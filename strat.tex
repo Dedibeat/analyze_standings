@@ -1,0 +1,333 @@
+\documentclass[11pt]{article}
+
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools,bm}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{microtype}
+\usepackage[dvipsnames]{xcolor}
+\usepackage[colorlinks=true,linkcolor=NavyBlue,citecolor=NavyBlue,urlcolor=NavyBlue]{hyperref}
+
+% ---- math shortcuts ----
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Teams}{\mathcal{T}}
+\newcommand{\Probs}{\mathcal{P}}
+\newcommand{\Conts}{\mathcal{C}}
+\newcommand{\Obs}{\mathcal{O}}
+\newcommand{\given}{\,\vert\,}
+\newcommand{\indic}[1]{\mathbf{1}\!\left[#1\right]}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+\newtheorem{remark}{Remark}
+
+\title{\textbf{Rating ICPC Problems from Contest Standings}\\[2pt]
+\large A two-layer model with cross-region standardization}
+\author{Bilguun}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\noindent
+Competitive programming judges such as Codeforces and AtCoder assign every
+contestant a rating, which lets tools like \texttt{clist.by} estimate a
+problem's difficulty by a single Elo inversion: find the rating level at which
+the expected number of solvers matches the observed number. ICPC contests
+provide no such native rating, so the contestant--strength layer must be built
+from the standings themselves. This note develops two estimators for ICPC
+problem difficulty from standings data (teams, solved problems, and per-problem
+solve times) and shows how teams that recur across regional contests, the World
+Finals, and the Universal Cup act as a linking signal that places problems from
+different regions onto a single comparable scale.
+\end{abstract}
+
+\section{Setup and notation}\label{sec:setup}
+
+Let $\Teams$ be the set of competitors (teams, or individuals; see
+Remark~\ref{rem:identity}), $\Probs$ the set of problems, and $\Conts$ the set
+of contests. Each contest $c \in \Conts$ has a duration $T_c$ and a fixed
+problem set $\Probs_c \subseteq \Probs$. Write $\Teams_c$ for the teams that
+participate in $c$. The observed data are
+\begin{itemize}[leftmargin=1.4em,itemsep=2pt]
+  \item $y_{tp} \in \{0,1\}$: whether team $t$ solved problem $p$
+        (during the contest in which $p$ appeared);
+  \item $\tau_{tp} \in [0,T_c]$: the time at which $t$ solved $p$, defined only
+        when $y_{tp}=1$;
+  \item $r_{t,c}$: the final rank of team $t$ in contest $c$.
+\end{itemize}
+We estimate two latent quantities:
+\[
+  \theta_t \in \R \quad\text{(ability of team $t$)},
+  \qquad
+  b_p \in \R \quad\text{(difficulty of problem $p$)} .
+\]
+Both live on the same scale, anchored as in Section~\ref{sec:link}.
+Let $\Obs = \{(t,p) : t \text{ attempted the contest containing } p\}$ be the
+set of competitor--problem pairs that are actually informative.
+
+\section{The Elo inversion primitive}\label{sec:elo}
+
+Throughout we reuse the Codeforces logistic convention, in which a competitor of
+ability $\theta$ solves a problem of difficulty $b$ with probability
+\begin{equation}\label{eq:pi}
+  \pi(\theta,b) \;=\; \frac{1}{1 + 10^{\,(b-\theta)/400}}
+  \;=\; \sigma\!\Big(\tfrac{\theta - b}{s}\Big),
+  \qquad s = \frac{400}{\ln 10} \approx 173.7,
+\end{equation}
+where $\sigma(x) = (1+e^{-x})^{-1}$. The scale is calibrated so that
+$\pi=\tfrac12$ when $\theta=b$, $\pi\approx0.76$ at a $200$-point edge, and
+$\pi\approx0.91$ at a $400$-point edge. The pairwise win probability between two
+competitors uses the same form, $E(\theta,\phi)=\pi(\theta,\phi)$.
+
+The single primitive underlying everything below inverts a weighted sum of
+\eqref{eq:pi} against a target. Given competitors with abilities
+$\{\theta_t\}_{t\in I}$ and nonnegative weights $\{w_t\}$, define
+
+\begin{definition}[Weighted rating]\label{def:wr}
+\[
+  \mathrm{WR}\big(\{(w_t,\theta_t)\}_{t\in I},\, S\big)
+  \;=\;
+  \text{the unique } b \text{ such that }
+  \sum_{t \in I} w_t\, \pi(\theta_t, b) \;=\; S .
+\]
+\end{definition}
+
+\noindent
+The left-hand side is strictly decreasing and continuous in $b$, so the root is
+unique and is found by bisection. Two specializations are used repeatedly:
+\begin{align}
+  \text{problem difficulty:}\quad
+    & b_p = \mathrm{WR}\big(\{(w_t,\theta_t)\}_{t\in\Teams_c},\, S_p\big),
+      \quad S_p = \sum_{t\in\Teams_c} w_t\, y_{tp};
+      \label{eq:bp}\\[2pt]
+  \text{performance rating:}\quad
+    & \rho_{t,c} : \;\; 1 + \!\!\sum_{u\in\Teams_c,\,u\neq t}\!\! \pi(\theta_u,\rho_{t,c}) = r_{t,c}.
+      \label{eq:perf}
+\end{align}
+Equation~\eqref{eq:bp} is exactly the difficulty estimate computed by
+\texttt{clist.by}; the only difference in our setting is that
+$\{\theta_t\}$ is unknown and must be estimated jointly
+(Sections~\ref{sec:fixedpoint}--\ref{sec:irt}). Equation~\eqref{eq:perf} reads
+``the ability whose expected rank equals the achieved rank.''
+
+\paragraph{Experience weighting and team composition.}
+Following the \texttt{clist} heuristic, a competitor seen in few prior contests
+contributes less, so its unsettled ability cannot distort a difficulty estimate:
+\begin{equation}\label{eq:weight}
+  w_t = 1 - 0.9^{\,n_t + 1},
+\end{equation}
+where $n_t$ is the number of prior contests of $t$. When a team's strength must
+be summarized from its members' abilities $\{\theta_m\}_{m\in t}$, use the same
+primitive at the median quantile,
+\begin{equation}\label{eq:team}
+  \theta_t = \mathrm{WR}\big(\{(1,\theta_m)\}_{m\in t},\, \tfrac12\big).
+\end{equation}
+
+\section{Architecture A: alternating fixed point}\label{sec:fixedpoint}
+
+The first estimator mirrors \texttt{clist} but adds the ability layer that
+\texttt{clist} obtains for free from the host judge. Abilities and difficulties
+are mutually dependent, so they are solved by alternation. The coupling across
+contests happens entirely in the ability update~\eqref{eq:update}: a team that
+played several contests gets one ability blending all of them, and that single
+value then pulls every one of those contests' difficulty estimates toward a
+common scale.
+
+\begin{equation}\label{eq:update}
+  \theta_t \;\leftarrow\;
+  \frac{\displaystyle\sum_{c\,:\,t\in\Teams_c} w_{t,c}\,\tfrac{1}{2}\big(\rho_{t,c} + \theta_t^{\text{prior}}\big)}
+       {\displaystyle\sum_{c\,:\,t\in\Teams_c} w_{t,c}} .
+\end{equation}
+
+\begin{algorithm}[h]
+\caption{Alternating estimation of abilities and difficulties}
+\label{alg:fp}
+\begin{algorithmic}[1]
+\State initialize $\theta_t \gets \theta_t^{\text{prior}}$ for all $t$ \Comment{from CF bootstrap, \eqref{eq:cfprior}}
+\Repeat
+  \For{each contest $c \in \Conts$}
+    \For{each team $t \in \Teams_c$}
+      \State $\rho_{t,c} \gets$ performance rating by \eqref{eq:perf}
+    \EndFor
+  \EndFor
+  \For{each team $t \in \Teams$}
+    \State update $\theta_t$ by \eqref{eq:update}
+  \EndFor
+\Until{$\max_t |\Delta\theta_t| < \varepsilon$}
+\For{each problem $p$ in contest $c$}
+  \State $b_p \gets \mathrm{WR}\big(\{(w_t,\theta_t)\}_{t\in\Teams_c},\, S_p\big)$ by \eqref{eq:bp}
+\EndFor
+\end{algorithmic}
+\end{algorithm}
+
+\noindent
+Algorithm~\ref{alg:fp} is cheap, reuses the \texttt{clist} code almost verbatim,
+and yields a usable first version. Its weaknesses are the ones \texttt{clist}
+inherits: it returns point estimates with no uncertainty, and a problem with very
+few in-contest solvers can be badly mis-rated when a single strong-but-low-rated
+team solves it. These motivate Architecture~B.
+
+\section{Architecture B: joint item-response model}\label{sec:irt}
+
+Treat each solve as a binary response governed by the gap between ability and
+difficulty. This is the Rasch model, the item-response cousin of
+Bradley--Terry:
+\begin{equation}\label{eq:rasch}
+  \Pr(y_{tp}=1 \given \theta_t, b_p)
+  \;=\; \sigma\!\Big(\tfrac{\theta_t - b_p}{s}\Big)
+  \;=\; \pi(\theta_t, b_p).
+\end{equation}
+A two-parameter (2PL) extension adds a per-problem discrimination $a_p>0$,
+allowing some problems to separate strong from weak teams more sharply than
+others:
+\begin{equation}\label{eq:twopl}
+  \Pr(y_{tp}=1 \given \theta_t, b_p, a_p)
+  \;=\; \sigma\!\big(a_p(\theta_t - b_p)\big).
+\end{equation}
+Assuming conditional independence of responses given the latent parameters, the
+log-likelihood over all observed pairs is
+\begin{equation}\label{eq:loglik}
+  \ell(\bm\theta,\bm b)
+  = \sum_{(t,p)\in\Obs}
+    \Big[\, y_{tp}\log \pi(\theta_t,b_p)
+      + (1-y_{tp})\log\big(1-\pi(\theta_t,b_p)\big) \Big].
+\end{equation}
+The same $\theta_t$ appears in the likelihood terms of every contest team $t$
+entered, so contests sharing teams are linked automatically; no post-hoc
+rescaling is needed.
+
+\paragraph{Priors and the MAP objective.}
+Gaussian priors regularize sparsely observed teams and problems---crucial for
+small regional fields:
+\begin{equation}\label{eq:priors}
+  \theta_t \sim \mathcal{N}\big(\mu_t,\ \sigma_\theta^2\big),
+  \qquad
+  b_p \sim \mathcal{N}\big(\mu_b,\ \sigma_b^2\big),
+\end{equation}
+with the team prior mean $\mu_t$ supplied by the bootstrap of
+Section~\ref{sec:link}. The estimate is the maximum-a-posteriori point (or the
+full posterior, via MCMC / variational inference):
+\begin{equation}\label{eq:map}
+  (\hat{\bm\theta}, \hat{\bm b})
+  = \argmax_{\bm\theta,\bm b}\;
+    \ell(\bm\theta,\bm b)
+    - \frac{1}{2\sigma_\theta^2}\sum_t (\theta_t-\mu_t)^2
+    - \frac{1}{2\sigma_b^2}\sum_p (b_p-\mu_b)^2 .
+\end{equation}
+A problem solved by nobody contributes only $\sum_t \log(1-\pi(\theta_t,b_p))$,
+which pushes $b_p$ upward but is held finite by the prior---so the pathological
+$b_p\to+\infty$ of a bare likelihood does not occur.
+
+\section{Using solve times: a survival formulation}\label{sec:survival}
+
+The per-problem solve time $\tau_{tp}$ is signal that \texttt{clist} discards.
+Model the act of solving as a constant-hazard (exponential) process over the
+contest window, with proportional hazards in the ability--difficulty gap:
+\begin{equation}\label{eq:hazard}
+  \lambda_{tp} = \lambda_0 \exp\!\Big(\tfrac{\theta_t - b_p}{s}\Big).
+\end{equation}
+A team that solves $p$ at time $\tau_{tp}$ contributes the event density, and a
+team that never solves $p$ contributes the survival probability to the contest
+end (a right-censored observation). The per-pair log-likelihood is
+\begin{equation}\label{eq:survlik}
+  \ell_{tp} =
+  \begin{cases}
+    \log \lambda_{tp} - \lambda_{tp}\,\tau_{tp}, & y_{tp}=1 \ \text{(solved at } \tau_{tp}),\\[4pt]
+    -\,\lambda_{tp}\, T_c, & y_{tp}=0 \ \text{(censored at } T_c).
+  \end{cases}
+\end{equation}
+This single likelihood uses the solve-time distribution \emph{and} handles
+zero-solve problems coherently, recovering the binary model of
+Section~\ref{sec:irt} as the special case where only the order of
+$\{y_{tp}\}$ is retained.
+
+\begin{remark}
+Contest length enters explicitly through $T_c$, which partly corrects the bias
+from comparing a 5-hour regional against a 2-hour short-format round.
+\end{remark}
+
+\section{Cross-region standardization}\label{sec:link}
+
+A single contest identifies abilities and difficulties only \emph{relative} to
+each other: since \eqref{eq:rasch} depends on $\theta_t - b_p$, adding a constant
+$\kappa$ to every $\theta_t$ and every $b_p$ leaves the likelihood unchanged.
+Within one contest this is a single global shift. Across contests with disjoint
+teams \emph{and} disjoint problems there is no shared parameter at all, so their
+scales float independently and their difficulties are not comparable.
+
+\paragraph{The linking graph.}
+Form the graph $G=(\Conts, E)$ whose vertices are contests and whose edges are
+\begin{equation}\label{eq:graph}
+  (c,c') \in E \iff |\Teams_c \cap \Teams_{c'}| \ge k ,
+\end{equation}
+for a small threshold $k$. Two contests are on a common scale precisely when they
+lie in the same connected component of $G$: a shared team carries one ability into
+both contests' likelihoods, fixing their relative shift. The World Finals (one
+problem set faced by teams qualifying from many regions) and the Universal Cup
+(recurring shared rounds across regions) are the high-degree hubs that merge the
+otherwise isolated regional components. In practice the Universal Cup is the
+stronger linker, contributing far more cross-region team pairs than the
+once-a-year Finals.
+
+\paragraph{Anchoring.}
+Within a connected component, one global degree of freedom remains. Fix it by an
+identifiability constraint---either centering,
+\begin{equation}\label{eq:center}
+  \frac{1}{|\Teams|}\sum_{t\in\Teams}\theta_t = 0,
+\end{equation}
+or, preferably, by anchoring to a familiar external scale through the Codeforces
+ratings of team members. For each team with members carrying Codeforces ratings
+$\{R_m\}_{m\in t}$, set the prior mean by composition~\eqref{eq:team},
+\begin{equation}\label{eq:cfprior}
+  \mu_t = \mathrm{WR}\big(\{(1,R_m)\}_{m\in t},\, \tfrac12\big).
+\end{equation}
+This simultaneously solves cold-start (teams with no contest history get a
+sensible prior), removes the global shift, and renders every output
+interpretable in Codeforces-equivalent points.
+
+\section{Practical notes}\label{sec:notes}
+
+\begin{remark}[Competitor identity]\label{rem:identity}
+A team's roster changes between seasons, so a team label is not a stable
+identity across years. Where rosters are known, modeling at the individual level
+and composing team strength by \eqref{eq:team} is preferable: it is more stable
+and it densifies the linking graph, since a single competitor recurs across
+seasons and appears in the Universal Cup with different teammates.
+\end{remark}
+
+\begin{remark}[Entity resolution]
+The linking graph is only as good as the identifiers feeding it. If a team or
+competitor is spelled inconsistently across regional standings, the Finals, the
+Universal Cup, and mirror sources, the linking edge silently disappears and the
+standardization quietly degrades. Identifier reconciliation is a prerequisite,
+not an afterthought.
+\end{remark}
+
+\begin{remark}[Recommended path]
+Ship Architecture~A first, bootstrapped by \eqref{eq:cfprior} and validated
+against problems with an external difficulty opinion (Finals problems with known
+editorial difficulty, or problems mirrored on a rated judge). Then move the final
+standardized ratings to the Bayesian model of Section~\ref{sec:irt} with the
+solve-time likelihood of Section~\ref{sec:survival}, once the linking graph's
+connectivity is established.
+\end{remark}
+
+\section*{Pointers}
+\addcontentsline{toc}{section}{Pointers}
+\small
+The Elo inversion and the $0.5/200/400$ calibration follow the Codeforces rating
+and problem-difficulty conventions; the difficulty estimator~\eqref{eq:bp},
+experience weight~\eqref{eq:weight}, and team composition~\eqref{eq:team} follow
+the open-source \texttt{calculate\_problem\_rating} logic in
+\href{https://github.com/aropan/clist}{\texttt{github.com/aropan/clist}}. The
+item-response treatment is standard Rasch / 2PL; the survival formulation is a
+proportional-hazards model with right-censoring.
+
+\end{document}

@@ -1,0 +1,762 @@
+\documentclass[11pt]{report}
+
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools,bm}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{parskip}
+\usepackage{microtype}
+\usepackage[dvipsnames,table]{xcolor}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usetikzlibrary{arrows.meta,positioning,calc}
+\usepackage[breakable]{tcolorbox}
+\usepackage[colorlinks=true,linkcolor=NavyBlue,citecolor=NavyBlue,urlcolor=NavyBlue]{hyperref}
+
+% ---------- math shortcuts ----------
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Teams}{\mathcal{T}}
+\newcommand{\Probs}{\mathcal{P}}
+\newcommand{\Conts}{\mathcal{C}}
+\newcommand{\Obs}{\mathcal{O}}
+\newcommand{\given}{\,\vert\,}
+
+% ---------- theorem-like ----------
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[chapter]
+\newtheorem{remark}{Remark}[chapter]
+\newtheorem{exercise}{Exercise}[chapter]
+\numberwithin{equation}{chapter}
+
+% ---------- callout boxes ----------
+\newtcolorbox{keyidea}{breakable,colback=NavyBlue!6,colframe=NavyBlue!55!black,
+  fonttitle=\bfseries,title=Key idea,left=2mm,right=2mm,top=1mm,bottom=1mm}
+\newtcolorbox{intuition}{breakable,colback=ForestGreen!7,colframe=ForestGreen!55!black,
+  fonttitle=\bfseries,title=Intuition,left=2mm,right=2mm,top=1mm,bottom=1mm}
+\newtcolorbox{worked}[1]{breakable,colback=BurntOrange!7,colframe=BurntOrange!65!black,
+  fonttitle=\bfseries,title=Worked example: #1,left=2mm,right=2mm,top=1mm,bottom=1mm}
+\newtcolorbox{takeaway}{breakable,colback=black!4,colframe=black!45,
+  fonttitle=\bfseries,title=Chapter in one paragraph,left=2mm,right=2mm,top=1mm,bottom=1mm}
+
+\title{\textbf{Rating Problems from Standings}\\[4pt]
+\large A Gentle, Practical Guide for ICPC-Style Contests}
+\author{Bilguun}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\tableofcontents
+
+\chapter*{Before we begin}
+\addcontentsline{toc}{chapter}{Before we begin}
+
+You have the standings of many programming contests. For each contest you know
+which teams competed, which problems each team solved, and at what minute each
+solve happened. You want one number per problem: \emph{how hard was it?} On
+Codeforces this number comes for free, because every contestant already has a
+rating. In ICPC there is no such rating. This guide builds the missing
+machinery from the ground up.
+
+The plan is deliberately gentle. We start from a single, very intuitive idea ---
+\emph{a problem's difficulty is the skill level at which solving it is a
+coin flip} --- and we keep returning to it. Every formula is introduced first in
+words, then in symbols, and then exercised on a tiny five-team contest that we
+carry through the whole book so the numbers stay concrete. By the end you will
+have two complete methods, a way to use the solve-time data that most tools throw
+away, and a principled recipe for putting problems from different regions of the
+world onto one comparable scale.
+
+No background beyond first-year probability and a little calculus is assumed.
+Familiarity with the Elo rating system or with logistic regression will make some
+passages feel like old friends, but it is not required.
+
+\chapter{The problem, and the one idea behind everything}
+
+\section{Why the obvious measures fail}
+
+Suppose problem~D in some regional was solved by only $3$ of $200$ teams. Is it
+hard? Probably --- but the solve count alone cannot tell you, because it ignores
+\emph{who} solved it. Three solves by the three weakest teams would be
+astonishing and would mean the problem is easy; three solves by the three
+strongest teams is exactly what you would expect from a hard problem. The
+acceptance rate has the same blind spot. Any honest difficulty measure has to
+weigh each solve by the strength of the team that produced it.
+
+That single sentence already tells us we cannot rate problems without first
+having some notion of team strength --- and, awkwardly, we cannot measure team
+strength without knowing how hard the problems they solved were. The two
+quantities define each other. Resolving that circularity is the technical heart
+of this guide; everything else is bookkeeping around it.
+
+\begin{keyidea}
+The difficulty of a problem is defined relative to \emph{solvers}, not to
+\emph{counts}. A problem is exactly as hard as the skill level at which a
+contestant has a $50\%$ chance of solving it. Stronger solvers shift that
+level up; weaker solvers shift it down.
+\end{keyidea}
+
+\section{The coin-flip definition}
+
+Fix a scale on which both ``team ability'' and ``problem difficulty'' are just
+real numbers, measured in the same units (we will borrow the Codeforces scale, so
+the numbers feel familiar). Write $\theta$ for a team's ability and $b$ for a
+problem's difficulty. The promise of the scale is this:
+
+\begin{center}
+\emph{a team whose ability equals a problem's difficulty has a $50\%$ chance of
+solving it.}
+\end{center}
+
+A team that is much stronger than the problem ($\theta \gg b$) almost always
+solves it; a team much weaker ($\theta \ll b$) almost never does. Between those
+extremes the probability slides smoothly. The smooth curve that competitive
+programming has settled on is the logistic curve of the next chapter, but the
+\emph{definition} of difficulty does not depend on the exact curve: $b$ is
+wherever the probability passes through one half.
+
+\begin{intuition}
+Think of difficulty as a height of a high-jump bar and ability as how high a
+jumper can clear. Set the bar at the height the athlete clears half the time and
+you have measured the athlete; raise the bar until even the best clears it only
+half the time and you have measured the bar. Problems and teams are measured on
+the same ruler precisely because they trade places in the same probability.
+\end{intuition}
+
+\section{Our running example}
+
+We will use one toy contest for the rest of the book. Five teams, whose
+(pretend, known) abilities on the Codeforces scale are listed below, attempt four
+problems labelled A--D. A check means the team solved the problem during the
+contest.
+
+\begin{table}[h]
+\centering
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{lc cccc}
+\toprule
+Team & Ability $\theta$ & A & B & C & D\\
+\midrule
+$T_1$ & $2400$ & \checkmark & \checkmark & \checkmark & \\
+$T_2$ & $2200$ & \checkmark & \checkmark & & \\
+$T_3$ & $2000$ & \checkmark & \checkmark & & \\
+$T_4$ & $1800$ & \checkmark & & & \\
+$T_5$ & $1600$ & \checkmark & & & \\
+\midrule
+\multicolumn{2}{r}{solved by} & $5$ & $3$ & $1$ & $0$\\
+\bottomrule
+\end{tabular}
+\caption{The running example. Problem A was solved by everyone, D by no one,
+and B and C land in between. In a real project the abilities would be
+\emph{unknown} and estimated; here we fix them so we can check the arithmetic by
+hand.}
+\label{tab:toy}
+\end{table}
+
+Intuitively A is very easy, D very hard, B moderately hard (only the top three
+got it), and C hard (only the very top team got it). Our job over the next
+chapters is to turn that intuition into numbers, and then --- the real trick ---
+to recover the abilities themselves when they are \emph{not} handed to us.
+
+\begin{takeaway}
+We cannot rank problems by how many teams solved them, because that ignores how
+strong those teams were. Instead we define a problem's difficulty as the ability
+level at which a team is equally likely to solve it or not. Ability and
+difficulty live on one shared ruler and are defined in terms of each other, which
+is the circularity the rest of the book resolves.
+\end{takeaway}
+
+\chapter{The logistic building block}
+
+\section{From ``coin flip'' to a curve}
+
+We need an actual formula for the probability that a team of ability $\theta$
+solves a problem of difficulty $b$. Three things are non-negotiable: the
+probability is $\tfrac12$ when $\theta=b$, it rises toward $1$ as the team
+outclasses the problem, and it falls toward $0$ in the opposite case. The
+logistic (sigmoid) function does exactly this, and it is the same function the
+Elo system uses for chess. On the Codeforces scale,
+\begin{equation}\label{eq:pi}
+  \pi(\theta,b)\;=\;\frac{1}{1+10^{\,(b-\theta)/400}}.
+\end{equation}
+The constant $400$ sets how quickly the curve turns: a $200$-point edge gives
+about a $76\%$ solve chance and a $400$-point edge about $91\%$. Figure~\ref{fig:sigmoid}
+plots it against the \emph{gap} $\theta-b$.
+
+\begin{figure}[h]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+  width=11cm, height=6cm,
+  domain=-600:600, samples=120,
+  xlabel={ability minus difficulty, $\theta-b$},
+  ylabel={solve probability $\pi$},
+  ymin=0, ymax=1, xmin=-600, xmax=600,
+  xtick={-400,-200,0,200,400},
+  ytick={0,0.25,0.5,0.75,1},
+  grid=both, grid style={black!10},
+  axis lines=left,
+  tick label style={font=\small},
+  label style={font=\small},
+]
+\addplot[NavyBlue,very thick] {1/(1+10^(-x/400))};
+\addplot[only marks,mark=*,mark size=1.6pt,BurntOrange]
+  coordinates {(0,0.5) (200,0.76) (400,0.91)};
+\draw[black!35,dashed] (axis cs:0,0) -- (axis cs:0,0.5);
+\draw[black!35,dashed] (axis cs:-600,0.5) -- (axis cs:0,0.5);
+\end{axis}
+\end{tikzpicture}
+\caption{The logistic solve curve~\eqref{eq:pi}. At an equal match the
+probability is exactly one half (the dashed cross-hair); the orange dots mark the
+$+200$ and $+400$ edges.}
+\label{fig:sigmoid}
+\end{figure}
+
+It is sometimes cleaner to write \eqref{eq:pi} with the natural logistic
+$\sigma(x)=1/(1+e^{-x})$,
+\begin{equation}\label{eq:sigmascale}
+  \pi(\theta,b)=\sigma\!\Big(\frac{\theta-b}{s}\Big),
+  \qquad s=\frac{400}{\ln 10}\approx 173.7,
+\end{equation}
+which makes plain that only the \emph{gap} $\theta-b$ matters, rescaled by $s$.
+Keep both forms in mind: \eqref{eq:pi} for hand arithmetic on the Codeforces
+scale, \eqref{eq:sigmascale} for the modelling chapters.
+
+\begin{intuition}
+Every $400$ points of advantage multiply a team's \emph{odds} of solving (the
+ratio $\pi/(1-\pi)$) by ten. That is the entire content of the constant in the
+exponent: rating differences are a logarithmic currency, and $400$ points buys
+one order of magnitude.
+\end{intuition}
+
+\section{The same curve rates head-to-head matches}
+
+The logistic also gives the probability that one team outperforms another: team
+$u$ beats team $t$ with probability $\pi(\theta_u,\theta_t)$, reading the
+opponent's ability in place of a problem's difficulty. We will need this in
+Chapter~4 to score how a team actually \emph{placed} in a contest. The two uses
+--- ``did you solve the problem?'' and ``did you beat the rival?'' --- are the
+same equation wearing different labels.
+
+\begin{takeaway}
+The probability of solving is a logistic function of the gap between ability and
+difficulty: one half at parity, climbing one order of magnitude in odds per $400$
+points. The identical curve, with an opponent's rating in place of a problem's,
+scores head-to-head outcomes.
+\end{takeaway}
+
+\chapter{Rating a problem when the teams are known}
+
+This chapter does the easy half of the circular problem: it assumes the team
+abilities are already known and rates the problems. (Chapter~4 removes the
+assumption.) This is exactly what tools such as \texttt{clist.by} compute for
+Codeforces, where the abilities are supplied by the judge.
+
+\section{Expected solvers versus actual solvers}
+
+Pick a candidate difficulty $b$. For each team we can compute its solve
+probability $\pi(\theta_t,b)$, and summing these gives the number of solvers we
+would \emph{expect} at that difficulty:
+\begin{equation}\label{eq:expected}
+  \E[\text{solvers}](b)\;=\;\sum_{t}\pi(\theta_t,b).
+\end{equation}
+Now turn it around. We do not know $b$, but we \emph{do} know the actual number
+of solvers $S$. So we choose the difficulty at which the expected count matches
+the observed count.
+
+\begin{keyidea}
+A problem's difficulty is the value $b$ that makes the expected number of solvers
+equal the number who actually solved it:
+\[
+  \sum_t \pi(\theta_t,b)\;=\;S.
+\]
+Because the left side decreases steadily as $b$ grows (harder problems are solved
+by fewer), there is exactly one such $b$, found by binary search.
+\end{keyidea}
+
+\begin{definition}[Weighted rating]\label{def:wr}
+Given teams with abilities $\{\theta_t\}$ and nonnegative weights $\{w_t\}$ (take
+all $w_t=1$ for now; Section~\ref{sec:weight} explains the weights), and a target
+$S$, define $\mathrm{WR}(\{(w_t,\theta_t)\},S)$ as the unique $b$ solving
+$\sum_t w_t\,\pi(\theta_t,b)=S$.
+\end{definition}
+
+\begin{worked}{difficulty of problem B}
+Problem B was solved by $3$ teams. Using the abilities from
+Table~\ref{tab:toy}, we look for $b$ with $\sum_t\pi(\theta_t,b)=3$. Trying
+$b=2000$ gives expected solvers
+\[
+  0.91+0.76+0.50+0.24+0.09 = 2.50,
+\]
+which is below $3$, so the true difficulty is a little \emph{lower}. Trying
+$b=1900$ gives $0.95+0.85+0.64+0.36+0.15=2.95$, just under $3$. A few more
+bisection steps land near $b\approx 1890$. So B's difficulty is about
+$1890$ --- between $T_3$ ($2000$) and $T_4$ ($1800$), which matches the fact that
+exactly the top three teams solved it.
+\end{worked}
+
+\begin{worked}{difficulty of problem C}
+Problem C was solved by $1$ team. We seek $b$ with $\sum_t\pi(\theta_t,b)=1$.
+At $b=2200$ the expected count is about $1.62$ (too many), at $b=2400$ about
+$0.87$ (too few), and around $b\approx 2360$ it equals $1$. So C rates near
+$2360$, just below the lone solver $T_1$ at $2400$ --- a genuinely hard problem.
+\end{worked}
+
+\section{The two ends of the scale}
+
+Problem A was solved by \emph{everyone} and D by \emph{no one}. The equation
+$\sum_t\pi=S$ has no finite solution in these cases: to expect all five solvers
+the difficulty must fall to $-\infty$, and to expect zero it must rise to
+$+\infty$. In practice you floor and cap the scale (Codeforces effectively treats
+``solved by all'' as rating $0$ and ``solved by none'' as a large ceiling). The
+lesson is not a defect but a caution: a problem at the very edge of a field is
+only weakly measured --- all you learn is ``easier than the weakest team'' or
+``harder than the strongest team here.'' To pin it down you need a field that
+straddles it.
+
+\section{Weighting unreliable teams}\label{sec:weight}
+
+Not every ability estimate deserves equal trust. A team you have seen in only one
+contest could be a fluke; a team with a long history is a steady yardstick. The
+weights $w_t$ in Definition~\ref{def:wr} let steadier teams speak louder. A simple,
+battle-tested choice (used by \texttt{clist}) grows the weight from near zero
+toward one as a team accumulates a history of $n_t$ prior contests:
+\begin{equation}\label{eq:weight}
+  w_t = 1 - 0.9^{\,n_t+1}.
+\end{equation}
+A newcomer ($n_t=0$) gets weight $0.1$; after ten contests the weight is about
+$0.65$; a veteran approaches $1$. The same idea will reappear as \emph{priors} in
+Chapter~5, in a more principled dress.
+
+\begin{takeaway}
+If you already know team abilities, a problem's difficulty is whatever value
+makes the summed solve probabilities equal the actual solver count --- a quantity
+found by binary search. Problems solved by all or none sit at the floor or
+ceiling and are only loosely measured, and shaky teams should be down-weighted so
+their noise does not leak into the difficulty.
+\end{takeaway}
+
+\chapter{Breaking the circle: rating teams and problems together}
+
+Chapter~3 assumed the abilities. In ICPC we do not have them, so we must estimate
+abilities and difficulties at the same time. The escape from the circularity is
+an old trick: guess one side, use it to compute the other, and repeat until the
+two stop changing.
+
+\section{Scoring how a team placed}
+
+Before we can update an ability we need to score a team's contest result. The
+natural score is the rating consistent with where it \emph{finished}. If a team
+placed $r$-th, then $r-1$ teams beat it, so the ability we infer is the one whose
+\emph{expected} number of superiors equals $r-1$. Using the head-to-head form of
+the logistic, the team's \emph{performance rating} $\rho$ in that contest solves
+\begin{equation}\label{eq:perf}
+  1+\sum_{u\neq t}\pi(\theta_u,\rho)\;=\;r .
+\end{equation}
+This is the very same weighted-rating inversion as before, now with rank in place
+of solver count.
+
+\begin{worked}{a team that overperformed}
+Suppose in our toy field team $T_4$ (true ability $1800$) finished \emph{2nd}.
+Then the expected number of teams above it must equal $1$, i.e.\ we solve
+$\sum_{u\neq T_4}\pi(\theta_u,\rho)=1$ over the other four teams
+($2400,2200,2000,1600$). Searching, $\rho\approx 2350$: finishing second in this
+field is performance worthy of a $2350$ player, far above $T_4$'s usual $1800$.
+A good night, and the system records it as such.
+\end{worked}
+
+\section{The alternating loop}
+
+Now the engine. Start every team at a prior guess. Sweep through all contests,
+computing each team's performance from the \emph{current} abilities of its rivals.
+Then move each team's ability toward the average of its performances across all
+the contests it played. Repeat. When nobody's rating moves appreciably, stop and
+rate the problems with the converged abilities.
+
+\begin{figure}[h]
+\centering
+\begin{tikzpicture}[
+  box/.style={rounded corners,draw=NavyBlue!60!black,fill=NavyBlue!6,
+    align=center,inner sep=6pt,minimum width=4.2cm,minimum height=1.5cm,font=\small},
+  >={Stealth[length=3mm]}]
+\node[box] (A) at (0,0) {\textbf{Team abilities} $\theta_t$\\(current guess)};
+\node[box] (B) at (8,0) {\textbf{Performances} $\rho_{t,c}$\\(one per contest played)};
+\draw[->,thick] (A.north) to[bend left=22]
+  node[above,font=\small\itshape]{score each result} (B.north);
+\draw[->,thick] (B.south) to[bend left=22]
+  node[below,font=\small\itshape]{average back into ability} (A.south);
+\end{tikzpicture}
+\caption{The alternating fixed point. Abilities produce performances; performances
+are averaged back into abilities, and the loop repeats until the abilities stop
+changing --- at which point the problems are rated with the converged abilities.
+The fixed point is a set of ratings internally consistent with every contest at once.}
+\label{fig:loop}
+\end{figure}
+
+The update that closes the loop blends a team's performances with its prior, with
+the experience weights of \eqref{eq:weight}:
+\begin{equation}\label{eq:update}
+  \theta_t \;\leftarrow\;
+  \frac{\displaystyle\sum_{c\,:\,t\text{ played }c} w_{t,c}\,\tfrac12\big(\rho_{t,c}+\theta_t^{\text{prior}}\big)}
+       {\displaystyle\sum_{c\,:\,t\text{ played }c} w_{t,c}} .
+\end{equation}
+
+\begin{intuition}
+Why does this resolve the circularity? Because each pass uses the \emph{best
+current} estimate of the other side and pushes both estimates toward mutual
+agreement. It is the same logic as repeatedly averaging to find an equilibrium:
+the abilities that explain the standings, given difficulties that explain the
+standings, given those abilities. A team that played several contests is the glue
+--- its single ability has to fit all of them, which drags those contests onto a
+common footing. Hold onto that observation; in Chapter~7 it becomes the entire
+basis for comparing different regions.
+\end{intuition}
+
+This method (essentially what \texttt{clist} does, plus the ability layer it
+normally gets for free) is quick to build and easy to sanity-check. Its limits
+are that it returns bare numbers with no error bars, and a problem with very few
+solvers can swing wildly on the luck of a single strong-but-underrated team.
+Chapter~5 fixes both.
+
+\begin{takeaway}
+When abilities are unknown, alternate: score each team by the rating its finishing
+place implies, average those performances back into its ability, and iterate to a
+fixed point; then rate the problems. Teams that appear in several contests force
+those contests into a single consistent scale.
+\end{takeaway}
+
+\chapter{A cleaner foundation: item response theory}
+
+The alternating loop works, but it is a procedure rather than a model: it does
+not say what we believe about the data, only what steps to run. Stating an honest
+probabilistic model buys us uncertainty estimates, graceful handling of the
+all/none edge cases, and a clean way to fold in priors. The right model is one
+that education researchers have used for decades to grade test questions ---
+\emph{item response theory}.
+
+\section{The Rasch model}
+
+Treat each ``did team $t$ solve problem $p$?'' as a coin flip whose bias is set by
+the gap between ability and difficulty. That is the Rasch model, and it is just
+our logistic curve read as a likelihood:
+\begin{equation}\label{eq:rasch}
+  \Pr(\text{team }t\text{ solves }p)\;=\;\pi(\theta_t,b_p)
+  =\sigma\!\Big(\frac{\theta_t-b_p}{s}\Big).
+\end{equation}
+A student is to a test what a team is to a contest: able people pass hard items
+only sometimes, weak people pass easy items most of the time, and every response
+is one logistic coin flip. Estimating all the $\theta$'s and $b$'s at once is the
+same statistical task whether the ``items'' are exam questions or contest
+problems.
+
+\begin{intuition}
+The alternating loop of Chapter~4 was secretly trying to fit this model; it just
+went back and forth instead of optimizing everything together. Writing the model
+down lets us hand the whole thing to a single optimizer and ask not only for the
+best estimates but for how sure we are of them.
+\end{intuition}
+
+\section{The likelihood, and why shared teams link contests}
+
+Assuming the solves are independent given the abilities and difficulties, the
+probability of the entire observed dataset is the product over all observed
+(team, problem) pairs $\Obs$, and its logarithm is
+\begin{equation}\label{eq:loglik}
+  \ell(\bm\theta,\bm b)=\sum_{(t,p)\in\Obs}
+  \Big[y_{tp}\log\pi(\theta_t,b_p)+(1-y_{tp})\log\big(1-\pi(\theta_t,b_p)\big)\Big],
+\end{equation}
+where $y_{tp}\in\{0,1\}$ records the solve. The crucial structural fact: the
+\emph{same} symbol $\theta_t$ appears in every term for every contest team $t$
+entered. A team that played a regional and the World Finals ties those two
+contests' problems together automatically, with no separate rescaling step,
+because one ability must explain both. This is the model-level version of the
+``glue'' from Chapter~4, and it is what Chapter~7 exploits.
+
+\section{Discrimination, priors, and uncertainty}
+
+Some problems split the field sharply --- strong teams solve them, weak teams do
+not, with little middle ground --- while others are noisy for everyone. A
+two-parameter extension gives each problem a \emph{discrimination} $a_p>0$
+controlling how steep its curve is:
+\begin{equation}\label{eq:twopl}
+  \Pr(\text{solve})=\sigma\!\big(a_p(\theta_t-b_p)\big).
+\end{equation}
+A large $a_p$ is a sharp filter; a small $a_p$ a near-coin-flip regardless of
+skill.
+
+Small regionals have few teams, so some problems and teams are barely observed.
+Left alone, the likelihood can send a never-solved problem's difficulty to
+infinity. The cure is a \emph{prior}: a gentle prior belief that abilities and
+difficulties are not absurdly extreme,
+\begin{equation}\label{eq:priors}
+  \theta_t\sim\mathcal N(\mu_t,\sigma_\theta^2),\qquad
+  b_p\sim\mathcal N(\mu_b,\sigma_b^2).
+\end{equation}
+We then maximize the log-likelihood plus the log-prior (the \emph{maximum a
+posteriori}, or MAP, estimate):
+\begin{equation}\label{eq:map}
+  (\hat{\bm\theta},\hat{\bm b})=\argmax_{\bm\theta,\bm b}\;
+  \ell(\bm\theta,\bm b)
+  -\frac{1}{2\sigma_\theta^2}\sum_t(\theta_t-\mu_t)^2
+  -\frac{1}{2\sigma_b^2}\sum_p(b_p-\mu_b)^2 .
+\end{equation}
+The prior is exactly the experience weight of Chapter~4 grown up: instead of
+shrinking a shaky team's \emph{influence}, it shrinks a shaky estimate toward a
+sensible default, and it does so for problems too. A problem nobody solved now
+contributes a term that pushes its difficulty up but is held finite by the prior,
+so the infinity of Section~3.2 never arises. And because we have a full model,
+fitting it in a Bayesian way (by MCMC or variational inference) returns not just a
+number per problem but a credible interval --- precisely what you want before
+trusting a difficulty estimated from four solvers.
+
+\begin{takeaway}
+Reading the logistic curve as a likelihood gives the Rasch model from education
+testing: every solve is one coin flip set by ability minus difficulty. Fitting all
+parameters jointly links any contests that share a team, a discrimination
+parameter lets problems differ in sharpness, and Gaussian priors both tame
+tiny-field noise and yield honest uncertainty.
+\end{takeaway}
+
+\chapter{Getting more from the clock}
+
+Standings carry a signal most difficulty tools discard: \emph{when} each solve
+happened. A problem solved at minute~15 was easy for that team; the same problem
+solved at minute~280, in the dying moments, was a struggle. We can fold this in
+without leaving the logistic family.
+
+\section{Solving as a race against the clock}
+
+Model each team's attack on each problem as a race: at every instant the team has
+some rate of cracking the problem, higher when the team outclasses the problem.
+Concretely, let the instantaneous solve rate (the \emph{hazard}) be
+\begin{equation}\label{eq:hazard}
+  \lambda_{tp}=\lambda_0\,\exp\!\Big(\frac{\theta_t-b_p}{s}\Big).
+\end{equation}
+A strong team facing an easy problem has a high rate and tends to solve quickly; a
+weak team facing a hard problem has a low rate and usually runs out of time. Two
+kinds of observation feed the fit. A team that solved $p$ at time $\tau_{tp}$
+contributes the probability density of solving \emph{exactly then}; a team that
+never solved $p$ contributes the probability of \emph{not yet} having solved it
+when the clock $T_c$ ran out --- a \emph{censored} observation, in the language of
+survival analysis. Their log-likelihood terms are
+\begin{equation}\label{eq:surv}
+  \ell_{tp}=
+  \begin{cases}
+    \log\lambda_{tp}-\lambda_{tp}\,\tau_{tp}, & \text{solved at }\tau_{tp},\\[4pt]
+    -\,\lambda_{tp}\,T_c, & \text{never solved.}
+  \end{cases}
+\end{equation}
+
+\begin{intuition}
+The binary model of Chapter~5 only asked \emph{whether} a team solved a problem.
+The clock model also asks \emph{how fast}, which is extra evidence about
+difficulty for free. And the ``never solved'' case is handled honestly: it does
+not mean the team \emph{couldn't}, only that it didn't within the time limit --
+exactly what a censored race says.
+\end{intuition}
+
+A pleasant bonus: contest length $T_c$ enters the formula explicitly, which
+partly corrects the unfairness of comparing a five-hour regional against a
+two-hour short round --- the same problem looks easier when teams had more time,
+and the $T_c$ term knows it.
+
+\begin{takeaway}
+Treat each solve as a timed race whose speed grows with the ability-minus-difficulty
+gap. Solved problems contribute when they were solved; unsolved ones contribute as
+races that hadn't finished at the buzzer. This uses the solve-time data, handles
+``nobody solved it'' gracefully, and bakes in a correction for contest length.
+\end{takeaway}
+
+\chapter{Putting different regions on one scale}
+
+So far every method produces ratings that are internally consistent. But
+``internally consistent'' has a hidden loophole that matters enormously once we
+compare regions.
+
+\section{The floating-zero problem}
+
+Look again at the model: the solve probability depends only on the
+\emph{difference} $\theta_t-b_p$. So if we add $100$ to every team's ability and
+$100$ to every problem's difficulty, every probability --- and therefore the
+entire likelihood --- is completely unchanged. The data cannot distinguish the
+two solutions. Within a single contest this is harmless: it just means ``the zero
+of the scale is arbitrary.'' Across two contests with no common teams and no
+common problems, it is fatal: each contest fixes its own arbitrary zero, and a
+$2000$ in one may be a $2300$ in the other. Their difficulties are simply not
+comparable.
+
+\begin{keyidea}
+Ratings are only pinned down up to a shared additive shift. Two contests are
+comparable only if something forces their shifts to agree --- and the only thing
+that can is a participant (or, rarely, a problem) they have in common.
+\end{keyidea}
+
+\section{The linking graph}
+
+This turns standardization into a question about connectivity. Build a graph whose
+nodes are contests; join two contests by an edge when they share enough teams.
+Two contests can be placed on the same scale exactly when a path of shared-team
+edges connects them. A shared team carries one ability into both contests'
+likelihoods, nailing down their relative shift; chains of shared teams propagate
+the alignment outward.
+
+\begin{figure}[h]
+\centering
+\begin{tikzpicture}[
+  reg/.style={rounded corners,draw=ForestGreen!60!black,fill=ForestGreen!8,
+    align=center,inner sep=5pt,minimum width=2.7cm,minimum height=1.1cm,font=\small},
+  hub/.style={rounded corners,draw=NavyBlue!65!black,fill=NavyBlue!10,
+    align=center,inner sep=5pt,minimum width=2.7cm,minimum height=1.1cm,font=\small\bfseries},
+  >={Stealth[length=2.6mm]},
+  every edge/.style={draw=black!45,thick}]
+\node[reg] (r1) at (0,2.1) {Asia\\regional};
+\node[reg] (r2) at (0,0) {Europe\\regional};
+\node[reg] (r3) at (0,-2.1) {Latin\\regional};
+\node[hub] (wf) at (4.2,1.1) {World Finals};
+\node[hub] (uc) at (4.2,-1.1) {Universal Cup};
+\node[reg,fill=black!4,draw=black!45] (scale) at (8.4,0) {one shared\\scale};
+\foreach \r in {r1,r2,r3}{
+  \draw (\r) edge[->] (wf);
+  \draw (\r) edge[->] (uc);
+}
+\draw[->] (wf) -- (scale);
+\draw[->] (uc) -- (scale);
+\node[font=\scriptsize\itshape,text=black!55] at (2.1,2.15) {shared teams};
+\end{tikzpicture}
+\caption{Each regional is an island whose internal ratings float on their own
+zero. The World Finals (qualifying teams from every region meet on one problem
+set) and the Universal Cup (recurring shared rounds across regions) are the
+bridges whose shared teams fuse the islands into a single scale.}
+\label{fig:link}
+\end{figure}
+
+Two structures do the heavy lifting. The \textbf{World Finals} gathers qualifying
+teams from every region onto one problem set, so each finalist carries its
+regional ability into a shared arena. The \textbf{Universal Cup} runs the same
+rounds for many strong teams across regions, repeatedly --- a far denser web of
+shared participations than the once-a-year Finals, and in practice the stronger
+linker of the two. Before trusting any cross-region number, compute the connected
+components of this graph: anything joined to the Finals/Universal-Cup component is
+comparable; anything cut off from it must be reported on its own scale, with a
+clear warning.
+
+\section{Anchoring the zero, and a free cold start}
+
+Connectivity removes all the floating zeros but one: the single global shift for
+the whole connected pool. Fix it with one convention. The plain choice is to
+declare the average ability to be zero. The better choice ties the scale to
+numbers people already understand --- the Codeforces ratings of the team members.
+For a team whose members carry Codeforces ratings, combine those member ratings
+into a team prior and use it both to seed the optimization and to anchor the
+scale:
+\begin{equation}\label{eq:cfprior}
+  \mu_t=\mathrm{WR}\big(\{(1,R_m)\}_{m\in t},\,\tfrac12\big),
+\end{equation}
+where $R_m$ are the members' Codeforces ratings and $\mathrm{WR}$ is the same
+inversion from Definition~\ref{def:wr}. This one move does three jobs at once: it
+gives brand-new teams a sensible starting ability (no cold-start problem), it
+fixes the global shift, and it makes every output readable as a
+Codeforces-equivalent number --- so ``this Yokohama problem is about $2400$''
+means what a competitive programmer expects it to mean.
+
+\begin{takeaway}
+Because only ability-minus-difficulty is identified, each isolated contest has its
+own arbitrary zero, and cross-region comparison requires a chain of shared teams
+to align those zeros. The World Finals and especially the Universal Cup supply
+that chain; one global convention --- ideally anchoring to members' Codeforces
+ratings --- fixes the last remaining shift and gives the whole scale familiar
+units.
+\end{takeaway}
+
+\chapter{A recipe, and the traps along the way}
+
+\section{Build it in two stages}
+
+Start simple and earn the complexity. \textbf{Stage one:} run the alternating
+loop of Chapter~4, seeded and anchored by the Codeforces bootstrap of
+\eqref{eq:cfprior}. It is a day's work on top of the open-source \texttt{clist}
+code and gives ratings you can eyeball immediately. Validate them against
+problems whose difficulty you already have an opinion on --- World Finals problems
+with known editorial ratings, or problems mirrored on a rated judge. \textbf{Stage
+two:} once you trust the linking graph's connectivity, move the final numbers to
+the Bayesian item-response model of Chapter~5, with the solve-time likelihood of
+Chapter~6 if you want the extra signal and the error bars. The first stage tells
+you whether the data and the plumbing are sound; the second gives you the ratings
+you publish.
+
+\section{Three traps}
+
+\begin{remark}[A team is not a stable thing]
+Rosters change between seasons, so ``University X, 2024'' and ``University X,
+2025'' are usually different people and should not share one ability. Where you
+know the rosters, model individual contestants and combine them into a team
+strength with \eqref{eq:cfprior}; this is both more accurate and a bonus for
+linking, since one person recurs across years and shows up in the Universal Cup
+with different teammates, adding edges to the graph of Chapter~7.
+\end{remark}
+
+\begin{remark}[Spelling is load-bearing]
+The linking graph is only as good as your identifiers. If a team is written one
+way in a regional's standings and another way at the Finals or on a mirror, the
+shared-team edge silently vanishes and your careful standardization quietly
+breaks. Reconciling names and identities across sources is not clean-up work to do
+later; it is a precondition for everything in Chapter~7.
+\end{remark}
+
+\begin{remark}[Few solvers, and unequal clocks]
+A problem solved by a handful of teams is estimated from a handful of coin flips;
+treat its rating as a wide interval, not a point, which is one more reason to
+prefer the Bayesian fit for the final numbers. And remember that a five-hour
+regional and a two-hour round are not the same yardstick --- the solve-time model
+of Chapter~6 helps, but cross-format comparisons always deserve a second look.
+\end{remark}
+
+\section*{Exercises}
+\addcontentsline{toc}{section}{Exercises}
+
+\begin{exercise}
+Using the abilities in Table~\ref{tab:toy}, verify by bisection that problem~B's
+difficulty is near $1890$. Then recompute it after deleting the weakest team
+$T_5$ from the field. Does the difficulty move, and why?
+\end{exercise}
+
+\begin{exercise}
+A problem is solved by exactly the top half of a field of evenly spaced abilities.
+Argue, without heavy computation, that its difficulty should land near the
+\emph{median} ability, and connect this to the coin-flip definition of
+Chapter~1.
+\end{exercise}
+
+\begin{exercise}
+Show that adding a constant $\kappa$ to every $\theta_t$ and every $b_p$ leaves
+the likelihood~\eqref{eq:loglik} unchanged. Explain in one sentence why this makes
+an isolated contest's zero arbitrary, and what removes the arbitrariness across
+contests.
+\end{exercise}
+
+\begin{exercise}
+In the clock model~\eqref{eq:surv}, suppose you doubled every contest's time limit
+$T_c$ but the underlying hazards stayed the same. Qualitatively, which way would
+estimated difficulties move, and is that the behaviour you want?
+\end{exercise}
+
+\chapter*{Where these ideas come from}
+\addcontentsline{toc}{chapter}{Where these ideas come from}
+
+The logistic solve curve and the $0.5/200/400$ calibration are the Codeforces
+rating and problem-difficulty conventions. The expected-versus-actual solver
+inversion, the experience weight~\eqref{eq:weight}, and the team-from-members
+composition~\eqref{eq:cfprior} follow the open-source
+\texttt{calculate\_problem\_rating} logic in
+\href{https://github.com/aropan/clist}{\texttt{github.com/aropan/clist}}. The
+joint estimation in Chapter~5 is the Rasch / two-parameter item-response model
+long used in educational testing, and the clock model in Chapter~6 is a
+proportional-hazards survival model with right-censoring. The cross-region linking
+argument is original to this project's setting but rests on the same
+identifiability fact that underlies every paired-comparison rating system.
+
+\end{document}
