@@ -37,6 +37,18 @@ contest (the rating implied by their final rank, eq. perf) — the gap shows who
 over- or under-performed. Click any column to sort, and filter teams by
 name/member/affiliation.
 
+### Contest-linking graph
+
+```bash
+./.venv/bin/python -m arch_a.export_graph
+```
+
+Writes a self-contained `output/contest_graph.html`: each node is a contest, an
+edge joins contests that share team identities (the links that put every contest
+on one scale). Toggle between the current roster/id keying and a year-appended
+keying to see that adding the season to the team key fragments the single scale
+into per-year islands. Runs on the 5-season `data/tagged.json`.
+
 Module self-checks:
 
 ```bash

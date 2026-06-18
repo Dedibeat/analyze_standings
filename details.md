@@ -108,6 +108,25 @@ Run with the project venv:
 - **Granularity:** per resolved identity (roster where available, else stable id).
   True individual-level modelling (strat Remark on roster changes) is a follow-up.
 
+- **No year in the team key (decision on the multi-season `tagged.json`).**
+  The larger `data/tagged.json` spans 5 seasons (2022–2026, 213 contests). We
+  keep identity season-agnostic — appending the contest `year` to the key would
+  **fragment the single scale into per-year islands**. Measured on the contest-
+  linking graph (nodes = contests, edge = ≥1 shared identity): current keying
+  leaves **6 components, the largest 206/213 contests** — essentially one scale;
+  year-appended keying gives **11 components of sizes 54/52/51/45/…** — exactly
+  the per-year contest counts, with only thin inter-year threads. Year-keying
+  deletes precisely the cross-year bridges (1,405 rosters and 579 ucup ids that
+  recur across seasons) that calibrate the years onto one comparable scale.
+  Year turnover is already handled by the roster: of 11,697 distinct rosters only
+  1,405 (12%) span >1 year — the other 88% already differ because members
+  graduated, so they are already separate identities. The real residual cost is
+  that a same-roster-multiple-seasons team gets a single ability blended across
+  seasons; the principled fix is a **time-varying `theta_{team,year}`** with a
+  smoothing prior (a model change, not a key change), recorded as a follow-up.
+  `arch_a/export_graph.py` renders both keyings as an interactive graph
+  (`output/contest_graph.html`).
+
 ### Results (current run)
 
 - Converges in ~15 iterations, monotone decreasing `max|dtheta|` < 0.5.
@@ -138,6 +157,10 @@ the price of letting the shared teams, rather than the prior, set the scale.
   length `T_c`; currently `tau` is loaded but unused.
 - **Member-level identity** and entity resolution across sources (strat
   Remarks), to densify linking and handle roster changes.
+- **Time-varying ability** `theta_{team,year}` with a season-to-season smoothing
+  prior, so same-roster teams that recur across seasons can drift instead of
+  collapsing to one blended ability — without losing the cross-year links that
+  keep all seasons on one scale (see the no-year-in-key decision above).
 - **External validation** against problems with a known editorial difficulty or
   a rated-judge mirror.
 - **CF anchoring** if member→handle→rating data becomes available, to turn the
