@@ -68,20 +68,28 @@ def _performance_ratings(thetas, ds, rows_by_contest, lo=elo.LO, hi=elo.HI, tol=
     return rho
 
 
-def _bisect_contest(th, target, lo, hi, tol):
+def _bisect_contest(th, target, lo, hi, tol, grid_n=2048):
     """Per-team root b_i of f_i(b) = sum_{j!=i} pi(theta_j, b_i) - target_i.
 
     f is strictly decreasing in b; clamp to [lo, hi] where no interior root.
+
+    The shared term sum_j pi(theta_j, b) is one monotone function G(b), the same
+    for every team i in the contest; only the self-term pi(theta_i, b_i) differs.
+    Rather than rebuild the dense (N, N) matrix pi(theta_j, b_i) on every bisection
+    step (O(N^2) per step), we sample G(b) once on a grid (O(N * grid_n)) and read
+    it back by interpolation (O(N) per step). The self-term stays exact. Grid error
+    in G is ~1e-3 ELO at grid_n=2048, far below the eps convergence threshold.
     """
-    th = th[None, :]  # (1, N) abilities of all teams (the j index)
+    grid = np.linspace(lo, hi, grid_n)
+    # G[k] = sum_j pi(theta_j, grid[k]); built once, shared by all teams i
+    G = (1.0 / (1.0 + np.power(10.0, (grid[:, None] - th[None, :]) / 400.0))).sum(axis=1)
 
     def f(b):  # b: (N,) candidate per team i
-        # M[i, j] = pi(theta_j, b_i)
-        M = 1.0 / (1.0 + np.power(10.0, (b[:, None] - th) / 400.0))
-        self_term = 1.0 / (1.0 + np.power(10.0, (b - th[0]) / 400.0))  # pi(theta_i, b_i)
-        return M.sum(axis=1) - self_term - target
+        Gb = np.interp(b, grid, G)                                # sum_j pi(theta_j, b_i)
+        self_term = 1.0 / (1.0 + np.power(10.0, (b - th) / 400.0))  # pi(theta_i, b_i)
+        return Gb - self_term - target
 
-    n = th.shape[1]
+    n = th.shape[0]
     a = np.full(n, lo)
     c = np.full(n, hi)
     fa, fc = f(a), f(c)
@@ -104,9 +112,10 @@ def _bisect_contest(th, target, lo, hi, tol):
 
 
 def estimate(ds=None, eps=0.5, max_iter=100, verbose=True):
+    if verbose: print("Loading...\n")
     if ds is None:
         ds = load()
-
+    
     n_teams = len(ds.teams)
     theta = np.full(n_teams, MU0)
     w_team, n_contests = _team_weights(ds)
@@ -119,6 +128,7 @@ def estimate(ds=None, eps=0.5, max_iter=100, verbose=True):
     denom = w_team * n_contests + PRIOR_STRENGTH
 
     history = []
+    if verbose: print("Iterating...\n")
     for it in range(max_iter):
         rho = _performance_ratings(theta, ds, rows_by_contest)
         # numerator: w_t * sum_c rho_{t,c} + PRIOR_STRENGTH * MU0

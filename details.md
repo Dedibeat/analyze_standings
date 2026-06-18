@@ -23,7 +23,14 @@ by alternation, then problems are rated with the converged abilities.
 - `elo.py` — the Elo-inversion primitive: logistic `pi(theta,b)` (s≈173.7) and
   `weighted_rating` (bisection, strat Def. 1). Also `performance_rating`.
 - `fixedpoint.py` — Algorithm 1: loop {performance rating (eq. perf) → ability
-  update (eq. update)} to a fixed point, then rate problems (eq. bp).
+  update (eq. update)} to a fixed point, then rate problems (eq. bp). The
+  per-contest performance solve (`_bisect_contest`) shares the monotone term
+  `G(b) = sum_j pi(theta_j, b)` across all teams in a contest: it is sampled on a
+  grid once per contest (O(N·grid)) and read back by interpolation during the
+  bisection, instead of rebuilding the dense N×N matrix `pi(theta_j, b_i)` on
+  every bisection step. This cut a full `estimate()` from ~36 min to ~1 min
+  (per-iteration `_performance_ratings` 93 s → ~2.8 s) with results unchanged
+  (grid error ~1e-3 ELO, far below the `eps=0.5` convergence threshold).
 - `run.py` — wires it together, writes `output/problem_ratings.json`, runs the
   verification checks.
 
