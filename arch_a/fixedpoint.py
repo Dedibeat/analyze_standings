@@ -103,7 +103,7 @@ def _bisect_contest(th, target, lo, hi, tol):
     return out
 
 
-def estimate(ds=None, eps=0.5, max_iter=100, verbose=False):
+def estimate(ds=None, eps=0.5, max_iter=100, verbose=True):
     if ds is None:
         ds = load()
 

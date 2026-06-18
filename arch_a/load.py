@@ -29,7 +29,7 @@ from dataclasses import dataclass
 
 import numpy as np
 
-DATA_PATH = os.path.join(os.path.dirname(__file__), os.pardir, "data", "standing_added.json")
+DATA_PATH = os.path.join(os.path.dirname(__file__), os.pardir, "data", "tagged.json")
 
 
 def _roster_token(members):
