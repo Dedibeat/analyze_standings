@@ -24,6 +24,17 @@ This writes `output/problem_ratings.json` (one record per problem with its
 estimated `difficulty` on a Codeforces-like [800, 4000] scale) and prints
 verification stats.
 
+### Interactive viewer
+
+```bash
+./.venv/bin/python -m arch_a.export_viewer
+```
+
+Writes a self-contained `output/ratings_viewer.html` — just open it in a browser
+(no server needed). Pick a contest to see its problems ranked by difficulty and
+its teams with their estimated `θ`; click any column to sort, and filter teams by
+name/member/affiliation.
+
 Module self-checks:
 
 ```bash
@@ -35,8 +46,10 @@ Module self-checks:
 ## Layout
 
 - `data/standing_added.json` — input standings (43 contests).
-- `arch_a/` — Architecture A implementation (`load`, `elo`, `fixedpoint`, `run`).
+- `arch_a/` — Architecture A implementation (`load`, `elo`, `fixedpoint`, `run`),
+  plus `export_viewer` + `viewer_template.html` for the HTML viewer.
 - `output/problem_ratings.json` — generated ratings.
+- `output/ratings_viewer.html` — generated interactive viewer.
 - `details.md` — design notes, key decisions, and follow-ups.
 
 See `details.md` for the no-Codeforces-data anchoring choice, the `$DEFAULT`
