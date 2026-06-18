@@ -50,17 +50,35 @@ Run with the project venv:
   by none pin to 4000. (Difficulty and performance map to the bounds in opposite
   directions, since rank 1 is the *best* result.)
 
-- **`$DEFAULT_DAT_PREFIX_*` team ids are per-contest, not stable identities.**
-  These come from domjudge and are local to each contest: of 475 such ids that
-  recur across contests, 472 carry a different team name each time, so the same id
-  denotes different teams. We namespace them by contest id (`contest_id::team_id`)
-  so each is a distinct, single-contest team. `ucup-*` ids are stable (581/586
-  name-consistent) and carry the cross-contest linking signal. With DEFAULT ids
-  excluded from linking, all 43 contests still form a single connected component
-  (k=3 shared teams), so the whole dataset is on one comparable scale.
+- **Team identity = roster (member set), resolved by union-find.** Two id
+  regimes exist: stable ids (`ucup-*`, a few bare ids) that denote one team
+  across contests, and `$DEFAULT_DAT_PREFIX_*` ids from domjudge (the 35 official
+  ICPC regional standings) that are **local to each contest** — of 475 recurring
+  DEFAULT ids, 472 carry a different team name each time, so the same id is
+  different teams. The roster is the reliable identity:
 
-- **Granularity:** per `team_id` (after the namespacing above). Member-level
-  modelling (strat Remark on roster changes) is a follow-up.
+  - ~1,000 domjudge teams play 2+ regionals (up to 6); keying by member set links
+    **2,716 appearances** that the DEFAULT ids leave as isolated islands.
+  - team_name is *not* reliable — 33% of these teams vary their display name
+    across regionals (punctuation, transliteration, renames), while the roster is
+    constant (e.g. `0_GB_RAM` across 6 regionals; one Chinese team appears as
+    `兄弟,我想拿牌` / `兄弟，我想拿牌` / `量大一队-…`).
+  - 60–63 domjudge teams also recur in the Universal Cup, so roster-keying welds
+    regional appearances onto rich UCup histories (e.g. *Rubikun*).
+
+  `load.member_identity` builds a union-find over {stable id, roster token},
+  unioning the two whenever they co-occur in a row. A row resolves to: its
+  roster's component if it has **≥2 members** (the ≥2 guard avoids merging
+  distinct teams on a single shared name — 72 one-member rows); else, for a
+  domjudge id, an isolated per-contest key (1,476 no-member + 72 one-member rows
+  that nothing identifies); else the stable id's component. This keeps a UCup
+  team together even when its roster is missing from some rounds. Result: 7,902
+  raw team keys collapse to **6,164 identities** (4,354 roster-identified, 1,598
+  multi-contest; 1,548 domjudge-isolated). All 43 contests remain one connected
+  component.
+
+- **Granularity:** per resolved identity (roster where available, else stable id).
+  True individual-level modelling (strat Remark on roster changes) is a follow-up.
 
 - **Experience weight** `w_{t,c} = 1 - 0.9^(n+1)` with `n` = prior appearances,
   ordering contests by `contest_id` (most `year` fields are null).
@@ -68,11 +86,12 @@ Run with the project venv:
 ### Results (current run)
 
 - Converges in ~9 iterations, monotone decreasing `max|dtheta|` < 0.5.
-- `theta` ≈ [1500, 3000], mean ~1977 (anchored near MU0).
-- `b` ≈ [1230, 4000]; 17 zero-solve problems pin to 4000.
+- `theta` ≈ [1500, 3000], mean ~1969 (anchored near MU0).
+- `b` ≈ [1195, 4000]; zero-solve problems pin to 4000.
 - Per-contest Spearman(difficulty, solve_count) median **−0.995** (harder
   problems were solved by fewer teams, as expected).
-- Most-recurring UCup teams land high (e.g. ucup-team1878 θ≈2721).
+- Roster-keying surfaces real competitor identities: the top θ is
+  `Gennady Korotkevich|Kevin Sun` (tourist) at θ≈2722 over 42 contests.
 
 ## Out of scope / follow-ups
 

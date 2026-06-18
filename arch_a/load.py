@@ -1,10 +1,26 @@
 """Load standings JSON into flat arrays for the fixed-point estimator.
 
-Team identity note: ``$DEFAULT_DAT_PREFIX_*`` ids come from domjudge and are
-local to a single contest (the same id denotes different teams in different
-contests). We namespace them by contest id so each is a distinct, single-contest
-team. Stable ids (``ucup-*`` and bare ids) are kept as-is so a team recurring
-across contests carries one identity -- the linking signal.
+Team identity. Two id regimes appear in the data:
+
+* Stable ids (``ucup-*`` and a few bare ids) denote the same team across
+  contests -- the cross-contest linking signal.
+* ``$DEFAULT_DAT_PREFIX_*`` ids come from domjudge (official ICPC regional
+  standings) and are local to a single contest: the same id denotes different
+  teams in different contests, so they cannot link on their own.
+
+The roster (member set) is a far more reliable identity than either id: ~1000
+domjudge teams play several regionals, and 63 of them also recur in the
+Universal Cup, often under varying display names. We therefore resolve identity
+by **union-find** over {stable id, member-set} (``member_identity``): every row
+whose id and roster co-occur unions them, so member-keyed rows, id-keyed rows,
+and domjudge regional rows of the same roster collapse into one team. This also
+keeps a Universal Cup team together when its roster is missing from some rounds.
+
+Resolution rule per row:
+
+* roster of >=2 members present -> the roster's component (links everywhere);
+* else domjudge id -> isolated per-contest key (nothing identifies it);
+* else stable id -> the id's component.
 """
 
 import json
@@ -16,11 +32,57 @@ import numpy as np
 DATA_PATH = os.path.join(os.path.dirname(__file__), os.pardir, "data", "standing_added.json")
 
 
-def team_key(contest_id, team_id):
-    """Canonical team identity. Per-contest namespace for domjudge placeholders."""
+def _roster_token(members):
+    """Identity token for a roster, or None if too small to trust (>=2 members)."""
+    if members and len(members) >= 2:
+        return "mem:" + "|".join(sorted(members))
+    return None
+
+
+class _UnionFind:
+    def __init__(self):
+        self.parent = {}
+
+    def find(self, x):
+        self.parent.setdefault(x, x)
+        root = x
+        while self.parent[root] != root:
+            root = self.parent[root]
+        while self.parent[x] != root:
+            self.parent[x], x = root, self.parent[x]
+        return root
+
+    def union(self, a, b):
+        ra, rb = self.find(a), self.find(b)
+        if ra != rb:
+            self.parent[ra] = rb
+
+
+def member_identity(raw):
+    """Build union-find resolver over stable ids and rosters (see module docstring)."""
+    uf = _UnionFind()
+    for c in raw:
+        for s in c["standings"]:
+            tid = s["team_id"]
+            stable = None if tid.startswith("$DEFAULT") else "id:" + tid
+            roster = _roster_token(s.get("members"))
+            if stable is not None:
+                uf.find(stable)
+            if roster is not None:
+                uf.find(roster)
+                if stable is not None:
+                    uf.union(stable, roster)
+    return uf
+
+
+def team_key(contest_id, team_id, members, uf):
+    """Canonical team identity for a standing row, resolved through ``uf``."""
+    roster = _roster_token(members)
+    if roster is not None:
+        return uf.find(roster)
     if team_id.startswith("$DEFAULT"):
-        return f"{contest_id}::{team_id}"
-    return team_id
+        return f"dj:{contest_id}::{team_id}"  # isolated: nothing identifies it
+    return uf.find("id:" + team_id)
 
 
 @dataclass
@@ -46,6 +108,8 @@ def load(path=DATA_PATH):
     with open(path) as f:
         raw = json.load(f)
 
+    uf = member_identity(raw)
+
     team_index = {}
     contest_index = {}
     problems = []
@@ -67,7 +131,7 @@ def load(path=DATA_PATH):
                 contest_of_problem.append(ci)
                 raw_solved_count.append(p.get("problem_solved_in_contest"))
         for s in c["standings"]:
-            tk = team_key(cid, s["team_id"])
+            tk = team_key(cid, s["team_id"], s.get("members"), uf)
             if tk not in team_index:
                 team_index[tk] = len(team_index)
 
@@ -90,7 +154,7 @@ def load(path=DATA_PATH):
         cols = {p["problem_label"]: problem_index[(ci, p["problem_label"])] for p in c["problems"]}
         for s in c["standings"]:
             assert s.get("rank") is not None, f"missing rank in contest {cid}"
-            ti = team_index[team_key(cid, s["team_id"])]
+            ti = team_index[team_key(cid, s["team_id"], s.get("members"), uf)]
             team_of_row.append(ti)
             contest_of_row.append(ci)
             rank_of_row.append(int(s["rank"]))
@@ -135,10 +199,18 @@ def load(path=DATA_PATH):
 
 
 if __name__ == "__main__":
+    import numpy as np
+
     ds = load()
     print(f"contests: {len(ds.contests)}")
     print(f"teams:    {len(ds.teams)}")
     print(f"problems: {len(ds.problems)}")
     print(f"rows:     {len(ds.team_of_row)}")
-    namespaced = sum(1 for t in ds.teams if "::" in t and "$DEFAULT" in t)
-    print(f"per-contest namespaced (domjudge) teams: {namespaced}")
+
+    counts = np.zeros(len(ds.teams), dtype=int)
+    np.add.at(counts, ds.team_of_row, 1)
+    roster = sum(1 for t in ds.teams if t.startswith("mem:"))
+    isolated = sum(1 for t in ds.teams if t.startswith("dj:"))
+    multi = int(np.sum(counts > 1))
+    print(f"roster-identified teams: {roster}  (multi-contest: {multi})")
+    print(f"domjudge isolated (no usable roster) teams: {isolated}")
