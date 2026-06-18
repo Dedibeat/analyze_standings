@@ -9,13 +9,30 @@ dependent, so they are solved by alternation:
     until max |delta theta| < eps
     for each problem: difficulty b_p                                  (eq. bp)
 
-Anchoring. The strat anchors the scale through the Codeforces ratings of team
-members (eq. cfprior), which seed theta_prior. No CF ratings exist in this data,
-so we use a constant neutral prior MU0 (a mid Codeforces rating) for every team.
-The blend toward theta_prior in eq. update then anchors the global shift on the
-Codeforces scale and keeps abilities inside the [800, 4000] working range -- the
-role the CF bootstrap would otherwise play. (Mean-centering to 0 is incompatible
-with that range, since the clamp is applied during the bisection.)
+Anchoring (deviation from the strat). The strat anchors the scale through the
+Codeforces ratings of team members (eq. cfprior), which seed a per-team
+theta_prior, and its eq. update blends 0.5*(rho + theta_prior). No CF ratings
+exist in this data, so theta_prior is a constant neutral MU0 (a mid Codeforces
+rating) for every team. A fixed 0.5 blend toward a *constant* MU0 never washes
+out with evidence -- even a 40-contest team stays pinned halfway to MU0 -- which
+flattens contest-strength differences toward MU0 and damps the cross-contest
+normalization the shared teams are meant to carry.
+
+We therefore treat MU0 as a single pseudo-observation of strength PRIOR_STRENGTH
+that the data outvotes as a team plays more contests:
+
+    theta_t = (w_t * sum_c rho_{t,c} + PRIOR_STRENGTH * MU0)
+              / (w_t * N_t            + PRIOR_STRENGTH)
+
+A one-contest team leans on MU0 (cold start); a veteran is driven by its own
+performances. MU0 still fixes the global shift on the [800, 4000] scale.
+
+Weighting (deviation from the strat). The strat's experience weight
+1 - 0.9^(n+1) grows with a team's accumulated history n. We replace it with a
+single reliability weight per team from its *total* contest count N_t,
+w_t = 1 - 0.9^(N_t): a team seen in many contests is a steady yardstick and
+speaks loudly in both the ability update and the difficulty estimate; a
+one-off team is down-weighted to 0.1.
 """
 
 import numpy as np
@@ -23,33 +40,18 @@ import numpy as np
 from . import elo
 from .load import load
 
-MU0 = 2000.0  # neutral prior mean (mid Codeforces rating); anchors the scale
+MU0 = 2000.0          # neutral prior mean (mid Codeforces rating); anchors the scale
+PRIOR_STRENGTH = 1.0  # MU0 counts as this many effective contests of evidence
 
 
-def _experience_weights(ds):
-    """w_{t,c} = 1 - 0.9^(n+1), n = prior appearances of the team (eq. weight).
+def _team_weights(ds):
+    """Reliability weight per team, w_t = 1 - 0.9^(N_t), N_t = contests played.
 
-    Contests are ordered by contest_id; a team's n-th appearance in that order
-    has n prior contests. Returns an array aligned with ds rows.
+    Returns (w_team, n_contests), both indexed by team. A team appears once per
+    contest, so its appearance count is its contest count.
     """
-    order_rank = np.empty(len(ds.contests), dtype=int)
-    order_rank[ds.contest_order] = np.arange(len(ds.contests))
-
-    rows = np.arange(len(ds.team_of_row))
-    # sort rows by (team, contest order) and count prior appearances per team
-    key = order_rank[ds.contest_of_row]
-    sort_idx = sorted(rows, key=lambda i: (ds.team_of_row[i], key[i]))
-    n_prior = np.empty(len(rows), dtype=int)
-    prev_team = -1
-    count = 0
-    for i in sort_idx:
-        t = ds.team_of_row[i]
-        if t != prev_team:
-            count = 0
-            prev_team = t
-        n_prior[i] = count
-        count += 1
-    return 1.0 - np.power(0.9, n_prior + 1)
+    n_contests = np.bincount(ds.team_of_row, minlength=len(ds.teams))
+    return 1.0 - np.power(0.9, n_contests), n_contests
 
 
 def _performance_ratings(thetas, ds, rows_by_contest, lo=elo.LO, hi=elo.HI, tol=1e-4):
@@ -107,26 +109,23 @@ def estimate(ds=None, eps=0.5, max_iter=100, verbose=False):
 
     n_teams = len(ds.teams)
     theta = np.full(n_teams, MU0)
-    theta_prior = np.full(n_teams, MU0)
-    w_row = _experience_weights(ds)
+    w_team, n_contests = _team_weights(ds)
 
     rows_by_contest = [
         np.where(ds.contest_of_row == ci)[0] for ci in range(len(ds.contests))
     ]
 
-    # denominator of eq. update: sum of experience weights per team
-    denom = np.zeros(n_teams)
-    np.add.at(denom, ds.team_of_row, w_row)
+    # denominator of the evidence-weighted update: w_t * N_t + PRIOR_STRENGTH
+    denom = w_team * n_contests + PRIOR_STRENGTH
 
     history = []
     for it in range(max_iter):
         rho = _performance_ratings(theta, ds, rows_by_contest)
-        # numerator: sum_c w_{t,c} * 0.5 * (rho_{t,c} + theta_prior_t)
-        contrib = w_row * 0.5 * (rho + theta_prior[ds.team_of_row])
-        numer = np.zeros(n_teams)
-        np.add.at(numer, ds.team_of_row, contrib)
-        new_theta = np.where(denom > 0, numer / np.maximum(denom, 1e-12), theta_prior)
-        new_theta = np.clip(new_theta, elo.LO, elo.HI)
+        # numerator: w_t * sum_c rho_{t,c} + PRIOR_STRENGTH * MU0
+        sum_rho = np.zeros(n_teams)
+        np.add.at(sum_rho, ds.team_of_row, rho)
+        numer = w_team * sum_rho + PRIOR_STRENGTH * MU0
+        new_theta = np.clip(numer / denom, elo.LO, elo.HI)
 
         delta = np.max(np.abs(new_theta - theta))
         history.append(delta)
@@ -136,27 +135,22 @@ def estimate(ds=None, eps=0.5, max_iter=100, verbose=False):
         if delta < eps:
             break
 
-    b = _rate_problems(theta, w_row, ds)
+    b = _rate_problems(theta, w_team, ds)
     return theta, b, history
 
 
-def _rate_problems(theta, w_row, ds):
+def _rate_problems(theta, w_team, ds):
     """b_p = WR({(w_t, theta_t)}, S_p), S_p = sum_t w_t y_tp (eq. bp).
 
-    Uses each team's final experience weight (last appearance), matching the
-    converged abilities.
+    Down-weights unreliable (few-contest) teams via the same reliability weight.
     """
-    # final weight per team = max weight observed (most experienced appearance)
-    team_weight = np.zeros(len(ds.teams))
-    np.maximum.at(team_weight, ds.team_of_row, w_row)
-
     b = np.empty(len(ds.problems))
     for p in range(len(ds.problems)):
         ci = ds.contest_of_problem[p]
         rows = np.where(ds.contest_of_row == ci)[0]
         teams = ds.team_of_row[rows]
         thetas = theta[teams]
-        weights = team_weight[teams]
+        weights = w_team[teams]
         solved = ds.y[rows, p] & ds.solve_mask[rows, p]
         S_p = np.sum(weights * solved)
         b[p] = elo.weighted_rating(thetas, S_p, weights=weights)

@@ -37,12 +37,34 @@ Run with the project venv:
   bootstrap (eq. cfprior) use the Codeforces ratings of team members. **The data
   contains no CF ratings, and `members` are real names, not handles**, so CF
   anchoring is not available. Instead we anchor with a **constant neutral prior
-  `MU0 = 2000`** (a mid Codeforces rating) used as `theta_prior` for every team.
-  The blend toward `theta_prior` in eq. update fixes the global shift on the
-  Codeforces scale. This replaces the plan's original "center to mean 0", which
-  is incompatible with the clamp below (centering would push half the teams under
-  the floor mid-loop). Outputs are therefore a relative scale pinned near 2000,
-  *not* certified CF-equivalent points.
+  `MU0 = 2000`** (a mid Codeforces rating) for every team. This replaces the
+  plan's original "center to mean 0", which is incompatible with the clamp below
+  (centering would push half the teams under the floor mid-loop). Outputs are
+  therefore a relative scale pinned near 2000, *not* certified CF-equivalent
+  points.
+
+- **Evidence-weighted prior (deviation from strat eq. update).** The strat blends
+  `0.5*(rho + theta_prior)` per contest. With a *constant* MU0 that 0.5 weight
+  never washes out — even a 40-contest team stays pinned halfway to MU0 — which
+  flattens every contest's mean ability toward MU0 and defeats cross-contest
+  normalization. We instead treat MU0 as a single pseudo-contest of strength
+  `PRIOR_STRENGTH = 1.0`:
+  `theta = (w_t*sum_c rho_c + PRIOR_STRENGTH*MU0) / (w_t*N_t + PRIOR_STRENGTH)`.
+  A one-contest team leans on MU0 (cold start); a veteran is driven by its own
+  performances (tourist: 2722 → 3634). Measured effect on normalization: with the
+  old 0.5 blend, removing *all* cross-contest linking barely moved ratings
+  (corr 0.99, mean shift 73 pts) — the prior did the anchoring. With the
+  evidence-weighted prior, an unlinked contest collapses to exactly MU0
+  (per-contest mean-theta std 3.7), and linking lifts small elite fields by
+  300–480 pts (mean rating shift 267 pts): the **shared teams now drive
+  normalization**, which is the whole point of the linking graph (§6).
+
+- **Reliability weight from total contests (deviation from strat eq. weight).**
+  The strat's experience weight `1 - 0.9^(n+1)` grows with accumulated history n.
+  We use a single per-team weight from its *total* contest count,
+  `w_t = 1 - 0.9^(N_t)` (one-off team → 0.1, veteran → ~1), applied in both the
+  ability update and the difficulty estimate. Simpler, and needs no contest
+  ordering (most `year` fields are null anyway).
 
 - **`theta` / `b` clamp `[800, 4000]`** (close to the Codeforces range). This is
   also the floor/ceiling the strat prescribes in §3.2: problems solved by all (and
@@ -80,18 +102,27 @@ Run with the project venv:
 - **Granularity:** per resolved identity (roster where available, else stable id).
   True individual-level modelling (strat Remark on roster changes) is a follow-up.
 
-- **Experience weight** `w_{t,c} = 1 - 0.9^(n+1)` with `n` = prior appearances,
-  ordering contests by `contest_id` (most `year` fields are null).
-
 ### Results (current run)
 
-- Converges in ~9 iterations, monotone decreasing `max|dtheta|` < 0.5.
-- `theta` ≈ [1500, 3000], mean ~1969 (anchored near MU0).
-- `b` ≈ [1195, 4000]; zero-solve problems pin to 4000.
+- Converges in ~15 iterations, monotone decreasing `max|dtheta|` < 0.5.
+- `theta` ≈ [1561, 3634], mean ~2018; veterans reach realistic levels
+  (tourist θ≈3634) now that the prior washes out with evidence.
+- `b` ≈ [1266, 4000], mean ~2462; zero-solve problems pin to 4000.
 - Per-contest Spearman(difficulty, solve_count) median **−0.995** (harder
   problems were solved by fewer teams, as expected).
-- Roster-keying surfaces real competitor identities: the top θ is
-  `Gennady Korotkevich|Kevin Sun` (tourist) at θ≈2722 over 42 contests.
+- Cross-contest normalization is now carried by the shared teams (see the
+  evidence-weighted-prior decision): per-contest mean ability spreads to std≈110
+  vs ≈3.7 with linking removed.
+
+### Caveat introduced by the stronger normalization
+
+Because an unlinked contest now collapses to MU0, a contest's absolute scale
+depends entirely on its *linked* teams. Contests dominated by domjudge-isolated
+teams (the large 500+-team Chinese regionals, where many rows have no usable
+roster) are anchored by their minority of multi-contest teams, so their scale is
+noisier than a UCup-heavy contest's. The graph is fully connected and every
+contest has linked teams, so this is a quality gradient, not a break — but it is
+the price of letting the shared teams, rather than the prior, set the scale.
 
 ## Out of scope / follow-ups
 

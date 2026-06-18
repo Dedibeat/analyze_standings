@@ -100,7 +100,6 @@ class Dataset:
     tau: np.ndarray            # (n_rows, n_problems) solve time seconds; NaN where not solved
     contest_of_problem: np.ndarray  # problem index -> contest index
 
-    contest_order: np.ndarray  # contest indices sorted by contest_id (for experience weights)
     raw_solved_count: np.ndarray  # problem index -> problem_solved_in_contest (reported)
 
 
@@ -176,10 +175,6 @@ def load(path=DATA_PATH):
             mask_rows.append(mask)
             tau_rows.append(tau)
 
-    contest_order = np.array(
-        sorted(range(len(contests)), key=lambda ci: contests[ci]), dtype=int
-    )
-
     return Dataset(
         teams=teams,
         contests=contests,
@@ -191,7 +186,6 @@ def load(path=DATA_PATH):
         solve_mask=np.array(mask_rows),
         tau=np.array(tau_rows),
         contest_of_problem=np.array(contest_of_problem, dtype=int),
-        contest_order=contest_order,
         raw_solved_count=np.array(
             [x if x is not None else -1 for x in raw_solved_count], dtype=int
         ),
