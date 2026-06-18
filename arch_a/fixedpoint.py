@@ -135,8 +135,10 @@ def estimate(ds=None, eps=0.5, max_iter=100, verbose=False):
         if delta < eps:
             break
 
+    # final per-row performance ratings (eq. perf) consistent with converged theta
+    rho = _performance_ratings(theta, ds, rows_by_contest)
     b = _rate_problems(theta, w_team, ds)
-    return theta, b, history
+    return theta, b, rho, history
 
 
 def _rate_problems(theta, w_team, ds):
@@ -159,7 +161,7 @@ def _rate_problems(theta, w_team, ds):
 
 if __name__ == "__main__":
     ds = load()
-    theta, b, history = estimate(ds, verbose=True)
+    theta, b, rho, history = estimate(ds, verbose=True)
     print(f"converged in {len(history)} iters, final max|dtheta| = {history[-1]:.4f}")
     print(f"theta range: [{theta.min():.0f}, {theta.max():.0f}], mean {theta.mean():.0f}")
     print(f"b range:     [{b.min():.0f}, {b.max():.0f}], mean {b.mean():.0f}")

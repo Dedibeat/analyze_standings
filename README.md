@@ -32,7 +32,9 @@ verification stats.
 
 Writes a self-contained `output/ratings_viewer.html` — just open it in a browser
 (no server needed). Pick a contest to see its problems ranked by difficulty and
-its teams with their estimated `θ`; click any column to sort, and filter teams by
+its teams with both their overall ability `θ` and their **performance** in that
+contest (the rating implied by their final rank, eq. perf) — the gap shows who
+over- or under-performed. Click any column to sort, and filter teams by
 name/member/affiliation.
 
 Module self-checks:

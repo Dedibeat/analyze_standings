@@ -30,7 +30,7 @@ def _spearman(x, y):
 
 def main():
     ds = load()
-    theta, b, history = estimate(ds)
+    theta, b, _, history = estimate(ds)
 
     records = []
     for p, (cid, label, pid, name) in enumerate(ds.problems):

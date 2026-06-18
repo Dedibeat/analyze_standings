@@ -74,7 +74,8 @@
         <thead><tr>
           <th data-k="rank" class="num">Rank</th>
           <th data-k="name" class="name">Team</th>
-          <th data-k="theta" class="num">&theta;</th>
+          <th data-k="theta" class="num" title="overall ability, blended across all contests">&theta;</th>
+          <th data-k="performance" class="num" title="performance in this contest, from final rank">Perf</th>
           <th data-k="solved" class="num">Solved</th>
           <th data-k="contests" class="num" title="contests this identity plays in the dataset">Cts</th>
         </tr></thead>
@@ -138,6 +139,7 @@ function renderTeams(c){
       <td class="num">${t.rank}</td>
       <td class="name">${esc(t.name)}${t.affiliation?`<div class="aff">${esc(t.affiliation)}</div>`:""}</td>
       <td class="num">${chip(t.theta)}</td>
+      <td class="num">${chip(t.performance)}</td>
       <td class="num">${t.solved}</td>
       <td class="num">${t.contests}</td>
     </tr>`).join("");

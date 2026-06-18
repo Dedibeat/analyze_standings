@@ -27,7 +27,7 @@ def build_data():
     ds = load()
     uf = member_identity(raw)
     key_to_idx = {k: i for i, k in enumerate(ds.teams)}
-    theta, b, _ = estimate(ds)
+    theta, b, rho, _ = estimate(ds)
 
     # problem difficulties + actual solve count among ranked teams, per contest
     prob_by_contest = {}
@@ -42,7 +42,10 @@ def build_data():
             "solved": solved,
         })
 
+    # rho is per ds row, built in the same raw iteration order as load(); a
+    # running counter therefore aligns each standing row with its performance.
     contests = []
+    row = 0
     for c in raw:
         cid = c["contest_id"]
         teams = []
@@ -53,9 +56,11 @@ def build_data():
                 "name": s.get("team_name") or "(unnamed)",
                 "affiliation": s.get("affiliation") or "",
                 "theta": round(float(theta[idx]), 0),
+                "performance": round(float(rho[row]), 0),
                 "solved": int(s.get("total_solved") or 0),
                 "contests": int(np.sum(ds.team_of_row == idx)),
             })
+            row += 1
         problems = prob_by_contest.get(cid, [])
         contests.append({
             "contest_id": int(cid),
@@ -69,6 +74,7 @@ def build_data():
             "teams": teams,
         })
 
+    assert row == len(rho), "performance/row alignment mismatch"
     contests.sort(key=lambda c: c["name"])
     return {"scale": {"lo": LO, "hi": HI}, "contests": contests}
 
