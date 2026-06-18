@@ -65,6 +65,12 @@ Run with the project venv:
   `w_t = 1 - 0.9^(N_t)` (one-off team → 0.1, veteran → ~1), applied in both the
   ability update and the difficulty estimate. Simpler, and needs no contest
   ordering (most `year` fields are null anyway).
+  *Trade-off:* `N_t` is the team's total count over the whole dataset, so it is
+  **non-causal/look-ahead** — a team's first appearance is weighted using
+  contests that came later. That is fine for this one-shot batch rating but makes
+  it unsuitable as-is for online/streaming use, and unlike the strat's
+  chronological weight it does not discount a veteran's unsettled early-career
+  results (all of a team's contests carry the same weight).
 
 - **`theta` / `b` clamp `[800, 4000]`** (close to the Codeforces range). This is
   also the floor/ceiling the strat prescribes in §3.2: problems solved by all (and
