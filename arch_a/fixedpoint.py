@@ -111,11 +111,23 @@ def _bisect_contest(th, target, lo, hi, tol, grid_n=2048):
     return out
 
 
-def estimate(ds=None, eps=0.5, max_iter=100, verbose=True):
+def estimate(ds=None, eps=0.5, max_iter=100, verbose=True,
+             prior_mu=None, prior_strength=None):
+    """Alternating fixed point for abilities, then problem difficulties.
+
+    ``prior_mu`` / ``prior_strength`` are the per-team prior mean and its strength
+    (in pseudo-contests). They default to the scalar neutral prior (MU0 at
+    strength PRIOR_STRENGTH) for every team; pass per-team arrays to anchor
+    selected teams to an external scale (see ``anchor.estimate_anchored``).
+    """
     if verbose: print("Loading...\n")
     if ds is None:
         ds = load()
-    
+    if prior_mu is None:
+        prior_mu = MU0
+    if prior_strength is None:
+        prior_strength = PRIOR_STRENGTH
+
     n_teams = len(ds.teams)
     theta = np.full(n_teams, MU0)
     w_team, n_contests = _team_weights(ds)
@@ -124,8 +136,8 @@ def estimate(ds=None, eps=0.5, max_iter=100, verbose=True):
         np.where(ds.contest_of_row == ci)[0] for ci in range(len(ds.contests))
     ]
 
-    # denominator of the evidence-weighted update: w_t * N_t + PRIOR_STRENGTH
-    denom = w_team * n_contests + PRIOR_STRENGTH
+    # denominator of the evidence-weighted update: w_t * N_t + prior_strength
+    denom = w_team * n_contests + prior_strength
 
     history = []
     if verbose: print("Iterating...\n")
@@ -134,7 +146,7 @@ def estimate(ds=None, eps=0.5, max_iter=100, verbose=True):
         # numerator: w_t * sum_c rho_{t,c} + PRIOR_STRENGTH * MU0
         sum_rho = np.zeros(n_teams)
         np.add.at(sum_rho, ds.team_of_row, rho)
-        numer = w_team * sum_rho + PRIOR_STRENGTH * MU0
+        numer = w_team * sum_rho + prior_strength * prior_mu
         new_theta = np.clip(numer / denom, elo.LO, elo.HI)
 
         delta = np.max(np.abs(new_theta - theta))

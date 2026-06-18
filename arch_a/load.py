@@ -29,7 +29,7 @@ from dataclasses import dataclass
 
 import numpy as np
 
-DATA_PATH = os.path.join(os.path.dirname(__file__), os.pardir, "data", "tagged.json")
+DATA_PATH = os.path.join(os.path.dirname(__file__), os.pardir, "data", "ucup_s4.json")
 
 
 def _roster_token(members):
@@ -103,11 +103,22 @@ class Dataset:
     raw_solved_count: np.ndarray  # problem index -> problem_solved_in_contest (reported)
 
 
-def load(path=DATA_PATH):
-    with open(path) as f:
-        raw = json.load(f)
+def load(path=DATA_PATH, uf=None):
+    """Load one file (str path) or several (list of paths) into one Dataset.
 
-    uf = member_identity(raw)
+    Pass a prebuilt ``uf`` to resolve team identity against a *shared* union-find
+    so team keys are comparable across separate ``load`` calls (the anchor fit
+    needs the UCup and tagged datasets to agree on who is who). When omitted, the
+    union-find is built from this call's own rows.
+    """
+    paths = [path] if isinstance(path, str) else list(path)
+    raw = []
+    for p in paths:
+        with open(p) as f:
+            raw.extend(json.load(f))
+
+    if uf is None:
+        uf = member_identity(raw)
 
     team_index = {}
     contest_index = {}

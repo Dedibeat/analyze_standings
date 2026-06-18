@@ -24,6 +24,13 @@ This writes `output/problem_ratings.json` (one record per problem with its
 estimated `difficulty` on a Codeforces-like [800, 4000] scale) and prints
 verification stats.
 
+`run` fits the full `data/tagged.json` **anchored to the Universal Cup scale**:
+it first fits the UCup seasons (`ucup_s3` + `ucup_s4`) on their own, then uses
+each UCup team's ability as that team's prior when fitting tagged, so the two
+sit on one comparable scale (see `arch_a/anchor.py`). Without the anchor the
+tagged fit floats ~440 pts above UCup for the 5.8k shared teams; anchoring cuts
+that scale gap roughly in half. Tune the pull with `estimate_anchored(anchor_weight=…)`.
+
 ### Interactive viewer
 
 ```bash
@@ -59,9 +66,10 @@ Module self-checks:
 
 ## Layout
 
-- `data/standing_added.json` — input standings (43 contests).
-- `arch_a/` — Architecture A implementation (`load`, `elo`, `fixedpoint`, `run`),
-  plus `export_viewer` + `viewer_template.html` for the HTML viewer.
+- `data/tagged.json` — full input standings (146 contests); `data/ucup_s3.json`,
+  `data/ucup_s4.json` — the Universal Cup seasons used to anchor the scale.
+- `arch_a/` — Architecture A implementation (`load`, `elo`, `fixedpoint`,
+  `anchor`, `run`), plus `export_viewer` + `viewer_template.html` for the viewer.
 - `output/problem_ratings.json` — generated ratings.
 - `output/ratings_viewer.html` — generated interactive viewer.
 - `details.md` — design notes, key decisions, and follow-ups.

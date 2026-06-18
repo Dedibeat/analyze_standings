@@ -9,7 +9,9 @@ implements **Architecture A — the alternating fixed point** (strat.tex §3).
 
 ## Data
 
-`data/standing_added.json` — 43 contests, 11,621 standing rows, 568 problems.
+`data/tagged.json` — 146 contests, 99,754 standing rows, 1,668 problems (the full
+mixed ICPC + Universal Cup set). `data/ucup_s3.json` and `data/ucup_s4.json` are
+the two Universal Cup seasons (43 and 33 contests) used to anchor the scale.
 Per standing row: `rank`, `team_id`, `members`, `total_solved`, and per-problem
 `{solved, score, time_seconds, wrong_attempts}`. This yields the model inputs
 `y_tp` (solved), `tau_tp` (solve time), `r_{t,c}` (rank).
@@ -31,8 +33,11 @@ by alternation, then problems are rated with the converged abilities.
   every bisection step. This cut a full `estimate()` from ~36 min to ~1 min
   (per-iteration `_performance_ratings` 93 s → ~2.8 s) with results unchanged
   (grid error ~1e-3 ELO, far below the `eps=0.5` convergence threshold).
-- `run.py` — wires it together, writes `output/problem_ratings.json`, runs the
-  verification checks.
+- `anchor.py` — two-phase anchored fit: fit the Universal Cup seasons alone, then
+  fit the full `tagged.json` with each UCup team's ability fed back as its prior
+  (see the anchoring decision below).
+- `run.py` — wires it together (now the anchored fit), writes
+  `output/problem_ratings.json`, runs the verification checks.
 
 Run with the project venv:
 
@@ -65,6 +70,26 @@ Run with the project venv:
   (per-contest mean-theta std 3.7), and linking lifts small elite fields by
   300–480 pts (mean rating shift 267 pts): the **shared teams now drive
   normalization**, which is the whole point of the linking graph (§6).
+
+- **Universal Cup anchor (`anchor.py`).** With only the constant MU0 prior, each
+  dataset's scale floats on its own: a tagged-only fit sits ~440 pts above a
+  UCup-only fit for the 5,835 teams they share (RMSE 519, corr 0.67 — the
+  *ordering* agrees, the *scale* does not). The Universal Cup is a densely
+  cross-linked league, so we treat its fit as the trusted scale. Two phases,
+  under **one shared union-find** (a roster's `team_key` root depends on union
+  order, so both datasets must resolve identity together):
+  1. fit the UCup seasons (`ucup_s3 + ucup_s4`) alone → ability `theta_u` per team;
+  2. fit `tagged.json` with each shared team's prior replaced by `theta_u`,
+     folded with the standing MU0 pseudo-contest:
+     `s_a = anchor_weight * w_u*N_u`,
+     `mu = (PRIOR_STRENGTH*MU0 + s_a*theta_u)/(PRIOR_STRENGTH + s_a)`,
+     `strength = PRIOR_STRENGTH + s_a`.
+  Anchor strength is the team's *UCup evidence* `w_u*N_u`: many UCup rounds → pinned
+  hard, a one-off → only nudged (still gets the MU0 cold start). The linking graph
+  then carries the UCup scale to non-UCup teams. Measured at `anchor_weight=1.0`:
+  shared-team RMSE vs UCup drops 519 → 301. Raising `anchor_weight` pins harder;
+  this is the one knob. *Note:* both fits are still only MU0-anchored in absolute
+  terms, so this buys **cross-fit consistency**, not certified CF-equivalent points.
 
 - **Reliability weight from total contests (deviation from strat eq. weight).**
   The strat's experience weight `1 - 0.9^(n+1)` grows with accumulated history n.

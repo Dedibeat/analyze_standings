@@ -11,8 +11,7 @@ import os
 
 import numpy as np
 
-from .fixedpoint import estimate
-from .load import load
+from .anchor import estimate_anchored
 
 OUT_DIR = os.path.join(os.path.dirname(__file__), os.pardir, "output")
 
@@ -29,8 +28,7 @@ def _spearman(x, y):
 
 
 def main():
-    ds = load()
-    theta, b, _, history = estimate(ds)
+    ds, theta, b, _, history = estimate_anchored()
 
     records = []
     for p, (cid, label, pid, name) in enumerate(ds.problems):
