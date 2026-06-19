@@ -118,6 +118,19 @@ Run with the project venv:
   by none pin to 4000. (Difficulty and performance map to the bounds in opposite
   directions, since rank 1 is the *best* result.)
 
+- **Boundary smoothing of difficulties (`SMOOTH`, `_rate_problems`).** Solved-by-all
+  and solved-by-none problems otherwise collapse onto the bound (was 66 at 800, 98
+  at 4000), discarding how strong the field was. We add two dummy teams of weight
+  `SMOOTH=0.5` to every problem's pool: a strong (HI) phantom that *solved* it
+  (target < total → all-solved root just above LO) and a weak (LO) phantom that
+  *failed* (none-solved root just below HI). This is additive smoothing with two
+  pseudo-observations at the extremes — gentle by construction (placing them at the
+  bounds, not at a neutral 2000, barely moves the values; α washes out against a
+  real field). Effect: 800-pins 66 → 0 (min now ~1028), 4000-pins 98 → 59 (the
+  remainder are the 6 empty contests plus problems a *large strong* field still all
+  failed, legitimately at-ceiling; the rest spread down to ~3229). Interior
+  problems are essentially unchanged; `α` is the one knob.
+
 - **Team identity = roster (member set), resolved by union-find.** Two id
   regimes exist: stable ids (`ucup-*`, a few bare ids) that denote one team
   across contests, and `$DEFAULT_DAT_PREFIX_*` ids from domjudge (the 35 official
@@ -187,7 +200,9 @@ Run with the project venv:
 
 - Converges in ~17 iterations, monotone decreasing `max|dtheta|` < 0.5.
 - `theta` ≈ [1720, 3777], mean ~2165 (zero-solve rows dropped; see decision).
-- `b` ≈ [800, 4000], mean ~2605; zero-solve problems pin to 4000.
+- `b` ≈ [1028, 4000], mean ~2613; boundary-smoothed (see decision), so
+  solved-by-all problems clear the 800 floor and most solved-by-none spread below
+  4000 (only at-ceiling and empty-contest problems remain pinned).
 - Per-contest Spearman(difficulty, solve_count) median **−0.993** (harder
   problems were solved by fewer teams, as expected).
 - Cross-contest normalization is now carried by the shared teams (see the

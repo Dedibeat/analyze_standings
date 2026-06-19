@@ -42,6 +42,9 @@ from .load import load
 
 MU0 = 2000.0          # neutral prior mean (mid Codeforces rating); anchors the scale
 PRIOR_STRENGTH = 1.0  # MU0 counts as this many effective contests of evidence
+SMOOTH = 0.5          # pseudo team-weight of the two boundary "dummy teams" that
+                      # smooth the solved-by-all / solved-by-none difficulty pins
+                      # off the [LO, HI] bounds (additive smoothing, eq. bp)
 
 
 def _team_weights(ds):
@@ -167,6 +170,13 @@ def _rate_problems(theta, w_team, ds):
     """b_p = WR({(w_t, theta_t)}, S_p), S_p = sum_t w_t y_tp (eq. bp).
 
     Down-weights unreliable (few-contest) teams via the same reliability weight.
+
+    Two boundary dummy teams (weight SMOOTH each) keep the solved-by-all /
+    solved-by-none cases off the bounds: a strong (HI) phantom that *solved* the
+    problem makes an all-solved target < total (root just above LO), and a weak
+    (LO) phantom that *failed* gives a none-solved problem a root just below HI.
+    They wash out against a real field but differentiate the otherwise-pinned
+    problems by field strength.
     """
     b = np.empty(len(ds.problems))
     for p in range(len(ds.problems)):
@@ -176,10 +186,10 @@ def _rate_problems(theta, w_team, ds):
             b[p] = elo.HI  # contest left with no solvers -> solved by none -> hardest
             continue
         teams = ds.team_of_row[rows]
-        thetas = theta[teams]
-        weights = w_team[teams]
+        thetas = np.append(theta[teams], [elo.HI, elo.LO])      # +strong, +weak dummy
+        weights = np.append(w_team[teams], [SMOOTH, SMOOTH])
         solved = ds.y[rows, p] & ds.solve_mask[rows, p]
-        S_p = np.sum(weights * solved)
+        S_p = np.sum(w_team[teams] * solved) + SMOOTH          # strong dummy solved
         b[p] = elo.weighted_rating(thetas, S_p, weights=weights)
     return b
 
