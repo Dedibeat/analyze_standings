@@ -38,7 +38,9 @@ UCUP = [os.path.join(DATA, "ucup_s3.json"), os.path.join(DATA, "ucup_s4.json")]
 def estimate_anchored(anchor_weight=1.0, verbose=True):
     """Fit tagged.json with its UCup teams anchored to a UCup-only fit.
 
-    Returns (ds_tagged, theta, b, rho, history) for the anchored tagged fit.
+    Returns (ds_tagged, theta, b, rho, history, uf) for the anchored tagged fit.
+    ``uf`` is the shared union-find both fits resolved identity through, so callers
+    can map raw standing rows to ``ds_tagged.teams`` via ``team_key``.
     """
     raw_all = []
     for p in [TAGGED] + UCUP:
@@ -78,11 +80,11 @@ def estimate_anchored(anchor_weight=1.0, verbose=True):
     theta, b, rho, history = estimate(
         ds_tagged, verbose=verbose, prior_mu=prior_mu, prior_strength=prior_strength
     )
-    return ds_tagged, theta, b, rho, history
+    return ds_tagged, theta, b, rho, history, uf
 
 
 if __name__ == "__main__":
-    ds, theta, b, rho, hist = estimate_anchored()
+    ds, theta, b, rho, hist, _ = estimate_anchored()
     print(f"converged in {len(hist)} iters, final max|dtheta| = {hist[-1]:.4f}")
     print(f"theta range: [{theta.min():.0f}, {theta.max():.0f}], mean {theta.mean():.0f}")
     print(f"b range:     [{b.min():.0f}, {b.max():.0f}], mean {b.mean():.0f}")

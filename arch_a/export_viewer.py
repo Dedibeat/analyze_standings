@@ -2,9 +2,10 @@
 
     python -m arch_a.export_viewer
 
-Runs Architecture A, then bundles per-contest problem difficulties and team
-abilities (with human-readable names) into output/ratings_viewer.html. The data
-is embedded directly in the page, so it opens from disk with no web server.
+Runs the UCup-anchored Architecture A fit over the full tagged.json, then bundles
+per-contest problem difficulties and team abilities (with human-readable names)
+into output/ratings_viewer.html. The data is embedded directly in the page, so it
+opens from disk with no web server.
 """
 
 import json
@@ -13,21 +14,19 @@ import os
 import numpy as np
 
 from .elo import LO, HI
-from .fixedpoint import estimate
-from .load import DATA_PATH, load, member_identity, team_key
+from .anchor import TAGGED, estimate_anchored
+from .load import team_key
 
 OUT_DIR = os.path.join(os.path.dirname(__file__), os.pardir, "output")
 TEMPLATE = os.path.join(os.path.dirname(__file__), "viewer_template.html")
 
 
 def build_data():
-    with open(DATA_PATH) as f:
+    with open(TAGGED) as f:
         raw = json.load(f)
 
-    ds = load()
-    uf = member_identity(raw)
+    ds, theta, b, rho, _, uf = estimate_anchored()
     key_to_idx = {k: i for i, k in enumerate(ds.teams)}
-    theta, b, rho, _ = estimate(ds)
 
     # problem difficulties + actual solve count among ranked teams, per contest
     prob_by_contest = {}

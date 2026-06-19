@@ -28,7 +28,7 @@ def _spearman(x, y):
 
 
 def main():
-    ds, theta, b, _, history = estimate_anchored()
+    ds, theta, b, _, history, _ = estimate_anchored()
 
     records = []
     for p, (cid, label, pid, name) in enumerate(ds.problems):

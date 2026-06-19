@@ -37,8 +37,9 @@ that scale gap roughly in half. Tune the pull with `estimate_anchored(anchor_wei
 ./.venv/bin/python -m arch_a.export_viewer
 ```
 
-Writes a self-contained `output/ratings_viewer.html` — just open it in a browser
-(no server needed). Pick a contest to see its problems ranked by difficulty and
+Writes a self-contained `output/ratings_viewer.html` from the same UCup-anchored
+fit as `run` (the full `tagged.json`, all 213 contests) — just open it in a
+browser (no server needed). Pick a contest to see its problems ranked by difficulty and
 its teams with both their overall ability `θ` and their **performance** in that
 contest (the rating implied by their final rank, eq. perf) — the gap shows who
 over- or under-performed. Click any column to sort, and filter teams by

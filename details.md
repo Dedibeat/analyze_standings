@@ -35,9 +35,15 @@ by alternation, then problems are rated with the converged abilities.
   (grid error ~1e-3 ELO, far below the `eps=0.5` convergence threshold).
 - `anchor.py` — two-phase anchored fit: fit the Universal Cup seasons alone, then
   fit the full `tagged.json` with each UCup team's ability fed back as its prior
-  (see the anchoring decision below).
+  (see the anchoring decision below). `estimate_anchored` returns the shared
+  union-find alongside `(ds, theta, b, rho, history)` so callers can map raw
+  standing rows back to `ds.teams`.
 - `run.py` — wires it together (now the anchored fit), writes
   `output/problem_ratings.json`, runs the verification checks.
+- `export_viewer.py` — builds `output/ratings_viewer.html` from the **same
+  UCup-anchored `estimate_anchored()` fit** over the full `tagged.json` (213
+  contests), so the viewer's `theta`/difficulties/performances match `run.py`.
+  (Previously it ran a plain unanchored `estimate()` on `ucup_s4.json` alone.)
 
 Run with the project venv:
 
