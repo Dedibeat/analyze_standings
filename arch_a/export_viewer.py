@@ -1,31 +1,43 @@
 """Build a self-contained HTML viewer of the estimated ratings.
 
-    python -m arch_a.export_viewer
+    python -m arch_a.export_viewer           # full UCup-anchored tagged fit
+    python -m arch_a.export_viewer --ucup    # the UCup-only anchor fit (s3 + s4)
 
 Runs the UCup-anchored Architecture A fit over the full tagged.json, then bundles
 per-contest problem difficulties and team abilities (with human-readable names)
 into output/ratings_viewer.html. The data is embedded directly in the page, so it
-opens from disk with no web server.
+opens from disk with no web server. With --ucup it instead shows the Phase-1
+UCup-only fit (the anchor itself) and writes output/ratings_viewer_ucup.html.
 """
 
 import json
 import os
+import sys
 
 import numpy as np
 
 from .elo import LO, HI
-from .anchor import TAGGED, estimate_anchored
-from .load import team_key
+from .anchor import TAGGED, UCUP, estimate_anchored
+from .fixedpoint import estimate
+from .load import load, member_identity, team_key
 
 OUT_DIR = os.path.join(os.path.dirname(__file__), os.pardir, "output")
 TEMPLATE = os.path.join(os.path.dirname(__file__), "viewer_template.html")
 
 
-def build_data():
-    with open(TAGGED) as f:
-        raw = json.load(f)
-
-    ds, theta, b, rho, _, uf = estimate_anchored()
+def build_data(ucup_only=False):
+    if ucup_only:
+        raw = []
+        for p in UCUP:
+            with open(p) as f:
+                raw.extend(json.load(f))
+        uf = member_identity(raw)
+        ds = load(UCUP, uf=uf)
+        theta, b, rho, _ = estimate(ds)
+    else:
+        with open(TAGGED) as f:
+            raw = json.load(f)
+        ds, theta, b, rho, _, uf = estimate_anchored()
     key_to_idx = {k: i for i, k in enumerate(ds.teams)}
 
     # problem difficulties + actual solve count among ranked teams, per contest
@@ -79,13 +91,15 @@ def build_data():
 
 
 def main():
-    data = build_data()
+    ucup_only = "--ucup" in sys.argv
+    data = build_data(ucup_only=ucup_only)
     with open(TEMPLATE) as f:
         template = f.read()
     html = template.replace("/*__DATA__*/null", json.dumps(data, ensure_ascii=False))
 
     os.makedirs(OUT_DIR, exist_ok=True)
-    out_path = os.path.join(OUT_DIR, "ratings_viewer.html")
+    name = "ratings_viewer_ucup.html" if ucup_only else "ratings_viewer.html"
+    out_path = os.path.join(OUT_DIR, name)
     with open(out_path, "w") as f:
         f.write(html)
     print(f"wrote {os.path.normpath(out_path)}  "

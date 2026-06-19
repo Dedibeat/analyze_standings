@@ -44,6 +44,8 @@ by alternation, then problems are rated with the converged abilities.
   UCup-anchored `estimate_anchored()` fit** over the full `tagged.json` (213
   contests), so the viewer's `theta`/difficulties/performances match `run.py`.
   (Previously it ran a plain unanchored `estimate()` on `ucup_s4.json` alone.)
+  `--ucup` instead builds the Phase-1 UCup-only fit (s3 + s4, 76 contests — the
+  anchor itself) to `output/ratings_viewer_ucup.html`.
 
 Run with the project venv:
 

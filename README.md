@@ -45,6 +45,16 @@ contest (the rating implied by their final rank, eq. perf) — the gap shows who
 over- or under-performed. Click any column to sort, and filter teams by
 name/member/affiliation.
 
+To view just the UCup-only anchor fit (Phase 1: seasons s3 + s4, 76 contests)
+instead of the full anchored tagged fit:
+
+```bash
+./.venv/bin/python -m arch_a.export_viewer --ucup
+```
+
+This writes a separate `output/ratings_viewer_ucup.html` (the main viewer is
+left untouched).
+
 ### Contest-linking graph
 
 ```bash
