@@ -39,6 +39,11 @@ def _roster_token(members):
     return None
 
 
+def row_solved_any(standing):
+    """True if this standing row solved at least one problem (else it is dropped)."""
+    return any(p.get("solved") for p in (standing.get("problems") or {}).values())
+
+
 class _UnionFind:
     def __init__(self):
         self.parent = {}
@@ -110,6 +115,11 @@ def load(path=DATA_PATH, uf=None):
     so team keys are comparable across separate ``load`` calls (the anchor fit
     needs the UCup and tagged datasets to agree on who is who). When omitted, the
     union-find is built from this call's own rows.
+
+    Standing rows that solved no problems are dropped (``row_solved_any``): they
+    are excluded from the fit, so a team's contest count ``N_t`` is the number of
+    contests where it actually solved something. ``uf`` is still built over *all*
+    rows, so identity links carried only by a zero-solve row are preserved.
     """
     paths = [path] if isinstance(path, str) else list(path)
     raw = []
@@ -141,6 +151,8 @@ def load(path=DATA_PATH, uf=None):
                 contest_of_problem.append(ci)
                 raw_solved_count.append(p.get("problem_solved_in_contest"))
         for s in c["standings"]:
+            if not row_solved_any(s):
+                continue  # zero-solve rows are dropped from the fit
             tk = team_key(cid, s["team_id"], s.get("members"), uf)
             if tk not in team_index:
                 team_index[tk] = len(team_index)
@@ -163,6 +175,8 @@ def load(path=DATA_PATH, uf=None):
         # which problem columns belong to this contest
         cols = {p["problem_label"]: problem_index[(ci, p["problem_label"])] for p in c["problems"]}
         for s in c["standings"]:
+            if not row_solved_any(s):
+                continue  # zero-solve rows are dropped from the fit
             assert s.get("rank") is not None, f"missing rank in contest {cid}"
             ti = team_index[team_key(cid, s["team_id"], s.get("members"), uf)]
             team_of_row.append(ti)

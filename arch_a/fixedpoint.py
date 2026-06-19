@@ -172,6 +172,9 @@ def _rate_problems(theta, w_team, ds):
     for p in range(len(ds.problems)):
         ci = ds.contest_of_problem[p]
         rows = np.where(ds.contest_of_row == ci)[0]
+        if rows.size == 0:
+            b[p] = elo.HI  # contest left with no solvers -> solved by none -> hardest
+            continue
         teams = ds.team_of_row[rows]
         thetas = theta[teams]
         weights = w_team[teams]

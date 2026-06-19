@@ -22,7 +22,8 @@ python3 -m venv .venv
 
 This writes `output/problem_ratings.json` (one record per problem with its
 estimated `difficulty` on a Codeforces-like [800, 4000] scale) and prints
-verification stats.
+verification stats. Standing rows that solved no problems are dropped before the
+fit (see the zero-solve decision in `details.md`).
 
 `run` fits the full `data/tagged.json` **anchored to the Universal Cup scale**:
 it first fits the UCup seasons (`ucup_s3` + `ucup_s4`) on their own, then uses

@@ -148,6 +148,22 @@ Run with the project venv:
 - **Granularity:** per resolved identity (roster where available, else stable id).
   True individual-level modelling (strat Remark on roster changes) is a follow-up.
 
+- **Drop zero-solve standing rows (`load.row_solved_any`).** A standing row that
+  solved no problem is removed before the fit (13.2% of tagged rows, 6.8%/4.7% of
+  UCup s3/s4). Rationale: such rows are dominated by the MU0 prior — a one-off
+  zero-solve team is pulled to ~1900 despite solving nothing — which inflates the
+  apparent strength of the field. Consequences: a team's `N_t` (hence reliability
+  weight) is now its count of contests *where it solved something*; the surviving
+  population is stronger (mean theta 2018 → 2165) and absolute difficulties shift
+  up (mean b 2462 → 2605) while the within-contest difficulty ordering is
+  unchanged (Spearman still −0.993). The shared `uf` is still built over all rows,
+  so identity links carried only by a zero-solve row survive. Contests left with
+  no solvers at all (6 in tagged) drop out of the viewer; their problems were
+  solved by nobody so they pin to 4000 (`_rate_problems` guards the empty pool).
+  *Trade-off:* 73% of dropped rows are real teams' off-days, not non-participants,
+  so this discards genuine low-end performances and is the reason difficulties
+  drift up rather than down.
+
 - **No year in the team key (decision on the multi-season `tagged.json`).**
   The larger `data/tagged.json` spans 5 seasons (2022–2026, 213 contests). We
   keep identity season-agnostic — appending the contest `year` to the key would
@@ -169,11 +185,10 @@ Run with the project venv:
 
 ### Results (current run)
 
-- Converges in ~15 iterations, monotone decreasing `max|dtheta|` < 0.5.
-- `theta` ≈ [1561, 3634], mean ~2018; veterans reach realistic levels
-  (tourist θ≈3634) now that the prior washes out with evidence.
-- `b` ≈ [1266, 4000], mean ~2462; zero-solve problems pin to 4000.
-- Per-contest Spearman(difficulty, solve_count) median **−0.995** (harder
+- Converges in ~17 iterations, monotone decreasing `max|dtheta|` < 0.5.
+- `theta` ≈ [1720, 3777], mean ~2165 (zero-solve rows dropped; see decision).
+- `b` ≈ [800, 4000], mean ~2605; zero-solve problems pin to 4000.
+- Per-contest Spearman(difficulty, solve_count) median **−0.993** (harder
   problems were solved by fewer teams, as expected).
 - Cross-contest normalization is now carried by the shared teams (see the
   evidence-weighted-prior decision): per-contest mean ability spreads to std≈110

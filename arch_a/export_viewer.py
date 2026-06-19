@@ -19,7 +19,7 @@ import numpy as np
 from .elo import LO, HI
 from .anchor import TAGGED, UCUP, estimate_anchored
 from .fixedpoint import estimate
-from .load import load, member_identity, team_key
+from .load import load, member_identity, row_solved_any, team_key
 
 OUT_DIR = os.path.join(os.path.dirname(__file__), os.pardir, "output")
 TEMPLATE = os.path.join(os.path.dirname(__file__), "viewer_template.html")
@@ -61,6 +61,8 @@ def build_data(ucup_only=False):
         cid = c["contest_id"]
         teams = []
         for s in c["standings"]:
+            if not row_solved_any(s):
+                continue  # dropped from the fit; keep viewer aligned with rho
             idx = key_to_idx[team_key(cid, s["team_id"], s.get("members"), uf)]
             teams.append({
                 "rank": int(s["rank"]),
@@ -72,6 +74,8 @@ def build_data(ucup_only=False):
                 "contests": int(np.sum(ds.team_of_row == idx)),
             })
             row += 1
+        if not teams:
+            continue  # contest had no solvers at all; nothing to show
         problems = prob_by_contest.get(cid, [])
         contests.append({
             "contest_id": int(cid),
