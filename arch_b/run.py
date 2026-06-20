@@ -1,20 +1,22 @@
 """Run Architecture B end to end and write problem ratings.
 
-    python -m arch_b.run
+    python -m arch_b.run              # binary Rasch model (strat.tex section 4)
+    python -m arch_b.run --survival   # solve-time survival model (section 5)
 
-Produces output/problem_ratings_b.json: one record per problem with its
-MAP-estimated difficulty b_p (Rasch IRT model, strat.tex section 4) on the
-Codeforces-like [800, 4000] scale. Written to a distinct file so Architecture A's
-output/problem_ratings.json is left untouched.
+Produces output/problem_ratings_b.json (or output/problem_ratings_survival.json
+with --survival): one record per problem with its MAP-estimated difficulty b_p on
+the Codeforces-like [800, 4000] scale. Written to a distinct file so Architecture
+A's output/problem_ratings.json is left untouched.
 """
 
 import json
 import os
+import sys
 
 import numpy as np
 
+from . import model, survival
 from .anchor import estimate_anchored
-from .model import laplace_se
 
 OUT_DIR = os.path.join(os.path.dirname(__file__), os.pardir, "output")
 
@@ -30,9 +32,12 @@ def _spearman(x, y):
     return float(np.corrcoef(rx, ry)[0, 1])
 
 
-def main():
-    ds, theta, b, history, _ = estimate_anchored()
-    _, se_b = laplace_se(ds, theta, b)  # Laplace posterior SE per difficulty
+def main(use_survival=False):
+    mod = survival if use_survival else model
+    out_name = "problem_ratings_survival.json" if use_survival else "problem_ratings_b.json"
+
+    ds, theta, b, history, _ = estimate_anchored(fit_fn=mod.fit)
+    _, se_b = mod.laplace_se(ds, theta, b)  # Laplace posterior SE per difficulty
 
     records = []
     for p, (cid, label, pid, name) in enumerate(ds.problems):
@@ -51,7 +56,7 @@ def main():
         })
 
     os.makedirs(OUT_DIR, exist_ok=True)
-    out_path = os.path.join(OUT_DIR, "problem_ratings_b.json")
+    out_path = os.path.join(OUT_DIR, out_name)
     with open(out_path, "w") as f:
         json.dump(records, f, indent=2, ensure_ascii=False)
 
@@ -96,4 +101,4 @@ def _verify(ds, theta, b, records):
 
 
 if __name__ == "__main__":
-    main()
+    main(use_survival="--survival" in sys.argv)

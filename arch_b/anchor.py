@@ -32,12 +32,15 @@ TAGGED = os.path.join(DATA, "tagged.json")
 UCUP = [os.path.join(DATA, "ucup_s3.json"), os.path.join(DATA, "ucup_s4.json")]
 
 
-def estimate_anchored(sigma_theta=SIGMA_THETA, sigma_b=SIGMA_B, verbose=True):
+def estimate_anchored(sigma_theta=SIGMA_THETA, sigma_b=SIGMA_B, fit_fn=fit, verbose=True):
     """Fit tagged.json with its UCup teams' prior mean anchored to a UCup-only fit.
 
     Returns (ds_tagged, theta, b, history, uf) for the anchored tagged fit. ``uf``
     is the shared union-find both fits resolved identity through, so callers can
     map raw standing rows to ``ds_tagged.teams`` via ``team_key``.
+
+    ``fit_fn`` is the MAP fitter, ``model.fit`` (binary Rasch) by default; pass
+    ``survival.fit`` to anchor the solve-time survival model on the same scale.
     """
     raw_all = []
     for p in [TAGGED] + UCUP:
@@ -49,7 +52,7 @@ def estimate_anchored(sigma_theta=SIGMA_THETA, sigma_b=SIGMA_B, verbose=True):
     ds_tagged = load(TAGGED, uf=uf)
 
     if verbose: print("=== UCup anchor fit (s3 + s4) ===")
-    theta_u, _, _ = fit(ds_ucup, sigma_theta=sigma_theta, sigma_b=sigma_b, verbose=verbose)
+    theta_u, _, _ = fit_fn(ds_ucup, sigma_theta=sigma_theta, sigma_b=sigma_b, verbose=verbose)
     anchor = {ds_ucup.teams[i]: theta_u[i] for i in range(len(ds_ucup.teams))}
 
     prior_mu = np.full(len(ds_tagged.teams), MU0)
@@ -63,8 +66,8 @@ def estimate_anchored(sigma_theta=SIGMA_THETA, sigma_b=SIGMA_B, verbose=True):
         print(f"anchored {n_anchored} of {len(ds_tagged.teams)} tagged teams to UCup")
 
     if verbose: print("=== anchored tagged fit ===")
-    theta, b, history = fit(ds_tagged, prior_mu=prior_mu,
-                            sigma_theta=sigma_theta, sigma_b=sigma_b, verbose=verbose)
+    theta, b, history = fit_fn(ds_tagged, prior_mu=prior_mu,
+                               sigma_theta=sigma_theta, sigma_b=sigma_b, verbose=verbose)
     return ds_tagged, theta, b, history, uf
 
 

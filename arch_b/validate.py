@@ -68,7 +68,10 @@ def main():
     labels = _llm_labels(tagged)
     print(f"trusted set: {len(labels)} problems from editorial-backed contests")
     _report("Architecture A", os.path.join(OUT, "problem_ratings.json"), labels)
-    _report("Architecture B", os.path.join(OUT, "problem_ratings_b.json"), labels)
+    _report("Architecture B (binary)", os.path.join(OUT, "problem_ratings_b.json"), labels)
+    surv = os.path.join(OUT, "problem_ratings_survival.json")
+    if os.path.exists(surv):
+        _report("Architecture B (survival)", surv, labels)
 
 
 if __name__ == "__main__":

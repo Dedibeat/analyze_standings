@@ -242,10 +242,16 @@ log-likelihood (eq. loglik) plus Gaussian priors on `theta` and `b` (eq. priors)
   alternating style. Converges in ~25 iters / ~5 s on the full tagged fit.
   `laplace_se(ds, theta, b)` returns per-parameter Laplace standard errors (see
   the uncertainty decision below).
+- `survival.py` — the solve-time survival variant (strat §5; see decision below).
+  Same MAP / block-coordinate Newton as `model.py`, drop-in via
+  `estimate_anchored(fit_fn=survival.fit)`; run with `arch_b.run --survival`.
 - `validate.py` — external validation against the LLM `difficulty_estimate` in
   `tagged.json` (written by the sibling `llm-integration` tagger from the problem
   statement — independent of standings). Trusts only **editorial-backed** problems
-  and reports per-bucket medians + Spearman for both architectures.
+  and reports per-bucket medians + Spearman for all three model outputs.
+- `sanity_cf.py` — numeric check against the official **Codeforces** ratings of
+  the 2026 ICPC Asia Pacific Championship (qoj 3747 = CF mirror 2206), a fully
+  independent authoritative opinion (see results below).
 - `anchor.py` — `estimate_anchored(sigma_theta)`: the same two-phase UCup anchor as
   `arch_a.anchor`, under one shared union-find. Fit UCup (s3+s4) alone, then feed
   each UCup team's `theta_u` back as its Gaussian **prior mean** `mu_t` in the
@@ -324,6 +330,29 @@ Run with the project venv:
   `difficulty_se` (range ~[10, 400], median ~81). A calibrated joint interval
   (full-Hessian Laplace, or MCMC / VI) remains a follow-up.
 
+- **Solve-time survival model (`survival.py`, strat §5).** The binary Rasch fit
+  discards *when* a problem was solved. The survival variant models solving as a
+  constant-hazard process over the contest window with proportional hazards in the
+  ability–difficulty gap (eq. hazard); a solve at `tau` contributes the event
+  density, a non-solve a right-censored survival to `T_c` (eq. survlik). **Fixed
+  baseline (deviation from strat):** the strat leaves `lambda0` free, but it is
+  globally confounded with the level of `b` (shifting all `b` by δ ≡ scaling
+  `lambda0`), so we fix it per contest at `lambda0_c = ln2 / T_c`. That both
+  removes the confounding *and* calibrates difficulty exactly as the binary model
+  (at `theta=b`, P(solve within the window)=½), so the two `b` scales are
+  comparable. The cumulative hazard then collapses to `Lambda = ln2 · exp((θ−b)/s)
+  · rho` with `rho = tau/T_c` (solved) or 1 (censored) — so `T_c` enters only as
+  the fraction of the window a solve used (it cancels for non-solves), making the
+  fit robust to `T_c`. `T_c` per contest is the latest observed solve time (no
+  duration field exists; observed maxima cluster at 5 h, the ICPC standard). The
+  estimator is the same strictly-concave block-coordinate Newton, with the
+  Poisson-GLM residual `y − Lambda` and curvature `Lambda` replacing `y − pi` and
+  `pi(1−pi)`. It converges slower (~70 iters, the likelihood is stiffer) but still
+  in seconds, and yields **tighter** uncertainty (`b` SE median ~28 vs binary ~81)
+  because solve times add information. Its decisive advantage: it **distinguishes
+  problems with identical solve counts** that the binary model rates identically
+  (see the APAC J/K example below).
+
 ### Results (Architecture B, current run)
 
 - Converges in ~25 iterations / ~5 s (block-coordinate Newton), `max(|dtheta|,
@@ -332,12 +361,15 @@ Run with the project venv:
   **a touch shrunk toward MU0 vs arch_a** ([1720, 3777]) — MAP shrinkage at the
   chosen `sigma=400` (a looser prior would widen it; see the knob above). It is a
   different, Bayesian scale, not a defect.
-- Per-contest Spearman(difficulty, solve_count) median **−0.951** over 134
-  contests. Slightly looser than arch_a's −0.993 *by design*: arch_a difficulty is
-  a near-monotone transform of the solve count given the field, whereas IRT
-  difficulty also depends on **which** teams solved a problem (a problem cleared by
-  weak teams rates easier than one cleared by equally many strong teams) — the
-  deviation from pure solve-count ordering is exactly the extra signal IRT buys.
+- Per-contest Spearman(difficulty, solve_count) median **−0.951** (binary) /
+  **−0.973** (survival) over 134 contests. Looser than arch_a's −0.993 *by design*:
+  arch_a difficulty is a near-monotone transform of the solve count given the
+  field, whereas IRT difficulty also depends on **which** teams solved a problem
+  (a problem cleared by weak teams rates easier than one cleared by equally many
+  strong teams) — the deviation from pure solve-count ordering is exactly the extra
+  signal IRT buys.
+- **Survival fit:** `b` ≈ [1209, 3030], mean ~2035; `b` SE median ~28 (tighter than
+  binary). Converges in ~70 iters / ~6 s.
 
 ### External validation vs the LLM difficulty (`arch_b.validate`)
 
@@ -349,35 +381,64 @@ problems): the LLM label is reliable enough to validate against only where an
 editorial shipped. Both architectures' difficulty rises monotonically across every
 bucket, and Architecture B agrees **more** with the independent ranking:
 
-| LLM bucket | n   | arch A median | arch B median |
-|------------|-----|---------------|---------------|
-| easy       | 317 | 1889          | 1440          |
-| medium     | 230 | 2467          | 1944          |
-| hard       | 247 | 2917          | 2211          |
-| very_hard  | 272 | 3506          | 2535          |
-| **Spearman** |   | **+0.792**    | **+0.874**    |
+| LLM bucket | n   | arch A | arch B binary | arch B survival |
+|------------|-----|--------|---------------|-----------------|
+| easy       | 317 | 1889   | 1440          | 1784            |
+| medium     | 230 | 2467   | 1944          | 2034            |
+| hard       | 247 | 2917   | 2211          | 2154            |
+| very_hard  | 272 | 3506   | 2535          | 2319            |
+| **Spearman** |   | **+0.792** | **+0.874**  | **+0.880**      |
+*(medians per bucket; Spearman over all 1066 problems)*
 
 So IRT's use of *which* teams solved each problem tracks the editorial-informed
 opinion better than arch A's solve-count-driven estimate, despite arch B's more
-compressed scale. (Restricting to editorial-backed problems *raised* arch B's
-agreement from +0.844 on the full set to +0.874 — the no-editorial labels are
-genuinely noisier.) Run: `./.venv/bin/python -m arch_b.validate`.
+compressed scale, and the survival model (which also uses solve *times*) is best.
+(Restricting to editorial-backed problems *raised* binary arch B's agreement from
++0.844 on the full set to +0.874 — the no-editorial labels are genuinely noisier.)
+Run: `./.venv/bin/python -m arch_b.validate`.
+
+### External validation vs Codeforces ratings (`arch_b.sanity_cf`)
+
+The 2026 ICPC Asia Pacific Championship (qoj contest 3747, 13 problems) was
+mirrored on Codeforces (contest 2206), where each problem carries an official CF
+problemset rating — an authoritative *numeric* opinion, independent of our
+standings. All three models match it strongly:
+
+| model           | Spearman vs CF | Pearson vs CF |
+|-----------------|----------------|---------------|
+| arch A          | +0.945         | +0.928        |
+| arch B binary   | **+0.962**     | +0.933        |
+| arch B survival | +0.956         | **+0.947**    |
+
+All ~0.95+ on a 13-problem contest is a strong cross-check of the whole approach.
+The survival model has the best *linear* calibration (Pearson). **The decisive
+case is J/K:** "Worldwide Playlist" (J) and "Time Display Stickers" (K) were each
+solved by exactly 76 teams, so the binary model rates them *identically* (1172 =
+1172); the survival model separates them by solve time (J 1827 > K 1714) and CF
+agrees (J 1700 > K 1300) — a clean illustration of the signal solve times add.
+(Caveat: all models still over-shrink the very hardest problems — the three
+1-solver problems A/L/M land near ~2400–2650 vs CF's 2900–3500 — since a single
+solve barely constrains the top of the scale. Ranking holds; absolute hard-end
+calibration is the open piece.)
 
 ## Out of scope / follow-ups
 
 - **2PL discrimination** `a_p` (strat §4) on top of the Rasch fit in `arch_b`,
   plus a calibrated joint posterior (full-Hessian Laplace / MCMC / VI) beyond the
   per-parameter Laplace SE already emitted as `difficulty_se`.
-- **Solve-time survival likelihood** (strat §5) — uses `tau_tp` and contest
-  length `T_c`; currently `tau` is loaded but unused.
+- **Per-contest `T_c` from real durations** — the survival model infers `T_c` as
+  the latest solve time (a slight underestimate); a true duration field (e.g. from
+  the qoj extractor) would sharpen the solved-cell time fractions.
 - **Member-level identity** and entity resolution across sources (strat
   Remarks), to densify linking and handle roster changes.
 - **Time-varying ability** `theta_{team,year}` with a season-to-season smoothing
   prior, so same-roster teams that recur across seasons can drift instead of
   collapsing to one blended ability — without losing the cross-year links that
   keep all seasons on one scale (see the no-year-in-key decision above).
-- **External validation** — first pass done against the LLM `difficulty_estimate`
-  on editorial-backed contests (`arch_b.validate`, see above); still open: a
-  rated-judge mirror or numeric editorial difficulty for a calibrated point check.
+- **Hard-end calibration** — all arch B variants over-shrink 1-solver problems vs
+  CF (see the APAC A/L/M caveat). External validation is now done two ways (LLM
+  buckets + the CF-rating point check, `arch_b.validate` / `arch_b.sanity_cf`);
+  what remains is fixing the *absolute* hard-end scale, e.g. an affine recalibration
+  to CF-rated mirror problems or a heavier-tailed prior.
 - **CF anchoring** if member→handle→rating data becomes available, to turn the
   relative scale into true Codeforces-equivalent points.

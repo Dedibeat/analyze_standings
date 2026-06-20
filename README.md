@@ -51,15 +51,29 @@ prior keeps solved-by-none/all problems finite, so no boundary smoothing is
 needed. See `details.md` for the Rasch-vs-2PL scope and the shrinkage-vs-arch_a
 comparison.
 
-Validate either architecture against the independent LLM `difficulty_estimate`
-(editorial-backed contests only):
+Add `--survival` to fit the **solve-time survival model** (`strat.tex` §5) instead,
+which also uses *when* each problem was solved (writes
+`output/problem_ratings_survival.json`):
 
 ```bash
-./.venv/bin/python -m arch_b.validate
+./.venv/bin/python -m arch_b.run --survival
 ```
 
-Both architectures' difficulty rises monotonically across the LLM easy → very_hard
-buckets; arch B agrees more closely (Spearman +0.874 vs arch A's +0.792).
+It distinguishes problems with identical solve counts that the binary model cannot
+(e.g. it correctly separates two APAC problems both solved by 76 teams), and gives
+tighter uncertainty.
+
+Validate any model against two independent opinions — the LLM `difficulty_estimate`
+(editorial-backed contests) and the official Codeforces ratings of the 2026 Asia
+Pacific Championship:
+
+```bash
+./.venv/bin/python -m arch_b.validate    # LLM buckets, all models
+./.venv/bin/python -m arch_b.sanity_cf   # vs Codeforces ratings (contest 2206)
+```
+
+Both arch B models beat arch A on the LLM check (Spearman +0.874 / +0.880 vs
++0.792), and all three match the CF ratings at Spearman ≈ 0.95+.
 
 ### Interactive viewer
 
@@ -104,6 +118,7 @@ Module self-checks:
 ./.venv/bin/python -m arch_a.load        # data summary
 ./.venv/bin/python -m arch_a.fixedpoint  # convergence trace
 ./.venv/bin/python -m arch_b.model       # MAP convergence trace
+./.venv/bin/python -m arch_b.survival    # survival-model convergence trace
 ```
 
 ## Layout
@@ -112,10 +127,12 @@ Module self-checks:
   `data/ucup_s4.json` — the Universal Cup seasons used to anchor the scale.
 - `arch_a/` — Architecture A implementation (`load`, `elo`, `fixedpoint`,
   `anchor`, `run`), plus `export_viewer` + `viewer_template.html` for the viewer.
-- `arch_b/` — Architecture B implementation (`model`, `anchor`, `run`, `validate`);
-  reuses `arch_a.load` and `arch_a.elo`.
+- `arch_b/` — Architecture B implementation (`model` binary Rasch, `survival`
+  solve-time model, `anchor`, `run`, `validate`, `sanity_cf`); reuses `arch_a.load`
+  and `arch_a.elo`.
 - `output/problem_ratings.json` — Architecture A ratings;
-  `output/problem_ratings_b.json` — Architecture B ratings.
+  `output/problem_ratings_b.json` — Architecture B (binary) ratings;
+  `output/problem_ratings_survival.json` — Architecture B (survival) ratings.
 - `output/ratings_viewer.html` — generated interactive viewer.
 - `details.md` — design notes, key decisions, and follow-ups.
 
