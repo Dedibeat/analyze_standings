@@ -281,15 +281,27 @@ Run with the project venv:
   `b_p → +inf` of a bare likelihood never occurs and the two `SMOOTH` dummy teams
   arch_a needs are unnecessary here. Solved-by-all is symmetric.
 
-- **`sigma_theta` / `sigma_b` are the regularization knobs; default 200.** The
-  prior precision `1/sigma^2 ≈ 2.5e-5` is worth ~3 problem-observations, so it
-  regularizes sparse teams/problems (cold start) while letting a well-observed
-  team's own likelihood dominate. The knob only controls **scale spread**, not
-  ordering: measured on the anchored tagged fit, per-contest Spearman is flat at
-  −0.929 / −0.934 / −0.935 for `sigma_theta` = 120 / 200 / 400, while `theta`
-  spreads from [1577, 2759] → [1295, 2860] → [1028, 3099]. Looser `sigma` → wider,
-  more arch_a-like scale (and `b` starts hitting the 800 floor); tighter → more
-  shrinkage toward `MU0`.
+- **`sigma_theta` / `sigma_b` are the regularization knobs; default 400** (both,
+  exposed on `estimate_anchored`). The prior is weakly informative: it regularizes
+  sparse teams/problems (cold start) while letting a well-observed team's own
+  likelihood dominate. The scale spread is set by `sigma` — this is MAP shrinkage,
+  not a structural cap: a looser prior recovers the full [800, 4000] range, but it
+  also pins more *easy* problems to the 800 floor and eventually erodes the
+  external validation. Sweeping both `sigma`s together (editorial-backed LLM-bucket
+  Spearman, see below):
+
+  | sigma | b range       | floor-pinned @800 | LLM-Spearman |
+  |-------|---------------|-------------------|--------------|
+  | 200   | [893, 2725]   | 0                 | +0.864       |
+  | **400** | [800, 3161] | 14                | **+0.874**   |
+  | 800   | [800, 3703]   | 89                | +0.874       |
+  | 1600  | [800, 4000]   | 120               | +0.865       |
+
+  Agreement peaks/plateaus at 400–800 then falls; we pick **400** — it gives peak
+  agreement and a reasonably wide top (~3161) while collapsing only 14 easy
+  problems onto the floor (89 at 800, a 5% loss of easy-end resolution). So `sigma`
+  trades easy-end floor-pinning for a wider hard end; arch B stays a touch more
+  shrunk than arch_a by choice, in exchange for keeping the easy end resolved.
 
 - **Anchor pull is the global `sigma_theta`, not per-team UCup evidence.** Unlike
   `arch_a.anchor` (which scales each team's prior *strength* by `w_u·N_u`), arch B
@@ -306,21 +318,21 @@ Run with the project venv:
   (negative Hessian), which the Newton step **already computes**. So `SE(b_p) =
   1/sqrt(negH_b_p)` is free. It is the *conditional* SE (ignores the theta–b
   cross-curvature), hence approximate, but it captures the dominant effect: a
-  much-solved problem is pinned tight (`b` SE down to ~9), while a solved-by-none/
-  all problem has no data and its SE relaxes to the prior sd `sigma_b` (=200) —
+  much-solved problem is pinned tight (`b` SE down to ~10), while a solved-by-none/
+  all problem has no data and its SE relaxes to the prior sd `sigma_b` (=400) —
   "we know only the prior." Reported in `output/problem_ratings_b.json` as
-  `difficulty_se` (range ~[9, 200], median ~68). A calibrated joint interval
+  `difficulty_se` (range ~[10, 400], median ~81). A calibrated joint interval
   (full-Hessian Laplace, or MCMC / VI) remains a follow-up.
 
 ### Results (Architecture B, current run)
 
 - Converges in ~25 iterations / ~5 s (block-coordinate Newton), `max(|dtheta|,
   |db|)` monotone below 0.5.
-- `theta` ≈ [1295, 2860], mean ~2007; `b` ≈ [893, 2725], mean ~1920. The scale is
-  **more shrunk toward MU0 than arch_a** ([1720, 3777]) — the expected effect of
-  the informative Gaussian prior (MAP shrinkage); it is a different (Bayesian)
-  scale, not a defect.
-- Per-contest Spearman(difficulty, solve_count) median **−0.934** over 134
+- `theta` ≈ [953, 3209], mean ~2008; `b` ≈ [800, 3161], mean ~1963. The scale is
+  **a touch shrunk toward MU0 vs arch_a** ([1720, 3777]) — MAP shrinkage at the
+  chosen `sigma=400` (a looser prior would widen it; see the knob above). It is a
+  different, Bayesian scale, not a defect.
+- Per-contest Spearman(difficulty, solve_count) median **−0.951** over 134
   contests. Slightly looser than arch_a's −0.993 *by design*: arch_a difficulty is
   a near-monotone transform of the solve count given the field, whereas IRT
   difficulty also depends on **which** teams solved a problem (a problem cleared by
@@ -339,16 +351,16 @@ bucket, and Architecture B agrees **more** with the independent ranking:
 
 | LLM bucket | n   | arch A median | arch B median |
 |------------|-----|---------------|---------------|
-| easy       | 317 | 1889          | 1553          |
-| medium     | 230 | 2467          | 1906          |
-| hard       | 247 | 2917          | 2084          |
-| very_hard  | 272 | 3506          | 2297          |
-| **Spearman** |   | **+0.792**    | **+0.864**    |
+| easy       | 317 | 1889          | 1440          |
+| medium     | 230 | 2467          | 1944          |
+| hard       | 247 | 2917          | 2211          |
+| very_hard  | 272 | 3506          | 2535          |
+| **Spearman** |   | **+0.792**    | **+0.874**    |
 
 So IRT's use of *which* teams solved each problem tracks the editorial-informed
 opinion better than arch A's solve-count-driven estimate, despite arch B's more
 compressed scale. (Restricting to editorial-backed problems *raised* arch B's
-agreement from +0.825 on the full set to +0.864 — the no-editorial labels are
+agreement from +0.844 on the full set to +0.874 — the no-editorial labels are
 genuinely noisier.) Run: `./.venv/bin/python -m arch_b.validate`.
 
 ## Out of scope / follow-ups

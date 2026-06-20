@@ -25,14 +25,14 @@ import os
 import numpy as np
 
 from arch_a.load import load, member_identity
-from .model import MU0, SIGMA_THETA, fit
+from .model import MU0, SIGMA_B, SIGMA_THETA, fit
 
 DATA = os.path.join(os.path.dirname(__file__), os.pardir, "data")
 TAGGED = os.path.join(DATA, "tagged.json")
 UCUP = [os.path.join(DATA, "ucup_s3.json"), os.path.join(DATA, "ucup_s4.json")]
 
 
-def estimate_anchored(sigma_theta=SIGMA_THETA, verbose=True):
+def estimate_anchored(sigma_theta=SIGMA_THETA, sigma_b=SIGMA_B, verbose=True):
     """Fit tagged.json with its UCup teams' prior mean anchored to a UCup-only fit.
 
     Returns (ds_tagged, theta, b, history, uf) for the anchored tagged fit. ``uf``
@@ -49,7 +49,7 @@ def estimate_anchored(sigma_theta=SIGMA_THETA, verbose=True):
     ds_tagged = load(TAGGED, uf=uf)
 
     if verbose: print("=== UCup anchor fit (s3 + s4) ===")
-    theta_u, _, _ = fit(ds_ucup, sigma_theta=sigma_theta, verbose=verbose)
+    theta_u, _, _ = fit(ds_ucup, sigma_theta=sigma_theta, sigma_b=sigma_b, verbose=verbose)
     anchor = {ds_ucup.teams[i]: theta_u[i] for i in range(len(ds_ucup.teams))}
 
     prior_mu = np.full(len(ds_tagged.teams), MU0)
@@ -64,7 +64,7 @@ def estimate_anchored(sigma_theta=SIGMA_THETA, verbose=True):
 
     if verbose: print("=== anchored tagged fit ===")
     theta, b, history = fit(ds_tagged, prior_mu=prior_mu,
-                            sigma_theta=sigma_theta, verbose=verbose)
+                            sigma_theta=sigma_theta, sigma_b=sigma_b, verbose=verbose)
     return ds_tagged, theta, b, history, uf
 
 

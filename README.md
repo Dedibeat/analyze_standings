@@ -45,7 +45,8 @@ automatically. Writes `output/problem_ratings_b.json` — same record format plu
 `difficulty_se` (Laplace standard error) per problem, a distinct file so
 Architecture A's output is left untouched. Reuses arch_a's data layer and the same
 two-phase UCup anchor, here feeding each UCup team's ability in as its Gaussian
-prior mean; tune the prior with `estimate_anchored(sigma_theta=…)`. The Gaussian
+prior mean; tune the prior with `estimate_anchored(sigma_theta=…, sigma_b=…)`
+(looser → wider scale but more easy problems pinned to the floor). The Gaussian
 prior keeps solved-by-none/all problems finite, so no boundary smoothing is
 needed. See `details.md` for the Rasch-vs-2PL scope and the shrinkage-vs-arch_a
 comparison.
@@ -58,7 +59,7 @@ Validate either architecture against the independent LLM `difficulty_estimate`
 ```
 
 Both architectures' difficulty rises monotonically across the LLM easy → very_hard
-buckets; arch B agrees more closely (Spearman +0.864 vs arch A's +0.792).
+buckets; arch B agrees more closely (Spearman +0.874 vs arch A's +0.792).
 
 ### Interactive viewer
 
