@@ -25,6 +25,8 @@ calibration would want a contest-scoped join.
 
     python -m arch_b.external_validate            # uses cached CF ratings if present
     python -m arch_b.external_validate --refresh  # refetch the CF problemset
+    python -m arch_b.external_validate --contest 2206   # per-problem table for one CF
+                                                        # contest, all models, +Pearson
 """
 
 import json
@@ -141,12 +143,56 @@ def _s(pairs):
     return _spearman([a for a, _ in pairs], [b for _, b in pairs])
 
 
-def main(refresh=False):
+def _load_models():
+    """[(name, {(contest_id, label): difficulty})] for each present output file."""
+    models = []
+    for name, fname in MODELS:
+        path = os.path.join(OUT, fname)
+        if os.path.exists(path):
+            models.append((name, {(r["contest_id"], r["problem_label"]): r["difficulty"]
+                                   for r in json.load(open(path))}))
+    return models
+
+
+def _detail(cfid, contests, mapping, rating, models):
+    """Per-problem table for one CF contest, all models, with Spearman + Pearson.
+
+    Replaces the old single-contest ``arch_b.sanity_cf`` view (e.g. --contest 2206
+    is the 2026 APAC championship it used to hard-code), for any listed mirror.
+    """
+    hit = [m for m in mapping if m[0] == cfid]
+    if not hit:
+        print(f"CF {cfid}: not mapped to a qoj contest (unrated or absent)")
+        return
+    _, qoj, region, matched = hit[0]
+    label_of = {_norm(p["problem_name"]): p["problem_label"]
+                for c in contests if c["contest_id"] == qoj for p in c["problems"]}
+    rows = sorted(((label_of[nm], rating[(cfid, nm)], nm) for nm in matched),
+                  key=lambda r: r[0])
+    print(f"\nCF {cfid}  =  qoj {qoj}  [{region}]  ({len(rows)} problems)")
+    print(f"{'lbl':>3} {'CF':>5} " + " ".join(f"{n:>13}" for n, _ in models))
+    for lbl, cf, nm in rows:
+        cells = " ".join(f"{md.get((qoj, lbl), float('nan')):13.0f}" for _, md in models)
+        print(f"{lbl:>3} {cf:5d} {cells}")
+    cfv = [cf for _, cf, _ in rows]
+    print()
+    for name, md in models:
+        ours = [md.get((qoj, lbl), float("nan")) for lbl, _, _ in rows]
+        print(f"{name:<13} Spearman={_spearman(cfv, ours):+.3f}  "
+              f"Pearson={np.corrcoef(cfv, ours)[0, 1]:+.3f}")
+
+
+def main(refresh=False, detail_cfid=None):
     contests = json.load(open(os.path.join(DATA, "tagged.json")))
     region_of = {c["contest_id"]: c["region"] for c in contests}
     rating = _cf_problemset(refresh)
     kat = {_norm(v["name"]): v["difficulty"] for v in json.load(open(KATTIS)).values()}
     mapping = _cf_mapping(contests, region_of, rating)
+    models = _load_models()
+
+    if detail_cfid is not None:
+        _detail(detail_cfid, contests, mapping, rating, models)
+        return
 
     # LLM buckets (editorial-backed problems) keyed (contest_id, label)
     llm = {(c["contest_id"], p["problem_label"]): BUCK[p["difficulty_estimate"]]
@@ -159,12 +205,7 @@ def main(refresh=False):
     print(f"\n{'model':<13}| {'CF pld':>7} {'AsiaPac':>8} {'N.Eur':>7} {'Europe':>7} | "
           f"{'Kat pld':>8} {'N.Am':>7} {'Europe':>7} | {'LLM':>7}")
     print("-" * 86)
-    for name, fname in MODELS:
-        path = os.path.join(OUT, fname)
-        if not os.path.exists(path):
-            continue
-        md = {(r["contest_id"], r["problem_label"]): r["difficulty"]
-              for r in json.load(open(path))}
+    for name, md in models:
         cf, ka = _pairs(md, contests, mapping, rating, kat)
         cf_all = [x for v in cf.values() for x in v]
         ka_pld = ka["North America"] + ka["Europe"]
@@ -174,8 +215,11 @@ def main(refresh=False):
               f"{f(_s(ka_pld)):>8} {f(_s(ka['North America'])):>7} "
               f"{f(_s(ka['Europe'])):>7} | {f(_s(llm_pairs)):>7}")
     print(f"\nn: CF pooled={len(cf_all)}, Kattis pooled={len(ka_pld)}, "
-          f"LLM={len(llm_pairs)} (editorial-backed)")
+          f"LLM={len(llm_pairs)} (editorial-backed). "
+          f"--contest <cfid> for a per-problem breakdown.")
 
 
 if __name__ == "__main__":
-    main(refresh="--refresh" in sys.argv)
+    args = sys.argv[1:]
+    cfid = next((int(a) for a in args if a.isdigit()), None)
+    main(refresh="--refresh" in args, detail_cfid=cfid)

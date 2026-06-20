@@ -313,9 +313,12 @@ log-likelihood (eq. loglik) plus Gaussian priors on `theta` and `b` (eq. priors)
   `tagged.json` (written by the sibling `llm-integration` tagger from the problem
   statement — independent of standings). Trusts only **editorial-backed** problems
   and reports per-bucket medians + Spearman for all three model outputs.
-- `sanity_cf.py` — numeric check against the official **Codeforces** ratings of
-  the 2026 ICPC Asia Pacific Championship (qoj 3747 = CF mirror 2206), a fully
-  independent authoritative opinion (see results below).
+- `external_validate.py` — per-region check of **all three models** against two
+  independent numeric yardsticks: official **Codeforces** problemset ratings (the
+  CF-mirror contests in `data/cf_team_contests.txt`) and **Kattis** difficulty
+  (`data/kattis_difficulty.json`); `--contest <cfid>` prints a per-problem table with
+  Spearman + Pearson for one contest (see results below). Replaces the old
+  single-contest `sanity_cf.py`.
 - `predict_eval.py` — internal held-out solve-prediction check: train on a random
   80% of observed cells, score predicted solve probability on the held-out 20%
   (log-loss / Brier / AUC + a calibration table). Both fitters accept an ``obs=``
@@ -478,12 +481,13 @@ matched rather than IRT dominating. (Restricting to editorial-backed problems
 no-editorial labels are genuinely noisier.)
 Run: `./.venv/bin/python -m arch_b.validate`.
 
-### External validation vs Codeforces ratings (`arch_b.sanity_cf`)
+### External validation vs Codeforces ratings (`arch_b.external_validate --contest 2206`)
 
 The 2026 ICPC Asia Pacific Championship (qoj contest 3747, 13 problems) was
 mirrored on Codeforces (contest 2206), where each problem carries an official CF
 problemset rating — an authoritative *numeric* opinion, independent of our
-standings. All three models match it strongly:
+standings. All three models match it strongly (this single-contest per-problem view,
+formerly `arch_b.sanity_cf`, is now `external_validate --contest 2206`):
 
 | model           | Spearman vs CF | Pearson vs CF |
 |-----------------|----------------|---------------|
@@ -549,14 +553,14 @@ we validate against two **numeric** yardsticks that are independent of our stand
 
 | region              | CF n | CF Spearman | Kattis n | Kattis Spearman |
 |---------------------|------|-------------|----------|-----------------|
-| Asia Pacific        | 53   | **+0.921**  | 7        | (n too small)   |
-| Northern Eurasia    | 25   | **+0.976**  | 6        | (n too small)   |
+| Asia Pacific        | 80   | **+0.939**  | 7        | (n too small)   |
+| Northern Eurasia    | 38   | **+0.970**  | 6        | (n too small)   |
 | Europe              | 34   | **+0.858**  | 188      | **+0.761**      |
 | North America       | —    | —           | 258      | **+0.821**      |
 | **Asia East/West Continent** | — | **none** | ~27/2 | **none** |
-| **POOLED**          | 112  | **+0.912**  | 489      | +0.732          |
-*(our survival difficulty vs each yardstick; small-n cells are cross-posted
-stragglers, not real coverage. Spearman, scale-free.)*
+| **POOLED**          | 152  | **+0.926**  | 489      | +0.732          |
+*(our survival difficulty vs each yardstick over 12 CF-mirror contests; small-n
+cells are cross-posted stragglers, not real coverage. Spearman, scale-free.)*
 
 **Verdict on the regional-bias question.** No region shows a difficulty breakdown
 against independent numeric truth (+0.86 to +0.98 everywhere measurable), and on the
@@ -571,13 +575,15 @@ a CF-mirrored EC contest) is the open follow-up. Run:
 `./.venv/bin/python -m arch_b.external_validate` (`--refresh` refetches CF).
 
 **All three models, side by side** (the module scores every `output/problem_ratings*`
-file; this supersedes the single-13-problem-contest `arch_b.sanity_cf` comparison):
+file; this **supersedes** `arch_b.sanity_cf`, which checked a single 13-problem contest
+— that per-problem view is now `external_validate --contest <cfid>`, e.g. `--contest 2206`
+reproduces the old APAC table with Spearman *and* Pearson):
 
-| model           | CF pooled (n=112) | AsiaPac | N.Eur | Europe | Kattis pooled (n=446) | N.Am | Europe | LLM (n=1090) |
+| model           | CF pooled (n=152) | AsiaPac | N.Eur | Europe | Kattis pooled (n=446) | N.Am | Europe | LLM (n=1090) |
 |-----------------|-------------------|---------|-------|--------|-----------------------|------|--------|--------------|
-| arch A          | +0.894            | +0.906  | **+0.985** | +0.851 | +0.692           | +0.674 | +0.722 | **+0.905** |
-| arch B binary   | +0.864            | +0.848  | +0.959 | **+0.870** | +0.758            | +0.781 | +0.758 | +0.871     |
-| **arch B survival** | **+0.910**    | **+0.921** | +0.976 | +0.858 | **+0.793**     | **+0.821** | **+0.761** | +0.882 |
+| arch A          | +0.905            | +0.918  | **+0.977** | +0.851 | +0.692           | +0.674 | +0.722 | **+0.905** |
+| arch B binary   | +0.875            | +0.875  | +0.946 | **+0.870** | +0.758            | +0.781 | +0.758 | +0.871     |
+| **arch B survival** | **+0.926**    | **+0.939** | +0.970 | +0.858 | **+0.793**     | **+0.821** | **+0.761** | +0.882 |
 
 **arch B survival is the most robust model**: it leads on *both* independent numeric
 yardsticks — CF (+0.910) and Kattis (+0.793) — which are the hardest checks (independent

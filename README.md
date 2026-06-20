@@ -73,9 +73,9 @@ Validate any model against two independent opinions — the LLM `difficulty_esti
 Pacific Championship:
 
 ```bash
-./.venv/bin/python -m arch_b.validate      # LLM buckets, all models
-./.venv/bin/python -m arch_b.sanity_cf     # vs Codeforces ratings (contest 2206)
-./.venv/bin/python -m arch_b.predict_eval  # held-out solve prediction (binary vs survival)
+./.venv/bin/python -m arch_b.validate           # LLM buckets, all models
+./.venv/bin/python -m arch_b.external_validate  # per-region vs Codeforces + Kattis, all models
+./.venv/bin/python -m arch_b.predict_eval       # held-out solve prediction (binary vs survival)
 ./.venv/bin/python -m arch_b.calibrate     # affine map to Codeforces points
 ```
 
@@ -164,8 +164,8 @@ Module self-checks:
 - `arch_a/` — Architecture A implementation (`load`, `elo`, `fixedpoint`,
   `anchor`, `run`), plus `export_viewer` + `viewer_template.html` for the viewer.
 - `arch_b/` — Architecture B implementation (`model` binary Rasch, `survival`
-  solve-time model, `anchor`, `run`, `validate`, `sanity_cf`, `external_validate`
-  per-region check vs Codeforces + Kattis, `predict_eval`, `calibrate`,
+  solve-time model, `anchor`, `run`, `validate`, `external_validate`
+  per-region check vs Codeforces + Kattis (all 3 models), `predict_eval`, `calibrate`,
   `season_experiment`, `twopl`/`twopl_region` 2PL discrimination prototype);
   reuses `arch_a.load` and `arch_a.elo`.
 - `output/problem_ratings.json` — Architecture A ratings;
