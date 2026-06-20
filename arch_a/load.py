@@ -47,6 +47,25 @@ def season_of(contest):
     return y - 1 if _CHAMPIONSHIP.search(contest.get("contest_name") or "") else y
 
 
+def dedupe_contests(raw):
+    """Drop duplicate contest entries sharing a ``contest_id``.
+
+    ``tagged.json`` repeats some contests (up to 6x): the first entry carries the
+    problem list, the rest are byte-identical standings with an empty ``problems``
+    list. Replaying them would count every standing row multiple times (inflating
+    the fit and each team's contest count), so we keep the first entry per
+    ``contest_id`` (the one with the problems)."""
+    seen = set()
+    out = []
+    for c in raw:
+        cid = c["contest_id"]
+        if cid in seen:
+            continue
+        seen.add(cid)
+        out.append(c)
+    return out
+
+
 def _max_solve_seconds(contest):
     """Latest observed solve time in a contest (a proxy for its duration)."""
     m = 0
@@ -171,6 +190,7 @@ def load(path=DATA_PATH, uf=None, season_key=False, min_solve_hours=None):
     for p in paths:
         with open(p) as f:
             raw.extend(json.load(f))
+    raw = dedupe_contests(raw)
 
     if min_solve_hours is not None:
         raw = [c for c in raw if _max_solve_seconds(c) >= min_solve_hours * 3600]

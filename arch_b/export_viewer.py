@@ -20,7 +20,7 @@ import numpy as np
 
 from arch_a.elo import HI, LO
 from arch_a.fixedpoint import _performance_ratings
-from arch_a.load import _max_solve_seconds, row_solved_any, team_key
+from arch_a.load import _max_solve_seconds, dedupe_contests, row_solved_any, team_key
 from . import survival
 from .anchor import TAGGED, estimate_anchored
 from .calibrate import _anchors
@@ -61,6 +61,7 @@ def build_data():
 
     with open(TAGGED) as f:
         raw = json.load(f)
+    raw = dedupe_contests(raw)  # match load(): drop repeated contest entries
     raw = [c for c in raw if _max_solve_seconds(c) >= MIN_SOLVE_HOURS * 3600]  # match load()
     key_to_idx = {k: i for i, k in enumerate(ds.teams)}
 
@@ -89,6 +90,7 @@ def build_data():
         contests.append({
             "contest_id": int(cid),
             "name": c.get("contest_name") or str(cid),
+            "year": c.get("year"),
             "region": c.get("region") or "",
             "url": c.get("contest_url") or "",
             "n_teams": len(teams),
@@ -99,7 +101,7 @@ def build_data():
         })
 
     assert row == len(rho), "performance/row alignment mismatch"
-    contests.sort(key=lambda c: c["name"])
+    contests.sort(key=lambda c: (-(c["year"] or 0), c["name"]))
     return {"scale": {"lo": LO, "hi": HI}, "contests": contests}
 
 

@@ -16,7 +16,7 @@ import json
 import os
 from collections import Counter, defaultdict
 
-from .load import _UnionFind, _roster_token
+from .load import _UnionFind, _roster_token, dedupe_contests
 
 DATA_PATH = os.path.join(os.path.dirname(__file__), os.pardir, "data", "tagged.json")
 OUT_DIR = os.path.join(os.path.dirname(__file__), os.pardir, "output")
@@ -92,6 +92,7 @@ def _scheme(raw, addyear):
 def build_data():
     with open(DATA_PATH) as f:
         raw = json.load(f)
+    raw = dedupe_contests(raw)
     nodes = [
         {
             "name": (c.get("contest_name") or str(c["contest_id"])),

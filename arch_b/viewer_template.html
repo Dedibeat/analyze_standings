@@ -38,6 +38,11 @@
   .se { color:var(--muted); font-size:11px; margin-left:4px; }
   .aff { color:var(--muted); font-size:12px; }
   .hidden { display:none; }
+  .meta a { color:var(--accent); text-decoration:none; }
+  .meta a:hover { text-decoration:underline; }
+  .legend { display:flex; align-items:center; gap:6px; color:var(--muted); font-size:12px; margin-left:auto; }
+  .legend .bar { width:120px; height:10px; border-radius:5px;
+    background:linear-gradient(90deg,hsl(210 62% 48%),hsl(140 62% 48%),hsl(40 62% 48%),hsl(0 62% 48%)); }
 </style>
 </head>
 <body>
@@ -48,6 +53,7 @@
   <div class="controls">
     <select id="contest"></select>
     <span class="meta" id="meta"></span>
+    <span class="legend"><span id="legLo"></span><span class="bar"></span><span id="legHi"></span></span>
   </div>
 </header>
 
@@ -103,12 +109,22 @@ function ratingColor(v){
 function chip(v){ return `<span class="rating" style="background:${ratingColor(v)}">${v}</span>`; }
 function chipSe(v, se){ return chip(v) + `<span class="se">&plusmn;${se}</span>`; }
 
+// group contests under a per-year <optgroup> (already sorted year desc, name asc)
+let curYear, group;
 DATA.contests.forEach((c,i)=>{
+  if(c.year !== curYear){
+    curYear = c.year;
+    group = document.createElement("optgroup");
+    group.label = curYear || "—";
+    sel.appendChild(group);
+  }
   const o = document.createElement("option");
   o.value = i;
   o.textContent = `${c.name}` + (c.region ? `  — ${c.region}` : "");
-  sel.appendChild(o);
+  group.appendChild(o);
 });
+$("#legLo").textContent = DATA.scale.lo;
+$("#legHi").textContent = DATA.scale.hi;
 
 function sortRows(rows, st){
   const {k, asc} = st;
@@ -151,7 +167,10 @@ function renderTeams(c){
 
 function render(){
   const c = DATA.contests[sel.value];
-  meta.innerHTML = `<b>${c.n_teams}</b> teams &middot; <b>${c.n_problems}</b> problems &middot; mean &theta; <b>${c.mean_theta}</b>`;
+  const yr = c.year ? `<b>${c.year}</b> &middot; ` : "";
+  const link = c.url ? `<a href="${c.url}" target="_blank" rel="noopener">qoj &#8599;</a> &middot; ` : "";
+  meta.innerHTML = `${yr}${link}<b>${c.n_teams}</b> teams &middot; <b>${c.n_problems}</b> problems &middot; mean &theta; <b>${c.mean_theta}</b>`;
+  if(history.replaceState) history.replaceState(null, "", "#" + c.contest_id);
   renderProbs(c); renderTeams(c);
 }
 
@@ -178,6 +197,13 @@ sel.addEventListener("change", render);
 filter.addEventListener("input", ()=>renderTeams(DATA.contests[sel.value]));
 wireSort("#probs", "probs", renderProbs);
 wireSort("#teams", "teams", renderTeams);
+
+// restore the contest from the URL hash (#<contest_id>) so links are shareable
+const wanted = location.hash.slice(1);
+if(wanted){
+  const i = DATA.contests.findIndex(c => String(c.contest_id) === wanted);
+  if(i >= 0) sel.value = i;
+}
 render();
 </script>
 </body>

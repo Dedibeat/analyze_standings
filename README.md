@@ -79,9 +79,12 @@ Pacific Championship:
 ./.venv/bin/python -m arch_b.calibrate     # affine map to Codeforces points
 ```
 
-Both arch B models beat arch A on the LLM check (Spearman +0.874 / +0.880 vs
-+0.792), and all three match the CF ratings at Spearman ≈ 0.95+. On held-out solve
-prediction the survival model generalizes best (AUC 0.881 vs binary 0.871).
+All three architectures agree closely with both opinions. On the LLM check arch A
+leads (Spearman +0.908 vs arch B +0.874 / +0.880 — deduping the repeated contests
+sharpened arch A's solve-count estimate); on the CF ratings the IRT fits edge ahead
+(binary +0.962, survival +0.956 vs arch A +0.945), and all three are ≈ 0.95+. On
+held-out solve prediction the survival model generalizes best (AUC 0.881 vs binary
+0.871).
 
 ### Calibrated Codeforces-point ratings
 
@@ -98,12 +101,14 @@ These are the best estimate of CF-equivalent difficulty.
 ```
 
 Writes a self-contained `output/ratings_viewer.html` from the same UCup-anchored
-fit as `run` (the full `tagged.json`, all 213 contests) — just open it in a
-browser (no server needed). Pick a contest to see its problems ranked by difficulty and
-its teams with both their overall ability `θ` and their **performance** in that
-contest (the rating implied by their final rank, eq. perf) — the gap shows who
-over- or under-performed. Click any column to sort, and filter teams by
-name/member/affiliation.
+fit as `run` (the full `tagged.json`, 146 unique contests after deduplication) —
+just open it in a browser (no server needed). The contest picker is grouped by year
+(newest first); the header shows the year and a link to the qoj contest. Pick a
+contest to see its problems ranked by difficulty and its teams with both their
+overall ability `θ` and their **performance** in that contest (the rating implied
+by their final rank, eq. perf) — the gap shows who over- or under-performed. Click
+any column to sort, filter teams by name/member/affiliation, and use the URL hash
+(`#<contest_id>`) to share a link straight to a contest.
 
 To view just the UCup-only anchor fit (Phase 1: seasons s3 + s4, 76 contests)
 instead of the full anchored tagged fit:

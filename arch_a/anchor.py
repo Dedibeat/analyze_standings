@@ -28,7 +28,7 @@ import os
 import numpy as np
 
 from .fixedpoint import MU0, PRIOR_STRENGTH, _team_weights, estimate
-from .load import load, member_identity
+from .load import dedupe_contests, load, member_identity
 
 DATA = os.path.join(os.path.dirname(__file__), os.pardir, "data")
 TAGGED = os.path.join(DATA, "tagged.json")
@@ -46,6 +46,7 @@ def estimate_anchored(anchor_weight=1.0, verbose=True):
     for p in [TAGGED] + UCUP:
         with open(p) as f:
             raw_all.extend(json.load(f))
+    raw_all = dedupe_contests(raw_all)
     uf = member_identity(raw_all)  # one identity space for both fits
 
     ds_ucup = load(UCUP, uf=uf)

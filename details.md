@@ -12,7 +12,10 @@ implements both **Architecture A — the alternating fixed point** (strat.tex §
 ## Data
 
 `data/tagged.json` — 146 contests, 99,754 standing rows, 1,668 problems (the full
-mixed ICPC + Universal Cup set). `data/ucup_s3.json` and `data/ucup_s4.json` are
+mixed ICPC + Universal Cup set). The file actually holds **213 contest entries**:
+67 are exact duplicates of an earlier entry (the same `contest_id` repeated up to
+6×, with identical standings but an empty problem list), so the loader drops them
+to 146 unique contests (see the deduplication decision). `data/ucup_s3.json` and `data/ucup_s4.json` are
 the two Universal Cup seasons (43 and 33 contests) used to anchor the scale.
 Per standing row: `rank`, `team_id`, `members`, `total_solved`, and per-problem
 `{solved, score, time_seconds, wrong_attempts}`. This yields the model inputs
@@ -43,11 +46,14 @@ by alternation, then problems are rated with the converged abilities.
 - `run.py` — wires it together (now the anchored fit), writes
   `output/problem_ratings.json`, runs the verification checks.
 - `export_viewer.py` — builds `output/ratings_viewer.html` from the **same
-  UCup-anchored `estimate_anchored()` fit** over the full `tagged.json` (213
-  contests), so the viewer's `theta`/difficulties/performances match `run.py`.
-  (Previously it ran a plain unanchored `estimate()` on `ucup_s4.json` alone.)
-  `--ucup` instead builds the Phase-1 UCup-only fit (s3 + s4, 76 contests — the
-  anchor itself) to `output/ratings_viewer_ucup.html`.
+  UCup-anchored `estimate_anchored()` fit** over the full `tagged.json` (146
+  unique contests after dedup), so the viewer's `theta`/difficulties/performances
+  match `run.py`. (Previously it ran a plain unanchored `estimate()` on
+  `ucup_s4.json` alone.) `--ucup` instead builds the Phase-1 UCup-only fit (s3 + s4,
+  76 contests — the anchor itself) to `output/ratings_viewer_ucup.html`.
+  Both viewer templates group the contest dropdown by `year` (sorted newest-first),
+  show the year and a link to the qoj contest in the header, colour-key legend, and
+  remember the open contest in the URL hash (`#<contest_id>`) for shareable links.
 
 Run with the project venv:
 
@@ -163,6 +169,22 @@ Run with the project venv:
 - **Granularity:** per resolved identity (roster where available, else stable id).
   True individual-level modelling (strat Remark on roster changes) is a follow-up.
 
+- **Deduplicate repeated contest entries (`load.dedupe_contests`).** `tagged.json`
+  repeats 50 contests (213 entries → 146 unique `contest_id`s, 67 extras): in every
+  group the first entry carries the problem list and the rest are byte-identical
+  standings with an empty `problems` list. The loader's second pass replays
+  *standings* once per entry, so without dedup a 6×-repeated contest counts each of
+  its standing rows 6×, inflating the likelihood/observation counts and every
+  team's contest count `N_t` (hence its reliability weight `w_t`). `dedupe_contests`
+  keeps the first entry per `contest_id` (the one with problems) right after the
+  files are read — in `load`, in both anchors' shared-union-find build, and in the
+  viewers/graph exporters that read the raw JSON independently. Measured effect of
+  the fix: arch A difficulty mean 2605 → 2216, and its agreement with the
+  independent LLM ranking **jumps from Spearman +0.792 to +0.908** (the
+  double-counting had been the largest drag on arch A); arch B is barely moved
+  (LLM unchanged, CF within noise) because its MAP is dominated by well-observed
+  cells rather than raw row counts.
+
 - **Drop zero-solve standing rows (`load.row_solved_any`).** A standing row that
   solved no problem is removed before the fit (13.2% of tagged rows, 6.8%/4.7% of
   UCup s3/s4). Rationale: such rows are dominated by the MU0 prior — a one-off
@@ -180,12 +202,12 @@ Run with the project venv:
   drift up rather than down.
 
 - **No year in the team key (decision on the multi-season `tagged.json`).**
-  The larger `data/tagged.json` spans 5 seasons (2022–2026, 213 contests). We
+  The larger `data/tagged.json` spans 5 seasons (2022–2026, 146 unique contests). We
   keep identity season-agnostic — appending the contest `year` to the key would
   **fragment the single scale into per-year islands**. Measured on the contest-
   linking graph (nodes = contests, edge = ≥1 shared identity): current keying
-  leaves **6 components, the largest 206/213 contests** — essentially one scale;
-  year-appended keying gives **11 components of sizes 54/52/51/45/…** — exactly
+  leaves **6 components, the largest 141/146 contests** — essentially one scale;
+  year-appended keying gives **11 components of sizes 36/35/34/32/…** — roughly
   the per-year contest counts, with only thin inter-year threads. Year-keying
   deletes precisely the cross-year bridges (1,405 rosters and 579 ucup ids that
   recur across seasons) that calibrate the years onto one comparable scale.
@@ -206,9 +228,9 @@ Run with the project venv:
 
 ### Results (current run)
 
-- Converges in ~17 iterations, monotone decreasing `max|dtheta|` < 0.5.
-- `theta` ≈ [1720, 3777], mean ~2165 (zero-solve rows dropped; see decision).
-- `b` ≈ [1028, 4000], mean ~2613; boundary-smoothed (see decision), so
+- Converges in ~7 iterations, monotone decreasing `max|dtheta|` < 0.5.
+- `theta` ≈ [1369, 3680], mean ~2007 (zero-solve rows dropped + contests deduped).
+- `b` ≈ [986, 4000], mean ~2216; boundary-smoothed (see decision), so
   solved-by-all problems clear the 800 floor and most solved-by-none spread below
   4000 (only at-ceiling and empty-contest problems remain pinned).
 - Per-contest Spearman(difficulty, solve_count) median **−0.993** (harder
@@ -394,25 +416,30 @@ Run with the project venv:
 `tagged.json` carries an LLM `difficulty_estimate` (easy / medium / hard /
 very_hard) per problem, written by the sibling `llm-integration` tagger from the
 problem **statement** — independent of the standings both estimators use. We trust
-it only on **editorial-backed** contests (128 of 213 contests, 1066 of the rated
+it only on **editorial-backed** contests (128 of 146 contests, 1066 of the rated
 problems): the LLM label is reliable enough to validate against only where an
-editorial shipped. Both architectures' difficulty rises monotonically across every
-bucket, and Architecture B agrees **more** with the independent ranking:
+editorial shipped. All three architectures' difficulty rises monotonically across
+every bucket:
 
 | LLM bucket | n   | arch A | arch B binary | arch B survival |
 |------------|-----|--------|---------------|-----------------|
-| easy       | 317 | 1889   | 1440          | 1784            |
-| medium     | 230 | 2467   | 1944          | 2034            |
-| hard       | 247 | 2917   | 2211          | 2154            |
-| very_hard  | 272 | 3506   | 2535          | 2319            |
-| **Spearman** |   | **+0.792** | **+0.874**  | **+0.880**      |
+| easy       | 317 | 1618   | 1440          | 1782            |
+| medium     | 230 | 2058   | 1942          | 2032            |
+| hard       | 247 | 2382   | 2210          | 2153            |
+| very_hard  | 272 | 2948   | 2535          | 2318            |
+| **Spearman** |   | **+0.908** | **+0.874**  | **+0.880**      |
 *(medians per bucket; Spearman over all 1066 problems)*
 
-So IRT's use of *which* teams solved each problem tracks the editorial-informed
-opinion better than arch A's solve-count-driven estimate, despite arch B's more
-compressed scale, and the survival model (which also uses solve *times*) is best.
-(Restricting to editorial-backed problems *raised* binary arch B's agreement from
-+0.844 on the full set to +0.874 — the no-editorial labels are genuinely noisier.)
+After the contest deduplication, **arch A now agrees most** with the
+editorial-informed ranking (+0.908) — removing the double-counted rows sharpened
+its solve-count-driven estimate substantially (it was +0.792 before the fix). The
+two IRT fits are essentially unchanged (the duplicates barely moved their MAP) and
+remain close behind, with the survival model (which also uses solve *times*) ahead
+of the binary Rasch. So on the LLM check arch A leads, while on the Codeforces
+numeric checks below the IRT fits stay ahead — the architectures are now closely
+matched rather than IRT dominating. (Restricting to editorial-backed problems
+*raised* binary arch B's agreement from +0.844 on the full set to +0.874 — the
+no-editorial labels are genuinely noisier.)
 Run: `./.venv/bin/python -m arch_b.validate`.
 
 ### External validation vs Codeforces ratings (`arch_b.sanity_cf`)
@@ -424,7 +451,7 @@ standings. All three models match it strongly:
 
 | model           | Spearman vs CF | Pearson vs CF |
 |-----------------|----------------|---------------|
-| arch A          | +0.945         | +0.928        |
+| arch A          | +0.945         | +0.938        |
 | arch B binary   | **+0.962**     | +0.933        |
 | arch B survival | +0.956         | **+0.947**    |
 
@@ -432,7 +459,7 @@ All ~0.95+ on a 13-problem contest is a strong cross-check of the whole approach
 The survival model has the best *linear* calibration (Pearson). **The decisive
 case is J/K:** "Worldwide Playlist" (J) and "Time Display Stickers" (K) were each
 solved by exactly 76 teams, so the binary model rates them *identically* (1172 =
-1172); the survival model separates them by solve time (J 1827 > K 1714) and CF
+1172); the survival model separates them by solve time (J 1826 > K 1714) and CF
 agrees (J 1700 > K 1300) — a clean illustration of the signal solve times add.
 (Caveat: all models still over-shrink the very hardest problems — the three
 1-solver problems A/L/M land near ~2400–2650 vs CF's 2900–3500 — since a single
@@ -450,7 +477,7 @@ Taiwan contest (CF 2172 = our 2657) — giving **40 anchor problems spanning CF
 
 | model           | Spearman vs CF | affine slope | fit-RMSE | LOCO-CV-RMSE |
 |-----------------|----------------|--------------|----------|--------------|
-| arch A          | +0.917         | 0.80         | 305      | 402          |
+| arch A          | +0.935         | 1.00         | 293      | 372          |
 | arch B binary   | +0.898         | 1.29         | 335      | 422          |
 | arch B survival | **+0.954**     | **2.41**     | **236**  | **252**      |
 

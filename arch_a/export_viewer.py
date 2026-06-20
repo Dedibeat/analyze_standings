@@ -19,7 +19,7 @@ import numpy as np
 from .elo import LO, HI
 from .anchor import TAGGED, UCUP, estimate_anchored
 from .fixedpoint import estimate
-from .load import load, member_identity, row_solved_any, team_key
+from .load import dedupe_contests, load, member_identity, row_solved_any, team_key
 
 OUT_DIR = os.path.join(os.path.dirname(__file__), os.pardir, "output")
 TEMPLATE = os.path.join(os.path.dirname(__file__), "viewer_template.html")
@@ -31,12 +31,14 @@ def build_data(ucup_only=False):
         for p in UCUP:
             with open(p) as f:
                 raw.extend(json.load(f))
+        raw = dedupe_contests(raw)
         uf = member_identity(raw)
         ds = load(UCUP, uf=uf)
         theta, b, rho, _ = estimate(ds)
     else:
         with open(TAGGED) as f:
             raw = json.load(f)
+        raw = dedupe_contests(raw)
         ds, theta, b, rho, _, uf = estimate_anchored()
     key_to_idx = {k: i for i, k in enumerate(ds.teams)}
 
@@ -80,6 +82,7 @@ def build_data(ucup_only=False):
         contests.append({
             "contest_id": int(cid),
             "name": c.get("contest_name") or str(cid),
+            "year": c.get("year"),
             "region": c.get("region") or "",
             "url": c.get("contest_url") or "",
             "n_teams": len(teams),
@@ -90,7 +93,7 @@ def build_data(ucup_only=False):
         })
 
     assert row == len(rho), "performance/row alignment mismatch"
-    contests.sort(key=lambda c: c["name"])
+    contests.sort(key=lambda c: (-(c["year"] or 0), c["name"]))
     return {"scale": {"lo": LO, "hi": HI}, "contests": contests}
 
 

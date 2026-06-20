@@ -24,7 +24,7 @@ import os
 
 import numpy as np
 
-from arch_a.load import _max_solve_seconds, load, member_identity, season_of
+from arch_a.load import _max_solve_seconds, dedupe_contests, load, member_identity, season_of
 from .model import MU0, SIGMA_B, SIGMA_THETA, fit
 
 DATA = os.path.join(os.path.dirname(__file__), os.pardir, "data")
@@ -49,6 +49,7 @@ def estimate_anchored(sigma_theta=SIGMA_THETA, sigma_b=SIGMA_B, fit_fn=fit,
     for p in [TAGGED] + UCUP:
         with open(p) as f:
             raw_all.extend(json.load(f))
+    raw_all = dedupe_contests(raw_all)
     if min_solve_hours is not None:
         raw_all = [c for c in raw_all if _max_solve_seconds(c) >= min_solve_hours * 3600]
     season_by_cid = {c["contest_id"]: season_of(c) for c in raw_all} if season_key else None
