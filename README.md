@@ -68,12 +68,14 @@ Validate any model against two independent opinions — the LLM `difficulty_esti
 Pacific Championship:
 
 ```bash
-./.venv/bin/python -m arch_b.validate    # LLM buckets, all models
-./.venv/bin/python -m arch_b.sanity_cf   # vs Codeforces ratings (contest 2206)
+./.venv/bin/python -m arch_b.validate      # LLM buckets, all models
+./.venv/bin/python -m arch_b.sanity_cf     # vs Codeforces ratings (contest 2206)
+./.venv/bin/python -m arch_b.predict_eval  # held-out solve prediction (binary vs survival)
 ```
 
 Both arch B models beat arch A on the LLM check (Spearman +0.874 / +0.880 vs
-+0.792), and all three match the CF ratings at Spearman ≈ 0.95+.
++0.792), and all three match the CF ratings at Spearman ≈ 0.95+. On held-out solve
+prediction the survival model generalizes best (AUC 0.881 vs binary 0.871).
 
 ### Interactive viewer
 
@@ -128,8 +130,8 @@ Module self-checks:
 - `arch_a/` — Architecture A implementation (`load`, `elo`, `fixedpoint`,
   `anchor`, `run`), plus `export_viewer` + `viewer_template.html` for the viewer.
 - `arch_b/` — Architecture B implementation (`model` binary Rasch, `survival`
-  solve-time model, `anchor`, `run`, `validate`, `sanity_cf`); reuses `arch_a.load`
-  and `arch_a.elo`.
+  solve-time model, `anchor`, `run`, `validate`, `sanity_cf`, `predict_eval`);
+  reuses `arch_a.load` and `arch_a.elo`.
 - `output/problem_ratings.json` — Architecture A ratings;
   `output/problem_ratings_b.json` — Architecture B (binary) ratings;
   `output/problem_ratings_survival.json` — Architecture B (survival) ratings.

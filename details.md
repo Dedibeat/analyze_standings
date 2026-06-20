@@ -252,6 +252,10 @@ log-likelihood (eq. loglik) plus Gaussian priors on `theta` and `b` (eq. priors)
 - `sanity_cf.py` — numeric check against the official **Codeforces** ratings of
   the 2026 ICPC Asia Pacific Championship (qoj 3747 = CF mirror 2206), a fully
   independent authoritative opinion (see results below).
+- `predict_eval.py` — internal held-out solve-prediction check: train on a random
+  80% of observed cells, score predicted solve probability on the held-out 20%
+  (log-loss / Brier / AUC + a calibration table). Both fitters accept an ``obs=``
+  train split for this (see results below).
 - `anchor.py` — `estimate_anchored(sigma_theta)`: the same two-phase UCup anchor as
   `arch_a.anchor`, under one shared union-find. Fit UCup (s3+s4) alone, then feed
   each UCup team's `theta_u` back as its Gaussian **prior mean** `mu_t` in the
@@ -419,7 +423,33 @@ agrees (J 1700 > K 1300) — a clean illustration of the signal solve times add.
 (Caveat: all models still over-shrink the very hardest problems — the three
 1-solver problems A/L/M land near ~2400–2650 vs CF's 2900–3500 — since a single
 solve barely constrains the top of the scale. Ranking holds; absolute hard-end
-calibration is the open piece.)
+calibration is the open piece — and is currently blocked: the CF problemset API
+truncates to the most recent contests, CF problem pages are 403 to the fetcher,
+and only the 2026 mirror (2206) was reachable, so there are too few CF anchors to
+fit *and* validate a recalibration. A multi-contest CF/clist pull, or member-CF
+ratings, would unblock it.)
+
+### Internal validation: held-out solve prediction (`arch_b.predict_eval`)
+
+Complementary to the external ranking checks: train on a random 80% of observed
+cells, predict the solve probability on the held-out 20%, score with proper rules.
+Both arch B fits predict the same quantity on a held-out cell — P(solve within the
+contest) — so this isolates the value of the solve-time signal the survival model
+uses in training. (Architecture A has no per-cell likelihood, so it is not in this
+comparison.)
+
+| model           | log-loss | Brier  | AUC    |
+|-----------------|----------|--------|--------|
+| arch B binary   | 0.3173   | 0.1001 | 0.8710 |
+| arch B survival | **0.3169** | **0.0990** | **0.8810** |
+
+The survival model generalizes **better** on every metric — the AUC lift
+(0.871 → 0.881) is the clearest sign that training on solve *times* sharpens the
+latent abilities/difficulties. Trade-off: the binary model's probabilities are
+very well calibrated (predicted ≈ empirical in every bin), whereas the survival
+model is mildly **under-confident** in the 0.5–0.9 range (better ranking, slightly
+worse probability calibration — the expected effect of scoring a hazard-model
+solve probability against a binary outcome; a recalibrated link is a follow-up).
 
 ## Out of scope / follow-ups
 
@@ -435,10 +465,12 @@ calibration is the open piece.)
   prior, so same-roster teams that recur across seasons can drift instead of
   collapsing to one blended ability — without losing the cross-year links that
   keep all seasons on one scale (see the no-year-in-key decision above).
-- **Hard-end calibration** — all arch B variants over-shrink 1-solver problems vs
-  CF (see the APAC A/L/M caveat). External validation is now done two ways (LLM
-  buckets + the CF-rating point check, `arch_b.validate` / `arch_b.sanity_cf`);
-  what remains is fixing the *absolute* hard-end scale, e.g. an affine recalibration
-  to CF-rated mirror problems or a heavier-tailed prior.
+- **Hard-end calibration (blocked on CF data).** All arch B variants over-shrink
+  1-solver problems vs CF (the APAC A/L/M caveat). Fixing the *absolute* hard-end
+  scale needs more CF anchors than one contest — enough to fit an affine
+  our→CF map *and* validate it out of sample (an affine map preserves ranking, so
+  the ordinal LLM check cannot validate it). Reaching the 2024/2025 APAC mirror
+  ratings (CF 1938 / 2073) is currently blocked (API truncation, 403 pages); needs
+  an authenticated CF/clist pull. Alternative: a heavier-tailed difficulty prior.
 - **CF anchoring** if member→handle→rating data becomes available, to turn the
   relative scale into true Codeforces-equivalent points.

@@ -55,17 +55,21 @@ def _observations(ds):
 
 
 def fit(ds, prior_mu=None, sigma_theta=SIGMA_THETA, sigma_b=SIGMA_B, mu_b=MU0,
-        eps=0.5, max_iter=200, verbose=True):
+        eps=0.5, max_iter=200, verbose=True, obs=None):
     """MAP fit of the Rasch model (eq. map); returns (theta, b, history).
 
     ``prior_mu`` is the per-team prior mean mu_t (eq. priors); defaults to the
     scalar neutral MU0 for every team. Pass a per-team array to anchor selected
     teams to an external scale (see ``anchor.estimate_anchored``). ``history`` is
     the per-iteration max parameter change.
+
+    ``obs`` overrides the observation set with a precomputed ``(obs_team, obs_prob,
+    obs_y)`` tuple (e.g. a train split for held-out evaluation); defaults to every
+    observed cell.
     """
     if prior_mu is None:
         prior_mu = np.full(len(ds.teams), MU0)
-    obs_team, obs_prob, obs_y = _observations(ds)
+    obs_team, obs_prob, obs_y = _observations(ds) if obs is None else obs
 
     s = elo.S
     prec_theta = 1.0 / sigma_theta**2   # prior precision (Hessian/gradient terms)

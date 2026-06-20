@@ -73,15 +73,17 @@ def _survival_observations(ds):
 
 
 def fit(ds, prior_mu=None, sigma_theta=SIGMA_THETA, sigma_b=SIGMA_B, mu_b=MU0,
-        eps=0.5, max_iter=200, verbose=True):
+        eps=0.5, max_iter=200, verbose=True, obs=None):
     """MAP fit of the survival model; returns (theta, b, history).
 
     Signature matches ``model.fit`` so it is a drop-in for
-    ``anchor.estimate_anchored(fit_fn=...)``.
+    ``anchor.estimate_anchored(fit_fn=...)``. ``obs`` overrides the observation set
+    with a precomputed ``(obs_team, obs_prob, obs_y, rho)`` tuple (a train split for
+    held-out evaluation); defaults to every observed cell.
     """
     if prior_mu is None:
         prior_mu = np.full(len(ds.teams), MU0)
-    obs_team, obs_prob, obs_y, rho = _survival_observations(ds)
+    obs_team, obs_prob, obs_y, rho = _survival_observations(ds) if obs is None else obs
 
     s = elo.S
     prec_theta = 1.0 / sigma_theta**2
