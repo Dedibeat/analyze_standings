@@ -165,7 +165,8 @@ Module self-checks:
   `anchor`, `run`), plus `export_viewer` + `viewer_template.html` for the viewer.
 - `arch_b/` — Architecture B implementation (`model` binary Rasch, `survival`
   solve-time model, `anchor`, `run`, `validate`, `sanity_cf`, `predict_eval`,
-  `calibrate`, `season_experiment`); reuses `arch_a.load` and `arch_a.elo`.
+  `calibrate`, `season_experiment`, `twopl`/`twopl_region` 2PL discrimination
+  prototype); reuses `arch_a.load` and `arch_a.elo`.
 - `output/problem_ratings.json` — Architecture A ratings;
   `output/problem_ratings_b.json` — Architecture B (binary) ratings;
   `output/problem_ratings_survival.json` — Architecture B (survival) ratings;
@@ -174,5 +175,8 @@ Module self-checks:
 - `details.md` — design notes, key decisions, and follow-ups.
 
 See `details.md` for the no-Codeforces-data anchoring choice, the `$DEFAULT`
-team-id handling, the two architectures, and what's deliberately out of scope
-(2PL discrimination, the solve-time survival model).
+team-id handling, the two architectures, and what's deliberately out of scope.
+2PL discrimination has now been **prototyped** (`arch_b.twopl`) and measured by
+region: it captures the regional discrimination signal in-sample but overfits
+(worse held-out prediction and LLM agreement), so the shipped fit stays Rasch —
+see the 2PL prototype section in `details.md`.
