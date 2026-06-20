@@ -63,6 +63,11 @@ It distinguishes problems with identical solve counts that the binary model cann
 (e.g. it correctly separates two APAC problems both solved by 76 teams), and gives
 tighter uncertainty.
 
+Both `run` modes drop short-format contests (warm-ups / 3 h rounds) by default
+(`MIN_SOLVE_HOURS`). `load` also offers `season_key=True` to separate recurring
+rosters by ICPC season — but `arch_b.season_experiment` shows it doesn't improve
+difficulty estimates, so it stays off; run that module to reproduce the comparison.
+
 Validate any model against two independent opinions — the LLM `difficulty_estimate`
 (editorial-backed contests) and the official Codeforces ratings of the 2026 Asia
 Pacific Championship:
@@ -140,7 +145,7 @@ Module self-checks:
   `anchor`, `run`), plus `export_viewer` + `viewer_template.html` for the viewer.
 - `arch_b/` — Architecture B implementation (`model` binary Rasch, `survival`
   solve-time model, `anchor`, `run`, `validate`, `sanity_cf`, `predict_eval`,
-  `calibrate`); reuses `arch_a.load` and `arch_a.elo`.
+  `calibrate`, `season_experiment`); reuses `arch_a.load` and `arch_a.elo`.
 - `output/problem_ratings.json` — Architecture A ratings;
   `output/problem_ratings_b.json` — Architecture B (binary) ratings;
   `output/problem_ratings_survival.json` — Architecture B (survival) ratings;

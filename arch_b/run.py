@@ -20,6 +20,11 @@ from .anchor import estimate_anchored
 
 OUT_DIR = os.path.join(os.path.dirname(__file__), os.pardir, "output")
 
+# Drop short-format contests (warm-ups, 3 h rounds) whose latest solve is below
+# this many hours -- a duration proxy (no duration field exists). Validated
+# metric-neutral vs CF/LLM in arch_b.season_experiment while removing noise.
+MIN_SOLVE_HOURS = 3.5
+
 
 def _spearman(x, y):
     """Spearman rank correlation (no scipy dependency)."""
@@ -36,7 +41,7 @@ def main(use_survival=False):
     mod = survival if use_survival else model
     out_name = "problem_ratings_survival.json" if use_survival else "problem_ratings_b.json"
 
-    ds, theta, b, history, _ = estimate_anchored(fit_fn=mod.fit)
+    ds, theta, b, history, _ = estimate_anchored(fit_fn=mod.fit, min_solve_hours=MIN_SOLVE_HOURS)
     _, se_b = mod.laplace_se(ds, theta, b)  # Laplace posterior SE per difficulty
 
     records = []

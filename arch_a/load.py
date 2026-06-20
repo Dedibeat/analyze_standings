@@ -25,17 +25,47 @@ Resolution rule per row:
 
 import json
 import os
+import re
 from dataclasses import dataclass
 
 import numpy as np
 
 DATA_PATH = os.path.join(os.path.dirname(__file__), os.pardir, "data", "ucup_s4.json")
 
+# ICPC season vs calendar year: continental *Championships* and the World Finals
+# are held the calendar year *after* the regional season they belong to (see the
+# season map in details.md), so their season is ``year - 1``; everything else is
+# its calendar year. Used only when ``season_key`` separates teams by season.
+_CHAMPIONSHIP = re.compile(r"championship|world final", re.I)
 
-def _roster_token(members):
-    """Identity token for a roster, or None if too small to trust (>=2 members)."""
+
+def season_of(contest):
+    """ICPC season of a contest: year-1 for championships/World Finals, else year."""
+    y = contest.get("year")
+    if y is None:
+        return None
+    return y - 1 if _CHAMPIONSHIP.search(contest.get("contest_name") or "") else y
+
+
+def _max_solve_seconds(contest):
+    """Latest observed solve time in a contest (a proxy for its duration)."""
+    m = 0
+    for s in contest["standings"]:
+        for p in (s.get("problems") or {}).values():
+            if p.get("solved") and p.get("time_seconds"):
+                m = max(m, p["time_seconds"])
+    return m
+
+
+def _roster_token(members, season=None):
+    """Identity token for a roster, or None if too small to trust (>=2 members).
+
+    When ``season`` is given the token is season-scoped, so a roster that recurs in
+    a later season resolves to a *separate* identity (time-varying ability).
+    """
     if members and len(members) >= 2:
-        return "mem:" + "|".join(sorted(members))
+        tok = "mem:" + "|".join(sorted(members))
+        return f"{tok}|s{season}" if season is not None else tok
     return None
 
 
@@ -63,14 +93,21 @@ class _UnionFind:
             self.parent[ra] = rb
 
 
-def member_identity(raw):
-    """Build union-find resolver over stable ids and rosters (see module docstring)."""
+def member_identity(raw, season_by_cid=None):
+    """Build union-find resolver over stable ids and rosters (see module docstring).
+
+    When ``season_by_cid`` (contest_id -> season) is given, roster tokens are
+    season-scoped so a recurring roster splits per season; the stable ``ucup-*``/id
+    keys are left season-agnostic on purpose, so they remain the cross-season
+    backbone that keeps the whole scale connected.
+    """
     uf = _UnionFind()
     for c in raw:
+        season = None if season_by_cid is None else season_by_cid[c["contest_id"]]
         for s in c["standings"]:
             tid = s["team_id"]
             stable = None if tid.startswith("$DEFAULT") else "id:" + tid
-            roster = _roster_token(s.get("members"))
+            roster = _roster_token(s.get("members"), season)
             if stable is not None:
                 uf.find(stable)
             if roster is not None:
@@ -80,13 +117,14 @@ def member_identity(raw):
     return uf
 
 
-def team_key(contest_id, team_id, members, uf):
+def team_key(contest_id, team_id, members, uf, season=None):
     """Canonical team identity for a standing row, resolved through ``uf``."""
-    roster = _roster_token(members)
+    roster = _roster_token(members, season)
     if roster is not None:
         return uf.find(roster)
     if team_id.startswith("$DEFAULT"):
-        return f"dj:{contest_id}::{team_id}"  # isolated: nothing identifies it
+        # isolated per contest -> already per-season (a contest is in one season)
+        return f"dj:{contest_id}::{team_id}"
     return uf.find("id:" + team_id)
 
 
@@ -108,7 +146,7 @@ class Dataset:
     raw_solved_count: np.ndarray  # problem index -> problem_solved_in_contest (reported)
 
 
-def load(path=DATA_PATH, uf=None):
+def load(path=DATA_PATH, uf=None, season_key=False, min_solve_hours=None):
     """Load one file (str path) or several (list of paths) into one Dataset.
 
     Pass a prebuilt ``uf`` to resolve team identity against a *shared* union-find
@@ -120,6 +158,13 @@ def load(path=DATA_PATH, uf=None):
     are excluded from the fit, so a team's contest count ``N_t`` is the number of
     contests where it actually solved something. ``uf`` is still built over *all*
     rows, so identity links carried only by a zero-solve row are preserved.
+
+    ``season_key`` separates recurring rosters by ICPC season (``season_of``), so a
+    roster gets a fresh ability each season; stable ids stay season-agnostic (the
+    cross-season backbone). ``min_solve_hours`` drops short-format contests whose
+    latest solve falls below that many hours (a duration proxy: no duration field
+    exists). When a shared ``uf`` is passed it must already be built with the same
+    ``season_key`` setting.
     """
     paths = [path] if isinstance(path, str) else list(path)
     raw = []
@@ -127,8 +172,16 @@ def load(path=DATA_PATH, uf=None):
         with open(p) as f:
             raw.extend(json.load(f))
 
+    if min_solve_hours is not None:
+        raw = [c for c in raw if _max_solve_seconds(c) >= min_solve_hours * 3600]
+
+    season_by_cid = {c["contest_id"]: season_of(c) for c in raw} if season_key else None
     if uf is None:
-        uf = member_identity(raw)
+        uf = member_identity(raw, season_by_cid)
+
+    def _key(cid, s):
+        season = None if season_by_cid is None else season_by_cid[cid]
+        return team_key(cid, s["team_id"], s.get("members"), uf, season)
 
     team_index = {}
     contest_index = {}
@@ -153,7 +206,7 @@ def load(path=DATA_PATH, uf=None):
         for s in c["standings"]:
             if not row_solved_any(s):
                 continue  # zero-solve rows are dropped from the fit
-            tk = team_key(cid, s["team_id"], s.get("members"), uf)
+            tk = _key(cid, s)
             if tk not in team_index:
                 team_index[tk] = len(team_index)
 
@@ -178,7 +231,7 @@ def load(path=DATA_PATH, uf=None):
             if not row_solved_any(s):
                 continue  # zero-solve rows are dropped from the fit
             assert s.get("rank") is not None, f"missing rank in contest {cid}"
-            ti = team_index[team_key(cid, s["team_id"], s.get("members"), uf)]
+            ti = team_index[_key(cid, s)]
             team_of_row.append(ti)
             contest_of_row.append(ci)
             rank_of_row.append(int(s["rank"]))

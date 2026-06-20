@@ -24,7 +24,7 @@ import os
 
 import numpy as np
 
-from arch_a.load import load, member_identity
+from arch_a.load import _max_solve_seconds, load, member_identity, season_of
 from .model import MU0, SIGMA_B, SIGMA_THETA, fit
 
 DATA = os.path.join(os.path.dirname(__file__), os.pardir, "data")
@@ -32,7 +32,8 @@ TAGGED = os.path.join(DATA, "tagged.json")
 UCUP = [os.path.join(DATA, "ucup_s3.json"), os.path.join(DATA, "ucup_s4.json")]
 
 
-def estimate_anchored(sigma_theta=SIGMA_THETA, sigma_b=SIGMA_B, fit_fn=fit, verbose=True):
+def estimate_anchored(sigma_theta=SIGMA_THETA, sigma_b=SIGMA_B, fit_fn=fit,
+                      season_key=False, min_solve_hours=None, verbose=True):
     """Fit tagged.json with its UCup teams' prior mean anchored to a UCup-only fit.
 
     Returns (ds_tagged, theta, b, history, uf) for the anchored tagged fit. ``uf``
@@ -41,15 +42,20 @@ def estimate_anchored(sigma_theta=SIGMA_THETA, sigma_b=SIGMA_B, fit_fn=fit, verb
 
     ``fit_fn`` is the MAP fitter, ``model.fit`` (binary Rasch) by default; pass
     ``survival.fit`` to anchor the solve-time survival model on the same scale.
+    ``season_key`` / ``min_solve_hours`` are passed through to ``load`` (and the
+    shared union-find) to separate teams by season and drop short contests.
     """
     raw_all = []
     for p in [TAGGED] + UCUP:
         with open(p) as f:
             raw_all.extend(json.load(f))
-    uf = member_identity(raw_all)  # one identity space for both fits
+    if min_solve_hours is not None:
+        raw_all = [c for c in raw_all if _max_solve_seconds(c) >= min_solve_hours * 3600]
+    season_by_cid = {c["contest_id"]: season_of(c) for c in raw_all} if season_key else None
+    uf = member_identity(raw_all, season_by_cid)  # one identity space for both fits
 
-    ds_ucup = load(UCUP, uf=uf)
-    ds_tagged = load(TAGGED, uf=uf)
+    ds_ucup = load(UCUP, uf=uf, season_key=season_key, min_solve_hours=min_solve_hours)
+    ds_tagged = load(TAGGED, uf=uf, season_key=season_key, min_solve_hours=min_solve_hours)
 
     if verbose: print("=== UCup anchor fit (s3 + s4) ===")
     theta_u, _, _ = fit_fn(ds_ucup, sigma_theta=sigma_theta, sigma_b=sigma_b, verbose=verbose)

@@ -193,10 +193,16 @@ Run with the project venv:
   1,405 (12%) span >1 year — the other 88% already differ because members
   graduated, so they are already separate identities. The real residual cost is
   that a same-roster-multiple-seasons team gets a single ability blended across
-  seasons; the principled fix is a **time-varying `theta_{team,year}`** with a
-  smoothing prior (a model change, not a key change), recorded as a follow-up.
-  `arch_a/export_graph.py` renders both keyings as an interactive graph
-  (`output/contest_graph.html`).
+  seasons. `arch_a/export_graph.py` renders both keyings as an interactive graph
+  (`output/contest_graph.html`). **Update — season-keying tried and measured
+  (`arch_b.season_experiment`, see below):** a *map-corrected* season key (with
+  stable `ucup-*` ids left season-agnostic as the backbone) avoids the
+  fragmentation — connectivity is unchanged (still one dominant component) — but it
+  does **not** improve difficulty estimates (CF agreement slightly *worse*, LLM
+  unchanged), because splitting a roster per season gives each identity less data.
+  So season-keying stays an opt-in `load(season_key=True)` flag, off by default; a
+  time-varying `theta_{team,season}` with a smoothing prior (keeping one identity)
+  remains the better follow-up than a hard key split.
 
 ### Results (current run)
 
@@ -259,6 +265,8 @@ log-likelihood (eq. loglik) plus Gaussian priors on `theta` and `b` (eq. priors)
 - `calibrate.py` — fit + apply the affine map from our scale to **Codeforces
   points**, using the 3 CF-mirrored contests as anchors; writes
   `output/problem_ratings_calibrated.json` (see results below).
+- `season_experiment.py` — tries + validates season-separated identity and the
+  short-contest filter (`load(season_key=, min_solve_hours=)`); see results below.
 - `anchor.py` — `estimate_anchored(sigma_theta)`: the same two-phase UCup anchor as
   `arch_a.anchor`, under one shared union-find. Fit UCup (s3+s4) alone, then feed
   each UCup team's `theta_u` back as its Gaussian **prior mean** `mu_t` in the
@@ -475,6 +483,33 @@ model is mildly **under-confident** in the 0.5–0.9 range (better ranking, slig
 worse probability calibration — the expected effect of scoring a hazard-model
 solve probability against a binary outcome; a recalibrated link is a follow-up).
 
+### Season-separated identity + short-contest filter (`arch_b.season_experiment`)
+
+Two data options were tried and validated on the UCup-anchored survival fit:
+
+* `load(season_key=True)` — separate a recurring roster's ability by ICPC season,
+  using the **map** (championships / World Finals belong to the *previous* season:
+  `load.season_of`); stable `ucup-*` ids stay season-agnostic as the cross-season
+  backbone, so the scale does not fragment.
+* `load(min_solve_hours=3.5)` — drop short-format contests (warm-ups, 3 h rounds)
+  whose latest solve is under 3.5 h (a duration proxy; 4.5 h would wrongly drop
+  small 5 h regionals whose last solve happened early). Now the **default in
+  `arch_b.run`**.
+
+| config             | teams | contests | graph (comp / biggest) | CF Spearman | CF LOCO-RMSE | LLM Spearman |
+|--------------------|-------|----------|------------------------|-------------|--------------|--------------|
+| baseline           | 33991 | 146      | 9 / 138                | +0.954      | 252          | +0.880       |
+| +5 h filter        | 33186 | 133      | 3 / 131                | +0.954      | 252          | +0.880       |
+| +season +5 h       | 34117 | 133      | 3 / 131                | +0.949      | 270          | +0.880       |
+
+The **5 h filter is a clean hygiene win** — identical external agreement while
+removing 13 noisy short contests and *improving* connectivity (9→3 components), so
+it is on by default. **Season-keying is validated as not worth it**: it preserves
+connectivity (the map + stable-ucup backbone avoids the per-season islands that
+sank plain year-keying) but slightly *worsens* CF agreement and leaves LLM
+unchanged — the +929 per-season roster splits each carry less data, and that cost
+cancels the time-varying benefit for *difficulty*. It stays an opt-in flag.
+
 ## Out of scope / follow-ups
 
 - **2PL discrimination** `a_p` (strat §4) on top of the Rasch fit in `arch_b`,
@@ -485,10 +520,12 @@ solve probability against a binary outcome; a recalibrated link is a follow-up).
   the qoj extractor) would sharpen the solved-cell time fractions.
 - **Member-level identity** and entity resolution across sources (strat
   Remarks), to densify linking and handle roster changes.
-- **Time-varying ability** `theta_{team,year}` with a season-to-season smoothing
-  prior, so same-roster teams that recur across seasons can drift instead of
-  collapsing to one blended ability — without losing the cross-year links that
-  keep all seasons on one scale (see the no-year-in-key decision above).
+- **Time-varying ability** `theta_{team,season}` with a season-to-season smoothing
+  prior — keeping **one** identity (unlike the hard `season_key` split, which was
+  tried and slightly hurt difficulty, see above) but letting ability drift, so a
+  recurring roster neither collapses to one blended value nor loses data to a split.
+  A dedicated team-performance prediction eval (not just difficulty) is the right
+  way to measure its benefit.
 - **Richer CF calibration.** The affine map to CF points (`arch_b.calibrate`) is
   fit on 40 anchors from 3 contests and validated leave-one-contest-out (RMSE
   ~250). Open: more anchor contests (broader regions/years) to fit a *per-region*
