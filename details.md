@@ -258,12 +258,32 @@ Run with the project venv:
 ### Caveat introduced by the stronger normalization
 
 Because an unlinked contest now collapses to MU0, a contest's absolute scale
-depends entirely on its *linked* teams. Contests dominated by domjudge-isolated
-teams (the large 500+-team Chinese regionals, where many rows have no usable
-roster) are anchored by their minority of multi-contest teams, so their scale is
-noisier than a UCup-heavy contest's. The graph is fully connected and every
-contest has linked teams, so this is a quality gradient, not a break — but it is
-the price of letting the shared teams, rather than the prior, set the scale.
+depends entirely on its *linked* teams (those that recur across contests), so a
+region carried by a thin minority of linkers sits on a noisier scale than a
+densely cross-linked one. **Measured linking by region** (share of appearances by
+multi-contest teams / UCup-anchored teams; median linker share per contest):
+
+| region              | % multi-contest | % UCup-anchored | median % linkers/contest |
+|---------------------|-----------------|-----------------|--------------------------|
+| Asia East Continent | 47%             | 30%             | 65%                      |
+| Northern Eurasia    | 43%             | 7%              | 43%                      |
+| North America       | 18%             | 3%              | 46%                      |
+| Asia Pacific        | 30%             | 10%             | 29%                      |
+| Europe              | 13%             | 3%              | 10%                      |
+
+The weakly-linked regions are **Europe** (13% multi-contest, 3% UCup, half its
+contests are ~90% one-off national teams) and Asia Pacific — *not* the large Asia
+East Continent regionals, which are in fact the **best-linked** in the dataset
+(strong Chinese teams play many EC regionals *and* the Universal Cup; ~half the EC
+rows are still domjudge-isolated one-offs, but the other half link richly and 30%
+anchor to UCup). The graph is fully connected and every contest has linked teams,
+so this is a quality gradient, not a break — but it is the price of letting the
+shared teams, rather than the prior, set the scale. *(Note: this linking gradient
+does not line up with the small per-region offsets vs the LLM yardstick — EA +14
+yet best-linked, Europe −24 yet worst-linked — so weak linking is not a
+demonstrated source of difficulty bias; per-team prior dependence is also uniform
+across regions at ~26%. Confirming any regional offset needs a second independent
+per-region anchor beyond the LLM.)*
 
 ## Architecture B (`arch_b/`)
 
