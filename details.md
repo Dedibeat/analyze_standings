@@ -5,7 +5,9 @@
 Rate ICPC-style problems by difficulty from contest standings alone (no native
 contestant rating, unlike Codeforces/AtCoder). Strategy is described in
 `strat.tex` (concise) and `strat_detailed.tex` (gentle long-form). This repo
-implements **Architecture A — the alternating fixed point** (strat.tex §3).
+implements both **Architecture A — the alternating fixed point** (strat.tex §3,
+`arch_a/`) and **Architecture B — the joint item-response (Rasch) MAP model**
+(strat.tex §4, `arch_b/`).
 
 ## Data
 
@@ -219,10 +221,96 @@ noisier than a UCup-heavy contest's. The graph is fully connected and every
 contest has linked teams, so this is a quality gradient, not a break — but it is
 the price of letting the shared teams, rather than the prior, set the scale.
 
+## Architecture B (`arch_b/`)
+
+Treat each solve as a Bernoulli response governed by the ability--difficulty gap:
+`Pr(y_tp=1) = sigma((theta_t - b_p)/s) = pi(theta_t, b_p)` (the Rasch model, strat
+§4 eq. rasch). The same `theta_t` appears in the likelihood of every contest team
+`t` entered, so contests sharing a team are linked **automatically** — there is no
+explicit ability-update step as in Architecture A; the coupling lives in the
+shared parameter. The estimate is the maximum-a-posteriori point (eq. map) of the
+log-likelihood (eq. loglik) plus Gaussian priors on `theta` and `b` (eq. priors).
+
+- `model.py` — `fit(ds, prior_mu, sigma_theta, sigma_b, mu_b)`: the MAP fit.
+  `_observations` flattens `solve_mask` into 1-D `(obs_team, obs_prob, obs_y)`
+  arrays (one entry per observed competitor–problem cell, ~256k for tagged). The
+  objective is strictly concave (concave log-likelihood + strictly concave
+  Gaussian prior) so the MAP is unique; it is solved by **block-coordinate
+  Newton** — one closed-form, vectorized Newton step over all `theta` (given `b`),
+  then one over all `b` (given the new `theta`), each accumulated with `np.add.at`.
+  Numpy only, **no learning rate** (scipy is not installed), and it echoes arch_a's
+  alternating style. Converges in ~25 iters / ~5 s on the full tagged fit.
+- `anchor.py` — `estimate_anchored(sigma_theta)`: the same two-phase UCup anchor as
+  `arch_a.anchor`, under one shared union-find. Fit UCup (s3+s4) alone, then feed
+  each UCup team's `theta_u` back as its Gaussian **prior mean** `mu_t` in the
+  tagged fit (others keep `MU0`). The pull strength is the single global
+  `sigma_theta`, not per-team UCup evidence (see decision below).
+- `run.py` — wires it (the anchored fit), writes `output/problem_ratings_b.json`
+  (a **distinct** file; arch_a's `problem_ratings.json` is untouched), runs the
+  same Spearman / top-team verification as `arch_a.run`.
+
+Run with the project venv:
+
+    ./.venv/bin/python -m arch_b.run
+
+### Key decisions (Architecture B)
+
+- **Reuse, don't fork, the data layer.** `arch_b` imports `arch_a.load`
+  (identity / union-find / zero-solve drop) and `arch_a.elo` (`pi`, scale `s`,
+  the `[800, 4000]` clamp) unchanged — only the *estimator* differs between the
+  two architectures, so all the team-identity and scale decisions above
+  (roster keying, UCup anchor rationale, zero-solve drop, no-year-in-key) carry
+  over verbatim.
+
+- **Scope = Rasch (1-parameter), not 2PL.** strat §4 presents the per-problem
+  discrimination `a_p` as "an extension," and the MAP objective (eq. map) is
+  written purely in terms of `pi(theta, b)` — the Rasch model. The Rasch MAP is
+  convex/uniquely solvable; adding `a_p` makes it non-convex (an `a_p·theta`
+  interaction). We ship the convex Rasch fit and leave 2PL a follow-up.
+
+- **The Gaussian prior replaces arch_a's boundary-smoothing hack.** A
+  solved-by-nobody problem contributes only `sum_t log(1 - pi)`, which pushes
+  `b_p` up but is held finite by the `N(mu_b, sigma_b^2)` prior (strat §4) — so the
+  `b_p → +inf` of a bare likelihood never occurs and the two `SMOOTH` dummy teams
+  arch_a needs are unnecessary here. Solved-by-all is symmetric.
+
+- **`sigma_theta` / `sigma_b` are the regularization knobs; default 200.** The
+  prior precision `1/sigma^2 ≈ 2.5e-5` is worth ~3 problem-observations, so it
+  regularizes sparse teams/problems (cold start) while letting a well-observed
+  team's own likelihood dominate. The knob only controls **scale spread**, not
+  ordering: measured on the anchored tagged fit, per-contest Spearman is flat at
+  −0.929 / −0.934 / −0.935 for `sigma_theta` = 120 / 200 / 400, while `theta`
+  spreads from [1577, 2759] → [1295, 2860] → [1028, 3099]. Looser `sigma` → wider,
+  more arch_a-like scale (and `b` starts hitting the 800 floor); tighter → more
+  shrinkage toward `MU0`.
+
+- **Anchor pull is the global `sigma_theta`, not per-team UCup evidence.** Unlike
+  `arch_a.anchor` (which scales each team's prior *strength* by `w_u·N_u`), arch B
+  uses one `sigma_theta` for every team and only sets the prior *mean* to `theta_u`.
+  A well-observed UCup team is already pinned by its own likelihood terms, so the
+  prior chiefly matters for sparse teams — making a per-team strength schedule
+  redundant here. This keeps the Bayesian model to the single, principled
+  regularization knob the strat prescribes.
+
+### Results (Architecture B, current run)
+
+- Converges in ~25 iterations / ~5 s (block-coordinate Newton), `max(|dtheta|,
+  |db|)` monotone below 0.5.
+- `theta` ≈ [1295, 2860], mean ~2007; `b` ≈ [893, 2725], mean ~1920. The scale is
+  **more shrunk toward MU0 than arch_a** ([1720, 3777]) — the expected effect of
+  the informative Gaussian prior (MAP shrinkage); it is a different (Bayesian)
+  scale, not a defect.
+- Per-contest Spearman(difficulty, solve_count) median **−0.934** over 134
+  contests. Slightly looser than arch_a's −0.993 *by design*: arch_a difficulty is
+  a near-monotone transform of the solve count given the field, whereas IRT
+  difficulty also depends on **which** teams solved a problem (a problem cleared by
+  weak teams rates easier than one cleared by equally many strong teams) — the
+  deviation from pure solve-count ordering is exactly the extra signal IRT buys.
+
 ## Out of scope / follow-ups
 
-- **Architecture B** — joint Rasch / 2PL item-response model (strat §4) with
-  Gaussian priors and uncertainty (MAP / MCMC / VI).
+- **2PL discrimination** `a_p` (strat §4) on top of the Rasch fit in `arch_b`,
+  plus posterior uncertainty (MCMC / VI) rather than the MAP point estimate.
 - **Solve-time survival likelihood** (strat §5) — uses `tau_tp` and contest
   length `T_c`; currently `tau` is loaded but unused.
 - **Member-level identity** and entity resolution across sources (strat

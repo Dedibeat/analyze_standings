@@ -6,8 +6,9 @@ built from the standings themselves.
 
 The method (`strat.tex`, long-form `strat_detailed.tex`): a problem's difficulty
 is the skill level at which solving it is a coin flip. Abilities and difficulties
-define each other, so they are solved by an alternating fixed point
-(**Architecture A**), and teams recurring across contests link everything onto one
+define each other, so they are solved either by an alternating fixed point
+(**Architecture A**) or by a joint item-response (Rasch) MAP fit
+(**Architecture B**); teams recurring across contests link everything onto one
 scale.
 
 ## Run
@@ -31,6 +32,22 @@ each UCup team's ability as that team's prior when fitting tagged, so the two
 sit on one comparable scale (see `arch_a/anchor.py`). Without the anchor the
 tagged fit floats ~440 pts above UCup for the 5.8k shared teams; anchoring cuts
 that scale gap roughly in half. Tune the pull with `estimate_anchored(anchor_weight=…)`.
+
+### Architecture B (joint item-response model)
+
+```bash
+./.venv/bin/python -m arch_b.run
+```
+
+Fits the joint **Rasch** item-response model by MAP (`strat.tex` §4): each solve
+is a Bernoulli draw on `sigma((θ_t − b_p)/s)`, and the shared `θ_t` links contests
+automatically. Writes `output/problem_ratings_b.json` (same record format,
+distinct file — Architecture A's output is left untouched). Reuses arch_a's data
+layer and the same two-phase UCup anchor, here feeding each UCup team's ability in
+as its Gaussian prior mean; tune the prior with `estimate_anchored(sigma_theta=…)`.
+The Gaussian prior keeps solved-by-none/all problems finite, so no boundary
+smoothing is needed. See `details.md` for the Rasch-vs-2PL scope and the
+shrinkage-vs-arch_a comparison.
 
 ### Interactive viewer
 
@@ -74,6 +91,7 @@ Module self-checks:
 ./.venv/bin/python -m arch_a.elo         # worked-example unit tests
 ./.venv/bin/python -m arch_a.load        # data summary
 ./.venv/bin/python -m arch_a.fixedpoint  # convergence trace
+./.venv/bin/python -m arch_b.model       # MAP convergence trace
 ```
 
 ## Layout
@@ -82,10 +100,13 @@ Module self-checks:
   `data/ucup_s4.json` — the Universal Cup seasons used to anchor the scale.
 - `arch_a/` — Architecture A implementation (`load`, `elo`, `fixedpoint`,
   `anchor`, `run`), plus `export_viewer` + `viewer_template.html` for the viewer.
-- `output/problem_ratings.json` — generated ratings.
+- `arch_b/` — Architecture B implementation (`model`, `anchor`, `run`); reuses
+  `arch_a.load` and `arch_a.elo`.
+- `output/problem_ratings.json` — Architecture A ratings;
+  `output/problem_ratings_b.json` — Architecture B ratings.
 - `output/ratings_viewer.html` — generated interactive viewer.
 - `details.md` — design notes, key decisions, and follow-ups.
 
 See `details.md` for the no-Codeforces-data anchoring choice, the `$DEFAULT`
-team-id handling, and what's deliberately out of scope (Architecture B, the
-solve-time survival model).
+team-id handling, the two architectures, and what's deliberately out of scope
+(2PL discrimination, the solve-time survival model).
