@@ -570,6 +570,26 @@ confirmed nor refuted from outside. Closing that gap (a Chinese-judge rating sou
 a CF-mirrored EC contest) is the open follow-up. Run:
 `./.venv/bin/python -m arch_b.external_validate` (`--refresh` refetches CF).
 
+**All three models, side by side** (the module scores every `output/problem_ratings*`
+file; this supersedes the single-13-problem-contest `arch_b.sanity_cf` comparison):
+
+| model           | CF pooled (n=112) | AsiaPac | N.Eur | Europe | Kattis pooled (n=446) | N.Am | Europe | LLM (n=1090) |
+|-----------------|-------------------|---------|-------|--------|-----------------------|------|--------|--------------|
+| arch A          | +0.894            | +0.906  | **+0.985** | +0.851 | +0.692           | +0.674 | +0.722 | **+0.905** |
+| arch B binary   | +0.864            | +0.848  | +0.959 | **+0.870** | +0.758            | +0.781 | +0.758 | +0.871     |
+| **arch B survival** | **+0.910**    | **+0.921** | +0.976 | +0.858 | **+0.793**     | **+0.821** | **+0.761** | +0.882 |
+
+**arch B survival is the most robust model**: it leads on *both* independent numeric
+yardsticks — CF (+0.910) and Kattis (+0.793) — which are the hardest checks (independent
+of our standings *and* of the statements), and the solve-time signal makes survival ≥
+binary on CF, Kattis, *and* LLM. **arch A wins only the LLM column** (+0.905), but that
+is the noisiest, coarsest referee (4 buckets) and aligns with arch A's near-monotone
+solve-count difficulty; against the broad 446-problem Kattis set arch A drops to **+0.692**,
+clearly behind both IRT models, so its LLM edge does not generalize. (Caveat: per-region
+n is modest — Europe CF 34, N.Eur 25 — so single-region orderings can flip on noise, and
+Kattis Europe carries some title-collision contamination; the pooled columns are the
+reliable read.)
+
 ### Internal validation: held-out solve prediction (`arch_b.predict_eval`)
 
 Complementary to the external ranking checks: train on a random 80% of observed
