@@ -41,13 +41,24 @@ that scale gap roughly in half. Tune the pull with `estimate_anchored(anchor_wei
 
 Fits the joint **Rasch** item-response model by MAP (`strat.tex` §4): each solve
 is a Bernoulli draw on `sigma((θ_t − b_p)/s)`, and the shared `θ_t` links contests
-automatically. Writes `output/problem_ratings_b.json` (same record format,
-distinct file — Architecture A's output is left untouched). Reuses arch_a's data
-layer and the same two-phase UCup anchor, here feeding each UCup team's ability in
-as its Gaussian prior mean; tune the prior with `estimate_anchored(sigma_theta=…)`.
-The Gaussian prior keeps solved-by-none/all problems finite, so no boundary
-smoothing is needed. See `details.md` for the Rasch-vs-2PL scope and the
-shrinkage-vs-arch_a comparison.
+automatically. Writes `output/problem_ratings_b.json` — same record format plus a
+`difficulty_se` (Laplace standard error) per problem, a distinct file so
+Architecture A's output is left untouched. Reuses arch_a's data layer and the same
+two-phase UCup anchor, here feeding each UCup team's ability in as its Gaussian
+prior mean; tune the prior with `estimate_anchored(sigma_theta=…)`. The Gaussian
+prior keeps solved-by-none/all problems finite, so no boundary smoothing is
+needed. See `details.md` for the Rasch-vs-2PL scope and the shrinkage-vs-arch_a
+comparison.
+
+Validate either architecture against the independent LLM `difficulty_estimate`
+(editorial-backed contests only):
+
+```bash
+./.venv/bin/python -m arch_b.validate
+```
+
+Both architectures' difficulty rises monotonically across the LLM easy → very_hard
+buckets; arch B agrees more closely (Spearman +0.864 vs arch A's +0.792).
 
 ### Interactive viewer
 
@@ -100,8 +111,8 @@ Module self-checks:
   `data/ucup_s4.json` — the Universal Cup seasons used to anchor the scale.
 - `arch_a/` — Architecture A implementation (`load`, `elo`, `fixedpoint`,
   `anchor`, `run`), plus `export_viewer` + `viewer_template.html` for the viewer.
-- `arch_b/` — Architecture B implementation (`model`, `anchor`, `run`); reuses
-  `arch_a.load` and `arch_a.elo`.
+- `arch_b/` — Architecture B implementation (`model`, `anchor`, `run`, `validate`);
+  reuses `arch_a.load` and `arch_a.elo`.
 - `output/problem_ratings.json` — Architecture A ratings;
   `output/problem_ratings_b.json` — Architecture B ratings.
 - `output/ratings_viewer.html` — generated interactive viewer.

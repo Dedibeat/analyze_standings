@@ -14,6 +14,7 @@ import os
 import numpy as np
 
 from .anchor import estimate_anchored
+from .model import laplace_se
 
 OUT_DIR = os.path.join(os.path.dirname(__file__), os.pardir, "output")
 
@@ -31,6 +32,7 @@ def _spearman(x, y):
 
 def main():
     ds, theta, b, history, _ = estimate_anchored()
+    _, se_b = laplace_se(ds, theta, b)  # Laplace posterior SE per difficulty
 
     records = []
     for p, (cid, label, pid, name) in enumerate(ds.problems):
@@ -43,6 +45,7 @@ def main():
             "problem_name": name,
             "contest_id": int(cid),
             "difficulty": round(float(b[p]), 1),
+            "difficulty_se": round(float(se_b[p]), 1),
             "solved_count": solved,
             "reported_solved_in_contest": int(ds.raw_solved_count[p]),
         })
@@ -60,6 +63,9 @@ def _verify(ds, theta, b, records):
     print("=== verification ===")
     print(f"theta: [{theta.min():.0f}, {theta.max():.0f}] mean {theta.mean():.0f}")
     print(f"b:     [{b.min():.0f}, {b.max():.0f}] mean {b.mean():.0f}")
+    se = np.array([r["difficulty_se"] for r in records])
+    print(f"b SE:  [{se.min():.0f}, {se.max():.0f}] median {np.median(se):.0f} "
+          f"(Laplace; high SE = few/all solvers, relaxes to prior sd)")
 
     # 1) Within each contest, harder problems (lower solve count) should rate
     # higher -> negative Spearman between difficulty and solve count.

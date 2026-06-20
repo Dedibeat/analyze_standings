@@ -240,14 +240,21 @@ log-likelihood (eq. loglik) plus Gaussian priors on `theta` and `b` (eq. priors)
   then one over all `b` (given the new `theta`), each accumulated with `np.add.at`.
   Numpy only, **no learning rate** (scipy is not installed), and it echoes arch_a's
   alternating style. Converges in ~25 iters / ~5 s on the full tagged fit.
+  `laplace_se(ds, theta, b)` returns per-parameter Laplace standard errors (see
+  the uncertainty decision below).
+- `validate.py` — external validation against the LLM `difficulty_estimate` in
+  `tagged.json` (written by the sibling `llm-integration` tagger from the problem
+  statement — independent of standings). Trusts only **editorial-backed** problems
+  and reports per-bucket medians + Spearman for both architectures.
 - `anchor.py` — `estimate_anchored(sigma_theta)`: the same two-phase UCup anchor as
   `arch_a.anchor`, under one shared union-find. Fit UCup (s3+s4) alone, then feed
   each UCup team's `theta_u` back as its Gaussian **prior mean** `mu_t` in the
   tagged fit (others keep `MU0`). The pull strength is the single global
   `sigma_theta`, not per-team UCup evidence (see decision below).
 - `run.py` — wires it (the anchored fit), writes `output/problem_ratings_b.json`
-  (a **distinct** file; arch_a's `problem_ratings.json` is untouched), runs the
-  same Spearman / top-team verification as `arch_a.run`.
+  (a **distinct** file; arch_a's `problem_ratings.json` is untouched) with a
+  `difficulty_se` per problem, runs the same Spearman / top-team verification as
+  `arch_a.run`.
 
 Run with the project venv:
 
@@ -292,6 +299,19 @@ Run with the project venv:
   redundant here. This keeps the Bayesian model to the single, principled
   regularization knob the strat prescribes.
 
+- **Uncertainty = per-parameter Laplace SE (`laplace_se`).** The fit is a MAP
+  *point* estimate; the strat frames the estimate as "the MAP point (or the full
+  posterior, via MCMC / VI)". The cheapest posterior summary is the Laplace
+  approximation — a Gaussian at the MAP with precision = the observed information
+  (negative Hessian), which the Newton step **already computes**. So `SE(b_p) =
+  1/sqrt(negH_b_p)` is free. It is the *conditional* SE (ignores the theta–b
+  cross-curvature), hence approximate, but it captures the dominant effect: a
+  much-solved problem is pinned tight (`b` SE down to ~9), while a solved-by-none/
+  all problem has no data and its SE relaxes to the prior sd `sigma_b` (=200) —
+  "we know only the prior." Reported in `output/problem_ratings_b.json` as
+  `difficulty_se` (range ~[9, 200], median ~68). A calibrated joint interval
+  (full-Hessian Laplace, or MCMC / VI) remains a follow-up.
+
 ### Results (Architecture B, current run)
 
 - Converges in ~25 iterations / ~5 s (block-coordinate Newton), `max(|dtheta|,
@@ -307,10 +327,35 @@ Run with the project venv:
   weak teams rates easier than one cleared by equally many strong teams) — the
   deviation from pure solve-count ordering is exactly the extra signal IRT buys.
 
+### External validation vs the LLM difficulty (`arch_b.validate`)
+
+`tagged.json` carries an LLM `difficulty_estimate` (easy / medium / hard /
+very_hard) per problem, written by the sibling `llm-integration` tagger from the
+problem **statement** — independent of the standings both estimators use. We trust
+it only on **editorial-backed** contests (128 of 213 contests, 1066 of the rated
+problems): the LLM label is reliable enough to validate against only where an
+editorial shipped. Both architectures' difficulty rises monotonically across every
+bucket, and Architecture B agrees **more** with the independent ranking:
+
+| LLM bucket | n   | arch A median | arch B median |
+|------------|-----|---------------|---------------|
+| easy       | 317 | 1889          | 1553          |
+| medium     | 230 | 2467          | 1906          |
+| hard       | 247 | 2917          | 2084          |
+| very_hard  | 272 | 3506          | 2297          |
+| **Spearman** |   | **+0.792**    | **+0.864**    |
+
+So IRT's use of *which* teams solved each problem tracks the editorial-informed
+opinion better than arch A's solve-count-driven estimate, despite arch B's more
+compressed scale. (Restricting to editorial-backed problems *raised* arch B's
+agreement from +0.825 on the full set to +0.864 — the no-editorial labels are
+genuinely noisier.) Run: `./.venv/bin/python -m arch_b.validate`.
+
 ## Out of scope / follow-ups
 
 - **2PL discrimination** `a_p` (strat §4) on top of the Rasch fit in `arch_b`,
-  plus posterior uncertainty (MCMC / VI) rather than the MAP point estimate.
+  plus a calibrated joint posterior (full-Hessian Laplace / MCMC / VI) beyond the
+  per-parameter Laplace SE already emitted as `difficulty_se`.
 - **Solve-time survival likelihood** (strat §5) — uses `tau_tp` and contest
   length `T_c`; currently `tau` is loaded but unused.
 - **Member-level identity** and entity resolution across sources (strat
@@ -319,7 +364,8 @@ Run with the project venv:
   prior, so same-roster teams that recur across seasons can drift instead of
   collapsing to one blended ability — without losing the cross-year links that
   keep all seasons on one scale (see the no-year-in-key decision above).
-- **External validation** against problems with a known editorial difficulty or
-  a rated-judge mirror.
+- **External validation** — first pass done against the LLM `difficulty_estimate`
+  on editorial-backed contests (`arch_b.validate`, see above); still open: a
+  rated-judge mirror or numeric editorial difficulty for a calibrated point check.
 - **CF anchoring** if member→handle→rating data becomes available, to turn the
   relative scale into true Codeforces-equivalent points.

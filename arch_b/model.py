@@ -116,13 +116,44 @@ def fit(ds, prior_mu=None, sigma_theta=SIGMA_THETA, sigma_b=SIGMA_B, mu_b=MU0,
     return theta, b, history
 
 
+def laplace_se(ds, theta, b, sigma_theta=SIGMA_THETA, sigma_b=SIGMA_B):
+    """Laplace standard errors for the MAP fit; returns (se_theta, se_b).
+
+    The strat frames the estimate as "the MAP point (or the full posterior, via
+    MCMC / VI)" (eq. map). The cheapest posterior summary is the Laplace
+    approximation: a Gaussian at the MAP whose precision is the observed
+    information (negative Hessian). We report the **per-parameter** version, the
+    same curvature the Newton step already uses, so SE = 1 / sqrt(negH):
+
+        negH_theta_t = (1/s^2) sum_p pi(1-pi) + 1/sigma_theta^2
+        negH_b_p     = (1/s^2) sum_t pi(1-pi) + 1/sigma_b^2
+
+    This ignores the theta--b cross-curvature (it conditions each parameter on the
+    others at their MAP), so it is an *approximate, conditional* SE, not the full
+    joint posterior sd -- but it captures the dominant effect: a problem seen by
+    many teams is pinned tightly (small SE), while a solved-by-none/all problem has
+    little data and its SE relaxes toward the prior sd sigma_b ("we know only the
+    prior"). A 2PL / MCMC / VI posterior is the follow-up for a calibrated interval.
+    """
+    obs_team, obs_prob, _ = _observations(ds)
+    info = elo.pi(theta[obs_team], b[obs_prob])
+    info = info * (1.0 - info)
+    negH_theta = np.full(len(theta), 1.0 / sigma_theta**2)
+    negH_b = np.full(len(b), 1.0 / sigma_b**2)
+    np.add.at(negH_theta, obs_team, info / elo.S**2)
+    np.add.at(negH_b, obs_prob, info / elo.S**2)
+    return 1.0 / np.sqrt(negH_theta), 1.0 / np.sqrt(negH_b)
+
+
 if __name__ == "__main__":
     from arch_a.load import load
 
     ds = load()
     theta, b, history = fit(ds, verbose=True)
+    se_theta, se_b = laplace_se(ds, theta, b)
     print(f"converged in {len(history)} iters, final max delta = {history[-1]:.4f}")
     print(f"theta range: [{theta.min():.0f}, {theta.max():.0f}], mean {theta.mean():.0f}")
     print(f"b range:     [{b.min():.0f}, {b.max():.0f}], mean {b.mean():.0f}")
+    print(f"b SE range:  [{se_b.min():.0f}, {se_b.max():.0f}], median {np.median(se_b):.0f}")
     assert history[-1] < 0.5
     print("model.py self-checks passed")
