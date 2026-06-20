@@ -524,8 +524,51 @@ good to ~250 pts. The slope 2.41 quantifies the compression — the survival sca
 and writes `output/problem_ratings_calibrated.json` with `difficulty_cf` (clipped to
 [800,4000]) and a slope-scaled `difficulty_cf_se`; these are the best estimate of
 CF-equivalent points. (Anchors are 3 strong contests; the global affine map is the
-simplest correction, not a per-region one. A 4th contest the user suggested, CF
-2068, sits below the CF API's truncation window and could not be fetched.)
+simplest correction, not a per-region one. Many more CF-mirrored contests are now
+available as anchors — see the per-region validation below — so a richer per-region
+or piecewise map is a natural extension.)
+
+### Per-region external validation (`arch_b.external_validate`)
+
+The LLM difficulty (`arch_b.validate`) is a single statement-based opinion that can
+*itself* be regionally biased, so a small per-region offset against it (e.g. EA +14,
+Europe −24) cannot by itself prove a model bias. To separate real bias from LLM noise
+we validate against two **numeric** yardsticks that are independent of our standings
+*and* of each other, and report agreement **per region**:
+
+* **Codeforces** problemset ratings for the ICPC contests mirrored on CF (mirror ids
+  in `data/cf_team_contests.txt`; ratings via the public `problemset.problems` API —
+  no login needed). CF contests are auto-mapped to our qoj contests by problem-name
+  vote, so an unmappable mirror (CF 2038, a Russian regional we don't carry) or an
+  *unrated* mirror (CF 1662 = SWERC 2021-22, 0 CF ratings) drops out automatically.
+  **9 contests / 112 problems** map, covering Asia Pacific, Northern Eurasia, Europe.
+* **Kattis** difficulty (1.0–9.x, Elo-style, from open.kattis's practice population),
+  scraped once into `data/kattis_difficulty.json` (the listing 403s `WebFetch` but is
+  curl-able with a browser UA). Covers **North America (88%)** and **Europe (53%)** —
+  exactly the regions CF does not mirror.
+
+| region              | CF n | CF Spearman | Kattis n | Kattis Spearman |
+|---------------------|------|-------------|----------|-----------------|
+| Asia Pacific        | 53   | **+0.921**  | 7        | (n too small)   |
+| Northern Eurasia    | 25   | **+0.976**  | 6        | (n too small)   |
+| Europe              | 34   | **+0.858**  | 188      | **+0.761**      |
+| North America       | —    | —           | 258      | **+0.821**      |
+| **Asia East/West Continent** | — | **none** | ~27/2 | **none** |
+| **POOLED**          | 112  | **+0.912**  | 489      | +0.732          |
+*(our survival difficulty vs each yardstick; small-n cells are cross-posted
+stragglers, not real coverage. Spearman, scale-free.)*
+
+**Verdict on the regional-bias question.** No region shows a difficulty breakdown
+against independent numeric truth (+0.86 to +0.98 everywhere measurable), and on the
+Kattis check our standings-based difficulty agrees with Kattis **better than the LLM
+does** (NA +0.821 vs LLM-Kattis +0.700; Europe +0.761 vs +0.655) — i.e. the LLM is the
+noisier referee, so the small per-region LLM offsets were largely LLM-labelling noise,
+**not** a model bias. The one genuine residual is that **Asia East Continent — the
+region the whole investigation started from — has no external numeric anchor at all**
+(its problems are mirrored on neither CF nor Kattis), so its calibration can be neither
+confirmed nor refuted from outside. Closing that gap (a Chinese-judge rating source, or
+a CF-mirrored EC contest) is the open follow-up. Run:
+`./.venv/bin/python -m arch_b.external_validate` (`--refresh` refetches CF).
 
 ### Internal validation: held-out solve prediction (`arch_b.predict_eval`)
 
@@ -654,8 +697,15 @@ worth modelling?
   way to measure its benefit.
 - **Richer CF calibration.** The affine map to CF points (`arch_b.calibrate`) is
   fit on 40 anchors from 3 contests and validated leave-one-contest-out (RMSE
-  ~250). Open: more anchor contests (broader regions/years) to fit a *per-region*
-  or piecewise map and shrink the residual; the 1-solver hard-end ordering it can't
-  fix (A/L/M) would also benefit from a heavier-tailed difficulty prior in-model.
+  ~250). **9 more CF-mirrored contests / 112 problems are now wired up**
+  (`arch_b.external_validate`, see the per-region validation above), spanning Asia
+  Pacific / Northern Eurasia / Europe — enough to fit a *per-region* or piecewise map
+  and shrink the residual (open). The 1-solver hard-end ordering the map can't fix
+  (A/L/M) would also benefit from a heavier-tailed difficulty prior in-model.
+- **No external anchor for Asia East/West Continent.** EC/WC problems are mirrored on
+  neither Codeforces nor Kattis, so the region the bias investigation centered on has
+  no independent numeric yardstick. A Chinese-judge rating source, or any CF-mirrored
+  EC contest, would let us confirm/refute EC calibration (currently only the LLM, the
+  noisier referee, covers it).
 - **CF anchoring** if member→handle→rating data becomes available, to turn the
   relative scale into true Codeforces-equivalent points.

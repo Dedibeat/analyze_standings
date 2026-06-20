@@ -164,9 +164,10 @@ Module self-checks:
 - `arch_a/` — Architecture A implementation (`load`, `elo`, `fixedpoint`,
   `anchor`, `run`), plus `export_viewer` + `viewer_template.html` for the viewer.
 - `arch_b/` — Architecture B implementation (`model` binary Rasch, `survival`
-  solve-time model, `anchor`, `run`, `validate`, `sanity_cf`, `predict_eval`,
-  `calibrate`, `season_experiment`, `twopl`/`twopl_region` 2PL discrimination
-  prototype); reuses `arch_a.load` and `arch_a.elo`.
+  solve-time model, `anchor`, `run`, `validate`, `sanity_cf`, `external_validate`
+  per-region check vs Codeforces + Kattis, `predict_eval`, `calibrate`,
+  `season_experiment`, `twopl`/`twopl_region` 2PL discrimination prototype);
+  reuses `arch_a.load` and `arch_a.elo`.
 - `output/problem_ratings.json` — Architecture A ratings;
   `output/problem_ratings_b.json` — Architecture B (binary) ratings;
   `output/problem_ratings_survival.json` — Architecture B (survival) ratings;
