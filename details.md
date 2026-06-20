@@ -267,6 +267,9 @@ log-likelihood (eq. loglik) plus Gaussian priors on `theta` and `b` (eq. priors)
   `output/problem_ratings_calibrated.json` (see results below).
 - `season_experiment.py` — tries + validates season-separated identity and the
   short-contest filter (`load(season_key=, min_solve_hours=)`); see results below.
+- `export_viewer.py` + `viewer_template.html` — self-contained HTML viewer of the
+  survival fit on **Codeforces-equivalent points** (difficulty ±SE, team θ/perf);
+  writes `output/ratings_viewer_b.html`, published via GitHub Pages.
 - `anchor.py` — `estimate_anchored(sigma_theta)`: the same two-phase UCup anchor as
   `arch_a.anchor`, under one shared union-find. Fit UCup (s3+s4) alone, then feed
   each UCup team's `theta_u` back as its Gaussian **prior mean** `mu_t` in the

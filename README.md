@@ -115,6 +115,21 @@ instead of the full anchored tagged fit:
 This writes a separate `output/ratings_viewer_ucup.html` (the main viewer is
 left untouched).
 
+#### Architecture B viewer (Codeforces-calibrated)
+
+```bash
+./.venv/bin/python -m arch_b.export_viewer
+```
+
+Writes `output/ratings_viewer_b.html` from the **survival** fit, with every
+difficulty and ability mapped to **Codeforces-equivalent points** and each problem
+difficulty shown with its Laplace standard error (±SE). This is the recommended
+viewer. It is published live via GitHub Pages:
+
+**<https://dedibeat.github.io/analyze_standings/output/ratings_viewer_b.html>**
+
+(The Architecture A viewer is also live at `.../output/ratings_viewer.html`.)
+
 ### Contest-linking graph
 
 ```bash

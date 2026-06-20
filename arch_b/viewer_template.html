@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ICPC problem &amp; team ratings (Architecture B &mdash; survival, CF-calibrated)</title>
+<style>
+  :root { --fg:#1b2330; --muted:#6b7785; --line:#e3e8ee; --accent:#2b6cb0; --bg:#f7f9fc; }
+  * { box-sizing: border-box; }
+  body { margin:0; font:14px/1.45 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+         color:var(--fg); background:var(--bg); }
+  header { padding:18px 22px; background:#fff; border-bottom:1px solid var(--line); }
+  h1 { margin:0 0 4px; font-size:18px; }
+  .sub { color:var(--muted); font-size:13px; }
+  .controls { display:flex; flex-wrap:wrap; gap:14px; align-items:center; margin-top:12px; }
+  select, input { font:14px inherit; padding:6px 8px; border:1px solid var(--line);
+                  border-radius:6px; background:#fff; color:var(--fg); }
+  select { min-width:280px; }
+  .meta { color:var(--muted); font-size:13px; }
+  .meta b { color:var(--fg); }
+  main { display:flex; flex-wrap:wrap; gap:20px; padding:20px 22px; align-items:flex-start; }
+  .panel { background:#fff; border:1px solid var(--line); border-radius:8px; overflow:hidden;
+           flex:1 1 360px; min-width:320px; }
+  .panel h2 { margin:0; padding:11px 14px; font-size:14px; border-bottom:1px solid var(--line);
+              background:#fbfcfe; display:flex; justify-content:space-between; }
+  .panel h2 span { color:var(--muted); font-weight:400; }
+  table { width:100%; border-collapse:collapse; }
+  th, td { padding:7px 12px; text-align:left; border-bottom:1px solid var(--line); white-space:nowrap; }
+  th { font-size:12px; color:var(--muted); cursor:pointer; user-select:none; position:sticky; top:0;
+       background:#fff; }
+  th.sorted::after { content:" \25BE"; color:var(--accent); }
+  th.sorted.asc::after { content:" \25B4"; }
+  td.num, th.num { text-align:right; font-variant-numeric:tabular-nums; }
+  td.name { white-space:normal; }
+  .scroll { max-height:72vh; overflow:auto; }
+  tbody tr:hover { background:#f2f7fd; }
+  .rating { font-weight:600; padding:1px 7px; border-radius:10px; color:#fff; }
+  .se { color:var(--muted); font-size:11px; margin-left:4px; }
+  .aff { color:var(--muted); font-size:12px; }
+  .hidden { display:none; }
+</style>
+</head>
+<body>
+<header>
+  <h1>ICPC problem &amp; team ratings</h1>
+  <div class="sub">Architecture B &mdash; solve-time survival model, mapped to <b>Codeforces-equivalent points</b>.
+    Difficulty &plusmn; its Laplace standard error. Click a column header to sort.</div>
+  <div class="controls">
+    <select id="contest"></select>
+    <span class="meta" id="meta"></span>
+  </div>
+</header>
+
+<main>
+  <section class="panel">
+    <h2>Problems <span id="probcount"></span></h2>
+    <div class="scroll">
+      <table id="probs">
+        <thead><tr>
+          <th data-k="label">#</th>
+          <th data-k="name" class="name">Name</th>
+          <th data-k="difficulty" class="num" title="Codeforces-calibrated difficulty &plusmn; standard error">Difficulty</th>
+          <th data-k="solved" class="num">Solved</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>Teams
+      <span><input id="filter" type="text" placeholder="filter team / member / affiliation"></span>
+    </h2>
+    <div class="scroll">
+      <table id="teams">
+        <thead><tr>
+          <th data-k="rank" class="num">Rank</th>
+          <th data-k="name" class="name">Team</th>
+          <th data-k="theta" class="num" title="overall ability (CF-equivalent), blended across all contests">&theta;</th>
+          <th data-k="performance" class="num" title="performance in this contest, from final rank">Perf</th>
+          <th data-k="solved" class="num">Solved</th>
+          <th data-k="contests" class="num" title="contests this identity plays in the dataset">Cts</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+</main>
+
+<script>
+const DATA = /*__DATA__*/null;
+
+const $ = (s, r=document) => r.querySelector(s);
+const sel = $("#contest"), meta = $("#meta"), filter = $("#filter");
+const sortState = { probs:{k:"difficulty",asc:false}, teams:{k:"rank",asc:true} };
+
+// colour a rating from lo..hi (blue -> green -> orange -> red), Codeforces-ish
+function ratingColor(v){
+  const {lo,hi} = DATA.scale, t = Math.max(0, Math.min(1, (v-lo)/(hi-lo)));
+  const hue = 210 - 210*t;            // 210 (blue) down to 0 (red)
+  return `hsl(${hue} 62% 48%)`;
+}
+function chip(v){ return `<span class="rating" style="background:${ratingColor(v)}">${v}</span>`; }
+function chipSe(v, se){ return chip(v) + `<span class="se">&plusmn;${se}</span>`; }
+
+DATA.contests.forEach((c,i)=>{
+  const o = document.createElement("option");
+  o.value = i;
+  o.textContent = `${c.name}` + (c.region ? `  — ${c.region}` : "");
+  sel.appendChild(o);
+});
+
+function sortRows(rows, st){
+  const {k, asc} = st;
+  return rows.slice().sort((a,b)=>{
+    let x=a[k], y=b[k];
+    if(typeof x === "string"){ x=x.toLowerCase(); y=y.toLowerCase(); }
+    return (x<y?-1:x>y?1:0) * (asc?1:-1);
+  });
+}
+
+function renderProbs(c){
+  const rows = sortRows(c.problems, sortState.probs);
+  $("#probcount").textContent = `${c.n_problems}`;
+  $("#probs tbody").innerHTML = rows.map(p=>`
+    <tr>
+      <td>${p.label}</td>
+      <td class="name">${esc(p.name)}</td>
+      <td class="num">${chipSe(p.difficulty, p.difficulty_se)}</td>
+      <td class="num">${p.solved}</td>
+    </tr>`).join("");
+  markSorted("#probs", sortState.probs);
+}
+
+function renderTeams(c){
+  const q = filter.value.trim().toLowerCase();
+  let rows = c.teams;
+  if(q) rows = rows.filter(t => (t.name+" "+t.affiliation).toLowerCase().includes(q));
+  rows = sortRows(rows, sortState.teams);
+  $("#teams tbody").innerHTML = rows.map(t=>`
+    <tr>
+      <td class="num">${t.rank}</td>
+      <td class="name">${esc(t.name)}${t.affiliation?`<div class="aff">${esc(t.affiliation)}</div>`:""}</td>
+      <td class="num">${chip(t.theta)}</td>
+      <td class="num">${chip(t.performance)}</td>
+      <td class="num">${t.solved}</td>
+      <td class="num">${t.contests}</td>
+    </tr>`).join("");
+  markSorted("#teams", sortState.teams);
+}
+
+function render(){
+  const c = DATA.contests[sel.value];
+  meta.innerHTML = `<b>${c.n_teams}</b> teams &middot; <b>${c.n_problems}</b> problems &middot; mean &theta; <b>${c.mean_theta}</b>`;
+  renderProbs(c); renderTeams(c);
+}
+
+function markSorted(tableSel, st){
+  document.querySelectorAll(`${tableSel} th`).forEach(th=>{
+    th.classList.toggle("sorted", th.dataset.k===st.k);
+    th.classList.toggle("asc", th.dataset.k===st.k && st.asc);
+  });
+}
+
+function wireSort(tableSel, stKey, rerender){
+  document.querySelectorAll(`${tableSel} th`).forEach(th=>{
+    th.addEventListener("click", ()=>{
+      const st = sortState[stKey], k = th.dataset.k;
+      if(st.k===k) st.asc = !st.asc; else { st.k=k; st.asc = (k==="rank"||k==="label"); }
+      rerender(DATA.contests[sel.value]);
+    });
+  });
+}
+
+function esc(s){ return String(s).replace(/[&<>]/g, m=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[m])); }
+
+sel.addEventListener("change", render);
+filter.addEventListener("input", ()=>renderTeams(DATA.contests[sel.value]));
+wireSort("#probs", "probs", renderProbs);
+wireSort("#teams", "teams", renderTeams);
+render();
+</script>
+</body>
+</html>
