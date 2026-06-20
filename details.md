@@ -256,6 +256,9 @@ log-likelihood (eq. loglik) plus Gaussian priors on `theta` and `b` (eq. priors)
   80% of observed cells, score predicted solve probability on the held-out 20%
   (log-loss / Brier / AUC + a calibration table). Both fitters accept an ``obs=``
   train split for this (see results below).
+- `calibrate.py` — fit + apply the affine map from our scale to **Codeforces
+  points**, using the 3 CF-mirrored contests as anchors; writes
+  `output/problem_ratings_calibrated.json` (see results below).
 - `anchor.py` — `estimate_anchored(sigma_theta)`: the same two-phase UCup anchor as
   `arch_a.anchor`, under one shared union-find. Fit UCup (s3+s4) alone, then feed
   each UCup team's `theta_u` back as its Gaussian **prior mean** `mu_t` in the
@@ -422,12 +425,33 @@ solved by exactly 76 teams, so the binary model rates them *identically* (1172 =
 agrees (J 1700 > K 1300) — a clean illustration of the signal solve times add.
 (Caveat: all models still over-shrink the very hardest problems — the three
 1-solver problems A/L/M land near ~2400–2650 vs CF's 2900–3500 — since a single
-solve barely constrains the top of the scale. Ranking holds; absolute hard-end
-calibration is the open piece — and is currently blocked: the CF problemset API
-truncates to the most recent contests, CF problem pages are 403 to the fetcher,
-and only the 2026 mirror (2206) was reachable, so there are too few CF anchors to
-fit *and* validate a recalibration. A multi-contest CF/clist pull, or member-CF
-ratings, would unblock it.)
+solve barely constrains the top of the scale. Ranking holds; the absolute scale is
+addressed by the affine calibration below.)
+
+### Scale calibration to Codeforces points (`arch_b.calibrate`)
+
+The raw scale is *relative* (pinned at the arbitrary MU0=2000). Three of our
+contests were mirrored on Codeforces with official problem ratings — the 2026 APAC
+(CF 2206), the 2025 Northern Eurasia Finals (CF 2181 = our 2785), and an ICPC
+Taiwan contest (CF 2172 = our 2657) — giving **40 anchor problems spanning CF
+800–3500**. We fit one global affine map `cf ≈ slope·b + intercept` and validate it
+**leave-one-contest-out** (fit on two contests, predict the third):
+
+| model           | Spearman vs CF | affine slope | fit-RMSE | LOCO-CV-RMSE |
+|-----------------|----------------|--------------|----------|--------------|
+| arch A          | +0.917         | 0.80         | 305      | 402          |
+| arch B binary   | +0.898         | 1.29         | 335      | 422          |
+| arch B survival | **+0.954**     | **2.41**     | **236**  | **252**      |
+
+The survival model is best and its map **generalizes**: CV-RMSE (252) barely exceeds
+fit-RMSE (236), so predicting an unseen contest's CF ratings from the other two is
+good to ~250 pts. The slope 2.41 quantifies the compression — the survival scale is
+~2.4× narrower than CF. `arch_b.calibrate` applies the survival map to all problems
+and writes `output/problem_ratings_calibrated.json` with `difficulty_cf` (clipped to
+[800,4000]) and a slope-scaled `difficulty_cf_se`; these are the best estimate of
+CF-equivalent points. (Anchors are 3 strong contests; the global affine map is the
+simplest correction, not a per-region one. A 4th contest the user suggested, CF
+2068, sits below the CF API's truncation window and could not be fetched.)
 
 ### Internal validation: held-out solve prediction (`arch_b.predict_eval`)
 
@@ -465,12 +489,10 @@ solve probability against a binary outcome; a recalibrated link is a follow-up).
   prior, so same-roster teams that recur across seasons can drift instead of
   collapsing to one blended ability — without losing the cross-year links that
   keep all seasons on one scale (see the no-year-in-key decision above).
-- **Hard-end calibration (blocked on CF data).** All arch B variants over-shrink
-  1-solver problems vs CF (the APAC A/L/M caveat). Fixing the *absolute* hard-end
-  scale needs more CF anchors than one contest — enough to fit an affine
-  our→CF map *and* validate it out of sample (an affine map preserves ranking, so
-  the ordinal LLM check cannot validate it). Reaching the 2024/2025 APAC mirror
-  ratings (CF 1938 / 2073) is currently blocked (API truncation, 403 pages); needs
-  an authenticated CF/clist pull. Alternative: a heavier-tailed difficulty prior.
+- **Richer CF calibration.** The affine map to CF points (`arch_b.calibrate`) is
+  fit on 40 anchors from 3 contests and validated leave-one-contest-out (RMSE
+  ~250). Open: more anchor contests (broader regions/years) to fit a *per-region*
+  or piecewise map and shrink the residual; the 1-solver hard-end ordering it can't
+  fix (A/L/M) would also benefit from a heavier-tailed difficulty prior in-model.
 - **CF anchoring** if member→handle→rating data becomes available, to turn the
   relative scale into true Codeforces-equivalent points.
