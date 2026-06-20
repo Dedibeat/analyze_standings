@@ -12,10 +12,12 @@ implements both **Architecture A — the alternating fixed point** (strat.tex §
 ## Data
 
 `data/tagged.json` — 146 contests, 99,754 standing rows, 1,668 problems (the full
-mixed ICPC + Universal Cup set). The file actually holds **213 contest entries**:
-67 are exact duplicates of an earlier entry (the same `contest_id` repeated up to
-6×, with identical standings but an empty problem list), so the loader drops them
-to 146 unique contests (see the deduplication decision). `data/ucup_s3.json` and `data/ucup_s4.json` are
+mixed ICPC + Universal Cup set). The file *originally* held **213 contest entries**:
+67 were exact duplicates of an earlier entry (the same `contest_id` repeated up to
+6×, with identical standings but an empty problem list). These have been **dropped
+from the source file** (146 unique contests remain); the loader still dedupes
+defensively in case the data is regenerated (see the deduplication decision).
+`data/ucup_s3.json` and `data/ucup_s4.json` are
 the two Universal Cup seasons (43 and 33 contests) used to anchor the scale.
 Per standing row: `rank`, `team_id`, `members`, `total_solved`, and per-problem
 `{solved, score, time_seconds, wrong_attempts}`. This yields the model inputs
@@ -170,15 +172,18 @@ Run with the project venv:
   True individual-level modelling (strat Remark on roster changes) is a follow-up.
 
 - **Deduplicate repeated contest entries (`load.dedupe_contests`).** `tagged.json`
-  repeats 50 contests (213 entries → 146 unique `contest_id`s, 67 extras): in every
-  group the first entry carries the problem list and the rest are byte-identical
-  standings with an empty `problems` list. The loader's second pass replays
-  *standings* once per entry, so without dedup a 6×-repeated contest counts each of
+  originally repeated 50 contests (213 entries → 146 unique `contest_id`s, 67
+  extras): in every group the first entry carried the problem list and the rest
+  were byte-identical standings with an empty `problems` list. The loader's second
+  pass replays *standings* once per entry, so a 6×-repeated contest counted each of
   its standing rows 6×, inflating the likelihood/observation counts and every
-  team's contest count `N_t` (hence its reliability weight `w_t`). `dedupe_contests`
-  keeps the first entry per `contest_id` (the one with problems) right after the
-  files are read — in `load`, in both anchors' shared-union-find build, and in the
-  viewers/graph exporters that read the raw JSON independently. Measured effect of
+  team's contest count `N_t` (hence its reliability weight `w_t`). **The duplicates
+  were removed from the source file**, so the data is the single clean source of
+  truth. `dedupe_contests` (keep the first entry per `contest_id` — the one with
+  problems) is *also* kept as a cheap idempotent guard right after the files are
+  read — in `load`, in both anchors' shared-union-find build, and in the
+  viewers/graph exporters — so the bug cannot silently return if the gitignored
+  data is ever regenerated upstream. Measured effect of
   the fix: arch A difficulty mean 2605 → 2216, and its agreement with the
   independent LLM ranking **jumps from Spearman +0.792 to +0.908** (the
   double-counting had been the largest drag on arch A); arch B is barely moved
