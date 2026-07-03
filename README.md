@@ -109,7 +109,10 @@ points are noise), and exits nonzero if any guard regresses (gym
 Asia-East-Continent / gym pooled / Kattis Spearman, solve-count sanity — the
 things the CF anchors can't see). `program.md` at the repo root is the matching
 instruction file for auto-research loops: verify contract, what code is fair
-game, hard anti-gaming rules, and a prioritized idea list.
+game, hard anti-gaming rules, and a prioritized idea list. A 2026-07-03
+auto-research campaign exhausted that idea list (13 iteration families, all
+within noise — see details.md): the baseline is robust, and further gains need
+new anchor data rather than fit changes.
 
 ### Calibrated Codeforces-point ratings
 

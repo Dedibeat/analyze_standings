@@ -737,6 +737,66 @@ modules, and everything under `data/` are read-only; CF anchor data must never
 be read in the fit path), and the prioritized idea list (hard-tail prior,
 gym-informed priors, solve-time/hazard refinements, `wrong_attempts`, …).
 
+### Auto-research campaign on the metric (2026-07-03): verdict PLATEAU
+
+A 25-iteration-budget autoresearch loop (`program.md`) attacked `loco_cf_rmse`
+(baseline **290.2**) with one structural change per iteration. **13 iteration
+families (~40 configurations) all landed within noise or worse** (range
+289.0–321.9; best −1.2 vs the ±5-point keep threshold), so the loop stopped
+after exhausting the prioritized idea list rather than noise-mine the anchors.
+Baseline reverted intact; per-iteration log in
+`autoresearch/autoresearch-260703-1733/classic-results.tsv`. Tried and
+discarded:
+
+1. Huber (heavy-tail) prior on `b`, delta 400/800 (294.9/290.2) — the prior
+   tail is not what holds the hard problems down.
+2. `sigma_theta`/`sigma_b` sweep 300–800 (289.0–302.3) — 400/400 already
+   optimal for the metric.
+3. Weibull hazard shape `rho^k`, k 0.5–2 (best 289.0 at k=1.25) — held-out AUC
+   flat (0.8809 vs 0.8810), so not corroborated; constant hazard stands.
+4. Gym-informed per-problem prior means `N(mapped b_gym, se)` — global,
+   sparse-only (<=2 solvers), and strength sweeps all flat (289.8–292.8).
+   Root cause: **only 1 of the 15 CF anchor contests has gym coverage**, so
+   the gym prior cannot move this metric at all; pulling hard toward gym
+   *hurts* (292.8), confirming the certification's "gym is noisier at
+   fine-grained ranking".
+5. `wrong_attempts` as down-weighted Bernoulli-failure evidence, C 0.1–0.5
+   (296.5–321.4, gym guards FAIL at 0.5) — monotonically worse. Curiously
+   Kattis pooled *rose* (to 0.811 at C=0.5), the only yardstick that liked it.
+6. `wrong_attempts` as ICPC penalty time, `tau_eff = tau + 600–1200 s * w`
+   (292.6–295.8) — worse.
+7. Evidence-scaled UCup anchor pull (the `arch_a.anchor` `anchor_weight`
+   analog), weight 1–64 (289.9–290.2) — as the original design argued, a
+   well-observed UCup team is already pinned by its own likelihood.
+8. `min_solve_hours` 3.0/4.0/4.5/None — 290.2 everywhere (the fit verifiably
+   changes; the anchor contests are all long formats, so the metric is
+   insensitive).
+9. Dropping Asia West Continent contests from the fit — 290.2.
+10. Keeping zero-solve rows as censored exposure — 291.2.
+11. Huber prior on `theta`, H 400–800 (290.1–290.2) — elite teams are pinned
+    by likelihood, not the prior; theta-side shrinkage is not the compressor.
+12. Per-contest hazard random intercept `delta_c ~ N(0, sigma_delta^2)`
+    absorbing `lambda0_c` misfit, sigma 0.25–2.0 (289.7–298.1) — the
+    per-contest LOCO biases (±200 pts) are field-strength information the
+    likelihood already allocates correctly, not baseline misfit.
+13. Time-varying `theta_{team,season}` with a season-chain drift prior, drift
+    sd 100–800 (291.0–293.4) — even the smoothed version (one identity, no
+    hard split) costs more in per-season evidence than ability drift gains,
+    matching the `season_experiment` verdict on the hard split.
+
+**Where the remaining error lives** (LOCO residual diagnostic): the
+cf[3200,3600) bucket carries ~41% of the pooled MSE (n=28, RMSE 480, bias
+−320) and 0–1-solver problems ~23% (RMSE 431, essentially pure variance) —
+nothing in standings data distinguishes CF 2900 from CF 3500 when at most one
+team solved the problem, and the one external instrument that could (the gym
+yardstick) does not cover the anchor contests. Per-contest scale offsets
+contribute ~13% of MSE (worst: CF 2068 bias −204, CF 2073 −181, CF 2181
++147); the rest is within-contest variance, worst in the weakly-linked SWERC
+mirror (CF 1776, RMSE 418 at bias only −15). Progress on this metric now needs
+**new information, not a better fit**: more CF-rated mirrors in `tagged.json`
+(ideally with gym coverage), or member→CF-handle data for true ability
+anchoring.
+
 ### Internal validation: held-out solve prediction (`arch_b.predict_eval`)
 
 Complementary to the external ranking checks: train on a random 80% of observed

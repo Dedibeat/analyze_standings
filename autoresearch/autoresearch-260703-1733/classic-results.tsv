@@ -1,0 +1,17 @@
+iter	change	metric	guards	verdict
+0	baseline	290.2	ok	baseline
+1	huber prior on b (d400/800)	294.9/290.2	ok	discard
+2	sigma_theta/sigma_b sweep	289.0-302.3	ok	discard (best 289.0 < noise)
+3	weibull hazard shape k	289.0-321.9	ok	discard (k=1.25 289.0 < noise)
+4	gym-informed b prior (global+sparse)	289.8-292.8	ok	discard (1/15 anchor contests gym-covered)
+5	wrong-attempt bernoulli evidence C=0.1-0.5	296.5-321.4	FAIL@0.5	discard
+6	penalty-time tau_eff (600/1200s)	292.6/295.8	ok	discard
+7	evidence-scaled ucup anchor w=1-64	289.9-290.2	ok	discard
+8	min_solve_hours 3.0-4.5/None	290.2	ok	discard (insensitive)
+9	drop asia west	290.2	ok	discard
+10	keep zero-solve rows	291.2	ok	discard
+11	huber prior on theta H=400-800	290.1-290.2	ok	discard
+12	per-contest hazard intercept sigma_delta 0.25-2.0	289.7-298.1	ok	discard
+13	time-varying theta_(team,season) drift 100-800	291.0-293.4	ok	discard
+-	AUC corroboration: k=1.25 AUC 0.8809 (flat vs 0.8810), sigma_theta=600 AUC 0.8782 (worse)	-	-	both stay discarded
+-	final: reverted to baseline, 290.2 confirmed, guards ok	290.2	ok	PLATEAU
