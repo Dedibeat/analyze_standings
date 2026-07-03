@@ -101,9 +101,11 @@ all three models validate at +0.95–0.98. `--certify` checks the instrument its
 
 `arch_b.metric` is the single number model improvements are judged by:
 **leave-one-contest-out RMSE in CF points** against the official ratings of all
-13 CF-mirrored contests (160 anchor problems). It refits the survival model from
+15 CF-mirrored contests (185 anchor problems — every rated mirror the dataset
+has; an exhaustive sweep found no more). It refits the survival model from
 source in ~5 s, prints `METRIC loco_cf_rmse=…` as its last line (lower is
-better; baseline **279.1**), and exits nonzero if any guard regresses (gym
+better; baseline **290.2**, cluster-bootstrap SE ±20 → improvements under ~5
+points are noise), and exits nonzero if any guard regresses (gym
 Asia-East-Continent / gym pooled / Kattis Spearman, solve-count sanity — the
 things the CF anchors can't see). `program.md` at the repo root is the matching
 instruction file for auto-research loops: verify contract, what code is fair

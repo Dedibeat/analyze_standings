@@ -17,9 +17,18 @@ Contract:
 - Exit code `1` means a guard was violated → **discard the change**, whatever
   the metric says. Exit `0` + lower RMSE → keep.
 - Runs in ~5 s, fully deterministic (no RNG anywhere in the fit).
-- Baselines (2026-07-03): survival **279.1**, binary (`--binary`) 339.8.
-  Guard floors are calibrated to the survival baseline; the binary variant
-  already sits below one of them.
+- Baselines (2026-07-03): survival **290.2**, binary (`--binary`) 344.3, on
+  185 anchor problems / 15 contests (every rated CF mirror our dataset has —
+  an exhaustive problemset sweep found no more). Guard floors are calibrated
+  to the survival baseline; the binary variant already sits below one of them.
+
+**Noise floor / keep threshold.** The cluster-bootstrap SE of the metric is
+**±20 points** (contests resampled as units). Keep/discard comparisons are
+paired on the same anchors so they are more sensitive than that, but still:
+**treat improvements smaller than ~5 points as noise** — do not keep them
+unless a guard or the held-out AUC (`python -m arch_b.predict_eval`) also
+improves. Many small "wins" kept against a fixed 185-anchor set is how a loop
+overfits the anchors without LOCO noticing.
 
 The guards (printed as `GUARD <name>=<value> (floor <f>) ok|FAIL`) protect what
 the metric cannot see: the CF anchors cover only Asia Pacific / Northern

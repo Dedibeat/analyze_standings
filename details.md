@@ -592,14 +592,16 @@ file; this **supersedes** `arch_b.sanity_cf`, which checked a single 13-problem 
 — that per-problem view is now `external_validate --contest <cfid>`, e.g. `--contest 2206`
 reproduces the old APAC table with Spearman *and* Pearson):
 
-| model           | CF pooled (n=160) | AsiaPac | N.Eur | Europe | Kattis pooled (n=446) | N.Am | Europe | Gym pooled (n=667) | AsiaEC | Europe | AsiaPac | LLM (n=1090) |
+| model           | CF pooled (n=185) | AsiaPac | N.Eur | Europe | Kattis pooled (n=446) | N.Am | Europe | Gym pooled (n=667) | AsiaEC | Europe | AsiaPac | LLM (n=1090) |
 |-----------------|-------------------|---------|-------|--------|-----------------------|------|--------|--------------------|--------|--------|---------|--------------|
-| arch A          | +0.909            | +0.918  | **+0.977** | +0.866 | +0.692           | +0.674 | +0.722 | **+0.957**       | **+0.981** | +0.939 | **+0.941** | **+0.905** |
-| arch B binary   | +0.881            | +0.875  | +0.946 | +0.883 | +0.758            | +0.781 | +0.758 | +0.919           | +0.951 | +0.886 | +0.914  | +0.871     |
-| **arch B survival** | **+0.930**    | **+0.939** | +0.970 | **+0.886** | **+0.793**     | **+0.821** | **+0.761** | +0.950       | +0.962 | **+0.953** | +0.935 | +0.882 |
+| arch A          | +0.912            | +0.914  | **+0.971** | +0.866 | +0.692           | +0.674 | +0.722 | **+0.957**       | **+0.981** | +0.939 | **+0.941** | **+0.905** |
+| arch B binary   | +0.880            | +0.866  | +0.940 | +0.883 | +0.758            | +0.781 | +0.758 | +0.919           | +0.951 | +0.886 | +0.914  | +0.871     |
+| **arch B survival** | **+0.923**    | **+0.924** | +0.960 | **+0.886** | **+0.793**     | **+0.821** | **+0.761** | +0.950       | +0.962 | **+0.953** | +0.935 | +0.882 |
 
-*(CF n grew 152 → 160 when CF 2157 — the rated mirror of qoj 2692 the gym
-certification discovered — was added to `data/cf_team_contests.txt`.)*
+*(CF n grew 152 → 185 as three unlisted rated mirrors were found and added to
+`data/cf_team_contests.txt`: CF 2157 ↔ qoj 2692 via the gym certification, then
+CF 1773 (2022–23 NEF) and CF 1938 (2024 APAC) via an exhaustive problemset
+sweep of all tagged contests — see the metric section.)*
 
 **arch B survival is the most robust model**: it leads on *both* independent numeric
 yardsticks — CF (+0.910) and Kattis (+0.793) — which are the hardest checks (independent
@@ -696,11 +698,26 @@ sensitive to ranking *and* scale (Spearman is blind to compression), works for
 all architectures (each gets its own map), and LOCO punishes anchor overfitting.
 Unlike `arch_b.calibrate` (which hardcodes 3 contests), `metric.py` auto-maps
 **all** rated mirrors in `data/cf_team_contests.txt` via the
-`external_validate` name-vote machinery: currently **160 problems / 13
-contests** (CF 2157 ↔ qoj 2692, found by the gym certification, is now in the
-list). Baselines (2026-07-03): **survival 279.1**, binary 339.8. (The old
-"RMSE ~252" was on the 40-problem / 3-contest anchor set — the new number is a
-harder, more trustworthy test, not a regression.)
+`external_validate` name-vote machinery: currently **185 problems / 15
+contests**. Three mirrors were *added to the list* by sweeping every tagged
+contest's problem names against the rated CF problemset (contest-level vote):
+CF 2157 ↔ qoj 2692 (found by the gym certification), plus CF 1773 (2022–23
+NEF) and CF 1938 (2024 APAC) found by the exhaustive sweep — which also showed
+**no further rated mirrors exist** for our 146 contests, so anchor growth now
+requires new contests in `tagged.json`. Baselines (2026-07-03): **survival
+290.2**, binary 344.3. (The old "RMSE ~252" was on the 40-problem / 3-contest
+anchor set; the rises to 279 then 290 are the test getting *harder and more
+trustworthy* as anchors grew — e.g. CF 1938 alone contributes RMSE 384 — not
+model regressions.)
+
+**Noise floor (cluster bootstrap, contests as resampling units):** the pooled
+RMSE carries **SE ≈ ±20 points** (95% CI ≈ [251, 327]); per-contest RMSE spreads
+160–420 with no single contest dominating. Paired comparisons on the same
+anchors are sharper — binary-vs-survival (+54) separates at P<0.001 — but an
+auto-research loop must still **treat single-digit improvements as noise**
+(`program.md` sets a ~5-point keep threshold, with guard/AUC corroboration for
+small wins) because repeatedly selecting on a fixed 185-anchor set overfits it
+in a way LOCO cannot detect.
 
 **Guards.** The CF anchors cover only AsiaPac / N.Eurasia / Europe, so a loop
 optimizing RMSE alone could silently regress the unanchored regions. The same
