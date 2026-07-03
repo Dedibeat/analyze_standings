@@ -123,6 +123,28 @@ class _UnionFind:
             self.parent[ra] = rb
 
 
+def _trusted_names(raw):
+    """Normalized team names usable as identity for rows without a roster.
+
+    A name is trusted only if it never appears twice within any single contest
+    (a repeated name cannot distinguish the teams carrying it), recurs across
+    >=2 contests (else it links nothing), and is >=5 chars normalized (very
+    short names are too generic to trust).
+    """
+    per_contest = {}
+    contests_of = {}
+    for c in raw:
+        cid = c["contest_id"]
+        seen = per_contest.setdefault(cid, {})
+        for s in c["standings"]:
+            nm = _norm_member(s.get("team_name") or "")
+            if len(nm) >= 5:
+                seen[nm] = seen.get(nm, 0) + 1
+                contests_of.setdefault(nm, set()).add(cid)
+    dup = {nm for seen in per_contest.values() for nm, k in seen.items() if k > 1}
+    return {nm for nm, cs in contests_of.items() if len(cs) >= 2 and nm not in dup}
+
+
 def member_identity(raw, season_by_cid=None):
     """Build union-find resolver over stable ids and rosters (see module docstring).
 
@@ -130,7 +152,14 @@ def member_identity(raw, season_by_cid=None):
     season-scoped so a recurring roster splits per season; the stable ``ucup-*``/id
     keys are left season-agnostic on purpose, so they remain the cross-season
     backbone that keeps the whole scale connected.
+
+    Rows with no usable roster and a per-contest domjudge id would be isolated
+    islands; when such a row carries a *trusted* recurring team name
+    (``_trusted_names``), its isolated ``dj:`` key is unioned to a ``tn:<name>``
+    node so the name links its appearances across contests (like stable ids,
+    names stay season-agnostic).
     """
+    trusted = _trusted_names(raw)
     uf = _UnionFind()
     pair_root = {}  # (member-pair, season) -> first roster token carrying it
     for c in raw:
@@ -141,6 +170,10 @@ def member_identity(raw, season_by_cid=None):
             roster = _roster_token(s.get("members"), season)
             if stable is not None:
                 uf.find(stable)
+            if stable is None and roster is None:
+                nm = _norm_member(s.get("team_name") or "")
+                if nm in trusted:
+                    uf.union(f"dj:{c['contest_id']}::{tid}", "tn:" + nm)
             if roster is not None:
                 uf.find(roster)
                 if stable is not None:
@@ -163,8 +196,9 @@ def team_key(contest_id, team_id, members, uf, season=None):
     if roster is not None:
         return uf.find(roster)
     if team_id.startswith("$DEFAULT"):
-        # isolated per contest -> already per-season (a contest is in one season)
-        return f"dj:{contest_id}::{team_id}"
+        # per-contest key; resolves through uf so a trusted team name can link
+        # it across contests (member_identity), else it stays isolated
+        return uf.find(f"dj:{contest_id}::{team_id}")
     return uf.find("id:" + team_id)
 
 
