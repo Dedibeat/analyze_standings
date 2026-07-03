@@ -77,38 +77,9 @@ def estimate_anchored(sigma_theta=SIGMA_THETA, sigma_b=SIGMA_B, fit_fn=fit,
         print(f"anchored {n_anchored} of {len(ds_tagged.teams)} tagged teams to UCup")
 
     if verbose: print("=== anchored tagged fit ===")
-    # Per-problem difficulty prior mean: gym-informed where available, else MU0.
-    # Soft-anchors ~300 problems to the CF-scale gym estimates so the hard tail
-    # (0-1 solver problems) is pulled toward a data-driven value instead of 2000.
-    mu_b = _gym_prior_means(ds_tagged, verbose=verbose)
     theta, b, history = fit_fn(ds_tagged, prior_mu=prior_mu,
-                               sigma_theta=sigma_theta, sigma_b=sigma_b,
-                               mu_b=mu_b, verbose=verbose)
+                               sigma_theta=sigma_theta, sigma_b=sigma_b, verbose=verbose)
     return ds_tagged, theta, b, history, uf
-
-
-GYM_PATH = os.path.join(os.path.dirname(__file__), os.pardir, "output", "gym_difficulty.json")
-
-
-def _gym_prior_means(ds, verbose=False):
-    """Return per-problem prior-mean array, using gym difficulties where available."""
-    mu_b = np.full(len(ds.problems), MU0)
-    if not os.path.exists(GYM_PATH):
-        if verbose:
-            print("gym_difficulty.json not found — using flat MU0 prior")
-        return mu_b
-    with open(GYM_PATH) as f:
-        gym = json.load(f)
-    gym_map = {(e["contest_id"], e["problem_label"]): e["difficulty"] for e in gym}
-    n = 0
-    for pi, (cid, label, _, _) in enumerate(ds.problems):
-        g = gym_map.get((cid, label))
-        if g is not None:
-            mu_b[pi] = g
-            n += 1
-    if verbose:
-        print(f"gym-informed difficulty prior: {n}/{len(ds.problems)} problems")
-    return mu_b
 
 
 if __name__ == "__main__":

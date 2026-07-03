@@ -91,7 +91,7 @@ def fit(ds, prior_mu=None, sigma_theta=SIGMA_THETA, sigma_b=SIGMA_B, mu_b=MU0,
     n_teams, n_problems = len(ds.teams), len(ds.problems)
 
     theta = np.full(n_teams, MU0)
-    b = np.full(n_problems, mu_b) if np.isscalar(mu_b) else np.array(mu_b, dtype=float)
+    b = np.full(n_problems, mu_b)
 
     def newton_block(param, index, mu, prec, sign):
         g = (theta[obs_team] - b[obs_prob]) / s
