@@ -117,9 +117,12 @@ details.md).
 
 ### Calibrated Codeforces-point ratings
 
-Three of our contests were mirrored on Codeforces with official problem ratings, so
-`arch_b.calibrate` fits a global affine map from the (relative) survival scale to CF
-points — validated leave-one-contest-out (RMSE ~250) — and writes
+`arch_b.calibrate` maps the (relative) survival scale to CF points in two legs: a
+monotone **shape** learned from the ~660 gym-mirror difficulties (nearly CF-native
+in scale; it cannot reorder our problems) and an **affine** leg fit on the official
+CF ratings of all 15 rated mirror contests (185 anchor problems, auto-mapped).
+Validated leave-one-contest-out: shaped RMSE **266** vs plain-affine 288
+(P(worse)≈1%, 10/15 contests improve, hard-tail RMSE 477→434). Writes
 `output/problem_ratings_calibrated.json` with `difficulty_cf` + `difficulty_cf_se`.
 These are the best estimate of CF-equivalent difficulty.
 

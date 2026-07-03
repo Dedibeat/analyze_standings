@@ -573,29 +573,41 @@ addressed by the affine calibration below.)
 
 ### Scale calibration to Codeforces points (`arch_b.calibrate`)
 
-The raw scale is *relative* (pinned at the arbitrary MU0=2000). Three of our
-contests were mirrored on Codeforces with official problem ratings — the 2026 APAC
-(CF 2206), the 2025 Northern Eurasia Finals (CF 2181 = our 2785), and an ICPC
-Taiwan contest (CF 2172 = our 2657) — giving **40 anchor problems spanning CF
-800–3500**. We fit one global affine map `cf ≈ slope·b + intercept` and validate it
-**leave-one-contest-out** (fit on two contests, predict the third):
+The raw scale is *relative* (pinned at the arbitrary MU0=2000) and compressed
+vs CF, more so in the hard tail. **Upgraded 2026-07-04** from the original
+single global affine on 3 hardcoded contests (LOCO ~252 on that 40-anchor set)
+to a **two-leg map** validated on all 15 rated mirrors (185 anchors,
+auto-mapped by the `external_validate` name vote):
 
-| model           | Spearman vs CF | affine slope | fit-RMSE | LOCO-CV-RMSE |
-|-----------------|----------------|--------------|----------|--------------|
-| arch A          | +0.935         | 1.00         | 293      | 372          |
-| arch B binary   | +0.898         | 1.29         | 335      | 422          |
-| arch B survival | **+0.954**     | **2.41**     | **236**  | **252**      |
+1. **Shape leg (gym-learned, nonlinear).** A monotone quantile map `f`
+   (NBINS=15 binned medians, linearly interpolated/extrapolated, shrunk toward
+   its own linear approximation by ALPHA=0.75) fit on the ~660 (our `b`,
+   `b_gym`) pairs — the gym yardstick is certified nearly CF-native in scale
+   (affine slope 1.23 vs official CF). qoj 2692 (the only gym∩anchor contest)
+   is excluded, so `f` shares no problems with the anchors that score it.
+   Because `f` is monotone it **cannot reorder our problems** — it consumes
+   only the gym population's trustworthy half (scale), none of its noisy half
+   (ranking), which is exactly the division the two failed in-fit experiments
+   established.
+2. **Scale leg (affine).** `cf ≈ A·f(b) + B` fit on the official CF anchors;
+   per LOCO fold it is refit on the 14 training contests.
 
-The survival model is best and its map **generalizes**: CV-RMSE (252) barely exceeds
-fit-RMSE (236), so predicting an unseen contest's CF ratings from the other two is
-good to ~250 pts. The slope 2.41 quantifies the compression — the survival scale is
-~2.4× narrower than CF. `arch_b.calibrate` applies the survival map to all problems
-and writes `output/problem_ratings_calibrated.json` with `difficulty_cf` (clipped to
-[800,4000]) and a slope-scaled `difficulty_cf_se`; these are the best estimate of
-CF-equivalent points. (Anchors are 3 strong contests; the global affine map is the
-simplest correction, not a per-region one. Many more CF-mirrored contests are now
-available as anchors — see the per-region validation below — so a richer per-region
-or piecewise map is a natural extension.)
+**LOCO validation (survival model): 288.4 → 266.4** (−22). Cluster bootstrap
+of the paired difference: mean −22.1, 95% CI [−43.9, −3.4], **P(worse) =
+1.05%**; 10/15 contests improve; the cf≥3200 tail improves RMSE 477 → 434.
+Controls: a per-fold *quadratic* on the CF anchors alone scores **297** (worse
+than affine — the win is the gym information, not flexibility); per-region gym
+shapes overfit (298); the result is stable across NBINS 8–25 (271–276 at
+α=1) and α 0.5–1.0 (266–271). Hyperparameters were chosen on this same
+anchor set (the known residual risk of a fixed anchor pool), but the plateau
+is broad and the CI excludes zero. `calibrate` prints both LOCO columns per
+model on every run; if `gym_difficulty.json` is absent it falls back to the
+plain affine. `difficulty_cf_se` is scaled by the *local* slope of the
+composed map (central difference). Note the fit-side metric (`arch_b.metric`)
+is untouched and still reads 288.4 — it scores the raw fit's affine
+calibratability, and its history stays comparable; the shipped deliverable's
+LOCO is the 266.4 figure. Experiment log:
+`autoresearch/autoresearch-260704-0150/classic-results.tsv`.
 
 ### Per-region external validation (`arch_b.external_validate`)
 
@@ -1082,26 +1094,24 @@ worth modelling?
   recurring roster neither collapses to one blended value nor loses data to a split.
   A dedicated team-performance prediction eval (not just difficulty) is the right
   way to measure its benefit.
-- **Richer CF calibration.** The affine map to CF points (`arch_b.calibrate`) is
-  fit on 40 anchors from 3 contests and validated leave-one-contest-out (RMSE
-  ~250). **9 more CF-mirrored contests / 112 problems are now wired up**
-  (`arch_b.external_validate`, see the per-region validation above), spanning Asia
-  Pacific / Northern Eurasia / Europe — enough to fit a *per-region* or piecewise map
-  and shrink the residual (open). The 1-solver hard-end ordering the map can't fix
-  (A/L/M) would also benefit from a heavier-tailed difficulty prior in-model.
+- ~~**Richer CF calibration.**~~ **Done (2026-07-04)** — `arch_b.calibrate` now
+  ships the gym-shaped two-leg map on all 185 auto-mapped anchors (LOCO 288 →
+  266, see the calibration section). Per-region maps were tried and overfit
+  (298); the 1-solver hard-end *ordering* remains data-limited (the shape
+  improves the tail's scale, RMSE 477 → 434, but cannot reorder 0–1-solver
+  problems).
 - **No external anchor for Asia West Continent.** ~~Asia East Continent~~ — **closed**:
   the gym-mirror yardstick (`arch_b.gym_difficulty`) now anchors EC at +0.95–0.98
   for all three models. Asia *West* remains uncovered (its one scraped gym, the
   Iranian contest, was a wrong-event match — see the gym section).
-- **Use `b_gym` as calibration anchors.** `b_gym` sits nearly on
-  the true CF scale (certify: affine slope 1.23 vs CF ratings), and covers 700
-  problems across 5 regions vs the 40 anchors `arch_b.calibrate` currently uses —
-  enough for the per-region / piecewise CF map above. The two *in-fit* uses are
-  now both tested and **negative**: as per-problem prior means (80afc92,
-  reverted — circular guard corroboration, Kattis down) and as merged fixed-θ
-  likelihood terms (`gym_merge`, see the experiment section — Kattis and
-  held-out AUC degrade monotonically with weight). The calibration layer is
-  the remaining, and principled, home for the gym signal.
+- ~~**Use `b_gym` as calibration anchors.**~~ **Done (2026-07-04)** — the
+  gym-learned shape leg in `arch_b.calibrate` (see the calibration section) is
+  exactly this, and it is the one use of the gym signal that survived
+  validation. The two *in-fit* uses tested **negative**: per-problem prior
+  means (80afc92, reverted — circular guard corroboration, Kattis down) and
+  merged fixed-θ likelihood terms (`gym_merge` — Kattis and held-out AUC
+  degrade monotonically with weight). Scale-half of the signal: used; noisy
+  ranking-half: discarded, by construction of the monotone map.
 - ~~**Add CF 2157 to `data/cf_team_contests.txt`.**~~ **Done** — the CF columns
   and the metric anchor set now include it (CF pooled n 152 → 160).
 - **CF anchoring** if member→handle→rating data becomes available, to turn the

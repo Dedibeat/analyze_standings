@@ -1,0 +1,8 @@
+model	iter	change	metric	guards	verdict
+claude-fable-5	0	baseline: per-fold affine calibration on 185 CF anchors (== metric protocol)	288.4	tail rmse 477 bias -322	baseline
+claude-fable-5	1	per-fold quadratic, CF anchors only (flexibility ablation)	297.3	tail 481	discard (curvature without gym data hurts)
+claude-fable-5	2	gym quantile-shape (nbins=15) + per-fold affine	271.1	tail 429	keep-candidate (-17.3; stable over nbins 8-25: 271-276)
+claude-fable-5	3	gym poly2 / poly3 shape + affine	294.3 / 278.5	-	discard (quantile shape better; poly3 non-monotone)
+claude-fable-5	4	per-region gym shapes + affine	298.2	-	discard (regions too thin, overfits)
+claude-fable-5	5	shape shrinkage alpha=0.25/0.5/0.75/1.0	275.2/267.7/266.4/271.1	-	alpha=0.75 best, broad plateau
+claude-fable-5	FINAL	SHIPPED: two-leg map (gym quantile shape nbins=15 alpha=0.75, excl qoj2692 + per-fold affine on 185 anchors). LOCO 288.4->266.4, bootstrap CI [-43.9,-3.4], P(worse)=1.05%, 10/15 contests improve, tail 477->434. Monotone map: all Spearman guards invariant; fit metric untouched (288.4)	266.4	ok	KEPT
