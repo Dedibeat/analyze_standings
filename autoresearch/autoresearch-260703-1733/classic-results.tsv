@@ -1,17 +1,29 @@
-iter	change	metric	guards	verdict
-0	baseline	290.2	ok	baseline
-1	huber prior on b (d400/800)	294.9/290.2	ok	discard
-2	sigma_theta/sigma_b sweep	289.0-302.3	ok	discard (best 289.0 < noise)
-3	weibull hazard shape k	289.0-321.9	ok	discard (k=1.25 289.0 < noise)
-4	gym-informed b prior (global+sparse)	289.8-292.8	ok	discard (1/15 anchor contests gym-covered)
-5	wrong-attempt bernoulli evidence C=0.1-0.5	296.5-321.4	FAIL@0.5	discard
-6	penalty-time tau_eff (600/1200s)	292.6/295.8	ok	discard
-7	evidence-scaled ucup anchor w=1-64	289.9-290.2	ok	discard
-8	min_solve_hours 3.0-4.5/None	290.2	ok	discard (insensitive)
-9	drop asia west	290.2	ok	discard
-10	keep zero-solve rows	291.2	ok	discard
-11	huber prior on theta H=400-800	290.1-290.2	ok	discard
-12	per-contest hazard intercept sigma_delta 0.25-2.0	289.7-298.1	ok	discard
-13	time-varying theta_(team,season) drift 100-800	291.0-293.4	ok	discard
--	AUC corroboration: k=1.25 AUC 0.8809 (flat vs 0.8810), sigma_theta=600 AUC 0.8782 (worse)	-	-	both stay discarded
--	final: reverted to baseline, 290.2 confirmed, guards ok	290.2	ok	PLATEAU
+model	iter	change	metric	guards	verdict
+-	0	baseline	290.2	ok	baseline
+fable	1	huber prior on b (d400/800)	294.9/290.2	ok	discard
+fable	2	sigma_theta/sigma_b sweep 300-800	289.0-302.3	ok	discard (best 289.0 < noise)
+fable	3	weibull hazard shape k 0.5-2	289.0-321.9	ok	discard (k=1.25 289.0 < noise)
+fable	4	gym-informed b prior (global+sparse)	289.8-292.8	ok	discard (1/15 anchor contests gym-covered)
+fable	5	wrong-attempt bernoulli evidence C=0.1-0.5	296.5-321.4	FAIL@0.5	discard
+fable	6	penalty-time tau_eff (600/1200s)	292.6/295.8	ok	discard
+fable	7	evidence-scaled ucup anchor w=1-64	289.9-290.2	ok	discard
+fable	8	min_solve_hours 3.0-4.5/None	290.2	ok	discard (insensitive)
+fable	9	drop asia west	290.2	ok	discard
+fable	10	keep zero-solve rows	291.2	ok	discard
+fable	11	huber prior on theta H=400-800	290.1-290.2	ok	discard
+fable	12	per-contest hazard intercept sigma 0.25-2.0	289.7-298.1	ok	discard
+fable	13	time-varying theta drift 100-800	291.0-293.4	ok	discard
+fable	-	AUC: k=1.25 AUC 0.8809 (flat), sigma_theta=600 AUC 0.8782 (worse)	-	-	both stay discarded
+fable	14	ID: normalized roster names + pair-union (>=2 shared members)	289.7	ok	KEPT (-2.2 RMSE, AUC 0.8810->0.8821)
+fable	15	ID: trusted recurring team names link dj-isolated rows	288.0	ok	KEPT (-1.7 RMSE, AUC 0.8821->0.8858, gym-pooled 0.950->0.954)
+deepseek	16	sigma_theta=600 (on improved identity)	286.8	ok	discard (AUC 0.8838 < 0.8858)
+deepseek	17	per-contest hazard intercept sigma 0.125-1.0	287.7-294.9	ok	discard (best -0.3 from 288.0, noise)
+deepseek	18	time-varying theta drift 200 (on improved identity)	316.3	-	discard (crash+IndexError; metric blew up)
+deepseek	19	evidence-scaled per-team prior K=5	287.3	ok	discard (AUC 0.8857 vs 0.8858, flat)
+deepseek	20	weibull k=1.25 on improved identity	287.1	ok	discard (AUC 0.8854 < 0.8858)
+deepseek	21	trusted-name threshold len>=3 (was >=5)	288.3	ok	discard (worse)
+deepseek	22	1-member roster linking (>=4 char guard)	291.5	ok	discard (worse)
+deepseek	23	evidence-scaled anchor weight w=4	288.8	ok	discard (worse)
+deepseek	24	sigma_theta=500	287.1	ok	discard (AUC 0.8848 < 0.8858)
+deepseek	25	data-driven per-problem mu_b (solve-rate prior)	305.9	ok	discard (terrible)
+-	FINAL	baseline 290.2 -> 288.0, 2 kept (fable ID fixes), 23 discarded, guards up	288.0	ok	PLATEAU
