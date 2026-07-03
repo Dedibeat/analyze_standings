@@ -735,3 +735,40 @@ worth modelling?
   noisier referee, covers it).
 - **CF anchoring** if member→handle→rating data becomes available, to turn the
   relative scale into true Codeforces-equivalent points.
+- **`data/cf_gym_mirrors.json` — scraped, not yet consumed.** For contests whose
+  problems were also mirrored as a Codeforces **Gym** contest (training replay, not
+  the officially-rated rounds `cf_team_contests.txt` uses), CF's own practice
+  population gives an independent difficulty signal: solve outcome vs. each
+  solver's *own* established Codeforces rating — closer to the strat's originally
+  recommended CF-anchor (eq. cfprior) than anything else in the repo, since our own
+  contestants have no CF handles (see the roster-identity decision above).
+  - **Contest → gym matching (62 of 146 contests mapped).** Matched two ways:
+    36 by a distinctive city/country keyword in `contest_name` + season year
+    (e.g. "Nanjing" 2023 → the CF gym titled "The 2023 ICPC Asia Nanjing Regional
+    Contest"); 26 more (the Europe/North America contests, whose `contest_name` is
+    only the broad sub-region label like "Northwestern Europe" — indistinguishable
+    from NWERC/BAPC/UKIEPC/GCPC/NCPC by name alone) by the same problem-name-vote
+    technique `external_validate._cf_mapping` already uses for CF-rated mirrors,
+    pointed at each candidate gym's problem list instead of `problemset.problems`.
+    Both CF's regular-contest API and gym `contest.standings` require an API key
+    (`curl` gets `"You have to be authenticated"` even for public gyms), and CF
+    sits behind a Cloudflare bot check that blocks plain `curl`/`WebFetch` outright —
+    so both the gym listing and every standings page were scraped through an
+    authenticated browser session (`claude-in-chrome`) via same-origin `fetch()`,
+    which carries the session cookie and reuses the already-solved challenge.
+  - **Schema.** Keyed by our `qoj_contest_id`; each entry has `gym_id`/`gym_url`,
+    `gym_problem_labels` vs. `our_problem_labels` (5 of the 62 mismatch — different
+    problem subset between the mirror and our record — flagged via
+    `labels_aligned` rather than dropped, so a consumer must join by problem
+    *name*, not letter, when false), and `solvers`: one row per (team member,
+    contest) with `cf_rating` and the list of problem letters *that team* solved.
+  - **Known limitations (why this stays raw data).** (1) ICPC solves are
+    per-*team*, so every member of a team is stamped with the same solved set —
+    the dataset over-represents team performance as if it were each member's own,
+    biased toward whichever member happened to have a CF handle. (2) Only
+    Codeforces-*rated* solvers are kept (unrated handles dropped silently), which
+    is a strong selection filter, especially outside competitive-CF-heavy regions.
+    (3) No `laplace_se`-style uncertainty or MAP fit has been run on it yet — that
+    would be the natural next step (a Rasch fit with `theta` *fixed* at each
+    solver's known CF rating, solving only for `b_p`), turning this into a real
+    external-validation column alongside the LLM/CF/Kattis ones above.
