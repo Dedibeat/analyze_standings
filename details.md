@@ -326,6 +326,13 @@ log-likelihood (eq. loglik) plus Gaussian priors on `theta` and `b` (eq. priors)
   `output/gym_difficulty.json`; `--certify` checks the instrument itself against
   official CF ratings + Kattis and compares team-reduction rules (see the section
   below).
+- `metric.py` — **the north-star metric** for model optimization: refits the
+  survival model from source and prints one scalar, the leave-one-contest-out
+  RMSE in CF points over all mapped rated mirrors, plus guard checks (gym EC /
+  gym pooled / Kattis pooled Spearman, solve-count sanity) that exit nonzero on
+  violation. Built as the verify command for auto-research loops; `program.md`
+  at the repo root is the matching agent instruction file (see the section
+  below).
 - `predict_eval.py` — internal held-out solve-prediction check: train on a random
   80% of observed cells, score predicted solve probability on the held-out 20%
   (log-loss / Brier / AUC + a calibration table). Both fitters accept an ``obs=``
@@ -585,11 +592,14 @@ file; this **supersedes** `arch_b.sanity_cf`, which checked a single 13-problem 
 — that per-problem view is now `external_validate --contest <cfid>`, e.g. `--contest 2206`
 reproduces the old APAC table with Spearman *and* Pearson):
 
-| model           | CF pooled (n=152) | AsiaPac | N.Eur | Europe | Kattis pooled (n=446) | N.Am | Europe | Gym pooled (n=667) | AsiaEC | Europe | AsiaPac | LLM (n=1090) |
+| model           | CF pooled (n=160) | AsiaPac | N.Eur | Europe | Kattis pooled (n=446) | N.Am | Europe | Gym pooled (n=667) | AsiaEC | Europe | AsiaPac | LLM (n=1090) |
 |-----------------|-------------------|---------|-------|--------|-----------------------|------|--------|--------------------|--------|--------|---------|--------------|
-| arch A          | +0.905            | +0.918  | **+0.977** | +0.851 | +0.692           | +0.674 | +0.722 | **+0.957**       | **+0.981** | +0.939 | **+0.941** | **+0.905** |
-| arch B binary   | +0.875            | +0.875  | +0.946 | **+0.870** | +0.758            | +0.781 | +0.758 | +0.919           | +0.951 | +0.886 | +0.914  | +0.871     |
-| **arch B survival** | **+0.926**    | **+0.939** | +0.970 | +0.858 | **+0.793**     | **+0.821** | **+0.761** | +0.950       | +0.962 | **+0.953** | +0.935 | +0.882 |
+| arch A          | +0.909            | +0.918  | **+0.977** | +0.866 | +0.692           | +0.674 | +0.722 | **+0.957**       | **+0.981** | +0.939 | **+0.941** | **+0.905** |
+| arch B binary   | +0.881            | +0.875  | +0.946 | +0.883 | +0.758            | +0.781 | +0.758 | +0.919           | +0.951 | +0.886 | +0.914  | +0.871     |
+| **arch B survival** | **+0.930**    | **+0.939** | +0.970 | **+0.886** | **+0.793**     | **+0.821** | **+0.761** | +0.950       | +0.962 | **+0.953** | +0.935 | +0.882 |
+
+*(CF n grew 152 → 160 when CF 2157 — the rated mirror of qoj 2692 the gym
+certification discovered — was added to `data/cf_team_contests.txt`.)*
 
 **arch B survival is the most robust model**: it leads on *both* independent numeric
 yardsticks — CF (+0.910) and Kattis (+0.793) — which are the hardest checks (independent
@@ -673,6 +683,42 @@ particular the first external numeric anchor for **Asia East Continent**
 regional-bias investigation left open. Run:
 `./.venv/bin/python -m arch_b.gym_difficulty` (then `-m arch_b.external_validate`);
 `--certify` reproduces the instrument checks.
+
+### The optimization metric (`arch_b.metric` + `program.md`)
+
+With validation settled (every anchored region agrees at +0.86–0.98), the open
+front is the **scale**, so model improvement is now driven by a single scalar:
+**leave-one-contest-out RMSE in CF points** — for each CF-rated mirror contest,
+fit the affine map `cf ≈ slope·b + icept` on the *other* mirrors, predict the
+held-out one, pool the errors. Chosen over the alternatives because it measures
+the shipped deliverable (`difficulty_cf`) directly in interpretable units, is
+sensitive to ranking *and* scale (Spearman is blind to compression), works for
+all architectures (each gets its own map), and LOCO punishes anchor overfitting.
+Unlike `arch_b.calibrate` (which hardcodes 3 contests), `metric.py` auto-maps
+**all** rated mirrors in `data/cf_team_contests.txt` via the
+`external_validate` name-vote machinery: currently **160 problems / 13
+contests** (CF 2157 ↔ qoj 2692, found by the gym certification, is now in the
+list). Baselines (2026-07-03): **survival 279.1**, binary 339.8. (The old
+"RMSE ~252" was on the 40-problem / 3-contest anchor set — the new number is a
+harder, more trustworthy test, not a regression.)
+
+**Guards.** The CF anchors cover only AsiaPac / N.Eurasia / Europe, so a loop
+optimizing RMSE alone could silently regress the unanchored regions. The same
+fit is therefore checked against floors (baseline − noise margin, calibrated to
+the survival model): gym **EC** Spearman ≥ 0.93 (the region with *no* CF
+anchors), gym pooled ≥ 0.92, Kattis pooled (NA+Europe convention) ≥ 0.75,
+within-contest solve-count sanity ≥ 0.90. Any violation exits nonzero =
+"discard the change". Note Asia West needs no exclusion switch: it has no
+anchor coverage, so it simply never enters the metric (dropping its contests
+*from the fit* is explicitly permitted as an experiment in `program.md`).
+
+**`program.md`** (repo root) is the instruction file for auto-research agents
+(karpathy-style `verify`/guard loop): the verify contract (last line
+`METRIC loco_cf_rmse=…`, exit 1 = discard, ~5 s deterministic runs), the scope
+(fit/likelihood/prior/hygiene code is fair game; `metric.py`, the yardstick
+modules, and everything under `data/` are read-only; CF anchor data must never
+be read in the fit path), and the prioritized idea list (hard-tail prior,
+gym-informed priors, solve-time/hazard refinements, `wrong_attempts`, …).
 
 ### Internal validation: held-out solve prediction (`arch_b.predict_eval`)
 
@@ -817,9 +863,8 @@ worth modelling?
   means `N(b_gym, se)` inside the main MAP fit (would have to *earn its place* on
   held-out prediction, since the gym referee is slightly noisier than the survival
   fit at fine ranking — see the certification).
-- **Add CF 2157 to `data/cf_team_contests.txt`.** Discovered by the gym
-  certification: CF 2157 is a rated mirror of our qoj 2692 that the mirror list
-  misses; adding it grows the official-CF validation column.
+- ~~**Add CF 2157 to `data/cf_team_contests.txt`.**~~ **Done** — the CF columns
+  and the metric anchor set now include it (CF pooled n 152 → 160).
 - **CF anchoring** if member→handle→rating data becomes available, to turn the
   relative scale into true Codeforces-equivalent points.
 - **`data/cf_gym_mirrors.json` — scraped; now consumed by `arch_b.gym_difficulty`

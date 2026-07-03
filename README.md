@@ -78,6 +78,7 @@ Pacific Championship:
 ./.venv/bin/python -m arch_b.external_validate  # per-region vs Codeforces + Kattis + gym, all models
 ./.venv/bin/python -m arch_b.predict_eval       # held-out solve prediction (binary vs survival)
 ./.venv/bin/python -m arch_b.calibrate     # affine map to Codeforces points
+./.venv/bin/python -m arch_b.metric        # THE optimization metric: LOCO CF-point RMSE + guards
 ```
 
 All three architectures agree closely with both opinions. On the LLM check arch A
@@ -95,6 +96,18 @@ each solver's rating. It is the third yardstick in `external_validate` and the
 first external numeric anchor for **Asia East Continent** (230 problems), where
 all three models validate at +0.95–0.98. `--certify` checks the instrument itself
 (vs official CF ratings: Spearman +0.976, affine slope ≈1.2).
+
+### The optimization metric
+
+`arch_b.metric` is the single number model improvements are judged by:
+**leave-one-contest-out RMSE in CF points** against the official ratings of all
+13 CF-mirrored contests (160 anchor problems). It refits the survival model from
+source in ~5 s, prints `METRIC loco_cf_rmse=…` as its last line (lower is
+better; baseline **279.1**), and exits nonzero if any guard regresses (gym
+Asia-East-Continent / gym pooled / Kattis Spearman, solve-count sanity — the
+things the CF anchors can't see). `program.md` at the repo root is the matching
+instruction file for auto-research loops: verify contract, what code is fair
+game, hard anti-gaming rules, and a prioritized idea list.
 
 ### Calibrated Codeforces-point ratings
 
