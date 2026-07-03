@@ -73,7 +73,7 @@ def _survival_observations(ds):
 
 
 def fit(ds, prior_mu=None, sigma_theta=SIGMA_THETA, sigma_b=SIGMA_B, mu_b=MU0,
-        eps=0.5, max_iter=200, verbose=True, obs=None, gym_obs=None):
+        eps=0.5, max_iter=200, verbose=True, obs=None, gym_obs=None, obs_w=None):
     """MAP fit of the survival model; returns (theta, b, history).
 
     Signature matches ``model.fit`` so it is a drop-in for
@@ -86,10 +86,14 @@ def fit(ds, prior_mu=None, sigma_theta=SIGMA_THETA, sigma_b=SIGMA_B, mu_b=MU0,
     times, so they enter with the binary-model likelihood (calibrated identically
     -- at theta=b both give P(solve within the window)=1/2), mixed with the
     survival terms. Both are concave in ``b``, so the block step stays valid.
+
+    ``obs_w`` optionally weights each observation's likelihood contribution
+    (per-cell array aligned with ``obs``); default 1 everywhere.
     """
     if prior_mu is None:
         prior_mu = np.full(len(ds.teams), MU0)
     obs_team, obs_prob, obs_y, rho = _survival_observations(ds) if obs is None else obs
+    w = 1.0 if obs_w is None else np.asarray(obs_w, float)
 
     s = elo.S
     prec_theta = 1.0 / sigma_theta**2
@@ -102,11 +106,11 @@ def fit(ds, prior_mu=None, sigma_theta=SIGMA_THETA, sigma_b=SIGMA_B, mu_b=MU0,
     def newton_block(param, index, mu, prec, sign, extra=None):
         g = (theta[obs_team] - b[obs_prob]) / s
         Lam = LN2 * np.exp(g) * rho          # cumulative hazard per cell
-        resid = obs_y - Lam
+        resid = w * (obs_y - Lam)
         grad = np.zeros_like(param)
         negH = np.full_like(param, prec)
         np.add.at(grad, index, resid)
-        np.add.at(negH, index, Lam / s**2)   # d Lambda / d param = Lambda / s
+        np.add.at(negH, index, w * Lam / s**2)  # d Lambda / d param = Lambda / s
         if extra is not None:                # fixed-theta binary gym terms
             g_theta, g_prob, g_y, g_w = extra
             g_pi = elo.pi(g_theta, param[g_prob])

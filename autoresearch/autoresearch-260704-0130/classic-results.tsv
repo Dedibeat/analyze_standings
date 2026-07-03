@@ -1,0 +1,7 @@
+model	iter	change	metric	guards	verdict
+claude-fable-5	0	baseline (harness replication check)	288.4	ok (identical to metric.py)	baseline
+claude-fable-5	1	per-obs reliability weight w_t=1-0.9^N_t (arch-A style)	305.5	ok (kattis 0.792, sanity 0.965)	discard (decisively worse: double-discounts one-off teams)
+claude-fable-5	2	thick-bridge contests (>1000 rows) obs weight 0.5	288.3	ok (unchanged)	discard (flat)
+claude-fable-5	3	thick-bridge contests obs weight 0.25	288.3	ok (unchanged)	discard (flat)
+claude-fable-5	4	thick-bridge contests obs weight 2.0	288.4	ok (unchanged)	discard (flat)
+claude-fable-5	FINAL	link-graph weighting is not a knob: global/per-team forms discarded in prior campaigns, per-obs forms flat or harmful. obs_w= hook kept (default off, baseline unchanged)	288.4	ok	DISCARD-ALL

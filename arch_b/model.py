@@ -55,7 +55,7 @@ def _observations(ds):
 
 
 def fit(ds, prior_mu=None, sigma_theta=SIGMA_THETA, sigma_b=SIGMA_B, mu_b=MU0,
-        eps=0.5, max_iter=200, verbose=True, obs=None, gym_obs=None):
+        eps=0.5, max_iter=200, verbose=True, obs=None, gym_obs=None, obs_w=None):
     """MAP fit of the Rasch model (eq. map); returns (theta, b, history).
 
     ``prior_mu`` is the per-team prior mean mu_t (eq. priors); defaults to the
@@ -71,10 +71,14 @@ def fit(ds, prior_mu=None, sigma_theta=SIGMA_THETA, sigma_b=SIGMA_B, mu_b=MU0,
     a ``(g_theta, g_prob, g_y, g_w)`` tuple from ``gym_merge.gym_observations``
     (gym solvers' abilities are known, so they contribute likelihood terms on
     the covered problems' difficulties but are not fit as teams).
+
+    ``obs_w`` optionally weights each observation's likelihood contribution
+    (per-cell array aligned with ``obs``); default 1 everywhere.
     """
     if prior_mu is None:
         prior_mu = np.full(len(ds.teams), MU0)
     obs_team, obs_prob, obs_y = _observations(ds) if obs is None else obs
+    w = 1.0 if obs_w is None else np.asarray(obs_w, float)
 
     s = elo.S
     prec_theta = 1.0 / sigma_theta**2   # prior precision (Hessian/gradient terms)
@@ -95,8 +99,8 @@ def fit(ds, prior_mu=None, sigma_theta=SIGMA_THETA, sigma_b=SIGMA_B, mu_b=MU0,
         so they accumulate into the same grad/negH before the sign is applied).
         """
         pi = elo.pi(theta[obs_team], b[obs_prob])
-        resid = obs_y - pi
-        info = pi * (1.0 - pi)
+        resid = w * (obs_y - pi)
+        info = w * pi * (1.0 - pi)
         grad = np.zeros_like(param)
         negH = np.full_like(param, prec)
         np.add.at(grad, index, resid)
