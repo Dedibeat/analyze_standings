@@ -313,12 +313,19 @@ log-likelihood (eq. loglik) plus Gaussian priors on `theta` and `b` (eq. priors)
   `tagged.json` (written by the sibling `llm-integration` tagger from the problem
   statement — independent of standings). Trusts only **editorial-backed** problems
   and reports per-bucket medians + Spearman for all three model outputs.
-- `external_validate.py` — per-region check of **all three models** against two
+- `external_validate.py` — per-region check of **all three models** against three
   independent numeric yardsticks: official **Codeforces** problemset ratings (the
-  CF-mirror contests in `data/cf_team_contests.txt`) and **Kattis** difficulty
-  (`data/kattis_difficulty.json`); `--contest <cfid>` prints a per-problem table with
-  Spearman + Pearson for one contest (see results below). Replaces the old
-  single-contest `sanity_cf.py`.
+  CF-mirror contests in `data/cf_team_contests.txt`), **Kattis** difficulty
+  (`data/kattis_difficulty.json`), and the **gym-mirror fixed-θ difficulty**
+  (`output/gym_difficulty.json`, when present); `--contest <cfid>` prints a
+  per-problem table with Spearman + Pearson for one contest (see results below).
+  Replaces the old single-contest `sanity_cf.py`.
+- `gym_difficulty.py` — fixed-θ Rasch difficulty from the CF gym-mirror
+  population (`data/cf_gym_mirrors.json`): each gym solver's own time-accurate CF
+  rating fixes θ, so only `b_p` is fit (1-D concave MAP per problem). Writes
+  `output/gym_difficulty.json`; `--certify` checks the instrument itself against
+  official CF ratings + Kattis and compares team-reduction rules (see the section
+  below).
 - `predict_eval.py` — internal held-out solve-prediction check: train on a random
   80% of observed cells, score predicted solve probability on the held-out 20%
   (log-loss / Brier / AUC + a calibration table). Both fitters accept an ``obs=``
@@ -567,23 +574,22 @@ against independent numeric truth (+0.86 to +0.98 everywhere measurable), and on
 Kattis check our standings-based difficulty agrees with Kattis **better than the LLM
 does** (NA +0.821 vs LLM-Kattis +0.700; Europe +0.761 vs +0.655) — i.e. the LLM is the
 noisier referee, so the small per-region LLM offsets were largely LLM-labelling noise,
-**not** a model bias. The one genuine residual is that **Asia East Continent — the
-region the whole investigation started from — has no external numeric anchor at all**
-(its problems are mirrored on neither CF nor Kattis), so its calibration can be neither
-confirmed nor refuted from outside. Closing that gap (a Chinese-judge rating source, or
-a CF-mirrored EC contest) is the open follow-up. Run:
-`./.venv/bin/python -m arch_b.external_validate` (`--refresh` refetches CF).
+**not** a model bias. The residual gap — **Asia East Continent had no external numeric
+anchor at all** (mirrored on neither CF nor Kattis) — is now closed by the gym-mirror
+yardstick below: EC validates at **+0.95 to +0.98** for all three models (230 problems),
+the *strongest* region in the gym column, so EC calibration is externally confirmed.
+Run: `./.venv/bin/python -m arch_b.external_validate` (`--refresh` refetches CF).
 
 **All three models, side by side** (the module scores every `output/problem_ratings*`
 file; this **supersedes** `arch_b.sanity_cf`, which checked a single 13-problem contest
 — that per-problem view is now `external_validate --contest <cfid>`, e.g. `--contest 2206`
 reproduces the old APAC table with Spearman *and* Pearson):
 
-| model           | CF pooled (n=152) | AsiaPac | N.Eur | Europe | Kattis pooled (n=446) | N.Am | Europe | LLM (n=1090) |
-|-----------------|-------------------|---------|-------|--------|-----------------------|------|--------|--------------|
-| arch A          | +0.905            | +0.918  | **+0.977** | +0.851 | +0.692           | +0.674 | +0.722 | **+0.905** |
-| arch B binary   | +0.875            | +0.875  | +0.946 | **+0.870** | +0.758            | +0.781 | +0.758 | +0.871     |
-| **arch B survival** | **+0.926**    | **+0.939** | +0.970 | +0.858 | **+0.793**     | **+0.821** | **+0.761** | +0.882 |
+| model           | CF pooled (n=152) | AsiaPac | N.Eur | Europe | Kattis pooled (n=446) | N.Am | Europe | Gym pooled (n=667) | AsiaEC | Europe | AsiaPac | LLM (n=1090) |
+|-----------------|-------------------|---------|-------|--------|-----------------------|------|--------|--------------------|--------|--------|---------|--------------|
+| arch A          | +0.905            | +0.918  | **+0.977** | +0.851 | +0.692           | +0.674 | +0.722 | **+0.957**       | **+0.981** | +0.939 | **+0.941** | **+0.905** |
+| arch B binary   | +0.875            | +0.875  | +0.946 | **+0.870** | +0.758            | +0.781 | +0.758 | +0.919           | +0.951 | +0.886 | +0.914  | +0.871     |
+| **arch B survival** | **+0.926**    | **+0.939** | +0.970 | +0.858 | **+0.793**     | **+0.821** | **+0.761** | +0.950       | +0.962 | **+0.953** | +0.935 | +0.882 |
 
 **arch B survival is the most robust model**: it leads on *both* independent numeric
 yardsticks — CF (+0.910) and Kattis (+0.793) — which are the hardest checks (independent
@@ -594,7 +600,79 @@ solve-count difficulty; against the broad 446-problem Kattis set arch A drops to
 clearly behind both IRT models, so its LLM edge does not generalize. (Caveat: per-region
 n is modest — Europe CF 34, N.Eur 25 — so single-region orderings can flip on noise, and
 Kattis Europe carries some title-collision contamination; the pooled columns are the
-reliable read.)
+reliable read.) In the **Gym column** arch A narrowly leads (+0.957) with survival right
+behind (+0.950) — expected, since a fixed-θ Rasch difficulty is close to a monotone
+transform of the (ability-weighted) solve rate, the same signal arch A leans on; the
+column's real payload is the EC cell, not the model ordering.
+
+### Gym-mirror fixed-θ difficulty (`arch_b.gym_difficulty`)
+
+Consumes `data/cf_gym_mirrors.json` (see the data bullet under follow-ups for how it
+was scraped). Every gym solver arrives with a **known ability on the true CF scale**
+(`cf_rating_at_attempt`), so unlike both main architectures there is no joint fit:
+θ is fixed and each problem's `b_p` is an independent 1-D strictly concave MAP
+(the `b` Newton block of `model.py` with per-observation weights, prior
+`N(2000, 400²)`). Converges in a handful of iterations; Laplace SE median ~43.
+Writes `output/gym_difficulty.json` (700 problems, 57 contests, 23,243 rated team
+attempts), which `external_validate` picks up as the third yardstick column.
+
+Key decisions:
+
+- **Trust policy (clist.by-style), since rating & contest count are time-relative.**
+  A rating backed by few rated contests is noisy, so each member's likelihood
+  weight is the repo's reliability convention `w = 1 − 0.9^n` with
+  `n = cf_rated_contests_at_attempt` (1 contest → 0.1, 10 → 0.65, 30 → ~0.96);
+  members with no rating yet are excluded, and a team with no rated member is
+  dropped (~3% of attempts). Removing the trust weighting entirely barely moves
+  the certification numbers, so the policy is cheap insurance, not load-bearing.
+- **Team reduction = `lse`:** `θ_team = s·log Σ exp(r_i/s)` — the single solver
+  equivalent to the members solving independently (in the hard-problem limit
+  P(team solves) ≈ Σ exp((r_i−b)/s)); an equal duo → max+120, trio → max+191.
+  Team weight = softmax-contribution-weighted member trust. The obvious
+  alternative (`max`: strongest member) certifies identically (ties on all
+  yardsticks), so `lse` is kept for the principled team-strength story;
+  `--certify` sweeps both.
+- **Join by problem name; 5 of the 62 scraped gyms were wrong events.** Gym
+  problem *names* come from `data/gym_checkpoints/api_standings.json` and join to
+  our problems by normalized title within the contest. All five
+  `labels_aligned: false` contests turned out to match **zero** problem names —
+  the city/season keyword matching had picked a *different event* in the same
+  region/season (four Taiwan contests, e.g. our qoj 2657 is the CF-2172-mirrored
+  round but the gym is a separate 2025 Taiwan online round; the Iranian contest's
+  qoj names are in Farsi so alignment is unverifiable) — so they are dropped
+  wholesale (57 contests / 700 of 763 problems survive). Consequence: the two
+  planned certification overlaps with `cf_team_contests.txt` (qoj 2657, 3297)
+  were among the bogus five, which forced the certification below onto a
+  contest-scoped name vote instead.
+
+**Certification (`--certify`)** — is `b_gym` itself trustworthy?
+
+- **vs official CF ratings:** a contest-level problem-name vote against the rated
+  CF problemset (a flat name join is dominated by coincidental generic titles —
+  it produced Spearman +0.22 from collisions like "Quick Sort"/"Flowers")
+  found one genuine rated mirror among the 57: **qoj 2692 ↔ CF 2157** (not in
+  `cf_team_contests.txt`). On its 8 shared problems: Spearman **+0.976**,
+  Pearson +0.974, affine slope **1.23** (icept −448, RMSE 213) — i.e. `b_gym`
+  is *nearly on the true CF scale already* (compare the survival scale's 2.4×
+  compression), which is its main promise as a future calibration anchor.
+- **vs Kattis, head-to-head with the survival model on the same 223 problems:**
+  gym +0.673 vs survival +0.727 pooled; the gap persists within-contest
+  (median +0.824 vs +0.882 over 17 contests), so it is not a cross-contest scale
+  artifact. Sweeping the fit knobs (reduction, trust off, solo-only,
+  `sigma_b` 400→800, dropping zero-solve attempts — only 1% here) moves nothing
+  by more than ~0.01. So the gym population is a **decent but not gold-standard
+  referee**: good enough to validate regions (its within-contest ordering vs
+  solve rate is near-perfect, median −1.000), authoritative on *scale* (CF check
+  above), but a bit noisier than our own survival fit at fine-grained ranking —
+  likely virtual-participation effects (solvers who have seen a famous problem
+  before) that no fit knob can remove.
+
+**Payload:** the per-region Gym column in the validation table above — in
+particular the first external numeric anchor for **Asia East Continent**
+(18 contests / 230 problems, all three models +0.95 to +0.98), closing the gap the
+regional-bias investigation left open. Run:
+`./.venv/bin/python -m arch_b.gym_difficulty` (then `-m arch_b.external_validate`);
+`--certify` reproduces the instrument checks.
 
 ### Internal validation: held-out solve prediction (`arch_b.predict_eval`)
 
@@ -728,14 +806,24 @@ worth modelling?
   Pacific / Northern Eurasia / Europe — enough to fit a *per-region* or piecewise map
   and shrink the residual (open). The 1-solver hard-end ordering the map can't fix
   (A/L/M) would also benefit from a heavier-tailed difficulty prior in-model.
-- **No external anchor for Asia East/West Continent.** EC/WC problems are mirrored on
-  neither Codeforces nor Kattis, so the region the bias investigation centered on has
-  no independent numeric yardstick. A Chinese-judge rating source, or any CF-mirrored
-  EC contest, would let us confirm/refute EC calibration (currently only the LLM, the
-  noisier referee, covers it).
+- **No external anchor for Asia West Continent.** ~~Asia East Continent~~ — **closed**:
+  the gym-mirror yardstick (`arch_b.gym_difficulty`) now anchors EC at +0.95–0.98
+  for all three models. Asia *West* remains uncovered (its one scraped gym, the
+  Iranian contest, was a wrong-event match — see the gym section).
+- **Use `b_gym` as calibration anchors / difficulty priors.** `b_gym` sits nearly on
+  the true CF scale (certify: affine slope 1.23 vs CF ratings), and covers 700
+  problems across 5 regions vs the 40 anchors `arch_b.calibrate` currently uses —
+  enough for the per-region / piecewise CF map above, and/or as per-problem prior
+  means `N(b_gym, se)` inside the main MAP fit (would have to *earn its place* on
+  held-out prediction, since the gym referee is slightly noisier than the survival
+  fit at fine ranking — see the certification).
+- **Add CF 2157 to `data/cf_team_contests.txt`.** Discovered by the gym
+  certification: CF 2157 is a rated mirror of our qoj 2692 that the mirror list
+  misses; adding it grows the official-CF validation column.
 - **CF anchoring** if member→handle→rating data becomes available, to turn the
   relative scale into true Codeforces-equivalent points.
-- **`data/cf_gym_mirrors.json` — scraped, not yet consumed.** For contests whose
+- **`data/cf_gym_mirrors.json` — scraped; now consumed by `arch_b.gym_difficulty`
+  (see that section).** For contests whose
   problems were also mirrored as a Codeforces **Gym** contest (training replay, not
   the officially-rated rounds `cf_team_contests.txt` uses), CF's own practice
   population gives an independent difficulty signal: solve outcome vs. each
@@ -794,9 +882,9 @@ worth modelling?
     reduce a team to one ability value (max member rating, best-known member,
     etc.) instead of that choice being silently baked into the file
     (25,003 teams / 57,695 member-rows total).
-  - **Known limitation (why this stays raw data).** No `laplace_se`-style
-    uncertainty or MAP fit has been run on it yet — that would be the natural
-    next step (a Rasch fit with `theta` *fixed* at each solver's
-    `cf_rating_at_attempt`, solving only for `b_p`, with some team-reduction rule
-    decided at that point), turning this into a real external-validation column
-    alongside the LLM/CF/Kattis ones above.
+  - **Consumed (2026-07-03).** `arch_b.gym_difficulty` runs exactly the fit this
+    bullet anticipated — a fixed-θ Rasch MAP for `b_p` with a trust-weighted
+    team reduction — and `external_validate` now reports it as the third
+    yardstick column. Note the matching caveat discovered on consumption: the
+    five `labels_aligned: false` entries are *wrong gym events* (zero
+    problem-name overlap), not merely re-lettered mirrors.

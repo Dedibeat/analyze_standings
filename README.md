@@ -74,7 +74,8 @@ Pacific Championship:
 
 ```bash
 ./.venv/bin/python -m arch_b.validate           # LLM buckets, all models
-./.venv/bin/python -m arch_b.external_validate  # per-region vs Codeforces + Kattis, all models
+./.venv/bin/python -m arch_b.gym_difficulty     # fixed-θ difficulty from CF gym mirrors
+./.venv/bin/python -m arch_b.external_validate  # per-region vs Codeforces + Kattis + gym, all models
 ./.venv/bin/python -m arch_b.predict_eval       # held-out solve prediction (binary vs survival)
 ./.venv/bin/python -m arch_b.calibrate     # affine map to Codeforces points
 ```
@@ -85,6 +86,15 @@ sharpened arch A's solve-count estimate); on the CF ratings the IRT fits edge ah
 (binary +0.962, survival +0.956 vs arch A +0.945), and all three are ≈ 0.95+. On
 held-out solve prediction the survival model generalizes best (AUC 0.881 vs binary
 0.871).
+
+`gym_difficulty` turns the scraped CF **gym-mirror** attempts
+(`data/cf_gym_mirrors.json` — real timed attempts whose solvers carry their own
+time-accurate Codeforces rating, trust-weighted by rated-contest count) into an
+independent per-problem difficulty on the CF scale, fit with ability *fixed* at
+each solver's rating. It is the third yardstick in `external_validate` and the
+first external numeric anchor for **Asia East Continent** (230 problems), where
+all three models validate at +0.95–0.98. `--certify` checks the instrument itself
+(vs official CF ratings: Spearman +0.976, affine slope ≈1.2).
 
 ### Calibrated Codeforces-point ratings
 
@@ -165,13 +175,15 @@ Module self-checks:
   `anchor`, `run`), plus `export_viewer` + `viewer_template.html` for the viewer.
 - `arch_b/` — Architecture B implementation (`model` binary Rasch, `survival`
   solve-time model, `anchor`, `run`, `validate`, `external_validate`
-  per-region check vs Codeforces + Kattis (all 3 models), `predict_eval`, `calibrate`,
-  `season_experiment`, `twopl`/`twopl_region` 2PL discrimination prototype);
-  reuses `arch_a.load` and `arch_a.elo`.
+  per-region check vs Codeforces + Kattis + gym mirrors (all 3 models),
+  `gym_difficulty` fixed-θ fit on the CF gym-mirror population, `predict_eval`,
+  `calibrate`, `season_experiment`, `twopl`/`twopl_region` 2PL discrimination
+  prototype); reuses `arch_a.load` and `arch_a.elo`.
 - `output/problem_ratings.json` — Architecture A ratings;
   `output/problem_ratings_b.json` — Architecture B (binary) ratings;
   `output/problem_ratings_survival.json` — Architecture B (survival) ratings;
-  `output/problem_ratings_calibrated.json` — survival ratings mapped to CF points.
+  `output/problem_ratings_calibrated.json` — survival ratings mapped to CF points;
+  `output/gym_difficulty.json` — independent CF-scale difficulty from gym mirrors.
 - `output/ratings_viewer.html` — generated interactive viewer.
 - `details.md` — design notes, key decisions, and follow-ups.
 

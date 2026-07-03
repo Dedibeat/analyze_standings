@@ -11,10 +11,16 @@ need *numeric* opinions that are independent of our standings AND of each other:
   * Kattis difficulty (1.0-9.x, Elo-style, from open.kattis's practice population),
     scraped once into ``data/kattis_difficulty.json``. Covers North America (~88%)
     and Europe (~53%) -- precisely the regions CF does not mirror.
+  * The CF gym-mirror fixed-theta difficulty (``arch_b.gym_difficulty``, from
+    ``output/gym_difficulty.json`` when present): each gym solver's own
+    time-accurate CF rating fixes theta, so ``b_gym`` needs no joint fit. Its
+    unique contribution is **Asia East Continent** (18 contests), which neither
+    CF mirrors nor Kattis reach.
 
-Together they reach every region except Asia East / West Continent, whose problems
-appear on neither judge. We join each yardstick to our problems by normalized title
-and report the per-region Spearman rank correlation for **all three trained models**
+The first two reach every region except Asia East / West Continent; the gym column
+closes the EC gap. We join each yardstick to our problems by normalized title
+(the gym one directly by ``(contest_id, problem_label)``) and report the per-region
+Spearman rank correlation for **all three trained models**
 (arch A, arch B binary, arch B survival), plus the LLM-bucket Spearman, side by side.
 
 CF contests are auto-mapped to our qoj contests by problem-name vote, so an
@@ -44,6 +50,7 @@ OUT = os.path.join(ROOT, "output")
 CF_LIST = os.path.join(DATA, "cf_team_contests.txt")
 CF_CACHE = os.path.join(DATA, "cf_problemset.json")          # gitignored under data/
 KATTIS = os.path.join(DATA, "kattis_difficulty.json")
+GYM_OUT = os.path.join(OUT, "gym_difficulty.json")           # arch_b.gym_difficulty
 MODELS = [("arch A", "problem_ratings.json"),
           ("arch B bin", "problem_ratings_b.json"),
           ("arch B surv", "problem_ratings_survival.json")]
@@ -187,6 +194,8 @@ def main(refresh=False, detail_cfid=None):
     region_of = {c["contest_id"]: c["region"] for c in contests}
     rating = _cf_problemset(refresh)
     kat = {_norm(v["name"]): v["difficulty"] for v in json.load(open(KATTIS)).values()}
+    gym = {(r["contest_id"], r["problem_label"]): (r["difficulty"], r["region"])
+           for r in json.load(open(GYM_OUT))} if os.path.exists(GYM_OUT) else {}
     mapping = _cf_mapping(contests, region_of, rating)
     models = _load_models()
 
@@ -203,18 +212,30 @@ def main(refresh=False, detail_cfid=None):
         return f"{v:+.3f}" if v is not None else "   -  "
 
     print(f"\n{'model':<13}| {'CF pld':>7} {'AsiaPac':>8} {'N.Eur':>7} {'Europe':>7} | "
-          f"{'Kat pld':>8} {'N.Am':>7} {'Europe':>7} | {'LLM':>7}")
-    print("-" * 86)
+          f"{'Kat pld':>8} {'N.Am':>7} {'Europe':>7} | "
+          f"{'Gym pld':>8} {'AsiaEC':>7} {'Europe':>7} {'AsiaPac':>8} | {'LLM':>7}")
+    print("-" * 122)
     for name, md in models:
         cf, ka = _pairs(md, contests, mapping, rating, kat)
         cf_all = [x for v in cf.values() for x in v]
         ka_pld = ka["North America"] + ka["Europe"]
+        gy = defaultdict(list)
+        for k, d in md.items():
+            if k in gym:
+                g, reg = gym[k]
+                gy[reg].append((d, g))
+        gy_all = [x for v in gy.values() for x in v]
         llm_pairs = [(d, llm[k]) for k, d in md.items() if k in llm]
         print(f"{name:<13}| {f(_s(cf_all)):>7} {f(_s(cf['Asia Pacific'])):>8} "
               f"{f(_s(cf['Northern Eurasia'])):>7} {f(_s(cf['Europe'])):>7} | "
               f"{f(_s(ka_pld)):>8} {f(_s(ka['North America'])):>7} "
-              f"{f(_s(ka['Europe'])):>7} | {f(_s(llm_pairs)):>7}")
+              f"{f(_s(ka['Europe'])):>7} | "
+              f"{f(_s(gy_all)):>8} {f(_s(gy['Asia East Continent'])):>7} "
+              f"{f(_s(gy['Europe'])):>7} {f(_s(gy['Asia Pacific'])):>8} | "
+              f"{f(_s(llm_pairs)):>7}")
     print(f"\nn: CF pooled={len(cf_all)}, Kattis pooled={len(ka_pld)}, "
+          f"Gym pooled={len(gy_all)} (EC={len(gy['Asia East Continent'])}, "
+          f"Eur={len(gy['Europe'])}, AP={len(gy['Asia Pacific'])}), "
           f"LLM={len(llm_pairs)} (editorial-backed). "
           f"--contest <cfid> for a per-problem breakdown.")
 
