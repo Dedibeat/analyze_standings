@@ -786,15 +786,17 @@ worth modelling?
     `gym_problem_labels` vs. `our_problem_labels` (5 of the 62 mismatch — different
     problem subset between the mirror and our record — flagged via
     `labels_aligned` rather than dropped, so a consumer must join by problem
-    *name*, not letter, when false), and `solvers`: one row per (team member,
-    contest attempt) with `handle`, `cf_rating_at_attempt`,
-    `cf_rated_contests_at_attempt`, `attempt_time`, and the list of problem
-    letters *that team* solved (57,695 rows total).
-  - **Known limitations (why this stays raw data).** (1) ICPC solves are
-    per-*team*, so every member of a team is stamped with the same solved set —
-    the dataset over-represents team performance as if it were each member's own,
-    biased toward whichever member happened to have a CF handle. (2) No
-    `laplace_se`-style uncertainty or MAP fit has been run on it yet — that would
-    be the natural next step (a Rasch fit with `theta` *fixed* at each solver's
-    `cf_rating_at_attempt`, solving only for `b_p`), turning this into a real
-    external-validation column alongside the LLM/CF/Kattis ones above.
+    *name*, not letter, when false), and `teams`: one entry per team **attempt**
+    (`participant_id`, `team_name`, `rank`, `attempt_time`, the shared `solved`
+    letter list — since solving is per-team, not per-member — and `members`,
+    each with `handle`, `cf_rating_at_attempt`, `cf_rated_contests_at_attempt`).
+    Kept grouped by team rather than flattened, so a consumer can choose how to
+    reduce a team to one ability value (max member rating, best-known member,
+    etc.) instead of that choice being silently baked into the file
+    (25,003 teams / 57,695 member-rows total).
+  - **Known limitation (why this stays raw data).** No `laplace_se`-style
+    uncertainty or MAP fit has been run on it yet — that would be the natural
+    next step (a Rasch fit with `theta` *fixed* at each solver's
+    `cf_rating_at_attempt`, solving only for `b_p`, with some team-reduction rule
+    decided at that point), turning this into a real external-validation column
+    alongside the LLM/CF/Kattis ones above.
