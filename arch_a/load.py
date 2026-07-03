@@ -215,6 +215,7 @@ class Dataset:
     y: np.ndarray              # (n_rows, n_problems) bool solved, NaN-free; valid only where mask
     solve_mask: np.ndarray     # (n_rows, n_problems) bool: problem belongs to that row's contest
     tau: np.ndarray            # (n_rows, n_problems) solve time seconds; NaN where not solved
+    wrong: np.ndarray          # (n_rows, n_problems) wrong attempts; 0 where mask is False
     contest_of_problem: np.ndarray  # problem index -> contest index
 
     raw_solved_count: np.ndarray  # problem index -> problem_solved_in_contest (reported)
@@ -295,7 +296,7 @@ def load(path=DATA_PATH, uf=None, season_key=False, min_solve_hours=None):
     n_problems = len(problems)
 
     team_of_row, contest_of_row, rank_of_row = [], [], []
-    y_rows, mask_rows, tau_rows = [], [], []
+    y_rows, mask_rows, tau_rows, wrong_rows = [], [], [], []
 
     for c in raw:
         cid = c["contest_id"]
@@ -314,11 +315,13 @@ def load(path=DATA_PATH, uf=None, season_key=False, min_solve_hours=None):
             y = np.zeros(n_problems, dtype=bool)
             mask = np.zeros(n_problems, dtype=bool)
             tau = np.full(n_problems, np.nan)
+            wrong = np.zeros(n_problems, dtype=int)
             for label, pdata in (s.get("problems") or {}).items():
                 col = cols.get(label)
                 if col is None:
                     continue  # standings problem not in problem list; skip defensively
                 mask[col] = True
+                wrong[col] = int(pdata.get("wrong_attempts", 0))
                 if pdata.get("solved"):
                     y[col] = True
                     t = pdata.get("time_seconds")
@@ -327,6 +330,7 @@ def load(path=DATA_PATH, uf=None, season_key=False, min_solve_hours=None):
             y_rows.append(y)
             mask_rows.append(mask)
             tau_rows.append(tau)
+            wrong_rows.append(wrong)
 
     return Dataset(
         teams=teams,
@@ -338,6 +342,7 @@ def load(path=DATA_PATH, uf=None, season_key=False, min_solve_hours=None):
         y=np.array(y_rows),
         solve_mask=np.array(mask_rows),
         tau=np.array(tau_rows),
+        wrong=np.array(wrong_rows, dtype=int),
         contest_of_problem=np.array(contest_of_problem, dtype=int),
         raw_solved_count=np.array(
             [x if x is not None else -1 for x in raw_solved_count], dtype=int

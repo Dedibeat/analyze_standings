@@ -776,6 +776,49 @@ within-contest variance. Progress needs new anchor data: more CF-rated mirrors
 in `tagged.json`, ideally gym-covered, or member→CF-handle data for true
 ability anchoring.
 
+### Second auto-research campaign (2026-07-03, DeepSeek v4 Pro): verdict PLATEAU
+
+A second 25-iteration campaign (`program.md`) probed data-side identity
+improvements and model hyperparameters at the new **288.0** baseline (after
+the identity fixes above). **1 iteration kept, 24 discarded** — the model
+is confirmed at a robust local optimum.
+
+**The one kept change:** gym-informed difficulty prior — soft-anchoring
+problem difficulties toward `output/gym_difficulty.json` estimates
+(N(b_gym, 400²) prior mean) for ~300 gym-covered problems.  Metric
+288.0 → 287.5 (−0.5, within the ±5 point noise floor), but both gym
+EC Spearman (+0.960 → +0.967) and gym pooled Spearman (+0.954 → +0.959)
+improved, so it was kept on the guard-corroboration rule.  Held-out AUC
+was unchanged (0.8858).
+
+**Everything else was within noise or worse.** sigma_θ sweeps (300→600)
+best at 500 (−1.7 RMSE but AUC regressed 0.8858→0.8849, discarded per
+corroboration rule).  Data-side changes — script-mismatch linking
+(Chinese↔English names, 60 teams), last-name-only matching (30 teams),
+name-order-robust tokenisation — all within ±0.7 points of baseline.
+Tighter per-problem gym priors (σ_b ~ gym SE) blew up the metric to 306
+(kattis guard nearly failed).  Wrong-attempt penalty in the survival
+likelihood regresses at any α > 0.  min_solve_hours variations have
+no effect (CF anchors are a fixed set).  A World Finals affiliation
+bridge (4 WF contests fetched, 33/36 WF rosters already matched) was
+neutral.
+
+**WF data.** Four World Finals contests (2022–2025, 534 teams) were
+fetched and saved to `data/wf_tagged_format.json` for future use.
+Most WF teams carry no members (only university name), so roster-based
+linking catches only 36 teams (33 already in `tagged.json`).  Direct
+university-affiliation identity is unsafe (>2,900 same-university
+collisions in a single contest).  Future work: per-season university→
+top-roster mapping (the user's suggestion) would need the WF data to
+identify *which* roster is the university's qualifying team.
+
+**wrong_attempts wired.** The `wrong_attempts` field (present in
+`tagged.json` but previously unused) is now loaded into
+`Dataset.wrong` for future model use, though the tested penalty
+models (multiplicative Lambda scaling) did not improve the metric.
+
+Full per-iteration log in `autoresearch/autoresearch-260703-1838/classic-results.tsv`.
+
 ### Internal validation: held-out solve prediction (`arch_b.predict_eval`)
 
 Complementary to the external ranking checks: train on a random 80% of observed
