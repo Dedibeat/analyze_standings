@@ -1,5 +1,27 @@
 # Auto-research program: minimize LOCO CF-RMSE
 
+## Invocation (uditgoenka/autoresearch skill)
+
+Run from a dedicated branch (`git checkout -b autoresearch` — the loop
+auto-commits and auto-reverts):
+
+```
+/autoresearch
+Goal: Reduce the survival difficulty model's leave-one-contest-out CF-point
+  RMSE. Read program.md (this file) first and obey its Scope and Hard rules.
+Scope: arch_b/survival.py, arch_b/model.py, arch_b/anchor.py, arch_b/run.py,
+  arch_a/load.py
+Metric: loco_cf_rmse (lower is better); improvements under 5 points are noise
+  — discard unless a guard value or held-out AUC also improves
+Verify: ./.venv/bin/python -m arch_b.metric | tail -1
+Guard: ./.venv/bin/python -m arch_b.metric
+Iterations: 25
+```
+
+(Verify parses the scalar off the last line; Guard reruns the same command for
+its exit code — nonzero = a guard floor was violated. Two ~5 s runs per
+iteration.)
+
 ## Goal
 
 Improve the **survival difficulty model** (the shipped deliverable:
