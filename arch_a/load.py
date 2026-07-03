@@ -26,7 +26,9 @@ Resolution rule per row:
 import json
 import os
 import re
+import unicodedata
 from dataclasses import dataclass
+from itertools import combinations
 
 import numpy as np
 
@@ -76,6 +78,15 @@ def _max_solve_seconds(contest):
     return m
 
 
+def _norm_member(name):
+    """Normalize a member name for identity matching: strip case, punctuation,
+    whitespace and diacritics, which vary across a team's contest appearances
+    (the same person is spelled differently by different registration systems)."""
+    name = unicodedata.normalize("NFKD", name)
+    name = "".join(ch for ch in name if not unicodedata.combining(ch))
+    return re.sub(r"[\s.\-_,']+", "", name.lower())
+
+
 def _roster_token(members, season=None):
     """Identity token for a roster, or None if too small to trust (>=2 members).
 
@@ -83,7 +94,7 @@ def _roster_token(members, season=None):
     a later season resolves to a *separate* identity (time-varying ability).
     """
     if members and len(members) >= 2:
-        tok = "mem:" + "|".join(sorted(members))
+        tok = "mem:" + "|".join(sorted(_norm_member(m) for m in members))
         return f"{tok}|s{season}" if season is not None else tok
     return None
 
@@ -121,6 +132,7 @@ def member_identity(raw, season_by_cid=None):
     backbone that keeps the whole scale connected.
     """
     uf = _UnionFind()
+    pair_root = {}  # (member-pair, season) -> first roster token carrying it
     for c in raw:
         season = None if season_by_cid is None else season_by_cid[c["contest_id"]]
         for s in c["standings"]:
@@ -133,6 +145,15 @@ def member_identity(raw, season_by_cid=None):
                 uf.find(roster)
                 if stable is not None:
                     uf.union(stable, roster)
+                # Rosters sharing >=2 members are the same team whose third
+                # member was respelled or substituted: an exact-token identity
+                # would split them (measured: ~3.7k such near-miss pairs).
+                mem = sorted({_norm_member(m) for m in s["members"]})
+                for pair in combinations(mem, 2):
+                    key = (pair, season)
+                    first = pair_root.setdefault(key, roster)
+                    if first != roster:
+                        uf.union(first, roster)
     return uf
 
 
