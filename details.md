@@ -302,6 +302,40 @@ demonstrated source of difficulty bias; per-team prior dependence is also unifor
 across regions at ~26%. Confirming any regional offset needs a second independent
 per-region anchor beyond the LLM.)*
 
+**How the contest-linking graph is carried: ICPC qualifiers and championships.**
+The graph of 146 contests sharing ≥1 resolved team has 2,849 edges.  Two contest
+types are the primary bridges connecting otherwise-isolated regions:
+
+| Bridge | Contests | Edges | Shared teams | Avg teams/edge | Contests reached |
+|--------|----------|-------|-------------|----------------|-----------------|
+| EC online qualifiers ("ICPC") | 6 (2022–2025) | 235 (8%) | 4,474 | **19.0** | 90 |
+| Championships (APAC, Europe, NEF, LAC, NAC) | 12 | 593 (21%) | 3,055 | 5.2 | 90 |
+| UCup + regionals (everything else) | 128 | 2,046 (72%) | 27,234 | 13.3 | — |
+
+The six "ICPC" contests (the Asia East Continent online qualifiers, 1,272–2,669
+teams each) are the **thickest edges** in the graph: 19 shared teams per edge on
+average, vs 5 for championships.  When an ICPC qualifier connects to a regional
+contest, it does so through many teams simultaneously, making those links
+robust.  Of 2,666 distinct EC teams in the qualifiers, 1,385 (52%) link to 90
+other contests, carrying the full bridging load for the EC region.  The
+remaining 1,281 (48%) are one-off university B/C-teams with valid rosters that
+never appear elsewhere — they are genuine single-contest teams, not linking
+failures (e.g. 中山大学 alone fields 30 teams in regionals and 16 in ICPC,
+almost entirely disjoint rosters).
+
+The 12 championship contests (APAC ×3, Europe ×2, LAC ×2, NAC ×1, NEF ×4)
+create more edges (593, 21%) but thinner ones (5 teams/edge).  Championships
+bridge 90 contests that would otherwise be disconnected from each other, and 11
+contests would fall out of the main component entirely without them.  Linking
+rates: APAC/Europe/NAC/LAC championships link 83–100% of their teams at 7–12
+cross-appearances each; NEF links only 42–58% (150+ one-off teams per NEF
+contest from Russian universities).
+
+The graph remains a single connected component even without championships (106
+of 106 linkable contests stay connected via UCup + regionals).  The EC
+qualifiers and championships supplement the UCup backbone by bridging the
+long-tail of sparsely-linked regional contests.
+
 ## Architecture B (`arch_b/`)
 
 Treat each solve as a Bernoulli response governed by the ability--difficulty gap:
