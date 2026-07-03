@@ -16,6 +16,13 @@ Metric: loco_cf_rmse (lower is better); improvements under 5 points are noise
 Verify: ./.venv/bin/python -m arch_b.metric | tail -1
 Guard: ./.venv/bin/python -m arch_b.metric
 Iterations: 25
+Delegation: reserve your own reasoning for picking the next change, deriving
+  the math (gradients/curvatures), reviewing diffs, and keep/discard. Delegate
+  the mechanical part of a change you have fully specified — the edit itself,
+  running verify, log bookkeeping — to a subagent with model: sonnet (include
+  the exact spec and file paths in its prompt; it starts with no context).
+  Never delegate design, math derivation, or keep/discard judgment. Parameter
+  sweeps are not LLM work at all: write a bash/python loop over the values.
 ```
 
 (Verify parses the scalar off the last line; Guard reruns the same command for
