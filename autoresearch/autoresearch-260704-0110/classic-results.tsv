@@ -1,0 +1,6 @@
+model	iter	change	metric	guards	verdict
+claude-fable-5	0	baseline (post gym-prior revert)	288.4	ok (kattis 0.795, auc 0.8851)	baseline
+claude-fable-5	1	gym merge: fixed-theta b-likelihood, lse+trust, excl qoj2692, w=0.1	287.2	ok (kattis 0.795->0.773)	discard (metric sub-noise, independent check down)
+claude-fable-5	2	gym merge w=0.3	286.9	ok (kattis 0.755 near floor)	discard (AUC 0.8851->0.8771, kattis down; gym guards up but circular)
+claude-fable-5	3	gym merge w=1.0	288.8	FAIL (kattis 0.736 < 0.75)	discard
+claude-fable-5	FINAL	gym data in the fit likelihood: NEGATIVE at all weights; gym signal belongs in the calibration layer. Code kept opt-in (ARCHB_GYM_MERGE), default off, baseline unchanged 288.4	288.4	ok	DISCARD-ALL

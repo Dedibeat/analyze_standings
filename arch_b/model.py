@@ -55,7 +55,7 @@ def _observations(ds):
 
 
 def fit(ds, prior_mu=None, sigma_theta=SIGMA_THETA, sigma_b=SIGMA_B, mu_b=MU0,
-        eps=0.5, max_iter=200, verbose=True, obs=None):
+        eps=0.5, max_iter=200, verbose=True, obs=None, gym_obs=None):
     """MAP fit of the Rasch model (eq. map); returns (theta, b, history).
 
     ``prior_mu`` is the per-team prior mean mu_t (eq. priors); defaults to the
@@ -66,6 +66,11 @@ def fit(ds, prior_mu=None, sigma_theta=SIGMA_THETA, sigma_b=SIGMA_B, mu_b=MU0,
     ``obs`` overrides the observation set with a precomputed ``(obs_team, obs_prob,
     obs_y)`` tuple (e.g. a train split for held-out evaluation); defaults to every
     observed cell.
+
+    ``gym_obs`` adds fixed-theta Bernoulli evidence to the ``b`` step only:
+    a ``(g_theta, g_prob, g_y, g_w)`` tuple from ``gym_merge.gym_observations``
+    (gym solvers' abilities are known, so they contribute likelihood terms on
+    the covered problems' difficulties but are not fit as teams).
     """
     if prior_mu is None:
         prior_mu = np.full(len(ds.teams), MU0)
@@ -79,13 +84,15 @@ def fit(ds, prior_mu=None, sigma_theta=SIGMA_THETA, sigma_b=SIGMA_B, mu_b=MU0,
     theta = np.full(n_teams, MU0)
     b = np.full(n_problems, mu_b)
 
-    def newton_block(param, index, other, other_index, mu, prec, sign):
+    def newton_block(param, index, other, other_index, mu, prec, sign, extra=None):
         """One Newton step for a block of parameters sharing the response pi.
 
         ``param`` is updated; ``other`` is held fixed. ``sign`` is +1 for theta
         (logit increases with theta) and -1 for b (logit decreases with b). The
         per-coordinate gradient is sign*(1/s)*sum(y - pi) - prec*(param - mu); the
-        negative curvature is (1/s^2)*sum pi(1-pi) + prec.
+        negative curvature is (1/s^2)*sum pi(1-pi) + prec. ``extra`` adds the
+        weighted fixed-theta ``gym_obs`` Bernoulli terms (same functional form,
+        so they accumulate into the same grad/negH before the sign is applied).
         """
         pi = elo.pi(theta[obs_team], b[obs_prob])
         resid = obs_y - pi
@@ -94,6 +101,11 @@ def fit(ds, prior_mu=None, sigma_theta=SIGMA_THETA, sigma_b=SIGMA_B, mu_b=MU0,
         negH = np.full_like(param, prec)
         np.add.at(grad, index, resid)
         np.add.at(negH, index, info / s**2)
+        if extra is not None:
+            g_theta, g_prob, g_y, g_w = extra
+            g_pi = elo.pi(g_theta, param[g_prob])
+            np.add.at(grad, g_prob, g_w * (g_y - g_pi))
+            np.add.at(negH, g_prob, g_w * g_pi * (1.0 - g_pi) / s**2)
         grad = sign * grad / s - prec * (param - mu)
         step = grad / negH
         return np.clip(param + step, elo.LO, elo.HI)
@@ -106,7 +118,8 @@ def fit(ds, prior_mu=None, sigma_theta=SIGMA_THETA, sigma_b=SIGMA_B, mu_b=MU0,
         new_theta = newton_block(theta, obs_team, b, obs_prob, prior_mu, prec_theta, +1.0)
         d_theta = np.max(np.abs(new_theta - theta))
         theta = new_theta
-        new_b = newton_block(b, obs_prob, theta, obs_team, mu_b, prec_b, -1.0)
+        new_b = newton_block(b, obs_prob, theta, obs_team, mu_b, prec_b, -1.0,
+                             extra=gym_obs)
         d_b = np.max(np.abs(new_b - b))
         b = new_b
 

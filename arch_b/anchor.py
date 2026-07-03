@@ -34,7 +34,8 @@ WF = os.path.join(DATA, "wf_tagged_format.json")
 
 
 def estimate_anchored(sigma_theta=SIGMA_THETA, sigma_b=SIGMA_B, fit_fn=fit,
-                      season_key=False, min_solve_hours=None, verbose=True):
+                      season_key=False, min_solve_hours=None, verbose=True,
+                      gym_merge=None):
     """Fit tagged.json with its UCup teams' prior mean anchored to a UCup-only fit.
 
     Returns (ds_tagged, theta, b, history, uf) for the anchored tagged fit. ``uf``
@@ -45,7 +46,14 @@ def estimate_anchored(sigma_theta=SIGMA_THETA, sigma_b=SIGMA_B, fit_fn=fit,
     ``survival.fit`` to anchor the solve-time survival model on the same scale.
     ``season_key`` / ``min_solve_hours`` are passed through to ``load`` (and the
     shared union-find) to separate teams by season and drop short contests.
+
+    ``gym_merge`` (float weight, or the ``ARCHB_GYM_MERGE`` env var so the
+    read-only ``metric.py`` can A/B it) merges the gym-mirror attempts into the
+    tagged fit as fixed-theta likelihood terms on ``b`` (``gym_merge.
+    gym_observations``; anchor-overlap contests always excluded). Off by default.
     """
+    if gym_merge is None and os.environ.get("ARCHB_GYM_MERGE"):
+        gym_merge = float(os.environ["ARCHB_GYM_MERGE"])
     # Include WF in the UF build so WF→regional top-team links enrich the
     # identity graph, but do NOT load WF rows into the fit (their solve data
     # is for different problems than the CF anchors and adds only noise).
@@ -76,9 +84,15 @@ def estimate_anchored(sigma_theta=SIGMA_THETA, sigma_b=SIGMA_B, fit_fn=fit,
     if verbose:
         print(f"anchored {n_anchored} of {len(ds_tagged.teams)} tagged teams to UCup")
 
+    gym_obs = None
+    if gym_merge:
+        from .gym_merge import gym_observations
+        gym_obs = gym_observations(ds_tagged, weight=gym_merge, verbose=verbose)
+
     if verbose: print("=== anchored tagged fit ===")
     theta, b, history = fit_fn(ds_tagged, prior_mu=prior_mu,
-                               sigma_theta=sigma_theta, sigma_b=sigma_b, verbose=verbose)
+                               sigma_theta=sigma_theta, sigma_b=sigma_b, verbose=verbose,
+                               gym_obs=gym_obs)
     return ds_tagged, theta, b, history, uf
 
 

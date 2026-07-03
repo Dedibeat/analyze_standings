@@ -73,13 +73,19 @@ def _survival_observations(ds):
 
 
 def fit(ds, prior_mu=None, sigma_theta=SIGMA_THETA, sigma_b=SIGMA_B, mu_b=MU0,
-        eps=0.5, max_iter=200, verbose=True, obs=None):
+        eps=0.5, max_iter=200, verbose=True, obs=None, gym_obs=None):
     """MAP fit of the survival model; returns (theta, b, history).
 
     Signature matches ``model.fit`` so it is a drop-in for
     ``anchor.estimate_anchored(fit_fn=...)``. ``obs`` overrides the observation set
     with a precomputed ``(obs_team, obs_prob, obs_y, rho)`` tuple (a train split for
     held-out evaluation); defaults to every observed cell.
+
+    ``gym_obs`` (``gym_merge.gym_observations``) adds fixed-theta **binary**
+    Bernoulli evidence to the ``b`` step: gym attempts carry no per-problem solve
+    times, so they enter with the binary-model likelihood (calibrated identically
+    -- at theta=b both give P(solve within the window)=1/2), mixed with the
+    survival terms. Both are concave in ``b``, so the block step stays valid.
     """
     if prior_mu is None:
         prior_mu = np.full(len(ds.teams), MU0)
@@ -93,7 +99,7 @@ def fit(ds, prior_mu=None, sigma_theta=SIGMA_THETA, sigma_b=SIGMA_B, mu_b=MU0,
     theta = np.full(n_teams, MU0)
     b = np.full(n_problems, mu_b)
 
-    def newton_block(param, index, mu, prec, sign):
+    def newton_block(param, index, mu, prec, sign, extra=None):
         g = (theta[obs_team] - b[obs_prob]) / s
         Lam = LN2 * np.exp(g) * rho          # cumulative hazard per cell
         resid = obs_y - Lam
@@ -101,6 +107,11 @@ def fit(ds, prior_mu=None, sigma_theta=SIGMA_THETA, sigma_b=SIGMA_B, mu_b=MU0,
         negH = np.full_like(param, prec)
         np.add.at(grad, index, resid)
         np.add.at(negH, index, Lam / s**2)   # d Lambda / d param = Lambda / s
+        if extra is not None:                # fixed-theta binary gym terms
+            g_theta, g_prob, g_y, g_w = extra
+            g_pi = elo.pi(g_theta, param[g_prob])
+            np.add.at(grad, g_prob, g_w * (g_y - g_pi))
+            np.add.at(negH, g_prob, g_w * g_pi * (1.0 - g_pi) / s**2)
         grad = sign * grad / s - prec * (param - mu)
         return np.clip(param + grad / negH, elo.LO, elo.HI)
 
@@ -112,7 +123,7 @@ def fit(ds, prior_mu=None, sigma_theta=SIGMA_THETA, sigma_b=SIGMA_B, mu_b=MU0,
         new_theta = newton_block(theta, obs_team, prior_mu, prec_theta, +1.0)
         d_theta = np.max(np.abs(new_theta - theta))
         theta = new_theta
-        new_b = newton_block(b, obs_prob, mu_b, prec_b, -1.0)
+        new_b = newton_block(b, obs_prob, mu_b, prec_b, -1.0, extra=gym_obs)
         d_b = np.max(np.abs(new_b - b))
         b = new_b
 
