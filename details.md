@@ -168,6 +168,23 @@ Run with the project venv:
   multi-contest; 1,548 domjudge-isolated). All 43 contests remain one connected
   component.
 
+  - **World Finals → regional top-team linking (`load._link_wf_top_team`).**
+    Four World Finals contests (2022–2025, 534 teams, fetched from QOJ via
+    `qoj-intergration/qoj.py`) are included in the union-find build.  Most WF
+    teams carry a university affiliation but no members, so roster-based identity
+    cannot link them.  ``_link_wf_top_team`` maps each (university, season) to
+    the best-ranked regional team (lowest rank percentile in its contest) from
+    the same university and season, then links the WF identity to that team's
+    roster.  This is safe because the WF team *is* the university's top team for
+    that season — only the single best-ranked roster per (university, season) is
+    linked, avoiding the ~2,900 same-university-multiple-teams collisions that a
+    bare affiliation-key would create.  9 new cross-contest links are created
+    (e.g. Universidad de Buenos Aires → "Está en el Corman", Purdue → "Purdue
+    GLD", SUSTech → "Brno").  The WF solve data is not loaded into the fit (WF
+    problems differ from the CF-anchor problems and add only noise); only the
+    identity links are used.  WF data: `data/wf_tagged_format.json` (gitignored,
+    fetched 2026-07-03).
+
 - **Granularity:** per resolved identity (roster where available, else stable id).
   True individual-level modelling (strat Remark on roster changes) is a follow-up.
 
@@ -803,14 +820,19 @@ no effect (CF anchors are a fixed set).  A World Finals affiliation
 bridge (4 WF contests fetched, 33/36 WF rosters already matched) was
 neutral.
 
-**WF data.** Four World Finals contests (2022–2025, 534 teams) were
-fetched and saved to `data/wf_tagged_format.json` for future use.
-Most WF teams carry no members (only university name), so roster-based
-linking catches only 36 teams (33 already in `tagged.json`).  Direct
-university-affiliation identity is unsafe (>2,900 same-university
-collisions in a single contest).  Future work: per-season university→
-top-roster mapping (the user's suggestion) would need the WF data to
-identify *which* roster is the university's qualifying team.
+**WF → regional linking (KEPT).** Four World Finals contests (2022–2025,
+534 teams) were fetched via `qoj-intergration/qoj.py` and saved to
+`data/wf_tagged_format.json`.  ``load._link_wf_top_team`` maps each
+(university, season) to the best-ranked regional team and links the WF
+identity to that team's roster — the WF team *is* the university's top
+team for that season.  9 new cross-contest links are created (e.g.
+Universidad de Buenos Aires → "Está en el Corman", Purdue → "Purdue
+GLD").  The gym EC guard improved (+0.960 → +0.962) confirming better
+Asia East Continent connectivity, though the CF-RMSE metric is blind
+to these links (the linked universities don't appear in the 15
+CF-anchor contests).  Only the identity links are used; WF solve
+data is not loaded into the fit (WF problems differ from CF-anchor
+problems).
 
 **wrong_attempts wired.** The `wrong_attempts` field (present in
 `tagged.json` but previously unused) is now loaded into
