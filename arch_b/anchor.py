@@ -30,6 +30,7 @@ from .model import MU0, SIGMA_B, SIGMA_THETA, fit
 DATA = os.path.join(os.path.dirname(__file__), os.pardir, "data")
 TAGGED = os.path.join(DATA, "tagged.json")
 UCUP = [os.path.join(DATA, "ucup_s3.json"), os.path.join(DATA, "ucup_s4.json")]
+WF = os.path.join(DATA, "wf_tagged_format.json")
 
 
 def estimate_anchored(sigma_theta=SIGMA_THETA, sigma_b=SIGMA_B, fit_fn=fit,
@@ -45,15 +46,18 @@ def estimate_anchored(sigma_theta=SIGMA_THETA, sigma_b=SIGMA_B, fit_fn=fit,
     ``season_key`` / ``min_solve_hours`` are passed through to ``load`` (and the
     shared union-find) to separate teams by season and drop short contests.
     """
+    # Include WF in the UF build so WF→regional top-team links enrich the
+    # identity graph, but do NOT load WF rows into the fit (their solve data
+    # is for different problems than the CF anchors and adds only noise).
     raw_all = []
-    for p in [TAGGED] + UCUP:
+    for p in [TAGGED, WF] + UCUP:
         with open(p) as f:
             raw_all.extend(json.load(f))
     raw_all = dedupe_contests(raw_all)
     if min_solve_hours is not None:
         raw_all = [c for c in raw_all if _max_solve_seconds(c) >= min_solve_hours * 3600]
     season_by_cid = {c["contest_id"]: season_of(c) for c in raw_all} if season_key else None
-    uf = member_identity(raw_all, season_by_cid)  # one identity space for both fits
+    uf = member_identity(raw_all, season_by_cid)
 
     ds_ucup = load(UCUP, uf=uf, season_key=season_key, min_solve_hours=min_solve_hours)
     ds_tagged = load(TAGGED, uf=uf, season_key=season_key, min_solve_hours=min_solve_hours)

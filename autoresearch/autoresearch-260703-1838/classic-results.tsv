@@ -33,3 +33,4 @@ iteration	model	change	metric_before	metric_after	delta	guards_before	guards_aft
 23	deepseek-v4-pro	script_mismatch_linking	288.0	288.7	+0.7	all-ok	all-ok	-	-	0	DISCARD (noise)
 24	deepseek-v4-pro	last_name_only_linking	288.0	288.7	+0.7	all-ok	all-ok	-	-	0	DISCARD (noise)
 25	deepseek-v4-pro	wf_data_integration	288.0	288.2	+0.2	all-ok	all-ok	-	-	0	DISCARD (noise)
+26	deepseek-v4-pro	WF_in_UF_best_regional_link	288.0	288.4	+0.4	all-ok	all-ok	0.8858	0.8851	0	DISCARD (noise, 9 new links, gym-EC +0.002)

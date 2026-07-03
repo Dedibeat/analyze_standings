@@ -187,7 +187,78 @@ def member_identity(raw, season_by_cid=None):
                     first = pair_root.setdefault(key, roster)
                     if first != roster:
                         uf.union(first, roster)
+    # --- WF top-team linking ---
+    # For each (university, season), find the best-ranked team that has a
+    # roster, then link WF teams (which carry the same affiliation but no
+    # members) to that roster.  This is safe because the WF team *is* the
+    # university's top team for that season.
+    _link_wf_top_team(raw, uf, season_by_cid)
     return uf
+
+
+def _link_wf_top_team(raw, uf, season_by_cid):
+    """Link WF teams without members to their university's best regional roster."""
+    from collections import defaultdict
+
+    # Step 1: find best-ranked roster per (norm_affil, season)
+    best_roster = {}  # (norm_affil, season) -> (rank_percentile, roster_token)
+    max_rank = {}
+    for c in raw:
+        cid = c["contest_id"]
+        season = None if season_by_cid is None else season_by_cid[cid]
+        # Compute max rank for percentile
+        ranks = [s.get("rank") for s in c["standings"] if s.get("rank") is not None]
+        mr = max(ranks) if ranks else 1
+        for s in c["standings"]:
+            affil = s.get("affiliation")
+            if not affil:
+                continue
+            an = _norm_member(affil)
+            if len(an) < 4:
+                continue
+            members = s.get("members") or []
+            if len(members) < 2:
+                continue  # need a roster to link TO
+            roster = _roster_token(members, season)
+            if roster is None:
+                continue
+            rank = s.get("rank")
+            if rank is None:
+                continue
+            pct = rank / mr if mr > 0 else 1.0
+            key = (an, season)
+            prev = best_roster.get(key)
+            if prev is None or pct < prev[0]:
+                best_roster[key] = (pct, roster)
+
+    if not best_roster:
+        return
+
+    # Step 2: link WF teams (no members, has affiliation) to the best roster
+    for c in raw:
+        season = None if season_by_cid is None else season_by_cid[c["contest_id"]]
+        for s in c["standings"]:
+            members = s.get("members") or []
+            if len(members) >= 2:
+                continue  # already has a roster
+            affil = s.get("affiliation")
+            if not affil:
+                continue
+            an = _norm_member(affil)
+            if len(an) < 4:
+                continue
+            hit = best_roster.get((an, season))
+            if hit is None:
+                continue
+            _, target_roster = hit
+            # Link this team's isolated key to the best regional roster
+            tid = s["team_id"]
+            if tid.startswith("$DEFAULT"):
+                uf.union(f"dj:{c['contest_id']}::{tid}", target_roster)
+                uf.find(target_roster)  # ensure target is in UF
+            else:
+                uf.union("id:" + tid, target_roster)
+                uf.find(target_roster)
 
 
 def team_key(contest_id, team_id, members, uf, season=None):
