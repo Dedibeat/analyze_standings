@@ -34,3 +34,5 @@ iteration	model	change	metric_before	metric_after	delta	guards_before	guards_aft
 24	deepseek-v4-pro	last_name_only_linking	288.0	288.7	+0.7	all-ok	all-ok	-	-	0	DISCARD (noise)
 25	deepseek-v4-pro	wf_data_integration	288.0	288.2	+0.2	all-ok	all-ok	-	-	0	DISCARD (noise)
 26	deepseek-v4-pro	WF_in_UF_best_regional_link	288.0	288.4	+0.4	all-ok	all-ok	0.8858	0.8851	0	DISCARD (noise, 9 new links, gym-EC +0.002)
+27	claude-fable-5	REVIEW: iter-1 gym prior implemented post-campaign (80afc92) then REVERTED (3fb0eca) — gym-guard corroboration is circular (change optimizes the guard), AUC flat, kattis 0.795->0.790, qoj-2692 anchor leak	288.0	288.4	+0.4	-	-	0.8858	0.8858	0	REVERTED
+28	claude-fable-5	NOTE: rows with metric_before=286.3 compare against the discarded sigma_theta=500 config, not the 288.0 incumbent	-	-	-	-	-	-	-	-	NOTE

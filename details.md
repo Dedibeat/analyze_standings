@@ -831,16 +831,30 @@ ability anchoring.
 
 A second 25-iteration campaign (`program.md`) probed data-side identity
 improvements and model hyperparameters at the new **288.0** baseline (after
-the identity fixes above). **1 iteration kept, 24 discarded** — the model
-is confirmed at a robust local optimum.
+the identity fixes above). **0 fit-side iterations kept; the WF identity
+linking was kept as a correctness change** — the model is confirmed at a
+robust local optimum.
 
-**The one kept change:** gym-informed difficulty prior — soft-anchoring
-problem difficulties toward `output/gym_difficulty.json` estimates
-(N(b_gym, 400²) prior mean) for ~300 gym-covered problems.  Metric
-288.0 → 287.5 (−0.5, within the ±5 point noise floor), but both gym
-EC Spearman (+0.960 → +0.967) and gym pooled Spearman (+0.954 → +0.959)
-improved, so it was kept on the guard-corroboration rule.  Held-out AUC
-was unchanged (0.8858).
+**Gym-informed difficulty prior: kept, then reverted on review.** The
+campaign's iteration 1 soft-anchored ~667 problem difficulties toward
+`output/gym_difficulty.json` (N(b_gym, 400²) prior mean; commit `80afc92`,
+implemented post-campaign — review found the original "KEPT" log entry had
+never actually been committed). Metric 288.4 → 288.0 (−0.4, far under the
+±5 noise floor), so the keep leaned on guard corroboration — but the
+corroborating guards (gym EC +0.962 → +0.969, gym pooled +0.954 → +0.959)
+are **circular** for this change: pulling `b` toward `b_gym` mechanically
+raises Spearman against `b_gym`. The genuinely independent signals did not
+corroborate (held-out AUC flat at 0.8858; Kattis pooled *down* 0.795 →
+0.790), the change carried a mild target leak (qoj 2692 is both
+gym-covered and a CF anchor contest, where `b_gym` correlates +0.976 with
+the official CF ratings), and it had a structural cost: with `b_gym` baked
+into the fit prior, the gym guards stop being an independent watchdog for
+the unanchored regions. Reverted (`3fb0eca`). The principled home for the
+gym signal is the calibration layer (per-region CF map on `b_gym` anchors)
+or the likelihood via merged gym *observations*, not a prior on `b`.
+Campaign-log caveat: several phase-3 TSV sweep rows compare against 286.3
+— a *discarded* σ_θ=500 config — rather than the 288.0 incumbent, so those
+deltas are not baseline-relative.
 
 **Everything else was within noise or worse.** sigma_θ sweeps (300→600)
 best at 500 (−1.7 RMSE but AUC regressed 0.8858→0.8849, discarded per
