@@ -750,25 +750,51 @@ worth modelling?
     from NWERC/BAPC/UKIEPC/GCPC/NCPC by name alone) by the same problem-name-vote
     technique `external_validate._cf_mapping` already uses for CF-rated mirrors,
     pointed at each candidate gym's problem list instead of `problemset.problems`.
-    Both CF's regular-contest API and gym `contest.standings` require an API key
-    (`curl` gets `"You have to be authenticated"` even for public gyms), and CF
-    sits behind a Cloudflare bot check that blocks plain `curl`/`WebFetch` outright —
-    so both the gym listing and every standings page were scraped through an
-    authenticated browser session (`claude-in-chrome`) via same-origin `fetch()`,
-    which carries the session cookie and reuses the already-solved challenge.
+    The gym listing itself was scraped through an authenticated browser session
+    (`claude-in-chrome`) since CF sits behind a Cloudflare bot check that blocks
+    plain `curl`/`WebFetch`; standings and rating history, once a user-supplied CF
+    **API key + secret** were available, came from the signed `contest.standings` /
+    `user.rating` endpoints directly (`curl`/Python, HMAC-SHA512 `apiSig`, no
+    browser needed — gym `contest.standings` returns `"You have to be authenticated"`
+    without a signed request even though the contest itself is public).
+  - **Upsolvers excluded.** `contest.standings` mixes real timed attempts
+    (`participantType: VIRTUAL`/`CONTESTANT`) with open-ended `PRACTICE` rows (no
+    time pressure, solved whenever) — 34% of all rows (17,353 of 50,716) were
+    `PRACTICE` and are dropped, since unlimited time on a problem is a different
+    signal from solving it live and would bias problems toward looking easier than
+    they are under real contest conditions. `ghost: true` rows (the original
+    onsite field, replayed into the mirror's standings for comparison) already
+    contribute nothing — they carry `members: []`, no real CF handle.
+  - **Rating and contest count are time-accurate, not "current."** A gym's virtual
+    attempt can happen years after the original contest, and a solver's CF rating
+    drifts a lot over that span, so using their rating *today* would be
+    systematically wrong for older mirrors. Each solver's full rating-change
+    history (`user.rating`, one call per handle — not batchable like `user.info`)
+    is fetched once, then `cf_rating_at_attempt` / `cf_rated_contests_at_attempt`
+    are computed by truncating that history to entries at or before the party's
+    own `startTimeSeconds` (bisection on timestamp). A solver with no rated
+    contest yet at attempt time gets `cf_rating_at_attempt: null`,
+    `cf_rated_contests_at_attempt: 0` (kept, not dropped — 3,016 of 57,695 rows).
+  - **Collection notes.** CF's rate limit rejected even 4 concurrent signed
+    requests (`"Call limit exceeded"`, HTTP 429) but tolerated a plain serial loop
+    at the network's natural ~0.2s/call latency with zero added delay (17,162
+    handles in ~64 min, 0 failures). Progress was checkpointed to
+    `data/gym_checkpoints/` (gitignored, survives outside `/tmp`) every 200
+    handles and the fetch resumes from there, since `/tmp` does not survive a
+    machine restart.
   - **Schema.** Keyed by our `qoj_contest_id`; each entry has `gym_id`/`gym_url`,
     `gym_problem_labels` vs. `our_problem_labels` (5 of the 62 mismatch — different
     problem subset between the mirror and our record — flagged via
     `labels_aligned` rather than dropped, so a consumer must join by problem
     *name*, not letter, when false), and `solvers`: one row per (team member,
-    contest) with `cf_rating` and the list of problem letters *that team* solved.
+    contest attempt) with `handle`, `cf_rating_at_attempt`,
+    `cf_rated_contests_at_attempt`, `attempt_time`, and the list of problem
+    letters *that team* solved (57,695 rows total).
   - **Known limitations (why this stays raw data).** (1) ICPC solves are
     per-*team*, so every member of a team is stamped with the same solved set —
     the dataset over-represents team performance as if it were each member's own,
-    biased toward whichever member happened to have a CF handle. (2) Only
-    Codeforces-*rated* solvers are kept (unrated handles dropped silently), which
-    is a strong selection filter, especially outside competitive-CF-heavy regions.
-    (3) No `laplace_se`-style uncertainty or MAP fit has been run on it yet — that
-    would be the natural next step (a Rasch fit with `theta` *fixed* at each
-    solver's known CF rating, solving only for `b_p`), turning this into a real
+    biased toward whichever member happened to have a CF handle. (2) No
+    `laplace_se`-style uncertainty or MAP fit has been run on it yet — that would
+    be the natural next step (a Rasch fit with `theta` *fixed* at each solver's
+    `cf_rating_at_attempt`, solving only for `b_p`), turning this into a real
     external-validation column alongside the LLM/CF/Kattis ones above.
