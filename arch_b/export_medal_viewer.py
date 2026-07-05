@@ -38,11 +38,12 @@ def main():
 
     contests = []
     for c in data["contests"]:
-        lg = dict(c["lowest_gold"])
-        lg["team_name"] = _strip_tags(lg["team_name"])
-        lg["affiliation"] = _strip_tags(lg.get("affiliation"))
+        for tier in ["gold", "silver", "bronze"]:
+            t = c["cutoff_teams"][tier]
+            t["team_name"] = _strip_tags(t["team_name"])
+            t["affiliation"] = _strip_tags(t.get("affiliation"))
         contests.append({
-            **c, "lowest_gold": lg,
+            **c,
             "short": _short_name(c["contest_name"]),
             "url": f"https://qoj.ac/contest/{c['contest_id']}",
             "problems": sorted(probs[c["contest_id"]], key=lambda p: p["difficulty"]),

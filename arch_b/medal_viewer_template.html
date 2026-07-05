@@ -446,8 +446,10 @@ function renderBars() {
           ? [ttRow(tierColor("star"), fmt(c.medal_bar_cf.star), "Star bar (CF)")] : []),
         ...[...TIERS].reverse().map(t => ttRow(tierColor(t), fmt(c.medal_bar_cf[t]), TITLE[t] + " bar (CF)")),
         el("div", { class: "tt-row" }, el("b", null, String(c.official_solving_teams)), " official solving teams"),
-        el("div", { class: "tt-row" }, "lowest gold: " + c.lowest_gold.team_name + " — " +
-                                        c.lowest_gold.solved + " solved")), ev);
+        ...["gold","silver","bronze"].map(t =>
+          el("div", { class: "tt-row" },
+            TITLE[t] + " cutoff: r" + c.cutoff_teams[t].rank_full_field + " " +
+            c.cutoff_teams[t].team_name + " — " + c.cutoff_teams[t].solved + " solved"))), ev);
     hover.addEventListener("pointerenter", tt);
     hover.addEventListener("pointermove", tipMove);
     hover.addEventListener("pointerleave", tipHide);
@@ -475,7 +477,7 @@ function renderDetail() {
       displayName(k))));
   if (!c) { box.replaceChildren(); return; }
 
-  const lg = c.lowest_gold;
+  const ct = c.cutoff_teams;
   const cuts = c.cutoff_ranks_official;
   const info = el("div", { class: "detail-grid" },
     el("div", { class: "panel" },
@@ -488,15 +490,19 @@ function renderDetail() {
         badgeChip("star", "Star bar " + (c.medal_bar_cf.star < STAR_CAP
           ? fmt(c.medal_bar_cf.star) + " CF" : "— (champions solve all)")),
         ...[...TIERS].reverse().map(t => badgeChip(t, TITLE[t] + " bar " + fmt(c.medal_bar_cf[t]) + " CF")))),
-    el("div", { class: "panel" },
-      el("div", { class: "lbl" }, "Lowest gold-medal team (rank " + cuts.gold + " of " + c.official_solving_teams + " official)"),
-      el("div", { class: "big" }, lg.team_name),
-      el("div", { class: "row" }, el("span", { class: "mutedtx" }, lg.affiliation || "")),
-      el("div", { class: "row" },
-        el("span", null, "solved ", el("b", null, String(lg.solved))),
-        el("span", null, "full-field rank ", el("b", null, String(lg.rank_full_field))),
-        el("span", null, "perf (Elo, raw) ", el("b", null, fmt(lg.performance_elo))),
-        el("span", null, "θ ", el("b", null, lg.theta == null ? "—" : fmt(lg.theta))))));
+    ...["gold","silver","bronze"].map(tier => {
+      const t = ct[tier];
+      const tierCuts = {gold: cuts.gold, silver: cuts.silver, bronze: cuts.bronze};
+      return el("div", { class: "panel" },
+        el("div", { class: "lbl" }, TITLE[tier] + " cutoff (rank " + tierCuts[tier] + " of " + c.official_solving_teams + " official)"),
+        el("div", { class: "big" }, t.team_name),
+        el("div", { class: "row" }, el("span", { class: "mutedtx" }, t.affiliation || "")),
+        el("div", { class: "row" },
+          el("span", null, "solved ", el("b", null, String(t.solved))),
+          el("span", null, "full-field rank ", el("b", null, String(t.rank_full_field))),
+          el("span", null, "perf (Elo, raw) ", el("b", null, fmt(t.performance_elo))),
+          t.penalty_seconds != null ? el("span", null, "penalty ", el("b", null, Math.floor(t.penalty_seconds / 60) + "m")) : null));
+    }));
 
   box.replaceChildren(info, renderStrip(c), renderProblemTable(c));
 }
@@ -633,12 +639,12 @@ function renderLgTable() {
   const cols = [
     ["year", "Year", c => c.year, false],
     ["contest", "Contest", c => c.short, false],
-    ["team", "Team", c => c.lowest_gold.team_name, false],
-    ["aff", "University", c => c.lowest_gold.affiliation || "", false],
-    ["solved", "Solved", c => c.lowest_gold.solved, true],
+    ["team", "Team", c => c.cutoff_teams.gold.team_name, false],
+    ["aff", "University", c => c.cutoff_teams.gold.affiliation || "", false],
+    ["solved", "Solved", c => c.cutoff_teams.gold.solved, true],
     ["n", "Official teams", c => c.official_solving_teams, true],
-    ["perf", "Perf (Elo, raw)", c => c.lowest_gold.performance_elo, true],
-    ["theta", "θ (raw)", c => c.lowest_gold.theta ?? -1, true],
+    ["perf", "Perf (Elo, raw)", c => c.cutoff_teams.gold.performance_elo, true],
+    ["theta", "θ (raw)", c => c.cutoff_teams.gold.theta ?? -1, true],
     ["goldbar", "Gold bar (CF)", c => c.medal_bar_cf.gold, true],
   ];
   const cs = [...filtered()].sort((a, b) => {
@@ -657,16 +663,16 @@ function renderLgTable() {
       },
     }, label + (lgSort.key === key ? (lgSort.dir > 0 ? " ↑" : " ↓") : ""))));
   const body = cs.map(c => {
-    const lg = c.lowest_gold;
+    const ct = c.cutoff_teams;
     return el("tr", { class: "clickable", onclick: () => selectContest(c.contest_id) },
       el("td", { class: "mutedtx" }, String(c.year)),
       el("td", null, c.short),
-      el("td", null, lg.team_name),
-      el("td", { class: "mutedtx" }, lg.affiliation || "—"),
-      el("td", { class: "num" }, String(lg.solved)),
+      el("td", null, ct.gold.team_name),
+      el("td", { class: "mutedtx" }, ct.gold.affiliation || "—"),
+      el("td", { class: "num" }, String(ct.gold.solved)),
       el("td", { class: "num" }, String(c.official_solving_teams)),
-      el("td", { class: "num" }, fmt(lg.performance_elo)),
-      el("td", { class: "num" }, lg.theta == null ? "—" : fmt(lg.theta)),
+      el("td", { class: "num" }, fmt(ct.gold.performance_elo)),
+      el("td", { class: "num" }, ct.gold.theta == null ? "—" : fmt(ct.gold.theta)),
       el("td", { class: "num" }, fmt(c.medal_bar_cf.gold)));
   });
   document.getElementById("lgTable").replaceChildren(

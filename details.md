@@ -712,12 +712,14 @@ self-contained (data embedded, no server, vanilla JS/SVG), light/dark aware via
 `prefers-color-scheme`. Sections: a season filter scoping everything below; a
 KPI row (contest/problem counts, median gold bar, model↔empirical agreement,
 badge-distribution stacked bar); a dot-range chart of the three medal bars per
-contest in CF points (sorted by gold bar, hover tooltips, click-to-open, URL
-hash `#<contest_id>` like the other viewers); a contest detail view (problems
+contest in CF points (sorted by gold bar, hover tooltips showing all three
+cutoff-team details, click-to-open, URL hash `#<contest_id>` like the other
+viewers); a contest detail view (three cutoff-team panels for gold/silver/bronze
+with solved count, penalty, full-field rank, and Elo performance; problems
 as lettered lollipop dots on the difficulty axis against the medal-bar
 threshold lines and a shaded bonus zone, plus a per-problem table with band
 solve-rate meters and a † marker where the empirical badge differs); and a
-sortable lowest-gold-team table. The detail strip shades both the bonus zone
+sortable gold-cutoff-team table. The detail strip shades both the bonus zone
 (gold bar → star bar) and the star zone (beyond the star bar), the table
 carries a Top-5 (champion) solve-rate column, and a star bar pinned at the
 scale ceiling renders as "— (champions solve all)". Design notes: badge colors
