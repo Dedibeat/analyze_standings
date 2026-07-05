@@ -146,6 +146,18 @@ the `calibrate` map (gold bar across contests: median ≈ 2680 CF, range ≈
 [2100, 2900]). See the medal-badge section in `details.md` for why the bars are
 empirical crossings rather than Elo performance ratings.
 
+```bash
+./.venv/bin/python -m arch_b.export_medal_viewer
+```
+
+Builds the interactive **medal viewer** (`output/medal_viewer.html`, self-contained,
+no server, light/dark aware) from `medal_badges.json`: a season filter + KPI row,
+a dot-range chart of the bronze/silver/gold bars per contest (sorted by gold bar,
+click a row to open the contest), a per-contest detail view (problems as lettered
+lollipops on the difficulty axis against the three medal-bar thresholds and the
+bonus zone, plus a table with band solve rates), and a sortable lowest-gold-team
+table.
+
 ### Interactive viewer
 
 ```bash
@@ -220,7 +232,8 @@ Module self-checks:
   per-region check vs Codeforces + Kattis + gym mirrors (all 3 models),
   `gym_difficulty` fixed-θ fit on the CF gym-mirror population, `predict_eval`,
   `calibrate`, `season_experiment`, `medals` EA medal badges + lowest-gold
-  analysis, `twopl`/`twopl_region` 2PL discrimination
+  analysis (with `export_medal_viewer` + `medal_viewer_template.html` for the
+  medal viewer), `twopl`/`twopl_region` 2PL discrimination
   prototype); reuses `arch_a.load` and `arch_a.elo`.
 - `output/problem_ratings.json` — Architecture A ratings;
   `output/problem_ratings_b.json` — Architecture B (binary) ratings;

@@ -673,6 +673,27 @@ Shenyang 2025 (2115). The lowest gold team solves 5–8 problems and its classic
 Elo rank-inversion performance (reported as `performance_elo`, raw scale, with
 the inflation caveat above) sits at 2290–2580.
 
+**Viewer (`arch_b.export_medal_viewer` + `medal_viewer_template.html`).**
+`output/medal_viewer.html` is the interactive presentation of the analysis —
+self-contained (data embedded, no server, vanilla JS/SVG), light/dark aware via
+`prefers-color-scheme`. Sections: a season filter scoping everything below; a
+KPI row (contest/problem counts, median gold bar, model↔empirical agreement,
+badge-distribution stacked bar); a dot-range chart of the three medal bars per
+contest in CF points (sorted by gold bar, hover tooltips, click-to-open, URL
+hash `#<contest_id>` like the other viewers); a contest detail view (problems
+as lettered lollipop dots on the difficulty axis against the medal-bar
+threshold lines and a shaded bonus zone, plus a per-problem table with band
+solve-rate meters and a † marker where the empirical badge differs); and a
+sortable lowest-gold-team table. Design notes: badge colors are
+medal-semantic (bronze/silver-blue/gold/violet bonus) and were **validated
+with the dataviz palette checker in both modes** (CVD ΔE ≥ 52; the gold hue is
+sub-3:1 on the light surface, mitigated by letter labels on every chip and the
+table views); all dynamic text is inserted via `textContent` (team names in
+the data contain raw HTML fragments, which the exporter also strips). One
+bug worth remembering: the per-row transparent SVG hit-rect must be appended
+*last* in its group — appended first, the row's dots/line/label paint above it
+and swallow every click (SVG hit-tests in paint order).
+
 ### Per-region external validation (`arch_b.external_validate`)
 
 The LLM difficulty (`arch_b.validate`) is a single statement-based opinion that can
