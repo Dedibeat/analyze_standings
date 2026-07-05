@@ -733,6 +733,66 @@ bug worth remembering: the per-row transparent SVG hit-rect must be appended
 *last* in its group — appended first, the row's dots/line/label paint above it
 and swallow every click (SVG hit-tests in paint order).
 
+### XCPCIO ← QOJ matching
+
+XCPCIO board data (`https://board.xcpcio.com`) hosts the official ICPC scoreboard
+for East Asia regionals.  ``scripts/build_xcpcio_official.py`` fetches
+``team.json`` for each matched contest and caches normalized official-team
+identity keys in ``data/xcpcio_ea_official.json`` (28 contests, 2022–2025
+regionals + EC-Finals — seasons 47th–50th).  Teams are matched to QOJ standing
+rows by set-intersection of candidate keys: bare name, org-name pairs with
+``-`` / ``: `` separators, parenthetical-stripped variants (XCPCIO bilingual
+orgs like `北京航空航天大学(Beihang University)` → stripped to Chinese-only),
+and member-stripped ``display_name_raw`` prefixes (QOJ domjudge rows append
+`` - member1, member2, ...``).
+
+**Coverage.**  28 of 30 EA medal contests are matched (the 6 online ``"ICPC"``
+qualifiers and EC-Final warm-ups are excluded by scope, not by matching failure).
+Two EA contests have no XCPCIO entry: Grand Prix of China (QOJ 3295) and
+Metropolis (QOJ 1913).  Matching quality is generally high (80–100% of XCPCIO
+teams found in QOJ); two contests have low match rates due to naming
+differences: Xi'an 2023 (~10%, bilingual org names) and Xi'an 2025 (~50%, i18n
+name dicts).  For older seasons (47th–48th) XCPCIO team data lacks per-team
+``"group": ["official"]`` tags, so the entire XCPCIO team list is treated as
+the official field; this is validated by comparing XCPCIO team counts against
+QOJ domjudge-id row counts (they match exactly).
+
+### Official-field validation of fitted difficulties
+
+The fitted survival-model difficulties are validated against **XCPCIO
+official-field solve rates** — the subset of teams actually competing for medals.
+This is an independent check: XCPCIO data was not used in the fit.
+
+**Per-contest Spearman(difficulty, official solve rate): median −0.962**
+over the 28 contests (range −0.657 to −1.000).  The equivalent full-field
+correlation is median −0.978 — the official-field agreement is slightly
+looser because the official field is smaller (median 335 vs 809 teams),
+but the 0.016 gap is noise-level.  Overall Spearman over all 358 rated EA
+problems: −0.940 (official) vs −0.972 (full field).  The model predicts
+official solve rates nearly as well as full-field rates.
+
+**Where unofficial teams distort the signal.**  20 of 358 problems (5.6%)
+have a solve-rate gap ≥ 0.15 between officials and unofficials.  Direction
+is inconsistent: on some contests unofficial star teams (often stronger,
+e.g. UCup squads) find hard problems easier; on others (e.g. Hong Kong &
+Macau 2022) the unofficial field is *weaker* and finds easy problems harder.
+Both directions are local noise, not systematic bias.  The two outlier
+contests in per-contest correlation are Xi'an 2023 (ρ = −0.657, only 36
+official teams matched) and Grand Prix of Hong Kong 2025 (ρ = −0.804,
+126 officials) — both have very small official fields where a handful of
+solves determines the rate.
+
+**Why not fit on official-only.**  Restricting the fit to XCPCIE-identified
+official teams would discard 54% of EA solving rows (9,568 of 20,635) and
+55% of cross-contest linking edges (162 of 364).  The unofficial entries
+(UCup teams and rosters competing unofficially in regional mirrors) are the
+cross-contest bridges that put every contest on one scale — the same
+mechanism documented in the main unofficial-participants decision above.
+Weighted approaches (downweighting unofficial observations) were also tested
+and found decisively harmful (+17 RMSE; see the contest-link weighting
+experiment).  The current strategy — all teams for fitting, XCPCIO for medal
+cutoffs — is the correct split.
+
 ### Per-region external validation (`arch_b.external_validate`)
 
 The LLM difficulty (`arch_b.validate`) is a single statement-based opinion that can
