@@ -133,14 +133,19 @@ These are the best estimate of CF-equivalent difficulty.
 ```
 
 Assigns every problem of the 30 medal-awarding **Asia East Continent** contests a
-**gold / silver / bronze / bonus badge** and reports the **lowest gold-medal team**
-per regional. Medals go by cumulative percentile of official teams solving ≥1
-problem (gold 10%, silver 30%, bronze 60%); the official onsite field is recovered
+**bronze / silver / gold / bonus / star badge** (weakest → hardest) and reports the
+**lowest gold-medal team** per regional. Medals go by cumulative percentile of
+official teams solving ≥1 problem (gold 10%, silver 30%, bronze 60%); the official
+onsite field is recovered
 from the mixed qoj standings by the domjudge `$DEFAULT` team-id prefix. Each tier's
 **medal bar** is the fitted (survival-model) difficulty at which the boundary
 cohort's actual solve rate crosses 50% (isotonic regression), and a problem gets
 the weakest tier whose bar clears it — badges are monotone in difficulty, and the
-non-bonus badge count per contest ≈ the lowest gold team's solve count. Writes
+medal-badge count per contest ≈ the lowest gold team's solve count. Above the gold
+bar, a second crossing at the **champion cohort** (top-5 official teams) splits
+**bonus** (champions still solve it at even odds — decides ranking within gold,
+119 problems) from **star** (beyond even the champions — the extreme problems,
+81, almost all 0–2 official solves). Writes
 `output/medal_badges.json`; bars and difficulties are also given in CF points via
 the `calibrate` map (gold bar across contests: median ≈ 2680 CF, range ≈
 [2100, 2900]). See the medal-badge section in `details.md` for why the bars are

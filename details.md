@@ -614,8 +614,8 @@ LOCO is the 266.4 figure. Experiment log:
 ICPC **Asia East Continent** regionals award medals by cumulative percentile of
 the official teams that solved ≥1 problem: gold 10%, silver 30%, bronze 60%.
 `arch_b.medals` assigns every problem of the medal-awarding EA contests a
-**gold / silver / bronze / bonus badge** and reports the **lowest gold-medal
-team** per regional. Writes `output/medal_badges.json`
+**bronze / silver / gold / bonus / star badge** (weakest → hardest) and reports
+the **lowest gold-medal team** per regional. Writes `output/medal_badges.json`
 (`{"contests": [...], "problems": [...]}`); run
 `./.venv/bin/python -m arch_b.medals`.
 
@@ -652,18 +652,36 @@ Key decisions:
   difficulty, so badges are monotone in `b`, cross-contest comparable, and
   CF-mappable (the `calibrate` two-leg map is monotone, so CF-space badges are
   identical).
+- **Star tier above bonus (the champion bar).** The badge ladder is
+  bronze < silver < gold < **bonus** < **star** — bonus/star are *above* gold,
+  not below bronze (a recurring misreading; the viewer spells it out). With
+  only four tiers, "bonus" was 52% of all problems and lumped "just above the
+  gold bar" with "solved by nobody", so one more crossing was added, anchored
+  at the **champion cohort** (`TOP_COHORT = 5`, the top-5 official teams, exact
+  cohort — no window): **bonus** = above the gold bar but the champions still
+  solve it at even odds (it decides ranking *within* gold), **star** = beyond
+  even the champions. This split the 200 bonus problems into **119 bonus + 81
+  star**; star problems almost all have 0–2 official solves (a scarcity rule
+  "≤2 official solves" selects a nearly identical set of 82, cross-validating
+  the bar). A champion cohort that solves everything at ≥50% pins its bar to
+  4000 → that contest has no star problems (HK & Macau 2022, Shenyang 2022 —
+  correct: their top-5 were world-class). *Caveat:* 5 teams is the noisiest
+  cohort of the four bars; in small/weak fields the star bar can sit close to
+  the gold bar (Hong Kong 2024 gets 7 star problems, one solved by 11 teams).
 - **Sanity badge: band majority.** A model-free column badges each problem with
   the weakest medal *band* (gold ranks 1..g / silver g+1..s / bronze s+1..z)
-  where ≥50% of official teams solved it. Agreement with the model badge is
-  **76%** (292/383) and the disagreements are almost all one step in the
+  where ≥50% of official teams solved it; if none, the top-5 majority splits
+  bonus (≥50%) from star. Agreement with the model badge is
+  **74%** (282/383) and the disagreements are almost all one step in the
   expected direction: the band's *median* team is stronger than the boundary
   team, so the band-majority badge skews one tier easier. The medal-bar badge
   is primary because the medal semantics is about the boundary ("what you
   needed to solve to reach the tier").
 
-Results (current run): badge totals **95 bronze / 43 silver / 45 gold / 200
-bonus** — half of each contest sits above the gold bar, which is inherent to
-the semantics (the lowest gold team solves ~6 of 13). Internal consistency:
+Results (current run): badge totals **95 bronze / 43 silver / 45 gold / 119
+bonus / 81 star** — half of each contest sits above the gold bar, which is
+inherent to the semantics (the lowest gold team solves ~6 of 13). Internal
+consistency:
 the non-bonus badge count per contest ≈ the lowest gold team's solve count
 (e.g. Jinan 2022: 6 solves, badges BBBSGG; Wuhan 2025: 6, BBBGGG). The **gold
 bar in CF points** spans [2115, 2917], median **2681**: hardest golds at Hong
@@ -684,9 +702,13 @@ hash `#<contest_id>` like the other viewers); a contest detail view (problems
 as lettered lollipop dots on the difficulty axis against the medal-bar
 threshold lines and a shaded bonus zone, plus a per-problem table with band
 solve-rate meters and a † marker where the empirical badge differs); and a
-sortable lowest-gold-team table. Design notes: badge colors are
-medal-semantic (bronze/silver-blue/gold/violet bonus) and were **validated
-with the dataviz palette checker in both modes** (CVD ΔE ≥ 52; the gold hue is
+sortable lowest-gold-team table. The detail strip shades both the bonus zone
+(gold bar → star bar) and the star zone (beyond the star bar), the table
+carries a Top-5 (champion) solve-rate column, and a star bar pinned at the
+scale ceiling renders as "— (champions solve all)". Design notes: badge colors
+are medal-semantic (bronze/silver-blue/gold/violet bonus/red star) and were
+**validated with the dataviz palette checker in both modes** (5 slots, worst
+adjacent CVD ΔE ≥ 58; the gold hue is
 sub-3:1 on the light surface, mitigated by letter labels on every chip and the
 table views); all dynamic text is inserted via `textContent` (team names in
 the data contain raw HTML fragments, which the exporter also strips). One

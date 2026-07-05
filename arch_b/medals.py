@@ -16,7 +16,15 @@ survival-model difficulty b) and the bar is the b where the smoothed rate
 crosses 0.5. A problem is badged with the weakest tier whose bar clears it:
 
     bronze if b_p <= bar_bronze; silver if <= bar_silver; gold if <= bar_gold;
-    else bonus (beyond even odds for even the lowest gold team).
+    bonus if <= bar_star; else star.
+
+Above the gold bar there are two tiers, split by one more crossing anchored at
+the **champion cohort** (the top TOP_COHORT official teams): **bonus** = above
+the gold bar but the champions still solve it at even odds (it decides ranking
+*within* gold), **star** = beyond even the champions (the genuinely extreme
+problems — almost all have 0-2 official solves). A champion cohort that solves
+everything at >= 50% pins its bar to elo.HI, so that contest simply has no
+star problems.
 
 Why empirical bars instead of model-predicted solve probabilities: the Elo
 rank-inversion performance rating is inflated against the Rasch/survival b
@@ -66,6 +74,8 @@ OUT = os.path.join(os.path.dirname(__file__), os.pardir, "output")
 OFFICIAL_PREFIX = "$DEFAULT"   # domjudge-imported onsite teams (see load.team_key)
 MEDAL_PCT = [("gold", 0.10), ("silver", 0.30), ("bronze", 0.60)]
 WINDOW = 7                     # +- official ranks around a cutoff = the boundary cohort
+TOP_COHORT = 5                 # the champion cohort anchoring the bonus/star split
+BADGE_ORDER = ["bronze", "silver", "gold", "bonus", "star"]  # weakest -> hardest
 
 
 def medal_contests():
@@ -122,7 +132,11 @@ def _medal_bar(officials, cut_idx, bs_sorted, labels_sorted):
     fitted difficulty; the cohort is the +-WINDOW official ranks at the cutoff.
     """
     lo, hi = max(0, cut_idx - WINDOW), min(len(officials), cut_idx + WINDOW + 1)
-    cohort = officials[lo:hi]
+    return _cohort_bar(officials[lo:hi], bs_sorted, labels_sorted)
+
+
+def _cohort_bar(cohort, bs_sorted, labels_sorted):
+    """Difficulty at which this cohort's isotonic solve rate crosses 50%."""
     iso = _pava_decreasing([_solve_rate(cohort, lab) for lab in labels_sorted])
     if iso[0] < 0.5:
         return elo.LO
@@ -173,6 +187,8 @@ def main():
                for tier, _ in MEDAL_PCT}
         bar["silver"] = max(bar["silver"], bar["bronze"])   # enforce tier order
         bar["gold"] = max(bar["gold"], bar["silver"])
+        bar["star"] = max(_cohort_bar(officials[:TOP_COHORT], bs_sorted, labels_sorted),
+                          bar["gold"])
 
         # lowest gold team: classic Elo rank-inversion perf + fitted theta
         rows = np.flatnonzero(ds.contest_of_row == ci)
@@ -201,18 +217,22 @@ def main():
         })
 
         # per-band empirical solve rates over official teams (sanity badge)
-        bands = {"gold": officials[:cuts["gold"]],
+        bands = {"champion": officials[:TOP_COHORT],
+                 "gold": officials[:cuts["gold"]],
                  "silver": officials[cuts["gold"]:cuts["silver"]],
                  "bronze": officials[cuts["silver"]:cuts["bronze"]]}
 
         for p in ps:
             cid_, label, _pid, name = ds.problems[p]
             bp = float(b[p])
-            badge = next((t for t, _ in reversed(MEDAL_PCT) if bp <= bar[t]), "bonus")
+            badge = next((t for t, _ in reversed(MEDAL_PCT) if bp <= bar[t]),
+                         "bonus" if bp <= bar["star"] else "star")
             rates = {t: round(_solve_rate(members, label), 3) if members else None
                      for t, members in bands.items()}
             emp = next((t for t in ("bronze", "silver", "gold")
-                        if rates[t] is not None and rates[t] >= 0.5), "bonus")
+                        if rates[t] is not None and rates[t] >= 0.5), None)
+            if emp is None:
+                emp = "bonus" if (rates["champion"] or 0) >= 0.5 else "star"
             agree += badge == emp
             total += 1
             problems_out.append({
@@ -237,11 +257,11 @@ def _report(contests_out, problems_out, agree, total):
     by_cid = {}
     for p in problems_out:
         by_cid.setdefault(p["contest_id"], []).append(p)
-    letter = {"bronze": "B", "silver": "S", "gold": "G", "bonus": "+"}
+    letter = {"bronze": "B", "silver": "S", "gold": "G", "bonus": "+", "star": "*"}
 
     print("\n=== medal bars & lowest gold team ===")
     print(f"{'cid':>5} {'year':>4} {'contest':<28} {'n_off':>5} "
-          f"{'bronze':>6} {'silver':>6} {'gold':>6} {'goldCF':>6}  "
+          f"{'bronze':>6} {'silver':>6} {'gold':>6} {'star':>6} {'goldCF':>6}  "
           f"badges (by difficulty) | lowest gold (solved, perf_elo)")
     for c in contests_out:
         lg = c["lowest_gold"]
@@ -250,7 +270,8 @@ def _report(contests_out, problems_out, agree, total):
         print(f"{c['contest_id']:>5} {c['year']:>4} {c['contest_name'][:28]:<28} "
               f"{c['official_solving_teams']:>5} "
               f"{c['medal_bar']['bronze']:>6.0f} {c['medal_bar']['silver']:>6.0f} "
-              f"{c['medal_bar']['gold']:>6.0f} {c['medal_bar_cf']['gold']:>6.0f}  "
+              f"{c['medal_bar']['gold']:>6.0f} {c['medal_bar']['star']:>6.0f} "
+              f"{c['medal_bar_cf']['gold']:>6.0f}  "
               f"{badges:<14} | {lg['team_name'][:24]} "
               f"({lg['solved']}, {lg['performance_elo']:.0f})")
 
@@ -265,7 +286,7 @@ def _report(contests_out, problems_out, agree, total):
           f"[{min(gold_cf):.0f}, {max(gold_cf):.0f}] median {statistics.median(gold_cf):.0f}")
 
     # sanity: within each contest, badges must be monotone in difficulty
-    tier_order = {"bronze": 0, "silver": 1, "gold": 2, "bonus": 3}
+    tier_order = {t: i for i, t in enumerate(BADGE_ORDER)}
     for cid, ps in by_cid.items():
         ps = sorted(ps, key=lambda p: p["difficulty"])
         tiers = [tier_order[p["badge"]] for p in ps]
