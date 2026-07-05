@@ -126,6 +126,26 @@ Validated leave-one-contest-out: shaped RMSE **266** vs plain-affine 288
 `output/problem_ratings_calibrated.json` with `difficulty_cf` + `difficulty_cf_se`.
 These are the best estimate of CF-equivalent difficulty.
 
+### East-Asia medal badges
+
+```bash
+./.venv/bin/python -m arch_b.medals
+```
+
+Assigns every problem of the 30 medal-awarding **Asia East Continent** contests a
+**gold / silver / bronze / bonus badge** and reports the **lowest gold-medal team**
+per regional. Medals go by cumulative percentile of official teams solving ≥1
+problem (gold 10%, silver 30%, bronze 60%); the official onsite field is recovered
+from the mixed qoj standings by the domjudge `$DEFAULT` team-id prefix. Each tier's
+**medal bar** is the fitted (survival-model) difficulty at which the boundary
+cohort's actual solve rate crosses 50% (isotonic regression), and a problem gets
+the weakest tier whose bar clears it — badges are monotone in difficulty, and the
+non-bonus badge count per contest ≈ the lowest gold team's solve count. Writes
+`output/medal_badges.json`; bars and difficulties are also given in CF points via
+the `calibrate` map (gold bar across contests: median ≈ 2680 CF, range ≈
+[2100, 2900]). See the medal-badge section in `details.md` for why the bars are
+empirical crossings rather than Elo performance ratings.
+
 ### Interactive viewer
 
 ```bash
@@ -199,7 +219,8 @@ Module self-checks:
   solve-time model, `anchor`, `run`, `validate`, `external_validate`
   per-region check vs Codeforces + Kattis + gym mirrors (all 3 models),
   `gym_difficulty` fixed-θ fit on the CF gym-mirror population, `predict_eval`,
-  `calibrate`, `season_experiment`, `twopl`/`twopl_region` 2PL discrimination
+  `calibrate`, `season_experiment`, `medals` EA medal badges + lowest-gold
+  analysis, `twopl`/`twopl_region` 2PL discrimination
   prototype); reuses `arch_a.load` and `arch_a.elo`.
 - `output/problem_ratings.json` — Architecture A ratings;
   `output/problem_ratings_b.json` — Architecture B (binary) ratings;

@@ -609,6 +609,70 @@ calibratability, and its history stays comparable; the shipped deliverable's
 LOCO is the 266.4 figure. Experiment log:
 `autoresearch/autoresearch-260704-0150/classic-results.tsv`.
 
+### East-Asia medal badges + lowest-gold analysis (`arch_b.medals`)
+
+ICPC **Asia East Continent** regionals award medals by cumulative percentile of
+the official teams that solved ≥1 problem: gold 10%, silver 30%, bronze 60%.
+`arch_b.medals` assigns every problem of the medal-awarding EA contests a
+**gold / silver / bronze / bonus badge** and reports the **lowest gold-medal
+team** per regional. Writes `output/medal_badges.json`
+(`{"contests": [...], "problems": [...]}`); run
+`./.venv/bin/python -m arch_b.medals`.
+
+Key decisions:
+
+- **Official field = the domjudge id prefix.** The qoj standings mix the
+  official onsite field (domjudge-imported `$DEFAULT_DAT_PREFIX_*` team ids)
+  with unofficial online participants, so the official field is recovered by
+  the id prefix and the medal cutoffs are ranks ⌈0.10 n⌉ / ⌈0.30 n⌉ / ⌈0.60 n⌉
+  within it. *Assumptions:* ceil rounding (the official rounding rule is not in
+  the data), and the domjudge field = the medal-eligible field (fuzzy for the
+  COVID-era online contests — Hong Kong & Macau 2022's "official" field contains
+  e.g. HSE Moscow's FFTilted, which is also why its gold bar is the outlier
+  high one).
+- **Scope: medal events only** (user decision). The 6 online qualifiers
+  (contest_name `"ICPC"`, 1.3–2.7k teams) and the EC-Final warm-ups award no
+  medals and are excluded → 30 contests / 383 problems (2022–2025).
+- **The medal bar is an empirical 50%-crossing, not an Elo performance
+  rating.** The original design compared the fitted difficulty `b_p` against
+  `elo.performance_rating` of the cutoff teams. Measured against the cutoff
+  cohorts' actual solve rates, that rank-inversion performance is **inflated on
+  the Rasch/survival `b` scale** (predicted−actual solve rate +0.10 at the
+  bronze cutoff, +0.34 at gold: gold-badged problems were solved by only ~10%
+  of the gold band). Even the well-centred alternative — the ability whose
+  *expected solve count* matches the cutoff team's (zero mean bias by
+  construction) — is miscalibrated exactly at the decision point: where it
+  predicts 50%, cutoff cohorts actually solve 57–92%, because EA fields' solve
+  curves are far steeper than the global Rasch slope (the 2PL finding: EA
+  discrimination ~2.1). So the bar is measured directly: per tier, take the
+  ±7-official-rank cohort around the cutoff team, isotonic-regress its
+  per-problem solve rates against `b` (PAVA, non-increasing), and set
+  `bar_tier` = the `b` where the smoothed rate crosses 0.5. Badge = the weakest
+  tier whose bar clears `b_p`, else **bonus** — still a threshold on the fitted
+  difficulty, so badges are monotone in `b`, cross-contest comparable, and
+  CF-mappable (the `calibrate` two-leg map is monotone, so CF-space badges are
+  identical).
+- **Sanity badge: band majority.** A model-free column badges each problem with
+  the weakest medal *band* (gold ranks 1..g / silver g+1..s / bronze s+1..z)
+  where ≥50% of official teams solved it. Agreement with the model badge is
+  **76%** (292/383) and the disagreements are almost all one step in the
+  expected direction: the band's *median* team is stronger than the boundary
+  team, so the band-majority badge skews one tier easier. The medal-bar badge
+  is primary because the medal semantics is about the boundary ("what you
+  needed to solve to reach the tier").
+
+Results (current run): badge totals **95 bronze / 43 silver / 45 gold / 200
+bonus** — half of each contest sits above the gold bar, which is inherent to
+the semantics (the lowest gold team solves ~6 of 13). Internal consistency:
+the non-bonus badge count per contest ≈ the lowest gold team's solve count
+(e.g. Jinan 2022: 6 solves, badges BBBSGG; Wuhan 2025: 6, BBBGGG). The **gold
+bar in CF points** spans [2115, 2917], median **2681**: hardest golds at Hong
+Kong & Macau 2022 (2917, the fuzzy-field caveat above), EC-Final-adjacent
+"China" 2024 (2885) and Shanghai 2023 (2883); softest at Grand Prix of
+Shenyang 2025 (2115). The lowest gold team solves 5–8 problems and its classic
+Elo rank-inversion performance (reported as `performance_elo`, raw scale, with
+the inflation caveat above) sits at 2290–2580.
+
 ### Per-region external validation (`arch_b.external_validate`)
 
 The LLM difficulty (`arch_b.validate`) is a single statement-based opinion that can
