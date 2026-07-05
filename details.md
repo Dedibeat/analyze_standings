@@ -17,6 +17,21 @@ mixed ICPC + Universal Cup set). The file *originally* held **213 contest entrie
 6×, with identical standings but an empty problem list). These have been **dropped
 from the source file** (146 unique contests remain); the loader still dedupes
 defensively in case the data is regenerated (see the deduplication decision).
+
+`data/tagged_with_official.json` — same 146 contests, with an added `official:
+true/false` field on every standing row. Official/unofficial tags are sourced from
+**XCPCIO** (`https://board.xcpcio.com`), which hosts the official ICPC scoreboard
+data (domjudge-imported onsite teams). For 26 East Asia regional contests (seasons
+47th–50th, 2022–2025), XCPCIO's team.json was fetched and teams were matched by
+normalized name against QOJ standing rows (see `scripts/add_xcpcio_official.py`).
+13 contests carry **explicit** XCPCIO group tags (`"group": ["official"]`); the
+other 13 (older 47th/48th seasons where XCPCIO team data lacks per-team group
+labels) use the entire XCPCIO team list as the official field — validated by
+comparing XCPCIO team counts against domjudge-id row counts (they match exactly).
+12 East Asia contests could not be matched (6 online "ICPC" qualifiers, 3 EC-Final
+warm-ups, Shanghai 2023 which XCPCIO has no entry for, "China" / "Grand Prix of
+China" which lack a city match). Non-EA contests are unaffected.
+
 `data/ucup_s3.json` and `data/ucup_s4.json` are
 the two Universal Cup seasons (43 and 33 contests) used to anchor the scale.
 Per standing row: `rank`, `team_id`, `members`, `total_solved`, and per-problem
@@ -621,18 +636,22 @@ the **lowest gold-medal team** per regional. Writes `output/medal_badges.json`
 
 Key decisions:
 
-- **Official field = the domjudge id prefix.** The qoj standings mix the
-  official onsite field (domjudge-imported `$DEFAULT_DAT_PREFIX_*` team ids)
-  with unofficial online participants, so the official field is recovered by
-  the id prefix and the medal cutoffs are ranks ⌈0.10 n⌉ / ⌈0.30 n⌉ / ⌈0.60 n⌉
-  within it. *Assumptions:* ceil rounding (the official rounding rule is not in
-  the data), and the domjudge field = the medal-eligible field (fuzzy for the
-  COVID-era online contests — Hong Kong & Macau 2022's "official" field contains
-  e.g. HSE Moscow's FFTilted, which is also why its gold bar is the outlier
-  high one).
+- **Official field = XCPCIO team data** (replaced the old domjudge-id-prefix
+  heuristic). ``data/xcpcio_ea_official.json`` caches XCPCIO official-team
+  identity keys for 28 EA contests (regionals + EC-Finals, 2022–2025), fetched
+  via ``scripts/build_xcpcio_official.py``. XCPCIO's team.json carries explicit
+  ``"group": ["official"]`` tags for 49th/50th seasons; for older 47th/48th
+  seasons the entire XCPCIO team list is the official field (domjudge-imported
+  onsite teams). Teams are matched to QOJ standing rows by normalized
+  name-matching (exact set intersection of candidate keys: bare name, org-name
+  pairs with multiple separators, parenthetical-stripped variants, and
+  member-stripped display_name_raw prefixes). Medal cutoffs are ranks
+  ⌈0.10 n⌉ / ⌈0.30 n⌉ / ⌈0.60 n⌉ within the XCPCIO-identified official field,
+  with ⌈ceil⌉ rounding (the official rounding rule is not in the data).
 - **Scope: medal events only** (user decision). The 6 online qualifiers
-  (contest_name `"ICPC"`, 1.3–2.7k teams) and the EC-Final warm-ups award no
-  medals and are excluded → 30 contests / 383 problems (2022–2025).
+  (contest_name ``"ICPC"``, 1.3–2.7k teams) and the EC-Final warm-ups award no
+  medals and are excluded → 28 contests / 358 problems (2022–2025).  Includes
+  EC-Finals (Shanghai 2023 = 48th EC-Final, China 2024 = 49th EC-Final).
 - **The medal bar is an empirical 50%-crossing, not an Elo performance
   rating.** The original design compared the fitted difficulty `b_p` against
   `elo.performance_rating` of the cutoff teams. Measured against the cutoff
@@ -678,18 +697,14 @@ Key decisions:
   is primary because the medal semantics is about the boundary ("what you
   needed to solve to reach the tier").
 
-Results (current run): badge totals **95 bronze / 43 silver / 45 gold / 119
-bonus / 81 star** — half of each contest sits above the gold bar, which is
-inherent to the semantics (the lowest gold team solves ~6 of 13). Internal
-consistency:
+Results (current run): badge totals **86 bronze / 36 silver / 40 gold / 93
+bonus / 103 star** (28 contests, 358 problems). Internal consistency:
 the non-bonus badge count per contest ≈ the lowest gold team's solve count
 (e.g. Jinan 2022: 6 solves, badges BBBSGG; Wuhan 2025: 6, BBBGGG). The **gold
-bar in CF points** spans [2115, 2917], median **2681**: hardest golds at Hong
-Kong & Macau 2022 (2917, the fuzzy-field caveat above), EC-Final-adjacent
-"China" 2024 (2885) and Shanghai 2023 (2883); softest at Grand Prix of
-Shenyang 2025 (2115). The lowest gold team solves 5–8 problems and its classic
-Elo rank-inversion performance (reported as `performance_elo`, raw scale, with
-the inflation caveat above) sits at 2290–2580.
+bar in CF points** spans [2114, 2885], median **2655**: hardest golds at
+EC-Final 2024 "China" (2885) and EC-Final 2023 "Shanghai" (2883); softest at
+Grand Prix of Shenyang 2025 (2114). The lowest gold team solves 4–8 problems
+and its classic Elo rank-inversion performance sits at 2286–2512.
 
 **Viewer (`arch_b.export_medal_viewer` + `medal_viewer_template.html`).**
 `output/medal_viewer.html` is the interactive presentation of the analysis —

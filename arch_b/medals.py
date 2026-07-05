@@ -2,11 +2,9 @@
 
 ICPC East Asia regionals award medals by cumulative percentile of the *official*
 teams that solved at least one problem: gold 10%, silver 30%, bronze 60%. The
-qoj standings mix the official onsite field (domjudge-imported ``$DEFAULT_DAT_
-PREFIX_*`` team ids) with unofficial online participants, so the official field
-is recovered by the id prefix and the cutoffs are ranks ceil(0.10 n) /
-ceil(0.30 n) / ceil(0.60 n) within it (rounding = ceil is an assumption; the
-official rounding rule is not in the data).
+official field is sourced from **XCPCIO** (``data/xcpcio_ea_official.json``), which
+hosts the official ICPC scoreboard data — each contest's official teams are
+identified by name-matching XCPCIO's team.json against QOJ standing rows.
 
 Badge model (medal-bar thresholds on the fitted difficulty scale): each tier's
 bar is the difficulty at which the cutoff cohort — the +-WINDOW official ranks
@@ -43,6 +41,7 @@ cohort, so it skews one tier easier where the two disagree (~24% of problems).
 
 Scope: Asia East Continent contests that actually award medals — the 6 online
 qualifiers (contest_name "ICPC") and the EC-Final warm-ups are excluded.
+Includes EC-Finals (Shanghai 2023 = 48th EC-Final, China 2024 = 49th EC-Final).
 
 Bars and difficulties are also reported in Codeforces points through the same
 gym-shaped two-leg map as ``arch_b.calibrate`` (monotone, so CF-space badges
@@ -58,6 +57,7 @@ Writes output/medal_badges.json: {"contests": [...], "problems": [...]}.
 import json
 import math
 import os
+import re
 import statistics
 
 import numpy as np
@@ -70,25 +70,70 @@ from .calibrate import _anchors, _gym_shape
 from .run import MIN_SOLVE_HOURS
 
 OUT = os.path.join(os.path.dirname(__file__), os.pardir, "output")
+XCPCIO_CACHE = os.path.join(os.path.dirname(__file__), os.pardir,
+                            "data", "xcpcio_ea_official.json")
 
-OFFICIAL_PREFIX = "$DEFAULT"   # domjudge-imported onsite teams (see load.team_key)
 MEDAL_PCT = [("gold", 0.10), ("silver", 0.30), ("bronze", 0.60)]
 WINDOW = 7                     # +- official ranks around a cutoff = the boundary cohort
 TOP_COHORT = 5                 # the champion cohort anchoring the bonus/star split
 BADGE_ORDER = ["bronze", "silver", "gold", "bonus", "star"]  # weakest -> hardest
 
 
+def _norm(name: str) -> str:
+    return "".join(c for c in str(name).lower() if c.isalnum())
+
+
+def _strip_paren(s: str) -> str:
+    return re.sub(r"\s*\([^)]*\)", "", s).strip()
+
+
+def _load_xcpcio_cache():
+    """Return {contest_id: {"board_link": ..., "official_keys": [[k,...], ...]}}."""
+    with open(XCPCIO_CACHE) as f:
+        raw = json.load(f)
+    out = {}
+    for cid_str, v in raw.items():
+        if "error" not in v:
+            # Build flat lookup set for fast matching
+            flat = set()
+            for keys in v["official_keys"]:
+                for k in keys:
+                    flat.add(k)
+            out[int(cid_str)] = {"board_link": v["board_link"],
+                                 "official_set": flat,
+                                 "n_official": v["n_official"]}
+    return out
+
+
+def _is_official(row: dict, xcpcio_set: set) -> bool:
+    """Check if a QOJ standing row matches any XCPCIO official team key."""
+    qoj_keys = {_norm(row.get("team_name", "") or "")}
+    raw = str(row.get("display_name_raw", "") or "")
+    if raw:
+        qoj_keys.add(_norm(raw))
+        parts = raw.split(" - ")
+        for n in range(2, len(parts) + 1):
+            qoj_keys.add(_norm(" - ".join(parts[:n])))
+    return bool(qoj_keys & xcpcio_set)
+
+
 def medal_contests():
-    """Raw EA contests that award medals, keyed by contest_id."""
+    """Raw EA contests that award medals, keyed by contest_id.
+
+    Only returns contests that have XCPCIO official-team data available.
+    """
+    xcpcio = _load_xcpcio_cache()
     with open(TAGGED) as f:
         raw = dedupe_contests(json.load(f))
     out = {}
     for c in raw:
+        cid = c["contest_id"]
         name = c["contest_name"].strip()
         if (c["region"] == "Asia East Continent"
                 and name != "ICPC"                      # online qualifiers
-                and "warm up" not in name.lower()):     # EC-Final warm-ups
-            out[c["contest_id"]] = c
+                and "warm up" not in name.lower()       # EC-Final warm-ups
+                and cid in xcpcio):                     # must have XCPCIO data
+            out[cid] = c
     return out
 
 
@@ -159,22 +204,26 @@ def main():
 
     team_idx = {tk: i for i, tk in enumerate(ds.teams)}
     contest_idx = {cid: ci for ci, cid in enumerate(ds.contests)}
+    xcpcio = _load_xcpcio_cache()
 
     contests_out, problems_out, agree, total = [], [], 0, 0
     for cid, c in sorted(medal_contests().items(),
-                         key=lambda kv: (kv[1]["year"], kv[0])):
+                         key=lambda kv: (kv[1].get("year"), kv[0])):
         ci = contest_idx.get(cid)
         if ci is None:
             print(f"skip {cid} {c['contest_name']}: not in the fit")
             continue
+
+        xc = xcpcio[cid]
         officials = sorted(
             (r for r in c["standings"]
-             if str(r["team_id"]).startswith(OFFICIAL_PREFIX)
+             if _is_official(r, xc["official_set"])
              and r["total_solved"] >= 1),
             key=lambda r: r["rank"])
         n = len(officials)
         if n < 10:
-            print(f"skip {cid} {c['contest_name']}: only {n} official solving teams")
+            print(f"skip {cid} {c['contest_name']}: only {n} official solving teams "
+                  f"(XCPCIO has {xc['n_official']} total)")
             continue
 
         ps = np.flatnonzero(ds.contest_of_problem == ci)
