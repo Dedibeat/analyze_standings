@@ -182,8 +182,8 @@ Run with the project venv:
     (e.g. Universidad de Buenos Aires → "Está en el Corman", Purdue → "Purdue
     GLD", SUSTech → "Brno").  The WF solve data is not loaded into the fit (WF
     problems differ from the CF-anchor problems and add only noise); only the
-    identity links are used.  WF data: `data/wf_tagged_format.json` (gitignored,
-    fetched 2026-07-03).
+    identity links are used.  WF data: `data/wf_tagged_format.json` (fetched
+    2026-07-03).
 
 - **Granularity:** per resolved identity (roster where available, else stable id).
   True individual-level modelling (strat Remark on roster changes) is a follow-up.
