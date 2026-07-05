@@ -239,30 +239,40 @@ def main():
         bar["star"] = max(_cohort_bar(officials[:TOP_COHORT], bs_sorted, labels_sorted),
                           bar["gold"])
 
-        # lowest gold team: classic Elo rank-inversion perf + fitted theta
+        # Medal cutoff teams: solved count, penalty, full-field rank and performance.
+        # Cutoff ranks are computed from the XCPCIO-identified official field, but
+        # the cutoff team's performance is ranked against the FULL standings (all teams,
+        # including unofficial/star) — they competed on-site and carry signal.
         rows = np.flatnonzero(ds.contest_of_row == ci)
         field_theta = theta[ds.team_of_row[rows]]
-        lg = officials[cuts["gold"] - 1]
-        lg_tk = team_key(cid, lg["team_id"], lg.get("members"), uf)
-        lg_ti = team_idx.get(lg_tk)
-        rivals = field_theta
-        if lg_ti is not None:
-            drop = np.flatnonzero(ds.team_of_row[rows] == lg_ti)[:1]
-            rivals = np.delete(field_theta, drop)
-        lg_perf = elo.performance_rating(lg["rank"], rivals)
+        cutoff_teams = {}
+        for tier, _ in MEDAL_PCT:
+            ct = officials[cuts[tier] - 1]
+            tk = team_key(cid, ct["team_id"], ct.get("members"), uf)
+            ti = team_idx.get(tk)
+            rivals = field_theta
+            if ti is not None:
+                drop = np.flatnonzero(ds.team_of_row[rows] == ti)[:1]
+                rivals = np.delete(field_theta, drop)
+            perf = elo.performance_rating(ct["rank"], rivals)
+            cutoff_teams[tier] = {
+                "team_name": ct["team_name"],
+                "affiliation": ct.get("affiliation"),
+                "rank_full_field": ct["rank"],
+                "rank_official": cuts[tier],
+                "solved": ct["total_solved"],
+                "penalty_seconds": ct.get("penalty_seconds"),
+                "performance_elo": round(float(perf), 1),
+                "theta": round(float(theta[ti]), 1) if ti is not None else None,
+            }
+
         contests_out.append({
             "contest_id": cid, "contest_name": c["contest_name"],
             "year": c["year"], "official_solving_teams": n,
             "cutoff_ranks_official": cuts,
             "medal_bar": {t: round(bar[t], 1) for t in bar},
             "medal_bar_cf": {t: round(to_cf(bar[t]), 1) for t in bar},
-            "lowest_gold": {
-                "team_name": lg["team_name"], "affiliation": lg.get("affiliation"),
-                "rank_full_field": lg["rank"], "rank_official": cuts["gold"],
-                "solved": lg["total_solved"],
-                "performance_elo": round(float(lg_perf), 1),
-                "theta": round(float(theta[lg_ti]), 1) if lg_ti is not None else None,
-            },
+            "cutoff_teams": cutoff_teams,
         })
 
         # per-band empirical solve rates over official teams (sanity badge)
@@ -308,12 +318,30 @@ def _report(contests_out, problems_out, agree, total):
         by_cid.setdefault(p["contest_id"], []).append(p)
     letter = {"bronze": "B", "silver": "S", "gold": "G", "bonus": "+", "star": "*"}
 
-    print("\n=== medal bars & lowest gold team ===")
+    print("\n=== medal cutoff teams (official field from XCPCIO, ranked in full standings) ===")
+    header = (f"{'cid':>5} {'year':>4} {'contest':<28} {'n_off':>5} "
+              f"{'| gold cutoff':>40s} {'| silver cutoff':>40s} {'| bronze cutoff':>40s}")
+    print(header)
+    print(f"{'':5} {'':4} {'':28} {'':5}  "
+          f"{'rank solv penalty perf':>40s}  "
+          f"{'rank solv penalty perf':>40s}  "
+          f"{'rank solv penalty perf':>40s}")
+    print("-" * 155)
+    for c in contests_out:
+        ct = c["cutoff_teams"]
+        parts = [f"{c['contest_id']:>5} {c['year']:>4} {c['contest_name'][:28]:<28} {c['official_solving_teams']:>5}"]
+        for tier in ["gold", "silver", "bronze"]:
+            t = ct[tier]
+            pen = t.get("penalty_seconds")
+            pen_str = f"{pen//60:4d}m" if isinstance(pen, (int, float)) and pen else "   ?"
+            parts.append(f"r{t['rank_full_field']:>4d} {t['solved']:2d}s {pen_str} {t['performance_elo']:5.0f}")
+        print("  ".join(parts))
+
+    print(f"\n=== medal bars (raw scale) ===")
     print(f"{'cid':>5} {'year':>4} {'contest':<28} {'n_off':>5} "
           f"{'bronze':>6} {'silver':>6} {'gold':>6} {'star':>6} {'goldCF':>6}  "
-          f"badges (by difficulty) | lowest gold (solved, perf_elo)")
+          f"badges")
     for c in contests_out:
-        lg = c["lowest_gold"]
         ps = sorted(by_cid[c["contest_id"]], key=lambda p: p["difficulty"])
         badges = "".join(letter[p["badge"]] for p in ps)
         print(f"{c['contest_id']:>5} {c['year']:>4} {c['contest_name'][:28]:<28} "
@@ -321,8 +349,7 @@ def _report(contests_out, problems_out, agree, total):
               f"{c['medal_bar']['bronze']:>6.0f} {c['medal_bar']['silver']:>6.0f} "
               f"{c['medal_bar']['gold']:>6.0f} {c['medal_bar']['star']:>6.0f} "
               f"{c['medal_bar_cf']['gold']:>6.0f}  "
-              f"{badges:<14} | {lg['team_name'][:24]} "
-              f"({lg['solved']}, {lg['performance_elo']:.0f})")
+              f"{badges:<14}")
 
     counts = {}
     for p in problems_out:
@@ -331,8 +358,13 @@ def _report(contests_out, problems_out, agree, total):
     print(f"model vs empirical badge agreement: {agree}/{total} ({agree/total:.0%})")
 
     gold_cf = [c["medal_bar_cf"]["gold"] for c in contests_out]
-    print(f"gold bar across contests (CF points): "
+    print(f"\ngold bar across contests (CF points): "
           f"[{min(gold_cf):.0f}, {max(gold_cf):.0f}] median {statistics.median(gold_cf):.0f}")
+
+    # Summarize cutoff performance
+    gold_perf = [c["cutoff_teams"]["gold"]["performance_elo"] for c in contests_out]
+    print(f"gold cutoff performance (full-field Elo): "
+          f"[{min(gold_perf):.0f}, {max(gold_perf):.0f}] median {statistics.median(gold_perf):.0f}")
 
     # sanity: within each contest, badges must be monotone in difficulty
     tier_order = {t: i for i, t in enumerate(BADGE_ORDER)}

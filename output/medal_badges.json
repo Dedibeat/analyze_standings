@@ -22,14 +22,37 @@
         "bronze": 2081.4,
         "star": 3146.1
       },
-      "lowest_gold": {
-        "team_name": "济南大学-樱之重生",
-        "affiliation": null,
-        "rank_full_field": 76,
-        "rank_official": 51,
-        "solved": 7,
-        "performance_elo": 2426.2,
-        "theta": 2145.9
+      "cutoff_teams": {
+        "gold": {
+          "team_name": "济南大学-樱之重生",
+          "affiliation": null,
+          "rank_full_field": 76,
+          "rank_official": 51,
+          "solved": 7,
+          "penalty_seconds": 35100,
+          "performance_elo": 2426.2,
+          "theta": 2145.9
+        },
+        "silver": {
+          "team_name": "华中师范大学-为了梦想",
+          "affiliation": null,
+          "rank_full_field": 201,
+          "rank_official": 153,
+          "solved": 6,
+          "penalty_seconds": 33900,
+          "performance_elo": 2198.1,
+          "theta": 2063.1
+        },
+        "bronze": {
+          "team_name": "华东师范大学-SEI3",
+          "affiliation": null,
+          "rank_full_field": 378,
+          "rank_official": 305,
+          "solved": 5,
+          "penalty_seconds": 35160,
+          "performance_elo": 1971.6,
+          "theta": 2020.7
+        }
       }
     },
     {
@@ -54,14 +77,37 @@
         "bronze": 2006.4,
         "star": 3267.9
       },
-      "lowest_gold": {
-        "team_name": "香港中文大学（深圳）-龙大相遇快乐划水",
-        "affiliation": null,
-        "rank_full_field": 85,
-        "rank_official": 57,
-        "solved": 6,
-        "performance_elo": 2423.8,
-        "theta": 2170.5
+      "cutoff_teams": {
+        "gold": {
+          "team_name": "香港中文大学（深圳）-龙大相遇快乐划水",
+          "affiliation": null,
+          "rank_full_field": 85,
+          "rank_official": 57,
+          "solved": 6,
+          "penalty_seconds": 52800,
+          "performance_elo": 2423.8,
+          "theta": 2170.5
+        },
+        "silver": {
+          "team_name": "广东技术师范大学-分治 ac",
+          "affiliation": null,
+          "rank_full_field": 224,
+          "rank_official": 169,
+          "solved": 4,
+          "penalty_seconds": 19740,
+          "performance_elo": 2195.5,
+          "theta": 2045.5
+        },
+        "bronze": {
+          "team_name": "浙江理工大学-好起来 rua",
+          "affiliation": null,
+          "rank_full_field": 411,
+          "rank_official": 338,
+          "solved": 3,
+          "penalty_seconds": 13080,
+          "performance_elo": 1977.2,
+          "theta": 2091.2
+        }
       }
     },
     {
@@ -86,14 +132,37 @@
         "bronze": 1709.1,
         "star": 3275.5
       },
-      "lowest_gold": {
-        "team_name": "天津大学-背着队友偷偷 A 题",
-        "affiliation": null,
-        "rank_full_field": 102,
-        "rank_official": 64,
-        "solved": 6,
-        "performance_elo": 2409.7,
-        "theta": 2150.2
+      "cutoff_teams": {
+        "gold": {
+          "team_name": "天津大学-背着队友偷偷 A 题",
+          "affiliation": null,
+          "rank_full_field": 102,
+          "rank_official": 64,
+          "solved": 6,
+          "penalty_seconds": 49380,
+          "performance_elo": 2409.7,
+          "theta": 2150.2
+        },
+        "silver": {
+          "team_name": "湘潭大学-叫谢老板会被禁言",
+          "affiliation": null,
+          "rank_full_field": 247,
+          "rank_official": 190,
+          "solved": 5,
+          "penalty_seconds": 52440,
+          "performance_elo": 2199.0,
+          "theta": 2174.9
+        },
+        "bronze": {
+          "team_name": "浙江万里学院-核酸不排队",
+          "affiliation": null,
+          "rank_full_field": 463,
+          "rank_official": 379,
+          "solved": 2,
+          "penalty_seconds": 2220,
+          "performance_elo": 1972.5,
+          "theta": 2030.4
+        }
       }
     },
     {
@@ -118,14 +187,37 @@
         "bronze": 1877.7,
         "star": 3137.2
       },
-      "lowest_gold": {
-        "team_name": "北京邮电大学-MeUmy 天下第一",
-        "affiliation": null,
-        "rank_full_field": 89,
-        "rank_official": 46,
-        "solved": 6,
-        "performance_elo": 2428.5,
-        "theta": 2185.0
+      "cutoff_teams": {
+        "gold": {
+          "team_name": "北京邮电大学-MeUmy 天下第一",
+          "affiliation": null,
+          "rank_full_field": 89,
+          "rank_official": 46,
+          "solved": 6,
+          "penalty_seconds": 49380,
+          "performance_elo": 2428.5,
+          "theta": 2185.0
+        },
+        "silver": {
+          "team_name": "浙江工业大学-ZJUT14",
+          "affiliation": null,
+          "rank_full_field": 253,
+          "rank_official": 138,
+          "solved": 4,
+          "penalty_seconds": 38040,
+          "performance_elo": 2173.6,
+          "theta": 2103.7
+        },
+        "bronze": {
+          "team_name": "中国科学技术大学-好好写码天天修锅",
+          "affiliation": null,
+          "rank_full_field": 435,
+          "rank_official": 276,
+          "solved": 2,
+          "penalty_seconds": 2880,
+          "performance_elo": 1961.5,
+          "theta": 2074.3
+        }
       }
     },
     {
@@ -150,14 +242,37 @@
         "bronze": 1736.4,
         "star": 2888.2
       },
-      "lowest_gold": {
-        "team_name": "南华大学-昨天刚学 C++",
-        "affiliation": null,
-        "rank_full_field": 240,
-        "rank_official": 74,
-        "solved": 4,
-        "performance_elo": 2307.9,
-        "theta": 2075.8
+      "cutoff_teams": {
+        "gold": {
+          "team_name": "南华大学-昨天刚学 C++",
+          "affiliation": null,
+          "rank_full_field": 240,
+          "rank_official": 74,
+          "solved": 4,
+          "penalty_seconds": 24720,
+          "performance_elo": 2307.9,
+          "theta": 2075.8
+        },
+        "silver": {
+          "team_name": "徐州工程学院-你就是歌姬",
+          "affiliation": null,
+          "rank_full_field": 456,
+          "rank_official": 220,
+          "solved": 3,
+          "penalty_seconds": 13320,
+          "performance_elo": 2131.5,
+          "theta": 2098.3
+        },
+        "bronze": {
+          "team_name": "广东工业大学-强力去污粉",
+          "affiliation": null,
+          "rank_full_field": 732,
+          "rank_official": 440,
+          "solved": 2,
+          "penalty_seconds": 2640,
+          "performance_elo": 1929.4,
+          "theta": 2134.0
+        }
       }
     },
     {
@@ -182,14 +297,37 @@
         "bronze": 1888.9,
         "star": 2952.3
       },
-      "lowest_gold": {
-        "team_name": "Hong Kong Olympiad in Informatics-HKOI2",
-        "affiliation": null,
-        "rank_full_field": 140,
-        "rank_official": 13,
-        "solved": 7,
-        "performance_elo": 2288.9,
-        "theta": 2117.5
+      "cutoff_teams": {
+        "gold": {
+          "team_name": "Hong Kong Olympiad in Informatics-HKOI2",
+          "affiliation": null,
+          "rank_full_field": 140,
+          "rank_official": 13,
+          "solved": 7,
+          "penalty_seconds": 82620,
+          "performance_elo": 2288.9,
+          "theta": 2117.5
+        },
+        "silver": {
+          "team_name": "Henan University of Science and Technology-jwm",
+          "affiliation": null,
+          "rank_full_field": 255,
+          "rank_official": 38,
+          "solved": 4,
+          "penalty_seconds": 20460,
+          "performance_elo": 2098.2,
+          "theta": 2131.2
+        },
+        "bronze": {
+          "team_name": "Changsha University-GuliGuliGuli",
+          "affiliation": null,
+          "rank_full_field": 354,
+          "rank_official": 76,
+          "solved": 3,
+          "penalty_seconds": 16740,
+          "performance_elo": 1930.8,
+          "theta": 2047.8
+        }
       }
     },
     {
@@ -214,14 +352,37 @@
         "bronze": 2021.3,
         "star": 3065.8
       },
-      "lowest_gold": {
-        "team_name": "末日时在做什么？有没有空？可以来烤苕皮么？",
-        "affiliation": "中国科学技术大学",
-        "rank_full_field": 163,
-        "rank_official": 35,
-        "solved": 7,
-        "performance_elo": 2361.5,
-        "theta": 2205.9
+      "cutoff_teams": {
+        "gold": {
+          "team_name": "末日时在做什么？有没有空？可以来烤苕皮么？",
+          "affiliation": "中国科学技术大学",
+          "rank_full_field": 163,
+          "rank_official": 35,
+          "solved": 7,
+          "penalty_seconds": 52680,
+          "performance_elo": 2361.5,
+          "theta": 2205.9
+        },
+        "silver": {
+          "team_name": "睿智猫猫头",
+          "affiliation": "南京理工大学",
+          "rank_full_field": 306,
+          "rank_official": 103,
+          "solved": 6,
+          "penalty_seconds": 67620,
+          "performance_elo": 2193.2,
+          "theta": 2118.8
+        },
+        "bronze": {
+          "team_name": "我不行了",
+          "affiliation": "北京科技大学",
+          "rank_full_field": 520,
+          "rank_official": 206,
+          "solved": 3,
+          "penalty_seconds": 22980,
+          "performance_elo": 1976.9,
+          "theta": 2048.1
+        }
       }
     },
     {
@@ -246,14 +407,37 @@
         "bronze": 2202.4,
         "star": 3033.4
       },
-      "lowest_gold": {
-        "team_name": "UESTC_馄饨之子风扇俱乐部 - 黄霖、徐辰烨、祁泓金",
-        "affiliation": "电子科技大学",
-        "rank_full_field": 150,
-        "rank_official": 35,
-        "solved": 6,
-        "performance_elo": 2377.7,
-        "theta": 2193.2
+      "cutoff_teams": {
+        "gold": {
+          "team_name": "UESTC_馄饨之子风扇俱乐部 - 黄霖、徐辰烨、祁泓金",
+          "affiliation": "电子科技大学",
+          "rank_full_field": 150,
+          "rank_official": 35,
+          "solved": 6,
+          "penalty_seconds": 43680,
+          "performance_elo": 2377.7,
+          "theta": 2193.2
+        },
+        "silver": {
+          "team_name": "偏爱 - 李天舒、徐浩洋、池久涛",
+          "affiliation": "西北工业大学",
+          "rank_full_field": 273,
+          "rank_official": 104,
+          "solved": 5,
+          "penalty_seconds": 59400,
+          "performance_elo": 2219.1,
+          "theta": 2149.6
+        },
+        "bronze": {
+          "team_name": "逆风之旅 - 沈运之、张炜钿、金朔平",
+          "affiliation": "南京航空航天大学",
+          "rank_full_field": 468,
+          "rank_official": 207,
+          "solved": 3,
+          "penalty_seconds": 25560,
+          "performance_elo": 1998.3,
+          "theta": 2167.3
+        }
       }
     },
     {
@@ -278,14 +462,37 @@
         "bronze": 2019.0,
         "star": 2864.2
       },
-      "lowest_gold": {
-        "team_name": "嘉然今天创什么",
-        "affiliation": "中国人民大学",
-        "rank_full_field": 155,
-        "rank_official": 30,
-        "solved": 6,
-        "performance_elo": 2332.4,
-        "theta": 2131.9
+      "cutoff_teams": {
+        "gold": {
+          "team_name": "嘉然今天创什么",
+          "affiliation": "中国人民大学",
+          "rank_full_field": 155,
+          "rank_official": 30,
+          "solved": 6,
+          "penalty_seconds": 53700,
+          "performance_elo": 2332.4,
+          "theta": 2131.9
+        },
+        "silver": {
+          "team_name": "Start Dash",
+          "affiliation": "中南大学",
+          "rank_full_field": 268,
+          "rank_official": 90,
+          "solved": 4,
+          "penalty_seconds": 21120,
+          "performance_elo": 2179.3,
+          "theta": 2096.2
+        },
+        "bronze": {
+          "team_name": "炼铜术士超想首银",
+          "affiliation": "合肥工业大学宣城校区",
+          "rank_full_field": 426,
+          "rank_official": 179,
+          "solved": 3,
+          "penalty_seconds": 18300,
+          "performance_elo": 1985.6,
+          "theta": 2048.6
+        }
       }
     },
     {
@@ -310,14 +517,37 @@
         "bronze": 2078.6,
         "star": 2909.5
       },
-      "lowest_gold": {
-        "team_name": "HKBU",
-        "affiliation": "Hong Kong Baptist University",
-        "rank_full_field": 80,
-        "rank_official": 8,
-        "solved": 6,
-        "performance_elo": 2360.6,
-        "theta": 2209.6
+      "cutoff_teams": {
+        "gold": {
+          "team_name": "HKBU",
+          "affiliation": "Hong Kong Baptist University",
+          "rank_full_field": 80,
+          "rank_official": 8,
+          "solved": 6,
+          "penalty_seconds": 43080,
+          "performance_elo": 2360.6,
+          "theta": 2209.6
+        },
+        "silver": {
+          "team_name": "SYSU_trailblazer",
+          "affiliation": "Zhongshan (Sun Yat-sen) University",
+          "rank_full_field": 143,
+          "rank_official": 23,
+          "solved": 5,
+          "penalty_seconds": 55380,
+          "performance_elo": 2188.1,
+          "theta": 2164.7
+        },
+        "bronze": {
+          "team_name": "Team Spirit",
+          "affiliation": "Wuhan University of Technology",
+          "rank_full_field": 222,
+          "rank_official": 45,
+          "solved": 2,
+          "penalty_seconds": 15420,
+          "performance_elo": 1972.7,
+          "theta": 2138.7
+        }
       }
     },
     {
@@ -342,14 +572,37 @@
         "bronze": 2088.0,
         "star": 3107.2
       },
-      "lowest_gold": {
-        "team_name": "东北大学_次元魔女",
-        "affiliation": "东北大学",
-        "rank_full_field": 148,
-        "rank_official": 35,
-        "solved": 7,
-        "performance_elo": 2363.9,
-        "theta": 2160.1
+      "cutoff_teams": {
+        "gold": {
+          "team_name": "东北大学_次元魔女",
+          "affiliation": "东北大学",
+          "rank_full_field": 148,
+          "rank_official": 35,
+          "solved": 7,
+          "penalty_seconds": 42960,
+          "performance_elo": 2363.9,
+          "theta": 2160.1
+        },
+        "silver": {
+          "team_name": "神里流:AC",
+          "affiliation": "西安电子科技大学",
+          "rank_full_field": 310,
+          "rank_official": 104,
+          "solved": 5,
+          "penalty_seconds": 42300,
+          "performance_elo": 2160.2,
+          "theta": 2129.7
+        },
+        "bronze": {
+          "team_name": "别急我还在藏东西队",
+          "affiliation": "华东理工大学",
+          "rank_full_field": 467,
+          "rank_official": 208,
+          "solved": 4,
+          "penalty_seconds": 46200,
+          "performance_elo": 1986.1,
+          "theta": 2024.4
+        }
       }
     },
     {
@@ -374,14 +627,37 @@
         "bronze": 1918.6,
         "star": 3029.7
       },
-      "lowest_gold": {
-        "team_name": "清蒸狮子头",
-        "affiliation": "杭州电子科技大学信息工程学院",
-        "rank_full_field": 150,
-        "rank_official": 48,
-        "solved": 6,
-        "performance_elo": 2397.8,
-        "theta": 2194.7
+      "cutoff_teams": {
+        "gold": {
+          "team_name": "清蒸狮子头",
+          "affiliation": "杭州电子科技大学信息工程学院",
+          "rank_full_field": 150,
+          "rank_official": 48,
+          "solved": 6,
+          "penalty_seconds": 42780,
+          "performance_elo": 2397.8,
+          "theta": 2194.7
+        },
+        "silver": {
+          "team_name": "雪崩团灭清一色",
+          "affiliation": "北京理工大学",
+          "rank_full_field": 331,
+          "rank_official": 143,
+          "solved": 5,
+          "penalty_seconds": 42540,
+          "performance_elo": 2195.3,
+          "theta": 2187.3
+        },
+        "bronze": {
+          "team_name": "为千江月找万山日",
+          "affiliation": "天元公学·杭州蕙兰未来科技城学校",
+          "rank_full_field": 582,
+          "rank_official": 285,
+          "solved": 3,
+          "penalty_seconds": 12720,
+          "performance_elo": 1967.6,
+          "theta": 2096.2
+        }
       }
     },
     {
@@ -406,14 +682,37 @@
         "bronze": 2561.1,
         "star": 3198.7
       },
-      "lowest_gold": {
-        "team_name": "顶针的约克5",
-        "affiliation": "清华大学",
-        "rank_full_field": 98,
-        "rank_official": 32,
-        "solved": 7,
-        "performance_elo": 2482.0,
-        "theta": 2209.8
+      "cutoff_teams": {
+        "gold": {
+          "team_name": "顶针的约克5",
+          "affiliation": "清华大学",
+          "rank_full_field": 98,
+          "rank_official": 32,
+          "solved": 7,
+          "penalty_seconds": 72180,
+          "performance_elo": 2482.0,
+          "theta": 2209.8
+        },
+        "silver": {
+          "team_name": "梦结束的地方",
+          "affiliation": "友情参赛",
+          "rank_full_field": 234,
+          "rank_official": 96,
+          "solved": 6,
+          "penalty_seconds": 73860,
+          "performance_elo": 2275.4,
+          "theta": 2159.6
+        },
+        "bronze": {
+          "team_name": "三个灰名",
+          "affiliation": "成都理工大学",
+          "rank_full_field": 409,
+          "rank_official": 192,
+          "solved": 5,
+          "penalty_seconds": 50280,
+          "performance_elo": 2080.6,
+          "theta": 2114.1
+        }
       }
     },
     {
@@ -438,14 +737,37 @@
         "bronze": 2097.3,
         "star": 2307.1
       },
-      "lowest_gold": {
-        "team_name": "为嘛黄瓜绿",
-        "affiliation": "太原理工大学",
-        "rank_full_field": 282,
-        "rank_official": 4,
-        "solved": 4,
-        "performance_elo": 2234.5,
-        "theta": 2116.3
+      "cutoff_teams": {
+        "gold": {
+          "team_name": "为嘛黄瓜绿",
+          "affiliation": "太原理工大学",
+          "rank_full_field": 282,
+          "rank_official": 4,
+          "solved": 4,
+          "penalty_seconds": 34740,
+          "performance_elo": 2234.5,
+          "theta": 2116.3
+        },
+        "silver": {
+          "team_name": "东北大学_哇哦",
+          "affiliation": "东北大学",
+          "rank_full_field": 397,
+          "rank_official": 11,
+          "solved": 3,
+          "penalty_seconds": 15120,
+          "performance_elo": 2120.1,
+          "theta": 2138.6
+        },
+        "bronze": {
+          "team_name": "倚楼听雨",
+          "affiliation": "电子科技大学中山学院",
+          "rank_full_field": 544,
+          "rank_official": 21,
+          "solved": 3,
+          "penalty_seconds": 38880,
+          "performance_elo": 1966.7,
+          "theta": 2046.3
+        }
       }
     },
     {
@@ -470,14 +792,37 @@
         "bronze": 2039.5,
         "star": 3163.3
       },
-      "lowest_gold": {
-        "team_name": "新建文件夹",
-        "affiliation": "香港中文大学（深圳）",
-        "rank_full_field": 218,
-        "rank_official": 31,
-        "solved": 7,
-        "performance_elo": 2325.9,
-        "theta": 2209.3
+      "cutoff_teams": {
+        "gold": {
+          "team_name": "新建文件夹",
+          "affiliation": "香港中文大学（深圳）",
+          "rank_full_field": 218,
+          "rank_official": 31,
+          "solved": 7,
+          "penalty_seconds": 36000,
+          "performance_elo": 2325.9,
+          "theta": 2209.3
+        },
+        "silver": {
+          "team_name": "玩机械动力玩的",
+          "affiliation": "中国地质大学（北京）",
+          "rank_full_field": 392,
+          "rank_official": 93,
+          "solved": 6,
+          "penalty_seconds": 46140,
+          "performance_elo": 2161.9,
+          "theta": 2149.3
+        },
+        "bronze": {
+          "team_name": "高玩派对",
+          "affiliation": "吉林大学",
+          "rank_full_field": 597,
+          "rank_official": 185,
+          "solved": 5,
+          "penalty_seconds": 56820,
+          "performance_elo": 1988.9,
+          "theta": 2058.6
+        }
       }
     },
     {
@@ -502,14 +847,37 @@
         "bronze": 2112.0,
         "star": 2820.6
       },
-      "lowest_gold": {
-        "team_name": "W4p3r Fan Club",
-        "affiliation": "哈尔滨工业大学",
-        "rank_full_field": 248,
-        "rank_official": 34,
-        "solved": 5,
-        "performance_elo": 2304.1,
-        "theta": 2203.3
+      "cutoff_teams": {
+        "gold": {
+          "team_name": "W4p3r Fan Club",
+          "affiliation": "哈尔滨工业大学",
+          "rank_full_field": 248,
+          "rank_official": 34,
+          "solved": 5,
+          "penalty_seconds": 39000,
+          "performance_elo": 2304.1,
+          "theta": 2203.3
+        },
+        "silver": {
+          "team_name": "不会起名",
+          "affiliation": "西北农林科技大学",
+          "rank_full_field": 435,
+          "rank_official": 101,
+          "solved": 4,
+          "penalty_seconds": 36480,
+          "performance_elo": 2139.2,
+          "theta": 2091.7
+        },
+        "bronze": {
+          "team_name": "奥恩",
+          "affiliation": "西北工业大学",
+          "rank_full_field": 644,
+          "rank_official": 201,
+          "solved": 3,
+          "penalty_seconds": 24900,
+          "performance_elo": 1965.0,
+          "theta": 2059.9
+        }
       }
     },
     {
@@ -534,14 +902,37 @@
         "bronze": 1683.1,
         "star": 2894.1
       },
-      "lowest_gold": {
-        "team_name": "UESTC_篝月明火",
-        "affiliation": "电子科技大学",
-        "rank_full_field": 118,
-        "rank_official": 30,
-        "solved": 6,
-        "performance_elo": 2413.8,
-        "theta": 2242.1
+      "cutoff_teams": {
+        "gold": {
+          "team_name": "UESTC_篝月明火",
+          "affiliation": "电子科技大学",
+          "rank_full_field": 118,
+          "rank_official": 30,
+          "solved": 6,
+          "penalty_seconds": 55680,
+          "performance_elo": 2413.8,
+          "theta": 2242.1
+        },
+        "silver": {
+          "team_name": "糖果酱",
+          "affiliation": "华中科技大学",
+          "rank_full_field": 275,
+          "rank_official": 90,
+          "solved": 4,
+          "penalty_seconds": 28740,
+          "performance_elo": 2201.4,
+          "theta": 2124.2
+        },
+        "bronze": {
+          "team_name": "银狼",
+          "affiliation": "鲁东大学",
+          "rank_full_field": 500,
+          "rank_official": 180,
+          "solved": 2,
+          "penalty_seconds": 11340,
+          "performance_elo": 1960.5,
+          "theta": 2030.0
+        }
       }
     },
     {
@@ -566,14 +957,37 @@
         "bronze": 2120.3,
         "star": 3078.3
       },
-      "lowest_gold": {
-        "team_name": "南方科技大学-奥斯陆",
-        "affiliation": "南方科技大学",
-        "rank_full_field": 138,
-        "rank_official": 45,
-        "solved": 7,
-        "performance_elo": 2377.7,
-        "theta": 2205.0
+      "cutoff_teams": {
+        "gold": {
+          "team_name": "南方科技大学-奥斯陆",
+          "affiliation": "南方科技大学",
+          "rank_full_field": 138,
+          "rank_official": 45,
+          "solved": 7,
+          "penalty_seconds": 61980,
+          "performance_elo": 2377.7,
+          "theta": 2205.0
+        },
+        "silver": {
+          "team_name": "在线光速幂",
+          "affiliation": "四川大学",
+          "rank_full_field": 286,
+          "rank_official": 134,
+          "solved": 5,
+          "penalty_seconds": 36120,
+          "performance_elo": 2187.9,
+          "theta": 2088.3
+        },
+        "bronze": {
+          "team_name": "再想想特判？",
+          "affiliation": "杭州师范大学",
+          "rank_full_field": 484,
+          "rank_official": 267,
+          "solved": 4,
+          "penalty_seconds": 54960,
+          "performance_elo": 1981.0,
+          "theta": 2003.6
+        }
       }
     },
     {
@@ -598,14 +1012,37 @@
         "bronze": 1898.3,
         "star": 2861.0
       },
-      "lowest_gold": {
-        "team_name": "Good Problems!!!",
-        "affiliation": "Harbin Institute of Technology at Shenzhen",
-        "rank_full_field": 141,
-        "rank_official": 15,
-        "solved": 5,
-        "performance_elo": 2338.9,
-        "theta": 2136.7
+      "cutoff_teams": {
+        "gold": {
+          "team_name": "Good Problems!!!",
+          "affiliation": "Harbin Institute of Technology at Shenzhen",
+          "rank_full_field": 141,
+          "rank_official": 15,
+          "solved": 5,
+          "penalty_seconds": 55080,
+          "performance_elo": 2338.9,
+          "theta": 2136.7
+        },
+        "silver": {
+          "team_name": "UESTC_StarStorm",
+          "affiliation": "University of Electronic Science and Technology of China",
+          "rank_full_field": 319,
+          "rank_official": 45,
+          "solved": 3,
+          "penalty_seconds": 24360,
+          "performance_elo": 2088.8,
+          "theta": 2085.6
+        },
+        "bronze": {
+          "team_name": "Reborn As SXR",
+          "affiliation": "Wuhan University",
+          "rank_full_field": 448,
+          "rank_official": 90,
+          "solved": 2,
+          "penalty_seconds": 8580,
+          "performance_elo": 1901.0,
+          "theta": 2088.2
+        }
       }
     },
     {
@@ -630,14 +1067,37 @@
         "bronze": 2098.5,
         "star": 3076.7
       },
-      "lowest_gold": {
-        "team_name": "我打铁牌？真的假的？",
-        "affiliation": "南京大学",
-        "rank_full_field": 179,
-        "rank_official": 37,
-        "solved": 6,
-        "performance_elo": 2344.0,
-        "theta": 2149.7
+      "cutoff_teams": {
+        "gold": {
+          "team_name": "我打铁牌？真的假的？",
+          "affiliation": "南京大学",
+          "rank_full_field": 179,
+          "rank_official": 37,
+          "solved": 6,
+          "penalty_seconds": 28620,
+          "performance_elo": 2344.0,
+          "theta": 2149.7
+        },
+        "silver": {
+          "team_name": "总裁，夫人说这签到题写不完，今晚不许回家",
+          "affiliation": "浙江师范大学",
+          "rank_full_field": 353,
+          "rank_official": 110,
+          "solved": 5,
+          "penalty_seconds": 41400,
+          "performance_elo": 2156.7,
+          "theta": 2107.0
+        },
+        "bronze": {
+          "team_name": "哈理工10队HZ",
+          "affiliation": "哈尔滨理工大学",
+          "rank_full_field": 555,
+          "rank_official": 220,
+          "solved": 4,
+          "penalty_seconds": 43140,
+          "performance_elo": 1964.5,
+          "theta": 2001.3
+        }
       }
     },
     {
@@ -662,14 +1122,37 @@
         "bronze": 2426.8,
         "star": 3131.2
       },
-      "lowest_gold": {
-        "team_name": "UESTC_篝月明火",
-        "affiliation": "电子科技大学",
-        "rank_full_field": 77,
-        "rank_official": 28,
-        "solved": 6,
-        "performance_elo": 2512.0,
-        "theta": 2193.2
+      "cutoff_teams": {
+        "gold": {
+          "team_name": "UESTC_篝月明火",
+          "affiliation": "电子科技大学",
+          "rank_full_field": 77,
+          "rank_official": 28,
+          "solved": 6,
+          "penalty_seconds": 65340,
+          "performance_elo": 2512.0,
+          "theta": 2193.2
+        },
+        "silver": {
+          "team_name": "让我们_着走，送他们房子",
+          "affiliation": "华中科技大学",
+          "rank_full_field": 208,
+          "rank_official": 84,
+          "solved": 4,
+          "penalty_seconds": 33300,
+          "performance_elo": 2282.3,
+          "theta": 2192.3
+        },
+        "bronze": {
+          "team_name": "帅比队长征到婚了QQ[已隐藏]",
+          "affiliation": "哈尔滨工业大学（威海）",
+          "rank_full_field": 350,
+          "rank_official": 168,
+          "solved": 3,
+          "penalty_seconds": 21180,
+          "performance_elo": 2109.5,
+          "theta": 2114.1
+        }
       }
     },
     {
@@ -694,14 +1177,37 @@
         "bronze": 2079.7,
         "star": 2942.5
       },
-      "lowest_gold": {
-        "team_name": "你是永远的猫猫虫",
-        "affiliation": null,
-        "rank_full_field": 228,
-        "rank_official": 22,
-        "solved": 6,
-        "performance_elo": 2346.2,
-        "theta": 2141.4
+      "cutoff_teams": {
+        "gold": {
+          "team_name": "你是永远的猫猫虫",
+          "affiliation": null,
+          "rank_full_field": 228,
+          "rank_official": 22,
+          "solved": 6,
+          "penalty_seconds": 45900,
+          "performance_elo": 2346.2,
+          "theta": 2141.4
+        },
+        "silver": {
+          "team_name": "长崎不爽世",
+          "affiliation": null,
+          "rank_full_field": 438,
+          "rank_official": 65,
+          "solved": 5,
+          "penalty_seconds": 45960,
+          "performance_elo": 2177.4,
+          "theta": 2095.3
+        },
+        "bronze": {
+          "team_name": "黄河远上白云间",
+          "affiliation": null,
+          "rank_full_field": 711,
+          "rank_official": 129,
+          "solved": 4,
+          "penalty_seconds": 48120,
+          "performance_elo": 1996.9,
+          "theta": 2062.9
+        }
       }
     },
     {
@@ -726,14 +1232,37 @@
         "bronze": 2006.4,
         "star": 3024.9
       },
-      "lowest_gold": {
-        "team_name": "为帅气毕业老学长征婚QQ搜“莱芜贝克汉姆”",
-        "affiliation": "哈尔滨工业大学（威海）",
-        "rank_full_field": 141,
-        "rank_official": 32,
-        "solved": 8,
-        "performance_elo": 2431.0,
-        "theta": 2192.4
+      "cutoff_teams": {
+        "gold": {
+          "team_name": "为帅气毕业老学长征婚QQ搜“莱芜贝克汉姆”",
+          "affiliation": "哈尔滨工业大学（威海）",
+          "rank_full_field": 141,
+          "rank_official": 32,
+          "solved": 8,
+          "penalty_seconds": 57360,
+          "performance_elo": 2431.0,
+          "theta": 2192.4
+        },
+        "silver": {
+          "team_name": "羽生萌萌香鱼子酱",
+          "affiliation": "上海科技大学",
+          "rank_full_field": 357,
+          "rank_official": 96,
+          "solved": 6,
+          "penalty_seconds": 55560,
+          "performance_elo": 2203.1,
+          "theta": 2124.8
+        },
+        "bronze": {
+          "team_name": "夏日空调幻想时刻",
+          "affiliation": "吉林大学",
+          "rank_full_field": 620,
+          "rank_official": 192,
+          "solved": 4,
+          "penalty_seconds": 33480,
+          "performance_elo": 1995.3,
+          "theta": 2062.3
+        }
       }
     },
     {
@@ -758,14 +1287,37 @@
         "bronze": 1951.7,
         "star": 3257.6
       },
-      "lowest_gold": {
-        "team_name": "天绫绫地宁宁",
-        "affiliation": "北京邮电大学",
-        "rank_full_field": 184,
-        "rank_official": 34,
-        "solved": 7,
-        "performance_elo": 2362.5,
-        "theta": 2195.7
+      "cutoff_teams": {
+        "gold": {
+          "team_name": "天绫绫地宁宁",
+          "affiliation": "北京邮电大学",
+          "rank_full_field": 184,
+          "rank_official": 34,
+          "solved": 7,
+          "penalty_seconds": 76920,
+          "performance_elo": 2362.5,
+          "theta": 2195.7
+        },
+        "silver": {
+          "team_name": "奇迹与你",
+          "affiliation": "广西大学",
+          "rank_full_field": 360,
+          "rank_official": 101,
+          "solved": 4,
+          "penalty_seconds": 30780,
+          "performance_elo": 2183.9,
+          "theta": 2130.4
+        },
+        "bronze": {
+          "team_name": "少猪哭泣乐队",
+          "affiliation": "中南大学",
+          "rank_full_field": 606,
+          "rank_official": 201,
+          "solved": 2,
+          "penalty_seconds": 2220,
+          "performance_elo": 1967.3,
+          "theta": 2101.6
+        }
       }
     },
     {
@@ -790,14 +1342,37 @@
         "bronze": 2058.7,
         "star": 2847.4
       },
-      "lowest_gold": {
-        "team_name": "花开之夜",
-        "affiliation": "济南大学",
-        "rank_full_field": 94,
-        "rank_official": 45,
-        "solved": 6,
-        "performance_elo": 2446.9,
-        "theta": 2190.1
+      "cutoff_teams": {
+        "gold": {
+          "team_name": "花开之夜",
+          "affiliation": "济南大学",
+          "rank_full_field": 94,
+          "rank_official": 45,
+          "solved": 6,
+          "penalty_seconds": 49860,
+          "performance_elo": 2446.9,
+          "theta": 2190.1
+        },
+        "silver": {
+          "team_name": "英文队名逆序对",
+          "affiliation": "华东师范大学",
+          "rank_full_field": 261,
+          "rank_official": 133,
+          "solved": 4,
+          "penalty_seconds": 26460,
+          "performance_elo": 2211.2,
+          "theta": 2077.8
+        },
+        "bronze": {
+          "team_name": "我的二个两次元队友",
+          "affiliation": "云南大学",
+          "rank_full_field": 482,
+          "rank_official": 266,
+          "solved": 3,
+          "penalty_seconds": 18540,
+          "performance_elo": 2004.1,
+          "theta": 1899.7
+        }
       }
     },
     {
@@ -822,14 +1397,37 @@
         "bronze": 1903.3,
         "star": 2915.4
       },
-      "lowest_gold": {
-        "team_name": "我坐戏子楼台前",
-        "affiliation": "香港科技大学（广州）",
-        "rank_full_field": 217,
-        "rank_official": 41,
-        "solved": 5,
-        "performance_elo": 2285.6,
-        "theta": 2101.5
+      "cutoff_teams": {
+        "gold": {
+          "team_name": "我坐戏子楼台前",
+          "affiliation": "香港科技大学（广州）",
+          "rank_full_field": 217,
+          "rank_official": 41,
+          "solved": 5,
+          "penalty_seconds": 33660,
+          "performance_elo": 2285.6,
+          "theta": 2101.5
+        },
+        "silver": {
+          "team_name": "顽强报名奖",
+          "affiliation": "北京科技大学",
+          "rank_full_field": 365,
+          "rank_official": 121,
+          "solved": 4,
+          "penalty_seconds": 28920,
+          "performance_elo": 2134.6,
+          "theta": 2086.1
+        },
+        "bronze": {
+          "team_name": "杀马特团长，我踏马来辣",
+          "affiliation": "厦门理工学院",
+          "rank_full_field": 553,
+          "rank_official": 242,
+          "solved": 3,
+          "penalty_seconds": 16440,
+          "performance_elo": 1957.4,
+          "theta": 1995.2
+        }
       }
     },
     {
@@ -854,14 +1452,37 @@
         "bronze": 1944.6,
         "star": 2998.1
       },
-      "lowest_gold": {
-        "team_name": "奇迹和魔法，都是存在的",
-        "affiliation": "北京航空航天大学",
-        "rank_full_field": 118,
-        "rank_official": 30,
-        "solved": 6,
-        "performance_elo": 2328.1,
-        "theta": 2191.9
+      "cutoff_teams": {
+        "gold": {
+          "team_name": "奇迹和魔法，都是存在的",
+          "affiliation": "北京航空航天大学",
+          "rank_full_field": 118,
+          "rank_official": 30,
+          "solved": 6,
+          "penalty_seconds": 58800,
+          "performance_elo": 2328.1,
+          "theta": 2191.9
+        },
+        "silver": {
+          "team_name": "杭电3队",
+          "affiliation": "杭州电子科技大学",
+          "rank_full_field": 221,
+          "rank_official": 90,
+          "solved": 4,
+          "penalty_seconds": 30420,
+          "performance_elo": 2145.5,
+          "theta": 2136.8
+        },
+        "bronze": {
+          "team_name": "口圭，又是电波题",
+          "affiliation": "郑州大学",
+          "rank_full_field": 345,
+          "rank_official": 179,
+          "solved": 2,
+          "penalty_seconds": 16620,
+          "performance_elo": 1943.0,
+          "theta": 1994.3
+        }
       }
     },
     {
@@ -886,14 +1507,37 @@
         "bronze": 2019.0,
         "star": 2664.8
       },
-      "lowest_gold": {
-        "team_name": "lemonade factory",
-        "affiliation": "Beihang University",
-        "rank_full_field": 103,
-        "rank_official": 13,
-        "solved": 5,
-        "performance_elo": 2349.9,
-        "theta": 2241.6
+      "cutoff_teams": {
+        "gold": {
+          "team_name": "lemonade factory",
+          "affiliation": "Beihang University",
+          "rank_full_field": 103,
+          "rank_official": 13,
+          "solved": 5,
+          "penalty_seconds": 29700,
+          "performance_elo": 2349.9,
+          "theta": 2241.6
+        },
+        "silver": {
+          "team_name": "One pull one hit",
+          "affiliation": "Chengdu University of Information Technology",
+          "rank_full_field": 234,
+          "rank_official": 38,
+          "solved": 3,
+          "penalty_seconds": 20280,
+          "performance_elo": 2090.0,
+          "theta": 2167.0
+        },
+        "bronze": {
+          "team_name": "Fondness? Delusion!",
+          "affiliation": "Jiangxi University of Finance and Economics",
+          "rank_full_field": 330,
+          "rank_official": 76,
+          "solved": 2,
+          "penalty_seconds": 15900,
+          "performance_elo": 1884.2,
+          "theta": 2017.9
+        }
       }
     }
   ],
