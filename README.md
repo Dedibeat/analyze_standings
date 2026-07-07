@@ -170,6 +170,19 @@ medal-cutoff bars). Reads `medal_badges.json` + raw standings; no model fit at
 runtime.
 
 ```bash
+./.venv/bin/python -m arch_b.export_performance_viewer
+```
+
+The **web version** (`output/performance_calculator.html`, self-contained,
+light/dark aware) generalizes the calculator to **every fitted contest with
+standings** (131 contests): pick a contest, click the problems you solved,
+optionally enter the penalty, and get the full-field rank/percentile, the
+official-field rank + medal on EA medal contests, the must-solve callout, the
+performance bar, and the EA medal projection — all client-side, shareable via
+the URL hash (`#c=2609&s=F,E,M,K&p=620`). Published via GitHub Pages:
+<https://dedibeat.github.io/analyze_standings/output/performance_calculator.html>
+
+```bash
 ./.venv/bin/python -m arch_b.export_medal_viewer
 ```
 
@@ -257,8 +270,9 @@ Module self-checks:
   `gym_difficulty` fixed-θ fit on the CF gym-mirror population, `predict_eval`,
   `calibrate`, `season_experiment`, `medals` EA medal badges + lowest-gold
   analysis (with `export_medal_viewer` + `medal_viewer_template.html` for the
-  medal viewer, and `performance` the post-virtual-contest calculator),
-  `twopl`/`twopl_region` 2PL discrimination
+  medal viewer, and `performance` the post-virtual-contest calculator with
+  `export_performance_viewer` + `performance_viewer_template.html` for its
+  web version), `twopl`/`twopl_region` 2PL discrimination
   prototype); reuses `arch_a.load` and `arch_a.elo`.
 - `output/problem_ratings.json` — Architecture A ratings;
   `output/problem_ratings_b.json` — Architecture B (binary) ratings;

@@ -738,6 +738,27 @@ direct rank insertion is authoritative (a hairline example: sweeping Wuhan
 2025's six ≤gold+ problems ranks gold 42/443 directly, while the bar lands 1
 raw point under Wuhan's gold+ edge and projects silver there).
 
+**Web version (`arch_b.export_performance_viewer` +
+`performance_viewer_template.html`).** `output/performance_calculator.html` is
+the calculator as a self-contained page (no server, light/dark aware, same
+badge palette as the medal viewer), generalized to **every fitted contest with
+standings** — 131 contests, not just the 28 EA medal ones. Pick a contest,
+click the problems you solved (chips sorted by difficulty, badge-dotted on EA
+contests), optionally enter the penalty; the page computes client-side: the
+full-field rank/percentile among the contest's *solving* teams, the
+official-field rank + medal on EA medal contests (rank insertion, best–worst
+range without a penalty), the missed ≤gold+ must-solve callout, the
+performance bar (a JS port of the same PAVA crossing), and the 28-contest EA
+medal projection. Data embedded at build time: per-contest problems from
+`problem_ratings_calibrated.json` (raw + CF difficulty — the global CF map is
+interpolated from all 1578 problem samples), per-team `[solved, penalty]`
+pairs of solving teams from `tagged.json`, badges/bars/cutoffs from
+`medal_badges.json`, official fields from the XCPCIO cache (~0.7 MB total).
+State lives in the URL hash (`#c=<cid>&s=A,C,E&p=800`), so a result is
+shareable. Verified against the CLI: the Wuhan example gives identical rank/
+medal/raw-bar (CF differs by 1 point because the page's CF map interpolates
+over all problems rather than the EA subset).
+
 **Viewer (`arch_b.export_medal_viewer` + `medal_viewer_template.html`).**
 `output/medal_viewer.html` is the interactive presentation of the analysis —
 self-contained (data embedded, no server, vanilla JS/SVG), light/dark aware via
