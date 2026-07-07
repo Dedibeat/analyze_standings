@@ -156,6 +156,20 @@ the `calibrate` map (gold-medal bar across contests: median ≈ 2655 CF, range �
 empirical crossings rather than Elo performance ratings.
 
 ```bash
+./.venv/bin/python -m arch_b.performance 2609 --solved F,E,M,K --penalty 620
+```
+
+**Performance calculator** for virtual contests: score a virtual run of any of
+the 28 EA medal contests against its official field — rank / percentile /
+medal by rank insertion (solved count, then penalty), a badge scorecard
+flagging missed problems at gold+ grade or below (the must-solve set for
+gold), your **performance bar** (the difficulty where your solve indicator
+crosses 50% — the same isotonic crossing that defines the medal bars), and a
+medal projection across all 28 EA regionals (your bar vs each contest's
+medal-cutoff bars). Reads `medal_badges.json` + raw standings; no model fit at
+runtime.
+
+```bash
 ./.venv/bin/python -m arch_b.export_medal_viewer
 ```
 
@@ -243,7 +257,8 @@ Module self-checks:
   `gym_difficulty` fixed-θ fit on the CF gym-mirror population, `predict_eval`,
   `calibrate`, `season_experiment`, `medals` EA medal badges + lowest-gold
   analysis (with `export_medal_viewer` + `medal_viewer_template.html` for the
-  medal viewer), `twopl`/`twopl_region` 2PL discrimination
+  medal viewer, and `performance` the post-virtual-contest calculator),
+  `twopl`/`twopl_region` 2PL discrimination
   prototype); reuses `arch_a.load` and `arch_a.elo`.
 - `output/problem_ratings.json` — Architecture A ratings;
   `output/problem_ratings_b.json` — Architecture B (binary) ratings;

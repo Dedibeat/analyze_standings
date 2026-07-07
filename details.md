@@ -716,6 +716,28 @@ EC-Final 2024 "China" (2885) and EC-Final 2023 "Shanghai" (2883); softest at
 Grand Prix of Shenyang 2025 (2114). The lowest gold team solves 4–8 problems
 and its classic Elo rank-inversion performance sits at 2234–2512.
 
+**Performance calculator (`arch_b.performance`).** Post-virtual-contest tool:
+`python -m arch_b.performance <contest_id> --solved A,C,E [--penalty <min>]`
+scores a virtual run of one of the 28 EA medal contests against the official
+field. Reports (1) the official-field rank / percentile / medal by **rank
+insertion** (solved count, then penalty; without a penalty it prints the
+best–worst range over the equal-solved block, treating an official with an
+unknown penalty as ahead); (2) a badge scorecard that calls out missed
+problems at gold+ grade or below (the must-solve set for gold); (3) the
+**performance bar** — the difficulty where the user's own solve indicator
+crosses 50%, computed with the *same* isotonic-crossing helper as the medal
+bars (`_cohort_bar` on a single synthetic row), so it is directly comparable
+to them; and (4) a medal projection across all 28 contests (gold where the
+bar clears the gold+ edge, etc., plus the ladder grade). Runs entirely off
+`output/medal_badges.json` + raw standings + the XCPCIO cache — **no model
+fit at runtime**; CF conversion of the bar interpolates the global
+(difficulty, difficulty_cf) samples of all badged problems. Caveats printed
+with the output: the bar quantizes on one contest's ~13 solve/miss
+observations and ignores penalty, so for the virtualed contest itself the
+direct rank insertion is authoritative (a hairline example: sweeping Wuhan
+2025's six ≤gold+ problems ranks gold 42/443 directly, while the bar lands 1
+raw point under Wuhan's gold+ edge and projects silver there).
+
 **Viewer (`arch_b.export_medal_viewer` + `medal_viewer_template.html`).**
 `output/medal_viewer.html` is the interactive presentation of the analysis —
 self-contained (data embedded, no server, vanilla JS/SVG), light/dark aware via
