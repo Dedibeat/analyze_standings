@@ -753,11 +753,34 @@ medal projection. Data embedded at build time: per-contest problems from
 `problem_ratings_calibrated.json` (raw + CF difficulty — the global CF map is
 interpolated from all 1578 problem samples), per-team `[solved, penalty]`
 pairs of solving teams from `tagged.json`, badges/bars/cutoffs from
-`medal_badges.json`, official fields from the XCPCIO cache (~0.7 MB total).
+`medal_badges.json`, official fields from the XCPCIO cache (~0.9 MB total).
 State lives in the URL hash (`#c=<cid>&s=A,C,E&p=800`), so a result is
 shareable. Verified against the CLI: the Wuhan example gives identical rank/
 medal/raw-bar (CF differs by 1 point because the page's CF map interpolates
 over all problems rather than the EA subset).
+
+**Two projection channels, never mixed (user decision).** The page's
+*primary* medal estimate is the classic **Elo rank-inversion performance**:
+the exporter runs the survival fit once at build time and embeds, per
+contest, the **rank → `elo.performance_rating` curve** over the field's
+fitted abilities (all 131 contests, ~0.24 MB); the page looks up the user's
+inserted full-field rank (or range) in the curve and compares it to each EA
+contest's **cutoff-team performances** (`cut_perf`, from
+`medal_badges.json`) — gold where the user's performance clears the gold
+cutoff team's. Needs only solve count + penalty, is finer-grained than the
+bar (rank resolution vs ~13 binary observations), and rewards speed. The
+**bar channel** (vs the medal bars) stays as the secondary, training-view
+projection with the ladder grade. The channels are kept strictly separate —
+performance vs performance, difficulty vs difficulty — because the
+rank-inversion is measured as inflated against the difficulty scale (+0.34
+predicted−actual solve rate at gold; the reason the medal bars are empirical
+crossings). Cross-check: the embedded curve evaluated at Wuhan 2025's
+gold-cutoff full-field rank (r94) gives 2447 vs the medals run's stored
+2446.9. Note the channels can genuinely disagree — the Wuhan ≤gold+ sweep
+projects gold in 26/28 by performance but 13/28 by bar — because cutoff
+*performance* measures field strength at the 10% rank while the gold *bar*
+measures the difficulty demanded there, and contests order differently on
+the two.
 
 **Viewer (`arch_b.export_medal_viewer` + `medal_viewer_template.html`).**
 `output/medal_viewer.html` is the interactive presentation of the analysis —

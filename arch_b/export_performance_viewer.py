@@ -9,25 +9,43 @@ computes — all client-side —
 
   * your rank / percentile among the contest's solving teams (full field),
     and, for EA medal contests, your official-field rank + medal;
+  * your **performance rating** — the classic Elo rank-inversion
+    (``elo.performance_rating``) of your inserted rank against the field's
+    fitted abilities, the same number the medal analysis reports for every
+    cutoff team — and, as the primary medal projection, that performance vs
+    each EA medal contest's cutoff-team performances;
   * the performance bar (the 50% isotonic crossing of your solve indicator,
-    the same crossing that defines the medal bars) in raw + CF points;
-  * the missed must-solve problems (badge gold+ or below, EA contests);
-  * a medal projection across the 28 EA medal contests (your bar vs their
-    medal-cutoff bars).
+    the same crossing that defines the medal bars) in raw + CF points, with
+    a secondary bar-based projection in the badge-ladder language;
+  * the missed must-solve problems (badge gold+ or below, EA contests).
 
-Inputs: ``output/problem_ratings_calibrated.json`` (difficulties, all
+The two channels live on different scales and are never mixed: performance is
+compared to cutoff *performances* (both Elo rank-inversions on the raw theta
+scale), the bar to the medal *bars* (both difficulty crossings) — the
+rank-inversion is measured as inflated against the difficulty scale
+(details.md), so cross-channel comparison would be wrong by construction.
+
+Build inputs: the UCup-anchored survival fit (run here once, to get the field
+abilities that back the per-contest **rank -> performance curve** embedded in
+the page), ``output/problem_ratings_calibrated.json`` (difficulties, all
 contests), ``data/tagged.json`` (standings -> per-team [solved, penalty]
-pairs of solving teams), ``output/medal_badges.json`` (badges + medal bars),
-and the XCPCIO official cache (official fields). Writes
-``output/performance_calculator.html`` — self-contained, no server.
+pairs of solving teams), ``output/medal_badges.json`` (badges + medal bars +
+cutoff performances), and the XCPCIO official cache (official fields). Writes
+``output/performance_calculator.html`` — self-contained, no server, nothing
+model-side runs at view time.
 """
 
 import json
 import os
 
+import numpy as np
+
+from arch_a import elo
 from arch_a.load import dedupe_contests
-from .anchor import TAGGED
+from . import survival
+from .anchor import TAGGED, estimate_anchored
 from .medals import _is_official, _load_xcpcio_cache, medal_contests
+from .run import MIN_SOLVE_HOURS
 
 OUT_DIR = os.path.join(os.path.dirname(__file__), os.pardir, "output")
 TEMPLATE = os.path.join(os.path.dirname(__file__), "performance_viewer_template.html")
@@ -44,6 +62,12 @@ def _pairs(rows):
     return sorted(out, key=lambda p: (-p[0], p[1] if p[1] is not None else -1))
 
 
+def _perf_curve(field_theta, n_ranks):
+    """Rank -> Elo rank-inversion performance, for ranks 1..n_ranks."""
+    return [round(float(elo.performance_rating(r, field_theta)))
+            for r in range(1, n_ranks + 1)]
+
+
 def main():
     with open(RATINGS) as f:
         ratings = json.load(f)
@@ -51,6 +75,11 @@ def main():
         badges = json.load(f)
     with open(TAGGED) as f:
         raw = dedupe_contests(json.load(f))
+
+    # the fit backs the rank -> performance curves (same fit medals.py uses)
+    ds, theta, _b, _rho, _uf = estimate_anchored(fit_fn=survival.fit,
+                                                 min_solve_hours=MIN_SOLVE_HOURS)
+    contest_idx = {cid: ci for ci, cid in enumerate(ds.contests)}
 
     probs_by_cid = {}
     for r in ratings:
@@ -82,6 +111,12 @@ def main():
                  for p in ps), key=lambda p: p["b"]),
             "field": field,
         }
+        ci = contest_idx.get(cid)
+        if ci is not None:
+            rows = np.flatnonzero(ds.contest_of_row == ci)
+            if len(rows):
+                field_theta = theta[ds.team_of_row[rows]]
+                entry["perf"] = _perf_curve(field_theta, len(field) + 1)
         if cid in medal_info and cid in ea_medal:
             xc = xcpcio[cid]
             entry["official"] = _pairs(
@@ -93,6 +128,8 @@ def main():
                 "bars_cf": m["medal_bar_cf"],
                 "cut_solved": {t: m["cutoff_teams"][t]["solved"]
                                for t in ("gold", "silver", "bronze")},
+                "cut_perf": {t: m["cutoff_teams"][t]["performance_elo"]
+                             for t in ("gold", "silver", "bronze")},
             }
         contests.append(entry)
 
@@ -107,8 +144,9 @@ def main():
     with open(out, "w") as f:
         f.write(html)
     n_medal = sum(1 for c in contests if "medal" in c)
+    n_perf = sum(1 for c in contests if "perf" in c)
     print(f"wrote {os.path.normpath(out)} ({len(contests)} contests, "
-          f"{n_medal} with medal data, "
+          f"{n_medal} with medal data, {n_perf} with perf curves, "
           f"{sum(len(c['problems']) for c in contests)} problems, "
           f"{sum(len(c['field']) for c in contests)} field rows)")
 

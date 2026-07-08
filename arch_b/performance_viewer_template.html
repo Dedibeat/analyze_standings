@@ -151,10 +151,13 @@ footer li { margin-top: 3px; }
     <p class="sub">Pick the contest you ran virtually, tick the problems you solved (penalty in
     minutes optional), and get your standing against the contest's real field plus an ICPC
     <b>East Asia medal estimate</b>. Works for every fitted contest with standings; EA medal
-    contests additionally rank you inside the official (medal-eligible) field. Your
-    <b>performance bar</b> is the difficulty at which your solve indicator crosses 50% — the
-    same isotonic crossing that defines the medal bars — so it transfers across contests on
-    the shared difficulty scale (Codeforces-equivalent points).</p>
+    contests additionally rank you inside the official (medal-eligible) field. Two channels,
+    on two scales that are never mixed: your <b>performance</b> is the classic Elo
+    rank-inversion of your inserted rank against the field's fitted abilities (raw scale),
+    compared to the same number for each regional's medal-cutoff teams — the primary medal
+    estimate, needing only solve count + penalty. Your <b>performance bar</b> is the
+    difficulty at which your solve indicator crosses 50% (the crossing that defines the medal
+    bars, CF-equivalent points) — the training view, using <i>which</i> problems you solved.</p>
   </header>
 
   <section class="card">
@@ -177,10 +180,13 @@ footer li { margin-top: 3px; }
 
   <section class="card">
     <h2>East Asia medal projection</h2>
-    <p class="card-sub">Your performance bar vs each EA medal contest's cutoff bars (the
-    difficulty its medal-boundary cohort solves at even odds, CF points). Gold where your bar
-    clears the gold bar, and so on; the grade column places you on the badge ladder
-    bronze &lt; bronze+ &lt; silver &lt; silver+ &lt; gold &lt; gold+ &lt; plat &lt; plat+.</p>
+    <p class="card-sub"><b>Medal (perf)</b> — the primary estimate — compares your Elo
+    rank-inversion performance to each contest's gold/silver/bronze <i>cutoff-team
+    performances</i> (raw scale; the gold column shows the performance the gold cutoff team
+    posted). <b>Medal (bar)</b> compares your performance bar to the contest's <i>medal
+    bars</i> (difficulty, CF points), with the grade column placing you on the badge ladder
+    bronze &lt; bronze+ &lt; silver &lt; silver+ &lt; gold &lt; gold+ &lt; plat &lt; plat+.
+    The channels stay separate: performance vs performance, difficulty vs difficulty.</p>
     <div class="tbl-wrap"><table id="projTable"></table></div>
     <p class="note" id="projNote"></p>
   </section>
@@ -190,6 +196,11 @@ footer li { margin-top: 3px; }
     (<code>problem_ratings_calibrated.json</code>), the raw standings, and
     <code>medal_badges.json</code>. Caveats:
     <ul>
+      <li>The two channels are deliberately never mixed: the Elo rank-inversion performance is
+      measured as inflated against the difficulty scale (see details.md), so it is only ever
+      compared to the cutoff teams' <i>performances</i>, and the bar only to the medal
+      <i>bars</i>. Where they disagree, the performance channel is the better medal estimate
+      (finer-grained, uses penalty); the bar is the training view.</li>
       <li>The bar quantizes on one contest's solve/miss pattern (~13 binary observations) and
       ignores penalty — for the contest you actually ran, the direct rank insertion is the
       authoritative number; the projection is for transferring to the other regionals.</li>
@@ -369,6 +380,11 @@ function renderChips() {
       : el("b", null, "Swept every problem at gold+ grade or below.")));
 }
 
+function medalOfPerf(p, cutPerf) {
+  for (const t of ["gold", "silver", "bronze"]) if (p >= cutPerf[t]) return t;
+  return null;
+}
+
 function renderKpis() {
   const c = contestById(state.cid);
   const box = document.getElementById("kpis");
@@ -391,6 +407,17 @@ function renderKpis() {
     lo === hi ? "r" + lo : "r" + lo + "–" + hi, "of " + n,
     lo === hi ? pctTop(lo, n) : pctTop(lo, n) + "–" + pctTop(hi, n).slice(4)));
 
+  let pBest = null, pWorst = null;
+  if (c.perf) {
+    const perfAt = r => c.perf[Math.min(r, c.perf.length) - 1];
+    pBest = perfAt(lo); pWorst = perfAt(hi);
+    tiles.push(tile("Performance (Elo)",
+      pBest >= HI ? "max" : pBest === pWorst ? fmt(pBest) : fmt(pWorst) + "–" + fmt(pBest),
+      null,
+      (pBest >= HI ? "rank 1 pins to the scale ceiling · " : "")
+        + "rank-inversion vs the field, raw scale — the primary medal estimate"));
+  }
+
   if (c.medal) {
     const [olo, ohi] = insertRank(c.official, state.solved.size, penS);
     const on = c.official.length;
@@ -410,48 +437,67 @@ function renderKpis() {
       "not an EA medal contest — see the projection below"));
   }
 
-  tiles.push(tile("Performance bar",
+  tiles.push(tile("Performance bar (difficulty)",
     bar <= LO ? "—" : bar >= HI ? "max" : fmt(toCF(bar)),
     bar > LO && bar < HI ? "CF" : null,
-    bar <= LO ? "solve the easiest problem first"
+    bar <= LO ? "tick the problems you solved"
       : bar >= HI ? "solved everything — pinned at the ceiling"
-      : fmt(bar) + " raw · your 50% solve-odds difficulty"));
+      : fmt(bar) + " raw · your 50% solve-odds difficulty (training view)"));
 
   box.replaceChildren(...tiles);
-  return bar;
+  return { bar, pBest, pWorst };
 }
 
-function renderProjection(bar) {
+function renderProjection(res) {
+  const { bar, pBest, pWorst } = res;
   const rows = DATA.contests.filter(c => c.medal)
-    .sort((a, b) => b.medal.bars_cf["gold+"] - a.medal.bars_cf["gold+"]);
-  const tally = { gold: 0, silver: 0, bronze: 0, none: 0 };
+    .sort((a, b) => b.medal.cut_perf.gold - a.medal.cut_perf.gold);
+  const tallyBest = { gold: 0, silver: 0, bronze: 0, none: 0 };
+  const tallyWorst = { gold: 0, silver: 0, bronze: 0, none: 0 };
+  const tallyBar = { gold: 0, silver: 0, bronze: 0, none: 0 };
+  const cap = s => s ? s[0].toUpperCase() + s.slice(1) : "—";
   const body = rows.map(c => {
     const m = c.medal;
-    const medal = (MEDAL_EDGE.find(([, e]) => bar >= m.bars[e]) || [null])[0];
-    tally[medal || "none"]++;
+    let perfCell = "—";
+    if (pBest != null) {
+      const mBest = medalOfPerf(pBest, m.cut_perf), mWorst = medalOfPerf(pWorst, m.cut_perf);
+      tallyBest[mBest || "none"]++;
+      tallyWorst[mWorst || "none"]++;
+      perfCell = mBest === mWorst ? cap(mBest) : cap(mWorst) + "–" + cap(mBest);
+    }
+    const medalBar = (MEDAL_EDGE.find(([, e]) => bar >= m.bars[e]) || [null])[0];
+    tallyBar[medalBar || "none"]++;
     const g = grade(bar, m.bars);
     return el("tr", { class: c.id === state.cid ? "me" : "" },
       el("td", { class: "mutedtx" }, String(c.year)),
       el("td", null, c.name + (c.id === state.cid ? " *" : "")),
-      el("td", { class: "num" }, fmt(m.bars_cf["bronze+"])),
-      el("td", { class: "num" }, fmt(m.bars_cf["silver+"])),
+      el("td", { class: "num" }, fmt(m.cut_perf.gold)),
+      el("td", null, el("b", null, perfCell)),
       el("td", { class: "num" }, fmt(m.bars_cf["gold+"])),
       el("td", null, g ? badgeChip(g) : el("span", { class: "mutedtx" }, "below")),
-      el("td", { style: "text-transform:capitalize" }, medal || "—"));
+      el("td", { style: "text-transform:capitalize", class: "mutedtx" }, medalBar || "—"));
   });
   document.getElementById("projTable").replaceChildren(
     el("thead", null, el("tr", null,
       el("th", null, "Year"), el("th", null, "Contest"),
-      el("th", { class: "num" }, "Bronze bar"), el("th", { class: "num" }, "Silver bar"),
-      el("th", { class: "num" }, "Gold bar"), el("th", null, "Grade"), el("th", null, "Medal"))),
+      el("th", { class: "num" }, "Gold perf"), el("th", null, "Medal (perf)"),
+      el("th", { class: "num" }, "Gold bar CF"), el("th", null, "Grade (bar)"),
+      el("th", null, "Medal (bar)"))),
     el("tbody", null, body));
   const total = rows.length;
+  const rng = (t) => ["gold", "silver", "bronze", "none"]
+    .filter(m => tallyBest[m] || tallyWorst[m])
+    .map(m => m + " in " + (tallyWorst[m] === tallyBest[m] ? tallyBest[m]
+      : Math.min(tallyWorst[m], tallyBest[m]) + "–" + Math.max(tallyWorst[m], tallyBest[m]))
+      + "/" + total).join(", ");
   document.getElementById("projNote").textContent =
-    (bar <= LO ? "No bar yet — tick the problems you solved. "
-      : "Projected: gold in " + tally.gold + "/" + total
-        + ", silver in " + tally.silver + "/" + total
-        + ", bronze in " + tally.bronze + "/" + total
-        + (tally.none ? ", none in " + tally.none + "/" + total : "") + ". ")
+    (pBest == null ? ""
+      : "Projected by performance: " + rng() + ". ")
+    + (bar <= LO ? "No difficulty bar yet — tick the problems you solved for the bar channel. "
+      : "By the bar: gold in " + tallyBar.gold + "/" + total
+        + ", silver in " + tallyBar.silver + "/" + total
+        + ", bronze in " + tallyBar.bronze + "/" + total
+        + (tallyBar.none ? ", none in " + tallyBar.none + "/" + total : "") + ". ")
     + (contestById(state.cid).medal
        ? "* = the contest you ran — its direct rank insertion above is authoritative."
        : "");

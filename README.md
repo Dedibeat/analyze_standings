@@ -177,9 +177,15 @@ The **web version** (`output/performance_calculator.html`, self-contained,
 light/dark aware) generalizes the calculator to **every fitted contest with
 standings** (131 contests): pick a contest, click the problems you solved,
 optionally enter the penalty, and get the full-field rank/percentile, the
-official-field rank + medal on EA medal contests, the must-solve callout, the
-performance bar, and the EA medal projection — all client-side, shareable via
-the URL hash (`#c=2609&s=F,E,M,K&p=620`). Published via GitHub Pages:
+official-field rank + medal on EA medal contests, the must-solve callout, and
+a two-channel EA medal projection — the **primary channel** is your Elo
+rank-inversion **performance** (looked up in a per-contest rank→performance
+curve the exporter precomputes from the fit) vs each regional's cutoff-team
+performances; the **bar channel** (your 50%-crossing difficulty vs the medal
+bars, with the ladder grade) is the training view. All client-side, shareable
+via the URL hash (`#c=2609&s=F,E,M,K&p=620`). Note the exporter runs the
+survival fit once at build time to compute the curves. Published via GitHub
+Pages:
 <https://dedibeat.github.io/analyze_standings/output/performance_calculator.html>
 
 ```bash
