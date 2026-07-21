@@ -126,6 +126,17 @@ Validated leave-one-contest-out: shaped RMSE **266** vs plain-affine 288
 `output/problem_ratings_calibrated.json` with `difficulty_cf` + `difficulty_cf_se`.
 These are the best estimate of CF-equivalent difficulty.
 
+### Participant Codeforces ratings (research finding)
+
+A 2026-07-21 feasibility test matched exactly one Codeforces handle for 1,168 of
+25,656 distinct standing member names (4.6%); only 2.3% of roster rows had every
+member resolved.  The official Codeforces API is the right rating/history source,
+while CLIST is useful only as secondary identity evidence.  The proposed fit
+improvement is a confidence-weighted, time-accurate CF prior on team ability,
+starting with fully resolved rosters so missing members are not silently treated
+as weak.  This is **documented but not implemented**; see
+[`cf_participant_ratings.md`](cf_participant_ratings.md).
+
 ### East-Asia medal badges
 
 ```bash
@@ -247,6 +258,8 @@ Module self-checks:
   `output/gym_difficulty.json` — independent CF-scale difficulty from gym mirrors.
 - `output/ratings_viewer.html` — generated interactive viewer.
 - `details.md` — design notes, key decisions, and follow-ups.
+- `cf_participant_ratings.md` — measured member→Codeforces coverage and the
+  proposed historical-rating prior for the fit (research only, not implemented).
 
 See `details.md` for the no-Codeforces-data anchoring choice, the `$DEFAULT`
 team-id handling, the two architectures, and what's deliberately out of scope.

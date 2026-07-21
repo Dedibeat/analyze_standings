@@ -81,12 +81,14 @@ Run with the project venv:
 - **Scale anchor / no Codeforces data.** The strat's recommended anchor and
   bootstrap (eq. cfprior) use the Codeforces ratings of team members. **The data
   contains no CF ratings, and `members` are real names, not handles**, so CF
-  anchoring is not available. Instead we anchor with a **constant neutral prior
-  `MU0 = 2000`** (a mid Codeforces rating) for every team. This replaces the
-  plan's original "center to mean 0", which is incompatible with the clamp below
-  (centering would push half the teams under the floor mid-loop). Outputs are
-  therefore a relative scale pinned near 2000, *not* certified CF-equivalent
-  points.
+  anchoring is not available in the shipped fit. A 2026-07-21 feasibility study
+  found a sparse external seed set but has not yet been collected or integrated
+  (see the participant-rating section below). Instead we anchor with a **constant
+  neutral prior `MU0 = 2000`** (a mid Codeforces rating) for every team. This
+  replaces the plan's original "center to mean 0", which is incompatible with the
+  clamp below (centering would push half the teams under the floor mid-loop).
+  Outputs are therefore a relative scale pinned near 2000, *not* certified
+  CF-equivalent points.
 
 - **Evidence-weighted prior (deviation from strat eq. update).** The strat blends
   `0.5*(rho + theta_prior)` per contest. With a *constant* MU0 that 0.5 weight
@@ -1261,6 +1263,42 @@ worth modelling?
   *survival* likelihood rather than the binary one. `twopl.py` is kept as a runnable
   prototype (`python -m arch_b.twopl_region` reproduces all numbers above).
 
+### Participant Codeforces ratings: feasibility study (2026-07-21)
+
+A live test confirmed that **some** standing members can be mapped to
+Codeforces, but the bottleneck is identity rather than rating retrieval.  The
+official Codeforces `user.ratedList` snapshot contained 958,447 rated accounts.
+Exact normalized full-name matching against `data/tagged.json` found one distinct
+handle for **1,168 of 25,656 unique member names (4.6%)** and for 4,839 of 65,588
+member appearances (7.4%); 302 additional names were ambiguous.  At team level,
+3,241 of 24,709 rows with rosters (13.1%) had at least one unique match, but only
+560 (2.3%) had every member matched.  This is a useful sparse anchor set, not a
+complete participant-rating layer.
+
+**Source decision:** Codeforces is authoritative once a handle is known:
+`user.info` supplies current records and `user.rating` supplies the history needed
+to select the last rating known before each ICPC contest.  CLIST unified coder
+profiles are useful secondary evidence for account identity, but the v4 account
+API is handle/resource-oriented and cannot bulk-resolve arbitrary real names.
+Neither current rating nor `maxRating` is valid for an old contest.
+
+**Fit direction:** add trusted, time-accurate CF data as a confidence-weighted
+prior on **team ability `theta`**, not as a prior on problem difficulty.  Start
+with fully resolved rosters only and reduce member ratings with the same `lse`
+team rule used by `arch_b.gym_difficulty`; ignoring an unmatched member would
+bias partial rosters downward.  Architecture B should accept per-team prior
+precision so verified veterans pull more strongly than weak/name-only matches;
+the Gaussian MAP remains strictly concave.  This should improve cold starts,
+weakly linked contest normalization, and 0–1-solver problems by identifying the
+actual strength of their field.
+
+Validation must use historical ratings only, treat the gym column as circular
+(it also uses CF user ratings), and require corroboration from held-out solve
+prediction and Kattis.  A CF-prior team holdout should test whether the scale
+transfers through the contest graph.  Full methodology, examples, equations,
+risks, and implementation order are in
+[`cf_participant_ratings.md`](cf_participant_ratings.md).
+
 ## Out of scope / follow-ups
 
 - **2PL discrimination** `a_p` (strat §4) on top of the Rasch fit in `arch_b`
@@ -1298,8 +1336,13 @@ worth modelling?
   ranking-half: discarded, by construction of the monotone map.
 - ~~**Add CF 2157 to `data/cf_team_contests.txt`.**~~ **Done** — the CF columns
   and the metric anchor set now include it (CF pooled n 152 → 160).
-- **CF anchoring** if member→handle→rating data becomes available, to turn the
-  relative scale into true Codeforces-equivalent points.
+- **CF participant anchoring — feasibility established, not implemented.** Exact
+  names yield a conservative but sparse seed set (4.6% of unique member names;
+  2.3% of roster rows fully resolved).  The proposed first experiment uses only
+  verified/corroborated, fully resolved rosters with time-accurate historical
+  ratings and per-team prior precision; see
+  [`cf_participant_ratings.md`](cf_participant_ratings.md) and the feasibility
+  section above.
 - **`data/cf_gym_mirrors.json` — scraped; now consumed by `arch_b.gym_difficulty`
   (see that section).** For contests whose
   problems were also mirrored as a Codeforces **Gym** contest (training replay, not
