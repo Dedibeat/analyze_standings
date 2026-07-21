@@ -260,6 +260,9 @@ Module self-checks:
 - `details.md` — design notes, key decisions, and follow-ups.
 - `cf_participant_ratings.md` — measured member→Codeforces coverage and the
   proposed historical-rating prior for the fit (research only, not implemented).
+- `external_data_sources.md` — internet-source audit covering CPHoF/Codeforces
+  participant identities, ICPC Global/Contest API metadata, and AOJ/solved.ac
+  difficulty signals, with measured overlap and a fit experiment order.
 
 See `details.md` for the no-Codeforces-data anchoring choice, the `$DEFAULT`
 team-id handling, the two architectures, and what's deliberately out of scope.

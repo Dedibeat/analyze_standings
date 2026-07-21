@@ -24,6 +24,12 @@ The likely first useful experiment is a conservative CF prior on team ability fo
 fully resolved rosters.  Partial-roster matches must not be treated as complete
 team ratings: the unmatched member is unknown, not necessarily unrated.
 
+A follow-up internet-source audit found that **CPHoF profiles and Codeforces
+World Finals team lists are the strongest high-confidence identity bridges**:
+they explicitly connect rosters or real names to handles.  Measured overlap,
+corroboration rules, CP-Ranking coverage, and the wider contest/problem source
+audit are in [`external_data_sources.md`](external_data_sources.md).
+
 ## Sources
 
 Codeforces exposes the required data directly:

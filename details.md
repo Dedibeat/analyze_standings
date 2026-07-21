@@ -1299,6 +1299,33 @@ transfers through the contest graph.  Full methodology, examples, equations,
 risks, and implementation order are in
 [`cf_participant_ratings.md`](cf_participant_ratings.md).
 
+### External data-source audit (2026-07-21)
+
+A broader live-source audit identified three concrete additions beyond the
+initial CLIST/XCPCIO pass.  First, CPHoF World Finals rosters and external-profile
+links provide a higher-confidence real-name→handle bridge: its 2021–2025 ICPC
+pages yielded 426 unique exact-name candidates in the current standings, covering
+2,485 member appearances before roster/institution verification.  The prepared
+CP-Ranking data gives a smaller immediately conservative seed—22 exact
+year+institution+team identities appearing in 57 standing rows—but an
+institution-only join is invalid because it would assign one finalist roster's
+rating to unrelated teams from the same university.
+
+Second, public ICPC Contest API / DOMjudge endpoints can provide the true contest
+duration, stable team/person IDs, and submission/judgement event history.  True
+duration directly closes the `T_c = latest solve` approximation; event feeds
+could later distinguish no-attempt cells from failed-attempt histories.  Endpoint
+access is contest-specific and must be measured rather than assumed.
+
+Third, AOJ is a useful independent difficulty guard: 71 unique exact-title
+matches were found, including 45 of 46 Japan Regional problems from 2022–2025.
+On those 45 problems, AOJ submissions per solved user has within-contest Spearman
++0.572 with the shipped difficulty.  AtCoder Problems produced no unique exact
+matches and is lower priority; solved.ac remains promising but should be cached
+because its BOJ integration ended in 2026.  Source URLs, matching policy, leakage
+rules, measurements, and the staged experiment order are documented in
+[`external_data_sources.md`](external_data_sources.md).
+
 ## Out of scope / follow-ups
 
 - **2PL discrimination** `a_p` (strat §4) on top of the Rasch fit in `arch_b`
@@ -1306,10 +1333,13 @@ risks, and implementation order are in
   plus a calibrated joint posterior (full-Hessian Laplace / MCMC / VI) beyond the
   per-parameter Laplace SE already emitted as `difficulty_se`.
 - **Per-contest `T_c` from real durations** — the survival model infers `T_c` as
-  the latest solve time (a slight underestimate); a true duration field (e.g. from
-  the qoj extractor) would sharpen the solved-cell time fractions.
+  the latest solve time (a slight underestimate); public ICPC Contest API /
+  DOMjudge metadata is now the preferred source for a true duration field (see
+  `external_data_sources.md`).
 - **Member-level identity** and entity resolution across sources (strat
-  Remarks), to densify linking and handle roster changes.
+  Remarks), to densify linking and handle roster changes.  CPHoF external-profile
+  links are the first high-confidence bridge to harvest; CLIST remains secondary
+  corroboration (see `external_data_sources.md`).
 - **Time-varying ability** `theta_{team,season}` with a season-to-season smoothing
   prior — keeping **one** identity (unlike the hard `season_key` split, which was
   tried and slightly hurt difficulty, see above) but letting ability drift, so a
