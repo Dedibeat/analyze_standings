@@ -132,24 +132,61 @@ These are the best estimate of CF-equivalent difficulty.
 ./.venv/bin/python -m arch_b.medals
 ```
 
-Assigns every problem of the 30 medal-awarding **Asia East Continent** contests a
-**bronze / silver / gold / bonus / star badge** (weakest → hardest) and reports the
+Assigns every problem of the 28 medal-awarding **Asia East Continent** contests a
+badge on the ladder **bronze < bronze+ < silver < silver+ < gold < gold+ <
+plat < plat+** (weakest → hardest) and reports the
 **lowest gold-medal team** per regional. Medals go by cumulative percentile of
 official teams solving ≥1 problem (gold 10%, silver 30%, bronze 60%); the official
-onsite field is recovered
-from the mixed qoj standings by the domjudge `$DEFAULT` team-id prefix. Each tier's
-**medal bar** is the fitted (survival-model) difficulty at which the boundary
-cohort's actual solve rate crosses 50% (isotonic regression), and a problem gets
-the weakest tier whose bar clears it — badges are monotone in difficulty, and the
-medal-badge count per contest ≈ the lowest gold team's solve count. Above the gold
-bar, a second crossing at the **champion cohort** (top-5 official teams) splits
-**bonus** (champions still solve it at even odds — decides ranking within gold,
-119 problems) from **star** (beyond even the champions — the extreme problems,
-81, almost all 0–2 official solves). Writes
+onsite field is identified by matching XCPCIO scoreboard data against the qoj
+standings. Every badge boundary is an anchored cohort crossing: the fitted
+(survival-model) difficulty at which the anchor cohort's actual solve rate
+crosses 50% (isotonic regression). Each medal's **"+" edge is the medal cutoff
+itself** and its plain edge the mid-band cohort (gold 20%, silver 45%, bronze
+80% — plain bronze is the giveaways the whole field solves); a problem gets the
+weakest grade whose bar clears it — badges are monotone in difficulty, and the
+badge count at gold+ or below per contest ≈ the lowest gold team's solve count.
+Above the gold-medal bar sits **platinum**, split by a crossing at the
+**champion cohort** (top-5 official teams): **plat** (champions still solve it
+at even odds — decides ranking within gold, 93 problems) vs **plat+** (beyond
+even the champions — the extreme problems, 103, almost all 0–2 official
+solves). Writes
 `output/medal_badges.json`; bars and difficulties are also given in CF points via
-the `calibrate` map (gold bar across contests: median ≈ 2680 CF, range ≈
+the `calibrate` map (gold-medal bar across contests: median ≈ 2655 CF, range ≈
 [2100, 2900]). See the medal-badge section in `details.md` for why the bars are
 empirical crossings rather than Elo performance ratings.
+
+```bash
+./.venv/bin/python -m arch_b.performance 2609 --solved F,E,M,K --penalty 620
+```
+
+**Performance calculator** for virtual contests: score a virtual run of any of
+the 28 EA medal contests against its official field — rank / percentile /
+medal by rank insertion (solved count, then penalty), a badge scorecard
+flagging missed problems at gold+ grade or below (the must-solve set for
+gold), your **performance bar** (the difficulty where your solve indicator
+crosses 50% — the same isotonic crossing that defines the medal bars), and a
+medal projection across all 28 EA regionals (your bar vs each contest's
+medal-cutoff bars). Reads `medal_badges.json` + raw standings; no model fit at
+runtime.
+
+```bash
+./.venv/bin/python -m arch_b.export_performance_viewer
+```
+
+The **web version** (`output/performance_calculator.html`, self-contained,
+light/dark aware) generalizes the calculator to **every fitted contest with
+standings** (131 contests): pick a contest, click the problems you solved,
+optionally enter the penalty, and get the full-field rank/percentile, the
+official-field rank + medal on EA medal contests, the must-solve callout, and
+a two-channel EA medal projection — the **primary channel** is your Elo
+rank-inversion **performance** (looked up in a per-contest rank→performance
+curve the exporter precomputes from the fit) vs each regional's cutoff-team
+performances; the **bar channel** (your 50%-crossing difficulty vs the medal
+bars, with the ladder grade) is the training view. All client-side, shareable
+via the URL hash (`#c=2609&s=F,E,M,K&p=620`). Note the exporter runs the
+survival fit once at build time to compute the curves. Published via GitHub
+Pages:
+<https://dedibeat.github.io/analyze_standings/output/performance_calculator.html>
 
 ```bash
 ./.venv/bin/python -m arch_b.export_medal_viewer
@@ -157,11 +194,12 @@ empirical crossings rather than Elo performance ratings.
 
 Builds the interactive **medal viewer** (`output/medal_viewer.html`, self-contained,
 no server, light/dark aware) from `medal_badges.json`: a season filter + KPI row,
-a dot-range chart of the bronze/silver/gold bars per contest (sorted by gold bar,
+a dot-range chart of the bronze/silver/gold medal bars per contest (sorted by
+gold bar,
 click a row to open the contest), a per-contest detail view (problems as lettered
-lollipops on the difficulty axis against the three medal-bar thresholds and the
-bonus zone, plus a table with band solve rates), and a sortable lowest-gold-team
-table.
+lollipops on the difficulty axis against the badge-boundary lines and the
+plat/plat+ zones, plus a table with half-band solve rates), and a sortable
+lowest-gold-team table.
 
 ### Interactive viewer
 
@@ -238,7 +276,9 @@ Module self-checks:
   `gym_difficulty` fixed-θ fit on the CF gym-mirror population, `predict_eval`,
   `calibrate`, `season_experiment`, `medals` EA medal badges + lowest-gold
   analysis (with `export_medal_viewer` + `medal_viewer_template.html` for the
-  medal viewer), `twopl`/`twopl_region` 2PL discrimination
+  medal viewer, and `performance` the post-virtual-contest calculator with
+  `export_performance_viewer` + `performance_viewer_template.html` for its
+  web version), `twopl`/`twopl_region` 2PL discrimination
   prototype); reuses `arch_a.load` and `arch_a.elo`.
 - `output/problem_ratings.json` — Architecture A ratings;
   `output/problem_ratings_b.json` — Architecture B (binary) ratings;

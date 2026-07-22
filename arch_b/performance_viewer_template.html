@@ -1,0 +1,539 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Score a virtual contest run against the field and estimate your ICPC East Asia medal, from standings-fitted problem difficulties.">
+<title>Virtual-contest performance calculator</title>
+<style>
+:root {
+  --page: #f9f9f7;
+  --surface: #fcfcfb;
+  --ink: #0b0b0b;
+  --ink2: #52514e;
+  --muted: #898781;
+  --grid: #e1e0d9;
+  --border: rgba(11,11,11,0.10);
+  --wash: rgba(11,11,11,0.045);
+  --link: #2a78d6;
+  --bronze:     #d18b52;
+  --bronzeplus: #a4552c;
+  --silver:     #6ea4ea;
+  --silverplus: #4a72b8;
+  --gold:       #d5a52e;
+  --goldplus:   #a87700;
+  --plat:       #897bdd;
+  --platplus:   #5646b8;
+  --shadow: 0 6px 20px rgba(11,11,11,0.10);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --page: #0d0d0d;
+    --surface: #1a1a19;
+    --ink: #ffffff;
+    --ink2: #c3c2b7;
+    --muted: #898781;
+    --grid: #2c2c2a;
+    --border: rgba(255,255,255,0.10);
+    --wash: rgba(255,255,255,0.055);
+    --link: #3987e5;
+    --bronze:     #c67f42;
+    --bronzeplus: #9a4f20;
+    --silver:     #6890d4;
+    --silverplus: #4a74c2;
+    --gold:       #b78a18;
+    --goldplus:   #9c750d;
+    --plat:       #8d80e0;
+    --platplus:   #6353cc;
+    --shadow: 0 6px 20px rgba(0,0,0,0.45);
+  }
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  background: var(--page);
+  color: var(--ink);
+  font: 14px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+.wrap { max-width: 1020px; margin: 0 auto; padding: 36px 20px 72px; }
+a { color: var(--link); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+header h1 { font-size: 23px; font-weight: 650; letter-spacing: -0.01em; margin: 0 0 6px; }
+header .sub { color: var(--ink2); font-size: 13.5px; max-width: 82ch; margin: 0; }
+header .sub b { color: var(--ink); font-weight: 600; }
+
+.card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+  padding: 20px 22px; margin-top: 16px;
+}
+.card h2 { font-size: 15.5px; font-weight: 650; margin: 0 0 4px; }
+.card .card-sub { color: var(--ink2); font-size: 12.5px; margin: 2px 0 10px; max-width: 90ch; }
+
+.controls { display: flex; flex-wrap: wrap; gap: 12px 16px; align-items: center; }
+select, input[type="number"] {
+  font: 13px system-ui, -apple-system, "Segoe UI", sans-serif;
+  color: var(--ink); background: var(--surface);
+  border: 1px solid var(--border); border-radius: 8px; padding: 7px 10px;
+  max-width: 100%;
+}
+select { max-width: 440px; }
+input[type="number"] { width: 110px; }
+label.ctl { font-size: 12.5px; color: var(--ink2); display: inline-flex; align-items: center; gap: 7px; }
+button.ghost {
+  font: 600 12.5px/1 system-ui, -apple-system, "Segoe UI", sans-serif;
+  color: var(--ink2); background: var(--surface);
+  border: 1px solid var(--border); border-radius: 999px;
+  padding: 7px 14px; cursor: pointer;
+}
+button.ghost:hover { background: var(--wash); }
+
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip {
+  font: 600 12.5px/1.2 system-ui, -apple-system, "Segoe UI", sans-serif;
+  color: var(--ink2); background: var(--surface);
+  border: 1px solid var(--border); border-radius: 10px;
+  padding: 8px 11px; cursor: pointer; text-align: left;
+}
+.chip:hover { background: var(--wash); }
+.chip.on { border-color: var(--ink); color: var(--ink); background: var(--wash); }
+.chip .dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; margin-right: 6px; }
+.chip small { display: block; font-weight: 500; color: var(--muted); margin-top: 3px; }
+.chip.on small { color: var(--ink2); }
+
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-top: 16px; }
+.tile { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px 12px; }
+.tile .lbl { font-size: 12px; color: var(--ink2); margin-bottom: 4px; }
+.tile .val { font-size: 24px; font-weight: 650; letter-spacing: -0.01em; }
+.tile .val small { font-size: 12.5px; font-weight: 500; color: var(--muted); margin-left: 3px; }
+.tile .foot { font-size: 11.5px; color: var(--muted); margin-top: 3px; }
+
+.badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 11.5px; font-weight: 600; color: var(--ink);
+  border-radius: 999px; padding: 2.5px 9px; white-space: nowrap; vertical-align: middle;
+}
+.badge .dot { width: 8px; height: 8px; border-radius: 50%; }
+.b-bronze     { background: color-mix(in srgb, var(--bronze)     16%, var(--surface)); }
+.b-bronzeplus { background: color-mix(in srgb, var(--bronzeplus) 16%, var(--surface)); }
+.b-silver     { background: color-mix(in srgb, var(--silver)     16%, var(--surface)); }
+.b-silverplus { background: color-mix(in srgb, var(--silverplus) 16%, var(--surface)); }
+.b-gold       { background: color-mix(in srgb, var(--gold)       18%, var(--surface)); }
+.b-goldplus   { background: color-mix(in srgb, var(--goldplus)   18%, var(--surface)); }
+.b-plat       { background: color-mix(in srgb, var(--plat)       14%, var(--surface)); }
+.b-platplus   { background: color-mix(in srgb, var(--platplus)   14%, var(--surface)); }
+.b-none       { background: var(--wash); }
+
+.callout { border: 1px solid var(--border); border-left: 3px solid var(--goldplus);
+           border-radius: 8px; padding: 10px 14px; margin-top: 14px; font-size: 13px; color: var(--ink2); }
+.callout b { color: var(--ink); }
+
+.tbl-wrap { overflow-x: auto; margin-top: 8px; }
+table { border-collapse: collapse; width: 100%; font-size: 13px; }
+th { text-align: left; font-size: 11.5px; font-weight: 600; color: var(--muted);
+     padding: 6px 10px; border-bottom: 1px solid var(--grid); white-space: nowrap; }
+td { padding: 7px 10px; border-bottom: 1px solid var(--grid); vertical-align: middle; }
+tr:last-child td { border-bottom: none; }
+tbody tr:hover { background: var(--wash); }
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+tr.me { background: var(--wash); }
+.mutedtx { color: var(--muted); }
+.note { color: var(--muted); font-size: 11.5px; margin-top: 8px; }
+footer { margin-top: 26px; color: var(--muted); font-size: 12px; max-width: 92ch; }
+footer ul { margin: 6px 0 0; padding-left: 18px; }
+footer li { margin-top: 3px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Virtual-contest performance calculator</h1>
+    <p class="sub">Pick the contest you ran virtually, tick the problems you solved (penalty in
+    minutes optional), and get your standing against the contest's real field plus an ICPC
+    <b>East Asia medal estimate</b>. Works for every fitted contest with standings; EA medal
+    contests additionally rank you inside the official (medal-eligible) field. Two channels,
+    on two scales that are never mixed: your <b>performance</b> is the classic Elo
+    rank-inversion of your inserted rank against the field's fitted abilities (raw scale),
+    compared to the same number for each regional's medal-cutoff teams — the primary medal
+    estimate, needing only solve count + penalty. Your <b>performance bar</b> is the
+    difficulty at which your solve indicator crosses 50% (the crossing that defines the medal
+    bars, CF-equivalent points) — the training view, using <i>which</i> problems you solved.</p>
+  </header>
+
+  <section class="card">
+    <div class="controls">
+      <label class="ctl">Contest <select id="contestSelect" aria-label="Pick a contest"></select></label>
+      <label class="ctl">Penalty (min) <input id="penalty" type="number" min="0" step="1" placeholder="—"></label>
+      <button class="ghost" id="clearBtn">Clear solved</button>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2 id="probTitle">Problems</h2>
+    <p class="card-sub">Click the problems you solved, easiest → hardest (fitted difficulty,
+    CF-equivalent points; EA medal contests show each problem's badge).</p>
+    <div class="chips" id="chips"></div>
+    <div id="mustSolve"></div>
+  </section>
+
+  <div class="kpis" id="kpis"></div>
+
+  <section class="card">
+    <h2>East Asia medal projection</h2>
+    <p class="card-sub"><b>Medal (perf)</b> — the primary estimate — compares your Elo
+    rank-inversion performance to each contest's gold/silver/bronze <i>cutoff-team
+    performances</i> (raw scale; the gold column shows the performance the gold cutoff team
+    posted). <b>Medal (bar)</b> compares your performance bar to the contest's <i>medal
+    bars</i> (difficulty, CF points), with the grade column placing you on the badge ladder
+    bronze &lt; bronze+ &lt; silver &lt; silver+ &lt; gold &lt; gold+ &lt; plat &lt; plat+.
+    The channels stay separate: performance vs performance, difficulty vs difficulty.</p>
+    <div class="tbl-wrap"><table id="projTable"></table></div>
+    <p class="note" id="projNote"></p>
+  </section>
+
+  <footer>
+    Generated by <code>arch_b.export_performance_viewer</code> from the survival-model fit
+    (<code>problem_ratings_calibrated.json</code>), the raw standings, and
+    <code>medal_badges.json</code>. Caveats:
+    <ul>
+      <li>The two channels are deliberately never mixed: the Elo rank-inversion performance is
+      measured as inflated against the difficulty scale (see details.md), so it is only ever
+      compared to the cutoff teams' <i>performances</i>, and the bar only to the medal
+      <i>bars</i>. Where they disagree, the performance channel is the better medal estimate
+      (finer-grained, uses penalty); the bar is the training view.</li>
+      <li>The bar quantizes on one contest's solve/miss pattern (~13 binary observations) and
+      ignores penalty — for the contest you actually ran, the direct rank insertion is the
+      authoritative number; the projection is for transferring to the other regionals.</li>
+      <li>Rank insertion counts teams that solved ≥1 problem; without a penalty you get the
+      best–worst range over the block of teams with your solve count, and a team with an
+      unknown penalty is assumed to finish ahead of you.</li>
+      <li>Medal cutoffs use ceil rounding of the 10/30/60% percentiles of official solving
+      teams; hosts may adjust boundaries at ties.</li>
+    </ul>
+  </footer>
+</div>
+
+<script>
+"use strict";
+const DATA = /*__DATA__*/null;
+
+const BADGE_ORDER = ["bronze", "bronze+", "silver", "silver+", "gold", "gold+", "plat", "plat+"];
+const MEDAL_EDGE = [["gold", "gold+"], ["silver", "silver+"], ["bronze", "bronze+"]];
+const LO = 800, HI = 4000;
+const slug = t => t.replace("+", "plus");
+const state = { cid: null, solved: new Set(), penalty: null };
+
+/* ---------- helpers ---------- */
+function el(tag, attrs, ...kids) {
+  const n = document.createElement(tag);
+  if (attrs) for (const [k, v] of Object.entries(attrs)) {
+    if (k === "class") n.className = v;
+    else if (k.startsWith("on")) n.addEventListener(k.slice(2), v);
+    else if (k === "style") n.style.cssText = v;
+    else n.setAttribute(k, v);
+  }
+  for (const kid of kids.flat()) {
+    if (kid == null) continue;
+    n.append(kid.nodeType ? kid : document.createTextNode(kid));
+  }
+  return n;
+}
+function cssVar(name) {
+  return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+}
+const fmt = x => Math.round(x).toString();
+const pctTop = (r, n) => "top " + Math.max(1, Math.round(r / n * 100)) + "%";
+const contestById = id => DATA.contests.find(c => c.id === id);
+const TITLE = Object.fromEntries(BADGE_ORDER.map(b =>
+  [b, b[0].toUpperCase() + b.slice(1)]));
+
+/* global raw-b -> CF map, sampled at every fitted problem */
+const CF_PTS = DATA.contests.flatMap(c => c.problems.map(p => [p.b, p.cf]))
+  .sort((a, b) => a[0] - b[0]);
+function toCF(b) {
+  if (b <= CF_PTS[0][0]) return CF_PTS[0][1];
+  if (b >= CF_PTS[CF_PTS.length - 1][0]) return CF_PTS[CF_PTS.length - 1][1];
+  let lo = 0, hi = CF_PTS.length - 1;
+  while (hi - lo > 1) {
+    const m = (lo + hi) >> 1;
+    if (CF_PTS[m][0] <= b) lo = m; else hi = m;
+  }
+  const [x0, y0] = CF_PTS[lo], [x1, y1] = CF_PTS[hi];
+  return x1 === x0 ? y0 : y0 + (b - x0) / (x1 - x0) * (y1 - y0);
+}
+
+/* isotonic non-increasing fit (PAVA), then the 50% crossing over probs */
+function userBar(probs, solved) {
+  const y = probs.map(p => solved.has(p.l) ? 1 : 0);
+  const blocks = [];
+  for (const v of y) {
+    blocks.push([v, 1]);
+    while (blocks.length > 1) {
+      const [s2, w2] = blocks[blocks.length - 1], [s1, w1] = blocks[blocks.length - 2];
+      if (s1 / w1 >= s2 / w2) break;
+      blocks.pop(); blocks.pop(); blocks.push([s1 + s2, w1 + w2]);
+    }
+  }
+  const iso = blocks.flatMap(([s, w]) => Array(w).fill(s / w));
+  if (iso[0] < 0.5) return LO;
+  if (iso[iso.length - 1] >= 0.5) return HI;
+  for (let i = 1; i < iso.length; i++) {
+    if (iso[i] < 0.5 && iso[i - 1] >= 0.5) {
+      const t = (iso[i - 1] - 0.5) / Math.max(iso[i - 1] - iso[i], 1e-9);
+      return probs[i - 1].b + t * (probs[i].b - probs[i - 1].b);
+    }
+  }
+}
+
+/* rank insertion into [solved, penalty_seconds|null] pairs -> [best, worst] */
+function insertRank(pairs, k, penS) {
+  let ahead = 0, equal = [];
+  for (const [s, p] of pairs) {
+    if (s > k) ahead++;
+    else if (s === k) equal.push(p);
+  }
+  if (penS == null) return [ahead + 1, ahead + equal.length + 1];
+  const lost = equal.filter(p => p == null || p < penS).length;
+  return [ahead + lost + 1, ahead + lost + 1];
+}
+
+function medalAt(rank, cuts) {
+  if (rank <= cuts.gold) return "gold";
+  if (rank <= cuts.silver) return "silver";
+  if (rank <= cuts.bronze) return "bronze";
+  return null;
+}
+
+function grade(bar, bars) {
+  let g = null;
+  for (const t of BADGE_ORDER.slice(0, -1))
+    if (t in bars && bar >= bars[t]) g = t;
+  return g;
+}
+
+function badgeChip(b, text) {
+  return el("span", { class: "badge b-" + (b ? slug(b) : "none") },
+    b ? el("span", { class: "dot", style: "background:" + cssVar("--" + slug(b)) }) : null,
+    text != null ? text : TITLE[b]);
+}
+
+/* ---------- hash state ---------- */
+function readHash() {
+  const q = new URLSearchParams(location.hash.slice(1));
+  const cid = Number(q.get("c"));
+  if (contestById(cid)) {
+    state.cid = cid;
+    state.solved = new Set((q.get("s") || "").split(",").filter(Boolean));
+    state.penalty = q.get("p") !== null && q.get("p") !== "" ? Number(q.get("p")) : null;
+  }
+}
+function writeHash() {
+  const q = new URLSearchParams();
+  q.set("c", state.cid);
+  if (state.solved.size) q.set("s", [...state.solved].join(","));
+  if (state.penalty != null) q.set("p", state.penalty);
+  history.replaceState(null, "", "#" + q.toString());
+}
+
+/* ---------- rendering ---------- */
+function renderSelect() {
+  const sel = document.getElementById("contestSelect");
+  const byYear = new Map();
+  for (const c of DATA.contests) {
+    const y = c.year || "unknown";
+    if (!byYear.has(y)) byYear.set(y, []);
+    byYear.get(y).push(c);
+  }
+  sel.replaceChildren(...[...byYear.entries()].map(([y, cs]) =>
+    el("optgroup", { label: String(y) },
+      ...cs.map(c => el("option",
+        { value: c.id, ...(c.id === state.cid ? { selected: "" } : {}) },
+        c.name + (c.medal ? " 🏅" : "") + (c.region ? " — " + c.region : ""))))));
+}
+
+function renderChips() {
+  const c = contestById(state.cid);
+  document.getElementById("probTitle").textContent =
+    "Problems — " + c.name + (c.year ? " (" + c.year + ")" : "");
+  document.getElementById("chips").replaceChildren(...c.problems.map(p =>
+    el("button", {
+      class: "chip" + (state.solved.has(p.l) ? " on" : ""),
+      onclick: () => {
+        if (!state.solved.delete(p.l)) state.solved.add(p.l);
+        update();
+      },
+    },
+      p.badge ? el("span", { class: "dot", style: "background:" + cssVar("--" + slug(p.badge)) }) : null,
+      (state.solved.has(p.l) ? "✓ " : "") + p.l + " · " + fmt(p.cf) + " CF",
+      el("small", null, p.n.length > 34 ? p.n.slice(0, 33) + "…" : p.n))));
+
+  const box = document.getElementById("mustSolve");
+  if (!c.medal) { box.replaceChildren(); return; }
+  const missed = c.problems.filter(p =>
+    p.badge && BADGE_ORDER.indexOf(p.badge) <= BADGE_ORDER.indexOf("gold+")
+    && !state.solved.has(p.l));
+  box.replaceChildren(el("div", { class: "callout" },
+    missed.length
+      ? ["Missed must-solve problems for gold: ",
+         ...missed.flatMap((p, i) => [i ? ", " : null,
+           el("b", null, p.l), " (", badgeChip(p.badge), ")"])]
+      : el("b", null, "Swept every problem at gold+ grade or below.")));
+}
+
+function medalOfPerf(p, cutPerf) {
+  for (const t of ["gold", "silver", "bronze"]) if (p >= cutPerf[t]) return t;
+  return null;
+}
+
+function renderKpis() {
+  const c = contestById(state.cid);
+  const box = document.getElementById("kpis");
+  const penS = state.penalty != null ? state.penalty * 60 : null;
+  const bar = userBar(c.problems, state.solved);
+
+  const tile = (lbl, val, small, foot) =>
+    el("div", { class: "tile" },
+      el("div", { class: "lbl" }, lbl),
+      el("div", { class: "val" }, val, small ? el("small", null, small) : null),
+      foot ? el("div", { class: "foot" }, foot) : null);
+
+  const tiles = [tile("Solved", String(state.solved.size),
+                      "of " + c.problems.length,
+                      state.penalty != null ? "penalty " + state.penalty + "m" : "no penalty given")];
+
+  const [lo, hi] = insertRank(c.field, state.solved.size, penS);
+  const n = c.field.length;
+  tiles.push(tile("Full field (solving teams)",
+    lo === hi ? "r" + lo : "r" + lo + "–" + hi, "of " + n,
+    lo === hi ? pctTop(lo, n) : pctTop(lo, n) + "–" + pctTop(hi, n).slice(4)));
+
+  let pBest = null, pWorst = null;
+  if (c.perf) {
+    const perfAt = r => c.perf[Math.min(r, c.perf.length) - 1];
+    pBest = perfAt(lo); pWorst = perfAt(hi);
+    tiles.push(tile("Performance (Elo)",
+      pBest >= HI ? "max" : pBest === pWorst ? fmt(pBest) : fmt(pWorst) + "–" + fmt(pBest),
+      null,
+      (pBest >= HI ? "rank 1 pins to the scale ceiling · " : "")
+        + "rank-inversion vs the field, raw scale — the primary medal estimate"));
+  }
+
+  if (c.medal) {
+    const [olo, ohi] = insertRank(c.official, state.solved.size, penS);
+    const on = c.official.length;
+    const mlo = medalAt(olo, c.medal.cuts), mhi = medalAt(ohi, c.medal.cuts);
+    const medalTxt = mlo === mhi ? (mlo || "none")
+      : (mhi || "none") + "–" + (mlo || "none");
+    tiles.push(tile("Official field",
+      olo === ohi ? "r" + olo : "r" + olo + "–" + ohi, "of " + on,
+      "cutoffs G/S/B " + c.medal.cuts.gold + "/" + c.medal.cuts.silver + "/" + c.medal.cuts.bronze));
+    tiles.push(el("div", { class: "tile" },
+      el("div", { class: "lbl" }, "Medal in this contest"),
+      el("div", { class: "val", style: "text-transform:capitalize" }, medalTxt),
+      el("div", { class: "foot" }, "cutoff teams solved "
+        + ["gold", "silver", "bronze"].map(t => c.medal.cut_solved[t]).join(" / "))));
+  } else {
+    tiles.push(tile("Medal in this contest", "—", null,
+      "not an EA medal contest — see the projection below"));
+  }
+
+  tiles.push(tile("Performance bar (difficulty)",
+    bar <= LO ? "—" : bar >= HI ? "max" : fmt(toCF(bar)),
+    bar > LO && bar < HI ? "CF" : null,
+    bar <= LO ? "tick the problems you solved"
+      : bar >= HI ? "solved everything — pinned at the ceiling"
+      : fmt(bar) + " raw · your 50% solve-odds difficulty (training view)"));
+
+  box.replaceChildren(...tiles);
+  return { bar, pBest, pWorst };
+}
+
+function renderProjection(res) {
+  const { bar, pBest, pWorst } = res;
+  const rows = DATA.contests.filter(c => c.medal)
+    .sort((a, b) => b.medal.cut_perf.gold - a.medal.cut_perf.gold);
+  const tallyBest = { gold: 0, silver: 0, bronze: 0, none: 0 };
+  const tallyWorst = { gold: 0, silver: 0, bronze: 0, none: 0 };
+  const tallyBar = { gold: 0, silver: 0, bronze: 0, none: 0 };
+  const cap = s => s ? s[0].toUpperCase() + s.slice(1) : "—";
+  const body = rows.map(c => {
+    const m = c.medal;
+    let perfCell = "—";
+    if (pBest != null) {
+      const mBest = medalOfPerf(pBest, m.cut_perf), mWorst = medalOfPerf(pWorst, m.cut_perf);
+      tallyBest[mBest || "none"]++;
+      tallyWorst[mWorst || "none"]++;
+      perfCell = mBest === mWorst ? cap(mBest) : cap(mWorst) + "–" + cap(mBest);
+    }
+    const medalBar = (MEDAL_EDGE.find(([, e]) => bar >= m.bars[e]) || [null])[0];
+    tallyBar[medalBar || "none"]++;
+    const g = grade(bar, m.bars);
+    return el("tr", { class: c.id === state.cid ? "me" : "" },
+      el("td", { class: "mutedtx" }, String(c.year)),
+      el("td", null, c.name + (c.id === state.cid ? " *" : "")),
+      el("td", { class: "num" }, fmt(m.cut_perf.gold)),
+      el("td", null, el("b", null, perfCell)),
+      el("td", { class: "num" }, fmt(m.bars_cf["gold+"])),
+      el("td", null, g ? badgeChip(g) : el("span", { class: "mutedtx" }, "below")),
+      el("td", { style: "text-transform:capitalize", class: "mutedtx" }, medalBar || "—"));
+  });
+  document.getElementById("projTable").replaceChildren(
+    el("thead", null, el("tr", null,
+      el("th", null, "Year"), el("th", null, "Contest"),
+      el("th", { class: "num" }, "Gold perf"), el("th", null, "Medal (perf)"),
+      el("th", { class: "num" }, "Gold bar CF"), el("th", null, "Grade (bar)"),
+      el("th", null, "Medal (bar)"))),
+    el("tbody", null, body));
+  const total = rows.length;
+  const rng = (t) => ["gold", "silver", "bronze", "none"]
+    .filter(m => tallyBest[m] || tallyWorst[m])
+    .map(m => m + " in " + (tallyWorst[m] === tallyBest[m] ? tallyBest[m]
+      : Math.min(tallyWorst[m], tallyBest[m]) + "–" + Math.max(tallyWorst[m], tallyBest[m]))
+      + "/" + total).join(", ");
+  document.getElementById("projNote").textContent =
+    (pBest == null ? ""
+      : "Projected by performance: " + rng() + ". ")
+    + (bar <= LO ? "No difficulty bar yet — tick the problems you solved for the bar channel. "
+      : "By the bar: gold in " + tallyBar.gold + "/" + total
+        + ", silver in " + tallyBar.silver + "/" + total
+        + ", bronze in " + tallyBar.bronze + "/" + total
+        + (tallyBar.none ? ", none in " + tallyBar.none + "/" + total : "") + ". ")
+    + (contestById(state.cid).medal
+       ? "* = the contest you ran — its direct rank insertion above is authoritative."
+       : "");
+}
+
+function update() {
+  writeHash();
+  renderSelect();
+  renderChips();
+  renderProjection(renderKpis());
+}
+
+/* ---------- wiring ---------- */
+document.getElementById("contestSelect").addEventListener("change", ev => {
+  state.cid = Number(ev.target.value);
+  state.solved = new Set();
+  update();
+});
+document.getElementById("penalty").addEventListener("input", ev => {
+  state.penalty = ev.target.value === "" ? null : Number(ev.target.value);
+  update();
+});
+document.getElementById("clearBtn").addEventListener("click", () => {
+  state.solved = new Set();
+  update();
+});
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", update);
+
+(function init() {
+  state.cid = DATA.contests.find(c => c.medal)?.id ?? DATA.contests[0].id;
+  readHash();
+  const c = contestById(state.cid);
+  state.solved = new Set([...state.solved].filter(l => c.problems.some(p => p.l === l)));
+  if (state.penalty != null) document.getElementById("penalty").value = state.penalty;
+  update();
+})();
+</script>
+</body>
+</html>
