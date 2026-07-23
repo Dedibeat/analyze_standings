@@ -68,14 +68,15 @@ Both `run` modes drop short-format contests (warm-ups / 3 h rounds) by default
 rosters by ICPC season — but `arch_b.season_experiment` shows it doesn't improve
 difficulty estimates, so it stays off; run that module to reproduce the comparison.
 
-Validate any model against two independent opinions — the LLM `difficulty_estimate`
-(editorial-backed contests) and the official Codeforces ratings of the 2026 Asia
-Pacific Championship:
+Validate any model against independent opinions from editorial-backed LLM labels,
+official Codeforces ratings, Kattis, fixed-ability Codeforces gym mirrors, and
+AOJ practice statistics:
 
 ```bash
 ./.venv/bin/python -m arch_b.validate           # LLM buckets, all models
 ./.venv/bin/python -m arch_b.gym_difficulty     # fixed-θ difficulty from CF gym mirrors
-./.venv/bin/python -m arch_b.external_validate  # per-region vs Codeforces + Kattis + gym, all models
+./.venv/bin/python -m arch_b.aoj --refresh      # rebuild the matched AOJ validation artifact
+./.venv/bin/python -m arch_b.external_validate  # Codeforces + Kattis + gym + AOJ, all models
 ./.venv/bin/python -m arch_b.predict_eval       # held-out solve prediction (binary vs survival)
 ./.venv/bin/python -m arch_b.calibrate     # affine map to Codeforces points
 ./.venv/bin/python -m arch_b.metric        # THE optimization metric: LOCO CF-point RMSE + guards
@@ -97,6 +98,14 @@ first external numeric anchor for **Asia East Continent** (230 problems), where
 all three models validate at +0.95–0.98. `--certify` checks the instrument itself
 (vs official CF ratings: Spearman +0.976, affine slope ≈1.2).
 
+`arch_b.aoj --refresh` fetches the live AOJ problem catalog and writes
+`data/aoj_difficulty.json` with source time, raw IDs, match method, accepted
+matches, and rejected candidates. A match is used only when its normalized title
+is unique in both datasets and at least three problems corroborate the same
+contest. The current artifact accepts 45 problems from four Japan regionals and
+keeps 26 isolated title matches rejected. `external_validate` compares
+`submissions / solvedUser` only by within-contest rank; AOJ never enters training.
+
 ### The optimization metric
 
 `arch_b.metric` is the single number model improvements are judged by:
@@ -106,8 +115,9 @@ has; an exhaustive sweep found no more). It refits the survival model from
 source in ~5 s, prints `METRIC loco_cf_rmse=…` as its last line (lower is
 better; baseline **290.2**, cluster-bootstrap SE ±20 → improvements under ~5
 points are noise), and exits nonzero if any guard regresses (gym
-Asia-East-Continent / gym pooled / Kattis Spearman, solve-count sanity — the
-things the CF anchors can't see). `program.md` at the repo root is the matching
+Asia-East-Continent / gym pooled / Kattis / AOJ within-contest Spearman,
+solve-count sanity — the things the CF anchors can't see). `program.md` at the
+repo root is the matching
 instruction file for auto-research loops: verify contract, what code is fair
 game, hard anti-gaming rules, and a prioritized idea list. A 2026-07-03 auto-research campaign (Claude Fable 5 + DeepSeek v4 Pro, 25
 iterations) found that the only repeatable improvements were data-side identity
@@ -241,11 +251,13 @@ Module self-checks:
 
 - `data/tagged.json` — full input standings (146 contests); `data/ucup_s3.json`,
   `data/ucup_s4.json` — the Universal Cup seasons used to anchor the scale.
+- `data/aoj_difficulty.json` — provenance-rich AOJ validation matches (practice
+  statistics; never a fit input).
 - `arch_a/` — Architecture A implementation (`load`, `elo`, `fixedpoint`,
   `anchor`, `run`), plus `export_viewer` + `viewer_template.html` for the viewer.
 - `arch_b/` — Architecture B implementation (`model` binary Rasch, `survival`
-  solve-time model, `anchor`, `run`, `validate`, `external_validate`
-  per-region check vs Codeforces + Kattis + gym mirrors (all 3 models),
+  solve-time model, `anchor`, `run`, `validate`, `aoj` collector/matcher,
+  `external_validate` check vs Codeforces + Kattis + gym mirrors + AOJ (all 3 models),
   `gym_difficulty` fixed-θ fit on the CF gym-mirror population, `predict_eval`,
   `calibrate`, `season_experiment`, `medals` EA medal badges + lowest-gold
   analysis (with `export_medal_viewer` + `medal_viewer_template.html` for the

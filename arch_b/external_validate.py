@@ -1,4 +1,4 @@
-"""Per-region external validation against two independent numeric yardsticks.
+"""Per-region external validation against independent numeric yardsticks.
 
 The LLM difficulty (arch_b.validate) is a single, statement-based opinion that can
 itself be regionally biased. To tell a real per-region model bias from LLM noise we
@@ -16,6 +16,9 @@ need *numeric* opinions that are independent of our standings AND of each other:
     time-accurate CF rating fixes theta, so ``b_gym`` needs no joint fit. Its
     unique contribution is **Asia East Continent** (18 contests), which neither
     CF mirrors nor Kattis reach.
+  * Aizu Online Judge accumulated practice statistics, conservatively matched by
+    unique title plus contest-level corroboration. ``submissions / solvedUser``
+    is compared only through within-contest ranks, never used as a fit input.
 
 The first two reach every region except Asia East / West Continent; the gym column
 closes the EC gap. We join each yardstick to our problems by normalized title
@@ -43,6 +46,8 @@ import urllib.request
 from collections import Counter, defaultdict
 
 import numpy as np
+
+from .aoj import load_matches as load_aoj_matches, within_contest_spearman
 
 ROOT = os.path.join(os.path.dirname(__file__), os.pardir)
 DATA = os.path.join(ROOT, "data")
@@ -196,6 +201,7 @@ def main(refresh=False, detail_cfid=None):
     kat = {_norm(v["name"]): v["difficulty"] for v in json.load(open(KATTIS)).values()}
     gym = {(r["contest_id"], r["problem_label"]): (r["difficulty"], r["region"])
            for r in json.load(open(GYM_OUT))} if os.path.exists(GYM_OUT) else {}
+    aoj = load_aoj_matches()
     mapping = _cf_mapping(contests, region_of, rating)
     models = _load_models()
 
@@ -213,8 +219,9 @@ def main(refresh=False, detail_cfid=None):
 
     print(f"\n{'model':<13}| {'CF pld':>7} {'AsiaPac':>8} {'N.Eur':>7} {'Europe':>7} | "
           f"{'Kat pld':>8} {'N.Am':>7} {'Europe':>7} | "
-          f"{'Gym pld':>8} {'AsiaEC':>7} {'Europe':>7} {'AsiaPac':>8} | {'LLM':>7}")
-    print("-" * 122)
+          f"{'Gym pld':>8} {'AsiaEC':>7} {'Europe':>7} {'AsiaPac':>8} | "
+          f"{'AOJ w/c':>7} | {'LLM':>7}")
+    print("-" * 132)
     for name, md in models:
         cf, ka = _pairs(md, contests, mapping, rating, kat)
         cf_all = [x for v in cf.values() for x in v]
@@ -225,6 +232,8 @@ def main(refresh=False, detail_cfid=None):
                 g, reg = gym[k]
                 gy[reg].append((d, g))
         gy_all = [x for v in gy.values() for x in v]
+        ao_pairs = [(cid, d, aoj[(cid, label)]) for (cid, label), d in md.items()
+                    if (cid, label) in aoj]
         llm_pairs = [(d, llm[k]) for k, d in md.items() if k in llm]
         print(f"{name:<13}| {f(_s(cf_all)):>7} {f(_s(cf['Asia Pacific'])):>8} "
               f"{f(_s(cf['Northern Eurasia'])):>7} {f(_s(cf['Europe'])):>7} | "
@@ -232,10 +241,12 @@ def main(refresh=False, detail_cfid=None):
               f"{f(_s(ka['Europe'])):>7} | "
               f"{f(_s(gy_all)):>8} {f(_s(gy['Asia East Continent'])):>7} "
               f"{f(_s(gy['Europe'])):>7} {f(_s(gy['Asia Pacific'])):>8} | "
+              f"{f(within_contest_spearman(ao_pairs)):>7} | "
               f"{f(_s(llm_pairs)):>7}")
     print(f"\nn: CF pooled={len(cf_all)}, Kattis pooled={len(ka_pld)}, "
           f"Gym pooled={len(gy_all)} (EC={len(gy['Asia East Continent'])}, "
           f"Eur={len(gy['Europe'])}, AP={len(gy['Asia Pacific'])}), "
+          f"AOJ={len(ao_pairs)} across {len({row[0] for row in ao_pairs})} contests, "
           f"LLM={len(llm_pairs)} (editorial-backed). "
           f"--contest <cfid> for a per-problem breakdown.")
 

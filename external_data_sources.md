@@ -5,6 +5,32 @@ initial CLIST/XCPCIO investigation, measures overlap against the current
 `data/tagged.json`, and separates data that may enter the likelihood from data
 that should remain external validation.
 
+## Implementation status
+
+AOJ is processed and shipped as a validation-only artifact:
+
+```bash
+./.venv/bin/python -m arch_b.aoj --refresh
+./.venv/bin/python -m arch_b.external_validate
+```
+
+The collector writes `data/aoj_difficulty.json` with retrieval time, raw AOJ
+identifier and URL, match method, accepted rows, and rejected candidates.
+Unique titles are accepted only when at least three matches corroborate one
+contest. The current snapshot has 71 candidates, of which 45 across four Japan
+regionals are accepted. `arch_b.metric` now enforces an AOJ within-contest
+Spearman floor of +0.52.
+
+Fit-side external inputs remain gated on missing evidence rather than guessed.
+A live recheck of CP-Ranking commit `c90a176` reproduced its 22 exact
+year+institution+team seeds (57 appearances), but its release contains one
+aggregate `average_cf_rating` per institution/year rather than the member
+handles and per-target-contest histories required for a time-causal team prior.
+CPHoF/profile corroboration and Codeforces `user.rating` histories are therefore
+still required before those seeds can enter the fit. True-duration ingestion is
+likewise waiting on contest-specific public Contest API endpoints; the API
+specification alone does not supply a centralized dataset.
+
 ## Decision
 
 The most promising additions are:

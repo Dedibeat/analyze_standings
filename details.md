@@ -381,11 +381,17 @@ log-likelihood (eq. loglik) plus Gaussian priors on `theta` and `b` (eq. priors)
   `tagged.json` (written by the sibling `llm-integration` tagger from the problem
   statement — independent of standings). Trusts only **editorial-backed** problems
   and reports per-bucket medians + Spearman for all three model outputs.
-- `external_validate.py` — per-region check of **all three models** against three
+- `aoj.py` — reproducible AOJ collector and conservative problem matcher. Writes
+  `data/aoj_difficulty.json` with source provenance, accepted matches, and
+  rejected candidates. Unique normalized titles are accepted only when at least
+  three matches corroborate a contest; the practice statistic is ranked within
+  contest and is never a fit input.
+- `external_validate.py` — per-region check of **all three models** against four
   independent numeric yardsticks: official **Codeforces** problemset ratings (the
   CF-mirror contests in `data/cf_team_contests.txt`), **Kattis** difficulty
   (`data/kattis_difficulty.json`), and the **gym-mirror fixed-θ difficulty**
-  (`output/gym_difficulty.json`, when present); `--contest <cfid>` prints a
+  (`output/gym_difficulty.json`, when present), plus within-contest **AOJ**
+  practice ranks (`data/aoj_difficulty.json`); `--contest <cfid>` prints a
   per-problem table with Spearman + Pearson for one contest (see results below).
   Replaces the old single-contest `sanity_cf.py`.
 - `gym_difficulty.py` — fixed-θ Rasch difficulty from the CF gym-mirror
@@ -397,8 +403,9 @@ log-likelihood (eq. loglik) plus Gaussian priors on `theta` and `b` (eq. priors)
 - `metric.py` — **the north-star metric** for model optimization: refits the
   survival model from source and prints one scalar, the leave-one-contest-out
   RMSE in CF points over all mapped rated mirrors, plus guard checks (gym EC /
-  gym pooled / Kattis pooled Spearman, solve-count sanity) that exit nonzero on
-  violation. Built as the verify command for auto-research loops; `program.md`
+  gym pooled / Kattis pooled / AOJ within-contest Spearman, solve-count sanity)
+  that exit nonzero on violation. Built as the verify command for auto-research
+  loops; `program.md`
   at the repo root is the matching agent instruction file (see the section
   below).
 - `predict_eval.py` — internal held-out solve-prediction check: train on a random
@@ -1317,13 +1324,16 @@ duration directly closes the `T_c = latest solve` approximation; event feeds
 could later distinguish no-attempt cells from failed-attempt histories.  Endpoint
 access is contest-specific and must be measured rather than assumed.
 
-Third, AOJ is a useful independent difficulty guard: 71 unique exact-title
-matches were found, including 45 of 46 Japan Regional problems from 2022–2025.
-On those 45 problems, AOJ submissions per solved user has within-contest Spearman
-+0.572 with the shipped difficulty.  AtCoder Problems produced no unique exact
-matches and is lower priority; solved.ac remains promising but should be cached
-because its BOJ integration ended in 2026.  Source URLs, matching policy, leakage
-rules, measurements, and the staged experiment order are documented in
+Third, AOJ is now a permanent independent difficulty guard. The reproducible
+collector found 71 unique exact-title candidates and accepts 45 of 46 Japan
+Regional problems from 2022–2025; the other 26 candidates are retained with a
+rejection reason because fewer than three titles corroborate their contest.
+Current within-contest Spearman is +0.587 (Architecture A), +0.650 (binary), and
++0.576 (survival). The north-star metric floors the survival AOJ guard at +0.52.
+AtCoder Problems produced no unique exact matches and is lower priority;
+solved.ac remains promising but should be cached because its BOJ integration
+ended in 2026. Source URLs, matching policy, leakage rules, measurements, and
+the staged experiment order are documented in
 [`external_data_sources.md`](external_data_sources.md).
 
 ## Out of scope / follow-ups

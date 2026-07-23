@@ -63,8 +63,9 @@ The guards (printed as `GUARD <name>=<value> (floor <f>) ok|FAIL`) protect what
 the metric cannot see: the CF anchors cover only Asia Pacific / Northern
 Eurasia / Europe, so `gym_ec_spearman` (Asia East Continent vs the gym-mirror
 yardstick), `gym_pooled_spearman`, `kattis_pooled_spearman` (North America +
-Europe) and `solvecount_sanity` (within-contest ordering) must not regress
-below their floors.
+Europe), `aoj_within_spearman` (Japan regionals with exposure removed by
+within-contest ranking), and `solvecount_sanity` (within-contest ordering) must
+not regress below their floors.
 
 ## Scope — what may be changed
 

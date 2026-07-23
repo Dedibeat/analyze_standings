@@ -24,6 +24,8 @@ auto-research loop must treat as "discard the change":
                               no CF anchors at all.
   * gym pooled Spearman    -- all gym-covered problems.
   * Kattis pooled Spearman -- North America + Europe practice-population check.
+  * AOJ within Spearman    -- Japan regionals, ranked within each contest to
+                              remove unequal practice exposure.
   * solve-count sanity     -- per-contest median Spearman(difficulty,
                               solve_count) must stay strongly negative.
 
@@ -44,6 +46,7 @@ from collections import defaultdict
 import numpy as np
 
 from . import model, survival
+from .aoj import load_matches as load_aoj_matches, within_contest_spearman
 from .anchor import estimate_anchored
 from .external_validate import GYM_OUT, KATTIS, _cf_mapping, _cf_problemset, _norm
 from .run import MIN_SOLVE_HOURS
@@ -54,6 +57,7 @@ GUARDS = {
     "gym_ec_spearman": 0.93,        # baseline +0.962
     "gym_pooled_spearman": 0.92,    # baseline +0.950
     "kattis_pooled_spearman": 0.75, # baseline +0.793
+    "aoj_within_spearman": 0.52,    # baseline +0.576
     "solvecount_sanity": 0.90,      # baseline +0.973 (sign flipped: -median)
 }
 
@@ -129,6 +133,9 @@ def main(use_binary=False):
                   if c["region"] in ("North America", "Europe")}
     ka = [(d, kat[nm]) for (cid, nm), d in by_name.items()
           if nm in kat and cid in kat_region]
+    aoj = load_aoj_matches()
+    ao = [(cid, d, aoj[(cid, label)]) for (cid, label), d in by_label.items()
+          if (cid, label) in aoj]
 
     per_contest = defaultdict(list)
     for p, (cid, label, pid, name) in enumerate(ds.problems):
@@ -144,6 +151,7 @@ def main(use_binary=False):
         "gym_ec_spearman": _spearman([a for a, _ in gy_ec], [g for _, g in gy_ec]),
         "gym_pooled_spearman": _spearman([a for a, _ in gy_all], [g for _, g in gy_all]),
         "kattis_pooled_spearman": _spearman([a for a, _ in ka], [k for _, k in ka]),
+        "aoj_within_spearman": within_contest_spearman(ao),
         "solvecount_sanity": float(np.median(sanity)),
     }
 
