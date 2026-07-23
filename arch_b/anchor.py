@@ -35,6 +35,10 @@ OLDER_ICPC = os.path.join(
     os.path.dirname(__file__), os.pardir,
     "autoresearch", "loop-260723-1333", "icpc_2020_2021.json",
 )
+PETROZ = os.path.join(
+    os.path.dirname(__file__), os.pardir,
+    "autoresearch", "loop-260723-1333", "petroz_2022_2026.json",
+)
 
 
 def estimate_anchored(sigma_theta=SIGMA_THETA, sigma_b=SIGMA_B, fit_fn=fit,
@@ -62,7 +66,7 @@ def estimate_anchored(sigma_theta=SIGMA_THETA, sigma_b=SIGMA_B, fit_fn=fit,
     # identity graph, but do NOT load WF rows into the fit (their solve data
     # is for different problems than the CF anchors and adds only noise).
     raw_all = []
-    for p in [TAGGED, WF, OLDER_ICPC] + UCUP:
+    for p in [TAGGED, WF, OLDER_ICPC, PETROZ] + UCUP:
         with open(p) as f:
             raw_all.extend(json.load(f))
     raw_all = dedupe_contests(raw_all)
@@ -72,8 +76,8 @@ def estimate_anchored(sigma_theta=SIGMA_THETA, sigma_b=SIGMA_B, fit_fn=fit,
     uf = member_identity(raw_all, season_by_cid)
 
     ds_ucup = load(UCUP, uf=uf, season_key=season_key, min_solve_hours=min_solve_hours)
-    ds_tagged = load([TAGGED, OLDER_ICPC], uf=uf, season_key=season_key,
-                     min_solve_hours=min_solve_hours)
+    ds_tagged = load([TAGGED, OLDER_ICPC, PETROZ], uf=uf,
+                     season_key=season_key, min_solve_hours=min_solve_hours)
 
     if verbose: print("=== UCup anchor fit (s3 + s4) ===")
     theta_u, _, _ = fit_fn(ds_ucup, sigma_theta=sigma_theta, sigma_b=sigma_b, verbose=verbose)
