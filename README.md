@@ -109,14 +109,14 @@ keeps 26 isolated title matches rejected. `external_validate` compares
 ### The optimization metric
 
 `arch_b.metric` is the single number model improvements are judged by:
-**leave-one-contest-out RMSE in CF points** against the official ratings of all
-15 CF-mirrored contests (185 anchor problems — every rated mirror the dataset
-has; an exhaustive sweep found no more). It refits the survival model from
-source in ~5 s, prints `METRIC loco_cf_rmse=…` as its last line (lower is
-better; baseline **290.2**, cluster-bootstrap SE ±20 → improvements under ~5
-points are noise), and exits nonzero if any guard regresses (gym
+**calibrated leave-one-contest-out RMSE in CF points** against the official
+ratings of all 15 CF-mirrored contests (185 anchor problems — every rated
+mirror the dataset has; an exhaustive sweep found no more). It refits the
+survival model from source, applies the locked shipped gym shape, and prints
+`METRIC calibrated_loco_cf_rmse=…` as its last line (baseline **266.4**; lower
+is better). It exits nonzero if any external guard regresses (gym
 Asia-East-Continent / gym pooled / Kattis / AOJ within-contest Spearman,
-solve-count sanity — the things the CF anchors can't see). `program.md` at the
+solve-count sanity) or if raw affine LOCO rises above 293.4. `program.md` at the
 repo root is the matching
 instruction file for auto-research loops: verify contract, what code is fair
 game, hard anti-gaming rules, and a prioritized idea list. A 2026-07-03 auto-research campaign (Claude Fable 5 + DeepSeek v4 Pro, 25

@@ -1,4 +1,4 @@
-# Auto-research program: minimize LOCO CF-RMSE
+# Auto-research program: minimize calibrated LOCO CF-RMSE
 
 ## Invocation (uditgoenka/autoresearch skill)
 
@@ -8,11 +8,13 @@ auto-commits and auto-reverts):
 ```
 /autoresearch
 Goal: Reduce the survival difficulty model's leave-one-contest-out CF-point
-  RMSE. Read program.md (this file) first and obey its Scope and Hard rules.
+  RMSE after the locked shipped two-leg calibration. Read program.md (this
+  file) first and obey its Scope and Hard rules.
 Scope: arch_b/survival.py, arch_b/model.py, arch_b/anchor.py, arch_b/run.py,
   arch_a/load.py
-Metric: loco_cf_rmse (lower is better); improvements under 5 points are noise
-  — discard unless a guard value or held-out AUC also improves
+Metric: calibrated_loco_cf_rmse (baseline 266.4; lower is better);
+  improvements under 5 points are noise — discard unless an independent guard
+  value or held-out AUC also improves
 Verify: ./.venv/bin/python -m arch_b.metric | tail -1
 Guard: ./.venv/bin/python -m arch_b.metric
 Iterations: 25
@@ -31,9 +33,11 @@ iteration.)
 
 ## Goal
 
-Improve the **survival difficulty model** (the shipped deliverable:
-CF-equivalent problem ratings) as measured by one scalar: leave-one-contest-out
-RMSE in Codeforces points against official CF problem ratings.
+Improve the **survival difficulty model** as measured by the shipped two-leg
+calibration's leave-one-contest-out RMSE in Codeforces points. The monotone gym
+shape is locked at `NBINS=15`, `ALPHA=0.75`, excluding qoj 2692; this campaign
+may improve the fit beneath it but must not retune calibration on the same 15
+anchor contests.
 
 ## Verify
 
@@ -42,30 +46,32 @@ RMSE in Codeforces points against official CF problem ratings.
 ```
 
 Contract:
-- Last stdout line is `METRIC loco_cf_rmse=<value>`. **Lower is better.**
+- Last stdout line is `METRIC calibrated_loco_cf_rmse=<value>`. **Lower is
+  better.**
 - Exit code `1` means a guard was violated → **discard the change**, whatever
   the metric says. Exit `0` + lower RMSE → keep.
 - Runs in ~5 s, fully deterministic (no RNG anywhere in the fit).
-- Baselines (2026-07-03): survival **290.2**, binary (`--binary`) 344.3, on
-  185 anchor problems / 15 contests (every rated CF mirror our dataset has —
-  an exhaustive problemset sweep found no more). Guard floors are calibrated
-  to the survival baseline; the binary variant already sits below one of them.
+- Baseline: calibrated survival **266.4** on 185 anchor problems / 15 contests
+  (every rated CF mirror our dataset has — an exhaustive problemset sweep found
+  no more). The raw affine LOCO remains visible as a guard, baseline 288.4 with
+  ceiling 293.4. The binary variant already sits below an external guard.
 
-**Noise floor / keep threshold.** The cluster-bootstrap SE of the metric is
-**±20 points** (contests resampled as units). Keep/discard comparisons are
-paired on the same anchors so they are more sensitive than that, but still:
-**treat improvements smaller than ~5 points as noise** — do not keep them
-unless a guard or the held-out AUC (`python -m arch_b.predict_eval`) also
-improves. Many small "wins" kept against a fixed 185-anchor set is how a loop
-overfits the anchors without LOCO noticing.
+**Noise floor / keep threshold.** The earlier raw-affine metric had
+cluster-bootstrap SE ≈20 points (contests resampled as units); the calibrated
+metric's own sampling SE has not been separately estimated. Paired comparisons
+on the same anchors are more sensitive, but still: **treat improvements smaller
+than ~5 points as noise** — do not keep them unless Kattis, AOJ, or held-out AUC
+(`python -m arch_b.predict_eval`) also improves. Many small "wins" kept against
+a fixed 185-anchor set is how a loop overfits the anchors without LOCO noticing.
 
-The guards (printed as `GUARD <name>=<value> (floor <f>) ok|FAIL`) protect what
-the metric cannot see: the CF anchors cover only Asia Pacific / Northern
-Eurasia / Europe, so `gym_ec_spearman` (Asia East Continent vs the gym-mirror
-yardstick), `gym_pooled_spearman`, `kattis_pooled_spearman` (North America +
-Europe), `aoj_within_spearman` (Japan regionals with exposure removed by
-within-contest ranking), and `solvecount_sanity` (within-contest ordering) must
-not regress below their floors.
+The guards protect what the calibrated metric cannot see. The CF anchors cover
+only Asia Pacific / Northern Eurasia / Europe, so `gym_ec_spearman` (Asia East
+Continent vs the gym-mirror yardstick), `gym_pooled_spearman`,
+`kattis_pooled_spearman` (North America + Europe), `aoj_within_spearman` (Japan
+regionals with exposure removed by within-contest ranking), and
+`solvecount_sanity` (within-contest ordering) must not regress below their
+floors. `raw_loco_cf_rmse` must also stay at or below 293.4 so the nonlinear
+calibration cannot hide a material regression in the underlying fit.
 
 ## Scope — what may be changed
 
@@ -97,8 +103,8 @@ Fair game (one focused change per iteration):
    CF problemset rating inside the fit path, and never special-case the anchor
    contest ids. The metric must stay a held-out test.
 2. **Do not modify** `arch_b/metric.py`, `arch_b/external_validate.py`,
-   `arch_b/gym_difficulty.py`, anything under `data/`, or
-   `output/gym_difficulty.json`.
+   `arch_b/calibrate.py`, `arch_b/gym_difficulty.py`, anything under `data/`,
+   `output/gym_difficulty.json`, or the locked calibration constants.
 3. Keep the fit deterministic and the verify runtime under ~2 minutes.
 4. numpy only (no scipy — it is not installed).
 

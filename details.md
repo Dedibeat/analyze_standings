@@ -401,11 +401,11 @@ log-likelihood (eq. loglik) plus Gaussian priors on `theta` and `b` (eq. priors)
   official CF ratings + Kattis and compares team-reduction rules (see the section
   below).
 - `metric.py` — **the north-star metric** for model optimization: refits the
-  survival model from source and prints one scalar, the leave-one-contest-out
-  RMSE in CF points over all mapped rated mirrors, plus guard checks (gym EC /
-  gym pooled / Kattis pooled / AOJ within-contest Spearman, solve-count sanity)
-  that exit nonzero on violation. Built as the verify command for auto-research
-  loops; `program.md`
+  survival model from source and prints one scalar, the shipped two-leg
+  calibrated leave-one-contest-out RMSE in CF points over all mapped rated
+  mirrors, plus guard checks (raw affine LOCO, gym EC / gym pooled / Kattis
+  pooled / AOJ within-contest Spearman, solve-count sanity) that exit nonzero
+  on violation. Built as the verify command for auto-research loops; `program.md`
   at the repo root is the matching agent instruction file (see the section
   below).
 - `predict_eval.py` — internal held-out solve-prediction check: train on a random
@@ -946,13 +946,13 @@ regional-bias investigation left open. Run:
 
 With validation settled (every anchored region agrees at +0.86–0.98), the open
 front is the **scale**, so model improvement is now driven by a single scalar:
-**leave-one-contest-out RMSE in CF points** — for each CF-rated mirror contest,
-fit the affine map `cf ≈ slope·b + icept` on the *other* mirrors, predict the
-held-out one, pool the errors. Chosen over the alternatives because it measures
-the shipped deliverable (`difficulty_cf`) directly in interpretable units, is
-sensitive to ranking *and* scale (Spearman is blind to compression), works for
-all architectures (each gets its own map), and LOCO punishes anchor overfitting.
-Unlike `arch_b.calibrate` (which hardcodes 3 contests), `metric.py` auto-maps
+the shipped two-leg map's **calibrated leave-one-contest-out RMSE in CF
+points**. The verifier refits the model, applies the locked gym-learned monotone
+shape (`NBINS=15`, `ALPHA=0.75`, qoj 2692 excluded), then for each CF-rated
+mirror contest fits the affine leg on the *other* mirrors, predicts the held-out
+one, and pools the errors. This measures the shipped deliverable
+(`difficulty_cf`) directly while preventing the loop from retuning calibration
+against the same anchors. `metric.py` auto-maps
 **all** rated mirrors in `data/cf_team_contests.txt` via the
 `external_validate` name-vote machinery: currently **185 problems / 15
 contests**. Three mirrors were *added to the list* by sweeping every tagged
@@ -960,34 +960,35 @@ contest's problem names against the rated CF problemset (contest-level vote):
 CF 2157 ↔ qoj 2692 (found by the gym certification), plus CF 1773 (2022–23
 NEF) and CF 1938 (2024 APAC) found by the exhaustive sweep — which also showed
 **no further rated mirrors exist** for our 146 contests, so anchor growth now
-requires new contests in `tagged.json`. Baselines (2026-07-03): **survival
-290.2**, binary 344.3. (The old "RMSE ~252" was on the 40-problem / 3-contest
-anchor set; the rises to 279 then 290 are the test getting *harder and more
-trustworthy* as anchors grew — e.g. CF 1938 alone contributes RMSE 384 — not
-model regressions.)
+requires new contests in `tagged.json`. The current calibrated survival
+baseline is **266.4**; raw affine LOCO is **288.4** and remains a guard with
+ceiling 293.4.
 
-**Noise floor (cluster bootstrap, contests as resampling units):** the pooled
-RMSE carries **SE ≈ ±20 points** (95% CI ≈ [251, 327]); per-contest RMSE spreads
-160–420 with no single contest dominating. Paired comparisons on the same
-anchors are sharper — binary-vs-survival (+54) separates at P<0.001 — but an
+**Noise floor (cluster bootstrap, contests as resampling units):** for the
+legacy raw-affine metric, pooled RMSE carried **SE ≈ ±20 points** (95% CI ≈
+[251, 327]); the calibrated metric's own sampling SE has not been separately
+estimated. Paired comparisons on the same anchors are sharper, but an
 auto-research loop must still **treat single-digit improvements as noise**
-(`program.md` sets a ~5-point keep threshold, with guard/AUC corroboration for
-small wins) because repeatedly selecting on a fixed 185-anchor set overfits it
-in a way LOCO cannot detect.
+(`program.md` sets a ~5-point keep threshold, requiring Kattis, AOJ, or
+held-out-AUC corroboration for small wins) because repeatedly selecting on a
+fixed 185-anchor set overfits it in a way LOCO cannot detect.
 
 **Guards.** The CF anchors cover only AsiaPac / N.Eurasia / Europe, so a loop
 optimizing RMSE alone could silently regress the unanchored regions. The same
 fit is therefore checked against floors (baseline − noise margin, calibrated to
 the survival model): gym **EC** Spearman ≥ 0.93 (the region with *no* CF
-anchors), gym pooled ≥ 0.92, Kattis pooled (NA+Europe convention) ≥ 0.75,
-within-contest solve-count sanity ≥ 0.90. Any violation exits nonzero =
-"discard the change". Note Asia West needs no exclusion switch: it has no
-anchor coverage, so it simply never enters the metric (dropping its contests
-*from the fit* is explicitly permitted as an experiment in `program.md`).
+anchors), gym pooled ≥ 0.92, Kattis pooled (NA+Europe convention) ≥ 0.75, AOJ
+within-contest Spearman ≥ 0.52, and within-contest solve-count sanity ≥ 0.90.
+Raw affine LOCO must remain ≤ 293.4 so the nonlinear calibration cannot hide a
+material fit regression. Any violation exits nonzero = "discard the change".
+Note Asia West needs no exclusion switch: it has no anchor coverage, so it
+simply never enters the metric (dropping its contests *from the fit* is
+explicitly permitted as an experiment in `program.md`).
 
 **`program.md`** (repo root) is the instruction file for auto-research agents
 (karpathy-style `verify`/guard loop): the verify contract (last line
-`METRIC loco_cf_rmse=…`, exit 1 = discard, ~5 s deterministic runs), the scope
+`METRIC calibrated_loco_cf_rmse=…`, exit 1 = discard, ~5 s deterministic
+runs), the scope
 (fit/likelihood/prior/hygiene code is fair game; `metric.py`, the yardstick
 modules, and everything under `data/` are read-only; CF anchor data must never
 be read in the fit path), and the prioritized idea list (hard-tail prior,
