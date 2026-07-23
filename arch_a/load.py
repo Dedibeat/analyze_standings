@@ -192,6 +192,7 @@ def member_identity(raw, season_by_cid=None):
     # roster, then link WF teams (which carry the same affiliation but no
     # members) to that roster.  This is safe because the WF team *is* the
     # university's top team for that season.
+    _link_wf_top_team(raw, uf, season_by_cid)
     return uf
 
 
