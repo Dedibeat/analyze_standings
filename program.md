@@ -12,7 +12,7 @@ Goal: Reduce the survival difficulty model's leave-one-contest-out CF-point
   file) first and obey its Scope and Hard rules.
 Scope: arch_b/survival.py, arch_b/model.py, arch_b/anchor.py, arch_b/run.py,
   arch_a/load.py
-Metric: calibrated_loco_cf_rmse (baseline 266.4; lower is better);
+Metric: calibrated_loco_cf_rmse (baseline 261.6; lower is better);
   improvements under 5 points are noise — discard unless an independent guard
   value or held-out AUC also improves
 Verify: ./.venv/bin/python -m arch_b.metric | tail -1
@@ -51,9 +51,9 @@ Contract:
 - Exit code `1` means a guard was violated → **discard the change**, whatever
   the metric says. Exit `0` + lower RMSE → keep.
 - Runs in ~5 s, fully deterministic (no RNG anywhere in the fit).
-- Baseline: calibrated survival **266.4** on 185 anchor problems / 15 contests
+- Baseline: calibrated survival **261.6** on 185 anchor problems / 15 contests
   (every rated CF mirror our dataset has — an exhaustive problemset sweep found
-  no more). The raw affine LOCO remains visible as a guard, baseline 288.4 with
+  no more). The raw affine LOCO remains visible as a guard, baseline 285.0 with
   ceiling 293.4. The binary variant already sits below an external guard.
 
 **Noise floor / keep threshold.** The earlier raw-affine metric had
