@@ -20,17 +20,73 @@ loaded under one union-find built from tagged + UCup together.
 """
 
 import json
+import math
 import os
+from datetime import datetime, timezone
 
 import numpy as np
 
-from arch_a.load import _max_solve_seconds, dedupe_contests, load, member_identity, season_of
+from arch_a import elo
+from arch_a.load import (
+    _max_solve_seconds, dedupe_contests, load, member_identity, season_of,
+    team_key,
+)
 from .model import MU0, SIGMA_B, SIGMA_THETA, fit
 
 DATA = os.path.join(os.path.dirname(__file__), os.pardir, "data")
 TAGGED = os.path.join(DATA, "tagged.json")
 UCUP = [os.path.join(DATA, "ucup_s3.json"), os.path.join(DATA, "ucup_s4.json")]
 WF = os.path.join(DATA, "wf_tagged_format.json")
+CF_PARTICIPANTS = os.path.join(DATA, "cphof_cf_participants.json")
+
+
+def _cf_participant_priors(ds, uf, season_key):
+    """Return conservative time-causal CF team priors keyed by dataset team."""
+    with open(CF_PARTICIPANTS) as f:
+        source = json.load(f)
+
+    rows = {}
+    for person in source["participants"]:
+        history = person["rating_history"]
+        for appearance in person["tagged_appearances"]:
+            if appearance["identity_evidence"]["status"] != "roster_corroborated":
+                continue
+            cutoff = datetime(
+                appearance["year"], 1, 1, tzinfo=timezone.utc).timestamp()
+            prior = [r for r in history if r["ratingUpdateTimeSeconds"] < cutoff]
+            if not prior:
+                continue
+            key = (
+                appearance["contest_id"],
+                appearance["team_id"],
+                tuple(sorted(appearance["roster"])),
+            )
+            row = rows.setdefault(key, {
+                "ratings": {},
+                "roster": appearance["roster"],
+                "year": appearance["year"],
+                "contest_name": appearance["contest_name"],
+            })
+            row["ratings"][appearance["member_name"]] = prior[-1]["newRating"]
+
+    values = {}
+    for (cid, tid, _), row in rows.items():
+        if len(row["ratings"]) != len(set(row["roster"])) or len(row["ratings"]) < 2:
+            continue
+        ratings = list(row["ratings"].values())
+        top = max(ratings)
+        team_rating = top + elo.S * math.log(sum(
+            math.exp((rating - top) / elo.S) for rating in ratings))
+        contest = {"year": row["year"], "contest_name": row["contest_name"]}
+        season = season_of(contest) if season_key else None
+        tk = team_key(cid, tid, row["roster"], uf, season)
+        values.setdefault(tk, []).append(team_rating)
+
+    return {
+        tk: float(np.mean(team_ratings))
+        for tk, team_ratings in values.items()
+        if tk in ds.teams
+    }
 
 
 def estimate_anchored(sigma_theta=SIGMA_THETA, sigma_b=SIGMA_B, fit_fn=fit,
@@ -81,8 +137,19 @@ def estimate_anchored(sigma_theta=SIGMA_THETA, sigma_b=SIGMA_B, fit_fn=fit,
         if hit is not None:
             prior_mu[i] = hit
             n_anchored += 1
+    prior_precision = np.full(len(ds_tagged.teams), 1.0 / sigma_theta**2)
+    cf_priors = _cf_participant_priors(ds_tagged, uf, season_key)
+    cf_precision = 1.0 / sigma_theta**2
+    team_index = {tk: i for i, tk in enumerate(ds_tagged.teams)}
+    for tk, cf_mu in cf_priors.items():
+        i = team_index[tk]
+        prior_mu[i] = (
+            prior_precision[i] * prior_mu[i] + cf_precision * cf_mu
+        ) / (prior_precision[i] + cf_precision)
+        prior_precision[i] += cf_precision
     if verbose:
         print(f"anchored {n_anchored} of {len(ds_tagged.teams)} tagged teams to UCup")
+        print(f"added {len(cf_priors)} conservative full-roster CF priors")
 
     gym_obs = None
     if gym_merge:
@@ -92,7 +159,7 @@ def estimate_anchored(sigma_theta=SIGMA_THETA, sigma_b=SIGMA_B, fit_fn=fit,
     if verbose: print("=== anchored tagged fit ===")
     theta, b, history = fit_fn(ds_tagged, prior_mu=prior_mu,
                                sigma_theta=sigma_theta, sigma_b=sigma_b, verbose=verbose,
-                               gym_obs=gym_obs)
+                               gym_obs=gym_obs, prior_precision=prior_precision)
     return ds_tagged, theta, b, history, uf
 
 
