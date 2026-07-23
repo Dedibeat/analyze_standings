@@ -101,14 +101,6 @@ def _roster_token(members, season=None):
 
 def row_solved_any(standing):
     """True if this standing row solved at least one problem (else it is dropped)."""
-    tid = str(standing["team_id"])
-    if (
-        not tid.startswith(("$DEFAULT", "ucup-"))
-        and not (standing.get("members") or [])
-        and not standing.get("affiliation")
-        and standing.get("team_name") == tid
-    ):
-        return False
     return any(p.get("solved") for p in (standing.get("problems") or {}).values())
 
 
