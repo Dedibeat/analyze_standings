@@ -101,7 +101,10 @@ def _roster_token(members, season=None):
 
 def row_solved_any(standing):
     """True if this standing row solved at least one problem (else it is dropped)."""
-    return any(p.get("solved") for p in (standing.get("problems") or {}).values())
+    return (
+        not standing["team_id"].startswith("$DEFAULT")
+        or any(p.get("solved") for p in (standing.get("problems") or {}).values())
+    )
 
 
 class _UnionFind:
