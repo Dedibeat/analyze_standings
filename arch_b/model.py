@@ -36,7 +36,7 @@ import numpy as np
 from arch_a import elo
 
 MU0 = 2000.0          # neutral prior mean (mid Codeforces rating); anchors the scale
-SIGMA_THETA = 600.0   # ability prior std (eq. priors): regularization knob
+SIGMA_THETA = 400.0   # ability prior std (eq. priors): regularization knob
 SIGMA_B = 400.0       # difficulty prior std (eq. priors): regularization knob
 
 
