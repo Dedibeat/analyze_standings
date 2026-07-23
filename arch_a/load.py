@@ -131,7 +131,6 @@ def _trusted_names(raw):
     >=2 contests (else it links nothing), and is >=5 chars normalized (very
     short names are too generic to trust).
     """
-    return set()
     per_contest = {}
     contests_of = {}
     for c in raw:
