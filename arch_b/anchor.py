@@ -68,8 +68,7 @@ def estimate_anchored(sigma_theta=SIGMA_THETA, sigma_b=SIGMA_B, fit_fn=fit,
     uf = member_identity(raw_all, season_by_cid)
 
     ds_ucup = load(UCUP, uf=uf, season_key=season_key, min_solve_hours=min_solve_hours)
-    ds_tagged = load([TAGGED, WF], uf=uf, season_key=season_key,
-                     min_solve_hours=min_solve_hours)
+    ds_tagged = load(TAGGED, uf=uf, season_key=season_key, min_solve_hours=min_solve_hours)
 
     if verbose: print("=== UCup anchor fit (s3 + s4) ===")
     theta_u, _, _ = fit_fn(ds_ucup, sigma_theta=sigma_theta, sigma_b=sigma_b, verbose=verbose)
