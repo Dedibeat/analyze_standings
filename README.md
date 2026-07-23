@@ -195,11 +195,11 @@ the weakest tier whose bar clears it — badges are monotone in difficulty, and 
 medal-badge count per contest ≈ the lowest gold team's solve count. Above the gold
 bar, a second crossing at the **champion cohort** (top-5 official teams) splits
 **bonus** (champions still solve it at even odds — decides ranking within gold,
-119 problems) from **star** (beyond even the champions — the extreme problems,
-81, almost all 0–2 official solves). Writes
+92 problems) from **star** (beyond even the champions — the extreme problems,
+104, almost all 0–2 official solves). Writes
 `output/medal_badges.json`; bars and difficulties are also given in CF points via
-the `calibrate` map (gold bar across contests: median ≈ 2680 CF, range ≈
-[2100, 2900]). See the medal-badge section in `details.md` for why the bars are
+the `calibrate` map (gold bar across contests: median ≈ 2601 CF, range ≈
+[2137, 2932]). See the medal-badge section in `details.md` for why the bars are
 empirical crossings rather than Elo performance ratings.
 
 ```bash

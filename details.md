@@ -722,14 +722,14 @@ Key decisions:
   is primary because the medal semantics is about the boundary ("what you
   needed to solve to reach the tier").
 
-Results (current run): badge totals **86 bronze / 36 silver / 40 gold / 93
-bonus / 103 star** (28 contests, 358 problems). Internal consistency:
+Results (current run): badge totals **86 bronze / 36 silver / 40 gold / 92
+bonus / 104 star** (28 contests, 358 problems). Internal consistency:
 the non-bonus badge count per contest ≈ the lowest gold team's solve count
 (e.g. Jinan 2022: 6 solves, badges BBBSGG; Wuhan 2025: 6, BBBGGG). The **gold
-bar in CF points** spans [2114, 2885], median **2655**: hardest golds at
-EC-Final 2024 "China" (2885) and EC-Final 2023 "Shanghai" (2883); softest at
-Grand Prix of Shenyang 2025 (2114). The lowest gold team solves 4–8 problems
-and its classic Elo rank-inversion performance sits at 2286–2512.
+bar in CF points** spans [2137, 2932], median **2601**: hardest golds at
+EC-Final 2024 "China" (2932) and EC-Final 2023 "Shanghai" (2897); softest at
+Grand Prix of Shenyang 2025 (2137). The lowest gold team solves 4–8 problems
+and its classic Elo rank-inversion performance sits at 2184–2502.
 
 **Viewer (`arch_b.export_medal_viewer` + `medal_viewer_template.html`).**
 `output/medal_viewer.html` is the interactive presentation of the analysis —
