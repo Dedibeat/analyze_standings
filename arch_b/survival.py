@@ -73,8 +73,7 @@ def _survival_observations(ds):
 
 
 def fit(ds, prior_mu=None, sigma_theta=SIGMA_THETA, sigma_b=SIGMA_B, mu_b=MU0,
-        eps=0.5, max_iter=200, verbose=True, obs=None, gym_obs=None, obs_w=None,
-        prior_precision=None):
+        eps=0.5, max_iter=200, verbose=True, obs=None, gym_obs=None, obs_w=None):
     """MAP fit of the survival model; returns (theta, b, history).
 
     Signature matches ``model.fit`` so it is a drop-in for
@@ -97,8 +96,7 @@ def fit(ds, prior_mu=None, sigma_theta=SIGMA_THETA, sigma_b=SIGMA_B, mu_b=MU0,
     w = 1.0 if obs_w is None else np.asarray(obs_w, float)
 
     s = elo.S
-    prec_theta = (1.0 / sigma_theta**2 if prior_precision is None
-                  else np.asarray(prior_precision, float))
+    prec_theta = 1.0 / sigma_theta**2
     prec_b = 1.0 / sigma_b**2
     n_teams, n_problems = len(ds.teams), len(ds.problems)
 
@@ -110,7 +108,7 @@ def fit(ds, prior_mu=None, sigma_theta=SIGMA_THETA, sigma_b=SIGMA_B, mu_b=MU0,
         Lam = LN2 * np.exp(g) * rho          # cumulative hazard per cell
         resid = w * (obs_y - Lam)
         grad = np.zeros_like(param)
-        negH = np.broadcast_to(prec, param.shape).astype(float).copy()
+        negH = np.full_like(param, prec)
         np.add.at(grad, index, resid)
         np.add.at(negH, index, w * Lam / s**2)  # d Lambda / d param = Lambda / s
         if extra is not None:                # fixed-theta binary gym terms
