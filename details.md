@@ -654,7 +654,7 @@ LOCO is the 266.4 figure. Experiment log:
 ICPC **Asia East Continent** regionals award medals by cumulative percentile of
 the official teams that solved ≥1 problem: gold 10%, silver 30%, bronze 60%.
 `arch_b.medals` assigns every problem of the medal-awarding EA contests a
-**bronze / silver / gold / bonus / star badge** (weakest → hardest) and reports
+**bronze / silver / gold / platinum / star badge** (weakest → hardest) and reports
 the **lowest gold-medal team** per regional. Writes `output/medal_badges.json`
 (`{"contests": [...], "problems": [...]}`); run
 `./.venv/bin/python -m arch_b.medals`.
@@ -692,19 +692,19 @@ Key decisions:
   ±7-official-rank cohort around the cutoff team, isotonic-regress its
   per-problem solve rates against `b` (PAVA, non-increasing), and set
   `bar_tier` = the `b` where the smoothed rate crosses 0.5. Badge = the weakest
-  tier whose bar clears `b_p`, else **bonus** — still a threshold on the fitted
+  tier whose bar clears `b_p`, else **platinum** — still a threshold on the fitted
   difficulty, so badges are monotone in `b`, cross-contest comparable, and
   CF-mappable (the `calibrate` two-leg map is monotone, so CF-space badges are
   identical).
-- **Star tier above bonus (the champion bar).** The badge ladder is
-  bronze < silver < gold < **bonus** < **star** — bonus/star are *above* gold,
+- **Star tier above platinum (the champion bar).** The badge ladder is
+  bronze < silver < gold < **platinum** < **star** — platinum/star are *above* gold,
   not below bronze (a recurring misreading; the viewer spells it out). With
-  only four tiers, "bonus" was 52% of all problems and lumped "just above the
+  only four tiers, "platinum" was 52% of all problems and lumped "just above the
   gold bar" with "solved by nobody", so one more crossing was added, anchored
   at the **champion cohort** (`TOP_COHORT = 5`, the top-5 official teams, exact
-  cohort — no window): **bonus** = above the gold bar but the champions still
+  cohort — no window): **platinum** = above the gold bar but the champions still
   solve it at even odds (it decides ranking *within* gold), **star** = beyond
-  even the champions. This split the 200 bonus problems into **119 bonus + 81
+  even the champions. This split the 200 platinum problems into **119 platinum + 81
   star**; star problems almost all have 0–2 official solves (a scarcity rule
   "≤2 official solves" selects a nearly identical set of 82, cross-validating
   the bar). A champion cohort that solves everything at ≥50% pins its bar to
@@ -715,7 +715,7 @@ Key decisions:
 - **Sanity badge: band majority.** A model-free column badges each problem with
   the weakest medal *band* (gold ranks 1..g / silver g+1..s / bronze s+1..z)
   where ≥50% of official teams solved it; if none, the top-5 majority splits
-  bonus (≥50%) from star. Agreement with the model badge is
+  platinum (≥50%) from star. Agreement with the model badge is
   **74%** (282/383) and the disagreements are almost all one step in the
   expected direction: the band's *median* team is stronger than the boundary
   team, so the band-majority badge skews one tier easier. The medal-bar badge
@@ -723,8 +723,8 @@ Key decisions:
   needed to solve to reach the tier").
 
 Results (current run): badge totals **86 bronze / 36 silver / 40 gold / 92
-bonus / 104 star** (28 contests, 358 problems). Internal consistency:
-the non-bonus badge count per contest ≈ the lowest gold team's solve count
+platinum / 104 star** (28 contests, 358 problems). Internal consistency:
+the non-platinum badge count per contest ≈ the lowest gold team's solve count
 (e.g. Jinan 2022: 6 solves, badges BBBSGG; Wuhan 2025: 6, BBBGGG). The **gold
 bar in CF points** spans [2137, 2932], median **2601**: hardest golds at
 EC-Final 2024 "China" (2932) and EC-Final 2023 "Shanghai" (2897); softest at
@@ -742,13 +742,13 @@ cutoff-team details, click-to-open, URL hash `#<contest_id>` like the other
 viewers); a contest detail view (three cutoff-team panels for gold/silver/bronze
 with solved count, penalty, full-field rank, and Elo performance; problems
 as lettered lollipop dots on the difficulty axis against the medal-bar
-threshold lines and a shaded bonus zone, plus a per-problem table with band
+threshold lines and a shaded platinum zone, plus a per-problem table with band
 solve-rate meters and a † marker where the empirical badge differs); and a
-sortable gold-cutoff-team table. The detail strip shades both the bonus zone
+sortable gold-cutoff-team table. The detail strip shades both the platinum zone
 (gold bar → star bar) and the star zone (beyond the star bar), the table
 carries a Top-5 (champion) solve-rate column, and a star bar pinned at the
 scale ceiling renders as "— (champions solve all)". Design notes: badge colors
-are medal-semantic (bronze/silver-blue/gold/violet bonus/red star) and were
+are medal-semantic (bronze/silver-blue/gold/violet platinum/red star) and were
 **validated with the dataviz palette checker in both modes** (5 slots, worst
 adjacent CVD ΔE ≥ 58; the gold hue is
 sub-3:1 on the light surface, mitigated by letter labels on every chip and the

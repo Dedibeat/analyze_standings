@@ -20,7 +20,7 @@
   --bronze: #b4633a;
   --silver: #5e86c4;
   --gold:   #d29500;
-  --bonus:  #4a3aa7;
+  --platinum:  #4a3aa7;
   --star:   #e34948;
   --shadow: 0 6px 20px rgba(11,11,11,0.10);
 }
@@ -39,7 +39,7 @@
     --bronze: #c97845;
     --silver: #6b90d4;
     --gold:   #c98500;
-    --bonus:  #9085e9;
+    --platinum:  #9085e9;
     --star:   #e66767;
     --shadow: 0 6px 20px rgba(0,0,0,0.45);
   }
@@ -121,7 +121,7 @@ select {
 .b-bronze { background: color-mix(in srgb, var(--bronze) 16%, var(--surface)); }
 .b-silver { background: color-mix(in srgb, var(--silver) 16%, var(--surface)); }
 .b-gold   { background: color-mix(in srgb, var(--gold)   18%, var(--surface)); }
-.b-bonus  { background: color-mix(in srgb, var(--bonus)  14%, var(--surface)); }
+.b-platinum  { background: color-mix(in srgb, var(--platinum)  14%, var(--surface)); }
 .b-star   { background: color-mix(in srgb, var(--star)   14%, var(--surface)); }
 
 .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 14px; }
@@ -177,7 +177,7 @@ footer li { margin-top: 3px; }
     Each problem is badged with the weakest tier whose boundary team solves it at ≥50% odds,
     measured on standings-fitted difficulties (UCup-anchored survival model, Codeforces-equivalent
     points). Above the gold bar sit two more tiers, split at the champion cohort (the top-5
-    official teams): still solvable by the champions at even odds → <b>bonus</b> (decides ranking
+    official teams): still solvable by the champions at even odds → <b>platinum</b> (decides ranking
     within gold); beyond even the champions → <b>★ star</b>. Official teams are recovered from the
     mixed qoj standings by their domjudge id prefix.</p>
   </header>
@@ -221,7 +221,7 @@ footer li { margin-top: 3px; }
       <li>Medal counts use ceil rounding of the 10/30/60% cutoffs; the official rounding rule is not in the data, and hosts may adjust boundaries at ties.</li>
       <li>The domjudge field is taken as the medal-eligible field — fuzzy for COVID-era online contests (Hong Kong &amp; Macau 2022's “official” field includes non-EA online teams, which is why its gold bar is the outlier).</li>
       <li>Xi'an 2025 was declared unrated; it is included with its qoj standings as-is.</li>
-      <li>A model-free sanity badge (weakest medal band where ≥50% of teams solved; top-5 majority splits bonus/star) agrees on ~74% of problems; disagreements are almost all one step easier, as expected when anchoring on the band majority instead of the boundary team.</li>
+      <li>A model-free sanity badge (weakest medal band where ≥50% of teams solved; top-5 majority splits platinum/star) agrees on ~74% of problems; disagreements are almost all one step easier, as expected when anchoring on the band majority instead of the boundary team.</li>
       <li>The star bar leans on a 5-team champion cohort, so it is the noisiest of the four bars — in small fields (e.g. Hong Kong 2024) it can sit close to the gold bar and badge a several-solve problem ★.</li>
     </ul>
   </footer>
@@ -232,10 +232,10 @@ footer li { margin-top: 3px; }
 "use strict";
 const DATA = /*__DATA__*/null;
 
-const BADGES = ["bronze", "silver", "gold", "bonus", "star"];
+const BADGES = ["bronze", "silver", "gold", "platinum", "star"];
 const TIERS = ["bronze", "silver", "gold"];
-const LETTER = { bronze: "B", silver: "S", gold: "G", bonus: "+", star: "★" };
-const TITLE = { bronze: "Bronze", silver: "Silver", gold: "Gold", bonus: "Bonus", star: "Star" };
+const LETTER = { bronze: "B", silver: "S", gold: "G", platinum: "+", star: "★" };
+const TITLE = { bronze: "Bronze", silver: "Silver", gold: "Gold", platinum: "Platinum", star: "Star" };
 const STAR_CAP = 3999;  // a star bar at the scale ceiling = "champions solve everything"
 
 const state = { year: "all", contest: null };
@@ -529,17 +529,17 @@ function renderStrip(c) {
   const svg = svgEl("svg", { width: W, height: H, viewBox: `0 0 ${W} ${H}`, role: "img",
                              "aria-label": "Problems on the difficulty axis vs the medal bars" });
 
-  // bonus zone: gold bar -> star bar; star zone: star bar -> right edge
-  const bonusEnd = hasStarBar ? x(c.medal_bar_cf.star) : W - padR;
-  svg.append(svgEl("rect", { x: x(c.medal_bar_cf.gold), y: lineTop, width: bonusEnd - x(c.medal_bar_cf.gold),
-                             height: baseY - lineTop, fill: tierColor("bonus"), opacity: 0.07 }));
-  if (bonusEnd - x(c.medal_bar_cf.gold) > 74)
+  // platinum zone: gold bar -> star bar; star zone: star bar -> right edge
+  const platinumEnd = hasStarBar ? x(c.medal_bar_cf.star) : W - padR;
+  svg.append(svgEl("rect", { x: x(c.medal_bar_cf.gold), y: lineTop, width: platinumEnd - x(c.medal_bar_cf.gold),
+                             height: baseY - lineTop, fill: tierColor("platinum"), opacity: 0.07 }));
+  if (platinumEnd - x(c.medal_bar_cf.gold) > 74)
     svg.append(svgEl("text", { x: x(c.medal_bar_cf.gold) + 6, y: lineTop + 14, "text-anchor": "start",
-                               "font-size": 11, fill: cssVar("--muted") }, "bonus zone"));
+                               "font-size": 11, fill: cssVar("--muted") }, "platinum zone"));
   if (hasStarBar) {
-    svg.append(svgEl("rect", { x: bonusEnd, y: lineTop, width: W - padR - bonusEnd,
+    svg.append(svgEl("rect", { x: platinumEnd, y: lineTop, width: W - padR - platinumEnd,
                                height: baseY - lineTop, fill: tierColor("star"), opacity: 0.07 }));
-    if (W - padR - bonusEnd > 84)
+    if (W - padR - platinumEnd > 84)
       svg.append(svgEl("text", { x: W - padR - 6, y: lineTop + 14, "text-anchor": "end",
                                  "font-size": 11, fill: cssVar("--muted") }, "★ star zone →"));
   }
@@ -605,7 +605,7 @@ function renderProblemTable(c) {
     const col = tierColor(p.badge);
     const w = Math.max(6, (p.difficulty_cf - cfLo) / (cfHi - cfLo) * 120);
     return el("tr", null,
-      el("td", null, badgeChip(p.badge, LETTER[p.badge] === "+" ? "Bonus" : TITLE[p.badge]),
+      el("td", null, badgeChip(p.badge, LETTER[p.badge] === "+" ? "Platinum" : TITLE[p.badge]),
         p.badge !== p.badge_empirical ? el("span", { class: "mutedtx" }, " †" + LETTER[p.badge_empirical]) : null),
       el("td", { class: "mutedtx" }, p.problem_label),
       el("td", null, p.problem_name),
@@ -630,7 +630,7 @@ function renderProblemTable(c) {
     el("tbody", null, rows));
   return el("div", null,
     el("div", { class: "tbl-wrap" }, tbl),
-    el("p", { class: "note" }, "† the model-free band-majority badge differs (its letter follows the dagger). Band columns: share of that group's official teams that solved the problem (Top-5 = the champion cohort that anchors the bonus/star split)."));
+    el("p", { class: "note" }, "† the model-free band-majority badge differs (its letter follows the dagger). Band columns: share of that group's official teams that solved the problem (Top-5 = the champion cohort that anchors the platinum/star split)."));
 }
 
 /* ---------- lowest-gold table ---------- */

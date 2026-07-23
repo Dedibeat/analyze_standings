@@ -184,7 +184,7 @@ derive priors from them.  See
 ```
 
 Assigns every problem of the 30 medal-awarding **Asia East Continent** contests a
-**bronze / silver / gold / bonus / star badge** (weakest → hardest) and reports the
+**bronze / silver / gold / platinum / star badge** (weakest → hardest) and reports the
 **lowest gold-medal team** per regional. Medals go by cumulative percentile of
 official teams solving ≥1 problem (gold 10%, silver 30%, bronze 60%); the official
 onsite field is recovered
@@ -194,7 +194,7 @@ cohort's actual solve rate crosses 50% (isotonic regression), and a problem gets
 the weakest tier whose bar clears it — badges are monotone in difficulty, and the
 medal-badge count per contest ≈ the lowest gold team's solve count. Above the gold
 bar, a second crossing at the **champion cohort** (top-5 official teams) splits
-**bonus** (champions still solve it at even odds — decides ranking within gold,
+**platinum** (champions still solve it at even odds — decides ranking within gold,
 92 problems) from **star** (beyond even the champions — the extreme problems,
 104, almost all 0–2 official solves). Writes
 `output/medal_badges.json`; bars and difficulties are also given in CF points via
@@ -211,7 +211,7 @@ no server, light/dark aware) from `medal_badges.json`: a season filter + KPI row
 a dot-range chart of the bronze/silver/gold bars per contest (sorted by gold bar,
 click a row to open the contest), a per-contest detail view (problems as lettered
 lollipops on the difficulty axis against the three medal-bar thresholds and the
-bonus zone, plus a table with band solve rates), and a sortable lowest-gold-team
+platinum zone, plus a table with band solve rates), and a sortable lowest-gold-team
 table.
 
 ### Interactive viewer

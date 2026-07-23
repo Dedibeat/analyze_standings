@@ -14,10 +14,10 @@ survival-model difficulty b) and the bar is the b where the smoothed rate
 crosses 0.5. A problem is badged with the weakest tier whose bar clears it:
 
     bronze if b_p <= bar_bronze; silver if <= bar_silver; gold if <= bar_gold;
-    bonus if <= bar_star; else star.
+    platinum if <= bar_star; else star.
 
 Above the gold bar there are two tiers, split by one more crossing anchored at
-the **champion cohort** (the top TOP_COHORT official teams): **bonus** = above
+the **champion cohort** (the top TOP_COHORT official teams): **platinum** = above
 the gold bar but the champions still solve it at even odds (it decides ranking
 *within* gold), **star** = beyond even the champions (the genuinely extreme
 problems — almost all have 0-2 official solves). A champion cohort that solves
@@ -75,8 +75,8 @@ XCPCIO_CACHE = os.path.join(os.path.dirname(__file__), os.pardir,
 
 MEDAL_PCT = [("gold", 0.10), ("silver", 0.30), ("bronze", 0.60)]
 WINDOW = 7                     # +- official ranks around a cutoff = the boundary cohort
-TOP_COHORT = 5                 # the champion cohort anchoring the bonus/star split
-BADGE_ORDER = ["bronze", "silver", "gold", "bonus", "star"]  # weakest -> hardest
+TOP_COHORT = 5                 # the champion cohort anchoring the platinum/star split
+BADGE_ORDER = ["bronze", "silver", "gold", "platinum", "star"]  # weakest -> hardest
 
 
 def _norm(name: str) -> str:
@@ -285,13 +285,13 @@ def main():
             cid_, label, _pid, name = ds.problems[p]
             bp = float(b[p])
             badge = next((t for t, _ in reversed(MEDAL_PCT) if bp <= bar[t]),
-                         "bonus" if bp <= bar["star"] else "star")
+                         "platinum" if bp <= bar["star"] else "star")
             rates = {t: round(_solve_rate(members, label), 3) if members else None
                      for t, members in bands.items()}
             emp = next((t for t in ("bronze", "silver", "gold")
                         if rates[t] is not None and rates[t] >= 0.5), None)
             if emp is None:
-                emp = "bonus" if (rates["champion"] or 0) >= 0.5 else "star"
+                emp = "platinum" if (rates["champion"] or 0) >= 0.5 else "star"
             agree += badge == emp
             total += 1
             problems_out.append({
@@ -316,7 +316,7 @@ def _report(contests_out, problems_out, agree, total):
     by_cid = {}
     for p in problems_out:
         by_cid.setdefault(p["contest_id"], []).append(p)
-    letter = {"bronze": "B", "silver": "S", "gold": "G", "bonus": "+", "star": "*"}
+    letter = {"bronze": "B", "silver": "S", "gold": "G", "platinum": "+", "star": "*"}
 
     print("\n=== medal cutoff teams (official field from XCPCIO, ranked in full standings) ===")
     header = (f"{'cid':>5} {'year':>4} {'contest':<28} {'n_off':>5} "
