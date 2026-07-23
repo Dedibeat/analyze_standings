@@ -23,7 +23,7 @@ OUT_DIR = os.path.join(os.path.dirname(__file__), os.pardir, "output")
 # Drop short-format contests (warm-ups, 3 h rounds) whose latest solve is below
 # this many hours -- a duration proxy (no duration field exists). Validated
 # metric-neutral vs CF/LLM in arch_b.season_experiment while removing noise.
-MIN_SOLVE_HOURS = 3.5
+MIN_SOLVE_HOURS = 3.0
 
 
 def _spearman(x, y):
