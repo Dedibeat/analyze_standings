@@ -38,6 +38,16 @@ Per standing row: `rank`, `team_id`, `members`, `total_solved`, and per-problem
 `{solved, score, time_seconds, wrong_attempts}`. This yields the model inputs
 `y_tp` (solved), `tau_tp` (solve time), `r_{t,c}` (rank).
 
+`data/icpc_2020_2021.json` adds 14 Asia East ICPC regional contests
+(8,487 standing rows, 179 problems), and `data/petroz_2022_2026.json` adds 57
+Petrozavodsk Programming Camp contests (9,694 rows, 671 problems). Both were
+fetched from QOJ on 2026-07-23 using dashboard problem labels plus unofficial
+standings only—no statements, editorials, or solutions. Architecture B loads
+these 71 supplemental contests with `tagged.json`; the `MIN_SOLVE_HOURS=3.5`
+filter leaves 204 fitted contests total. Their value is extra cross-contest team
+evidence: calibrated LOCO improves 264.5 → 261.6, corroborated by an original-cell
+holdout (AUC 0.885761 → 0.886000).
+
 ## Architecture A (`arch_a/`)
 
 Abilities `theta_t` and difficulties `b_p` define each other, so they are solved
@@ -195,9 +205,15 @@ Run with the project venv:
     roster.  This is safe because the WF team *is* the university's top team for
     that season — only the single best-ranked roster per (university, season) is
     linked, avoiding the ~2,900 same-university-multiple-teams collisions that a
-    bare affiliation-key would create.  9 new cross-contest links are created
-    (e.g. Universidad de Buenos Aires → "Está en el Corman", Purdue → "Purdue
-    GLD", SUSTech → "Brno").  The WF solve data is not loaded into the fit (WF
+    bare affiliation-key would create. A 2026-07-23 audit found the implementation
+    had omitted both guards: it applied the affiliation join to 3,605 no-roster
+    rows in 120 non-WF contests and, with season keying disabled, selected one
+    globally best roster per university. The fixed join filters to actual World
+    Finals and always matches on `season_of(c)` while keeping the identity token
+    season-agnostic; 13 no-roster WF rows currently resolve to a roster. This
+    correction improves calibrated LOCO 266.4 → 264.5. Example links include
+    Universidad de Buenos Aires → "Está en el Corman", Purdue → "Purdue GLD",
+    and SUSTech → "Brno".  The WF solve data is not loaded into the fit (WF
     problems differ from the CF-anchor problems and add only noise); only the
     identity links are used.  WF data: `data/wf_tagged_format.json` (fetched
     2026-07-03).
@@ -401,11 +417,11 @@ log-likelihood (eq. loglik) plus Gaussian priors on `theta` and `b` (eq. priors)
   official CF ratings + Kattis and compares team-reduction rules (see the section
   below).
 - `metric.py` — **the north-star metric** for model optimization: refits the
-  survival model from source and prints one scalar, the leave-one-contest-out
-  RMSE in CF points over all mapped rated mirrors, plus guard checks (gym EC /
-  gym pooled / Kattis pooled / AOJ within-contest Spearman, solve-count sanity)
-  that exit nonzero on violation. Built as the verify command for auto-research
-  loops; `program.md`
+  survival model from source and prints one scalar, the shipped two-leg
+  calibrated leave-one-contest-out RMSE in CF points over all mapped rated
+  mirrors, plus guard checks (raw affine LOCO, gym EC / gym pooled / Kattis
+  pooled / AOJ within-contest Spearman, solve-count sanity) that exit nonzero
+  on violation. Built as the verify command for auto-research loops; `program.md`
   at the repo root is the matching agent instruction file (see the section
   below).
 - `predict_eval.py` — internal held-out solve-prediction check: train on a random
@@ -423,8 +439,8 @@ log-likelihood (eq. loglik) plus Gaussian priors on `theta` and `b` (eq. priors)
 - `anchor.py` — `estimate_anchored(sigma_theta)`: the same two-phase UCup anchor as
   `arch_a.anchor`, under one shared union-find. Fit UCup (s3+s4) alone, then feed
   each UCup team's `theta_u` back as its Gaussian **prior mean** `mu_t` in the
-  tagged fit (others keep `MU0`). The pull strength is the single global
-  `sigma_theta`, not per-team UCup evidence (see decision below).
+  tagged + supplemental-standings fit (others keep `MU0`). The pull strength is
+  the single global `sigma_theta`, not per-team UCup evidence (see decision below).
 - `run.py` — wires it (the anchored fit), writes `output/problem_ratings_b.json`
   (a **distinct** file; arch_a's `problem_ratings.json` is untouched) with a
   `difficulty_se` per problem, runs the same Spearman / top-team verification as
@@ -946,13 +962,13 @@ regional-bias investigation left open. Run:
 
 With validation settled (every anchored region agrees at +0.86–0.98), the open
 front is the **scale**, so model improvement is now driven by a single scalar:
-**leave-one-contest-out RMSE in CF points** — for each CF-rated mirror contest,
-fit the affine map `cf ≈ slope·b + icept` on the *other* mirrors, predict the
-held-out one, pool the errors. Chosen over the alternatives because it measures
-the shipped deliverable (`difficulty_cf`) directly in interpretable units, is
-sensitive to ranking *and* scale (Spearman is blind to compression), works for
-all architectures (each gets its own map), and LOCO punishes anchor overfitting.
-Unlike `arch_b.calibrate` (which hardcodes 3 contests), `metric.py` auto-maps
+the shipped two-leg map's **calibrated leave-one-contest-out RMSE in CF
+points**. The verifier refits the model, applies the locked gym-learned monotone
+shape (`NBINS=15`, `ALPHA=0.75`, qoj 2692 excluded), then for each CF-rated
+mirror contest fits the affine leg on the *other* mirrors, predicts the held-out
+one, and pools the errors. This measures the shipped deliverable
+(`difficulty_cf`) directly while preventing the loop from retuning calibration
+against the same anchors. `metric.py` auto-maps
 **all** rated mirrors in `data/cf_team_contests.txt` via the
 `external_validate` name-vote machinery: currently **185 problems / 15
 contests**. Three mirrors were *added to the list* by sweeping every tagged
@@ -960,34 +976,35 @@ contest's problem names against the rated CF problemset (contest-level vote):
 CF 2157 ↔ qoj 2692 (found by the gym certification), plus CF 1773 (2022–23
 NEF) and CF 1938 (2024 APAC) found by the exhaustive sweep — which also showed
 **no further rated mirrors exist** for our 146 contests, so anchor growth now
-requires new contests in `tagged.json`. Baselines (2026-07-03): **survival
-290.2**, binary 344.3. (The old "RMSE ~252" was on the 40-problem / 3-contest
-anchor set; the rises to 279 then 290 are the test getting *harder and more
-trustworthy* as anchors grew — e.g. CF 1938 alone contributes RMSE 384 — not
-model regressions.)
+requires new contests in the fit. After the 2026-07-23 data-expansion campaign
+below, the current calibrated survival baseline is **261.6**; raw affine LOCO is
+**285.0** and remains a guard with ceiling 293.4.
 
-**Noise floor (cluster bootstrap, contests as resampling units):** the pooled
-RMSE carries **SE ≈ ±20 points** (95% CI ≈ [251, 327]); per-contest RMSE spreads
-160–420 with no single contest dominating. Paired comparisons on the same
-anchors are sharper — binary-vs-survival (+54) separates at P<0.001 — but an
+**Noise floor (cluster bootstrap, contests as resampling units):** for the
+legacy raw-affine metric, pooled RMSE carried **SE ≈ ±20 points** (95% CI ≈
+[251, 327]); the calibrated metric's own sampling SE has not been separately
+estimated. Paired comparisons on the same anchors are sharper, but an
 auto-research loop must still **treat single-digit improvements as noise**
-(`program.md` sets a ~5-point keep threshold, with guard/AUC corroboration for
-small wins) because repeatedly selecting on a fixed 185-anchor set overfits it
-in a way LOCO cannot detect.
+(`program.md` sets a ~5-point keep threshold, requiring Kattis, AOJ, or
+held-out-AUC corroboration for small wins) because repeatedly selecting on a
+fixed 185-anchor set overfits it in a way LOCO cannot detect.
 
 **Guards.** The CF anchors cover only AsiaPac / N.Eurasia / Europe, so a loop
 optimizing RMSE alone could silently regress the unanchored regions. The same
 fit is therefore checked against floors (baseline − noise margin, calibrated to
 the survival model): gym **EC** Spearman ≥ 0.93 (the region with *no* CF
-anchors), gym pooled ≥ 0.92, Kattis pooled (NA+Europe convention) ≥ 0.75,
-within-contest solve-count sanity ≥ 0.90. Any violation exits nonzero =
-"discard the change". Note Asia West needs no exclusion switch: it has no
-anchor coverage, so it simply never enters the metric (dropping its contests
-*from the fit* is explicitly permitted as an experiment in `program.md`).
+anchors), gym pooled ≥ 0.92, Kattis pooled (NA+Europe convention) ≥ 0.75, AOJ
+within-contest Spearman ≥ 0.52, and within-contest solve-count sanity ≥ 0.90.
+Raw affine LOCO must remain ≤ 293.4 so the nonlinear calibration cannot hide a
+material fit regression. Any violation exits nonzero = "discard the change".
+Note Asia West needs no exclusion switch: it has no anchor coverage, so it
+simply never enters the metric (dropping its contests *from the fit* is
+explicitly permitted as an experiment in `program.md`).
 
 **`program.md`** (repo root) is the instruction file for auto-research agents
 (karpathy-style `verify`/guard loop): the verify contract (last line
-`METRIC loco_cf_rmse=…`, exit 1 = discard, ~5 s deterministic runs), the scope
+`METRIC calibrated_loco_cf_rmse=…`, exit 1 = discard, ~5 s deterministic
+runs), the scope
 (fit/likelihood/prior/hygiene code is fair game; `metric.py`, the yardstick
 modules, and everything under `data/` are read-only; CF anchor data must never
 be read in the fit path), and the prioritized idea list (hard-tail prior,
@@ -1161,6 +1178,72 @@ thick bridges are neither a noise source nor an untapped lever. Verdict:
 evidence weighting inside the likelihood is a solved problem in the MAP model;
 the linking graph is not a knob. Log:
 `autoresearch/autoresearch-260704-0130/classic-results.tsv`.
+
+### Data-side auto-research campaign (2026-07-23): 261.6 LOCO
+
+A 46-iteration campaign focused on standings and identity data after earlier
+model-side searches had plateaued. **3 changes were kept, 43 discarded.** The
+calibrated metric improves **266.4 → 261.6** (−4.8 CF points), while raw affine
+LOCO improves **288.4 → 285.0** and every guard passes. Full log:
+`autoresearch/loop-260723-1333/classic-results.tsv`.
+
+The first keep fixes `_link_wf_top_team`: the purported WF-only,
+season-matched affiliation join was actually touching thousands of regional
+no-roster rows and ignoring season when the main identity key was
+season-agnostic. Restricting it to World Finals and separating competition
+season from identity-token season improves calibrated LOCO **266.4 → 264.5**;
+Kattis also rises 0.795 → 0.796 and held-out AUC stays 0.8858.
+
+The other two keeps add standings-only QOJ data: 14 Asia East ICPC contests from
+2020–2021 and 57 Petrozavodsk camp contests from 2022–2026. Together they add
+18,181 rows and 850 problems, improving **264.5 → 261.6**. A held-out transfer
+test scored the same original `tagged.json` cells with and without all 71
+supplemental contests: log-loss **0.312411 → 0.311973**, Brier
+**0.097557 → 0.097385**, and AUC **0.885761 → 0.886000**. This corroborates
+that the new standings improve linked team abilities rather than merely fitting
+the 185 CF anchor problems. Collection used only QOJ category/dashboard labels
+and unofficial standings; statements, editorials, and solutions were never
+requested.
+
+Notable discards: a conservative full-roster CF prior using only ratings known
+before January 1 of each contest year moved LOCO just −0.1; live QOJ refresh
+added 482 later virtual-replay rows and moved −1.0 without independent
+corroboration; removing account-like replay rows was decisively harmful
+(LOCO 282.8, raw guard 306.6, Kattis guard 0.707); zero-solve inclusion, stricter
+identity links, duration thresholds, Asia West exclusion, and qualifier removal
+were neutral or worse. A refreshed cookie made the standings audit possible,
+but QOJ's historical dashboard exposes no exact start timestamp, so the
+participant-prior experiment stayed on the conservative January 1 cutoff.
+
+The continuation tested every other QOJ training-camp family separately:
+ByteDance/Moscow Workshops, JAG, ICPCCamp, Moscow International Workshops,
+Moscow Pre-Finals, HDU multi-university training, Osijek, and 130 older
+Petrozavodsk entries. After contest-id deduplication this was 196 unique
+contests (192 with standing rows). No family cleared the 5-point threshold.
+The best narrow combination, HDU + pre-finals, moved LOCO only
+**261.6 → 261.0** and failed the independent original-cell holdout:
+log-loss **0.312698 → 0.313261** and AUC **0.885327 → 0.884989**.
+Combining all camp families was harmful (**264.0**, gym pooled 0.953,
+solve-count sanity 0.951). `scripts/fetch_qoj_supplemental.py` reproduces these
+standings-only collections from a QOJ category while skipping already-loaded
+contest ids; it never requests statements, editorials, submissions, or
+solutions.
+
+XCPCIO was also tested as a direct fit source rather than only as the official
+team-label source used by the medal analysis. Its hosted `config.json`,
+`team.json`, `organizations.json`, and `run.json` provide exact duration,
+official groups, member rosters, and run timestamps. The resumable
+`scripts/fetch_xcpcio_standings.py` converts those files to the project schema,
+handles second/millisecond/minute timestamp declarations, and assigns stable
+negative ids so they cannot collide with QOJ contests. A 2022–2026 sample
+covered **56 provincial contests / 14,134 rows** (13,258 explicitly official;
+8,188 with rosters). Individual years were neutral except 2023 (261.9);
+combining all years regressed **261.6 → 262.5**, including when restricted to
+official teams, and the Asia-East gym guard slipped 0.961 → 0.960. Five
+official 9th CCPC boards were neutral (261.6). Existing XCPCIO East Asia
+regionals were not re-imported because those same contests are already loaded
+from QOJ and XCPCIO already supplies their official-team labels. The direct
+XCPCIO datasets therefore remain discarded experiments, not shipped fit input.
 
 ### Internal validation: held-out solve prediction (`arch_b.predict_eval`)
 

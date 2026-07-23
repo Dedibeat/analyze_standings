@@ -1,17 +1,20 @@
-"""The north-star metric: leave-one-contest-out RMSE in Codeforces points.
+"""The north-star metric: calibrated leave-one-contest-out RMSE in CF points.
 
 One command, one scalar. Refits the survival model **from source** (so any code
 or hyperparameter change is picked up), joins the fitted difficulties to the
 official CF problemset ratings of every mirrored contest in
 ``data/cf_team_contests.txt`` (auto-mapped by problem-name vote, same machinery
-as ``external_validate``), and scores leave-one-contest-out: for each anchor
-contest, fit the affine map ``cf ~ slope*b + icept`` on the *other* contests and
-predict the held-out one. Pooled RMSE over all anchor problems, in CF points.
+as ``external_validate``), applies the locked gym-learned monotone shape from
+``calibrate.py``, and scores leave-one-contest-out: for each anchor contest, fit
+the affine leg on the *other* contests and predict the held-out one. Pooled RMSE
+over all anchor problems, in CF points.
 
 Why this metric (see details.md): it measures the shipped deliverable
 (``difficulty_cf``) directly, in interpretable units; it is sensitive to both
 ranking *and* scale (Spearman is blind to compression); and LOCO punishes
-overfitting the anchor set. Lower is better.
+overfitting the anchor set. The shape is locked at NBINS=15, ALPHA=0.75, with
+qoj 2692 excluded; auto-research may improve the fit but not tune calibration
+against the same anchor set. Lower is better.
 
 Guards. The CF anchors cover only Asia Pacific / Northern Eurasia / Europe, so
 optimizing the metric alone could silently regress the unanchored regions or
@@ -28,8 +31,11 @@ auto-research loop must treat as "discard the change":
                               remove unequal practice exposure.
   * solve-count sanity     -- per-contest median Spearman(difficulty,
                               solve_count) must stay strongly negative.
+  * raw affine LOCO        -- the unshaped fit must not regress by more than
+                              the 5-point keep threshold.
 
-The last line on stdout is always ``METRIC loco_cf_rmse=<value>``.
+The last line on stdout is always
+``METRIC calibrated_loco_cf_rmse=<value>``.
 
     python -m arch_b.metric            # survival model (the shipped one)
     python -m arch_b.metric --binary   # score the binary Rasch fit instead
@@ -48,6 +54,7 @@ import numpy as np
 from . import model, survival
 from .aoj import load_matches as load_aoj_matches, within_contest_spearman
 from .anchor import estimate_anchored
+from .calibrate import _gym_shape
 from .external_validate import GYM_OUT, KATTIS, _cf_mapping, _cf_problemset, _norm
 from .run import MIN_SOLVE_HOURS
 
@@ -60,6 +67,7 @@ GUARDS = {
     "aoj_within_spearman": 0.52,    # baseline +0.576
     "solvecount_sanity": 0.90,      # baseline +0.973 (sign flipped: -median)
 }
+RAW_LOCO_CEILING = 293.4  # baseline 288.4 + the 5-point keep threshold
 
 
 def _spearman(x, y):
@@ -110,7 +118,14 @@ def main(use_binary=False):
                 our.append(by_name[(qoj, nm)])
                 cf.append(rating[(cfid, nm)])
                 grp.append(cfid)
-    rmse = loco_rmse(our, cf, grp)
+    raw_rmse = loco_rmse(our, cf, grp)
+    records = [{"contest_id": int(cid), "problem_label": label,
+                "difficulty": float(b[p])}
+               for p, (cid, label, _pid, _name) in enumerate(ds.problems)]
+    shape = _gym_shape(records)
+    if shape is None:
+        raise RuntimeError("locked gym calibration shape is unavailable")
+    calibrated_rmse = loco_rmse(shape(np.asarray(our, float)), cf, grp)
 
     # --- guards, from the same fit ---
     gym = json.load(open(GYM_OUT))
@@ -156,14 +171,17 @@ def main(use_binary=False):
     }
 
     fail = [name for name, floor in GUARDS.items() if guards[name] < floor]
+    raw_fail = raw_rmse > RAW_LOCO_CEILING
     print(f"model={'binary' if use_binary else 'survival'}  "
           f"anchors: {len(our)} problems / {len(set(grp))} contests  "
           f"({time.time() - t0:.0f}s)")
     for name, floor in GUARDS.items():
         mark = "FAIL" if name in fail else "ok"
         print(f"GUARD {name}={guards[name]:+.3f} (floor {floor:+.2f}) {mark}")
-    print(f"METRIC loco_cf_rmse={rmse:.1f}")
-    if fail:
+    print(f"GUARD raw_loco_cf_rmse={raw_rmse:.1f} "
+          f"(ceiling {RAW_LOCO_CEILING:.1f}) {'FAIL' if raw_fail else 'ok'}")
+    print(f"METRIC calibrated_loco_cf_rmse={calibrated_rmse:.1f}")
+    if fail or raw_fail:
         sys.exit(1)
 
 

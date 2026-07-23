@@ -51,6 +51,11 @@ prior keeps solved-by-none/all problems finite, so no boundary smoothing is
 needed. See `details.md` for the Rasch-vs-2PL scope and the shrinkage-vs-arch_a
 comparison.
 
+Architecture B also loads 71 standings-only supplemental QOJ contests:
+14 Asia East ICPC regionals from 2020–2021 and 57 Petrozavodsk camp contests
+from 2022–2026. They add cross-contest team evidence without using statements
+or editorials and improve calibrated LOCO 264.5 → 261.6.
+
 Add `--survival` to fit the **solve-time survival model** (`strat.tex` §5) instead,
 which also uses *when* each problem was solved (writes
 `output/problem_ratings_survival.json`):
@@ -109,21 +114,24 @@ keeps 26 isolated title matches rejected. `external_validate` compares
 ### The optimization metric
 
 `arch_b.metric` is the single number model improvements are judged by:
-**leave-one-contest-out RMSE in CF points** against the official ratings of all
-15 CF-mirrored contests (185 anchor problems — every rated mirror the dataset
-has; an exhaustive sweep found no more). It refits the survival model from
-source in ~5 s, prints `METRIC loco_cf_rmse=…` as its last line (lower is
-better; baseline **290.2**, cluster-bootstrap SE ±20 → improvements under ~5
-points are noise), and exits nonzero if any guard regresses (gym
+**calibrated leave-one-contest-out RMSE in CF points** against the official
+ratings of all 15 CF-mirrored contests (185 anchor problems — every rated
+mirror the dataset has; an exhaustive sweep found no more). It refits the
+survival model from source, applies the locked shipped gym shape, and prints
+`METRIC calibrated_loco_cf_rmse=…` as its last line (current baseline
+**261.6**, down from 266.4; lower is better). It exits nonzero if any external
+guard regresses (gym
 Asia-East-Continent / gym pooled / Kattis / AOJ within-contest Spearman,
-solve-count sanity — the things the CF anchors can't see). `program.md` at the
+solve-count sanity) or if raw affine LOCO rises above 293.4. `program.md` at the
 repo root is the matching
 instruction file for auto-research loops: verify contract, what code is fair
 game, hard anti-gaming rules, and a prioritized idea list. A 2026-07-03 auto-research campaign (Claude Fable 5 + DeepSeek v4 Pro, 25
 iterations) found that the only repeatable improvements were data-side identity
 fixes (−2.2 RMSE to 288.0, AUC-corroborated); all model-side knobs are at
 optimum. Further gains need new anchor data rather than fit changes (see
-details.md).
+details.md). A 2026-07-23 data-side campaign added the supplemental standings
+and fixed an over-broad World Finals affiliation join; original-cell held-out
+AUC also improved 0.885761 → 0.886000.
 
 ### Calibrated Codeforces-point ratings
 
@@ -273,6 +281,9 @@ Module self-checks:
 
 - `data/tagged.json` — full input standings (146 contests); `data/ucup_s3.json`,
   `data/ucup_s4.json` — the Universal Cup seasons used to anchor the scale.
+- `data/icpc_2020_2021.json` — 14 older Asia East ICPC standings;
+  `data/petroz_2022_2026.json` — 57 recent Petrozavodsk camp standings. Both are
+  QOJ standings-only supplements consumed by Architecture B.
 - `data/aoj_difficulty.json` — provenance-rich AOJ validation matches (practice
   statistics; never a fit input).
 - `arch_a/` — Architecture A implementation (`load`, `elo`, `fixedpoint`,
@@ -298,6 +309,10 @@ Module self-checks:
 - `scripts/cphof_cf_participants.py` — resumable, rate-limited builder for that
   artifact; raw source responses are cached under the gitignored
   `data/cphof_cache/`.
+- `scripts/fetch_qoj_supplemental.py` — standings-only QOJ category collector;
+  `scripts/fetch_xcpcio_standings.py` — resumable converter for XCPCIO-hosted
+  official boards. Their broader camp/provincial datasets were tested and
+  discarded; see the 2026-07-23 campaign in `details.md`.
 - `cf_participant_ratings.md` — measured member→Codeforces coverage and the
   proposed historical-rating prior (the source layer is implemented; fit
   integration remains research).

@@ -31,12 +31,14 @@ DATA = os.path.join(os.path.dirname(__file__), os.pardir, "data")
 TAGGED = os.path.join(DATA, "tagged.json")
 UCUP = [os.path.join(DATA, "ucup_s3.json"), os.path.join(DATA, "ucup_s4.json")]
 WF = os.path.join(DATA, "wf_tagged_format.json")
+OLDER_ICPC = os.path.join(DATA, "icpc_2020_2021.json")
+PETROZ = os.path.join(DATA, "petroz_2022_2026.json")
 
 
 def estimate_anchored(sigma_theta=SIGMA_THETA, sigma_b=SIGMA_B, fit_fn=fit,
                       season_key=False, min_solve_hours=None, verbose=True,
                       gym_merge=None):
-    """Fit tagged.json with its UCup teams' prior mean anchored to a UCup-only fit.
+    """Fit tagged + supplemental standings, anchored to a UCup-only fit.
 
     Returns (ds_tagged, theta, b, history, uf) for the anchored tagged fit. ``uf``
     is the shared union-find both fits resolved identity through, so callers can
@@ -51,14 +53,22 @@ def estimate_anchored(sigma_theta=SIGMA_THETA, sigma_b=SIGMA_B, fit_fn=fit,
     read-only ``metric.py`` can A/B it) merges the gym-mirror attempts into the
     tagged fit as fixed-theta likelihood terms on ``b`` (``gym_merge.
     gym_observations``; anchor-overlap contests always excluded). Off by default.
+
+    ``ARCHB_EXTRA_CONTESTS`` is an ``os.pathsep``-separated list of standings
+    JSON files used only by data-side experiments; it does not change the
+    shipped default inputs.
     """
     if gym_merge is None and os.environ.get("ARCHB_GYM_MERGE"):
         gym_merge = float(os.environ["ARCHB_GYM_MERGE"])
+    extra = [
+        path for path in os.environ.get("ARCHB_EXTRA_CONTESTS", "").split(os.pathsep)
+        if path
+    ]
     # Include WF in the UF build so WF→regional top-team links enrich the
     # identity graph, but do NOT load WF rows into the fit (their solve data
     # is for different problems than the CF anchors and adds only noise).
     raw_all = []
-    for p in [TAGGED, WF] + UCUP:
+    for p in [TAGGED, WF, OLDER_ICPC, PETROZ] + extra + UCUP:
         with open(p) as f:
             raw_all.extend(json.load(f))
     raw_all = dedupe_contests(raw_all)
@@ -68,7 +78,8 @@ def estimate_anchored(sigma_theta=SIGMA_THETA, sigma_b=SIGMA_B, fit_fn=fit,
     uf = member_identity(raw_all, season_by_cid)
 
     ds_ucup = load(UCUP, uf=uf, season_key=season_key, min_solve_hours=min_solve_hours)
-    ds_tagged = load(TAGGED, uf=uf, season_key=season_key, min_solve_hours=min_solve_hours)
+    ds_tagged = load([TAGGED, OLDER_ICPC, PETROZ] + extra, uf=uf,
+                     season_key=season_key, min_solve_hours=min_solve_hours)
 
     if verbose: print("=== UCup anchor fit (s3 + s4) ===")
     theta_u, _, _ = fit_fn(ds_ucup, sigma_theta=sigma_theta, sigma_b=sigma_b, verbose=verbose)

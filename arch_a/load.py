@@ -205,7 +205,8 @@ def _link_wf_top_team(raw, uf, season_by_cid):
     max_rank = {}
     for c in raw:
         cid = c["contest_id"]
-        season = None if season_by_cid is None else season_by_cid[cid]
+        token_season = None if season_by_cid is None else season_by_cid[cid]
+        competition_season = season_of(c)
         # Compute max rank for percentile
         ranks = [s.get("rank") for s in c["standings"] if s.get("rank") is not None]
         mr = max(ranks) if ranks else 1
@@ -219,14 +220,14 @@ def _link_wf_top_team(raw, uf, season_by_cid):
             members = s.get("members") or []
             if len(members) < 2:
                 continue  # need a roster to link TO
-            roster = _roster_token(members, season)
+            roster = _roster_token(members, token_season)
             if roster is None:
                 continue
             rank = s.get("rank")
             if rank is None:
                 continue
             pct = rank / mr if mr > 0 else 1.0
-            key = (an, season)
+            key = (an, competition_season)
             prev = best_roster.get(key)
             if prev is None or pct < prev[0]:
                 best_roster[key] = (pct, roster)
@@ -236,7 +237,9 @@ def _link_wf_top_team(raw, uf, season_by_cid):
 
     # Step 2: link WF teams (no members, has affiliation) to the best roster
     for c in raw:
-        season = None if season_by_cid is None else season_by_cid[c["contest_id"]]
+        if "world final" not in (c.get("contest_name") or "").lower():
+            continue
+        competition_season = season_of(c)
         for s in c["standings"]:
             members = s.get("members") or []
             if len(members) >= 2:
@@ -247,7 +250,7 @@ def _link_wf_top_team(raw, uf, season_by_cid):
             an = _norm_member(affil)
             if len(an) < 4:
                 continue
-            hit = best_roster.get((an, season))
+            hit = best_roster.get((an, competition_season))
             if hit is None:
                 continue
             _, target_roster = hit
