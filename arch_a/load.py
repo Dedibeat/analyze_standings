@@ -138,7 +138,7 @@ def _trusted_names(raw):
         seen = per_contest.setdefault(cid, {})
         for s in c["standings"]:
             nm = _norm_member(s.get("team_name") or "")
-            if len(nm) >= 5:
+            if len(nm) >= 6:
                 seen[nm] = seen.get(nm, 0) + 1
                 contests_of.setdefault(nm, set()).add(cid)
     dup = {nm for seen in per_contest.values() for nm, k in seen.items() if k > 1}
