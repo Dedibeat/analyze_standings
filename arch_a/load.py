@@ -321,7 +321,6 @@ def load(path=DATA_PATH, uf=None, season_key=False, min_solve_hours=None):
         with open(p) as f:
             raw.extend(json.load(f))
     raw = dedupe_contests(raw)
-    raw = [c for c in raw if c.get("contest_name") != "ICPC"]
 
     if min_solve_hours is not None:
         raw = [c for c in raw if _max_solve_seconds(c) >= min_solve_hours * 3600]
