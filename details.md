@@ -1308,6 +1308,12 @@ risks, and implementation order are in
 
 ### External data-source audit (2026-07-21)
 
+**Implemented 2026-07-23:** AOJ is now a reproducible validation-only dataset
+and metric guard (45 accepted problems across four Japan regionals; survival
+within-contest Spearman +0.576). Fit-side participant priors remain deferred:
+CP-Ranking lacks the member-level, time-accurate rating histories needed to use
+its 22 identity seeds without leakage.
+
 A broader live-source audit identified three concrete additions beyond the
 initial CLIST/XCPCIO pass.  First, CPHoF World Finals rosters and external-profile
 links provide a higher-confidence real-name→handle bridge: its 2021–2025 ICPC
