@@ -21,13 +21,23 @@ contest. The current snapshot has 71 candidates, of which 45 across four Japan
 regionals are accepted. `arch_b.metric` now enforces an AOJ within-contest
 Spearman floor of +0.52.
 
-Fit-side external inputs remain gated on missing evidence rather than guessed.
+The participant source layer is also processed and shipped:
+
+```bash
+./.venv/bin/python scripts/cphof_cf_participants.py --refresh
+```
+
+`data/cphof_cf_participants.json` contains 346 explicit CPHoF profile identities,
+complete official Codeforces `user.rating` histories, separate roster evidence
+for each target appearance, and rejected/name-only candidates.  Requiring a
+second roster member corroborates 285 people and leaves 347 target rows with
+handles for every member.  The artifact is not a fit input yet: regional
+standings provide only a year, so no exact timestamp exists for a non-leaking
+historical team prior.
+
 A live recheck of CP-Ranking commit `c90a176` reproduced its 22 exact
-year+institution+team seeds (57 appearances), but its release contains one
-aggregate `average_cf_rating` per institution/year rather than the member
-handles and per-target-contest histories required for a time-causal team prior.
-CPHoF/profile corroboration and Codeforces `user.rating` histories are therefore
-still required before those seeds can enter the fit. True-duration ingestion is
+year+institution+team seeds (57 appearances), but its release contains only one
+aggregate `average_cf_rating` per institution/year.  True-duration ingestion is
 likewise waiting on contest-specific public Contest API endpoints; the API
 specification alone does not supply a centralized dataset.
 
@@ -345,16 +355,16 @@ MAE but hurt held-out prediction or Kattis/AOJ agreement.
 
 ## Recommended implementation order
 
-1. Build a cached CPHoF/Codeforces-team-list identity artifact with reviewable
-   confidence and provenance.
-2. Resolve historical ratings through `user.rating` and produce a full-roster
-   team-prior dry-run report.
+1. ~~Build a cached CPHoF identity artifact with reviewable confidence and
+   provenance.~~ **Done** in `data/cphof_cf_participants.json`.
+2. ~~Resolve historical ratings through `user.rating`.~~ **Done.**  The
+   full-roster team-prior dry run remains blocked on exact regional timestamps.
 3. Add the Architecture B per-team prior precision described in
    `cf_participant_ratings.md`, preserving byte-identical output with no priors.
 4. Harvest ICPC Global metadata and probe every official `resultsUrl` for a
    public Contest API.
 5. Add true duration where available and evaluate it separately.
-6. Add AOJ as a permanent external validator.
+6. ~~Add AOJ as a permanent external validator.~~ **Done.**
 7. Use ICPC Archives to pilot solved.ac canonical mappings; cache a dated
    snapshot before considering calibration.
 8. Consider a submission-event likelihood only after public-feed coverage is

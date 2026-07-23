@@ -1306,13 +1306,42 @@ transfers through the contest graph.  Full methodology, examples, equations,
 risks, and implementation order are in
 [`cf_participant_ratings.md`](cf_participant_ratings.md).
 
+**Source layer implemented 2026-07-23.**  The reproducible
+`scripts/cphof_cf_participants.py` collector now caches CPHoF's 2021–2025 World
+Finals standings and relevant profile pages, follows only explicit CPHoF
+Codeforces profile links, and fetches complete histories from the official
+Codeforces `user.rating` API.  Raw responses live in the resumable, gitignored
+`data/cphof_cache/`; the provenance-rich
+`data/cphof_cf_participants.json` artifact is committed.
+
+The current snapshot has 415 exact-name CPHoF candidates, 346 explicit
+person→handle identities with available API histories, and 285 people whose
+appearance in `tagged.json` is corroborated by at least one additional matching
+roster member.  Those conservative links cover 1,582 standing-member
+appearances; 347 unique standing rows have explicit handles for every roster
+member.  Another 537 name-only appearances remain review candidates and do not
+count as trusted links.  Nine stale CPHoF handles fail the official API and are
+retained as rejected evidence rather than repaired by guessing.
+
+The artifact stores 29,425 rating changes and computes 470 historical ratings
+before the CPHoF World Finals calendar dates.  CPHoF does not publish a start
+time on those pages, so the collector uses 00:00 UTC at the start of each date:
+a conservative cutoff that excludes same-date changes rather than risk
+look-ahead.  It deliberately does not derive regional priors:
+`tagged.json` provides only `year`, not the exact contest start timestamp
+required to choose a non-leaking historical rating.
+Fit-side per-team precision, full-roster `lse` reduction, and regional date
+collection therefore remain follow-ups.
+
 ### External data-source audit (2026-07-21)
 
 **Implemented 2026-07-23:** AOJ is now a reproducible validation-only dataset
 and metric guard (45 accepted problems across four Japan regionals; survival
-within-contest Spearman +0.576). Fit-side participant priors remain deferred:
-CP-Ranking lacks the member-level, time-accurate rating histories needed to use
-its 22 identity seeds without leakage.
+within-contest Spearman +0.576).  The CPHoF→Codeforces identity/history source
+layer described above is also implemented; fit-side participant priors remain
+deferred because exact regional timestamps and per-team prior precision are
+still missing.  CP-Ranking alone remains insufficient because it lacks the
+member-level histories needed to use its 22 identity seeds without leakage.
 
 A broader live-source audit identified three concrete additions beyond the
 initial CLIST/XCPCIO pass.  First, CPHoF World Finals rosters and external-profile
@@ -1382,11 +1411,11 @@ the staged experiment order are documented in
   ranking-half: discarded, by construction of the monotone map.
 - ~~**Add CF 2157 to `data/cf_team_contests.txt`.**~~ **Done** — the CF columns
   and the metric anchor set now include it (CF pooled n 152 → 160).
-- **CF participant anchoring — feasibility established, not implemented.** Exact
-  names yield a conservative but sparse seed set (4.6% of unique member names;
-  2.3% of roster rows fully resolved).  The proposed first experiment uses only
-  verified/corroborated, fully resolved rosters with time-accurate historical
-  ratings and per-team prior precision; see
+- **CF participant anchoring — source data collected, fit integration not
+  implemented.**  The CPHoF/official-API artifact supplies 346 explicit
+  identities and 347 roster-complete standing rows, while name-only matches
+  remain excluded.  The proposed first fit experiment still needs exact target
+  contest timestamps and per-team prior precision; see
   [`cf_participant_ratings.md`](cf_participant_ratings.md) and the feasibility
   section above.
 - **`data/cf_gym_mirrors.json` — scraped; now consumed by `arch_b.gym_difficulty`

@@ -1,7 +1,18 @@
 # Participant Codeforces ratings: feasibility and fit plan
 
-Status: research note, **not yet used by the shipped fit**.  Measurements below
-are from a live snapshot on 2026-07-21.
+Status: the CPHoF/official-Codeforces-API source layer was collected on
+2026-07-23, but is **not yet used by the shipped fit**.  The broad exact-name
+coverage experiment below is from 2026-07-21.
+
+Rebuild the auditable source artifact with:
+
+    ./.venv/bin/python scripts/cphof_cf_participants.py --refresh
+
+`data/cphof_cf_participants.json` contains explicit profile identities, separate
+roster-corroboration status for each matching standing appearance, complete
+Codeforces rating histories, and pre-World Finals ratings.  Regional prior
+construction remains blocked on exact contest timestamps: `tagged.json` has only
+the contest year.
 
 ## Conclusion
 
@@ -261,12 +272,13 @@ held-out solves or Kattis, repeats the circular gym-guard mistake documented in
 
 ## Proposed implementation order
 
-1. Add a reproducible collector that caches the rated-list snapshot and per-handle
-   histories outside the fit path.
-2. Produce a reviewed `member -> CF handle` artifact plus a coverage report by
-   region, contest, roster completeness, and confidence.
+1. ~~Add a reproducible collector with cached per-handle histories outside the
+   fit path.~~ **Done** for the higher-confidence CPHoF seed population.
+2. ~~Produce a reviewed `member -> CF handle` artifact plus coverage by region,
+   contest, roster completeness, and confidence.~~ **Done**; name-only target
+   appearances remain explicitly untrusted.
 3. Build time-causal full-roster team priors and a dry-run report; do not change
-   the estimator yet.
+   the estimator yet.  This first requires exact regional contest timestamps.
 4. Add per-team prior precision to the survival/binary MAP fit and verify the
    baseline is byte-identical when no CF prior is supplied.
 5. Run the evaluation matrix above.  Only then make CF priors a default.

@@ -144,7 +144,29 @@ member resolved.  The official Codeforces API is the right rating/history source
 while CLIST is useful only as secondary identity evidence.  The proposed fit
 improvement is a confidence-weighted, time-accurate CF prior on team ability,
 starting with fully resolved rosters so missing members are not silently treated
-as weak.  This is **documented but not implemented**; see
+as weak.
+
+The conservative source layer is now implemented:
+
+```bash
+./.venv/bin/python scripts/cphof_cf_participants.py --refresh
+```
+
+It caches CPHoF's 2021–2025 World Finals rosters/profile pages, accepts only
+explicit CPHoF Codeforces profile links, and caches each handle's complete
+official `user.rating` history.  `data/cphof_cf_participants.json` contains 346
+explicit person→handle identities; requiring a second matching roster member
+corroborates 285 people across 1,582 standing-member appearances and leaves 347
+unique standing rows with handles for the full roster.  Exact-name-only
+appearances and stale/missing handles remain in the artifact as rejected or
+review-only evidence.
+
+This data is **not yet consumed by the fit**.  CPHoF supplies World Finals
+calendar dates but no start times, so the artifact includes 470 pre-event rating
+observations using a conservative 00:00 UTC cutoff that excludes same-date
+rating changes.  Most `tagged.json` regionals have only a year, so the
+collector retains full histories but does not invent regional timestamps or
+derive priors from them.  See
 [`cf_participant_ratings.md`](cf_participant_ratings.md).
 
 ### East-Asia medal badges
@@ -270,8 +292,15 @@ Module self-checks:
   `output/gym_difficulty.json` — independent CF-scale difficulty from gym mirrors.
 - `output/ratings_viewer.html` — generated interactive viewer.
 - `details.md` — design notes, key decisions, and follow-ups.
+- `data/cphof_cf_participants.json` — audited CPHoF person/profile links,
+  roster-corroborated standing appearances, and official Codeforces rating
+  histories (source data only; not yet a fit input).
+- `scripts/cphof_cf_participants.py` — resumable, rate-limited builder for that
+  artifact; raw source responses are cached under the gitignored
+  `data/cphof_cache/`.
 - `cf_participant_ratings.md` — measured member→Codeforces coverage and the
-  proposed historical-rating prior for the fit (research only, not implemented).
+  proposed historical-rating prior (the source layer is implemented; fit
+  integration remains research).
 - `external_data_sources.md` — internet-source audit covering CPHoF/Codeforces
   participant identities, ICPC Global/Contest API metadata, and AOJ/solved.ac
   difficulty signals, with measured overlap and a fit experiment order.
