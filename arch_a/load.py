@@ -183,7 +183,7 @@ def member_identity(raw, season_by_cid=None):
                 # would split them (measured: ~3.7k such near-miss pairs).
                 mem = sorted({_norm_member(m) for m in s["members"]})
                 for pair in combinations(mem, 2):
-                    key = (pair, season, _norm_member(s.get("affiliation") or ""))
+                    key = (pair, season)
                     first = pair_root.setdefault(key, roster)
                     if first != roster:
                         uf.union(first, roster)
