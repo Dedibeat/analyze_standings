@@ -28,7 +28,7 @@ from arch_a.load import _max_solve_seconds, dedupe_contests, load, member_identi
 from .model import MU0, SIGMA_B, SIGMA_THETA, fit
 
 DATA = os.path.join(os.path.dirname(__file__), os.pardir, "data")
-TAGGED = os.path.join(DATA, "tagged.json")
+TAGGED = "/tmp/tagged_live_260723.json"
 UCUP = [os.path.join(DATA, "ucup_s3.json"), os.path.join(DATA, "ucup_s4.json")]
 WF = os.path.join(DATA, "wf_tagged_format.json")
 
