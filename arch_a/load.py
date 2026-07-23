@@ -142,7 +142,7 @@ def _trusted_names(raw):
                 seen[nm] = seen.get(nm, 0) + 1
                 contests_of.setdefault(nm, set()).add(cid)
     dup = {nm for seen in per_contest.values() for nm, k in seen.items() if k > 1}
-    return {nm for nm, cs in contests_of.items() if len(cs) >= 3 and nm not in dup}
+    return {nm for nm, cs in contests_of.items() if len(cs) >= 2 and nm not in dup}
 
 
 def member_identity(raw, season_by_cid=None):
