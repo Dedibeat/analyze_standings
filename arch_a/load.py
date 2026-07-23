@@ -329,6 +329,24 @@ def load(path=DATA_PATH, uf=None, season_key=False, min_solve_hours=None):
     if uf is None:
         uf = member_identity(raw, season_by_cid)
 
+    contests_by_stable_id = {}
+    for c in raw:
+        for s in c["standings"]:
+            tid = str(s["team_id"])
+            if not tid.startswith(("$DEFAULT", "ucup-")):
+                contests_by_stable_id.setdefault(tid, set()).add(c["contest_id"])
+
+    def _keep_row(s):
+        tid = str(s["team_id"])
+        account_like = (
+            not tid.startswith(("$DEFAULT", "ucup-"))
+            and not (s.get("members") or [])
+            and not s.get("affiliation")
+            and s.get("team_name") == tid
+        )
+        return row_solved_any(s) and (
+            not account_like or len(contests_by_stable_id[tid]) >= 2)
+
     def _key(cid, s):
         season = None if season_by_cid is None else season_by_cid[cid]
         return team_key(cid, s["team_id"], s.get("members"), uf, season)
@@ -354,7 +372,7 @@ def load(path=DATA_PATH, uf=None, season_key=False, min_solve_hours=None):
                 contest_of_problem.append(ci)
                 raw_solved_count.append(p.get("problem_solved_in_contest"))
         for s in c["standings"]:
-            if not row_solved_any(s):
+            if not _keep_row(s):
                 continue  # zero-solve rows are dropped from the fit
             tk = _key(cid, s)
             if tk not in team_index:
@@ -378,7 +396,7 @@ def load(path=DATA_PATH, uf=None, season_key=False, min_solve_hours=None):
         # which problem columns belong to this contest
         cols = {p["problem_label"]: problem_index[(ci, p["problem_label"])] for p in c["problems"]}
         for s in c["standings"]:
-            if not row_solved_any(s):
+            if not _keep_row(s):
                 continue  # zero-solve rows are dropped from the fit
             assert s.get("rank") is not None, f"missing rank in contest {cid}"
             ti = team_index[_key(cid, s)]
