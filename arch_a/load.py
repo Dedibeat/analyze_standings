@@ -173,11 +173,7 @@ def member_identity(raw, season_by_cid=None):
             if stable is None and roster is None:
                 nm = _norm_member(s.get("team_name") or "")
                 if nm in trusted:
-                    affil = _norm_member(s.get("affiliation") or "")
-                    uf.union(
-                        f"dj:{c['contest_id']}::{tid}",
-                        f"tn:{nm}::aff:{affil}",
-                    )
+                    uf.union(f"dj:{c['contest_id']}::{tid}", "tn:" + nm)
             if roster is not None:
                 uf.find(roster)
                 if stable is not None:
