@@ -31,7 +31,7 @@ MEDAL = os.path.join(OUT, "medal_badges.json")
 #
 # 2022 (47th): Shenyang Nov 5-6, Xi'an Nov 12-13, Jinan Nov 26-27,
 #   Hangzhou Dec 3-4, Nanjing Dec 17-18, Hong Kong & Macau Jan 14 2023
-# 2023 (48th): Nanjing Nov 4-5, Macau Nov 11-12, Shenyang Nov 18-19,
+# 2023 (48th): Nanjing Nov 4-5, Shenyang Nov 11-12, Macau Nov 18-19,
 #   Hefei Nov 25-26, Jinan Dec 2-3, Hangzhou Dec 9-10,
 #   EC-Final Shanghai Jan 12-14 2024, Xi'an Invitational (~Feb/Mar 2024)
 # 2024 (49th): Chengdu Oct 26-27, Nanjing Nov 2-3, Hangzhou Nov 9-10,
@@ -43,8 +43,11 @@ MEDAL = os.path.join(OUT, "medal_badges.json")
 CONTEST_ORDER = {
     # 2022
     1096: 1, 1051: 2, 1053: 3, 1071: 4, 1093: 5, 1099: 6,
-    # 2023
-    1435: 1, 1459: 2, 1449: 3, 1440: 4, 1472: 5, 1516: 6, 1522: 7, 1784: 8,
+    # 2023 (verified against icpc.pku.edu.cn/ssxx/1119_icpcbjzb_151096.htm)
+    # Nanjing Nov 4-5, Shenyang Nov 11-12, Macau Nov 18-19, Hefei Nov 25-26,
+    # Jinan Dec 2-3, Hangzhou Dec 9-10, EC-Final Shanghai Jan 12-14 2024,
+    # Xi'an Invitational ~Feb/Mar 2024
+    1435: 1, 1449: 2, 1459: 3, 1440: 4, 1472: 5, 1516: 6, 1522: 7, 1784: 8,
     # 2024
     1821: 1, 1828: 2, 1893: 3, 1865: 4, 1871: 5, 1885: 6, 1894: 7,
     # 2025
