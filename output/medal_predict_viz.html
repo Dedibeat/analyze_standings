@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Medal Cutoff Prediction — City × Time × Event Type</title>
+<style>
+:root {
+  --page: #f9f9f7;
+  --surface: #fcfcfb;
+  --ink: #0b0b0b;
+  --ink2: #52514e;
+  --muted: #898781;
+  --grid: #e1e0d9;
+  --baseline: #c3c2b7;
+  --border: rgba(11,11,11,0.10);
+  /* categorical slots (year encoding) */
+  --y2022: #2a78d6;
+  --y2023: #1baf7a;
+  --y2024: #eda100;
+  --y2025: #e34948;
+  /* emphasis */
+  --ec-final: #4a3aa7;
+  --grand-mean: #898781;
+  /* sequential for bars */
+  --bar-fill: #5598e7;
+  --bar-fill-hover: #3987e5;
+  --bar-best: #2a78d6;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --page: #0d0d0d;
+    --surface: #1a1a19;
+    --ink: #ffffff;
+    --ink2: #c3c2b7;
+    --muted: #898781;
+    --grid: #2c2c2a;
+    --baseline: #383835;
+    --border: rgba(255,255,255,0.10);
+    --y2022: #3987e5;
+    --y2023: #199e70;
+    --y2024: #c98500;
+    --y2025: #e66767;
+    --ec-final: #9085e9;
+    --grand-mean: #c3c2b7;
+    --bar-fill: #3987e5;
+    --bar-fill-hover: #5598e7;
+    --bar-best: #2a78d6;
+  }
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  background: var(--page); color: var(--ink);
+  padding: 2rem;
+  line-height: 1.5;
+}
+h1 { font-size: 1.5rem; font-weight: 600; margin-bottom: 0.25rem; }
+.subtitle { color: var(--ink2); font-size: 0.875rem; margin-bottom: 2.5rem; }
+.section { margin-bottom: 3rem; }
+.section h2 { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.15rem; }
+.section .desc { color: var(--ink2); font-size: 0.8rem; margin-bottom: 1rem; }
+.chart-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1.5rem 1.5rem 1rem;
+  overflow: visible;
+}
+svg { display: block; width: 100%; }
+/* tooltip */
+.tooltip {
+  position: absolute; pointer-events: none;
+  background: var(--ink); color: var(--surface);
+  padding: 6px 10px; border-radius: 4px;
+  font-size: 0.75rem; line-height: 1.4;
+  opacity: 0; transition: opacity 0.1s;
+  z-index: 100; max-width: 260px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+.tooltip.show { opacity: 1; }
+.tooltip .tt-year { font-weight: 600; }
+.tooltip .tt-val { color: inherit; }
+/* legend */
+.legend-row { display: flex; gap: 1.25rem; flex-wrap: wrap; margin-bottom: 0.75rem; }
+.legend-item { display: flex; align-items: center; gap: 0.35rem; font-size: 0.75rem; color: var(--ink2); }
+.legend-swatch { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.legend-swatch.star { border-radius: 0; clip-path: polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%); }
+.kpi-row { display: flex; gap: 2rem; flex-wrap: wrap; margin-bottom: 2.5rem; }
+.kpi { text-align: center; min-width: 80px; }
+.kpi .value { font-size: 1.5rem; font-weight: 600; color: var(--ink); }
+.kpi .label { font-size: 0.7rem; color: var(--ink2); text-transform: uppercase; letter-spacing: 0.04em; }
+.hit-area { cursor: pointer; }
+</style>
+</head>
+<body>
+<h1>What Predicts Medal Cutoff Difficulty?</h1>
+<p class="subtitle">Gold medal bars in CF-equivalent points — 28 ICPC Asia East contests, 2022–2025</p>
+
+<div class="kpi-row">
+  <div class="kpi"><div class="value" style="color:var(--ec-final)">+359 CF</div><div class="label">EC Final premium</div></div>
+  <div class="kpi"><div class="value">59%</div><div class="label">City explains (η²)</div></div>
+  <div class="kpi"><div class="value">−99 CF</div><div class="label">First→last (order)</div></div>
+  <div class="kpi"><div class="value">174 CF</div><div class="label">Best model LOCO RMSE</div></div>
+  <div class="kpi"><div class="value">2,568 CF</div><div class="label">Grand mean</div></div>
+</div>
+
+<!-- ===== CHART 1: City effect ===== -->
+<div class="section">
+  <h2>1. Gold Cutoff by Host City</h2>
+  <p class="desc">Horizontal dot-range: each city's mean (large dot) and range (thin line). Individual contest dots colored by year. ★ marks EC Finals. Dashed line at grand mean (2,568 CF).</p>
+  <div class="legend-row">
+    <span class="legend-item"><span class="legend-swatch" style="background:var(--y2022)"></span> 2022</span>
+    <span class="legend-item"><span class="legend-swatch" style="background:var(--y2023)"></span> 2023</span>
+    <span class="legend-item"><span class="legend-swatch" style="background:var(--y2024)"></span> 2024</span>
+    <span class="legend-item"><span class="legend-swatch" style="background:var(--y2025)"></span> 2025</span>
+    <span class="legend-item"><span class="legend-swatch star" style="background:var(--ec-final)"></span> EC Final</span>
+  </div>
+  <div class="chart-box"><svg id="chart1" viewBox="0 0 720 420"></svg></div>
+</div>
+
+<!-- ===== CHART 2: Temporal order ===== -->
+<div class="section">
+  <h2>2. Temporal Position Within Each Season</h2>
+  <p class="desc">Connected scatter by season. X-axis = contest order (1st, 2nd, …). Each panel's dashed line = within-season trend. ★ = EC Final. 2025 shows the strongest decline (r = −0.60) as top teams qualify early.</p>
+  <div class="chart-box"><svg id="chart2" viewBox="0 0 720 400"></svg></div>
+</div>
+
+<!-- ===== CHART 3: Model comparison ===== -->
+<div class="section">
+  <h2>3. Model Comparison — Leave-One-Contest-Out RMSE</h2>
+  <p class="desc">Lower RMSE = better prediction. The "is_ec_final" flag alone drops error by 28 CF. Adding order + year + n_teams to the EC-final flag recovers 14 more CF. The grand mean is 188 CF.</p>
+  <div class="chart-box"><svg id="chart3" viewBox="0 0 720 200"></svg></div>
+</div>
+
+<div class="tooltip" id="tt"></div>
+
+<script>
+// ===== Shared helpers =====
+const tt = document.getElementById('tt');
+
+function showTT(evt, html) {
+  tt.innerHTML = html;
+  tt.classList.add('show');
+  const x = evt.clientX + 14, y = evt.clientY - 10;
+  tt.style.left = Math.min(x, window.innerWidth - 270) + 'px';
+  tt.style.top = y + 'px';
+}
+function hideTT() { tt.classList.remove('show'); }
+
+const YEAR_COLORS = {'2022': 'var(--y2022)', '2023': 'var(--y2023)', '2024': 'var(--y2024)', '2025': 'var(--y2025)'};
+
+// ===== CHART 1: City dot-range =====
+(function() {
+  const cities = [
+    {name:'China', mean:2932, min:2932, max:2932, n:1, ec:[true], points:[{y:2932, year:2024, name:'EC-Final (China)', ec:true}]},
+    {name:'Jinan', mean:2737, min:2700, max:2775, n:2, ec:[false,false], points:[{y:2700, year:2023, name:'Jinan 2023', ec:false},{y:2775, year:2022, name:'Jinan 2022', ec:false}]},
+    {name:'Shanghai', mean:2707, min:2517, max:2897, n:2, ec:[false,true], points:[{y:2897, year:2023, name:'EC-Final Shanghai', ec:true},{y:2517, year:2025, name:'Grand Prix of Shanghai', ec:false}]},
+    {name:'Hangzhou', mean:2651, min:2585, max:2733, n:3, ec:[false,false,false], points:[{y:2585, year:2023, name:'Hangzhou 2023', ec:false},{y:2634, year:2024, name:'Hangzhou 2024', ec:false},{y:2733, year:2022, name:'Hangzhou 2022', ec:false}]},
+    {name:'Chengdu', mean:2638, min:2617, max:2659, n:2, ec:[false,false], points:[{y:2617, year:2024, name:'Chengdu 2024', ec:false},{y:2659, year:2025, name:'Grand Prix of Chengdu', ec:false}]},
+    {name:'Wuhan', mean:2633, min:2633, max:2633, n:1, ec:[false], points:[{y:2633, year:2025, name:'Wuhan 2025', ec:false}]},
+    {name:'Kunming', mean:2617, min:2617, max:2617, n:1, ec:[false], points:[{y:2617, year:2024, name:'Kunming 2024', ec:false}]},
+    {name:'Macau', mean:2574, min:2455, max:2693, n:2, ec:[false,false], points:[{y:2693, year:2023, name:'Macau 2023', ec:false},{y:2455, year:2022, name:'Hong Kong & Macau 2022', ec:false}]},
+    {name:'Hefei', mean:2527, min:2527, max:2527, n:1, ec:[false], points:[{y:2527, year:2023, name:'Hefei 2023', ec:false}]},
+    {name:"Xi'an", mean:2508, min:2183, max:2695, n:3, ec:[false,false,false], points:[{y:2695, year:2022, name:"Xi'an 2022", ec:false},{y:2183, year:2023, name:"Xi'an Invitational 2023", ec:false},{y:2645, year:2025, name:"Xi'an 2025", ec:false}]},
+    {name:'Nanjing', mean:2453, min:2392, max:2562, n:4, ec:[false,false,false,false], points:[{y:2562, year:2022, name:'Nanjing 2022', ec:false},{y:2456, year:2023, name:'Nanjing 2023', ec:false},{y:2402, year:2024, name:'Nanjing 2024', ec:false},{y:2392, year:2025, name:'Grand Prix of Nanjing', ec:false}]},
+    {name:'Shenyang', mean:2433, min:2137, max:2741, n:4, ec:[false,false,false,false], points:[{y:2410, year:2022, name:'Shenyang 2022', ec:false},{y:2445, year:2023, name:'Shenyang 2023', ec:false},{y:2741, year:2024, name:'Shenyang 2024', ec:false},{y:2137, year:2025, name:'Grand Prix of Shenyang', ec:false}]},
+    {name:'Hong Kong', mean:2426, min:2417, max:2435, n:2, ec:[false,false], points:[{y:2435, year:2024, name:'Hong Kong 2024', ec:false},{y:2417, year:2025, name:'Grand Prix of Hong Kong', ec:false}]},
+  ];
+
+  const svg = document.getElementById('chart1');
+  const W = 720, H = 420;
+  const left = 110, right = 80, top = 28, bottom = 18;
+  const plotW = W - left - right, plotH = H - top - bottom;
+  const rowH = plotH / cities.length;
+
+  // X scale: gold_cf from 2000 to 3000
+  const xMin = 2000, xMax = 3000;
+  const x = v => left + (v - xMin) / (xMax - xMin) * plotW;
+
+  // Background
+  svg.innerHTML = '';
+
+  // Gridlines
+  for (let v = 2000; v <= 3000; v += 200) {
+    const gx = x(v);
+    svg.insertAdjacentHTML('beforeend', `<line x1="${gx}" y1="${top}" x2="${gx}" y2="${H-bottom}" stroke="var(--grid)" stroke-width="1"/>`);
+    svg.insertAdjacentHTML('beforeend', `<text x="${gx}" y="${H-bottom+14}" text-anchor="middle" fill="var(--muted)" font-size="10">${v.toLocaleString()}</text>`);
+  }
+
+  // Grand mean vertical line
+  const gm = 2568;
+  svg.insertAdjacentHTML('beforeend', `<line x1="${x(gm)}" y1="${top}" x2="${x(gm)}" y2="${H-bottom}" stroke="var(--grand-mean)" stroke-width="1" stroke-dasharray="4,3"/>`);
+  svg.insertAdjacentHTML('beforeend', `<text x="${x(gm)}" y="${top-4}" text-anchor="middle" fill="var(--muted)" font-size="9">grand mean ${gm}</text>`);
+
+  cities.forEach((c, i) => {
+    const cy = top + rowH * i + rowH / 2;
+
+    // Range line
+    if (c.min < c.max) {
+      svg.insertAdjacentHTML('beforeend',
+        `<line x1="${x(c.min)}" y1="${cy}" x2="${x(c.max)}" y2="${cy}" stroke="var(--muted)" stroke-width="1.5" opacity="0.5"/>`);
+    }
+
+    // City label
+    svg.insertAdjacentHTML('beforeend',
+      `<text x="${left-8}" y="${cy+3.5}" text-anchor="end" fill="var(--ink2)" font-size="11">${c.name}</text>`);
+
+    // Mean dot (larger)
+    svg.insertAdjacentHTML('beforeend',
+      `<circle cx="${x(c.mean)}" cy="${cy}" r="4" fill="var(--ink)" stroke="var(--surface)" stroke-width="2"/>`);
+
+    // Individual contest dots
+    const jitter = c.points.length > 1 ? 5 : 0;
+    c.points.forEach((p, pi) => {
+      const jy = c.points.length > 1 ? cy + (pi - (c.points.length-1)/2) * jitter : cy;
+      const fill = YEAR_COLORS[p.year] || 'var(--muted)';
+      const r = p.ec ? 5 : 3.5;
+
+      let shape;
+      if (p.ec) {
+        // Star for EC Finals
+        shape = `<polygon points="${x(p.y)},${jy-5.5} ${x(p.y)+1.6},${jy-1.7} ${x(p.y)+5.3},${jy-1.7} ${x(p.y)+2.6},${jy+0.7} ${x(p.y)+3.3},${jy+4.5} ${x(p.y)},${jy+2.2} ${x(p.y)-3.3},${jy+4.5} ${x(p.y)-2.6},${jy+0.7} ${x(p.y)-5.3},${jy-1.7} ${x(p.y)-1.6},${jy-1.7}" fill="var(--ec-final)" stroke="var(--surface)" stroke-width="1.5"/>`;
+      } else {
+        shape = `<circle cx="${x(p.y)}" cy="${jy}" r="${r}" fill="${fill}" stroke="var(--surface)" stroke-width="2"/>`;
+      }
+
+      svg.insertAdjacentHTML('beforeend',
+        `<g class="hit-area" data-tt="${p.name}<br>Year: ${p.year}<br>Gold cutoff: ${p.y} CF${p.ec ? ' ← EC FINAL' : ''}">${shape}</g>`);
+    });
+
+    // N count
+    svg.insertAdjacentHTML('beforeend',
+      `<text x="${x(c.max)+12}" y="${cy+3.5}" fill="var(--muted)" font-size="9">n=${c.n}</text>`);
+  });
+
+  // Hover
+  svg.querySelectorAll('.hit-area').forEach(el => {
+    el.addEventListener('mouseenter', e => showTT(e, el.dataset.tt));
+    el.addEventListener('mousemove', e => {
+      tt.style.left = Math.min(e.clientX + 14, window.innerWidth - 270) + 'px';
+      tt.style.top = (e.clientY - 10) + 'px';
+    });
+    el.addEventListener('mouseleave', hideTT);
+  });
+})();
+
+// ===== CHART 2: Temporal order within season =====
+(function() {
+  const seasons = [
+    {year: 2022, r: -0.077, slope: -6.2, points: [
+      {pos:1, gold:2410, name:'Shenyang', ec:false},
+      {pos:2, gold:2695, name:"Xi'an", ec:false},
+      {pos:3, gold:2775, name:'Jinan', ec:false},
+      {pos:4, gold:2733, name:'Hangzhou', ec:false},
+      {pos:5, gold:2562, name:'Nanjing', ec:false},
+      {pos:6, gold:2455, name:'Hong Kong & Macau', ec:false},
+    ]},
+    {year: 2023, r: -0.041, slope: -3.6, points: [
+      {pos:1, gold:2456, name:'Nanjing', ec:false},
+      {pos:2, gold:2693, name:'Macau', ec:false},
+      {pos:3, gold:2445, name:'Shenyang', ec:false},
+      {pos:4, gold:2527, name:'Hefei', ec:false},
+      {pos:5, gold:2700, name:'Jinan', ec:false},
+      {pos:6, gold:2585, name:'Hangzhou', ec:false},
+      {pos:7, gold:2897, name:'EC-Final Shanghai', ec:true},
+      {pos:8, gold:2183, name:"Xi'an Inv.", ec:false},
+    ]},
+    {year: 2024, r: +0.427, slope: +35.5, points: [
+      {pos:1, gold:2617, name:'Chengdu', ec:false},
+      {pos:2, gold:2402, name:'Nanjing', ec:false},
+      {pos:3, gold:2634, name:'Hangzhou', ec:false},
+      {pos:4, gold:2741, name:'Shenyang', ec:false},
+      {pos:5, gold:2617, name:'Kunming', ec:false},
+      {pos:6, gold:2435, name:'Hong Kong', ec:false},
+      {pos:7, gold:2932, name:'EC-Final (China)', ec:true},
+    ]},
+    {year: 2025, r: -0.599, slope: -52.3, points: [
+      {pos:1, gold:2645, name:"Xi'an", ec:false},
+      {pos:2, gold:2659, name:'Chengdu', ec:false},
+      {pos:3, gold:2633, name:'Wuhan', ec:false},
+      {pos:4, gold:2392, name:'Nanjing', ec:false},
+      {pos:5, gold:2137, name:'Shenyang', ec:false},
+      {pos:6, gold:2517, name:'Shanghai', ec:false},
+      {pos:7, gold:2417, name:'Hong Kong', ec:false},
+    ]},
+  ];
+
+  const svg = document.getElementById('chart2');
+  const W = 720, H = 400;
+  const cols = 2, rows = 2;
+  const margin = {l: 45, r: 15, t: 30, b: 30};
+  const gapX = 30, gapY = 28;
+  const pw = (W - margin.l - margin.r - gapX) / cols;
+  const ph = (H - margin.t - margin.b - gapY) / rows;
+
+  svg.innerHTML = '';
+
+  seasons.forEach((s, si) => {
+    const col = si % cols, row = Math.floor(si / cols);
+    const ox = margin.l + col * (pw + gapX);
+    const oy = margin.t + row * (ph + gapY);
+
+    const golds = s.points.map(p => p.gold);
+    const yMin = Math.floor(Math.min(...golds) / 50) * 50 - 50;
+    const yMax = Math.ceil(Math.max(...golds) / 50) * 50 + 50;
+    const xPos = pos => ox + (pos - 1) / (Math.max(...s.points.map(p=>p.pos)) - 1) * pw;
+    const yGold = g => oy + ph - (g - yMin) / (yMax - yMin) * ph;
+
+    // Panel background
+    svg.insertAdjacentHTML('beforeend',
+      `<rect x="${ox}" y="${oy}" width="${pw}" height="${ph}" fill="none" stroke="var(--border)" rx="4"/>`);
+
+    // Title
+    svg.insertAdjacentHTML('beforeend',
+      `<text x="${ox + pw/2}" y="${oy - 8}" text-anchor="middle" fill="var(--ink)" font-size="12" font-weight="600">${s.year} Season (r = ${s.r > 0 ? '+' : ''}${s.r.toFixed(3)})</text>`);
+
+    // Y grid + labels
+    for (let v = yMin; v <= yMax; v += (yMax-yMin) > 500 ? 200 : 100) {
+      const gy = yGold(v);
+      svg.insertAdjacentHTML('beforeend',
+        `<line x1="${ox}" y1="${gy}" x2="${ox+pw}" y2="${gy}" stroke="var(--grid)" stroke-width="1"/>`);
+      svg.insertAdjacentHTML('beforeend',
+        `<text x="${ox-6}" y="${gy+3.5}" text-anchor="end" fill="var(--muted)" font-size="9">${v}</text>`);
+    }
+
+    // X labels
+    s.points.forEach(p => {
+      svg.insertAdjacentHTML('beforeend',
+        `<text x="${xPos(p.pos)}" y="${oy+ph+16}" text-anchor="middle" fill="var(--muted)" font-size="9">${p.pos}</text>`);
+    });
+    svg.insertAdjacentHTML('beforeend',
+      `<text x="${ox+pw/2}" y="${oy+ph+28}" text-anchor="middle" fill="var(--muted)" font-size="9">Position in season →</text>`);
+
+    // Trend line (dashed)
+    const x1t = xPos(Math.min(...s.points.map(p=>p.pos)));
+    const x2t = xPos(Math.max(...s.points.map(p=>p.pos)));
+    const meanPos = s.points.reduce((a,p)=>a+p.pos,0)/s.points.length;
+    const meanGold = golds.reduce((a,g)=>a+g,0)/golds.length;
+    const dy = s.slope * (s.points[s.points.length-1].pos - s.points[0].pos);
+    svg.insertAdjacentHTML('beforeend',
+      `<line x1="${x1t}" y1="${yGold(meanGold - s.slope*(s.points[0].pos-meanPos))}" x2="${x2t}" y2="${yGold(meanGold + s.slope*(s.points[s.points.length-1].pos-meanPos))}" stroke="var(--muted)" stroke-width="1" stroke-dasharray="4,3" opacity="0.6"/>`);
+
+    // Connect regular points (skip EC Finals in the line)
+    const regular = s.points.filter(p => !p.ec);
+    if (regular.length > 1) {
+      let pathD = '';
+      regular.forEach((p, pi) => {
+        pathD += (pi === 0 ? 'M' : 'L') + xPos(p.pos) + ',' + yGold(p.gold) + ' ';
+      });
+      svg.insertAdjacentHTML('beforeend',
+        `<path d="${pathD}" fill="none" stroke="var(--ink2)" stroke-width="1.2" opacity="0.3"/>`);
+    }
+
+    // Dots
+    s.points.forEach(p => {
+      const cx = xPos(p.pos), cy = yGold(p.gold);
+      if (p.ec) {
+        svg.insertAdjacentHTML('beforeend',
+          `<polygon points="${cx},${cy-6} ${cx+1.7},${cy-2} ${cx+5.5},${cy-2} ${cx+2.8},${cy+0.5} ${cx+3.5},${cy+4.5} ${cx},${cy+2} ${cx-3.5},${cy+4.5} ${cx-2.8},${cy+0.5} ${cx-5.5},${cy-2} ${cx-1.7},${cy-2}" fill="var(--ec-final)" stroke="var(--surface)" stroke-width="1.5"/>`);
+      } else {
+        const fill = YEAR_COLORS[String(s.year)] || 'var(--ink)';
+        svg.insertAdjacentHTML('beforeend',
+          `<circle cx="${cx}" cy="${cy}" r="4" fill="${fill}" stroke="var(--surface)" stroke-width="2"/>`);
+      }
+
+      // Label for endpoints
+      if (p.pos === 1 || p.pos === Math.max(...s.points.map(x=>x.pos))) {
+        svg.insertAdjacentHTML('beforeend',
+          `<text x="${cx + (p.pos===1?-5:5)}" y="${cy-8}" text-anchor="${p.pos===1?'end':'start'}" fill="var(--ink2)" font-size="9">${p.gold}</text>`);
+      }
+    });
+  });
+})();
+
+// ===== CHART 3: Model comparison =====
+(function() {
+  const models = [
+    {name: 'Intercept only\n(grand mean)', rmse: 188, best: false},
+    {name: 'Is EC Final only', rmse: 160, best: false},
+    {name: 'Order + Year + N teams\n+ Is EC Final', rmse: 174, best: true},
+    {name: 'Order + Year + N teams', rmse: 212, best: false},
+  ];
+
+  const svg = document.getElementById('chart3');
+  const W = 720, H = 200;
+  const left = 180, right = 40, top = 12, bottom = 20;
+  const plotW = W - left - right, plotH = H - top - bottom;
+  const barH = Math.min(28, plotH / models.length - 6);
+  const gap = (plotH - models.length * barH) / (models.length + 1);
+
+  const xMax = 240, xMin = 140;
+  const xV = v => left + (v - xMin) / (xMax - xMin) * plotW;
+
+  svg.innerHTML = '';
+
+  // Grid
+  for (let v = 140; v <= 240; v += 20) {
+    const gx = xV(v);
+    svg.insertAdjacentHTML('beforeend', `<line x1="${gx}" y1="${top}" x2="${gx}" y2="${H-bottom}" stroke="var(--grid)" stroke-width="1"/>`);
+    svg.insertAdjacentHTML('beforeend', `<text x="${gx}" y="${H-bottom+14}" text-anchor="middle" fill="var(--muted)" font-size="10">${v}</text>`);
+  }
+  svg.insertAdjacentHTML('beforeend', `<text x="${left+plotW/2}" y="${H-2}" text-anchor="middle" fill="var(--muted)" font-size="9">LOCO RMSE (CF points) — lower is better →</text>`);
+
+  models.forEach((m, i) => {
+    const by = top + gap + i * (barH + gap);
+    const bw = xV(m.rmse) - left;
+    const fill = m.best ? 'var(--bar-best)' : 'var(--bar-fill)';
+    const rx = 4;
+
+    // Bar with rounded data-end
+    const bw2 = Math.max(bw, rx * 2);
+    svg.insertAdjacentHTML('beforeend',
+      `<rect x="${left}" y="${by}" width="${bw2}" height="${barH}" rx="${rx}" fill="${fill}" class="hit-area" data-tt="RMSE = ${m.rmse} CF${m.best ? ' ← best model' : ''}"/>`);
+
+    // Value at tip
+    svg.insertAdjacentHTML('beforeend',
+      `<text x="${xV(m.rmse) + 8}" y="${by + barH/2 + 3.5}" fill="var(--ink)" font-size="11" font-weight="600">${m.rmse}</text>`);
+
+    // Label
+    const lines = m.name.split('\n');
+    svg.insertAdjacentHTML('beforeend',
+      `<text x="${left-8}" y="${by + barH/2 - (lines.length>1?2:0)}" text-anchor="end" fill="var(--ink2)" font-size="10.5">${lines.map((l,li) => `<tspan x="${left-8}" dy="${li===0?0:13}">${l}</tspan>`).join('')}</text>`);
+  });
+
+  svg.querySelectorAll('.hit-area').forEach(el => {
+    el.addEventListener('mouseenter', e => showTT(e, el.dataset.tt));
+    el.addEventListener('mousemove', e => {
+      tt.style.left = Math.min(e.clientX + 14, window.innerWidth - 270) + 'px';
+      tt.style.top = (e.clientY - 10) + 'px';
+    });
+    el.addEventListener('mouseleave', hideTT);
+  });
+})();
+</script>
+</body>
+</html>

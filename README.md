@@ -214,6 +214,18 @@ lollipops on the difficulty axis against the three medal-bar thresholds and the
 platinum zone, plus a table with band solve rates), and a sortable lowest-gold-team
 table.
 
+### Medal cutoff prediction (city + time)
+
+```bash
+./.venv/bin/python -m arch_b.medal_predict
+```
+
+Analyzes whether gold-medal cutoff difficulty can be predicted from host **city**
+and **temporal order** within the contest season. Key findings: EC Finals are
++359 CF harder than regular regionals (the strongest signal); city explains ~59%
+of variance; temporal order within a season is a weak, inconsistent predictor.
+The interactive chart is at `output/medal_predict_viz.html`.
+
 ### Interactive viewer
 
 ```bash
