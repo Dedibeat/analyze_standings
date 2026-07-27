@@ -1,0 +1,5 @@
+experiment	train_history	gold_rmse_cf	gold_mae_cf	pairwise_accuracy	n_contests	global_calibrated_loco_cf	status
+legacy_city_order_year	2022-2025	172.4	125.5	0.667	19		replace
+pooled_city_one_pseudo	2022-2025	131.7	92.7	0.771	19		keep
+pooled_city_one_pseudo	2017-2025	160.9	125.1	0.510	19		discard_archive
+global_fit_with_2017_2019		261.8			261.8	discard_archive

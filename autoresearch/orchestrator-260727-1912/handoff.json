@@ -1,0 +1,9 @@
+{
+  "goal": "Improve medal_predict.py to help choose a regional contest in the 2026 Asia East season.",
+  "success_predicate": "./.venv/bin/python -m unittest tests.test_medal_predict -v",
+  "decision_metric": "Forward-in-time gold-bar RMSE and within-season pair ordering.",
+  "incumbent": "Regular-only city mean with one grand-mean pseudo-contest.",
+  "outcome": "converged",
+  "archive_decision": "Do not add 2017-2019 QOJ data: it worsened the current-regime decision holdout and slightly regressed the global north-star metric.",
+  "independent_verify_pending": false
+}

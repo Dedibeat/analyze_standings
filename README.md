@@ -183,12 +183,12 @@ derive priors from them.  See
 ./.venv/bin/python -m arch_b.medals
 ```
 
-Assigns every problem of the 30 medal-awarding **Asia East Continent** contests a
+Assigns every problem of the 28 medal-awarding **Asia East Continent** contests a
 **bronze / silver / gold / platinum / star badge** (weakest → hardest) and reports the
 **lowest gold-medal team** per regional. Medals go by cumulative percentile of
 official teams solving ≥1 problem (gold 10%, silver 30%, bronze 60%); the official
-onsite field is recovered
-from the mixed qoj standings by the domjudge `$DEFAULT` team-id prefix. Each tier's
+onsite field is recovered by matching the QOJ standings to XCPCIO's official-team
+data. Each tier's
 **medal bar** is the fitted (survival-model) difficulty at which the boundary
 cohort's actual solve rate crosses 50% (isotonic regression), and a problem gets
 the weakest tier whose bar clears it — badges are monotone in difficulty, and the
@@ -214,17 +214,32 @@ lollipops on the difficulty axis against the three medal-bar thresholds and the
 platinum zone, plus a table with band solve rates), and a sortable lowest-gold-team
 table.
 
-### Medal cutoff prediction (city + time)
+### Regional medal-cutoff chooser
 
 ```bash
 ./.venv/bin/python -m arch_b.medal_predict
+./.venv/bin/python -m arch_b.medal_predict --target bronze
+./.venv/bin/python -m arch_b.medal_predict --city Shanghai
+./.venv/bin/python -m arch_b.medal_predict --report
 ```
 
-Analyzes whether gold-medal cutoff difficulty can be predicted from host **city**
-and **temporal order** within the contest season. Key findings: EC Finals are
-+359 CF harder than regular regionals (the strongest signal); city explains ~59%
-of variance; temporal order within a season is a weak, inconsistent predictor.
-The interactive chart is at `output/medal_predict_viz.html`.
+The default command ranks the eight ordinary 2026 Asia East regional sites by
+predicted gold-medal cutoff; `--target` can instead rank for silver or bronze,
+and `--cities` compares a custom list. Lower is historically easier. The model
+uses only the 25 ordinary 2022–2025 regionals and partially pools each host city
+with one overall-mean pseudo-contest. EC Finals do not contaminate ordinary-city
+baselines, and one-off hosts no longer get full weight.
+
+Forward validation (train on earlier seasons, predict 2023–2025) gives **132 CF
+gold-bar RMSE** and **77.1% correct pair ordering** over 19 contests, versus
+172 CF / 66.7% for the previous raw-city + order/year formula after correcting
+the 2022 Hong Kong host label. The
+[2026 ICPC Global city list](https://icpc.global/regionals/results) was checked
+on 2026-07-27; dates were still absent, and temporal order is weak historically, so
+the chooser does not invent positions. All current error bands overlap: use the
+ranking as a shortlist alongside travel, quotas, eligibility, and registration
+constraints, not as a medal guarantee. `output/medal_predict_viz.html` remains
+the descriptive city/time chart; `--report` prints that analysis.
 
 ### Interactive viewer
 

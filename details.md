@@ -758,69 +758,74 @@ bug worth remembering: the per-row transparent SVG hit-rect must be appended
 *last* in its group — appended first, the row's dots/line/label paint above it
 and swallow every click (SVG hit-tests in paint order).
 
-### Medal cutoff prediction: city + temporal order (`arch_b.medal_predict`)
+### Regional medal-cutoff chooser (`arch_b.medal_predict`)
 
-Can we predict a contest's medal cutoff difficulty from its host city and its
-position in the season calendar?  ``arch_b.medal_predict`` builds linear models
-of `gold_bar_cf` against city, temporal order within the season, event type
-(regular vs EC Final), and field size, with leave-one-contest-out validation.
+The default command now answers the decision question directly: rank the eight
+ordinary 2026 Asia East regional sites by the predicted gold cutoff.  `--target
+silver|bronze` changes the medal target, `--cities ...` compares a supplied
+shortlist, `--city` prints all three bars for one host, and `--report` retains
+the descriptive city/time analysis.  Lower bar = historically softer cutoff;
+it is not a probability that a particular team medals.
 
-**Data.**  28 East Asia contests (2022–2025) with known chronological order
-from ICPC Beijing HQ official schedules (`icpc.pku.edu.cn`).  Temporal position
-within each season: 47th (6 regionals, Nov 2022–Jan 2023), 48th (6 regionals +
-EC Final + Xi'an Invitational, Nov 2023–early 2024), 49th (6 regionals + EC
-Final, Oct–Dec 2024), 50th (7 regionals, Oct–Nov 2025).
+**Shipped model.**  Prediction uses the 25 ordinary regionals from 2022–2025
+only.  For each medal tier, city `c` with `n_c` observations is partially
+pooled with one overall-mean pseudo-contest:
 
-**City effects** explain ~59% of gold-bar variance (between-city SD ~141 CF
-points).  Hardest cities (Jinan 2737, Hangzhou 2651) host ~506 CF harder gold
-bars than softest cities (Hong Kong 2426, Shenyang 2433).  Reliability varies:
-Nanjing and Shenyang have 4 contests each, Xi'an and Hangzhou 3, while Wuhan,
-Kunming, Hefei, and China appear only once.
+`pred(c) = (sum(city bars) + overall regular-regional mean) / (n_c + 1)`.
 
-**EC Finals** are the dominant single predictor: **+359 CF** harder than
-regular regionals.  Only qualified teams participate, so the field is
-systematically stronger.  The Xi'an 2023 Invitational (a small post-ECFinal
-event with only 34 official solving teams) sits at 2183 CF — the softest gold
-bar in the dataset.
+An unseen city receives the overall mean.  Gold, silver, and bronze are fitted
+directly rather than imposing average gaps.  EC Finals are excluded from every
+ordinary-city baseline (the old code mixed the 2023 Shanghai EC Final into the
+Shanghai regional estimate and then added an EC-Final premium again).  A
+requested EC Final uses the separate two-final mean.  Year, temporal order,
+and field size are deliberately excluded from future recommendations: order
+varies inconsistently by season, field size is uninformative, and extrapolating
+the small year coefficient made the 2026 estimates artificially easy.
 
-**Temporal order** has a weak negative effect: an OLS of gold_cf ~ norm_order
-(on regular regionals only) gives a slope of −99 CF from first→last position,
-but the per-season trend is inconsistent:
-2022 r=−0.08, 2023 r=+0.36, 2024 r=−0.07, 2025 r=−0.60. The 2025 season
-shows the clearest "qualification fatigue" dynamic — the gold bar falls from
-2645 (Xi'an, Oct 18–19) to 2137 (Shenyang, Nov 15–16) — but the effect is
-not reliable enough across seasons to be a general law.
+**Decision-metric validation.**  A rolling-origin check trains strictly on
+earlier seasons and predicts the 19 regular regionals in 2023–2025.  The
+shipped one-pseudo-contest city model achieves **131.7 CF RMSE**, **92.7 CF
+MAE**, and **77.1% correct within-season pair ordering** (48 pairs).  The prior
+raw-city + order/year formula, reevaluated after fixing the host label below,
+gets 172.4 RMSE / 125.5 MAE / 66.7% pair ordering.  Each CLI interval is
+explicitly labelled a historical RMSE band, not a 68% confidence or medal
+probability.
 
-**Field size** (number of official solving teams) does NOT predict gold cutoff
-(r≈+0.21, t≈0.6): a small elite field (Macau 2023, 74 teams, gold=2693) can
-have a far higher bar than a large open field (Shenyang 2022, 733 teams,
-gold=2410).
+**2026 choice.**  [ICPC Global](https://icpc.global/regionals/results) listed
+Chengdu, Hong Kong, Nanchang, Nanjing, Shanghai, Shenyang, Wuhan, and Xi'an as
+the ordinary 2026 Asia East sites on 2026-07-27.  Dates/order were still blank;
+online rounds and the EC Final are
+not selectable ordinary medal regionals and are excluded.  For gold, the point
+leaders are Shenyang 2458, Hong Kong 2465, and Nanjing 2473 CF, but their gaps
+are tiny relative to the 132-CF forward error and every candidate's band
+overlaps.  The output therefore presents a ranking plus evidence counts and
+warns that travel/cost, school quotas, eligibility, registration limits, and
+this year's applicant strength remain outside the model.  The candidate list
+is source-dated in code instead of silently assuming unpublished dates.
 
-**LOCO model comparison** (predicting gold_cf, one contest held out at a time):
+**QOJ archive audit (not shipped).**  The user identified QOJ's 2015–2021 Asia
+East category archive as a possible way to add signal.  The 2015–2016 regional
+mirrors are incomplete (zero official teams and only 2–11 practice rows), so
+they are unusable.  The 18 ordinary 2017–2019 mirrors are complete five-hour
+standings, and for every 2017–2021 stored regional QOJ's server-side
+official-only set equals the `$DEFAULT...` team-id set exactly; no
+official-field guess is needed.  Nevertheless, adding the 6.8 MB 2017–2019
+solve data is neutral/slightly worse on the global fit (calibrated LOCO 261.6
+→ 261.8 CF, all guards pass), and using all 2017–2021 medal bars worsens the
+same 2023–2025 decision holdout to **160.9 CF RMSE / 51.0% pair ordering**.
+Older Nanjing/Shanghai fields do not transfer well enough to the recent regime,
+so neither the archive data nor its bars are added merely to increase sample
+size.
 
-| model | LOCO RMSE |
-|---|---|
-| intercept only (grand mean 2568) | 188 CF |
-| is_ec_final only | 160 CF |
-| order + year + n_teams | 212 CF |
-| order + year + n_teams + is_ec_final | 174 CF |
+**Host correction.**  QOJ category 460 names contest 1099 “The 2022 ICPC Asia
+Hong Kong Regional Contest,” while the medal artifact's shortened contest name
+is “Hong Kong & Macau.”  The old substring loop encountered `Macau` first and
+misclassified it.  `CONTEST_CITY` now maps 1099 explicitly to Hong Kong; a test
+locks the source-backed correction.
 
-The EC-final flag alone reduces error by 28 CF (−15%); adding order + year +
-n_teams to the EC-final flag recovers 14 more CF.  The city-dummy model
-(not LOCO-able with single-contest cities) has in-sample R²≈0.52 but adjusted
-R²≈0.07 (overfitting 13 city dummies on 28 data points).
-
-**Verdict.**  City identity and event type (EC Final vs regional) are the only
-reliable predictors.  Temporal order within the season is not a general
-predictor — its effect is season-specific and dominated by which cities host
-early vs late.  A new regional contest's gold bar can be predicted to ±141 CF
-(between-city SD) with a city-specific offset; for a new city not in the
-dataset, the best estimate is the grand mean 2568 ± 199 CF (1σ prediction
-interval).
-
-Run: `./.venv/bin/python -m arch_b.medal_predict`.  The interactive
-visualization is at `output/medal_predict_viz.html` (self-contained, no server,
-light/dark aware).
+Run: `./.venv/bin/python -m arch_b.medal_predict`.  The older interactive
+`output/medal_predict_viz.html` remains a descriptive city/time view; it is not
+the 2026 recommendation interface.
 
 ### XCPCIO ← QOJ matching
 

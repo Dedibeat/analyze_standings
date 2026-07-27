@@ -1,38 +1,56 @@
-"""Predict medal cutoff performances from city and temporal order within season.
+"""Predict medal cutoffs and compare regional-contest choices.
 
-Analysis: does knowing a contest's host city and its position within the
-season's contest calendar help predict how hard the gold/silver/bronze bars
-will be (in Codeforces-equivalent points)?
+The shipped chooser estimates each regular regional from regular-regionals only,
+with city history shrunk toward the overall mean by one pseudo-contest.  This
+avoids treating a one-off city result as certain and avoids leaking EC Final
+strength into an ordinary regional hosted by the same city.
 
-Model:  gold_cf ~ city_baseline + order_within_season + is_ec_final + n_teams
+Temporal order, year trend, and field size remain descriptive analyses, but are
+not used for future recommendations: they do not improve forward-in-time
+validation and the 2026 dates/order are not published.
 
-Key findings (see module docstring at bottom or run with --report):
-- EC Finals are ~360 CF harder than regular regionals (the strongest signal)
-- City explains ~59% of gold-bar variance (between-city SD ~160 CF)
-- Temporal order within season: weak negative trend (~-50 CF from first→last
-  regular regional), strongest in 2025 (r=-0.60) when the "qualification
-  fatigue" dynamic is clearest
-- Field size (n_teams) is NOT a reliable predictor (r=+0.21, t≈0.6)
-- LOCO prediction RMSE: ~174 CF with the full model, vs ~188 CF for grand mean
+Default run: compare the current 2026 Asia East regional cities:
 
 Run:  ./.venv/bin/python -m arch_b.medal_predict
 
-The Predictor class can be imported and used to predict medal bars for
-hypothetical future contests:
+Other useful modes:
 
-    from arch_b.medal_predict import Predictor
-    p = Predictor()
-    result = p.predict(city="Hangzhou", year=2026, position=3, is_ec_final=False)
-    # result = {"gold_cf": 2620, "gold_lo": 2479, "gold_hi": 2761, ...}
+    ./.venv/bin/python -m arch_b.medal_predict --target silver
+    ./.venv/bin/python -m arch_b.medal_predict --city Hangzhou
+    ./.venv/bin/python -m arch_b.medal_predict --report
 """
 
-import json, math, statistics, os
+import argparse
+import json
+import math
+import os
+import statistics
 from collections import defaultdict
 
 import numpy as np
 
 OUT = os.path.join(os.path.dirname(__file__), os.pardir, "output")
 MEDAL = os.path.join(OUT, "medal_badges.json")
+TIERS = ("gold", "silver", "bronze")
+CITY_SHRINKAGE = 1.0
+
+# ICPC Global listed these eight 2026 Asia East onsite regionals on 2026-07-27.
+# Dates/order were still blank. Online contests and the EC Final are deliberately
+# excluded because this chooser compares ordinary medal-awarding regionals.
+# Source: https://icpc.global/regionals/results
+REGIONALS_BY_YEAR = {
+    2026: (
+        "Chengdu", "Hong Kong", "Nanchang", "Nanjing",
+        "Shanghai", "Shenyang", "Wuhan", "Xi'an",
+    ),
+}
+
+# Stored contest names occasionally collapse the QOJ category's actual host.
+# QOJ category 460 labels 1099 "The 2022 ICPC Asia Hong Kong Regional Contest",
+# while medal_badges.json carries the shorter "Hong Kong & Macau".
+CONTEST_CITY = {
+    1099: "Hong Kong",
+}
 
 # --- Chronological order within each ICPC Asia East season ---
 # Sourced from ICPC Beijing HQ official schedules (icpc.pku.edu.cn):
@@ -110,7 +128,7 @@ def load_rows():
             "is_invitational": cid in INVITATIONAL,
             "is_regular": cid not in EC_FINALS and cid not in INVITATIONAL,
             "n_teams": c["official_solving_teams"],
-            "city": _extract_city(c["contest_name"]),
+            "city": CONTEST_CITY.get(cid, _extract_city(c["contest_name"])),
             "gold_cf": c["medal_bar_cf"]["gold"],
             "silver_cf": c["medal_bar_cf"]["silver"],
             "bronze_cf": c["medal_bar_cf"]["bronze"],
@@ -167,250 +185,237 @@ def loco_rmse(rows, feature_func):
     return math.sqrt(statistics.mean([e ** 2 for e in errors]))
 
 
+def _city_prediction(rows, city, value_key, shrinkage=CITY_SHRINKAGE):
+    """Predict a bar with a partially pooled city mean."""
+    grand_mean = statistics.mean(r[value_key] for r in rows)
+    city_values = [r[value_key] for r in rows if r["city"] == city]
+    if not city_values:
+        return grand_mean
+    return (
+        sum(city_values) + shrinkage * grand_mean
+    ) / (len(city_values) + shrinkage)
+
+
+def rolling_origin_metrics(rows, value_key, shrinkage=CITY_SHRINKAGE):
+    """Evaluate later seasons using only strictly earlier regular regionals."""
+    years = sorted({r["year"] for r in rows})
+    errors = []
+    correct_pairs = []
+    for year in years[1:]:
+        train = [r for r in rows if r["year"] < year]
+        test = [r for r in rows if r["year"] == year]
+        predictions = [
+            _city_prediction(train, r["city"], value_key, shrinkage)
+            for r in test
+        ]
+        errors.extend(
+            prediction - row[value_key]
+            for prediction, row in zip(predictions, test)
+        )
+        for i in range(len(test)):
+            for j in range(i + 1, len(test)):
+                actual_delta = test[i][value_key] - test[j][value_key]
+                predicted_delta = predictions[i] - predictions[j]
+                if actual_delta and predicted_delta:
+                    correct_pairs.append(
+                        (actual_delta > 0) == (predicted_delta > 0))
+
+    return {
+        "n": len(errors),
+        "rmse": math.sqrt(statistics.mean(e ** 2 for e in errors)),
+        "mae": statistics.mean(abs(e) for e in errors),
+        "pairwise_accuracy": statistics.mean(correct_pairs),
+        "n_pairs": len(correct_pairs),
+    }
+
+
 class Predictor:
-    """Predict medal cutoff bars for an ICPC Asia East contest.
+    """Predict medal bars and rank regular ICPC Asia East contest choices.
 
     Usage
     -----
     >>> p = Predictor()
-    >>> r = p.predict(city="Hangzhou", year=2026, position=3, is_ec_final=False)
-    >>> print(f"gold = {r['gold_cf']:.0f} CF  [{r['gold_lo']:.0f}, {r['gold_hi']:.0f}]")
-    gold = 2620 CF  [2309, 2931]
-
-    Parameters
-    ----------
-    city : str
-        Host city name (e.g. "Hangzhou", "Nanjing"). Case-sensitive; must
-        match one of the known cities. Pass None or an unknown name for a
-        new city.
-    year : int
-        Contest year (2022–…).
-    position : int
-        1-based position within the season calendar (1 = first contest,
-        N = last). Ignored for EC Finals.
-    is_ec_final : bool
-        Whether this is the East Continent Final championship.
-    n_teams : int or None
-        Number of official solving teams (optional; not used in prediction
-        beyond the EC Final flag — field size does not predict cutoff).
-
-    Returns
-    -------
-    dict with keys:
-        gold_cf, gold_lo, gold_hi   — gold bar prediction + 68% interval
-        silver_cf, silver_lo, silver_hi
-        bronze_cf, bronze_lo, bronze_hi
-        city_baseline               — the city's historical mean gold bar
-        city_n_contests             — how many times this city has hosted
-        city_is_known               — whether the city is in the dataset
-        ec_final_premium            — EC Final adjustment applied
-        order_effect                — temporal position contribution
-        breakdown                   — human-readable component breakdown
+    >>> [r["city"] for r in p.recommend(REGIONALS_BY_YEAR[2026])[:3]]
+    ['Shenyang', 'Hong Kong', 'Nanjing']
     """
 
-    def __init__(self):
-        rows = load_rows()
-        self.rows = rows
+    def __init__(self, rows=None, shrinkage=CITY_SHRINKAGE):
+        self.rows = list(rows) if rows is not None else load_rows()
+        self.regular = [r for r in self.rows if r["is_regular"]]
+        self.shrinkage = shrinkage
+        if len(self.regular) < 2:
+            raise ValueError("at least two regular regional contests are required")
 
-        # ---- Grand means ----
-        self.grand_mean = statistics.mean([r["gold_cf"] for r in rows])
+        self.grand_mean = statistics.mean(
+            r["gold_cf"] for r in self.regular)
 
-        # ---- City baselines ----
         by_city = defaultdict(list)
-        for r in rows:
+        for r in self.regular:
             by_city[r["city"]].append(r["gold_cf"])
         self.city_mean = {c: statistics.mean(v) for c, v in by_city.items()}
         self.city_n = {c: len(v) for c, v in by_city.items()}
-        self.city_sd = statistics.stdev(self.city_mean.values()) if len(self.city_mean) > 1 else 0
+        self.city_estimate = {
+            city: _city_prediction(
+                self.regular, city, "gold_cf", self.shrinkage)
+            for city in by_city
+        }
+        self.city_sd = (
+            statistics.stdev(self.city_mean.values())
+            if len(self.city_mean) > 1 else 0
+        )
 
-        # Within-city residual SD (pooled)
         within_vars = []
-        for c, vals in by_city.items():
+        for vals in by_city.values():
             if len(vals) > 1:
                 within_vars.append(statistics.variance(vals))
-        self.within_sd = math.sqrt(statistics.mean(within_vars)) if within_vars else 0
+        self.within_sd = (
+            math.sqrt(statistics.mean(within_vars)) if within_vars else 0
+        )
 
-        # ---- EC Final premium ----
-        ec = [r for r in rows if r["is_ec_final"]]
-        regular = [r for r in rows if r["is_regular"]]
-        self.ec_mean = statistics.mean([r["gold_cf"] for r in ec])
-        self.reg_mean = statistics.mean([r["gold_cf"] for r in regular])
+        self.ec = [r for r in self.rows if r["is_ec_final"]]
+        self.ec_mean = statistics.mean(r["gold_cf"] for r in self.ec)
+        self.reg_mean = self.grand_mean
         self.ec_premium = self.ec_mean - self.reg_mean
 
-        # ---- Temporal order (regular regionals only) ----
         year_means = {}
-        for r in regular:
+        for r in self.regular:
             year_means.setdefault(r["year"], []).append(r["gold_cf"])
         year_means = {y: statistics.mean(v) for y, v in year_means.items()}
 
-        # Fit order slope on year-demeaned data
-        reg_orders = np.array([r["norm_order"] for r in regular])
-        reg_gold_dm = np.array([r["gold_cf"] - year_means[r["year"]] for r in regular])
+        reg_orders = np.array([r["norm_order"] for r in self.regular])
+        reg_gold_dm = np.array([
+            r["gold_cf"] - year_means[r["year"]] for r in self.regular
+        ])
         self.order_slope, self.order_intercept = np.polyfit(reg_orders, reg_gold_dm, 1)
 
-        # ---- Year trend (on city-demeaned data) ----
-        years_arr = np.array([r["year"] for r in regular])
-        gold_city_dm = np.array([r["gold_cf"] - self.city_mean.get(r["city"], self.grand_mean)
-                                 for r in regular])
+        years_arr = np.array([r["year"] for r in self.regular])
+        gold_city_dm = np.array([
+            r["gold_cf"] - self.city_mean.get(r["city"], self.grand_mean)
+            for r in self.regular
+        ])
         self.year_slope, _ = np.polyfit(years_arr - statistics.mean(years_arr), gold_city_dm, 1)
 
-        # ---- Silver / bronze ratios ----
-        # Silver and bronze bars are highly correlated with gold; predict
-        # them as offsets from the predicted gold.
-        silver_offsets = [r["gold_cf"] - r["silver_cf"] for r in rows]
-        bronze_offsets = [r["silver_cf"] - r["bronze_cf"] for r in rows]
+        silver_offsets = [
+            r["gold_cf"] - r["silver_cf"] for r in self.regular
+        ]
+        bronze_offsets = [
+            r["silver_cf"] - r["bronze_cf"] for r in self.regular
+        ]
         self.gold_silver_gap = statistics.mean(silver_offsets)
         self.silver_bronze_gap = statistics.mean(bronze_offsets)
         self.gold_silver_gap_sd = statistics.stdev(silver_offsets)
         self.silver_bronze_gap_sd = statistics.stdev(bronze_offsets)
 
-        # ---- Per-season max positions (for norm_order calculation) ----
-        self.season_max_pos = {}
-        for r in rows:
-            self.season_max_pos[r["year"]] = max(
-                self.season_max_pos.get(r["year"], 1), r["order"])
+        self.validation = {
+            tier: rolling_origin_metrics(
+                self.regular, f"{tier}_cf", self.shrinkage)
+            for tier in TIERS
+        }
 
-    def predict(self, city=None, year=2025, position=1, is_ec_final=False,
+    def predict(self, city=None, year=2026, position=None, is_ec_final=False,
                 n_teams=None):
-        """Predict medal bars for a contest.
-
-        city : str or None
-            Host city. Pass None for an unknown city.
-        year : int
-            Contest year.
-        position : int
-            1-based chronological position within the season (1 = first).
-            Ignored for EC Finals.
-        is_ec_final : bool
-            Whether this contest is an EC Final.
-        n_teams : int or None
-            Ignored (field size does not predict cutoff).
-        """
+        """Predict medal bars; year/order/team count are intentionally unused."""
         known = city is not None and city in self.city_mean
-        city_baseline = self.city_mean.get(city, self.grand_mean) if city else self.grand_mean
         n_contests = self.city_n.get(city, 0) if city else 0
+        predictions = {}
+        errors = {}
+        for tier in TIERS:
+            value_key = f"{tier}_cf"
+            if is_ec_final:
+                predictions[tier] = statistics.mean(
+                    r[value_key] for r in self.ec)
+            else:
+                predictions[tier] = _city_prediction(
+                    self.regular, city, value_key, self.shrinkage)
+            errors[tier] = self.validation[tier]["rmse"]
 
-        # ---- Build prediction ----
-        pred = self.grand_mean  # start from grand mean
-
-        breakdown = [f"grand mean: {self.grand_mean:.0f} CF"]
-
-        # 1. City effect
-        city_effect = city_baseline - self.grand_mean
-        pred += city_effect
-        if known:
-            breakdown.append(f"city ({city}): {city_effect:+.0f} CF "
-                             f"(baseline {city_baseline:.0f}, n={n_contests})")
-        else:
-            city_label = city if city else "unknown"
-            breakdown.append(f"city ({city_label}): +0 CF (unknown, using grand mean)")
-
-        # 2. EC Final premium
-        ec_effect = 0
         if is_ec_final:
-            ec_effect = self.ec_premium
-            pred += ec_effect
-            breakdown.append(f"EC Final: {ec_effect:+.0f} CF")
-
-        # 3. Temporal order (regular regionals only)
-        order_effect = 0
-        if not is_ec_final and position is not None:
-            # Compute norm_order for this year (assume ~7 positions unless known)
-            max_pos = self.season_max_pos.get(year, 7)
-            norm_order = (position - 1) / max(1, max_pos - 1)
-            order_effect = self.order_slope * norm_order
-            pred += order_effect
-            breakdown.append(f"temporal order (pos {position}/{max_pos}): "
-                             f"{order_effect:+.0f} CF")
-        elif is_ec_final:
-            breakdown.append("temporal order: N/A (EC Final)")
-
-        # 4. Year trend (small adjustment)
-        year_effect = self.year_slope * (year - 2023)
-        pred += year_effect
-        if abs(year_effect) > 1:
-            breakdown.append(f"year trend: {year_effect:+.0f} CF")
-
-        # ---- Compute intervals ----
-        # Known city: within-city SD
-        # Unknown city: sqrt(between_city_var + within_city_var)
-        if known and n_contests >= 2:
-            city_vals = [r["gold_cf"] for r in self.rows if r["city"] == city]
-            city_se = statistics.stdev(city_vals) / math.sqrt(len(city_vals))
-            pred_sd = math.sqrt(self.within_sd**2 + city_se**2)
-        elif known:
-            pred_sd = math.sqrt(self.city_sd**2 / 2 + self.within_sd**2)
+            breakdown = [
+                f"EC Final mean: {predictions['gold']:.0f} CF "
+                f"(n={len(self.ec)}; city not used)"
+            ]
+            city_baseline = self.grand_mean
         else:
-            pred_sd = math.sqrt(self.city_sd**2 + self.within_sd**2)
-
-        gold_lo = pred - pred_sd
-        gold_hi = pred + pred_sd
-
-        # ---- Silver and bronze ----
-        silver = pred - self.gold_silver_gap
-        silver_sd = math.sqrt(pred_sd**2 + self.gold_silver_gap_sd**2)
-        silver_lo = silver - silver_sd
-        silver_hi = silver + silver_sd
-
-        bronze = silver - self.silver_bronze_gap
-        bronze_sd = math.sqrt(silver_sd**2 + self.silver_bronze_gap_sd**2)
-        bronze_lo = bronze - bronze_sd
-        bronze_hi = bronze + bronze_sd
+            city_baseline = predictions["gold"]
+            if known:
+                raw = self.city_mean[city]
+                breakdown = [
+                    f"regular-regional mean: {self.grand_mean:.0f} CF",
+                    f"city ({city}): raw {raw:.0f} CF over n={n_contests}, "
+                    f"shrunk to {city_baseline:.0f} CF",
+                ]
+            else:
+                city_label = city if city else "unknown"
+                breakdown = [
+                    f"regular-regional mean: {self.grand_mean:.0f} CF",
+                    f"city ({city_label}): no history; using regional mean",
+                ]
+            breakdown.append(
+                "year/order/field size: excluded by forward validation")
 
         return {
-            "gold_cf": round(pred, 0),
-            "gold_lo": round(gold_lo, 0),
-            "gold_hi": round(gold_hi, 0),
-            "silver_cf": round(silver, 0),
-            "silver_lo": round(silver_lo, 0),
-            "silver_hi": round(silver_hi, 0),
-            "bronze_cf": round(bronze, 0),
-            "bronze_lo": round(bronze_lo, 0),
-            "bronze_hi": round(bronze_hi, 0),
+            **{
+                f"{tier}_{suffix}": round(
+                    predictions[tier] + delta * errors[tier], 0)
+                for tier in TIERS
+                for suffix, delta in (("cf", 0), ("lo", -1), ("hi", 1))
+            },
             "city_baseline": round(city_baseline, 0),
+            "city_raw_mean": (
+                round(self.city_mean[city], 0) if known else None
+            ),
             "city_n_contests": n_contests,
             "city_is_known": known,
-            "ec_final_premium": round(ec_effect, 0),
-            "order_effect": round(order_effect, 0),
-            "prediction_sd": round(pred_sd, 0),
+            "ec_final_premium": round(
+                self.ec_premium if is_ec_final else 0, 0),
+            "order_effect": 0,
+            "prediction_sd": round(errors["gold"], 0),
+            "prediction_rmse": round(errors["gold"], 0),
+            "validation_n": self.validation["gold"]["n"],
             "breakdown": breakdown,
         }
+
+    def recommend(self, cities, year=2026, target="gold"):
+        """Return regular regional choices from easiest to hardest target bar."""
+        if target not in TIERS:
+            raise ValueError(f"target must be one of: {', '.join(TIERS)}")
+        rows = []
+        for city in cities:
+            prediction = self.predict(city=city, year=year)
+            prediction.update({
+                "city": city,
+                "year": year,
+                "target": target,
+                "target_cf": prediction[f"{target}_cf"],
+                "target_lo": prediction[f"{target}_lo"],
+                "target_hi": prediction[f"{target}_hi"],
+            })
+            rows.append(prediction)
+        return sorted(rows, key=lambda r: (r["target_cf"], r["city"]))
 
     def print_prediction(self, **kwargs):
         """Pretty-print a prediction."""
         r = self.predict(**kwargs)
         city = kwargs.get("city", "unknown")
         year = kwargs.get("year", "?")
-        pos = kwargs.get("position", "?")
-        ec = "EC FINAL" if kwargs.get("is_ec_final") else f"position {pos}"
-
-        reliability = ""
-        if r["city_is_known"]:
-            n = r["city_n_contests"]
-            stars = "★★★" if n >= 3 else ("★★" if n == 2 else "★")
-            reliability = f"  reliability: {stars} (n={n})"
-
-        print(f"""
-╔══════════════════════════════════════════════════════════╗
-║  PREDICTED MEDAL CUTOFFS                                ║
-║  {city}, {year} ({ec}){'':<30}║
-╠══════════════════════════════════════════════════════════╣
-║  Gold:   {r['gold_cf']:>6.0f} CF   [{r['gold_lo']:.0f} – {r['gold_hi']:.0f}]  (1σ)         ║
-║  Silver: {r['silver_cf']:>6.0f} CF   [{r['silver_lo']:.0f} – {r['silver_hi']:.0f}]              ║
-║  Bronze: {r['bronze_cf']:>6.0f} CF   [{r['bronze_lo']:.0f} – {r['bronze_hi']:.0f}]              ║
-╠══════════════════════════════════════════════════════════╣
-║  Uncertainty: ±{r['prediction_sd']:.0f} CF (1σ){reliability:<26}║
-╚══════════════════════════════════════════════════════════╝
-Breakdown:
-""" + "\n".join(f"  {b}" for b in r["breakdown"]))
+        event = "EC Final" if kwargs.get("is_ec_final") else "regular regional"
+        print(f"{city}, {year} — {event}")
+        for tier in TIERS:
+            print(
+                f"  {tier.capitalize():<6} {r[f'{tier}_cf']:>4.0f} CF  "
+                f"[{r[f'{tier}_lo']:.0f}, {r[f'{tier}_hi']:.0f}] "
+                "historical RMSE band"
+            )
+        print("\nBreakdown:")
+        print("\n".join(f"  {line}" for line in r["breakdown"]))
 
 
 def report():
     """Print the full analysis report + example predictions."""
     p = Predictor()
     rows = p.rows
-    regular = [r for r in rows if r["is_regular"]]
-    ec = [r for r in rows if r["is_ec_final"]]
+    regular = p.regular
+    ec = p.ec
 
     print("=" * 72)
     print("MEDAL CUTOFF PREDICTION: City + Temporal Order + Event Type")
@@ -430,18 +435,19 @@ def report():
     print(f"  EC Final premium: {p.ec_premium:+.0f} CF")
 
     # ---- 2. City effect ----
-    print("\n2. CITY EFFECT — explains ~59% of variance")
-    print("-" * 44)
+    print("\n2. CITY EFFECT — regular regionals only")
+    print("-" * 42)
     print(f"  Grand mean: {p.grand_mean:.0f} CF")
     print(f"  Between-city SD: {p.city_sd:.0f} CF")
     print(f"  Within-city SD:  {p.within_sd:.0f} CF")
-    print(f"\n  {'City':<14} {'effect':>8} {'n':>3}  reliability")
-    print(f"  {'':-<40}")
-    for city in sorted(p.city_mean, key=p.city_mean.get, reverse=True):
-        effect = p.city_mean[city] - p.grand_mean
+    print(f"\n  {'City':<14} {'raw':>7} {'pooled':>8} {'n':>3}")
+    print(f"  {'':-<38}")
+    for city in sorted(p.city_estimate, key=p.city_estimate.get, reverse=True):
         n = p.city_n[city]
-        stars = "★★★" if n >= 3 else ("★★" if n == 2 else "★")
-        print(f"  {city:<14} {effect:>+8.0f} {n:>3}  {stars}")
+        print(
+            f"  {city:<14} {p.city_mean[city]:>7.0f} "
+            f"{p.city_estimate[city]:>8.0f} {n:>3}"
+        )
 
     # ---- 3. Temporal order effect ----
     print("\n3. TEMPORAL ORDER — weak within-season effect")
@@ -482,29 +488,20 @@ def report():
             label = "← strongest" if abs(r_yr) > 0.5 else ""
             print(f"    {year}: {slope:+.0f} CF/position, r={r_yr:+.3f}  {label}")
 
-    # ---- 4. LOCO model comparison ----
-    print("\n4. MODEL COMPARISON — Leave-One-Contest-Out RMSE")
-    print("-" * 49)
-
-    def f_intercept(r):
-        return [1.0]
-
-    def f_ec_final(r):
-        return [1.0, 1.0 if r["is_ec_final"] else 0.0]
-
-    def f_full(r):
-        return [1.0, r["norm_order"], r["year"] - 2023,
-                r["n_teams"] / 100, 1.0 if r["is_ec_final"] else 0.0]
-
-    models = [
-        ("intercept only (grand mean)", f_intercept),
-        ("is_ec_final only", f_ec_final),
-        ("full: order + year + n_teams + is_ec_final", f_full),
-    ]
-    for name, func in models:
-        rmse = loco_rmse(rows, func)
-        impr = loco_rmse(rows, f_intercept) - rmse
-        print(f"  {name:<42} RMSE={rmse:.0f} CF  (Δ={impr:+.0f})")
+    # ---- 4. Forward model comparison ----
+    print("\n4. MODEL VALIDATION — train on earlier seasons only")
+    print("-" * 51)
+    pooled = p.validation["gold"]
+    raw_city = rolling_origin_metrics(regular, "gold_cf", shrinkage=0)
+    print(
+        f"  raw city mean:          RMSE={raw_city['rmse']:.0f} CF, "
+        f"pair ordering={raw_city['pairwise_accuracy']:.1%}"
+    )
+    print(
+        f"  pooled city (shipped):  RMSE={pooled['rmse']:.0f} CF, "
+        f"pair ordering={pooled['pairwise_accuracy']:.1%} "
+        f"(n={pooled['n']}, {pooled['n_pairs']} pairs)"
+    )
 
     # ---- 5. Silver/bronze gap stats ----
     print("\n5. SILVER & BRONZE BAR RELATIONSHIPS")
@@ -515,45 +512,43 @@ def report():
     # ---- 6. Known city table ----
     print("\n6. KNOWN CITY BASELINES")
     print("-" * 22)
-    print(f"  {'City':<14} {'baseline':>8} {'n':>3}  {'±1σ':>6}")
-    print(f"  {'':-<36}")
-    for city in sorted(p.city_mean, key=p.city_mean.get, reverse=True):
+    print(f"  {'City':<14} {'pooled':>8} {'n':>3}  {'raw SD':>7}")
+    print(f"  {'':-<39}")
+    for city in sorted(p.city_estimate, key=p.city_estimate.get, reverse=True):
         n = p.city_n[city]
         if n >= 2:
-            vals = [r["gold_cf"] for r in rows if r["city"] == city]
+            vals = [r["gold_cf"] for r in regular if r["city"] == city]
             sd = statistics.stdev(vals)
         else:
             sd = float("nan")
         sd_str = f"{sd:.0f}" if not math.isnan(sd) else "?"
-        print(f"  {city:<14} {p.city_mean[city]:>8.0f} {n:>3}  ±{sd_str:>5}")
+        print(
+            f"  {city:<14} {p.city_estimate[city]:>8.0f} "
+            f"{n:>3}  {sd_str:>7}"
+        )
 
     # ---- 7. Example predictions ----
     print("\n7. EXAMPLE PREDICTIONS")
     print("-" * 21)
 
     examples = [
-        {"city": "Hangzhou", "year": 2026, "position": 2, "is_ec_final": False,
-         "desc": "Hangzhou 2026, 2nd regional (well-known city, mid-early season)"},
-        {"city": "Wuhan", "year": 2026, "position": 1, "is_ec_final": False,
-         "desc": "Wuhan 2026, season opener (single-contest city, high uncertainty)"},
-        {"city": None, "year": 2026, "position": 4, "is_ec_final": False,
-         "desc": "NEW city 2026, mid-season (unknown city, max uncertainty)"},
+        {"city": "Hangzhou", "year": 2026, "position": None, "is_ec_final": False,
+         "desc": "Hangzhou 2026 (three prior regular regionals)"},
+        {"city": "Wuhan", "year": 2026, "position": None, "is_ec_final": False,
+         "desc": "Wuhan 2026 (one prior regular regional, partially pooled)"},
+        {"city": None, "year": 2026, "position": None, "is_ec_final": False,
+         "desc": "New city 2026 (no city history)"},
         {"city": "Shanghai", "year": 2026, "position": None, "is_ec_final": True,
          "desc": "EC Final 2026 in Shanghai (championship event)"},
     ]
     for ex in examples:
         r = p.predict(city=ex["city"], year=ex["year"], position=ex["position"],
                       is_ec_final=ex["is_ec_final"])
-        stars = ""
-        if r["city_is_known"]:
-            n = r["city_n_contests"]
-            stars = f"  [{ '*' * min(n, 3) }{ '.' * max(0, 3-n) }]"
-        city_label = ex["city"] if ex["city"] else "new city"
         print(f"\n  {ex['desc']}:")
-        print(f"    gold   = {r['gold_cf']:.0f}  [{r['gold_lo']:.0f} – {r['gold_hi']:.0f}] CF{stars}")
+        print(f"    gold   = {r['gold_cf']:.0f}  [{r['gold_lo']:.0f} – {r['gold_hi']:.0f}] CF")
         print(f"    silver = {r['silver_cf']:.0f}  [{r['silver_lo']:.0f} – {r['silver_hi']:.0f}] CF")
         print(f"    bronze = {r['bronze_cf']:.0f}  [{r['bronze_lo']:.0f} – {r['bronze_hi']:.0f}] CF")
-        print(f"    ±{r['prediction_sd']:.0f} CF (1σ)")
+        print(f"    ±{r['prediction_rmse']:.0f} CF historical gold RMSE")
 
     # ---- 8. Summary ----
     print("\n" + "=" * 72)
@@ -563,24 +558,85 @@ def report():
     1. EC FINAL is the dominant predictor: +{p.ec_premium:.0f} CF harder
        than regular regionals.
 
-    2. CITY explains ~59% of gold-bar variance. Hardest cities
-       (Jinan {p.city_mean['Jinan']:.0f}, Hangzhou {p.city_mean['Hangzhou']:.0f}) host
-       ~{max(p.city_mean.values()) - min(p.city_mean.values()):.0f} CF harder gold bars than softest
-       (Hong Kong {p.city_mean['Hong Kong']:.0f}, Shenyang {p.city_mean['Shenyang']:.0f}).
+    2. CITY is useful only with partial pooling. The shipped model adds one
+       grand-mean pseudo-contest so one-off hosts do not get full weight.
 
-    3. TEMPORAL ORDER has a weak effect: later regular regionals tend
-       to be {abs(p.order_slope):.0f} CF softer on average, but the per-season
-       pattern is inconsistent (2023 r=+0.59 vs 2025 r=-0.60).
+    3. TEMPORAL ORDER is descriptive only: its per-season pattern is
+       inconsistent, so it is excluded from future recommendations.
 
-    4. FIELD SIZE does NOT predict gold cutoff.
+    4. FORWARD VALIDATION: pooled-city RMSE={pooled['rmse']:.0f} CF and
+       pairwise ordering={pooled['pairwise_accuracy']:.1%} over {pooled['n']}
+       later-season contests.
 
-    5. Prediction uncertainty: ±{p.within_sd:.0f} CF for known cities (1σ),
-       ±{math.sqrt(p.city_sd**2 + p.within_sd**2):.0f} CF for new cities.
+    5. FIELD SIZE is not used; travel, quotas, eligibility, and registration
+       limits are outside this model and still matter to the final choice.
     """)
 
 
+def print_recommendations(predictor, cities, year, target):
+    rows = predictor.recommend(cities, year=year, target=target)
+    metric = predictor.validation[target]
+    print(f"ASIA EAST {year} REGIONAL CHOOSER — target: {target.upper()}")
+    print("Lower predicted bar means a historically softer medal cutoff.")
+    if year == 2026 and tuple(cities) == REGIONALS_BY_YEAR[2026]:
+        print(
+            "Official city list checked 2026-07-27; dates/order were not "
+            "published, so no temporal adjustment is used."
+        )
+    print()
+    print(f"{'#':>2}  {'City':<12} {'bar':>7} {'RMSE band':>17} {'history':>9}")
+    print("-" * 54)
+    for rank, row in enumerate(rows, start=1):
+        history = (
+            f"n={row['city_n_contests']}"
+            if row["city_is_known"] else "new city"
+        )
+        print(
+            f"{rank:>2}  {row['city']:<12} {row['target_cf']:>5.0f} CF "
+            f"[{row['target_lo']:.0f}, {row['target_hi']:.0f}] "
+            f"{history:>9}"
+        )
+
+    leaders = ", ".join(r["city"] for r in rows[:3])
+    print(
+        f"\nPoint-estimate leaders: {leaders}. The {metric['rmse']:.0f}-CF "
+        f"historical RMSE band comes from {metric['n']} forward predictions; "
+        "overlapping bands mean the exact order is uncertain."
+    )
+    print(
+        "Not modeled: travel/cost, school quotas, eligibility, registration "
+        "limits, or the strength of this year's applicant pool."
+    )
+
+
 def main():
-    report()
+    parser = argparse.ArgumentParser(
+        description="Predict medal bars and compare Asia East regionals.")
+    parser.add_argument("--year", type=int, default=2026)
+    parser.add_argument("--target", choices=TIERS, default="gold")
+    parser.add_argument(
+        "--cities", nargs="+",
+        help="candidate host cities; quote names such as 'Hong Kong'")
+    parser.add_argument("--city", help="show one city's full medal prediction")
+    parser.add_argument("--ec-final", action="store_true")
+    parser.add_argument("--report", action="store_true")
+    args = parser.parse_args()
+
+    if args.report:
+        report()
+        return
+
+    predictor = Predictor()
+    if args.city:
+        predictor.print_prediction(
+            city=args.city, year=args.year, is_ec_final=args.ec_final)
+        return
+
+    cities = args.cities or REGIONALS_BY_YEAR.get(args.year)
+    if not cities:
+        parser.error(
+            f"no built-in regional list for {args.year}; pass --cities")
+    print_recommendations(predictor, cities, args.year, args.target)
 
 
 if __name__ == "__main__":
