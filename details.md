@@ -1688,3 +1688,14 @@ was submitted with 400 training examples, 150 validation examples, and two
 epochs. At the final handoff checkpoint it was `JOB_STATE_RUNNING`. A result is
 not a tuning success claim until the tuned endpoint is evaluated on the same
 frozen validation pairs and then once on the untouched final test.
+
+An additional paired close-gap check used 10 new unordered validation pairs
+(five at a 200-point gap and five at 300), sent in both orientations to both
+models. On these 20 new requests, Flash scored 12/20 (60%) and Pro 11/20 (55%):
+both were 4/10 at gap 200, while Flash was 8/10 and Pro 7/10 at gap 300. Combining
+these with the earlier paired close-gap requests gives 28 matched ordered
+comparisons: both models are 6/14 (42.9%) at gap 200; Flash is 12/14 (85.7%) and
+Pro 9/14 (64.3%) at gap 300. This is still only 14 unordered problems represented
+twice, and order consistency on the new close-gap subset was 60% for Flash and
+70% for Pro, so the apparent 300-gap advantage remains a pilot signal rather
+than a reliable model-ranking claim.
