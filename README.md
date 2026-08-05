@@ -353,3 +353,35 @@ team-id handling, the two architectures, and what's deliberately out of scope.
 region: it captures the regional discrimination signal in-sample but overfits
 (worse held-out prediction and LLM agreement), so the shipped fit stays Rasch —
 see the 2PL prototype section in `details.md`.
+
+### Codeforces pairwise-difficulty tuning pilot
+
+`pairwise_tuning.py` is a separate experiment that teaches Gemini to answer the
+same pairwise question used at evaluation time: which of two Codeforces problem
+statements is harder? It reuses the official metadata and statement scraper from
+`../codeforces_integration`, removes exact statement duplicates, and never puts
+problem title, contest index, or rating in the prompt.
+
+The frozen temporal contract is 600 training candidates before 2025-02-01,
+validation from February–March 2025, and an untouched final test from
+2025-04-01 through 2025-05-21. Raw statements and run credentials/results are
+gitignored; `data/cf_pairwise/collection_summary.json` records the auditable
+collection counts. Generate the deterministic files with:
+
+```bash
+./.venv/bin/pip install -r ../codeforces_integration/requirements.txt google-auth
+./.venv/bin/python pairwise_tuning.py collect --cf-integration ../codeforces_integration
+./.venv/bin/python pairwise_tuning.py prepare --output pairwise_tuning_run
+./.venv/bin/python -m unittest discover -s tests -p 'test_*.py'
+```
+
+The 2026-08-05 pilot uses 400 balanced pairwise examples from 200 training
+problems, 150 post-cutoff tuning-validation pairs, two epochs, and a $25 pilot
+dispatch cap inside the overall $100 budget. Exact `countTokens` preflight was
+649,514 tokens per epoch and $12.99 estimated training cost. The pre-tuning
+Gemini 3.5 Flash baseline on 200 swapped-order requests was 69.0% overall,
+55.8% at an exact 300-point gap, and 84.0% order-consistent. A deliberately
+small 20-request Gemini 3.1 Pro Preview check scored 80.0%; its sample is too
+small for a strong model comparison. Vertex accepted tuning job
+`projects/703166210069/locations/us-central1/tuningJobs/2518784060365471744`.
+The final 96-problem test partition was not uploaded or evaluated.

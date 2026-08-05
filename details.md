@@ -1636,3 +1636,55 @@ the staged experiment order are documented in
     yardstick column. Note the matching caveat discovered on consumption: the
     five `labels_aligned: false` entries are *wrong gym events* (zero
     problem-name overlap), not merely re-lettered mirrors.
+
+## Codeforces pairwise Gemini pilot (2026-08-05)
+
+This experiment is intentionally separate from the standings fit. Codeforces
+ratings supply the supervised truth because the deployed operation is itself a
+binary comparison. Training directly on rating classes would add an unnecessary
+absolute-calibration problem, while Vertex managed SFT does not expose a custom
+pairwise loss. Each JSONL target is therefore only `{"harder":"A"}` or
+`{"harder":"B"}`.
+
+Key leakage and evaluation decisions:
+
+- Google's Gemini 3.5 Flash knowledge cutoff is documented only as January
+  2025, so 2025-02-01 is the first unambiguously post-cutoff date.
+- The newest 600 usable, exact-statement-deduplicated pre-cutoff problems form
+  the stage-two pool. The first pilot stratifies 200 of them by rating and draws
+  400 comparisons: 25% exact-200, 35% exact-300, and 40% at least 400 points,
+  with A/B truth balanced.
+- February–March 2025 supplies tuning validation and the zero-shot baseline.
+  April 1–May 21 supplies 96 problems in a frozen final test. Final-test
+  statements and labels are never uploaded with the tuning job.
+- Every baseline unordered pair is sent in both orientations. This measures
+  order bias as well as accuracy. The final small Flash prefix contains 200
+  requests; the Pro sanity check contains 20 requests and is not powered for a
+  close model comparison.
+- Tuning uses two epochs and automatic adapter selection. The tokenizer gate
+  rejected the original 500-pair plan ($16.38 training and $26.38 including the
+  reserve) and accepted 400 pairs ($12.99 training, $22.99 planned total).
+  This preserves the two-epoch pilot while staying below the local $25 cap and
+  well below the user's $100 ceiling.
+
+Collection found 600/600 usable pre-cutoff statements and 227/248 usable rated
+post-cutoff statements. Missing statement pages remain missing rather than being
+filled from guessed or weak sources. The resulting partitions are 600 train
+problems across 82 contests, 131 validation problems across 21 contests, and 96
+test problems across 15 contests.
+
+The frozen zero-shot results are: Gemini 3.5 Flash with minimal thinking, 69.0%
+overall, 41.3% at exact 200, 55.8% at exact 300, 77.3% at gaps of at least 300,
+88.2% at gaps of at least 400, and 84.0% swapped-order consistency; Gemini 3.1
+Pro Preview with low thinking, 80.0% overall and 100% order consistency on only
+20 requests. Capacity returned repeated 429s, so resumable checkpoints were
+served across global, US, and EU endpoints; each prediction records its request
+location. The Flash alias, prompt, temperature, schema, and thinking level were
+unchanged.
+
+Vertex job
+`projects/703166210069/locations/us-central1/tuningJobs/2518784060365471744`
+was submitted with 400 training examples, 150 validation examples, and two
+epochs. At the final handoff checkpoint it was `JOB_STATE_RUNNING`. A result is
+not a tuning success claim until the tuned endpoint is evaluated on the same
+frozen validation pairs and then once on the untouched final test.
