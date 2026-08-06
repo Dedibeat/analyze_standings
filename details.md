@@ -1685,9 +1685,23 @@ unchanged.
 Vertex job
 `projects/703166210069/locations/us-central1/tuningJobs/2518784060365471744`
 was submitted with 400 training examples, 150 validation examples, and two
-epochs. At the final handoff checkpoint it was `JOB_STATE_RUNNING`. A result is
-not a tuning success claim until the tuned endpoint is evaluated on the same
-frozen validation pairs and then once on the untouched final test.
+epochs. It completed successfully on 2026-08-05 and produced tuned endpoint
+`projects/703166210069/locations/us/endpoints/432767776692633600`.
+
+The 2026-08-06 tuned evaluation reused all 200 frozen ordered validation
+requests. All calls returned valid predictions. Tuned accuracy was 70.0%
+overall, 37.0% at exact gap 200, 65.4% at exact gap 300, 79.9% at gaps of at
+least 300, 87.3% at gaps of at least 400, and 94.0% swapped-order consistency.
+Against the paired base results this is +1.0, -4.3, +9.6, +2.6, -1.0, and +10.0
+percentage points respectively. Across all requests, tuning corrected 12 base
+errors but changed 10 base successes to errors; at exact gap 300 those counts
+were 8 and 3. Exact paired tests are not significant (all requests p=0.832;
+gap 300 p=0.227), and the two orientations of each unordered problem pair are
+correlated. Phase 1 therefore shows a promising 300-gap and order-consistency
+signal, not a confirmed generalization gain. The tuned run used 319,416 prompt
+tokens and 1,200 output tokens, estimated at $0.808 at the tuned non-global
+rate. Estimated training plus both base and tuned validation inference is
+$14.35. The untouched final test remains unevaluated.
 
 An additional paired close-gap check used 10 new unordered validation pairs
 (five at a 200-point gap and five at 300), sent in both orientations to both

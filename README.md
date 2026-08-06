@@ -383,5 +383,11 @@ Gemini 3.5 Flash baseline on 200 swapped-order requests was 69.0% overall,
 55.8% at an exact 300-point gap, and 84.0% order-consistent. A deliberately
 small 20-request Gemini 3.1 Pro Preview check scored 80.0%; its sample is too
 small for a strong model comparison. Vertex accepted tuning job
-`projects/703166210069/locations/us-central1/tuningJobs/2518784060365471744`.
-The final 96-problem test partition was not uploaded or evaluated.
+`projects/703166210069/locations/us-central1/tuningJobs/2518784060365471744`,
+which completed successfully. On the identical 200 validation requests, the
+tuned model scored 70.0% overall, 37.0% at an exact 200-point gap, 65.4% at an
+exact 300-point gap, and 94.0% order-consistent. This is a +1.0-point overall
+change and +9.6 points at gap 300, but -4.3 points at gap 200; the paired changes
+are too small to establish a reliable improvement. The tuned validation run used
+319,416 input and 1,200 output tokens, estimated at $0.81. The final 96-problem
+test partition was not uploaded or evaluated.
