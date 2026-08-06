@@ -400,4 +400,7 @@ base scored 80.0% overall and 72.5% at gap 300; adding the first scoped author
 solution scored 77.0% and 65.0%, while increasing the two-epoch preflight from
 $20.87 to $27.80. Code was therefore excluded. The editorial job
 `projects/703166210069/locations/us-central1/tuningJobs/3895319841782890496`
-started on 2026-08-06. The final test remains unenriched and untouched.
+completed successfully on 2026-08-06. On the identical clean development
+requests, the tuned endpoint improved from 80.0% to 84.0% overall and from
+72.5% to 80.0% at the exact 300-point gap; this is only a 100-request
+development result, so the final test remains unenriched and untouched.

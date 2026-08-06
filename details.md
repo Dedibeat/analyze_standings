@@ -1760,11 +1760,23 @@ The verified Cloud Storage uploads are
 (3,530,316 bytes) and `phase2_editorial_validation.jsonl` (754,934 bytes).
 Vertex job
 `projects/703166210069/locations/us-central1/tuningJobs/3895319841782890496`
-was submitted with two epochs on 2026-08-06 and was `JOB_STATE_RUNNING` at the
-handoff checkpoint. The $15 evaluation reserve makes the Phase 2 planned total
-$35.86682 before the already-observed $1.032 base ablation, still below the
-overall $100 envelope. The final test remains unenriched, unuploaded, and
-unevaluated.
+was submitted with two epochs on 2026-08-06 and completed successfully. Its
+endpoint is
+`projects/703166210069/locations/us/endpoints/8084383543595106304`.
+
+The tuned editorial endpoint was evaluated on the identical 100 clean
+development requests: 84.0% overall, 73.3% at exact gap 200, 80.0% at exact
+gap 300, 88.6% at gaps of at least 300, 100.0% at gaps of at least 400, and
+84.0% swapped-order consistency. Relative to editorial-only base, these are
+increases of 4.0, 3.3, 7.5, 4.3, 0.0, and 8.0 percentage points. Tuning corrected
+eight base errors while losing four base successes; at gap 300 those counts
+were four and one. Exact paired tests are not significant (overall p=0.388;
+gap 300 p=0.727), and swapped orientations are correlated, so this is a
+positive development signal rather than a final generalization claim. The
+tuned evaluation used 269,318 prompt and 600 output tokens, estimated at
+$0.675. The $15 evaluation reserve makes the Phase 2 planned total $35.86682
+before the already-observed $1.032 base ablation, still below the overall $100
+envelope. The final test remains unenriched, unuploaded, and unevaluated.
 
 An additional paired close-gap check used 10 new unordered validation pairs
 (five at a 200-point gap and five at 300), sent in both orientations to both
