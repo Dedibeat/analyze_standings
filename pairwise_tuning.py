@@ -231,7 +231,7 @@ def enrich(args: argparse.Namespace) -> None:
         ) from exc
 
     manifest = json.loads(args.manifest.read_text(encoding="utf-8"))
-    if "test" in args.partitions:
+    if "test" in args.partitions and not args.allow_final_test:
         raise SystemExit("final-test enrichment is forbidden before the development decision")
     expected = {
         row["problem_id"]: row["statement_sha256"]
@@ -600,7 +600,7 @@ class Vertex:
 
     def request(self, url: str, payload: dict | None = None, timeout: int = 300) -> dict:
         last_error: Exception | None = None
-        for attempt in range(1, 4):
+        for attempt in range(1, 9):
             try:
                 if not self.credentials.valid or self.credentials.expired:
                     self.credentials.refresh(self.auth_request)
@@ -623,8 +623,8 @@ class Vertex:
                     raise last_error
             except (URLError, TimeoutError, socket.timeout) as exc:
                 last_error = exc
-            if attempt < 3:
-                time.sleep(2 ** (attempt - 1))
+            if attempt < 8:
+                time.sleep(min(60, 2 ** (attempt - 1)))
         raise last_error or RuntimeError("request failed")
 
 
@@ -916,6 +916,11 @@ def main() -> None:
     x.add_argument("--cookies")
     x.add_argument("--retry-missing", action="store_true")
     x.add_argument("--extra-pre-cutoff", action="store_true")
+    x.add_argument(
+        "--allow-final-test",
+        action="store_true",
+        help="explicitly permit enriching the frozen final-test partition after the development decision",
+    )
     p = sub.add_parser("prepare")
     p.add_argument("--output", type=Path, required=True)
     p2 = sub.add_parser("prepare-phase2")

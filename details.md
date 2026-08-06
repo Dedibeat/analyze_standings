@@ -1806,7 +1806,41 @@ overfitting: validation accuracy rises with training accuracy and validation
 loss does not turn upward. This is not an independent generalization result,
 however—the 75-pair validation set was used by the tuning job, and the curves
 reach nearly perfect accuracy/near-zero loss. The final test remains
-unenriched, unuploaded, and unevaluated.
+unenriched, unuploaded, and unevaluated at that point in the phase-completion
+record; the authorized evaluation is recorded below.
+
+The final evaluation was subsequently authorized after the development decision.
+All 96 frozen final-test problems were editorial-enriched from the sibling
+Codeforces scraper and verified against the manifest hashes. The test contains
+500 unordered pairs in both orientations, for 1,000 ordered requests. The
+input mode was editorial-only: each prompt contained the statement and official
+tutorial, with no author solution code. Problem `2086A` had a short but genuine
+official tutorial, so it was included under an explicit final-test exception
+rather than silently falling back to statement-only input.
+
+The base requests were completed by batch job
+`projects/703166210069/locations/us/batchPredictionJobs/7631252811556061184`;
+the tuned requests used endpoint
+`projects/703166210069/locations/us/endpoints/4697676623812493312`. All 1,000
+responses on each side parsed as valid `{"harder":"A"|"B"}` predictions.
+The paired results were:
+
+| Metric | Base | Tuned | Change |
+|---|---:|---:|---:|
+| Overall | 82.3% | **85.2%** | **+2.9 pp** |
+| Exact gap 200 | 67.7% | 70.0% | +2.3 pp |
+| Exact gap 300 | 77.0% | 82.3% | +5.3 pp |
+| Gap at least 300 | 88.6% | 91.7% | +3.1 pp |
+| Gap at least 400 | 97.3% | 98.8% | +1.3 pp |
+| Swapped-order consistency | 77.8% | 89.2% | +11.4 pp |
+
+Usage was 3,030,230 prompt and 12,000 output tokens for base, and 3,030,230
+prompt and 6,000 output tokens for tuned (plus 15,870 cached-content tokens
+reported by the tuned endpoint). At the evaluator's non-global list-rate
+estimate, this was $5.118679 for base and $7.588919 for tuned. These are final
+test results, not tuning-validation results; they support a positive Phase 3
+generalization signal, while the 1,000-request sample remains a single frozen
+benchmark rather than proof that future test sets will improve.
 
 An additional paired close-gap check used 10 new unordered validation pairs
 (five at a 200-point gap and five at 300), sent in both orientations to both

@@ -439,4 +439,18 @@ epochs. Vertex job
 completed successfully. Its monitor shows no visible train/validation
 divergence, but the near-perfect score is only on the 75-pair tuning-validation
 set and may reflect validation-set overfitting; the final test remains
-untouched.
+validation-only until a clean final evaluation is run.
+
+The final evaluation then used the frozen 96-problem test partition as 500
+unordered pairs in both orientations (1,000 editorial-only requests). The one
+short but official tutorial for `2086A` was retained as an explicit exception;
+no solution code was included. The base model ran through Vertex batch job
+`projects/703166210069/locations/us/batchPredictionJobs/7631252811556061184`,
+and the tuned model used endpoint
+`projects/703166210069/locations/us/endpoints/4697676623812493312`. All 2,000
+responses were valid. Base scored 82.3% overall versus 85.2% tuned, a +2.9
+percentage-point gain. The tuned gains were +2.3 points at exact gap 200,
++5.3 at exact gap 300, +3.1 at gaps of at least 300, and +1.3 at gaps of at
+least 400; swapped-order consistency rose from 77.8% to 89.2%. The scorer's
+non-global list-rate estimates were $5.119 for base and $7.589 for tuned;
+generated predictions and the final score remain gitignored artifacts.
