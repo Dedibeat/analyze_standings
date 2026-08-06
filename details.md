@@ -1703,6 +1703,42 @@ tokens and 1,200 output tokens, estimated at $0.808 at the tuned non-global
 rate. Estimated training plus both base and tuned validation inference is
 $14.35. The untouched final test remains unevaluated.
 
+### Phase 2 statement-plus-editorial preparation (paused 2026-08-06)
+
+Phase 2 is a fresh-base-model experiment, not continuation tuning. Each side
+of a comparison will contain `[Statement]`, `[Editorial]`, and optionally the
+first scoped author reference-solution block. The intended comparison is
+statement-only base versus editorial-only base versus editorial-tuned, with the
+code variant admitted only after its exact token preflight. Titles, ratings,
+tags, contest identifiers, and problem indices remain excluded from model
+input. A new preparation command uses 400 quota-balanced pairs while ensuring
+every selected training problem appears at least once. Its tuning-validation
+and development sets are contest-disjoint; the final test is not enriched,
+uploaded, or evaluated.
+
+The integration captured 623/731 non-empty tutorials and 469/731 code-bearing
+records for the original training-plus-validation pool. That count was not
+accepted as evidence of usable editorials. A random manual audit of
+`1975E`, `1986C`, `1989E`, `1991A`, `1999C`, `2002G`, `2032F`, `2072A`,
+`2077E`, and `2081B` checked each statement against its saved Codeforces
+problem and tutorial URLs. All ten tutorial headings/entities matched the
+correct task; six contained substantive task-specific prose (`1975E`, `2002G`,
+`2032F`, `2072A`, `2077E`, `2081B`). The other four (`1986C`, `1989E`,
+`1991A`, `1999C`) were title-only or video-only captures and are excluded.
+
+Accordingly, a tutorial is now substantive only when it has at least 200
+characters after whitespace normalization and is not a video-editorial marker.
+Under that rule the original split has 423/600 substantive training records and
+112/131 substantive validation records. We collected 150 older exact-statement
+candidates (750 pre-cutoff statement candidates total) and began their
+resumable enrichment. At the paused checkpoint, the cache held 546 substantive
+pre-cutoff records, still short of the 600 required for Phase 2. The current
+raw cache has 746 scraper-`ok`, 120 scraper-`missing`, and 112 unattempted
+records; scraper `ok` is intentionally not synonymous with substantive prose.
+No Phase-2 JSONL, Vertex countTokens call, Cloud Storage upload, or tuning job
+was created. Resume collection/enrichment only after deciding to continue this
+coverage-recovery step.
+
 An additional paired close-gap check used 10 new unordered validation pairs
 (five at a 200-point gap and five at 300), sent in both orientations to both
 models. On these 20 new requests, Flash scored 12/20 (60%) and Pro 11/20 (55%):

@@ -73,6 +73,43 @@ def statement_hash(problem: dict) -> str:
     return sha256_bytes(canonical_text(statement_text(problem)).encode("utf-8"))
 
 
+def editorial_text(problem: dict, include_code: bool = False) -> str:
+    """Return problem-scoped editorial input, optionally with one author solution."""
+    editorial = problem.get("editorial") or {}
+    tutorial = canonical_text(str(editorial.get("tutorial") or ""))
+    if not tutorial:
+        return ""
+    sections = [f"[Editorial]\n{tutorial}"]
+    if include_code:
+        solutions = editorial.get("solution_code") or []
+        code = str(solutions[0]).replace("\r\n", "\n").strip() if solutions else ""
+        if code:
+            sections.append(f"[Reference solution]\n{code}")
+    return "\n\n".join(sections)
+
+
+def has_substantive_editorial(problem: dict) -> bool:
+    """Reject title-only and video-only tutorial captures."""
+    tutorial = canonical_text(str(((problem.get("editorial") or {}).get("tutorial") or "")))
+    return len(tutorial) >= 200 and "video editorial" not in tutorial.lower()
+
+
+def problem_text(problem: dict, input_mode: str = "statement") -> str:
+    text = statement_text(problem)
+    if input_mode == "statement":
+        return text
+    if input_mode not in {"editorial", "editorial_code"}:
+        raise ValueError(f"unknown input mode: {input_mode}")
+    extra = editorial_text(problem, include_code=input_mode == "editorial_code")
+    if not extra:
+        raise ValueError(f"missing editorial for {problem.get('problem_id', '<unknown>')}")
+    return f"[Statement]\n{text}\n\n{extra}"
+
+
+def content_hash(problem: dict, input_mode: str) -> str:
+    return sha256_bytes(canonical_text(problem_text(problem, input_mode)).encode("utf-8"))
+
+
 def parse_start(problem: dict) -> datetime:
     return datetime.fromisoformat(problem["contest_start_time"].replace("Z", "+00:00"))
 
@@ -126,6 +163,27 @@ def partition_problems(problems: Iterable[dict]) -> dict[str, list[dict]]:
     return {"train": train, "validation": validation, "test": test}
 
 
+def newest_substantive_train(problems: Iterable[dict], count: int = TRAIN_COUNT) -> list[dict]:
+    """Select the newest exact-statement-unique pre-cutoff tutorial records."""
+    unique: dict[str, dict] = {}
+    for problem in sorted(
+        problems,
+        key=lambda p: (parse_start(p), p["contest_id"], p["index"]),
+        reverse=True,
+    ):
+        if problem.get("rating") is not None and statement_text(problem):
+            unique.setdefault(statement_hash(problem), problem)
+    train = [
+        problem
+        for problem in unique.values()
+        if parse_start(problem) < POST_CUTOFF and has_substantive_editorial(problem)
+    ]
+    train.sort(key=lambda p: (parse_start(p), p["contest_id"], p["index"]), reverse=True)
+    if len(train) < count:
+        raise ValueError(f"need {count} substantive-editorial pre-cutoff problems, found {len(train)}")
+    return train[:count]
+
+
 def problem_public(problem: dict) -> dict:
     return {
         "problem_id": problem["problem_id"],
@@ -139,8 +197,8 @@ def problem_public(problem: dict) -> dict:
     }
 
 
-def user_text(a: dict, b: dict) -> str:
-    return f"Problem A:\n{statement_text(a)}\n\nProblem B:\n{statement_text(b)}"
+def user_text(a: dict, b: dict, input_mode: str = "statement") -> str:
+    return f"Problem A:\n{problem_text(a, input_mode)}\n\nProblem B:\n{problem_text(b, input_mode)}"
 
 
 def truth(a: dict, b: dict) -> str:
@@ -149,13 +207,15 @@ def truth(a: dict, b: dict) -> str:
     return "A" if a["rating"] > b["rating"] else "B"
 
 
-def tuning_example(pair: dict, by_id: dict[str, dict]) -> dict:
+def tuning_example(
+    pair: dict, by_id: dict[str, dict], input_mode: str = "statement"
+) -> dict:
     a, b = by_id[pair["a"]], by_id[pair["b"]]
     target = json.dumps({"harder": truth(a, b)}, separators=(",", ":"))
     return {
         "systemInstruction": {"role": "system", "parts": [{"text": SYSTEM}]},
         "contents": [
-            {"role": "user", "parts": [{"text": user_text(a, b)}]},
+            {"role": "user", "parts": [{"text": user_text(a, b, input_mode)}]},
             {"role": "model", "parts": [{"text": target}]},
         ],
     }
@@ -223,6 +283,84 @@ def sample_pairs(
         rng.shuffle(choices)
         selected.extend(choices[:count])
     return _orient(selected, by_id, rng)
+
+
+def sample_covering_pairs(
+    problems: list[dict], total: int, proportions: dict[str, float], seed: int
+) -> list[dict]:
+    """Sample quota-balanced pairs while using every problem at least once."""
+    if total * 2 < len(problems):
+        raise ValueError(f"{total} pairs cannot cover {len(problems)} problems")
+    rng = random.Random(seed)
+    by_id = {p["problem_id"]: p for p in problems}
+    buckets = candidate_pairs(problems)
+    names = list(proportions)
+    quota = {}
+    allocated = 0
+    for i, name in enumerate(names):
+        count = total - allocated if i == len(names) - 1 else round(total * proportions[name])
+        quota[name] = count
+        allocated += count
+
+    candidates = []
+    for bucket, edges in buckets.items():
+        shuffled = edges[:]
+        rng.shuffle(shuffled)
+        candidates.extend((a, b, bucket) for a, b in shuffled)
+    rng.shuffle(candidates)
+    selected: list[tuple[str, str]] = []
+    selected_keys: set[tuple[str, str]] = set()
+    used = Counter()
+    uncovered = set(by_id)
+    while uncovered:
+        choices = [
+            row
+            for row in candidates
+            if quota.get(row[2], 0) > used[row[2]]
+            and tuple(sorted(row[:2])) not in selected_keys
+            and (row[0] in uncovered or row[1] in uncovered)
+        ]
+        if not choices:
+            raise ValueError(f"unable to cover {len(uncovered)} problems within pair quotas")
+        best_score = max((a in uncovered) + (b in uncovered) for a, b, _ in choices)
+        a, b, bucket = next(
+            row for row in choices if (row[0] in uncovered) + (row[1] in uncovered) == best_score
+        )
+        selected.append((a, b))
+        selected_keys.add(tuple(sorted((a, b))))
+        used[bucket] += 1
+        uncovered.discard(a)
+        uncovered.discard(b)
+
+    for bucket in names:
+        choices = [
+            (a, b)
+            for a, b in buckets.get(bucket, [])
+            if tuple(sorted((a, b))) not in selected_keys
+        ]
+        rng.shuffle(choices)
+        need = quota[bucket] - used[bucket]
+        if len(choices) < need:
+            raise ValueError(f"not enough unused {bucket} pairs: need {need}, found {len(choices)}")
+        for a, b in choices[:need]:
+            selected.append((a, b))
+            selected_keys.add(tuple(sorted((a, b))))
+    return _orient(selected, by_id, rng)
+
+
+def split_by_contest(problems: list[dict], seed: int) -> tuple[list[dict], list[dict]]:
+    """Deterministically balance whole contests across tuning and development."""
+    by_contest: dict[int, list[dict]] = defaultdict(list)
+    for problem in problems:
+        by_contest[problem["contest_id"]].append(problem)
+    contests = list(by_contest)
+    random.Random(seed).shuffle(contests)
+    left: list[dict] = []
+    right: list[dict] = []
+    for contest in contests:
+        target = left if len(left) <= len(right) else right
+        target.extend(by_contest[contest])
+    return left, right
 
 
 def choose_pilot_problems(train: list[dict], count: int = PILOT_PROBLEM_COUNT) -> list[dict]:

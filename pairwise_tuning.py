@@ -5,6 +5,8 @@ from __future__ import annotations
 import argparse
 from collections import Counter
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from copy import deepcopy
+from dataclasses import asdict
 from datetime import datetime, timezone
 import json
 from pathlib import Path
@@ -27,12 +29,19 @@ from cf_pairwise import (
     TUNING_VALIDATION_PAIR_COUNT,
     accuracy,
     choose_pilot_problems,
+    content_hash,
+    editorial_text,
+    has_substantive_editorial,
+    newest_substantive_train,
+    parse_start,
     partition_problems,
     problem_public,
     sample_pairs,
+    sample_covering_pairs,
     sha256_bytes,
     statement_hash,
     statement_text,
+    split_by_contest,
     swapped_pairs,
     tuning_example,
     user_text,
@@ -56,6 +65,9 @@ PILOT_EVAL_RESERVE_USD = 10.0
 BASELINE_UNORDERED_COUNT = 100
 PRO_BASELINE_UNORDERED_COUNT = 10
 PRO_MODEL = "gemini-3.1-pro-preview"
+PHASE2_PAIR_COUNT = 400
+PHASE2_TUNING_VALIDATION_PAIR_COUNT = 75
+PHASE2_DEV_UNORDERED_COUNT = 50
 
 
 def iso_utc(timestamp: int | float) -> str:
@@ -116,7 +128,7 @@ def collect(args: argparse.Namespace) -> None:
     for meta in metas:
         is_post = meta.problem_id in post_ids
         is_pre = starts[meta.contest_id] < POST_CUTOFF.timestamp()
-        if not is_post and (not is_pre or len(usable_pre_hashes) >= TRAIN_COUNT):
+        if not is_post and (not is_pre or len(usable_pre_hashes) >= args.target_pre_cutoff):
             continue
         if is_post and meta.problem_id in done_post:
             continue
@@ -132,7 +144,7 @@ def collect(args: argparse.Namespace) -> None:
     fetched = Counter()
     for i, meta in enumerate(selected, 1):
         is_post = meta.problem_id in post_ids
-        if not is_post and len(usable_pre_hashes) >= TRAIN_COUNT:
+        if not is_post and len(usable_pre_hashes) >= args.target_pre_cutoff:
             continue
         try:
             statement = scraper.fetch_statement(meta)
@@ -180,14 +192,14 @@ def collect(args: argparse.Namespace) -> None:
             f"pre_unique={len(usable_pre_hashes)}, post={len(done_post)}/{len(post_ids)}",
             flush=True,
         )
-        if len(usable_pre_hashes) >= TRAIN_COUNT:
+        if len(usable_pre_hashes) >= args.target_pre_cutoff:
             break
 
     summary = {
         "created_at": datetime.now(timezone.utc).isoformat(),
         "codeforces_integration": str(integration),
         "rated_metadata_count": len(metas),
-        "required_train_unique": TRAIN_COUNT,
+        "required_train_unique": args.target_pre_cutoff,
         "usable_pre_cutoff_unique": len(usable_pre_hashes),
         "post_cutoff_metadata": len(post_ids),
         "post_cutoff_cached": len(done_post),
@@ -198,8 +210,135 @@ def collect(args: argparse.Namespace) -> None:
         json.dumps(summary, indent=2) + "\n", encoding="utf-8"
     )
     print(json.dumps(summary, indent=2))
-    if len(usable_pre_hashes) < TRAIN_COUNT:
+    if len(usable_pre_hashes) < args.target_pre_cutoff:
         raise SystemExit("collection incomplete; rerun to retry missing/transient fetches")
+
+
+def enrich(args: argparse.Namespace) -> None:
+    """Add problem-scoped editorials to frozen train/development records."""
+    integration = args.cf_integration.resolve()
+    if not (integration / "cf_problems" / "scraper.py").exists():
+        raise SystemExit(f"Codeforces integration not found: {integration}")
+    sys.path.insert(0, str(integration))
+    try:
+        from cf_problems import Scraper
+        from cf_problems.models import ProblemMeta
+        from cf_problems.scraper import FetchError
+        from cf_problems.transport import build_session
+    except ImportError as exc:
+        raise SystemExit(
+            "Install codeforces_integration/requirements.txt into the active Python environment"
+        ) from exc
+
+    manifest = json.loads(args.manifest.read_text(encoding="utf-8"))
+    if "test" in args.partitions:
+        raise SystemExit("final-test enrichment is forbidden before the development decision")
+    expected = {
+        row["problem_id"]: row["statement_sha256"]
+        for part in args.partitions
+        for row in manifest["partitions"][part]["problems"]
+    }
+    if args.extra_pre_cutoff:
+        expected.update(
+            {
+                p["problem_id"]: statement_hash(p)
+                for p in load_problem_files()
+                if parse_start(p) < POST_CUTOFF
+            }
+        )
+    cached = {p["problem_id"]: p for p in load_problem_files()}
+    missing = sorted(set(expected) - set(cached))
+    if missing:
+        raise ValueError(f"missing {len(missing)} frozen problem records")
+    for pid, digest in expected.items():
+        if statement_hash(cached[pid]) != digest:
+            raise ValueError(f"cached statement mismatch for {pid}")
+
+    session = build_session(cookies=args.cookies)
+    scraper = Scraper(delay=args.delay, session=session)
+    fetch_uncached = scraper._fetch
+    blog_pages = {}
+
+    def fetch_with_blog_cache(url: str):
+        if "/blog/entry/" not in url:
+            return fetch_uncached(url)
+        if url not in blog_pages:
+            blog_pages[url] = fetch_uncached(url)
+        return deepcopy(blog_pages[url])
+
+    scraper._fetch = fetch_with_blog_cache
+    counts = Counter()
+    targets = [cached[pid] for pid in sorted(expected)]
+    blog_by_contest = {
+        p["contest_id"]: p["editorial"]["url"]
+        for p in targets
+        if (p.get("editorial") or {}).get("url")
+    }
+    for i, problem in enumerate(targets, 1):
+        old_status = (problem.get("fetch") or {}).get("editorial")
+        if old_status == "ok" or (old_status == "missing" and not args.retry_missing):
+            counts[f"cached_{old_status}"] += 1
+            continue
+        meta = ProblemMeta(
+            contest_id=problem["contest_id"],
+            index=problem["index"],
+            name=problem["name"],
+            rating=problem.get("rating"),
+            tags=problem.get("tags") or [],
+            points=problem.get("points"),
+            type=problem.get("type"),
+        )
+        try:
+            blog_url = blog_by_contest.get(meta.contest_id)
+            editorial = (
+                scraper.fetch_editorial_by_url(blog_url, meta.problem_id)
+                if blog_url
+                else scraper.fetch_editorial(meta)
+            )
+        except FetchError as exc:
+            problem.setdefault("fetch", {})["editorial"] = "error"
+            counts["error"] += 1
+            print(f"[{i}/{len(targets)}] {meta.problem_id} error: {exc}", flush=True)
+        else:
+            data = asdict(editorial) if editorial else None
+            if data and data.get("url"):
+                blog_by_contest[meta.contest_id] = data["url"]
+            problem["editorial"] = data
+            status = "ok" if has_substantive_editorial(problem) else "missing"
+            problem.setdefault("fetch", {})["editorial"] = status
+            counts[status] += 1
+            code_count = len((data or {}).get("solution_code") or [])
+            print(
+                f"[{i}/{len(targets)}] {meta.problem_id} {status}; code={code_count}",
+                flush=True,
+            )
+        (PROBLEMS / f"{meta.problem_id}.json").write_text(
+            json.dumps(problem, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+        )
+
+    refreshed = {p["problem_id"]: p for p in load_problem_files() if p["problem_id"] in expected}
+    coverage = {
+        "target_count": len(expected),
+        "editorial_count": sum(
+            has_substantive_editorial(p) for p in refreshed.values()
+        ),
+        "code_count": sum(
+            bool((p.get("editorial") or {}).get("solution_code")) for p in refreshed.values()
+        ),
+    }
+    summary = {
+        "updated_at": datetime.now(timezone.utc).isoformat(),
+        "manifest_sha256": sha256_bytes(args.manifest.read_bytes()),
+        "partitions": args.partitions,
+        "counts": dict(counts),
+        "coverage": coverage,
+        "final_test_touched": False,
+    }
+    DATA.mkdir(parents=True, exist_ok=True)
+    (DATA / "phase2_enrichment_summary.json").write_text(
+        json.dumps(summary, indent=2) + "\n", encoding="utf-8"
+    )
+    print(json.dumps(summary, indent=2))
 
 
 def jsonl_bytes(examples: list[dict]) -> bytes:
@@ -321,6 +460,128 @@ def prepare(args: argparse.Namespace) -> None:
     )
 
 
+def prepare_phase2(args: argparse.Namespace) -> None:
+    problems = load_problem_files()
+    parts = partition_problems(problems)
+    try:
+        phase2_train = newest_substantive_train(problems)
+    except ValueError as exc:
+        raise SystemExit(str(exc)) from exc
+    enriched_validation = [p for p in parts["validation"] if has_substantive_editorial(p)]
+    tuning_rows, development_rows = split_by_contest(enriched_validation, SEED + 20)
+    if not tuning_rows or not development_rows:
+        raise ValueError("contest-disjoint Phase 2 validation split is empty")
+
+    train_pairs = sample_covering_pairs(
+        phase2_train,
+        PHASE2_PAIR_COUNT,
+        {"200": 0.25, "300": 0.35, "400+": 0.40},
+        SEED + 21,
+    )
+    tuning_pairs = sample_pairs(
+        tuning_rows,
+        PHASE2_TUNING_VALIDATION_PAIR_COUNT,
+        {"200": 0.30, "300": 0.35, "400+": 0.35},
+        SEED + 22,
+    )
+    development_unordered = sample_pairs(
+        development_rows,
+        PHASE2_DEV_UNORDERED_COUNT,
+        {"200": 0.30, "300": 0.40, "400+": 0.30},
+        SEED + 23,
+    )
+    development_pairs = swapped_pairs(development_unordered)
+    by_id = {p["problem_id"]: p for p in problems}
+    args.output.mkdir(parents=True, exist_ok=True)
+
+    files = {}
+    for mode in ("editorial", "editorial_code"):
+        train_data = jsonl_bytes([tuning_example(pair, by_id, mode) for pair in train_pairs])
+        validation_data = jsonl_bytes(
+            [tuning_example(pair, by_id, mode) for pair in tuning_pairs]
+        )
+        for kind, data, count in (
+            ("train", train_data, len(train_pairs)),
+            ("validation", validation_data, len(tuning_pairs)),
+        ):
+            name = f"phase2_{mode}_{kind}.jsonl"
+            (args.output / name).write_bytes(data)
+            files[name] = {
+                "sha256": sha256_bytes(data),
+                "bytes": len(data),
+                "examples": count,
+            }
+
+    split_rows = {
+        "train": phase2_train,
+        "tuning_validation": tuning_rows,
+        "development": development_rows,
+        "test": parts["test"],
+    }
+    manifest = {
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "seed": SEED,
+        "model": MODEL,
+        "input_modes": ["editorial", "editorial_code"],
+        "partitions": {
+            name: {
+                "count": len(rows),
+                "contest_count": len({p["contest_id"] for p in rows}),
+                "problems": [
+                    {
+                        **problem_public(p),
+                        "editorial_sha256": content_hash(p, "editorial"),
+                        "editorial_code_sha256": content_hash(p, "editorial_code"),
+                    }
+                    if has_substantive_editorial(p)
+                    else problem_public(p)
+                    for p in rows
+                ],
+            }
+            for name, rows in split_rows.items()
+        },
+        "train_pairs": train_pairs,
+        "tuning_validation_pairs": tuning_pairs,
+        "phase2_dev_pairs": development_pairs,
+        "files": files,
+        "coverage": {
+            "training_problems": len(phase2_train),
+            "training_problems_with_code": sum(
+                bool((p.get("editorial") or {}).get("solution_code")) for p in phase2_train
+            ),
+            "enriched_validation_problems": len(enriched_validation),
+        },
+        "split_contract": {
+            "tuning_development_contest_disjoint": not (
+                {p["contest_id"] for p in tuning_rows}
+                & {p["contest_id"] for p in development_rows}
+            ),
+            "all_training_problems_used": {
+                p["problem_id"] for p in phase2_train
+            }
+            == {pid for pair in train_pairs for pid in (pair["a"], pair["b"])},
+            "final_test_enriched": False,
+            "final_test_upload_forbidden": True,
+        },
+    }
+    (args.output / "phase2_manifest.json").write_text(
+        json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+    )
+    print(
+        json.dumps(
+            {
+                "training_pairs": len(train_pairs),
+                "training_problems": len(phase2_train),
+                "tuning_validation_pairs": len(tuning_pairs),
+                "development_requests": len(development_pairs),
+                "coverage": manifest["coverage"],
+                "split_contract": manifest["split_contract"],
+            },
+            indent=2,
+        )
+    )
+
+
 class Vertex:
     def __init__(self, project: str):
         try:
@@ -394,7 +655,7 @@ def count_dataset(args: argparse.Namespace) -> None:
             counts[futures[future]] = future.result()
     tokens = sum(counts)
     training_cost = tokens * PILOT_EPOCHS * TRAINING_PRICE_PER_MILLION / 1_000_000
-    planned = training_cost + PILOT_EVAL_RESERVE_USD
+    planned = training_cost + args.eval_reserve_usd
     result = {
         "created_at": datetime.now(timezone.utc).isoformat(),
         "project": args.project,
@@ -406,11 +667,11 @@ def count_dataset(args: argparse.Namespace) -> None:
         "tokens_per_epoch": tokens,
         "epochs": PILOT_EPOCHS,
         "estimated_training_cost_usd": round(training_cost, 6),
-        "evaluation_reserve_usd": PILOT_EVAL_RESERVE_USD,
+        "evaluation_reserve_usd": args.eval_reserve_usd,
         "planned_pilot_total_usd": round(planned, 6),
-        "pilot_training_cap_usd": PILOT_TRAINING_CAP_USD,
-        "pilot_total_cap_usd": PILOT_TOTAL_CAP_USD,
-        "dispatch_allowed": training_cost <= PILOT_TRAINING_CAP_USD and planned <= PILOT_TOTAL_CAP_USD,
+        "pilot_training_cap_usd": args.training_cap_usd,
+        "pilot_total_cap_usd": args.total_cap_usd,
+        "dispatch_allowed": training_cost <= args.training_cap_usd and planned <= args.total_cap_usd,
         "minimum_example_tokens": min(counts),
         "maximum_example_tokens": max(counts),
         "mean_example_tokens": tokens / len(counts),
@@ -450,7 +711,7 @@ def response_text(response: dict) -> str:
     return "".join(part.get("text", "") for part in parts if not part.get("thought"))
 
 
-def load_manifest_problems(manifest: dict) -> dict[str, dict]:
+def load_manifest_problems(manifest: dict, input_mode: str = "statement") -> dict[str, dict]:
     cached = {p["problem_id"]: p for p in load_problem_files()}
     expected = {
         p["problem_id"]: p["statement_sha256"]
@@ -460,14 +721,35 @@ def load_manifest_problems(manifest: dict) -> dict[str, dict]:
     for pid, digest in expected.items():
         if pid not in cached or statement_hash(cached[pid]) != digest:
             raise ValueError(f"cached statement mismatch for {pid}")
+    if input_mode != "statement":
+        hash_key = f"{input_mode}_sha256"
+        enriched_expected = {
+            p["problem_id"]: p[hash_key]
+            for part in manifest["partitions"].values()
+            for p in part["problems"]
+            if hash_key in p
+        }
+        if not enriched_expected:
+            raise ValueError(f"manifest has no frozen hashes for input mode {input_mode}")
+        for pid, digest in enriched_expected.items():
+            if content_hash(cached[pid], input_mode) != digest:
+                raise ValueError(f"cached {input_mode} mismatch for {pid}")
     return cached
 
 
 def evaluate(args: argparse.Namespace) -> None:
     manifest = json.loads(args.manifest.read_text())
     pairs = manifest[args.pairs_key]
-    by_id = load_manifest_problems(manifest)
+    by_id = load_manifest_problems(manifest, args.input_mode)
     saved = json.loads(args.output.read_text()) if args.output.exists() else {"predictions": []}
+    for key, expected in (
+        ("target", args.target),
+        ("pairs_key", args.pairs_key),
+        ("input_mode", args.input_mode),
+        ("manifest_sha256", sha256_bytes(args.manifest.read_bytes())),
+    ):
+        if saved.get("predictions") and saved.get(key) != expected:
+            raise ValueError(f"existing prediction checkpoint has different {key}")
     done = {(p["a"], p["b"]) for p in saved["predictions"]}
     vertex = Vertex(args.project)
     url = generate_url(args.project, args.target, args.location)
@@ -476,7 +758,9 @@ def evaluate(args: argparse.Namespace) -> None:
         a, b = by_id[pair["a"]], by_id[pair["b"]]
         payload = {
             "systemInstruction": {"parts": [{"text": SYSTEM}]},
-            "contents": [{"role": "user", "parts": [{"text": user_text(a, b)}]}],
+            "contents": [
+                {"role": "user", "parts": [{"text": user_text(a, b, args.input_mode)}]}
+            ],
             "generationConfig": {
                 "thinkingConfig": {"thinkingLevel": args.thinking_level.upper()},
                 "maxOutputTokens": 1024 if "pro" in args.target else 64,
@@ -509,6 +793,7 @@ def evaluate(args: argparse.Namespace) -> None:
                 "location": args.location,
                 "pairs_key": args.pairs_key,
                 "thinking_level": args.thinking_level,
+                "input_mode": args.input_mode,
                 "manifest_sha256": sha256_bytes(args.manifest.read_bytes()),
                 "updated_at": datetime.now(timezone.utc).isoformat(),
             })
@@ -621,8 +906,19 @@ def main() -> None:
     c.add_argument("--cf-integration", type=Path, default=DEFAULT_CF_INTEGRATION)
     c.add_argument("--delay", type=float, default=2.0)
     c.add_argument("--cookies")
+    c.add_argument("--target-pre-cutoff", type=int, default=TRAIN_COUNT)
+    x = sub.add_parser("enrich")
+    x.add_argument("--manifest", type=Path, required=True)
+    x.add_argument("--cf-integration", type=Path, default=DEFAULT_CF_INTEGRATION)
+    x.add_argument("--partitions", nargs="+", choices=("train", "validation", "test"), default=("train", "validation"))
+    x.add_argument("--delay", type=float, default=2.0)
+    x.add_argument("--cookies")
+    x.add_argument("--retry-missing", action="store_true")
+    x.add_argument("--extra-pre-cutoff", action="store_true")
     p = sub.add_parser("prepare")
     p.add_argument("--output", type=Path, required=True)
+    p2 = sub.add_parser("prepare-phase2")
+    p2.add_argument("--output", type=Path, required=True)
     n = sub.add_parser("count")
     n.add_argument("--project", required=True)
     n.add_argument("--location", default="global")
@@ -630,6 +926,9 @@ def main() -> None:
     n.add_argument("--dataset", type=Path, required=True)
     n.add_argument("--output", type=Path, required=True)
     n.add_argument("--workers", type=int, default=4)
+    n.add_argument("--training-cap-usd", type=float, default=PILOT_TRAINING_CAP_USD)
+    n.add_argument("--total-cap-usd", type=float, default=PILOT_TOTAL_CAP_USD)
+    n.add_argument("--eval-reserve-usd", type=float, default=PILOT_EVAL_RESERVE_USD)
     e = sub.add_parser("evaluate")
     e.add_argument("--project", required=True)
     e.add_argument("--target", required=True)
@@ -637,8 +936,13 @@ def main() -> None:
     e.add_argument("--manifest", type=Path, required=True)
     e.add_argument(
         "--pairs-key",
-        choices=("baseline_pairs", "pro_baseline_pairs", "test_pairs"),
+        choices=("baseline_pairs", "pro_baseline_pairs", "test_pairs", "phase2_dev_pairs"),
         default="baseline_pairs",
+    )
+    e.add_argument(
+        "--input-mode",
+        choices=("statement", "editorial", "editorial_code"),
+        default="statement",
     )
     e.add_argument("--thinking-level", choices=("minimal", "low", "medium", "high"), default="minimal")
     e.add_argument("--output", type=Path, required=True)
@@ -665,8 +969,12 @@ def main() -> None:
     args = parser.parse_args()
     if args.command == "collect":
         collect(args)
+    elif args.command == "enrich":
+        enrich(args)
     elif args.command == "prepare":
         prepare(args)
+    elif args.command == "prepare-phase2":
+        prepare_phase2(args)
     elif args.command == "count":
         count_dataset(args)
     elif args.command == "evaluate":

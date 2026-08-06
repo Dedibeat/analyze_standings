@@ -391,3 +391,17 @@ change and +9.6 points at gap 300, but -4.3 points at gap 200; the paired change
 are too small to establish a reliable improvement. The tuned validation run used
 319,416 input and 1,200 output tokens, estimated at $0.81. The final 96-problem
 test partition was not uploaded or evaluated.
+
+Phase 2 is prepared, but deliberately not dispatched. It adds the same
+problem-scoped tutorial text and, optionally, the first author reference
+solution that will be available at inference. The code exposes resumable
+`enrich`, `prepare-phase2`, and modality-aware `evaluate` commands; it freezes
+a contest-disjoint tuning/development split and requires every one of the 600
+training problems to occur in at least one comparison. The first 10-record
+manual audit found correct problem/tutorial identity in every case, but four
+captures were title-only or video-only rather than substantive prose. The
+pipeline therefore accepts only tutorials with at least 200 non-video
+characters. At the paused 2026-08-06 checkpoint, 546 substantive-editorial
+pre-cutoff candidates were available, so no Phase-2 datasets, countTokens
+preflight, upload, or training job was created. More older candidates must be
+collected and enriched before the 600-problem contract can be met.
