@@ -117,6 +117,7 @@ class PairwiseDatasetTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "need 3"):
             newest_substantive_train(rows, 3)
         self.assertEqual(len(newest_substantive_train(rows, 2)), 2)
+        self.assertEqual(len(newest_substantive_train(rows, None)), 2)
 
     def test_swapped_consistency(self):
         pair = {"a": "1A", "b": "2A", "gap": 300, "truth": "B"}

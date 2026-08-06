@@ -392,16 +392,12 @@ are too small to establish a reliable improvement. The tuned validation run used
 319,416 input and 1,200 output tokens, estimated at $0.81. The final 96-problem
 test partition was not uploaded or evaluated.
 
-Phase 2 is prepared, but deliberately not dispatched. It adds the same
-problem-scoped tutorial text and, optionally, the first author reference
-solution that will be available at inference. The code exposes resumable
-`enrich`, `prepare-phase2`, and modality-aware `evaluate` commands; it freezes
-a contest-disjoint tuning/development split and requires every one of the 600
-training problems to occur in at least one comparison. The first 10-record
-manual audit found correct problem/tutorial identity in every case, but four
-captures were title-only or video-only rather than substantive prose. The
-pipeline therefore accepts only tutorials with at least 200 non-video
-characters. At the paused 2026-08-06 checkpoint, 546 substantive-editorial
-pre-cutoff candidates were available, so no Phase-2 datasets, countTokens
-preflight, upload, or training job was created. More older candidates must be
-collected and enriched before the 600-problem contract can be met.
+Phase 2 is submitted as a fresh editorial-only model. It uses all 561
+exact-statement-unique substantive-editorial pre-cutoff problems in 400
+coverage-guaranteed training pairs, 75 contest-disjoint tuning-validation
+pairs, and a separate 100-request development evaluation. The editorial-only
+base scored 80.0% overall and 72.5% at gap 300; adding the first scoped author
+solution scored 77.0% and 65.0%, while increasing the two-epoch preflight from
+$20.87 to $27.80. Code was therefore excluded. The editorial job
+`projects/703166210069/locations/us-central1/tuningJobs/3895319841782890496`
+started on 2026-08-06. The final test remains unenriched and untouched.

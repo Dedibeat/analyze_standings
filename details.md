@@ -1703,7 +1703,7 @@ tokens and 1,200 output tokens, estimated at $0.808 at the tuned non-global
 rate. Estimated training plus both base and tuned validation inference is
 $14.35. The untouched final test remains unevaluated.
 
-### Phase 2 statement-plus-editorial preparation (paused 2026-08-06)
+### Phase 2 statement-plus-editorial preparation (2026-08-06)
 
 Phase 2 is a fresh-base-model experiment, not continuation tuning. Each side
 of a comparison will contain `[Statement]`, `[Editorial]`, and optionally the
@@ -1730,14 +1730,41 @@ Accordingly, a tutorial is now substantive only when it has at least 200
 characters after whitespace normalization and is not a video-editorial marker.
 Under that rule the original split has 423/600 substantive training records and
 112/131 substantive validation records. We collected 150 older exact-statement
-candidates (750 pre-cutoff statement candidates total) and began their
-resumable enrichment. At the paused checkpoint, the cache held 546 substantive
-pre-cutoff records, still short of the 600 required for Phase 2. The current
-raw cache has 746 scraper-`ok`, 120 scraper-`missing`, and 112 unattempted
-records; scraper `ok` is intentionally not synonymous with substantive prose.
-No Phase-2 JSONL, Vertex countTokens call, Cloud Storage upload, or tuning job
-was created. Resume collection/enrichment only after deciding to continue this
-coverage-recovery step.
+candidates (750 pre-cutoff statement candidates total), completed their
+resumable enrichment, and deduplicated exact statements again. The user
+explicitly accepted the resulting 561 substantive pre-cutoff problems rather
+than requiring 600. All 561 occur in the 400 quota-balanced training pairs;
+458 have an extracted first author-solution block. The 75 tuning-validation
+pairs and 100 swapped-order development requests are contest-disjoint.
+
+Three independent 10-record manual audits then checked saved statement text,
+tutorial text, task identifiers, and saved Codeforces problem/tutorial URLs.
+All 30 were task-matched and substantive; no title/video-only capture or
+cross-problem contamination was found. Live Codeforces verification remains
+Cloudflare-blocked, so this is a source-metadata and content identity audit,
+not a fresh-page fetch.
+
+Exact global `countTokens` preflights on the same 400 training pairs returned
+1,043,341 tokens/epoch and $20.86682 for two editorial-only epochs, versus
+1,390,192 tokens/epoch and $27.80384 with code. On the clean 100-request
+development ablation, base Flash with editorial-only input was 80.0% overall,
+70.0% at gap 200, 72.5% at gap 300, and 76.0% order-consistent. Adding code was
+77.0%, 70.0%, 65.0%, and 82.0% respectively. Code therefore added cost and
+hurt the target 300-gap metric, so the submitted Phase 2 training data is
+editorial-only. Actual ablation usage was 269,318 input/1,200 output tokens
+for editorial-only ($0.456 estimated) and 341,994/1,200 for code
+($0.576 estimated at the base rate).
+
+The verified Cloud Storage uploads are
+`gs://gctc-vertex-batch-703166210069/cf-pairwise-20260805/phase2-editorial-v1/phase2_editorial_train.jsonl`
+(3,530,316 bytes) and `phase2_editorial_validation.jsonl` (754,934 bytes).
+Vertex job
+`projects/703166210069/locations/us-central1/tuningJobs/3895319841782890496`
+was submitted with two epochs on 2026-08-06 and was `JOB_STATE_RUNNING` at the
+handoff checkpoint. The $15 evaluation reserve makes the Phase 2 planned total
+$35.86682 before the already-observed $1.032 base ablation, still below the
+overall $100 envelope. The final test remains unenriched, unuploaded, and
+unevaluated.
 
 An additional paired close-gap check used 10 new unordered validation pairs
 (five at a 200-point gap and five at 300), sent in both orientations to both

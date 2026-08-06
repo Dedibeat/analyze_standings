@@ -163,7 +163,9 @@ def partition_problems(problems: Iterable[dict]) -> dict[str, list[dict]]:
     return {"train": train, "validation": validation, "test": test}
 
 
-def newest_substantive_train(problems: Iterable[dict], count: int = TRAIN_COUNT) -> list[dict]:
+def newest_substantive_train(
+    problems: Iterable[dict], count: int | None = TRAIN_COUNT
+) -> list[dict]:
     """Select the newest exact-statement-unique pre-cutoff tutorial records."""
     unique: dict[str, dict] = {}
     for problem in sorted(
@@ -179,6 +181,8 @@ def newest_substantive_train(problems: Iterable[dict], count: int = TRAIN_COUNT)
         if parse_start(problem) < POST_CUTOFF and has_substantive_editorial(problem)
     ]
     train.sort(key=lambda p: (parse_start(p), p["contest_id"], p["index"]), reverse=True)
+    if count is None:
+        return train
     if len(train) < count:
         raise ValueError(f"need {count} substantive-editorial pre-cutoff problems, found {len(train)}")
     return train[:count]

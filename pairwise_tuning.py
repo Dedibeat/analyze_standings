@@ -464,7 +464,7 @@ def prepare_phase2(args: argparse.Namespace) -> None:
     problems = load_problem_files()
     parts = partition_problems(problems)
     try:
-        phase2_train = newest_substantive_train(problems)
+        phase2_train = newest_substantive_train(problems, None)
     except ValueError as exc:
         raise SystemExit(str(exc)) from exc
     enriched_validation = [p for p in parts["validation"] if has_substantive_editorial(p)]
