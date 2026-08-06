@@ -314,13 +314,14 @@ def sample_covering_pairs(
     rng.shuffle(candidates)
     selected: list[tuple[str, str]] = []
     selected_keys: set[tuple[str, str]] = set()
-    used = Counter()
+    bucket_used = Counter()
+    degree = Counter()
     uncovered = set(by_id)
     while uncovered:
         choices = [
             row
             for row in candidates
-            if quota.get(row[2], 0) > used[row[2]]
+            if quota.get(row[2], 0) > bucket_used[row[2]]
             and tuple(sorted(row[:2])) not in selected_keys
             and (row[0] in uncovered or row[1] in uncovered)
         ]
@@ -332,23 +333,34 @@ def sample_covering_pairs(
         )
         selected.append((a, b))
         selected_keys.add(tuple(sorted((a, b))))
-        used[bucket] += 1
+        bucket_used[bucket] += 1
+        degree[a] += 1
+        degree[b] += 1
         uncovered.discard(a)
         uncovered.discard(b)
 
     for bucket in names:
-        choices = [
-            (a, b)
-            for a, b in buckets.get(bucket, [])
-            if tuple(sorted((a, b))) not in selected_keys
-        ]
-        rng.shuffle(choices)
-        need = quota[bucket] - used[bucket]
-        if len(choices) < need:
-            raise ValueError(f"not enough unused {bucket} pairs: need {need}, found {len(choices)}")
-        for a, b in choices[:need]:
+        need = quota[bucket] - bucket_used[bucket]
+        for _ in range(need):
+            choices = [
+                (a, b)
+                for a, b in buckets.get(bucket, [])
+                if tuple(sorted((a, b))) not in selected_keys
+            ]
+            if not choices:
+                raise ValueError(f"not enough unused {bucket} pairs: need {need}")
+            a, b = min(
+                choices,
+                key=lambda edge: (
+                    degree[edge[0]] + degree[edge[1]],
+                    max(degree[edge[0]], degree[edge[1]]),
+                ),
+            )
             selected.append((a, b))
             selected_keys.add(tuple(sorted((a, b))))
+            bucket_used[bucket] += 1
+            degree[a] += 1
+            degree[b] += 1
     return _orient(selected, by_id, rng)
 
 

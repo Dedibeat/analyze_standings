@@ -96,6 +96,8 @@ class PairwiseDatasetTest(unittest.TestCase):
         )
         used = {pid for pair in pairs for pid in (pair["a"], pair["b"])}
         self.assertEqual(used, {p["problem_id"] for p in rows})
+        degree = {pid: sum(pid in (pair["a"], pair["b"]) for pair in pairs) for pid in used}
+        self.assertLessEqual(max(degree.values()), 3)
 
     def test_contest_split_has_no_contest_overlap(self):
         rows = []

@@ -474,7 +474,7 @@ def prepare_phase2(args: argparse.Namespace) -> None:
 
     train_pairs = sample_covering_pairs(
         phase2_train,
-        PHASE2_PAIR_COUNT,
+        args.pair_count,
         {"200": 0.25, "300": 0.35, "400+": 0.40},
         SEED + 21,
     )
@@ -541,6 +541,7 @@ def prepare_phase2(args: argparse.Namespace) -> None:
             for name, rows in split_rows.items()
         },
         "train_pairs": train_pairs,
+        "training_pair_count": args.pair_count,
         "tuning_validation_pairs": tuning_pairs,
         "phase2_dev_pairs": development_pairs,
         "files": files,
@@ -919,6 +920,7 @@ def main() -> None:
     p.add_argument("--output", type=Path, required=True)
     p2 = sub.add_parser("prepare-phase2")
     p2.add_argument("--output", type=Path, required=True)
+    p2.add_argument("--pair-count", type=int, default=PHASE2_PAIR_COUNT)
     n = sub.add_parser("count")
     n.add_argument("--project", required=True)
     n.add_argument("--location", default="global")

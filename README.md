@@ -404,3 +404,13 @@ completed successfully on 2026-08-06. On the identical clean development
 requests, the tuned endpoint improved from 80.0% to 84.0% overall and from
 72.5% to 80.0% at the exact 300-point gap; this is only a 100-request
 development result, so the final test remains unenriched and untouched.
+
+Phase 3 is a fresh-base-model replication with 600 rather than 400 editorial
+pairs. It retains the same 561 problems, tuning-validation split, development
+set, two epochs, and prompt; only the 200 additional training comparisons
+change. The sampler has no duplicate unordered pairs and uses every problem
+one to three times (mean 2.14), with 150/210/240 pairs at 200/300/at-least-400
+rating gaps. Exact preflight was 1,608,024 tokens per epoch and $32.16 for two
+epochs. Vertex job
+`projects/703166210069/locations/us-central1/tuningJobs/8563467981319831552`
+started on 2026-08-06. The final test remains untouched.

@@ -1778,6 +1778,31 @@ $0.675. The $15 evaluation reserve makes the Phase 2 planned total $35.86682
 before the already-observed $1.032 base ablation, still below the overall $100
 envelope. The final test remains unenriched, unuploaded, and unevaluated.
 
+### Phase 3: larger pairwise supervision (running 2026-08-06)
+
+Phase 3 is intentionally a fresh `gemini-3.5-flash` base-model run, not an
+attempt to continue the Phase 2 endpoint. That isolates the change from 400 to
+600 diverse comparisons instead of confounding additional data with repeated
+epochs on the old 400-pair signal. It retains Phase 2's 561 substantive,
+exact-statement-unique pre-cutoff problems, editorial-only prompt, two epochs,
+75 tuning-validation pairs, and frozen 100-request development set.
+
+The first 600-pair draft was sparse but had a degree range of 1--8. Before any
+upload, the sampler was corrected to track pair-bucket allocation separately
+from problem degree. The submitted set has no duplicate unordered pair, covers
+all 561 problems, has degree distribution 26 once / 431 twice / 104 three
+times (mean 2.14, max 3), and preserves 150 exact-200, 210 exact-300, and 240
+at-least-400 gap pairs. The correction is regression-tested.
+
+The corrected global `countTokens` preflight returned 1,608,024 tokens per
+epoch and $32.16048 estimated training cost for two epochs ($47.16048 with the
+$15 evaluation reserve). Verified uploads are in
+`gs://gctc-vertex-batch-703166210069/cf-pairwise-20260805/phase3-editorial600-v1/`:
+the train file is 5,438,197 bytes and the validation file 754,934 bytes. Vertex
+job `projects/703166210069/locations/us-central1/tuningJobs/8563467981319831552`
+was submitted on 2026-08-06 and was `JOB_STATE_RUNNING` at handoff. The final
+test remains unenriched, unuploaded, and unevaluated.
+
 An additional paired close-gap check used 10 new unordered validation pairs
 (five at a 200-point gap and five at 300), sent in both orientations to both
 models. On these 20 new requests, Flash scored 12/20 (60%) and Pro 11/20 (55%):
