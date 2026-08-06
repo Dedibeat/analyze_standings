@@ -436,4 +436,7 @@ one to three times (mean 2.14), with 150/210/240 pairs at 200/300/at-least-400
 rating gaps. Exact preflight was 1,608,024 tokens per epoch and $32.16 for two
 epochs. Vertex job
 `projects/703166210069/locations/us-central1/tuningJobs/8563467981319831552`
-started on 2026-08-06. The final test remains untouched.
+completed successfully. Its monitor shows no visible train/validation
+divergence, but the near-perfect score is only on the 75-pair tuning-validation
+set and may reflect validation-set overfitting; the final test remains
+untouched.

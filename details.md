@@ -1778,7 +1778,7 @@ $0.675. The $15 evaluation reserve makes the Phase 2 planned total $35.86682
 before the already-observed $1.032 base ablation, still below the overall $100
 envelope. The final test remains unenriched, unuploaded, and unevaluated.
 
-### Phase 3: larger pairwise supervision (running 2026-08-06)
+### Phase 3: larger pairwise supervision (completed 2026-08-06)
 
 Phase 3 is intentionally a fresh `gemini-3.5-flash` base-model run, not an
 attempt to continue the Phase 2 endpoint. That isolates the change from 400 to
@@ -1800,8 +1800,13 @@ $15 evaluation reserve). Verified uploads are in
 `gs://gctc-vertex-batch-703166210069/cf-pairwise-20260805/phase3-editorial600-v1/`:
 the train file is 5,438,197 bytes and the validation file 754,934 bytes. Vertex
 job `projects/703166210069/locations/us-central1/tuningJobs/8563467981319831552`
-was submitted on 2026-08-06 and was `JOB_STATE_RUNNING` at handoff. The final
-test remains unenriched, unuploaded, and unevaluated.
+completed successfully, as shown by the Vertex tuning monitor. The monitor's
+training and tuning-validation curves do not show the usual visual signature of
+overfitting: validation accuracy rises with training accuracy and validation
+loss does not turn upward. This is not an independent generalization result,
+however—the 75-pair validation set was used by the tuning job, and the curves
+reach nearly perfect accuracy/near-zero loss. The final test remains
+unenriched, unuploaded, and unevaluated.
 
 An additional paired close-gap check used 10 new unordered validation pairs
 (five at a 200-point gap and five at 300), sent in both orientations to both
