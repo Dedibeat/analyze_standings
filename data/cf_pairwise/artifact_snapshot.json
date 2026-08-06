@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "snapshot_commit": "3f58b08",
+  "artifacts": {
+    "pairwise_tuning_run": {
+      "files": 29,
+      "sha256": "cf6bf4a06e8a48027fefb0c3f340e1a67f4ef2f953e19bd0d2df1fe7d0d3aec9"
+    },
+    "pairwise_phase2_run": {
+      "files": 15,
+      "sha256": "c09c7074cec01e32d1088344107c141e3378d50214f32a1a521f9660465d6929"
+    },
+    "pairwise_phase3_run": {
+      "files": 9,
+      "sha256": "b9a6545a39edb64401195bfcbd33d827d2a4db4d21cb6ef271b312ae71a5a9d5"
+    },
+    "data/cf_pairwise/problems": {
+      "files": 978,
+      "sha256": "99851e1fcebec8f229fa3789646320a7b1aada92ef5f2c7805a4b70982dfaf13"
+    }
+  }
+}

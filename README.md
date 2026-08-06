@@ -375,6 +375,29 @@ collection counts. Generate the deterministic files with:
 ./.venv/bin/python -m unittest discover -s tests -p 'test_*.py'
 ```
 
+#### Copying the frozen pairwise artifacts
+
+The raw problem cache and the three `pairwise_*_run/` directories are deliberately
+gitignored. They are required to reproduce the already-submitted experiments
+exactly: recollecting would re-scrape live Codeforces statements and editorials.
+First clone/pull this repository at the same revision on both computers, then,
+from the destination checkout, pull the artifacts over SSH:
+
+```bash
+./scripts/sync_pairwise_artifacts.sh pull dedibeat@DESKTOP_HOST
+./scripts/sync_pairwise_artifacts.sh verify
+```
+
+Replace `DESKTOP_HOST` with the desktop's LAN hostname/IP or Tailscale name/IP.
+The helper resumes interrupted transfers and copies `pairwise_tuning_run/`,
+`pairwise_phase2_run/`, `pairwise_phase3_run/`, and
+`data/cf_pairwise/problems/` (about 38 MB at the published snapshot). To copy
+the other direction, run `push` instead of `pull`. If the source repository has
+a different path, set `PAIRWISE_ARTIFACT_REPO` before invoking it. `verify`
+checks the file counts and content hashes against the tracked
+`data/cf_pairwise/artifact_snapshot.json`; update that snapshot intentionally
+whenever a new frozen artifact set is published.
+
 The 2026-08-05 pilot uses 400 balanced pairwise examples from 200 training
 problems, 150 post-cutoff tuning-validation pairs, two epochs, and a $25 pilot
 dispatch cap inside the overall $100 budget. Exact `countTokens` preflight was

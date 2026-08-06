@@ -1813,3 +1813,22 @@ Pro 9/14 (64.3%) at gap 300. This is still only 14 unordered problems represente
 twice, and order consistency on the new close-gap subset was 60% for Flash and
 70% for Pro, so the apparent 300-gap advantage remains a pilot signal rather
 than a reliable model-ranking claim.
+
+### Frozen-artifact transfer protocol (2026-08-06)
+
+The raw Codeforces cache and pairwise run directories are intentionally excluded
+from Git: `data/cf_pairwise/problems/`, `pairwise_tuning_run/`,
+`pairwise_phase2_run/`, and `pairwise_phase3_run/`. They must be copied to
+resume or audit the existing experiments, because a new collection re-scrapes
+mutable live statement/editorial pages and is not an exact reproduction.
+
+`scripts/sync_pairwise_artifacts.sh pull USER@HOST` transfers all four roots
+from a matching checkout at the fixed default source path, resuming partial
+transfers through `rsync`. `push` reverses the direction; set
+`PAIRWISE_ARTIFACT_REPO` when the remote checkout uses another path. After any
+transfer, `scripts/sync_pairwise_artifacts.sh verify` checks all copied files
+against the tracked `data/cf_pairwise/artifact_snapshot.json`. That snapshot
+records the 3f58b08 artifact set: 29 pilot-run files, 15 Phase-2 files, 9
+Phase-3 files, and 978 cached problem records. A future frozen set requires an
+intentional snapshot update and commit; it must never silently replace the
+published verification target.
