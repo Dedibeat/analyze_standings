@@ -1,7 +1,9 @@
 # Zero-shot LLM + survival-model integration plan
 
-Status: **plan only**. No repository problem statement or model output was sent
-to Gemini while preparing this document.
+Status: **executed 2026-08-07**. The planning phase sent no repository problem
+statement or model output to Gemini; the subsequent paid run followed the
+protocol below. Its raw checkpoints and analysis are in the local gitignored
+`llm_survival_run/` directory.
 
 ## Fixed decisions
 

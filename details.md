@@ -2006,8 +2006,7 @@ published verification target.
 ## Planned zero-shot LLM × survival integration (2026-08-07)
 
 The integration requested after reading arXiv:2512.14220 is documented in
-[`llm_survival_plan.md`](llm_survival_plan.md); this task produced a plan, not an
-experiment run. The fixed scope is the base Vertex publisher model
+[`llm_survival_plan.md`](llm_survival_plan.md). The fixed scope is the base Vertex publisher model
 `gemini-3.5-flash` with zero-shot, minimal-thinking, statement-only pairwise
 comparisons. No tuned endpoint is involved. Knowledge cutoff is deliberately not
 a selection constraint: the operational isolation rule is that prompts contain
@@ -2025,4 +2024,37 @@ requires at least a 5-point improvement over calibrated LOCO 261.6, favorable
 contest-cluster bootstrap evidence, and every existing metric guard unchanged.
 Otherwise Gemini remains limited to provisional no-standings ratings or
 disagreement QA. No repository problem statement or fitted rating was sent to
-Gemini while preparing this plan.
+Gemini while preparing the plan.
+
+### Executed zero-shot run (2026-08-07)
+
+The plan was then executed under the user's $50 budget with the base
+`gemini-3.5-flash` publisher model in Vertex `global`. The pilot used 156
+ordered requests (13 problems, both orientations), all responses parsed, with
+85.9% orientation consistency. The full run used 185 problems across 15 mapped
+contests and 2,128 ordered requests. It completed with 2,128 valid responses;
+two transient 429 responses were retried, and no malformed response remained.
+
+This was a strict statement-only run. The sanitizer read each problem's
+`statement` field and removed title/index/contest furniture, URLs, page
+markers, and limits. A contest-level `editorial` field (which contains the
+editorials for all problems) was never read or serialized into a prompt. The
+run also excluded solve counts/times, tags, survival estimates, CF ratings, and
+medal data. Knowledge cutoff was not used as a selection criterion.
+
+Count-Tokens preflight estimated $6.3221 for the full dispatch; successful
+response usage estimates total inference cost at **$5.4270**, within the $50
+budget. The raw manifest, sanitized statements, checkpoints, and report remain
+in the local gitignored `llm_survival_run/` directory; the resumable runner and
+tests are tracked in `llm_survival.py` and `tests/test_llm_survival.py`.
+
+The independent Gemini BT ranking reached 0.752 pairwise accuracy against CF
+ratings and 0.816 orientation consistency. Nested contest-level LOCO fusion
+did not pass the shipping gate: survival-only RMSE was **261.57**, fused RMSE
+was **264.76** (−3.19 points), and the contest bootstrap probability that
+fusion was worse was 0.667. The smallest sparse graph stable in both mean and
+worst-contest Kendall correlation was 10 unordered matches/problem (0.974 mean,
+0.921 minimum). The two fusion gates therefore fail; the order, sparse-graph,
+and budget checks pass. `arch_b.metric` remains unchanged and all existing
+guards pass, so survival remains the default and no shadow rating fields were
+added.

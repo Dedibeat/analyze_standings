@@ -363,8 +363,22 @@ metadata-sanitized statements, both A/B orientations, an uncertainty-aware
 survival prior, and nested contest-level validation against the existing metric
 and guards. Knowledge cutoff is reporting context, not a split requirement;
 solve data, ratings, labels, and other target proxies remain excluded from the
-prompt. This is a plan only—no repository problem was dispatched as part of the
-planning task.
+prompt. The document records planning only; no repository problem was dispatched
+during that planning task. The plan was subsequently executed on 2026-08-07 with the
+user-approved $50 cap. The run used only sanitized per-problem `statement`
+text: the contest-level `editorial` field (which contains all problem editorials)
+was never read or sent. The 156-request pilot passed parsing and 85.9% A/B
+order consistency; the full 2,128-request run completed after two transient
+429 retries. Estimated actual inference cost was **$5.4270**.
+
+The result is deliberately not integrated into standings: nested contest-level
+LOCO was 261.57 CF points for survival versus 264.76 for fusion (−3.19), with
+0.667 bootstrap probability that fusion was worse. A/B consistency was 0.816,
+BT pairwise accuracy against CF ratings was 0.752, and the selected robust
+sparse schedule was 10 unordered matches/problem (mean/minimum Kendall 0.974 /
+0.921). Survival remains the default. Use [`llm_survival.py`](llm_survival.py)
+to reproduce the prepared, resumable workflow; raw statements and responses are
+kept in the local gitignored `llm_survival_run/` directory.
 
 ### Codeforces pairwise-difficulty tuning pilot
 
