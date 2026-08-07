@@ -1710,11 +1710,14 @@ of a comparison will contain `[Statement]`, `[Editorial]`, and optionally the
 first scoped author reference-solution block. The intended comparison is
 statement-only base versus editorial-only base versus editorial-tuned, with the
 code variant admitted only after its exact token preflight. Titles, ratings,
-tags, contest identifiers, and problem indices remain excluded from model
-input. A new preparation command uses 400 quota-balanced pairs while ensuring
-every selected training problem appears at least once. Its tuning-validation
-and development sets are contest-disjoint; the final test is not enriched,
-uploaded, or evaluated.
+tags, contest identifiers, and problem indices are not interpolated from their
+structured fields. The official tutorial is inserted verbatim, however; the
+later high-thinking audit found that many tutorials contain their own identifier
+and title header, so the effective prompt does not satisfy this intended
+metadata exclusion (see the forensic follow-up below). A new preparation command
+uses 400 quota-balanced pairs while ensuring every selected training problem
+appears at least once. Its tuning-validation and development sets are
+contest-disjoint; the final test is not enriched, uploaded, or evaluated.
 
 The integration captured 623/731 non-empty tutorials and 469/731 code-bearing
 records for the original training-plus-validation pool. That count was not
@@ -1838,9 +1841,9 @@ Usage was 3,030,230 prompt and 12,000 output tokens for base, and 3,030,230
 prompt and 6,000 output tokens for tuned (plus 15,870 cached-content tokens
 reported by the tuned endpoint). At the evaluator's non-global list-rate
 estimate, this was $5.118679 for base and $7.588919 for tuned. These are final
-test results, not tuning-validation results; they support a positive Phase 3
-generalization signal, while the 1,000-request sample remains a single frozen
-benchmark rather than proof that future test sets will improve.
+test results, not tuning-validation results. They support a positive Phase 3
+result on the current unsanitized editorial input, while the forensic audit below
+means they do not establish metadata-free intrinsic-difficulty generalization.
 
 ### High-thinking reasoning audit (2026-08-07)
 
@@ -1881,6 +1884,65 @@ Pro 9/14 (64.3%) at gap 300. This is still only 14 unordered problems represente
 twice, and order consistency on the new close-gap subset was 60% for Flash and
 70% for Pro, so the apparent 300-gap advantage remains a pilot signal rather
 than a reliable model-ranking claim.
+
+#### Forensic follow-up: reasoning behavior and prompt contamination
+
+Joining the high-thinking audit back to the minimal-thinking final predictions
+separates the sample effect from the reasoning setting:
+
+| Same 50 unordered pairs / 100 requests | Base | Tuned | Tuning change |
+|---|---:|---:|---:|
+| Minimal thinking | 81.0% | 81.0% | 0.0 pp |
+| High thinking | 84.0% | 81.0% | -3.0 pp |
+
+At the unordered-pair cluster level, the high-thinking tuning change has an
+approximate 95% interval of **-12.0 to +6.0 points**. High thinking changed
+13/100 base decisions and 18/100 tuned decisions; it corrected eight and lost
+five base decisions, while correcting and losing nine tuned decisions. It cost
+$2.101348 base and $3.305749 tuned, versus $0.542276 and $0.804504 under minimal
+thinking on the same requests (**3.9x / 4.1x**). Incorrect high-thinking answers
+were also much longer on average than correct ones (base 2,355 vs 1,426 thought
+tokens; tuned 2,498 vs 1,494). These are diagnostic associations on a small
+sample, not evidence that length causes errors, but they show no return from the
+extra reasoning budget. The large minimal-thinking final comparison remains
++2.9 points (an approximate paired-pair 95% interval of **+0.9 to +4.9**) with
+the much stronger 77.8% to 89.2% order-consistency gain.
+
+The trace audit also found a contract violation in the *effective* prompt. The
+prompt builder omits structured title, ID, index, and rating fields and tells the
+model not to use them, but `editorial_text` passes the official tutorial through
+verbatim. Many tutorials start with text such as `2096E - Wonderful Teddy Bears`
+or `Problem G1 - BAUDELAIRE (Easy Version)`:
+
+- 192/561 Phase 3 training problems contain their literal problem ID in the
+  rendered editorial input and 247/561 contain title text. Across the submitted
+  600 training comparisons, 352 have at least one literal ID (71 have two).
+- All 75 tuning-validation pairs expose at least one literal ID (47 expose both).
+- 51/96 final-test problems expose a literal ID and 66/96 expose title text.
+  Thus 816/1,000 ordered final requests contain at least one literal ID; the
+  high-thinking audit contains 82/100.
+
+The returned reasoning uses exactly this forbidden channel: problem letters,
+supposed contest placement, and numerical-rating guesses appear repeatedly. A
+representative tuned failure is `2084F` versus `2106G1` (true ratings 2900 vs
+2200). The high-thinking base chose `2084F` in both orientations from the
+algorithmic burden. The tuned trace chose `2106G1` in both, incorrectly asserted
+that the two were from the same round, and treated the later `G1` position as
+decisive. On `2096E` versus `2109C3`, the base trace reversed its semantic
+judgment when A/B order was swapped, alternately prioritizing a rare one-trick
+discovery and a longer invariant proof. This is label/order-sensitive narrative,
+not stable difficulty comparison.
+
+The existing +2.9-point result is therefore valid only as an operational score
+for **unsanitized tutorial inputs**. It cannot establish that tuning improves the
+intended metadata-free, inherent-difficulty judgment, even though the observed
+gain is not confined to the simplest literal-ID subgroup. The required clean
+test is currently missing: tutorials must be sanitized (with regression checks
+against IDs, contest/index markers, and titles), training and tuning validation
+must be regenerated, a fresh base model must be tuned, and evaluation must use
+an untouched temporal test. Cleaning only the current endpoint's evaluation
+would introduce a train/eval distribution shift, and the existing final pool has
+already been evaluated repeatedly.
 
 ### Frozen-artifact transfer protocol (2026-08-06)
 

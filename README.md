@@ -359,8 +359,11 @@ see the 2PL prototype section in `details.md`.
 `pairwise_tuning.py` is a separate experiment that teaches Gemini to answer the
 same pairwise question used at evaluation time: which of two Codeforces problem
 statements is harder? It reuses the official metadata and statement scraper from
-`../codeforces_integration`, removes exact statement duplicates, and never puts
-problem title, contest index, or rating in the prompt.
+`../codeforces_integration`, removes exact statement duplicates, and does not
+interpolate the structured problem-title, contest-index, or rating fields into
+the prompt. Official tutorial text is included verbatim in the editorial
+experiments, however, and a later audit found that many tutorials contain their
+own problem identifier/title header; see the contamination caveat below.
 
 The frozen temporal contract is 600 training candidates before 2025-02-01,
 validation from February–March 2025, and an untouched final test from
@@ -464,3 +467,24 @@ Both sides returned 100 valid decisions and thought text on 98/100 requests.
 The raw reasoning-audit predictions and score are gitignored under
 `pairwise_phase3_run/`; the evaluator now uses a 4,096-token output allowance
 when thought capture is enabled so the final JSON decision is not truncated.
+
+A forensic join against the minimal-reasoning outputs changes the interpretation.
+On those exact 100 requests, minimal reasoning scored 81.0% for both base and
+tuned; high reasoning raised base to 84.0% but left tuned at 81.0%. The
+high-thinking tuning delta has a wide approximate 95% paired-pair interval of
+-12.0 to +6.0 points and is not evidence that tuning hurts. High reasoning cost
+about 3.9x base and 4.1x tuned inference on the same sample, with no reliable
+accuracy gain, so this pilot does not justify enabling it.
+
+More importantly, verbatim tutorial text contaminates the intended metadata-free
+comparison. Literal problem IDs occur in 51/96 final-test problem prompts and
+title text in 66/96; 816/1,000 ordered final requests contain at least one
+literal ID. The same issue affects training: 352/600 Phase 3 pairs contain at
+least one literal ID, and every tuning-validation pair does. Returned thoughts
+explicitly use forbidden problem letters, inferred contest positions, and
+supposed ratings. Consequently the +2.9-point final gain is a positive result
+only for the current unsanitized editorial input, not clean evidence that tuning
+improves intrinsic algorithmic-difficulty judgment. A fresh sanitized
+train/validation build, fresh tuning job, and untouched clean test are required
+before making that claim; the existing final pool has already been used and does
+not supply that missing test.
