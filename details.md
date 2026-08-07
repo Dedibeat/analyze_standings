@@ -1936,13 +1936,53 @@ not stable difficulty comparison.
 The existing +2.9-point result is therefore valid only as an operational score
 for **unsanitized tutorial inputs**. It cannot establish that tuning improves the
 intended metadata-free, inherent-difficulty judgment, even though the observed
-gain is not confined to the simplest literal-ID subgroup. The required clean
-test is currently missing: tutorials must be sanitized (with regression checks
-against IDs, contest/index markers, and titles), training and tuning validation
-must be regenerated, a fresh base model must be tuned, and evaluation must use
+gain is not confined to the simplest literal-ID subgroup. At the time of this
+audit the clean test was still missing: tutorials needed to be sanitized (with
+regression checks against IDs, contest/index markers, and titles), training and
+tuning validation regenerated, a fresh base model tuned, and evaluation run on
 an untouched temporal test. Cleaning only the current endpoint's evaluation
 would introduce a train/eval distribution shift, and the existing final pool has
 already been evaluated repeatedly.
+
+### Metadata-sanitized base reasoning check (2026-08-07)
+
+`cf_pairwise.editorial_text` now sanitizes tutorial and optional reference-solution
+text before it is used for hashes, tuning JSONL, or evaluation prompts. It removes
+problem-ID tokens (including IDs mentioned in a tutorial), URLs, title/header
+lines, author/analysis/credit attribution, and the Codeforces rating footer. The
+prompt path raises if an ID, URL, or source problem title survives. The tests cover
+the `2084F`-style header, the `Problem G1` header, parenthesized attribution, and
+reference-solution preservation. The cached-source audit found 845 non-empty
+metadata-free tutorials; 17 records contain only metadata headers and remain
+excluded. Rebuilding the editorial dataset gives 558 substantive pre-cutoff
+training problems (the old unsanitized build had 561), 400 training pairs, 75
+contest-disjoint tuning-validation pairs, and a 100-request contest-disjoint
+development pool.
+
+As a small base-model diagnostic, 20 unordered development pairs were sent in
+both orientations (40 requests per setting) to `gemini-3.5-flash` with the same
+clean editorial prompts and captured thoughts:
+
+| setting | accuracy | exact-300 | ≥300 | ≥400 | swapped consistency | estimated inference cost |
+|---------|---------:|----------:|-----:|-----:|---------------------:|--------------------------:|
+| minimal | 80.0% | 68.2% | 80.6% | 100.0% | 70.0% | $0.184028 |
+| high | 82.5% | 68.2% | 80.6% | 100.0% | 85.0% | $0.800352 |
+
+High reasoning changed 5 of the 20 unordered-pair outcomes relative to minimal
+(three improved, two worsened), so this sample suggests a +2.5-point accuracy
+and +15-point order-consistency difference but is too small for a model-setting
+claim. It cost about 4.35× as much. All 40 responses in each setting were valid.
+
+Manual prompt inspection found no problem-ID token in the 400 training, 75
+tuning-validation, or 40 evaluated development prompts, and neither member of
+an evaluated pair's title appeared in the other prompt's editorial snippet. No
+Codeforces ID appeared in the 40 high-thinking traces. Some high-thinking traces
+guessed or reconstructed titles/divisions despite their absence from the prompt;
+that is model behavior or pretraining, not input leakage, and is a reason to keep
+the system instruction prohibiting external metadata. This check does not make
+the old 2026-08-05/06 final result clean: that final pool was already evaluated
+with unsanitized tutorials. A fresh tuned checkpoint and a new untouched temporal
+test are still required for a clean tuning claim.
 
 ### Frozen-artifact transfer protocol (2026-08-06)
 

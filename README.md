@@ -361,9 +361,11 @@ same pairwise question used at evaluation time: which of two Codeforces problem
 statements is harder? It reuses the official metadata and statement scraper from
 `../codeforces_integration`, removes exact statement duplicates, and does not
 interpolate the structured problem-title, contest-index, or rating fields into
-the prompt. Official tutorial text is included verbatim in the editorial
-experiments, however, and a later audit found that many tutorials contain their
-own problem identifier/title header; see the contamination caveat below.
+the prompt. Editorial/tutorial text now passes through a metadata sanitizer in
+`cf_pairwise.py` before it is hashed or sent: problem IDs, URLs, title/header
+lines, attribution, and rating-footer boilerplate are removed, with prompt-level
+regression checks. The historical Phase 2/3 artifacts below predate this fix and
+remain unsanitized; the clean base-model diagnostic is recorded in `details.md`.
 
 The frozen temporal contract is 600 training candidates before 2025-02-01,
 validation from February–March 2025, and an untouched final test from
@@ -487,4 +489,7 @@ only for the current unsanitized editorial input, not clean evidence that tuning
 improves intrinsic algorithmic-difficulty judgment. A fresh sanitized
 train/validation build, fresh tuning job, and untouched clean test are required
 before making that claim; the existing final pool has already been used and does
-not supply that missing test.
+not supply that clean test. A 40-request-per-setting base-only check after the
+sanitizer gave 80.0% minimal versus 82.5% high reasoning, with 70.0% versus
+85.0% swapped-order consistency. This is a small development diagnostic, not a
+replacement for the fresh tuned-model and untouched-test evaluation.

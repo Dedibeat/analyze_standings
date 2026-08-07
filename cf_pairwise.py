@@ -24,6 +24,18 @@ POST_CUTOFF = datetime(2025, 2, 1, tzinfo=UTC)
 FINAL_TEST_START = datetime(2025, 4, 1, tzinfo=UTC)
 FINAL_TEST_END = datetime(2025, 5, 22, tzinfo=UTC)
 
+PROBLEM_ID_RE = re.compile(r"(?<![A-Za-z0-9])\d{3,5}[A-Z]\d{0,2}(?![A-Za-z0-9])")
+URL_RE = re.compile(r"https?://\S+", re.IGNORECASE)
+EDITORIAL_HEADER_RE = re.compile(
+    r"^\s*(?:problem\s+)?(?:\d{3,5}[A-Z]\d{0,2}|[A-Z]\d{0,2})\s*[-:–—]",
+    re.IGNORECASE,
+)
+EDITORIAL_METADATA_LINE_RE = re.compile(
+    r"^\s*(?:problem\s+)?(?:credits?|author|analysis|idea|prepared|"
+    r"written\s+by|solution\s+by|editorial(?:ist)?)\b.*$",
+    re.IGNORECASE,
+)
+
 SYSTEM = (
     "Compare the inherent competitive-programming difficulty of the two problem "
     "statements. Judge the algorithmic insight, proof burden, and implementation "
@@ -73,24 +85,79 @@ def statement_hash(problem: dict) -> str:
     return sha256_bytes(canonical_text(statement_text(problem)).encode("utf-8"))
 
 
+def sanitize_editorial(problem: dict, value: str, preserve_layout: bool = False) -> str:
+    """Remove source metadata from tutorial prose while keeping its method."""
+    title = canonical_text(str(problem.get("name") or ""))
+    lines = []
+    for raw_line in value.replace("\r\n", "\n").replace("\r", "\n").split("\n"):
+        line = raw_line.strip()
+        if not line:
+            continue
+        if line.lower().startswith("rate the problem"):
+            break
+        metadata_line = line.strip("()[] ")
+        title_header = len(title) >= 3 and title.casefold() in line.casefold()
+        if (
+            EDITORIAL_HEADER_RE.match(line)
+            or EDITORIAL_METADATA_LINE_RE.match(metadata_line)
+            or (title_header and re.match(r"^\s*[A-Z]\d{0,2}\s*[.:–—-]", line))
+        ):
+            continue
+        line = URL_RE.sub("", line)
+        line = PROBLEM_ID_RE.sub("", line)
+        if len(title) >= 3:
+            line = re.sub(re.escape(title), "", line, flags=re.IGNORECASE)
+        line = line.strip()
+        if not line or re.fullmatch(r"[-:–—|]+", line):
+            continue
+        lines.append(line)
+    return "\n".join(lines).strip() if preserve_layout else canonical_text(" ".join(lines))
+
+
+def editorial_metadata_leaks(problem: dict, text: str) -> list[str]:
+    """Return metadata tokens that must not reach an editorial prompt."""
+    leaks = []
+    if PROBLEM_ID_RE.search(text):
+        leaks.append("problem_id")
+    if URL_RE.search(text):
+        leaks.append("url")
+    title = canonical_text(str(problem.get("name") or ""))
+    if len(title) >= 3 and title.casefold() in text.casefold():
+        leaks.append("title")
+    return leaks
+
+
 def editorial_text(problem: dict, include_code: bool = False) -> str:
-    """Return problem-scoped editorial input, optionally with one author solution."""
+    """Return metadata-sanitized editorial input, optionally with one solution."""
     editorial = problem.get("editorial") or {}
-    tutorial = canonical_text(str(editorial.get("tutorial") or ""))
+    tutorial = sanitize_editorial(problem, str(editorial.get("tutorial") or ""))
     if not tutorial:
         return ""
     sections = [f"[Editorial]\n{tutorial}"]
     if include_code:
         solutions = editorial.get("solution_code") or []
-        code = str(solutions[0]).replace("\r\n", "\n").strip() if solutions else ""
+        code = (
+            sanitize_editorial(problem, str(solutions[0]), preserve_layout=True)
+            if solutions
+            else ""
+        )
         if code:
             sections.append(f"[Reference solution]\n{code}")
-    return "\n\n".join(sections)
+    result = "\n\n".join(sections)
+    leaks = editorial_metadata_leaks(problem, result)
+    if leaks:
+        raise ValueError(
+            f"editorial metadata leak for {problem.get('problem_id', '<unknown>')}: "
+            + ", ".join(leaks)
+        )
+    return result
 
 
 def has_substantive_editorial(problem: dict) -> bool:
     """Reject title-only and video-only tutorial captures."""
-    tutorial = canonical_text(str(((problem.get("editorial") or {}).get("tutorial") or "")))
+    tutorial = sanitize_editorial(
+        problem, str(((problem.get("editorial") or {}).get("tutorial") or ""))
+    )
     return len(tutorial) >= 200 and "video editorial" not in tutorial.lower()
 
 

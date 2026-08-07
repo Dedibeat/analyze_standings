@@ -3,6 +3,7 @@ from datetime import datetime, timezone
 
 from cf_pairwise import (
     accuracy,
+    editorial_metadata_leaks,
     editorial_text,
     has_substantive_editorial,
     newest_substantive_train,
@@ -59,6 +60,44 @@ class PairwiseDatasetTest(unittest.TestCase):
         self.assertIn("[Statement]", enriched)
         self.assertIn("[Reference solution]\nint main() {\n}", enriched)
         self.assertNotIn("ignored", enriched)
+
+    def test_editorial_text_removes_metadata_and_ids(self):
+        row = problem("2084F", 2900, (2025, 4, 1))
+        row["name"] = "Skyscape"
+        row["editorial"] = {
+            "tutorial": (
+                "2084F - Skyscape\n\n"
+                "Problem Credits: author\n"
+                "Analysis: editor\n\n"
+                "A permutation is good when its ordered pairs remain ordered. "
+                "See 2106G1 for a separate version.\n\n"
+                "Rate the Problem\nAmazing\nGood\n"
+            )
+        }
+        text = editorial_text(row)
+        self.assertIn("ordered pairs", text)
+        self.assertNotIn("2084F", text)
+        self.assertNotIn("2106G1", text)
+        self.assertNotIn("Skyscape", text)
+        self.assertNotIn("Problem Credits", text)
+        self.assertNotIn("Rate the Problem", text)
+        self.assertEqual(editorial_metadata_leaks(row, text), [])
+
+    def test_editorial_header_without_numeric_id_is_removed(self):
+        row = problem("2106G1", 2200, (2025, 4, 1))
+        row["name"] = "Baudelaire (easy version)"
+        row["editorial"] = {
+            "tutorial": (
+                "Problem G1 — BAUDELAIRE (Easy Version)\n\n"
+                "(Author & Analysis: SpyrosAliv)\n\n"
+                "Suppose that we know the root of the tree."
+            )
+        }
+        text = editorial_text(row)
+        self.assertIn("Suppose that we know", text)
+        self.assertNotIn("BAUDELAIRE", text)
+        self.assertNotIn("SpyrosAliv", text)
+        self.assertEqual(editorial_metadata_leaks(row, text), [])
 
     def test_enriched_text_requires_editorial(self):
         with self.assertRaisesRegex(ValueError, "missing editorial for 1A"):

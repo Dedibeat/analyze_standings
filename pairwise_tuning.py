@@ -741,6 +741,10 @@ def load_manifest_problems(manifest: dict, input_mode: str = "statement") -> dic
 def evaluate(args: argparse.Namespace) -> None:
     manifest = json.loads(args.manifest.read_text())
     pairs = manifest[args.pairs_key]
+    if args.max_pairs is not None:
+        if args.max_pairs < 1:
+            raise ValueError("--max-pairs must be positive")
+        pairs = pairs[: args.max_pairs]
     by_id = load_manifest_problems(manifest, args.input_mode)
     saved = json.loads(args.output.read_text()) if args.output.exists() else {"predictions": []}
     for key, expected in (
@@ -749,6 +753,7 @@ def evaluate(args: argparse.Namespace) -> None:
         ("input_mode", args.input_mode),
         ("thinking_level", args.thinking_level),
         ("include_thoughts", args.include_thoughts),
+        ("max_pairs", args.max_pairs),
         ("manifest_sha256", sha256_bytes(args.manifest.read_bytes())),
     ):
         if saved.get("predictions") and saved.get(key) != expected:
@@ -812,6 +817,7 @@ def evaluate(args: argparse.Namespace) -> None:
                 "pairs_key": args.pairs_key,
                 "thinking_level": args.thinking_level,
                 "input_mode": args.input_mode,
+                "max_pairs": args.max_pairs,
                 "manifest_sha256": sha256_bytes(args.manifest.read_bytes()),
                 "updated_at": datetime.now(timezone.utc).isoformat(),
             })
@@ -970,6 +976,7 @@ def main() -> None:
     )
     e.add_argument("--thinking-level", choices=("minimal", "low", "medium", "high"), default="minimal")
     e.add_argument("--include-thoughts", action="store_true")
+    e.add_argument("--max-pairs", type=int, help="evaluate only the first N ordered pairs")
     e.add_argument("--output", type=Path, required=True)
     e.add_argument("--workers", type=int, default=4)
     s = sub.add_parser("submit")
