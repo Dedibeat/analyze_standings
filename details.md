@@ -1842,6 +1842,35 @@ test results, not tuning-validation results; they support a positive Phase 3
 generalization signal, while the 1,000-request sample remains a single frozen
 benchmark rather than proof that future test sets will improve.
 
+### High-thinking reasoning audit (2026-08-07)
+
+To inspect whether additional reasoning changed the comparison, a deterministic
+50-pair exploratory sample was drawn from the already-used final-test pool:
+15 unordered pairs at gap 200, 15 at gap 300, and 20 at gaps at least 400.
+Both orientations were evaluated, giving 100 requests per model. The prompt
+remained editorial-only; `thinkingLevel=HIGH` and Vertex's
+`thinkingConfig.includeThoughts=true` were enabled. The evaluator stores the
+returned thought text with each prediction, while the final JSON decision is
+parsed separately. Google's REST schema documents `includeThoughts` as the
+switch that returns thoughts when available.
+
+| Metric | Base | Tuned | Change |
+|---|---:|---:|---:|
+| Overall | 84.0% | 81.0% | -3.0 pp |
+| Exact gap 200 | 60.0% | 70.0% | +10.0 pp |
+| Exact gap 300 | 90.0% | 73.3% | -16.7 pp |
+| Gap at least 300 | 94.3% | 85.7% | -8.6 pp |
+| Gap at least 400 | 97.5% | 95.0% | -2.5 pp |
+| Swapped-order consistency | 88.0% | 86.0% | -2.0 pp |
+
+All 200 responses were valid. Thought text was returned on 98/100 requests for
+each model. Usage was 321,452 prompt, 157,497 thought, and 1,185 output tokens
+for base; tuned used 321,452 prompt, 168,434 thought, and 600 output tokens.
+The evaluator's non-global list-rate estimates were $2.101348 and $3.305749,
+respectively. Because this audit reuses final-test problems and has only 50
+unordered pairs, it is diagnostic evidence rather than a replacement for the
+1,000-request final result.
+
 An additional paired close-gap check used 10 new unordered validation pairs
 (five at a 200-point gap and five at 300), sent in both orientations to both
 models. On these 20 new requests, Flash scored 12/20 (60%) and Pro 11/20 (55%):

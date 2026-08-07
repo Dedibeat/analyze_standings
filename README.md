@@ -454,3 +454,13 @@ percentage-point gain. The tuned gains were +2.3 points at exact gap 200,
 least 400; swapped-order consistency rose from 77.8% to 89.2%. The scorer's
 non-global list-rate estimates were $5.119 for base and $7.589 for tuned;
 generated predictions and the final score remain gitignored artifacts.
+
+As an exploratory reasoning audit, the same final-test pool was sampled into 50
+unordered pairs (15 exact-200, 15 exact-300, and 20 at least 400) and sent in
+both orientations with `thinkingLevel=HIGH` and returned thoughts enabled. On
+these 100 requests, base scored 84.0% and tuned 81.0%; this is a -3.0-point
+change and is not an independent test because it reuses the final-test pool.
+Both sides returned 100 valid decisions and thought text on 98/100 requests.
+The raw reasoning-audit predictions and score are gitignored under
+`pairwise_phase3_run/`; the evaluator now uses a 4,096-token output allowance
+when thought capture is enabled so the final JSON decision is not truncated.

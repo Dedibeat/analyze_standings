@@ -747,6 +747,8 @@ def evaluate(args: argparse.Namespace) -> None:
         ("target", args.target),
         ("pairs_key", args.pairs_key),
         ("input_mode", args.input_mode),
+        ("thinking_level", args.thinking_level),
+        ("include_thoughts", args.include_thoughts),
         ("manifest_sha256", sha256_bytes(args.manifest.read_bytes())),
     ):
         if saved.get("predictions") and saved.get(key) != expected:
@@ -757,14 +759,22 @@ def evaluate(args: argparse.Namespace) -> None:
 
     def one(pair: dict) -> dict:
         a, b = by_id[pair["a"]], by_id[pair["b"]]
+        thinking_config = {"thinkingLevel": args.thinking_level.upper()}
+        if args.include_thoughts:
+            thinking_config["includeThoughts"] = True
+        max_output_tokens = (
+            4096
+            if args.include_thoughts
+            else 1024 if "pro" in args.target else 64
+        )
         payload = {
             "systemInstruction": {"parts": [{"text": SYSTEM}]},
             "contents": [
                 {"role": "user", "parts": [{"text": user_text(a, b, args.input_mode)}]}
             ],
             "generationConfig": {
-                "thinkingConfig": {"thinkingLevel": args.thinking_level.upper()},
-                "maxOutputTokens": 1024 if "pro" in args.target else 64,
+                "thinkingConfig": thinking_config,
+                "maxOutputTokens": max_output_tokens,
                 "responseMimeType": "application/json",
                 "responseSchema": SCHEMA,
                 "temperature": 0,
@@ -775,11 +785,18 @@ def evaluate(args: argparse.Namespace) -> None:
         predicted = decoded.get("harder")
         if predicted not in {"A", "B"}:
             raise ValueError(f"invalid prediction: {decoded!r}")
+        thoughts = [
+            part.get("text", "")
+            for candidate in response.get("candidates", [])[:1]
+            for part in (candidate.get("content") or {}).get("parts", [])
+            if part.get("thought") and part.get("text")
+        ]
         return {
             **pair,
             "predicted": predicted,
             "request_location": args.location,
             "usage": response.get("usageMetadata", {}),
+            "thoughts": thoughts,
         }
 
     remaining = [p for p in pairs if (p["a"], p["b"]) not in done]
@@ -952,6 +969,7 @@ def main() -> None:
         default="statement",
     )
     e.add_argument("--thinking-level", choices=("minimal", "low", "medium", "high"), default="minimal")
+    e.add_argument("--include-thoughts", action="store_true")
     e.add_argument("--output", type=Path, required=True)
     e.add_argument("--workers", type=int, default=4)
     s = sub.add_parser("submit")
