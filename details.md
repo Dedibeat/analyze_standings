@@ -2002,3 +2002,27 @@ records the 3f58b08 artifact set: 29 pilot-run files, 15 Phase-2 files, 9
 Phase-3 files, and 978 cached problem records. A future frozen set requires an
 intentional snapshot update and commit; it must never silently replace the
 published verification target.
+
+## Planned zero-shot LLM × survival integration (2026-08-07)
+
+The integration requested after reading arXiv:2512.14220 is documented in
+[`llm_survival_plan.md`](llm_survival_plan.md); this task produced a plan, not an
+experiment run. The fixed scope is the base Vertex publisher model
+`gemini-3.5-flash` with zero-shot, minimal-thinking, statement-only pairwise
+comparisons. No tuned endpoint is involved. Knowledge cutoff is deliberately not
+a selection constraint: the operational isolation rule is that prompts contain
+no title/index/contest metadata, solve counts or times, existing labels,
+survival outputs, CF ratings, tags, or medal data.
+
+The proposed first dispatch is a separately approved 13-problem protocol pilot
+on qoj 3747 / CF 2206: full round-robin in both orientations, 156 requests. If
+its parsing, order-consistency, and cost checks pass, the evidence experiment
+expands to all 15 rated mirrors (185 problems, 2,128 ordered requests). Gemini
+comparisons are aggregated with Bradley--Terry, then enter an uncertainty-aware
+MAP fusion as pairwise likelihood terms around the survival difficulty/SE prior.
+Nested contest-level LOCO keeps held-out CF ratings out of the fit. Shipping
+requires at least a 5-point improvement over calibrated LOCO 261.6, favorable
+contest-cluster bootstrap evidence, and every existing metric guard unchanged.
+Otherwise Gemini remains limited to provisional no-standings ratings or
+disagreement QA. No repository problem statement or fitted rating was sent to
+Gemini while preparing this plan.

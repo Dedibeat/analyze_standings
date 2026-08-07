@@ -354,6 +354,18 @@ region: it captures the regional discrimination signal in-sample but overfits
 (worse held-out prediction and LLM agreement), so the shipped fit stays Rasch —
 see the 2PL prototype section in `details.md`.
 
+### Planned zero-shot LLM + survival integration
+
+[`llm_survival_plan.md`](llm_survival_plan.md) applies the pairwise-comparison +
+Bradley--Terry method from arXiv:2512.14220 to this repository without replacing
+the survival model. The plan uses base zero-shot `gemini-3.5-flash`,
+metadata-sanitized statements, both A/B orientations, an uncertainty-aware
+survival prior, and nested contest-level validation against the existing metric
+and guards. Knowledge cutoff is reporting context, not a split requirement;
+solve data, ratings, labels, and other target proxies remain excluded from the
+prompt. This is a plan only—no repository problem was dispatched as part of the
+planning task.
+
 ### Codeforces pairwise-difficulty tuning pilot
 
 `pairwise_tuning.py` is a separate experiment that teaches Gemini to answer the
