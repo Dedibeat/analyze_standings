@@ -46,6 +46,7 @@ def main():
     cap = {}
 
     def fit_fn(ds, **kw):
+        kw.pop("gym_obs", None)  # 2PL prototype has no gym-merge likelihood
         th, b, alpha, hist = twopl.fit_full(ds, **kw)
         cap.update(ds=ds, theta=th, b=b, alpha=alpha)   # last call == tagged fit
         return th, b, hist

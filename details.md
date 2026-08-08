@@ -2080,12 +2080,105 @@ in the local gitignored `llm_survival_run/` directory; the resumable runner and
 tests are tracked in `llm_survival.py` and `tests/test_llm_survival.py`.
 
 The independent Gemini BT ranking reached 0.752 pairwise accuracy against CF
-ratings and 0.816 orientation consistency. Nested contest-level LOCO fusion
-did not pass the shipping gate: survival-only RMSE was **261.57**, fused RMSE
-was **264.76** (−3.19 points), and the contest bootstrap probability that
-fusion was worse was 0.667. The smallest sparse graph stable in both mean and
-worst-contest Kendall correlation was 10 unordered matches/problem (0.974 mean,
-0.921 minimum). The two fusion gates therefore fail; the order, sparse-graph,
-and budget checks pass. `arch_b.metric` remains unchanged and all existing
-guards pass, so survival remains the default and no shadow rating fields were
-added.
+ratings and 0.816 orientation consistency. After the full-cell correction, the
+local nested contest-level analysis gives survival-only RMSE **275.68** and
+fused RMSE **282.31** (fusion worse by 6.63 points), with contest bootstrap
+probability fusion was worse **0.733**. The smallest sparse graph stable in both
+mean and worst-contest Kendall correlation remains 10 unordered matches/problem
+(0.974 mean, 0.921 minimum). The two fusion gates therefore fail; the order,
+sparse-graph, and budget checks pass. `arch_b.metric` remains unchanged and all
+existing guards pass, so survival remains the default and no shadow rating
+fields were added.
+
+### Post-fix retest of the DeepResearch experiments (2026-08-08)
+
+The earlier experiment logs were rechecked after the censored full-cell fix
+(`76a458c`) and the unknown-problem-label retention fix (`c783db6`). No input
+data or external ratings were changed. The regression suite passes **29/29**
+tests. The main corrected fit uses 774,639 Architecture B observations after
+including omitted no-attempt cells.
+
+The current optimization results are:
+
+| fit / check | result |
+|---|---:|
+| Architecture A median solve-count Spearman | −0.995 |
+| Architecture B binary calibrated LOCO / raw LOCO | 254.2 / 248.3 CF |
+| Architecture B survival calibrated LOCO / raw LOCO | **244.2 / 245.2 CF** |
+| survival guards: Gym EC / Gym pooled / Kattis / AOJ / solve sanity | +0.978 / +0.969 / +0.772 / +0.568 / +0.995 |
+
+The external validation retest gives the following pooled/per-region values:
+
+| model | CF pooled | AsiaPac | N. Eur. | Europe | Kattis pooled | Gym pooled | LLM |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| arch A | +0.913 | +0.920 | +0.973 | +0.861 | +0.692 | +0.960 | +0.907 |
+| arch B binary | +0.937 | +0.942 | +0.974 | +0.896 | +0.755 | +0.971 | +0.908 |
+| arch B survival | **+0.942** | **+0.944** | +0.972 | **+0.902** | **+0.771** | +0.969 | **+0.911** |
+
+The conclusions that survive the correction are:
+
+- The season experiment remains neutral for the 5-hour filter and slightly
+  disfavors hard season splitting: baseline `245` CF LOCO, `+5h` `245`, and
+  `+season +5h` `246`; the corresponding LLM Spearman is +0.911 for all three.
+  Its harness had a stale unused `CF_REF` import, which was removed so the
+  documented command runs again.
+- The 2PL regional probe still overfits. The corrected held-out check is Rasch
+  AUC **0.9733** versus 2PL **0.9724**; corrected median alpha is 2.56 in Asia
+  East, 2.47 in Europe, 2.40 in Northern Eurasia, 2.02 in Asia Pacific, and
+  1.55 in North America. The prototype harness now discards the anchor's
+  unused `gym_obs=None` argument.
+- The corrected held-out tagged-only solve check has 598,205 cells. Binary is
+  better on this split (log-loss/Brier/AUC `0.2009/0.0615/0.9733`) than survival
+  (`0.2309/0.0699/0.9673`), so the old claim that survival wins this internal
+  check is no longer current. Survival remains the shipped model because it
+  adds solve-time structure and wins the broader external ranking checks.
+- Re-running `arch_b.medals` produces **85 bronze / 41 silver / 40 gold / 88
+  platinum / 104 star**; gold bars span **[2316, 2828] CF** with median **2540**.
+  The regional chooser still reports the same top three 2026 cities:
+  Hong Kong, Shanghai, and Shenyang, with 105 CF historical forward RMSE.
+- The frozen zero-shot Gemini responses were analysed locally again against the
+  corrected survival ratings; no inference was dispatched. Nested LOCO is
+  survival **275.68** versus fusion **282.31** CF (fusion worse by 6.63), with
+  bootstrap probability fusion is worse **0.733**. This reinforces the prior
+  decision not to integrate the pairwise model into standings. Pairwise
+  accuracy remains 0.752, order consistency 0.816, and the stable sparse
+  schedule remains 10 matches/problem.
+
+The specific keep/control rows from
+`autoresearch/loop-260723-1333/classic-results.tsv` were also rerun where the
+source inputs are present:
+
+| TSV experiment/control | corrected calibrated LOCO | conclusion |
+|---|---:|---|
+| current WF links + older ICPC + Petroz | **244.2** | baseline |
+| no WF identity links | 244.2 | metric-neutral; keep for correctness |
+| include WF solve rows | 244.3 | discard |
+| omit older ICPC | 244.3 | addition is only −0.1, below noise |
+| omit Petroz | 245.9 | addition is −1.7, below the 5-point keep threshold |
+| `sigma_theta=300 / 500 / 600` | 243.8 / 243.5 / 242.9 | sub-noise; survival AUC 0.9674 / 0.9670 / 0.9666 |
+| latest solve threshold 3.0 / 4.0 / 4.5 h | 244.2 / 244.1 / 244.0 | sub-noise; 4.5 h lowers Kattis slightly |
+| exclude Asia West / exclude online qualifiers | 242.1 / 243.5 | sub-noise; no independent corroboration |
+| all zero-solve / stable-ID zero-solve rows | 245.7 / 245.9 | discard |
+| trusted-name minimum length 6 / recurrence in 3 contests | 243.9 / 243.9 | sub-noise |
+| disable trusted names / scope names by affiliation / scope roster pairs by affiliation | 246.7 / 243.6 / 244.1 | no improvement; discard |
+
+Thus none of the discarded rows becomes a justified new keep under the corrected
+contract. The three historical keeps remain defensible as data-quality choices,
+but their numeric gains are now smaller than the campaign's noise threshold;
+the WF change is retained because it fixes an over-broad identity join, not
+because this scalar metric moves.
+
+Rows for the time-causal participant prior, refreshed live-QOJ replay rows, and
+the additional camp/XCPCIO collections were not rerun individually: the prior
+experiment patch is not part of the shipped code, the refreshed replay snapshot
+is not present, and those candidate collection files are not tracked in this
+checkout. Their TSV values remain historical results, not post-fix measurements.
+
+The gym-merge experiment could not be rerun from this checkout because its
+loader requires the missing, gitignored
+`data/gym_checkpoints/api_standings.json`; the tracked gym difficulty artifact
+does not contain the raw standings needed to reconstruct fixed-ability gym
+observations. Its historical negative result is therefore retained as
+pre-fix evidence, not relabeled as a post-fix measurement. The unrelated
+Codeforces pairwise-tuning experiments do not consume `solve_mask` and were not
+rerun.

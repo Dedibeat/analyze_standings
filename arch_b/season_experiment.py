@@ -26,7 +26,7 @@ import numpy as np
 from arch_a.load import _UnionFind
 from . import survival
 from .anchor import estimate_anchored
-from .calibrate import CF_REF, _anchors
+from .calibrate import _anchors
 from .validate import DATA, _llm_labels
 
 OUT = os.path.join(os.path.dirname(__file__), os.pardir, "output")

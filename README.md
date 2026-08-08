@@ -92,12 +92,13 @@ AOJ practice statistics:
 ./.venv/bin/python -m arch_b.metric        # THE optimization metric: LOCO CF-point RMSE + guards
 ```
 
-All three architectures agree closely with both opinions. On the LLM check arch A
-leads (Spearman +0.908 vs arch B +0.874 / +0.880 — deduping the repeated contests
-sharpened arch A's solve-count estimate); on the CF ratings the IRT fits edge ahead
-(binary +0.962, survival +0.956 vs arch A +0.945), and all three are ≈ 0.95+. On
-held-out solve prediction the survival model generalizes best (AUC 0.881 vs binary
-0.871).
+All three architectures agree closely with both opinions. After the full-cell mask
+correction, the LLM-bucket Spearman values are +0.908 (arch A), +0.908 (binary),
+and +0.911 (survival); the pooled CF values are +0.913, +0.937, and +0.942.
+On the corrected tagged-only held-out-cell check, binary scores AUC 0.9733 versus
+survival 0.9673; this check now favours binary, while the survival model remains
+the shipped choice because it uses solve-time information and leads the broader
+external CF/Kattis validation.
 
 `gym_difficulty` turns the scraped CF **gym-mirror** attempts
 (`data/cf_gym_mirrors.json` — real timed attempts whose solvers carry their own
@@ -137,6 +138,9 @@ optimum. Further gains need new anchor data rather than fit changes (see
 details.md). A 2026-07-23 data-side campaign added the supplemental standings
 and fixed an over-broad World Finals affiliation join; original-cell held-out
 AUC also improved 0.885761 → 0.886000.
+Those campaign numbers predate the full-cell mask correction; the corrected
+row-by-row retest of `autoresearch/loop-260723-1333/classic-results.tsv` is
+recorded in `details.md`.
 
 ### Calibrated Codeforces-point ratings
 
@@ -200,11 +204,12 @@ the weakest tier whose bar clears it — badges are monotone in difficulty, and 
 medal-badge count per contest ≈ the lowest gold team's solve count. Above the gold
 bar, a second crossing at the **champion cohort** (top-5 official teams) splits
 **platinum** (champions still solve it at even odds — decides ranking within gold,
-92 problems) from **star** (beyond even the champions — the extreme problems,
+88 problems) from **star** (beyond even the champions — the extreme problems,
 104, almost all 0–2 official solves). Writes
 `output/medal_badges.json`; bars and difficulties are also given in CF points via
-the `calibrate` map (gold bar across contests: median ≈ 2601 CF, range ≈
-[2137, 2932]). See the medal-badge section in `details.md` for why the bars are
+the `calibrate` map (gold bar across contests: median ≈ 2540 CF, range ≈
+[2316, 2828]). The current badge totals are 85 bronze / 41 silver / 40 gold /
+88 platinum / 104 star. See the medal-badge section in `details.md` for why the bars are
 empirical crossings rather than Elo performance ratings.
 
 ```bash
@@ -376,9 +381,10 @@ was never read or sent. The 156-request pilot passed parsing and 85.9% A/B
 order consistency; the full 2,128-request run completed after two transient
 429 retries. Estimated actual inference cost was **$5.4270**.
 
-The result is deliberately not integrated into standings: nested contest-level
-LOCO was 261.57 CF points for survival versus 264.76 for fusion (−3.19), with
-0.667 bootstrap probability that fusion was worse. A/B consistency was 0.816,
+The result is deliberately not integrated into standings. Re-running the local
+analysis against the corrected survival fit gives nested contest-level LOCO
+275.68 CF points for survival versus 282.31 for fusion (fusion worse by 6.63),
+with 0.733 bootstrap probability that fusion was worse. A/B consistency was 0.816,
 BT pairwise accuracy against CF ratings was 0.752, and the selected robust
 sparse schedule was 10 unordered matches/problem (mean/minimum Kendall 0.974 /
 0.921). Survival remains the default. Use [`llm_survival.py`](llm_survival.py)
