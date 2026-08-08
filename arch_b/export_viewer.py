@@ -79,13 +79,16 @@ def build_data():
     # therefore the prefix of the rho array.
     row = 0
     tagged_row_count = sum(
-        1 for c in raw for s in c["standings"] if row_solved_any(s)
+        1 for c in raw
+        for s in c["standings"]
+        if row_solved_any(s, {p["problem_label"] for p in c["problems"]})
     )
     for c in raw:
         cid = c["contest_id"]
+        labels = {p["problem_label"] for p in c["problems"]}
         teams = []
         for s in c["standings"]:
-            if not row_solved_any(s):
+            if not row_solved_any(s, labels):
                 continue
             idx = key_to_idx[team_key(cid, s["team_id"], s.get("members"), uf)]
             teams.append({

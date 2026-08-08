@@ -99,9 +99,18 @@ def _roster_token(members, season=None):
     return None
 
 
-def row_solved_any(standing):
-    """True if this standing row solved at least one problem (else it is dropped)."""
-    return any(p.get("solved") for p in (standing.get("problems") or {}).values())
+def row_solved_any(standing, problem_labels=None):
+    """True if this row solved a problem included in the fit.
+
+    Some QOJ standings contain labels that are absent from the contest's parsed
+    problem list.  Those cells cannot be modeled without inventing problem
+    metadata, so they must not by themselves retain a row as a solved team.
+    """
+    problems = standing.get("problems") or {}
+    if problem_labels is None:
+        return any(p.get("solved") for p in problems.values())
+    return any(p.get("solved") for label, p in problems.items()
+               if label in problem_labels)
 
 
 class _UnionFind:
@@ -303,10 +312,11 @@ def load(path=DATA_PATH, uf=None, season_key=False, min_solve_hours=None):
     needs the UCup and tagged datasets to agree on who is who). When omitted, the
     union-find is built from this call's own rows.
 
-    Standing rows that solved no problems are dropped (``row_solved_any``): they
-    are excluded from the fit, so a team's contest count ``N_t`` is the number of
-    contests where it actually solved something. ``uf`` is still built over *all*
-    rows, so identity links carried only by a zero-solve row are preserved.
+    Standing rows that solved no listed problem are dropped (``row_solved_any``):
+    labels absent from a contest's parsed problem list are not part of the fit.
+    A team's contest count ``N_t`` is therefore the number of contests where it
+    solved something in the modeled problem set. ``uf`` is still built over
+    *all* rows, so identity links carried only by a zero-solve row are preserved.
 
     ``season_key`` separates recurring rosters by ICPC season (``season_of``), so a
     roster gets a fresh ability each season; stable ids stay season-agnostic (the
@@ -346,6 +356,7 @@ def load(path=DATA_PATH, uf=None, season_key=False, min_solve_hours=None):
         if cid not in contest_index:
             contest_index[cid] = len(contest_index)
         ci = contest_index[cid]
+        labels = {p["problem_label"] for p in c["problems"]}
         for p in c["problems"]:
             key = (ci, p["problem_label"])
             if key not in problem_index:
@@ -354,7 +365,7 @@ def load(path=DATA_PATH, uf=None, season_key=False, min_solve_hours=None):
                 contest_of_problem.append(ci)
                 raw_solved_count.append(p.get("problem_solved_in_contest"))
         for s in c["standings"]:
-            if not row_solved_any(s):
+            if not row_solved_any(s, labels):
                 continue  # zero-solve rows are dropped from the fit
             tk = _key(cid, s)
             if tk not in team_index:
@@ -378,7 +389,7 @@ def load(path=DATA_PATH, uf=None, season_key=False, min_solve_hours=None):
         # which problem columns belong to this contest
         cols = {p["problem_label"]: problem_index[(ci, p["problem_label"])] for p in c["problems"]}
         for s in c["standings"]:
-            if not row_solved_any(s):
+            if not row_solved_any(s, cols):
                 continue  # zero-solve rows are dropped from the fit
             assert s.get("rank") is not None, f"missing rank in contest {cid}"
             ti = team_index[_key(cid, s)]

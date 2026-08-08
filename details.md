@@ -266,8 +266,17 @@ Run with the project venv:
   attempted cells (the official subset likewise has M ahead, 111 vs 84). With
   all 633 retained nonzero-solve teams included for both problems, the corrected
   survival fit rates raw B=2265 and M=2226; the shipped calibrated output is
-  B=2576.6 and M=2479.0. A regression test covers the mask semantics in
+  B=2577.4 and M=2479.7. A regression test covers the mask semantics in
   `tests/test_load.py`.
+
+- **Do not retain rows using unknown problem labels (`load.row_solved_any`).**
+  A few QOJ exports have standing labels that are absent from the parsed contest
+  problem list. The loader cannot rate those problems without inventing their
+  metadata, so a row is retained only when it solved at least one listed problem.
+  Before this guard, Petroz contest 2575 listed only `M`, but 610 rows that solved
+  only omitted labels were retained as censored non-solves of `M`. The fit now
+  keeps the 44 rows that actually solved `M`; viewers use the same filter for
+  performance-row alignment. A regression test covers this case.
 
 - **No year in the team key (decision on the multi-season `tagged.json`).**
   The larger `data/tagged.json` spans 5 seasons (2022–2026, 146 unique contests). We
@@ -319,11 +328,11 @@ Run with the project venv:
   vs ≈3.7 with linking removed.
 
 **2026-08-08 current fit after the full-cell mask correction:** Arch A is
-`theta=[1372,3698]`, mean 2011, `b=[951,4000]`, mean 2230, with median
-within-contest Spearman −0.995. Arch B uses 775,432 observations after adding
+`theta=[1372,3698]`, mean 2011, `b=[951,4000]`, mean 2226, with median
+within-contest Spearman −0.995. Arch B uses 774,639 observations after adding
 the censored no-attempt cells: binary `theta=[1117,3538]`, `b=[800,3759]`,
-mean `b=2333`, and survival `theta=[1385,2916]`, `b=[1182,3251]`, mean
-`b=2210`; their solve-count Spearman medians are −1.000 and −0.995.
+mean `b=2332`, and survival `theta=[1385,2915]`, `b=[1182,3251]`, mean
+`b=2209`; their solve-count Spearman medians are −1.000 and −0.995.
 
 ### Caveat introduced by the stronger normalization
 
@@ -401,7 +410,7 @@ log-likelihood (eq. loglik) plus Gaussian priors on `theta` and `b` (eq. priors)
 
 - `model.py` — `fit(ds, prior_mu, sigma_theta, sigma_b, mu_b)`: the MAP fit.
   `_observations` flattens `solve_mask` into 1-D `(obs_team, obs_prob, obs_y)`
-  arrays (one entry per observed competitor–problem cell, 775,432 after including
+  arrays (one entry per observed competitor–problem cell, 774,639 after including
   censored no-attempt cells in tagged plus supplemental standings). The
   objective is strictly concave (concave log-likelihood + strictly concave
   Gaussian prior) so the MAP is unique; it is solved by **block-coordinate
@@ -560,11 +569,11 @@ Run with the project venv:
 
 ### Results (Architecture B, current run)
 
-- The corrected full-cell fit uses 775,432 observations. Binary converges in 53
+- The corrected full-cell fit uses 774,639 observations. Binary converges in 53
   anchor and 48 tagged iterations; `theta` ≈ [1117, 3538], mean ~1975, and
-  `b` ≈ [800, 3759], mean ~2333. Survival converges in 163 anchor and 137
-  tagged iterations; `theta` ≈ [1385, 2916], mean ~1963, and `b` ≈ [1182,
-  3251], mean ~2210.
+  `b` ≈ [800, 3759], mean ~2332. Survival converges in 163 anchor and 137
+  tagged iterations; `theta` ≈ [1385, 2915], mean ~1963, and `b` ≈ [1182,
+  3251], mean ~2209.
 - Per-contest Spearman(difficulty, solve_count) median **−1.000** (binary) /
   **−0.995** (survival) over 197 contests. Looser than arch_a's −0.995 *by design*:
   arch_a difficulty is a near-monotone transform of the solve count given the
@@ -803,25 +812,25 @@ varies inconsistently by season, field size is uninformative, and extrapolating
 the small year coefficient made the 2026 estimates artificially easy.
 
 **Decision-metric validation.**  A rolling-origin check trains strictly on
-earlier seasons and predicts the 19 regular regionals in 2023–2025.  The
-shipped one-pseudo-contest city model achieves **131.7 CF RMSE**, **92.7 CF
-MAE**, and **77.1% correct within-season pair ordering** (48 pairs).  The prior
-raw-city + order/year formula, reevaluated after fixing the host label below,
-gets 172.4 RMSE / 125.5 MAE / 66.7% pair ordering.  Each CLI interval is
-explicitly labelled a historical RMSE band, not a 68% confidence or medal
-probability.
+earlier seasons and predicts the 19 regular regionals in 2023–2025.  With the
+corrected full-cell ratings, the shipped one-pseudo-contest city model achieves
+**105.0 CF RMSE**, **86.5 CF MAE**, and **47.9% correct within-season pair
+ordering** (48 pairs).  The RMSE is useful as a broad uncertainty scale, but
+the pair ordering is weak in this snapshot, so the ranking is only a rough
+shortlist. Each CLI interval is explicitly labelled a historical RMSE band,
+not a 68% confidence or medal probability.
 
 **2026 choice.**  [ICPC Global](https://icpc.global/regionals/results) listed
 Chengdu, Hong Kong, Nanchang, Nanjing, Shanghai, Shenyang, Wuhan, and Xi'an as
 the ordinary 2026 Asia East sites on 2026-07-27.  Dates/order were still blank;
-online rounds and the EC Final are
-not selectable ordinary medal regionals and are excluded.  For gold, the point
-leaders are Shenyang 2458, Hong Kong 2465, and Nanjing 2473 CF, but their gaps
-are tiny relative to the 132-CF forward error and every candidate's band
-overlaps.  The output therefore presents a ranking plus evidence counts and
-warns that travel/cost, school quotas, eligibility, registration limits, and
-this year's applicant strength remain outside the model.  The candidate list
-is source-dated in code instead of silently assuming unpublished dates.
+online rounds and the EC Final are not selectable ordinary medal regionals and
+are excluded.  For gold, the point leaders are Hong Kong 2506, Shanghai 2518,
+and Shenyang 2526 CF; their gaps are tiny relative to the 105-CF forward error
+and every candidate's band overlaps.  The output therefore presents a ranking
+plus evidence counts and warns that travel/cost, school quotas, eligibility,
+registration limits, and this year's applicant strength remain outside the
+model.  The candidate list is source-dated in code instead of silently assuming
+unpublished dates.
 
 **QOJ archive audit (not shipped).**  The user identified QOJ's 2015–2021 Asia
 East category archive as a possible way to add signal.  The 2015–2016 regional

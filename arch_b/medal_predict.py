@@ -236,7 +236,7 @@ class Predictor:
     -----
     >>> p = Predictor()
     >>> [r["city"] for r in p.recommend(REGIONALS_BY_YEAR[2026])[:3]]
-    ['Shenyang', 'Hong Kong', 'Nanjing']
+    ['Hong Kong', 'Shanghai', 'Shenyang']
     """
 
     def __init__(self, rows=None, shrinkage=CITY_SHRINKAGE):

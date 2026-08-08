@@ -41,6 +41,36 @@ class LoadTest(unittest.TestCase):
         self.assertEqual(ds.solve_mask[0].tolist(), [True, True, True])
         self.assertEqual(ds.y[0].tolist(), [True, False, False])
 
+    def test_unknown_problem_solve_does_not_retain_row(self):
+        contest = {
+            "contest_id": 2,
+            "contest_name": "Partial metadata",
+            "year": 2026,
+            "region": "",
+            "problems": [
+                {"problem_id": 1, "problem_label": "A", "problem_name": "A",
+                 "problem_solved_in_contest": 0},
+            ],
+            "standings": [{
+                "rank": 1,
+                "team_id": "team-2",
+                "team_name": "team-2",
+                "members": [],
+                "total_solved": 1,
+                "problems": {
+                    "B": {"solved": True, "time_seconds": 100,
+                          "wrong_attempts": 0},
+                },
+            }],
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "contest.json"
+            path.write_text(json.dumps([contest]))
+            ds = load(str(path))
+
+        self.assertEqual(len(ds.team_of_row), 0)
+        self.assertEqual(len(ds.problems), 1)
+
 
 if __name__ == "__main__":
     unittest.main()

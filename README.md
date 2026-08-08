@@ -26,7 +26,9 @@ estimated `difficulty` on a Codeforces-like [800, 4000] scale) and prints
 verification stats. Standing rows that solved no problems are dropped before the
 fit (see the zero-solve decision in `details.md`). QOJ omits unattempted problem
 labels; the loader treats those cells as censored non-solves rather than dropping
-them from the likelihood.
+them from the likelihood. If a standings row contains a label absent from that
+contest's parsed problem list, that unknown solve is ignored for row retention
+because its problem metadata is unavailable.
 
 `run` fits the full `data/tagged.json` **anchored to the Universal Cup scale**:
 it first fits the UCup seasons (`ucup_s3` + `ucup_s4`) on their own, then uses
@@ -233,11 +235,11 @@ uses only the 25 ordinary 2022–2025 regionals and partially pools each host ci
 with one overall-mean pseudo-contest. EC Finals do not contaminate ordinary-city
 baselines, and one-off hosts no longer get full weight.
 
-Forward validation (train on earlier seasons, predict 2023–2025) gives **132 CF
-gold-bar RMSE** and **77.1% correct pair ordering** over 19 contests, versus
-172 CF / 66.7% for the previous raw-city + order/year formula after correcting
-the 2022 Hong Kong host label. The
-[2026 ICPC Global city list](https://icpc.global/regionals/results) was checked
+Forward validation (train on earlier seasons, predict 2023–2025) gives **105 CF
+gold-bar RMSE** and **47.9% correct pair ordering** over 19 contests after the
+full-cell rating correction. The pair ordering is therefore weak in this
+snapshot; use the city ranking as a rough shortlist, not a reliable ordering.
+The [2026 ICPC Global city list](https://icpc.global/regionals/results) was checked
 on 2026-07-27; dates were still absent, and temporal order is weak historically, so
 the chooser does not invent positions. All current error bands overlap: use the
 ranking as a shortlist alongside travel, quotas, eligibility, and registration
