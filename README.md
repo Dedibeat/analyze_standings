@@ -24,7 +24,9 @@ python3 -m venv .venv
 This writes `output/problem_ratings.json` (one record per problem with its
 estimated `difficulty` on a Codeforces-like [800, 4000] scale) and prints
 verification stats. Standing rows that solved no problems are dropped before the
-fit (see the zero-solve decision in `details.md`).
+fit (see the zero-solve decision in `details.md`). QOJ omits unattempted problem
+labels; the loader treats those cells as censored non-solves rather than dropping
+them from the likelihood.
 
 `run` fits the full `data/tagged.json` **anchored to the Universal Cup scale**:
 it first fits the UCup seasons (`ucup_s3` + `ucup_s4`) on their own, then uses
@@ -54,7 +56,8 @@ comparison.
 Architecture B also loads 71 standings-only supplemental QOJ contests:
 14 Asia East ICPC regionals from 2020–2021 and 57 Petrozavodsk camp contests
 from 2022–2026. They add cross-contest team evidence without using statements
-or editorials and improve calibrated LOCO 264.5 → 261.6.
+or editorials. The current full-cell fit has calibrated LOCO RMSE 244.2 CF
+points (the earlier 261.6 figure excluded omitted no-attempt cells).
 
 Add `--survival` to fit the **solve-time survival model** (`strat.tex` §5) instead,
 which also uses *when* each problem was solved (writes
@@ -119,7 +122,7 @@ ratings of all 15 CF-mirrored contests (185 anchor problems — every rated
 mirror the dataset has; an exhaustive sweep found no more). It refits the
 survival model from source, applies the locked shipped gym shape, and prints
 `METRIC calibrated_loco_cf_rmse=…` as its last line (current baseline
-**261.6**, down from 266.4; lower is better). It exits nonzero if any external
+**244.2**, down from the pre-correction 261.6; lower is better). It exits nonzero if any external
 guard regresses (gym
 Asia-East-Continent / gym pooled / Kattis / AOJ within-contest Spearman,
 solve-count sanity) or if raw affine LOCO rises above 293.4. `program.md` at the

@@ -256,6 +256,19 @@ Run with the project venv:
   so this discards genuine low-end performances and is the reason difficulties
   drift up rather than down.
 
+- **Treat omitted problem entries as censored non-solves (`load.solve_mask`).**
+  QOJ omits a problem from a standing row when the team never attempted it. The
+  loader now marks every problem belonging to the row's contest in
+  `solve_mask`, leaving an omitted entry as `y=0` with right-censoring at the
+  contest end. Before this fix, the model silently excluded no-attempt cells.
+  The Shenyang 2023 audit made the error visible: QOJ reports B=148 and M=185
+  solves, but the old likelihood saw only B=148/178 and M=185/233 among
+  attempted cells (the official subset likewise has M ahead, 111 vs 84). With
+  all 633 retained nonzero-solve teams included for both problems, the corrected
+  survival fit rates raw B=2265 and M=2226; the shipped calibrated output is
+  B=2576.6 and M=2479.0. A regression test covers the mask semantics in
+  `tests/test_load.py`.
+
 - **No year in the team key (decision on the multi-season `tagged.json`).**
   The larger `data/tagged.json` spans 5 seasons (2022–2026, 146 unique contests). We
   keep identity season-agnostic — appending the contest `year` to the key would
@@ -294,16 +307,23 @@ Run with the project venv:
 
 ### Results (current run)
 
-- Converges in ~7 iterations, monotone decreasing `max|dtheta|` < 0.5.
-- `theta` ≈ [1369, 3680], mean ~2007 (zero-solve rows dropped + contests deduped).
-- `b` ≈ [986, 4000], mean ~2216; boundary-smoothed (see decision), so
+- Converges in 8 iterations, monotone decreasing `max|dtheta|` < 0.5.
+- `theta` ≈ [1372, 3698], mean ~2011 (zero-solve rows dropped + contests deduped).
+- `b` ≈ [951, 4000], mean ~2230; boundary-smoothed (see decision), so
   solved-by-all problems clear the 800 floor and most solved-by-none spread below
   4000 (only at-ceiling and empty-contest problems remain pinned).
-- Per-contest Spearman(difficulty, solve_count) median **−0.993** (harder
+- Per-contest Spearman(difficulty, solve_count) median **−0.995** (harder
   problems were solved by fewer teams, as expected).
 - Cross-contest normalization is now carried by the shared teams (see the
   evidence-weighted-prior decision): per-contest mean ability spreads to std≈110
   vs ≈3.7 with linking removed.
+
+**2026-08-08 current fit after the full-cell mask correction:** Arch A is
+`theta=[1372,3698]`, mean 2011, `b=[951,4000]`, mean 2230, with median
+within-contest Spearman −0.995. Arch B uses 775,432 observations after adding
+the censored no-attempt cells: binary `theta=[1117,3538]`, `b=[800,3759]`,
+mean `b=2333`, and survival `theta=[1385,2916]`, `b=[1182,3251]`, mean
+`b=2210`; their solve-count Spearman medians are −1.000 and −0.995.
 
 ### Caveat introduced by the stronger normalization
 
@@ -381,7 +401,8 @@ log-likelihood (eq. loglik) plus Gaussian priors on `theta` and `b` (eq. priors)
 
 - `model.py` — `fit(ds, prior_mu, sigma_theta, sigma_b, mu_b)`: the MAP fit.
   `_observations` flattens `solve_mask` into 1-D `(obs_team, obs_prob, obs_y)`
-  arrays (one entry per observed competitor–problem cell, ~256k for tagged). The
+  arrays (one entry per observed competitor–problem cell, 775,432 after including
+  censored no-attempt cells in tagged plus supplemental standings). The
   objective is strictly concave (concave log-likelihood + strictly concave
   Gaussian prior) so the MAP is unique; it is solved by **block-coordinate
   Newton** — one closed-form, vectorized Newton step over all `theta` (given `b`),
@@ -539,21 +560,20 @@ Run with the project venv:
 
 ### Results (Architecture B, current run)
 
-- Converges in ~25 iterations / ~5 s (block-coordinate Newton), `max(|dtheta|,
-  |db|)` monotone below 0.5.
-- `theta` ≈ [953, 3209], mean ~2008; `b` ≈ [800, 3161], mean ~1963. The scale is
-  **a touch shrunk toward MU0 vs arch_a** ([1720, 3777]) — MAP shrinkage at the
-  chosen `sigma=400` (a looser prior would widen it; see the knob above). It is a
-  different, Bayesian scale, not a defect.
-- Per-contest Spearman(difficulty, solve_count) median **−0.951** (binary) /
-  **−0.973** (survival) over 134 contests. Looser than arch_a's −0.993 *by design*:
+- The corrected full-cell fit uses 775,432 observations. Binary converges in 53
+  anchor and 48 tagged iterations; `theta` ≈ [1117, 3538], mean ~1975, and
+  `b` ≈ [800, 3759], mean ~2333. Survival converges in 163 anchor and 137
+  tagged iterations; `theta` ≈ [1385, 2916], mean ~1963, and `b` ≈ [1182,
+  3251], mean ~2210.
+- Per-contest Spearman(difficulty, solve_count) median **−1.000** (binary) /
+  **−0.995** (survival) over 197 contests. Looser than arch_a's −0.995 *by design*:
   arch_a difficulty is a near-monotone transform of the solve count given the
   field, whereas IRT difficulty also depends on **which** teams solved a problem
   (a problem cleared by weak teams rates easier than one cleared by equally many
   strong teams) — the deviation from pure solve-count ordering is exactly the extra
   signal IRT buys.
-- **Survival fit:** `b` ≈ [1209, 3030], mean ~2035; `b` SE median ~28 (tighter than
-  binary). Converges in ~70 iters / ~6 s.
+- **Survival fit:** `b` SE median remains ~28 (tighter than binary) because solve
+  times add information.
 
 ### External validation vs the LLM difficulty (`arch_b.validate`)
 
@@ -1045,9 +1065,11 @@ contest's problem names against the rated CF problemset (contest-level vote):
 CF 2157 ↔ qoj 2692 (found by the gym certification), plus CF 1773 (2022–23
 NEF) and CF 1938 (2024 APAC) found by the exhaustive sweep — which also showed
 **no further rated mirrors exist** for our 146 contests, so anchor growth now
-requires new contests in the fit. After the 2026-07-23 data-expansion campaign
-below, the current calibrated survival baseline is **261.6**; raw affine LOCO is
-**285.0** and remains a guard with ceiling 293.4.
+requires new contests in the fit. After the 2026-08-08 full-cell mask correction,
+the current calibrated survival baseline is **244.2**; raw affine LOCO is
+**245.2** and remains a guard with ceiling 293.4. The previous 261.6/285.0
+figures were the pre-correction baseline, where omitted no-attempt cells were
+excluded from the likelihood.
 
 **Noise floor (cluster bootstrap, contests as resampling units):** for the
 legacy raw-affine metric, pooled RMSE carried **SE ≈ ±20 points** (95% CI ≈

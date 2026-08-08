@@ -23,7 +23,7 @@ from arch_a.fixedpoint import _performance_ratings
 from arch_a.load import _max_solve_seconds, dedupe_contests, row_solved_any, team_key
 from . import survival
 from .anchor import TAGGED, estimate_anchored
-from .calibrate import _anchors
+from .calibrate import _anchors, _gym_shape
 from .run import MIN_SOLVE_HOURS
 
 OUT_DIR = os.path.join(os.path.dirname(__file__), os.pardir, "output")
@@ -43,19 +43,27 @@ def build_data():
              "difficulty": float(b[p])}
             for p, (cid, lab, pid, name) in enumerate(ds.problems)]
     our, cf, _ = _anchors(recs)
-    slope, intercept = np.polyfit(our, cf, 1)
-    to_cf = lambda x: float(np.clip(slope * x + intercept, LO, HI))  # noqa: E731
+    shape = _gym_shape(recs)
+    if shape is None:
+        shape = lambda x: np.asarray(x, float)  # noqa: E731
+    slope, intercept = np.polyfit(shape(our), cf, 1)
+    to_cf = lambda x: float(np.clip(  # noqa: E731
+        slope * shape(np.asarray([x], float))[0] + intercept, LO, HI))
 
     # problem difficulties (CF points) + SE, per contest
     prob_by_contest = {}
     for p, (cid, label, pid, name) in enumerate(ds.problems):
         ci = ds.contest_of_problem[p]
         rows = np.where(ds.contest_of_row == ci)[0]
+        h = 10.0
+        local_slope = abs(slope * float(
+            (shape(np.asarray([b[p] + h]))[0] -
+             shape(np.asarray([b[p] - h]))[0]) / (2 * h)))
         solved = int(np.sum(ds.y[rows, p] & ds.solve_mask[rows, p]))
         prob_by_contest.setdefault(int(cid), []).append({
             "label": label, "name": name,
             "difficulty": round(to_cf(b[p]), 0),
-            "difficulty_se": round(slope * se_b[p], 0),
+            "difficulty_se": round(local_slope * se_b[p], 0),
             "solved": solved,
         })
 
@@ -66,7 +74,13 @@ def build_data():
     key_to_idx = {k: i for i, k in enumerate(ds.teams)}
 
     contests = []
-    row = 0  # running counter aligned with rho (same order as load built ds rows)
+    # ``rho`` also contains the supplemental contests used by the fit.  The
+    # viewer displays only tagged.json, which is the first source loaded and
+    # therefore the prefix of the rho array.
+    row = 0
+    tagged_row_count = sum(
+        1 for c in raw for s in c["standings"] if row_solved_any(s)
+    )
     for c in raw:
         cid = c["contest_id"]
         teams = []
@@ -100,7 +114,7 @@ def build_data():
             "teams": teams,
         })
 
-    assert row == len(rho), "performance/row alignment mismatch"
+    assert row == tagged_row_count, "tagged performance/row alignment mismatch"
     contests.sort(key=lambda c: (-(c["year"] or 0), c["name"]))
     return {"scale": {"lo": LO, "hi": HI}, "contests": contests}
 

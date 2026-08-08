@@ -287,7 +287,7 @@ class Dataset:
     rank_of_row: np.ndarray    # row -> finishing rank (int)
 
     y: np.ndarray              # (n_rows, n_problems) bool solved, NaN-free; valid only where mask
-    solve_mask: np.ndarray     # (n_rows, n_problems) bool: problem belongs to that row's contest
+    solve_mask: np.ndarray     # (n_rows, n_problems) bool: contest problem cell, incl. no-attempt
     tau: np.ndarray            # (n_rows, n_problems) solve time seconds; NaN where not solved
     wrong: np.ndarray          # (n_rows, n_problems) wrong attempts; 0 where mask is False
     contest_of_problem: np.ndarray  # problem index -> contest index
@@ -390,6 +390,10 @@ def load(path=DATA_PATH, uf=None, season_key=False, min_solve_hours=None):
             mask = np.zeros(n_problems, dtype=bool)
             tau = np.full(n_problems, np.nan)
             wrong = np.zeros(n_problems, dtype=int)
+            # QOJ omits a problem from ``standing["problems"]`` when the team
+            # never attempted it.  It is still a censored non-solve for this
+            # contest, so every problem in the contest must be in the mask.
+            mask[list(cols.values())] = True
             for label, pdata in (s.get("problems") or {}).items():
                 col = cols.get(label)
                 if col is None:
