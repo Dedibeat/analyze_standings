@@ -144,7 +144,9 @@ row-by-row retest of `autoresearch/loop-260723-1333/classic-results.tsv` is
 recorded in `details.md`. The deeper [supplemental-contest influence audit](data_influence.md)
 finds that the corrected 1.065-CF gain is almost entirely Petroz-to-Northern-
 Eurasia transfer, is not corroborated by the current original-cell holdout, and
-does not justify a metric-selected contest subset.
+does not justify a metric-selected contest subset. A strict no-link control
+degrades LOCO from 244.2 to 333.5, confirming that shared-team normalization is
+essential even though merely maximizing the number of new links is not useful.
 
 ### Calibrated Codeforces-point ratings
 

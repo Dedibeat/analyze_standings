@@ -27,6 +27,7 @@ import json
 import os
 import tempfile
 from collections import Counter, defaultdict
+from dataclasses import replace
 
 import numpy as np
 
@@ -154,6 +155,33 @@ def _fit(paths, identity_paths=None):
         ds, _theta, b, _history, _uf = estimate_anchored(
             fit_fn=survival.fit, min_solve_hours=MIN_SOLVE_HOURS,
             supplemental_paths=paths, identity_paths=identity_paths)
+    result = _score(ds, b)
+    result.update({
+        "contests": len(ds.contests),
+        "rows": len(ds.team_of_row),
+        "teams": len(ds.teams),
+        "problems": len(ds.problems),
+    })
+    return result
+
+
+def _without_cross_contest_links(ds):
+    """Give every standing row its own ability parameter.
+
+    There is one standing row per team per contest, so this preserves all
+    within-contest response cells while preventing theta from being shared
+    across contests.  It also deliberately removes UCup prior transfer: that
+    transfer is itself a cross-dataset identity link.
+    """
+    n_rows = len(ds.team_of_row)
+    return replace(ds, teams=[f"row:{i}" for i in range(n_rows)],
+                   team_of_row=np.arange(n_rows, dtype=int))
+
+
+def _fit_without_cross_contest_links():
+    ds = load([TAGGED, OLDER_ICPC, PETROZ], min_solve_hours=MIN_SOLVE_HOURS)
+    ds = _without_cross_contest_links(ds)
+    _theta, b, _history = survival.fit(ds, verbose=False)
     result = _score(ds, b)
     result.update({
         "contests": len(ds.contests),
@@ -324,6 +352,8 @@ def main(argv=None):
         results[name] = _fit(paths)
         print(f"  calibrated={results[name]['calibrated_loco']:.1f}  "
               f"raw={results[name]['raw_loco']:.1f}")
+    print("fitting without any cross-contest team links ...", flush=True)
+    results["no_cross_contest_links"] = _fit_without_cross_contest_links()
     print("fitting supplemental identity links without solve evidence ...", flush=True)
     results["identity_only"] = _fit([], identity_paths=[OLDER_ICPC, PETROZ])
     with _contest_file(bridge) as path:

@@ -2,7 +2,9 @@ import unittest
 
 import numpy as np
 
-from arch_b.data_influence import _bridge_subset, _loco_details
+from arch_a.load import Dataset
+from arch_b.data_influence import (_bridge_subset, _loco_details,
+                                   _without_cross_contest_links)
 
 
 class DataInfluenceTest(unittest.TestCase):
@@ -23,6 +25,22 @@ class DataInfluenceTest(unittest.TestCase):
                  for cid, linked in enumerate([1, 2, 3, 100], start=1)]
 
         self.assertEqual(_bridge_subset(contests, stats), [{"contest_id": 4}])
+
+    def test_without_cross_contest_links_gives_every_row_an_identity(self):
+        ds = Dataset(
+            teams=["shared"], contests=[1, 2], problems=[],
+            team_of_row=np.array([0, 0]), contest_of_row=np.array([0, 1]),
+            rank_of_row=np.array([1, 1]), y=np.empty((2, 0), dtype=bool),
+            solve_mask=np.empty((2, 0), dtype=bool), tau=np.empty((2, 0)),
+            wrong=np.empty((2, 0), dtype=int),
+            contest_of_problem=np.array([], dtype=int),
+            raw_solved_count=np.array([], dtype=int))
+
+        local = _without_cross_contest_links(ds)
+
+        self.assertEqual(local.teams, ["row:0", "row:1"])
+        self.assertEqual(local.team_of_row.tolist(), [0, 1])
+        self.assertEqual(ds.team_of_row.tolist(), [0, 0])
 
 
 if __name__ == "__main__":

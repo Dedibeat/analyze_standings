@@ -2192,6 +2192,14 @@ combination is 244.188. The same direction holds under a custom equal-contest
 LOCO (249.592 → 248.560), and all ordinary guards pass, but the total 1.065-CF
 gain remains well below the 5-point keep threshold.
 
+A strict no-link control assigns every standing row its own theta and disables
+UCup prior transfer, preserving all within-contest cells but sharing no ability
+between contests. Calibrated LOCO degrades **244.188 → 333.469** and raw LOCO
+degrades **245.192 → 330.307**, failing the raw guard. Solve-count sanity remains
++0.995 because within-contest ordering survives; what is lost is the absolute
+cross-contest scale. Linking is therefore structurally essential even though
+the marginal value of an arbitrary new link is not monotonic.
+
 The causal decomposition shows that supplemental identity unions without solve
 evidence move only −0.069 CF. Keeping only supplemental rows whose identities
 already occur in tagged retains −0.827 of the −1.065 gain; the remaining −0.238

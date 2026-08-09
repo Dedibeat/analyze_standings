@@ -17,6 +17,7 @@ post-selection mutation.
 | Fit | calibrated LOCO | equal-contest LOCO | raw LOCO | delta vs tagged-only |
 |---|---:|---:|---:|---:|
 | tagged only | 245.253 | 249.592 | 247.372 | — |
+| no cross-contest team links | 333.469 | 339.734 | 330.307 | +88.216 |
 | identity links only, no supplemental solves | 245.184 | 249.490 | 247.355 | -0.069 |
 | older ICPC only | 245.887 | 250.250 | 247.155 | +0.634 |
 | Petroz only | 244.285 | 248.674 | 245.464 | -0.968 |
@@ -24,9 +25,19 @@ post-selection mutation.
 | Petroz top link-count quartile | 244.952 | 249.254 | 246.535 | -0.301 |
 | all supplemental, linked rows only | 244.426 | 248.828 | 245.469 | -0.827 |
 
-All existing guards pass in every row.  The equal-contest custom metric gives
-the same direction as pooled LOCO, so the small gain is not only a consequence
-of one anchor contest having more rated problems.
+All existing guards pass in every row except the deliberately broken no-link
+control, whose raw LOCO exceeds the 293.4 ceiling. The equal-contest custom
+metric gives the same direction as pooled LOCO, so the small supplemental gain
+is not only a consequence of one anchor contest having more rated problems.
+
+The no-link control gives every standing row its own ability and disables UCup
+prior transfer, while preserving every within-contest response cell. Its
+calibrated LOCO is **333.469**, 89.281 CF worse than the linked shipped fit.
+Within-contest solve-count sanity remains +0.995, demonstrating the distinction:
+the model can still rank problems inside a contest, but it cannot place different
+contests reliably on one difficulty scale. Cross-contest linking itself is
+therefore essential; only the *marginal value of additional links* is small and
+non-monotonic.
 
 The current effect is much smaller than the historical 266.4 → 261.6 campaign
 result.  Against the corrected tagged-only baseline, all 71 supplemental
