@@ -90,6 +90,7 @@ AOJ practice statistics:
 ./.venv/bin/python -m arch_b.predict_eval       # held-out solve prediction (binary vs survival)
 ./.venv/bin/python -m arch_b.calibrate     # affine map to Codeforces points
 ./.venv/bin/python -m arch_b.metric        # THE optimization metric: LOCO CF-point RMSE + guards
+./.venv/bin/python -m arch_b.data_influence # explain supplemental-contest effects
 ```
 
 All three architectures agree closely with both opinions. After the full-cell mask
@@ -140,7 +141,10 @@ and fixed an over-broad World Finals affiliation join; original-cell held-out
 AUC also improved 0.885761 → 0.886000.
 Those campaign numbers predate the full-cell mask correction; the corrected
 row-by-row retest of `autoresearch/loop-260723-1333/classic-results.tsv` is
-recorded in `details.md`.
+recorded in `details.md`. The deeper [supplemental-contest influence audit](data_influence.md)
+finds that the corrected 1.065-CF gain is almost entirely Petroz-to-Northern-
+Eurasia transfer, is not corroborated by the current original-cell holdout, and
+does not justify a metric-selected contest subset.
 
 ### Calibrated Codeforces-point ratings
 

@@ -2182,3 +2182,32 @@ observations. Its historical negative result is therefore retained as
 pre-fix evidence, not relabeled as a post-fix measurement. The unrelated
 Codeforces pairwise-tuning experiments do not consume `solve_mask` and were not
 rerun.
+
+### Supplemental-contest influence audit (2026-08-09)
+
+`arch_b.data_influence` now explains the corrected effect instead of reporting
+only the scalar ablation. Tagged-only calibrated LOCO is 245.253; older ICPC
+alone is worse at 245.887, Petroz alone improves to 244.285, and the shipped
+combination is 244.188. The same direction holds under a custom equal-contest
+LOCO (249.592 → 248.560), and all ordinary guards pass, but the total 1.065-CF
+gain remains well below the 5-point keep threshold.
+
+The causal decomposition shows that supplemental identity unions without solve
+evidence move only −0.069 CF. Keeping only supplemental rows whose identities
+already occur in tagged retains −0.827 of the −1.065 gain; the remaining −0.238
+comes from unlinked opponents calibrating the new contests' problem scales.
+Petroz supplies 4,736 linked rows and 2,976 UCup-team appearances, versus older
+ICPC's 1,100 and 201. Its direct CF-anchor overlaps are overwhelmingly Northern
+Eurasian (3,411, vs 307 Europe and 296 Asia Pacific), matching the observed
+regional change: Northern Eurasia LOCO improves 220.13 → 214.28 while Asia
+Pacific slightly regresses 208.99 → 209.73 and Europe is flat 332.48 → 332.54.
+Seven of the 15 CF contests improve and eight regress.
+
+A mutation control removed the five highest-link supplemental contests whose
+individual deletion happened to improve LOCO. The post-selected metric reaches
+243.646, but a fixed 117,634-cell original-`tagged.json` holdout rejects it:
+tagged-only / all-supplemental / mutation log-loss is 0.229876 / 0.230252 /
+0.230105, and AUC is 0.967638 / 0.967626 / 0.967593. The mutation is therefore
+an example of selection overfit, not a shipped change. The full rationale and
+per-contest artifact are in `data_influence.md` and
+`output/data_influence.json`; run `./.venv/bin/python -m arch_b.data_influence`.

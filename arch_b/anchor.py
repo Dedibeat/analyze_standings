@@ -37,7 +37,8 @@ PETROZ = os.path.join(DATA, "petroz_2022_2026.json")
 
 def estimate_anchored(sigma_theta=SIGMA_THETA, sigma_b=SIGMA_B, fit_fn=fit,
                       season_key=False, min_solve_hours=None, verbose=True,
-                      gym_merge=None):
+                      gym_merge=None, supplemental_paths=None,
+                      identity_paths=None):
     """Fit tagged + supplemental standings, anchored to a UCup-only fit.
 
     Returns (ds_tagged, theta, b, history, uf) for the anchored tagged fit. ``uf``
@@ -54,7 +55,13 @@ def estimate_anchored(sigma_theta=SIGMA_THETA, sigma_b=SIGMA_B, fit_fn=fit,
     tagged fit as fixed-theta likelihood terms on ``b`` (``gym_merge.
     gym_observations``; anchor-overlap contests always excluded). Off by default.
 
-    ``ARCHB_EXTRA_CONTESTS`` is an ``os.pathsep``-separated list of standings
+    ``supplemental_paths`` overrides the shipped older-ICPC + Petroz inputs;
+    pass an empty sequence for a tagged-only diagnostic fit.  ``None`` keeps
+    the shipped default.  ``identity_paths`` can separately override which
+    supplements participate in union-find construction, allowing diagnostics
+    to distinguish identity-link changes from added likelihood evidence; by
+    default it follows ``supplemental_paths``.  ``ARCHB_EXTRA_CONTESTS`` is an
+    ``os.pathsep``-separated list of standings
     JSON files used only by data-side experiments; it does not change the
     shipped default inputs.
     """
@@ -64,11 +71,15 @@ def estimate_anchored(sigma_theta=SIGMA_THETA, sigma_b=SIGMA_B, fit_fn=fit,
         path for path in os.environ.get("ARCHB_EXTRA_CONTESTS", "").split(os.pathsep)
         if path
     ]
+    supplemental = ([OLDER_ICPC, PETROZ] if supplemental_paths is None
+                    else list(supplemental_paths))
+    identity_supplemental = (supplemental if identity_paths is None
+                             else list(identity_paths))
     # Include WF in the UF build so WF→regional top-team links enrich the
     # identity graph, but do NOT load WF rows into the fit (their solve data
     # is for different problems than the CF anchors and adds only noise).
     raw_all = []
-    for p in [TAGGED, WF, OLDER_ICPC, PETROZ] + extra + UCUP:
+    for p in [TAGGED, WF] + identity_supplemental + extra + UCUP:
         with open(p) as f:
             raw_all.extend(json.load(f))
     raw_all = dedupe_contests(raw_all)
@@ -78,7 +89,7 @@ def estimate_anchored(sigma_theta=SIGMA_THETA, sigma_b=SIGMA_B, fit_fn=fit,
     uf = member_identity(raw_all, season_by_cid)
 
     ds_ucup = load(UCUP, uf=uf, season_key=season_key, min_solve_hours=min_solve_hours)
-    ds_tagged = load([TAGGED, OLDER_ICPC, PETROZ] + extra, uf=uf,
+    ds_tagged = load([TAGGED] + supplemental + extra, uf=uf,
                      season_key=season_key, min_solve_hours=min_solve_hours)
 
     if verbose: print("=== UCup anchor fit (s3 + s4) ===")
