@@ -346,6 +346,8 @@ Module self-checks:
   `output/gym_difficulty.json` — independent CF-scale difficulty from gym mirrors.
 - `output/ratings_viewer.html` — generated interactive viewer.
 - `details.md` — design notes, key decisions, and follow-ups.
+- `rating_bias.md` — catalog of every mechanism that can inflate or deflate
+  estimated difficulties (by pipeline stage, with direction + status).
 - `data/cphof_cf_participants.json` — audited CPHoF person/profile links,
   roster-corroborated standing appearances, and official Codeforces rating
   histories (source data only; not yet a fit input).

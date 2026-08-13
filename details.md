@@ -336,6 +336,10 @@ mean `b=2332`, and survival `theta=[1385,2915]`, `b=[1182,3251]`, mean
 
 ### Caveat introduced by the stronger normalization
 
+A full catalog of inflation/deflation mechanisms (by pipeline stage, with
+measured directions) lives in `rating_bias.md`; the Nanjing 2022 audit that
+prompted it is summarized in the bottom-line section there.
+
 Because an unlinked contest now collapses to MU0, a contest's absolute scale
 depends entirely on its *linked* teams (those that recur across contests), so a
 region carried by a thin minority of linkers sits on a noisier scale than a
