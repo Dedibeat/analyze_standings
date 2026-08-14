@@ -71,15 +71,12 @@ def estimate_anchored(sigma_theta=SIGMA_THETA, sigma_b=SIGMA_B, fit_fn=fit,
         path for path in os.environ.get("ARCHB_EXTRA_CONTESTS", "").split(os.pathsep)
         if path
     ]
-    supplemental = ([OLDER_ICPC, PETROZ] if supplemental_paths is None
+    supplemental = ([OLDER_ICPC, PETROZ, WF] if supplemental_paths is None
                     else list(supplemental_paths))
     identity_supplemental = (supplemental if identity_paths is None
                              else list(identity_paths))
-    # Include WF in the UF build so WF→regional top-team links enrich the
-    # identity graph, but do NOT load WF rows into the fit (their solve data
-    # is for different problems than the CF anchors and adds only noise).
     raw_all = []
-    for p in [TAGGED, WF] + identity_supplemental + extra + UCUP:
+    for p in [TAGGED] + identity_supplemental + extra + UCUP:
         with open(p) as f:
             raw_all.extend(json.load(f))
     raw_all = dedupe_contests(raw_all)
