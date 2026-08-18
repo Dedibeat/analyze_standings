@@ -2306,3 +2306,45 @@ addition and contest-id lookup were re-verified the same way: a bad id shows
 the inline error and clears on a valid one, `goToContestId(819)` lands on
 "Petrozavodsk Winter 2022. Day 1. Kyoto U Contest 2" (147 teams), and a
 5-of-13 partial solve there gives a plausible mid-field rank/performance.
+
+### Revision: manual solved/penalty entry + calibrated standings performance (2026-08-18)
+
+Two follow-up changes, both user-requested same day:
+
+1. **Input switched from per-problem detail to direct solved-count +
+   penalty entry.** The original design (above) had the user check off each
+   problem with a time and wrong-attempt count, and the page summed those
+   into solved/penalty itself. The user asked to enter solved/penalty
+   directly instead — the two numbers actually used for rank-insertion (the
+   per-problem breakdown was never itself part of the ranking math, only a
+   way to derive the total). `#inSolved`/`#inPenalty` are now editable
+   number inputs feeding `recompute()` directly; the problems table lost its
+   checkbox/time/wrong-attempt columns and is now pure reference (label,
+   name, `difficulty_cf`) for judging what a plausible solved/penalty pair
+   would be. This is a strict simplification, not a scope change — the
+   rank-insertion and Elo-inversion math are untouched.
+2. **Standings table gains a calibrated Performance column** for every real
+   team, not just the virtual one. Reuses `arch_a.fixedpoint.
+   _performance_ratings` exactly as `arch_b.export_viewer` does (each real
+   team's rho from its *actual* rank), then the same `to_cf` map already
+   built for the virtual team's own number. The row→(contest, team) mapping
+   needed to attach the right rho to the right team is looked up by
+   `(contest_id, team index)` from `ds.contest_of_row`/`ds.team_of_row`
+   directly, rather than by an incrementing counter over raw-JSON row order
+   (the trick `export_viewer.py` uses, which only works because it reads
+   *exactly* the fit's first source in the fit's own concatenation order).
+   That trick would silently misalign here: this module's `SOURCES` is
+   `[TAGGED, PETROZ]`, but the actual fit's supplemental order is
+   `[OLDER_ICPC, PETROZ, WF]` — older-ICPC's rows sit between tagged's and
+   Petroz's in the row array this module never reads. The `(contest_id, team
+   index)` lookup sidesteps that fragility entirely and is asserted non-None
+   for every team the picker builds.
+
+Verified with headless Chrome again: default load has solved/penalty
+inputs at 0/0 (rank last, performance floor); setting them to 8 solved / 900
+min penalty on a 150-team contest recomputes live to rank 46/150, performance
+2658 CF; the standings table now renders 5 columns per row, the top real team
+shows the 4000 ceiling performance, and the highlighted "YOU" row's
+Performance cell matches the summary stat exactly.
+"Petrozavodsk Winter 2022. Day 1. Kyoto U Contest 2" (147 teams), and a
+5-of-13 partial solve there gives a plausible mid-field rank/performance.

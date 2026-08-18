@@ -44,6 +44,8 @@
   .stat { text-align:center; }
   .stat .label { color:var(--muted); font-size:11px; text-transform:uppercase; letter-spacing:.03em; }
   .stat .value { font-size:22px; font-weight:600; margin-top:2px; }
+  .stat input.value { width:5em; text-align:center; border:1px solid var(--line); border-radius:6px;
+    padding:2px 4px; }
   .note { padding:0 16px 14px; color:var(--muted); font-size:12px; }
   .hint { color:var(--muted); font-size:11px; }
 </style>
@@ -51,9 +53,10 @@
 <body>
 <header>
   <h1>Virtual contest performance calculator</h1>
-  <div class="sub">Pick a contest you've replayed virtually, check off what you solved (with time
-    and wrong-attempt count, ICPC-clock style), and see the Codeforces-equivalent performance
-    rating you'd have earned by standard tie-break rank-insertion into the real field.</div>
+  <div class="sub">Pick a contest you've replayed virtually, enter your team's solved count and
+    penalty (standard ICPC scoring, same as any line in the standings), and see the
+    Codeforces-equivalent performance rating you'd have earned by standard tie-break
+    rank-insertion into the real field.</div>
   <div class="controls">
     <select id="contest"></select>
     <span class="meta" id="meta"></span>
@@ -70,8 +73,10 @@
   <section class="panel" style="flex-basis:100%">
     <h2>Your result</h2>
     <div class="stats">
-      <div class="stat"><div class="label">Solved</div><div class="value" id="stSolved">0</div></div>
-      <div class="stat"><div class="label">Penalty (min)</div><div class="value" id="stPenalty">0</div></div>
+      <div class="stat"><div class="label">Solved</div>
+        <input type="number" class="value" id="inSolved" min="0" value="0"></div>
+      <div class="stat"><div class="label">Penalty (min)</div>
+        <input type="number" class="value" id="inPenalty" min="0" value="0"></div>
       <div class="stat"><div class="label">Rank</div><div class="value" id="stRank">&mdash;</div></div>
       <div class="stat"><div class="label">Performance</div><div class="value" id="stPerf">&mdash;</div></div>
     </div>
@@ -84,7 +89,6 @@
       <table id="probs">
         <thead><tr>
           <th>#</th><th class="name">Name</th><th class="num">Difficulty</th>
-          <th class="num">Solved</th><th class="num">Time (min)</th><th class="num">Wrong</th>
         </tr></thead>
         <tbody></tbody>
       </table>
@@ -99,7 +103,7 @@
       <table id="teams">
         <thead><tr>
           <th class="num">Rank</th><th class="name">Team</th><th class="num">Solved</th>
-          <th class="num">Penalty</th>
+          <th class="num">Penalty</th><th class="num">Performance</th>
         </tr></thead>
         <tbody></tbody>
       </table>
@@ -168,25 +172,19 @@ DATA.contests.forEach((c,i)=>{
 
 function renderProbs(c){
   $("#probcount").textContent = `${c.problems.length}`;
-  $("#probs tbody").innerHTML = c.problems.map((p,i)=>`
-    <tr data-i="${i}">
+  $("#probs tbody").innerHTML = c.problems.map(p=>`
+    <tr>
       <td>${p.label}</td>
       <td class="name">${esc(p.name)}</td>
       <td class="num">${chip(p.difficulty_cf)}</td>
-      <td class="num"><input type="checkbox" class="fSolved"></td>
-      <td class="num"><input type="number" class="fTime" min="0" max="${c.duration_minutes}"
-          placeholder="0" title="minutes into the contest (≤ ${c.duration_minutes})"></td>
-      <td class="num"><input type="number" class="fWrong" min="0" placeholder="0"
-          title="wrong submissions before this AC"></td>
     </tr>`).join("");
-  $("#probs tbody").querySelectorAll("input").forEach(el => el.addEventListener("input", recompute));
 }
 
-function renderTeams(c, rank){
+function renderTeams(c, rank, solved, penalty, perfCf){
   const q = filter.value.trim().toLowerCase();
   let rows = c.teams.map(t => ({...t, penaltyMin: Math.round(t.penalty/60)}));
   if(q) rows = rows.filter(t => (t.name+" "+t.affiliation).toLowerCase().includes(q));
-  const you = {isYou:true, rank, name:"YOU (virtual)"};
+  const you = {isYou:true, rank, name:"YOU (virtual)", solved, penaltyMin: penalty, performance: perfCf};
   const merged = [];
   let inserted = false;
   for(const t of rows){
@@ -194,33 +192,20 @@ function renderTeams(c, rank){
     merged.push(t);
   }
   if(!inserted) merged.push(you);
-  $("#teams tbody").innerHTML = merged.map(t => t.isYou ? `
-    <tr class="you">
-      <td class="num">${t.rank}</td><td class="name">${esc(t.name)}</td>
-      <td class="num">${$("#stSolved").textContent}</td>
-      <td class="num">${$("#stPenalty").textContent}</td>
-    </tr>` : `
-    <tr>
+  $("#teams tbody").innerHTML = merged.map(t => `
+    <tr class="${t.isYou ? "you" : ""}">
       <td class="num">${t.rank}</td>
       <td class="name">${esc(t.name)}${t.affiliation?`<div class="aff">${esc(t.affiliation)}</div>`:""}</td>
       <td class="num">${t.solved}</td>
       <td class="num">${t.penaltyMin}</td>
+      <td class="num">${chip(t.performance)}</td>
     </tr>`).join("");
 }
 
 function recompute(){
   const c = DATA.contests[sel.value];
-  let solved = 0, penalty = 0;
-  $$("#probs tbody tr").forEach(tr => {
-    if(tr.querySelector(".fSolved").checked){
-      solved++;
-      const time = parseInt(tr.querySelector(".fTime").value) || 0;
-      const wrong = parseInt(tr.querySelector(".fWrong").value) || 0;
-      penalty += time + 20 * wrong;
-    }
-  });
-  $("#stSolved").textContent = solved;
-  $("#stPenalty").textContent = penalty;
+  const solved = parseInt($("#inSolved").value) || 0;
+  const penalty = parseInt($("#inPenalty").value) || 0;
 
   let better = 0;
   for(const t of c.teams){
@@ -242,7 +227,7 @@ function recompute(){
   else if(above && !below) note = `Below everyone — behind <b>${esc(above.name)}</b> (rank ${above.rank}).`;
   $("#noteContext").innerHTML = note;
 
-  renderTeams(c, rank);
+  renderTeams(c, rank, solved, penalty, perfCf);
 }
 
 function render(){
@@ -252,6 +237,8 @@ function render(){
   meta.innerHTML = `${yr}${link}<b>${c.teams.length}</b> teams &middot; <b>${c.problems.length}</b> problems `
     + `&middot; ~<b>${c.duration_minutes}</b> min`;
   if(history.replaceState) history.replaceState(null, "", "#" + c.contest_id);
+  $("#inSolved").value = 0;
+  $("#inPenalty").value = 0;
   renderProbs(c);
   recompute();
 }
@@ -268,6 +255,8 @@ function goToContestId(id){
 sel.addEventListener("change", render);
 filter.addEventListener("input", recompute);
 $("#reset").addEventListener("click", render);
+$("#inSolved").addEventListener("input", recompute);
+$("#inPenalty").addEventListener("input", recompute);
 $("#cidGo").addEventListener("click", () => goToContestId($("#cidInput").value.trim()));
 $("#cidInput").addEventListener("keydown", e => {
   if(e.key === "Enter") goToContestId($("#cidInput").value.trim());

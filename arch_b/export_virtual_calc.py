@@ -4,19 +4,24 @@
 
 For a team that solved a past contest "virtually" (outside the official
 window), estimate the Codeforces-equivalent performance rating they would
-have earned. Method: standard ICPC tie-break (most solved, then lowest
-penalty) inserts the virtual team into the contest's real final standings to
-get a hypothetical rank, then the classic Elo rank-inversion primitive
-(``arch_a.elo.performance_rating``, already used for every real team's
-``performance_elo`` in ``arch_b.medals``) converts that rank + the real
-field's fitted abilities into a performance rating. This reuses the same
-UCup-anchored survival fit and CF calibration as ``arch_b.export_viewer``,
-just bundled differently: real teams carry their *internal* ability (not
-CF-mapped) plus their solved/penalty, so the rank-insertion and Elo bisection
-can run against the same scale the fit was made on, and a dense ``to_cf``
-lookup table lets the browser map the resulting rho to CF points itself
-(the shape+affine map from ``arch_b.calibrate`` cannot be re-fit client
-side, so it is sampled once here instead of re-derived in JS).
+have earned from a manually entered solved-count + penalty (standard ICPC
+scoring, same as any real team's line in the standings). Method: standard
+ICPC tie-break (most solved, then lowest penalty) inserts the virtual team
+into the contest's real final standings to get a hypothetical rank, then the
+classic Elo rank-inversion primitive (``arch_a.elo.performance_rating``,
+already used for every real team's ``performance_elo`` in ``arch_b.medals``)
+converts that rank + the real field's fitted abilities into a performance
+rating. This reuses the same UCup-anchored survival fit and CF calibration as
+``arch_b.export_viewer``, just bundled differently: real teams carry their
+*internal* ability (not CF-mapped) plus their solved/penalty, so the
+rank-insertion and Elo bisection can run against the same scale the fit was
+made on, and a dense ``to_cf`` lookup table lets the browser map the
+resulting rho to CF points itself (the shape+affine map from
+``arch_b.calibrate`` cannot be re-fit client side, so it is sampled once here
+instead of re-derived in JS). Every real team also carries its own calibrated
+performance (from its actual rank, ``arch_a.fixedpoint._performance_ratings``)
+so the standings table shows CF-equivalent performance for real and virtual
+teams side by side.
 
 Writes output/virtual_calc.html: self-contained, no server, one page per
 contest picked from a dropdown (same grouping as ratings_viewer_b.html).
@@ -28,6 +33,7 @@ import os
 import numpy as np
 
 from arch_a import elo
+from arch_a.fixedpoint import _performance_ratings
 from arch_a.load import _max_solve_seconds, dedupe_contests, row_solved_any, team_key
 from . import survival
 from .anchor import PETROZ, TAGGED, estimate_anchored
@@ -79,6 +85,17 @@ def build_data():
             "difficulty_cf": round(to_cf(b[p]), 0),
         })
 
+    # each real team's own calibrated performance in that contest, from its
+    # actual rank (same eq. perf primitive as export_viewer.py / medals.py).
+    # Keyed by (contest_id, team index) rather than assumed row order, since
+    # this module's SOURCES (tagged + Petroz) is not the full fit's row order
+    # (which also includes older-ICPC and World Finals in between).
+    rows_by_contest = [np.where(ds.contest_of_row == ci)[0] for ci in range(len(ds.contests))]
+    rho = _performance_ratings(theta, ds, rows_by_contest)
+    perf_lookup = {(int(ds.contests[ds.contest_of_row[row]]), int(ds.team_of_row[row])):
+                   round(to_cf(rho[row]), 0)
+                   for row in range(len(ds.contest_of_row))}
+
     raw = []
     for path in SOURCES:
         with open(path) as f:
@@ -96,6 +113,8 @@ def build_data():
             if not row_solved_any(s, labels):
                 continue
             idx = key_to_idx[team_key(cid, s["team_id"], s.get("members"), uf)]
+            perf = perf_lookup.get((int(cid), idx))
+            assert perf is not None, f"missing performance for row {s['team_id']!r} in {cid}"
             teams.append({
                 "rank": int(s["rank"]),
                 "name": s.get("team_name") or "(unnamed)",
@@ -103,6 +122,7 @@ def build_data():
                 "solved": int(s.get("total_solved") or 0),
                 "penalty": int(s.get("penalty_seconds") or 0),
                 "theta": round(float(theta[idx]), 2),
+                "performance": perf,
             })
         if not teams:
             continue
