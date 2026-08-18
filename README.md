@@ -304,18 +304,21 @@ viewer. It is published live via GitHub Pages:
 ./.venv/bin/python -m arch_b.export_virtual_calc
 ```
 
-Writes `output/virtual_calc.html`: pick one of the 132 fitted contests, check
-off which problems your team solved in a virtual (out-of-window) run with the
-time (minutes into the contest) and wrong-attempt count for each, and see the
-Codeforces-equivalent performance rating you'd have earned. Method: standard
-ICPC tie-break (most solved, then lowest penalty) inserts your team into that
-contest's real final standings to get a hypothetical rank, then the same Elo
-rank-inversion primitive `arch_b.medals` uses for every real team's
-`performance_elo` converts that rank plus the real field's fitted abilities
-into a rating. The CF-points mapping is the same gym-shape + affine
-calibration as `arch_b.calibrate`, sampled into a dense lookup table at
-export time so the browser doesn't need to re-fit it. Self-contained, no
-server; recomputes live as you edit your solves.
+Writes `output/virtual_calc.html`: pick one of the 189 fitted contests (132
+tagged.json regionals + all 57 Petrozavodsk camp contests) by name from the
+year-grouped dropdown, or jump straight to one by its qoj **contest id** in
+the id box. Check off which problems your team solved in a virtual
+(out-of-window) run with the time (minutes into the contest) and
+wrong-attempt count for each, and see the Codeforces-equivalent performance
+rating you'd have earned. Method: standard ICPC tie-break (most solved, then
+lowest penalty) inserts your team into that contest's real final standings to
+get a hypothetical rank, then the same Elo rank-inversion primitive
+`arch_b.medals` uses for every real team's `performance_elo` converts that
+rank plus the real field's fitted abilities into a rating. The CF-points
+mapping is the same gym-shape + affine calibration as `arch_b.calibrate`,
+sampled into a dense lookup table at export time so the browser doesn't need
+to re-fit it. Self-contained, no server; recomputes live as you edit your
+solves.
 
 ### Contest-linking graph
 

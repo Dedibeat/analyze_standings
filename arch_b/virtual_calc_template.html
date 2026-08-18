@@ -57,6 +57,11 @@
   <div class="controls">
     <select id="contest"></select>
     <span class="meta" id="meta"></span>
+    <span>
+      <input id="cidInput" type="text" inputmode="numeric" placeholder="contest id" style="width:110px">
+      <button class="btn" id="cidGo">Go</button>
+      <span class="hint" id="cidErr" style="color:#c0392b"></span>
+    </span>
     <button class="btn" id="reset">Reset solves</button>
   </div>
 </header>
@@ -251,16 +256,25 @@ function render(){
   recompute();
 }
 
+// jump straight to a contest by its numeric id (qoj contest_id), instead of
+// hunting for it in the (long, year-grouped) dropdown
+function goToContestId(id){
+  const i = DATA.contests.findIndex(c => String(c.contest_id) === String(id));
+  $("#cidErr").textContent = i < 0 ? `no contest with id ${id}` : "";
+  if(i >= 0){ sel.value = i; render(); }
+  return i >= 0;
+}
+
 sel.addEventListener("change", render);
 filter.addEventListener("input", recompute);
 $("#reset").addEventListener("click", render);
+$("#cidGo").addEventListener("click", () => goToContestId($("#cidInput").value.trim()));
+$("#cidInput").addEventListener("keydown", e => {
+  if(e.key === "Enter") goToContestId($("#cidInput").value.trim());
+});
 
 const wanted = location.hash.slice(1);
-if(wanted){
-  const i = DATA.contests.findIndex(c => String(c.contest_id) === wanted);
-  if(i >= 0) sel.value = i;
-}
-render();
+if(!wanted || !goToContestId(wanted)) render();
 </script>
 </body>
 </html>

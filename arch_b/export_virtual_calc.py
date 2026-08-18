@@ -30,9 +30,16 @@ import numpy as np
 from arch_a import elo
 from arch_a.load import _max_solve_seconds, dedupe_contests, row_solved_any, team_key
 from . import survival
-from .anchor import TAGGED, estimate_anchored
+from .anchor import PETROZ, TAGGED, estimate_anchored
 from .calibrate import _anchors, _gym_shape
 from .run import MIN_SOLVE_HOURS
+
+# Contest sources offered in the picker: the full tagged.json regionals plus
+# the standings-only Petrozavodsk camp contests. Both are already part of the
+# fit by default (arch_b.anchor.estimate_anchored's shipped supplemental
+# inputs), so ds/theta/b already cover them -- only the raw standings need
+# reloading here to build each contest's team list.
+SOURCES = [TAGGED, PETROZ]
 
 OUT_DIR = os.path.join(os.path.dirname(__file__), os.pardir, "output")
 TEMPLATE = os.path.join(os.path.dirname(__file__), "virtual_calc_template.html")
@@ -72,8 +79,10 @@ def build_data():
             "difficulty_cf": round(to_cf(b[p]), 0),
         })
 
-    with open(TAGGED) as f:
-        raw = json.load(f)
+    raw = []
+    for path in SOURCES:
+        with open(path) as f:
+            raw.extend(json.load(f))
     raw = dedupe_contests(raw)  # match load(): drop repeated contest entries
     raw = [c for c in raw if _max_solve_seconds(c) >= MIN_SOLVE_HOURS * 3600]  # match load()
     key_to_idx = {k: i for i, k in enumerate(ds.teams)}

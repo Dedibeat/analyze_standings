@@ -2274,12 +2274,23 @@ since it's just reference context while filling the form) and every real
 team (rank, name, affiliation, solved, `penalty_seconds`, internal `theta`).
 Teams with zero solves are already absent from the fit (dropped at the loader
 level, `README.md`), matching `arch_b.medals`'s convention of restricting
-rivals to solving teams. Scope is the 132 contests that survive
-`MIN_SOLVE_HOURS` filtering in the tagged-only fit (same set
-`arch_b.export_viewer` uses) — not the UCup-anchor-only seasons or the
-QOJ-standings-only supplemental contests, since those either lack full
-problem/statement metadata or aren't meant to be picked as a "your contest"
-target.
+rivals to solving teams. Scope is the 189 contests that survive
+`MIN_SOLVE_HOURS` filtering: the 132 tagged.json regionals `arch_b.export_viewer`
+also uses, plus all 57 standings-only Petrozavodsk camp contests
+(`arch_b.anchor.PETROZ`) — not the UCup-anchor-only seasons, the older-ICPC
+supplement, or World Finals, since those either lack full problem/statement
+metadata (unlike Petroz, which does carry problem names) or aren't a natural
+"your contest" target. Both sources are already part of the shipped fit by
+default (`estimate_anchored`'s supplemental inputs), so no extra fitting is
+needed to add Petroz — only its raw standings had to be reloaded and folded
+into the same contest-building loop as tagged.json.
+
+The picker also accepts a **qoj contest id** directly (a text box + Go
+button, `goToContestId` in the template), not just the year-grouped
+dropdown — useful once Petroz's 57 similarly-named "Petrozavodsk ... Day N ...
+Contest" entries are mixed in. An unknown id shows an inline error rather
+than a blocking `alert()`; the existing `#<contest_id>` URL-hash deep link
+now routes through the same lookup.
 
 Verified with headless Chrome (`google-chrome --headless=new --dump-dom`,
 plus a scripted harness that checks boxes and calls `recompute()` directly)
@@ -2290,4 +2301,8 @@ computation before the fix. Post-fix, spot checks on the 2026 ICPC Asia
 Pacific Championship (77 real teams) match expectations: zero solves → rank
 78/78, performance floor 800; solving all 13 problems fastest → rank 1/78,
 performance ceiling 4000; a mid-pack 6-of-13 solve pattern → rank 38/78,
-performance ≈2383 CF, consistent with the field's ~2340 mean θ.
+performance ≈2383 CF, consistent with the field's ~2340 mean θ. The Petroz
+addition and contest-id lookup were re-verified the same way: a bad id shows
+the inline error and clears on a valid one, `goToContestId(819)` lands on
+"Petrozavodsk Winter 2022. Day 1. Kyoto U Contest 2" (147 teams), and a
+5-of-13 partial solve there gives a plausible mid-field rank/performance.
