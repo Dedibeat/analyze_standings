@@ -1,0 +1,134 @@
+"""Build the interactive virtual-contest performance calculator.
+
+    python -m arch_b.export_virtual_calc
+
+For a team that solved a past contest "virtually" (outside the official
+window), estimate the Codeforces-equivalent performance rating they would
+have earned. Method: standard ICPC tie-break (most solved, then lowest
+penalty) inserts the virtual team into the contest's real final standings to
+get a hypothetical rank, then the classic Elo rank-inversion primitive
+(``arch_a.elo.performance_rating``, already used for every real team's
+``performance_elo`` in ``arch_b.medals``) converts that rank + the real
+field's fitted abilities into a performance rating. This reuses the same
+UCup-anchored survival fit and CF calibration as ``arch_b.export_viewer``,
+just bundled differently: real teams carry their *internal* ability (not
+CF-mapped) plus their solved/penalty, so the rank-insertion and Elo bisection
+can run against the same scale the fit was made on, and a dense ``to_cf``
+lookup table lets the browser map the resulting rho to CF points itself
+(the shape+affine map from ``arch_b.calibrate`` cannot be re-fit client
+side, so it is sampled once here instead of re-derived in JS).
+
+Writes output/virtual_calc.html: self-contained, no server, one page per
+contest picked from a dropdown (same grouping as ratings_viewer_b.html).
+"""
+
+import json
+import os
+
+import numpy as np
+
+from arch_a import elo
+from arch_a.load import _max_solve_seconds, dedupe_contests, row_solved_any, team_key
+from . import survival
+from .anchor import TAGGED, estimate_anchored
+from .calibrate import _anchors, _gym_shape
+from .run import MIN_SOLVE_HOURS
+
+OUT_DIR = os.path.join(os.path.dirname(__file__), os.pardir, "output")
+TEMPLATE = os.path.join(os.path.dirname(__file__), "virtual_calc_template.html")
+
+LOOKUP_STEP = 5.0  # CF-point granularity of the embedded to_cf sample table
+
+
+def _cf_map(records):
+    """The composed internal-scale -> CF-points map from arch_b.calibrate."""
+    shape = _gym_shape(records)
+    if shape is None:
+        shape = lambda t: np.asarray(t, float)  # noqa: E731
+    our, cf, _ = _anchors(records)
+    slope, intercept = np.polyfit(shape(our), cf, 1)
+    return lambda t: float(np.clip(slope * shape(np.array([t]))[0] + intercept,
+                                    elo.LO, elo.HI))
+
+
+def build_data():
+    ds, theta, b, _, uf = estimate_anchored(
+        fit_fn=survival.fit, min_solve_hours=MIN_SOLVE_HOURS, verbose=False)
+
+    records = [{"contest_id": int(cid), "problem_label": lab, "problem_name": name,
+                "difficulty": float(b[p])}
+               for p, (cid, lab, pid, name) in enumerate(ds.problems)]
+    to_cf = _cf_map(records)
+
+    # dense lookup table so the browser can map rho -> CF points without
+    # re-deriving the shape+affine calibration itself
+    xs = np.arange(elo.LO, elo.HI + LOOKUP_STEP, LOOKUP_STEP)
+    ys = [round(to_cf(x), 1) for x in xs]
+
+    prob_by_contest = {}
+    for p, (cid, label, pid, name) in enumerate(ds.problems):
+        prob_by_contest.setdefault(int(cid), []).append({
+            "label": label, "name": name,
+            "difficulty_cf": round(to_cf(b[p]), 0),
+        })
+
+    with open(TAGGED) as f:
+        raw = json.load(f)
+    raw = dedupe_contests(raw)  # match load(): drop repeated contest entries
+    raw = [c for c in raw if _max_solve_seconds(c) >= MIN_SOLVE_HOURS * 3600]  # match load()
+    key_to_idx = {k: i for i, k in enumerate(ds.teams)}
+
+    contests = []
+    for c in raw:
+        cid = c["contest_id"]
+        labels = {p["problem_label"] for p in c["problems"]}
+        teams = []
+        for s in c["standings"]:
+            if not row_solved_any(s, labels):
+                continue
+            idx = key_to_idx[team_key(cid, s["team_id"], s.get("members"), uf)]
+            teams.append({
+                "rank": int(s["rank"]),
+                "name": s.get("team_name") or "(unnamed)",
+                "affiliation": s.get("affiliation") or "",
+                "solved": int(s.get("total_solved") or 0),
+                "penalty": int(s.get("penalty_seconds") or 0),
+                "theta": round(float(theta[idx]), 2),
+            })
+        if not teams:
+            continue
+        teams.sort(key=lambda t: t["rank"])
+        problems = prob_by_contest.get(cid, [])
+        contests.append({
+            "contest_id": int(cid),
+            "name": c.get("contest_name") or str(cid),
+            "year": c.get("year"),
+            "region": c.get("region") or "",
+            "url": c.get("contest_url") or "",
+            "duration_minutes": round(_max_solve_seconds(c) / 60),
+            "problems": problems,
+            "teams": teams,
+        })
+
+    contests.sort(key=lambda c: (-(c["year"] or 0), c["name"]))
+    return {"scale": {"lo": elo.LO, "hi": elo.HI},
+            "to_cf": {"lo": elo.LO, "step": LOOKUP_STEP, "ys": ys},
+            "contests": contests}
+
+
+def main():
+    data = build_data()
+    with open(TEMPLATE) as f:
+        template = f.read()
+    html = template.replace("/*__DATA__*/null", json.dumps(data, ensure_ascii=False))
+
+    os.makedirs(OUT_DIR, exist_ok=True)
+    out_path = os.path.join(OUT_DIR, "virtual_calc.html")
+    with open(out_path, "w") as f:
+        f.write(html)
+    print(f"wrote {os.path.normpath(out_path)}  "
+          f"({len(data['contests'])} contests, {len(html) // 1024} KB)")
+
+
+if __name__ == "__main__":
+    main()

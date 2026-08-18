@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Virtual contest performance calculator</title>
+<style>
+  :root { --fg:#1b2330; --muted:#6b7785; --line:#e3e8ee; --accent:#2b6cb0; --bg:#f7f9fc; }
+  * { box-sizing: border-box; }
+  body { margin:0; font:14px/1.45 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+         color:var(--fg); background:var(--bg); }
+  header { padding:18px 22px; background:#fff; border-bottom:1px solid var(--line); }
+  h1 { margin:0 0 4px; font-size:18px; }
+  .sub { color:var(--muted); font-size:13px; }
+  .controls { display:flex; flex-wrap:wrap; gap:14px; align-items:center; margin-top:12px; }
+  select, input[type=text], input[type=number] { font:14px inherit; padding:6px 8px;
+    border:1px solid var(--line); border-radius:6px; background:#fff; color:var(--fg); }
+  select { min-width:280px; }
+  input[type=number] { width:64px; }
+  .meta { color:var(--muted); font-size:13px; }
+  .meta b { color:var(--fg); }
+  main { display:flex; flex-wrap:wrap; gap:20px; padding:20px 22px; align-items:flex-start; }
+  .panel { background:#fff; border:1px solid var(--line); border-radius:8px; overflow:hidden;
+           flex:1 1 380px; min-width:320px; }
+  .panel h2 { margin:0; padding:11px 14px; font-size:14px; border-bottom:1px solid var(--line);
+              background:#fbfcfe; display:flex; justify-content:space-between; align-items:center; }
+  .panel h2 span { color:var(--muted); font-weight:400; font-size:12px; }
+  table { width:100%; border-collapse:collapse; }
+  th, td { padding:7px 12px; text-align:left; border-bottom:1px solid var(--line); white-space:nowrap; }
+  th { font-size:12px; color:var(--muted); position:sticky; top:0; background:#fff; }
+  td.num, th.num { text-align:right; font-variant-numeric:tabular-nums; }
+  td.name { white-space:normal; }
+  .scroll { max-height:60vh; overflow:auto; }
+  tbody tr:hover { background:#f2f7fd; }
+  tr.you { background:#eaf3ff; font-weight:600; }
+  tr.you:hover { background:#dcebfd; }
+  .rating { font-weight:600; padding:1px 7px; border-radius:10px; color:#fff; display:inline-block; }
+  .aff { color:var(--muted); font-size:12px; }
+  .btn { font:13px inherit; padding:6px 12px; border:1px solid var(--line); border-radius:6px;
+         background:#fff; color:var(--fg); cursor:pointer; }
+  .btn:hover { background:#f2f7fd; }
+  .stats { display:grid; grid-template-columns:repeat(auto-fit, minmax(110px,1fr)); gap:14px;
+           padding:16px; }
+  .stat { text-align:center; }
+  .stat .label { color:var(--muted); font-size:11px; text-transform:uppercase; letter-spacing:.03em; }
+  .stat .value { font-size:22px; font-weight:600; margin-top:2px; }
+  .note { padding:0 16px 14px; color:var(--muted); font-size:12px; }
+  .hint { color:var(--muted); font-size:11px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Virtual contest performance calculator</h1>
+  <div class="sub">Pick a contest you've replayed virtually, check off what you solved (with time
+    and wrong-attempt count, ICPC-clock style), and see the Codeforces-equivalent performance
+    rating you'd have earned by standard tie-break rank-insertion into the real field.</div>
+  <div class="controls">
+    <select id="contest"></select>
+    <span class="meta" id="meta"></span>
+    <button class="btn" id="reset">Reset solves</button>
+  </div>
+</header>
+
+<main>
+  <section class="panel" style="flex-basis:100%">
+    <h2>Your result</h2>
+    <div class="stats">
+      <div class="stat"><div class="label">Solved</div><div class="value" id="stSolved">0</div></div>
+      <div class="stat"><div class="label">Penalty (min)</div><div class="value" id="stPenalty">0</div></div>
+      <div class="stat"><div class="label">Rank</div><div class="value" id="stRank">&mdash;</div></div>
+      <div class="stat"><div class="label">Performance</div><div class="value" id="stPerf">&mdash;</div></div>
+    </div>
+    <div class="note" id="noteContext"></div>
+  </section>
+
+  <section class="panel">
+    <h2>Problems <span id="probcount"></span></h2>
+    <div class="scroll">
+      <table id="probs">
+        <thead><tr>
+          <th>#</th><th class="name">Name</th><th class="num">Difficulty</th>
+          <th class="num">Solved</th><th class="num">Time (min)</th><th class="num">Wrong</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>Standings
+      <span><input id="filter" type="text" placeholder="filter team / affiliation"></span>
+    </h2>
+    <div class="scroll">
+      <table id="teams">
+        <thead><tr>
+          <th class="num">Rank</th><th class="name">Team</th><th class="num">Solved</th>
+          <th class="num">Penalty</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+</main>
+
+<script>
+const DATA = /*__DATA__*/null;
+
+const $ = (s, r=document) => r.querySelector(s);
+const $$ = (s, r=document) => r.querySelectorAll(s);
+const sel = $("#contest"), meta = $("#meta"), filter = $("#filter");
+
+function ratingColor(v){
+  const {lo,hi} = DATA.scale, t = Math.max(0, Math.min(1, (v-lo)/(hi-lo)));
+  const hue = 210 - 210*t;
+  return `hsl(${hue} 62% 48%)`;
+}
+function chip(v){ return `<span class="rating" style="background:${ratingColor(v)}">${Math.round(v)}</span>`; }
+function esc(s){ return String(s).replace(/[&<>]/g, m=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[m])); }
+
+// dense internal-scale -> CF-points lookup (built server-side from the same
+// gym-shape + affine calibration as arch_b.calibrate; linearly interpolated)
+function toCf(x){
+  const {lo, step, ys} = DATA.to_cf;
+  x = Math.max(DATA.scale.lo, Math.min(DATA.scale.hi, x));
+  const idx = (x - lo) / step, i0 = Math.floor(idx), i1 = Math.min(i0 + 1, ys.length - 1);
+  const frac = idx - i0;
+  return ys[i0] + (ys[i1] - ys[i0]) * frac;
+}
+
+// arch_a.elo, ported: pi(theta,b) solve probability, then bisection root-find
+// (strat.tex eq. perf) -- same primitive arch_b.medals uses for real teams'
+// performance_elo, here applied to a hypothetically inserted virtual team.
+function pi(theta, b){ return 1 / (1 + Math.pow(10, (b - theta) / 400)); }
+
+function weightedRating(thetas, target){
+  const {lo, hi} = DATA.scale;
+  const f = b => thetas.reduce((s,th) => s + pi(th,b), 0) - target;
+  if (f(lo) <= 0) return lo;
+  if (f(hi) >= 0) return hi;
+  let a = lo, c = hi;
+  while (c - a > 1e-4){
+    const m = (a + c) / 2;
+    if (f(m) > 0) a = m; else c = m;
+  }
+  return (a + c) / 2;
+}
+function performanceRating(rank, rivalThetas){ return weightedRating(rivalThetas, rank - 1); }
+
+// -- contest picker, grouped by year like ratings_viewer_b.html --
+let curYear, group;
+DATA.contests.forEach((c,i)=>{
+  if(c.year !== curYear){
+    curYear = c.year;
+    group = document.createElement("optgroup");
+    group.label = curYear || "—";
+    sel.appendChild(group);
+  }
+  const o = document.createElement("option");
+  o.value = i;
+  o.textContent = `${c.name}` + (c.region ? `  — ${c.region}` : "");
+  group.appendChild(o);
+});
+
+function renderProbs(c){
+  $("#probcount").textContent = `${c.problems.length}`;
+  $("#probs tbody").innerHTML = c.problems.map((p,i)=>`
+    <tr data-i="${i}">
+      <td>${p.label}</td>
+      <td class="name">${esc(p.name)}</td>
+      <td class="num">${chip(p.difficulty_cf)}</td>
+      <td class="num"><input type="checkbox" class="fSolved"></td>
+      <td class="num"><input type="number" class="fTime" min="0" max="${c.duration_minutes}"
+          placeholder="0" title="minutes into the contest (≤ ${c.duration_minutes})"></td>
+      <td class="num"><input type="number" class="fWrong" min="0" placeholder="0"
+          title="wrong submissions before this AC"></td>
+    </tr>`).join("");
+  $("#probs tbody").querySelectorAll("input").forEach(el => el.addEventListener("input", recompute));
+}
+
+function renderTeams(c, rank){
+  const q = filter.value.trim().toLowerCase();
+  let rows = c.teams.map(t => ({...t, penaltyMin: Math.round(t.penalty/60)}));
+  if(q) rows = rows.filter(t => (t.name+" "+t.affiliation).toLowerCase().includes(q));
+  const you = {isYou:true, rank, name:"YOU (virtual)"};
+  const merged = [];
+  let inserted = false;
+  for(const t of rows){
+    if(!inserted && t.rank >= rank){ merged.push(you); inserted = true; }
+    merged.push(t);
+  }
+  if(!inserted) merged.push(you);
+  $("#teams tbody").innerHTML = merged.map(t => t.isYou ? `
+    <tr class="you">
+      <td class="num">${t.rank}</td><td class="name">${esc(t.name)}</td>
+      <td class="num">${$("#stSolved").textContent}</td>
+      <td class="num">${$("#stPenalty").textContent}</td>
+    </tr>` : `
+    <tr>
+      <td class="num">${t.rank}</td>
+      <td class="name">${esc(t.name)}${t.affiliation?`<div class="aff">${esc(t.affiliation)}</div>`:""}</td>
+      <td class="num">${t.solved}</td>
+      <td class="num">${t.penaltyMin}</td>
+    </tr>`).join("");
+}
+
+function recompute(){
+  const c = DATA.contests[sel.value];
+  let solved = 0, penalty = 0;
+  $$("#probs tbody tr").forEach(tr => {
+    if(tr.querySelector(".fSolved").checked){
+      solved++;
+      const time = parseInt(tr.querySelector(".fTime").value) || 0;
+      const wrong = parseInt(tr.querySelector(".fWrong").value) || 0;
+      penalty += time + 20 * wrong;
+    }
+  });
+  $("#stSolved").textContent = solved;
+  $("#stPenalty").textContent = penalty;
+
+  let better = 0;
+  for(const t of c.teams){
+    if(t.solved > solved || (t.solved === solved && Math.round(t.penalty/60) < penalty)) better++;
+  }
+  const rank = better + 1;
+  const rivalThetas = c.teams.map(t => t.theta);
+  const rho = performanceRating(rank, rivalThetas);
+  const perfCf = toCf(rho);
+
+  $("#stRank").textContent = `${rank} / ${c.teams.length + 1}`;
+  $("#stPerf").innerHTML = chip(perfCf);
+
+  const above = c.teams.filter(t => t.rank < rank).slice(-1)[0];
+  const below = c.teams.find(t => t.rank >= rank);
+  let note = "";
+  if(above && below) note = `Between <b>${esc(above.name)}</b> (rank ${above.rank}) and <b>${esc(below.name)}</b> (rank ${below.rank}).`;
+  else if(!above && below) note = `Ahead of everyone — above <b>${esc(below.name)}</b> (rank ${below.rank}).`;
+  else if(above && !below) note = `Below everyone — behind <b>${esc(above.name)}</b> (rank ${above.rank}).`;
+  $("#noteContext").innerHTML = note;
+
+  renderTeams(c, rank);
+}
+
+function render(){
+  const c = DATA.contests[sel.value];
+  const yr = c.year ? `<b>${c.year}</b> &middot; ` : "";
+  const link = c.url ? `<a href="${c.url}" target="_blank" rel="noopener">qoj &#8599;</a> &middot; ` : "";
+  meta.innerHTML = `${yr}${link}<b>${c.teams.length}</b> teams &middot; <b>${c.problems.length}</b> problems `
+    + `&middot; ~<b>${c.duration_minutes}</b> min`;
+  if(history.replaceState) history.replaceState(null, "", "#" + c.contest_id);
+  renderProbs(c);
+  recompute();
+}
+
+sel.addEventListener("change", render);
+filter.addEventListener("input", recompute);
+$("#reset").addEventListener("click", render);
+
+const wanted = location.hash.slice(1);
+if(wanted){
+  const i = DATA.contests.findIndex(c => String(c.contest_id) === wanted);
+  if(i >= 0) sel.value = i;
+}
+render();
+</script>
+</body>
+</html>

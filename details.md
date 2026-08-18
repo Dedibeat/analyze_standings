@@ -2223,3 +2223,71 @@ tagged-only / all-supplemental / mutation log-loss is 0.229876 / 0.230252 /
 an example of selection overfit, not a shipped change. The full rationale and
 per-contest artifact are in `data_influence.md` and
 `output/data_influence.json`; run `./.venv/bin/python -m arch_b.data_influence`.
+
+## Virtual contest performance calculator (2026-08-18)
+
+`arch_b.export_virtual_calc` writes `output/virtual_calc.html`, an interactive
+tool for a team that solved a past contest *virtually* (outside the official
+window) to estimate the Codeforces-equivalent performance rating they would
+have earned. Design was discussed with the user (four `AskUserQuestion`
+rounds) before building; the agreed shape:
+
+- **Contest source**: an existing contest already in the fit (not a freeform
+  problem set), so the virtual team can be ranked against a real field.
+- **Rating method**: the classic **Elo rank-inversion** primitive
+  (`arch_a.elo.performance_rating`, eq. perf) — not a fresh Rasch MLE fit from
+  the solve pattern. This is the same primitive `arch_b.medals` already uses
+  for every real team's `performance_elo`, so the virtual number sits on a
+  precedented scale rather than a new one.
+- **Input granularity**: full ICPC-clock detail — solved/unsolved, minutes
+  into the contest, and wrong-attempt count per problem, matching how
+  `penalty_seconds` is actually computed in the source data.
+  Penalty = `floor(time_seconds/60) + 20*wrong_attempts`, summed only over
+  *solved* problems (standard ICPC rule; wrong attempts on unsolved problems
+  don't count).
+- **Interface**: a self-contained HTML page (open from disk, no server),
+  following the exact convention of `ratings_viewer_b.html` /
+  `medal_viewer.html` — contest picker grouped by year, `/*__DATA__*/null`
+  placeholder swapped for embedded JSON, URL-hash deep links.
+
+Mechanics: the virtual team's (solved, penalty) is compared against every
+real team's (solved, penalty_seconds) in that contest using the standard ICPC
+tie-break (more solved wins; ties broken by lower penalty) to get a
+hypothetical rank. `elo.performance_rating(rank, rival_thetas)` then converts
+that rank plus the real field's **internal-scale** fitted abilities (same
+UCup-anchored survival fit as `arch_b.export_viewer`) into an internal-scale
+rho. The rank-insertion and Elo bisection are reimplemented in vanilla JS
+(`pi`, `weightedRating`, `performanceRating` in `virtual_calc_template.html`
+directly port `arch_a/elo.py`) since they must run live against whatever the
+user types.
+
+Mapping rho to CF points reuses the same `arch_b.calibrate` gym-shape +
+affine composition as `_cf_map` in `arch_b.medals`, but that map can't be
+re-fit in the browser (no gym data or CF anchors shipped client-side), so
+`export_virtual_calc.build_data()` samples it once into a dense lookup table
+(every 5 CF points across [800, 4000], ~641 points) and the page does linear
+interpolation. This is exact enough for display purposes and avoids
+duplicating the shape-fitting math in JS.
+
+Bundled per contest: problems (label, name, `difficulty_cf` only — no SE,
+since it's just reference context while filling the form) and every real
+team (rank, name, affiliation, solved, `penalty_seconds`, internal `theta`).
+Teams with zero solves are already absent from the fit (dropped at the loader
+level, `README.md`), matching `arch_b.medals`'s convention of restricting
+rivals to solving teams. Scope is the 132 contests that survive
+`MIN_SOLVE_HOURS` filtering in the tagged-only fit (same set
+`arch_b.export_viewer` uses) — not the UCup-anchor-only seasons or the
+QOJ-standings-only supplemental contests, since those either lack full
+problem/statement metadata or aren't meant to be picked as a "your contest"
+target.
+
+Verified with headless Chrome (`google-chrome --headless=new --dump-dom`,
+plus a scripted harness that checks boxes and calls `recompute()` directly)
+rather than by inspection alone: this caught a real bug (`$(...).forEach is
+not a function` — `$` is `querySelector`, singular; needed `$$` /
+`querySelectorAll` for the per-row solve loop) that silently broke every
+computation before the fix. Post-fix, spot checks on the 2026 ICPC Asia
+Pacific Championship (77 real teams) match expectations: zero solves → rank
+78/78, performance floor 800; solving all 13 problems fastest → rank 1/78,
+performance ceiling 4000; a mid-pack 6-of-13 solve pattern → rank 38/78,
+performance ≈2383 CF, consistent with the field's ~2340 mean θ.

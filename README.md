@@ -298,6 +298,25 @@ viewer. It is published live via GitHub Pages:
 
 (The Architecture A viewer is also live at `.../output/ratings_viewer.html`.)
 
+### Virtual contest performance calculator
+
+```bash
+./.venv/bin/python -m arch_b.export_virtual_calc
+```
+
+Writes `output/virtual_calc.html`: pick one of the 132 fitted contests, check
+off which problems your team solved in a virtual (out-of-window) run with the
+time (minutes into the contest) and wrong-attempt count for each, and see the
+Codeforces-equivalent performance rating you'd have earned. Method: standard
+ICPC tie-break (most solved, then lowest penalty) inserts your team into that
+contest's real final standings to get a hypothetical rank, then the same Elo
+rank-inversion primitive `arch_b.medals` uses for every real team's
+`performance_elo` converts that rank plus the real field's fitted abilities
+into a rating. The CF-points mapping is the same gym-shape + affine
+calibration as `arch_b.calibrate`, sampled into a dense lookup table at
+export time so the browser doesn't need to re-fit it. Self-contained, no
+server; recomputes live as you edit your solves.
+
 ### Contest-linking graph
 
 ```bash
@@ -338,13 +357,15 @@ Module self-checks:
   `calibrate`, `season_experiment`, `medals` EA medal badges + lowest-gold
   analysis (with `export_medal_viewer` + `medal_viewer_template.html` for the
   medal viewer), `twopl`/`twopl_region` 2PL discrimination
-  prototype); reuses `arch_a.load` and `arch_a.elo`.
+  prototype, `export_virtual_calc` + `virtual_calc_template.html` for the
+  virtual-contest performance calculator); reuses `arch_a.load` and `arch_a.elo`.
 - `output/problem_ratings.json` — Architecture A ratings;
   `output/problem_ratings_b.json` — Architecture B (binary) ratings;
   `output/problem_ratings_survival.json` — Architecture B (survival) ratings;
   `output/problem_ratings_calibrated.json` — survival ratings mapped to CF points;
   `output/gym_difficulty.json` — independent CF-scale difficulty from gym mirrors.
 - `output/ratings_viewer.html` — generated interactive viewer.
+- `output/virtual_calc.html` — generated virtual-contest performance calculator.
 - `details.md` — design notes, key decisions, and follow-ups.
 - `rating_bias.md` — catalog of every mechanism that can inflate or deflate
   estimated difficulties (by pipeline stage, with direction + status).
