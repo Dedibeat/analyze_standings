@@ -2389,3 +2389,30 @@ overlaps minus a few dropped by the same `MIN_SOLVE_HOURS`/dedupe filters
 `difficulty_cf` values and team performances, no contest id is duplicated in
 the output (`grep`-checked), and `arch_b.export_virtual_calc` still runs
 clean end-to-end.
+
+### Revision: export the 52 UCup-only contests for ../my-react-app (2026-08-19)
+
+Follow-up: the user wanted these same 52 UCup-only contests' problems added
+to `../my-react-app`'s problemset app, with their calibrated ratings — a
+different consumer than the virtual calc, so a separate script,
+`arch_b/export_ucup_only.py`, was added rather than reusing
+`export_virtual_calc`'s in-memory picker data. It fits the same UCup-only
+Phase-1 fit (`estimate_anchored(..., return_ucup=True)`), computes Laplace
+SE (`survival.laplace_se`), and calibrates to CF points with the same
+shape+affine map as `arch_b.calibrate` (`_gym_shape`/`_anchors`, duplicated
+inline rather than importing `calibrate.main`'s internals, since that
+function also writes a file and picks between binary/survival models —
+more than this script needs). Writes `output/ucup_only_contests.json`
+(canonical/tagged.json-shaped, no LLM tag fields) and
+`output/ucup_only_ratings.json` (problem_ratings_calibrated.json-shaped).
+
+37 of the 52 contests carry no `year` in the source UCup JSON (`ucup_s3`/
+`ucup_s4.json`); the react app's display string is `contest_name + ' ' +
+year` verbatim, so those were rendering as e.g. "Grand Prix of Ōokayama
+null". Fixed by falling back to each season file's most common non-null
+year when a contest's own `year` is missing (2024 for `ucup_s3.json`, 2025
+for `ucup_s4.json`, computed dynamically via `Counter.most_common`, not
+hardcoded) — only affects the exported `year` field, not the fit itself.
+
+The my-react-app side (`scripts/merge_ucup.py`, `DETAILS.md`) is documented
+in that repo.
