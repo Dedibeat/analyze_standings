@@ -20,11 +20,16 @@ exactly, for `../my-react-app` to merge in:
 - output/ucup_only_contests.json: contest+problem records in
   ../my-react-app/canonical/tagged.json's shape (no LLM tag/analysis
   fields -- that pipeline never ran on these problems; region is set to the
-  literal "Universal Cup").
+  literal "Universal Cup"). Many UCup rounds carry no ``year`` in the source
+  data; those fall back to their season's most common year (2024 for
+  ucup_s3.json, 2025 for ucup_s4.json) rather than null, since the app
+  displays ``contest_name + ' ' + year`` verbatim and a null year rendered
+  as the literal string "null".
 """
 
 import json
 import os
+from collections import Counter
 
 import numpy as np
 
@@ -89,9 +94,15 @@ def build():
         })
 
     raw = []
+    fallback_year = {}  # contest_id -> season's most common year, for null-year contests
     for path in UCUP:
         with open(path) as f:
-            raw.extend(json.load(f))
+            file_contests = json.load(f)
+        years = [c["year"] for c in file_contests if c.get("year") is not None]
+        season_year = Counter(years).most_common(1)[0][0] if years else None
+        for c in file_contests:
+            fallback_year[c["contest_id"]] = season_year
+        raw.extend(file_contests)
     raw = dedupe_contests(raw)
     raw = [c for c in raw if _max_solve_seconds(c) >= MIN_SOLVE_HOURS * 3600]
     raw = [c for c in raw if c["contest_id"] not in tagged_ids]
@@ -101,7 +112,7 @@ def build():
         contests.append({
             "contest_id": c["contest_id"],
             "contest_name": c.get("contest_name"),
-            "year": c.get("year"),
+            "year": c.get("year") or fallback_year.get(c["contest_id"]),
             "region": "Universal Cup",
             "contest_url": c.get("contest_url"),
             "editorial_url": c.get("editorial_url"),
