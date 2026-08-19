@@ -304,10 +304,11 @@ viewer. It is published live via GitHub Pages:
 ./.venv/bin/python -m arch_b.export_virtual_calc
 ```
 
-Writes `output/virtual_calc.html`: pick one of the 189 fitted contests (132
-tagged.json regionals + all 57 Petrozavodsk camp contests) by name from the
-year-grouped dropdown, or jump straight to one by its qoj **contest id** in
-the id box. Enter your team's solved count and penalty (minutes) from a
+Writes `output/virtual_calc.html`: pick one of the 241 fitted contests (132
+tagged.json regionals + all 57 Petrozavodsk camp contests + 52 Universal Cup
+rounds not already in tagged.json, rated on their own Phase-1 UCup-only fit)
+by name from the year-grouped dropdown, or jump straight to one by its qoj
+**contest id** in the id box. Enter your team's solved count and penalty (minutes) from a
 virtual (out-of-window) run — standard ICPC scoring, the same two numbers any
 real team's standings line carries — and see the Codeforces-equivalent
 performance rating you'd have earned. Method: standard ICPC tie-break (most

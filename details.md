@@ -2348,3 +2348,44 @@ shows the 4000 ceiling performance, and the highlighted "YOU" row's
 Performance cell matches the summary stat exactly.
 "Petrozavodsk Winter 2022. Day 1. Kyoto U Contest 2" (147 teams), and a
 5-of-13 partial solve there gives a plausible mid-field rank/performance.
+
+### Revision: Universal Cup contests added to the picker (2026-08-19)
+
+User asked why UCup contests (e.g. `qoj.ac/contest/2921`, "Grand Prix of
+Ōokayama") weren't showing up in the virtual calc. Root cause: `SOURCES =
+[TAGGED, PETROZ]` never included `ucup_s3.json`/`ucup_s4.json` — UCup was
+loaded only for the Phase-1 anchor fit inside `estimate_anchored`, and its
+resulting UCup-only `theta_u`/`b_u` were discarded (`_`) rather than
+returned, so the raw standings were never reloaded for the picker either.
+(Separately: SEERC 2023–2025 aren't in the picker for an unrelated reason —
+they were never fetched from QOJ into any dataset file at all; only the 2022
+edition exists, as `tagged.json` contest 2511. That's a data-collection gap,
+not a code fix, and is still open.)
+
+Fix: `arch_b.anchor.estimate_anchored` gained an opt-in `return_ucup=False`
+flag; when `True` it additionally returns `(ds_ucup, theta_u, b_u)` from the
+Phase-1 fit it already runs internally (previously `b_u` was thrown away).
+Default behavior/return arity is unchanged for every other caller.
+`export_virtual_calc.py` now builds the picker's contest list twice — once
+from the tagged-scale fit over `SOURCES` (unchanged), once from the UCup-only
+fit over `UCUP_SOURCES = UCUP` — via a shared `_contests_from(ds, theta, b,
+to_cf, paths, uf, exclude_ids=())` helper (the previous single inline loop
+in `build_data()`, factored out unchanged apart from the new parameter). The
+same `to_cf` map (fit once from the tagged-scale records) is reused for both,
+since it's a general internal-scale→CF-points affine map, not tied to which
+dataset the internal thetas came from.
+
+17 contest ids appear in *both* `tagged.json` and the UCup files (e.g. id
+2511 above is not among them, but ids like 1784/2908/3169/... are) — without
+handling, they'd be listed twice with two different fits' numbers. Fixed by
+passing `exclude_ids={int(cid) for cid in ds.contests}` (the tagged fit's
+own contest set) to the UCup pass, so an overlapping contest is shown once,
+from the tagged-scale fit only.
+
+Contest count: 189 → 241 (132 tagged + 57 Petroz, unchanged, plus 52 UCup
+rounds not already in tagged.json; UCup's raw 76 contests minus the 17
+overlaps minus a few dropped by the same `MIN_SOLVE_HOURS`/dedupe filters
+`load()` applies). Verified `2921` now appears with real problem
+`difficulty_cf` values and team performances, no contest id is duplicated in
+the output (`grep`-checked), and `arch_b.export_virtual_calc` still runs
+clean end-to-end.

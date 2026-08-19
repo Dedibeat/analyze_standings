@@ -38,12 +38,18 @@ PETROZ = os.path.join(DATA, "petroz_2022_2026.json")
 def estimate_anchored(sigma_theta=SIGMA_THETA, sigma_b=SIGMA_B, fit_fn=fit,
                       season_key=False, min_solve_hours=None, verbose=True,
                       gym_merge=None, supplemental_paths=None,
-                      identity_paths=None):
+                      identity_paths=None, return_ucup=False):
     """Fit tagged + supplemental standings, anchored to a UCup-only fit.
 
     Returns (ds_tagged, theta, b, history, uf) for the anchored tagged fit. ``uf``
     is the shared union-find both fits resolved identity through, so callers can
     map raw standing rows to ``ds_tagged.teams`` via ``team_key``.
+
+    ``return_ucup=True`` additionally returns the Phase-1 UCup-only fit as a
+    6th element ``(ds_ucup, theta_u, b_u)`` -- e.g. for callers that need
+    ratings for UCup-only teams/problems (not part of ``ds_tagged``), such as
+    ``export_virtual_calc``. Off by default so every existing 5-value unpack
+    keeps working unchanged.
 
     ``fit_fn`` is the MAP fitter, ``model.fit`` (binary Rasch) by default; pass
     ``survival.fit`` to anchor the solve-time survival model on the same scale.
@@ -90,7 +96,7 @@ def estimate_anchored(sigma_theta=SIGMA_THETA, sigma_b=SIGMA_B, fit_fn=fit,
                      season_key=season_key, min_solve_hours=min_solve_hours)
 
     if verbose: print("=== UCup anchor fit (s3 + s4) ===")
-    theta_u, _, _ = fit_fn(ds_ucup, sigma_theta=sigma_theta, sigma_b=sigma_b, verbose=verbose)
+    theta_u, b_u, _ = fit_fn(ds_ucup, sigma_theta=sigma_theta, sigma_b=sigma_b, verbose=verbose)
     anchor = {ds_ucup.teams[i]: theta_u[i] for i in range(len(ds_ucup.teams))}
 
     prior_mu = np.full(len(ds_tagged.teams), MU0)
@@ -112,6 +118,8 @@ def estimate_anchored(sigma_theta=SIGMA_THETA, sigma_b=SIGMA_B, fit_fn=fit,
     theta, b, history = fit_fn(ds_tagged, prior_mu=prior_mu,
                                sigma_theta=sigma_theta, sigma_b=sigma_b, verbose=verbose,
                                gym_obs=gym_obs)
+    if return_ucup:
+        return ds_tagged, theta, b, history, uf, (ds_ucup, theta_u, b_u)
     return ds_tagged, theta, b, history, uf
 
 

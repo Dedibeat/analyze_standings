@@ -36,7 +36,7 @@ from arch_a import elo
 from arch_a.fixedpoint import _performance_ratings
 from arch_a.load import _max_solve_seconds, dedupe_contests, row_solved_any, team_key
 from . import survival
-from .anchor import PETROZ, TAGGED, estimate_anchored
+from .anchor import PETROZ, TAGGED, UCUP, estimate_anchored
 from .calibrate import _anchors, _gym_shape
 from .run import MIN_SOLVE_HOURS
 
@@ -46,6 +46,12 @@ from .run import MIN_SOLVE_HOURS
 # inputs), so ds/theta/b already cover them -- only the raw standings need
 # reloading here to build each contest's team list.
 SOURCES = [TAGGED, PETROZ]
+
+# Universal Cup contests (ucup_s3.json + ucup_s4.json) are not part of the
+# tagged fit -- they're used only for the Phase-1 anchor fit that pins the
+# tagged fit's scale (estimate_anchored's return_ucup extra). Built as a
+# separate contest list on the UCup-only theta_u/b_u below.
+UCUP_SOURCES = UCUP
 
 OUT_DIR = os.path.join(os.path.dirname(__file__), os.pardir, "output")
 TEMPLATE = os.path.join(os.path.dirname(__file__), "virtual_calc_template.html")
@@ -64,20 +70,14 @@ def _cf_map(records):
                                     elo.LO, elo.HI))
 
 
-def build_data():
-    ds, theta, b, _, uf = estimate_anchored(
-        fit_fn=survival.fit, min_solve_hours=MIN_SOLVE_HOURS, verbose=False)
-
-    records = [{"contest_id": int(cid), "problem_label": lab, "problem_name": name,
-                "difficulty": float(b[p])}
-               for p, (cid, lab, pid, name) in enumerate(ds.problems)]
-    to_cf = _cf_map(records)
-
-    # dense lookup table so the browser can map rho -> CF points without
-    # re-deriving the shape+affine calibration itself
-    xs = np.arange(elo.LO, elo.HI + LOOKUP_STEP, LOOKUP_STEP)
-    ys = [round(to_cf(x), 1) for x in xs]
-
+def _contests_from(ds, theta, b, to_cf, paths, uf, exclude_ids=()):
+    """Build the picker's contest list for one fit (ds/theta/b) from its raw
+    standings ``paths``. Shared between the tagged-scale fit (SOURCES) and the
+    UCup-only Phase-1 fit (UCUP_SOURCES, via estimate_anchored's return_ucup),
+    which have their own team/problem index spaces. ``exclude_ids`` drops
+    contest ids already covered by another call (17 UCup rounds are also
+    tagged.json entries, so skip them here to avoid listing the same contest
+    twice with two different fits)."""
     prob_by_contest = {}
     for p, (cid, label, pid, name) in enumerate(ds.problems):
         prob_by_contest.setdefault(int(cid), []).append({
@@ -88,8 +88,8 @@ def build_data():
     # each real team's own calibrated performance in that contest, from its
     # actual rank (same eq. perf primitive as export_viewer.py / medals.py).
     # Keyed by (contest_id, team index) rather than assumed row order, since
-    # this module's SOURCES (tagged + Petroz) is not the full fit's row order
-    # (which also includes older-ICPC and World Finals in between).
+    # ``paths`` is not necessarily the full fit's row order (which also
+    # includes older-ICPC and World Finals in between).
     rows_by_contest = [np.where(ds.contest_of_row == ci)[0] for ci in range(len(ds.contests))]
     rho = _performance_ratings(theta, ds, rows_by_contest)
     perf_lookup = {(int(ds.contests[ds.contest_of_row[row]]), int(ds.team_of_row[row])):
@@ -97,11 +97,12 @@ def build_data():
                    for row in range(len(ds.contest_of_row))}
 
     raw = []
-    for path in SOURCES:
+    for path in paths:
         with open(path) as f:
             raw.extend(json.load(f))
     raw = dedupe_contests(raw)  # match load(): drop repeated contest entries
     raw = [c for c in raw if _max_solve_seconds(c) >= MIN_SOLVE_HOURS * 3600]  # match load()
+    raw = [c for c in raw if c["contest_id"] not in exclude_ids]
     key_to_idx = {k: i for i, k in enumerate(ds.teams)}
 
     contests = []
@@ -138,6 +139,28 @@ def build_data():
             "problems": problems,
             "teams": teams,
         })
+    return contests
+
+
+def build_data():
+    ds, theta, b, _, uf, (ds_ucup, theta_u, b_u) = estimate_anchored(
+        fit_fn=survival.fit, min_solve_hours=MIN_SOLVE_HOURS, verbose=False,
+        return_ucup=True)
+
+    records = [{"contest_id": int(cid), "problem_label": lab, "problem_name": name,
+                "difficulty": float(b[p])}
+               for p, (cid, lab, pid, name) in enumerate(ds.problems)]
+    to_cf = _cf_map(records)
+
+    # dense lookup table so the browser can map rho -> CF points without
+    # re-deriving the shape+affine calibration itself
+    xs = np.arange(elo.LO, elo.HI + LOOKUP_STEP, LOOKUP_STEP)
+    ys = [round(to_cf(x), 1) for x in xs]
+
+    tagged_ids = {int(cid) for cid in ds.contests}
+    contests = (_contests_from(ds, theta, b, to_cf, SOURCES, uf)
+                + _contests_from(ds_ucup, theta_u, b_u, to_cf, UCUP_SOURCES, uf,
+                                  exclude_ids=tagged_ids))
 
     contests.sort(key=lambda c: (-(c["year"] or 0), c["name"]))
     return {"scale": {"lo": elo.LO, "hi": elo.HI},
