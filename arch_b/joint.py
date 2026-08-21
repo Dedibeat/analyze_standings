@@ -48,7 +48,7 @@ PETROZ = os.path.join(DATA, "petroz_2022_2026.json")
 def estimate_joint(sigma_theta=SIGMA_THETA, sigma_b=SIGMA_B, fit_fn=fit,
                    season_key=False, min_solve_hours=None, verbose=True,
                    gym_merge=None, supplemental_paths=None,
-                   identity_paths=None, prior_mu=None):
+                   identity_paths=None, prior=None):
     """Fit tagged + supplemental + Universal Cup standings in one MAP.
 
     Returns ``(ds, theta, b, history, uf)``. ``uf`` is the union-find identity
@@ -60,10 +60,12 @@ def estimate_joint(sigma_theta=SIGMA_THETA, sigma_b=SIGMA_B, fit_fn=fit,
     ``min_solve_hours`` are passed through to ``load`` (and the union-find) to
     separate teams by season and drop short contests.
 
-    ``prior_mu`` overrides the per-team Gaussian prior mean, which defaults to
-    the neutral ``MU0`` for every team; pass a callable ``(ds) -> array`` to
-    anchor selected teams to an external scale (``cf_prior.prior_means`` builds
-    one from the collected Codeforces participant ratings).
+    ``prior`` overrides the per-team Gaussian prior, which defaults to the
+    neutral ``MU0`` at the global ``sigma_theta`` for every team. Pass a callable
+    ``(ds, uf, sigma_theta, season_by_cid) -> (mu, sd)`` to anchor selected teams
+    to an external ability scale; ``cf_prior.prior`` is one, built from the
+    collected Codeforces participant ratings. Both fitters accept a per-team
+    ``sigma_theta`` array, so the returned ``sd`` may vary by team.
 
     ``gym_merge`` (float weight, or the ``ARCHB_GYM_MERGE`` env var so the
     read-only ``metric.py`` can A/B it) merges the gym-mirror attempts into the
@@ -103,7 +105,10 @@ def estimate_joint(sigma_theta=SIGMA_THETA, sigma_b=SIGMA_B, fit_fn=fit,
 
     ds = load(paths, uf=uf, season_key=season_key, min_solve_hours=min_solve_hours)
 
-    mu = np.full(len(ds.teams), MU0) if prior_mu is None else prior_mu(ds)
+    if prior is None:
+        mu, sd = np.full(len(ds.teams), float(MU0)), sigma_theta
+    else:
+        mu, sd = prior(ds, uf, sigma_theta, season_by_cid)
 
     gym_obs = None
     if gym_merge:
@@ -113,7 +118,7 @@ def estimate_joint(sigma_theta=SIGMA_THETA, sigma_b=SIGMA_B, fit_fn=fit,
     if verbose:
         print(f"=== joint fit ({len(ds.contests)} contests, {len(ds.teams)} teams, "
               f"{len(ds.problems)} problems) ===")
-    theta, b, history = fit_fn(ds, prior_mu=mu, sigma_theta=sigma_theta,
+    theta, b, history = fit_fn(ds, prior_mu=mu, sigma_theta=sd,
                                sigma_b=sigma_b, verbose=verbose, gym_obs=gym_obs)
     return ds, theta, b, history, uf
 
