@@ -47,9 +47,11 @@ Fits the joint **Rasch** item-response model by MAP (`strat.tex` §4): each solv
 is a Bernoulli draw on `sigma((θ_t − b_p)/s)`, and the shared `θ_t` links contests
 automatically. Writes `output/problem_ratings_b.json` — same record format plus a
 `difficulty_se` (Laplace standard error) per problem, a distinct file so
-Architecture A's output is left untouched. Reuses arch_a's data layer and the same
-two-phase UCup anchor, here feeding each UCup team's ability in as its Gaussian
-prior mean; tune the prior with `estimate_anchored(sigma_theta=…, sigma_b=…)`
+Architecture A's output is left untouched. Reuses arch_a's data layer and fits
+**one joint MAP** over tagged.json, the supplemental standings, and the Universal
+Cup seasons (`arch_b.joint`) — the two-phase UCup prior was retired on
+2026-08-21 after it measured as a no-op here; tune the prior with
+`estimate_joint(sigma_theta=…, sigma_b=…)`
 (looser → wider scale but more easy problems pinned to the floor). The Gaussian
 prior keeps solved-by-none/all problems finite, so no boundary smoothing is
 needed. See `details.md` for the Rasch-vs-2PL scope and the shrinkage-vs-arch_a
@@ -193,6 +195,59 @@ The proposed structural shift (sparse data layer → one joint fit → cross-con
 LLM pairwise → hierarchical per-contest/per-region calibration → ability-side CF
 anchoring) is written up at the end of `details.md`.
 
+### Structural shift implemented (2026-08-21)
+
+The five steps the audit proposed, as built and measured (baseline metric 244.3):
+
+1. **Sparse data layer.** `arch_a.load` now stores observed cells in COO form
+   (`obs_row`/`obs_prob`/`obs_y`/`obs_tau`/`obs_wrong` plus `solved_count`),
+   replacing dense `n_rows x n_problems` matrices that were 99.65% empty. Peak
+   RSS for `arch_b.run --survival` drops **6,177 MB -> 696 MB** with the metric
+   bit-identical at 244.3.
+2. **One fit, one scale.** `arch_b/anchor.py` -> `arch_b/joint.py`;
+   `estimate_anchored` -> `estimate_joint`. The Universal Cup is ordinary fit
+   data and the two-phase prior is gone (`arch_a.anchor` keeps its anchor, which
+   there does work). Metric 244.3 -> **245.4**, inside the noise floor; rated
+   problems 2,475 -> **3,159**; the UCup-only export now matches
+   `problem_ratings_calibrated.json` to within rounding instead of sitting ~79
+   CF points low.
+3. **Cross-contest LLM comparisons** — `llm_crosscontest.py`, see below.
+4. **Hierarchical calibration** (`arch_b/hier_calibrate.py`): `cf = A*f(b) + B +
+   u_contest + v_region`, partially pooled. It measures **tau_contest = 72.4**
+   and **tau_region = 12.0** CF points — contest levels really do move, but the
+   between-region level among the three anchored regions is nil, which is
+   evidence the 100+ point region gaps the gym and LLM-bucket referees disagree
+   about are referee artifacts. LOCO does not improve (245.4 vs 248.3), so the
+   shipped map stays the plain affine; what ships is the **uncertainty**:
+   `difficulty_cf_se` is now the fit SE (`difficulty_cf_fit_se`) and the
+   calibration level sd (`difficulty_cf_level_sd`, 73.4 CF for any contest no CF
+   anchor saw) in quadrature, median 46.8 -> **86.4**.
+5. **Ability-side CF anchoring** (`arch_b/cf_prior.py`): the CPHoF participant
+   ratings as a time-accurate, roster-complete, leak-free prior on team ability.
+   Measured **inert** (57 anchored identities, metric moves <= 0.2), so it is
+   off by default — but `--validate` gives the repo's first external check of the
+   *ability* axis: fitted theta vs CF team ability Pearson **+0.752**, with an
+   implied compression of 2.86x against the 1.63x the difficulty map applies.
+
+### Cross-contest LLM difficulty comparisons
+
+```bash
+python llm_crosscontest.py prepare --scope mirrors --matches 6
+python llm_crosscontest.py count   --project <gcp-project>
+python llm_crosscontest.py run     --project <gcp-project>
+python llm_crosscontest.py analyse
+```
+
+`llm_survival.py` only ever pairs problems **inside one contest**, which is the
+axis the fit already gets right — hence its flat fusion result. This module
+pairs problems **across** contests, the axis nothing else can measure, and
+validates the instrument first on the 15 CF-mirrored contests where the true
+cross-contest levels are known. Partners are drawn uniformly from other contests
+(never using our difficulty, a CF rating, or any other target proxy), both A/B
+orientations are sent, and `bt_scores` fits Bradley-Terry by coordinate Newton in
+O(edges) per sweep so the graph can be far larger than `llm_survival.bt_fit`'s
+dense Hessian allows.
+
 ### Participant Codeforces ratings (research finding)
 
 A 2026-07-21 feasibility test matched exactly one Codeforces handle for 1,168 of
@@ -298,7 +353,8 @@ the descriptive city/time chart; `--report` prints that analysis.
 ```
 
 Writes a self-contained `output/ratings_viewer.html` from the same UCup-anchored
-fit as `run` (the full `tagged.json`, 146 unique contests after deduplication) —
+fit as `run` (Architecture A keeps its two-phase anchor, which measurably works
+there) (the full `tagged.json`, 146 unique contests after deduplication) —
 just open it in a browser (no server needed). The contest picker is grouped by year
 (newest first); the header shows the year and a link to the qoj contest. Pick a
 contest to see its problems ranked by difficulty and its teams with both their
@@ -390,7 +446,10 @@ Module self-checks:
 - `arch_a/` — Architecture A implementation (`load`, `elo`, `fixedpoint`,
   `anchor`, `run`), plus `export_viewer` + `viewer_template.html` for the viewer.
 - `arch_b/` — Architecture B implementation (`model` binary Rasch, `survival`
-  solve-time model, `anchor`, `run`, `validate`, `aoj` collector/matcher,
+  solve-time model, `joint` (one MAP over tagged + supplemental + Universal Cup;
+  replaced the two-phase `anchor`), `cf_prior` opt-in ability anchor +
+  ability-axis validation, `hier_calibrate` per-contest/per-region calibration
+  levels, `run`, `validate`, `aoj` collector/matcher,
   `external_validate` check vs Codeforces + Kattis + gym mirrors + AOJ (all 3 models),
   `gym_difficulty` fixed-θ fit on the CF gym-mirror population, `predict_eval`,
   `calibrate`, `season_experiment`, `medals` EA medal badges + lowest-gold

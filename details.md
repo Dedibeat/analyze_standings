@@ -2693,3 +2693,141 @@ while the fit is the reverse. Ordered by dependency, not by expected metric gain
 were already tried and overfit (298 vs 266), and Finding 5 now shows that even
 one offset parameter per region, learned from the gym alone, would encode a
 level difference the LLM referee reverses.
+
+## Implementing the structural shift (2026-08-21)
+
+The five steps proposed by the anchoring audit above, as built and measured.
+Every number is from `arch_b.metric` (the shipped calibrated LOCO CF-point RMSE
+plus its guards) unless stated otherwise; the pre-change baseline is **244.3**.
+
+### 1. Sparse data layer — done
+
+`arch_a.load` stored `y`, `solve_mask`, `tau` (float64) and `wrong` (int64) as
+dense `n_rows x n_problems` matrices that were **99.65% empty**: a cell is
+observed only where the problem belongs to the row's contest. `Dataset` now
+carries the observed cells in COO form — `obs_row`, `obs_prob`, `obs_y`,
+`obs_tau` (float32), `obs_wrong` (int32) — in the exact row-major order
+`np.nonzero(solve_mask)` produced, plus precomputed `solved_count` and
+`field_count` for the per-problem reductions seven call sites were doing by
+hand. `model._observations` / `survival._observations` now read the arrays
+directly instead of flattening a dense matrix back into them.
+
+| | before | after |
+|---|---:|---:|
+| peak RSS, `arch_b.run --survival` | 6,177 MB | **696 MB** |
+| runtime | 12 s | 10 s |
+| `calibrated_loco_cf_rmse` | 244.3 | **244.3** (bit-identical) |
+
+`arch_a.run` reproduces its documented `theta=[1372, 3698]` mean 2011 and median
+solve-count Spearman −0.995. This was the prerequisite for step 2: at joint size
+(94,093 rows x 3,464 problems) the dense layout needs ~11 GB and OOMs on a 16 GB
+machine.
+
+### 2. One fit, one scale — done
+
+`arch_b/anchor.py` became `arch_b/joint.py`, `estimate_anchored` became
+`estimate_joint`, and the Universal Cup is now ordinary fit data rather than a
+separate Phase-1 anchor. `arch_a.anchor` is untouched: there the prior
+*strength* scales with each team's UCup evidence and it does measurably tighten
+the scale (shared-team RMSE 519 → 301).
+
+| | before | after |
+|---|---:|---:|
+| `calibrated_loco_cf_rmse` | 244.3 | **245.4** |
+| raw affine LOCO | 245.4 | 246.9 |
+| rated problems | 2,475 | **3,159** |
+| gym EC / gym pooled / Kattis / AOJ | +0.978 / +0.969 / +0.772 / +0.568 | +0.977 / +0.969 / +0.772 / +0.568 |
+
+The +1.1 cost is inside the ±20 bootstrap noise floor and well under
+`program.md`'s 5-point keep threshold. In exchange the second scale is gone:
+all 684 UCup-only exported problems now come from the shipped fit and match
+`output/problem_ratings_calibrated.json` to within rounding (max |diff| 0.2),
+against a **mean +79 CF shift** from the old two-scale export. `external_validate`
+is unchanged within noise (CF pooled +0.941, Kattis +0.770, gym +0.969, LLM
++0.911). `export_virtual_calc` no longer needs a second fit or `exclude_ids`
+(241 contests, unchanged); `data_influence._fit` always includes UCup so its
+supplemental variants stay comparable, and its recorded artifact needs
+regenerating.
+
+### 5. Ability-side Codeforces anchoring — done, and inert
+
+`arch_b/cf_prior.py` turns `data/cphof_cf_participants.json` into a
+time-accurate Gaussian prior on team ability — `strat.tex` eq. cfprior, and the
+only anchor that reaches Asia East Continent (79% of the corroborated
+appearances). Conservative by construction: roster-complete rows only, a
+leak-free 1-January-of-the-season cutoff (regionals carry no start time), the
+`lse` team reduction, trust-weighted precision, and placement *relative* to
+`MU0` so no CF level enters the fit. `joint.estimate_joint` gained a `prior`
+hook; both fitters already accepted a per-team `sigma_theta` array.
+
+Coverage is 57 team identities from 310 standing rows, and the sweep is flat:
+
+| scale \ cf_sigma | 100 | 200 | 400 |
+|---|---:|---:|---:|
+| 0.5 | 245.6 | 245.4 | 245.4 |
+| 1.0 | 245.6 | 245.4 | 245.4 |
+
+with every guard unchanged. Same mechanism as Finding 1: those 57 teams are
+World-Finals-level rosters that play many contests, so their own likelihood
+already pins them. It is therefore **off by default**.
+
+Its value is as a yardstick. `python -m arch_b.cf_prior --validate` gives the
+repo's first external check of the **ability** axis, which no other yardstick
+reaches:
+
+    fitted theta vs CF team ability: Pearson +0.752  Spearman +0.762  (57 teams)
+    cf_ability ~ 2.86 * theta - 3699   (sd ratio 3.80, residual sd 220 CF)
+
+That 2.86 is much steeper than the **1.63** slope the shipped difficulty map
+applies over the same range, even though `theta` and `b` share one logit scale
+by construction — so the compression is not a single global factor, and the
+ability axis is compressed more than the difficulty axis where they overlap.
+(Caveat: this population is elite and narrow — theta sd 88 against CF sd 334 —
+so range restriction and errors in `theta` both inflate the slope estimate.)
+
+### 4. Hierarchical calibration — done; ships as the uncertainty model
+
+`arch_b/hier_calibrate.py` fits `cf = A*f(b) + B + u_contest + v_region` with
+partially pooled Gaussian random effects: empirical-Bayes group means
+`n_g/(n_g + sigma^2/tau^2) * mean residual`, and method-of-moments variance
+components debiased by the sampling variance of a group mean (estimating `tau`
+from the *shrunken* means instead collapses it to zero — the first version of
+this module did exactly that and reported `tau=0`). An `offsets=` hook accepts
+an external per-contest level observation as a weighted pseudo-observation of
+`u_c`.
+
+On the survival fit's 185 anchors (15 contests, 3 regions):
+
+    sigma = 228.0    tau_contest = 72.4    tau_region = 12.0   CF points
+    per-region level: Asia Pacific +0.0, Europe +3.3, Northern Eurasia -3.4
+
+**This is the substantive result.** Contest-to-contest level varies materially
+(tau 72 CF), but the between-*region* level, among three regions as different as
+Asia Pacific, Europe and Northern Eurasia, is essentially nil — 12 CF points.
+That is direct evidence that the 100+ point region gaps the gym (+117 Europe
+over Asia East) and the LLM bucket labels (−134 on the same pair) disagree about
+in Finding 5 are **referee artifacts, not fit bias**. It does not prove Asia
+East is unbiased — no CF anchor reaches it — but it removes the prior that large
+regional level bias is the norm.
+
+LOCO does **not** improve: 245.4 plain vs 248.3 hierarchical. A held-out contest
+cannot know its own `u`, and with `tau_region` at the noise floor there is
+nothing for the region effect to transfer. The shipped map therefore stays the
+plain global affine.
+
+What did change is the reported uncertainty. `difficulty_cf_se` previously
+scaled only the Laplace SE of `b` through the map — treating the map itself as
+exact. It is now the quadrature sum of that (kept as `difficulty_cf_fit_se`) and
+the calibration **level** sd (`difficulty_cf_level_sd`): the posterior sd of its
+own offset for the 15 anchored contests (~48 CF), and `sqrt(tau_c^2 + tau_r^2)`
+= **73.4 CF** for the 2,970 problems no CF anchor ever saw.
+
+| | median | mean |
+|---|---:|---:|
+| `difficulty_cf_fit_se` (old meaning) | 46.8 | 61.2 |
+| `difficulty_cf_level_sd` | 73.4 | 71.9 |
+| `difficulty_cf_se` (new total) | **86.4** | 99.7 |
+
+The level term is larger than the fit term for a typical problem, so the old
+figure understated the real uncertainty by about half. `calibrate`,
+`export_ucup_only` and the Architecture B viewer all report the same total.
