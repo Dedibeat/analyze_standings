@@ -61,11 +61,11 @@ from .run import MIN_SOLVE_HOURS
 # Guard floors: current baseline minus a noise margin (~0.02-0.04). A change
 # that pushes any of these below its floor is discarded regardless of the metric.
 GUARDS = {
-    "gym_ec_spearman": 0.93,        # baseline +0.962
-    "gym_pooled_spearman": 0.92,    # baseline +0.950
-    "kattis_pooled_spearman": 0.75, # baseline +0.793
-    "aoj_within_spearman": 0.52,    # baseline +0.576
-    "solvecount_sanity": 0.90,      # baseline +0.973 (sign flipped: -median)
+    "gym_ec_spearman": 0.93,        # baseline +0.977
+    "gym_pooled_spearman": 0.92,    # baseline +0.969
+    "kattis_pooled_spearman": 0.75, # baseline +0.772
+    "aoj_within_spearman": 0.52,    # baseline +0.568
+    "solvecount_sanity": 0.90,      # baseline +0.995 (sign flipped: -median)
 }
 RAW_LOCO_CEILING = 293.4  # baseline 288.4 + the 5-point keep threshold
 

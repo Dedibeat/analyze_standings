@@ -10,9 +10,9 @@ auto-commits and auto-reverts):
 Goal: Reduce the survival difficulty model's leave-one-contest-out CF-point
   RMSE after the locked shipped two-leg calibration. Read program.md (this
   file) first and obey its Scope and Hard rules.
-Scope: arch_b/survival.py, arch_b/model.py, arch_b/anchor.py, arch_b/run.py,
+Scope: arch_b/survival.py, arch_b/model.py, arch_b/joint.py, arch_b/run.py,
   arch_a/load.py
-Metric: calibrated_loco_cf_rmse (corrected baseline 244.2; lower is better);
+Metric: calibrated_loco_cf_rmse (baseline 245.4; lower is better);
   improvements under 5 points are noise — discard unless an independent guard
   value or held-out AUC also improves
 Verify: ./.venv/bin/python -m arch_b.metric | tail -1
@@ -51,12 +51,14 @@ Contract:
 - Exit code `1` means a guard was violated → **discard the change**, whatever
   the metric says. Exit `0` + lower RMSE → keep.
 - Runs in ~5 s, fully deterministic (no RNG anywhere in the fit).
-- Baseline after the full-cell mask correction: calibrated survival **244.2** on
+- Baseline after the 2026-08-21 joint fit: calibrated survival **245.4** on
   185 anchor problems / 15 contests
   (every rated CF mirror our dataset has — an exhaustive problemset sweep found
   no more). The raw affine LOCO remains visible as a guard, current baseline
-  245.2; the historical ceiling remains 293.4. The binary variant scores 254.2
-  on the corrected metric.
+  246.9; the historical ceiling remains 293.4. The binary variant scores 256.0.
+  The previous 244.2/245.2 pair was the two-phase-anchored fit, before the
+  Universal Cup became ordinary fit data (+1.1, inside the noise floor, in
+  exchange for 684 more problems on one scale — see details.md).
 
 **Noise floor / keep threshold.** The earlier raw-affine metric had
 cluster-bootstrap SE ≈20 points (contests resampled as units); the calibrated
@@ -87,8 +89,11 @@ Fair game (one focused change per iteration):
   **heavier-tailed difficulty prior** (the known worst failure is over-shrunk
   1-solver problems: we say ~2500 where CF says 2900–3500); per-problem prior
   scale by observation count.
-- `arch_b/anchor.py` — the UCup anchor pull (e.g. per-team evidence-scaled
-  prior strength as in `arch_a/anchor.py`, `anchor_weight` analog).
+- `arch_b/joint.py` — which sources enter the single fit, and the `prior` hook
+  (`arch_b/cf_prior.py` supplies an ability-side Codeforces prior through it;
+  measured inert at every setting swept so far). The two-phase UCup anchor was
+  measured as a no-op here and removed — do not reintroduce it without a
+  measurement.
 - `arch_b/run.py` — `MIN_SOLVE_HOURS` and other data-hygiene thresholds.
 - `arch_a/load.py` — data hygiene and identity keying (season keying, zero-solve
   policy, dropping **Asia West Continent** contests is explicitly permitted —
