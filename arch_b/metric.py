@@ -154,10 +154,8 @@ def main(use_binary=False):
 
     per_contest = defaultdict(list)
     for p, (cid, label, pid, name) in enumerate(ds.problems):
-        ci = ds.contest_of_problem[p]
-        rows = np.where(ds.contest_of_row == ci)[0]
-        solved = int(np.sum(ds.y[rows, p] & ds.solve_mask[rows, p]))
-        per_contest[ci].append((float(b[p]), solved))
+        ci = int(ds.contest_of_problem[p])
+        per_contest[ci].append((float(b[p]), int(ds.solved_count[p])))
     sanity = [-s for v in per_contest.values() if len(v) >= 3
               for s in [_spearman([d for d, _ in v], [c for _, c in v])]
               if not np.isnan(s)]

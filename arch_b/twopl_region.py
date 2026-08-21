@@ -55,8 +55,8 @@ def main():
     ds, theta, b, alpha = cap["ds"], cap["theta"], cap["b"], cap["alpha"]
 
     reg = np.array([region_of_cid.get(ds.contests[ci], "?") for ci in ds.contest_of_problem])
-    field = ds.solve_mask.sum(axis=0)
-    solved = (ds.y & ds.solve_mask).sum(axis=0)
+    field = ds.field_count
+    solved = ds.solved_count
     rate = np.divide(solved, field, out=np.full(len(field), np.nan, float), where=field > 0)
 
     print(f"alpha: [{alpha.min():.2f}, {alpha.max():.2f}] median {np.median(alpha):.2f} "

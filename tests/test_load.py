@@ -38,8 +38,11 @@ class LoadTest(unittest.TestCase):
             path.write_text(json.dumps([contest]))
             ds = load(str(path))
 
-        self.assertEqual(ds.solve_mask[0].tolist(), [True, True, True])
-        self.assertEqual(ds.y[0].tolist(), [True, False, False])
+        # all three contest problems are observed cells for the single row,
+        # even though only A was attempted
+        self.assertEqual(ds.obs_row.tolist(), [0, 0, 0])
+        self.assertEqual(ds.obs_prob.tolist(), [0, 1, 2])
+        self.assertEqual(ds.obs_y.tolist(), [True, False, False])
 
     def test_unknown_problem_solve_does_not_retain_row(self):
         contest = {

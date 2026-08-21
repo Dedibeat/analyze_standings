@@ -32,9 +32,7 @@ def main():
 
     records = []
     for p, (cid, label, pid, name) in enumerate(ds.problems):
-        ci = ds.contest_of_problem[p]
-        rows = np.where(ds.contest_of_row == ci)[0]
-        solved = int(np.sum(ds.y[rows, p] & ds.solve_mask[rows, p]))
+        solved = int(ds.solved_count[p])
         records.append({
             "problem_id": pid,
             "problem_label": label,

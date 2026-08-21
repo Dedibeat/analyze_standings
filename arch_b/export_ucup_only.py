@@ -75,9 +75,7 @@ def build():
         cid = int(cid)
         if cid in tagged_ids:
             continue
-        ci = ds_ucup.contest_of_problem[p]
-        rows = np.where(ds_ucup.contest_of_row == ci)[0]
-        solved = int(np.sum(ds_ucup.y[rows, p] & ds_ucup.solve_mask[rows, p]))
+        solved = int(ds_ucup.solved_count[p])
         d = float(b_u[p])
         se = float(se_b_u[p])
         ratings.append({

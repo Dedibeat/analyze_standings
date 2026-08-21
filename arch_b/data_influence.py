@@ -108,8 +108,7 @@ def _guards(ds, b):
     per_contest = defaultdict(list)
     for p in range(len(ds.problems)):
         ci = int(ds.contest_of_problem[p])
-        rows = np.where(ds.contest_of_row == ci)[0]
-        solved = int(np.sum(ds.y[rows, p] & ds.solve_mask[rows, p]))
+        solved = int(ds.solved_count[p])
         per_contest[ci].append((float(b[p]), solved))
     sanity = [-rho for values in per_contest.values() if len(values) >= 3
               for rho in [_spearman([x for x, _ in values], [y for _, y in values])]

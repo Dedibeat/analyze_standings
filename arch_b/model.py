@@ -48,10 +48,8 @@ def _observations(ds):
     the 0/1 solve outcome. A team plays several contests (several rows), all
     sharing one theta_t -- that shared index is what links the contests.
     """
-    obs_row, obs_prob = np.nonzero(ds.solve_mask)
-    obs_team = ds.team_of_row[obs_row]
-    obs_y = ds.y[obs_row, obs_prob].astype(float)
-    return obs_team, obs_prob, obs_y
+    obs_team = ds.team_of_row[ds.obs_row]
+    return obs_team, ds.obs_prob, ds.obs_y.astype(float)
 
 
 def fit(ds, prior_mu=None, sigma_theta=SIGMA_THETA, sigma_b=SIGMA_B, mu_b=MU0,

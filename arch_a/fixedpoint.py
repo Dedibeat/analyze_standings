@@ -188,8 +188,9 @@ def _rate_problems(theta, w_team, ds):
         teams = ds.team_of_row[rows]
         thetas = np.append(theta[teams], [elo.HI, elo.LO])      # +strong, +weak dummy
         weights = np.append(w_team[teams], [SMOOTH, SMOOTH])
-        solved = ds.y[rows, p] & ds.solve_mask[rows, p]
-        S_p = np.sum(w_team[teams] * solved) + SMOOTH          # strong dummy solved
+        sel = ds.obs_prob == p
+        solved_by = ds.team_of_row[ds.obs_row[sel][ds.obs_y[sel]]]
+        S_p = np.sum(w_team[solved_by]) + SMOOTH               # strong dummy solved
         b[p] = elo.weighted_rating(thetas, S_p, weights=weights)
     return b
 

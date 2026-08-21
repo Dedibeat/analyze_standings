@@ -295,10 +295,21 @@ class Dataset:
     contest_of_row: np.ndarray # row -> contest index
     rank_of_row: np.ndarray    # row -> finishing rank (int)
 
-    y: np.ndarray              # (n_rows, n_problems) bool solved, NaN-free; valid only where mask
-    solve_mask: np.ndarray     # (n_rows, n_problems) bool: contest problem cell, incl. no-attempt
-    tau: np.ndarray            # (n_rows, n_problems) solve time seconds; NaN where not solved
-    wrong: np.ndarray          # (n_rows, n_problems) wrong attempts; 0 where mask is False
+    # Observed competitor--problem cells, in COO form (row-major: sorted by row,
+    # then by problem).  A cell is observed exactly when the problem belongs to
+    # the row's contest, including no-attempt cells, which are censored
+    # non-solves (see the solve_mask decision in details.md).  The dense
+    # (n_rows, n_problems) matrices this replaces were 99.65% empty -- every
+    # consumer either flattened them straight back to these arrays
+    # (``model._observations``) or reduced them per problem (``solved_count``).
+    obs_row: np.ndarray        # observation -> row index
+    obs_prob: np.ndarray       # observation -> problem index
+    obs_y: np.ndarray          # observation -> bool solved
+    obs_tau: np.ndarray        # observation -> solve time seconds; NaN where not solved
+    obs_wrong: np.ndarray      # observation -> wrong attempts
+
+    solved_count: np.ndarray   # problem index -> number of observed solves
+    field_count: np.ndarray    # problem index -> number of observed cells (field size)
     contest_of_problem: np.ndarray  # problem index -> contest index
 
     raw_solved_count: np.ndarray  # problem index -> problem_solved_in_contest (reported)
@@ -381,45 +392,60 @@ def load(path=DATA_PATH, uf=None, season_key=False, min_solve_hours=None):
     n_problems = len(problems)
 
     team_of_row, contest_of_row, rank_of_row = [], [], []
-    y_rows, mask_rows, tau_rows, wrong_rows = [], [], [], []
+    row_chunks, prob_chunks, y_chunks, tau_chunks, wrong_chunks = [], [], [], [], []
 
     for c in raw:
         cid = c["contest_id"]
         ci = contest_index[cid]
         # which problem columns belong to this contest
         cols = {p["problem_label"]: problem_index[(ci, p["problem_label"])] for p in c["problems"]}
+        # QOJ omits a problem from ``standing["problems"]`` when the team never
+        # attempted it.  It is still a censored non-solve for this contest, so
+        # every problem in the contest is an observed cell for every row of it.
+        block = np.array(sorted(cols.values()), dtype=np.int64)
+        slot = {col: k for k, col in enumerate(block)}
         for s in c["standings"]:
             if not row_solved_any(s, cols):
                 continue  # zero-solve rows are dropped from the fit
             assert s.get("rank") is not None, f"missing rank in contest {cid}"
             ti = team_index[_key(cid, s)]
+            ri = len(team_of_row)
             team_of_row.append(ti)
             contest_of_row.append(ci)
             rank_of_row.append(int(s["rank"]))
 
-            y = np.zeros(n_problems, dtype=bool)
-            mask = np.zeros(n_problems, dtype=bool)
-            tau = np.full(n_problems, np.nan)
-            wrong = np.zeros(n_problems, dtype=int)
-            # QOJ omits a problem from ``standing["problems"]`` when the team
-            # never attempted it.  It is still a censored non-solve for this
-            # contest, so every problem in the contest must be in the mask.
-            mask[list(cols.values())] = True
+            y = np.zeros(len(block), dtype=bool)
+            tau = np.full(len(block), np.nan, dtype=np.float32)
+            wrong = np.zeros(len(block), dtype=np.int32)
             for label, pdata in (s.get("problems") or {}).items():
                 col = cols.get(label)
                 if col is None:
                     continue  # standings problem not in problem list; skip defensively
-                mask[col] = True
-                wrong[col] = int(pdata.get("wrong_attempts", 0))
+                k = slot[col]
+                wrong[k] = int(pdata.get("wrong_attempts", 0))
                 if pdata.get("solved"):
-                    y[col] = True
+                    y[k] = True
                     t = pdata.get("time_seconds")
                     assert t is not None, f"solved cell without time in contest {cid}"
-                    tau[col] = t
-            y_rows.append(y)
-            mask_rows.append(mask)
-            tau_rows.append(tau)
-            wrong_rows.append(wrong)
+                    tau[k] = t
+            row_chunks.append(np.full(len(block), ri, dtype=np.int64))
+            prob_chunks.append(block)
+            y_chunks.append(y)
+            tau_chunks.append(tau)
+            wrong_chunks.append(wrong)
+
+    def _cat(chunks, dtype):
+        if not chunks:
+            return np.zeros(0, dtype=dtype)
+        return np.concatenate(chunks)
+
+    obs_row = _cat(row_chunks, np.int64)
+    obs_prob = _cat(prob_chunks, np.int64)
+    obs_y = _cat(y_chunks, bool)
+    solved_count = np.zeros(n_problems, dtype=int)
+    field_count = np.zeros(n_problems, dtype=int)
+    np.add.at(solved_count, obs_prob, obs_y)
+    np.add.at(field_count, obs_prob, 1)
 
     return Dataset(
         teams=teams,
@@ -428,10 +454,13 @@ def load(path=DATA_PATH, uf=None, season_key=False, min_solve_hours=None):
         team_of_row=np.array(team_of_row, dtype=int),
         contest_of_row=np.array(contest_of_row, dtype=int),
         rank_of_row=np.array(rank_of_row, dtype=int),
-        y=np.array(y_rows),
-        solve_mask=np.array(mask_rows),
-        tau=np.array(tau_rows),
-        wrong=np.array(wrong_rows, dtype=int),
+        obs_row=obs_row,
+        obs_prob=obs_prob,
+        obs_y=obs_y,
+        obs_tau=_cat(tau_chunks, np.float32),
+        obs_wrong=_cat(wrong_chunks, np.int32),
+        solved_count=solved_count,
+        field_count=field_count,
         contest_of_problem=np.array(contest_of_problem, dtype=int),
         raw_solved_count=np.array(
             [x if x is not None else -1 for x in raw_solved_count], dtype=int

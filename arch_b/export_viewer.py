@@ -59,7 +59,7 @@ def build_data():
         local_slope = abs(slope * float(
             (shape(np.asarray([b[p] + h]))[0] -
              shape(np.asarray([b[p] - h]))[0]) / (2 * h)))
-        solved = int(np.sum(ds.y[rows, p] & ds.solve_mask[rows, p]))
+        solved = int(ds.solved_count[p])
         prob_by_contest.setdefault(int(cid), []).append({
             "label": label, "name": name,
             "difficulty": round(to_cf(b[p]), 0),

@@ -56,12 +56,12 @@ def _survival_observations(ds):
     rho_tp = tau_tp / T_c for a solved cell (fraction of the window used) and 1 for
     a censored cell. T_c per contest is the latest observed solve time.
     """
-    obs_row, obs_prob = np.nonzero(ds.solve_mask)
-    obs_team = ds.team_of_row[obs_row]
-    obs_y = ds.y[obs_row, obs_prob].astype(float)
+    obs_team = ds.team_of_row[ds.obs_row]
+    obs_prob = ds.obs_prob
+    obs_y = ds.obs_y.astype(float)
     obs_contest = ds.contest_of_problem[obs_prob]
     solved = obs_y > 0
-    tau = np.nan_to_num(ds.tau[obs_row, obs_prob])  # 0 where censored (unused)
+    tau = np.nan_to_num(ds.obs_tau).astype(float)  # 0 where censored (unused)
 
     n_contests = len(ds.contests)
     Tc = np.zeros(n_contests)

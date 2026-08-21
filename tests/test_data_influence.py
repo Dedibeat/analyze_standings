@@ -30,9 +30,12 @@ class DataInfluenceTest(unittest.TestCase):
         ds = Dataset(
             teams=["shared"], contests=[1, 2], problems=[],
             team_of_row=np.array([0, 0]), contest_of_row=np.array([0, 1]),
-            rank_of_row=np.array([1, 1]), y=np.empty((2, 0), dtype=bool),
-            solve_mask=np.empty((2, 0), dtype=bool), tau=np.empty((2, 0)),
-            wrong=np.empty((2, 0), dtype=int),
+            rank_of_row=np.array([1, 1]),
+            obs_row=np.array([], dtype=int), obs_prob=np.array([], dtype=int),
+            obs_y=np.array([], dtype=bool), obs_tau=np.array([], dtype=np.float32),
+            obs_wrong=np.array([], dtype=np.int32),
+            solved_count=np.array([], dtype=int),
+            field_count=np.array([], dtype=int),
             contest_of_problem=np.array([], dtype=int),
             raw_solved_count=np.array([], dtype=int))
 
