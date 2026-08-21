@@ -353,8 +353,8 @@ the descriptive city/time chart; `--report` prints that analysis.
 ```
 
 Writes a self-contained `output/ratings_viewer.html` from the same UCup-anchored
-fit as `run` (Architecture A keeps its two-phase anchor, which measurably works
-there) (the full `tagged.json`, 146 unique contests after deduplication) —
+fit as `run` — the full `tagged.json`, 146 unique contests after deduplication
+(Architecture A keeps its two-phase anchor, which measurably works there) —
 just open it in a browser (no server needed). The contest picker is grouped by year
 (newest first); the header shows the year and a link to the qoj contest. Pick a
 contest to see its problems ranked by difficulty and its teams with both their
