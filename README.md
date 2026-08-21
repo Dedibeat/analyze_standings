@@ -159,6 +159,40 @@ Validated leave-one-contest-out: shaped RMSE **266** vs plain-affine 288
 `output/problem_ratings_calibrated.json` with `difficulty_cf` + `difficulty_cf_se`.
 These are the best estimate of CF-equivalent difficulty.
 
+### Anchoring audit (2026-08-21)
+
+A review of every mechanism that pins the scale — the UCup prior, the gym shape,
+the CF affine leg, and the LLM opinions — is recorded in the anchoring-audit
+section of `details.md`. Headline measurements, all on the current shipped fit:
+
+- The Phase-1 **UCup prior-mean anchor is a no-op in Architecture B** (removing
+  it moves difficulties by mean −3.6 with sd 0.96 and leaves the metric at
+  244.3). Cross-contest normalization is carried by the shared union-find and
+  the joint likelihood, not by the prior.
+- `output/ucup_only_ratings.json` is **~90 CF points too low**: it rates the
+  52 UCup-only contests on the Phase-1 fit but calibrates them with a map fit on
+  the tagged-scale fit. Measured on the 305 problems both fits rate,
+  `b_ucup ≈ 0.959·b_tagged + 36`.
+- Fitting **UCup as ordinary data in one joint fit** costs +1.1 CF points
+  (245.4 vs 244.3, all guards unchanged) and puts 684 more problems on the
+  shipped scale. It is currently blocked by the dense `rows × n_problems`
+  arrays in `arch_a.load` (~11 GB peak at joint size, ~0.35% density).
+- **Per-region levels are not identified.** Against the gym yardstick
+  Europe − Asia East = +117 ± 42; against the LLM bucket labels the same pair is
+  −134 ± 30. Both referees rank well within region and disagree in sign on the
+  level, so a per-region offset cannot be learned from either alone.
+- The **LLM pairwise instrument pairs only within a contest** (185 problems /
+  15 mirrors), i.e. on the axis the fit already gets right. Statements cover
+  100% of tagged and UCup problems in every region, so a cross-contest schedule
+  is the one anchor candidate with full regional reach — and it can be validated
+  against the known per-contest CF offsets before being trusted.
+- Only **92 of 207 fitted contests** have any external anchor, and all 185 CF
+  anchor problems come from three regions.
+
+The proposed structural shift (sparse data layer → one joint fit → cross-contest
+LLM pairwise → hierarchical per-contest/per-region calibration → ability-side CF
+anchoring) is written up at the end of `details.md`.
+
 ### Participant Codeforces ratings (research finding)
 
 A 2026-07-21 feasibility test matched exactly one Codeforces handle for 1,168 of
