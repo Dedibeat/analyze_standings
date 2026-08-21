@@ -966,7 +966,14 @@ def main() -> None:
     e.add_argument("--manifest", type=Path, required=True)
     e.add_argument(
         "--pairs-key",
-        choices=("baseline_pairs", "pro_baseline_pairs", "test_pairs", "phase2_dev_pairs"),
+        choices=(
+            "baseline_pairs",
+            "pro_baseline_pairs",
+            "test_pairs",
+            "phase2_dev_pairs",
+            "gap_200_pairs",
+            "gap_300_pairs",
+        ),
         default="baseline_pairs",
     )
     e.add_argument(

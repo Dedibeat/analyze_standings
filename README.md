@@ -564,3 +564,14 @@ not supply that clean test. A 40-request-per-setting base-only check after the
 sanitizer gave 80.0% minimal versus 82.5% high reasoning, with 70.0% versus
 85.0% swapped-order consistency. This is a small development diagnostic, not a
 replacement for the fresh tuned-model and untouched-test evaluation.
+
+### Gemini 3.6 vs 3.5 gap check
+
+Using the same frozen statement-only pairs in both orientations, Gemini 3.5
+Flash scored 21/46 (45.7%, 95% CI 32.2–59.8%) at an exact 200-point gap and
+31/52 (59.6%, CI 46.1–71.8%) at 300. Gemini 3.6 Flash scored 16/46 (34.8%, CI
+22.7–49.2%) and 30/52 (57.7%, CI 44.2–70.1%), respectively. The 3.5 point
+estimates are higher, but the paired differences are inconclusive at this
+sample size. Gemini 3.6 was more A/B-order consistent: 82.6% vs 78.3% at 200
+and 84.6% vs 57.7% at 300. Details and raw ignored outputs are in
+`details.md` and `gemini_gap_run/`.
