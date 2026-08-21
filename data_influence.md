@@ -14,16 +14,27 @@ post-selection mutation.
 
 ## Result
 
+**Refreshed 2026-08-21** for the single joint fit (the Universal Cup is now
+ordinary fit data, so it is part of every row's baseline rather than a separate
+anchor phase; the no-link control was corrected to use the same sources).
+
 | Fit | calibrated LOCO | equal-contest LOCO | raw LOCO | delta vs tagged-only |
 |---|---:|---:|---:|---:|
-| tagged only | 245.253 | 249.592 | 247.372 | — |
-| no cross-contest team links | 333.469 | 339.734 | 330.307 | +88.216 |
-| identity links only, no supplemental solves | 245.184 | 249.490 | 247.355 | -0.069 |
-| older ICPC only | 245.887 | 250.250 | 247.155 | +0.634 |
-| Petroz only | 244.285 | 248.674 | 245.464 | -0.968 |
-| all supplemental | **244.188** | **248.560** | **245.192** | **-1.065** |
-| Petroz top link-count quartile | 244.952 | 249.254 | 246.535 | -0.301 |
-| all supplemental, linked rows only | 244.426 | 248.828 | 245.469 | -0.827 |
+| tagged only | 248.161 | 252.694 | 249.906 | — |
+| no cross-contest team links | 333.442 | 339.709 | 330.277 | +85.281 |
+| identity links only, no supplemental solves | 248.019 | 252.519 | 249.895 | -0.143 |
+| older ICPC only | 248.454 | 252.977 | 249.762 | +0.293 |
+| Petroz only | 246.520 | 251.046 | 247.972 | -1.641 |
+| all supplemental | **246.318** | **250.792** | **247.784** | **-1.843** |
+| Petroz top link-count quartile | 247.354 | 251.812 | 249.143 | -0.807 |
+| all supplemental, linked rows only | 246.935 | 251.466 | 248.086 | -1.226 |
+
+(The shipped fit reads 245.4 rather than 246.3 because these rows exclude the
+World Finals identity join, which `_fit`'s variants do not vary.)
+
+Previous values on the two-phase-anchored fit, for comparison: tagged-only
+245.253, all-supplemental 244.188, delta **-1.065**. The supplemental gain is
+now **-1.843**, and the no-link control is unchanged at 333.
 
 All existing guards pass in every row except the deliberately broken no-link
 control, whose raw LOCO exceeds the 293.4 ceiling. The equal-contest custom
@@ -39,9 +50,9 @@ contests reliably on one difficulty scale. Cross-contest linking itself is
 therefore essential; only the *marginal value of additional links* is small and
 non-monotonic.
 
-The current effect is much smaller than the historical 266.4 → 261.6 campaign
+The current effect is still much smaller than the historical 266.4 → 261.6 campaign
 result.  Against the corrected tagged-only baseline, all 71 supplemental
-contests improve calibrated LOCO by only **1.065 CF**, below the project's
+contests improve calibrated LOCO by only **1.843 CF**, below the project's
 predeclared 5-point keep threshold.
 
 ## How the extra contests act
@@ -50,7 +61,7 @@ Supplemental problems are not part of the 185 CF anchors.  They can change an
 anchor difficulty only by changing a team ability shared with `tagged.json`.
 The decomposition supports that mechanism:
 
-- Identity unions alone explain only 0.069 CF of the 1.065-CF change.  The gain
+- Identity unions alone explain only 0.143 CF of the 1.843-CF change.  The gain
   is performance evidence, not a hidden identity repair.
 - Petroz contributes 4,736 retained rows from linked teams and 2,976 UCup-team
   appearances.  Older ICPC contributes 1,100 linked rows and 201 UCup-team

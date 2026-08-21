@@ -186,7 +186,9 @@ def _without_cross_contest_links(ds):
 
 
 def _fit_without_cross_contest_links():
-    ds = load([TAGGED, OLDER_ICPC, PETROZ], min_solve_hours=MIN_SOLVE_HOURS)
+    # same sources as ``_fit``'s baseline (UCup included) so the control differs
+    # from the other rows only in having no cross-contest identities
+    ds = load([TAGGED, OLDER_ICPC, PETROZ] + UCUP, min_solve_hours=MIN_SOLVE_HOURS)
     ds = _without_cross_contest_links(ds)
     _theta, b, _history = survival.fit(ds, verbose=False)
     result = _score(ds, b)
@@ -204,7 +206,7 @@ def _heldout_original_cells(paths):
     raw = _read([TAGGED, WF] + list(paths) + UCUP)
     raw = [c for c in raw if _max_solve_seconds(c) >= MIN_SOLVE_HOURS * 3600]
     uf = member_identity(raw)
-    ds = load([TAGGED] + list(paths), uf=uf, min_solve_hours=MIN_SOLVE_HOURS)
+    ds = load([TAGGED] + list(paths) + UCUP, uf=uf, min_solve_hours=MIN_SOLVE_HOURS)
     obs_team, obs_prob, obs_y, rho = survival._survival_observations(ds)
     tagged_cids = {c["contest_id"] for c in _read([TAGGED])}
     original = np.array([

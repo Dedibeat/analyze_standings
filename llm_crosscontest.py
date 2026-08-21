@@ -72,7 +72,19 @@ UCUP = [DATA / "ucup_s3.json", DATA / "ucup_s4.json"]
 # --------------------------------------------------------------------------- rows
 
 def _sanitized(problem, contest):
-    text = sanitize_statement({**problem, "contest_name": contest.get("contest_name", "")})
+    """The sanitized statement, or None if it cannot be made metadata-free.
+
+    ``sanitize_statement(strict=True)`` raises when a leak survives -- usually a
+    "Problem C" phrase wrapped across a line break, which the per-line
+    substitution misses and the joined text reintroduces. Such a problem is
+    **skipped**, never sent with the leak: the Phase-3 forensics showed that
+    verbatim ids and labels in the prompt invalidate the intended metadata-free
+    comparison.
+    """
+    try:
+        text = sanitize_statement({**problem, "contest_name": contest.get("contest_name", "")})
+    except ValueError:
+        return None
     return text if len(text) >= 40 else None
 
 
@@ -406,17 +418,18 @@ def analyse(args):
 
         # per-contest level: the quantity nothing else can estimate
         print("\n=== per-contest level offsets (CF points) ===")
-        shape = _gym_shape([{"contest_id": problems[pid]["contest_id"],
-                             "problem_label": problems[pid]["problem_label"],
-                             "difficulty": problems[pid]["survival_difficulty"]}
-                            for pid in ids])
+        # the gym shape needs the whole ratings file to have enough joined
+        # pairs; building it from these 185 problems alone silently returns None
+        shape = _gym_shape(json.loads(
+            (OUTPUT / "problem_ratings_survival.json").read_text(encoding="utf-8")))
         z = shape(sur) if shape else sur
         a_s, b_s = np.polyfit(z, cf, 1)
         fit_resid = cf - (a_s * z + b_s)
         a_b, b_b = np.polyfit(bt, cf, 1)
         bt_resid = cf - (a_b * bt + b_b)
+        groups = list(np.unique(grp))
         true_off, bt_off = [], []
-        for g in np.unique(grp):
+        for g in groups:
             m = grp == g
             true_off.append(fit_resid[m].mean())
             bt_off.append(bt_resid[m].mean())
@@ -425,16 +438,36 @@ def analyse(args):
         true_off, bt_off = np.array(true_off), np.array(bt_off)
         corr = float(np.corrcoef(true_off, bt_off)[0, 1])
         print(f"\ncorrelation of BT-implied vs true per-contest offsets: {corr:+.3f}")
-        base = float(np.sqrt(np.mean(fit_resid ** 2)))
-        corrected = cf - (a_s * z + b_s + np.array([bt_off[list(np.unique(grp)).index(g)]
-                                                    for g in grp]))
-        print(f"anchor RMSE  fit alone {base:.1f}  "
-              f"fit + BT contest offset {float(np.sqrt(np.mean(corrected**2))):.1f}")
+
+        # The BT offsets are noisy, so they must be shrunk before use -- applying
+        # them raw overcorrects and makes things worse. k is refit inside each
+        # fold, and the held-out contest contributes only its own BT offset.
+        rmse = lambda v: float(np.sqrt(np.mean(v ** 2)))  # noqa: E731
+        plain, shrunk = [], []
+        for g in groups:
+            tr, te = grp != g, grp == g
+            a_, b_ = np.polyfit(z[tr], cf[tr], 1)
+            r_ = cf[tr] - (a_ * z[tr] + b_)
+            ab_, bb_ = np.polyfit(bt[tr], cf[tr], 1)
+            br_ = cf[tr] - (ab_ * bt[tr] + bb_)
+            others = [h for h in groups if h != g]
+            to = np.array([r_[grp[tr] == h].mean() for h in others])
+            bo = np.array([br_[grp[tr] == h].mean() for h in others])
+            k = float(np.dot(to, bo) / np.dot(bo, bo)) if np.dot(bo, bo) > 0 else 0.0
+            off = float((cf[te] - (ab_ * bt[te] + bb_)).mean())
+            plain.append(cf[te] - (a_ * z[te] + b_))
+            shrunk.append(cf[te] - (a_ * z[te] + b_ + k * off))
+        loco_plain = rmse(np.concatenate(plain))
+        loco_shrunk = rmse(np.concatenate(shrunk))
+        k_full = float(np.dot(true_off, bt_off) / np.dot(bt_off, bt_off))
+        print(f"shrink factor k (in-sample) {k_full:.3f}   "
+              f"(1.0 would mean the BT offsets are noise-free)")
+        print(f"LOCO plain {loco_plain:.1f}   LOCO + shrunk BT contest offset "
+              f"{loco_shrunk:.1f}   ({loco_shrunk - loco_plain:+.1f})")
         out.update({"cf_spearman_bt": _spearman(bt, cf),
                     "cf_spearman_survival": _spearman(sur, cf),
-                    "contest_offset_corr": corr,
-                    "rmse_fit_alone": base,
-                    "rmse_fit_plus_bt_offset": float(np.sqrt(np.mean(corrected ** 2)))})
+                    "contest_offset_corr": corr, "shrink_k": k_full,
+                    "loco_plain": loco_plain, "loco_with_bt_offset": loco_shrunk})
 
     (args.run_dir / "analysis.json").write_text(
         json.dumps(out, indent=2) + "\n", encoding="utf-8")

@@ -2831,3 +2831,81 @@ own offset for the 15 anchored contests (~48 CF), and `sqrt(tau_c^2 + tau_r^2)`
 The level term is larger than the fit term for a typical problem, so the old
 figure understated the real uncertainty by about half. `calibrate`,
 `export_ucup_only` and the Architecture B viewer all report the same total.
+
+### 3. Cross-contest LLM comparisons — instrument built and validated
+
+`llm_crosscontest.py` pairs problems **across** contests, the axis
+`llm_survival.py` never touched (`_make_requests` groups by `contest_id`, and
+its scope is asserted to the 185 problems of the 15 rated mirrors). Same
+statement-only prompt, same metadata sanitizer, both A/B orientations, a seeded
+schedule whose partners are drawn **uniformly from other contests** — never using
+our difficulty, a CF rating, or any other target proxy — and resumable
+checkpoints behind a hard preflight budget gate. `bt_scores` refits
+Bradley--Terry by coordinate Newton in O(edges) per sweep, because
+`llm_survival.bt_fit` builds a dense `(n-1)^2` Hessian per iteration, which is
+fine for one 13-problem contest and hopeless for a cross-contest graph.
+Statements that cannot be made metadata-free are **skipped**, never sent with the
+leak (the Phase-3 forensics showed verbatim ids and labels invalidate the
+comparison); that costs a handful of problems.
+
+**Validation stage, dispatched.** 185 problems / 15 CF-mirrored contests, 698
+cross-contest unordered pairs in both orientations = 1,396 requests to
+`gemini-3.5-flash`, exact `countTokens` preflight **$3.5402**, all 1,396
+returned valid decisions (2 transient failures retried). The global BT is fitted
+over these new cross-contest edges *plus* the 2,128 within-contest predictions
+the earlier run already paid for.
+
+The instrument is **not** damaged by crossing contests — raw pairwise accuracy
+against official CF ratings is nearly the same either way, with the same
+gap profile:
+
+| CF rating gap | cross-contest | within-contest |
+|---|---:|---:|
+| <= 200 | 0.531 | 0.579 |
+| 300-500 | 0.619 | 0.658 |
+| 600-1000 | 0.711 | 0.752 |
+| > 1000 | 0.899 | 0.895 |
+| **all** | **0.717** (n=1,394) | **0.754** (n=2,054) |
+
+A/B order consistency was 0.784, in line with the within-contest run's 0.816.
+
+But as a *global* difficulty estimator it is far behind the standings fit —
+Spearman against CF **+0.634** for the cross-contest BT versus **+0.943** for
+survival — and the level signal it does carry is weak:
+
+    correlation of BT-implied vs true per-contest offsets:  +0.540  (15 contests)
+    optimal shrink factor k:                                 0.453
+    LOCO plain 245.4  ->  LOCO + shrunk BT contest offset 242.8   (-2.6)
+
+with `k` and the affine leg both refit inside each fold and the held-out contest
+contributing only its own BT offset. **Applying the offsets raw makes things
+worse** (247.6): they are about half noise, so they must be shrunk — the first
+version of `analyse` skipped that and reported a false negative.
+
+The mechanism is visible in the accuracy table. Contest levels differ by
+`tau_contest = 72` CF points (step 4), which is deep inside the <= 200 gap band
+where the model runs at 0.53 — barely above chance. The instrument measures the
+right quantity on the right axis; its resolution is simply coarser than the
+quantity.
+
+**A fixed-position variant is worse, not better.** Holding each problem at our
+own calibrated difficulty and fitting one free level per contest — the
+`gym_difficulty` pattern, and the better-posed estimator on paper — scores
+offset correlation +0.36 to +0.40 across `kappa` in {200, 400, 600}, against
++0.540 for the free BT. Fixing positions forces every disagreement with our
+within-contest ranking into the offset as noise; the free BT uses the
+within-contest edges to pin positions from the model's *own* view and isolates
+the level better. That matters for costing the deployment stage: the validated
+estimator **needs within-contest edges too**, not only cross-contest ones.
+
+**Deployment stage: not dispatched.** The full scope is 2,345 statement-bearing
+problems over 191 contests (Universal Cup 642, Asia East 458, Europe 442, North
+America 312, Asia Pacific 279, Northern Eurasia 140, Latin America 37, Asia West
+35 — exactly the regions with no anchor). Cross-contest pairs alone at 4 matches
+per problem cost about $21, which fits the remaining budget; but adding the
+sparse within-contest schedule the validation showed is necessary (~10 matches
+per problem, the density `llm_survival`'s own sparse-schedule analysis selected)
+takes the full scope to roughly **$75** — over the approved cap. A targeted
+build covering only the unanchored regions plus the 15 anchored mirrors as
+bridges (~1,027 problems) is about **$21** and would fit. That scope change was
+not pre-approved, so the run is prepared but not dispatched.
