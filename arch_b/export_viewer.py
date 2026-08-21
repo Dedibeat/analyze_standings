@@ -24,6 +24,7 @@ from arch_a.load import _max_solve_seconds, dedupe_contests, row_solved_any, tea
 from . import survival
 from .joint import TAGGED, estimate_joint
 from .calibrate import _anchors, _gym_shape
+from .hier_calibrate import level_sd
 from .run import MIN_SOLVE_HOURS
 
 OUT_DIR = os.path.join(os.path.dirname(__file__), os.pardir, "output")
@@ -50,11 +51,12 @@ def build_data():
     to_cf = lambda x: float(np.clip(  # noqa: E731
         slope * shape(np.asarray([x], float))[0] + intercept, LO, HI))
 
-    # problem difficulties (CF points) + SE, per contest
+    # problem difficulties (CF points) + SE, per contest. The SE is the fit's
+    # Laplace SE through the map *and* the calibration level uncertainty for the
+    # contest (arch_b.hier_calibrate), the same total arch_b.calibrate reports.
+    level_by_contest, default_level = level_sd(recs)
     prob_by_contest = {}
     for p, (cid, label, pid, name) in enumerate(ds.problems):
-        ci = ds.contest_of_problem[p]
-        rows = np.where(ds.contest_of_row == ci)[0]
         h = 10.0
         local_slope = abs(slope * float(
             (shape(np.asarray([b[p] + h]))[0] -
@@ -63,7 +65,9 @@ def build_data():
         prob_by_contest.setdefault(int(cid), []).append({
             "label": label, "name": name,
             "difficulty": round(to_cf(b[p]), 0),
-            "difficulty_se": round(local_slope * se_b[p], 0),
+            "difficulty_se": round(float(np.hypot(
+                local_slope * se_b[p],
+                level_by_contest.get(int(cid), default_level))), 0),
             "solved": solved,
         })
 

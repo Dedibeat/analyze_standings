@@ -12,7 +12,8 @@ exactly, for `../my-react-app` to merge in:
 - output/ucup_only_ratings.json: same record shape as
   problem_ratings_calibrated.json (problem_id, problem_label, problem_name,
   contest_id, difficulty, difficulty_se, solved_count,
-  reported_solved_in_contest, difficulty_cf, difficulty_cf_se). These come
+  reported_solved_in_contest, difficulty_cf, difficulty_cf_fit_se,
+  difficulty_cf_level_sd, difficulty_cf_se). These come
   from the same single joint fit and the same shape+affine calibration as
   output/problem_ratings_calibrated.json -- since the 2026-08-21 audit the
   Universal Cup is ordinary fit data, so there is no longer a second scale
@@ -38,6 +39,7 @@ from arch_a.load import _max_solve_seconds, dedupe_contests
 from . import survival
 from .joint import OLDER_ICPC, PETROZ, TAGGED, UCUP, WF, estimate_joint
 from .calibrate import _anchors, _gym_shape
+from .hier_calibrate import level_sd
 from .run import MIN_SOLVE_HOURS
 
 OUT_DIR = os.path.join(os.path.dirname(__file__), os.pardir, "output")
@@ -61,10 +63,16 @@ def build():
     def to_cf(d):
         return float(np.clip(slope * shape(np.array([d]))[0] + intercept, elo.LO, elo.HI))
 
-    def to_cf_se(d, se):
+    # same three uncertainties as calibrate.py: the fit SE through the map, the
+    # calibration level sd for a contest the CF anchors never saw, and the total
+    level_by_contest, default_level = level_sd(records)
+
+    def to_cf_se(d, se, contest_id):
         h = 10.0
         dz = (shape(np.array([d + h]))[0] - shape(np.array([d - h]))[0]) / (2 * h)
-        return float(abs(slope * dz) * se)
+        fit_se = abs(slope * dz) * se
+        level = level_by_contest.get(contest_id, default_level)
+        return float(fit_se), float(level), float(np.hypot(fit_se, level))
 
     # a handful of UCup rounds are also carried by another source file (Petroz
     # camps mirrored as UCup rounds); the fit keeps that source's copy, so only
@@ -97,6 +105,7 @@ def build():
         solved = int(ds.solved_count[p])
         d = float(b[p])
         se = float(se_b[p])
+        fit_se, level, total_se = to_cf_se(d, se, cid)
         ratings.append({
             "problem_id": pid,
             "problem_label": label,
@@ -107,7 +116,9 @@ def build():
             "solved_count": solved,
             "reported_solved_in_contest": int(ds.raw_solved_count[p]),
             "difficulty_cf": round(to_cf(d), 1),
-            "difficulty_cf_se": round(to_cf_se(d, se), 1),
+            "difficulty_cf_fit_se": round(fit_se, 1),
+            "difficulty_cf_level_sd": round(level, 1),
+            "difficulty_cf_se": round(total_se, 1),
         })
 
     contests = []

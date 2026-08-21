@@ -32,8 +32,15 @@ file is missing the module falls back to the plain affine map.
     python -m arch_b.calibrate --binary   # calibrate the binary model instead
 
 Writes output/problem_ratings_calibrated.json: every record gains
-``difficulty_cf`` (clipped to [800, 4000]) and ``difficulty_cf_se``
-(= difficulty_se scaled by the local slope of the composed map).
+``difficulty_cf`` (clipped to [800, 4000]) and three uncertainties.
+``difficulty_cf_fit_se`` is the old figure -- the Laplace SE of ``b`` scaled by
+the local slope of the composed map -- which treats the map itself as exact.
+``difficulty_cf_level_sd`` is what the map does *not* know about this contest's
+level (``arch_b.hier_calibrate``): the posterior sd of its own offset for the 15
+contests with CF anchors, and ``sqrt(tau_contest^2 + tau_region^2)`` = 73 CF
+points for every contest the anchors never saw -- larger than the median fit SE
+of 47. ``difficulty_cf_se`` is now the two in quadrature, so it is an honest
+total rather than a fit-only figure.
 """
 
 import contextlib
@@ -173,6 +180,8 @@ def main(use_binary=False):
     if shape is None:
         print("(gym_difficulty.json unavailable — plain affine map)")
         shape = lambda t: np.asarray(t, float)
+    from .hier_calibrate import level_sd  # imports this module; keep it lazy
+    by_contest, default_level = level_sd(records)
     for r in records:
         d = float(r["difficulty"])
         r["difficulty_cf"] = round(float(np.clip(
@@ -181,7 +190,11 @@ def main(use_binary=False):
             # local slope of the composed map via central difference
             h = 10.0
             dz = (shape(np.array([d + h]))[0] - shape(np.array([d - h]))[0]) / (2 * h)
-            r["difficulty_cf_se"] = round(float(abs(slope * dz) * r["difficulty_se"]), 1)
+            fit_se = abs(slope * dz) * r["difficulty_se"]
+            level = by_contest.get(r["contest_id"], default_level)
+            r["difficulty_cf_fit_se"] = round(float(fit_se), 1)
+            r["difficulty_cf_level_sd"] = round(float(level), 1)
+            r["difficulty_cf_se"] = round(float(np.hypot(fit_se, level)), 1)
     out = os.path.join(OUT, "problem_ratings_calibrated.json")
     with open(out, "w") as f:
         json.dump(records, f, indent=2, ensure_ascii=False)
