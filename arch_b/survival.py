@@ -77,7 +77,7 @@ def fit(ds, prior_mu=None, sigma_theta=SIGMA_THETA, sigma_b=SIGMA_B, mu_b=MU0,
     """MAP fit of the survival model; returns (theta, b, history).
 
     Signature matches ``model.fit`` so it is a drop-in for
-    ``anchor.estimate_anchored(fit_fn=...)``. ``obs`` overrides the observation set
+    ``joint.estimate_joint(fit_fn=...)``. ``obs`` overrides the observation set
     with a precomputed ``(obs_team, obs_prob, obs_y, rho)`` tuple (a train split for
     held-out evaluation); defaults to every observed cell.
 

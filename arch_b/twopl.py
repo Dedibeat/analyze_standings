@@ -127,7 +127,7 @@ def fit_full(ds, prior_mu=None, sigma_theta=SIGMA_THETA, sigma_b=SIGMA_B, mu_b=M
 
 
 def fit(ds, **kwargs):
-    """Drop-in for ``model.fit`` / ``anchor.estimate_anchored`` (drops alpha)."""
+    """Drop-in for ``model.fit`` / ``joint.estimate_joint`` (drops alpha)."""
     theta, b, _alpha, history = fit_full(ds, **kwargs)
     return theta, b, history
 

@@ -12,11 +12,11 @@ exactly, for `../my-react-app` to merge in:
 - output/ucup_only_ratings.json: same record shape as
   problem_ratings_calibrated.json (problem_id, problem_label, problem_name,
   contest_id, difficulty, difficulty_se, solved_count,
-  reported_solved_in_contest, difficulty_cf, difficulty_cf_se), computed from
-  the Phase-1 UCup-only survival fit (estimate_anchored's return_ucup extra)
-  and calibrated with the same shape+affine map as arch_b.calibrate / the
-  virtual calc (fit once on the tagged-scale records, reused here -- see the
-  "same scale and anchor" verification in details.md).
+  reported_solved_in_contest, difficulty_cf, difficulty_cf_se). These come
+  from the same single joint fit and the same shape+affine calibration as
+  output/problem_ratings_calibrated.json -- since the 2026-08-21 audit the
+  Universal Cup is ordinary fit data, so there is no longer a second scale
+  to cross-walk (the old Phase-1-fit export sat ~90 CF points low).
 - output/ucup_only_contests.json: contest+problem records in
   ../my-react-app/canonical/tagged.json's shape (no LLM tag/analysis
   fields -- that pipeline never ran on these problems; region is set to the
@@ -36,7 +36,7 @@ import numpy as np
 from arch_a import elo
 from arch_a.load import _max_solve_seconds, dedupe_contests
 from . import survival
-from .anchor import UCUP, estimate_anchored
+from .joint import OLDER_ICPC, PETROZ, TAGGED, UCUP, WF, estimate_joint
 from .calibrate import _anchors, _gym_shape
 from .run import MIN_SOLVE_HOURS
 
@@ -44,13 +44,11 @@ OUT_DIR = os.path.join(os.path.dirname(__file__), os.pardir, "output")
 
 
 def build():
-    ds, theta, b, _, uf, (ds_ucup, theta_u, b_u) = estimate_anchored(
-        fit_fn=survival.fit, min_solve_hours=MIN_SOLVE_HOURS, verbose=False,
-        return_ucup=True)
-    _, se_b_u = survival.laplace_se(ds_ucup, theta_u, b_u)
+    ds, theta, b, _, uf = estimate_joint(
+        fit_fn=survival.fit, min_solve_hours=MIN_SOLVE_HOURS, verbose=False)
+    _, se_b = survival.laplace_se(ds, theta, b)
 
-    # same shape+affine calibration as calibrate.py / export_virtual_calc.py,
-    # fit once on the tagged-scale records and reused for the UCup-only b_u
+    # same shape+affine calibration as calibrate.py / export_virtual_calc.py
     records = [{"contest_id": int(cid), "problem_label": lab, "problem_name": name,
                 "difficulty": float(b[p])}
                for p, (cid, lab, pid, name) in enumerate(ds.problems)]
@@ -68,28 +66,13 @@ def build():
         dz = (shape(np.array([d + h]))[0] - shape(np.array([d - h]))[0]) / (2 * h)
         return float(abs(slope * dz) * se)
 
-    tagged_ids = {int(cid) for cid in ds.contests}
-
-    ratings = []
-    for p, (cid, label, pid, name) in enumerate(ds_ucup.problems):
-        cid = int(cid)
-        if cid in tagged_ids:
-            continue
-        solved = int(ds_ucup.solved_count[p])
-        d = float(b_u[p])
-        se = float(se_b_u[p])
-        ratings.append({
-            "problem_id": pid,
-            "problem_label": label,
-            "problem_name": name,
-            "contest_id": cid,
-            "difficulty": round(d, 1),
-            "difficulty_se": round(se, 1),
-            "solved_count": solved,
-            "reported_solved_in_contest": int(ds_ucup.raw_solved_count[p]),
-            "difficulty_cf": round(to_cf(d), 1),
-            "difficulty_cf_se": round(to_cf_se(d, se), 1),
-        })
+    # a handful of UCup rounds are also carried by another source file (Petroz
+    # camps mirrored as UCup rounds); the fit keeps that source's copy, so only
+    # contests unique to the UCup seasons are exported here
+    other_ids = set()
+    for path in [TAGGED, OLDER_ICPC, PETROZ, WF]:
+        with open(path) as f:
+            other_ids.update(c["contest_id"] for c in json.load(f))
 
     raw = []
     fallback_year = {}  # contest_id -> season's most common year, for null-year contests
@@ -103,7 +86,29 @@ def build():
         raw.extend(file_contests)
     raw = dedupe_contests(raw)
     raw = [c for c in raw if _max_solve_seconds(c) >= MIN_SOLVE_HOURS * 3600]
-    raw = [c for c in raw if c["contest_id"] not in tagged_ids]
+    raw = [c for c in raw if c["contest_id"] not in other_ids]
+    ucup_only_ids = {c["contest_id"] for c in raw}
+
+    ratings = []
+    for p, (cid, label, pid, name) in enumerate(ds.problems):
+        cid = int(cid)
+        if cid not in ucup_only_ids:
+            continue
+        solved = int(ds.solved_count[p])
+        d = float(b[p])
+        se = float(se_b[p])
+        ratings.append({
+            "problem_id": pid,
+            "problem_label": label,
+            "problem_name": name,
+            "contest_id": cid,
+            "difficulty": round(d, 1),
+            "difficulty_se": round(se, 1),
+            "solved_count": solved,
+            "reported_solved_in_contest": int(ds.raw_solved_count[p]),
+            "difficulty_cf": round(to_cf(d), 1),
+            "difficulty_cf_se": round(to_cf_se(d, se), 1),
+        })
 
     contests = []
     for c in raw:

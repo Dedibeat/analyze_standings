@@ -65,7 +65,7 @@ import numpy as np
 from arch_a import elo
 from arch_a.load import dedupe_contests, team_key
 from . import survival
-from .anchor import TAGGED, estimate_anchored
+from .joint import TAGGED, estimate_joint
 from .calibrate import _anchors, _gym_shape
 from .run import MIN_SOLVE_HOURS
 
@@ -194,7 +194,7 @@ def _cohort_bar(cohort, bs_sorted, labels_sorted):
 
 
 def main():
-    ds, theta, b, _, uf = estimate_anchored(fit_fn=survival.fit,
+    ds, theta, b, _, uf = estimate_joint(fit_fn=survival.fit,
                                             min_solve_hours=MIN_SOLVE_HOURS)
     # records for the calibration helpers (same shape run.py exports)
     records = [{"contest_id": int(cid), "problem_label": label,

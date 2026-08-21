@@ -22,7 +22,7 @@ from arch_a.elo import HI, LO
 from arch_a.fixedpoint import _performance_ratings
 from arch_a.load import _max_solve_seconds, dedupe_contests, row_solved_any, team_key
 from . import survival
-from .anchor import TAGGED, estimate_anchored
+from .joint import TAGGED, estimate_joint
 from .calibrate import _anchors, _gym_shape
 from .run import MIN_SOLVE_HOURS
 
@@ -31,7 +31,7 @@ TEMPLATE = os.path.join(os.path.dirname(__file__), "viewer_template.html")
 
 
 def build_data():
-    ds, theta, b, _, uf = estimate_anchored(
+    ds, theta, b, _, uf = estimate_joint(
         fit_fn=survival.fit, min_solve_hours=MIN_SOLVE_HOURS, verbose=False)
     se_theta, se_b = survival.laplace_se(ds, theta, b)
 

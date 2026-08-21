@@ -35,7 +35,7 @@ from arch_a import elo
 from arch_a.load import (_max_solve_seconds, dedupe_contests, load,
                          member_identity, row_solved_any, team_key)
 from . import survival
-from .anchor import OLDER_ICPC, PETROZ, TAGGED, UCUP, WF, estimate_anchored
+from .joint import OLDER_ICPC, PETROZ, TAGGED, UCUP, WF, estimate_joint
 from .calibrate import _anchors, _gym_shape
 from .metric import GUARDS, RAW_LOCO_CEILING, _spearman
 from .external_validate import (GYM_OUT, KATTIS, _cf_mapping, _cf_problemset,
@@ -150,10 +150,18 @@ def _score(ds, b):
 
 
 def _fit(paths, identity_paths=None):
+    """Fit with ``paths`` as the only supplemental *standings* under test.
+
+    The Universal Cup seasons are always included: since the 2026-08-21 audit
+    they are ordinary fit data rather than a separate anchor phase, so they are
+    part of the baseline every variant is compared against, not a variable.
+    """
     with contextlib.redirect_stdout(io.StringIO()):
-        ds, _theta, b, _history, _uf = estimate_anchored(
+        ds, _theta, b, _history, _uf = estimate_joint(
             fit_fn=survival.fit, min_solve_hours=MIN_SOLVE_HOURS,
-            supplemental_paths=paths, identity_paths=identity_paths)
+            supplemental_paths=list(paths) + UCUP,
+            identity_paths=(None if identity_paths is None
+                            else list(identity_paths) + UCUP))
     result = _score(ds, b)
     result.update({
         "contests": len(ds.contests),

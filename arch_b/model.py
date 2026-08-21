@@ -58,7 +58,7 @@ def fit(ds, prior_mu=None, sigma_theta=SIGMA_THETA, sigma_b=SIGMA_B, mu_b=MU0,
 
     ``prior_mu`` is the per-team prior mean mu_t (eq. priors); defaults to the
     scalar neutral MU0 for every team. Pass a per-team array to anchor selected
-    teams to an external scale (see ``anchor.estimate_anchored``). ``history`` is
+    teams to an external scale (see ``joint.estimate_joint``). ``history`` is
     the per-iteration max parameter change.
 
     ``obs`` overrides the observation set with a precomputed ``(obs_team, obs_prob,

@@ -16,7 +16,7 @@ import sys
 import numpy as np
 
 from . import model, survival
-from .anchor import estimate_anchored
+from .joint import estimate_joint
 
 OUT_DIR = os.path.join(os.path.dirname(__file__), os.pardir, "output")
 
@@ -41,7 +41,7 @@ def main(use_survival=False):
     mod = survival if use_survival else model
     out_name = "problem_ratings_survival.json" if use_survival else "problem_ratings_b.json"
 
-    ds, theta, b, history, _ = estimate_anchored(fit_fn=mod.fit, min_solve_hours=MIN_SOLVE_HOURS)
+    ds, theta, b, history, _ = estimate_joint(fit_fn=mod.fit, min_solve_hours=MIN_SOLVE_HOURS)
     _, se_b = mod.laplace_se(ds, theta, b)  # Laplace posterior SE per difficulty
 
     records = []

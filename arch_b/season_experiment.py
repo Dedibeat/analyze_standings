@@ -25,7 +25,7 @@ import numpy as np
 
 from arch_a.load import _UnionFind
 from . import survival
-from .anchor import estimate_anchored
+from .joint import estimate_joint
 from .calibrate import _anchors
 from .validate import DATA, _llm_labels
 
@@ -61,7 +61,7 @@ def _records(ds, b):
 
 
 def _evaluate(label, season_key, min_solve_hours, llm):
-    ds, theta, b, hist, _ = estimate_anchored(
+    ds, theta, b, hist, _ = estimate_joint(
         fit_fn=survival.fit, season_key=season_key,
         min_solve_hours=min_solve_hours, verbose=False)
     n_comp, biggest = _components(ds)

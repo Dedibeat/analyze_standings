@@ -23,7 +23,7 @@ import numpy as np
 from arch_a import elo
 from arch_a.load import load
 from . import model, twopl
-from .anchor import estimate_anchored
+from .joint import estimate_joint
 from .predict_eval import _metrics
 
 DATA = os.path.join(os.path.dirname(__file__), os.pardir, "data")
@@ -51,7 +51,7 @@ def main():
         cap.update(ds=ds, theta=th, b=b, alpha=alpha)   # last call == tagged fit
         return th, b, hist
 
-    estimate_anchored(fit_fn=fit_fn, min_solve_hours=MIN_SOLVE_HOURS, verbose=False)
+    estimate_joint(fit_fn=fit_fn, min_solve_hours=MIN_SOLVE_HOURS, verbose=False)
     ds, theta, b, alpha = cap["ds"], cap["theta"], cap["b"], cap["alpha"]
 
     reg = np.array([region_of_cid.get(ds.contests[ci], "?") for ci in ds.contest_of_problem])

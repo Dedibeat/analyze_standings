@@ -53,7 +53,7 @@ import numpy as np
 
 from . import model, survival
 from .aoj import load_matches as load_aoj_matches, within_contest_spearman
-from .anchor import estimate_anchored
+from .joint import estimate_joint
 from .calibrate import _gym_shape
 from .external_validate import GYM_OUT, KATTIS, _cf_mapping, _cf_problemset, _norm
 from .run import MIN_SOLVE_HOURS
@@ -92,7 +92,7 @@ def main(use_binary=False):
     t0 = time.time()
     mod = model if use_binary else survival
     with contextlib.redirect_stdout(io.StringIO()):   # silence the fit trace
-        ds, theta, b, history, _ = estimate_anchored(
+        ds, theta, b, history, _ = estimate_joint(
             fit_fn=mod.fit, min_solve_hours=MIN_SOLVE_HOURS)
 
     # Fitted difficulties keyed both ways the yardsticks join.

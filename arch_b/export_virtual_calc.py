@@ -36,22 +36,16 @@ from arch_a import elo
 from arch_a.fixedpoint import _performance_ratings
 from arch_a.load import _max_solve_seconds, dedupe_contests, row_solved_any, team_key
 from . import survival
-from .anchor import PETROZ, TAGGED, UCUP, estimate_anchored
+from .joint import PETROZ, TAGGED, UCUP, estimate_joint
 from .calibrate import _anchors, _gym_shape
 from .run import MIN_SOLVE_HOURS
 
-# Contest sources offered in the picker: the full tagged.json regionals plus
-# the standings-only Petrozavodsk camp contests. Both are already part of the
-# fit by default (arch_b.anchor.estimate_anchored's shipped supplemental
-# inputs), so ds/theta/b already cover them -- only the raw standings need
-# reloading here to build each contest's team list.
-SOURCES = [TAGGED, PETROZ]
-
-# Universal Cup contests (ucup_s3.json + ucup_s4.json) are not part of the
-# tagged fit -- they're used only for the Phase-1 anchor fit that pins the
-# tagged fit's scale (estimate_anchored's return_ucup extra). Built as a
-# separate contest list on the UCup-only theta_u/b_u below.
-UCUP_SOURCES = UCUP
+# Contest sources offered in the picker: the tagged.json regionals, the
+# standings-only Petrozavodsk camp contests, and the Universal Cup seasons.
+# All three are part of the single joint fit (arch_b.joint.estimate_joint's
+# shipped inputs), so ds/theta/b cover every one of them on one scale -- only
+# the raw standings need reloading here to build each contest's team list.
+SOURCES = [TAGGED, PETROZ] + UCUP
 
 OUT_DIR = os.path.join(os.path.dirname(__file__), os.pardir, "output")
 TEMPLATE = os.path.join(os.path.dirname(__file__), "virtual_calc_template.html")
@@ -70,14 +64,11 @@ def _cf_map(records):
                                     elo.LO, elo.HI))
 
 
-def _contests_from(ds, theta, b, to_cf, paths, uf, exclude_ids=()):
-    """Build the picker's contest list for one fit (ds/theta/b) from its raw
-    standings ``paths``. Shared between the tagged-scale fit (SOURCES) and the
-    UCup-only Phase-1 fit (UCUP_SOURCES, via estimate_anchored's return_ucup),
-    which have their own team/problem index spaces. ``exclude_ids`` drops
-    contest ids already covered by another call (17 UCup rounds are also
-    tagged.json entries, so skip them here to avoid listing the same contest
-    twice with two different fits)."""
+def _contests_from(ds, theta, b, to_cf, paths, uf):
+    """Build the picker's contest list for the fit (ds/theta/b) from its raw
+    standings ``paths``. Contest ids repeated across ``paths`` (17 UCup rounds
+    are also tagged.json entries) are deduplicated the same way the fit
+    deduplicates them, so each contest is listed once."""
     prob_by_contest = {}
     for p, (cid, label, pid, name) in enumerate(ds.problems):
         prob_by_contest.setdefault(int(cid), []).append({
@@ -102,7 +93,6 @@ def _contests_from(ds, theta, b, to_cf, paths, uf, exclude_ids=()):
             raw.extend(json.load(f))
     raw = dedupe_contests(raw)  # match load(): drop repeated contest entries
     raw = [c for c in raw if _max_solve_seconds(c) >= MIN_SOLVE_HOURS * 3600]  # match load()
-    raw = [c for c in raw if c["contest_id"] not in exclude_ids]
     key_to_idx = {k: i for i, k in enumerate(ds.teams)}
 
     contests = []
@@ -143,9 +133,8 @@ def _contests_from(ds, theta, b, to_cf, paths, uf, exclude_ids=()):
 
 
 def build_data():
-    ds, theta, b, _, uf, (ds_ucup, theta_u, b_u) = estimate_anchored(
-        fit_fn=survival.fit, min_solve_hours=MIN_SOLVE_HOURS, verbose=False,
-        return_ucup=True)
+    ds, theta, b, _, uf = estimate_joint(
+        fit_fn=survival.fit, min_solve_hours=MIN_SOLVE_HOURS, verbose=False)
 
     records = [{"contest_id": int(cid), "problem_label": lab, "problem_name": name,
                 "difficulty": float(b[p])}
@@ -157,10 +146,7 @@ def build_data():
     xs = np.arange(elo.LO, elo.HI + LOOKUP_STEP, LOOKUP_STEP)
     ys = [round(to_cf(x), 1) for x in xs]
 
-    tagged_ids = {int(cid) for cid in ds.contests}
-    contests = (_contests_from(ds, theta, b, to_cf, SOURCES, uf)
-                + _contests_from(ds_ucup, theta_u, b_u, to_cf, UCUP_SOURCES, uf,
-                                  exclude_ids=tagged_ids))
+    contests = _contests_from(ds, theta, b, to_cf, SOURCES, uf)
 
     contests.sort(key=lambda c: (-(c["year"] or 0), c["name"]))
     return {"scale": {"lo": elo.LO, "hi": elo.HI},
