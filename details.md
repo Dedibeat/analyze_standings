@@ -3013,3 +3013,31 @@ the required evidence is absent or the work is a new experiment: adjudicating
 identity unions, collecting recorded contest durations/dates, constructing fresh
 frozen forecast and regional-transfer sets, estimating full joint/calibration
 uncertainty, and reconstructing the missing raw gym/campaign snapshots.
+
+## Fit and rating improvement strategy (2026-09-06)
+
+[rating_improvement_strategy.md](rating_improvement_strategy.md) reviews the
+measurement assumptions beyond the existing metrics at `c181982`. Fresh read-only
+diagnostics on the shipped joint inputs find 525,259 omitted source problem cells
+(56.9% of fitted cells), 2,052 dropped zero-solve rows with recorded wrong attempts,
+and 142 fitted identity components whose source rosters have no member common to
+all of them. These identify uncertainty about engagement and roster continuity;
+they do not establish that every omitted cell or identity merge is wrong.
+
+Five QOJ problem IDs occur in both Luxor World Finals (1661/1662), currently with
+separate fitted difficulties. The official ICPC problem books corroborate the
+shared tasks; saved CF-mapped ratings for Turning Red are 1844.7 and 1921.4.
+This is a small existing panel for testing shared task identity and context,
+not a demonstrated large scale error. The official event page also distinguishes
+the April 2024 calendar event from the source's 2022/2023 season labels.
+
+Recommended work starts with an audited panel of shared tasks, zero-solve
+appearances with submissions, and influential roster chains, followed by separate
+common-task and shrunk appearance-effect experiments. The larger model direction
+is completion/time/engagement separation; targeted common-task attempts and
+controlled hint studies could supply information the standings lack. The report
+also distinguishes problem difficulty, team ability and rank performance, and
+proposes useful evidence/uncertainty annotations for sparse problems. Sources,
+input hashes, limitations and concrete checks are included. This task changed
+documentation only; no model gain was measured, ratings regenerated, or paid
+inference dispatched.

@@ -17,6 +17,12 @@ uncertainty labels, and participation-key collisions. The concrete correctness
 defects were repaired on 2026-09-06; open data/model research limitations remain
 listed in the review and in `details.md`.
 
+The [fit and rating improvement strategy](rating_improvement_strategy.md) examines
+what could improve the underlying measurement beyond benchmark scores: task
+choice and time burden, participation and roster continuity, shared problems
+across contests, and targeted collection of missing evidence. It records fresh
+diagnostics and proposed experiments, not implemented model changes.
+
 ## Run
 
 Requires Python 3 + numpy. A project venv is used:
