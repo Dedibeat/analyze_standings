@@ -259,6 +259,87 @@ clearer rating meaning. Highest model upside: separating completion, speed and
 participation. Most informative unconventional investment: controlled common-task
 attempts that measure the missing distinctions directly.
 
+## Calibration and Google's TabFM (2026-09-06 follow-up)
+
+Calibration deserves a focused experiment alongside the structural work above.
+There are three separate targets: mapping latent difficulty to CF points,
+calibrating solve probabilities, and quantifying prediction uncertainty. A better
+CF mapping does not establish either of the other two. Reproducing `_loco_rmse`
+on the saved survival records gives **246.9061 affine / 245.4277 gym-shaped**,
+185 problems in 15 contests. The historical 22-point shape benefit is not the
+current benefit. Keep a plain affine control in the next calibration experiment;
+the earlier paired interval [-9.63, +6.16] does not establish a current shape win.
+
+Google's [TabFM announcement](https://research.google/blog/introducing-tabfm-a-zero-shot-foundation-model-for-tabular-data/)
+describes regression/classification by in-context learning, with pretraining on
+synthetic tables. It still needs labeled examples from our task as context;
+zero-shot here means no task-specific weight training, not no CF labels.
+That makes it a plausible experiment on the 185-problem calibration table.
+Its general tabular prior supplies an inductive bias, not additional evidence
+about ICPC ability, engagement, or unanchored regions.
+
+The most promising first use is a residual correction:
+
+`predicted_CF = affine(b_survival) + lambda * TabFM(features)`
+
+The TabFM target is the CF residual relative to the baseline. Start with a small
+prespecified feature set: raw survival difficulty, binary/survival disagreement,
+conditional fit SE, solve/field counts, and summary timing and field-strength
+information. Binary and survival values share the internal coordinate system
+but have different scales; their disagreement needs empirical interpretation,
+not a presumed direction. Timing summaries need missing indicators for unsolved
+problems. Use raw fit evidence, not a CF-calibrated feature computed with the
+held-out contest's labels. Region and contest IDs should not enter the first
+pilot as shortcuts for the limited anchor coverage.
+
+This asks whether two problems with the same current difficulty require
+different corrections because their evidence differs. With only `b` as input,
+TabFM mainly supplies another one-dimensional curve. Extra covariates could
+recover useful information discarded by the scalar estimate. Such a correction
+can change problem ordering, so it is an additional predictive model and loses
+the shipped monotone map's automatic ordering guarantee. Check any reorderings
+on the shared-task panel and independent outcomes as well as CF errors.
+
+Compare affine, the locked gym shape, one simple regularized feature regression,
+and TabFM residual correction on the same outer contest folds. Learn baseline
+coefficients, preprocessing and residual models using training labels only;
+choose features, context sampling and `lambda` inside the training contests.
+Keep the outer contest's CF labels out of every prediction step. Standings from
+that contest are legitimate inputs when rating completed contests; they would
+not be available for a future-contest forecast. Keep repeated canonical tasks
+together where applicable. The 15 repeatedly inspected contests remain a
+development set, so confirmation needs fresh contests and checks of transfer
+to different fields.
+
+The limitation is coverage rather than the bare sample count: 185 examples can
+support a small-data learner, but they represent only 15 contest environments
+from three regions. The saved raw anchor range is [1177.9, 2936.1], and 94 fitted
+problem appearances lie outside it. Inspect tail behavior explicitly; neither
+a model's tabular pretraining nor a distributional output establishes reliable
+extrapolation or calibrated uncertainty there. Treat residual shrinkage toward
+the affine baseline as a candidate evaluated in the inner folds, not a guaranteed
+improvement.
+
+A more targeted use is solve-probability calibration: learn systematic departures
+from the current ability/difficulty link using predictions and evidence available
+at the intended prediction time. Construct features without the held-out
+responses, including refitting any ability/difficulty estimates that would
+otherwise contain them. If this reveals repeatable dependence on roster state,
+timing or field composition, it provides a concrete hypothesis for improving the
+generative model. Directly flattening all response cells into a supervised table
+does not automatically preserve the joint model's identity links or yield an
+identifiable problem-difficulty scale.
+
+Practical constraints checked in the [official repository](https://github.com/google-research/tabfm):
+inference uses sampled bounded contexts (the documented estimator default is
+100 context rows), so a pilot should record context coverage and sampling
+stability. The default v1 weights have a separate license restricting them to
+non-commercial, non-production use; the source code is Apache-2.0. A research
+comparison and deployment in the published viewer therefore require different
+considerations. No installation, weight download, TabFM inference, or calibration
+change was performed for this assessment. The numerical results above are a
+read-only reproduction of the existing maps, not a TabFM result.
+
 ## Reproduction limits
 
 Counts above are direct reductions of the local joint inputs, not a new metric

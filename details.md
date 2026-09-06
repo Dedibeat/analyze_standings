@@ -3041,3 +3041,19 @@ proposes useful evidence/uncertainty annotations for sparse problems. Sources,
 input hashes, limitations and concrete checks are included. This task changed
 documentation only; no model gain was measured, ratings regenerated, or paid
 inference dispatched.
+
+### Calibration and TabFM assessment (2026-09-06)
+
+The strategy document now includes a [calibration/TabFM follow-up](rating_improvement_strategy.md#calibration-and-googles-tabfm-2026-09-06-follow-up).
+The current saved-record map comparison reproduces **246.9061 affine / 245.4277
+gym-shaped CF LOCO RMSE**, with 185 anchors across 15 contests. Their raw
+difficulty range is [1177.9, 2936.1]; 94 fitted appearances lie outside it.
+Google's TabFM is recommended for a bounded research comparison as a conditional
+residual correction using fit/evidence features, with simple calibration and
+regularized-regression controls. Its potential value is learning when the scalar
+fit needs correction; neither synthetic pretraining nor a lower development
+error establishes regional transfer, probability calibration or valid intervals.
+The report specifies contest-grouped selection, timing of feature availability,
+context-sampling checks and the current weights' research-use restrictions.
+No TabFM inference or model changes were made. README's existing strategy link
+continues to point to the expanded assessment.
