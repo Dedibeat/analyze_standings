@@ -1,9 +1,11 @@
-"""Held-out solve-prediction check: does the model predict who solves what?
+"""Held-out response-imputation check: does the model predict missing cells?
 
 The external checks (LLM, Codeforces) validate the *difficulty ranking*. This is
-the complementary *internal* test of the fit itself: hold out a random slice of the
-observed (team, problem) cells, fit on the rest, and score the predicted solve
-probability on the held-out cells with proper scoring rules (log-loss, Brier, AUC).
+the complementary *internal* test of the fit itself: hold out a random slice of
+resolved (team, problem) response groups, fit on the rest, and score the predicted
+solve probability on the held-out cells with proper scoring rules (log-loss,
+Brier, AUC). Grouping keeps repeated responses for the same resolved team/problem
+out of the opposite split, and survival durations use training solves only.
 
 It directly answers whether the survival model's use of solve *times* in training
 yields latent abilities/difficulties that generalize better than the binary model:
@@ -13,35 +15,58 @@ so a fair head-to-head on identical held-out cells isolates the value of the tim
 signal. (Architecture A has no per-cell likelihood -- its abilities come from ranks
 -- so per-cell hold-out does not apply to it; this compares the two arch B fits.)
 
-Fit on the full tagged.json (neutral MU0 prior, no UCup anchor: the anchor sets the
-absolute scale, irrelevant to a within-contest predictive comparison).
+This evaluates imputation for already-retained appearances, not future contests:
+the loader's zero-solve-row filter was applied before the split. The fit uses the
+same joint standings sources and duration filter as the shipped model.
 
     python -m arch_b.predict_eval
 """
 
-import os
-
 import numpy as np
 
 from arch_a import elo
-from arch_a.load import load
+from .aoj import _rank
 from . import model, survival
+from .joint import load_joint_dataset
+from .run import MIN_SOLVE_HOURS
 
-TAGGED = os.path.join(os.path.dirname(__file__), os.pardir, "data", "tagged.json")
 TEST_FRAC = 0.2
 SEED = 0
 
 
+def _grouped_test_mask(obs_team, obs_prob, candidates=None, seed=SEED,
+                       test_frac=TEST_FRAC):
+    """Select response groups without splitting duplicate team/problem keys."""
+    obs_team, obs_prob = np.asarray(obs_team), np.asarray(obs_prob)
+    if candidates is None:
+        candidates = np.ones(len(obs_team), dtype=bool)
+    else:
+        candidates = np.asarray(candidates, bool)
+    keys = np.column_stack((obs_team[candidates], obs_prob[candidates]))
+    unique_keys, inverse = np.unique(keys, axis=0, return_inverse=True)
+    selected = (np.random.default_rng(seed).random(len(unique_keys)) < test_frac)[inverse]
+    test = np.zeros(len(obs_team), dtype=bool)
+    test[np.flatnonzero(candidates)] = selected
+    return test
+
+
 def _metrics(y, p):
+    y, p = np.asarray(y), np.asarray(p, float)
+    if y.shape != p.shape or y.ndim != 1:
+        raise ValueError("y and p must be one-dimensional arrays of equal length")
+    if not np.all(np.isfinite(p)):
+        raise ValueError("predictions must be finite")
+    if not np.all((y == 0) | (y == 1)):
+        raise ValueError("labels must be binary")
     p = np.clip(p, 1e-6, 1 - 1e-6)
     logloss = -np.mean(y * np.log(p) + (1 - y) * np.log(1 - p))
     brier = np.mean((p - y) ** 2)
     # AUC via the rank-sum (Mann-Whitney) identity, no sklearn
-    order = np.argsort(p)
-    ranks = np.empty(len(p))
-    ranks[order] = np.arange(1, len(p) + 1)
+    ranks = _rank(p) + 1.0
     n1 = y.sum()
     n0 = len(y) - n1
+    if n1 == 0 or n0 == 0:
+        raise ValueError("AUC requires both label classes")
     auc = (ranks[y == 1].sum() - n1 * (n1 + 1) / 2) / (n1 * n0)
     return logloss, brier, auc
 
@@ -56,13 +81,15 @@ def _calibration(y, p, edges=(0, .1, .3, .5, .7, .9, 1.0001)):
 
 
 def main():
-    ds = load(TAGGED)
-    obs_team, obs_prob, obs_y, rho = survival._survival_observations(ds)
+    ds, _uf, _season = load_joint_dataset(min_solve_hours=MIN_SOLVE_HOURS)
+    obs_team, obs_prob, obs_y, _rho = survival._survival_observations(ds)
 
-    rng = np.random.default_rng(SEED)
-    test = rng.random(len(obs_y)) < TEST_FRAC
+    test = _grouped_test_mask(obs_team, obs_prob)
     train = ~test
-    print(f"{len(obs_y)} cells: {train.sum()} train / {test.sum()} held out "
+    _t, _p, _y, rho = survival._survival_observations(ds, duration_mask=train)
+    n_groups = len(np.unique(np.column_stack((obs_team, obs_prob)), axis=0))
+    print(f"{len(obs_y)} cells / {n_groups} resolved team-problem groups: "
+          f"{train.sum()} train / {test.sum()} held out "
           f"(solve rate {obs_y.mean():.3f})")
 
     tr_bin = (obs_team[train], obs_prob[train], obs_y[train])

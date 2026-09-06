@@ -196,8 +196,8 @@ def fit(contests, reduction=REDUCTION, mu_b=MU_B, sigma_b=SIGMA_B,
 
 
 def _spearman(x, y):
-    x, y = np.asarray(x, float), np.asarray(y, float)
-    return float(np.corrcoef(np.argsort(np.argsort(x)), np.argsort(np.argsort(y)))[0, 1])
+    from .aoj import spearman
+    return spearman(x, y)
 
 
 def _cf_contest_pairs(contests, rows):

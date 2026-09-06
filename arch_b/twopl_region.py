@@ -24,7 +24,7 @@ from arch_a import elo
 from arch_a.load import load
 from . import model, twopl
 from .joint import estimate_joint
-from .predict_eval import _metrics
+from .predict_eval import _grouped_test_mask, _metrics
 
 DATA = os.path.join(os.path.dirname(__file__), os.pardir, "data")
 TAGGED = os.path.join(DATA, "tagged.json")
@@ -97,8 +97,7 @@ def main():
     print("\n=== held-out solve prediction (80/20, full tagged, unanchored) ===")
     dsf = load(TAGGED)
     ot, op, oy = model._observations(dsf)
-    rng = np.random.default_rng(0)
-    test = rng.random(len(oy)) < 0.2
+    test = _grouped_test_mask(ot, op)
     tr = (ot[~test], op[~test], oy[~test])
     yte, tte, pte = oy[test], ot[test], op[test]
 

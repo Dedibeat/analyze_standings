@@ -52,10 +52,11 @@ from collections import defaultdict
 import numpy as np
 
 from . import model, survival
-from .aoj import load_matches as load_aoj_matches, within_contest_spearman
+from .aoj import load_matches as load_aoj_matches, spearman, within_contest_spearman
 from .joint import estimate_joint
 from .calibrate import _gym_shape
-from .external_validate import GYM_OUT, KATTIS, _cf_mapping, _cf_problemset, _norm
+from .external_validate import (GYM_OUT, KATTIS, _cf_mapping, _cf_problemset,
+                                _kattis_matches, _norm)
 from .run import MIN_SOLVE_HOURS
 
 # Guard floors: current baseline minus a noise margin (~0.02-0.04). A change
@@ -67,14 +68,13 @@ GUARDS = {
     "aoj_within_spearman": 0.52,    # baseline +0.568
     "solvecount_sanity": 0.90,      # baseline +0.995 (sign flipped: -median)
 }
-RAW_LOCO_CEILING = 293.4  # baseline 288.4 + the 5-point keep threshold
+RAW_LOCO_CEILING = 251.9  # corrected joint baseline 246.9 + 5-point keep threshold
+EXPECTED_ANCHOR_PROBLEMS = 185
+EXPECTED_ANCHOR_CONTESTS = 15
 
 
 def _spearman(x, y):
-    x, y = np.asarray(x, float), np.asarray(y, float)
-    if len(x) < 2 or np.all(x == x[0]) or np.all(y == y[0]):
-        return float("nan")
-    return float(np.corrcoef(np.argsort(np.argsort(x)), np.argsort(np.argsort(y)))[0, 1])
+    return spearman(x, y)
 
 
 def loco_rmse(our, cf, grp):
@@ -86,6 +86,23 @@ def loco_rmse(our, cf, grp):
         slope, icept = np.polyfit(our[tr], cf[tr], 1)
         errs.append(slope * our[te] + icept - cf[te])
     return float(np.sqrt(np.mean(np.concatenate(errs) ** 2)))
+
+
+def _guard_failures(guards, raw_rmse, calibrated_rmse, coverage):
+    """Return failed metric contracts, treating missing/non-finite values as failures."""
+    finite = lambda value: value is not None and np.isfinite(value)  # noqa: E731
+    failed = []
+    for name, floor in GUARDS.items():
+        value = guards.get(name)
+        if not finite(value) or value < floor:
+            failed.append(name)
+    if not finite(raw_rmse) or raw_rmse > RAW_LOCO_CEILING:
+        failed.append("raw_loco_cf_rmse")
+    if not finite(calibrated_rmse):
+        failed.append("calibrated_loco_cf_rmse")
+    if coverage != (EXPECTED_ANCHOR_PROBLEMS, EXPECTED_ANCHOR_CONTESTS):
+        failed.append("anchor_coverage")
+    return failed
 
 
 def main(use_binary=False):
@@ -137,17 +154,16 @@ def main(use_binary=False):
             gy_all.append(pair)
             if r["region"] == "Asia East Continent":
                 gy_ec.append(pair)
-    kat = {_norm(v["name"]): v["difficulty"]
-           for v in json.load(open(KATTIS)).values()}
     # Same convention as external_validate's "Kat pld": North America + Europe,
     # the two regions Kattis genuinely covers (elsewhere it is stragglers and
     # title collisions).
     tagged = json.load(open(os.path.join(os.path.dirname(GYM_OUT),
                                          os.pardir, "data", "tagged.json")))
+    kat = _kattis_matches(tagged, json.load(open(KATTIS)))
     kat_region = {c["contest_id"]: c["region"] for c in tagged
                   if c["region"] in ("North America", "Europe")}
-    ka = [(d, kat[nm]) for (cid, nm), d in by_name.items()
-          if nm in kat and cid in kat_region]
+    ka = [(d, kat[(cid, nm)]) for (cid, nm), d in by_name.items()
+          if (cid, nm) in kat and cid in kat_region]
     aoj = load_aoj_matches()
     ao = [(cid, d, aoj[(cid, label)]) for (cid, label), d in by_label.items()
           if (cid, label) in aoj]
@@ -168,18 +184,26 @@ def main(use_binary=False):
         "solvecount_sanity": float(np.median(sanity)),
     }
 
-    fail = [name for name, floor in GUARDS.items() if guards[name] < floor]
-    raw_fail = raw_rmse > RAW_LOCO_CEILING
+    coverage = (len(our), len(set(grp)))
+    failed = _guard_failures(guards, raw_rmse, calibrated_rmse, coverage)
+    fail = [name for name in GUARDS if name in failed]
+    raw_fail = "raw_loco_cf_rmse" in failed
+    metric_fail = "calibrated_loco_cf_rmse" in failed
+    coverage_fail = "anchor_coverage" in failed
     print(f"model={'binary' if use_binary else 'survival'}  "
           f"anchors: {len(our)} problems / {len(set(grp))} contests  "
           f"({time.time() - t0:.0f}s)")
+    if coverage_fail:
+        print("GUARD anchor_coverage="
+              f"{coverage[0]} problems/{coverage[1]} contests "
+              f"(expected {EXPECTED_ANCHOR_PROBLEMS}/{EXPECTED_ANCHOR_CONTESTS}) FAIL")
     for name, floor in GUARDS.items():
         mark = "FAIL" if name in fail else "ok"
         print(f"GUARD {name}={guards[name]:+.3f} (floor {floor:+.2f}) {mark}")
     print(f"GUARD raw_loco_cf_rmse={raw_rmse:.1f} "
           f"(ceiling {RAW_LOCO_CEILING:.1f}) {'FAIL' if raw_fail else 'ok'}")
     print(f"METRIC calibrated_loco_cf_rmse={calibrated_rmse:.1f}")
-    if fail or raw_fail:
+    if failed:
         sys.exit(1)
 
 

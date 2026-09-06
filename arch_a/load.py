@@ -294,6 +294,7 @@ class Dataset:
     team_of_row: np.ndarray    # row -> team index
     contest_of_row: np.ndarray # row -> contest index
     rank_of_row: np.ndarray    # row -> finishing rank (int)
+    participation_of_row: list # row -> (contest_id, source standings-row index)
 
     # Observed competitor--problem cells, in COO form (row-major: sorted by row,
     # then by problem).  A cell is observed exactly when the problem belongs to
@@ -391,7 +392,7 @@ def load(path=DATA_PATH, uf=None, season_key=False, min_solve_hours=None):
 
     n_problems = len(problems)
 
-    team_of_row, contest_of_row, rank_of_row = [], [], []
+    team_of_row, contest_of_row, rank_of_row, participation_of_row = [], [], [], []
     row_chunks, prob_chunks, y_chunks, tau_chunks, wrong_chunks = [], [], [], [], []
 
     for c in raw:
@@ -404,7 +405,7 @@ def load(path=DATA_PATH, uf=None, season_key=False, min_solve_hours=None):
         # every problem in the contest is an observed cell for every row of it.
         block = np.array(sorted(cols.values()), dtype=np.int64)
         slot = {col: k for k, col in enumerate(block)}
-        for s in c["standings"]:
+        for source_row, s in enumerate(c["standings"]):
             if not row_solved_any(s, cols):
                 continue  # zero-solve rows are dropped from the fit
             assert s.get("rank") is not None, f"missing rank in contest {cid}"
@@ -413,6 +414,7 @@ def load(path=DATA_PATH, uf=None, season_key=False, min_solve_hours=None):
             team_of_row.append(ti)
             contest_of_row.append(ci)
             rank_of_row.append(int(s["rank"]))
+            participation_of_row.append((cid, source_row))
 
             y = np.zeros(len(block), dtype=bool)
             tau = np.full(len(block), np.nan, dtype=np.float32)
@@ -454,6 +456,7 @@ def load(path=DATA_PATH, uf=None, season_key=False, min_solve_hours=None):
         team_of_row=np.array(team_of_row, dtype=int),
         contest_of_row=np.array(contest_of_row, dtype=int),
         rank_of_row=np.array(rank_of_row, dtype=int),
+        participation_of_row=participation_of_row,
         obs_row=obs_row,
         obs_prob=obs_prob,
         obs_y=obs_y,

@@ -34,7 +34,7 @@ import numpy as np
 
 from arch_a import elo
 from arch_a.fixedpoint import _performance_ratings
-from arch_a.load import _max_solve_seconds, dedupe_contests, row_solved_any, team_key
+from arch_a.load import _max_solve_seconds, dedupe_contests, row_solved_any
 from . import survival
 from .joint import PETROZ, TAGGED, UCUP, estimate_joint
 from .calibrate import _anchors, _gym_shape
@@ -64,7 +64,15 @@ def _cf_map(records):
                                     elo.LO, elo.HI))
 
 
-def _contests_from(ds, theta, b, to_cf, paths, uf):
+def _performance_lookup(ds, rho, to_cf):
+    """Map each source participation to its own fitted performance."""
+    return {
+        participation: (int(ds.team_of_row[row]), round(to_cf(rho[row]), 0))
+        for row, participation in enumerate(ds.participation_of_row)
+    }
+
+
+def _contests_from(ds, theta, b, to_cf, paths):
     """Build the picker's contest list for the fit (ds/theta/b) from its raw
     standings ``paths``. Contest ids repeated across ``paths`` (17 UCup rounds
     are also tagged.json entries) are deduplicated the same way the fit
@@ -78,14 +86,13 @@ def _contests_from(ds, theta, b, to_cf, paths, uf):
 
     # each real team's own calibrated performance in that contest, from its
     # actual rank (same eq. perf primitive as export_viewer.py / medals.py).
-    # Keyed by (contest_id, team index) rather than assumed row order, since
-    # ``paths`` is not necessarily the full fit's row order (which also
-    # includes older-ICPC and World Finals in between).
+    # Keyed by the source participation rather than resolved team identity.
+    # Identity is intentionally shared across contests (and can collide inside
+    # one contest after roster unioning), while every standings row has its own
+    # rank-derived performance.
     rows_by_contest = [np.where(ds.contest_of_row == ci)[0] for ci in range(len(ds.contests))]
     rho = _performance_ratings(theta, ds, rows_by_contest)
-    perf_lookup = {(int(ds.contests[ds.contest_of_row[row]]), int(ds.team_of_row[row])):
-                   round(to_cf(rho[row]), 0)
-                   for row in range(len(ds.contest_of_row))}
+    row_lookup = _performance_lookup(ds, rho, to_cf)
 
     raw = []
     for path in paths:
@@ -93,19 +100,17 @@ def _contests_from(ds, theta, b, to_cf, paths, uf):
             raw.extend(json.load(f))
     raw = dedupe_contests(raw)  # match load(): drop repeated contest entries
     raw = [c for c in raw if _max_solve_seconds(c) >= MIN_SOLVE_HOURS * 3600]  # match load()
-    key_to_idx = {k: i for i, k in enumerate(ds.teams)}
-
     contests = []
     for c in raw:
         cid = c["contest_id"]
         labels = {p["problem_label"] for p in c["problems"]}
         teams = []
-        for s in c["standings"]:
+        for source_row, s in enumerate(c["standings"]):
             if not row_solved_any(s, labels):
                 continue
-            idx = key_to_idx[team_key(cid, s["team_id"], s.get("members"), uf)]
-            perf = perf_lookup.get((int(cid), idx))
-            assert perf is not None, f"missing performance for row {s['team_id']!r} in {cid}"
+            hit = row_lookup.get((cid, source_row))
+            assert hit is not None, f"missing participation {source_row} in contest {cid}"
+            idx, perf = hit
             teams.append({
                 "rank": int(s["rank"]),
                 "name": s.get("team_name") or "(unnamed)",
@@ -133,7 +138,7 @@ def _contests_from(ds, theta, b, to_cf, paths, uf):
 
 
 def build_data():
-    ds, theta, b, _, uf = estimate_joint(
+    ds, theta, b, _, _uf = estimate_joint(
         fit_fn=survival.fit, min_solve_hours=MIN_SOLVE_HOURS, verbose=False)
 
     records = [{"contest_id": int(cid), "problem_label": lab, "problem_name": name,
@@ -146,7 +151,7 @@ def build_data():
     xs = np.arange(elo.LO, elo.HI + LOOKUP_STEP, LOOKUP_STEP)
     ys = [round(to_cf(x), 1) for x in xs]
 
-    contests = _contests_from(ds, theta, b, to_cf, SOURCES, uf)
+    contests = _contests_from(ds, theta, b, to_cf, SOURCES)
 
     contests.sort(key=lambda c: (-(c["year"] or 0), c["name"]))
     return {"scale": {"lo": elo.LO, "hi": elo.HI},

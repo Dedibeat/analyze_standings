@@ -32,15 +32,12 @@ file is missing the module falls back to the plain affine map.
     python -m arch_b.calibrate --binary   # calibrate the binary model instead
 
 Writes output/problem_ratings_calibrated.json: every record gains
-``difficulty_cf`` (clipped to [800, 4000]) and three uncertainties.
-``difficulty_cf_fit_se`` is the old figure -- the Laplace SE of ``b`` scaled by
-the local slope of the composed map -- which treats the map itself as exact.
-``difficulty_cf_level_sd`` is what the map does *not* know about this contest's
-level (``arch_b.hier_calibrate``): the posterior sd of its own offset for the 15
-contests with CF anchors, and ``sqrt(tau_contest^2 + tau_region^2)`` = 73 CF
-points for every contest the anchors never saw -- larger than the median fit SE
-of 47. ``difficulty_cf_se`` is now the two in quadrature, so it is an honest
-total rather than a fit-only figure.
+``difficulty_cf`` (clipped to [800, 4000]) and explicitly limited uncertainty
+components. ``difficulty_cf_fit_se`` is the conditional Laplace SE of ``b``
+scaled by the local slope of the composed map. ``difficulty_cf_level_sd`` is the
+hierarchical contest-level component, and ``difficulty_cf_partial_se`` is their
+quadrature. The partial SE is not a calibrated CF prediction interval: it omits
+mapping/variance-component uncertainty and residual CF discrepancy.
 """
 
 import contextlib
@@ -53,6 +50,7 @@ from collections import defaultdict
 import numpy as np
 
 from arch_a import elo
+from .aoj import spearman
 from .external_validate import GYM_OUT, _cf_mapping, _cf_problemset, _norm
 
 OUT = os.path.join(os.path.dirname(__file__), os.pardir, "output")
@@ -135,9 +133,7 @@ def _gym_shape(records):
 
 
 def _spearman(x, y):
-    rx = np.argsort(np.argsort(x))
-    ry = np.argsort(np.argsort(y))
-    return float(np.corrcoef(rx, ry)[0, 1])
+    return spearman(x, y)
 
 
 def _loco_rmse(z, cf, grp):
@@ -194,7 +190,8 @@ def main(use_binary=False):
             level = by_contest.get(r["contest_id"], default_level)
             r["difficulty_cf_fit_se"] = round(float(fit_se), 1)
             r["difficulty_cf_level_sd"] = round(float(level), 1)
-            r["difficulty_cf_se"] = round(float(np.hypot(fit_se, level)), 1)
+            r["difficulty_cf_partial_se"] = round(float(np.hypot(fit_se, level)), 1)
+            r.pop("difficulty_cf_se", None)
     out = os.path.join(OUT, "problem_ratings_calibrated.json")
     with open(out, "w") as f:
         json.dump(records, f, indent=2, ensure_ascii=False)

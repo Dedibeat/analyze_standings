@@ -20,15 +20,15 @@ import os
 
 import numpy as np
 
+from .aoj import spearman
+
 DATA = os.path.join(os.path.dirname(__file__), os.pardir, "data", "tagged.json")
 OUT = os.path.join(os.path.dirname(__file__), os.pardir, "output")
 ORDER = ["very_easy", "easy", "medium", "hard", "very_hard"]
 
 
 def _spearman(x, y):
-    rx = np.argsort(np.argsort(x))
-    ry = np.argsort(np.argsort(y))
-    return float(np.corrcoef(rx, ry)[0, 1])
+    return spearman(x, y)
 
 
 def _llm_labels(tagged):

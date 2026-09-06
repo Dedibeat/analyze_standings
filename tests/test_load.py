@@ -43,6 +43,7 @@ class LoadTest(unittest.TestCase):
         self.assertEqual(ds.obs_row.tolist(), [0, 0, 0])
         self.assertEqual(ds.obs_prob.tolist(), [0, 1, 2])
         self.assertEqual(ds.obs_y.tolist(), [True, False, False])
+        self.assertEqual(ds.participation_of_row, [(1, 0)])
 
     def test_unknown_problem_solve_does_not_retain_row(self):
         contest = {

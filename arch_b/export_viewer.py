@@ -51,9 +51,9 @@ def build_data():
     to_cf = lambda x: float(np.clip(  # noqa: E731
         slope * shape(np.asarray([x], float))[0] + intercept, LO, HI))
 
-    # problem difficulties (CF points) + SE, per contest. The SE is the fit's
-    # Laplace SE through the map *and* the calibration level uncertainty for the
-    # contest (arch_b.hier_calibrate), the same total arch_b.calibrate reports.
+    # Problem difficulties (CF points) + partial SE, per contest. This combines
+    # conditional fit and contest-level components but is not a calibrated CF
+    # prediction interval (see calibrate.py).
     level_by_contest, default_level = level_sd(recs)
     prob_by_contest = {}
     for p, (cid, label, pid, name) in enumerate(ds.problems):
@@ -65,7 +65,7 @@ def build_data():
         prob_by_contest.setdefault(int(cid), []).append({
             "label": label, "name": name,
             "difficulty": round(to_cf(b[p]), 0),
-            "difficulty_se": round(float(np.hypot(
+            "difficulty_partial_se": round(float(np.hypot(
                 local_slope * se_b[p],
                 level_by_contest.get(int(cid), default_level))), 0),
             "solved": solved,

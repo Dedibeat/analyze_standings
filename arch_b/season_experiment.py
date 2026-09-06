@@ -24,6 +24,7 @@ import os
 import numpy as np
 
 from arch_a.load import _UnionFind
+from .aoj import spearman
 from . import survival
 from .joint import estimate_joint
 from .calibrate import _anchors
@@ -33,9 +34,7 @@ OUT = os.path.join(os.path.dirname(__file__), os.pardir, "output")
 
 
 def _spearman(x, y):
-    rx = np.argsort(np.argsort(x))
-    ry = np.argsort(np.argsort(y))
-    return float(np.corrcoef(rx, ry)[0, 1])
+    return spearman(x, y)
 
 
 def _components(ds):

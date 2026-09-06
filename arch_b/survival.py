@@ -44,17 +44,19 @@ pi(1-pi) in the binary model), the Poisson-GLM form of this likelihood.
 import numpy as np
 
 from arch_a import elo
-from .model import MU0, SIGMA_B, SIGMA_THETA
+from .model import MU0, SIGMA_B, SIGMA_THETA, _require_converged
 
 LN2 = np.log(2.0)
 DEFAULT_TC = 18000.0  # fallback window (5 h) for a contest with no observed solves
 
 
-def _survival_observations(ds):
+def _survival_observations(ds, duration_mask=None):
     """Flatten Obs into (obs_team, obs_prob, obs_y, rho) with the exposure ratio.
 
     rho_tp = tau_tp / T_c for a solved cell (fraction of the window used) and 1 for
     a censored cell. T_c per contest is the latest observed solve time.
+    ``duration_mask`` can restrict which observations determine T_c without
+    removing observations from the returned arrays.
     """
     obs_team = ds.team_of_row[ds.obs_row]
     obs_prob = ds.obs_prob
@@ -64,8 +66,14 @@ def _survival_observations(ds):
     tau = np.nan_to_num(ds.obs_tau).astype(float)  # 0 where censored (unused)
 
     n_contests = len(ds.contests)
+    duration_cells = solved
+    if duration_mask is not None:
+        duration_mask = np.asarray(duration_mask, bool)
+        if duration_mask.shape != solved.shape:
+            raise ValueError("duration_mask must align with observations")
+        duration_cells = solved & duration_mask
     Tc = np.zeros(n_contests)
-    np.maximum.at(Tc, obs_contest[solved], tau[solved])
+    np.maximum.at(Tc, obs_contest[duration_cells], tau[duration_cells])
     Tc[Tc <= 0] = DEFAULT_TC
 
     rho = np.where(solved, tau / Tc[obs_contest], 1.0)
@@ -103,6 +111,20 @@ def fit(ds, prior_mu=None, sigma_theta=SIGMA_THETA, sigma_b=SIGMA_B, mu_b=MU0,
     theta = np.full(n_teams, MU0)
     b = np.full(n_problems, mu_b)
 
+    def objective(theta_value, b_value):
+        gap = (theta_value[obs_team] - b_value[obs_prob]) / s
+        cumulative_hazard = LN2 * np.exp(gap) * rho
+        value = np.sum(w * (obs_y * gap - cumulative_hazard))
+        value -= 0.5 * np.sum(prec_theta * (theta_value - prior_mu) ** 2)
+        value -= 0.5 * np.sum(prec_b * (b_value - mu_b) ** 2)
+        if gym_obs is not None:
+            g_theta, g_prob, g_y, g_w = gym_obs
+            g_gap = (g_theta - b_value[g_prob]) / s
+            value += np.sum(g_w * (g_y * g_gap - np.logaddexp(0.0, g_gap)))
+        return float(value)
+
+    initial_objective = objective(theta, b)
+
     def newton_block(param, index, mu, prec, sign, extra=None):
         g = (theta[obs_team] - b[obs_prob]) / s
         Lam = LN2 * np.exp(g) * rho          # cumulative hazard per cell
@@ -138,6 +160,10 @@ def fit(ds, prior_mu=None, sigma_theta=SIGMA_THETA, sigma_b=SIGMA_B, mu_b=MU0,
         if delta < eps:
             break
 
+    _require_converged(theta, b, history, eps)
+    final_objective = objective(theta, b)
+    if not np.isfinite(final_objective) or final_objective + 1e-7 < initial_objective:
+        raise RuntimeError("survival MAP fit decreased its objective")
     return theta, b, history
 
 

@@ -11,6 +11,7 @@ import os
 
 import numpy as np
 
+from arch_b.aoj import spearman
 from .anchor import estimate_anchored
 
 OUT_DIR = os.path.join(os.path.dirname(__file__), os.pardir, "output")
@@ -18,13 +19,7 @@ OUT_DIR = os.path.join(os.path.dirname(__file__), os.pardir, "output")
 
 def _spearman(x, y):
     """Spearman rank correlation (no scipy dependency)."""
-    x = np.asarray(x, dtype=float)
-    y = np.asarray(y, dtype=float)
-    if len(x) < 2 or np.all(x == x[0]) or np.all(y == y[0]):
-        return np.nan
-    rx = np.argsort(np.argsort(x))
-    ry = np.argsort(np.argsort(y))
-    return float(np.corrcoef(rx, ry)[0, 1])
+    return spearman(x, y)
 
 
 def main():

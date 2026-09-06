@@ -199,9 +199,8 @@ def level_sd(records, region_of=None):
     Returns ``(by_contest, default)``: the posterior sd of ``u_c`` for each qoj
     contest that has CF anchors, and the sd to use for every other contest,
     ``sqrt(tau_contest^2 + tau_region^2)`` -- what is not known about the level
-    of a contest the anchors never saw. This is the uncertainty the shipped
-    ``difficulty_cf_se`` used to omit entirely: it reported only the Laplace SE
-    of ``b`` scaled through the map, as if the map itself were exact.
+    of a contest the anchors never saw. This is one partial uncertainty
+    component; it is not by itself a calibrated prediction interval.
     """
     if region_of is None:
         region_of = _regions()

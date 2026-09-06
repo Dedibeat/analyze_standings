@@ -11,6 +11,12 @@ define each other, so they are solved either by an alternating fixed point
 (**Architecture B**); teams recurring across contests link everything onto one
 scale.
 
+The [2026-09-05 experiment review](experiment_review.md) records the audit that
+found held-out-label leakage, incorrect rank/AUC tie handling, incomplete
+uncertainty labels, and participation-key collisions. The concrete correctness
+defects were repaired on 2026-09-06; open data/model research limitations remain
+listed in the review and in `details.md`.
+
 ## Run
 
 Requires Python 3 + numpy. A project venv is used:
@@ -60,8 +66,9 @@ comparison.
 Architecture B also loads 71 standings-only supplemental QOJ contests:
 14 Asia East ICPC regionals from 2020–2021 and 57 Petrozavodsk camp contests
 from 2022–2026. They add cross-contest team evidence without using statements
-or editorials. The current full-cell fit has calibrated LOCO RMSE 244.2 CF
-points (the earlier 261.6 figure excluded omitted no-attempt cells).
+or editorials. The current joint fit has calibrated LOCO RMSE 245.4 CF
+points (244.2 was the earlier two-phase fit; 261.6 also predates the
+omitted-non-attempt-cell correction).
 
 Add `--survival` to fit the **solve-time survival model** (`strat.tex` §5) instead,
 which also uses *when* each problem was solved (writes
@@ -89,7 +96,7 @@ AOJ practice statistics:
 ./.venv/bin/python -m arch_b.gym_difficulty     # fixed-θ difficulty from CF gym mirrors
 ./.venv/bin/python -m arch_b.aoj --refresh      # rebuild the matched AOJ validation artifact
 ./.venv/bin/python -m arch_b.external_validate  # Codeforces + Kattis + gym + AOJ, all models
-./.venv/bin/python -m arch_b.predict_eval       # held-out solve prediction (binary vs survival)
+./.venv/bin/python -m arch_b.predict_eval       # held-out response imputation (binary vs survival)
 ./.venv/bin/python -m arch_b.calibrate     # affine map to Codeforces points
 ./.venv/bin/python -m arch_b.metric        # THE optimization metric: LOCO CF-point RMSE + guards
 ./.venv/bin/python -m arch_b.data_influence # explain supplemental-contest effects
@@ -98,10 +105,11 @@ AOJ practice statistics:
 All three architectures agree closely with both opinions. After the full-cell mask
 correction, the LLM-bucket Spearman values are +0.908 (arch A), +0.908 (binary),
 and +0.911 (survival); the pooled CF values are +0.913, +0.937, and +0.942.
-On the corrected tagged-only held-out-cell check, binary scores AUC 0.9733 versus
-survival 0.9673; this check now favours binary, while the survival model remains
+On the corrected joint response-group imputation check, binary scores AUC 0.9727
+versus survival 0.9674; this check favours binary, while the survival model remains
 the shipped choice because it uses solve-time information and leads the broader
-external CF/Kattis validation.
+external CF/Kattis validation. This is not a future-contest forecast because row
+retention occurs before the split.
 
 `gym_difficulty` turns the scraped CF **gym-mirror** attempts
 (`data/cf_gym_mirrors.json` — real timed attempts whose solvers carry their own
@@ -128,17 +136,19 @@ ratings of all 15 CF-mirrored contests (185 anchor problems — every rated
 mirror the dataset has; an exhaustive sweep found no more). It refits the
 survival model from source, applies the locked shipped gym shape, and prints
 `METRIC calibrated_loco_cf_rmse=…` as its last line (current baseline
-**244.2**, down from the pre-correction 261.6; lower is better). It exits nonzero if any external
+**245.4** for the joint fit; lower is better). It exits nonzero if any external
 guard regresses (gym
 Asia-East-Continent / gym pooled / Kattis / AOJ within-contest Spearman,
-solve-count sanity) or if raw affine LOCO rises above 293.4. `program.md` at the
+solve-count sanity) or if raw affine LOCO rises above 251.9 (the corrected 246.9
+baseline plus five points). Anchor coverage and every metric must also be finite.
+`program.md` at the
 repo root is the matching
 instruction file for auto-research loops: verify contract, what code is fair
 game, hard anti-gaming rules, and a prioritized idea list. A 2026-07-03 auto-research campaign (Claude Fable 5 + DeepSeek v4 Pro, 25
 iterations) found that the only repeatable improvements were data-side identity
-fixes (−2.2 RMSE to 288.0, AUC-corroborated); all model-side knobs are at
-optimum. Further gains need new anchor data rather than fit changes (see
-details.md). A 2026-07-23 data-side campaign added the supplemental standings
+fixes (−2.2 RMSE to 288.0, AUC-corroborated). That finite search predates major
+data/model corrections and does not establish that model improvements are
+exhausted (see the current review). A 2026-07-23 data-side campaign added the supplemental standings
 and fixed an over-broad World Finals affiliation join; original-cell held-out
 AUC also improved 0.885761 → 0.886000.
 Those campaign numbers predate the full-cell mask correction; the corrected
@@ -156,16 +166,20 @@ essential even though merely maximizing the number of new links is not useful.
 monotone **shape** learned from the ~660 gym-mirror difficulties (nearly CF-native
 in scale; it cannot reorder our problems) and an **affine** leg fit on the official
 CF ratings of all 15 rated mirror contests (185 anchor problems, auto-mapped).
-Validated leave-one-contest-out: shaped RMSE **266** vs plain-affine 288
-(P(worse)≈1%, 10/15 contests improve, hard-tail RMSE 477→434). Writes
-`output/problem_ratings_calibrated.json` with `difficulty_cf` + `difficulty_cf_se`.
-These are the best estimate of CF-equivalent difficulty.
+Current saved joint-fit leave-one-contest-out: shaped RMSE **245.43** vs
+plain-affine **246.91**. The paired contest-bootstrap difference includes zero
+([-9.63, +6.16] CF); the earlier 266 vs 288 improvement is historical. Writes
+`output/problem_ratings_calibrated.json` with `difficulty_cf`, conditional
+`difficulty_cf_fit_se`, `difficulty_cf_level_sd`, and their
+`difficulty_cf_partial_se` quadrature. The partial SE is deliberately not called
+a total: it is not a calibrated CF prediction interval (see the current review).
 
 ### Anchoring audit (2026-08-21)
 
-A review of every mechanism that pins the scale — the UCup prior, the gym shape,
+A historical review of every mechanism that pins the scale — the UCup prior, the gym shape,
 the CF affine leg, and the LLM opinions — is recorded in the anchoring-audit
-section of `details.md`. Headline measurements, all on the current shipped fit:
+section of `details.md`. These measurements precede the implemented structural
+shift below; the second-scale bug and dense-memory blocker have since been resolved:
 
 - The Phase-1 **UCup prior-mean anchor is a no-op in Architecture B** (removing
   it moves difficulties by mean −3.6 with sd 0.96 and leaves the metric at
@@ -214,14 +228,14 @@ The five steps the audit proposed, as built and measured (baseline metric 244.3)
 3. **Cross-contest LLM comparisons** — `llm_crosscontest.py`, see below.
 4. **Hierarchical calibration** (`arch_b/hier_calibrate.py`): `cf = A*f(b) + B +
    u_contest + v_region`, partially pooled. It measures **tau_contest = 72.4**
-   and **tau_region = 12.0** CF points — contest levels really do move, but the
-   between-region level among the three anchored regions is nil, which is
-   evidence the 100+ point region gaps the gym and LLM-bucket referees disagree
-   about are referee artifacts. LOCO does not improve (245.4 vs 248.3), so the
-   shipped map stays the plain affine; what ships is the **uncertainty**:
-   `difficulty_cf_se` is now the fit SE (`difficulty_cf_fit_se`) and the
-   calibration level sd (`difficulty_cf_level_sd`, 73.4 CF for any contest no CF
-   anchor saw) in quadrature, median 46.8 -> **86.4**.
+   and **tau_region = 12.0** CF points. Only three regions inform the latter
+   estimate; it cannot establish absence of bias in unanchored regions or prove
+   that the gym/LLM disagreement is a referee artifact. LOCO does not improve
+   (245.4 vs 248.3), so the
+   shipped map stays the plain affine. The exported uncertainty components are
+   the conditional fit SE (`difficulty_cf_fit_se`) and calibration level SD
+   (`difficulty_cf_level_sd`) plus their explicitly partial quadrature; these are
+   not advertised as a calibrated prediction interval.
 5. **Ability-side CF anchoring** (`arch_b/cf_prior.py`): the CPHoF participant
    ratings as a time-accurate, roster-complete, leak-free prior on team ability.
    Measured **inert** (57 anchored identities, metric moves <= 0.2), so it is
@@ -248,6 +262,12 @@ orientations are sent, and `bt_scores` fits Bradley-Terry by coordinate Newton i
 O(edges) per sweep so the graph can be far larger than `llm_survival.bt_fit`'s
 dense Hessian allows.
 
+**Corrected 2026-09-06:** `analyse` now constructs its held-out adjustment only
+from the contest's BT-minus-survival feature; held-out CF labels are scoring-only,
+with mutation invariance covered by a regression test. Reanalysis of the saved
+responses scores 245.43 plain versus **246.78 adjusted**, so the LLM feature does
+not improve LOCO and the wider paid run remains unjustified.
+
 ### Participant Codeforces ratings (research finding)
 
 A 2026-07-21 feasibility test matched exactly one Codeforces handle for 1,168 of
@@ -273,7 +293,8 @@ unique standing rows with handles for the full roster.  Exact-name-only
 appearances and stale/missing handles remain in the artifact as rejected or
 review-only evidence.
 
-This data is **not yet consumed by the fit**.  CPHoF supplies World Finals
+This data is consumed by the **opt-in** `arch_b.cf_prior` hook described above;
+the default fit leaves it off. CPHoF supplies World Finals
 calendar dates but no start times, so the artifact includes 470 pre-event rating
 observations using a conservative 00:00 UTC cutoff that excludes same-date
 rating changes.  Most `tagged.json` regionals have only a year, so the

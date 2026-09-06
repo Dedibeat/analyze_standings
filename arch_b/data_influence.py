@@ -41,7 +41,7 @@ from .metric import GUARDS, RAW_LOCO_CEILING, _spearman
 from .external_validate import (GYM_OUT, KATTIS, _cf_mapping, _cf_problemset,
                                 _norm)
 from .aoj import load_matches as load_aoj_matches, within_contest_spearman
-from .predict_eval import SEED, TEST_FRAC, _metrics
+from .predict_eval import SEED, TEST_FRAC, _grouped_test_mask, _metrics
 from .run import MIN_SOLVE_HOURS
 
 OUT = os.path.join(os.path.dirname(__file__), os.pardir, "output", "data_influence.json")
@@ -207,17 +207,16 @@ def _heldout_original_cells(paths):
     raw = [c for c in raw if _max_solve_seconds(c) >= MIN_SOLVE_HOURS * 3600]
     uf = member_identity(raw)
     ds = load([TAGGED] + list(paths) + UCUP, uf=uf, min_solve_hours=MIN_SOLVE_HOURS)
-    obs_team, obs_prob, obs_y, rho = survival._survival_observations(ds)
+    obs_team, obs_prob, obs_y, _rho = survival._survival_observations(ds)
     tagged_cids = {c["contest_id"] for c in _read([TAGGED])}
     original = np.array([
         ds.contests[int(ds.contest_of_problem[p])] in tagged_cids for p in obs_prob
     ])
-    original_index = np.flatnonzero(original)
-    rng = np.random.default_rng(SEED)
-    heldout_original = rng.random(len(original_index)) < TEST_FRAC
-    test = original_index[heldout_original]
-    train = np.ones(len(obs_y), dtype=bool)
-    train[test] = False
+    test_mask = _grouped_test_mask(obs_team, obs_prob, candidates=original,
+                                   seed=SEED, test_frac=TEST_FRAC)
+    train = ~test_mask
+    test = np.flatnonzero(test_mask)
+    _t, _p, _y, rho = survival._survival_observations(ds, duration_mask=train)
     theta, b, _history = survival.fit(
         ds, obs=(obs_team[train], obs_prob[train], obs_y[train], rho[train]),
         verbose=False)

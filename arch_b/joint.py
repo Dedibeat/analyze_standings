@@ -45,6 +45,32 @@ OLDER_ICPC = os.path.join(DATA, "icpc_2020_2021.json")
 PETROZ = os.path.join(DATA, "petroz_2022_2026.json")
 
 
+def load_joint_dataset(season_key=False, min_solve_hours=None,
+                       supplemental_paths=None, identity_paths=None):
+    """Load the exact standings/identity configuration used by the joint fit."""
+    extra = [
+        path for path in os.environ.get("ARCHB_EXTRA_CONTESTS", "").split(os.pathsep)
+        if path
+    ]
+    supplemental = ([OLDER_ICPC, PETROZ, WF] + UCUP if supplemental_paths is None
+                    else list(supplemental_paths))
+    identity_supplemental = (supplemental if identity_paths is None
+                             else list(identity_paths))
+    paths = [TAGGED] + supplemental + extra
+
+    raw_all = []
+    for p in [TAGGED] + identity_supplemental + extra:
+        with open(p) as f:
+            raw_all.extend(json.load(f))
+    raw_all = dedupe_contests(raw_all)
+    if min_solve_hours is not None:
+        raw_all = [c for c in raw_all if _max_solve_seconds(c) >= min_solve_hours * 3600]
+    season_by_cid = {c["contest_id"]: season_of(c) for c in raw_all} if season_key else None
+    uf = member_identity(raw_all, season_by_cid)
+    ds = load(paths, uf=uf, season_key=season_key, min_solve_hours=min_solve_hours)
+    return ds, uf, season_by_cid
+
+
 def estimate_joint(sigma_theta=SIGMA_THETA, sigma_b=SIGMA_B, fit_fn=fit,
                    season_key=False, min_solve_hours=None, verbose=True,
                    gym_merge=None, supplemental_paths=None,
@@ -83,27 +109,9 @@ def estimate_joint(sigma_theta=SIGMA_THETA, sigma_b=SIGMA_B, fit_fn=fit,
     """
     if gym_merge is None and os.environ.get("ARCHB_GYM_MERGE"):
         gym_merge = float(os.environ["ARCHB_GYM_MERGE"])
-    extra = [
-        path for path in os.environ.get("ARCHB_EXTRA_CONTESTS", "").split(os.pathsep)
-        if path
-    ]
-    supplemental = ([OLDER_ICPC, PETROZ, WF] + UCUP if supplemental_paths is None
-                    else list(supplemental_paths))
-    identity_supplemental = (supplemental if identity_paths is None
-                             else list(identity_paths))
-    paths = [TAGGED] + supplemental + extra
-
-    raw_all = []
-    for p in [TAGGED] + identity_supplemental + extra:
-        with open(p) as f:
-            raw_all.extend(json.load(f))
-    raw_all = dedupe_contests(raw_all)
-    if min_solve_hours is not None:
-        raw_all = [c for c in raw_all if _max_solve_seconds(c) >= min_solve_hours * 3600]
-    season_by_cid = {c["contest_id"]: season_of(c) for c in raw_all} if season_key else None
-    uf = member_identity(raw_all, season_by_cid)
-
-    ds = load(paths, uf=uf, season_key=season_key, min_solve_hours=min_solve_hours)
+    ds, uf, season_by_cid = load_joint_dataset(
+        season_key=season_key, min_solve_hours=min_solve_hours,
+        supplemental_paths=supplemental_paths, identity_paths=identity_paths)
 
     if prior is None:
         mu, sd = np.full(len(ds.teams), float(MU0)), sigma_theta

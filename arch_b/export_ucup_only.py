@@ -13,7 +13,7 @@ exactly, for `../my-react-app` to merge in:
   problem_ratings_calibrated.json (problem_id, problem_label, problem_name,
   contest_id, difficulty, difficulty_se, solved_count,
   reported_solved_in_contest, difficulty_cf, difficulty_cf_fit_se,
-  difficulty_cf_level_sd, difficulty_cf_se). These come
+  difficulty_cf_level_sd, difficulty_cf_partial_se). These come
   from the same single joint fit and the same shape+affine calibration as
   output/problem_ratings_calibrated.json -- since the 2026-08-21 audit the
   Universal Cup is ordinary fit data, so there is no longer a second scale
@@ -63,8 +63,8 @@ def build():
     def to_cf(d):
         return float(np.clip(slope * shape(np.array([d]))[0] + intercept, elo.LO, elo.HI))
 
-    # same three uncertainties as calibrate.py: the fit SE through the map, the
-    # calibration level sd for a contest the CF anchors never saw, and the total
+    # Same partial uncertainty components as calibrate.py. Their quadrature is
+    # not a calibrated total CF prediction interval.
     level_by_contest, default_level = level_sd(records)
 
     def to_cf_se(d, se, contest_id):
@@ -118,7 +118,7 @@ def build():
             "difficulty_cf": round(to_cf(d), 1),
             "difficulty_cf_fit_se": round(fit_se, 1),
             "difficulty_cf_level_sd": round(level, 1),
-            "difficulty_cf_se": round(total_se, 1),
+            "difficulty_cf_partial_se": round(total_se, 1),
         })
 
     contests = []

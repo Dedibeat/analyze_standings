@@ -66,6 +66,7 @@ import numpy as np
 
 from arch_a import elo
 from arch_a.load import team_key
+from .aoj import spearman
 from .model import MU0
 
 DATA = os.path.join(os.path.dirname(__file__), os.pardir, "data")
@@ -125,7 +126,7 @@ def team_abilities(uf, season_by_cid=None):
         cutoff = _cutoff(a["year"])
         ratings, trusts = [], []
         for member in roster:
-            hit = history.get(_norm_name(member))
+            hit = row["members"].get(_norm_name(member))
             at = _rating_at(hit, cutoff) if hit else None
             if at is None:
                 break                      # roster not complete at the cutoff
@@ -223,11 +224,10 @@ def main(validate=False):
              if tk in index]
     x = np.array([a for a, _ in pairs])
     y = np.array([c for _, c in pairs])
-    rank = lambda v: np.argsort(np.argsort(v))  # noqa: E731
     slope, icept = np.polyfit(x, y, 1)
     print(f"\n=== ability-axis validation ({len(x)} teams) ===")
     print(f"fitted theta vs CF team ability: Pearson "
-          f"{np.corrcoef(x, y)[0, 1]:+.3f}  Spearman {np.corrcoef(rank(x), rank(y))[0, 1]:+.3f}")
+          f"{np.corrcoef(x, y)[0, 1]:+.3f}  Spearman {spearman(x, y):+.3f}")
     print(f"cf_ability ~ {slope:.2f} * theta {icept:+.0f}  "
           f"(sd ratio {y.std() / x.std():.2f}; residual sd {(y - (slope * x + icept)).std():.0f} CF)")
     print(f"theta [{x.min():.0f}, {x.max():.0f}] sd {x.std():.0f}  |  "

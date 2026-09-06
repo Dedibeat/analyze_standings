@@ -50,12 +50,12 @@ Contract:
   better.**
 - Exit code `1` means a guard was violated → **discard the change**, whatever
   the metric says. Exit `0` + lower RMSE → keep.
-- Runs in ~5 s, fully deterministic (no RNG anywhere in the fit).
+- Runs in ~10 s, fully deterministic (no RNG anywhere in the fit).
 - Baseline after the 2026-08-21 joint fit: calibrated survival **245.4** on
   185 anchor problems / 15 contests
   (every rated CF mirror our dataset has — an exhaustive problemset sweep found
   no more). The raw affine LOCO remains visible as a guard, current baseline
-  246.9; the historical ceiling remains 293.4. The binary variant scores 256.0.
+  246.9; the guard ceiling is 251.9 (baseline + 5). The binary variant scores 256.0.
   The previous 244.2/245.2 pair was the two-phase-anchored fit, before the
   Universal Cup became ordinary fit data (+1.1, inside the noise floor, in
   exchange for 684 more problems on one scale — see details.md).
@@ -74,7 +74,7 @@ Continent vs the gym-mirror yardstick), `gym_pooled_spearman`,
 `kattis_pooled_spearman` (North America + Europe), `aoj_within_spearman` (Japan
 regionals with exposure removed by within-contest ranking), and
 `solvecount_sanity` (within-contest ordering) must not regress below their
-floors. `raw_loco_cf_rmse` must also stay at or below 293.4 so the nonlinear
+floors. `raw_loco_cf_rmse` must also stay at or below 251.9 so the nonlinear
 calibration cannot hide a material regression in the underlying fit.
 
 ## Scope — what may be changed

@@ -47,7 +47,7 @@ from collections import Counter, defaultdict
 
 import numpy as np
 
-from .aoj import load_matches as load_aoj_matches, within_contest_spearman
+from .aoj import load_matches as load_aoj_matches, spearman, within_contest_spearman
 
 ROOT = os.path.join(os.path.dirname(__file__), os.pardir)
 DATA = os.path.join(ROOT, "data")
@@ -62,6 +62,7 @@ MODELS = [("arch A", "problem_ratings.json"),
 BUCK = {"easy": 0, "medium": 1, "hard": 2, "very_hard": 3}   # LLM difficulty buckets
 UA = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/124.0 Safari/537.36"
 MIN_MATCH = 0.6   # a CF contest maps to our contest only if >=60% of its names match
+MIN_KATTIS_CONTEST_MATCHES = 3
 
 
 def _norm(s):
@@ -69,8 +70,7 @@ def _norm(s):
 
 
 def _spearman(x, y):
-    x, y = np.asarray(x, float), np.asarray(y, float)
-    return float(np.corrcoef(np.argsort(np.argsort(x)), np.argsort(np.argsort(y)))[0, 1])
+    return spearman(x, y)
 
 
 def _cf_problemset(refresh=False):
@@ -126,6 +126,35 @@ def _cf_mapping(contests, region_of, rating):
     return mapping
 
 
+def _kattis_matches(contests, artifact, min_contest_matches=MIN_KATTIS_CONTEST_MATCHES):
+    """Return conservative Kattis matches keyed by ``(contest_id, title)``.
+
+    Titles must be unique in the Kattis artifact and within the source contest;
+    a contest must have several matches so isolated generic-title collisions do
+    not become validation evidence.
+    """
+    kattis_by_name = defaultdict(list)
+    for row in artifact.values():
+        kattis_by_name[_norm(row["name"])].append(float(row["difficulty"]))
+    unique = {name: values[0] for name, values in kattis_by_name.items()
+              if name and len(values) == 1}
+
+    candidates = defaultdict(list)
+    for contest in contests:
+        seen = Counter(_norm(problem["problem_name"])
+                       for problem in contest["problems"])
+        for problem in contest["problems"]:
+            name = _norm(problem["problem_name"])
+            if seen[name] == 1 and name in unique:
+                candidates[contest["contest_id"]].append((name, unique[name]))
+    return {
+        (contest_id, name): difficulty
+        for contest_id, rows in candidates.items()
+        if len(rows) >= min_contest_matches
+        for name, difficulty in rows
+    }
+
+
 def _pairs(model_diff, contests, mapping, rating, kat):
     """For one model output, build (region -> [(ours, yardstick)]) for CF and Kattis."""
     by_name = {}   # (qoj, norm_name) -> our difficulty
@@ -142,7 +171,7 @@ def _pairs(model_diff, contests, mapping, rating, kat):
     for c in contests:
         for p in c["problems"]:
             d = model_diff.get((c["contest_id"], p["problem_label"]))
-            k = kat.get(_norm(p["problem_name"]))
+            k = kat.get((c["contest_id"], _norm(p["problem_name"])))
             if d is not None and k is not None:
                 ka[c["region"]].append((d, k))
     return cf, ka
@@ -198,7 +227,7 @@ def main(refresh=False, detail_cfid=None):
     contests = json.load(open(os.path.join(DATA, "tagged.json")))
     region_of = {c["contest_id"]: c["region"] for c in contests}
     rating = _cf_problemset(refresh)
-    kat = {_norm(v["name"]): v["difficulty"] for v in json.load(open(KATTIS)).values()}
+    kat = _kattis_matches(contests, json.load(open(KATTIS)))
     gym = {(r["contest_id"], r["problem_label"]): (r["difficulty"], r["region"])
            for r in json.load(open(GYM_OUT))} if os.path.exists(GYM_OUT) else {}
     aoj = load_aoj_matches()

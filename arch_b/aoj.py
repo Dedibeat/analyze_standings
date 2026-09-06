@@ -150,6 +150,8 @@ def load_matches(path=AOJ_FILE):
 def _rank(values):
     """Average ranks, including ties, with zero-based rank values."""
     values = np.asarray(values, float)
+    if not np.all(np.isfinite(values)):
+        raise ValueError("rank values must be finite")
     order = np.argsort(values, kind="mergesort")
     ranks = np.empty(len(values), float)
     start = 0
@@ -160,6 +162,19 @@ def _rank(values):
         ranks[order[start:end]] = 0.5 * (start + end - 1)
         start = end
     return ranks
+
+
+def spearman(x, y):
+    """Spearman correlation with average ranks for ties."""
+    x, y = np.asarray(x, float), np.asarray(y, float)
+    if x.shape != y.shape:
+        raise ValueError("Spearman inputs must have the same shape")
+    if len(x) < 2:
+        return float("nan")
+    rx, ry = _rank(x), _rank(y)
+    if np.all(rx == rx[0]) or np.all(ry == ry[0]):
+        return float("nan")
+    return float(np.corrcoef(rx, ry)[0, 1])
 
 
 def within_contest_spearman(pairs):
@@ -180,7 +195,7 @@ def within_contest_spearman(pairs):
         aoj_ranks.extend(_rank([row[1] for row in rows]))
     if len(model_ranks) < 2:
         return None
-    return float(np.corrcoef(model_ranks, aoj_ranks)[0, 1])
+    return spearman(model_ranks, aoj_ranks)
 
 
 def main():

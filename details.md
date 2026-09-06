@@ -1,5 +1,12 @@
 # Details
 
+**Current review (2026-09-05):** [experiment_review.md](experiment_review.md)
+audits the implementation and historical conclusions at `8a351e0`. In particular,
+the cross-contest LLM LOCO improvement recorded below uses held-out CF labels and
+is invalid as generalization evidence. Historical results remain for provenance;
+the review and the 2026-09-06 implementation resolution at the end of this file
+supersede those claims.
+
 ## Goal
 
 Rate ICPC-style problems by difficulty from contest standings alone (no native
@@ -458,12 +465,13 @@ log-likelihood (eq. loglik) plus Gaussian priors on `theta` and `b` (eq. priors)
   on violation. Built as the verify command for auto-research loops; `program.md`
   at the repo root is the matching agent instruction file (see the section
   below).
-- `predict_eval.py` — internal held-out solve-prediction check: train on a random
-  80% of observed cells, score predicted solve probability on the held-out 20%
-  (log-loss / Brier / AUC + a calibration table). Both fitters accept an ``obs=``
-  train split for this (see results below).
+- `predict_eval.py` — internal held-out response-imputation check on the shipped
+  joint inputs. Repeated resolved team/problem responses stay in one split and
+  survival duration uses training events only. It reports log-loss / Brier / AUC
+  plus calibration; because row retention precedes the split, it is not a
+  future-contest forecast (see the 2026-09-06 resolution below).
 - `calibrate.py` — fit + apply the affine map from our scale to **Codeforces
-  points**, using the 3 CF-mirrored contests as anchors; writes
+  points**, using 15 rated CF-mirrored contests as anchors; writes
   `output/problem_ratings_calibrated.json` (see results below).
 - `season_experiment.py` — tries + validates season-separated identity and the
   short-contest filter (`load(season_key=, min_solve_hours=)`); see results below.
@@ -2834,6 +2842,11 @@ figure understated the real uncertainty by about half. `calibrate`,
 
 ### 3. Cross-contest LLM comparisons — instrument built and validated
 
+**2026-09-05 correction:** the comparisons were collected, but the offset
+validation below leaks held-out CF ratings (`llm_crosscontest.py:457`). The
+245.4 → 242.8 improvement and offset correlation do not validate a deployable
+instrument. See [experiment_review.md](experiment_review.md), finding 1.
+
 `llm_crosscontest.py` pairs problems **across** contests, the axis
 `llm_survival.py` never touched (`_make_requests` groups by `contest_id`, and
 its scope is asserted to the 185 problems of the 15 rated mirrors). Same
@@ -2909,3 +2922,94 @@ takes the full scope to roughly **$75** — over the approved cap. A targeted
 build covering only the unanchored regions plus the 15 anchored mirrors as
 bridges (~1,027 problems) is about **$21** and would fit. That scope change was
 not pre-approved, so the run is prepared but not dispatched.
+
+## Experiment and implementation review (2026-09-05)
+
+Reviewed the current ICPC/LLM implementation, saved artifacts and historical
+campaigns at `8a351e0`; full findings, evidence, limitations, artifact hashes and
+recommended experiment order are in [experiment_review.md](experiment_review.md).
+This was a documentation-only review: no model fixes, output regeneration or
+paid inference were performed.
+
+Reproduced `arch_b.metric`: **245.4 calibrated / 246.9 raw affine CF RMSE**,
+all guards pass. The joint dataset has **260 contests, 37,576 identities, 3,159
+problems, 73,023 rows and 923,842 observed cells**, including the four World
+Finals. Earlier WF-identity-only descriptions and dataset counts are historical.
+The unittest suite passes **32/32**. Tagged-only binary/survival log-loss
+reproduces at **0.2009/0.2309**, Brier **0.0615/0.0699**, and reported AUC
+**0.9733/0.9673**; AUC tie handling needs correction.
+
+Principal corrections:
+
+- The cross-contest LLM held-out offset reads `cf[te]`. Saved artifacts
+  reproduce baseline **245.4277** and leaked **242.8481** RMSE. A simple
+  deployable BT-minus-survival offset control yields **246.7782**. This is
+  diagnostic, not a tuned replacement; the claimed gain cannot justify rollout.
+- Rank/AUC ties and NaN guard enforcement need repair. The holdout also
+  bypasses the joint configuration, uses outcome-dependent preprocessing,
+  and has 284 test cells with the same team/problem key in training.
+- Fit-plus-level SE is not validated total CF prediction uncertainty. A LOCO
+  interval diagnostic covers **62.2%** of CF ratings within 1.96 SD; this is
+  predictive coverage, not a test against latent true difficulty. Three
+  anchored regions do not establish absence of bias in unanchored regions.
+- There are **281 repeated contest/identity groups** (295 excess rows), so
+  the virtual calculator's performance dictionary overwrites nonunique keys.
+  Identity resolution needs a separate participation identifier and provenance
+  audit. These counts alone do not establish which merges are wrong.
+- The CF prior tests cohort-centered relative spacing, not absolute anchoring;
+  its roster check also needs row-specific corroboration.
+- The gym shape's historical 22-point gain is now **1.48 points** on saved
+  joint-fit records. A paired contest bootstrap of fixed LOCO errors gives
+  shaped-minus-affine 95% interval **[-9.63, +6.16]** (10,000 draws, seed
+  20260905); it does not account for historical model selection.
+
+Keep the sparse/full-cell loader and joint fit. Repair and version evaluation,
+freeze task-specific holdouts, rebaseline calibration/uncertainty, then audit
+identity/date/ability data before focused model experiments. The historical
+finite-search “plateau” is not an established error floor. Missing raw gym
+standings and discarded campaign snapshots were not reconstructed by guessing.
+
+## Review implementation resolution (2026-09-06)
+
+The concrete correctness defects that could be fixed from the repository's
+available evidence are now repaired:
+
+- `llm_crosscontest.analyse` no longer reads held-out CF labels while constructing
+  predictions. Each fold learns a BT-minus-survival contest feature and its
+  coefficient from training contests only. Mutating held-out labels leaves both
+  plain and adjusted predictions unchanged. Reanalysis of the existing responses
+  gives **245.43 plain / 246.78 adjusted LOCO RMSE**; the wider paid run remains
+  unjustified.
+- Every Spearman helper and the AUC rank-sum now use average ranks for ties. The
+  metric rejects non-finite primary/guard values, requires exactly **185 problems
+  / 15 contests** of anchor coverage, and uses the corrected raw ceiling
+  **251.9 = 246.9 + 5**. The Kattis guard now accepts only unique titles with at
+  least three matches corroborating the source contest: 427 pooled matches,
+  survival Spearman **+0.795**.
+- `predict_eval` now loads the same 260-contest joint configuration as the shipped
+  fit, assigns repeated resolved team/problem responses to one side of the split,
+  and derives contest duration from training solves only. It is explicitly an
+  imputation check for retained appearances, not a future-contest forecast. The
+  corrected run has 923,842 cells / 920,158 response groups; binary is log-loss
+  **0.2040**, Brier **0.0623**, AUC **0.9727**, and survival is **0.2329 / 0.0701 /
+  0.9674**.
+- The loader preserves `(contest_id, source_row)` as a participation identifier.
+  The virtual calculator keys rank-derived performance by this identifier, so
+  two rows merged to one ability identity no longer overwrite each other.
+- CF-prior roster completeness now requires every rating history to be
+  corroborated on that exact standing row, not merely present globally. Coverage
+  is **54 identities / 295 rows** after the correction (previously 57 identities).
+- Binary and survival fits reject non-finite or unconverged results and verify
+  that the final objective is not below its initial value. The full suite passes
+  **42 tests**.
+- The calibrated artifacts now call the quadrature of conditional fit SE and
+  contest-level SD `difficulty_cf_partial_se`; the ambiguous
+  `difficulty_cf_se` field was removed. This fixes the claim/label, not the
+  missing statistical work needed for calibrated CF prediction intervals.
+
+The full survival metric remains **245.4 calibrated / 246.9 raw CF RMSE**, with
+all guards passing; the binary control is **256.0 / 248.1**. Still open because
+the required evidence is absent or the work is a new experiment: adjudicating
+identity unions, collecting recorded contest durations/dates, constructing fresh
+frozen forecast and regional-transfer sets, estimating full joint/calibration
+uncertainty, and reconstructing the missing raw gym/campaign snapshots.

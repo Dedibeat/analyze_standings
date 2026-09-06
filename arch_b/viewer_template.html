@@ -65,7 +65,7 @@
         <thead><tr>
           <th data-k="label">#</th>
           <th data-k="name" class="name">Name</th>
-          <th data-k="difficulty" class="num" title="Codeforces-calibrated difficulty &plusmn; standard error">Difficulty</th>
+          <th data-k="difficulty" class="num" title="Codeforces-calibrated difficulty &plusmn; partial standard error">Difficulty</th>
           <th data-k="solved" class="num">Solved</th>
         </tr></thead>
         <tbody></tbody>
@@ -142,7 +142,7 @@ function renderProbs(c){
     <tr>
       <td>${p.label}</td>
       <td class="name">${esc(p.name)}</td>
-      <td class="num">${chipSe(p.difficulty, p.difficulty_se)}</td>
+      <td class="num" title="partial SE; not a calibrated prediction interval">${chipSe(p.difficulty, p.difficulty_partial_se)}</td>
       <td class="num">${p.solved}</td>
     </tr>`).join("");
   markSorted("#probs", sortState.probs);

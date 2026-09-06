@@ -24,11 +24,10 @@ boundary-smoothing dummy teams are unnecessary here.
 
 Optimizer. The objective splits into per-team and per-problem terms that are each
 a 1-D concave function of a single parameter (given the others), so we run
-block-coordinate Newton: one exact Newton step over all theta (given b), then one
-over all b (given the new theta). Each step is closed form and vectorized via
-np.add.at -- numpy only, no learning rate. Strict concavity makes every 1-D
-Newton step a guaranteed ascent toward that coordinate's optimum, and the blocks
-alternate to a fixed point.
+block-coordinate Newton: one Newton step over all theta (given b), then one over
+all b (given the new theta). Each step is closed form and vectorized via
+np.add.at. The fit explicitly checks finite values, convergence, and that the
+final objective did not fall below its initial value.
 """
 
 import numpy as np
@@ -38,6 +37,16 @@ from arch_a import elo
 MU0 = 2000.0          # neutral prior mean (mid Codeforces rating); anchors the scale
 SIGMA_THETA = 400.0   # ability prior std (eq. priors): regularization knob
 SIGMA_B = 400.0       # difficulty prior std (eq. priors): regularization knob
+
+
+def _require_converged(theta, b, history, eps):
+    """Reject non-finite or iteration-limited fits before consumers use them."""
+    if (not history or not np.all(np.isfinite(theta)) or not np.all(np.isfinite(b))
+            or not np.all(np.isfinite(history))):
+        raise RuntimeError("MAP fit produced non-finite values")
+    if history[-1] >= eps:
+        raise RuntimeError(
+            f"MAP fit did not converge: final delta {history[-1]:.6g} >= {eps}")
 
 
 def _observations(ds):
@@ -86,6 +95,19 @@ def fit(ds, prior_mu=None, sigma_theta=SIGMA_THETA, sigma_b=SIGMA_B, mu_b=MU0,
     theta = np.full(n_teams, MU0)
     b = np.full(n_problems, mu_b)
 
+    def objective(theta_value, b_value):
+        gap = (theta_value[obs_team] - b_value[obs_prob]) / s
+        value = np.sum(w * (obs_y * gap - np.logaddexp(0.0, gap)))
+        value -= 0.5 * np.sum(prec_theta * (theta_value - prior_mu) ** 2)
+        value -= 0.5 * np.sum(prec_b * (b_value - mu_b) ** 2)
+        if gym_obs is not None:
+            g_theta, g_prob, g_y, g_w = gym_obs
+            g_gap = (g_theta - b_value[g_prob]) / s
+            value += np.sum(g_w * (g_y * g_gap - np.logaddexp(0.0, g_gap)))
+        return float(value)
+
+    initial_objective = objective(theta, b)
+
     def newton_block(param, index, other, other_index, mu, prec, sign, extra=None):
         """One Newton step for a block of parameters sharing the response pi.
 
@@ -132,6 +154,10 @@ def fit(ds, prior_mu=None, sigma_theta=SIGMA_THETA, sigma_b=SIGMA_B, mu_b=MU0,
         if delta < eps:
             break
 
+    _require_converged(theta, b, history, eps)
+    final_objective = objective(theta, b)
+    if not np.isfinite(final_objective) or final_objective + 1e-7 < initial_objective:
+        raise RuntimeError("MAP fit decreased its objective")
     return theta, b, history
 
 

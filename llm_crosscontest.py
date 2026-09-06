@@ -55,6 +55,8 @@ from pathlib import Path
 
 import numpy as np
 
+from arch_b.aoj import spearman
+
 from arch_b.calibrate import _gym_shape
 from arch_b.external_validate import _cf_mapping, _cf_problemset, _norm
 from llm_survival import (DATA, LOCATION, MODEL, OUTPUT, PROMPT_VERSION, SYSTEM,
@@ -375,8 +377,44 @@ def _order_consistency(rows):
 
 
 def _spearman(a, b):
-    r = lambda v: np.argsort(np.argsort(v))  # noqa: E731
-    return float(np.corrcoef(r(a), r(b))[0, 1])
+    return spearman(a, b)
+
+
+def _predict_heldout_contest(z, bt, cf, groups, heldout):
+    """Return plain/BT-adjusted predictions for one held-out contest.
+
+    Every fitted quantity uses training-contest CF labels only.  The held-out
+    contest contributes its standings/LLM features (``z`` and ``bt``), but its
+    CF labels are used solely by the caller when scoring the returned values.
+    """
+    z = np.asarray(z, float)
+    bt = np.asarray(bt, float)
+    cf = np.asarray(cf, float)
+    groups = np.asarray(groups)
+    train, test = groups != heldout, groups == heldout
+    if not test.any() or len(np.unique(groups[train])) < 2:
+        raise ValueError("held-out prediction needs one test and two training contests")
+
+    a_sur, b_sur = np.polyfit(z[train], cf[train], 1)
+    a_bt, b_bt = np.polyfit(bt[train], cf[train], 1)
+    survival_prediction = a_sur * z + b_sur
+    feature = (a_bt * bt + b_bt) - survival_prediction
+
+    train_groups = np.unique(groups[train])
+    residual_mean = np.array([
+        np.mean(cf[groups == group] - survival_prediction[groups == group])
+        for group in train_groups
+    ])
+    feature_mean = np.array([
+        np.mean(feature[groups == group]) for group in train_groups
+    ])
+    denom = float(np.dot(feature_mean, feature_mean))
+    coefficient = (float(np.dot(residual_mean, feature_mean) / denom)
+                   if denom > 0 else 0.0)
+    heldout_feature = float(np.mean(feature[test]))
+    plain = survival_prediction[test]
+    adjusted = plain + coefficient * heldout_feature
+    return plain, adjusted, coefficient, heldout_feature
 
 
 def analyse(args):
@@ -426,48 +464,42 @@ def analyse(args):
         a_s, b_s = np.polyfit(z, cf, 1)
         fit_resid = cf - (a_s * z + b_s)
         a_b, b_b = np.polyfit(bt, cf, 1)
-        bt_resid = cf - (a_b * bt + b_b)
+        bt_feature = (a_b * bt + b_b) - (a_s * z + b_s)
         groups = list(np.unique(grp))
-        true_off, bt_off = [], []
+        true_off, feature_off = [], []
         for g in groups:
             m = grp == g
             true_off.append(fit_resid[m].mean())
-            bt_off.append(bt_resid[m].mean())
+            feature_off.append(bt_feature[m].mean())
             print(f"  CF {g}: n={m.sum():3d}  fit offset {true_off[-1]:+7.1f}  "
-                  f"BT-implied {bt_off[-1]:+7.1f}")
-        true_off, bt_off = np.array(true_off), np.array(bt_off)
-        corr = float(np.corrcoef(true_off, bt_off)[0, 1])
-        print(f"\ncorrelation of BT-implied vs true per-contest offsets: {corr:+.3f}")
+                  f"BT-minus-survival feature {feature_off[-1]:+7.1f}")
+        true_off, feature_off = np.array(true_off), np.array(feature_off)
+        corr = float(np.corrcoef(true_off, feature_off)[0, 1])
+        print(f"\nin-sample correlation of BT-minus-survival feature vs true "
+              f"offset: {corr:+.3f}")
 
-        # The BT offsets are noisy, so they must be shrunk before use -- applying
-        # them raw overcorrects and makes things worse. k is refit inside each
-        # fold, and the held-out contest contributes only its own BT offset.
+        # Fit the adjustment inside each fold. Held-out CF labels are used only
+        # after predictions have been constructed, when computing the errors.
         rmse = lambda v: float(np.sqrt(np.mean(v ** 2)))  # noqa: E731
-        plain, shrunk = [], []
+        plain, adjusted, coefficients = [], [], []
         for g in groups:
-            tr, te = grp != g, grp == g
-            a_, b_ = np.polyfit(z[tr], cf[tr], 1)
-            r_ = cf[tr] - (a_ * z[tr] + b_)
-            ab_, bb_ = np.polyfit(bt[tr], cf[tr], 1)
-            br_ = cf[tr] - (ab_ * bt[tr] + bb_)
-            others = [h for h in groups if h != g]
-            to = np.array([r_[grp[tr] == h].mean() for h in others])
-            bo = np.array([br_[grp[tr] == h].mean() for h in others])
-            k = float(np.dot(to, bo) / np.dot(bo, bo)) if np.dot(bo, bo) > 0 else 0.0
-            off = float((cf[te] - (ab_ * bt[te] + bb_)).mean())
-            plain.append(cf[te] - (a_ * z[te] + b_))
-            shrunk.append(cf[te] - (a_ * z[te] + b_ + k * off))
+            te = grp == g
+            p_plain, p_adjusted, k, _feature = _predict_heldout_contest(
+                z, bt, cf, grp, g)
+            plain.append(cf[te] - p_plain)
+            adjusted.append(cf[te] - p_adjusted)
+            coefficients.append(k)
         loco_plain = rmse(np.concatenate(plain))
-        loco_shrunk = rmse(np.concatenate(shrunk))
-        k_full = float(np.dot(true_off, bt_off) / np.dot(bt_off, bt_off))
-        print(f"shrink factor k (in-sample) {k_full:.3f}   "
-              f"(1.0 would mean the BT offsets are noise-free)")
-        print(f"LOCO plain {loco_plain:.1f}   LOCO + shrunk BT contest offset "
-              f"{loco_shrunk:.1f}   ({loco_shrunk - loco_plain:+.1f})")
+        loco_adjusted = rmse(np.concatenate(adjusted))
+        print(f"fold adjustment coefficient median {np.median(coefficients):.3f}")
+        print(f"LOCO plain {loco_plain:.1f}   LOCO + deployable BT feature "
+              f"{loco_adjusted:.1f}   ({loco_adjusted - loco_plain:+.1f})")
         out.update({"cf_spearman_bt": _spearman(bt, cf),
                     "cf_spearman_survival": _spearman(sur, cf),
-                    "contest_offset_corr": corr, "shrink_k": k_full,
-                    "loco_plain": loco_plain, "loco_with_bt_offset": loco_shrunk})
+                    "contest_feature_corr_in_sample": corr,
+                    "fold_adjustment_coefficient_median": float(np.median(coefficients)),
+                    "loco_plain": loco_plain,
+                    "loco_with_deployable_bt_feature": loco_adjusted})
 
     (args.run_dir / "analysis.json").write_text(
         json.dumps(out, indent=2) + "\n", encoding="utf-8")
