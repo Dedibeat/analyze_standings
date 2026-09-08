@@ -3173,3 +3173,12 @@ tasks gives non-anchor gym/Kattis counts 659/416; the stricter whole-anchor
 contest plus task purge gives 655/412, reproducing the historical reported
 counts. These are distinct subset definitions, not confirmation of a global
 replacement.
+
+### Proposed experiment roadmap (2026-09-08)
+
+[experiment_roadmap.md](experiment_roadmap.md) records proposed, not-run
+diagnostics and later research directions. It recommends retaining DE unchanged
+as the candidate for a prospective confirmation design, distinguishes OOF,
+full-refit, and fresh-confirmation evidence, and requires provenance/identity/
+context audits before any model change. It does not authorize a model or data
+run, production promotion, or the explicitly deferred TabFM comparison.

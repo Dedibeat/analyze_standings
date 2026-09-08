@@ -16,6 +16,14 @@ No numerical improvement is promised. Agreement with CF remains useful evidence,
 but the proposed changes should also explain repeated tasks, participation, and
 team behavior that the existing benchmark cannot resolve.
 
+## 2026-09-08 proposed experiment roadmap
+
+The later [experiment roadmap](experiment_roadmap.md) is the current
+proposed-only sequencing note for calibration audits, fresh confirmation, and
+structural research. Its dated status matters: it does not replace the evidence
+or limitations below, and it authorizes no run, data collection, model change,
+or deferred TabFM comparison.
+
 ## What the current data actually supports
 
 Diagnostics loaded the shipped configuration with

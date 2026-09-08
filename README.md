@@ -43,6 +43,10 @@ confirmation or a production-promotion decision. Reproduce it with
 non-OOF transfer diagnostic with
 `./.venv/bin/python -m arch_b.calibration_ablation_transfer`.
 
+The proposed-only [experiment roadmap](experiment_roadmap.md) records the next
+audits, fresh-confirmation requirements, and longer-term rating research. It
+does not authorize a run, a calibration change, or the deferred TabFM comparison.
+
 ## Run
 
 Requires Python 3 + numpy. A project venv is used:
