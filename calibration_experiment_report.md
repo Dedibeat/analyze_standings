@@ -110,3 +110,32 @@ TABFM_CHECKPOINT_DIR=/home/dedibeat/.cache/tabfm_runtime/checkpoints/google-tabf
 A completed TabFM run records the verified model and config hashes. Its output
 must be reported separately from the ridge proxy. Do not overwrite the
 baseline-only artifact until this deferred full run is intentionally authorized.
+
+## 2026-09-08 follow-up: selected-fit read-only diagnostic
+
+This diagnostic ran no new model variant or hyperparameter search; it
+reconstructed the 15 saved outer ridge fits from their saved selected
+hyperparameters and feature rows. The saved OOF ridge predictions reproduced to
+a maximum absolute error of `4.55e-13` CF points.
+
+In the standardized residual fits, binary-minus-survival is positive in 15/15
+outer folds, conditional fit SE is negative in 15/15, solve rate is positive in
+15/15, and log field size is negative in 15/15. These are stable coefficient
+signs, not feature attributions: binary-minus-survival and solve rate have
+anchor-table correlation -0.95, and other prespecified features are also
+correlated. In particular, this does not show that binary-minus-survival caused
+the ridge gain.
+
+For the 185 saved OOF predictions, 43.6% of ridge-minus-raw correction variance
+is between held-out-contest means and 56.4% is within contest. The small count
+of changed within-contest orders therefore does not make the correction merely
+a contest offset. A per-contest CF-label-derived offset would nevertheless be
+unavailable at deployment and is not a valid direction.
+
+The focused next development experiment is prespecified grouped ablations that
+separate estimator disagreement, non-time evidence, and timing features, while
+retaining the same nested contest protocol. Region/source transfer stress checks
+are development diagnostics; fresh frozen confirmation is still required, and
+this pilot has no fresh frozen confirmation set. This follow-up reports no ablation
+result, does not authorize a full TabFM run or an underlying-fit rewrite, and
+does not support deployment.

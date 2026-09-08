@@ -3111,3 +3111,29 @@ The local checkpoint contains `regression/model.safetensors` and
 completed-run artifact records actual model/config hashes. It does not silently
 download a model, and it must not overwrite the baseline-only artifact unless the
 deferred run is deliberately authorized.
+
+### Calibration selected-fit read-only diagnostic (2026-09-08 follow-up)
+
+No new model variant or hyperparameter search was run; existing selected fits
+were reproduced. Reconstructing all 15 saved outer ridge fits from the saved
+selections and rows reproduced the saved OOF ridge predictions within
+**4.55e-13 CF points**. In the standardized residual
+fits, binary-minus-survival is positive in 15/15 folds, conditional fit SE is
+negative in 15/15, solve rate is positive in 15/15, and log field size is
+negative in 15/15. This is not causal or unique-feature evidence:
+binary-minus-survival and solve rate correlate -0.95 across the anchor table,
+with further correlation among the prespecified inputs.
+
+Across the 185 saved OOF predictions, ridge-minus-raw correction variance is
+**43.6% between held-out-contest means and 56.4% within contest**. Thus the two
+changed orders among 1,064 pairs do not imply a pure contest-offset correction;
+nor would a per-contest offset learned from held-out CF labels be deployable.
+
+The bounded next development direction is prespecified, same-protocol grouped
+ridge ablations separating estimator disagreement, non-time evidence, and
+timing features, plus region/source transfer stress checks explicitly labelled
+development diagnostics. They require fresh frozen confirmation before a
+deployment decision; this pilot has no fresh frozen confirmation set. These diagnostics do not
+claim ablation results, prove that the disagreement feature caused the gain,
+authorize the deferred full TabFM comparison, or justify an underlying-fit
+rewrite.
