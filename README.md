@@ -23,6 +23,17 @@ choice and time burden, participation and roster continuity, shared problems
 across contests, and targeted collection of missing evidence. It records fresh
 diagnostics and proposed experiments, not implemented model changes.
 
+The bounded [calibration residual experiment](calibration_experiment_report.md)
+now records a nested 15-contest CF-anchor control: raw affine 246.9061,
+gym-shaped affine 245.4277, and ridge residual 229.6269 RMSE. This is a
+research-only proxy result; the full 185-anchor TabFM CF comparison was deferred
+by the user after a pinned-weight, seven-feature CPU smoke passed (it has no CF
+score), and no shipped calibration or rating artifact changed. Reproduce the controls with
+`./.venv/bin/python -m arch_b.calibration_experiment --baseline-only`.
+The optional TabFM route uses the pinned `TABFM_CHECKPOINT_DIR` interface
+documented in that report; it does not silently download a checkpoint, and must
+be intentionally run in an isolated process.
+
 ## Run
 
 Requires Python 3 + numpy. A project venv is used:

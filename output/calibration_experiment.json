@@ -1,0 +1,5705 @@
+{
+  "research_only": true,
+  "independent_confirmation": false,
+  "config": {
+    "features": [
+      "raw_b",
+      "binary_minus_survival",
+      "conditional_fit_se",
+      "solve_rate",
+      "log_field_size",
+      "log_median_solve_seconds",
+      "timing_missing"
+    ],
+    "lambdas": [
+      0.0,
+      0.25,
+      0.5,
+      0.75,
+      1.0
+    ],
+    "ridge_alphas": [
+      0.1,
+      1.0,
+      10.0
+    ],
+    "tabfm_context_max_rows": 185,
+    "tabfm_estimators": 1,
+    "tabfm_seed": 20260907,
+    "tabfm_device": "cpu",
+    "tabfm_batch_size": 1,
+    "tabfm_revision": "77cb9cc1b4fd3a9c77fbb9552c218200bb4dab83",
+    "tabfm_checkpoint_sha256_expected": "bd5a615b0322a8f04a895038de6df6fbd71430eca750e1d792f31048654674a9",
+    "field_strength": "omitted_no_saved_provenance",
+    "outer_split": "CF contest; explicit canonical_task rows are purged from training"
+  },
+  "anchor_coverage": {
+    "problems": 185,
+    "contests": 15
+  },
+  "tabfm_status": "not_run_baseline_only",
+  "tabfm_backend": null,
+  "provenance_sha256": {
+    "data/tagged.json": "54677cf98b452e115e24bcd2149b609d00a50e74fa783ad4865e8162b2446a94",
+    "data/icpc_2020_2021.json": "6c72e5eaa2de7eb536cd784dcdcab7288c89f6a6c5edbd5306ab017b8fc52ec1",
+    "data/petroz_2022_2026.json": "84961ea5542fa1281a567e54cacc14ac91311d6599dcf29470d15c7dc456cb84",
+    "data/wf_tagged_format.json": "63eba1ca8a996a97e9e471553ce67ed058ffc6cd197241df0330372ed88329de",
+    "data/ucup_s3.json": "8c74b4b963ce8f33027624e53c8dde320180704d93a96714e5e802e7ab4b7615",
+    "data/ucup_s4.json": "021e02abd20750ae77357a02922da1ac754572f923735cd28501344692732e23",
+    "output/problem_ratings_survival.json": "8af4583b8163f58e6103b9440a47ef81f33cc5a8cece5391f0ed8db93cbc989f",
+    "output/problem_ratings_b.json": "8ee5e0633b53fc9a0251f7d8e671c240eff19279605c3c1d60d51d2918475989",
+    "output/gym_difficulty.json": "7da4bc82ce6a9442567c2badaf410bfd7af8ade2d98d8f9ff872e89ea3166038",
+    "data/cf_problemset.json": "1e3f7c1da8c2f2939d34c4a81f080b064bb96c853f3082c79e615e7b369e4df8",
+    "data/cf_team_contests.txt": "7db8711fb86393dc21efc622153ea944e4091a059061b601909a684f99f3c9ac",
+    "arch_b/calibration_experiment.py": "2183f742909eb6dd5f76939f432de02bc70d8f5265b9453aad9049c064911aac"
+  },
+  "metrics_rmse": {
+    "gym_shape_affine": 245.42771867838908,
+    "raw_affine": 246.90610552502162,
+    "ridge_residual": 229.62692455153203
+  },
+  "per_cf_contest_rmse": {
+    "1773": {
+      "gym_shape_affine": 279.8433998091378,
+      "raw_affine": 275.1187356766733,
+      "ridge_residual": 222.32879313921953
+    },
+    "1776": {
+      "gym_shape_affine": 417.7501328852231,
+      "raw_affine": 408.30479068647077,
+      "ridge_residual": 397.82303726278155
+    },
+    "1906": {
+      "gym_shape_affine": 236.69072927211755,
+      "raw_affine": 214.60279463043233,
+      "ridge_residual": 197.22546434535204
+    },
+    "1912": {
+      "gym_shape_affine": 176.57904367359717,
+      "raw_affine": 142.88562031628635,
+      "ridge_residual": 116.09121047139175
+    },
+    "1938": {
+      "gym_shape_affine": 230.51865215121623,
+      "raw_affine": 259.9084411133586,
+      "ridge_residual": 250.54478543048828
+    },
+    "1949": {
+      "gym_shape_affine": 170.0076452673013,
+      "raw_affine": 168.13765384669202,
+      "ridge_residual": 178.7294877735702
+    },
+    "2041": {
+      "gym_shape_affine": 180.40733653903607,
+      "raw_affine": 206.66727317751784,
+      "ridge_residual": 236.1368712942503
+    },
+    "2045": {
+      "gym_shape_affine": 205.0348176841414,
+      "raw_affine": 193.56918240276383,
+      "ridge_residual": 196.29574462407868
+    },
+    "2052": {
+      "gym_shape_affine": 164.65593460955316,
+      "raw_affine": 152.73279734775386,
+      "ridge_residual": 164.55293564869896
+    },
+    "2068": {
+      "gym_shape_affine": 382.9846939098467,
+      "raw_affine": 382.4943881131637,
+      "ridge_residual": 325.62150364714006
+    },
+    "2073": {
+      "gym_shape_affine": 281.81086737768567,
+      "raw_affine": 299.9753190326016,
+      "ridge_residual": 244.51164055094634
+    },
+    "2157": {
+      "gym_shape_affine": 295.33501673527314,
+      "raw_affine": 299.5540488805574,
+      "ridge_residual": 289.1203415451412
+    },
+    "2172": {
+      "gym_shape_affine": 114.64206672158238,
+      "raw_affine": 114.49711239342284,
+      "ridge_residual": 113.78232967595248
+    },
+    "2181": {
+      "gym_shape_affine": 213.52736191085936,
+      "raw_affine": 229.77266194226036,
+      "ridge_residual": 197.49260621771847
+    },
+    "2206": {
+      "gym_shape_affine": 200.63720161425783,
+      "raw_affine": 211.44463305784768,
+      "ridge_residual": 194.83627496744725
+    }
+  },
+  "per_region_rmse": {
+    "Asia Pacific": {
+      "gym_shape_affine": 211.5230780516146,
+      "raw_affine": 219.88513237580023,
+      "ridge_residual": 208.81758220151747
+    },
+    "Europe": {
+      "gym_shape_affine": 335.3513753048441,
+      "raw_affine": 332.3333507957185,
+      "ridge_residual": 311.8910115918374
+    },
+    "Northern Eurasia": {
+      "gym_shape_affine": 212.5597087457952,
+      "raw_affine": 207.02056018010114,
+      "ridge_residual": 179.66302417169703
+    }
+  },
+  "research_diagnostics": {
+    "all_anchor_inner_selected": {
+      "ridge_alpha": 1.0,
+      "ridge_lambda": 0.75
+    },
+    "not_oof_not_deployment": true,
+    "anchor_raw_range": [
+      1177.9,
+      2936.1
+    ],
+    "out_of_anchor_range": 94,
+    "largest_absolute_corrections": [
+      {
+        "contest_id": 1965,
+        "problem_id": 10332,
+        "problem_label": "L",
+        "canonical_task": "qoj:10332",
+        "region": null,
+        "raw_b": 2112.0,
+        "binary_minus_survival": 278.3000000000002,
+        "conditional_fit_se": 27.4,
+        "solve_rate": 0.8,
+        "log_field_size": 3.9318256327243257,
+        "log_median_solve_seconds": 8.715388097366482,
+        "timing_missing": 0.0,
+        "raw_affine": 2280.7298009732986,
+        "ridge_residual": 2679.3332574830547,
+        "correction": 398.60345650975614
+      },
+      {
+        "contest_id": 1965,
+        "problem_id": 10328,
+        "problem_label": "H",
+        "canonical_task": "qoj:10328",
+        "region": null,
+        "raw_b": 2051.0,
+        "binary_minus_survival": 241.0999999999999,
+        "conditional_fit_se": 26.4,
+        "solve_rate": 0.86,
+        "log_field_size": 3.9318256327243257,
+        "log_median_solve_seconds": 8.379997952238393,
+        "timing_missing": 0.0,
+        "raw_affine": 2180.0050878879915,
+        "ridge_residual": 2575.4134938087773,
+        "correction": 395.40840592078575
+      },
+      {
+        "contest_id": 1965,
+        "problem_id": 10334,
+        "problem_label": "N",
+        "canonical_task": "qoj:10334",
+        "region": null,
+        "raw_b": 2236.3,
+        "binary_minus_survival": 396.39999999999964,
+        "conditional_fit_se": 31.5,
+        "solve_rate": 0.6,
+        "log_field_size": 3.9318256327243257,
+        "log_median_solve_seconds": 9.136424689026015,
+        "timing_missing": 0.0,
+        "raw_affine": 2485.9770441946703,
+        "ridge_residual": 2877.7212191046456,
+        "correction": 391.7441749099753
+      },
+      {
+        "contest_id": 1997,
+        "problem_id": 10783,
+        "problem_label": "K",
+        "canonical_task": "qoj:10783",
+        "region": "Asia East Continent",
+        "raw_b": 1693.4,
+        "binary_minus_survival": -830.3000000000001,
+        "conditional_fit_se": 6.3,
+        "solve_rate": 0.9986928104575163,
+        "log_field_size": 6.641182169740591,
+        "log_median_solve_seconds": 8.205491613120236,
+        "timing_missing": 0.0,
+        "raw_affine": 1589.5270977354385,
+        "ridge_residual": 1203.496236914327,
+        "correction": -386.03086082111145
+      },
+      {
+        "contest_id": 1965,
+        "problem_id": 10335,
+        "problem_label": "O",
+        "canonical_task": "qoj:10335",
+        "region": null,
+        "raw_b": 2097.6,
+        "binary_minus_survival": 229.80000000000018,
+        "conditional_fit_se": 26.7,
+        "solve_rate": 0.84,
+        "log_field_size": 3.9318256327243257,
+        "log_median_solve_seconds": 8.631503537593648,
+        "timing_missing": 0.0,
+        "raw_affine": 2256.952163785947,
+        "ridge_residual": 2641.458811480202,
+        "correction": 384.50664769425475
+      },
+      {
+        "contest_id": 1965,
+        "problem_id": 10333,
+        "problem_label": "M",
+        "canonical_task": "qoj:10333",
+        "region": null,
+        "raw_b": 2229.8,
+        "binary_minus_survival": 337.1999999999998,
+        "conditional_fit_se": 30.0,
+        "solve_rate": 0.66,
+        "log_field_size": 3.9318256327243257,
+        "log_median_solve_seconds": 9.271153211372695,
+        "timing_missing": 0.0,
+        "raw_affine": 2475.2440829642687,
+        "ridge_residual": 2858.619004206904,
+        "correction": 383.3749212426351
+      },
+      {
+        "contest_id": 1965,
+        "problem_id": 10324,
+        "problem_label": "D",
+        "canonical_task": "qoj:10324",
+        "region": null,
+        "raw_b": 2315.3,
+        "binary_minus_survival": 442.89999999999964,
+        "conditional_fit_se": 35.1,
+        "solve_rate": 0.48,
+        "log_field_size": 3.9318256327243257,
+        "log_median_solve_seconds": 9.544631660629822,
+        "timing_missing": 0.0,
+        "raw_affine": 2616.423803764166,
+        "ridge_residual": 2987.564270119844,
+        "correction": 371.14046635567775
+      },
+      {
+        "contest_id": 1780,
+        "problem_id": 8937,
+        "problem_label": "F",
+        "canonical_task": "qoj:8937",
+        "region": null,
+        "raw_b": 1605.8,
+        "binary_minus_survival": -805.8,
+        "conditional_fit_se": 7.5,
+        "solve_rate": 0.9981167608286252,
+        "log_field_size": 6.2766434893416445,
+        "log_median_solve_seconds": 7.888709524182015,
+        "timing_missing": 0.0,
+        "raw_affine": 1444.8798048457188,
+        "ridge_residual": 1080.1167295223745,
+        "correction": -364.7630753233443
+      },
+      {
+        "contest_id": 1954,
+        "problem_id": 10274,
+        "problem_label": "J",
+        "canonical_task": "qoj:10274",
+        "region": null,
+        "raw_b": 2172.0,
+        "binary_minus_survival": 434.5,
+        "conditional_fit_se": 30.1,
+        "solve_rate": 0.5238095238095238,
+        "log_field_size": 4.1588830833596715,
+        "log_median_solve_seconds": 8.38206051742474,
+        "timing_missing": 0.0,
+        "raw_affine": 2379.803289253928,
+        "ridge_residual": 2740.7498597984995,
+        "correction": 360.9465705445714
+      },
+      {
+        "contest_id": 1965,
+        "problem_id": 10323,
+        "problem_label": "C",
+        "canonical_task": "qoj:10323",
+        "region": null,
+        "raw_b": 2372.3,
+        "binary_minus_survival": 513.3999999999996,
+        "conditional_fit_se": 40.3,
+        "solve_rate": 0.36,
+        "log_field_size": 3.9318256327243257,
+        "log_median_solve_seconds": 9.528139343331775,
+        "timing_missing": 0.0,
+        "raw_affine": 2710.5436176307644,
+        "ridge_residual": 3069.4063820539095,
+        "correction": 358.8627644231451
+      },
+      {
+        "contest_id": 1954,
+        "problem_id": 10268,
+        "problem_label": "D",
+        "canonical_task": "qoj:10268",
+        "region": null,
+        "raw_b": 2110.0,
+        "binary_minus_survival": 318.0,
+        "conditional_fit_se": 26.7,
+        "solve_rate": 0.6666666666666666,
+        "log_field_size": 4.1588830833596715,
+        "log_median_solve_seconds": 8.58260632996447,
+        "timing_missing": 0.0,
+        "raw_affine": 2277.427351363944,
+        "ridge_residual": 2628.702340456319,
+        "correction": 351.27498909237465
+      },
+      {
+        "contest_id": 1954,
+        "problem_id": 10276,
+        "problem_label": "L",
+        "canonical_task": "qoj:10276",
+        "region": null,
+        "raw_b": 2180.2,
+        "binary_minus_survival": 368.7000000000003,
+        "conditional_fit_se": 28.8,
+        "solve_rate": 0.5714285714285714,
+        "log_field_size": 4.1588830833596715,
+        "log_median_solve_seconds": 8.879542008450773,
+        "timing_missing": 0.0,
+        "raw_affine": 2393.343332652281,
+        "ridge_residual": 2739.1893783161304,
+        "correction": 345.8460456638495
+      },
+      {
+        "contest_id": 1126,
+        "problem_id": 5673,
+        "problem_label": "A",
+        "canonical_task": "qoj:5673",
+        "region": "North America",
+        "raw_b": 1387.2,
+        "binary_minus_survival": 155.0999999999999,
+        "conditional_fit_se": 51.2,
+        "solve_rate": 1.0,
+        "log_field_size": 2.5649493574615367,
+        "log_median_solve_seconds": 5.32544603393629,
+        "timing_missing": 0.0,
+        "raw_affine": 1083.9220625432908,
+        "ridge_residual": 1429.1941327135123,
+        "correction": 345.27207017022147
+      },
+      {
+        "contest_id": 1356,
+        "problem_id": 7183,
+        "problem_label": "I",
+        "canonical_task": "qoj:7183",
+        "region": "Training Camp",
+        "raw_b": 1585.3,
+        "binary_minus_survival": -761.1999999999999,
+        "conditional_fit_se": 7.4,
+        "solve_rate": 1.0,
+        "log_field_size": 6.326149473155099,
+        "log_median_solve_seconds": 6.875232087276577,
+        "timing_missing": 0.0,
+        "raw_affine": 1411.0296963498367,
+        "ridge_residual": 1065.9153853547923,
+        "correction": -345.11431099504443
+      },
+      {
+        "contest_id": 2513,
+        "problem_id": 14307,
+        "problem_label": "G",
+        "canonical_task": "qoj:14307",
+        "region": "Asia East Continent",
+        "raw_b": 1543.4,
+        "binary_minus_survival": -651.2,
+        "conditional_fit_se": 3.7,
+        "solve_rate": 0.9902783915156872,
+        "log_field_size": 7.724888439323074,
+        "log_median_solve_seconds": 7.561121589530238,
+        "timing_missing": 0.0,
+        "raw_affine": 1341.8433770338638,
+        "ridge_residual": 999.8822814863805,
+        "correction": -341.9610955474833
+      },
+      {
+        "contest_id": 1939,
+        "problem_id": 10222,
+        "problem_label": "I",
+        "canonical_task": "qoj:10222",
+        "region": null,
+        "raw_b": 2145.8,
+        "binary_minus_survival": 242.79999999999973,
+        "conditional_fit_se": 24.5,
+        "solve_rate": 0.7352941176470589,
+        "log_field_size": 4.23410650459726,
+        "log_median_solve_seconds": 9.000606507571892,
+        "timing_missing": 0.0,
+        "raw_affine": 2336.541199371387,
+        "ridge_residual": 2676.387202455501,
+        "correction": 339.8460030841143
+      },
+      {
+        "contest_id": 1954,
+        "problem_id": 10270,
+        "problem_label": "F",
+        "canonical_task": "qoj:10270",
+        "region": null,
+        "raw_b": 2189.1,
+        "binary_minus_survival": 340.3000000000002,
+        "conditional_fit_se": 28.4,
+        "solve_rate": 0.5873015873015873,
+        "log_field_size": 4.1588830833596715,
+        "log_median_solve_seconds": 9.053335623166017,
+        "timing_missing": 0.0,
+        "raw_affine": 2408.039233413908,
+        "ridge_residual": 2745.232128804648,
+        "correction": 337.19289539074
+      },
+      {
+        "contest_id": 3542,
+        "problem_id": 17423,
+        "problem_label": "E",
+        "canonical_task": "qoj:17423",
+        "region": null,
+        "raw_b": 2124.8,
+        "binary_minus_survival": 295.2999999999997,
+        "conditional_fit_se": 26.4,
+        "solve_rate": 0.6615384615384615,
+        "log_field_size": 4.189654742026425,
+        "log_median_solve_seconds": 8.810310466357958,
+        "timing_missing": 0.0,
+        "raw_affine": 2301.8654784731666,
+        "ridge_residual": 2637.669898689402,
+        "correction": 335.8044202162355
+      },
+      {
+        "contest_id": 1954,
+        "problem_id": 10277,
+        "problem_label": "M",
+        "canonical_task": "qoj:10277",
+        "region": null,
+        "raw_b": 2268.4,
+        "binary_minus_survival": 432.7999999999997,
+        "conditional_fit_se": 32.6,
+        "solve_rate": 0.4444444444444444,
+        "log_field_size": 4.1588830833596715,
+        "log_median_solve_seconds": 9.095658771892568,
+        "timing_missing": 0.0,
+        "raw_affine": 2538.981360424807,
+        "ridge_residual": 2872.009670739437,
+        "correction": 333.02831031462983
+      },
+      {
+        "contest_id": 1954,
+        "problem_id": 10265,
+        "problem_label": "A",
+        "canonical_task": "qoj:10265",
+        "region": null,
+        "raw_b": 2270.2,
+        "binary_minus_survival": 431.0,
+        "conditional_fit_se": 32.6,
+        "solve_rate": 0.4444444444444444,
+        "log_field_size": 4.1588830833596715,
+        "log_median_solve_seconds": 9.148730890344492,
+        "timing_missing": 0.0,
+        "raw_affine": 2541.9535650732255,
+        "ridge_residual": 2874.304133562102,
+        "correction": 332.35056848887643
+      }
+    ],
+    "luxor_shared_task_rows": [
+      {
+        "contest_id": 1662,
+        "problem_id": 8677,
+        "problem_label": "D",
+        "canonical_task": "qoj:8677",
+        "region": "?",
+        "raw_b": 2050.7,
+        "binary_minus_survival": -20.59999999999991,
+        "conditional_fit_se": 16.5,
+        "solve_rate": 0.7142857142857143,
+        "log_field_size": 5.043425116919247,
+        "log_median_solve_seconds": 9.078065332666364,
+        "timing_missing": 0.0,
+        "raw_affine": 2179.5097204465883,
+        "ridge_residual": 2299.335312716704,
+        "correction": 119.82559227011552
+      },
+      {
+        "contest_id": 1662,
+        "problem_id": 8676,
+        "problem_label": "C",
+        "canonical_task": "qoj:8676",
+        "region": "?",
+        "raw_b": 2296.0,
+        "binary_minus_survival": 241.0,
+        "conditional_fit_se": 26.6,
+        "solve_rate": 0.2727272727272727,
+        "log_field_size": 5.043425116919247,
+        "log_median_solve_seconds": 9.575052927597383,
+        "timing_missing": 0.0,
+        "raw_affine": 2584.5551650338966,
+        "ridge_residual": 2682.4679358315616,
+        "correction": 97.91277079766496
+      },
+      {
+        "contest_id": 1661,
+        "problem_id": 8677,
+        "problem_label": "T",
+        "canonical_task": "qoj:8677",
+        "region": "?",
+        "raw_b": 2059.5,
+        "binary_minus_survival": -34.700000000000045,
+        "conditional_fit_se": 18.5,
+        "solve_rate": 0.6423357664233577,
+        "log_field_size": 4.927253685157205,
+        "log_median_solve_seconds": 9.11173476822206,
+        "timing_missing": 0.0,
+        "raw_affine": 2194.0404987277475,
+        "ridge_residual": 2274.763339216436,
+        "correction": 80.72284048868869
+      },
+      {
+        "contest_id": 1661,
+        "problem_id": 8676,
+        "problem_label": "V",
+        "canonical_task": "qoj:8676",
+        "region": "?",
+        "raw_b": 2299.8,
+        "binary_minus_survival": 233.89999999999964,
+        "conditional_fit_se": 30.5,
+        "solve_rate": 0.23357664233576642,
+        "log_field_size": 4.927253685157205,
+        "log_median_solve_seconds": 9.444344730623138,
+        "timing_missing": 0.0,
+        "raw_affine": 2590.82981929167,
+        "ridge_residual": 2664.907453534969,
+        "correction": 74.07763424329914
+      },
+      {
+        "contest_id": 1662,
+        "problem_id": 8674,
+        "problem_label": "A",
+        "canonical_task": "qoj:8674",
+        "region": "?",
+        "raw_b": 1849.2,
+        "binary_minus_survival": -225.0,
+        "conditional_fit_se": 14.5,
+        "solve_rate": 0.935064935064935,
+        "log_field_size": 5.043425116919247,
+        "log_median_solve_seconds": 8.119993827725105,
+        "timing_missing": 0.0,
+        "raw_affine": 1846.78792230414,
+        "ridge_residual": 1911.7561893659656,
+        "correction": 64.9682670618256
+      },
+      {
+        "contest_id": 1662,
+        "problem_id": 8680,
+        "problem_label": "G",
+        "canonical_task": "qoj:8680",
+        "region": "?",
+        "raw_b": 1912.6,
+        "binary_minus_survival": -248.39999999999986,
+        "conditional_fit_se": 14.6,
+        "solve_rate": 0.922077922077922,
+        "log_field_size": 5.043425116919247,
+        "log_median_solve_seconds": 8.669227347271736,
+        "timing_missing": 0.0,
+        "raw_affine": 1951.475574920672,
+        "ridge_residual": 2004.7128120782938,
+        "correction": 53.23723715762185
+      },
+      {
+        "contest_id": 1662,
+        "problem_id": 8683,
+        "problem_label": "J",
+        "canonical_task": "qoj:8683",
+        "region": "?",
+        "raw_b": 2785.8,
+        "binary_minus_survival": 427.1999999999998,
+        "conditional_fit_se": 99.6,
+        "solve_rate": 0.012987012987012988,
+        "log_field_size": 5.043425116919247,
+        "log_median_solve_seconds": 9.351579483668907,
+        "timing_missing": 0.0,
+        "raw_affine": 3393.3250743647714,
+        "ridge_residual": 3422.4633567674696,
+        "correction": 29.138282402698223
+      },
+      {
+        "contest_id": 1661,
+        "problem_id": 8683,
+        "problem_label": "S",
+        "canonical_task": "qoj:8683",
+        "region": "?",
+        "raw_b": 2818.0,
+        "binary_minus_survival": 389.5999999999999,
+        "conditional_fit_se": 120.5,
+        "solve_rate": 0.0072992700729927005,
+        "log_field_size": 4.927253685157205,
+        "log_median_solve_seconds": 9.714805812589491,
+        "timing_missing": 0.0,
+        "raw_affine": 3446.494513075376,
+        "ridge_residual": 3425.4149996463902,
+        "correction": -21.079513428985592
+      },
+      {
+        "contest_id": 1661,
+        "problem_id": 8680,
+        "problem_label": "P",
+        "canonical_task": "qoj:8680",
+        "region": "?",
+        "raw_b": 1872.6,
+        "binary_minus_survival": -347.0,
+        "conditional_fit_se": 15.4,
+        "solve_rate": 0.9343065693430657,
+        "log_field_size": 4.927253685157205,
+        "log_median_solve_seconds": 8.579040594742317,
+        "timing_missing": 0.0,
+        "raw_affine": 1885.4265827335857,
+        "ridge_residual": 1879.398569867598,
+        "correction": -6.028012865987648
+      },
+      {
+        "contest_id": 1661,
+        "problem_id": 8674,
+        "problem_label": "W",
+        "canonical_task": "qoj:8674",
+        "region": "?",
+        "raw_b": 1846.1,
+        "binary_minus_survival": -345.29999999999995,
+        "conditional_fit_se": 15.3,
+        "solve_rate": 0.9416058394160584,
+        "log_field_size": 4.927253685157205,
+        "log_median_solve_seconds": 8.384347278082808,
+        "timing_missing": 0.0,
+        "raw_affine": 1841.6691254096409,
+        "ridge_residual": 1836.408760245126,
+        "correction": -5.260365164514951
+      }
+    ]
+  },
+  "selected_by_outer_contest": {
+    "1773": {
+      "ridge_alpha": 1.0,
+      "ridge_lambda": 0.75,
+      "tabfm": "unavailable"
+    },
+    "1776": {
+      "ridge_alpha": 1.0,
+      "ridge_lambda": 0.75,
+      "tabfm": "unavailable"
+    },
+    "1906": {
+      "ridge_alpha": 0.1,
+      "ridge_lambda": 0.75,
+      "tabfm": "unavailable"
+    },
+    "1912": {
+      "ridge_alpha": 1.0,
+      "ridge_lambda": 0.75,
+      "tabfm": "unavailable"
+    },
+    "1938": {
+      "ridge_alpha": 1.0,
+      "ridge_lambda": 0.75,
+      "tabfm": "unavailable"
+    },
+    "1949": {
+      "ridge_alpha": 0.1,
+      "ridge_lambda": 0.75,
+      "tabfm": "unavailable"
+    },
+    "2041": {
+      "ridge_alpha": 1.0,
+      "ridge_lambda": 1.0,
+      "tabfm": "unavailable"
+    },
+    "2045": {
+      "ridge_alpha": 1.0,
+      "ridge_lambda": 0.75,
+      "tabfm": "unavailable"
+    },
+    "2052": {
+      "ridge_alpha": 1.0,
+      "ridge_lambda": 0.75,
+      "tabfm": "unavailable"
+    },
+    "2068": {
+      "ridge_alpha": 1.0,
+      "ridge_lambda": 0.75,
+      "tabfm": "unavailable"
+    },
+    "2073": {
+      "ridge_alpha": 1.0,
+      "ridge_lambda": 0.75,
+      "tabfm": "unavailable"
+    },
+    "2157": {
+      "ridge_alpha": 1.0,
+      "ridge_lambda": 0.75,
+      "tabfm": "unavailable"
+    },
+    "2172": {
+      "ridge_alpha": 1.0,
+      "ridge_lambda": 0.75,
+      "tabfm": "unavailable"
+    },
+    "2181": {
+      "ridge_alpha": 1.0,
+      "ridge_lambda": 0.75,
+      "tabfm": "unavailable"
+    },
+    "2206": {
+      "ridge_alpha": 1.0,
+      "ridge_lambda": 0.75,
+      "tabfm": "unavailable"
+    }
+  },
+  "folds": {
+    "1773": {
+      "predictions": [
+        {
+          "row_id": "1773:1062:5210",
+          "cf_contest": 1773,
+          "cf": 3500.0,
+          "contest_id": 1062,
+          "problem_id": 5210,
+          "problem_label": "L",
+          "region": "Northern Eurasia",
+          "raw_affine": 3645.3749049995313,
+          "gym_shape_affine": 3511.335666457882,
+          "ridge_residual": 3498.938396012234,
+          "features": {
+            "raw_b": 2936.1,
+            "binary_minus_survival": 332.7000000000003,
+            "conditional_fit_se": 158.3,
+            "solve_rate": 0.0,
+            "log_field_size": 5.659482215759621,
+            "log_median_solve_seconds": 0.0,
+            "timing_missing": 1.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "1773:1062:5209",
+          "cf_contest": 1773,
+          "cf": 1900.0,
+          "contest_id": 1062,
+          "problem_id": 5209,
+          "problem_label": "K",
+          "region": "Northern Eurasia",
+          "raw_affine": 1942.193140677745,
+          "gym_shape_affine": 1908.6334506751361,
+          "ridge_residual": 1918.099882766909,
+          "features": {
+            "raw_b": 1898.9,
+            "binary_minus_survival": -166.5,
+            "conditional_fit_se": 12.4,
+            "solve_rate": 0.6818181818181818,
+            "log_field_size": 5.659482215759621,
+            "log_median_solve_seconds": 9.137984709784043,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "1773:1062:5208",
+          "cf_contest": 1773,
+          "cf": 2900.0,
+          "contest_id": 1062,
+          "problem_id": 5208,
+          "problem_label": "J",
+          "region": "Northern Eurasia",
+          "raw_affine": 3203.651134653831,
+          "gym_shape_affine": 3201.8693360178445,
+          "ridge_residual": 3177.8852335023093,
+          "features": {
+            "raw_b": 2667.1,
+            "binary_minus_survival": 343.3000000000002,
+            "conditional_fit_se": 78.4,
+            "solve_rate": 0.013986013986013986,
+            "log_field_size": 5.659482215759621,
+            "log_median_solve_seconds": 9.485962514935522,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "1773:1062:5207",
+          "cf_contest": 1773,
+          "cf": 2500.0,
+          "contest_id": 1062,
+          "problem_id": 5207,
+          "problem_label": "I",
+          "region": "Northern Eurasia",
+          "raw_affine": 2803.965016801996,
+          "gym_shape_affine": 2868.897855658365,
+          "ridge_residual": 2797.816256467482,
+          "features": {
+            "raw_b": 2423.7,
+            "binary_minus_survival": 283.5,
+            "conditional_fit_se": 41.4,
+            "solve_rate": 0.05944055944055944,
+            "log_field_size": 5.659482215759621,
+            "log_median_solve_seconds": 9.314430080500564,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "1773:1062:5206",
+          "cf_contest": 1773,
+          "cf": 2600.0,
+          "contest_id": 1062,
+          "problem_id": 5206,
+          "problem_label": "H",
+          "region": "Northern Eurasia",
+          "raw_affine": 2641.0691133882656,
+          "gym_shape_affine": 2693.237440494754,
+          "ridge_residual": 2623.492308582049,
+          "features": {
+            "raw_b": 2324.5,
+            "binary_minus_survival": 221.0999999999999,
+            "conditional_fit_se": 31.4,
+            "solve_rate": 0.1048951048951049,
+            "log_field_size": 5.659482215759621,
+            "log_median_solve_seconds": 9.447031735835662,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "1773:1062:5205",
+          "cf_contest": 1773,
+          "cf": 2800.0,
+          "contest_id": 1062,
+          "problem_id": 5205,
+          "problem_label": "G",
+          "region": "Northern Eurasia",
+          "raw_affine": 2942.557902367711,
+          "gym_shape_affine": 3013.573774767581,
+          "ridge_residual": 2936.382109634739,
+          "features": {
+            "raw_b": 2508.1,
+            "binary_minus_survival": 305.9000000000001,
+            "conditional_fit_se": 50.7,
+            "solve_rate": 0.038461538461538464,
+            "log_field_size": 5.659482215759621,
+            "log_median_solve_seconds": 9.658034484302057,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "1773:1062:5204",
+          "cf_contest": 1773,
+          "cf": 800.0,
+          "contest_id": 1062,
+          "problem_id": 5204,
+          "problem_label": "F",
+          "region": "Northern Eurasia",
+          "raw_affine": 1417.0509036645292,
+          "gym_shape_affine": 1413.6227757309985,
+          "ridge_residual": 1159.7774661778508,
+          "features": {
+            "raw_b": 1579.1,
+            "binary_minus_survival": -708.3999999999999,
+            "conditional_fit_se": 10.3,
+            "solve_rate": 0.9965034965034965,
+            "log_field_size": 5.659482215759621,
+            "log_median_solve_seconds": 7.658227526161352,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "1773:1062:5203",
+          "cf_contest": 1773,
+          "cf": 1400.0,
+          "contest_id": 1062,
+          "problem_id": 5203,
+          "problem_label": "E",
+          "region": "Northern Eurasia",
+          "raw_affine": 1574.5278909364722,
+          "gym_shape_affine": 1543.0577988438597,
+          "ridge_residual": 1549.0223530566197,
+          "features": {
+            "raw_b": 1675.0,
+            "binary_minus_survival": -262.9000000000001,
+            "conditional_fit_se": 10.9,
+            "solve_rate": 0.8881118881118881,
+            "log_field_size": 5.659482215759621,
+            "log_median_solve_seconds": 8.066521490469993,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "1773:1062:5202",
+          "cf_contest": 1773,
+          "cf": 2600.0,
+          "contest_id": 1062,
+          "problem_id": 5202,
+          "problem_label": "D",
+          "region": "Northern Eurasia",
+          "raw_affine": 2640.083855907941,
+          "gym_shape_affine": 2692.171447612394,
+          "ridge_residual": 2625.2479977812122,
+          "features": {
+            "raw_b": 2323.9,
+            "binary_minus_survival": 232.0999999999999,
+            "conditional_fit_se": 32.0,
+            "solve_rate": 0.10139860139860139,
+            "log_field_size": 5.659482215759621,
+            "log_median_solve_seconds": 9.234935418831563,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "1773:1062:5201",
+          "cf_contest": 1773,
+          "cf": 3500.0,
+          "contest_id": 1062,
+          "problem_id": 5201,
+          "problem_label": "C",
+          "region": "Northern Eurasia",
+          "raw_affine": 3149.6261828160114,
+          "gym_shape_affine": 3171.213421775238,
+          "ridge_residual": 3131.018419061585,
+          "features": {
+            "raw_b": 2634.2,
+            "binary_minus_survival": 338.7000000000003,
+            "conditional_fit_se": 71.7,
+            "solve_rate": 0.017482517482517484,
+            "log_field_size": 5.659482215759621,
+            "log_median_solve_seconds": 9.544810605926722,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "1773:1062:5200",
+          "cf_contest": 1773,
+          "cf": 2200.0,
+          "contest_id": 1062,
+          "problem_id": 5200,
+          "problem_label": "B",
+          "region": "Northern Eurasia",
+          "raw_affine": 2512.65722178591,
+          "gym_shape_affine": 2540.3833763827574,
+          "ridge_residual": 2484.298025891996,
+          "features": {
+            "raw_b": 2246.3,
+            "binary_minus_survival": 161.19999999999982,
+            "conditional_fit_se": 25.5,
+            "solve_rate": 0.16083916083916083,
+            "log_field_size": 5.659482215759621,
+            "log_median_solve_seconds": 9.492507263739853,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "1773:1062:5199",
+          "cf_contest": 1773,
+          "cf": 1900.0,
+          "contest_id": 1062,
+          "problem_id": 5199,
+          "problem_label": "A",
+          "region": "Northern Eurasia",
+          "raw_affine": 2113.13531351413,
+          "gym_shape_affine": 2069.0317374970014,
+          "ridge_residual": 2096.234445167205,
+          "features": {
+            "raw_b": 2003.0,
+            "binary_minus_survival": 8.200000000000045,
+            "conditional_fit_se": 15.5,
+            "solve_rate": 0.4370629370629371,
+            "log_field_size": 5.659482215759621,
+            "log_median_solve_seconds": 9.09873819539488,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        }
+      ],
+      "selected": {
+        "ridge_alpha": 1.0,
+        "ridge_lambda": 0.75,
+        "tabfm": "unavailable"
+      }
+    },
+    "1776": {
+      "predictions": [
+        {
+          "row_id": "1776:1123:5651",
+          "cf_contest": 1776,
+          "cf": 3000.0,
+          "contest_id": 1123,
+          "problem_id": 5651,
+          "problem_label": "G",
+          "region": "Europe",
+          "raw_affine": 2667.214899786333,
+          "gym_shape_affine": 2722.289240481271,
+          "ridge_residual": 2669.7858683742097,
+          "features": {
+            "raw_b": 2348.9,
+            "binary_minus_survival": 267.2999999999997,
+            "conditional_fit_se": 45.5,
+            "solve_rate": 0.0945945945945946,
+            "log_field_size": 5.003946305945459,
+            "log_median_solve_seconds": 9.547062577352603,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "1776:1123:5652",
+          "cf_contest": 1776,
+          "cf": 1500.0,
+          "contest_id": 1123,
+          "problem_id": 5652,
+          "problem_label": "H",
+          "region": "Europe",
+          "raw_affine": 1694.8614375563043,
+          "gym_shape_affine": 1654.0624675156037,
+          "ridge_residual": 1695.3334019943572,
+          "features": {
+            "raw_b": 1758.0,
+            "binary_minus_survival": -212.9000000000001,
+            "conditional_fit_se": 16.0,
+            "solve_rate": 0.7972972972972973,
+            "log_field_size": 5.003946305945459,
+            "log_median_solve_seconds": 8.501267040865978,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "1776:1123:5646",
+          "cf_contest": 1776,
+          "cf": 3200.0,
+          "contest_id": 1123,
+          "problem_id": 5646,
+          "problem_label": "B",
+          "region": "Europe",
+          "raw_affine": 1916.8456684834173,
+          "gym_shape_affine": 1881.5291861092333,
+          "ridge_residual": 1939.258467304398,
+          "features": {
+            "raw_b": 1892.9,
+            "binary_minus_survival": 17.09999999999991,
+            "conditional_fit_se": 19.7,
+            "solve_rate": 0.527027027027027,
+            "log_field_size": 5.003946305945459,
+            "log_median_solve_seconds": 8.453187861440325,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "1776:1123:5654",
+          "cf_contest": 1776,
+          "cf": 2500.0,
+          "contest_id": 1123,
+          "problem_id": 5654,
+          "problem_label": "J",
+          "region": "Europe",
+          "raw_affine": 2354.8901627220926,
+          "gym_shape_affine": 2386.9517794659096,
+          "ridge_residual": 2352.603385806005,
+          "features": {
+            "raw_b": 2159.1,
+            "binary_minus_survival": 153.0,
+            "conditional_fit_se": 29.2,
+            "solve_rate": 0.23648648648648649,
+            "log_field_size": 5.003946305945459,
+            "log_median_solve_seconds": 9.320180837655714,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "1776:1123:5649",
+          "cf_contest": 1776,
+          "cf": 2500.0,
+          "contest_id": 1123,
+          "problem_id": 5649,
+          "problem_label": "E",
+          "region": "Europe",
+          "raw_affine": 2451.4837457867447,
+          "gym_shape_affine": 2465.8741687115717,
+          "ridge_residual": 2448.6211385618144,
+          "features": {
+            "raw_b": 2217.8,
+            "binary_minus_survival": 180.19999999999982,
+            "conditional_fit_se": 32.6,
+            "solve_rate": 0.1891891891891892,
+            "log_field_size": 5.003946305945459,
+            "log_median_solve_seconds": 9.556126244582746,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "1776:1123:5650",
+          "cf_contest": 1776,
+          "cf": 1300.0,
+          "contest_id": 1123,
+          "problem_id": 5650,
+          "problem_label": "F",
+          "region": "Europe",
+          "raw_affine": 1509.5728949144004,
+          "gym_shape_affine": 1481.4573668872656,
+          "ridge_residual": 1447.3792023465398,
+          "features": {
+            "raw_b": 1645.4,
+            "binary_minus_survival": -389.3000000000002,
+            "conditional_fit_se": 14.8,
+            "solve_rate": 0.9324324324324325,
+            "log_field_size": 5.003946305945459,
+            "log_median_solve_seconds": 7.890208213109961,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "1776:1123:5647",
+          "cf_contest": 1776,
+          "cf": 2100.0,
+          "contest_id": 1123,
+          "problem_id": 5647,
+          "problem_label": "C",
+          "region": "Europe",
+          "raw_affine": 2153.3107091374277,
+          "gym_shape_affine": 2119.091863689623,
+          "ridge_residual": 2157.0029014959246,
+          "features": {
+            "raw_b": 2036.6,
+            "binary_minus_survival": 81.0,
+            "conditional_fit_se": 23.6,
+            "solve_rate": 0.36486486486486486,
+            "log_field_size": 5.003946305945459,
+            "log_median_solve_seconds": 9.004545458996587,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "1776:1123:5655",
+          "cf_contest": 1776,
+          "cf": 1700.0,
+          "contest_id": 1123,
+          "problem_id": 5655,
+          "problem_label": "K",
+          "region": "Europe",
+          "raw_affine": 1840.985972073188,
+          "gym_shape_affine": 1793.6990246817031,
+          "ridge_residual": 1847.8485335458531,
+          "features": {
+            "raw_b": 1846.8,
+            "binary_minus_survival": -134.29999999999995,
+            "conditional_fit_se": 17.3,
+            "solve_rate": 0.6824324324324325,
+            "log_field_size": 5.003946305945459,
+            "log_median_solve_seconds": 8.812992231969966,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "1776:1123:5648",
+          "cf_contest": 1776,
+          "cf": 3500.0,
+          "contest_id": 1123,
+          "problem_id": 5648,
+          "problem_label": "D",
+          "region": "Europe",
+          "raw_affine": 3479.6212363965283,
+          "gym_shape_affine": 3385.538367949902,
+          "ridge_residual": 3313.0821702382,
+          "features": {
+            "raw_b": 2842.6,
+            "binary_minus_survival": 311.7000000000003,
+            "conditional_fit_se": 165.4,
+            "solve_rate": 0.0,
+            "log_field_size": 5.003946305945459,
+            "log_median_solve_seconds": 0.0,
+            "timing_missing": 1.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "1776:1123:5653",
+          "cf_contest": 1776,
+          "cf": 2500.0,
+          "contest_id": 1123,
+          "problem_id": 5653,
+          "problem_label": "I",
+          "region": "Europe",
+          "raw_affine": 2608.962551566764,
+          "gym_shape_affine": 2659.2939332482874,
+          "ridge_residual": 2607.8697117165852,
+          "features": {
+            "raw_b": 2313.5,
+            "binary_minus_survival": 231.0999999999999,
+            "conditional_fit_se": 40.4,
+            "solve_rate": 0.12162162162162163,
+            "log_field_size": 5.003946305945459,
+            "log_median_solve_seconds": 9.741968123371437,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "1776:1123:5656",
+          "cf_contest": 1776,
+          "cf": 2200.0,
+          "contest_id": 1123,
+          "problem_id": 5656,
+          "problem_label": "L",
+          "region": "Europe",
+          "raw_affine": 2337.611923843407,
+          "gym_shape_affine": 2373.5103425093384,
+          "ridge_residual": 2334.705716678879,
+          "features": {
+            "raw_b": 2148.6,
+            "binary_minus_survival": 140.70000000000027,
+            "conditional_fit_se": 28.4,
+            "solve_rate": 0.25,
+            "log_field_size": 5.003946305945459,
+            "log_median_solve_seconds": 9.367429587218957,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "1776:1123:5645",
+          "cf_contest": 1776,
+          "cf": 800.0,
+          "contest_id": 1123,
+          "problem_id": 5645,
+          "problem_label": "A",
+          "region": "Europe",
+          "raw_affine": 1089.9585221463226,
+          "gym_shape_affine": 1161.0556314850473,
+          "ridge_residual": 963.0270734939136,
+          "features": {
+            "raw_b": 1390.4,
+            "binary_minus_survival": -464.20000000000005,
+            "conditional_fit_se": 14.4,
+            "solve_rate": 0.9932432432432432,
+            "log_field_size": 5.003946305945459,
+            "log_median_solve_seconds": 6.660575149839686,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        }
+      ],
+      "selected": {
+        "ridge_alpha": 1.0,
+        "ridge_lambda": 0.75,
+        "tabfm": "unavailable"
+      }
+    },
+    "1906": {
+      "predictions": [
+        {
+          "row_id": "1906:1991:10570",
+          "cf_contest": 1906,
+          "cf": 1700.0,
+          "contest_id": 1991,
+          "problem_id": 10570,
+          "problem_label": "M",
+          "region": "Asia Pacific",
+          "raw_affine": 1568.0239446946478,
+          "gym_shape_affine": 1533.8826131600354,
+          "ridge_residual": 1621.0465215597408,
+          "features": {
+            "raw_b": 1682.0,
+            "binary_minus_survival": -148.29999999999995,
+            "conditional_fit_se": 21.4,
+            "solve_rate": 0.7951807228915663,
+            "log_field_size": 4.430816798843313,
+            "log_median_solve_seconds": 7.635545402985622,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 0.1,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "1906:1991:10569",
+          "cf_contest": 1906,
+          "cf": 2500.0,
+          "contest_id": 1991,
+          "problem_id": 10569,
+          "problem_label": "L",
+          "region": "Asia Pacific",
+          "raw_affine": 2075.813213567939,
+          "gym_shape_affine": 2035.7174643526273,
+          "ridge_residual": 2055.666275928416,
+          "features": {
+            "raw_b": 1988.2,
+            "binary_minus_survival": -62.5,
+            "conditional_fit_se": 26.7,
+            "solve_rate": 0.5060240963855421,
+            "log_field_size": 4.430816798843313,
+            "log_median_solve_seconds": 9.21542741102474,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 0.1,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "1906:1991:10568",
+          "cf_contest": 1906,
+          "cf": 2500.0,
+          "contest_id": 1991,
+          "problem_id": 10568,
+          "problem_label": "K",
+          "region": "Asia Pacific",
+          "raw_affine": 2794.213968877898,
+          "gym_shape_affine": 2861.6285686768365,
+          "ridge_residual": 2738.9634945740663,
+          "features": {
+            "raw_b": 2421.4,
+            "binary_minus_survival": 235.29999999999973,
+            "conditional_fit_se": 73.1,
+            "solve_rate": 0.060240963855421686,
+            "log_field_size": 4.430816798843313,
+            "log_median_solve_seconds": 9.11173476822206,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 0.1,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "1906:1991:10567",
+          "cf_contest": 1906,
+          "cf": 2100.0,
+          "contest_id": 1991,
+          "problem_id": 10567,
+          "problem_label": "J",
+          "region": "Asia Pacific",
+          "raw_affine": 2411.796576970057,
+          "gym_shape_affine": 2433.7122706586338,
+          "ridge_residual": 2375.9286929513682,
+          "features": {
+            "raw_b": 2190.8,
+            "binary_minus_survival": 121.19999999999982,
+            "conditional_fit_se": 40.5,
+            "solve_rate": 0.21686746987951808,
+            "log_field_size": 4.430816798843313,
+            "log_median_solve_seconds": 9.365162255067553,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 0.1,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "1906:1991:10566",
+          "cf_contest": 1906,
+          "cf": 2900.0,
+          "contest_id": 1991,
+          "problem_id": 10566,
+          "problem_label": "I",
+          "region": "Asia Pacific",
+          "raw_affine": 2805.8224760043286,
+          "gym_shape_affine": 2874.097057120107,
+          "ridge_residual": 2742.1740998817527,
+          "features": {
+            "raw_b": 2428.4,
+            "binary_minus_survival": 228.29999999999973,
+            "conditional_fit_se": 73.1,
+            "solve_rate": 0.060240963855421686,
+            "log_field_size": 4.430816798843313,
+            "log_median_solve_seconds": 9.488047863280759,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 0.1,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "1906:1991:10565",
+          "cf_contest": 1906,
+          "cf": 2200.0,
+          "contest_id": 1991,
+          "problem_id": 10565,
+          "problem_label": "H",
+          "region": "Asia Pacific",
+          "raw_affine": 2139.99167439549,
+          "gym_shape_affine": 2101.802448390816,
+          "ridge_residual": 2117.268561373605,
+          "features": {
+            "raw_b": 2026.9,
+            "binary_minus_survival": -26.300000000000182,
+            "conditional_fit_se": 28.5,
+            "solve_rate": 0.4457831325301205,
+            "log_field_size": 4.430816798843313,
+            "log_median_solve_seconds": 9.169622538697624,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 0.1,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "1906:1991:10564",
+          "cf_contest": 1906,
+          "cf": 2900.0,
+          "contest_id": 1991,
+          "problem_id": 10564,
+          "problem_label": "G",
+          "region": "Asia Pacific",
+          "raw_affine": 2936.1694274525344,
+          "gym_shape_affine": 3010.4120519749317,
+          "ridge_residual": 2854.7207361281285,
+          "features": {
+            "raw_b": 2507.0,
+            "binary_minus_survival": 244.69999999999982,
+            "conditional_fit_se": 89.8,
+            "solve_rate": 0.03614457831325301,
+            "log_field_size": 4.430816798843313,
+            "log_median_solve_seconds": 9.44549154241467,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 0.1,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "1906:1991:10563",
+          "cf_contest": 1906,
+          "cf": 2100.0,
+          "contest_id": 1991,
+          "problem_id": 10563,
+          "problem_label": "F",
+          "region": "Asia Pacific",
+          "raw_affine": 2102.678615774821,
+          "gym_shape_affine": 2057.5826420037274,
+          "ridge_residual": 2094.718735280147,
+          "features": {
+            "raw_b": 2004.4,
+            "binary_minus_survival": -3.800000000000182,
+            "conditional_fit_se": 28.5,
+            "solve_rate": 0.4457831325301205,
+            "log_field_size": 4.430816798843313,
+            "log_median_solve_seconds": 9.028938392241612,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 0.1,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "1906:1991:10562",
+          "cf_contest": 1906,
+          "cf": 1900.0,
+          "contest_id": 1991,
+          "problem_id": 10562,
+          "problem_label": "E",
+          "region": "Asia Pacific",
+          "raw_affine": 1857.7391154071358,
+          "gym_shape_affine": 1811.7151905147662,
+          "ridge_residual": 1857.5200554385194,
+          "features": {
+            "raw_b": 1856.7,
+            "binary_minus_survival": -148.70000000000005,
+            "conditional_fit_se": 23.2,
+            "solve_rate": 0.6746987951807228,
+            "log_field_size": 4.430816798843313,
+            "log_median_solve_seconds": 8.653645314551737,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 0.1,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "1906:1991:10561",
+          "cf_contest": 1906,
+          "cf": 2800.0,
+          "contest_id": 1991,
+          "problem_id": 10561,
+          "problem_label": "D",
+          "region": "Asia Pacific",
+          "raw_affine": 3156.067719590347,
+          "gym_shape_affine": 3176.978931874079,
+          "ridge_residual": 3021.0898925608435,
+          "features": {
+            "raw_b": 2639.6,
+            "binary_minus_survival": 252.5999999999999,
+            "conditional_fit_se": 126.6,
+            "solve_rate": 0.012048192771084338,
+            "log_field_size": 4.430816798843313,
+            "log_median_solve_seconds": 9.583351156530737,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 0.1,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "1906:1991:10560",
+          "cf_contest": 1906,
+          "cf": 3000.0,
+          "contest_id": 1991,
+          "problem_id": 10560,
+          "problem_label": "C",
+          "region": "Asia Pacific",
+          "raw_affine": 2815.2751175215644,
+          "gym_shape_affine": 2884.249969138198,
+          "ridge_residual": 2746.518509173919,
+          "features": {
+            "raw_b": 2434.1,
+            "binary_minus_survival": 222.5999999999999,
+            "conditional_fit_se": 73.0,
+            "solve_rate": 0.060240963855421686,
+            "log_field_size": 4.430816798843313,
+            "log_median_solve_seconds": 9.658928824466434,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 0.1,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "1906:1991:10559",
+          "cf_contest": 1906,
+          "cf": 2600.0,
+          "contest_id": 1991,
+          "problem_id": 10559,
+          "problem_label": "B",
+          "region": "Asia Pacific",
+          "raw_affine": 2518.0973350849426,
+          "gym_shape_affine": 2551.308717492677,
+          "ridge_residual": 2467.009531471969,
+          "features": {
+            "raw_b": 2254.9,
+            "binary_minus_survival": 139.69999999999982,
+            "conditional_fit_se": 45.7,
+            "solve_rate": 0.1686746987951807,
+            "log_field_size": 4.430816798843313,
+            "log_median_solve_seconds": 9.67423160855296,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 0.1,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "1906:1991:10558",
+          "cf_contest": 1906,
+          "cf": 1000.0,
+          "contest_id": 1991,
+          "problem_id": 10558,
+          "problem_label": "A",
+          "region": "Asia Pacific",
+          "raw_affine": 1185.4407169707154,
+          "gym_shape_affine": 1230.2610441273555,
+          "ridge_residual": 1048.0620162987339,
+          "features": {
+            "raw_b": 1451.3,
+            "binary_minus_survival": -519.5,
+            "conditional_fit_se": 19.1,
+            "solve_rate": 1.0,
+            "log_field_size": 4.430816798843313,
+            "log_median_solve_seconds": 7.039660349862076,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 0.1,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        }
+      ],
+      "selected": {
+        "ridge_alpha": 0.1,
+        "ridge_lambda": 0.75,
+        "tabfm": "unavailable"
+      }
+    },
+    "1912": {
+      "predictions": [
+        {
+          "row_id": "1912:1985:10438",
+          "cf_contest": 1912,
+          "cf": 800.0,
+          "contest_id": 1985,
+          "problem_id": 10438,
+          "problem_label": "L",
+          "region": "Northern Eurasia",
+          "raw_affine": 1081.738476920536,
+          "gym_shape_affine": 1154.7049028024785,
+          "ridge_residual": 853.3943759651975,
+          "features": {
+            "raw_b": 1383.0,
+            "binary_minus_survival": -583.0,
+            "conditional_fit_se": 10.1,
+            "solve_rate": 1.0,
+            "log_field_size": 5.6937321388027,
+            "log_median_solve_seconds": 6.606650186198215,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "1912:1985:10437",
+          "cf_contest": 1912,
+          "cf": 1800.0,
+          "contest_id": 1985,
+          "problem_id": 10437,
+          "problem_label": "K",
+          "region": "Northern Eurasia",
+          "raw_affine": 1754.5052812246659,
+          "gym_shape_affine": 1710.4896528456334,
+          "ridge_residual": 1772.8389311169954,
+          "features": {
+            "raw_b": 1791.1,
+            "binary_minus_survival": -41.69999999999982,
+            "conditional_fit_se": 12.4,
+            "solve_rate": 0.6655405405405406,
+            "log_field_size": 5.6937321388027,
+            "log_median_solve_seconds": 8.382975849296429,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "1912:1985:10436",
+          "cf_contest": 1912,
+          "cf": 2300.0,
+          "contest_id": 1985,
+          "problem_id": 10436,
+          "problem_label": "J",
+          "region": "Northern Eurasia",
+          "raw_affine": 2404.6871670799683,
+          "gym_shape_affine": 2427.018910257421,
+          "ridge_residual": 2383.8547189427086,
+          "features": {
+            "raw_b": 2185.5,
+            "binary_minus_survival": 172.5,
+            "conditional_fit_se": 22.7,
+            "solve_rate": 0.19594594594594594,
+            "log_field_size": 5.6937321388027,
+            "log_median_solve_seconds": 9.299129334790242,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "1912:1985:10435",
+          "cf_contest": 1912,
+          "cf": 3300.0,
+          "contest_id": 1985,
+          "problem_id": 10435,
+          "problem_label": "I",
+          "region": "Northern Eurasia",
+          "raw_affine": 3270.0027651668047,
+          "gym_shape_affine": 3237.1475382088443,
+          "ridge_residual": 3220.3963294623677,
+          "features": {
+            "raw_b": 2710.4,
+            "binary_minus_survival": 343.5999999999999,
+            "conditional_fit_se": 87.3,
+            "solve_rate": 0.010135135135135136,
+            "log_field_size": 5.6937321388027,
+            "log_median_solve_seconds": 9.771098364490383,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "1912:1985:10434",
+          "cf_contest": 1912,
+          "cf": 2400.0,
+          "contest_id": 1985,
+          "problem_id": 10434,
+          "problem_label": "H",
+          "region": "Northern Eurasia",
+          "raw_affine": 2603.9949510553897,
+          "gym_shape_affine": 2653.5293897695706,
+          "ridge_residual": 2591.904374001973,
+          "features": {
+            "raw_b": 2306.4,
+            "binary_minus_survival": 246.29999999999973,
+            "conditional_fit_se": 30.5,
+            "solve_rate": 0.10810810810810811,
+            "log_field_size": 5.6937321388027,
+            "log_median_solve_seconds": 9.224686965683105,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "1912:1985:10433",
+          "cf_contest": 1912,
+          "cf": 2400.0,
+          "contest_id": 1985,
+          "problem_id": 10433,
+          "problem_label": "G",
+          "region": "Northern Eurasia",
+          "raw_affine": 2586.6853420252664,
+          "gym_shape_affine": 2634.7948319075604,
+          "ridge_residual": 2569.673595816539,
+          "features": {
+            "raw_b": 2295.9,
+            "binary_minus_survival": 229.69999999999982,
+            "conditional_fit_se": 29.2,
+            "solve_rate": 0.11824324324324324,
+            "log_field_size": 5.6937321388027,
+            "log_median_solve_seconds": 9.299541017434485,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "1912:1985:10432",
+          "cf_contest": 1912,
+          "cf": 3100.0,
+          "contest_id": 1985,
+          "problem_id": 10432,
+          "problem_label": "F",
+          "region": "Northern Eurasia",
+          "raw_affine": 3202.577716658991,
+          "gym_shape_affine": 3198.874514264993,
+          "ridge_residual": 3165.2048278120465,
+          "features": {
+            "raw_b": 2669.5,
+            "binary_minus_survival": 342.4000000000001,
+            "conditional_fit_se": 78.4,
+            "solve_rate": 0.013513513513513514,
+            "log_field_size": 5.6937321388027,
+            "log_median_solve_seconds": 9.537627699020323,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "1912:1985:10431",
+          "cf_contest": 1912,
+          "cf": 2200.0,
+          "contest_id": 1985,
+          "problem_id": 10431,
+          "problem_label": "E",
+          "region": "Northern Eurasia",
+          "raw_affine": 2129.2171033720047,
+          "gym_shape_affine": 2087.2509989005944,
+          "ridge_residual": 2098.7349057515953,
+          "features": {
+            "raw_b": 2018.4,
+            "binary_minus_survival": 0.1999999999998181,
+            "conditional_fit_se": 15.2,
+            "solve_rate": 0.4391891891891892,
+            "log_field_size": 5.6937321388027,
+            "log_median_solve_seconds": 9.35452729228868,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "1912:1985:10430",
+          "cf_contest": 1912,
+          "cf": 1900.0,
+          "contest_id": 1985,
+          "problem_id": 10430,
+          "problem_label": "D",
+          "region": "Northern Eurasia",
+          "raw_affine": 1895.2901013363362,
+          "gym_shape_affine": 1854.9471088378086,
+          "ridge_residual": 1902.8466040322542,
+          "features": {
+            "raw_b": 1876.5,
+            "binary_minus_survival": -0.09999999999990905,
+            "conditional_fit_se": 13.5,
+            "solve_rate": 0.5608108108108109,
+            "log_field_size": 5.6937321388027,
+            "log_median_solve_seconds": 8.53660358493606,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "1912:1985:10429",
+          "cf_contest": 1912,
+          "cf": 3300.0,
+          "contest_id": 1985,
+          "problem_id": 10429,
+          "problem_label": "C",
+          "region": "Northern Eurasia",
+          "raw_affine": 3202.248009820322,
+          "gym_shape_affine": 3198.6873601136786,
+          "ridge_residual": 3165.107017496546,
+          "features": {
+            "raw_b": 2669.3,
+            "binary_minus_survival": 342.5999999999999,
+            "conditional_fit_se": 78.4,
+            "solve_rate": 0.013513513513513514,
+            "log_field_size": 5.6937321388027,
+            "log_median_solve_seconds": 9.67517441189118,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "1912:1985:10428",
+          "cf_contest": 1912,
+          "cf": 2100.0,
+          "contest_id": 1985,
+          "problem_id": 10428,
+          "problem_label": "B",
+          "region": "Northern Eurasia",
+          "raw_affine": 2163.836321432251,
+          "gym_shape_affine": 2130.3045721066414,
+          "ridge_residual": 2140.2817256794897,
+          "features": {
+            "raw_b": 2039.4,
+            "binary_minus_survival": 52.59999999999991,
+            "conditional_fit_se": 16.4,
+            "solve_rate": 0.3783783783783784,
+            "log_field_size": 5.6937321388027,
+            "log_median_solve_seconds": 9.20658332309847,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "1912:1985:10427",
+          "cf_contest": 1912,
+          "cf": 1900.0,
+          "contest_id": 1985,
+          "problem_id": 10427,
+          "problem_label": "A",
+          "region": "Northern Eurasia",
+          "raw_affine": 1685.4316985235068,
+          "gym_shape_affine": 1644.7680551746578,
+          "ridge_residual": 1688.2939669813363,
+          "features": {
+            "raw_b": 1749.2,
+            "binary_minus_survival": -122.70000000000005,
+            "conditional_fit_se": 11.6,
+            "solve_rate": 0.7567567567567568,
+            "log_field_size": 5.6937321388027,
+            "log_median_solve_seconds": 8.219730107109351,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        }
+      ],
+      "selected": {
+        "ridge_alpha": 1.0,
+        "ridge_lambda": 0.75,
+        "tabfm": "unavailable"
+      }
+    },
+    "1938": {
+      "predictions": [
+        {
+          "row_id": "1938:1886:10165",
+          "cf_contest": 1938,
+          "cf": 3500.0,
+          "contest_id": 1886,
+          "problem_id": 10165,
+          "problem_label": "M",
+          "region": "Asia Pacific",
+          "raw_affine": 3426.277488258406,
+          "gym_shape_affine": 3345.913532701461,
+          "ridge_residual": 3391.9670225519,
+          "features": {
+            "raw_b": 2798.2,
+            "binary_minus_survival": 387.0,
+            "conditional_fit_se": 121.2,
+            "solve_rate": 0.00909090909090909,
+            "log_field_size": 4.709530201312334,
+            "log_median_solve_seconds": 8.907747686788648,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "1938:1886:10164",
+          "cf_contest": 1938,
+          "cf": 2800.0,
+          "contest_id": 1886,
+          "problem_id": 10164,
+          "problem_label": "L",
+          "region": "Asia Pacific",
+          "raw_affine": 2756.5441572681098,
+          "gym_shape_affine": 2816.196407187706,
+          "ridge_residual": 2852.263449617781,
+          "features": {
+            "raw_b": 2397.6,
+            "binary_minus_survival": 311.2000000000003,
+            "conditional_fit_se": 41.4,
+            "solve_rate": 0.15454545454545454,
+            "log_field_size": 4.709530201312334,
+            "log_median_solve_seconds": 9.519661619531444,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "1938:1886:10163",
+          "cf_contest": 1938,
+          "cf": 2400.0,
+          "contest_id": 1886,
+          "problem_id": 10163,
+          "problem_label": "K",
+          "region": "Asia Pacific",
+          "raw_affine": 2437.058287192609,
+          "gym_shape_affine": 2450.4690586901766,
+          "ridge_residual": 2566.897999939695,
+          "features": {
+            "raw_b": 2206.5,
+            "binary_minus_survival": 176.19999999999982,
+            "conditional_fit_se": 26.1,
+            "solve_rate": 0.4,
+            "log_field_size": 4.709530201312334,
+            "log_median_solve_seconds": 9.416622566214981,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "1938:1886:10162",
+          "cf_contest": 1938,
+          "cf": 2100.0,
+          "contest_id": 1886,
+          "problem_id": 10162,
+          "problem_label": "J",
+          "region": "Asia Pacific",
+          "raw_affine": 1917.2877115438741,
+          "gym_shape_affine": 1882.5010203121865,
+          "ridge_residual": 1967.4635289238772,
+          "features": {
+            "raw_b": 1895.6,
+            "binary_minus_survival": -297.1999999999998,
+            "conditional_fit_se": 17.0,
+            "solve_rate": 0.9454545454545454,
+            "log_field_size": 4.709530201312334,
+            "log_median_solve_seconds": 8.605020901781758,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "1938:1886:10161",
+          "cf_contest": 1938,
+          "cf": 2800.0,
+          "contest_id": 1886,
+          "problem_id": 10161,
+          "problem_label": "I",
+          "region": "Asia Pacific",
+          "raw_affine": 3613.856319354541,
+          "gym_shape_affine": 3482.9106623497833,
+          "ridge_residual": 3612.8212777515296,
+          "features": {
+            "raw_b": 2910.4,
+            "binary_minus_survival": 371.1999999999998,
+            "conditional_fit_se": 160.1,
+            "solve_rate": 0.0,
+            "log_field_size": 4.709530201312334,
+            "log_median_solve_seconds": 0.0,
+            "timing_missing": 1.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "1938:1886:10160",
+          "cf_contest": 1938,
+          "cf": 1600.0,
+          "contest_id": 1886,
+          "problem_id": 10160,
+          "problem_label": "H",
+          "region": "Asia Pacific",
+          "raw_affine": 1626.2228764829392,
+          "gym_shape_affine": 1590.3015509738643,
+          "ridge_residual": 1608.5128339513728,
+          "features": {
+            "raw_b": 1721.5,
+            "binary_minus_survival": -397.79999999999995,
+            "conditional_fit_se": 16.6,
+            "solve_rate": 0.990909090909091,
+            "log_field_size": 4.709530201312334,
+            "log_median_solve_seconds": 7.504942068396171,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "1938:1886:10159",
+          "cf_contest": 1938,
+          "cf": 2300.0,
+          "contest_id": 1886,
+          "problem_id": 10159,
+          "problem_label": "G",
+          "region": "Asia Pacific",
+          "raw_affine": 2099.3495181960043,
+          "gym_shape_affine": 2053.5843430498403,
+          "ridge_residual": 2246.0572600909554,
+          "features": {
+            "raw_b": 2004.5,
+            "binary_minus_survival": -54.299999999999955,
+            "conditional_fit_se": 18.7,
+            "solve_rate": 0.7818181818181819,
+            "log_field_size": 4.709530201312334,
+            "log_median_solve_seconds": 8.996713889353813,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "1938:1886:10158",
+          "cf_contest": 1938,
+          "cf": 2400.0,
+          "contest_id": 1886,
+          "problem_id": 10158,
+          "problem_label": "F",
+          "region": "Asia Pacific",
+          "raw_affine": 2342.9345065267235,
+          "gym_shape_affine": 2377.494514274285,
+          "ridge_residual": 2480.341892507502,
+          "features": {
+            "raw_b": 2150.2,
+            "binary_minus_survival": 97.30000000000018,
+            "conditional_fit_se": 22.7,
+            "solve_rate": 0.5272727272727272,
+            "log_field_size": 4.709530201312334,
+            "log_median_solve_seconds": 9.397649470281177,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "1938:1886:10157",
+          "cf_contest": 1938,
+          "cf": 2200.0,
+          "contest_id": 1886,
+          "problem_id": 10157,
+          "problem_label": "E",
+          "region": "Asia Pacific",
+          "raw_affine": 2033.4795899857754,
+          "gym_shape_affine": 2000.329677563362,
+          "ridge_residual": 2104.018767316355,
+          "features": {
+            "raw_b": 1965.1,
+            "binary_minus_survival": -253.19999999999982,
+            "conditional_fit_se": 17.4,
+            "solve_rate": 0.9090909090909091,
+            "log_field_size": 4.709530201312334,
+            "log_median_solve_seconds": 8.985382676096364,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "1938:1886:10156",
+          "cf_contest": 1938,
+          "cf": 3300.0,
+          "contest_id": 1886,
+          "problem_id": 10156,
+          "problem_label": "D",
+          "region": "Asia Pacific",
+          "raw_affine": 3011.4975596046556,
+          "gym_shape_affine": 3079.375999915593,
+          "ridge_residual": 3078.0819389269345,
+          "features": {
+            "raw_b": 2550.1,
+            "binary_minus_survival": 366.8000000000002,
+            "conditional_fit_se": 62.3,
+            "solve_rate": 0.06363636363636363,
+            "log_field_size": 4.709530201312334,
+            "log_median_solve_seconds": 9.59947282546345,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "1938:1886:10155",
+          "cf_contest": 1938,
+          "cf": 1900.0,
+          "contest_id": 1886,
+          "problem_id": 10155,
+          "problem_label": "C",
+          "region": "Asia Pacific",
+          "raw_affine": 1947.7149372653507,
+          "gym_shape_affine": 1917.7184867087722,
+          "ridge_residual": 2020.742333249607,
+          "features": {
+            "raw_b": 1913.8,
+            "binary_minus_survival": -253.5,
+            "conditional_fit_se": 17.2,
+            "solve_rate": 0.9272727272727272,
+            "log_field_size": 4.709530201312334,
+            "log_median_solve_seconds": 8.693999567522082,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "1938:1886:10154",
+          "cf_contest": 1938,
+          "cf": 3000.0,
+          "contest_id": 1886,
+          "problem_id": 10154,
+          "problem_label": "B",
+          "region": "Asia Pacific",
+          "raw_affine": 2942.283980216242,
+          "gym_shape_affine": 3010.47659076702,
+          "ridge_residual": 3018.401120994256,
+          "features": {
+            "raw_b": 2508.7,
+            "binary_minus_survival": 355.7000000000003,
+            "conditional_fit_se": 55.7,
+            "solve_rate": 0.08181818181818182,
+            "log_field_size": 4.709530201312334,
+            "log_median_solve_seconds": 9.643485495857657,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "1938:1886:10153",
+          "cf_contest": 1938,
+          "cf": 3500.0,
+          "contest_id": 1886,
+          "problem_id": 10153,
+          "problem_label": "A",
+          "region": "Asia Pacific",
+          "raw_affine": 3613.856319354541,
+          "gym_shape_affine": 3482.9106623497833,
+          "ridge_residual": 3612.8212777515296,
+          "features": {
+            "raw_b": 2910.4,
+            "binary_minus_survival": 371.1999999999998,
+            "conditional_fit_se": 160.1,
+            "solve_rate": 0.0,
+            "log_field_size": 4.709530201312334,
+            "log_median_solve_seconds": 0.0,
+            "timing_missing": 1.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        }
+      ],
+      "selected": {
+        "ridge_alpha": 1.0,
+        "ridge_lambda": 0.75,
+        "tabfm": "unavailable"
+      }
+    },
+    "1949": {
+      "predictions": [
+        {
+          "row_id": "1949:1967:10346",
+          "cf_contest": 1949,
+          "cf": 2800.0,
+          "contest_id": 1967,
+          "problem_id": 10346,
+          "problem_label": "K",
+          "region": "Europe",
+          "raw_affine": 2428.306676605209,
+          "gym_shape_affine": 2444.2514475222824,
+          "ridge_residual": 2680.754103899721,
+          "features": {
+            "raw_b": 2201.7,
+            "binary_minus_survival": 222.9000000000001,
+            "conditional_fit_se": 26.1,
+            "solve_rate": 0.4888888888888889,
+            "log_field_size": 4.51085950651685,
+            "log_median_solve_seconds": 9.472550778454295,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 0.1,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "1949:1967:10345",
+          "cf_contest": 1949,
+          "cf": 2600.0,
+          "contest_id": 1967,
+          "problem_id": 10345,
+          "problem_label": "J",
+          "region": "Europe",
+          "raw_affine": 2605.078453419149,
+          "gym_shape_affine": 2654.6227916967537,
+          "ridge_residual": 2825.52024017898,
+          "features": {
+            "raw_b": 2308.3,
+            "binary_minus_survival": 318.5,
+            "conditional_fit_se": 33.1,
+            "solve_rate": 0.3,
+            "log_field_size": 4.51085950651685,
+            "log_median_solve_seconds": 9.55824698622306,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 0.1,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "1949:1967:10344",
+          "cf_contest": 1949,
+          "cf": 1800.0,
+          "contest_id": 1967,
+          "problem_id": 10344,
+          "problem_label": "I",
+          "region": "Europe",
+          "raw_affine": 1813.9169645079794,
+          "gym_shape_affine": 1766.0780511847518,
+          "ridge_residual": 1766.15714610811,
+          "features": {
+            "raw_b": 1831.2,
+            "binary_minus_survival": -475.10000000000014,
+            "conditional_fit_se": 18.3,
+            "solve_rate": 1.0,
+            "log_field_size": 4.51085950651685,
+            "log_median_solve_seconds": 7.9624156801210635,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 0.1,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "1949:1967:10343",
+          "cf_contest": 1949,
+          "cf": 3100.0,
+          "contest_id": 1967,
+          "problem_id": 10343,
+          "problem_label": "H",
+          "region": "Europe",
+          "raw_affine": 3295.9144967651837,
+          "gym_shape_affine": 3253.356205864475,
+          "ridge_residual": 3390.866683480815,
+          "features": {
+            "raw_b": 2724.9,
+            "binary_minus_survival": 438.2999999999997,
+            "conditional_fit_se": 100.7,
+            "solve_rate": 0.022222222222222223,
+            "log_field_size": 4.51085950651685,
+            "log_median_solve_seconds": 9.633416164344007,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 0.1,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "1949:1967:10342",
+          "cf_contest": 1949,
+          "cf": 2300.0,
+          "contest_id": 1967,
+          "problem_id": 10342,
+          "problem_label": "G",
+          "region": "Europe",
+          "raw_affine": 2132.9684641233825,
+          "gym_shape_affine": 2092.2362517739334,
+          "ridge_residual": 2352.9626639252697,
+          "features": {
+            "raw_b": 2023.6,
+            "binary_minus_survival": -77.59999999999991,
+            "conditional_fit_se": 19.6,
+            "solve_rate": 0.8666666666666667,
+            "log_field_size": 4.51085950651685,
+            "log_median_solve_seconds": 9.068142966266382,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 0.1,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "1949:1967:10341",
+          "cf_contest": 1949,
+          "cf": 2200.0,
+          "contest_id": 1967,
+          "problem_id": 10341,
+          "problem_label": "F",
+          "region": "Europe",
+          "raw_affine": 2041.4318592441198,
+          "gym_shape_affine": 2006.4506361864685,
+          "ridge_residual": 2276.2751268591264,
+          "features": {
+            "raw_b": 1968.4,
+            "binary_minus_survival": -68.40000000000009,
+            "conditional_fit_se": 19.4,
+            "solve_rate": 0.8888888888888888,
+            "log_field_size": 4.51085950651685,
+            "log_median_solve_seconds": 8.7877545370596,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 0.1,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "1949:1967:10340",
+          "cf_contest": 1949,
+          "cf": 2900.0,
+          "contest_id": 1967,
+          "problem_id": 10340,
+          "problem_label": "E",
+          "region": "Europe",
+          "raw_affine": 3033.575893651063,
+          "gym_shape_affine": 3103.075042423787,
+          "ridge_residual": 3189.8112942770017,
+          "features": {
+            "raw_b": 2566.7,
+            "binary_minus_survival": 432.60000000000036,
+            "conditional_fit_se": 66.6,
+            "solve_rate": 0.06666666666666667,
+            "log_field_size": 4.51085950651685,
+            "log_median_solve_seconds": 9.294405747093851,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 0.1,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "1949:1967:10339",
+          "cf_contest": 1949,
+          "cf": 2600.0,
+          "contest_id": 1967,
+          "problem_id": 10339,
+          "problem_label": "D",
+          "region": "Europe",
+          "raw_affine": 2558.8126694312605,
+          "gym_shape_affine": 2601.5533813140473,
+          "ridge_residual": 2787.758698414782,
+          "features": {
+            "raw_b": 2280.4,
+            "binary_minus_survival": 296.5999999999999,
+            "conditional_fit_se": 31.0,
+            "solve_rate": 0.34444444444444444,
+            "log_field_size": 4.51085950651685,
+            "log_median_solve_seconds": 9.523763287920113,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 0.1,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "1949:1967:10338",
+          "cf_contest": 1949,
+          "cf": 1900.0,
+          "contest_id": 1967,
+          "problem_id": 10338,
+          "problem_label": "C",
+          "region": "Europe",
+          "raw_affine": 1841.2784496621073,
+          "gym_shape_affine": 1792.2841846920926,
+          "ridge_residual": 1893.8452975421048,
+          "features": {
+            "raw_b": 1847.7,
+            "binary_minus_survival": -346.70000000000005,
+            "conditional_fit_se": 18.4,
+            "solve_rate": 0.9888888888888889,
+            "log_field_size": 4.51085950651685,
+            "log_median_solve_seconds": 8.172164452111904,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 0.1,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "1949:1967:10337",
+          "cf_contest": 1949,
+          "cf": 1500.0,
+          "contest_id": 1967,
+          "problem_id": 10337,
+          "problem_label": "B",
+          "region": "Europe",
+          "raw_affine": 1712.7623830290834,
+          "gym_shape_affine": 1669.321040135969,
+          "ridge_residual": 1708.5740278685353,
+          "features": {
+            "raw_b": 1770.2,
+            "binary_minus_survival": -414.10000000000014,
+            "conditional_fit_se": 18.3,
+            "solve_rate": 1.0,
+            "log_field_size": 4.51085950651685,
+            "log_median_solve_seconds": 7.599901959208498,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 0.1,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "1949:1967:10336",
+          "cf_contest": 1949,
+          "cf": 3300.0,
+          "contest_id": 1967,
+          "problem_id": 10336,
+          "problem_label": "A",
+          "region": "Europe",
+          "raw_affine": 3413.651796519309,
+          "gym_shape_affine": 3339.7210124830376,
+          "ridge_residual": 3470.73646265517,
+          "features": {
+            "raw_b": 2795.9,
+            "binary_minus_survival": 433.2999999999997,
+            "conditional_fit_se": 121.2,
+            "solve_rate": 0.011111111111111112,
+            "log_field_size": 4.51085950651685,
+            "log_median_solve_seconds": 9.792332503169966,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 0.1,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        }
+      ],
+      "selected": {
+        "ridge_alpha": 0.1,
+        "ridge_lambda": 0.75,
+        "tabfm": "unavailable"
+      }
+    },
+    "2041": {
+      "predictions": [
+        {
+          "row_id": "2041:3297:16921",
+          "cf_contest": 2041,
+          "cf": 3300.0,
+          "contest_id": 3297,
+          "problem_id": 16921,
+          "problem_label": "N",
+          "region": "Asia Pacific",
+          "raw_affine": 3256.556403983407,
+          "gym_shape_affine": 3232.148582693302,
+          "ridge_residual": 3111.291806191355,
+          "features": {
+            "raw_b": 2697.5,
+            "binary_minus_survival": 299.0,
+            "conditional_fit_se": 124.5,
+            "solve_rate": 0.008264462809917356,
+            "log_field_size": 4.804021044733257,
+            "log_median_solve_seconds": 9.615205300012315,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 1.0,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2041:3297:16920",
+          "cf_contest": 2041,
+          "cf": 2000.0,
+          "contest_id": 3297,
+          "problem_id": 16920,
+          "problem_label": "M",
+          "region": "Asia Pacific",
+          "raw_affine": 2153.7997228582053,
+          "gym_shape_affine": 2121.624950111251,
+          "ridge_residual": 2122.8953292671654,
+          "features": {
+            "raw_b": 2035.7,
+            "binary_minus_survival": -0.2999999999999545,
+            "conditional_fit_se": 25.6,
+            "solve_rate": 0.38016528925619836,
+            "log_field_size": 4.804021044733257,
+            "log_median_solve_seconds": 9.065141174483978,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 1.0,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2041:3297:16919",
+          "cf_contest": 2041,
+          "cf": 2900.0,
+          "contest_id": 3297,
+          "problem_id": 16919,
+          "problem_label": "L",
+          "region": "Asia Pacific",
+          "raw_affine": 3135.4164663620686,
+          "gym_shape_affine": 3163.614065047973,
+          "ridge_residual": 3038.256716326617,
+          "features": {
+            "raw_b": 2624.8,
+            "binary_minus_survival": 290.6999999999998,
+            "conditional_fit_se": 102.6,
+            "solve_rate": 0.01652892561983471,
+            "log_field_size": 4.804021044733257,
+            "log_median_solve_seconds": 9.734832186505988,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 1.0,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2041:3297:16918",
+          "cf_contest": 2041,
+          "cf": 3100.0,
+          "contest_id": 3297,
+          "problem_id": 16918,
+          "problem_label": "K",
+          "region": "Asia Pacific",
+          "raw_affine": 2912.299029670221,
+          "gym_shape_affine": 2984.434044753902,
+          "ridge_residual": 2858.5702526444925,
+          "features": {
+            "raw_b": 2490.9,
+            "binary_minus_survival": 263.2999999999997,
+            "conditional_fit_se": 72.6,
+            "solve_rate": 0.04132231404958678,
+            "log_field_size": 4.804021044733257,
+            "log_median_solve_seconds": 9.604137675216665,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 1.0,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2041:3297:16917",
+          "cf_contest": 2041,
+          "cf": 2700.0,
+          "contest_id": 3297,
+          "problem_id": 16917,
+          "problem_label": "J",
+          "region": "Asia Pacific",
+          "raw_affine": 2966.7870071147563,
+          "gym_shape_affine": 3038.722940157303,
+          "ridge_residual": 2899.4177398454544,
+          "features": {
+            "raw_b": 2523.6,
+            "binary_minus_survival": 275.8000000000002,
+            "conditional_fit_se": 79.6,
+            "solve_rate": 0.03305785123966942,
+            "log_field_size": 4.804021044733257,
+            "log_median_solve_seconds": 9.458020426135295,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 1.0,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2041:3297:16916",
+          "cf_contest": 2041,
+          "cf": 2300.0,
+          "contest_id": 3297,
+          "problem_id": 16916,
+          "problem_label": "I",
+          "region": "Asia Pacific",
+          "raw_affine": 2409.0767303353596,
+          "gym_shape_affine": 2432.575559364959,
+          "ridge_residual": 2369.896193023371,
+          "features": {
+            "raw_b": 2188.9,
+            "binary_minus_survival": 123.09999999999991,
+            "conditional_fit_se": 35.2,
+            "solve_rate": 0.19834710743801653,
+            "log_field_size": 4.804021044733257,
+            "log_median_solve_seconds": 9.20397012496834,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 1.0,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2041:3297:16915",
+          "cf_contest": 2041,
+          "cf": 2300.0,
+          "contest_id": 3297,
+          "problem_id": 16915,
+          "problem_label": "H",
+          "region": "Asia Pacific",
+          "raw_affine": 2280.2718172936884,
+          "gym_shape_affine": 2296.5093772171076,
+          "ridge_residual": 2240.625821882865,
+          "features": {
+            "raw_b": 2111.6,
+            "binary_minus_survival": 87.30000000000018,
+            "conditional_fit_se": 30.6,
+            "solve_rate": 0.2644628099173554,
+            "log_field_size": 4.804021044733257,
+            "log_median_solve_seconds": 8.936626948751798,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 1.0,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2041:3297:16914",
+          "cf_contest": 2041,
+          "cf": 3100.0,
+          "contest_id": 3297,
+          "problem_id": 16914,
+          "problem_label": "G",
+          "region": "Asia Pacific",
+          "raw_affine": 2970.786124725365,
+          "gym_shape_affine": 3042.7074462419573,
+          "ridge_residual": 2902.1894916904316,
+          "features": {
+            "raw_b": 2526.0,
+            "binary_minus_survival": 273.4000000000001,
+            "conditional_fit_se": 79.6,
+            "solve_rate": 0.03305785123966942,
+            "log_field_size": 4.804021044733257,
+            "log_median_solve_seconds": 9.457590998633625,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 1.0,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2041:3297:16913",
+          "cf_contest": 2041,
+          "cf": 2400.0,
+          "contest_id": 3297,
+          "problem_id": 16913,
+          "problem_label": "F",
+          "region": "Asia Pacific",
+          "raw_affine": 2432.738176198124,
+          "gym_shape_affine": 2450.9366907411045,
+          "ridge_residual": 2395.542477615166,
+          "features": {
+            "raw_b": 2203.1,
+            "binary_minus_survival": 124.5,
+            "conditional_fit_se": 35.9,
+            "solve_rate": 0.19008264462809918,
+            "log_field_size": 4.804021044733257,
+            "log_median_solve_seconds": 9.328567753340833,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 1.0,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2041:3297:16912",
+          "cf_contest": 2041,
+          "cf": 1200.0,
+          "contest_id": 3297,
+          "problem_id": 16912,
+          "problem_label": "E",
+          "region": "Asia Pacific",
+          "raw_affine": 1245.666765449267,
+          "gym_shape_affine": 1282.5676330845245,
+          "ridge_residual": 1161.5526643145838,
+          "features": {
+            "raw_b": 1490.7,
+            "binary_minus_survival": -328.5,
+            "conditional_fit_se": 16.1,
+            "solve_rate": 0.9669421487603306,
+            "log_field_size": 4.804021044733257,
+            "log_median_solve_seconds": 7.05444965813294,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 1.0,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2041:3297:16911",
+          "cf_contest": 2041,
+          "cf": 1700.0,
+          "contest_id": 3297,
+          "problem_id": 16911,
+          "problem_label": "D",
+          "region": "Asia Pacific",
+          "raw_affine": 1816.707434264025,
+          "gym_shape_affine": 1773.528162097526,
+          "ridge_residual": 1811.5495841630209,
+          "features": {
+            "raw_b": 1833.4,
+            "binary_minus_survival": -49.0,
+            "conditional_fit_se": 20.5,
+            "solve_rate": 0.5950413223140496,
+            "log_field_size": 4.804021044733257,
+            "log_median_solve_seconds": 8.046068934501799,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 1.0,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2041:3297:16910",
+          "cf_contest": 2041,
+          "cf": 2000.0,
+          "contest_id": 3297,
+          "problem_id": 16910,
+          "problem_label": "C",
+          "region": "Asia Pacific",
+          "raw_affine": 2063.6529467190794,
+          "gym_shape_affine": 2028.5307275183463,
+          "ridge_residual": 2042.5340531162683,
+          "features": {
+            "raw_b": 1981.6,
+            "binary_minus_survival": 12.200000000000045,
+            "conditional_fit_se": 24.5,
+            "solve_rate": 0.4132231404958678,
+            "log_field_size": 4.804021044733257,
+            "log_median_solve_seconds": 8.79186600927438,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 1.0,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2041:3297:16909",
+          "cf_contest": 2041,
+          "cf": 1200.0,
+          "contest_id": 3297,
+          "problem_id": 16909,
+          "problem_label": "B",
+          "region": "Asia Pacific",
+          "raw_affine": 1371.8056000838662,
+          "gym_shape_affine": 1378.2490325951462,
+          "ridge_residual": 1211.3786523506215,
+          "features": {
+            "raw_b": 1566.4,
+            "binary_minus_survival": -501.10000000000014,
+            "conditional_fit_se": 15.9,
+            "solve_rate": 0.9834710743801653,
+            "log_field_size": 4.804021044733257,
+            "log_median_solve_seconds": 7.62608275807238,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 1.0,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2041:3297:16908",
+          "cf_contest": 2041,
+          "cf": 1300.0,
+          "contest_id": 3297,
+          "problem_id": 16908,
+          "problem_label": "A",
+          "region": "Asia Pacific",
+          "raw_affine": 724.448436866669,
+          "gym_shape_affine": 887.2024842480316,
+          "ridge_residual": 558.8224088288462,
+          "features": {
+            "raw_b": 1177.9,
+            "binary_minus_survival": -285.5000000000001,
+            "conditional_fit_se": 15.8,
+            "solve_rate": 1.0,
+            "log_field_size": 4.804021044733257,
+            "log_median_solve_seconds": 5.3981627015177525,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 1.0,
+            "tabfm": "unavailable"
+          }
+        }
+      ],
+      "selected": {
+        "ridge_alpha": 1.0,
+        "ridge_lambda": 1.0,
+        "tabfm": "unavailable"
+      }
+    },
+    "2045": {
+      "predictions": [
+        {
+          "row_id": "2045:1992:10583",
+          "cf_contest": 2045,
+          "cf": 1800.0,
+          "contest_id": 1992,
+          "problem_id": 10583,
+          "problem_label": "M",
+          "region": "Asia Pacific",
+          "raw_affine": 1817.1678760073555,
+          "gym_shape_affine": 1769.7289319789954,
+          "ridge_residual": 1818.9942295391297,
+          "features": {
+            "raw_b": 1829.5,
+            "binary_minus_survival": -255.29999999999995,
+            "conditional_fit_se": 19.5,
+            "solve_rate": 0.8061224489795918,
+            "log_field_size": 4.59511985013459,
+            "log_median_solve_seconds": 8.70334075304372,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2045:1992:10582",
+          "cf_contest": 2045,
+          "cf": 3000.0,
+          "contest_id": 1992,
+          "problem_id": 10582,
+          "problem_label": "L",
+          "region": "Asia Pacific",
+          "raw_affine": 2934.9264712560384,
+          "gym_shape_affine": 3007.697903434778,
+          "ridge_residual": 2923.9377540377045,
+          "features": {
+            "raw_b": 2505.1,
+            "binary_minus_survival": 298.8000000000002,
+            "conditional_fit_se": 79.8,
+            "solve_rate": 0.04081632653061224,
+            "log_field_size": 4.59511985013459,
+            "log_median_solve_seconds": 9.565739502410864,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2045:1992:10581",
+          "cf_contest": 2045,
+          "cf": 2900.0,
+          "contest_id": 1992,
+          "problem_id": 10581,
+          "problem_label": "K",
+          "region": "Asia Pacific",
+          "raw_affine": 3212.0498648382686,
+          "gym_shape_affine": 3207.92640816715,
+          "ridge_residual": 3155.8421235701157,
+          "features": {
+            "raw_b": 2672.6,
+            "binary_minus_survival": 336.4000000000001,
+            "conditional_fit_se": 125.4,
+            "solve_rate": 0.01020408163265306,
+            "log_field_size": 4.59511985013459,
+            "log_median_solve_seconds": 9.194312610898985,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2045:1992:10580",
+          "cf_contest": 2045,
+          "cf": 2600.0,
+          "contest_id": 1992,
+          "problem_id": 10580,
+          "problem_label": "J",
+          "region": "Asia Pacific",
+          "raw_affine": 2929.797620389741,
+          "gym_shape_affine": 3002.562476590324,
+          "ridge_residual": 2919.913101048098,
+          "features": {
+            "raw_b": 2502.0,
+            "binary_minus_survival": 301.9000000000001,
+            "conditional_fit_se": 79.8,
+            "solve_rate": 0.04081632653061224,
+            "log_field_size": 4.59511985013459,
+            "log_median_solve_seconds": 9.460904518866384,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2045:1992:10579",
+          "cf_contest": 2045,
+          "cf": 2100.0,
+          "contest_id": 1992,
+          "problem_id": 10579,
+          "problem_label": "I",
+          "region": "Asia Pacific",
+          "raw_affine": 2017.6894001993928,
+          "gym_shape_affine": 1988.782424285233,
+          "ridge_residual": 2047.7375374321014,
+          "features": {
+            "raw_b": 1950.7,
+            "binary_minus_survival": -50.799999999999955,
+            "conditional_fit_se": 23.4,
+            "solve_rate": 0.5612244897959183,
+            "log_field_size": 4.59511985013459,
+            "log_median_solve_seconds": 9.028938392241612,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2045:1992:10578",
+          "cf_contest": 2045,
+          "cf": 2200.0,
+          "contest_id": 1992,
+          "problem_id": 10578,
+          "problem_label": "H",
+          "region": "Asia Pacific",
+          "raw_affine": 2514.526147021743,
+          "gym_shape_affine": 2544.934837946832,
+          "ridge_residual": 2513.7143105646915,
+          "features": {
+            "raw_b": 2251.0,
+            "binary_minus_survival": 181.69999999999982,
+            "conditional_fit_se": 42.8,
+            "solve_rate": 0.16326530612244897,
+            "log_field_size": 4.59511985013459,
+            "log_median_solve_seconds": 9.229407434693409,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2045:1992:10577",
+          "cf_contest": 2045,
+          "cf": 2200.0,
+          "contest_id": 1992,
+          "problem_id": 10577,
+          "problem_label": "G",
+          "region": "Asia Pacific",
+          "raw_affine": 2308.2139847548533,
+          "gym_shape_affine": 2333.8874243369846,
+          "ridge_residual": 2313.4753905519774,
+          "features": {
+            "raw_b": 2126.3,
+            "binary_minus_survival": 82.19999999999982,
+            "conditional_fit_se": 31.5,
+            "solve_rate": 0.30612244897959184,
+            "log_field_size": 4.59511985013459,
+            "log_median_solve_seconds": 9.227541579295957,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2045:1992:10576",
+          "cf_contest": 2045,
+          "cf": 3000.0,
+          "contest_id": 1992,
+          "problem_id": 10576,
+          "problem_label": "F",
+          "region": "Asia Pacific",
+          "raw_affine": 2641.423844262083,
+          "gym_shape_affine": 2695.0260928249945,
+          "ridge_residual": 2637.8119878528296,
+          "features": {
+            "raw_b": 2327.7,
+            "binary_minus_survival": 220.5,
+            "conditional_fit_se": 51.1,
+            "solve_rate": 0.11224489795918367,
+            "log_field_size": 4.59511985013459,
+            "log_median_solve_seconds": 9.346966969508008,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2045:1992:10575",
+          "cf_contest": 2045,
+          "cf": 2700.0,
+          "contest_id": 1992,
+          "problem_id": 10575,
+          "problem_label": "E",
+          "region": "Asia Pacific",
+          "raw_affine": 2746.6480104222615,
+          "gym_shape_affine": 2809.0880932407727,
+          "ridge_residual": 2741.5191080173217,
+          "features": {
+            "raw_b": 2391.3,
+            "binary_minus_survival": 246.79999999999973,
+            "conditional_fit_se": 59.2,
+            "solve_rate": 0.08163265306122448,
+            "log_field_size": 4.59511985013459,
+            "log_median_solve_seconds": 9.636620666464932,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2045:1992:10574",
+          "cf_contest": 2045,
+          "cf": 3500.0,
+          "contest_id": 1992,
+          "problem_id": 10574,
+          "problem_label": "D",
+          "region": "Asia Pacific",
+          "raw_affine": 3419.0238143137135,
+          "gym_shape_affine": 3346.949442176946,
+          "ridge_residual": 3258.815284505357,
+          "features": {
+            "raw_b": 2797.7,
+            "binary_minus_survival": 325.7000000000003,
+            "conditional_fit_se": 169.2,
+            "solve_rate": 0.0,
+            "log_field_size": 4.59511985013459,
+            "log_median_solve_seconds": 0.0,
+            "timing_missing": 1.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2045:1992:10573",
+          "cf_contest": 2045,
+          "cf": 1400.0,
+          "contest_id": 1992,
+          "problem_id": 10573,
+          "problem_label": "C",
+          "region": "Asia Pacific",
+          "raw_affine": 1510.9258452487243,
+          "gym_shape_affine": 1480.9019355349396,
+          "ridge_residual": 1478.6379694029517,
+          "features": {
+            "raw_b": 1644.4,
+            "binary_minus_survival": -377.20000000000005,
+            "conditional_fit_se": 18.0,
+            "solve_rate": 0.9489795918367347,
+            "log_field_size": 4.59511985013459,
+            "log_median_solve_seconds": 7.843064016692054,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2045:1992:10572",
+          "cf_contest": 2045,
+          "cf": 2000.0,
+          "contest_id": 1992,
+          "problem_id": 10572,
+          "problem_label": "B",
+          "region": "Asia Pacific",
+          "raw_affine": 2096.9384184238033,
+          "gym_shape_affine": 2053.228525536055,
+          "ridge_residual": 2120.5413899942687,
+          "features": {
+            "raw_b": 1998.6,
+            "binary_minus_survival": -14.099999999999909,
+            "conditional_fit_se": 25.0,
+            "solve_rate": 0.4897959183673469,
+            "log_field_size": 4.59511985013459,
+            "log_median_solve_seconds": 9.07595146893753,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2045:1992:10571",
+          "cf_contest": 2045,
+          "cf": 1700.0,
+          "contest_id": 1992,
+          "problem_id": 10571,
+          "problem_label": "A",
+          "region": "Asia Pacific",
+          "raw_affine": 1701.6860081145815,
+          "gym_shape_affine": 1659.1053076431394,
+          "ridge_residual": 1734.0221532673893,
+          "features": {
+            "raw_b": 1759.7,
+            "binary_minus_survival": -201.9000000000001,
+            "conditional_fit_se": 19.4,
+            "solve_rate": 0.8163265306122449,
+            "log_field_size": 4.59511985013459,
+            "log_median_solve_seconds": 8.30671904320269,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        }
+      ],
+      "selected": {
+        "ridge_alpha": 1.0,
+        "ridge_lambda": 0.75,
+        "tabfm": "unavailable"
+      }
+    },
+    "2052": {
+      "predictions": [
+        {
+          "row_id": "2052:1984:10426",
+          "cf_contest": 2052,
+          "cf": 2700.0,
+          "contest_id": 1984,
+          "problem_id": 10426,
+          "problem_label": "M",
+          "region": "Northern Eurasia",
+          "raw_affine": 2469.507527314036,
+          "gym_shape_affine": 2489.140746186965,
+          "ridge_residual": 2436.844870972025,
+          "features": {
+            "raw_b": 2228.4,
+            "binary_minus_survival": 187.29999999999973,
+            "conditional_fit_se": 24.0,
+            "solve_rate": 0.17333333333333334,
+            "log_field_size": 5.707110264748875,
+            "log_median_solve_seconds": 9.39992713976155,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2052:1984:10425",
+          "cf_contest": 2052,
+          "cf": 2900.0,
+          "contest_id": 1984,
+          "problem_id": 10425,
+          "problem_label": "L",
+          "region": "Northern Eurasia",
+          "raw_affine": 2952.875855409391,
+          "gym_shape_affine": 3025.177383114474,
+          "ridge_residual": 2945.5707241911114,
+          "features": {
+            "raw_b": 2520.8,
+            "binary_minus_survival": 342.5,
+            "conditional_fit_se": 50.7,
+            "solve_rate": 0.03666666666666667,
+            "log_field_size": 5.707110264748875,
+            "log_median_solve_seconds": 9.430760217368796,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2052:1984:10424",
+          "cf_contest": 2052,
+          "cf": 2800.0,
+          "contest_id": 1984,
+          "problem_id": 10424,
+          "problem_label": "K",
+          "region": "Northern Eurasia",
+          "raw_affine": 3114.714977572644,
+          "gym_shape_affine": 3148.5577429258615,
+          "ridge_residual": 3107.029324253264,
+          "features": {
+            "raw_b": 2618.7,
+            "binary_minus_survival": 376.9000000000001,
+            "conditional_fit_se": 66.3,
+            "solve_rate": 0.02,
+            "log_field_size": 5.707110264748875,
+            "log_median_solve_seconds": 9.636816527273812,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2052:1984:10423",
+          "cf_contest": 2052,
+          "cf": 2000.0,
+          "contest_id": 1984,
+          "problem_id": 10423,
+          "problem_label": "J",
+          "region": "Northern Eurasia",
+          "raw_affine": 1971.7571730407408,
+          "gym_shape_affine": 1944.614785919631,
+          "ridge_residual": 1957.7149027093917,
+          "features": {
+            "raw_b": 1927.3,
+            "binary_minus_survival": -65.39999999999986,
+            "conditional_fit_se": 12.9,
+            "solve_rate": 0.6066666666666667,
+            "log_field_size": 5.707110264748875,
+            "log_median_solve_seconds": 9.120853205474647,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2052:1984:10422",
+          "cf_contest": 2052,
+          "cf": 2800.0,
+          "contest_id": 1984,
+          "problem_id": 10422,
+          "problem_label": "I",
+          "region": "Northern Eurasia",
+          "raw_affine": 2721.7715726880137,
+          "gym_shape_affine": 2782.366062452832,
+          "ridge_residual": 2703.72876028881,
+          "features": {
+            "raw_b": 2381.0,
+            "binary_minus_survival": 278.1999999999998,
+            "conditional_fit_se": 35.0,
+            "solve_rate": 0.08,
+            "log_field_size": 5.707110264748875,
+            "log_median_solve_seconds": 9.44604470533525,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2052:1984:10421",
+          "cf_contest": 2052,
+          "cf": 3500.0,
+          "contest_id": 1984,
+          "problem_id": 10421,
+          "problem_label": "H",
+          "region": "Northern Eurasia",
+          "raw_affine": 3164.3081712896774,
+          "gym_shape_affine": 3176.745426559903,
+          "ridge_residual": 3152.974575830357,
+          "features": {
+            "raw_b": 2648.7,
+            "binary_minus_survival": 382.2000000000003,
+            "conditional_fit_se": 71.6,
+            "solve_rate": 0.016666666666666666,
+            "log_field_size": 5.707110264748875,
+            "log_median_solve_seconds": 9.662879887470275,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2052:1984:10420",
+          "cf_contest": 2052,
+          "cf": 2800.0,
+          "contest_id": 1984,
+          "problem_id": 10420,
+          "problem_label": "G",
+          "region": "Northern Eurasia",
+          "raw_affine": 2715.985700087693,
+          "gym_shape_affine": 2776.095725806948,
+          "ridge_residual": 2695.2720143247125,
+          "features": {
+            "raw_b": 2377.5,
+            "binary_minus_survival": 270.0,
+            "conditional_fit_se": 34.3,
+            "solve_rate": 0.08333333333333333,
+            "log_field_size": 5.707110264748875,
+            "log_median_solve_seconds": 9.601300793881466,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2052:1984:10419",
+          "cf_contest": 2052,
+          "cf": 1700.0,
+          "contest_id": 1984,
+          "problem_id": 10419,
+          "problem_label": "F",
+          "region": "Northern Eurasia",
+          "raw_affine": 1643.6155412797011,
+          "gym_shape_affine": 1604.3601616421959,
+          "ridge_residual": 1616.9359806204561,
+          "features": {
+            "raw_b": 1728.8,
+            "binary_minus_survival": -244.0999999999999,
+            "conditional_fit_se": 10.7,
+            "solve_rate": 0.8766666666666667,
+            "log_field_size": 5.707110264748875,
+            "log_median_solve_seconds": 8.261784679514752,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2052:1984:10418",
+          "cf_contest": 2052,
+          "cf": 1900.0,
+          "contest_id": 1984,
+          "problem_id": 10418,
+          "problem_label": "E",
+          "region": "Northern Eurasia",
+          "raw_affine": 1788.262356287716,
+          "gym_shape_affine": 1741.723942115549,
+          "ridge_residual": 1771.6040051783093,
+          "features": {
+            "raw_b": 1816.3,
+            "binary_minus_survival": -182.39999999999986,
+            "conditional_fit_se": 11.3,
+            "solve_rate": 0.79,
+            "log_field_size": 5.707110264748875,
+            "log_median_solve_seconds": 8.736328721332908,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2052:1984:10417",
+          "cf_contest": 2052,
+          "cf": 2100.0,
+          "contest_id": 1984,
+          "problem_id": 10417,
+          "problem_label": "D",
+          "region": "Northern Eurasia",
+          "raw_affine": 2049.9491084679303,
+          "gym_shape_affine": 2013.5475702141857,
+          "ridge_residual": 2036.257319160301,
+          "features": {
+            "raw_b": 1974.6,
+            "binary_minus_survival": 10.600000000000136,
+            "conditional_fit_se": 14.3,
+            "solve_rate": 0.49333333333333335,
+            "log_field_size": 5.707110264748875,
+            "log_median_solve_seconds": 9.046231944601587,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2052:1984:10416",
+          "cf_contest": 2052,
+          "cf": 3500.0,
+          "contest_id": 1984,
+          "problem_id": 10416,
+          "problem_label": "C",
+          "region": "Northern Eurasia",
+          "raw_affine": 3481.208679141523,
+          "gym_shape_affine": 3389.907525726771,
+          "ridge_residual": 3418.2774784902085,
+          "features": {
+            "raw_b": 2840.4,
+            "binary_minus_survival": 404.5,
+            "conditional_fit_se": 119.8,
+            "solve_rate": 0.0033333333333333335,
+            "log_field_size": 5.707110264748875,
+            "log_median_solve_seconds": 9.597709395814938,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2052:1984:10415",
+          "cf_contest": 2052,
+          "cf": 2400.0,
+          "contest_id": 1984,
+          "problem_id": 10415,
+          "problem_label": "B",
+          "region": "Northern Eurasia",
+          "raw_affine": 2426.1961381344927,
+          "gym_shape_affine": 2442.8058935646377,
+          "ridge_residual": 2380.75517801312,
+          "features": {
+            "raw_b": 2202.2,
+            "binary_minus_survival": 134.5,
+            "conditional_fit_se": 21.5,
+            "solve_rate": 0.21666666666666667,
+            "log_field_size": 5.707110264748875,
+            "log_median_solve_seconds": 9.571783927990017,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2052:1984:10414",
+          "cf_contest": 2052,
+          "cf": 1600.0,
+          "contest_id": 1984,
+          "problem_id": 10414,
+          "problem_label": "A",
+          "region": "Northern Eurasia",
+          "raw_affine": 1550.8762690288481,
+          "gym_shape_affine": 1517.7894432954508,
+          "ridge_residual": 1502.6995863333987,
+          "features": {
+            "raw_b": 1672.7,
+            "binary_minus_survival": -300.79999999999995,
+            "conditional_fit_se": 10.4,
+            "solve_rate": 0.9233333333333333,
+            "log_field_size": 5.707110264748875,
+            "log_median_solve_seconds": 8.047829357457841,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        }
+      ],
+      "selected": {
+        "ridge_alpha": 1.0,
+        "ridge_lambda": 0.75,
+        "tabfm": "unavailable"
+      }
+    },
+    "2068": {
+      "predictions": [
+        {
+          "row_id": "2068:1964:10320",
+          "cf_contest": 2068,
+          "cf": 3000.0,
+          "contest_id": 1964,
+          "problem_id": 10320,
+          "problem_label": "K",
+          "region": "Europe",
+          "raw_affine": 2762.707078808534,
+          "gym_shape_affine": 2828.4449333398447,
+          "ridge_residual": 2883.901415181943,
+          "features": {
+            "raw_b": 2415.3,
+            "binary_minus_survival": 342.6999999999998,
+            "conditional_fit_se": 42.6,
+            "solve_rate": 0.16326530612244897,
+            "log_field_size": 4.59511985013459,
+            "log_median_solve_seconds": 9.64930472862475,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2068:1964:10319",
+          "cf_contest": 2068,
+          "cf": 2000.0,
+          "contest_id": 1964,
+          "problem_id": 10319,
+          "problem_label": "J",
+          "region": "Europe",
+          "raw_affine": 1793.1428243905427,
+          "gym_shape_affine": 1745.9950459738666,
+          "ridge_residual": 1669.452025717414,
+          "features": {
+            "raw_b": 1827.1,
+            "binary_minus_survival": -521.6999999999998,
+            "conditional_fit_se": 17.5,
+            "solve_rate": 1.0,
+            "log_field_size": 4.59511985013459,
+            "log_median_solve_seconds": 8.066992189466681,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2068:1964:10318",
+          "cf_contest": 2068,
+          "cf": 3500.0,
+          "contest_id": 1964,
+          "problem_id": 10318,
+          "problem_label": "I",
+          "region": "Europe",
+          "raw_affine": 3079.356676349669,
+          "gym_shape_affine": 3122.435757900953,
+          "ridge_residual": 3182.7503591616164,
+          "features": {
+            "raw_b": 2607.4,
+            "binary_minus_survival": 434.2999999999997,
+            "conditional_fit_se": 71.8,
+            "solve_rate": 0.05102040816326531,
+            "log_field_size": 4.59511985013459,
+            "log_median_solve_seconds": 9.70430463866676,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2068:1964:10317",
+          "cf_contest": 2068,
+          "cf": 2700.0,
+          "contest_id": 1964,
+          "problem_id": 10317,
+          "problem_label": "H",
+          "region": "Europe",
+          "raw_affine": 2343.199933705884,
+          "gym_shape_affine": 2375.399989189757,
+          "ridge_residual": 2495.568708318898,
+          "features": {
+            "raw_b": 2160.8,
+            "binary_minus_survival": 143.19999999999982,
+            "conditional_fit_se": 23.8,
+            "solve_rate": 0.5408163265306123,
+            "log_field_size": 4.59511985013459,
+            "log_median_solve_seconds": 9.377632889750377,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2068:1964:10316",
+          "cf_contest": 2068,
+          "cf": 3500.0,
+          "contest_id": 1964,
+          "problem_id": 10316,
+          "problem_label": "G",
+          "region": "Europe",
+          "raw_affine": 3134.411838025224,
+          "gym_shape_affine": 3153.757097450567,
+          "ridge_residual": 3230.8265256113286,
+          "features": {
+            "raw_b": 2640.8,
+            "binary_minus_survival": 443.1999999999998,
+            "conditional_fit_se": 78.6,
+            "solve_rate": 0.04081632653061224,
+            "log_field_size": 4.59511985013459,
+            "log_median_solve_seconds": 9.62483129129166,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2068:1964:10315",
+          "cf_contest": 2068,
+          "cf": 1900.0,
+          "contest_id": 1964,
+          "problem_id": 10315,
+          "problem_label": "F",
+          "region": "Europe",
+          "raw_affine": 1801.879122500736,
+          "gym_shape_affine": 1754.3690977307654,
+          "ridge_residual": 1675.4500824482445,
+          "features": {
+            "raw_b": 1832.4,
+            "binary_minus_survival": -527.0,
+            "conditional_fit_se": 17.5,
+            "solve_rate": 1.0,
+            "log_field_size": 4.59511985013459,
+            "log_median_solve_seconds": 8.237479288613633,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2068:1964:10314",
+          "cf_contest": 2068,
+          "cf": 2800.0,
+          "contest_id": 1964,
+          "problem_id": 10314,
+          "problem_label": "E",
+          "region": "Europe",
+          "raw_affine": 2742.102602133551,
+          "gym_shape_affine": 2806.318254567132,
+          "ridge_residual": 2870.671118268733,
+          "features": {
+            "raw_b": 2402.8,
+            "binary_minus_survival": 355.1999999999998,
+            "conditional_fit_se": 42.6,
+            "solve_rate": 0.16326530612244897,
+            "log_field_size": 4.59511985013459,
+            "log_median_solve_seconds": 9.40224090355046,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2068:1964:10313",
+          "cf_contest": 2068,
+          "cf": 3100.0,
+          "contest_id": 1964,
+          "problem_id": 10313,
+          "problem_label": "D",
+          "region": "Europe",
+          "raw_affine": 2943.8616377349827,
+          "gym_shape_affine": 3017.158418417753,
+          "ridge_residual": 3060.726576744268,
+          "features": {
+            "raw_b": 2525.2,
+            "binary_minus_survival": 414.5,
+            "conditional_fit_se": 58.7,
+            "solve_rate": 0.08163265306122448,
+            "log_field_size": 4.59511985013459,
+            "log_median_solve_seconds": 9.407919931159118,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2068:1964:10312",
+          "cf_contest": 2068,
+          "cf": 2100.0,
+          "contest_id": 1964,
+          "problem_id": 10312,
+          "problem_label": "C",
+          "region": "Europe",
+          "raw_affine": 1914.7916546796416,
+          "gym_shape_affine": 1880.7336177752834,
+          "ridge_residual": 1833.5522006728727,
+          "features": {
+            "raw_b": 1900.9,
+            "binary_minus_survival": -456.4000000000001,
+            "conditional_fit_se": 17.6,
+            "solve_rate": 0.9897959183673469,
+            "log_field_size": 4.59511985013459,
+            "log_median_solve_seconds": 8.627123250788433,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2068:1964:10311",
+          "cf_contest": 2068,
+          "cf": 3100.0,
+          "contest_id": 1964,
+          "problem_id": 10311,
+          "problem_label": "B",
+          "region": "Europe",
+          "raw_affine": 2157.7596436310387,
+          "gym_shape_affine": 2128.109530742547,
+          "ridge_residual": 2289.457876585885,
+          "features": {
+            "raw_b": 2048.3,
+            "binary_minus_survival": -35.90000000000009,
+            "conditional_fit_se": 19.6,
+            "solve_rate": 0.7959183673469388,
+            "log_field_size": 4.59511985013459,
+            "log_median_solve_seconds": 9.188197007290492,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2068:1964:10310",
+          "cf_contest": 2068,
+          "cf": 2300.0,
+          "contest_id": 1964,
+          "problem_id": 10310,
+          "problem_label": "A",
+          "region": "Europe",
+          "raw_affine": 1964.0775628862004,
+          "gym_shape_affine": 1938.148557946545,
+          "ridge_residual": 2090.8209604940603,
+          "features": {
+            "raw_b": 1930.8,
+            "binary_minus_survival": -97.59999999999991,
+            "conditional_fit_se": 18.5,
+            "solve_rate": 0.8979591836734694,
+            "log_field_size": 4.59511985013459,
+            "log_median_solve_seconds": 8.36718392408953,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        }
+      ],
+      "selected": {
+        "ridge_alpha": 1.0,
+        "ridge_lambda": 0.75,
+        "tabfm": "unavailable"
+      }
+    },
+    "2073": {
+      "predictions": [
+        {
+          "row_id": "2073:2527:14338",
+          "cf_contest": 2073,
+          "cf": 3300.0,
+          "contest_id": 2527,
+          "problem_id": 14338,
+          "problem_label": "M",
+          "region": "Asia Pacific",
+          "raw_affine": 3230.2048932341004,
+          "gym_shape_affine": 3207.264478072447,
+          "ridge_residual": 3259.1097097097213,
+          "features": {
+            "raw_b": 2696.2,
+            "binary_minus_survival": 379.0,
+            "conditional_fit_se": 87.5,
+            "solve_rate": 0.02459016393442623,
+            "log_field_size": 4.812184355372417,
+            "log_median_solve_seconds": 9.533437849648918,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2073:2527:14337",
+          "cf_contest": 2073,
+          "cf": 1300.0,
+          "contest_id": 2527,
+          "problem_id": 14337,
+          "problem_label": "L",
+          "region": "Asia Pacific",
+          "raw_affine": 1589.300843144022,
+          "gym_shape_affine": 1555.5566851241565,
+          "ridge_residual": 1503.832155146643,
+          "features": {
+            "raw_b": 1698.1,
+            "binary_minus_survival": -490.29999999999995,
+            "conditional_fit_se": 15.7,
+            "solve_rate": 1.0,
+            "log_field_size": 4.812184355372417,
+            "log_median_solve_seconds": 7.496097345175956,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2073:2527:14336",
+          "cf_contest": 2073,
+          "cf": 2900.0,
+          "contest_id": 2527,
+          "problem_id": 14336,
+          "problem_label": "K",
+          "region": "Asia Pacific",
+          "raw_affine": 2738.8050128895215,
+          "gym_shape_affine": 2800.4652320975592,
+          "ridge_residual": 2830.4356551139604,
+          "features": {
+            "raw_b": 2397.3,
+            "binary_minus_survival": 320.6999999999998,
+            "conditional_fit_se": 39.2,
+            "solve_rate": 0.1557377049180328,
+            "log_field_size": 4.812184355372417,
+            "log_median_solve_seconds": 9.380420642347783,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2073:2527:14335",
+          "cf_contest": 2073,
+          "cf": 2000.0,
+          "contest_id": 2527,
+          "problem_id": 14335,
+          "problem_label": "J",
+          "region": "Asia Pacific",
+          "raw_affine": 1857.606164228784,
+          "gym_shape_affine": 1814.2179457010127,
+          "ridge_residual": 1883.2044255396186,
+          "features": {
+            "raw_b": 1861.3,
+            "binary_minus_survival": -322.0,
+            "conditional_fit_se": 16.0,
+            "solve_rate": 0.9672131147540983,
+            "log_field_size": 4.812184355372417,
+            "log_median_solve_seconds": 8.410387187098427,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2073:2527:14334",
+          "cf_contest": 2073,
+          "cf": 3100.0,
+          "contest_id": 2527,
+          "problem_id": 14334,
+          "problem_label": "I",
+          "region": "Asia Pacific",
+          "raw_affine": 2585.417228225255,
+          "gym_shape_affine": 2634.7036308612396,
+          "ridge_residual": 2695.881219583588,
+          "features": {
+            "raw_b": 2304.0,
+            "binary_minus_survival": 274.5,
+            "conditional_fit_se": 30.9,
+            "solve_rate": 0.2540983606557377,
+            "log_field_size": 4.812184355372417,
+            "log_median_solve_seconds": 9.417435838868785,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2073:2527:14333",
+          "cf_contest": 2073,
+          "cf": 2700.0,
+          "contest_id": 2527,
+          "problem_id": 14333,
+          "problem_label": "H",
+          "region": "Asia Pacific",
+          "raw_affine": 2372.351237952062,
+          "gym_shape_affine": 2399.07245587079,
+          "ridge_residual": 2511.426911965276,
+          "features": {
+            "raw_b": 2174.4,
+            "binary_minus_survival": 158.0,
+            "conditional_fit_se": 22.5,
+            "solve_rate": 0.48360655737704916,
+            "log_field_size": 4.812184355372417,
+            "log_median_solve_seconds": 9.36228862824824,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2073:2527:14332",
+          "cf_contest": 2073,
+          "cf": 2200.0,
+          "contest_id": 2527,
+          "problem_id": 14332,
+          "problem_label": "G",
+          "region": "Asia Pacific",
+          "raw_affine": 1921.8876474053418,
+          "gym_shape_affine": 1888.8718895607183,
+          "ridge_residual": 2017.722113161059,
+          "features": {
+            "raw_b": 1900.4,
+            "binary_minus_survival": -189.5,
+            "conditional_fit_se": 16.3,
+            "solve_rate": 0.9262295081967213,
+            "log_field_size": 4.812184355372417,
+            "log_median_solve_seconds": 8.616314282284044,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2073:2527:14331",
+          "cf_contest": 2073,
+          "cf": 3500.0,
+          "contest_id": 2527,
+          "problem_id": 14331,
+          "problem_label": "F",
+          "region": "Asia Pacific",
+          "raw_affine": 2836.1314528908565,
+          "gym_shape_affine": 2904.6610276249253,
+          "ridge_residual": 2918.4375973977617,
+          "features": {
+            "raw_b": 2456.5,
+            "binary_minus_survival": 336.5999999999999,
+            "conditional_fit_se": 45.3,
+            "solve_rate": 0.11475409836065574,
+            "log_field_size": 4.812184355372417,
+            "log_median_solve_seconds": 9.678811577660474,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2073:2527:14330",
+          "cf_contest": 2073,
+          "cf": 3300.0,
+          "contest_id": 2527,
+          "problem_id": 14330,
+          "problem_label": "E",
+          "region": "Asia Pacific",
+          "raw_affine": 3066.4597340426644,
+          "gym_shape_affine": 3114.3944729681957,
+          "ridge_residual": 3121.9363354765374,
+          "features": {
+            "raw_b": 2596.6,
+            "binary_minus_survival": 369.5999999999999,
+            "conditional_fit_se": 66.4,
+            "solve_rate": 0.04918032786885246,
+            "log_field_size": 4.812184355372417,
+            "log_median_solve_seconds": 9.608478704697886,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2073:2527:14329",
+          "cf_contest": 2073,
+          "cf": 2400.0,
+          "contest_id": 2527,
+          "problem_id": 14329,
+          "problem_label": "D",
+          "region": "Asia Pacific",
+          "raw_affine": 2263.845409572195,
+          "gym_shape_affine": 2275.23594424377,
+          "ridge_residual": 2420.4168680310613,
+          "features": {
+            "raw_b": 2108.4,
+            "binary_minus_survival": 117.09999999999991,
+            "conditional_fit_se": 20.4,
+            "solve_rate": 0.5901639344262295,
+            "log_field_size": 4.812184355372417,
+            "log_median_solve_seconds": 9.17585244151751,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2073:2527:14328",
+          "cf_contest": 2073,
+          "cf": 2700.0,
+          "contest_id": 2527,
+          "problem_id": 14328,
+          "problem_label": "C",
+          "region": "Asia Pacific",
+          "raw_affine": 2873.779687283265,
+          "gym_shape_affine": 2944.57727455541,
+          "ridge_residual": 2952.2295480798643,
+          "features": {
+            "raw_b": 2479.4,
+            "binary_minus_survival": 348.7999999999997,
+            "conditional_fit_se": 48.7,
+            "solve_rate": 0.09836065573770492,
+            "log_field_size": 4.812184355372417,
+            "log_median_solve_seconds": 9.512184191834058,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2073:2527:14327",
+          "cf_contest": 2073,
+          "cf": 3500.0,
+          "contest_id": 2527,
+          "problem_id": 14327,
+          "problem_label": "B",
+          "region": "Asia Pacific",
+          "raw_affine": 3610.468500874452,
+          "gym_shape_affine": 3479.448236705645,
+          "ridge_residual": 3527.5115676565165,
+          "features": {
+            "raw_b": 2927.5,
+            "binary_minus_survival": 356.3000000000002,
+            "conditional_fit_se": 158.9,
+            "solve_rate": 0.0,
+            "log_field_size": 4.812184355372417,
+            "log_median_solve_seconds": 0.0,
+            "timing_missing": 1.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2073:2527:14326",
+          "cf_contest": 2073,
+          "cf": 1900.0,
+          "contest_id": 2527,
+          "problem_id": 14326,
+          "problem_label": "A",
+          "region": "Asia Pacific",
+          "raw_affine": 1728.8787951053969,
+          "gym_shape_affine": 1686.5724572180945,
+          "ridge_residual": 1679.3072715995759,
+          "features": {
+            "raw_b": 1783.0,
+            "binary_minus_survival": -443.9000000000001,
+            "conditional_fit_se": 15.8,
+            "solve_rate": 0.9918032786885246,
+            "log_field_size": 4.812184355372417,
+            "log_median_solve_seconds": 8.006700845440367,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        }
+      ],
+      "selected": {
+        "ridge_alpha": 1.0,
+        "ridge_lambda": 0.75,
+        "tabfm": "unavailable"
+      }
+    },
+    "2157": {
+      "predictions": [
+        {
+          "row_id": "2157:2692:15715",
+          "cf_contest": 2157,
+          "cf": 3500.0,
+          "contest_id": 2692,
+          "problem_id": 15715,
+          "problem_label": "H",
+          "region": "Europe",
+          "raw_affine": 3361.7341861326267,
+          "gym_shape_affine": 3298.8059711496844,
+          "ridge_residual": 3278.4225190946063,
+          "features": {
+            "raw_b": 2774.2,
+            "binary_minus_survival": 333.3000000000002,
+            "conditional_fit_se": 122.0,
+            "solve_rate": 0.00546448087431694,
+            "log_field_size": 5.214935757608986,
+            "log_median_solve_seconds": 9.777016888482178,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2157:2692:15718",
+          "cf_contest": 2157,
+          "cf": 3200.0,
+          "contest_id": 2692,
+          "problem_id": 15718,
+          "problem_label": "K",
+          "region": "Europe",
+          "raw_affine": 2992.3618413951926,
+          "gym_shape_affine": 3061.907007306977,
+          "ridge_residual": 2979.877675217042,
+          "features": {
+            "raw_b": 2546.2,
+            "binary_minus_survival": 319.9000000000001,
+            "conditional_fit_se": 66.7,
+            "solve_rate": 0.03278688524590164,
+            "log_field_size": 5.214935757608986,
+            "log_median_solve_seconds": 9.480863569337167,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2157:2692:15716",
+          "cf_contest": 2157,
+          "cf": 2800.0,
+          "contest_id": 2692,
+          "problem_id": 15716,
+          "problem_label": "I",
+          "region": "Europe",
+          "raw_affine": 2738.3373516810275,
+          "gym_shape_affine": 2798.1622420273643,
+          "ridge_residual": 2738.3357082307443,
+          "features": {
+            "raw_b": 2389.4,
+            "binary_minus_survival": 271.0,
+            "conditional_fit_se": 44.0,
+            "solve_rate": 0.08196721311475409,
+            "log_field_size": 5.214935757608986,
+            "log_median_solve_seconds": 9.552439604462528,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2157:2692:15714",
+          "cf_contest": 2157,
+          "cf": 2400.0,
+          "contest_id": 2692,
+          "problem_id": 15714,
+          "problem_label": "G",
+          "region": "Europe",
+          "raw_affine": 2447.051616664402,
+          "gym_shape_affine": 2460.8254671729183,
+          "ridge_residual": 2444.9848429744816,
+          "features": {
+            "raw_b": 2209.6,
+            "binary_minus_survival": 168.4000000000001,
+            "conditional_fit_se": 28.0,
+            "solve_rate": 0.20765027322404372,
+            "log_field_size": 5.214935757608986,
+            "log_median_solve_seconds": 9.392745258631441,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2157:2692:15708",
+          "cf_contest": 2157,
+          "cf": 1900.0,
+          "contest_id": 2692,
+          "problem_id": 15708,
+          "problem_label": "A",
+          "region": "Europe",
+          "raw_affine": 2059.372660104455,
+          "gym_shape_affine": 2026.2172442091842,
+          "ridge_residual": 2062.5187152515077,
+          "features": {
+            "raw_b": 1970.3,
+            "binary_minus_survival": -40.700000000000045,
+            "conditional_fit_se": 17.5,
+            "solve_rate": 0.5355191256830601,
+            "log_field_size": 5.214935757608986,
+            "log_median_solve_seconds": 8.993303139093733,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2157:2692:15709",
+          "cf_contest": 2157,
+          "cf": 1600.0,
+          "contest_id": 2692,
+          "problem_id": 15709,
+          "problem_label": "B",
+          "region": "Europe",
+          "raw_affine": 1933.0084369048063,
+          "gym_shape_affine": 1898.6496027544233,
+          "ridge_residual": 1936.2150038885652,
+          "features": {
+            "raw_b": 1892.3,
+            "binary_minus_survival": -115.79999999999995,
+            "conditional_fit_se": 15.9,
+            "solve_rate": 0.6557377049180327,
+            "log_field_size": 5.214935757608986,
+            "log_median_solve_seconds": 8.808518618782816,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2157:2692:15712",
+          "cf_contest": 2157,
+          "cf": 900.0,
+          "contest_id": 2692,
+          "problem_id": 15712,
+          "problem_label": "E",
+          "region": "Europe",
+          "raw_affine": 1532.0450363674604,
+          "gym_shape_affine": 1505.1328465408299,
+          "ridge_residual": 1513.2686336719298,
+          "features": {
+            "raw_b": 1644.8,
+            "binary_minus_survival": -279.29999999999995,
+            "conditional_fit_se": 13.6,
+            "solve_rate": 0.8961748633879781,
+            "log_field_size": 5.214935757608986,
+            "log_median_solve_seconds": 7.760253877768513,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2157:2692:15711",
+          "cf_contest": 2157,
+          "cf": 800.0,
+          "contest_id": 2692,
+          "problem_id": 15711,
+          "problem_label": "D",
+          "region": "Europe",
+          "raw_affine": 1137.3998469900966,
+          "gym_shape_affine": 1204.0076859037988,
+          "ridge_residual": 1023.1518711096362,
+          "features": {
+            "raw_b": 1401.2,
+            "binary_minus_survival": -443.80000000000007,
+            "conditional_fit_se": 12.9,
+            "solve_rate": 0.9890710382513661,
+            "log_field_size": 5.214935757608986,
+            "log_median_solve_seconds": 6.493753839851687,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        }
+      ],
+      "selected": {
+        "ridge_alpha": 1.0,
+        "ridge_lambda": 0.75,
+        "tabfm": "unavailable"
+      }
+    },
+    "2172": {
+      "predictions": [
+        {
+          "row_id": "2172:2657:15406",
+          "cf_contest": 2172,
+          "cf": 2800.0,
+          "contest_id": 2657,
+          "problem_id": 15406,
+          "problem_label": "N",
+          "region": "Asia Pacific",
+          "raw_affine": 2671.5736038783425,
+          "gym_shape_affine": 2727.06773838377,
+          "ridge_residual": 2679.5848435232947,
+          "features": {
+            "raw_b": 2346.8,
+            "binary_minus_survival": 257.0999999999999,
+            "conditional_fit_se": 49.0,
+            "solve_rate": 0.09836065573770492,
+            "log_field_size": 4.812184355372417,
+            "log_median_solve_seconds": 9.494842393421333,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2172:2657:15405",
+          "cf_contest": 2172,
+          "cf": 1300.0,
+          "contest_id": 2657,
+          "problem_id": 15405,
+          "problem_label": "M",
+          "region": "Asia Pacific",
+          "raw_affine": 1413.3527726801856,
+          "gym_shape_affine": 1412.7381658653553,
+          "ridge_residual": 1393.576300891495,
+          "features": {
+            "raw_b": 1582.4,
+            "binary_minus_survival": -312.60000000000014,
+            "conditional_fit_se": 16.3,
+            "solve_rate": 0.9344262295081968,
+            "log_field_size": 4.812184355372417,
+            "log_median_solve_seconds": 7.621195162809845,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2172:2657:15404",
+          "cf_contest": 2172,
+          "cf": 2300.0,
+          "contest_id": 2657,
+          "problem_id": 15404,
+          "problem_label": "L",
+          "region": "Asia Pacific",
+          "raw_affine": 2284.0995279180515,
+          "gym_shape_affine": 2299.3654712177695,
+          "ridge_residual": 2291.514638459029,
+          "features": {
+            "raw_b": 2111.4,
+            "binary_minus_survival": 124.09999999999991,
+            "conditional_fit_se": 29.7,
+            "solve_rate": 0.2786885245901639,
+            "log_field_size": 4.812184355372417,
+            "log_median_solve_seconds": 8.914760527397261,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2172:2657:15403",
+          "cf_contest": 2172,
+          "cf": 2100.0,
+          "contest_id": 2657,
+          "problem_id": 15403,
+          "problem_label": "K",
+          "region": "Asia Pacific",
+          "raw_affine": 2288.8729978427964,
+          "gym_shape_affine": 2306.423247184425,
+          "ridge_residual": 2284.7926021654166,
+          "features": {
+            "raw_b": 2114.3,
+            "binary_minus_survival": 71.59999999999991,
+            "conditional_fit_se": 28.1,
+            "solve_rate": 0.3114754098360656,
+            "log_field_size": 4.812184355372417,
+            "log_median_solve_seconds": 9.433043826461988,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2172:2657:15402",
+          "cf_contest": 2172,
+          "cf": 2300.0,
+          "contest_id": 2657,
+          "problem_id": 15402,
+          "problem_label": "J",
+          "region": "Asia Pacific",
+          "raw_affine": 2355.0431671444258,
+          "gym_shape_affine": 2390.3239330717793,
+          "ridge_residual": 2358.345162275875,
+          "features": {
+            "raw_b": 2154.5,
+            "binary_minus_survival": 133.80000000000018,
+            "conditional_fit_se": 31.5,
+            "solve_rate": 0.2459016393442623,
+            "log_field_size": 4.812184355372417,
+            "log_median_solve_seconds": 9.263691547473178,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2172:2657:15401",
+          "cf_contest": 2172,
+          "cf": 2000.0,
+          "contest_id": 2657,
+          "problem_id": 15401,
+          "problem_label": "I",
+          "region": "Asia Pacific",
+          "raw_affine": 2169.2070449017883,
+          "gym_shape_affine": 2139.1323408681124,
+          "ridge_residual": 2167.6242273143894,
+          "features": {
+            "raw_b": 2041.6,
+            "binary_minus_survival": 19.40000000000009,
+            "conditional_fit_se": 24.8,
+            "solve_rate": 0.4016393442622951,
+            "log_field_size": 4.812184355372417,
+            "log_median_solve_seconds": 9.118334726180159,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2172:2657:15400",
+          "cf_contest": 2172,
+          "cf": 2500.0,
+          "contest_id": 2657,
+          "problem_id": 15400,
+          "problem_label": "H",
+          "region": "Asia Pacific",
+          "raw_affine": 2643.7557963858662,
+          "gym_shape_affine": 2697.060119863926,
+          "ridge_residual": 2651.4122166515235,
+          "features": {
+            "raw_b": 2329.9,
+            "binary_minus_survival": 250.5999999999999,
+            "conditional_fit_se": 47.2,
+            "solve_rate": 0.10655737704918032,
+            "log_field_size": 4.812184355372417,
+            "log_median_solve_seconds": 9.377632889750377,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2172:2657:15399",
+          "cf_contest": 2172,
+          "cf": 3300.0,
+          "contest_id": 2657,
+          "problem_id": 15399,
+          "problem_label": "G",
+          "region": "Asia Pacific",
+          "raw_affine": 3456.0686956484124,
+          "gym_shape_affine": 3369.4787844397965,
+          "ridge_residual": 3318.8730835738493,
+          "features": {
+            "raw_b": 2823.4,
+            "binary_minus_survival": 326.4000000000001,
+            "conditional_fit_se": 167.0,
+            "solve_rate": 0.0,
+            "log_field_size": 4.812184355372417,
+            "log_median_solve_seconds": 0.0,
+            "timing_missing": 1.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2172:2657:15398",
+          "cf_contest": 2172,
+          "cf": 1600.0,
+          "contest_id": 2657,
+          "problem_id": 15398,
+          "problem_label": "F",
+          "region": "Asia Pacific",
+          "raw_affine": 1639.3518832551551,
+          "gym_shape_affine": 1606.341542390925,
+          "ridge_residual": 1692.6544524884357,
+          "features": {
+            "raw_b": 1719.7,
+            "binary_minus_survival": -85.70000000000005,
+            "conditional_fit_se": 18.3,
+            "solve_rate": 0.7377049180327869,
+            "log_field_size": 4.812184355372417,
+            "log_median_solve_seconds": 7.8674885686991285,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2172:2657:15397",
+          "cf_contest": 2172,
+          "cf": 1200.0,
+          "contest_id": 2657,
+          "problem_id": 15397,
+          "problem_label": "E",
+          "region": "Asia Pacific",
+          "raw_affine": 1265.8690122467017,
+          "gym_shape_affine": 1300.8652790277179,
+          "ridge_residual": 1063.2706017805792,
+          "features": {
+            "raw_b": 1492.8,
+            "binary_minus_survival": -610.6999999999999,
+            "conditional_fit_se": 15.8,
+            "solve_rate": 1.0,
+            "log_field_size": 4.812184355372417,
+            "log_median_solve_seconds": 7.2305631534092925,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2172:2657:15396",
+          "cf_contest": 2172,
+          "cf": 3100.0,
+          "contest_id": 2657,
+          "problem_id": 15396,
+          "problem_label": "D",
+          "region": "Asia Pacific",
+          "raw_affine": 3137.8922348025153,
+          "gym_shape_affine": 3161.3456796368228,
+          "ridge_residual": 3099.061479822435,
+          "features": {
+            "raw_b": 2630.1,
+            "binary_minus_survival": 338.4000000000001,
+            "conditional_fit_se": 102.5,
+            "solve_rate": 0.01639344262295082,
+            "log_field_size": 4.812184355372417,
+            "log_median_solve_seconds": 9.571052156897165,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2172:2657:15395",
+          "cf_contest": 2172,
+          "cf": 3100.0,
+          "contest_id": 2657,
+          "problem_id": 15395,
+          "problem_label": "C",
+          "region": "Asia Pacific",
+          "raw_affine": 2926.8719436465717,
+          "gym_shape_affine": 2997.449699723947,
+          "ridge_residual": 2921.8919677442946,
+          "features": {
+            "raw_b": 2501.9,
+            "binary_minus_survival": 314.5,
+            "conditional_fit_se": 72.5,
+            "solve_rate": 0.040983606557377046,
+            "log_field_size": 4.812184355372417,
+            "log_median_solve_seconds": 9.545454543987825,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2172:2657:15394",
+          "cf_contest": 2172,
+          "cf": 1800.0,
+          "contest_id": 2657,
+          "problem_id": 15394,
+          "problem_label": "B",
+          "region": "Asia Pacific",
+          "raw_affine": 1861.0713311389752,
+          "gym_shape_affine": 1818.4787740677298,
+          "ridge_residual": 1891.5239706761379,
+          "features": {
+            "raw_b": 1854.4,
+            "binary_minus_survival": -50.700000000000045,
+            "conditional_fit_se": 20.2,
+            "solve_rate": 0.6065573770491803,
+            "log_field_size": 4.812184355372417,
+            "log_median_solve_seconds": 8.4252971767117,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2172:2657:15393",
+          "cf_contest": 2172,
+          "cf": 800.0,
+          "contest_id": 2657,
+          "problem_id": 15393,
+          "problem_label": "A",
+          "region": "Asia Pacific",
+          "raw_affine": 823.582333357449,
+          "gym_shape_affine": 965.3714766474375,
+          "ridge_residual": 759.8806628551278,
+          "features": {
+            "raw_b": 1224.1,
+            "binary_minus_survival": -341.9999999999999,
+            "conditional_fit_se": 15.8,
+            "solve_rate": 1.0,
+            "log_field_size": 4.812184355372417,
+            "log_median_solve_seconds": 5.484796933490655,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        }
+      ],
+      "selected": {
+        "ridge_alpha": 1.0,
+        "ridge_lambda": 0.75,
+        "tabfm": "unavailable"
+      }
+    },
+    "2181": {
+      "predictions": [
+        {
+          "row_id": "2181:2785:15905",
+          "cf_contest": 2181,
+          "cf": 1700.0,
+          "contest_id": 2785,
+          "problem_id": 15905,
+          "problem_label": "M",
+          "region": "Northern Eurasia",
+          "raw_affine": 1647.8383823029262,
+          "gym_shape_affine": 1610.8575432198595,
+          "ridge_residual": 1684.8570683718285,
+          "features": {
+            "raw_b": 1726.5,
+            "binary_minus_survival": -91.5,
+            "conditional_fit_se": 11.1,
+            "solve_rate": 0.7554179566563467,
+            "log_field_size": 5.780743515792329,
+            "log_median_solve_seconds": 8.27410200229233,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2181:2785:15904",
+          "cf_contest": 2181,
+          "cf": 2800.0,
+          "contest_id": 2785,
+          "problem_id": 15904,
+          "problem_label": "L",
+          "region": "Northern Eurasia",
+          "raw_affine": 3185.1135980194836,
+          "gym_shape_affine": 3189.5250789056245,
+          "ridge_residual": 3101.90859916321,
+          "features": {
+            "raw_b": 2651.2,
+            "binary_minus_survival": 286.0,
+            "conditional_fit_se": 78.5,
+            "solve_rate": 0.01238390092879257,
+            "log_field_size": 5.780743515792329,
+            "log_median_solve_seconds": 9.137769679141348,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2181:2785:15903",
+          "cf_contest": 2181,
+          "cf": 3500.0,
+          "contest_id": 2785,
+          "problem_id": 15903,
+          "problem_label": "K",
+          "region": "Northern Eurasia",
+          "raw_affine": 3639.7959506727534,
+          "gym_shape_affine": 3502.757246690042,
+          "ridge_residual": 3422.5057549622757,
+          "features": {
+            "raw_b": 2924.7,
+            "binary_minus_survival": 271.0,
+            "conditional_fit_se": 159.1,
+            "solve_rate": 0.0,
+            "log_field_size": 5.780743515792329,
+            "log_median_solve_seconds": 0.0,
+            "timing_missing": 1.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2181:2785:15902",
+          "cf_contest": 2181,
+          "cf": 2300.0,
+          "contest_id": 2785,
+          "problem_id": 15902,
+          "problem_label": "J",
+          "region": "Northern Eurasia",
+          "raw_affine": 2517.4703335750482,
+          "gym_shape_affine": 2544.266981994786,
+          "ridge_residual": 2462.209776477937,
+          "features": {
+            "raw_b": 2249.6,
+            "binary_minus_survival": 179.30000000000018,
+            "conditional_fit_se": 26.7,
+            "solve_rate": 0.13003095975232198,
+            "log_field_size": 5.780743515792329,
+            "log_median_solve_seconds": 9.440658127038393,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2181:2785:15901",
+          "cf_contest": 2181,
+          "cf": 3500.0,
+          "contest_id": 2785,
+          "problem_id": 15901,
+          "problem_label": "I",
+          "region": "Northern Eurasia",
+          "raw_affine": 3341.218434999894,
+          "gym_shape_affine": 3284.664164593736,
+          "ridge_residual": 3238.1657267113296,
+          "features": {
+            "raw_b": 2745.1,
+            "binary_minus_survival": 286.0,
+            "conditional_fit_se": 100.3,
+            "solve_rate": 0.006191950464396285,
+            "log_field_size": 5.780743515792329,
+            "log_median_solve_seconds": 9.654833867051826,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2181:2785:15900",
+          "cf_contest": 2181,
+          "cf": 1200.0,
+          "contest_id": 2785,
+          "problem_id": 15900,
+          "problem_label": "H",
+          "region": "Northern Eurasia",
+          "raw_affine": 1301.2158209566492,
+          "gym_shape_affine": 1323.8245616284,
+          "ridge_residual": 1227.984511970008,
+          "features": {
+            "raw_b": 1518.0,
+            "binary_minus_survival": -376.79999999999995,
+            "conditional_fit_se": 9.8,
+            "solve_rate": 0.9690402476780186,
+            "log_field_size": 5.780743515792329,
+            "log_median_solve_seconds": 7.470224135899966,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2181:2785:15899",
+          "cf_contest": 2181,
+          "cf": 2400.0,
+          "contest_id": 2785,
+          "problem_id": 15899,
+          "problem_label": "G",
+          "region": "Northern Eurasia",
+          "raw_affine": 2338.9223091693398,
+          "gym_shape_affine": 2375.4208286814296,
+          "ridge_residual": 2291.669751740812,
+          "features": {
+            "raw_b": 2142.2,
+            "binary_minus_survival": 129.80000000000018,
+            "conditional_fit_se": 20.7,
+            "solve_rate": 0.21671826625386997,
+            "log_field_size": 5.780743515792329,
+            "log_median_solve_seconds": 9.354310837386214,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2181:2785:15898",
+          "cf_contest": 2181,
+          "cf": 1600.0,
+          "contest_id": 2785,
+          "problem_id": 15898,
+          "problem_label": "F",
+          "region": "Northern Eurasia",
+          "raw_affine": 1743.4297361514195,
+          "gym_shape_affine": 1700.6587921676055,
+          "ridge_residual": 1739.9734012472966,
+          "features": {
+            "raw_b": 1784.0,
+            "binary_minus_survival": -188.0999999999999,
+            "conditional_fit_se": 10.9,
+            "solve_rate": 0.7832817337461301,
+            "log_field_size": 5.780743515792329,
+            "log_median_solve_seconds": 8.842604480678025,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2181:2785:15897",
+          "cf_contest": 2181,
+          "cf": 2900.0,
+          "contest_id": 2785,
+          "problem_id": 15897,
+          "problem_label": "E",
+          "region": "Northern Eurasia",
+          "raw_affine": 3457.4242721131063,
+          "gym_shape_affine": 3369.5456035610628,
+          "ridge_residual": 3329.768889943007,
+          "features": {
+            "raw_b": 2815.0,
+            "binary_minus_survival": 283.4000000000001,
+            "conditional_fit_se": 120.6,
+            "solve_rate": 0.0030959752321981426,
+            "log_field_size": 5.780743515792329,
+            "log_median_solve_seconds": 9.729074639810214,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2181:2785:15896",
+          "cf_contest": 2181,
+          "cf": 2000.0,
+          "contest_id": 2785,
+          "problem_id": 15896,
+          "problem_label": "D",
+          "region": "Northern Eurasia",
+          "raw_affine": 1940.7635396612668,
+          "gym_shape_affine": 1907.403925379272,
+          "ridge_residual": 1944.1233911027234,
+          "features": {
+            "raw_b": 1902.7,
+            "binary_minus_survival": 2.7999999999999545,
+            "conditional_fit_se": 13.4,
+            "solve_rate": 0.5232198142414861,
+            "log_field_size": 5.780743515792329,
+            "log_median_solve_seconds": 8.846784666945227,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2181:2785:15895",
+          "cf_contest": 2181,
+          "cf": 3200.0,
+          "contest_id": 2785,
+          "problem_id": 15895,
+          "problem_label": "C",
+          "region": "Northern Eurasia",
+          "raw_affine": 3255.435585285419,
+          "gym_shape_affine": 3229.279384099768,
+          "ridge_residual": 3165.849752454617,
+          "features": {
+            "raw_b": 2693.5,
+            "binary_minus_survival": 285.9000000000001,
+            "conditional_fit_se": 87.5,
+            "solve_rate": 0.009287925696594427,
+            "log_field_size": 5.780743515792329,
+            "log_median_solve_seconds": 9.528139343331775,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2181:2785:15894",
+          "cf_contest": 2181,
+          "cf": 1400.0,
+          "contest_id": 2785,
+          "problem_id": 15894,
+          "problem_label": "B",
+          "region": "Northern Eurasia",
+          "raw_affine": 1463.3055079171386,
+          "gym_shape_affine": 1446.683032500896,
+          "ridge_residual": 1432.6567466683005,
+          "features": {
+            "raw_b": 1615.5,
+            "binary_minus_survival": -299.5,
+            "conditional_fit_se": 10.1,
+            "solve_rate": 0.9256965944272446,
+            "log_field_size": 5.780743515792329,
+            "log_median_solve_seconds": 7.902857191280582,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2181:2785:15893",
+          "cf_contest": 2181,
+          "cf": 1300.0,
+          "contest_id": 2785,
+          "problem_id": 15893,
+          "problem_label": "A",
+          "region": "Northern Eurasia",
+          "raw_affine": 1595.6371908100095,
+          "gym_shape_affine": 1562.3908405588923,
+          "ridge_residual": 1604.3407488230591,
+          "features": {
+            "raw_b": 1695.1,
+            "binary_minus_survival": -198.19999999999982,
+            "conditional_fit_se": 10.5,
+            "solve_rate": 0.8452012383900929,
+            "log_field_size": 5.780743515792329,
+            "log_median_solve_seconds": 8.374246182096304,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        }
+      ],
+      "selected": {
+        "ridge_alpha": 1.0,
+        "ridge_lambda": 0.75,
+        "tabfm": "unavailable"
+      }
+    },
+    "2206": {
+      "predictions": [
+        {
+          "row_id": "2206:3747:18246",
+          "cf_contest": 2206,
+          "cf": 2900.0,
+          "contest_id": 3747,
+          "problem_id": 18246,
+          "problem_label": "M",
+          "region": "Asia Pacific",
+          "raw_affine": 3344.9210612364423,
+          "gym_shape_affine": 3286.336470602654,
+          "ridge_residual": 3361.5106767555426,
+          "features": {
+            "raw_b": 2757.2,
+            "binary_minus_survival": 385.2000000000003,
+            "conditional_fit_se": 122.5,
+            "solve_rate": 0.012987012987012988,
+            "log_field_size": 4.356708826689592,
+            "log_median_solve_seconds": 9.696524881825722,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2206:3747:18245",
+          "cf_contest": 2206,
+          "cf": 3500.0,
+          "contest_id": 3747,
+          "problem_id": 18245,
+          "problem_label": "L",
+          "region": "Asia Pacific",
+          "raw_affine": 3345.415984486054,
+          "gym_shape_affine": 3286.698839145942,
+          "ridge_residual": 3361.8381024757673,
+          "features": {
+            "raw_b": 2757.5,
+            "binary_minus_survival": 384.9000000000001,
+            "conditional_fit_se": 122.5,
+            "solve_rate": 0.012987012987012988,
+            "log_field_size": 4.356708826689592,
+            "log_median_solve_seconds": 9.692828247710418,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2206:3747:18244",
+          "cf_contest": 2206,
+          "cf": 1300.0,
+          "contest_id": 3747,
+          "problem_id": 18244,
+          "problem_label": "K",
+          "region": "Asia Pacific",
+          "raw_affine": 1662.5119613895881,
+          "gym_shape_affine": 1623.5148325422224,
+          "ridge_residual": 1659.6022267866344,
+          "features": {
+            "raw_b": 1737.4,
+            "binary_minus_survival": -419.60000000000014,
+            "conditional_fit_se": 19.8,
+            "solve_rate": 1.0,
+            "log_field_size": 4.356708826689592,
+            "log_median_solve_seconds": 7.621195162809845,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2206:3747:18243",
+          "cf_contest": 2206,
+          "cf": 1700.0,
+          "contest_id": 3747,
+          "problem_id": 18243,
+          "problem_label": "J",
+          "region": "Asia Pacific",
+          "raw_affine": 1845.3036149128588,
+          "gym_shape_affine": 1797.4289488493782,
+          "ridge_residual": 1783.8340791884664,
+          "features": {
+            "raw_b": 1848.2,
+            "binary_minus_survival": -530.4000000000001,
+            "conditional_fit_se": 19.8,
+            "solve_rate": 1.0,
+            "log_field_size": 4.356708826689592,
+            "log_median_solve_seconds": 8.371242135931933,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2206:3747:18242",
+          "cf_contest": 2206,
+          "cf": 2900.0,
+          "contest_id": 3747,
+          "problem_id": 18242,
+          "problem_label": "I",
+          "region": "Asia Pacific",
+          "raw_affine": 2766.5207568568508,
+          "gym_shape_affine": 2827.713526561061,
+          "ridge_residual": 2883.991839910654,
+          "features": {
+            "raw_b": 2406.6,
+            "binary_minus_survival": 321.3000000000002,
+            "conditional_fit_se": 48.9,
+            "solve_rate": 0.15584415584415584,
+            "log_field_size": 4.356708826689592,
+            "log_median_solve_seconds": 9.519111009257829,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2206:3747:18241",
+          "cf_contest": 2206,
+          "cf": 1800.0,
+          "contest_id": 3747,
+          "problem_id": 18241,
+          "problem_label": "H",
+          "region": "Asia Pacific",
+          "raw_affine": 1863.2858263154185,
+          "gym_shape_affine": 1818.294210888467,
+          "ridge_residual": 2013.9040261662708,
+          "features": {
+            "raw_b": 1859.1,
+            "binary_minus_survival": -165.39999999999986,
+            "conditional_fit_se": 20.5,
+            "solve_rate": 0.935064935064935,
+            "log_field_size": 4.356708826689592,
+            "log_median_solve_seconds": 8.284251797621916,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2206:3747:18240",
+          "cf_contest": 2206,
+          "cf": 3100.0,
+          "contest_id": 3747,
+          "problem_id": 18240,
+          "problem_label": "G",
+          "region": "Asia Pacific",
+          "raw_affine": 3226.3044557461617,
+          "gym_shape_affine": 3208.9638089596774,
+          "ridge_residual": 3275.1107631097766,
+          "features": {
+            "raw_b": 2685.3,
+            "binary_minus_survival": 386.89999999999964,
+            "conditional_fit_se": 101.4,
+            "solve_rate": 0.025974025974025976,
+            "log_field_size": 4.356708826689592,
+            "log_median_solve_seconds": 9.674105834254771,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2206:3747:18239",
+          "cf_contest": 2206,
+          "cf": 2400.0,
+          "contest_id": 3747,
+          "problem_id": 18239,
+          "problem_label": "F",
+          "region": "Asia Pacific",
+          "raw_affine": 2252.625449343324,
+          "gym_shape_affine": 2252.221755808269,
+          "ridge_residual": 2425.7196263861506,
+          "features": {
+            "raw_b": 2095.1,
+            "binary_minus_survival": 41.40000000000009,
+            "conditional_fit_se": 24.5,
+            "solve_rate": 0.6493506493506493,
+            "log_field_size": 4.356708826689592,
+            "log_median_solve_seconds": 9.23024103368252,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2206:3747:18238",
+          "cf_contest": 2206,
+          "cf": 2500.0,
+          "contest_id": 3747,
+          "problem_id": 18238,
+          "problem_label": "E",
+          "region": "Asia Pacific",
+          "raw_affine": 2233.8183658580774,
+          "gym_shape_affine": 2224.3700336355846,
+          "ridge_residual": 2404.373990112304,
+          "features": {
+            "raw_b": 2083.7,
+            "binary_minus_survival": 9.100000000000364,
+            "conditional_fit_se": 23.8,
+            "solve_rate": 0.6883116883116883,
+            "log_field_size": 4.356708826689592,
+            "log_median_solve_seconds": 9.309370895439137,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2206:3747:18237",
+          "cf_contest": 2206,
+          "cf": 2600.0,
+          "contest_id": 3747,
+          "problem_id": 18237,
+          "problem_label": "D",
+          "region": "Asia Pacific",
+          "raw_affine": 2574.9854592571064,
+          "gym_shape_affine": 2621.0491208459975,
+          "ridge_residual": 2710.9209964707065,
+          "features": {
+            "raw_b": 2290.5,
+            "binary_minus_survival": 245.9000000000001,
+            "conditional_fit_se": 36.6,
+            "solve_rate": 0.2857142857142857,
+            "log_field_size": 4.356708826689592,
+            "log_median_solve_seconds": 9.405166749908611,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2206:3747:18236",
+          "cf_contest": 2206,
+          "cf": 2200.0,
+          "contest_id": 3747,
+          "problem_id": 18236,
+          "problem_label": "C",
+          "region": "Asia Pacific",
+          "raw_affine": 2043.932812423705,
+          "gym_shape_affine": 2009.407287677216,
+          "ridge_residual": 2115.9164943888286,
+          "features": {
+            "raw_b": 1968.6,
+            "binary_minus_survival": -316.0,
+            "conditional_fit_se": 20.3,
+            "solve_rate": 0.948051948051948,
+            "log_field_size": 4.356708826689592,
+            "log_median_solve_seconds": 9.007121989469242,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2206:3747:18235",
+          "cf_contest": 2206,
+          "cf": 2500.0,
+          "contest_id": 3747,
+          "problem_id": 18235,
+          "problem_label": "B",
+          "region": "Asia Pacific",
+          "raw_affine": 2334.4527599457983,
+          "gym_shape_affine": 2370.7891967386017,
+          "ridge_residual": 2500.310674112783,
+          "features": {
+            "raw_b": 2144.7,
+            "binary_minus_survival": 102.90000000000009,
+            "conditional_fit_se": 26.7,
+            "solve_rate": 0.5454545454545454,
+            "log_field_size": 4.356708826689592,
+            "log_median_solve_seconds": 9.349319399257634,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        },
+        {
+          "row_id": "2206:3747:18234",
+          "cf_contest": 2206,
+          "cf": 3500.0,
+          "contest_id": 3747,
+          "problem_id": 18234,
+          "problem_label": "A",
+          "region": "Asia Pacific",
+          "raw_affine": 3344.7560868199052,
+          "gym_shape_affine": 3286.2156810882243,
+          "ridge_residual": 3361.370538001271,
+          "features": {
+            "raw_b": 2757.1,
+            "binary_minus_survival": 385.3000000000002,
+            "conditional_fit_se": 122.5,
+            "solve_rate": 0.012987012987012988,
+            "log_field_size": 4.356708826689592,
+            "log_median_solve_seconds": 9.677903525682558,
+            "timing_missing": 0.0
+          },
+          "selected": {
+            "ridge_alpha": 1.0,
+            "ridge_lambda": 0.75,
+            "tabfm": "unavailable"
+          }
+        }
+      ],
+      "selected": {
+        "ridge_alpha": 1.0,
+        "ridge_lambda": 0.75,
+        "tabfm": "unavailable"
+      }
+    }
+  }
+}

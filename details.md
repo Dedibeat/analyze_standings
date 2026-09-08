@@ -3055,5 +3055,59 @@ fit needs correction; neither synthetic pretraining nor a lower development
 error establishes regional transfer, probability calibration or valid intervals.
 The report specifies contest-grouped selection, timing of feature availability,
 context-sampling checks and the current weights' research-use restrictions.
-No TabFM inference or model changes were made. README's existing strategy link
-continues to point to the expanded assessment.
+At that time no TabFM inference or model changes were made. README's existing
+strategy link continues to point to the expanded assessment.
+
+### Nested calibration residual control (2026-09-08)
+
+`arch_b.calibration_experiment` now records a bounded, research-only comparison
+on the same 185 CF anchors in 15 contest-held-out folds. The outer contest's
+labels are absent from every map and inner selection step; explicit canonical
+shared tasks are purged from matching training folds. The prespecified features
+are raw survival difficulty, binary-minus-survival difficulty, conditional fit
+SE, solve rate, log field size, log median solve time, and a missing-time flag;
+there are no IDs, regions, names, or calibrated-output inputs. Inner
+contest-grouped selection covers ridge alpha {0.1, 1, 10} and residual shrinkage
+{0, .25, .5, .75, 1}.
+
+The refreshed baseline-only artifact reports **246.9061 raw affine / 245.4277
+locked gym shape / 229.6269 nested ridge residual** CF LOCO RMSE. Ridge wins over
+raw in 11/15 outer contests and gym in 12/15. The four losses to raw are CF
+1949 (+10.6), 2041 (+29.5), 2045 (+2.7), and 2052 (+11.8); the three losses to
+gym are instead 1938 (+20.0), 1949 (+8.7), and 2041 (+55.7). Per-region
+raw/gym/ridge RMSE is Asia Pacific 219.9/211.5/208.8, Europe
+332.3/335.4/311.9, and Northern Eurasia 207.0/212.6/179.7. The OOF anchor-order
+check has 2 reversals among 1,064 within-contest pairs and CF concordance 968
+raw -> 969 ridge; it is distinct from the non-OOF full-fit diagnostic. Cached,
+non-OOF transfer proxies are mixed: gym pooled .9691 -> .9769 (n=667), gym EC
+.9774 -> .9817 (n=230), Kattis .7955 -> .7848 (n=427), and AOJ .5685 -> .5587
+(n=45); the non-anchor gym/Kattis subsets show the same directions. The full
+detail, provenance hashes, and explicit non-OOF diagnostics are in
+[calibration_experiment_report.md](calibration_experiment_report.md) and
+`output/calibration_experiment.json`.
+
+This measures only the regularized control on the reused anchor set; it does
+not establish regional transfer, probability calibration, interval coverage, or
+a production replacement. A pinned-weight, seven-feature CPU smoke completed
+on synthetic 170-train/15-test inputs, but has no TabFM CF score. The full
+185-anchor comparison is **not run** because the user explicitly deferred it;
+the cached baseline-only artifact remains unchanged. With eight threads its
+smoke load was 8.772 s and fit/predict 12.925 s (four threads: 21.820 s), while
+one process reached 12.6 GiB; the 225-call nested comparison is estimated at
+45–55 minutes. The verified runtime is TabFM 1.0.1 from official source
+`d8678b6` with torch 2.12.1+cpu. The existing survival, binary, and calibrated
+output artifacts were not regenerated.
+
+The eventual isolated command is:
+
+```bash
+OMP_NUM_THREADS=8 MKL_NUM_THREADS=8 OPENBLAS_NUM_THREADS=8 \
+TABFM_CHECKPOINT_DIR=/home/dedibeat/.cache/tabfm_runtime/checkpoints/google-tabfm-1.0.0-pytorch-77cb9cc1b4fd3a9c77fbb9552c218200bb4dab83 \
+/home/dedibeat/.cache/tabfm_runtime/venv/bin/python -m arch_b.calibration_experiment --tabfm --tabfm-license-ack
+```
+
+The local checkpoint contains `regression/model.safetensors` and
+`regression/config.json`; the model SHA-256 is verified before loading and the
+completed-run artifact records actual model/config hashes. It does not silently
+download a model, and it must not overwrite the baseline-only artifact unless the
+deferred run is deliberately authorized.
