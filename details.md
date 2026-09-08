@@ -3137,3 +3137,39 @@ deployment decision; this pilot has no fresh frozen confirmation set. These diag
 claim ablation results, prove that the disagreement feature caused the gain,
 authorize the deferred full TabFM comparison, or justify an underlying-fit
 rewrite.
+
+### Frozen calibration feature-group ablation (2026-09-08)
+
+The approved research-only ablation is recorded in
+`output/calibration_ablation.json`, with the frozen protocol in
+[`calibration_ablation_plan.md`](calibration_ablation_plan.md). It retains
+`raw_b` in every ridge residual fit and separately tests disagreement (D),
+non-time evidence (E), and timing (T), including all seven nonempty D/E/T
+bundles. Nested 15-contest LOCO RMSE is **246.9061 raw / 245.4277 gym / 241.7094
+D / 238.2049 E / 247.3457 T / 226.5661 DE / 245.2137 DT / 241.1893 ET /
+229.6269 DET**; the inner-only adaptive selector also scores **226.5661** and
+selected DE in every outer contest fold. The retained DET control reproduces
+every old ridge OOF prediction exactly and its selected settings exactly.
+
+The separate calibration-label leave-one-region-out diagnostic gives **248.6523
+raw / 246.0305 gym / 243.4531 D / 237.5236 E / 248.6584 T / 225.7640 DE /
+243.2424 DT / 242.2078 ET / 228.3597 DET / 226.9881 adaptive**. Its adaptive
+choice is DET (Asia Pacific) and DE (Europe, Northern Eurasia). This holds only
+completed-contest standings/raw fits fixed while excluding all labels from the
+held region before baselines, preprocessing, and inner contest selection; it
+is a calibration-label transfer stress check, not a future-contest forecast.
+
+Both protocols are exploratory development on the reused anchors, not fresh
+confirmation or a production-promotion decision. No TabFM import, download, or
+run occurred, and the existing production artifacts and baseline experiment
+artifact remain unchanged.
+
+The concise result and transfer caveats are in
+[calibration_ablation_report.md](calibration_ablation_report.md). Full-anchor
+transfer refits are explicitly non-OOF and mixed: DE improves cached pooled gym
+Spearman (.9691 to .9780; n=667) but is lower on Kattis (.7955 to .7760; n=427)
+and AOJ within-contest (.5685 to .5642; n=45). Removing only canonical anchor
+tasks gives non-anchor gym/Kattis counts 659/416; the stricter whole-anchor
+contest plus task purge gives 655/412, reproducing the historical reported
+counts. These are distinct subset definitions, not confirmation of a global
+replacement.

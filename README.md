@@ -34,6 +34,15 @@ The optional TabFM route uses the pinned `TABFM_CHECKPOINT_DIR` interface
 documented in that report; it does not silently download a checkpoint, and must
 be intentionally run in an isolated process.
 
+The frozen [feature-group ablation](calibration_ablation_report.md) separates
+estimator disagreement (D), non-time evidence (E), and extra calibration timing
+features (T) on the same reused anchors. DE is the strongest development
+candidate (226.5661 LOCO / 225.7640 LORO RMSE), but this is not fresh
+confirmation or a production-promotion decision. Reproduce it with
+`./.venv/bin/python -m arch_b.calibration_ablation` and inspect the separate
+non-OOF transfer diagnostic with
+`./.venv/bin/python -m arch_b.calibration_ablation_transfer`.
+
 ## Run
 
 Requires Python 3 + numpy. A project venv is used:
