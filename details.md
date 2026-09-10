@@ -3229,3 +3229,38 @@ deterministic example selection, training-only support flags, stale provenance,
 and finite predictions. Prior experiment and production artifacts are unchanged;
 TabFM remains deferred. Reproduce with
 `OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 ./.venv/bin/python -m arch_b.calibration_audit`.
+
+### BigQuery and Google Cloud TabFM plan (2026-09-10)
+
+The user requested a cloud experiment plan, specified **BigQuery and a $10
+total spending limit**, and pointed out native TabFM availability through
+`AI.PREDICT`. [tabfm_cloud_plan.md](tabfm_cloud_plan.md) now plans that managed
+route directly, superseding the initially considered CPU VM. Official Google
+Cloud documentation confirms Preview compute billing and token pricing starting
+October 30, 2026. No VM, GPU, or checkpoint deployment is needed.
+
+The plan preserves seven features, task-purged nested contest folds, residual
+shrinkage selection, and 225 inference calls, comparing managed TabFM against
+raw/gym affine, DET ridge, and the newer DE ridge OOF control. The managed API
+exposes no checkpoint/seed/ensemble/context controls in its documented signature,
+so the result must be labelled as a managed-backend comparison, not a replay of
+the pinned local checkpoint. A separate bounded wrapper remains to be implemented.
+
+The Preview plan limits all query jobs to 300, each capped at 1 GiB, for about
+$1.84 query compute before free allowances/credits at the provisional
+`us-central1` rate, plus a small storage allowance. It specifies job accounting,
+alerts, a stop margin, table expiration, and cleanup within the user's $10
+ceiling. The project, credit details, region requirements, and Preview access
+remain unverified; cloud execution is pending.
+
+Read-only checks matched the 11 baseline input hashes and experiment-source
+hash. The exact nested schedule contains 36,260 training-row appearances and
+2,775 prediction-row appearances, corresponding to $0.01603025 per ensemble
+in future model-token charges, excluding query compute. Ensemble count is
+unexposed, so that is an illustration rather than a service quote. There are
+184 distinct seven-feature vectors among 185 anchors; the plan therefore
+requires verified prediction-ID passthrough instead of joining on feature values.
+
+`gcloud`/`bq` are installed. No paid queries, cloud resources, TabFM inference,
+or production changes were made. README links the plan, and prior experiment
+artifacts remain unchanged. The separate local-checkpoint run stays deferred.

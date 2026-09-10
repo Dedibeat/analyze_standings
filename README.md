@@ -34,6 +34,12 @@ The optional TabFM route uses the pinned `TABFM_CHECKPOINT_DIR` interface
 documented in that report; it does not silently download a checkpoint, and must
 be intentionally run in an isolated process.
 
+The [BigQuery and Google Cloud TabFM plan](tabfm_cloud_plan.md) specifies the
+requested **$10 total limit** and native managed TabFM through BigQuery
+`AI.PREDICT`, with experiment tables and SQL scoring. It compares against DET
+and the newer DE control, limits query spending, and preserves separate result
+artifacts. No VM or GPU is needed. This is a plan; cloud execution remains pending.
+
 The frozen [feature-group ablation](calibration_ablation_report.md) separates
 estimator disagreement (D), non-time evidence (E), and extra calibration timing
 features (T) on the same reused anchors. DE is the strongest development
