@@ -1,8 +1,12 @@
 # Experiment roadmap: calibration and rating evidence
 
-Status (2026-09-08): **proposed only; none of the experiments below has run.**
-This is a decision aid for later sessions, not a frozen protocol. It authorizes
-no model, data, output-artifact, deployment, or TabFM change.
+Original status (2026-09-08): proposed only. On 2026-09-10 the user's request
+for autonomous prediction improvement authorized the bounded correction/source
+audit and calibration-label contest-influence study recorded in
+[calibration_audit_report.md](calibration_audit_report.md), under a separate
+[frozen protocol](calibration_audit_plan.md). This roadmap remains a decision
+aid, not a frozen protocol; other studies below remain proposed. No production
+or TabFM change was made.
 
 ## Starting point and boundary
 
@@ -37,10 +41,12 @@ Existing evidence entrypoints are
 [`arch_b/calibration_ablation_transfer.py`](arch_b/calibration_ablation_transfer.py),
 with saved [baseline](output/calibration_experiment.json),
 [ablation](output/calibration_ablation.json), and
-[transfer](output/calibration_ablation_transfer.json) artifacts. No general
-resampling, task-context, negative-control, abstention, or simulation harness
-exists yet; any future harness and row-level audit output are planned artifacts,
-not current commands or files.
+[transfer](output/calibration_ablation_transfer.json) artifacts. The later
+[`arch_b/calibration_audit.py`](arch_b/calibration_audit.py) now supplies the
+deterministic correction tables, local cached provenance checks, feature-range
+flags, and nested anchor-contest influence study. Its full-refit row table is
+explicitly non-OOF. General field/identity resampling, external task-context
+adjudication, abstention, and simulation harnesses remain proposed.
 
 ## Rules for every proposed run
 
@@ -84,6 +90,12 @@ not current commands or files.
 ## Immediate proposed experiments
 
 ### 1. Deterministic largest-correction audit
+
+**2026-09-10 execution:** cached source checks and the deterministic OOF/full-refit
+tables, including all five Luxor pairs, are complete in the linked audit.
+External task-version/identity adjudication is still missing. The main new
+finding is 1,840 appearances outside some DE training-feature range, compared
+with only 94 outside the raw-difficulty range.
 
 **Hypothesis.** A small set of large DE corrections, including both apparent
 wins and losses, may expose off-support extrapolation, context mismatch, or a
@@ -190,6 +202,12 @@ confidence statements; an identified influential bridge moves to provenance
 adjudication, not automatic edge deletion.
 
 ### 5. Candidate, anchor, and uncertainty leverage
+
+**2026-09-10 bounded execution:** all 15 calibration-label contest deletions
+were rerun with nested DE-only setting selection (210 outer fits). DE beats
+both controls after every deletion; matched-cohort RMSE shifts range from
+-2.91 to +1.80 CF points. This does not cover raw-fit/identity resampling,
+feature-uncertainty perturbations, or adaptive bundle reselection.
 
 **Hypothesis.** The DE result may be driven by a small set of anchors, contests,
 or uncertain evidence regimes despite all-fold DE selection.

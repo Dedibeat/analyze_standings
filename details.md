@@ -3182,3 +3182,50 @@ as the candidate for a prospective confirmation design, distinguishes OOF,
 full-refit, and fresh-confirmation evidence, and requires provenance/identity/
 context audits before any model change. It does not authorize a model or data
 run, production promotion, or the explicitly deferred TabFM comparison.
+
+### Autonomous DE prediction audit and anchor influence (2026-09-10)
+
+The request to work autonomously on prediction improvement led to a bounded
+execution of the roadmap's correction/source audit and calibration-label
+contest-influence study. The protocol was written before execution in
+[calibration_audit_plan.md](calibration_audit_plan.md); implementation is
+`arch_b.calibration_audit`, with full findings in
+[calibration_audit_report.md](calibration_audit_report.md) and research predictions
+in `output/calibration_audit.json`. No candidate features or production map changed.
+
+All 3,159 survival/binary problem appearances agree with the joint loader and
+cached sources on task/title/solve-count/field-size provenance. All 185 anchors
+have unique cached contest-scoped CF matches. Previous artifact input hashes
+match, and OOF prediction replay differs by at most 7.74e-12 CF points. The
+baseline remains **246.9061 raw / 245.4277 gym / 226.5661 DE** LOCO RMSE.
+
+Each of the 15 CF anchor contests was removed in turn, with its canonical tasks
+purged before rerunning nested DE-only selection on the remaining cohort
+(210 outer fits). DE beats raw and gym in all 15 deletions. Comparing to the
+original OOF predictions on exactly the same remaining rows, refitting changes
+DE RMSE by **-2.91 to +1.80 points**, below the frozen 5-point audit threshold.
+Individual predictions can still move by 117.9 points. This is calibration-label
+sensitivity with the raw fits fixed, not independent replication or uncertainty.
+
+The largest-correction audit selects 23 unique OOF anchors and separately saves
+all 3,159 full-refit rows with source links, features, predictions, and marginal
+training-range flags. **1,840 appearances (58.2%) exceed at least one DE feature
+range**, including 1,610 outside the anchor field-size range of **77–323 teams**;
+only 94 exceed the raw-difficulty range. Seven of the ten largest full-refit
+corrections are in Aobayama's 50-team field, with a maximum +534.3-point shift,
+although its raw difficulties are within anchor support. These are extrapolation
+diagnostics, not proof of errors or calibrated risk probabilities.
+
+Both Luxor appearances of all five shared tasks pass cached identity/title
+checks. Riddle of the Sphinx's gap is 5.1 raw / 101.0 DE, and Turning Red's
+is 66.0 / 145.3; external task-version/context equivalence remains unverified.
+No source defect was reproduced, so no data or identity correction was made.
+Fresh confirmation labels, actual recorded durations, and adjudicated roster
+identity remain missing. The next confirmation design needs small/large fields
+and other evidence-feature regimes in addition to regions/raw-difficulty bands.
+
+All 64 tests pass, including label-mutation leakage checks, task purges,
+deterministic example selection, training-only support flags, stale provenance,
+and finite predictions. Prior experiment and production artifacts are unchanged;
+TabFM remains deferred. Reproduce with
+`OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 ./.venv/bin/python -m arch_b.calibration_audit`.

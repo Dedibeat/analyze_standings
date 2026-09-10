@@ -43,9 +43,18 @@ confirmation or a production-promotion decision. Reproduce it with
 non-OOF transfer diagnostic with
 `./.venv/bin/python -m arch_b.calibration_ablation_transfer`.
 
-The proposed-only [experiment roadmap](experiment_roadmap.md) records the next
-audits, fresh-confirmation requirements, and longer-term rating research. It
-does not authorize a run, a calibration change, or the deferred TabFM comparison.
+The [2026-09-10 prediction audit](calibration_audit_report.md) verifies cached
+source/feature consistency and reruns nested DE calibration after each anchor
+contest is removed. DE beats both controls in all 15 deletions, but 1,840 of
+3,159 full-refit appearances exceed at least one training-feature range
+(1,610 on field size). The saved research predictions now include source links
+and feature-support flags. Reproduce with
+`./.venv/bin/python -m arch_b.calibration_audit`; production ratings are unchanged.
+
+The [experiment roadmap](experiment_roadmap.md) records the remaining audits,
+fresh-confirmation requirements, and longer-term rating research. Its correction
+and anchor-contest influence audits now have the bounded results linked above;
+the deferred TabFM comparison remains out of scope.
 
 ## Run
 
