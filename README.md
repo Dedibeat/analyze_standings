@@ -68,6 +68,13 @@ requirements before a default update. Reproduce offline with
 `./.venv/bin/python -m arch_b.shipped_fit_audit` (requires the original local
 managed-response archive). Production outputs remain unchanged.
 
+The [mechanism explanation and future plan](calibration_interpretation.md)
+decomposes DE into an estimator blend and evidence correction. It shows that
+conditional SE largely encodes solve count, and that unusual combinations of
+disagreement and solve rate explain much of the largest correction. The small
+DE–TabFM gap remains uncertain across contests. Proposed next work isolates
+these mechanisms and obtains fresh transfer evidence before promotion.
+
 The [experiment roadmap](experiment_roadmap.md) records the remaining audits,
 fresh-confirmation requirements, and longer-term rating research. Its correction
 and anchor-contest influence audits now have the bounded results linked above;

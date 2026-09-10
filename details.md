@@ -3329,3 +3329,49 @@ artifact is written. Reproduce with
 the gitignored original managed archive is required and missing files cause an
 error rather than new cloud inference. Production fit, calibration and exports
 are unchanged; the audit prepares a reviewable update but does not promote DE.
+
+### Explaining DE / TabFM and proposing next work (2026-09-10)
+
+[calibration_interpretation.md](calibration_interpretation.md) explains the
+existing results and records the user's requested future plan. The reproducible
+diagnostic `arch_b.calibration_interpretation` reconstructs the selected DE
+coefficients and saves `output/calibration_interpretation.json`; it performs no
+new candidate search, production refit, or TabFM inference.
+
+The full DE fit expands to approximately **0.934742 survival_b + 0.876768
+binary_b + evidence terms + intercept**: its difficulty component is a roughly
+52/48 survival/binary blend with rescaling. Disagreement/SE/solve-rate/field-size
+coefficient signs are stable across all 15 outer folds, but they are correlated
+inputs, not independent causal effects. Disagreement and solve rate correlate
+**-0.952** on anchors. For Aobayama's 12 Grid they instead reinforce the
+correction, contributing +155.7 and +282.0 points relative to anchor means;
+small field size contributes +70.5 of the +531.4 raw-affine correction.
+This highlights joint feature support, beyond individual range flags. Across
+all appearances the disagreement term contributes +60.06 of the average
++73.35 DE-minus-raw shift. OOF correction variance is 40.8% between contest
+means and 59.2% within contests.
+
+The survival MAP first-order condition implies
+`SE(b) = [k/s² + (b-MU0)/(s*sigma_b²) + 1/sigma_b²]^(-1/2)` for interior,
+unweighted default fits, where k is solve count. This reconstructs saved SEs
+with median error 0.0247 and maximum 0.0508, consistent with rounding and finite
+convergence. SE therefore mainly contributes nonlinear solve-count information
+to E; including it as a predictor does not calibrate prediction uncertainty.
+
+Managed TabFM used seven features; the matched DET ridge control is 229.63
+RMSE versus TabFM 231.29, while five-feature DE is 226.57. Their OOF correction
+correlation is .722; selected TabFM shrinkages are .75 in nine folds and .5 in
+six. A descriptive paired 15-contest bootstrap of fixed predictions (20,000
+resamples, seed 20260910) gives 2.5–97.5 percentile RMSE-difference ranges
+**[-34.45,-2.27] DE-minus-gym**, **[-13.94,+6.48] DE-minus-TabFM**, and
+**[-9.76,+7.63] DET-minus-TabFM**. These do not refit or adjust for benchmark
+selection and are not fresh confirmation. TabFM has not demonstrated a gain;
+its inferiority to ridge is not established.
+
+The proposed sequence is a fixed-panel decomposition of estimator disagreement,
+three prespecified leave-one-E-feature-out controls, fresh confirmation covering
+joint feature regimes and regions, then coordinated opt-in integration and
+scope-limited promotion if supported. Missing durations, adjudicated context,
+fresh labels and uncertainty remain explicit. These are proposals only; all
+earlier experiment/production artifacts remain unchanged. Reproduce with
+`OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 ./.venv/bin/python -m arch_b.calibration_interpretation`.
