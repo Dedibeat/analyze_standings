@@ -193,8 +193,13 @@ class BigQueryService:
     def upload(self, name, rows, run_id):
         config = self.bigquery.LoadJobConfig(write_disposition="WRITE_TRUNCATE")
         job_id = _safe_id(f"{run_id}_{self.dataset}_load_{name}")
-        job = self.client.load_table_from_json(rows, f"{self.dataset_ref}.{name}", job_id=job_id,
-                                               location=self.location, job_config=config)
+        try:
+            job = self.client.load_table_from_json(rows, f"{self.dataset_ref}.{name}", job_id=job_id,
+                                                   location=self.location, job_config=config)
+        except Exception as error:
+            if error.__class__.__name__ != "Conflict":
+                raise
+            job = self.client.get_job(job_id, location=self.location)
         job.result(timeout=600)
         if job.errors:
             raise RuntimeError(f"load {name} failed: {job.errors}")
