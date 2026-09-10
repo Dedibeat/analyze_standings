@@ -1,0 +1,3836 @@
+{
+  "research_only": true,
+  "independent_confirmation": false,
+  "not_for_production_promotion": true,
+  "tabfm_status": "run",
+  "backend": {
+    "service": "BigQuery AI.PREDICT TabFM Preview",
+    "project": "test-gemeni-501216",
+    "location": "us-central1",
+    "dataset": "tabfm_research",
+    "unexposed": [
+      "seed",
+      "checkpoint_revision",
+      "ensemble_count",
+      "context_size"
+    ]
+  },
+  "run_id": "tabfm_61dfe4abe56d461e",
+  "query_limit": 300,
+  "maximum_bytes_billed": 1073741824,
+  "anchor_coverage": {
+    "problems": 185,
+    "contests": 15
+  },
+  "selected_by_outer_contest": {
+    "1773": {
+      "tabfm_lambda": 0.75,
+      "inner_mse": 53657.712736102585
+    },
+    "1776": {
+      "tabfm_lambda": 0.75,
+      "inner_mse": 46603.351827798724
+    },
+    "1906": {
+      "tabfm_lambda": 0.75,
+      "inner_mse": 55416.888494519495
+    },
+    "1912": {
+      "tabfm_lambda": 0.75,
+      "inner_mse": 57041.76958749542
+    },
+    "1938": {
+      "tabfm_lambda": 0.5,
+      "inner_mse": 53488.95999500322
+    },
+    "1949": {
+      "tabfm_lambda": 0.5,
+      "inner_mse": 55884.056522088445
+    },
+    "2041": {
+      "tabfm_lambda": 0.75,
+      "inner_mse": 54897.38893969105
+    },
+    "2045": {
+      "tabfm_lambda": 0.75,
+      "inner_mse": 55080.64207661094
+    },
+    "2052": {
+      "tabfm_lambda": 0.75,
+      "inner_mse": 53801.53786138205
+    },
+    "2068": {
+      "tabfm_lambda": 0.75,
+      "inner_mse": 49837.6140210783
+    },
+    "2073": {
+      "tabfm_lambda": 0.5,
+      "inner_mse": 53919.46698857775
+    },
+    "2157": {
+      "tabfm_lambda": 0.75,
+      "inner_mse": 52700.18639590225
+    },
+    "2172": {
+      "tabfm_lambda": 0.5,
+      "inner_mse": 58971.89379861688
+    },
+    "2181": {
+      "tabfm_lambda": 0.5,
+      "inner_mse": 56511.72393098879
+    },
+    "2206": {
+      "tabfm_lambda": 0.5,
+      "inner_mse": 56187.31693427007
+    }
+  },
+  "metrics": {
+    "raw_affine": {
+      "rmse": 246.9061055250216,
+      "mae": 177.92810700922357,
+      "signed_bias": 0.23477457831958837
+    },
+    "gym_shape_affine": {
+      "rmse": 245.42771867838908,
+      "mae": 177.36479218937046,
+      "signed_bias": 0.25799334571889826
+    },
+    "ridge_DET": {
+      "rmse": 229.62692455153206,
+      "mae": 163.27773391412532,
+      "signed_bias": -1.369836635891332
+    },
+    "ridge_DE": {
+      "rmse": 226.56614179146965,
+      "mae": 162.44397945204818,
+      "signed_bias": -0.5161357698969663
+    },
+    "tabfm_residual": {
+      "rmse": 231.28649076312442,
+      "mae": 164.38898885483258,
+      "signed_bias": 5.208539381022294
+    }
+  },
+  "predictions": [
+    {
+      "row_id": "2068:1964:10320",
+      "cf": 3000.0,
+      "cf_contest": 2068,
+      "region": "Europe",
+      "features": {
+        "raw_b": 2415.3,
+        "binary_minus_survival": 342.6999999999998,
+        "conditional_fit_se": 42.6,
+        "solve_rate": 0.16326530612244897,
+        "log_field_size": 4.59511985013459,
+        "log_median_solve_seconds": 9.64930472862475,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2762.707078808534,
+      "gym_shape_affine": 2828.4449333398447,
+      "ridge_DET": 2883.901415181943,
+      "ridge_DE": 2924.84780607781,
+      "tabfm_residual": 2884.957078808534
+    },
+    {
+      "row_id": "2068:1964:10319",
+      "cf": 2000.0,
+      "cf_contest": 2068,
+      "region": "Europe",
+      "features": {
+        "raw_b": 1827.1,
+        "binary_minus_survival": -521.6999999999998,
+        "conditional_fit_se": 17.5,
+        "solve_rate": 1.0,
+        "log_field_size": 4.59511985013459,
+        "log_median_solve_seconds": 8.066992189466681,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 1793.1428243905427,
+      "gym_shape_affine": 1745.9950459738666,
+      "ridge_DET": 1669.452025717414,
+      "ridge_DE": 1630.2535241588398,
+      "tabfm_residual": 1740.2678243905427
+    },
+    {
+      "row_id": "2068:1964:10318",
+      "cf": 3500.0,
+      "cf_contest": 2068,
+      "region": "Europe",
+      "features": {
+        "raw_b": 2607.4,
+        "binary_minus_survival": 434.2999999999997,
+        "conditional_fit_se": 71.8,
+        "solve_rate": 0.05102040816326531,
+        "log_field_size": 4.59511985013459,
+        "log_median_solve_seconds": 9.70430463866676,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 3079.356676349669,
+      "gym_shape_affine": 3122.435757900953,
+      "ridge_DET": 3182.7503591616164,
+      "ridge_DE": 3219.0279952601422,
+      "tabfm_residual": 3155.856676349669
+    },
+    {
+      "row_id": "2068:1964:10317",
+      "cf": 2700.0,
+      "cf_contest": 2068,
+      "region": "Europe",
+      "features": {
+        "raw_b": 2160.8,
+        "binary_minus_survival": 143.19999999999982,
+        "conditional_fit_se": 23.8,
+        "solve_rate": 0.5408163265306123,
+        "log_field_size": 4.59511985013459,
+        "log_median_solve_seconds": 9.377632889750377,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2343.199933705884,
+      "gym_shape_affine": 2375.399989189757,
+      "ridge_DET": 2495.568708318898,
+      "ridge_DE": 2545.094636852897,
+      "tabfm_residual": 2490.199933705884
+    },
+    {
+      "row_id": "2068:1964:10316",
+      "cf": 3500.0,
+      "cf_contest": 2068,
+      "region": "Europe",
+      "features": {
+        "raw_b": 2640.8,
+        "binary_minus_survival": 443.1999999999998,
+        "conditional_fit_se": 78.6,
+        "solve_rate": 0.04081632653061224,
+        "log_field_size": 4.59511985013459,
+        "log_median_solve_seconds": 9.62483129129166,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 3134.411838025224,
+      "gym_shape_affine": 3153.757097450567,
+      "ridge_DET": 3230.8265256113286,
+      "ridge_DE": 3265.549173668071,
+      "tabfm_residual": 3171.536838025224
+    },
+    {
+      "row_id": "2068:1964:10315",
+      "cf": 1900.0,
+      "cf_contest": 2068,
+      "region": "Europe",
+      "features": {
+        "raw_b": 1832.4,
+        "binary_minus_survival": -527.0,
+        "conditional_fit_se": 17.5,
+        "solve_rate": 1.0,
+        "log_field_size": 4.59511985013459,
+        "log_median_solve_seconds": 8.237479288613633,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 1801.879122500736,
+      "gym_shape_affine": 1754.3690977307654,
+      "ridge_DET": 1675.4500824482445,
+      "ridge_DE": 1634.1068385316753,
+      "tabfm_residual": 1767.004122500736
+    },
+    {
+      "row_id": "2068:1964:10314",
+      "cf": 2800.0,
+      "cf_contest": 2068,
+      "region": "Europe",
+      "features": {
+        "raw_b": 2402.8,
+        "binary_minus_survival": 355.1999999999998,
+        "conditional_fit_se": 42.6,
+        "solve_rate": 0.16326530612244897,
+        "log_field_size": 4.59511985013459,
+        "log_median_solve_seconds": 9.40224090355046,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2742.102602133551,
+      "gym_shape_affine": 2806.318254567132,
+      "ridge_DET": 2870.671118268733,
+      "ridge_DE": 2915.7598004815013,
+      "tabfm_residual": 2807.352602133551
+    },
+    {
+      "row_id": "2068:1964:10313",
+      "cf": 3100.0,
+      "cf_contest": 2068,
+      "region": "Europe",
+      "features": {
+        "raw_b": 2525.2,
+        "binary_minus_survival": 414.5,
+        "conditional_fit_se": 58.7,
+        "solve_rate": 0.08163265306122448,
+        "log_field_size": 4.59511985013459,
+        "log_median_solve_seconds": 9.407919931159118,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2943.8616377349827,
+      "gym_shape_affine": 3017.158418417753,
+      "ridge_DET": 3060.726576744268,
+      "ridge_DE": 3103.1640238880423,
+      "tabfm_residual": 2979.2991377349827
+    },
+    {
+      "row_id": "2068:1964:10312",
+      "cf": 2100.0,
+      "cf_contest": 2068,
+      "region": "Europe",
+      "features": {
+        "raw_b": 1900.9,
+        "binary_minus_survival": -456.4000000000001,
+        "conditional_fit_se": 17.6,
+        "solve_rate": 0.9897959183673469,
+        "log_field_size": 4.59511985013459,
+        "log_median_solve_seconds": 8.627123250788433,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 1914.7916546796416,
+      "gym_shape_affine": 1880.7336177752834,
+      "ridge_DET": 1833.5522006728727,
+      "ridge_DE": 1805.7221326302863,
+      "tabfm_residual": 1948.1666546796416
+    },
+    {
+      "row_id": "2068:1964:10311",
+      "cf": 3100.0,
+      "cf_contest": 2068,
+      "region": "Europe",
+      "features": {
+        "raw_b": 2048.3,
+        "binary_minus_survival": -35.90000000000009,
+        "conditional_fit_se": 19.6,
+        "solve_rate": 0.7959183673469388,
+        "log_field_size": 4.59511985013459,
+        "log_median_solve_seconds": 9.188197007290492,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2157.7596436310387,
+      "gym_shape_affine": 2128.109530742547,
+      "ridge_DET": 2289.457876585885,
+      "ridge_DE": 2331.4460583764794,
+      "tabfm_residual": 2324.2596436310387
+    },
+    {
+      "row_id": "2068:1964:10310",
+      "cf": 2300.0,
+      "cf_contest": 2068,
+      "region": "Europe",
+      "features": {
+        "raw_b": 1930.8,
+        "binary_minus_survival": -97.59999999999991,
+        "conditional_fit_se": 18.5,
+        "solve_rate": 0.8979591836734694,
+        "log_field_size": 4.59511985013459,
+        "log_median_solve_seconds": 8.36718392408953,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 1964.0775628862004,
+      "gym_shape_affine": 1938.148557946545,
+      "ridge_DET": 2090.8209604940603,
+      "ridge_DE": 2135.157069486009,
+      "tabfm_residual": 2028.2025628862004
+    },
+    {
+      "row_id": "2073:2527:14338",
+      "cf": 3300.0,
+      "cf_contest": 2073,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 2696.2,
+        "binary_minus_survival": 379.0,
+        "conditional_fit_se": 87.5,
+        "solve_rate": 0.02459016393442623,
+        "log_field_size": 4.812184355372417,
+        "log_median_solve_seconds": 9.533437849648918,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 3230.2048932341004,
+      "gym_shape_affine": 3207.264478072447,
+      "ridge_DET": 3259.1097097097213,
+      "ridge_DE": 3263.806962586676,
+      "tabfm_residual": 3228.3923932341004
+    },
+    {
+      "row_id": "2073:2527:14337",
+      "cf": 1300.0,
+      "cf_contest": 2073,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 1698.1,
+        "binary_minus_survival": -490.29999999999995,
+        "conditional_fit_se": 15.7,
+        "solve_rate": 1.0,
+        "log_field_size": 4.812184355372417,
+        "log_median_solve_seconds": 7.496097345175956,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 1589.300843144022,
+      "gym_shape_affine": 1555.5566851241565,
+      "ridge_DET": 1503.832155146643,
+      "ridge_DE": 1501.7936910786593,
+      "tabfm_residual": 1548.550843144022
+    },
+    {
+      "row_id": "2073:2527:14336",
+      "cf": 2900.0,
+      "cf_contest": 2073,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 2397.3,
+        "binary_minus_survival": 320.6999999999998,
+        "conditional_fit_se": 39.2,
+        "solve_rate": 0.1557377049180328,
+        "log_field_size": 4.812184355372417,
+        "log_median_solve_seconds": 9.380420642347783,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2738.8050128895215,
+      "gym_shape_affine": 2800.4652320975592,
+      "ridge_DET": 2830.4356551139604,
+      "ridge_DE": 2837.965787620601,
+      "tabfm_residual": 2760.0550128895215
+    },
+    {
+      "row_id": "2073:2527:14335",
+      "cf": 2000.0,
+      "cf_contest": 2073,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 1861.3,
+        "binary_minus_survival": -322.0,
+        "conditional_fit_se": 16.0,
+        "solve_rate": 0.9672131147540983,
+        "log_field_size": 4.812184355372417,
+        "log_median_solve_seconds": 8.410387187098427,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 1857.606164228784,
+      "gym_shape_affine": 1814.2179457010127,
+      "ridge_DET": 1883.2044255396186,
+      "ridge_DE": 1887.4179537289015,
+      "tabfm_residual": 1914.106164228784
+    },
+    {
+      "row_id": "2073:2527:14334",
+      "cf": 3100.0,
+      "cf_contest": 2073,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 2304.0,
+        "binary_minus_survival": 274.5,
+        "conditional_fit_se": 30.9,
+        "solve_rate": 0.2540983606557377,
+        "log_field_size": 4.812184355372417,
+        "log_median_solve_seconds": 9.417435838868785,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2585.417228225255,
+      "gym_shape_affine": 2634.7036308612396,
+      "ridge_DET": 2695.881219583588,
+      "ridge_DE": 2703.6754969323,
+      "tabfm_residual": 2636.917228225255
+    },
+    {
+      "row_id": "2073:2527:14333",
+      "cf": 2700.0,
+      "cf_contest": 2073,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 2174.4,
+        "binary_minus_survival": 158.0,
+        "conditional_fit_se": 22.5,
+        "solve_rate": 0.48360655737704916,
+        "log_field_size": 4.812184355372417,
+        "log_median_solve_seconds": 9.36228862824824,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2372.351237952062,
+      "gym_shape_affine": 2399.07245587079,
+      "ridge_DET": 2511.426911965276,
+      "ridge_DE": 2521.5676319107492,
+      "tabfm_residual": 2461.851237952062
+    },
+    {
+      "row_id": "2073:2527:14332",
+      "cf": 2200.0,
+      "cf_contest": 2073,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 1900.4,
+        "binary_minus_survival": -189.5,
+        "conditional_fit_se": 16.3,
+        "solve_rate": 0.9262295081967213,
+        "log_field_size": 4.812184355372417,
+        "log_median_solve_seconds": 8.616314282284044,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 1921.8876474053418,
+      "gym_shape_affine": 1888.8718895607183,
+      "ridge_DET": 2017.722113161059,
+      "ridge_DE": 2027.7003325800142,
+      "tabfm_residual": 1976.8876474053418
+    },
+    {
+      "row_id": "2073:2527:14331",
+      "cf": 3500.0,
+      "cf_contest": 2073,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 2456.5,
+        "binary_minus_survival": 336.5999999999999,
+        "conditional_fit_se": 45.3,
+        "solve_rate": 0.11475409836065574,
+        "log_field_size": 4.812184355372417,
+        "log_median_solve_seconds": 9.678811577660474,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2836.1314528908565,
+      "gym_shape_affine": 2904.6610276249253,
+      "ridge_DET": 2918.4375973977617,
+      "ridge_DE": 2923.0919499387646,
+      "tabfm_residual": 2899.3814528908565
+    },
+    {
+      "row_id": "2073:2527:14330",
+      "cf": 3300.0,
+      "cf_contest": 2073,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 2596.6,
+        "binary_minus_survival": 369.5999999999999,
+        "conditional_fit_se": 66.4,
+        "solve_rate": 0.04918032786885246,
+        "log_field_size": 4.812184355372417,
+        "log_median_solve_seconds": 9.608478704697886,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 3066.4597340426644,
+      "gym_shape_affine": 3114.3944729681957,
+      "ridge_DET": 3121.9363354765374,
+      "ridge_DE": 3126.9181873103225,
+      "tabfm_residual": 3113.9597340426644
+    },
+    {
+      "row_id": "2073:2527:14329",
+      "cf": 2400.0,
+      "cf_contest": 2073,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 2108.4,
+        "binary_minus_survival": 117.09999999999991,
+        "conditional_fit_se": 20.4,
+        "solve_rate": 0.5901639344262295,
+        "log_field_size": 4.812184355372417,
+        "log_median_solve_seconds": 9.17585244151751,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2263.845409572195,
+      "gym_shape_affine": 2275.23594424377,
+      "ridge_DET": 2420.4168680310613,
+      "ridge_DE": 2433.435215215705,
+      "tabfm_residual": 2349.345409572195
+    },
+    {
+      "row_id": "2073:2527:14328",
+      "cf": 2700.0,
+      "cf_contest": 2073,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 2479.4,
+        "binary_minus_survival": 348.7999999999997,
+        "conditional_fit_se": 48.7,
+        "solve_rate": 0.09836065573770492,
+        "log_field_size": 4.812184355372417,
+        "log_median_solve_seconds": 9.512184191834058,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2873.779687283265,
+      "gym_shape_affine": 2944.57727455541,
+      "ridge_DET": 2952.2295480798643,
+      "ridge_DE": 2958.4535363262225,
+      "tabfm_residual": 2915.029687283265
+    },
+    {
+      "row_id": "2073:2527:14327",
+      "cf": 3500.0,
+      "cf_contest": 2073,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 2927.5,
+        "binary_minus_survival": 356.3000000000002,
+        "conditional_fit_se": 158.9,
+        "solve_rate": 0.0,
+        "log_field_size": 4.812184355372417,
+        "log_median_solve_seconds": 0.0,
+        "timing_missing": 1.0
+      },
+      "raw_affine": 3610.468500874452,
+      "gym_shape_affine": 3479.448236705645,
+      "ridge_DET": 3527.5115676565165,
+      "ridge_DE": 3533.44793206644,
+      "tabfm_residual": 3536.968500874452
+    },
+    {
+      "row_id": "2073:2527:14326",
+      "cf": 1900.0,
+      "cf_contest": 2073,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 1783.0,
+        "binary_minus_survival": -443.9000000000001,
+        "conditional_fit_se": 15.8,
+        "solve_rate": 0.9918032786885246,
+        "log_field_size": 4.812184355372417,
+        "log_median_solve_seconds": 8.006700845440367,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 1728.8787951053969,
+      "gym_shape_affine": 1686.5724572180945,
+      "ridge_DET": 1679.3072715995759,
+      "ridge_DE": 1678.0370976941495,
+      "tabfm_residual": 1734.1600451053969
+    },
+    {
+      "row_id": "2052:1984:10426",
+      "cf": 2700.0,
+      "cf_contest": 2052,
+      "region": "Northern Eurasia",
+      "features": {
+        "raw_b": 2228.4,
+        "binary_minus_survival": 187.29999999999973,
+        "conditional_fit_se": 24.0,
+        "solve_rate": 0.17333333333333334,
+        "log_field_size": 5.707110264748875,
+        "log_median_solve_seconds": 9.39992713976155,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2469.507527314036,
+      "gym_shape_affine": 2489.140746186965,
+      "ridge_DET": 2436.844870972025,
+      "ridge_DE": 2425.1208859557883,
+      "tabfm_residual": 2430.882527314036
+    },
+    {
+      "row_id": "2052:1984:10425",
+      "cf": 2900.0,
+      "cf_contest": 2052,
+      "region": "Northern Eurasia",
+      "features": {
+        "raw_b": 2520.8,
+        "binary_minus_survival": 342.5,
+        "conditional_fit_se": 50.7,
+        "solve_rate": 0.03666666666666667,
+        "log_field_size": 5.707110264748875,
+        "log_median_solve_seconds": 9.430760217368796,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2952.875855409391,
+      "gym_shape_affine": 3025.177383114474,
+      "ridge_DET": 2945.5707241911114,
+      "ridge_DE": 2944.4581383999257,
+      "tabfm_residual": 2888.375855409391
+    },
+    {
+      "row_id": "2052:1984:10424",
+      "cf": 2800.0,
+      "cf_contest": 2052,
+      "region": "Northern Eurasia",
+      "features": {
+        "raw_b": 2618.7,
+        "binary_minus_survival": 376.9000000000001,
+        "conditional_fit_se": 66.3,
+        "solve_rate": 0.02,
+        "log_field_size": 5.707110264748875,
+        "log_median_solve_seconds": 9.636816527273812,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 3114.714977572644,
+      "gym_shape_affine": 3148.5577429258615,
+      "ridge_DET": 3107.029324253264,
+      "ridge_DE": 3106.0901744141106,
+      "tabfm_residual": 3172.839977572644
+    },
+    {
+      "row_id": "2052:1984:10423",
+      "cf": 2000.0,
+      "cf_contest": 2052,
+      "region": "Northern Eurasia",
+      "features": {
+        "raw_b": 1927.3,
+        "binary_minus_survival": -65.39999999999986,
+        "conditional_fit_se": 12.9,
+        "solve_rate": 0.6066666666666667,
+        "log_field_size": 5.707110264748875,
+        "log_median_solve_seconds": 9.120853205474647,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 1971.7571730407408,
+      "gym_shape_affine": 1944.614785919631,
+      "ridge_DET": 1957.7149027093917,
+      "ridge_DE": 1951.4255302210054,
+      "tabfm_residual": 1924.8821730407408
+    },
+    {
+      "row_id": "2052:1984:10422",
+      "cf": 2800.0,
+      "cf_contest": 2052,
+      "region": "Northern Eurasia",
+      "features": {
+        "raw_b": 2381.0,
+        "binary_minus_survival": 278.1999999999998,
+        "conditional_fit_se": 35.0,
+        "solve_rate": 0.08,
+        "log_field_size": 5.707110264748875,
+        "log_median_solve_seconds": 9.44604470533525,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2721.7715726880137,
+      "gym_shape_affine": 2782.366062452832,
+      "ridge_DET": 2703.72876028881,
+      "ridge_DE": 2697.8447496149397,
+      "tabfm_residual": 2703.6778226880137
+    },
+    {
+      "row_id": "2052:1984:10421",
+      "cf": 3500.0,
+      "cf_contest": 2052,
+      "region": "Northern Eurasia",
+      "features": {
+        "raw_b": 2648.7,
+        "binary_minus_survival": 382.2000000000003,
+        "conditional_fit_se": 71.6,
+        "solve_rate": 0.016666666666666666,
+        "log_field_size": 5.707110264748875,
+        "log_median_solve_seconds": 9.662879887470275,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 3164.3081712896774,
+      "gym_shape_affine": 3176.745426559903,
+      "ridge_DET": 3152.974575830357,
+      "ridge_DE": 3151.021353898602,
+      "tabfm_residual": 3241.1831712896774
+    },
+    {
+      "row_id": "2052:1984:10420",
+      "cf": 2800.0,
+      "cf_contest": 2052,
+      "region": "Northern Eurasia",
+      "features": {
+        "raw_b": 2377.5,
+        "binary_minus_survival": 270.0,
+        "conditional_fit_se": 34.3,
+        "solve_rate": 0.08333333333333333,
+        "log_field_size": 5.707110264748875,
+        "log_median_solve_seconds": 9.601300793881466,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2715.985700087693,
+      "gym_shape_affine": 2776.095725806948,
+      "ridge_DET": 2695.2720143247125,
+      "ridge_DE": 2688.024940293926,
+      "tabfm_residual": 2746.360700087693
+    },
+    {
+      "row_id": "2052:1984:10419",
+      "cf": 1700.0,
+      "cf_contest": 2052,
+      "region": "Northern Eurasia",
+      "features": {
+        "raw_b": 1728.8,
+        "binary_minus_survival": -244.0999999999999,
+        "conditional_fit_se": 10.7,
+        "solve_rate": 0.8766666666666667,
+        "log_field_size": 5.707110264748875,
+        "log_median_solve_seconds": 8.261784679514752,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 1643.6155412797011,
+      "gym_shape_affine": 1604.3601616421959,
+      "ridge_DET": 1616.9359806204561,
+      "ridge_DE": 1607.8498838675212,
+      "tabfm_residual": 1525.8655412797011
+    },
+    {
+      "row_id": "2052:1984:10418",
+      "cf": 1900.0,
+      "cf_contest": 2052,
+      "region": "Northern Eurasia",
+      "features": {
+        "raw_b": 1816.3,
+        "binary_minus_survival": -182.39999999999986,
+        "conditional_fit_se": 11.3,
+        "solve_rate": 0.79,
+        "log_field_size": 5.707110264748875,
+        "log_median_solve_seconds": 8.736328721332908,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 1788.262356287716,
+      "gym_shape_affine": 1741.723942115549,
+      "ridge_DET": 1771.6040051783093,
+      "ridge_DE": 1765.012315207838,
+      "tabfm_residual": 1723.387356287716
+    },
+    {
+      "row_id": "2052:1984:10417",
+      "cf": 2100.0,
+      "cf_contest": 2052,
+      "region": "Northern Eurasia",
+      "features": {
+        "raw_b": 1974.6,
+        "binary_minus_survival": 10.600000000000136,
+        "conditional_fit_se": 14.3,
+        "solve_rate": 0.49333333333333335,
+        "log_field_size": 5.707110264748875,
+        "log_median_solve_seconds": 9.046231944601587,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2049.9491084679303,
+      "gym_shape_affine": 2013.5475702141857,
+      "ridge_DET": 2036.257319160301,
+      "ridge_DE": 2030.4739444380061,
+      "tabfm_residual": 2040.7616084679303
+    },
+    {
+      "row_id": "2052:1984:10416",
+      "cf": 3500.0,
+      "cf_contest": 2052,
+      "region": "Northern Eurasia",
+      "features": {
+        "raw_b": 2840.4,
+        "binary_minus_survival": 404.5,
+        "conditional_fit_se": 119.8,
+        "solve_rate": 0.0033333333333333335,
+        "log_field_size": 5.707110264748875,
+        "log_median_solve_seconds": 9.597709395814938,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 3481.208679141523,
+      "gym_shape_affine": 3389.907525726771,
+      "ridge_DET": 3418.2774784902085,
+      "ridge_DE": 3401.2568061844554,
+      "tabfm_residual": 3395.333679141523
+    },
+    {
+      "row_id": "2052:1984:10415",
+      "cf": 2400.0,
+      "cf_contest": 2052,
+      "region": "Northern Eurasia",
+      "features": {
+        "raw_b": 2202.2,
+        "binary_minus_survival": 134.5,
+        "conditional_fit_se": 21.5,
+        "solve_rate": 0.21666666666666667,
+        "log_field_size": 5.707110264748875,
+        "log_median_solve_seconds": 9.571783927990017,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2426.1961381344927,
+      "gym_shape_affine": 2442.8058935646377,
+      "ridge_DET": 2380.75517801312,
+      "ridge_DE": 2364.1126414035907,
+      "tabfm_residual": 2447.6648881344927
+    },
+    {
+      "row_id": "2052:1984:10414",
+      "cf": 1600.0,
+      "cf_contest": 2052,
+      "region": "Northern Eurasia",
+      "features": {
+        "raw_b": 1672.7,
+        "binary_minus_survival": -300.79999999999995,
+        "conditional_fit_se": 10.4,
+        "solve_rate": 0.9233333333333333,
+        "log_field_size": 5.707110264748875,
+        "log_median_solve_seconds": 8.047829357457841,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 1550.8762690288481,
+      "gym_shape_affine": 1517.7894432954508,
+      "ridge_DET": 1502.6995863333987,
+      "ridge_DE": 1486.6996747443977,
+      "tabfm_residual": 1482.2512690288481
+    },
+    {
+      "row_id": "2045:1992:10583",
+      "cf": 1800.0,
+      "cf_contest": 2045,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 1829.5,
+        "binary_minus_survival": -255.29999999999995,
+        "conditional_fit_se": 19.5,
+        "solve_rate": 0.8061224489795918,
+        "log_field_size": 4.59511985013459,
+        "log_median_solve_seconds": 8.70334075304372,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 1817.1678760073555,
+      "gym_shape_affine": 1769.7289319789954,
+      "ridge_DET": 1818.9942295391297,
+      "ridge_DE": 1817.2189938125714,
+      "tabfm_residual": 1823.3085010073555
+    },
+    {
+      "row_id": "2045:1992:10582",
+      "cf": 3000.0,
+      "cf_contest": 2045,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 2505.1,
+        "binary_minus_survival": 298.8000000000002,
+        "conditional_fit_se": 79.8,
+        "solve_rate": 0.04081632653061224,
+        "log_field_size": 4.59511985013459,
+        "log_median_solve_seconds": 9.565739502410864,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2934.9264712560384,
+      "gym_shape_affine": 3007.697903434778,
+      "ridge_DET": 2923.9377540377045,
+      "ridge_DE": 2914.2742015702192,
+      "tabfm_residual": 2953.6764712560384
+    },
+    {
+      "row_id": "2045:1992:10581",
+      "cf": 2900.0,
+      "cf_contest": 2045,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 2672.6,
+        "binary_minus_survival": 336.4000000000001,
+        "conditional_fit_se": 125.4,
+        "solve_rate": 0.01020408163265306,
+        "log_field_size": 4.59511985013459,
+        "log_median_solve_seconds": 9.194312610898985,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 3212.0498648382686,
+      "gym_shape_affine": 3207.92640816715,
+      "ridge_DET": 3155.8421235701157,
+      "ridge_DE": 3121.033725557274,
+      "tabfm_residual": 3159.1748648382686
+    },
+    {
+      "row_id": "2045:1992:10580",
+      "cf": 2600.0,
+      "cf_contest": 2045,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 2502.0,
+        "binary_minus_survival": 301.9000000000001,
+        "conditional_fit_se": 79.8,
+        "solve_rate": 0.04081632653061224,
+        "log_field_size": 4.59511985013459,
+        "log_median_solve_seconds": 9.460904518866384,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2929.797620389741,
+      "gym_shape_affine": 3002.562476590324,
+      "ridge_DET": 2919.913101048098,
+      "ridge_DE": 2911.334700908969,
+      "tabfm_residual": 2935.071057889741
+    },
+    {
+      "row_id": "2045:1992:10579",
+      "cf": 2100.0,
+      "cf_contest": 2045,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 1950.7,
+        "binary_minus_survival": -50.799999999999955,
+        "conditional_fit_se": 23.4,
+        "solve_rate": 0.5612244897959183,
+        "log_field_size": 4.59511985013459,
+        "log_median_solve_seconds": 9.028938392241612,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2017.6894001993928,
+      "gym_shape_affine": 1988.782424285233,
+      "ridge_DET": 2047.7375374321014,
+      "ridge_DE": 2057.1017031583106,
+      "tabfm_residual": 2088.939400199393
+    },
+    {
+      "row_id": "2045:1992:10578",
+      "cf": 2200.0,
+      "cf_contest": 2045,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 2251.0,
+        "binary_minus_survival": 181.69999999999982,
+        "conditional_fit_se": 42.8,
+        "solve_rate": 0.16326530612244897,
+        "log_field_size": 4.59511985013459,
+        "log_median_solve_seconds": 9.229407434693409,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2514.526147021743,
+      "gym_shape_affine": 2544.934837946832,
+      "ridge_DET": 2513.7143105646915,
+      "ridge_DE": 2516.3354153296796,
+      "tabfm_residual": 2464.651147021743
+    },
+    {
+      "row_id": "2045:1992:10577",
+      "cf": 2200.0,
+      "cf_contest": 2045,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 2126.3,
+        "binary_minus_survival": 82.19999999999982,
+        "conditional_fit_se": 31.5,
+        "solve_rate": 0.30612244897959184,
+        "log_field_size": 4.59511985013459,
+        "log_median_solve_seconds": 9.227541579295957,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2308.2139847548533,
+      "gym_shape_affine": 2333.8874243369846,
+      "ridge_DET": 2313.4753905519774,
+      "ridge_DE": 2317.5976275795056,
+      "tabfm_residual": 2256.0889847548533
+    },
+    {
+      "row_id": "2045:1992:10576",
+      "cf": 3000.0,
+      "cf_contest": 2045,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 2327.7,
+        "binary_minus_survival": 220.5,
+        "conditional_fit_se": 51.1,
+        "solve_rate": 0.11224489795918367,
+        "log_field_size": 4.59511985013459,
+        "log_median_solve_seconds": 9.346966969508008,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2641.423844262083,
+      "gym_shape_affine": 2695.0260928249945,
+      "ridge_DET": 2637.8119878528296,
+      "ridge_DE": 2637.9888397064037,
+      "tabfm_residual": 2597.173844262083
+    },
+    {
+      "row_id": "2045:1992:10575",
+      "cf": 2700.0,
+      "cf_contest": 2045,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 2391.3,
+        "binary_minus_survival": 246.79999999999973,
+        "conditional_fit_se": 59.2,
+        "solve_rate": 0.08163265306122448,
+        "log_field_size": 4.59511985013459,
+        "log_median_solve_seconds": 9.636620666464932,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2746.6480104222615,
+      "gym_shape_affine": 2809.0880932407727,
+      "ridge_DET": 2741.5191080173217,
+      "ridge_DE": 2737.831937164975,
+      "tabfm_residual": 2843.3980104222615
+    },
+    {
+      "row_id": "2045:1992:10574",
+      "cf": 3500.0,
+      "cf_contest": 2045,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 2797.7,
+        "binary_minus_survival": 325.7000000000003,
+        "conditional_fit_se": 169.2,
+        "solve_rate": 0.0,
+        "log_field_size": 4.59511985013459,
+        "log_median_solve_seconds": 0.0,
+        "timing_missing": 1.0
+      },
+      "raw_affine": 3419.0238143137135,
+      "gym_shape_affine": 3346.949442176946,
+      "ridge_DET": 3258.815284505357,
+      "ridge_DE": 3226.030881457381,
+      "tabfm_residual": 3318.5238143137135
+    },
+    {
+      "row_id": "2045:1992:10573",
+      "cf": 1400.0,
+      "cf_contest": 2045,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 1644.4,
+        "binary_minus_survival": -377.20000000000005,
+        "conditional_fit_se": 18.0,
+        "solve_rate": 0.9489795918367347,
+        "log_field_size": 4.59511985013459,
+        "log_median_solve_seconds": 7.843064016692054,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 1510.9258452487243,
+      "gym_shape_affine": 1480.9019355349396,
+      "ridge_DET": 1478.6379694029517,
+      "ridge_DE": 1466.2063142703319,
+      "tabfm_residual": 1481.1133452487243
+    },
+    {
+      "row_id": "2045:1992:10572",
+      "cf": 2000.0,
+      "cf_contest": 2045,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 1998.6,
+        "binary_minus_survival": -14.099999999999909,
+        "conditional_fit_se": 25.0,
+        "solve_rate": 0.4897959183673469,
+        "log_field_size": 4.59511985013459,
+        "log_median_solve_seconds": 9.07595146893753,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2096.9384184238033,
+      "gym_shape_affine": 2053.228525536055,
+      "ridge_DET": 2120.5413899942687,
+      "ridge_DE": 2128.898788176057,
+      "tabfm_residual": 2189.1884184238033
+    },
+    {
+      "row_id": "2045:1992:10571",
+      "cf": 1700.0,
+      "cf_contest": 2045,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 1759.7,
+        "binary_minus_survival": -201.9000000000001,
+        "conditional_fit_se": 19.4,
+        "solve_rate": 0.8163265306122449,
+        "log_field_size": 4.59511985013459,
+        "log_median_solve_seconds": 8.30671904320269,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 1701.6860081145815,
+      "gym_shape_affine": 1659.1053076431394,
+      "ridge_DET": 1734.0221532673893,
+      "ridge_DE": 1743.23943181525,
+      "tabfm_residual": 1675.6235081145815
+    },
+    {
+      "row_id": "2041:3297:16921",
+      "cf": 3300.0,
+      "cf_contest": 2041,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 2697.5,
+        "binary_minus_survival": 299.0,
+        "conditional_fit_se": 124.5,
+        "solve_rate": 0.008264462809917356,
+        "log_field_size": 4.804021044733257,
+        "log_median_solve_seconds": 9.615205300012315,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 3256.556403983407,
+      "gym_shape_affine": 3232.148582693302,
+      "ridge_DET": 3111.291806191355,
+      "ridge_DE": 3109.493817901458,
+      "tabfm_residual": 3172.556403983407
+    },
+    {
+      "row_id": "2041:3297:16920",
+      "cf": 2000.0,
+      "cf_contest": 2041,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 2035.7,
+        "binary_minus_survival": -0.2999999999999545,
+        "conditional_fit_se": 25.6,
+        "solve_rate": 0.38016528925619836,
+        "log_field_size": 4.804021044733257,
+        "log_median_solve_seconds": 9.065141174483978,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2153.7997228582053,
+      "gym_shape_affine": 2121.624950111251,
+      "ridge_DET": 2122.8953292671654,
+      "ridge_DE": 2113.906586295955,
+      "tabfm_residual": 2110.4872228582053
+    },
+    {
+      "row_id": "2041:3297:16919",
+      "cf": 2900.0,
+      "cf_contest": 2041,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 2624.8,
+        "binary_minus_survival": 290.6999999999998,
+        "conditional_fit_se": 102.6,
+        "solve_rate": 0.01652892561983471,
+        "log_field_size": 4.804021044733257,
+        "log_median_solve_seconds": 9.734832186505988,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 3135.4164663620686,
+      "gym_shape_affine": 3163.614065047973,
+      "ridge_DET": 3038.256716326617,
+      "ridge_DE": 3032.9501570573693,
+      "tabfm_residual": 3083.2914663620686
+    },
+    {
+      "row_id": "2041:3297:16918",
+      "cf": 3100.0,
+      "cf_contest": 2041,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 2490.9,
+        "binary_minus_survival": 263.2999999999997,
+        "conditional_fit_se": 72.6,
+        "solve_rate": 0.04132231404958678,
+        "log_field_size": 4.804021044733257,
+        "log_median_solve_seconds": 9.604137675216665,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2912.299029670221,
+      "gym_shape_affine": 2984.434044753902,
+      "ridge_DET": 2858.5702526444925,
+      "ridge_DE": 2856.4783192008335,
+      "tabfm_residual": 2929.642779670221
+    },
+    {
+      "row_id": "2041:3297:16917",
+      "cf": 2700.0,
+      "cf_contest": 2041,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 2523.6,
+        "binary_minus_survival": 275.8000000000002,
+        "conditional_fit_se": 79.6,
+        "solve_rate": 0.03305785123966942,
+        "log_field_size": 4.804021044733257,
+        "log_median_solve_seconds": 9.458020426135295,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2966.7870071147563,
+      "gym_shape_affine": 3038.722940157303,
+      "ridge_DET": 2899.4177398454544,
+      "ridge_DE": 2903.567124163692,
+      "tabfm_residual": 2933.9745071147563
+    },
+    {
+      "row_id": "2041:3297:16916",
+      "cf": 2300.0,
+      "cf_contest": 2041,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 2188.9,
+        "binary_minus_survival": 123.09999999999991,
+        "conditional_fit_se": 35.2,
+        "solve_rate": 0.19834710743801653,
+        "log_field_size": 4.804021044733257,
+        "log_median_solve_seconds": 9.20397012496834,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2409.0767303353596,
+      "gym_shape_affine": 2432.575559364959,
+      "ridge_DET": 2369.896193023371,
+      "ridge_DE": 2367.4674029790326,
+      "tabfm_residual": 2352.0767303353596
+    },
+    {
+      "row_id": "2041:3297:16915",
+      "cf": 2300.0,
+      "cf_contest": 2041,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 2111.6,
+        "binary_minus_survival": 87.30000000000018,
+        "conditional_fit_se": 30.6,
+        "solve_rate": 0.2644628099173554,
+        "log_field_size": 4.804021044733257,
+        "log_median_solve_seconds": 8.936626948751798,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2280.2718172936884,
+      "gym_shape_affine": 2296.5093772171076,
+      "ridge_DET": 2240.625821882865,
+      "ridge_DE": 2242.736221202489,
+      "tabfm_residual": 2269.1624422936884
+    },
+    {
+      "row_id": "2041:3297:16914",
+      "cf": 3100.0,
+      "cf_contest": 2041,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 2526.0,
+        "binary_minus_survival": 273.4000000000001,
+        "conditional_fit_se": 79.6,
+        "solve_rate": 0.03305785123966942,
+        "log_field_size": 4.804021044733257,
+        "log_median_solve_seconds": 9.457590998633625,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2970.786124725365,
+      "gym_shape_affine": 3042.7074462419573,
+      "ridge_DET": 2902.1894916904316,
+      "ridge_DE": 2906.5315543168617,
+      "tabfm_residual": 2937.786124725365
+    },
+    {
+      "row_id": "2041:3297:16913",
+      "cf": 2400.0,
+      "cf_contest": 2041,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 2203.1,
+        "binary_minus_survival": 124.5,
+        "conditional_fit_se": 35.9,
+        "solve_rate": 0.19008264462809918,
+        "log_field_size": 4.804021044733257,
+        "log_median_solve_seconds": 9.328567753340833,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2432.738176198124,
+      "gym_shape_affine": 2450.9366907411045,
+      "ridge_DET": 2395.542477615166,
+      "ridge_DE": 2389.362207178311,
+      "tabfm_residual": 2402.925676198124
+    },
+    {
+      "row_id": "2041:3297:16912",
+      "cf": 1200.0,
+      "cf_contest": 2041,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 1490.7,
+        "binary_minus_survival": -328.5,
+        "conditional_fit_se": 16.1,
+        "solve_rate": 0.9669421487603306,
+        "log_field_size": 4.804021044733257,
+        "log_median_solve_seconds": 7.05444965813294,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 1245.666765449267,
+      "gym_shape_affine": 1282.5676330845245,
+      "ridge_DET": 1161.5526643145838,
+      "ridge_DE": 1180.3913408574372,
+      "tabfm_residual": 1280.916765449267
+    },
+    {
+      "row_id": "2041:3297:16911",
+      "cf": 1700.0,
+      "cf_contest": 2041,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 1833.4,
+        "binary_minus_survival": -49.0,
+        "conditional_fit_se": 20.5,
+        "solve_rate": 0.5950413223140496,
+        "log_field_size": 4.804021044733257,
+        "log_median_solve_seconds": 8.046068934501799,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 1816.707434264025,
+      "gym_shape_affine": 1773.528162097526,
+      "ridge_DET": 1811.5495841630209,
+      "ridge_DE": 1825.0165644554581,
+      "tabfm_residual": 1922.457434264025
+    },
+    {
+      "row_id": "2041:3297:16910",
+      "cf": 2000.0,
+      "cf_contest": 2041,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 1981.6,
+        "binary_minus_survival": 12.200000000000045,
+        "conditional_fit_se": 24.5,
+        "solve_rate": 0.4132231404958678,
+        "log_field_size": 4.804021044733257,
+        "log_median_solve_seconds": 8.79186600927438,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2063.6529467190794,
+      "gym_shape_affine": 2028.5307275183463,
+      "ridge_DET": 2042.5340531162683,
+      "ridge_DE": 2039.8439979160814,
+      "tabfm_residual": 2072.1373217190794
+    },
+    {
+      "row_id": "2041:3297:16909",
+      "cf": 1200.0,
+      "cf_contest": 2041,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 1566.4,
+        "binary_minus_survival": -501.10000000000014,
+        "conditional_fit_se": 15.9,
+        "solve_rate": 0.9834710743801653,
+        "log_field_size": 4.804021044733257,
+        "log_median_solve_seconds": 7.62608275807238,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 1371.8056000838662,
+      "gym_shape_affine": 1378.2490325951462,
+      "ridge_DET": 1211.3786523506215,
+      "ridge_DE": 1212.4616374392713,
+      "tabfm_residual": 1293.0556000838662
+    },
+    {
+      "row_id": "2041:3297:16908",
+      "cf": 1300.0,
+      "cf_contest": 2041,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 1177.9,
+        "binary_minus_survival": -285.5000000000001,
+        "conditional_fit_se": 15.8,
+        "solve_rate": 1.0,
+        "log_field_size": 4.804021044733257,
+        "log_median_solve_seconds": 5.3981627015177525,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 724.448436866669,
+      "gym_shape_affine": 887.2024842480316,
+      "ridge_DET": 558.8224088288462,
+      "ridge_DE": 614.2056434904475,
+      "tabfm_residual": 698.198436866669
+    },
+    {
+      "row_id": "1949:1967:10346",
+      "cf": 2800.0,
+      "cf_contest": 1949,
+      "region": "Europe",
+      "features": {
+        "raw_b": 2201.7,
+        "binary_minus_survival": 222.9000000000001,
+        "conditional_fit_se": 26.1,
+        "solve_rate": 0.4888888888888889,
+        "log_field_size": 4.51085950651685,
+        "log_median_solve_seconds": 9.472550778454295,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2428.306676605209,
+      "gym_shape_affine": 2444.2514475222824,
+      "ridge_DET": 2680.754103899721,
+      "ridge_DE": 2741.6919228940683,
+      "tabfm_residual": 2602.306676605209
+    },
+    {
+      "row_id": "1949:1967:10345",
+      "cf": 2600.0,
+      "cf_contest": 1949,
+      "region": "Europe",
+      "features": {
+        "raw_b": 2308.3,
+        "binary_minus_survival": 318.5,
+        "conditional_fit_se": 33.1,
+        "solve_rate": 0.3,
+        "log_field_size": 4.51085950651685,
+        "log_median_solve_seconds": 9.55824698622306,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2605.078453419149,
+      "gym_shape_affine": 2654.6227916967537,
+      "ridge_DET": 2825.52024017898,
+      "ridge_DE": 2880.927949016712,
+      "tabfm_residual": 2766.078453419149
+    },
+    {
+      "row_id": "1949:1967:10344",
+      "cf": 1800.0,
+      "cf_contest": 1949,
+      "region": "Europe",
+      "features": {
+        "raw_b": 1831.2,
+        "binary_minus_survival": -475.10000000000014,
+        "conditional_fit_se": 18.3,
+        "solve_rate": 1.0,
+        "log_field_size": 4.51085950651685,
+        "log_median_solve_seconds": 7.9624156801210635,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 1813.9169645079794,
+      "gym_shape_affine": 1766.0780511847518,
+      "ridge_DET": 1766.15714610811,
+      "ridge_DE": 1752.4931269842536,
+      "tabfm_residual": 1778.9169645079794
+    },
+    {
+      "row_id": "1949:1967:10343",
+      "cf": 3100.0,
+      "cf_contest": 1949,
+      "region": "Europe",
+      "features": {
+        "raw_b": 2724.9,
+        "binary_minus_survival": 438.2999999999997,
+        "conditional_fit_se": 100.7,
+        "solve_rate": 0.022222222222222223,
+        "log_field_size": 4.51085950651685,
+        "log_median_solve_seconds": 9.633416164344007,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 3295.9144967651837,
+      "gym_shape_affine": 3253.356205864475,
+      "ridge_DET": 3390.866683480815,
+      "ridge_DE": 3407.2056400654137,
+      "tabfm_residual": 3336.1644967651837
+    },
+    {
+      "row_id": "1949:1967:10342",
+      "cf": 2300.0,
+      "cf_contest": 1949,
+      "region": "Europe",
+      "features": {
+        "raw_b": 2023.6,
+        "binary_minus_survival": -77.59999999999991,
+        "conditional_fit_se": 19.6,
+        "solve_rate": 0.8666666666666667,
+        "log_field_size": 4.51085950651685,
+        "log_median_solve_seconds": 9.068142966266382,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2132.9684641233825,
+      "gym_shape_affine": 2092.2362517739334,
+      "ridge_DET": 2352.9626639252697,
+      "ridge_DE": 2401.447341567277,
+      "tabfm_residual": 2306.9684641233825
+    },
+    {
+      "row_id": "1949:1967:10341",
+      "cf": 2200.0,
+      "cf_contest": 1949,
+      "region": "Europe",
+      "features": {
+        "raw_b": 1968.4,
+        "binary_minus_survival": -68.40000000000009,
+        "conditional_fit_se": 19.4,
+        "solve_rate": 0.8888888888888888,
+        "log_field_size": 4.51085950651685,
+        "log_median_solve_seconds": 8.7877545370596,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2041.4318592441198,
+      "gym_shape_affine": 2006.4506361864685,
+      "ridge_DET": 2276.2751268591264,
+      "ridge_DE": 2325.845108421344,
+      "tabfm_residual": 2142.9318592441196
+    },
+    {
+      "row_id": "1949:1967:10340",
+      "cf": 2900.0,
+      "cf_contest": 1949,
+      "region": "Europe",
+      "features": {
+        "raw_b": 2566.7,
+        "binary_minus_survival": 432.60000000000036,
+        "conditional_fit_se": 66.6,
+        "solve_rate": 0.06666666666666667,
+        "log_field_size": 4.51085950651685,
+        "log_median_solve_seconds": 9.294405747093851,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 3033.575893651063,
+      "gym_shape_affine": 3103.075042423787,
+      "ridge_DET": 3189.8112942770017,
+      "ridge_DE": 3223.030637474054,
+      "tabfm_residual": 3071.075893651063
+    },
+    {
+      "row_id": "1949:1967:10339",
+      "cf": 2600.0,
+      "cf_contest": 1949,
+      "region": "Europe",
+      "features": {
+        "raw_b": 2280.4,
+        "binary_minus_survival": 296.5999999999999,
+        "conditional_fit_se": 31.0,
+        "solve_rate": 0.34444444444444444,
+        "log_field_size": 4.51085950651685,
+        "log_median_solve_seconds": 9.523763287920113,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2558.8126694312605,
+      "gym_shape_affine": 2601.5533813140473,
+      "ridge_DET": 2787.758698414782,
+      "ridge_DE": 2844.6539457556314,
+      "tabfm_residual": 2727.8126694312605
+    },
+    {
+      "row_id": "1949:1967:10338",
+      "cf": 1900.0,
+      "cf_contest": 1949,
+      "region": "Europe",
+      "features": {
+        "raw_b": 1847.7,
+        "binary_minus_survival": -346.70000000000005,
+        "conditional_fit_se": 18.4,
+        "solve_rate": 0.9888888888888889,
+        "log_field_size": 4.51085950651685,
+        "log_median_solve_seconds": 8.172164452111904,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 1841.2784496621073,
+      "gym_shape_affine": 1792.2841846920926,
+      "ridge_DET": 1893.8452975421048,
+      "ridge_DE": 1902.0723447591795,
+      "tabfm_residual": 1868.5284496621073
+    },
+    {
+      "row_id": "1949:1967:10337",
+      "cf": 1500.0,
+      "cf_contest": 1949,
+      "region": "Europe",
+      "features": {
+        "raw_b": 1770.2,
+        "binary_minus_survival": -414.10000000000014,
+        "conditional_fit_se": 18.3,
+        "solve_rate": 1.0,
+        "log_field_size": 4.51085950651685,
+        "log_median_solve_seconds": 7.599901959208498,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 1712.7623830290834,
+      "gym_shape_affine": 1669.321040135969,
+      "ridge_DET": 1708.5740278685353,
+      "ridge_DE": 1701.4303720282812,
+      "tabfm_residual": 1659.2623830290834
+    },
+    {
+      "row_id": "1949:1967:10336",
+      "cf": 3300.0,
+      "cf_contest": 1949,
+      "region": "Europe",
+      "features": {
+        "raw_b": 2795.9,
+        "binary_minus_survival": 433.2999999999997,
+        "conditional_fit_se": 121.2,
+        "solve_rate": 0.011111111111111112,
+        "log_field_size": 4.51085950651685,
+        "log_median_solve_seconds": 9.792332503169966,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 3413.651796519309,
+      "gym_shape_affine": 3339.7210124830376,
+      "ridge_DET": 3470.73646265517,
+      "ridge_DE": 3476.553024164645,
+      "tabfm_residual": 3436.651796519309
+    },
+    {
+      "row_id": "1912:1985:10438",
+      "cf": 800.0,
+      "cf_contest": 1912,
+      "region": "Northern Eurasia",
+      "features": {
+        "raw_b": 1383.0,
+        "binary_minus_survival": -583.0,
+        "conditional_fit_se": 10.1,
+        "solve_rate": 1.0,
+        "log_field_size": 5.6937321388027,
+        "log_median_solve_seconds": 6.606650186198215,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 1081.738476920536,
+      "gym_shape_affine": 1154.7049028024785,
+      "ridge_DET": 853.3943759651975,
+      "ridge_DE": 779.6604792952985,
+      "tabfm_residual": 955.738476920536
+    },
+    {
+      "row_id": "1912:1985:10437",
+      "cf": 1800.0,
+      "cf_contest": 1912,
+      "region": "Northern Eurasia",
+      "features": {
+        "raw_b": 1791.1,
+        "binary_minus_survival": -41.69999999999982,
+        "conditional_fit_se": 12.4,
+        "solve_rate": 0.6655405405405406,
+        "log_field_size": 5.6937321388027,
+        "log_median_solve_seconds": 8.382975849296429,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 1754.5052812246659,
+      "gym_shape_affine": 1710.4896528456334,
+      "ridge_DET": 1772.8389311169954,
+      "ridge_DE": 1778.9030356306507,
+      "tabfm_residual": 1967.5052812246659
+    },
+    {
+      "row_id": "1912:1985:10436",
+      "cf": 2300.0,
+      "cf_contest": 1912,
+      "region": "Northern Eurasia",
+      "features": {
+        "raw_b": 2185.5,
+        "binary_minus_survival": 172.5,
+        "conditional_fit_se": 22.7,
+        "solve_rate": 0.19594594594594594,
+        "log_field_size": 5.6937321388027,
+        "log_median_solve_seconds": 9.299129334790242,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2404.6871670799683,
+      "gym_shape_affine": 2427.018910257421,
+      "ridge_DET": 2383.8547189427086,
+      "ridge_DE": 2375.095196547342,
+      "tabfm_residual": 2419.6871670799683
+    },
+    {
+      "row_id": "1912:1985:10435",
+      "cf": 3300.0,
+      "cf_contest": 1912,
+      "region": "Northern Eurasia",
+      "features": {
+        "raw_b": 2710.4,
+        "binary_minus_survival": 343.5999999999999,
+        "conditional_fit_se": 87.3,
+        "solve_rate": 0.010135135135135136,
+        "log_field_size": 5.6937321388027,
+        "log_median_solve_seconds": 9.771098364490383,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 3270.0027651668047,
+      "gym_shape_affine": 3237.1475382088443,
+      "ridge_DET": 3220.3963294623677,
+      "ridge_DE": 3208.150987333148,
+      "tabfm_residual": 3284.0652651668047
+    },
+    {
+      "row_id": "1912:1985:10434",
+      "cf": 2400.0,
+      "cf_contest": 1912,
+      "region": "Northern Eurasia",
+      "features": {
+        "raw_b": 2306.4,
+        "binary_minus_survival": 246.29999999999973,
+        "conditional_fit_se": 30.5,
+        "solve_rate": 0.10810810810810811,
+        "log_field_size": 5.6937321388027,
+        "log_median_solve_seconds": 9.224686965683105,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2603.9949510553897,
+      "gym_shape_affine": 2653.5293897695706,
+      "ridge_DET": 2591.904374001973,
+      "ridge_DE": 2586.763101402099,
+      "tabfm_residual": 2588.0574510553897
+    },
+    {
+      "row_id": "1912:1985:10433",
+      "cf": 2400.0,
+      "cf_contest": 1912,
+      "region": "Northern Eurasia",
+      "features": {
+        "raw_b": 2295.9,
+        "binary_minus_survival": 229.69999999999982,
+        "conditional_fit_se": 29.2,
+        "solve_rate": 0.11824324324324324,
+        "log_field_size": 5.6937321388027,
+        "log_median_solve_seconds": 9.299541017434485,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2586.6853420252664,
+      "gym_shape_affine": 2634.7948319075604,
+      "ridge_DET": 2569.673595816539,
+      "ridge_DE": 2562.6764904113097,
+      "tabfm_residual": 2592.5447170252664
+    },
+    {
+      "row_id": "1912:1985:10432",
+      "cf": 3100.0,
+      "cf_contest": 1912,
+      "region": "Northern Eurasia",
+      "features": {
+        "raw_b": 2669.5,
+        "binary_minus_survival": 342.4000000000001,
+        "conditional_fit_se": 78.4,
+        "solve_rate": 0.013513513513513514,
+        "log_field_size": 5.6937321388027,
+        "log_median_solve_seconds": 9.537627699020323,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 3202.577716658991,
+      "gym_shape_affine": 3198.874514264993,
+      "ridge_DET": 3165.2048278120465,
+      "ridge_DE": 3156.360446830808,
+      "tabfm_residual": 3178.202716658991
+    },
+    {
+      "row_id": "1912:1985:10431",
+      "cf": 2200.0,
+      "cf_contest": 1912,
+      "region": "Northern Eurasia",
+      "features": {
+        "raw_b": 2018.4,
+        "binary_minus_survival": 0.1999999999998181,
+        "conditional_fit_se": 15.2,
+        "solve_rate": 0.4391891891891892,
+        "log_field_size": 5.6937321388027,
+        "log_median_solve_seconds": 9.35452729228868,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2129.2171033720047,
+      "gym_shape_affine": 2087.2509989005944,
+      "ridge_DET": 2098.7349057515953,
+      "ridge_DE": 2086.7269790421883,
+      "tabfm_residual": 2122.0921033720047
+    },
+    {
+      "row_id": "1912:1985:10430",
+      "cf": 1900.0,
+      "cf_contest": 1912,
+      "region": "Northern Eurasia",
+      "features": {
+        "raw_b": 1876.5,
+        "binary_minus_survival": -0.09999999999990905,
+        "conditional_fit_se": 13.5,
+        "solve_rate": 0.5608108108108109,
+        "log_field_size": 5.6937321388027,
+        "log_median_solve_seconds": 8.53660358493606,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 1895.2901013363362,
+      "gym_shape_affine": 1854.9471088378086,
+      "ridge_DET": 1902.8466040322542,
+      "ridge_DE": 1904.8483541966928,
+      "tabfm_residual": 2117.290101336336
+    },
+    {
+      "row_id": "1912:1985:10429",
+      "cf": 3300.0,
+      "cf_contest": 1912,
+      "region": "Northern Eurasia",
+      "features": {
+        "raw_b": 2669.3,
+        "binary_minus_survival": 342.5999999999999,
+        "conditional_fit_se": 78.4,
+        "solve_rate": 0.013513513513513514,
+        "log_field_size": 5.6937321388027,
+        "log_median_solve_seconds": 9.67517441189118,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 3202.248009820322,
+      "gym_shape_affine": 3198.6873601136786,
+      "ridge_DET": 3165.107017496546,
+      "ridge_DE": 3156.167841426087,
+      "tabfm_residual": 3204.6269198203217
+    },
+    {
+      "row_id": "1912:1985:10428",
+      "cf": 2100.0,
+      "cf_contest": 1912,
+      "region": "Northern Eurasia",
+      "features": {
+        "raw_b": 2039.4,
+        "binary_minus_survival": 52.59999999999991,
+        "conditional_fit_se": 16.4,
+        "solve_rate": 0.3783783783783784,
+        "log_field_size": 5.6937321388027,
+        "log_median_solve_seconds": 9.20658332309847,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2163.836321432251,
+      "gym_shape_affine": 2130.3045721066414,
+      "ridge_DET": 2140.2817256794897,
+      "ridge_DE": 2130.678899513865,
+      "tabfm_residual": 2145.742571432251
+    },
+    {
+      "row_id": "1912:1985:10427",
+      "cf": 1900.0,
+      "cf_contest": 1912,
+      "region": "Northern Eurasia",
+      "features": {
+        "raw_b": 1749.2,
+        "binary_minus_survival": -122.70000000000005,
+        "conditional_fit_se": 11.6,
+        "solve_rate": 0.7567567567567568,
+        "log_field_size": 5.6937321388027,
+        "log_median_solve_seconds": 8.219730107109351,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 1685.4316985235068,
+      "gym_shape_affine": 1644.7680551746578,
+      "ridge_DET": 1688.2939669813363,
+      "ridge_DE": 1689.6289864196858,
+      "tabfm_residual": 1878.9316985235068
+    },
+    {
+      "row_id": "1906:1991:10570",
+      "cf": 1700.0,
+      "cf_contest": 1906,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 1682.0,
+        "binary_minus_survival": -148.29999999999995,
+        "conditional_fit_se": 21.4,
+        "solve_rate": 0.7951807228915663,
+        "log_field_size": 4.430816798843313,
+        "log_median_solve_seconds": 7.635545402985622,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 1568.0239446946478,
+      "gym_shape_affine": 1533.8826131600354,
+      "ridge_DET": 1621.0465215597408,
+      "ridge_DE": 1633.0027534454596,
+      "tabfm_residual": 1525.8364446946478
+    },
+    {
+      "row_id": "1906:1991:10569",
+      "cf": 2500.0,
+      "cf_contest": 1906,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 1988.2,
+        "binary_minus_survival": -62.5,
+        "conditional_fit_se": 26.7,
+        "solve_rate": 0.5060240963855421,
+        "log_field_size": 4.430816798843313,
+        "log_median_solve_seconds": 9.21542741102474,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2075.813213567939,
+      "gym_shape_affine": 2035.7174643526273,
+      "ridge_DET": 2055.666275928416,
+      "ridge_DE": 2068.489627350418,
+      "tabfm_residual": 2046.1882135679389
+    },
+    {
+      "row_id": "1906:1991:10568",
+      "cf": 2500.0,
+      "cf_contest": 1906,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 2421.4,
+        "binary_minus_survival": 235.29999999999973,
+        "conditional_fit_se": 73.1,
+        "solve_rate": 0.060240963855421686,
+        "log_field_size": 4.430816798843313,
+        "log_median_solve_seconds": 9.11173476822206,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2794.213968877898,
+      "gym_shape_affine": 2861.6285686768365,
+      "ridge_DET": 2738.9634945740663,
+      "ridge_DE": 2733.7808967085653,
+      "tabfm_residual": 2720.338968877898
+    },
+    {
+      "row_id": "1906:1991:10567",
+      "cf": 2100.0,
+      "cf_contest": 1906,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 2190.8,
+        "binary_minus_survival": 121.19999999999982,
+        "conditional_fit_se": 40.5,
+        "solve_rate": 0.21686746987951808,
+        "log_field_size": 4.430816798843313,
+        "log_median_solve_seconds": 9.365162255067553,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2411.796576970057,
+      "gym_shape_affine": 2433.7122706586338,
+      "ridge_DET": 2375.9286929513682,
+      "ridge_DE": 2384.988201381582,
+      "tabfm_residual": 2386.296576970057
+    },
+    {
+      "row_id": "1906:1991:10566",
+      "cf": 2900.0,
+      "cf_contest": 1906,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 2428.4,
+        "binary_minus_survival": 228.29999999999973,
+        "conditional_fit_se": 73.1,
+        "solve_rate": 0.060240963855421686,
+        "log_field_size": 4.430816798843313,
+        "log_median_solve_seconds": 9.488047863280759,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2805.8224760043286,
+      "gym_shape_affine": 2874.097057120107,
+      "ridge_DET": 2742.1740998817527,
+      "ridge_DE": 2740.225746470533,
+      "tabfm_residual": 2773.5724760043286
+    },
+    {
+      "row_id": "1906:1991:10565",
+      "cf": 2200.0,
+      "cf_contest": 1906,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 2026.9,
+        "binary_minus_survival": -26.300000000000182,
+        "conditional_fit_se": 28.5,
+        "solve_rate": 0.4457831325301205,
+        "log_field_size": 4.430816798843313,
+        "log_median_solve_seconds": 9.169622538697624,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2139.99167439549,
+      "gym_shape_affine": 2101.802448390816,
+      "ridge_DET": 2117.268561373605,
+      "ridge_DE": 2128.5623358778926,
+      "tabfm_residual": 2105.30417439549
+    },
+    {
+      "row_id": "1906:1991:10564",
+      "cf": 2900.0,
+      "cf_contest": 1906,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 2507.0,
+        "binary_minus_survival": 244.69999999999982,
+        "conditional_fit_se": 89.8,
+        "solve_rate": 0.03614457831325301,
+        "log_field_size": 4.430816798843313,
+        "log_median_solve_seconds": 9.44549154241467,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2936.1694274525344,
+      "gym_shape_affine": 3010.4120519749317,
+      "ridge_DET": 2854.7207361281285,
+      "ridge_DE": 2845.5671853606723,
+      "tabfm_residual": 2848.7944274525344
+    },
+    {
+      "row_id": "1906:1991:10563",
+      "cf": 2100.0,
+      "cf_contest": 1906,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 2004.4,
+        "binary_minus_survival": -3.800000000000182,
+        "conditional_fit_se": 28.5,
+        "solve_rate": 0.4457831325301205,
+        "log_field_size": 4.430816798843313,
+        "log_median_solve_seconds": 9.028938392241612,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2102.678615774821,
+      "gym_shape_affine": 2057.5826420037274,
+      "ridge_DET": 2094.718735280147,
+      "ridge_DE": 2107.8467473572837,
+      "tabfm_residual": 2080.459865774821
+    },
+    {
+      "row_id": "1906:1991:10562",
+      "cf": 1900.0,
+      "cf_contest": 1906,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 1856.7,
+        "binary_minus_survival": -148.70000000000005,
+        "conditional_fit_se": 23.2,
+        "solve_rate": 0.6746987951807228,
+        "log_field_size": 4.430816798843313,
+        "log_median_solve_seconds": 8.653645314551737,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 1857.7391154071358,
+      "gym_shape_affine": 1811.7151905147662,
+      "ridge_DET": 1857.5200554385194,
+      "ridge_DE": 1868.5076064297152,
+      "tabfm_residual": 1811.2391154071358
+    },
+    {
+      "row_id": "1906:1991:10561",
+      "cf": 2800.0,
+      "cf_contest": 1906,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 2639.6,
+        "binary_minus_survival": 252.5999999999999,
+        "conditional_fit_se": 126.6,
+        "solve_rate": 0.012048192771084338,
+        "log_field_size": 4.430816798843313,
+        "log_median_solve_seconds": 9.583351156530737,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 3156.067719590347,
+      "gym_shape_affine": 3176.978931874079,
+      "ridge_DET": 3021.0898925608435,
+      "ridge_DE": 2997.4176850567187,
+      "tabfm_residual": 3063.442719590347
+    },
+    {
+      "row_id": "1906:1991:10560",
+      "cf": 3000.0,
+      "cf_contest": 1906,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 2434.1,
+        "binary_minus_survival": 222.5999999999999,
+        "conditional_fit_se": 73.0,
+        "solve_rate": 0.060240963855421686,
+        "log_field_size": 4.430816798843313,
+        "log_median_solve_seconds": 9.658928824466434,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2815.2751175215644,
+      "gym_shape_affine": 2884.249969138198,
+      "ridge_DET": 2746.518509173919,
+      "ridge_DE": 2745.6915790338394,
+      "tabfm_residual": 2803.7907425215644
+    },
+    {
+      "row_id": "1906:1991:10559",
+      "cf": 2600.0,
+      "cf_contest": 1906,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 2254.9,
+        "binary_minus_survival": 139.69999999999982,
+        "conditional_fit_se": 45.7,
+        "solve_rate": 0.1686746987951807,
+        "log_field_size": 4.430816798843313,
+        "log_median_solve_seconds": 9.67423160855296,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2518.0973350849426,
+      "gym_shape_affine": 2551.308717492677,
+      "ridge_DET": 2467.009531471969,
+      "ridge_DE": 2475.596382544966,
+      "tabfm_residual": 2494.0973350849426
+    },
+    {
+      "row_id": "1906:1991:10558",
+      "cf": 1000.0,
+      "cf_contest": 1906,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 1451.3,
+        "binary_minus_survival": -519.5,
+        "conditional_fit_se": 19.1,
+        "solve_rate": 1.0,
+        "log_field_size": 4.430816798843313,
+        "log_median_solve_seconds": 7.039660349862076,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 1185.4407169707154,
+      "gym_shape_affine": 1230.2610441273555,
+      "ridge_DET": 1048.0620162987339,
+      "ridge_DE": 1019.4335176099155,
+      "tabfm_residual": 1037.6907169707154
+    },
+    {
+      "row_id": "1776:1123:5651",
+      "cf": 3000.0,
+      "cf_contest": 1776,
+      "region": "Europe",
+      "features": {
+        "raw_b": 2348.9,
+        "binary_minus_survival": 267.2999999999997,
+        "conditional_fit_se": 45.5,
+        "solve_rate": 0.0945945945945946,
+        "log_field_size": 5.003946305945459,
+        "log_median_solve_seconds": 9.547062577352603,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2667.214899786333,
+      "gym_shape_affine": 2722.289240481271,
+      "ridge_DET": 2669.7858683742097,
+      "ridge_DE": 2671.1559975743035,
+      "tabfm_residual": 2688.496149786333
+    },
+    {
+      "row_id": "1776:1123:5652",
+      "cf": 1500.0,
+      "cf_contest": 1776,
+      "region": "Europe",
+      "features": {
+        "raw_b": 1758.0,
+        "binary_minus_survival": -212.9000000000001,
+        "conditional_fit_se": 16.0,
+        "solve_rate": 0.7972972972972973,
+        "log_field_size": 5.003946305945459,
+        "log_median_solve_seconds": 8.501267040865978,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 1694.8614375563043,
+      "gym_shape_affine": 1654.0624675156037,
+      "ridge_DET": 1695.3334019943572,
+      "ridge_DE": 1689.628894759917,
+      "tabfm_residual": 1610.8614375563043
+    },
+    {
+      "row_id": "1776:1123:5646",
+      "cf": 3200.0,
+      "cf_contest": 1776,
+      "region": "Europe",
+      "features": {
+        "raw_b": 1892.9,
+        "binary_minus_survival": 17.09999999999991,
+        "conditional_fit_se": 19.7,
+        "solve_rate": 0.527027027027027,
+        "log_field_size": 5.003946305945459,
+        "log_median_solve_seconds": 8.453187861440325,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 1916.8456684834173,
+      "gym_shape_affine": 1881.5291861092333,
+      "ridge_DET": 1939.258467304398,
+      "ridge_DE": 1949.2823682728115,
+      "tabfm_residual": 1843.3456684834173
+    },
+    {
+      "row_id": "1776:1123:5654",
+      "cf": 2500.0,
+      "cf_contest": 1776,
+      "region": "Europe",
+      "features": {
+        "raw_b": 2159.1,
+        "binary_minus_survival": 153.0,
+        "conditional_fit_se": 29.2,
+        "solve_rate": 0.23648648648648649,
+        "log_field_size": 5.003946305945459,
+        "log_median_solve_seconds": 9.320180837655714,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2354.8901627220926,
+      "gym_shape_affine": 2386.9517794659096,
+      "ridge_DET": 2352.603385806005,
+      "ridge_DE": 2352.723770749682,
+      "tabfm_residual": 2321.5151627220926
+    },
+    {
+      "row_id": "1776:1123:5649",
+      "cf": 2500.0,
+      "cf_contest": 1776,
+      "region": "Europe",
+      "features": {
+        "raw_b": 2217.8,
+        "binary_minus_survival": 180.19999999999982,
+        "conditional_fit_se": 32.6,
+        "solve_rate": 0.1891891891891892,
+        "log_field_size": 5.003946305945459,
+        "log_median_solve_seconds": 9.556126244582746,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2451.4837457867447,
+      "gym_shape_affine": 2465.8741687115717,
+      "ridge_DET": 2448.6211385618144,
+      "ridge_DE": 2446.653926961964,
+      "tabfm_residual": 2466.2962457867447
+    },
+    {
+      "row_id": "1776:1123:5650",
+      "cf": 1300.0,
+      "cf_contest": 1776,
+      "region": "Europe",
+      "features": {
+        "raw_b": 1645.4,
+        "binary_minus_survival": -389.3000000000002,
+        "conditional_fit_se": 14.8,
+        "solve_rate": 0.9324324324324325,
+        "log_field_size": 5.003946305945459,
+        "log_median_solve_seconds": 7.890208213109961,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 1509.5728949144004,
+      "gym_shape_affine": 1481.4573668872656,
+      "ridge_DET": 1447.3792023465398,
+      "ridge_DE": 1424.3157556599253,
+      "tabfm_residual": 1326.5728949144004
+    },
+    {
+      "row_id": "1776:1123:5647",
+      "cf": 2100.0,
+      "cf_contest": 1776,
+      "region": "Europe",
+      "features": {
+        "raw_b": 2036.6,
+        "binary_minus_survival": 81.0,
+        "conditional_fit_se": 23.6,
+        "solve_rate": 0.36486486486486486,
+        "log_field_size": 5.003946305945459,
+        "log_median_solve_seconds": 9.004545458996587,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2153.3107091374277,
+      "gym_shape_affine": 2119.091863689623,
+      "ridge_DET": 2157.0029014959246,
+      "ridge_DE": 2159.2445966484233,
+      "tabfm_residual": 2094.0607091374277
+    },
+    {
+      "row_id": "1776:1123:5655",
+      "cf": 1700.0,
+      "cf_contest": 1776,
+      "region": "Europe",
+      "features": {
+        "raw_b": 1846.8,
+        "binary_minus_survival": -134.29999999999995,
+        "conditional_fit_se": 17.3,
+        "solve_rate": 0.6824324324324325,
+        "log_field_size": 5.003946305945459,
+        "log_median_solve_seconds": 8.812992231969966,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 1840.985972073188,
+      "gym_shape_affine": 1793.6990246817031,
+      "ridge_DET": 1847.8485335458531,
+      "ridge_DE": 1844.3474125291184,
+      "tabfm_residual": 1747.985972073188
+    },
+    {
+      "row_id": "1776:1123:5648",
+      "cf": 3500.0,
+      "cf_contest": 1776,
+      "region": "Europe",
+      "features": {
+        "raw_b": 2842.6,
+        "binary_minus_survival": 311.7000000000003,
+        "conditional_fit_se": 165.4,
+        "solve_rate": 0.0,
+        "log_field_size": 5.003946305945459,
+        "log_median_solve_seconds": 0.0,
+        "timing_missing": 1.0
+      },
+      "raw_affine": 3479.6212363965283,
+      "gym_shape_affine": 3385.538367949902,
+      "ridge_DET": 3313.0821702382,
+      "ridge_DE": 3274.1674136171414,
+      "tabfm_residual": 3343.1212363965283
+    },
+    {
+      "row_id": "1776:1123:5653",
+      "cf": 2500.0,
+      "cf_contest": 1776,
+      "region": "Europe",
+      "features": {
+        "raw_b": 2313.5,
+        "binary_minus_survival": 231.0999999999999,
+        "conditional_fit_se": 40.4,
+        "solve_rate": 0.12162162162162163,
+        "log_field_size": 5.003946305945459,
+        "log_median_solve_seconds": 9.741968123371437,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2608.962551566764,
+      "gym_shape_affine": 2659.2939332482874,
+      "ridge_DET": 2607.8697117165852,
+      "ridge_DE": 2605.3437517725056,
+      "tabfm_residual": 2713.962551566764
+    },
+    {
+      "row_id": "1776:1123:5656",
+      "cf": 2200.0,
+      "cf_contest": 1776,
+      "region": "Europe",
+      "features": {
+        "raw_b": 2148.6,
+        "binary_minus_survival": 140.70000000000027,
+        "conditional_fit_se": 28.4,
+        "solve_rate": 0.25,
+        "log_field_size": 5.003946305945459,
+        "log_median_solve_seconds": 9.367429587218957,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2337.611923843407,
+      "gym_shape_affine": 2373.5103425093384,
+      "ridge_DET": 2334.705716678879,
+      "ridge_DE": 2333.5942272680313,
+      "tabfm_residual": 2307.049423843407
+    },
+    {
+      "row_id": "1776:1123:5645",
+      "cf": 800.0,
+      "cf_contest": 1776,
+      "region": "Europe",
+      "features": {
+        "raw_b": 1390.4,
+        "binary_minus_survival": -464.20000000000005,
+        "conditional_fit_se": 14.4,
+        "solve_rate": 0.9932432432432432,
+        "log_field_size": 5.003946305945459,
+        "log_median_solve_seconds": 6.660575149839686,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 1089.9585221463226,
+      "gym_shape_affine": 1161.0556314850473,
+      "ridge_DET": 963.0270734939136,
+      "ridge_DE": 924.909915371137,
+      "tabfm_residual": 975.2085221463226
+    },
+    {
+      "row_id": "2206:3747:18246",
+      "cf": 2900.0,
+      "cf_contest": 2206,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 2757.2,
+        "binary_minus_survival": 385.2000000000003,
+        "conditional_fit_se": 122.5,
+        "solve_rate": 0.012987012987012988,
+        "log_field_size": 4.356708826689592,
+        "log_median_solve_seconds": 9.696524881825722,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 3344.9210612364423,
+      "gym_shape_affine": 3286.336470602654,
+      "ridge_DET": 3361.5106767555426,
+      "ridge_DE": 3361.404619175838,
+      "tabfm_residual": 3322.2960612364423
+    },
+    {
+      "row_id": "2206:3747:18245",
+      "cf": 3500.0,
+      "cf_contest": 2206,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 2757.5,
+        "binary_minus_survival": 384.9000000000001,
+        "conditional_fit_se": 122.5,
+        "solve_rate": 0.012987012987012988,
+        "log_field_size": 4.356708826689592,
+        "log_median_solve_seconds": 9.692828247710418,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 3345.415984486054,
+      "gym_shape_affine": 3286.698839145942,
+      "ridge_DET": 3361.8381024757673,
+      "ridge_DE": 3361.6868873992457,
+      "tabfm_residual": 3322.040984486054
+    },
+    {
+      "row_id": "2206:3747:18244",
+      "cf": 1300.0,
+      "cf_contest": 2206,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 1737.4,
+        "binary_minus_survival": -419.60000000000014,
+        "conditional_fit_se": 19.8,
+        "solve_rate": 1.0,
+        "log_field_size": 4.356708826689592,
+        "log_median_solve_seconds": 7.621195162809845,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 1662.5119613895881,
+      "gym_shape_affine": 1623.5148325422224,
+      "ridge_DET": 1659.6022267866344,
+      "ridge_DE": 1659.1304156120395,
+      "tabfm_residual": 1605.2619613895881
+    },
+    {
+      "row_id": "2206:3747:18243",
+      "cf": 1700.0,
+      "cf_contest": 2206,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 1848.2,
+        "binary_minus_survival": -530.4000000000001,
+        "conditional_fit_se": 19.8,
+        "solve_rate": 1.0,
+        "log_field_size": 4.356708826689592,
+        "log_median_solve_seconds": 8.371242135931933,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 1845.3036149128588,
+      "gym_shape_affine": 1797.4289488493782,
+      "ridge_DET": 1783.8340791884664,
+      "ridge_DE": 1763.3814794574323,
+      "tabfm_residual": 1871.3036149128588
+    },
+    {
+      "row_id": "2206:3747:18242",
+      "cf": 2900.0,
+      "cf_contest": 2206,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 2406.6,
+        "binary_minus_survival": 321.3000000000002,
+        "conditional_fit_se": 48.9,
+        "solve_rate": 0.15584415584415584,
+        "log_field_size": 4.356708826689592,
+        "log_median_solve_seconds": 9.519111009257829,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2766.5207568568508,
+      "gym_shape_affine": 2827.713526561061,
+      "ridge_DET": 2883.991839910654,
+      "ridge_DE": 2923.894460820338,
+      "tabfm_residual": 2795.2707568568508
+    },
+    {
+      "row_id": "2206:3747:18241",
+      "cf": 1800.0,
+      "cf_contest": 2206,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 1859.1,
+        "binary_minus_survival": -165.39999999999986,
+        "conditional_fit_se": 20.5,
+        "solve_rate": 0.935064935064935,
+        "log_field_size": 4.356708826689592,
+        "log_median_solve_seconds": 8.284251797621916,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 1863.2858263154185,
+      "gym_shape_affine": 1818.294210888467,
+      "ridge_DET": 2013.9040261662708,
+      "ridge_DE": 2063.9622156320243,
+      "tabfm_residual": 1930.7858263154185
+    },
+    {
+      "row_id": "2206:3747:18240",
+      "cf": 3100.0,
+      "cf_contest": 2206,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 2685.3,
+        "binary_minus_survival": 386.89999999999964,
+        "conditional_fit_se": 101.4,
+        "solve_rate": 0.025974025974025976,
+        "log_field_size": 4.356708826689592,
+        "log_median_solve_seconds": 9.674105834254771,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 3226.3044557461617,
+      "gym_shape_affine": 3208.9638089596774,
+      "ridge_DET": 3275.1107631097766,
+      "ridge_DE": 3287.836514720722,
+      "tabfm_residual": 3219.1169557461617
+    },
+    {
+      "row_id": "2206:3747:18239",
+      "cf": 2400.0,
+      "cf_contest": 2206,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 2095.1,
+        "binary_minus_survival": 41.40000000000009,
+        "conditional_fit_se": 24.5,
+        "solve_rate": 0.6493506493506493,
+        "log_field_size": 4.356708826689592,
+        "log_median_solve_seconds": 9.23024103368252,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2252.625449343324,
+      "gym_shape_affine": 2252.221755808269,
+      "ridge_DET": 2425.7196263861506,
+      "ridge_DE": 2483.624437837171,
+      "tabfm_residual": 2392.625449343324
+    },
+    {
+      "row_id": "2206:3747:18238",
+      "cf": 2500.0,
+      "cf_contest": 2206,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 2083.7,
+        "binary_minus_survival": 9.100000000000364,
+        "conditional_fit_se": 23.8,
+        "solve_rate": 0.6883116883116883,
+        "log_field_size": 4.356708826689592,
+        "log_median_solve_seconds": 9.309370895439137,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2233.8183658580774,
+      "gym_shape_affine": 2224.3700336355846,
+      "ridge_DET": 2404.373990112304,
+      "ridge_DE": 2461.147038971456,
+      "tabfm_residual": 2409.8183658580774
+    },
+    {
+      "row_id": "2206:3747:18237",
+      "cf": 2600.0,
+      "cf_contest": 2206,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 2290.5,
+        "binary_minus_survival": 245.9000000000001,
+        "conditional_fit_se": 36.6,
+        "solve_rate": 0.2857142857142857,
+        "log_field_size": 4.356708826689592,
+        "log_median_solve_seconds": 9.405166749908611,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2574.9854592571064,
+      "gym_shape_affine": 2621.0491208459975,
+      "ridge_DET": 2710.9209964707065,
+      "ridge_DE": 2757.391480930213,
+      "tabfm_residual": 2622.7354592571064
+    },
+    {
+      "row_id": "2206:3747:18236",
+      "cf": 2200.0,
+      "cf_contest": 2206,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 1968.6,
+        "binary_minus_survival": -316.0,
+        "conditional_fit_se": 20.3,
+        "solve_rate": 0.948051948051948,
+        "log_field_size": 4.356708826689592,
+        "log_median_solve_seconds": 9.007121989469242,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2043.932812423705,
+      "gym_shape_affine": 2009.407287677216,
+      "ridge_DET": 2115.9164943888286,
+      "ridge_DE": 2139.3870557596065,
+      "tabfm_residual": 2145.432812423705
+    },
+    {
+      "row_id": "2206:3747:18235",
+      "cf": 2500.0,
+      "cf_contest": 2206,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 2144.7,
+        "binary_minus_survival": 102.90000000000009,
+        "conditional_fit_se": 26.7,
+        "solve_rate": 0.5454545454545454,
+        "log_field_size": 4.356708826689592,
+        "log_median_solve_seconds": 9.349319399257634,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2334.4527599457983,
+      "gym_shape_affine": 2370.7891967386017,
+      "ridge_DET": 2500.310674112783,
+      "ridge_DE": 2556.0357615473195,
+      "tabfm_residual": 2456.9527599457983
+    },
+    {
+      "row_id": "2206:3747:18234",
+      "cf": 3500.0,
+      "cf_contest": 2206,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 2757.1,
+        "binary_minus_survival": 385.3000000000002,
+        "conditional_fit_se": 122.5,
+        "solve_rate": 0.012987012987012988,
+        "log_field_size": 4.356708826689592,
+        "log_median_solve_seconds": 9.677903525682558,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 3344.7560868199052,
+      "gym_shape_affine": 3286.2156810882243,
+      "ridge_DET": 3361.370538001271,
+      "ridge_DE": 3361.3105297680354,
+      "tabfm_residual": 3321.2560868199052
+    },
+    {
+      "row_id": "2181:2785:15905",
+      "cf": 1700.0,
+      "cf_contest": 2181,
+      "region": "Northern Eurasia",
+      "features": {
+        "raw_b": 1726.5,
+        "binary_minus_survival": -91.5,
+        "conditional_fit_se": 11.1,
+        "solve_rate": 0.7554179566563467,
+        "log_field_size": 5.780743515792329,
+        "log_median_solve_seconds": 8.27410200229233,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 1647.8383823029262,
+      "gym_shape_affine": 1610.8575432198595,
+      "ridge_DET": 1684.8570683718285,
+      "ridge_DE": 1691.1594242194715,
+      "tabfm_residual": 1681.3383823029262
+    },
+    {
+      "row_id": "2181:2785:15904",
+      "cf": 2800.0,
+      "cf_contest": 2181,
+      "region": "Northern Eurasia",
+      "features": {
+        "raw_b": 2651.2,
+        "binary_minus_survival": 286.0,
+        "conditional_fit_se": 78.5,
+        "solve_rate": 0.01238390092879257,
+        "log_field_size": 5.780743515792329,
+        "log_median_solve_seconds": 9.137769679141348,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 3185.1135980194836,
+      "gym_shape_affine": 3189.5250789056245,
+      "ridge_DET": 3101.90859916321,
+      "ridge_DE": 3101.3334678693273,
+      "tabfm_residual": 3134.6135980194836
+    },
+    {
+      "row_id": "2181:2785:15903",
+      "cf": 3500.0,
+      "cf_contest": 2181,
+      "region": "Northern Eurasia",
+      "features": {
+        "raw_b": 2924.7,
+        "binary_minus_survival": 271.0,
+        "conditional_fit_se": 159.1,
+        "solve_rate": 0.0,
+        "log_field_size": 5.780743515792329,
+        "log_median_solve_seconds": 0.0,
+        "timing_missing": 1.0
+      },
+      "raw_affine": 3639.7959506727534,
+      "gym_shape_affine": 3502.757246690042,
+      "ridge_DET": 3422.5057549622757,
+      "ridge_DE": 3435.403111726141,
+      "tabfm_residual": 3548.7959506727534
+    },
+    {
+      "row_id": "2181:2785:15902",
+      "cf": 2300.0,
+      "cf_contest": 2181,
+      "region": "Northern Eurasia",
+      "features": {
+        "raw_b": 2249.6,
+        "binary_minus_survival": 179.30000000000018,
+        "conditional_fit_se": 26.7,
+        "solve_rate": 0.13003095975232198,
+        "log_field_size": 5.780743515792329,
+        "log_median_solve_seconds": 9.440658127038393,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2517.4703335750482,
+      "gym_shape_affine": 2544.266981994786,
+      "ridge_DET": 2462.209776477937,
+      "ridge_DE": 2458.1405175202763,
+      "tabfm_residual": 2503.4078335750482
+    },
+    {
+      "row_id": "2181:2785:15901",
+      "cf": 3500.0,
+      "cf_contest": 2181,
+      "region": "Northern Eurasia",
+      "features": {
+        "raw_b": 2745.1,
+        "binary_minus_survival": 286.0,
+        "conditional_fit_se": 100.3,
+        "solve_rate": 0.006191950464396285,
+        "log_field_size": 5.780743515792329,
+        "log_median_solve_seconds": 9.654833867051826,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 3341.218434999894,
+      "gym_shape_affine": 3284.664164593736,
+      "ridge_DET": 3238.1657267113296,
+      "ridge_DE": 3228.60127362232,
+      "tabfm_residual": 3310.843434999894
+    },
+    {
+      "row_id": "2181:2785:15900",
+      "cf": 1200.0,
+      "cf_contest": 2181,
+      "region": "Northern Eurasia",
+      "features": {
+        "raw_b": 1518.0,
+        "binary_minus_survival": -376.79999999999995,
+        "conditional_fit_se": 9.8,
+        "solve_rate": 0.9690402476780186,
+        "log_field_size": 5.780743515792329,
+        "log_median_solve_seconds": 7.470224135899966,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 1301.2158209566492,
+      "gym_shape_affine": 1323.8245616284,
+      "ridge_DET": 1227.984511970008,
+      "ridge_DE": 1226.92306897999,
+      "tabfm_residual": 1258.7158209566492
+    },
+    {
+      "row_id": "2181:2785:15899",
+      "cf": 2400.0,
+      "cf_contest": 2181,
+      "region": "Northern Eurasia",
+      "features": {
+        "raw_b": 2142.2,
+        "binary_minus_survival": 129.80000000000018,
+        "conditional_fit_se": 20.7,
+        "solve_rate": 0.21671826625386997,
+        "log_field_size": 5.780743515792329,
+        "log_median_solve_seconds": 9.354310837386214,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2338.9223091693398,
+      "gym_shape_affine": 2375.4208286814296,
+      "ridge_DET": 2291.669751740812,
+      "ridge_DE": 2287.3293153630902,
+      "tabfm_residual": 2320.6723091693398
+    },
+    {
+      "row_id": "2181:2785:15898",
+      "cf": 1600.0,
+      "cf_contest": 2181,
+      "region": "Northern Eurasia",
+      "features": {
+        "raw_b": 1784.0,
+        "binary_minus_survival": -188.0999999999999,
+        "conditional_fit_se": 10.9,
+        "solve_rate": 0.7832817337461301,
+        "log_field_size": 5.780743515792329,
+        "log_median_solve_seconds": 8.842604480678025,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 1743.4297361514195,
+      "gym_shape_affine": 1700.6587921676055,
+      "ridge_DET": 1739.9734012472966,
+      "ridge_DE": 1737.445621333023,
+      "tabfm_residual": 1778.9297361514195
+    },
+    {
+      "row_id": "2181:2785:15897",
+      "cf": 2900.0,
+      "cf_contest": 2181,
+      "region": "Northern Eurasia",
+      "features": {
+        "raw_b": 2815.0,
+        "binary_minus_survival": 283.4000000000001,
+        "conditional_fit_se": 120.6,
+        "solve_rate": 0.0030959752321981426,
+        "log_field_size": 5.780743515792329,
+        "log_median_solve_seconds": 9.729074639810214,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 3457.4242721131063,
+      "gym_shape_affine": 3369.5456035610628,
+      "ridge_DET": 3329.768889943007,
+      "ridge_DE": 3315.4307278830324,
+      "tabfm_residual": 3432.9242721131063
+    },
+    {
+      "row_id": "2181:2785:15896",
+      "cf": 2000.0,
+      "cf_contest": 2181,
+      "region": "Northern Eurasia",
+      "features": {
+        "raw_b": 1902.7,
+        "binary_minus_survival": 2.7999999999999545,
+        "conditional_fit_se": 13.4,
+        "solve_rate": 0.5232198142414861,
+        "log_field_size": 5.780743515792329,
+        "log_median_solve_seconds": 8.846784666945227,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 1940.7635396612668,
+      "gym_shape_affine": 1907.403925379272,
+      "ridge_DET": 1944.1233911027234,
+      "ridge_DE": 1945.0939167917338,
+      "tabfm_residual": 1968.2635396612668
+    },
+    {
+      "row_id": "2181:2785:15895",
+      "cf": 3200.0,
+      "cf_contest": 2181,
+      "region": "Northern Eurasia",
+      "features": {
+        "raw_b": 2693.5,
+        "binary_minus_survival": 285.9000000000001,
+        "conditional_fit_se": 87.5,
+        "solve_rate": 0.009287925696594427,
+        "log_field_size": 5.780743515792329,
+        "log_median_solve_seconds": 9.528139343331775,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 3255.435585285419,
+      "gym_shape_affine": 3229.279384099768,
+      "ridge_DET": 3165.849752454617,
+      "ridge_DE": 3159.796796731098,
+      "tabfm_residual": 3220.185585285419
+    },
+    {
+      "row_id": "2181:2785:15894",
+      "cf": 1400.0,
+      "cf_contest": 2181,
+      "region": "Northern Eurasia",
+      "features": {
+        "raw_b": 1615.5,
+        "binary_minus_survival": -299.5,
+        "conditional_fit_se": 10.1,
+        "solve_rate": 0.9256965944272446,
+        "log_field_size": 5.780743515792329,
+        "log_median_solve_seconds": 7.902857191280582,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 1463.3055079171386,
+      "gym_shape_affine": 1446.683032500896,
+      "ridge_DET": 1432.6567466683005,
+      "ridge_DE": 1433.5929221560614,
+      "tabfm_residual": 1428.0555079171386
+    },
+    {
+      "row_id": "2181:2785:15893",
+      "cf": 1300.0,
+      "cf_contest": 2181,
+      "region": "Northern Eurasia",
+      "features": {
+        "raw_b": 1695.1,
+        "binary_minus_survival": -198.19999999999982,
+        "conditional_fit_se": 10.5,
+        "solve_rate": 0.8452012383900929,
+        "log_field_size": 5.780743515792329,
+        "log_median_solve_seconds": 8.374246182096304,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 1595.6371908100095,
+      "gym_shape_affine": 1562.3908405588923,
+      "ridge_DET": 1604.3407488230591,
+      "ridge_DE": 1605.9288720727686,
+      "tabfm_residual": 1573.3871908100095
+    },
+    {
+      "row_id": "2172:2657:15406",
+      "cf": 2800.0,
+      "cf_contest": 2172,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 2346.8,
+        "binary_minus_survival": 257.0999999999999,
+        "conditional_fit_se": 49.0,
+        "solve_rate": 0.09836065573770492,
+        "log_field_size": 4.812184355372417,
+        "log_median_solve_seconds": 9.494842393421333,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2671.5736038783425,
+      "gym_shape_affine": 2727.06773838377,
+      "ridge_DET": 2679.5848435232947,
+      "ridge_DE": 2681.156602798004,
+      "tabfm_residual": 2679.8236038783425
+    },
+    {
+      "row_id": "2172:2657:15405",
+      "cf": 1300.0,
+      "cf_contest": 2172,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 1582.4,
+        "binary_minus_survival": -312.60000000000014,
+        "conditional_fit_se": 16.3,
+        "solve_rate": 0.9344262295081968,
+        "log_field_size": 4.812184355372417,
+        "log_median_solve_seconds": 7.621195162809845,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 1413.3527726801856,
+      "gym_shape_affine": 1412.7381658653553,
+      "ridge_DET": 1393.576300891495,
+      "ridge_DE": 1388.7447366410738,
+      "tabfm_residual": 1387.7277726801856
+    },
+    {
+      "row_id": "2172:2657:15404",
+      "cf": 2300.0,
+      "cf_contest": 2172,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 2111.4,
+        "binary_minus_survival": 124.09999999999991,
+        "conditional_fit_se": 29.7,
+        "solve_rate": 0.2786885245901639,
+        "log_field_size": 4.812184355372417,
+        "log_median_solve_seconds": 8.914760527397261,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2284.0995279180515,
+      "gym_shape_affine": 2299.3654712177695,
+      "ridge_DET": 2291.514638459029,
+      "ridge_DE": 2295.1892679210414,
+      "tabfm_residual": 2299.0370279180515
+    },
+    {
+      "row_id": "2172:2657:15403",
+      "cf": 2100.0,
+      "cf_contest": 2172,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 2114.3,
+        "binary_minus_survival": 71.59999999999991,
+        "conditional_fit_se": 28.1,
+        "solve_rate": 0.3114754098360656,
+        "log_field_size": 4.812184355372417,
+        "log_median_solve_seconds": 9.433043826461988,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2288.8729978427964,
+      "gym_shape_affine": 2306.423247184425,
+      "ridge_DET": 2284.7926021654166,
+      "ridge_DE": 2277.0738578147257,
+      "tabfm_residual": 2305.8729978427964
+    },
+    {
+      "row_id": "2172:2657:15402",
+      "cf": 2300.0,
+      "cf_contest": 2172,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 2154.5,
+        "binary_minus_survival": 133.80000000000018,
+        "conditional_fit_se": 31.5,
+        "solve_rate": 0.2459016393442623,
+        "log_field_size": 4.812184355372417,
+        "log_median_solve_seconds": 9.263691547473178,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2355.0431671444258,
+      "gym_shape_affine": 2390.3239330717793,
+      "ridge_DET": 2358.345162275875,
+      "ridge_DE": 2356.8002143579492,
+      "tabfm_residual": 2348.8244171444258
+    },
+    {
+      "row_id": "2172:2657:15401",
+      "cf": 2000.0,
+      "cf_contest": 2172,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 2041.6,
+        "binary_minus_survival": 19.40000000000009,
+        "conditional_fit_se": 24.8,
+        "solve_rate": 0.4016393442622951,
+        "log_field_size": 4.812184355372417,
+        "log_median_solve_seconds": 9.118334726180159,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2169.2070449017883,
+      "gym_shape_affine": 2139.1323408681124,
+      "ridge_DET": 2167.6242273143894,
+      "ridge_DE": 2163.0786161706037,
+      "tabfm_residual": 2150.9570449017883
+    },
+    {
+      "row_id": "2172:2657:15400",
+      "cf": 2500.0,
+      "cf_contest": 2172,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 2329.9,
+        "binary_minus_survival": 250.5999999999999,
+        "conditional_fit_se": 47.2,
+        "solve_rate": 0.10655737704918032,
+        "log_field_size": 4.812184355372417,
+        "log_median_solve_seconds": 9.377632889750377,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2643.7557963858662,
+      "gym_shape_affine": 2697.060119863926,
+      "ridge_DET": 2651.4122166515235,
+      "ridge_DE": 2654.219218133176,
+      "tabfm_residual": 2646.6307963858662
+    },
+    {
+      "row_id": "2172:2657:15399",
+      "cf": 3300.0,
+      "cf_contest": 2172,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 2823.4,
+        "binary_minus_survival": 326.4000000000001,
+        "conditional_fit_se": 167.0,
+        "solve_rate": 0.0,
+        "log_field_size": 4.812184355372417,
+        "log_median_solve_seconds": 0.0,
+        "timing_missing": 1.0
+      },
+      "raw_affine": 3456.0686956484124,
+      "gym_shape_affine": 3369.4787844397965,
+      "ridge_DET": 3318.8730835738493,
+      "ridge_DE": 3261.4135244934996,
+      "tabfm_residual": 3398.5686956484124
+    },
+    {
+      "row_id": "2172:2657:15398",
+      "cf": 1600.0,
+      "cf_contest": 2172,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 1719.7,
+        "binary_minus_survival": -85.70000000000005,
+        "conditional_fit_se": 18.3,
+        "solve_rate": 0.7377049180327869,
+        "log_field_size": 4.812184355372417,
+        "log_median_solve_seconds": 7.8674885686991285,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 1639.3518832551551,
+      "gym_shape_affine": 1606.341542390925,
+      "ridge_DET": 1692.6544524884357,
+      "ridge_DE": 1713.9916194292582,
+      "tabfm_residual": 1698.6018832551551
+    },
+    {
+      "row_id": "2172:2657:15397",
+      "cf": 1200.0,
+      "cf_contest": 2172,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 1492.8,
+        "binary_minus_survival": -610.6999999999999,
+        "conditional_fit_se": 15.8,
+        "solve_rate": 1.0,
+        "log_field_size": 4.812184355372417,
+        "log_median_solve_seconds": 7.2305631534092925,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 1265.8690122467017,
+      "gym_shape_affine": 1300.8652790277179,
+      "ridge_DET": 1063.2706017805792,
+      "ridge_DE": 999.005698912431,
+      "tabfm_residual": 1147.3690122467017
+    },
+    {
+      "row_id": "2172:2657:15396",
+      "cf": 3100.0,
+      "cf_contest": 2172,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 2630.1,
+        "binary_minus_survival": 338.4000000000001,
+        "conditional_fit_se": 102.5,
+        "solve_rate": 0.01639344262295082,
+        "log_field_size": 4.812184355372417,
+        "log_median_solve_seconds": 9.571052156897165,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 3137.8922348025153,
+      "gym_shape_affine": 3161.3456796368228,
+      "ridge_DET": 3099.061479822435,
+      "ridge_DE": 3087.142284708065,
+      "tabfm_residual": 3104.8922348025153
+    },
+    {
+      "row_id": "2172:2657:15395",
+      "cf": 3100.0,
+      "cf_contest": 2172,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 2501.9,
+        "binary_minus_survival": 314.5,
+        "conditional_fit_se": 72.5,
+        "solve_rate": 0.040983606557377046,
+        "log_field_size": 4.812184355372417,
+        "log_median_solve_seconds": 9.545454543987825,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2926.8719436465717,
+      "gym_shape_affine": 2997.449699723947,
+      "ridge_DET": 2921.8919677442946,
+      "ridge_DE": 2920.9950219206503,
+      "tabfm_residual": 2921.2156936465717
+    },
+    {
+      "row_id": "2172:2657:15394",
+      "cf": 1800.0,
+      "cf_contest": 2172,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 1854.4,
+        "binary_minus_survival": -50.700000000000045,
+        "conditional_fit_se": 20.2,
+        "solve_rate": 0.6065573770491803,
+        "log_field_size": 4.812184355372417,
+        "log_median_solve_seconds": 8.4252971767117,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 1861.0713311389752,
+      "gym_shape_affine": 1818.4787740677298,
+      "ridge_DET": 1891.5239706761379,
+      "ridge_DE": 1901.6412206110579,
+      "tabfm_residual": 1877.3213311389752
+    },
+    {
+      "row_id": "2172:2657:15393",
+      "cf": 800.0,
+      "cf_contest": 2172,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 1224.1,
+        "binary_minus_survival": -341.9999999999999,
+        "conditional_fit_se": 15.8,
+        "solve_rate": 1.0,
+        "log_field_size": 4.812184355372417,
+        "log_median_solve_seconds": 5.484796933490655,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 823.582333357449,
+      "gym_shape_affine": 965.3714766474375,
+      "ridge_DET": 759.8806628551278,
+      "ridge_DE": 759.1429652254218,
+      "tabfm_residual": 983.582333357449
+    },
+    {
+      "row_id": "2157:2692:15715",
+      "cf": 3500.0,
+      "cf_contest": 2157,
+      "region": "Europe",
+      "features": {
+        "raw_b": 2774.2,
+        "binary_minus_survival": 333.3000000000002,
+        "conditional_fit_se": 122.0,
+        "solve_rate": 0.00546448087431694,
+        "log_field_size": 5.214935757608986,
+        "log_median_solve_seconds": 9.777016888482178,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 3361.7341861326267,
+      "gym_shape_affine": 3298.8059711496844,
+      "ridge_DET": 3278.4225190946063,
+      "ridge_DE": 3257.4761728715935,
+      "tabfm_residual": 3308.1091861326267
+    },
+    {
+      "row_id": "2157:2692:15718",
+      "cf": 3200.0,
+      "cf_contest": 2157,
+      "region": "Europe",
+      "features": {
+        "raw_b": 2546.2,
+        "binary_minus_survival": 319.9000000000001,
+        "conditional_fit_se": 66.7,
+        "solve_rate": 0.03278688524590164,
+        "log_field_size": 5.214935757608986,
+        "log_median_solve_seconds": 9.480863569337167,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2992.3618413951926,
+      "gym_shape_affine": 3061.907007306977,
+      "ridge_DET": 2979.877675217042,
+      "ridge_DE": 2978.683579595544,
+      "tabfm_residual": 2972.8618413951926
+    },
+    {
+      "row_id": "2157:2692:15716",
+      "cf": 2800.0,
+      "cf_contest": 2157,
+      "region": "Europe",
+      "features": {
+        "raw_b": 2389.4,
+        "binary_minus_survival": 271.0,
+        "conditional_fit_se": 44.0,
+        "solve_rate": 0.08196721311475409,
+        "log_field_size": 5.214935757608986,
+        "log_median_solve_seconds": 9.552439604462528,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2738.3373516810275,
+      "gym_shape_affine": 2798.1622420273643,
+      "ridge_DET": 2738.3357082307443,
+      "ridge_DE": 2737.727818683584,
+      "tabfm_residual": 2751.4623516810275
+    },
+    {
+      "row_id": "2157:2692:15714",
+      "cf": 2400.0,
+      "cf_contest": 2157,
+      "region": "Europe",
+      "features": {
+        "raw_b": 2209.6,
+        "binary_minus_survival": 168.4000000000001,
+        "conditional_fit_se": 28.0,
+        "solve_rate": 0.20765027322404372,
+        "log_field_size": 5.214935757608986,
+        "log_median_solve_seconds": 9.392745258631441,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2447.051616664402,
+      "gym_shape_affine": 2460.8254671729183,
+      "ridge_DET": 2444.9848429744816,
+      "ridge_DE": 2441.7956842273393,
+      "tabfm_residual": 2448.996929164402
+    },
+    {
+      "row_id": "2157:2692:15708",
+      "cf": 1900.0,
+      "cf_contest": 2157,
+      "region": "Europe",
+      "features": {
+        "raw_b": 1970.3,
+        "binary_minus_survival": -40.700000000000045,
+        "conditional_fit_se": 17.5,
+        "solve_rate": 0.5355191256830601,
+        "log_field_size": 5.214935757608986,
+        "log_median_solve_seconds": 8.993303139093733,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2059.372660104455,
+      "gym_shape_affine": 2026.2172442091842,
+      "ridge_DET": 2062.5187152515077,
+      "ridge_DE": 2060.8296503968136,
+      "tabfm_residual": 2058.874613604455
+    },
+    {
+      "row_id": "2157:2692:15709",
+      "cf": 1600.0,
+      "cf_contest": 2157,
+      "region": "Europe",
+      "features": {
+        "raw_b": 1892.3,
+        "binary_minus_survival": -115.79999999999995,
+        "conditional_fit_se": 15.9,
+        "solve_rate": 0.6557377049180327,
+        "log_field_size": 5.214935757608986,
+        "log_median_solve_seconds": 8.808518618782816,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 1933.0084369048063,
+      "gym_shape_affine": 1898.6496027544233,
+      "ridge_DET": 1936.2150038885652,
+      "ridge_DE": 1934.9423408071823,
+      "tabfm_residual": 1909.2896869048063
+    },
+    {
+      "row_id": "2157:2692:15712",
+      "cf": 900.0,
+      "cf_contest": 2157,
+      "region": "Europe",
+      "features": {
+        "raw_b": 1644.8,
+        "binary_minus_survival": -279.29999999999995,
+        "conditional_fit_se": 13.6,
+        "solve_rate": 0.8961748633879781,
+        "log_field_size": 5.214935757608986,
+        "log_median_solve_seconds": 7.760253877768513,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 1532.0450363674604,
+      "gym_shape_affine": 1505.1328465408299,
+      "ridge_DET": 1513.2686336719298,
+      "ridge_DE": 1508.4058110008173,
+      "tabfm_residual": 1462.6700363674604
+    },
+    {
+      "row_id": "2157:2692:15711",
+      "cf": 800.0,
+      "cf_contest": 2157,
+      "region": "Europe",
+      "features": {
+        "raw_b": 1401.2,
+        "binary_minus_survival": -443.80000000000007,
+        "conditional_fit_se": 12.9,
+        "solve_rate": 0.9890710382513661,
+        "log_field_size": 5.214935757608986,
+        "log_median_solve_seconds": 6.493753839851687,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 1137.3998469900966,
+      "gym_shape_affine": 1204.0076859037988,
+      "ridge_DET": 1023.1518711096362,
+      "ridge_DE": 990.984474033112,
+      "tabfm_residual": 1034.6498469900966
+    },
+    {
+      "row_id": "1773:1062:5210",
+      "cf": 3500.0,
+      "cf_contest": 1773,
+      "region": "Northern Eurasia",
+      "features": {
+        "raw_b": 2936.1,
+        "binary_minus_survival": 332.7000000000003,
+        "conditional_fit_se": 158.3,
+        "solve_rate": 0.0,
+        "log_field_size": 5.659482215759621,
+        "log_median_solve_seconds": 0.0,
+        "timing_missing": 1.0
+      },
+      "raw_affine": 3645.3749049995313,
+      "gym_shape_affine": 3511.335666457882,
+      "ridge_DET": 3498.938396012234,
+      "ridge_DE": 3447.252291475993,
+      "tabfm_residual": 3505.8749049995313
+    },
+    {
+      "row_id": "1773:1062:5209",
+      "cf": 1900.0,
+      "cf_contest": 1773,
+      "region": "Northern Eurasia",
+      "features": {
+        "raw_b": 1898.9,
+        "binary_minus_survival": -166.5,
+        "conditional_fit_se": 12.4,
+        "solve_rate": 0.6818181818181818,
+        "log_field_size": 5.659482215759621,
+        "log_median_solve_seconds": 9.137984709784043,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 1942.193140677745,
+      "gym_shape_affine": 1908.6334506751361,
+      "ridge_DET": 1918.099882766909,
+      "ridge_DE": 1905.8759222697647,
+      "tabfm_residual": 1985.693140677745
+    },
+    {
+      "row_id": "1773:1062:5208",
+      "cf": 2900.0,
+      "cf_contest": 1773,
+      "region": "Northern Eurasia",
+      "features": {
+        "raw_b": 2667.1,
+        "binary_minus_survival": 343.3000000000002,
+        "conditional_fit_se": 78.4,
+        "solve_rate": 0.013986013986013986,
+        "log_field_size": 5.659482215759621,
+        "log_median_solve_seconds": 9.485962514935522,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 3203.651134653831,
+      "gym_shape_affine": 3201.8693360178445,
+      "ridge_DET": 3177.8852335023093,
+      "ridge_DE": 3172.7247717550617,
+      "tabfm_residual": 3126.026134653831
+    },
+    {
+      "row_id": "1773:1062:5207",
+      "cf": 2500.0,
+      "cf_contest": 1773,
+      "region": "Northern Eurasia",
+      "features": {
+        "raw_b": 2423.7,
+        "binary_minus_survival": 283.5,
+        "conditional_fit_se": 41.4,
+        "solve_rate": 0.05944055944055944,
+        "log_field_size": 5.659482215759621,
+        "log_median_solve_seconds": 9.314430080500564,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2803.965016801996,
+      "gym_shape_affine": 2868.897855658365,
+      "ridge_DET": 2797.816256467482,
+      "ridge_DE": 2798.483714042856,
+      "tabfm_residual": 2722.215016801996
+    },
+    {
+      "row_id": "1773:1062:5206",
+      "cf": 2600.0,
+      "cf_contest": 1773,
+      "region": "Northern Eurasia",
+      "features": {
+        "raw_b": 2324.5,
+        "binary_minus_survival": 221.0999999999999,
+        "conditional_fit_se": 31.4,
+        "solve_rate": 0.1048951048951049,
+        "log_field_size": 5.659482215759621,
+        "log_median_solve_seconds": 9.447031735835662,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2641.0691133882656,
+      "gym_shape_affine": 2693.237440494754,
+      "ridge_DET": 2623.492308582049,
+      "ridge_DE": 2618.2404963466993,
+      "tabfm_residual": 2625.6003633882656
+    },
+    {
+      "row_id": "1773:1062:5205",
+      "cf": 2800.0,
+      "cf_contest": 1773,
+      "region": "Northern Eurasia",
+      "features": {
+        "raw_b": 2508.1,
+        "binary_minus_survival": 305.9000000000001,
+        "conditional_fit_se": 50.7,
+        "solve_rate": 0.038461538461538464,
+        "log_field_size": 5.659482215759621,
+        "log_median_solve_seconds": 9.658034484302057,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2942.557902367711,
+      "gym_shape_affine": 3013.573774767581,
+      "ridge_DET": 2936.382109634739,
+      "ridge_DE": 2935.5651570244386,
+      "tabfm_residual": 2987.370402367711
+    },
+    {
+      "row_id": "1773:1062:5204",
+      "cf": 800.0,
+      "cf_contest": 1773,
+      "region": "Northern Eurasia",
+      "features": {
+        "raw_b": 1579.1,
+        "binary_minus_survival": -708.3999999999999,
+        "conditional_fit_se": 10.3,
+        "solve_rate": 0.9965034965034965,
+        "log_field_size": 5.659482215759621,
+        "log_median_solve_seconds": 7.658227526161352,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 1417.0509036645292,
+      "gym_shape_affine": 1413.6227757309985,
+      "ridge_DET": 1159.7774661778508,
+      "ridge_DE": 1074.0003215940965,
+      "tabfm_residual": 1301.5509036645292
+    },
+    {
+      "row_id": "1773:1062:5203",
+      "cf": 1400.0,
+      "cf_contest": 1773,
+      "region": "Northern Eurasia",
+      "features": {
+        "raw_b": 1675.0,
+        "binary_minus_survival": -262.9000000000001,
+        "conditional_fit_se": 10.9,
+        "solve_rate": 0.8881118881118881,
+        "log_field_size": 5.659482215759621,
+        "log_median_solve_seconds": 8.066521490469993,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 1574.5278909364722,
+      "gym_shape_affine": 1543.0577988438597,
+      "ridge_DET": 1549.0223530566197,
+      "ridge_DE": 1539.5653369118227,
+      "tabfm_residual": 1516.7778909364722
+    },
+    {
+      "row_id": "1773:1062:5202",
+      "cf": 2600.0,
+      "cf_contest": 1773,
+      "region": "Northern Eurasia",
+      "features": {
+        "raw_b": 2323.9,
+        "binary_minus_survival": 232.0999999999999,
+        "conditional_fit_se": 32.0,
+        "solve_rate": 0.10139860139860139,
+        "log_field_size": 5.659482215759621,
+        "log_median_solve_seconds": 9.234935418831563,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2640.083855907941,
+      "gym_shape_affine": 2692.171447612394,
+      "ridge_DET": 2625.2479977812122,
+      "ridge_DE": 2622.342727281316,
+      "tabfm_residual": 2522.333855907941
+    },
+    {
+      "row_id": "1773:1062:5201",
+      "cf": 3500.0,
+      "cf_contest": 1773,
+      "region": "Northern Eurasia",
+      "features": {
+        "raw_b": 2634.2,
+        "binary_minus_survival": 338.7000000000003,
+        "conditional_fit_se": 71.7,
+        "solve_rate": 0.017482517482517484,
+        "log_field_size": 5.659482215759621,
+        "log_median_solve_seconds": 9.544810605926722,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 3149.6261828160114,
+      "gym_shape_affine": 3171.213421775238,
+      "ridge_DET": 3131.018419061585,
+      "ridge_DE": 3127.703397328693,
+      "tabfm_residual": 3114.3761828160114
+    },
+    {
+      "row_id": "1773:1062:5200",
+      "cf": 2200.0,
+      "cf_contest": 1773,
+      "region": "Northern Eurasia",
+      "features": {
+        "raw_b": 2246.3,
+        "binary_minus_survival": 161.19999999999982,
+        "conditional_fit_se": 25.5,
+        "solve_rate": 0.16083916083916083,
+        "log_field_size": 5.659482215759621,
+        "log_median_solve_seconds": 9.492507263739853,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2512.65722178591,
+      "gym_shape_affine": 2540.3833763827574,
+      "ridge_DET": 2484.298025891996,
+      "ridge_DE": 2474.0464023586833,
+      "tabfm_residual": 2552.21972178591
+    },
+    {
+      "row_id": "1773:1062:5199",
+      "cf": 1900.0,
+      "cf_contest": 1773,
+      "region": "Northern Eurasia",
+      "features": {
+        "raw_b": 2003.0,
+        "binary_minus_survival": 8.200000000000045,
+        "conditional_fit_se": 15.5,
+        "solve_rate": 0.4370629370629371,
+        "log_field_size": 5.659482215759621,
+        "log_median_solve_seconds": 9.09873819539488,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2113.13531351413,
+      "gym_shape_affine": 2069.0317374970014,
+      "ridge_DET": 2096.234445167205,
+      "ridge_DE": 2088.5377380761574,
+      "tabfm_residual": 2100.94781351413
+    },
+    {
+      "row_id": "1938:1886:10165",
+      "cf": 3500.0,
+      "cf_contest": 1938,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 2798.2,
+        "binary_minus_survival": 387.0,
+        "conditional_fit_se": 121.2,
+        "solve_rate": 0.00909090909090909,
+        "log_field_size": 4.709530201312334,
+        "log_median_solve_seconds": 8.907747686788648,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 3426.277488258406,
+      "gym_shape_affine": 3345.913532701461,
+      "ridge_DET": 3391.9670225519,
+      "ridge_DE": 3426.455054443053,
+      "tabfm_residual": 3331.277488258406
+    },
+    {
+      "row_id": "1938:1886:10164",
+      "cf": 2800.0,
+      "cf_contest": 1938,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 2397.6,
+        "binary_minus_survival": 311.2000000000003,
+        "conditional_fit_se": 41.4,
+        "solve_rate": 0.15454545454545454,
+        "log_field_size": 4.709530201312334,
+        "log_median_solve_seconds": 9.519661619531444,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2756.5441572681098,
+      "gym_shape_affine": 2816.196407187706,
+      "ridge_DET": 2852.263449617781,
+      "ridge_DE": 2849.126955854753,
+      "tabfm_residual": 2839.5441572681098
+    },
+    {
+      "row_id": "1938:1886:10163",
+      "cf": 2400.0,
+      "cf_contest": 1938,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 2206.5,
+        "binary_minus_survival": 176.19999999999982,
+        "conditional_fit_se": 26.1,
+        "solve_rate": 0.4,
+        "log_field_size": 4.709530201312334,
+        "log_median_solve_seconds": 9.416622566214981,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2437.058287192609,
+      "gym_shape_affine": 2450.4690586901766,
+      "ridge_DET": 2566.897999939695,
+      "ridge_DE": 2565.550444606348,
+      "tabfm_residual": 2588.058287192609
+    },
+    {
+      "row_id": "1938:1886:10162",
+      "cf": 2100.0,
+      "cf_contest": 1938,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 1895.6,
+        "binary_minus_survival": -297.1999999999998,
+        "conditional_fit_se": 17.0,
+        "solve_rate": 0.9454545454545454,
+        "log_field_size": 4.709530201312334,
+        "log_median_solve_seconds": 8.605020901781758,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 1917.2877115438741,
+      "gym_shape_affine": 1882.5010203121865,
+      "ridge_DET": 1967.4635289238772,
+      "ridge_DE": 1972.0446631705681,
+      "tabfm_residual": 2052.287711543874
+    },
+    {
+      "row_id": "1938:1886:10161",
+      "cf": 2800.0,
+      "cf_contest": 1938,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 2910.4,
+        "binary_minus_survival": 371.1999999999998,
+        "conditional_fit_se": 160.1,
+        "solve_rate": 0.0,
+        "log_field_size": 4.709530201312334,
+        "log_median_solve_seconds": 0.0,
+        "timing_missing": 1.0
+      },
+      "raw_affine": 3613.856319354541,
+      "gym_shape_affine": 3482.9106623497833,
+      "ridge_DET": 3612.8212777515296,
+      "ridge_DE": 3554.788819707437,
+      "tabfm_residual": 3601.293819354541
+    },
+    {
+      "row_id": "1938:1886:10160",
+      "cf": 1600.0,
+      "cf_contest": 1938,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 1721.5,
+        "binary_minus_survival": -397.79999999999995,
+        "conditional_fit_se": 16.6,
+        "solve_rate": 0.990909090909091,
+        "log_field_size": 4.709530201312334,
+        "log_median_solve_seconds": 7.504942068396171,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 1626.2228764829392,
+      "gym_shape_affine": 1590.3015509738643,
+      "ridge_DET": 1608.5128339513728,
+      "ridge_DE": 1612.4018792002792,
+      "tabfm_residual": 1552.2228764829392
+    },
+    {
+      "row_id": "1938:1886:10159",
+      "cf": 2300.0,
+      "cf_contest": 1938,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 2004.5,
+        "binary_minus_survival": -54.299999999999955,
+        "conditional_fit_se": 18.7,
+        "solve_rate": 0.7818181818181819,
+        "log_field_size": 4.709530201312334,
+        "log_median_solve_seconds": 8.996713889353813,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2099.3495181960043,
+      "gym_shape_affine": 2053.5843430498403,
+      "ridge_DET": 2246.0572600909554,
+      "ridge_DE": 2255.508127821953,
+      "tabfm_residual": 2281.3495181960043
+    },
+    {
+      "row_id": "1938:1886:10158",
+      "cf": 2400.0,
+      "cf_contest": 1938,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 2150.2,
+        "binary_minus_survival": 97.30000000000018,
+        "conditional_fit_se": 22.7,
+        "solve_rate": 0.5272727272727272,
+        "log_field_size": 4.709530201312334,
+        "log_median_solve_seconds": 9.397649470281177,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2342.9345065267235,
+      "gym_shape_affine": 2377.494514274285,
+      "ridge_DET": 2480.341892507502,
+      "ridge_DE": 2481.56068177009,
+      "tabfm_residual": 2538.9345065267235
+    },
+    {
+      "row_id": "1938:1886:10157",
+      "cf": 2200.0,
+      "cf_contest": 1938,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 1965.1,
+        "binary_minus_survival": -253.19999999999982,
+        "conditional_fit_se": 17.4,
+        "solve_rate": 0.9090909090909091,
+        "log_field_size": 4.709530201312334,
+        "log_median_solve_seconds": 8.985382676096364,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2033.4795899857754,
+      "gym_shape_affine": 2000.329677563362,
+      "ridge_DET": 2104.018767316355,
+      "ridge_DE": 2108.0196236756365,
+      "tabfm_residual": 2212.4795899857754
+    },
+    {
+      "row_id": "1938:1886:10156",
+      "cf": 3300.0,
+      "cf_contest": 1938,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 2550.1,
+        "binary_minus_survival": 366.8000000000002,
+        "conditional_fit_se": 62.3,
+        "solve_rate": 0.06363636363636363,
+        "log_field_size": 4.709530201312334,
+        "log_median_solve_seconds": 9.59947282546345,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 3011.4975596046556,
+      "gym_shape_affine": 3079.375999915593,
+      "ridge_DET": 3078.0819389269345,
+      "ridge_DE": 3082.483752642456,
+      "tabfm_residual": 3079.9975596046556
+    },
+    {
+      "row_id": "1938:1886:10155",
+      "cf": 1900.0,
+      "cf_contest": 1938,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 1913.8,
+        "binary_minus_survival": -253.5,
+        "conditional_fit_se": 17.2,
+        "solve_rate": 0.9272727272727272,
+        "log_field_size": 4.709530201312334,
+        "log_median_solve_seconds": 8.693999567522082,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 1947.7149372653507,
+      "gym_shape_affine": 1917.7184867087722,
+      "ridge_DET": 2020.742333249607,
+      "ridge_DE": 2026.9920615791493,
+      "tabfm_residual": 2106.7149372653507
+    },
+    {
+      "row_id": "1938:1886:10154",
+      "cf": 3000.0,
+      "cf_contest": 1938,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 2508.7,
+        "binary_minus_survival": 355.7000000000003,
+        "conditional_fit_se": 55.7,
+        "solve_rate": 0.08181818181818182,
+        "log_field_size": 4.709530201312334,
+        "log_median_solve_seconds": 9.643485495857657,
+        "timing_missing": 0.0
+      },
+      "raw_affine": 2942.283980216242,
+      "gym_shape_affine": 3010.47659076702,
+      "ridge_DET": 3018.401120994256,
+      "ridge_DE": 3019.8158922720545,
+      "tabfm_residual": 3017.283980216242
+    },
+    {
+      "row_id": "1938:1886:10153",
+      "cf": 3500.0,
+      "cf_contest": 1938,
+      "region": "Asia Pacific",
+      "features": {
+        "raw_b": 2910.4,
+        "binary_minus_survival": 371.1999999999998,
+        "conditional_fit_se": 160.1,
+        "solve_rate": 0.0,
+        "log_field_size": 4.709530201312334,
+        "log_median_solve_seconds": 0.0,
+        "timing_missing": 1.0
+      },
+      "raw_affine": 3613.856319354541,
+      "gym_shape_affine": 3482.9106623497833,
+      "ridge_DET": 3612.8212777515296,
+      "ridge_DE": 3554.788819707437,
+      "tabfm_residual": 3601.293819354541
+    }
+  ],
+  "baseline_provenance_sha256": {
+    "data/tagged.json": "54677cf98b452e115e24bcd2149b609d00a50e74fa783ad4865e8162b2446a94",
+    "data/icpc_2020_2021.json": "6c72e5eaa2de7eb536cd784dcdcab7288c89f6a6c5edbd5306ab017b8fc52ec1",
+    "data/petroz_2022_2026.json": "84961ea5542fa1281a567e54cacc14ac91311d6599dcf29470d15c7dc456cb84",
+    "data/wf_tagged_format.json": "63eba1ca8a996a97e9e471553ce67ed058ffc6cd197241df0330372ed88329de",
+    "data/ucup_s3.json": "8c74b4b963ce8f33027624e53c8dde320180704d93a96714e5e802e7ab4b7615",
+    "data/ucup_s4.json": "021e02abd20750ae77357a02922da1ac754572f923735cd28501344692732e23",
+    "output/problem_ratings_survival.json": "8af4583b8163f58e6103b9440a47ef81f33cc5a8cece5391f0ed8db93cbc989f",
+    "output/problem_ratings_b.json": "8ee5e0633b53fc9a0251f7d8e671c240eff19279605c3c1d60d51d2918475989",
+    "output/gym_difficulty.json": "7da4bc82ce6a9442567c2badaf410bfd7af8ade2d98d8f9ff872e89ea3166038",
+    "data/cf_problemset.json": "1e3f7c1da8c2f2939d34c4a81f080b064bb96c853f3082c79e615e7b369e4df8",
+    "data/cf_team_contests.txt": "7db8711fb86393dc21efc622153ea944e4091a059061b601909a684f99f3c9ac",
+    "arch_b/calibration_experiment.py": "2183f742909eb6dd5f76939f432de02bc70d8f5265b9453aad9049c064911aac"
+  },
+  "source_sha256": {
+    "module": "f4f67e3a7881b1138c127fffb4907229d3e4a6ade8aa8bf70777e761480a84a5",
+    "plan": "bca663b96139b4ad80817d9ca934029286499161fdb2a8d776b7d9bfa02ae265"
+  },
+  "archive": "/home/dedibeat/projects/analyze_standings/tabfm_bigquery_run/tabfm_61dfe4abe56d461e",
+  "tables_deleted_after_archive": true
+}

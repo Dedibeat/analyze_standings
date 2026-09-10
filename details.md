@@ -3264,3 +3264,22 @@ requires verified prediction-ID passthrough instead of joining on feature values
 `gcloud`/`bq` are installed. No paid queries, cloud resources, TabFM inference,
 or production changes were made. README links the plan, and prior experiment
 artifacts remain unchanged. The separate local-checkpoint run stays deferred.
+
+### Managed BigQuery TabFM execution (2026-09-10)
+
+The planned managed experiment was executed in `test-gemeni-501216`,
+`us-central1`, after a native smoke test verified finite prediction-ID
+passthrough for two identical feature vectors. A project-scoped, gross-spend
+budget alert was created at $2/$5/$8; every executable query was dry-run first
+and capped at 1 GiB. The seven-feature, task-purged nested protocol completed
+all **225** calls with a persistent deterministic job ledger. It records
+4,718,592,000 billed bytes (4.395 GiB); the dedicated dataset was deleted after
+local archival.
+
+Managed TabFM residual OOF RMSE is **231.2865 CF points**, versus 246.9061 raw,
+245.4277 gym, 229.6269 DET, and **226.5661 DE**. It improves the affine controls
+but loses to DE, so this is a negative research pilot: no production calibration,
+rating, feature, or backend search changed. The result is
+`output/calibration_tabfm_bigquery.json`; the concise report is
+[tabfm_bigquery_report.md](tabfm_bigquery_report.md). The local pinned-checkpoint
+run remains separate and deferred.

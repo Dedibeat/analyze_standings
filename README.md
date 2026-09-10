@@ -26,9 +26,10 @@ diagnostics and proposed experiments, not implemented model changes.
 The bounded [calibration residual experiment](calibration_experiment_report.md)
 now records a nested 15-contest CF-anchor control: raw affine 246.9061,
 gym-shaped affine 245.4277, and ridge residual 229.6269 RMSE. This is a
-research-only proxy result; the full 185-anchor TabFM CF comparison was deferred
-by the user after a pinned-weight, seven-feature CPU smoke passed (it has no CF
-score), and no shipped calibration or rating artifact changed. Reproduce the controls with
+research-only proxy result. The managed [BigQuery TabFM result](tabfm_bigquery_report.md)
+completed the full 185-anchor comparison: TabFM reaches 231.2865 RMSE, improving
+on raw/gym but not the frozen DE control (226.5661), so no shipped calibration or
+rating artifact changed. Reproduce the controls with
 `./.venv/bin/python -m arch_b.calibration_experiment --baseline-only`.
 The optional TabFM route uses the pinned `TABFM_CHECKPOINT_DIR` interface
 documented in that report; it does not silently download a checkpoint, and must
@@ -38,7 +39,7 @@ The [BigQuery and Google Cloud TabFM plan](tabfm_cloud_plan.md) specifies the
 requested **$10 total limit** and native managed TabFM through BigQuery
 `AI.PREDICT`, with experiment tables and SQL scoring. It compares against DET
 and the newer DE control, limits query spending, and preserves separate result
-artifacts. No VM or GPU is needed. This is a plan; cloud execution remains pending.
+artifacts. No VM or GPU is needed; the executed result is linked above.
 
 The frozen [feature-group ablation](calibration_ablation_report.md) separates
 estimator disagreement (D), non-time evidence (E), and extra calibration timing
