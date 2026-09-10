@@ -58,10 +58,21 @@ contest is removed. DE beats both controls in all 15 deletions, but 1,840 of
 and feature-support flags. Reproduce with
 `./.venv/bin/python -m arch_b.calibration_audit`; production ratings are unchanged.
 
+The [TabFM/DE audit and shipped-fit update preparation](shipped_fit_update_plan.md)
+replays all 225 managed calls and DE's nested selection, and stages a full
+per-problem comparison in `output/shipped_fit_audit.json`. DE improves development
+RMSE by 18.86 points over the shipped gym calibration, but would move 1,737
+ratings by at least 100 points; 1,840 appearances exceed an anchor feature range.
+The plan identifies exporter, ability/medal-map, uncertainty and confirmation
+requirements before a default update. Reproduce offline with
+`./.venv/bin/python -m arch_b.shipped_fit_audit` (requires the original local
+managed-response archive). Production outputs remain unchanged.
+
 The [experiment roadmap](experiment_roadmap.md) records the remaining audits,
 fresh-confirmation requirements, and longer-term rating research. Its correction
 and anchor-contest influence audits now have the bounded results linked above;
-the deferred TabFM comparison remains out of scope.
+the deferred local-checkpoint TabFM comparison remains separate from the completed
+managed pilot.
 
 ## Run
 

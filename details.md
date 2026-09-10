@@ -3283,3 +3283,49 @@ rating, feature, or backend search changed. The result is
 `output/calibration_tabfm_bigquery.json`; the concise report is
 [tabfm_bigquery_report.md](tabfm_bigquery_report.md). The local pinned-checkpoint
 run remains separate and deferred.
+
+### TabFM / DE audit and shipped-fit update preparation (2026-09-10)
+
+[shipped_fit_update_plan.md](shipped_fit_update_plan.md) records the audit and
+concrete calibration-release dependencies at `b935754`.
+`arch_b.shipped_fit_audit` verifies prior provenance, reconstructs the entire
+managed manifest, and replays all 225 archived responses, inner shrinkage choices,
+and outer predictions exactly. The experiment ledger accounts for 4,718,592,000
+billed bytes; the separate two-job smoke adds 41,943,040 bytes. This checks local
+evidence, not an independent invoice or remote-cleanup confirmation. DE's nested
+selection and full refit reproduce the existing artifacts; its full-anchor
+settings remain alpha=1, lambda=1. No new inference or model search occurred.
+
+Development RMSE remains **245.4277 shipped gym / 226.5661 DE / 231.2865 managed
+TabFM**. DE wins 9/15 contests against each, while TabFM is slightly better on
+the pooled Europe anchors. There is no fresh-confirmation or significance claim.
+
+The new research artifact `output/shipped_fit_audit.json` stages all 3,159
+appearance-level DE values beside the actual shipped ratings, using the existing
+[800,4000] bounds and one-decimal display policy. There are 259 rated contests;
+the loader's 260th entry, contest 1120, has no rated problems. Proposed changes
+average +75.98 points, have median absolute change 113.9, and move 1,737 ratings
+by at least 100 points. Aobayama 1965 H moves 2151.5 -> 2711.4 (+559.9). These
+are comparisons with shipped gym calibration, not the earlier raw-affine
+correction audit. The display comparison has 105 changed orders/new ties among
+18,142 previously non-tied within-contest pairs; 1,840 appearances remain outside
+at least one anchor feature range. No support fallback was introduced.
+
+The update plan identifies duplicated scalar-map construction in calibration,
+viewers, UCup export, virtual calculation and medals. DE has no defined
+problem-feature vector for team abilities or medal bars, and existing gym-based
+uncertainty fields cannot simply accompany DE predictions. Current raw-order
+metric guards also do not test a DE postprocessing layer. Fresh confirmation,
+extrapolation/uncertainty/badge policies and downstream app integration remain
+release requirements. The managed runner's feature-only run ID and recovered
+load jobs also require content binding before any changed-label rerun; the
+current archived manifest matches, so this is a future reuse defect rather than
+evidence that the completed pilot used wrong inputs.
+
+All **72 tests pass**, including five new offline replay corruption/missing-input
+checks. Every existing output's hash is verified unchanged before the audit
+artifact is written. Reproduce with
+`OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 ./.venv/bin/python -m arch_b.shipped_fit_audit`;
+the gitignored original managed archive is required and missing files cause an
+error rather than new cloud inference. Production fit, calibration and exports
+are unchanged; the audit prepares a reviewable update but does not promote DE.
