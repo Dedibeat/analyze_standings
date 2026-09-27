@@ -3493,6 +3493,20 @@ unmodelled site: every NUM silver since 2022 came at Hong Kong/Macau (ranks
 22–30 of 82–149 official teams; 2025 N^3 30th, gold line 13th), while its
 mainland best is bronze (Hangzhou 2024 116th; Nanjing/Wuhan 2025).
 
+**Sensitivity: how strong are non-online quota teams?** G = 10% of full
+official capacity (shipped) implicitly treats invitational/WF/host/provincial
+entrants as weak, so quota-heavy sites (Xi'an, Nanchang: ~100 invitational
+slots) look easier. Setting G = 10% of the online-admitted slots instead
+(quota teams as strong as online ones) reproduces the ChatGPT order: for a team
+at online #110 in both rounds, Shenyang 64% > Wuhan ≈ Shanghai 59% > Xi'an ≈
+Nanchang 55% > Chengdu = Nanjing 54% (shipped: Wuhan ≈ Shenyang ≈ Xi'an 53% >
+Nanchang ≈ Shanghai 52% > Chengdu = Nanjing 47%). Held-out Δlog loss for the
+alternative: 2024 −0.0005 [−0.0011, +0.0001], 2025 −0.0026 [−0.0089, +0.0022]
+(shipped: −0.0004 [−0.0006, −0.0000], −0.0012 [−0.0026, −0.0000]); the data do
+not separate them. Robust across both (and GPT's): Shenyang and Wuhan near the
+top, Chengdu/Nanjing last; Shanghai vs Xi'an/Nanchang depends on the quota
+assumption.
+
 **Pre-existing bugs found (not fixed here).** (1) `scripts/build_xcpcio_official.py`
 treats every XCPCIO team as official when a board has no `group` field, but the
 47th/48th boards carry a per-team `official` flag (e.g. Xi'an 2022: 476 official
