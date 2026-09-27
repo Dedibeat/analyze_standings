@@ -183,16 +183,36 @@ def history(team, entries_by_school, season, date):
     return out
 
 
-def build():
+def context():
     data = og.load()
     strengths = og.online_strengths(data["online_teams"])
     ev = qt.load_evidence()
     dates = contest_dates()
-    entries = regional_entries(data, dates)
     by_school = collections.defaultdict(list)
-    for e in entries:
+    for e in regional_entries(data, dates):
         by_school[(e["season"], e["school"])].append(e)
-    online, schools, depth = online_index(data)
+    dates.update({("2026", r["site"]): r["date"] for r in data["rules"].values()
+                  if r["season"] == 2026 and r.get("online_bands")})
+    return data, strengths, ev, dates, by_school, online_index(data)
+
+
+def online_features(key, season, school, online, schools, depth, strengths):
+    rounds = online.get(key, {}) if key else {}
+    srank = schools.get((season, school), {})
+    x = strengths[key]["x"] if key else None
+    return dict(online_x=round(x, 5) if x is not None else None,
+                online_rank_r1=rounds.get("1", (None,))[0], online_rank_r2=rounds.get("2", (None,))[0],
+                online_solved_r1=rounds["1"][1] if "1" in rounds else None,
+                online_solved_r2=rounds["2"][1] if "2" in rounds else None,
+                online_rounds=len(rounds),
+                school_rank_combined=srank.get("combined"),
+                school_rank_best_round=min([srank[t] for t in ("round1", "round2") if t in srank], default=None),
+                school_online_teams=len(depth[(season, school)][0]),
+                school_top100_teams=len(depth[(season, school)][1]))
+
+
+def build(ctx):
+    data, strengths, ev, dates, by_school, (online, schools, depth) = ctx
     link = {(r["season"], r["site"], r["team"], r["school"]): r for r in og.link_regionals(data, strengths)}
     regional = {(r["season"], r["site"], r["team"], r["school"]): r
                 for r in data["regional_teams"] if r["official"] == "1"}
@@ -212,23 +232,13 @@ def build():
             reg, x, okey = regional[key], link[key]["x"], link[key]["online_key"]
             school = og.norm_school(r["school"])
             index[school] += 1
-            rounds = online.get(okey, {}) if okey else {}
-            srank = schools.get((season, school), {})
             channels = set(r["school_channels"].split("|")) - {""}
             team = dict(school=school, team=og.norm_name(r["team"]),
                         members={og.norm_name(m) for m in reg["members"].split("|") if m.strip()})
             row = dict(row_id=f"{season}/{site}/{reg['team_id']}", season=season, site=site,
                        school=r["school"], team=r["team"],
-                       online_x=round(x, 5) if x is not None else None,
-                       online_rank_r1=rounds.get("1", (None,))[0], online_rank_r2=rounds.get("2", (None,))[0],
-                       online_solved_r1=rounds["1"][1] if "1" in rounds else None,
-                       online_solved_r2=rounds["2"][1] if "2" in rounds else None,
-                       online_rounds=len(rounds), online_link=link[key]["link"] or "none",
-                       school_rank_combined=srank.get("combined"),
-                       school_rank_best_round=min([srank[t] for t in ("round1", "round2") if t in srank],
-                                                  default=None),
-                       school_online_teams=len(depth[(season, school)][0]),
-                       school_top100_teams=len(depth[(season, school)][1]),
+                       **online_features(okey, season, school, online, schools, depth, strengths),
+                       online_link=link[key]["link"] or "none",
                        band_slots=r["band_slots"], school_wf="wf" in channels, school_host="host" in channels,
                        school_invitational="invitational" in channels, school_local="local" in channels,
                        school_non_mainland="non_mainland" in channels, **site_f,
@@ -243,6 +253,68 @@ def build():
                        rank_pct=round(int(reg["official_rank"]) / len(rs), 5))
             rows.append(row)
     return rows
+
+
+def forecast_2026(ctx):
+    """Every 2026 online team at every 2026 mainland site ("if it attends"),
+    pre-registration features minus ``FORECAST_EXCLUDED``: 2026 members are
+    unknown (PTA rosters; a same-name 2025 team exists for only 161 of 2,893) and no
+    2026 regional has been held yet."""
+    data, strengths, ev, dates, by_school, (online, schools, depth) = ctx
+    raw = {}
+    for r in data["online_teams"]:
+        if r["season"] == "2026":
+            raw.setdefault((r["season"], og.norm_school(r["school"]), og.norm_name(r["team"])), r)
+    rows = []
+    for site in sorted(s for (season, s) in dates if season == "2026"):
+        rule = data["rules"][("2026", site)]
+        slots = og.school_slots("2026", rule, data)
+        site_f = site_features("2026", site, data, ev, strengths, dates)
+        channels = {}
+        for i, (key, r) in enumerate(sorted(raw.items())):
+            school, name = key[1], key[2]
+            if school not in channels:
+                channels[school] = set(qt.school_channels("2026", site, r["school"], ev))
+            ch = channels[school]
+            rows.append(dict(row_id=f"2026/{site}/{i}", season="2026", site=site, school=r["school"],
+                             team=r["team"], **online_features(key, "2026", school, online, schools, depth,
+                                                               strengths),
+                             online_link="name", band_slots=slots.get(school, 0), school_wf="wf" in ch,
+                             school_host="host" in ch, school_invitational="invitational" in ch,
+                             school_local="local" in ch, school_non_mainland="non_mainland" in ch, **site_f,
+                             **history(dict(school=school, team=name, members=set()), by_school, "2026",
+                                       dates[("2026", site)])))
+    return rows
+
+
+# Unknowable before the 2026 season: members (PTA rosters) and earlier 2026 results.
+FORECAST_EXCLUDED = ("members_prev_regionals", "members_prev_golds", "members_prev_best_medal",
+                     "members_prev_best_rank_pct", "earlier_regionals", "earlier_best_medal",
+                     "earlier_best_rank_pct")
+
+
+def forecast_sql(features):
+    """Backtest of the forecast feature set on both splits, then the 2026 forecast."""
+    cols = ",\n    ".join(features)
+
+    def call(tag, train_where, predict_from):
+        return f"""-- {tag}
+SELECT row_id, (SELECT prob FROM UNNEST(predicted_gold_probs) WHERE label = 'true') AS p_gold
+FROM AI.PREDICT(
+  (SELECT
+    {cols},
+    gold
+   FROM `PROJECT.DATASET.teams`{train_where}),
+  (SELECT
+    row_id,
+    {cols}
+   {predict_from}),
+  label_col => 'gold');
+"""
+    parts = [call(f"forecast_set / {name}", f" WHERE season IN ({', '.join(repr(x) for x in sp['train'])})",
+                  f"FROM `PROJECT.DATASET.teams` WHERE season = '{sp['test']}'") for name, sp in SPLITS.items()]
+    parts.append(call("forecast_set / forecast_2026", "", "FROM `PROJECT.DATASET.forecast_2026`"))
+    return "\n".join(parts)
 
 
 def sql(feature_sets):
@@ -298,9 +370,28 @@ def write(rows):
     (OUT / "predict.sql").write_text(sql({"all_features": names, "pre_registration": pre}))
 
 
+def write_forecast(rows):
+    pre = [(n, t) for n, t, tier, _ in FEATURES if tier != "registration" and n not in FORECAST_EXCLUDED]
+    fields = [n for n, _ in IDS] + [n for n, _ in pre]
+    with open(OUT / "forecast_2026.csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=fields, lineterminator="\n")
+        w.writeheader()
+        for r in rows:
+            w.writerow({k: ("" if r[k] is None else str(r[k]).lower() if isinstance(r[k], bool) else r[k])
+                        for k in fields})
+    schema = [{"name": n, "type": t, "mode": "NULLABLE"} for n, t in IDS + pre]
+    (OUT / "forecast_2026_schema.json").write_text(json.dumps(schema, indent=1) + "\n")
+    (OUT / "forecast_2026.sql").write_text(forecast_sql([n for n, _ in pre]))
+
+
 def main():
-    rows = build()
+    ctx = context()
+    rows = build(ctx)
     write(rows)
+    fc = forecast_2026(ctx)
+    write_forecast(fc)
+    print(f"2026 forecast rows: {len(fc)} ({len({r['team'] + r['school'] for r in fc})} teams), "
+          f"{len(FEATURES) - len(FORECAST_EXCLUDED) - 10} features")
     gold = sum(r["gold"] for r in rows)
     print(f"{len(rows)} teams, {len(FEATURES)} features, {gold} golds -> {OUT}")
 

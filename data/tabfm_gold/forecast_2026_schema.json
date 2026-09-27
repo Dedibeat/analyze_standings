@@ -1,0 +1,167 @@
+[
+ {
+  "name": "row_id",
+  "type": "STRING",
+  "mode": "NULLABLE"
+ },
+ {
+  "name": "season",
+  "type": "STRING",
+  "mode": "NULLABLE"
+ },
+ {
+  "name": "site",
+  "type": "STRING",
+  "mode": "NULLABLE"
+ },
+ {
+  "name": "school",
+  "type": "STRING",
+  "mode": "NULLABLE"
+ },
+ {
+  "name": "team",
+  "type": "STRING",
+  "mode": "NULLABLE"
+ },
+ {
+  "name": "online_x",
+  "type": "FLOAT64",
+  "mode": "NULLABLE"
+ },
+ {
+  "name": "online_rank_r1",
+  "type": "INT64",
+  "mode": "NULLABLE"
+ },
+ {
+  "name": "online_rank_r2",
+  "type": "INT64",
+  "mode": "NULLABLE"
+ },
+ {
+  "name": "online_solved_r1",
+  "type": "INT64",
+  "mode": "NULLABLE"
+ },
+ {
+  "name": "online_solved_r2",
+  "type": "INT64",
+  "mode": "NULLABLE"
+ },
+ {
+  "name": "online_rounds",
+  "type": "INT64",
+  "mode": "NULLABLE"
+ },
+ {
+  "name": "online_link",
+  "type": "STRING",
+  "mode": "NULLABLE"
+ },
+ {
+  "name": "school_rank_combined",
+  "type": "INT64",
+  "mode": "NULLABLE"
+ },
+ {
+  "name": "school_rank_best_round",
+  "type": "INT64",
+  "mode": "NULLABLE"
+ },
+ {
+  "name": "school_online_teams",
+  "type": "INT64",
+  "mode": "NULLABLE"
+ },
+ {
+  "name": "school_top100_teams",
+  "type": "INT64",
+  "mode": "NULLABLE"
+ },
+ {
+  "name": "band_slots",
+  "type": "INT64",
+  "mode": "NULLABLE"
+ },
+ {
+  "name": "school_wf",
+  "type": "BOOL",
+  "mode": "NULLABLE"
+ },
+ {
+  "name": "school_host",
+  "type": "BOOL",
+  "mode": "NULLABLE"
+ },
+ {
+  "name": "school_invitational",
+  "type": "BOOL",
+  "mode": "NULLABLE"
+ },
+ {
+  "name": "school_local",
+  "type": "BOOL",
+  "mode": "NULLABLE"
+ },
+ {
+  "name": "school_non_mainland",
+  "type": "BOOL",
+  "mode": "NULLABLE"
+ },
+ {
+  "name": "site_capacity",
+  "type": "INT64",
+  "mode": "NULLABLE"
+ },
+ {
+  "name": "site_band_seats",
+  "type": "INT64",
+  "mode": "NULLABLE"
+ },
+ {
+  "name": "site_quota_share",
+  "type": "FLOAT64",
+  "mode": "NULLABLE"
+ },
+ {
+  "name": "site_school_cap",
+  "type": "INT64",
+  "mode": "NULLABLE"
+ },
+ {
+  "name": "site_two_slot_band",
+  "type": "INT64",
+  "mode": "NULLABLE"
+ },
+ {
+  "name": "site_team_count_clause",
+  "type": "BOOL",
+  "mode": "NULLABLE"
+ },
+ {
+  "name": "site_rules_line_x",
+  "type": "FLOAT64",
+  "mode": "NULLABLE"
+ },
+ {
+  "name": "site_top50_entitlement",
+  "type": "INT64",
+  "mode": "NULLABLE"
+ },
+ {
+  "name": "season_order",
+  "type": "INT64",
+  "mode": "NULLABLE"
+ },
+ {
+  "name": "school_prev_golds",
+  "type": "INT64",
+  "mode": "NULLABLE"
+ },
+ {
+  "name": "school_prev_medals",
+  "type": "INT64",
+  "mode": "NULLABLE"
+ }
+]

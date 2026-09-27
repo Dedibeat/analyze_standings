@@ -103,7 +103,8 @@ HOST_GAPS = "2023 Xi'an/Jinan and 2024 Chengdu notices name no host school; sett
 
 INVITATIONALS = {"2023/xian": "48th/xian-invitational", "2024/kunming": "49th/kunming-invitational"}
 INVITATIONAL_GAPS = ("2025 Xi'an uses the 2025 Shaanxi invitational (4 May 2025), which is not on XCPCIO; "
-                     "2026 Nanchang uses 50th/nanchang-invitational (forecast season only).")
+                     "2026 Nanchang uses 50th/nanchang-invitational, whose board lists English school "
+                     "names (not linkable to the Chinese online rankings) and marks official teams 'icpc'.")
 
 PROVINCIAL = {  # site -> provincial-contest boards of the site's province
     "shenyang": ["2024/liaoning", "2025/liaoning"],
@@ -114,6 +115,7 @@ PROVINCIAL = {  # site -> provincial-contest boards of the site's province
     "hangzhou": ["2023/zhejiang", "2024/zhejiang", "2025/zhejiang"],
     "chengdu": ["2024/sichuan", "2025/sichuan"],
     "shanghai": ["2024/shanghai", "2025/shanghai"],
+    "nanchang": ["2023/jiangxi", "2024/jiangxi"],
 }
 PROVINCIAL_GAPS = "No XCPCIO provincial board for Anhui (Hefei) or Yunnan (Kunming)."
 
