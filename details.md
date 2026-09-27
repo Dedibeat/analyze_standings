@@ -3795,3 +3795,47 @@ replace the shipped `online_gold` model, which predicts from online ranks
 alone for 2026 teams. A 2026 use would need 2026 rows (history and rules
 features exist before registration) and a pre-registered comparison.
 
+### 2026 TabFM forecast (2026-09-27)
+
+`data/tabfm_gold/forecast_2026.csv` has 20,251 rows: every 2026 online team
+(2,893) at each 2026 mainland site, asking "gold chance if this team attends". It
+uses 28 features: the 35 pre-registration features minus members' history and
+earlier-regional results. Those can't be known before the season: 2026 rosters
+are only on PTA, a same-name 2025 regional team exists for only 161 teams, and
+no 2026 regional has been held. `forecast_2026.sql` backtests this feature set
+on both splits, then trains on all 2023–2025 teams and predicts 2026. It ran
+in `test-gemeni-501216`: three queries, 10/10/20 MiB billed. The dataset was
+deleted and the login revoked afterwards. Jiangxi provincial boards were added
+as Nanchang's local evidence. Nanchang's invitational board uses English school
+names and marks official teams `icpc`, so it is recorded as a gap.
+
+**Backtest of the 28-feature set** (Δ log loss vs online-only): 2024 −0.0125
+[−0.021, −0.006], 2025 −0.0086 [−0.027, +0.014]. On linked teams, the only kind
+in the 2026 grid: 2024 0.156 vs 0.165 (better), **2025 0.170 vs 0.161
+(worse)**. Removing member and earlier-regional history removes most of
+TabFM's advantage. Held-out calibration was good: teams ranked #141–280
+online were predicted 19–21% gold and won 18–19%.
+
+**Shift in the 2026 rows.** The grid contains teams that would never attend.
+For online ranks #141–280, the 2026 rows come from schools with 3.6 top-100
+teams on average, versus 1.6–1.9 in training. These are strong schools' 5th–10th
+teams, which are capped out in reality. TabFM gives that band 34% gold. Keeping
+each school's strongest `site_school_cap` teams (the report does this) lowers
+it to 26%, still above the backtest. The remaining excess is mostly
+Shanghai (34%). Its 2026 rules (1–50 ×2, 51–200 ×1, capacity 336) give a rules
+line x of −4.45 and a band profile outside the 2023–2025 range, so TabFM is
+extrapolating there.
+
+**Result** (`output/tabfm_forecast_2026.md`, within-cap teams; TabFM /
+online-gold model at online #100): Shanghai 64/60, Wuhan 63/63,
+Shenyang 62/66, Xi'an 60/61, Nanchang 55/60, Nanjing 54/58, Chengdu 54/58.
+Apart from Shanghai, TabFM agrees with the rules model's grouping: easier
+Wuhan/Shenyang/Xi'an, harder Nanchang/Nanjing/Chengdu. At #200 the two agree
+within ~3 points. TabFM is less certain at the top (#10: 92–97% vs 100%).
+NUM-R^3 (online #436): Shanghai 10.7%, Nanchang 5.6%, Shenyang 4.9%, other
+sites 2.9–4.0%. The Shanghai figure inherits the Shanghai extrapolation.
+**Decision:** the online-gold forecast stays the one to use. The TabFM 2026
+table is a research comparison and is marked uncalibrated in its report.
+Once 2026 registration lists or early-regional results exist, the full
+feature sets (which did beat online-only) become usable for the later sites.
+

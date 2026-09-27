@@ -170,7 +170,10 @@ REFERENCE_RANKS = (10, 25, 50, 100, 200)
 def forecast_report(path):
     """2026 forecast from TabFM output on ``forecast_2026.csv``: per site, the
     gold chance of teams near reference online ranks and of a top-300 team,
-    next to the online-gold model; plus every NUM team."""
+    next to the online-gold model; plus every NUM team.  Site summaries use
+    only teams that can attend: each school's strongest ``site_school_cap``
+    online teams (training rows are attendees; deeper teams of strong
+    schools are out of distribution and get inflated chances)."""
     with open(DATA / "forecast_2026.csv", encoding="utf-8") as f:
         rows = {r["row_id"]: r for r in csv.DictReader(f)}
     with open(path, encoding="utf-8") as f:
@@ -179,15 +182,21 @@ def forecast_report(path):
     if missing:
         raise ValueError(f"{len(missing)} forecast rows lack a prediction")
     og_forecast = {e["site"]: e for e in json.loads((OUT / "online_gold.json").read_text())["forecast_2026"]}
+    by_school = {}
+    for r in rows.values():
+        by_school.setdefault((r["site"], r["school"]), []).append(r)
+    within_cap = {r["row_id"] for rs in by_school.values()
+                  for r in sorted(rs, key=lambda r: -float(r["online_x"]))[:int(rs[0]["site_school_cap"])]}
     sites = {}
     for r in rows.values():
         rank = math.exp(-float(r["online_x"]))
         sites.setdefault(r["site"], []).append((rank, p[r["row_id"]], r))
     out = []
     for site, teams in sites.items():
-        ref = {k: float(np.median([q for rank, q, _ in teams if 0.8 * k <= rank <= 1.25 * k]))
+        cap = [(rank, q) for rank, q, r in teams if r["row_id"] in within_cap]
+        ref = {k: float(np.median([q for rank, q in cap if 0.8 * k <= rank <= 1.25 * k]))
                for k in REFERENCE_RANKS}
-        top = [q for rank, q, _ in teams if rank <= 300]
+        top = [q for rank, q in cap if rank <= 300]
         e = og_forecast.get(site, {})
         out.append(dict(site=site, date=e.get("date"), top300_mean=round(float(np.mean(top)), 4),
                         tabfm=ref, online_gold={k: e["gold_by_online_rank"][str(k)]["p"] for k in REFERENCE_RANKS},
@@ -204,7 +213,14 @@ def forecast_markdown(fc):
          "`AI.PREDICT`) trained on every 2023-2025 mainland regional team with the 28 forecast features "
          "(`data/tabfm_gold/forecast_2026.sql`). Probability of gold **if the team attends**, before "
          "registration: no member history, no earlier 2026 results, field unknown. Cells: median over "
-         "2026 online teams within ±25% of the online rank (TabFM / online-gold model).", "",
+         "2026 online teams within ±25% of the online rank (TabFM / online-gold model), counting only "
+         "each school's strongest `site_school_cap` teams.", "",
+         "**Not calibrated for 2026.** On held-out 2024/2025 this feature set was calibrated (teams "
+         "ranked #141-280 online: predicted 19-21%, actual 18-19%), but its 2026 predictions for the "
+         "same band average 26% even within the cap, and 34% at Shanghai, whose 2026 rule profile "
+         "lies outside the training range. Linked-team log loss also lost to online strength alone in "
+         "2025. Use the online-gold forecast (`output/online_gold.md`) for decisions; this table is a "
+         "research comparison.", "",
          "| # | site | date | mean, top-300 teams | " + " | ".join(f"#{k}" for k in REFERENCE_RANKS) +
          " | online-gold rules line |", "|---|---|---|---|" + "---|" * (len(REFERENCE_RANKS) + 1)]
     for i, s in enumerate(fc["sites"], 1):

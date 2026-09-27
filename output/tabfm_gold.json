@@ -191,6 +191,17 @@
       -0.03326,
       -0.01282
      ]
+    },
+    "tabfm_forecast_set": {
+     "log_loss": 0.15797,
+     "brier": 0.04678,
+     "log_loss_linked": 0.15626,
+     "log_loss_unlinked": 0.17944,
+     "delta_vs_online_only": -0.0125,
+     "delta_ci95": [
+      -0.021,
+      -0.00604
+     ]
     }
    }
   },
@@ -274,6 +285,17 @@
      "delta_ci95": [
       -0.04094,
       -0.00517
+     ]
+    },
+    "tabfm_forecast_set": {
+     "log_loss": 0.17989,
+     "brier": 0.04962,
+     "log_loss_linked": 0.16979,
+     "log_loss_unlinked": 0.19355,
+     "delta_vs_online_only": -0.00865,
+     "delta_ci95": [
+      -0.02698,
+      0.01356
      ]
     }
    }

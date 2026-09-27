@@ -1,0 +1,35 @@
+[
+ {
+  "tag": "forecast_set_test_2024",
+  "job_id": "tabfm_gold_forecast_set_test_2024_1",
+  "state": "DONE",
+  "error": null,
+  "rows": 2094,
+  "bytes_billed": "10485760",
+  "bytes_processed": "1265071",
+  "slot_ms": "157169",
+  "seconds": 69.987
+ },
+ {
+  "tag": "forecast_set_test_2025",
+  "job_id": "tabfm_gold_forecast_set_test_2025_1",
+  "state": "DONE",
+  "error": null,
+  "rows": 2231,
+  "bytes_billed": "10485760",
+  "bytes_processed": "1265071",
+  "slot_ms": "178890",
+  "seconds": 62.353
+ },
+ {
+  "tag": "forecast_set_forecast_2026",
+  "job_id": "tabfm_gold_forecast_set_forecast_2026_1",
+  "state": "DONE",
+  "error": null,
+  "rows": 20251,
+  "bytes_billed": "20971520",
+  "bytes_processed": "5000662",
+  "slot_ms": "492591",
+  "seconds": 168.21
+ }
+]

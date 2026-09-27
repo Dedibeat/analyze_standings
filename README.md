@@ -497,6 +497,12 @@ seasons: −0.022 (2024, pre-registration features) and −0.033 (2025, all
 features) log loss vs online strength alone, with 95% intervals excluding zero,
 and it also improves on linked teams. Results: `output/tabfm_gold.md`; predictions
 and job ledger in `output/tabfm_gold_predictions/`.
+A pre-season 2026 TabFM forecast (every 2026 online team at every site, 28
+features knowable now) is in `output/tabfm_forecast_2026.md`. Without member and
+earlier-regional history it no longer beats online strength on linked teams,
+and it runs high for 2026 (especially Shanghai, whose rules fall outside the
+training range). It is a research comparison; use `output/online_gold.md` for
+decisions.
 
 ### Interactive viewer
 
