@@ -431,6 +431,27 @@ ranking as a shortlist alongside travel, quotas, eligibility, and registration
 constraints, not as a medal guarantee. `output/medal_predict_viz.html` remains
 the descriptive city/time chart; `--report` prints that analysis.
 
+### Online results, slot rules and gold chances
+
+```bash
+python3 scripts/build_ec_online_data.py        # official online rankings, rosters, regional results
+python3 -m arch_b.online_gold                   # backtest, rating-fit comparison, 2026 forecast
+python3 -m arch_b.online_gold --school 复旦大学  # per-team forecast for a school
+```
+
+Independent of the rating fit: gold chance at a regional is modelled from a
+team's official online ranks plus a site "rules line" derived from the
+hand-encoded slot rules (`data/ec_online/slot_rules.json`), with the golds
+won by quota entrants (invitational/WF/host teams, measured at ~0.44× the band
+teams' gold rate on earlier seasons) taken out first. Trained on earlier
+seasons, online strength alone predicts held-out gold well; the rules line adds
+a small consistent gain (2024 and 2025), while per-site history and the rating
+fit's CF gold bars do not. The same data independently confirm the Shenyang
+2024→2025 swing and flag Kunming/Nanjing 2024 as the largest fit-vs-online
+disagreements. Results: `output/online_gold.md`; details in `details.md`.
+Hong Kong/Macau are not modelled, and 2025–2026 rosters (only on PTA) are
+missing.
+
 ### Interactive viewer
 
 ```bash
@@ -542,6 +563,10 @@ Module self-checks:
   medal viewer), `twopl`/`twopl_region` 2PL discrimination
   prototype, `export_virtual_calc` + `virtual_calc_template.html` for the
   virtual-contest performance calculator); reuses `arch_a.load` and `arch_a.elo`.
+- `data/ec_online/` — official Asia East online rankings (teams, schools),
+  2022–2024 online rosters, 2022–2025 regional official standings and medals,
+  and hand-encoded 2023–2026 slot rules; built by
+  `scripts/build_ec_online_data.py`, consumed by `arch_b.online_gold`.
 - `output/problem_ratings.json` — Architecture A ratings;
   `output/problem_ratings_b.json` — Architecture B (binary) ratings;
   `output/problem_ratings_survival.json` — Architecture B (survival) ratings;
