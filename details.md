@@ -3437,7 +3437,7 @@ downloads cached in git-ignored `data/ec_online_cache/`):
 **Linking.** School + team name links only 45–56% of official regional teams
 (teams rename after the online rounds); adding roster matches (≥2 shared
 members at the same school) raises 2022–2024 to 78–86%. Remaining teams mostly
-entered through non-online quotas. 2025 stays name-only (~57%). Hong Kong/Macau
+entered through non-online quotas. 2025 stays name-only (~54%). Hong Kong/Macau
 use English names and are unlinked.
 
 **Model (`arch_b.online_gold`).** Online strength `x = −mean(log online rank)`
@@ -3486,6 +3486,12 @@ single 2025 contest; its city history did not help held-out gold prediction.
 National University of Mongolia (combined rank 128, one band slot at every
 mainland site): NUM-R^3 (online #544/#349) ≈ 2.8–3.6% gold depending on site,
 NUM-MNM ≈ 0.7–0.9%, the rest ≤ 0.3%, conditional on attending.
+Site differences for NUM-R^3 are small against its uncertainty (10th–90th
+percentile ≈ 2.5–5.9% at the easiest sites, 2.2–3.8% at Chengdu/Nanjing).
+NUM's own record in `regional_teams.csv` points the other way from the
+unmodelled site: every NUM silver since 2022 came at Hong Kong/Macau (ranks
+22–30 of 82–149 official teams; 2025 N^3 30th, gold line 13th), while its
+mainland best is bronze (Hangzhou 2024 116th; Nanjing/Wuhan 2025).
 
 **Pre-existing bugs found (not fixed here).** (1) `scripts/build_xcpcio_official.py`
 treats every XCPCIO team as official when a board has no `group` field, but the
