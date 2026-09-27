@@ -8,10 +8,10 @@ official source per channel:
 
 * World Finals schools (+1 seat, last three WFs): 46th/47th from the XCPCIO
   WF boards (English names, mapped to Chinese below), 48th/49th verbatim from
-  the 50th Xi'an notice's lists.
-* Host schools (+2): 2025 verbatim from the same Xi'an notice; 2023-2024
-  from the site notices' venue or signature (sites whose notice names no
-  host are left out rather than guessed).
+  the 50th Xi'an notice's lists, 50th from the 51st (2026) Xi'an notice.
+* Host schools (+2): 2025 and 2026 verbatim from those Xi'an notices;
+  2023-2024 from the site notices' venue or signature (sites whose notice
+  names no host are left out rather than guessed).
 * Invitational medals (Xi'an 2023: 124 medal schools, Kunming 2024: 98):
   the spring invitational boards on XCPCIO.
 * Provincial contests (local/provincial seats): official schools of each
@@ -66,17 +66,20 @@ EN_TO_CN = {
     "Zhongshan (Sun Yat-sen) University": "中山大学",
 }
 XIAN_2025_NOTICE = "https://icpc.pku.edu.cn/tzgg/13fdc9e9f8d54e8fa227f2ee7cfe1b9d.htm"
-WF_FROM_NOTICE = {  # 晋级 2024 / 2025 年世界总决赛的高校 (48th Astana, 49th Baku)
+XIAN_2026_NOTICE = "https://icpc.pku.edu.cn/tzgg/a9259fcfb12d4087b31bc1eef3490e79.htm"
+WF_FROM_NOTICE = {  # 晋级 2024 / 2025 / 2026 年世界总决赛的高校 (48th Astana, 49th Baku, 50th Dubai)
     48: "清华大学、电子科技大学、哈尔滨工业大学、东北大学、武汉理工大学、南京邮电大学、南京大学、湖南大学、"
         "北京大学、北京交通大学、上海交通大学、国防科技大学、浙江大学、香港中文大学（深圳）、香港中文大学、"
         "中国科学技术大学、西北工业大学",
     49: "北京大学、清华大学、浙江大学、中国科学技术大学、中山大学、北京航空航天大学、哈尔滨工业大学、上海交通大学、"
         "中南大学、北京交通大学、南京理工大学、南方科技大学、北京邮电大学、南京航空航天大学、上海大学、香港大学",
+    50: "北京大学、清华大学、浙江大学、上海交通大学、复旦大学、中山大学、武汉大学、香港中文大学、中国科学技术大学、"
+        "哈尔滨工业大学、电子科技大学、吉林大学、东北大学、广东工业大学、西北工业大学、香港中文大学（深圳）",
 }
 # Which WF editions give a seat in each season, as the notices state.  2023
 # notices differ ("2022 and 2023 WF", "45th-47th"); the 45th list is not on
 # XCPCIO, so 2023 uses 46th-47th.
-WF_EDITIONS = {"2023": [46, 47], "2024": [46, 47, 48], "2025": [47, 48, 49]}
+WF_EDITIONS = {"2023": [46, 47], "2024": [46, 47, 48], "2025": [47, 48, 49], "2026": [48, 49, 50]}
 
 HOSTS = {
     "2023": {"东北大学": "Shenyang notice: 在东北大学南湖校区举办",
@@ -92,6 +95,9 @@ HOSTS = {
     "2025": {s: "Xi'an 2025 notice: 2025 年亚洲区域赛 EC 承办高校" for s in
              "北京大学、西北工业大学、电子科技大学、武汉大学、南京航空航天大学、东北大学、上海大学、"
              "香港科技大学、杭州师范大学".split("、")},
+    "2026": {s: "Xi'an 2026 notice: 2026 年亚洲区域赛 EC 承办高校" for s in
+             "北京大学、西北工业大学、东北大学、电子科技大学、武汉大学、南京航空航天大学、江西师范大学、上海大学、"
+             "香港大学、杭州师范大学、浙江大学".split("、")},
 }
 HOST_GAPS = "2023 Xi'an/Jinan and 2024 Chengdu notices name no host school; setter schools are never listed."
 
@@ -178,7 +184,7 @@ def main():
         "wf_editions_by_season": WF_EDITIONS,
         "wf_schools": wf_schools(),
         "wf_sources": {"46": XCPCIO + WF_BOARDS[46], "47": XCPCIO + WF_BOARDS[47],
-                       "48": XIAN_2025_NOTICE, "49": XIAN_2025_NOTICE},
+                       "48": XIAN_2025_NOTICE, "49": XIAN_2025_NOTICE, "50": XIAN_2026_NOTICE},
         "hosts": HOSTS,
         "invitational_medal_schools": {k: invitational_medals(b) for k, b in INVITATIONALS.items()},
         "provincial_schools": {site: {p: provincial_schools(p) for p in paths}

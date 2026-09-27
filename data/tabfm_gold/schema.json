@@ -1,0 +1,312 @@
+[
+ {
+  "name": "row_id",
+  "type": "STRING",
+  "mode": "NULLABLE"
+ },
+ {
+  "name": "season",
+  "type": "STRING",
+  "mode": "NULLABLE"
+ },
+ {
+  "name": "site",
+  "type": "STRING",
+  "mode": "NULLABLE"
+ },
+ {
+  "name": "school",
+  "type": "STRING",
+  "mode": "NULLABLE"
+ },
+ {
+  "name": "team",
+  "type": "STRING",
+  "mode": "NULLABLE"
+ },
+ {
+  "name": "online_x",
+  "type": "FLOAT64",
+  "mode": "NULLABLE",
+  "description": "-mean(log online rank) over rounds entered; NULL if unlinked"
+ },
+ {
+  "name": "online_rank_r1",
+  "type": "INT64",
+  "mode": "NULLABLE",
+  "description": "round-1 team rank; NULL if absent or unranked"
+ },
+ {
+  "name": "online_rank_r2",
+  "type": "INT64",
+  "mode": "NULLABLE",
+  "description": "round-2 team rank; NULL if absent or unranked"
+ },
+ {
+  "name": "online_solved_r1",
+  "type": "INT64",
+  "mode": "NULLABLE",
+  "description": "round-1 problems solved"
+ },
+ {
+  "name": "online_solved_r2",
+  "type": "INT64",
+  "mode": "NULLABLE",
+  "description": "round-2 problems solved"
+ },
+ {
+  "name": "online_rounds",
+  "type": "INT64",
+  "mode": "NULLABLE",
+  "description": "online rounds the linked team entered (0-2)"
+ },
+ {
+  "name": "online_link",
+  "type": "STRING",
+  "mode": "NULLABLE",
+  "description": "how the regional team was linked: name / roster / none"
+ },
+ {
+  "name": "school_rank_combined",
+  "type": "INT64",
+  "mode": "NULLABLE",
+  "description": "school's combined online rank (slot rules use it)"
+ },
+ {
+  "name": "school_rank_best_round",
+  "type": "INT64",
+  "mode": "NULLABLE",
+  "description": "school's better per-round school rank"
+ },
+ {
+  "name": "school_online_teams",
+  "type": "INT64",
+  "mode": "NULLABLE",
+  "description": "school's teams in the online rounds"
+ },
+ {
+  "name": "school_top100_teams",
+  "type": "INT64",
+  "mode": "NULLABLE",
+  "description": "school's distinct teams ranked <= 100 in a round"
+ },
+ {
+  "name": "band_slots",
+  "type": "INT64",
+  "mode": "NULLABLE",
+  "description": "school's rank-band slots at this site"
+ },
+ {
+  "name": "school_wf",
+  "type": "BOOL",
+  "mode": "NULLABLE",
+  "description": "school reached a WF counted this season"
+ },
+ {
+  "name": "school_host",
+  "type": "BOOL",
+  "mode": "NULLABLE",
+  "description": "school hosts an EC regional this or last season"
+ },
+ {
+  "name": "school_invitational",
+  "type": "BOOL",
+  "mode": "NULLABLE",
+  "description": "school medalled at this site's spring invitational"
+ },
+ {
+  "name": "school_local",
+  "type": "BOOL",
+  "mode": "NULLABLE",
+  "description": "school is on the site province's provincial board"
+ },
+ {
+  "name": "school_non_mainland",
+  "type": "BOOL",
+  "mode": "NULLABLE",
+  "description": "Hong Kong / Macau / Taiwan / foreign school"
+ },
+ {
+  "name": "site_capacity",
+  "type": "INT64",
+  "mode": "NULLABLE",
+  "description": "notice's official capacity"
+ },
+ {
+  "name": "site_band_seats",
+  "type": "INT64",
+  "mode": "NULLABLE",
+  "description": "sum of rank-band slots"
+ },
+ {
+  "name": "site_quota_share",
+  "type": "FLOAT64",
+  "mode": "NULLABLE",
+  "description": "1 - band seats / capacity"
+ },
+ {
+  "name": "site_school_cap",
+  "type": "INT64",
+  "mode": "NULLABLE",
+  "description": "ordinary per-school team cap"
+ },
+ {
+  "name": "site_two_slot_band",
+  "type": "INT64",
+  "mode": "NULLABLE",
+  "description": "last school rank with 2 band slots (0 if none)"
+ },
+ {
+  "name": "site_team_count_clause",
+  "type": "BOOL",
+  "mode": "NULLABLE",
+  "description": ">=3 teams in the top N clause"
+ },
+ {
+  "name": "site_rules_line_x",
+  "type": "FLOAT64",
+  "mode": "NULLABLE",
+  "description": "online strength of the 10% line among rule-admitted teams"
+ },
+ {
+  "name": "site_top50_entitlement",
+  "type": "INT64",
+  "mode": "NULLABLE",
+  "description": "top-50 schools' WF/host quota seats (quota_teams)"
+ },
+ {
+  "name": "season_order",
+  "type": "INT64",
+  "mode": "NULLABLE",
+  "description": "position of the regional in the season's calendar"
+ },
+ {
+  "name": "members_prev_regionals",
+  "type": "INT64",
+  "mode": "NULLABLE",
+  "description": "members with a previous-season official regional; NULL w/o members"
+ },
+ {
+  "name": "members_prev_golds",
+  "type": "INT64",
+  "mode": "NULLABLE",
+  "description": "members with a previous-season regional gold"
+ },
+ {
+  "name": "members_prev_best_medal",
+  "type": "INT64",
+  "mode": "NULLABLE",
+  "description": "best previous-season medal of a member (0-3)"
+ },
+ {
+  "name": "members_prev_best_rank_pct",
+  "type": "FLOAT64",
+  "mode": "NULLABLE",
+  "description": "best previous-season official rank / field"
+ },
+ {
+  "name": "earlier_regionals",
+  "type": "INT64",
+  "mode": "NULLABLE",
+  "description": "this season's earlier regionals of this team"
+ },
+ {
+  "name": "earlier_best_medal",
+  "type": "INT64",
+  "mode": "NULLABLE",
+  "description": "best medal there (0-3)"
+ },
+ {
+  "name": "earlier_best_rank_pct",
+  "type": "FLOAT64",
+  "mode": "NULLABLE",
+  "description": "best official rank / field there; NULL if none"
+ },
+ {
+  "name": "school_prev_golds",
+  "type": "INT64",
+  "mode": "NULLABLE",
+  "description": "school's previous-season regional golds"
+ },
+ {
+  "name": "school_prev_medals",
+  "type": "INT64",
+  "mode": "NULLABLE",
+  "description": "school's previous-season regional medals"
+ },
+ {
+  "name": "admission",
+  "type": "STRING",
+  "mode": "NULLABLE",
+  "description": "band (online seat) or quota"
+ },
+ {
+  "name": "quota_channel",
+  "type": "STRING",
+  "mode": "NULLABLE",
+  "description": "quota channel (quota_teams); '' for band teams"
+ },
+ {
+  "name": "team_index_in_school",
+  "type": "INT64",
+  "mode": "NULLABLE",
+  "description": "1 = school's strongest-online team at the site"
+ },
+ {
+  "name": "school_teams_at_site",
+  "type": "INT64",
+  "mode": "NULLABLE",
+  "description": "school's official teams at the site"
+ },
+ {
+  "name": "field_teams",
+  "type": "INT64",
+  "mode": "NULLABLE",
+  "description": "official teams at the site"
+ },
+ {
+  "name": "field_linked_share",
+  "type": "FLOAT64",
+  "mode": "NULLABLE",
+  "description": "share of the field linked to an online team"
+ },
+ {
+  "name": "field_top50_quota_teams",
+  "type": "INT64",
+  "mode": "NULLABLE",
+  "description": "quota teams from top-50 online schools"
+ },
+ {
+  "name": "field_line_x",
+  "type": "FLOAT64",
+  "mode": "NULLABLE",
+  "description": "strength of the 10% line among linked attendees"
+ },
+ {
+  "name": "field_strength_rank",
+  "type": "INT64",
+  "mode": "NULLABLE",
+  "description": "team's online-strength rank among linked attendees"
+ },
+ {
+  "name": "x_minus_field_line",
+  "type": "FLOAT64",
+  "mode": "NULLABLE",
+  "description": "online_x - field_line_x"
+ },
+ {
+  "name": "gold",
+  "type": "BOOL",
+  "mode": "NULLABLE"
+ },
+ {
+  "name": "medal",
+  "type": "STRING",
+  "mode": "NULLABLE"
+ },
+ {
+  "name": "rank_pct",
+  "type": "FLOAT64",
+  "mode": "NULLABLE"
+ }
+]

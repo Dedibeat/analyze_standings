@@ -243,6 +243,83 @@ def channel_rho_check(rows):
             "corr": {k: round(v, 3) for k, v in corr.items()}}
 
 
+TOP_SCHOOLS = 50  # combined online school rank that separates contending quota teams
+
+
+def elite_entitlement(season, site, data, ev):
+    """Quota seats the WF/host channels promise top-50 online schools at a
+    site, known before registration: each such school's WF/host seats, capped
+    by its headroom (privileged cap minus band slots)."""
+    rule = data["rules"][(season, site)]
+    slots = og.school_slots(season, rule, data)
+    cap = rule.get("school_cap_privileged") or rule.get("school_cap") or 4
+    total = 0
+    for r in data["online_schools"]:
+        if r["season"] == season and r["table"] == "combined" and int(r["rank"]) <= TOP_SCHOOLS:
+            seats = sum(CHANNEL_SEATS[c] for c in school_channels(season, site, r["school"], ev)
+                        if c in ("wf", "host"))
+            total += min(seats, max(0, cap - slots.get(og.norm_school(r["school"]), 0)))
+    return total
+
+
+def school_rank_quota_model(rows, data, ev):
+    """Best predictor of quota golds, fit on ``rows`` (``team_table``):
+    quota teams of top-50 online schools and of all other schools win gold at
+    ``rho_top50`` and ``rho_rest`` times the band teams' rate, and top-50
+    schools fill ``kappa`` quota seats per WF/host entitlement seat."""
+    band = [r for r in rows if r["admission"] == "band"]
+    band_rate = sum(r["gold"] for r in band) / len(band)
+    quota = [r for r in rows if r["admission"] == "quota"]
+    top = [r for r in quota if r["school_online_rank"] and r["school_online_rank"] <= TOP_SCHOOLS]
+    rest = [r for r in quota if not (r["school_online_rank"] and r["school_online_rank"] <= TOP_SCHOOLS)]
+    contests = sorted({(r["season"], r["site"]) for r in rows})
+    entitled = sum(elite_entitlement(s, site, data, ev) for s, site in contests)
+    return {"rho_top50": sum(r["gold"] for r in top) / len(top) / band_rate,
+            "rho_rest": sum(r["gold"] for r in rest) / len(rest) / band_rate,
+            "rho_pooled": sum(r["gold"] for r in quota) / len(quota) / band_rate,
+            "kappa": len(top) / entitled, "contests": len(contests)}
+
+
+def pre_contest_check(rows, data, ev):
+    """Quota golds per contest predicted before registration, leave-season-out:
+    pooled rate on the notices' planned quota seats vs the school-rank model
+    (kappa x top-50 WF/host entitlement at rho_top50, the rest at rho_rest).
+    Also the top-50 quota seat forecast itself."""
+    res = []
+    for test in sorted({r["season"] for r in rows}):
+        train = [r for r in rows if r["season"] != test]
+        m = school_rank_quota_model(train, data, ev)
+        band = [r for r in train if r["admission"] == "band"]
+        band_rate = sum(r["gold"] for r in band) / len(band)
+        planned = {k: _planned_quota(*k, data) for k in _group(train, ("season", "site"))}
+        pooled_rate = sum(r["gold"] for r in train if r["admission"] == "quota") / sum(planned.values())
+        for (season, site), rs in _group([r for r in rows if r["season"] == test], ("season", "site")).items():
+            q = [r for r in rs if r["admission"] == "quota"]
+            plan = _planned_quota(season, site, data)
+            top = min(plan, m["kappa"] * elite_entitlement(season, site, data, ev))
+            res.append(dict(season=season, site=site, actual=sum(r["gold"] for r in q),
+                            pooled=plan * pooled_rate,
+                            school_rank=band_rate * (m["rho_top50"] * top + m["rho_rest"] * (plan - top)),
+                            top50_actual=sum(1 for r in q if r["school_online_rank"]
+                                             and r["school_online_rank"] <= TOP_SCHOOLS),
+                            top50_forecast=round(top, 1)))
+    actual = np.array([r["actual"] for r in res])
+    out = {"contests": res}
+    for k in ("pooled", "school_rank"):
+        pred = np.array([r[k] for r in res])
+        out[k] = {"mae": round(float(np.mean(np.abs(pred - actual))), 2),
+                  "corr": round(float(np.corrcoef(pred, actual)[0, 1]), 3)}
+    t = np.array([[r["top50_forecast"], r["top50_actual"]] for r in res])
+    out["top50_seats"] = {"mae": round(float(np.mean(np.abs(t[:, 0] - t[:, 1]))), 1),
+                          "corr": round(float(np.corrcoef(t[:, 0], t[:, 1])[0, 1]), 3)}
+    return out
+
+
+def _planned_quota(season, site, data):
+    rule = data["rules"][(season, site)]
+    return max(0, rule["official_capacity"] - sum(og.school_slots(season, rule, data).values()))
+
+
 def repeat_schools(rows, top=15):
     """Schools that most often send quota teams, with their channels."""
     per = collections.defaultdict(list)
@@ -316,6 +393,23 @@ def markdown(res):
           "none), or the team's own linked online rank (<=30, <=100, <=300, >300, unlinked).", "",
           "| grouping | MAE (golds per contest) | correlation |", "|---|---|---|"]
     L += [f"| {k} | {rc['mae'][k]} | {rc['corr'][k]} |" for k in PREDICTORS]
+    pc = res["pre_contest_check"]
+    L += ["", "## Before registration: forecasting a contest's quota golds (leave-season-out)", "",
+          "Only rules and evidence known before registration: the notice's planned quota seats "
+          "(capacity minus band slots), and top-50 schools' WF/host entitlement. The school-rank "
+          "model (backtested in `arch_b.online_gold` as `rules_line_school_rank`) expects kappa x "
+          "entitlement quota teams from "
+          "top-50 schools at their gold rate and the remaining planned seats at the others' rate.", "",
+          "| predictor | MAE (golds per contest) | correlation |", "|---|---|---|",
+          f"| pooled rate x planned quota seats | {pc['pooled']['mae']} | {pc['pooled']['corr']} |",
+          f"| school-rank model | {pc['school_rank']['mae']} | {pc['school_rank']['corr']} |", "",
+          f"Top-50 quota seats forecast vs actual: MAE {pc['top50_seats']['mae']}, correlation "
+          f"{pc['top50_seats']['corr']}. Full-data fit: " +
+          ", ".join(f"{k} {v:.3f}" for k, v in res["school_rank_model"].items() if k != "contests") + ".", "",
+          "| season | site | quota golds | pooled | school-rank | top-50 quota seats (forecast / actual) |",
+          "|---|---|---|---|---|---|"]
+    L += [f"| {c['season']} | {c['site']} | {c['actual']} | {c['pooled']:.1f} | {c['school_rank']:.1f} | "
+          f"{c['top50_forecast']} / {c['top50_actual']} |" for c in pc["contests"]]
     L += ["", "## Quota teams by their school's combined online rank", "",
           "| school rank | quota teams | golds | top channels |", "|---|---|---|---|"]
     for b in res["school_rank_profile"]:
@@ -338,6 +432,8 @@ def run():
         r["medal"] = medals.get((r["season"], r["site"], r["team"], r["school"]), "")
     res = {"shanghai_check": shanghai_check(rows, ev), "channels": channel_summary(rows, medals),
            "contests": by_contest(rows), "channel_rho_check": channel_rho_check(rows),
+           "pre_contest_check": pre_contest_check(rows, data, ev),
+           "school_rank_model": school_rank_quota_model(rows, data, ev),
            "school_rank_profile": school_rank_profile(rows), "repeat_schools": repeat_schools(rows),
            "gaps": ev["gaps"]}
     return rows, res

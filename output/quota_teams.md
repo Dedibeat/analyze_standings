@@ -61,6 +61,38 @@ Each contest's quota golds predicted from gold rates of the other seasons, group
 | by_school_rank | 1.58 | 0.533 |
 | by_team_rank | 2.18 | 0.54 |
 
+## Before registration: forecasting a contest's quota golds (leave-season-out)
+
+Only rules and evidence known before registration: the notice's planned quota seats (capacity minus band slots), and top-50 schools' WF/host entitlement. The school-rank model (backtested in `arch_b.online_gold` as `rules_line_school_rank`) expects kappa x entitlement quota teams from top-50 schools at their gold rate and the remaining planned seats at the others' rate.
+
+| predictor | MAE (golds per contest) | correlation |
+|---|---|---|
+| pooled rate x planned quota seats | 2.52 | 0.437 |
+| school-rank model | 1.58 | 0.249 |
+
+Top-50 quota seats forecast vs actual: MAE 4.0, correlation 0.705. Full-data fit: rho_top50 1.384, rho_rest 0.065, rho_pooled 0.441, kappa 1.387.
+
+| season | site | quota golds | pooled | school-rank | top-50 quota seats (forecast / actual) |
+|---|---|---|---|---|---|
+| 2023 | hangzhou | 6 | 9.2 | 5.8 | 30.1 / 22 |
+| 2023 | hefei | 6 | 3.8 | 5.4 | 30.1 / 25 |
+| 2023 | jinan | 6 | 4.9 | 6.0 | 32.8 / 33 |
+| 2023 | nanjing | 6 | 7.9 | 6.2 | 32.8 / 41 |
+| 2023 | shenyang | 6 | 5.3 | 6.0 | 32.8 / 33 |
+| 2023 | xian | 14 | 12.0 | 6.5 | 32.8 / 47 |
+| 2024 | chengdu | 8 | 6.2 | 8.3 | 44.3 / 39 |
+| 2024 | hangzhou | 8 | 9.3 | 8.7 | 44.3 / 37 |
+| 2024 | kunming | 10 | 14.0 | 9.3 | 44.3 / 45 |
+| 2024 | nanjing | 4 | 8.2 | 8.6 | 44.3 / 40 |
+| 2024 | shanghai | 8 | 6.2 | 8.3 | 44.3 / 41 |
+| 2024 | shenyang | 7 | 5.5 | 8.2 | 44.3 / 42 |
+| 2025 | chengdu | 10 | 7.1 | 7.9 | 42.3 / 43 |
+| 2025 | nanjing | 5 | 7.1 | 7.9 | 42.3 / 44 |
+| 2025 | shanghai | 11 | 6.6 | 7.8 | 42.3 / 44 |
+| 2025 | shenyang | 10 | 5.9 | 7.8 | 42.3 / 43 |
+| 2025 | wuhan | 10 | 11.8 | 9.6 | 49.1 / 56 |
+| 2025 | xian | 7 | 11.1 | 8.4 | 42.3 / 42 |
+
 ## Quota teams by their school's combined online rank
 
 | school rank | quota teams | golds | top channels |
