@@ -452,6 +452,23 @@ disagreements. Results: `output/online_gold.md`; details in `details.md`.
 Hong Kong/Macau are not modelled, and 2025–2026 rosters (only on PTA) are
 missing.
 
+```bash
+python3 scripts/build_quota_evidence.py        # WF/host/invitational/provincial evidence + Shanghai lists
+python3 -m arch_b.quota_teams                   # which teams entered each regional on a quota seat, and why
+```
+
+Every official team of the 2023–2025 mainland regionals is labelled band
+(online rank-band seat) or quota, and each quota team gets the channel that
+explains its seat: host, World Finals school, invitational medal, non-mainland,
+provincial/local, girls, or unexplained (wildcards, problem setters,
+second-round applications). The inferred band seats reproduce Shanghai's
+published per-school online seats exactly (2024, 2025), and WF + host explain
+68 of the 71 published reward schools. Quota teams hold 39% of seats but win
+22% of golds (142 of 648); 89% of those golds come from the extra teams of
+top-50 online schools (mostly WF/host seats), and quota teams from schools
+ranked below 100 practically never win gold. Results:
+`output/quota_teams.md` (per team: `output/quota_teams.csv`).
+
 ### Interactive viewer
 
 ```bash
@@ -567,6 +584,9 @@ Module self-checks:
   2022–2024 online rosters, 2022–2025 regional official standings and medals,
   and hand-encoded 2023–2026 slot rules; built by
   `scripts/build_ec_online_data.py`, consumed by `arch_b.online_gold`.
+  `quota_evidence.json` (quota-channel evidence and Shanghai's published
+  allocation lists) is built by `scripts/build_quota_evidence.py`, consumed by
+  `arch_b.quota_teams`.
 - `output/problem_ratings.json` — Architecture A ratings;
   `output/problem_ratings_b.json` — Architecture B (binary) ratings;
   `output/problem_ratings_survival.json` — Architecture B (survival) ratings;

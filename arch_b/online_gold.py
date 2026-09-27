@@ -61,10 +61,15 @@ FORECAST_RANKS = (10, 25, 50, 100, 200)
 
 # ------------------------------------------------------------------ loading
 
+SCHOOL_ALIAS = re.compile(r"[(（]山东省科学院[)）]")  # 齐鲁工业大学's official long form
+TRADITIONAL = str.maketrans("學門灣臺國華醫東會", "学门湾台国华医东会")
+
+
 def norm_school(s):
-    s = unicodedata.normalize("NFKC", s or "").lower()
-    s = re.sub(r"[(（][^)）]*[)）]", "", s)
-    return "".join(c for c in s if c.isalnum())
+    """Keep campus qualifiers: 哈尔滨工业大学(威海) is its own school with its own
+    online rank and slots (``大连理工大学(盘锦校区)`` == ``大连理工大学盘锦校区``)."""
+    s = SCHOOL_ALIAS.sub("", unicodedata.normalize("NFKC", s or ""))
+    return "".join(c for c in s.translate(TRADITIONAL).lower() if c.isalnum())
 
 
 def norm_name(s):
@@ -121,7 +126,7 @@ def link_regionals(data, strengths):
         if key not in strengths:
             votes = collections.Counter()
             for m in r["members"].split("|"):
-                votes.update(roster.get((season, school, norm_name(m)), ()))
+                votes.update(sorted(roster.get((season, school, norm_name(m)), ())))  # deterministic ties
             best = votes.most_common(1)
             key, how = ((season, school, best[0][0]), "roster") if best and best[0][1] >= 2 else (None, "")
             if key not in strengths:

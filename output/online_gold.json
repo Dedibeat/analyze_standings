@@ -1,15 +1,15 @@
 {
- "model_rows": 4963,
+ "model_rows": 4966,
  "link_counts": {
   "2023/name": 1085,
-  "2023/roster": 658,
+  "2023/roster": 660,
   "2024/roster": 672,
-  "2024/name": 1266,
+  "2024/name": 1267,
   "2025/name": 1282
  },
  "backtest": {
   "2024": {
-   "teams": 1938,
+   "teams": 1939,
    "sites": [
     "chengdu",
     "hangzhou",
@@ -20,8 +20,8 @@
    ],
    "variants": {
     "online_only": {
-     "log_loss": 0.16586,
-     "brier": 0.04834,
+     "log_loss": 0.16589,
+     "brier": 0.04835,
      "delta_log_loss_vs_online_only": 0.0,
      "delta_ci95": [
       0.0,
@@ -36,118 +36,118 @@
       "shenyang": 0.0
      },
      "coef": [
-      12.335,
-      2.72
+      12.427,
+      2.736
      ]
     },
     "site_history": {
-     "log_loss": 0.166,
+     "log_loss": 0.16599,
      "brier": 0.04836,
-     "delta_log_loss_vs_online_only": 0.00013,
+     "delta_log_loss_vs_online_only": 0.0001,
      "delta_ci95": [
-      -0.00076,
-      0.00095
+      -0.00047,
+      0.00061
      ],
      "per_site_delta": {
-      "chengdu": 0.00016,
-      "hangzhou": -0.00183,
-      "kunming": 0.00029,
-      "nanjing": 0.00049,
-      "shanghai": 0.00024,
-      "shenyang": 0.00178
+      "chengdu": 0.0001,
+      "hangzhou": -0.00116,
+      "kunming": 0.00019,
+      "nanjing": 0.0004,
+      "shanghai": 0.00016,
+      "shenyang": 0.00112
      },
      "coef": [
-      4.091,
-      2.734,
-      -1.793
+      6.598,
+      2.746,
+      -1.263
      ]
     },
     "cf_bar_history": {
-     "log_loss": 0.16583,
-     "brier": 0.04835,
-     "delta_log_loss_vs_online_only": -3e-05,
+     "log_loss": 0.16585,
+     "brier": 0.04836,
+     "delta_log_loss_vs_online_only": -4e-05,
      "delta_ci95": [
-      -0.00058,
-      0.00047
+      -0.0005,
+      0.00038
      ],
      "per_site_delta": {
-      "chengdu": 8e-05,
-      "hangzhou": -0.0012,
-      "kunming": 0.00014,
+      "chengdu": 6e-05,
+      "hangzhou": -0.00103,
+      "kunming": 0.0001,
       "nanjing": -0.00015,
-      "shanghai": 0.00011,
-      "shenyang": 0.00103
+      "shanghai": 9e-05,
+      "shenyang": 0.00086
      },
      "coef": [
-      26.856,
-      2.727,
-      -5.662
+      25.086,
+      2.74,
+      -4.94
      ]
     },
     "rules_line": {
-     "log_loss": 0.16546,
-     "brier": 0.04835,
-     "delta_log_loss_vs_online_only": -0.0004,
+     "log_loss": 0.16565,
+     "brier": 0.04836,
+     "delta_log_loss_vs_online_only": -0.00023,
      "delta_ci95": [
-      -0.00075,
-      -1e-05
+      -0.00055,
+      0.00011
      ],
      "per_site_delta": {
-      "chengdu": 9e-05,
-      "hangzhou": -0.00083,
-      "kunming": -0.00104,
-      "nanjing": -0.00026,
-      "shanghai": 0.00012,
-      "shenyang": -0.00017
+      "chengdu": 0.00023,
+      "hangzhou": -0.0004,
+      "kunming": -0.00085,
+      "nanjing": -0.00011,
+      "shanghai": 0.00031,
+      "shenyang": -0.00032
      },
      "coef": [
-      10.055,
-      2.718,
-      -0.561
+      10.483,
+      2.734,
+      -0.474
      ]
     },
     "rules_line_quota_adjusted": {
-     "log_loss": 0.16532,
-     "brier": 0.04829,
-     "delta_log_loss_vs_online_only": -0.00054,
+     "log_loss": 0.16555,
+     "brier": 0.04832,
+     "delta_log_loss_vs_online_only": -0.00034,
      "delta_ci95": [
-      -0.00115,
-      7e-05
+      -0.00072,
+      0.0001
      ],
      "per_site_delta": {
       "chengdu": 0.00025,
-      "hangzhou": -0.00188,
-      "kunming": -0.00091,
-      "nanjing": -0.00037,
-      "shanghai": 0.00032,
-      "shenyang": -0.00028
+      "hangzhou": -0.00117,
+      "kunming": -0.00068,
+      "nanjing": -0.00019,
+      "shanghai": 0.00034,
+      "shenyang": -0.0003
      },
      "coef": [
-      9.856,
-      2.718,
-      -0.64
+      10.75,
+      2.735,
+      -0.43
      ]
     },
     "oracle_line": {
-     "log_loss": 0.16415,
-     "brier": 0.04808,
-     "delta_log_loss_vs_online_only": -0.00172,
+     "log_loss": 0.16462,
+     "brier": 0.04814,
+     "delta_log_loss_vs_online_only": -0.00127,
      "delta_ci95": [
-      -0.00306,
-      -0.00076
+      -0.00223,
+      -0.0006
      ],
      "per_site_delta": {
-      "chengdu": -0.00148,
-      "hangzhou": -0.00467,
-      "kunming": -0.00089,
-      "nanjing": -0.00065,
-      "shanghai": -0.00206,
-      "shenyang": -0.00037
+      "chengdu": -0.00108,
+      "hangzhou": -0.0034,
+      "kunming": -0.00067,
+      "nanjing": -0.00047,
+      "shanghai": -0.00144,
+      "shenyang": -0.00041
      },
      "coef": [
-      8.229,
-      2.734,
-      -0.899
+      9.597,
+      2.745,
+      -0.617
      ]
     }
    }
@@ -164,8 +164,8 @@
    ],
    "variants": {
     "online_only": {
-     "log_loss": 0.16137,
-     "brier": 0.04869,
+     "log_loss": 0.16132,
+     "brier": 0.04866,
      "delta_log_loss_vs_online_only": 0.0,
      "delta_ci95": [
       0.0,
@@ -180,172 +180,172 @@
       "xian": 0.0
      },
      "coef": [
-      11.156,
-      2.461
+      11.196,
+      2.468
      ]
     },
     "site_history": {
-     "log_loss": 0.16593,
-     "brier": 0.05008,
-     "delta_log_loss_vs_online_only": 0.00456,
+     "log_loss": 0.16554,
+     "brier": 0.04996,
+     "delta_log_loss_vs_online_only": 0.00422,
      "delta_ci95": [
-      0.00051,
-      0.00973
+      0.00043,
+      0.00901
      ],
      "per_site_delta": {
-      "chengdu": 0.00471,
-      "nanjing": -0.00058,
-      "shanghai": 0.00057,
-      "shenyang": 0.00678,
-      "wuhan": -7e-05,
-      "xian": 0.01617
+      "chengdu": 0.0042,
+      "nanjing": -0.00056,
+      "shanghai": 0.00049,
+      "shenyang": 0.00655,
+      "wuhan": -6e-05,
+      "xian": 0.0149
      },
      "coef": [
-      0.691,
-      2.479,
-      -2.232
+      1.507,
+      2.484,
+      -2.062
      ]
     },
     "cf_bar_history": {
-     "log_loss": 0.16217,
-     "brier": 0.04884,
-     "delta_log_loss_vs_online_only": 0.0008,
+     "log_loss": 0.16206,
+     "brier": 0.0488,
+     "delta_log_loss_vs_online_only": 0.00074,
      "delta_ci95": [
-      0.0001,
-      0.00172
+      9e-05,
+      0.00158
      ],
      "per_site_delta": {
-      "chengdu": 0.00137,
-      "nanjing": 0.0007,
+      "chengdu": 0.00127,
+      "nanjing": 0.00065,
       "shanghai": -1e-05,
-      "shenyang": 0.00287,
-      "wuhan": -2e-05,
-      "xian": -2e-05
+      "shenyang": 0.00263,
+      "wuhan": -1e-05,
+      "xian": -1e-05
      },
      "coef": [
-      15.362,
-      2.463,
-      -1.635
+      15.069,
+      2.469,
+      -1.506
      ]
     },
     "rules_line": {
-     "log_loss": 0.16012,
-     "brier": 0.04821,
-     "delta_log_loss_vs_online_only": -0.00125,
+     "log_loss": 0.16025,
+     "brier": 0.04826,
+     "delta_log_loss_vs_online_only": -0.00107,
      "delta_ci95": [
-      -0.00275,
-      -1e-05
+      -0.00227,
+      -8e-05
      ],
      "per_site_delta": {
-      "chengdu": 8e-05,
-      "nanjing": 2e-05,
-      "shanghai": 0.0,
-      "shenyang": -0.00456,
-      "wuhan": -0.00021,
-      "xian": -0.00272
+      "chengdu": -8e-05,
+      "nanjing": -2e-05,
+      "shanghai": -0.0,
+      "shenyang": -0.00374,
+      "wuhan": -0.00025,
+      "xian": -0.00223
      },
      "coef": [
-      8.31,
-      2.461,
-      -0.699
+      8.715,
+      2.467,
+      -0.606
      ]
     },
     "rules_line_quota_adjusted": {
-     "log_loss": 0.15974,
-     "brier": 0.04815,
-     "delta_log_loss_vs_online_only": -0.00163,
+     "log_loss": 0.1598,
+     "brier": 0.04819,
+     "delta_log_loss_vs_online_only": -0.00152,
      "delta_ci95": [
-      -0.00437,
-      2e-05
+      -0.00407,
+      -8e-05
      ],
      "per_site_delta": {
-      "chengdu": 4e-05,
-      "nanjing": -1e-05,
-      "shanghai": -0.0,
-      "shenyang": -0.00826,
-      "wuhan": 2e-05,
-      "xian": -0.00148
+      "chengdu": -0.00015,
+      "nanjing": -5e-05,
+      "shanghai": 3e-05,
+      "shenyang": -0.00774,
+      "wuhan": -0.00018,
+      "xian": -0.00092
      },
      "coef": [
-      7.772,
-      2.462,
-      -0.866
+      8.425,
+      2.468,
+      -0.706
      ]
     },
     "oracle_line": {
-     "log_loss": 0.15698,
-     "brier": 0.04799,
-     "delta_log_loss_vs_online_only": -0.00439,
+     "log_loss": 0.15709,
+     "brier": 0.048,
+     "delta_log_loss_vs_online_only": -0.00423,
      "delta_ci95": [
-      -0.01141,
-      0.00031
+      -0.01094,
+      0.00034
      ],
      "per_site_delta": {
-      "chengdu": -0.00528,
-      "nanjing": 0.00064,
-      "shanghai": 0.00037,
-      "shenyang": -0.02048,
-      "wuhan": 0.00126,
-      "xian": -0.00332
+      "chengdu": -0.00545,
+      "nanjing": 0.00039,
+      "shanghai": 0.00033,
+      "shenyang": -0.01939,
+      "wuhan": 0.00122,
+      "xian": -0.00293
      },
      "coef": [
-      5.431,
-      2.488,
-      -1.238
+      5.788,
+      2.492,
+      -1.167
      ]
     }
    }
   }
  },
  "contest_difficulty": {
-  "slope": 2.547,
+  "slope": 2.551,
   "spearman_rank_vs_bar": -0.503,
-  "cf_points_per_log_rank": -358.7,
+  "cf_points_per_log_rank": -360.9,
   "contests": [
    {
     "season": "2023",
     "site": "hangzhou",
-    "online_rank_for_even_gold": 97.6,
+    "online_rank_for_even_gold": 97.7,
     "cf_gold_bar": 2536.1,
-    "linked_teams": 370,
-    "cf_bar_implied_by_online": 2549.8,
-    "fit_minus_online": -13.7
+    "linked_teams": 371,
+    "cf_bar_implied_by_online": 2550.2,
+    "fit_minus_online": -14.1
    },
    {
     "season": "2023",
     "site": "hefei",
-    "online_rank_for_even_gold": 89.6,
+    "online_rank_for_even_gold": 89.7,
     "cf_gold_bar": 2520.8,
     "linked_teams": 305,
-    "cf_bar_implied_by_online": 2580.5,
-    "fit_minus_online": -59.7
+    "cf_bar_implied_by_online": 2581.1,
+    "fit_minus_online": -60.3
    },
    {
     "season": "2023",
     "site": "jinan",
-    "online_rank_for_even_gold": 77.7,
+    "online_rank_for_even_gold": 79.4,
     "cf_gold_bar": 2659.9,
-    "linked_teams": 290,
-    "cf_bar_implied_by_online": 2631.6,
-    "fit_minus_online": 28.3
+    "linked_teams": 291,
+    "cf_bar_implied_by_online": 2625.1,
+    "fit_minus_online": 34.8
    },
    {
     "season": "2023",
     "site": "nanjing",
-    "online_rank_for_even_gold": 92.3,
+    "online_rank_for_even_gold": 92.4,
     "cf_gold_bar": 2548.3,
     "linked_teams": 302,
-    "cf_bar_implied_by_online": 2569.9,
-    "fit_minus_online": -21.6
+    "cf_bar_implied_by_online": 2570.4,
+    "fit_minus_online": -22.1
    },
    {
     "season": "2023",
     "site": "shenyang",
-    "online_rank_for_even_gold": 96.2,
+    "online_rank_for_even_gold": 96.3,
     "cf_gold_bar": 2533.5,
     "linked_teams": 258,
-    "cf_bar_implied_by_online": 2555.0,
-    "fit_minus_online": -21.5
+    "cf_bar_implied_by_online": 2555.4,
+    "fit_minus_online": -21.9
    },
    {
     "season": "2023",
@@ -357,38 +357,38 @@
    {
     "season": "2024",
     "site": "chengdu",
-    "online_rank_for_even_gold": 100.6,
+    "online_rank_for_even_gold": 100.3,
     "cf_gold_bar": 2491.8,
     "linked_teams": 283,
-    "cf_bar_implied_by_online": 2539.0,
-    "fit_minus_online": -47.2
+    "cf_bar_implied_by_online": 2540.8,
+    "fit_minus_online": -49.0
    },
    {
     "season": "2024",
     "site": "hangzhou",
-    "online_rank_for_even_gold": 110.0,
+    "online_rank_for_even_gold": 110.1,
     "cf_gold_bar": 2535.8,
-    "linked_teams": 343,
-    "cf_bar_implied_by_online": 2506.9,
-    "fit_minus_online": 28.9
+    "linked_teams": 344,
+    "cf_bar_implied_by_online": 2507.1,
+    "fit_minus_online": 28.7
    },
    {
     "season": "2024",
     "site": "kunming",
-    "online_rank_for_even_gold": 98.9,
+    "online_rank_for_even_gold": 99.2,
     "cf_gold_bar": 2696.1,
     "linked_teams": 412,
-    "cf_bar_implied_by_online": 2545.1,
-    "fit_minus_online": 151.0
+    "cf_bar_implied_by_online": 2544.7,
+    "fit_minus_online": 151.4
    },
    {
     "season": "2024",
     "site": "nanjing",
-    "online_rank_for_even_gold": 97.9,
+    "online_rank_for_even_gold": 98.2,
     "cf_gold_bar": 2430.7,
     "linked_teams": 316,
-    "cf_bar_implied_by_online": 2548.7,
-    "fit_minus_online": -118.0
+    "cf_bar_implied_by_online": 2548.4,
+    "fit_minus_online": -117.7
    },
    {
     "season": "2024",
@@ -403,8 +403,8 @@
     "online_rank_for_even_gold": 82.6,
     "cf_gold_bar": 2702.7,
     "linked_teams": 277,
-    "cf_bar_implied_by_online": 2609.7,
-    "fit_minus_online": 93.0
+    "cf_bar_implied_by_online": 2610.8,
+    "fit_minus_online": 91.9
    },
    {
     "season": "2025",
@@ -412,44 +412,44 @@
     "online_rank_for_even_gold": 77.1,
     "cf_gold_bar": 2665.7,
     "linked_teams": 199,
-    "cf_bar_implied_by_online": 2634.4,
-    "fit_minus_online": 31.3
+    "cf_bar_implied_by_online": 2635.7,
+    "fit_minus_online": 30.0
    },
    {
     "season": "2025",
     "site": "nanjing",
-    "online_rank_for_even_gold": 88.8,
+    "online_rank_for_even_gold": 88.9,
     "cf_gold_bar": 2532.8,
     "linked_teams": 211,
-    "cf_bar_implied_by_online": 2583.7,
-    "fit_minus_online": -50.9
+    "cf_bar_implied_by_online": 2584.3,
+    "fit_minus_online": -51.5
    },
    {
     "season": "2025",
     "site": "shanghai",
-    "online_rank_for_even_gold": 94.0,
+    "online_rank_for_even_gold": 94.1,
     "cf_gold_bar": 2474.2,
     "linked_teams": 172,
-    "cf_bar_implied_by_online": 2563.3,
-    "fit_minus_online": -89.1
+    "cf_bar_implied_by_online": 2563.8,
+    "fit_minus_online": -89.6
    },
    {
     "season": "2025",
     "site": "shenyang",
-    "online_rank_for_even_gold": 151.2,
+    "online_rank_for_even_gold": 151.3,
     "cf_gold_bar": 2382.2,
     "linked_teams": 215,
-    "cf_bar_implied_by_online": 2392.8,
-    "fit_minus_online": -10.6
+    "cf_bar_implied_by_online": 2392.4,
+    "fit_minus_online": -10.2
    },
    {
     "season": "2025",
     "site": "wuhan",
-    "online_rank_for_even_gold": 99.4,
+    "online_rank_for_even_gold": 99.5,
     "cf_gold_bar": 2588.2,
     "linked_teams": 269,
-    "cf_bar_implied_by_online": 2543.3,
-    "fit_minus_online": 44.9
+    "cf_bar_implied_by_online": 2543.6,
+    "fit_minus_online": 44.6
    },
    {
     "season": "2025",
@@ -457,133 +457,133 @@
     "online_rank_for_even_gold": 127.4,
     "cf_gold_bar": 2509.5,
     "linked_teams": 216,
-    "cf_bar_implied_by_online": 2454.3,
-    "fit_minus_online": 55.2
+    "cf_bar_implied_by_online": 2454.4,
+    "fit_minus_online": 55.1
    }
   ]
  },
  "quota": {
-  "rho": 0.443,
+  "rho": 0.441,
   "contests": [
    {
     "season": "2023",
     "site": "hangzhou",
-    "band_seats": 266,
-    "quota_seats": 176,
+    "band_seats": 272,
+    "quota_seats": 170,
     "band_golds": 39,
     "quota_golds": 6,
     "quota_gold_share": 0.133,
-    "relative_gold_rate": 0.233
+    "relative_gold_rate": 0.246
    },
    {
     "season": "2023",
     "site": "hefei",
-    "band_seats": 259,
-    "quota_seats": 85,
+    "band_seats": 263,
+    "quota_seats": 81,
     "band_golds": 30,
     "quota_golds": 6,
     "quota_gold_share": 0.167,
-    "relative_gold_rate": 0.609
+    "relative_gold_rate": 0.649
    },
    {
     "season": "2023",
     "site": "jinan",
-    "band_seats": 210,
-    "quota_seats": 124,
-    "band_golds": 27,
-    "quota_golds": 7,
-    "quota_gold_share": 0.206,
-    "relative_gold_rate": 0.439
+    "band_seats": 213,
+    "quota_seats": 121,
+    "band_golds": 28,
+    "quota_golds": 6,
+    "quota_gold_share": 0.176,
+    "relative_gold_rate": 0.377
    },
    {
     "season": "2023",
     "site": "nanjing",
-    "band_seats": 218,
-    "quota_seats": 113,
+    "band_seats": 220,
+    "quota_seats": 111,
     "band_golds": 27,
     "quota_golds": 6,
     "quota_gold_share": 0.182,
-    "relative_gold_rate": 0.429
+    "relative_gold_rate": 0.44
    },
    {
     "season": "2023",
     "site": "shenyang",
-    "band_seats": 186,
-    "quota_seats": 105,
+    "band_seats": 188,
+    "quota_seats": 103,
     "band_golds": 23,
     "quota_golds": 6,
     "quota_gold_share": 0.207,
-    "relative_gold_rate": 0.462
+    "relative_gold_rate": 0.476
    },
    {
     "season": "2023",
     "site": "xian",
-    "band_seats": 200,
-    "quota_seats": 206,
-    "band_golds": 26,
-    "quota_golds": 15,
-    "quota_gold_share": 0.366,
-    "relative_gold_rate": 0.56
+    "band_seats": 202,
+    "quota_seats": 204,
+    "band_golds": 27,
+    "quota_golds": 14,
+    "quota_gold_share": 0.341,
+    "relative_gold_rate": 0.513
    },
    {
     "season": "2024",
     "site": "chengdu",
-    "band_seats": 187,
-    "quota_seats": 120,
+    "band_seats": 188,
+    "quota_seats": 119,
     "band_golds": 23,
     "quota_golds": 8,
     "quota_gold_share": 0.258,
-    "relative_gold_rate": 0.542
+    "relative_gold_rate": 0.55
    },
    {
     "season": "2024",
     "site": "hangzhou",
-    "band_seats": 223,
-    "quota_seats": 143,
+    "band_seats": 225,
+    "quota_seats": 141,
     "band_golds": 29,
     "quota_golds": 8,
     "quota_gold_share": 0.216,
-    "relative_gold_rate": 0.43
+    "relative_gold_rate": 0.44
    },
    {
     "season": "2024",
     "site": "kunming",
-    "band_seats": 218,
-    "quota_seats": 231,
-    "band_golds": 34,
-    "quota_golds": 11,
-    "quota_gold_share": 0.244,
-    "relative_gold_rate": 0.305
+    "band_seats": 220,
+    "quota_seats": 229,
+    "band_golds": 35,
+    "quota_golds": 10,
+    "quota_gold_share": 0.222,
+    "relative_gold_rate": 0.274
    },
    {
     "season": "2024",
     "site": "nanjing",
     "band_seats": 205,
     "quota_seats": 131,
-    "band_golds": 30,
-    "quota_golds": 3,
-    "quota_gold_share": 0.091,
-    "relative_gold_rate": 0.156
+    "band_golds": 29,
+    "quota_golds": 4,
+    "quota_gold_share": 0.121,
+    "relative_gold_rate": 0.216
    },
    {
     "season": "2024",
     "site": "shanghai",
-    "band_seats": 192,
-    "quota_seats": 144,
+    "band_seats": 193,
+    "quota_seats": 143,
     "band_golds": 26,
     "quota_golds": 8,
     "quota_gold_share": 0.235,
-    "relative_gold_rate": 0.41
+    "relative_gold_rate": 0.415
    },
    {
     "season": "2024",
     "site": "shenyang",
-    "band_seats": 194,
-    "quota_seats": 106,
+    "band_seats": 196,
+    "quota_seats": 104,
     "band_golds": 23,
     "quota_golds": 7,
     "quota_gold_share": 0.233,
-    "relative_gold_rate": 0.557
+    "relative_gold_rate": 0.574
    },
    {
     "season": "2025",
@@ -598,91 +598,91 @@
    {
     "season": "2025",
     "site": "nanjing",
-    "band_seats": 205,
-    "quota_seats": 130,
+    "band_seats": 206,
+    "quota_seats": 129,
     "band_golds": 28,
     "quota_golds": 5,
     "quota_gold_share": 0.152,
-    "relative_gold_rate": 0.282
+    "relative_gold_rate": 0.285
    },
    {
     "season": "2025",
     "site": "shanghai",
-    "band_seats": 202,
-    "quota_seats": 129,
-    "band_golds": 20,
-    "quota_golds": 10,
-    "quota_gold_share": 0.333,
-    "relative_gold_rate": 0.783
+    "band_seats": 205,
+    "quota_seats": 126,
+    "band_golds": 19,
+    "quota_golds": 11,
+    "quota_gold_share": 0.367,
+    "relative_gold_rate": 0.942
    },
    {
     "season": "2025",
     "site": "shenyang",
-    "band_seats": 280,
-    "quota_seats": 120,
-    "band_golds": 29,
-    "quota_golds": 11,
-    "quota_gold_share": 0.275,
-    "relative_gold_rate": 0.885
+    "band_seats": 282,
+    "quota_seats": 118,
+    "band_golds": 30,
+    "quota_golds": 10,
+    "quota_gold_share": 0.25,
+    "relative_gold_rate": 0.797
    },
    {
     "season": "2025",
     "site": "wuhan",
-    "band_seats": 278,
-    "quota_seats": 168,
-    "band_golds": 34,
-    "quota_golds": 11,
-    "quota_gold_share": 0.244,
-    "relative_gold_rate": 0.535
+    "band_seats": 276,
+    "quota_seats": 170,
+    "band_golds": 35,
+    "quota_golds": 10,
+    "quota_gold_share": 0.222,
+    "relative_gold_rate": 0.464
    },
    {
     "season": "2025",
     "site": "xian",
-    "band_seats": 195,
-    "quota_seats": 204,
+    "band_seats": 198,
+    "quota_seats": 201,
     "band_golds": 33,
     "quota_golds": 7,
     "quota_gold_share": 0.175,
-    "relative_gold_rate": 0.203
+    "relative_gold_rate": 0.209
    }
   ]
  },
  "final_coef": [
-  5.106,
-  2.488,
-  -1.591
+  5.804,
+  2.493,
+  -1.416
  ],
  "forecast_2026": [
   {
    "site": "xian",
    "date": "2026-10-17",
    "source": "https://icpc.pku.edu.cn/tzgg/a9259fcfb12d4087b31bc1eef3490e79.htm",
-   "rules_line_online_rank": 73.5,
+   "rules_line_online_rank": 74.8,
    "gold_by_online_rank": {
     "10": {
-     "p": 0.998,
-     "p10": 0.9969,
+     "p": 0.9979,
+     "p10": 0.9968,
      "p90": 0.9989
     },
     "25": {
-     "p": 0.9808,
-     "p10": 0.9727,
-     "p90": 0.9887
+     "p": 0.9799,
+     "p10": 0.9716,
+     "p90": 0.9877
     },
     "50": {
-     "p": 0.9012,
-     "p10": 0.8659,
-     "p90": 0.9372
+     "p": 0.8966,
+     "p10": 0.8611,
+     "p90": 0.9315
     },
     "100": {
-     "p": 0.619,
-     "p10": 0.5332,
-     "p90": 0.7254
+     "p": 0.6063,
+     "p10": 0.5228,
+     "p90": 0.7041
     },
     "200": {
-     "p": 0.2246,
-     "p10": 0.1642,
-     "p90": 0.3181
+     "p": 0.2148,
+     "p10": 0.1582,
+     "p90": 0.2971
     }
    },
    "easiest_rank": 3
@@ -691,32 +691,32 @@
    "site": "chengdu",
    "date": "2026-10-24",
    "source": "https://icpc.pku.edu.cn/tzgg/19c9af66a6184e29a863547a2f83cc74.htm",
-   "rules_line_online_rank": 68.4,
+   "rules_line_online_rank": 68.6,
    "gold_by_online_rank": {
     "10": {
-     "p": 0.9978,
-     "p10": 0.9967,
-     "p90": 0.9988
+     "p": 0.9976,
+     "p10": 0.9965,
+     "p90": 0.9986
     },
     "25": {
-     "p": 0.9785,
-     "p10": 0.9706,
-     "p90": 0.9866
+     "p": 0.9773,
+     "p10": 0.9693,
+     "p90": 0.9853
     },
     "50": {
-     "p": 0.8904,
-     "p10": 0.8582,
-     "p90": 0.9254
+     "p": 0.8846,
+     "p10": 0.8536,
+     "p90": 0.9178
     },
     "100": {
-     "p": 0.5916,
-     "p10": 0.5202,
-     "p90": 0.685
+     "p": 0.5766,
+     "p10": 0.51,
+     "p90": 0.6601
     },
     "200": {
-     "p": 0.2052,
-     "p10": 0.157,
-     "p90": 0.2772
+     "p": 0.1948,
+     "p10": 0.1514,
+     "p90": 0.2541
     }
    },
    "easiest_rank": 6
@@ -728,29 +728,29 @@
    "rules_line_online_rank": 79.3,
    "gold_by_online_rank": {
     "10": {
-     "p": 0.9982,
-     "p10": 0.9972,
-     "p90": 0.9991
+     "p": 0.9981,
+     "p10": 0.997,
+     "p90": 0.999
     },
     "25": {
-     "p": 0.983,
-     "p10": 0.9743,
-     "p90": 0.9907
+     "p": 0.9815,
+     "p10": 0.9728,
+     "p90": 0.9892
     },
     "50": {
-     "p": 0.9114,
-     "p10": 0.8727,
-     "p90": 0.9484
+     "p": 0.904,
+     "p10": 0.8658,
+     "p90": 0.9401
     },
     "100": {
-     "p": 0.6471,
-     "p10": 0.5478,
-     "p90": 0.7646
+     "p": 0.6259,
+     "p10": 0.5312,
+     "p90": 0.7327
     },
     "200": {
-     "p": 0.2464,
-     "p10": 0.1721,
-     "p90": 0.3651
+     "p": 0.2291,
+     "p10": 0.1631,
+     "p90": 0.3275
     }
    },
    "easiest_rank": 2
@@ -759,32 +759,32 @@
    "site": "nanjing",
    "date": "2026-11-07",
    "source": "https://icpc.pku.edu.cn/tzgg/276a166ac0c34db0af139941fbf2323c.htm",
-   "rules_line_online_rank": 68.4,
+   "rules_line_online_rank": 68.6,
    "gold_by_online_rank": {
     "10": {
-     "p": 0.9978,
-     "p10": 0.9967,
-     "p90": 0.9988
+     "p": 0.9976,
+     "p10": 0.9965,
+     "p90": 0.9986
     },
     "25": {
-     "p": 0.9785,
-     "p10": 0.9706,
-     "p90": 0.9866
+     "p": 0.9773,
+     "p10": 0.9693,
+     "p90": 0.9853
     },
     "50": {
-     "p": 0.8904,
-     "p10": 0.8582,
-     "p90": 0.9254
+     "p": 0.8846,
+     "p10": 0.8536,
+     "p90": 0.9178
     },
     "100": {
-     "p": 0.5916,
-     "p10": 0.5202,
-     "p90": 0.685
+     "p": 0.5766,
+     "p10": 0.51,
+     "p90": 0.6601
     },
     "200": {
-     "p": 0.2052,
-     "p10": 0.157,
-     "p90": 0.2772
+     "p": 0.1948,
+     "p10": 0.1514,
+     "p90": 0.2541
     }
    },
    "easiest_rank": 7
@@ -796,29 +796,29 @@
    "rules_line_online_rank": 88.7,
    "gold_by_online_rank": {
     "10": {
-     "p": 0.9985,
-     "p10": 0.9975,
-     "p90": 0.9993
+     "p": 0.9984,
+     "p10": 0.9973,
+     "p90": 0.9992
     },
     "25": {
-     "p": 0.9857,
-     "p10": 0.9768,
-     "p90": 0.993
+     "p": 0.9842,
+     "p10": 0.975,
+     "p90": 0.9915
     },
     "50": {
-     "p": 0.9248,
-     "p10": 0.8824,
-     "p90": 0.9614
+     "p": 0.9169,
+     "p10": 0.8741,
+     "p90": 0.9534
     },
     "100": {
-     "p": 0.6868,
-     "p10": 0.5675,
-     "p90": 0.8154
+     "p": 0.6623,
+     "p10": 0.5484,
+     "p90": 0.782
     },
     "200": {
-     "p": 0.281,
-     "p10": 0.1842,
-     "p90": 0.4392
+     "p": 0.2584,
+     "p10": 0.1727,
+     "p90": 0.3897
     }
    },
    "easiest_rank": 1
@@ -830,29 +830,29 @@
    "rules_line_online_rank": 73.5,
    "gold_by_online_rank": {
     "10": {
-     "p": 0.998,
-     "p10": 0.9969,
-     "p90": 0.9989
+     "p": 0.9979,
+     "p10": 0.9968,
+     "p90": 0.9988
     },
     "25": {
-     "p": 0.9808,
-     "p10": 0.9727,
-     "p90": 0.9887
+     "p": 0.9794,
+     "p10": 0.9712,
+     "p90": 0.9872
     },
     "50": {
-     "p": 0.9012,
-     "p10": 0.8659,
-     "p90": 0.9372
+     "p": 0.8943,
+     "p10": 0.8596,
+     "p90": 0.9289
     },
     "100": {
-     "p": 0.619,
-     "p10": 0.5332,
-     "p90": 0.7254
+     "p": 0.6004,
+     "p10": 0.5208,
+     "p90": 0.6949
     },
     "200": {
-     "p": 0.2246,
-     "p10": 0.1642,
-     "p90": 0.3181
+     "p": 0.2107,
+     "p10": 0.1568,
+     "p90": 0.288
     }
    },
    "easiest_rank": 4
@@ -864,29 +864,29 @@
    "rules_line_online_rank": 73.0,
    "gold_by_online_rank": {
     "10": {
-     "p": 0.998,
-     "p10": 0.9969,
-     "p90": 0.9989
+     "p": 0.9978,
+     "p10": 0.9968,
+     "p90": 0.9988
     },
     "25": {
-     "p": 0.9806,
-     "p10": 0.9725,
-     "p90": 0.9885
+     "p": 0.9792,
+     "p10": 0.9711,
+     "p90": 0.9871
     },
     "50": {
-     "p": 0.9002,
-     "p10": 0.8652,
-     "p90": 0.9362
+     "p": 0.8934,
+     "p10": 0.8588,
+     "p90": 0.9278
     },
     "100": {
-     "p": 0.6165,
-     "p10": 0.5322,
-     "p90": 0.7219
+     "p": 0.5981,
+     "p10": 0.5198,
+     "p90": 0.6912
     },
     "200": {
-     "p": 0.2227,
-     "p10": 0.1634,
-     "p90": 0.3145
+     "p": 0.2091,
+     "p10": 0.1562,
+     "p90": 0.2848
     }
    },
    "easiest_rank": 5
@@ -910,45 +910,45 @@
     ],
     "gold": {
      "xian": {
-      "p": 0.04,
-      "p10": 0.0259,
-      "p90": 0.064,
+      "p": 0.0378,
+      "p10": 0.0244,
+      "p90": 0.058,
       "rank_band_slots": 1
      },
      "chengdu": {
-      "p": 0.0359,
-      "p10": 0.0245,
-      "p90": 0.0533,
+      "p": 0.0336,
+      "p10": 0.0233,
+      "p90": 0.0479,
       "rank_band_slots": 1
      },
      "wuhan": {
-      "p": 0.045,
-      "p10": 0.0273,
-      "p90": 0.0774,
+      "p": 0.0409,
+      "p10": 0.0254,
+      "p90": 0.0662,
       "rank_band_slots": 1
      },
      "nanjing": {
-      "p": 0.0359,
-      "p10": 0.0245,
-      "p90": 0.0533,
+      "p": 0.0336,
+      "p10": 0.0233,
+      "p90": 0.0479,
       "rank_band_slots": 1
      },
      "shenyang": {
-      "p": 0.0533,
-      "p10": 0.0295,
-      "p90": 0.1017,
+      "p": 0.0476,
+      "p10": 0.0272,
+      "p90": 0.085,
       "rank_band_slots": 1
      },
      "shanghai": {
-      "p": 0.04,
-      "p10": 0.0259,
-      "p90": 0.064,
+      "p": 0.0369,
+      "p10": 0.0242,
+      "p90": 0.0559,
       "rank_band_slots": 1
      },
      "nanchang": {
-      "p": 0.0396,
-      "p10": 0.0257,
-      "p90": 0.063,
+      "p": 0.0366,
+      "p10": 0.0242,
+      "p90": 0.055,
       "rank_band_slots": 1
      }
     }
@@ -963,45 +963,45 @@
     ],
     "gold": {
      "xian": {
-      "p": 0.0104,
-      "p10": 0.0063,
-      "p90": 0.0176,
+      "p": 0.0098,
+      "p10": 0.006,
+      "p90": 0.0159,
       "rank_band_slots": 1
      },
      "chengdu": {
-      "p": 0.0093,
-      "p10": 0.0059,
-      "p90": 0.0145,
+      "p": 0.0087,
+      "p10": 0.0056,
+      "p90": 0.013,
       "rank_band_slots": 1
      },
      "wuhan": {
-      "p": 0.0118,
-      "p10": 0.0067,
-      "p90": 0.0213,
+      "p": 0.0106,
+      "p10": 0.0062,
+      "p90": 0.0181,
       "rank_band_slots": 1
      },
      "nanjing": {
-      "p": 0.0093,
-      "p10": 0.0059,
-      "p90": 0.0145,
+      "p": 0.0087,
+      "p10": 0.0056,
+      "p90": 0.013,
       "rank_band_slots": 1
      },
      "shenyang": {
-      "p": 0.014,
-      "p10": 0.0072,
-      "p90": 0.0285,
+      "p": 0.0124,
+      "p10": 0.0066,
+      "p90": 0.0234,
       "rank_band_slots": 1
      },
      "shanghai": {
-      "p": 0.0104,
-      "p10": 0.0063,
-      "p90": 0.0176,
+      "p": 0.0096,
+      "p10": 0.0059,
+      "p90": 0.0153,
       "rank_band_slots": 1
      },
      "nanchang": {
-      "p": 0.0103,
-      "p10": 0.0063,
-      "p90": 0.0173,
+      "p": 0.0095,
+      "p10": 0.0059,
+      "p90": 0.015,
       "rank_band_slots": 1
      }
     }
@@ -1015,45 +1015,45 @@
     ],
     "gold": {
      "xian": {
-      "p": 0.0036,
-      "p10": 0.002,
-      "p90": 0.0062,
+      "p": 0.0033,
+      "p10": 0.0019,
+      "p90": 0.0056,
       "rank_band_slots": 1
      },
      "chengdu": {
-      "p": 0.0032,
-      "p10": 0.0019,
-      "p90": 0.0051,
+      "p": 0.0029,
+      "p10": 0.0018,
+      "p90": 0.0046,
       "rank_band_slots": 1
      },
      "wuhan": {
-      "p": 0.004,
-      "p10": 0.0022,
-      "p90": 0.0075,
+      "p": 0.0036,
+      "p10": 0.002,
+      "p90": 0.0064,
       "rank_band_slots": 1
      },
      "nanjing": {
-      "p": 0.0032,
-      "p10": 0.0019,
-      "p90": 0.0051,
+      "p": 0.0029,
+      "p10": 0.0018,
+      "p90": 0.0046,
       "rank_band_slots": 1
      },
      "shenyang": {
-      "p": 0.0048,
-      "p10": 0.0024,
-      "p90": 0.0101,
+      "p": 0.0042,
+      "p10": 0.0021,
+      "p90": 0.0083,
       "rank_band_slots": 1
      },
      "shanghai": {
-      "p": 0.0036,
-      "p10": 0.002,
-      "p90": 0.0062,
+      "p": 0.0032,
+      "p10": 0.0019,
+      "p90": 0.0054,
       "rank_band_slots": 1
      },
      "nanchang": {
-      "p": 0.0035,
-      "p10": 0.002,
-      "p90": 0.0061,
+      "p": 0.0032,
+      "p10": 0.0019,
+      "p90": 0.0053,
       "rank_band_slots": 1
      }
     }
@@ -1068,45 +1068,45 @@
     ],
     "gold": {
      "xian": {
-      "p": 0.0026,
-      "p10": 0.0015,
-      "p90": 0.0046,
+      "p": 0.0025,
+      "p10": 0.0014,
+      "p90": 0.0042,
       "rank_band_slots": 1
      },
      "chengdu": {
-      "p": 0.0023,
-      "p10": 0.0014,
-      "p90": 0.0038,
+      "p": 0.0022,
+      "p10": 0.0013,
+      "p90": 0.0034,
       "rank_band_slots": 1
      },
      "wuhan": {
-      "p": 0.003,
-      "p10": 0.0016,
-      "p90": 0.0056,
+      "p": 0.0027,
+      "p10": 0.0014,
+      "p90": 0.0048,
       "rank_band_slots": 1
      },
      "nanjing": {
-      "p": 0.0023,
-      "p10": 0.0014,
-      "p90": 0.0038,
+      "p": 0.0022,
+      "p10": 0.0013,
+      "p90": 0.0034,
       "rank_band_slots": 1
      },
      "shenyang": {
-      "p": 0.0035,
-      "p10": 0.0017,
-      "p90": 0.0076,
+      "p": 0.0031,
+      "p10": 0.0016,
+      "p90": 0.0061,
       "rank_band_slots": 1
      },
      "shanghai": {
-      "p": 0.0026,
-      "p10": 0.0015,
-      "p90": 0.0046,
+      "p": 0.0024,
+      "p10": 0.0014,
+      "p90": 0.004,
       "rank_band_slots": 1
      },
      "nanchang": {
-      "p": 0.0026,
-      "p10": 0.0015,
-      "p90": 0.0045,
+      "p": 0.0024,
+      "p10": 0.0014,
+      "p90": 0.0039,
       "rank_band_slots": 1
      }
     }
@@ -1121,45 +1121,45 @@
     ],
     "gold": {
      "xian": {
-      "p": 0.002,
-      "p10": 0.0011,
-      "p90": 0.0035,
+      "p": 0.0019,
+      "p10": 0.001,
+      "p90": 0.0032,
       "rank_band_slots": 1
      },
      "chengdu": {
-      "p": 0.0018,
-      "p10": 0.0011,
-      "p90": 0.0029,
+      "p": 0.0017,
+      "p10": 0.001,
+      "p90": 0.0026,
       "rank_band_slots": 1
      },
      "wuhan": {
-      "p": 0.0023,
-      "p10": 0.0012,
-      "p90": 0.0043,
+      "p": 0.002,
+      "p10": 0.0011,
+      "p90": 0.0037,
       "rank_band_slots": 1
      },
      "nanjing": {
-      "p": 0.0018,
-      "p10": 0.0011,
-      "p90": 0.0029,
+      "p": 0.0017,
+      "p10": 0.001,
+      "p90": 0.0026,
       "rank_band_slots": 1
      },
      "shenyang": {
-      "p": 0.0027,
-      "p10": 0.0013,
-      "p90": 0.0058,
+      "p": 0.0024,
+      "p10": 0.0012,
+      "p90": 0.0047,
       "rank_band_slots": 1
      },
      "shanghai": {
-      "p": 0.002,
-      "p10": 0.0011,
-      "p90": 0.0035,
+      "p": 0.0018,
+      "p10": 0.001,
+      "p90": 0.0031,
       "rank_band_slots": 1
      },
      "nanchang": {
-      "p": 0.002,
-      "p10": 0.0011,
-      "p90": 0.0035,
+      "p": 0.0018,
+      "p10": 0.001,
+      "p90": 0.003,
       "rank_band_slots": 1
      }
     }
@@ -1174,45 +1174,45 @@
     ],
     "gold": {
      "xian": {
-      "p": 0.0019,
+      "p": 0.0018,
       "p10": 0.001,
-      "p90": 0.0033,
+      "p90": 0.003,
       "rank_band_slots": 1
      },
      "chengdu": {
-      "p": 0.0017,
-      "p10": 0.001,
-      "p90": 0.0028,
+      "p": 0.0016,
+      "p10": 0.0009,
+      "p90": 0.0025,
       "rank_band_slots": 1
      },
      "wuhan": {
-      "p": 0.0021,
-      "p10": 0.0011,
-      "p90": 0.0041,
+      "p": 0.0019,
+      "p10": 0.001,
+      "p90": 0.0035,
       "rank_band_slots": 1
      },
      "nanjing": {
-      "p": 0.0017,
-      "p10": 0.001,
-      "p90": 0.0028,
+      "p": 0.0016,
+      "p10": 0.0009,
+      "p90": 0.0025,
       "rank_band_slots": 1
      },
      "shenyang": {
-      "p": 0.0025,
-      "p10": 0.0012,
-      "p90": 0.0055,
+      "p": 0.0022,
+      "p10": 0.0011,
+      "p90": 0.0045,
       "rank_band_slots": 1
      },
      "shanghai": {
-      "p": 0.0019,
+      "p": 0.0017,
       "p10": 0.001,
-      "p90": 0.0033,
+      "p90": 0.0029,
       "rank_band_slots": 1
      },
      "nanchang": {
-      "p": 0.0019,
+      "p": 0.0017,
       "p10": 0.001,
-      "p90": 0.0033,
+      "p90": 0.0029,
       "rank_band_slots": 1
      }
     }
@@ -1227,45 +1227,45 @@
     ],
     "gold": {
      "xian": {
-      "p": 0.0015,
+      "p": 0.0014,
       "p10": 0.0008,
-      "p90": 0.0027,
+      "p90": 0.0025,
       "rank_band_slots": 1
      },
      "chengdu": {
-      "p": 0.0014,
-      "p10": 0.0008,
-      "p90": 0.0023,
+      "p": 0.0013,
+      "p10": 0.0007,
+      "p90": 0.002,
       "rank_band_slots": 1
      },
      "wuhan": {
-      "p": 0.0017,
-      "p10": 0.0009,
-      "p90": 0.0033,
+      "p": 0.0016,
+      "p10": 0.0008,
+      "p90": 0.0028,
       "rank_band_slots": 1
      },
      "nanjing": {
-      "p": 0.0014,
-      "p10": 0.0008,
-      "p90": 0.0023,
+      "p": 0.0013,
+      "p10": 0.0007,
+      "p90": 0.002,
       "rank_band_slots": 1
      },
      "shenyang": {
-      "p": 0.0021,
-      "p10": 0.001,
-      "p90": 0.0045,
+      "p": 0.0018,
+      "p10": 0.0009,
+      "p90": 0.0037,
       "rank_band_slots": 1
      },
      "shanghai": {
-      "p": 0.0015,
+      "p": 0.0014,
       "p10": 0.0008,
-      "p90": 0.0027,
+      "p90": 0.0024,
       "rank_band_slots": 1
      },
      "nanchang": {
-      "p": 0.0015,
+      "p": 0.0014,
       "p10": 0.0008,
-      "p90": 0.0027,
+      "p90": 0.0023,
       "rank_band_slots": 1
      }
     }
@@ -1280,45 +1280,45 @@
     ],
     "gold": {
      "xian": {
-      "p": 0.0011,
-      "p10": 0.0006,
-      "p90": 0.0019,
+      "p": 0.001,
+      "p10": 0.0005,
+      "p90": 0.0018,
       "rank_band_slots": 1
      },
      "chengdu": {
-      "p": 0.001,
+      "p": 0.0009,
       "p10": 0.0005,
-      "p90": 0.0016,
+      "p90": 0.0014,
       "rank_band_slots": 1
      },
      "wuhan": {
-      "p": 0.0012,
+      "p": 0.0011,
       "p10": 0.0006,
-      "p90": 0.0024,
+      "p90": 0.002,
       "rank_band_slots": 1
      },
      "nanjing": {
-      "p": 0.001,
+      "p": 0.0009,
       "p10": 0.0005,
-      "p90": 0.0016,
+      "p90": 0.0014,
       "rank_band_slots": 1
      },
      "shenyang": {
-      "p": 0.0015,
-      "p10": 0.0007,
-      "p90": 0.0032,
+      "p": 0.0013,
+      "p10": 0.0006,
+      "p90": 0.0026,
       "rank_band_slots": 1
      },
      "shanghai": {
-      "p": 0.0011,
-      "p10": 0.0006,
-      "p90": 0.0019,
+      "p": 0.001,
+      "p10": 0.0005,
+      "p90": 0.0017,
       "rank_band_slots": 1
      },
      "nanchang": {
-      "p": 0.0011,
-      "p10": 0.0006,
-      "p90": 0.0019,
+      "p": 0.001,
+      "p10": 0.0005,
+      "p90": 0.0017,
       "rank_band_slots": 1
      }
     }
@@ -1334,43 +1334,43 @@
      "xian": {
       "p": 0.0006,
       "p10": 0.0003,
-      "p90": 0.0011,
+      "p90": 0.001,
       "rank_band_slots": 1
      },
      "chengdu": {
       "p": 0.0005,
       "p10": 0.0003,
-      "p90": 0.0009,
+      "p90": 0.0008,
       "rank_band_slots": 1
      },
      "wuhan": {
-      "p": 0.0007,
+      "p": 0.0006,
       "p10": 0.0003,
-      "p90": 0.0013,
+      "p90": 0.0011,
       "rank_band_slots": 1
      },
      "nanjing": {
       "p": 0.0005,
       "p10": 0.0003,
-      "p90": 0.0009,
+      "p90": 0.0008,
       "rank_band_slots": 1
      },
      "shenyang": {
-      "p": 0.0008,
-      "p10": 0.0004,
-      "p90": 0.0018,
+      "p": 0.0007,
+      "p10": 0.0003,
+      "p90": 0.0015,
       "rank_band_slots": 1
      },
      "shanghai": {
-      "p": 0.0006,
+      "p": 0.0005,
       "p10": 0.0003,
-      "p90": 0.0011,
+      "p90": 0.001,
       "rank_band_slots": 1
      },
      "nanchang": {
-      "p": 0.0006,
+      "p": 0.0005,
       "p10": 0.0003,
-      "p90": 0.0011,
+      "p90": 0.0009,
       "rank_band_slots": 1
      }
     }
@@ -1386,43 +1386,43 @@
      "xian": {
       "p": 0.0006,
       "p10": 0.0003,
-      "p90": 0.0011,
+      "p90": 0.001,
       "rank_band_slots": 1
      },
      "chengdu": {
       "p": 0.0005,
       "p10": 0.0003,
-      "p90": 0.0009,
+      "p90": 0.0008,
       "rank_band_slots": 1
      },
      "wuhan": {
-      "p": 0.0007,
+      "p": 0.0006,
       "p10": 0.0003,
-      "p90": 0.0013,
+      "p90": 0.0011,
       "rank_band_slots": 1
      },
      "nanjing": {
       "p": 0.0005,
       "p10": 0.0003,
-      "p90": 0.0009,
+      "p90": 0.0008,
       "rank_band_slots": 1
      },
      "shenyang": {
-      "p": 0.0008,
-      "p10": 0.0004,
-      "p90": 0.0018,
+      "p": 0.0007,
+      "p10": 0.0003,
+      "p90": 0.0015,
       "rank_band_slots": 1
      },
      "shanghai": {
-      "p": 0.0006,
+      "p": 0.0005,
       "p10": 0.0003,
-      "p90": 0.0011,
+      "p90": 0.001,
       "rank_band_slots": 1
      },
      "nanchang": {
-      "p": 0.0006,
+      "p": 0.0005,
       "p10": 0.0003,
-      "p90": 0.0011,
+      "p90": 0.0009,
       "rank_band_slots": 1
      }
     }
