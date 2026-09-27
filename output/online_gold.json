@@ -1,0 +1,1213 @@
+{
+ "model_rows": 4962,
+ "link_counts": {
+  "2023/name": 1085,
+  "2023/roster": 657,
+  "2024/roster": 672,
+  "2024/name": 1266,
+  "2025/name": 1282
+ },
+ "backtest": {
+  "2024": {
+   "teams": 1938,
+   "sites": [
+    "chengdu",
+    "hangzhou",
+    "kunming",
+    "nanjing",
+    "shanghai",
+    "shenyang"
+   ],
+   "variants": {
+    "online_only": {
+     "log_loss": 0.16582,
+     "brier": 0.04834,
+     "delta_log_loss_vs_online_only": 0.0,
+     "delta_ci95": [
+      0.0,
+      0.0
+     ],
+     "per_site_delta": {
+      "chengdu": 0.0,
+      "hangzhou": 0.0,
+      "kunming": 0.0,
+      "nanjing": 0.0,
+      "shanghai": 0.0,
+      "shenyang": 0.0
+     },
+     "coef": [
+      12.331,
+      2.719
+     ]
+    },
+    "site_history": {
+     "log_loss": 0.16595,
+     "brier": 0.04836,
+     "delta_log_loss_vs_online_only": 0.00013,
+     "delta_ci95": [
+      -0.00076,
+      0.00095
+     ],
+     "per_site_delta": {
+      "chengdu": 0.00016,
+      "hangzhou": -0.00184,
+      "kunming": 0.00029,
+      "nanjing": 0.00051,
+      "shanghai": 0.00024,
+      "shenyang": 0.00178
+     },
+     "coef": [
+      4.019,
+      2.733,
+      -1.808
+     ]
+    },
+    "cf_bar_history": {
+     "log_loss": 0.16578,
+     "brier": 0.04836,
+     "delta_log_loss_vs_online_only": -3e-05,
+     "delta_ci95": [
+      -0.00058,
+      0.00046
+     ],
+     "per_site_delta": {
+      "chengdu": 7e-05,
+      "hangzhou": -0.0012,
+      "kunming": 0.00013,
+      "nanjing": -0.00016,
+      "shanghai": 0.00011,
+      "shenyang": 0.00103
+     },
+     "coef": [
+      26.91,
+      2.726,
+      -5.684
+     ]
+    },
+    "rules_line": {
+     "log_loss": 0.1654,
+     "brier": 0.04835,
+     "delta_log_loss_vs_online_only": -0.00041,
+     "delta_ci95": [
+      -0.00077,
+      -1e-05
+     ],
+     "per_site_delta": {
+      "chengdu": 9e-05,
+      "hangzhou": -0.00084,
+      "kunming": -0.00107,
+      "nanjing": -0.00028,
+      "shanghai": 0.00012,
+      "shenyang": -0.00017
+     },
+     "coef": [
+      10.003,
+      2.716,
+      -0.573
+     ]
+    },
+    "oracle_line": {
+     "log_loss": 0.1641,
+     "brier": 0.04808,
+     "delta_log_loss_vs_online_only": -0.00172,
+     "delta_ci95": [
+      -0.00305,
+      -0.00077
+     ],
+     "per_site_delta": {
+      "chengdu": -0.0014,
+      "hangzhou": -0.00469,
+      "kunming": -0.00091,
+      "nanjing": -0.00069,
+      "shanghai": -0.00206,
+      "shenyang": -0.00036
+     },
+     "coef": [
+      8.188,
+      2.733,
+      -0.907
+     ]
+    }
+   }
+  },
+  "2025": {
+   "teams": 1282,
+   "sites": [
+    "chengdu",
+    "nanjing",
+    "shanghai",
+    "shenyang",
+    "wuhan",
+    "xian"
+   ],
+   "variants": {
+    "online_only": {
+     "log_loss": 0.16136,
+     "brier": 0.04868,
+     "delta_log_loss_vs_online_only": 0.0,
+     "delta_ci95": [
+      0.0,
+      0.0
+     ],
+     "per_site_delta": {
+      "chengdu": 0.0,
+      "nanjing": 0.0,
+      "shanghai": 0.0,
+      "shenyang": 0.0,
+      "wuhan": 0.0,
+      "xian": 0.0
+     },
+     "coef": [
+      11.156,
+      2.46
+     ]
+    },
+    "site_history": {
+     "log_loss": 0.16591,
+     "brier": 0.05008,
+     "delta_log_loss_vs_online_only": 0.00455,
+     "delta_ci95": [
+      0.00051,
+      0.00971
+     ],
+     "per_site_delta": {
+      "chengdu": 0.00472,
+      "nanjing": -0.00058,
+      "shanghai": 0.00058,
+      "shenyang": 0.00677,
+      "wuhan": -7e-05,
+      "xian": 0.01613
+     },
+     "coef": [
+      0.7,
+      2.479,
+      -2.229
+     ]
+    },
+    "cf_bar_history": {
+     "log_loss": 0.16216,
+     "brier": 0.04883,
+     "delta_log_loss_vs_online_only": 0.0008,
+     "delta_ci95": [
+      9e-05,
+      0.00172
+     ],
+     "per_site_delta": {
+      "chengdu": 0.00137,
+      "nanjing": 0.0007,
+      "shanghai": -1e-05,
+      "shenyang": 0.00286,
+      "wuhan": -2e-05,
+      "xian": -2e-05
+     },
+     "coef": [
+      15.349,
+      2.463,
+      -1.63
+     ]
+    },
+    "rules_line": {
+     "log_loss": 0.16009,
+     "brier": 0.04819,
+     "delta_log_loss_vs_online_only": -0.00127,
+     "delta_ci95": [
+      -0.0028,
+      -0.0
+     ],
+     "per_site_delta": {
+      "chengdu": 9e-05,
+      "nanjing": 2e-05,
+      "shanghai": 0.0,
+      "shenyang": -0.00464,
+      "wuhan": -0.00018,
+      "xian": -0.00277
+     },
+     "coef": [
+      8.253,
+      2.461,
+      -0.713
+     ]
+    },
+    "oracle_line": {
+     "log_loss": 0.15696,
+     "brier": 0.04798,
+     "delta_log_loss_vs_online_only": -0.0044,
+     "delta_ci95": [
+      -0.01139,
+      0.0003
+     ],
+     "per_site_delta": {
+      "chengdu": -0.00531,
+      "nanjing": 0.00059,
+      "shanghai": 0.00036,
+      "shenyang": -0.0204,
+      "wuhan": 0.00125,
+      "xian": -0.00331
+     },
+     "coef": [
+      5.449,
+      2.488,
+      -1.234
+     ]
+    }
+   }
+  }
+ },
+ "contest_difficulty": {
+  "slope": 2.547,
+  "spearman_rank_vs_bar": -0.503,
+  "cf_points_per_log_rank": -358.3,
+  "contests": [
+   {
+    "season": "2023",
+    "site": "hangzhou",
+    "online_rank_for_even_gold": 97.9,
+    "cf_gold_bar": 2536.1,
+    "linked_teams": 369,
+    "cf_bar_implied_by_online": 2548.9,
+    "fit_minus_online": -12.8
+   },
+   {
+    "season": "2023",
+    "site": "hefei",
+    "online_rank_for_even_gold": 89.6,
+    "cf_gold_bar": 2520.8,
+    "linked_teams": 305,
+    "cf_bar_implied_by_online": 2580.6,
+    "fit_minus_online": -59.8
+   },
+   {
+    "season": "2023",
+    "site": "jinan",
+    "online_rank_for_even_gold": 77.7,
+    "cf_gold_bar": 2659.9,
+    "linked_teams": 290,
+    "cf_bar_implied_by_online": 2631.7,
+    "fit_minus_online": 28.2
+   },
+   {
+    "season": "2023",
+    "site": "nanjing",
+    "online_rank_for_even_gold": 92.3,
+    "cf_gold_bar": 2548.3,
+    "linked_teams": 302,
+    "cf_bar_implied_by_online": 2570.0,
+    "fit_minus_online": -21.7
+   },
+   {
+    "season": "2023",
+    "site": "shenyang",
+    "online_rank_for_even_gold": 96.2,
+    "cf_gold_bar": 2533.5,
+    "linked_teams": 258,
+    "cf_bar_implied_by_online": 2555.2,
+    "fit_minus_online": -21.7
+   },
+   {
+    "season": "2023",
+    "site": "xian",
+    "online_rank_for_even_gold": 87.4,
+    "cf_gold_bar": null,
+    "linked_teams": 218
+   },
+   {
+    "season": "2024",
+    "site": "chengdu",
+    "online_rank_for_even_gold": 100.2,
+    "cf_gold_bar": 2491.8,
+    "linked_teams": 283,
+    "cf_bar_implied_by_online": 2540.6,
+    "fit_minus_online": -48.8
+   },
+   {
+    "season": "2024",
+    "site": "hangzhou",
+    "online_rank_for_even_gold": 110.1,
+    "cf_gold_bar": 2535.8,
+    "linked_teams": 343,
+    "cf_bar_implied_by_online": 2506.8,
+    "fit_minus_online": 29.0
+   },
+   {
+    "season": "2024",
+    "site": "kunming",
+    "online_rank_for_even_gold": 99.1,
+    "cf_gold_bar": 2696.1,
+    "linked_teams": 412,
+    "cf_bar_implied_by_online": 2544.5,
+    "fit_minus_online": 151.6
+   },
+   {
+    "season": "2024",
+    "site": "nanjing",
+    "online_rank_for_even_gold": 98.2,
+    "cf_gold_bar": 2430.7,
+    "linked_teams": 316,
+    "cf_bar_implied_by_online": 2547.8,
+    "fit_minus_online": -117.1
+   },
+   {
+    "season": "2024",
+    "site": "shanghai",
+    "online_rank_for_even_gold": 105.6,
+    "cf_gold_bar": null,
+    "linked_teams": 307
+   },
+   {
+    "season": "2024",
+    "site": "shenyang",
+    "online_rank_for_even_gold": 82.7,
+    "cf_gold_bar": 2702.7,
+    "linked_teams": 277,
+    "cf_bar_implied_by_online": 2609.3,
+    "fit_minus_online": 93.4
+   },
+   {
+    "season": "2025",
+    "site": "chengdu",
+    "online_rank_for_even_gold": 77.1,
+    "cf_gold_bar": 2665.7,
+    "linked_teams": 199,
+    "cf_bar_implied_by_online": 2634.5,
+    "fit_minus_online": 31.2
+   },
+   {
+    "season": "2025",
+    "site": "nanjing",
+    "online_rank_for_even_gold": 88.8,
+    "cf_gold_bar": 2532.8,
+    "linked_teams": 211,
+    "cf_bar_implied_by_online": 2583.8,
+    "fit_minus_online": -51.0
+   },
+   {
+    "season": "2025",
+    "site": "shanghai",
+    "online_rank_for_even_gold": 94.0,
+    "cf_gold_bar": 2474.2,
+    "linked_teams": 172,
+    "cf_bar_implied_by_online": 2563.5,
+    "fit_minus_online": -89.3
+   },
+   {
+    "season": "2025",
+    "site": "shenyang",
+    "online_rank_for_even_gold": 151.2,
+    "cf_gold_bar": 2382.2,
+    "linked_teams": 215,
+    "cf_bar_implied_by_online": 2393.2,
+    "fit_minus_online": -11.0
+   },
+   {
+    "season": "2025",
+    "site": "wuhan",
+    "online_rank_for_even_gold": 99.4,
+    "cf_gold_bar": 2588.2,
+    "linked_teams": 269,
+    "cf_bar_implied_by_online": 2543.4,
+    "fit_minus_online": 44.8
+   },
+   {
+    "season": "2025",
+    "site": "xian",
+    "online_rank_for_even_gold": 127.4,
+    "cf_gold_bar": 2509.5,
+    "linked_teams": 216,
+    "cf_bar_implied_by_online": 2454.5,
+    "fit_minus_online": 55.0
+   }
+  ]
+ },
+ "final_coef": [
+  6.603,
+  2.48,
+  -1.148
+ ],
+ "forecast_2026": [
+  {
+   "site": "xian",
+   "date": "2026-10-17",
+   "source": "https://icpc.pku.edu.cn/tzgg/a9259fcfb12d4087b31bc1eef3490e79.htm",
+   "rules_line_online_rank": 91.1,
+   "gold_by_online_rank": {
+    "10": {
+     "p": 0.9977,
+     "p10": 0.9965,
+     "p90": 0.9989
+    },
+    "25": {
+     "p": 0.9781,
+     "p10": 0.9696,
+     "p90": 0.9879
+    },
+    "50": {
+     "p": 0.8889,
+     "p10": 0.8575,
+     "p90": 0.9305
+    },
+    "100": {
+     "p": 0.589,
+     "p10": 0.5229,
+     "p90": 0.6969
+    },
+    "200": {
+     "p": 0.2043,
+     "p10": 0.162,
+     "p90": 0.2922
+    }
+   },
+   "easiest_rank": 3
+  },
+  {
+   "site": "chengdu",
+   "date": "2026-10-24",
+   "source": "https://icpc.pku.edu.cn/tzgg/19c9af66a6184e29a863547a2f83cc74.htm",
+   "rules_line_online_rank": 73.5,
+   "gold_by_online_rank": {
+    "10": {
+     "p": 0.9971,
+     "p10": 0.9958,
+     "p90": 0.9984
+    },
+    "25": {
+     "p": 0.9721,
+     "p10": 0.9637,
+     "p90": 0.982
+    },
+    "50": {
+     "p": 0.8621,
+     "p10": 0.8361,
+     "p90": 0.8991
+    },
+    "100": {
+     "p": 0.5283,
+     "p10": 0.4885,
+     "p90": 0.5978
+    },
+    "200": {
+     "p": 0.1672,
+     "p10": 0.1443,
+     "p90": 0.2083
+    }
+   },
+   "easiest_rank": 6
+  },
+  {
+   "site": "wuhan",
+   "date": "2026-10-31",
+   "source": "https://icpc.pku.edu.cn/tzgg/35fbb9f94ae841dfbd64bcd332ef4f86.htm",
+   "rules_line_online_rank": 91.8,
+   "gold_by_online_rank": {
+    "10": {
+     "p": 0.9977,
+     "p10": 0.9965,
+     "p90": 0.9989
+    },
+    "25": {
+     "p": 0.9783,
+     "p10": 0.9698,
+     "p90": 0.9881
+    },
+    "50": {
+     "p": 0.8897,
+     "p10": 0.8581,
+     "p90": 0.9315
+    },
+    "100": {
+     "p": 0.5911,
+     "p10": 0.5241,
+     "p90": 0.7007
+    },
+    "200": {
+     "p": 0.2058,
+     "p10": 0.1626,
+     "p90": 0.2957
+    }
+   },
+   "easiest_rank": 1
+  },
+  {
+   "site": "nanjing",
+   "date": "2026-11-07",
+   "source": "https://icpc.pku.edu.cn/tzgg/276a166ac0c34db0af139941fbf2323c.htm",
+   "rules_line_online_rank": 73.5,
+   "gold_by_online_rank": {
+    "10": {
+     "p": 0.9971,
+     "p10": 0.9958,
+     "p90": 0.9984
+    },
+    "25": {
+     "p": 0.9721,
+     "p10": 0.9637,
+     "p90": 0.982
+    },
+    "50": {
+     "p": 0.8621,
+     "p10": 0.8361,
+     "p90": 0.8991
+    },
+    "100": {
+     "p": 0.5283,
+     "p10": 0.4885,
+     "p90": 0.5978
+    },
+    "200": {
+     "p": 0.1672,
+     "p10": 0.1443,
+     "p90": 0.2083
+    }
+   },
+   "easiest_rank": 7
+  },
+  {
+   "site": "shenyang",
+   "date": "2026-11-14",
+   "source": "https://icpc.pku.edu.cn/tzgg/2b4f6bc1a27d4b4c91b6b5a4c78f97f3.htm",
+   "rules_line_online_rank": 91.8,
+   "gold_by_online_rank": {
+    "10": {
+     "p": 0.9977,
+     "p10": 0.9965,
+     "p90": 0.9989
+    },
+    "25": {
+     "p": 0.9783,
+     "p10": 0.9698,
+     "p90": 0.9881
+    },
+    "50": {
+     "p": 0.8897,
+     "p10": 0.8581,
+     "p90": 0.9315
+    },
+    "100": {
+     "p": 0.5911,
+     "p10": 0.5241,
+     "p90": 0.7007
+    },
+    "200": {
+     "p": 0.2058,
+     "p10": 0.1626,
+     "p90": 0.2957
+    }
+   },
+   "easiest_rank": 2
+  },
+  {
+   "site": "shanghai",
+   "date": "2026-12-05",
+   "source": "https://icpc.pku.edu.cn/tzgg/7d3cbb4896de4774873be489d780a82b.htm",
+   "rules_line_online_rank": 86.9,
+   "gold_by_online_rank": {
+    "10": {
+     "p": 0.9976,
+     "p10": 0.9964,
+     "p90": 0.9988
+    },
+    "25": {
+     "p": 0.9769,
+     "p10": 0.9684,
+     "p90": 0.9867
+    },
+    "50": {
+     "p": 0.8835,
+     "p10": 0.8532,
+     "p90": 0.9245
+    },
+    "100": {
+     "p": 0.576,
+     "p10": 0.5161,
+     "p90": 0.6756
+    },
+    "200": {
+     "p": 0.1958,
+     "p10": 0.1584,
+     "p90": 0.2725
+    }
+   },
+   "easiest_rank": 5
+  },
+  {
+   "site": "nanchang",
+   "date": "2026-12-19",
+   "source": "https://icpc.pku.edu.cn/tzgg/b4d55e13589b47d384b6c854702acc86.htm",
+   "rules_line_online_rank": 88.7,
+   "gold_by_online_rank": {
+    "10": {
+     "p": 0.9976,
+     "p10": 0.9964,
+     "p90": 0.9988
+    },
+    "25": {
+     "p": 0.9774,
+     "p10": 0.969,
+     "p90": 0.9873
+    },
+    "50": {
+     "p": 0.8858,
+     "p10": 0.8552,
+     "p90": 0.9271
+    },
+    "100": {
+     "p": 0.5817,
+     "p10": 0.5192,
+     "p90": 0.6849
+    },
+    "200": {
+     "p": 0.1994,
+     "p10": 0.1599,
+     "p90": 0.2806
+    }
+   },
+   "easiest_rank": 4
+  },
+  {
+   "site": "hongkong",
+   "date": "2027-01-09",
+   "source": "https://icpc.pku.edu.cn/tzgg/374c9f5210bd4ff287068ec82d56dde2.htm",
+   "not_modelled": "registration-based field; no linked history"
+  }
+ ],
+ "schools": {
+  "蒙古国立大学": [
+   {
+    "team": "NUM-R^3",
+    "school": "蒙古国立大学(Монгол Улсын Их Сургууль)",
+    "combined_school_rank": 128,
+    "online_ranks": [
+     544,
+     349
+    ],
+    "gold": {
+     "xian": {
+      "p": 0.0359,
+      "p10": 0.0256,
+      "p90": 0.0577,
+      "rank_band_slots": 1
+     },
+     "chengdu": {
+      "p": 0.0283,
+      "p10": 0.0221,
+      "p90": 0.0377,
+      "rank_band_slots": 1
+     },
+     "wuhan": {
+      "p": 0.0362,
+      "p10": 0.0257,
+      "p90": 0.0586,
+      "rank_band_slots": 1
+     },
+     "nanjing": {
+      "p": 0.0283,
+      "p10": 0.0221,
+      "p90": 0.0377,
+      "rank_band_slots": 1
+     },
+     "shenyang": {
+      "p": 0.0362,
+      "p10": 0.0257,
+      "p90": 0.0586,
+      "rank_band_slots": 1
+     },
+     "shanghai": {
+      "p": 0.0341,
+      "p10": 0.0248,
+      "p90": 0.0528,
+      "rank_band_slots": 1
+     },
+     "nanchang": {
+      "p": 0.0348,
+      "p10": 0.0251,
+      "p90": 0.0549,
+      "rank_band_slots": 1
+     }
+    }
+   },
+   {
+    "team": "NUM-MNM",
+    "school": "蒙古国立大学(Монгол Улсын Их Сургууль)",
+    "combined_school_rank": 128,
+    "online_ranks": [
+     585,
+     981
+    ],
+    "gold": {
+     "xian": {
+      "p": 0.0093,
+      "p10": 0.0062,
+      "p90": 0.0156,
+      "rank_band_slots": 1
+     },
+     "chengdu": {
+      "p": 0.0073,
+      "p10": 0.0053,
+      "p90": 0.0103,
+      "rank_band_slots": 1
+     },
+     "wuhan": {
+      "p": 0.0094,
+      "p10": 0.0062,
+      "p90": 0.0158,
+      "rank_band_slots": 1
+     },
+     "nanjing": {
+      "p": 0.0073,
+      "p10": 0.0053,
+      "p90": 0.0103,
+      "rank_band_slots": 1
+     },
+     "shenyang": {
+      "p": 0.0094,
+      "p10": 0.0062,
+      "p90": 0.0158,
+      "rank_band_slots": 1
+     },
+     "shanghai": {
+      "p": 0.0089,
+      "p10": 0.006,
+      "p90": 0.0143,
+      "rank_band_slots": 1
+     },
+     "nanchang": {
+      "p": 0.0091,
+      "p10": 0.0061,
+      "p90": 0.0149,
+      "rank_band_slots": 1
+     }
+    }
+   },
+   {
+    "team": "NUM-B2D",
+    "school": "蒙古国立大学(Монгол Улсын Их Сургууль)",
+    "combined_school_rank": 128,
+    "online_ranks": [
+     1171
+    ],
+    "gold": {
+     "xian": {
+      "p": 0.0032,
+      "p10": 0.002,
+      "p90": 0.0055,
+      "rank_band_slots": 1
+     },
+     "chengdu": {
+      "p": 0.0025,
+      "p10": 0.0017,
+      "p90": 0.0037,
+      "rank_band_slots": 1
+     },
+     "wuhan": {
+      "p": 0.0032,
+      "p10": 0.002,
+      "p90": 0.0056,
+      "rank_band_slots": 1
+     },
+     "nanjing": {
+      "p": 0.0025,
+      "p10": 0.0017,
+      "p90": 0.0037,
+      "rank_band_slots": 1
+     },
+     "shenyang": {
+      "p": 0.0032,
+      "p10": 0.002,
+      "p90": 0.0056,
+      "rank_band_slots": 1
+     },
+     "shanghai": {
+      "p": 0.003,
+      "p10": 0.0019,
+      "p90": 0.005,
+      "rank_band_slots": 1
+     },
+     "nanchang": {
+      "p": 0.0031,
+      "p10": 0.002,
+      "p90": 0.0052,
+      "rank_band_slots": 1
+     }
+    }
+   },
+   {
+    "team": "NUM-XOX",
+    "school": "蒙古国立大学(Монгол Улсын Их Сургууль)",
+    "combined_school_rank": 128,
+    "online_ranks": [
+     837,
+     2095
+    ],
+    "gold": {
+     "xian": {
+      "p": 0.0024,
+      "p10": 0.0015,
+      "p90": 0.0041,
+      "rank_band_slots": 1
+     },
+     "chengdu": {
+      "p": 0.0018,
+      "p10": 0.0012,
+      "p90": 0.0027,
+      "rank_band_slots": 1
+     },
+     "wuhan": {
+      "p": 0.0024,
+      "p10": 0.0015,
+      "p90": 0.0042,
+      "rank_band_slots": 1
+     },
+     "nanjing": {
+      "p": 0.0018,
+      "p10": 0.0012,
+      "p90": 0.0027,
+      "rank_band_slots": 1
+     },
+     "shenyang": {
+      "p": 0.0024,
+      "p10": 0.0015,
+      "p90": 0.0042,
+      "rank_band_slots": 1
+     },
+     "shanghai": {
+      "p": 0.0022,
+      "p10": 0.0014,
+      "p90": 0.0037,
+      "rank_band_slots": 1
+     },
+     "nanchang": {
+      "p": 0.0023,
+      "p10": 0.0014,
+      "p90": 0.0039,
+      "rank_band_slots": 1
+     }
+    }
+   },
+   {
+    "team": "NUM-SEA",
+    "school": "蒙古国立大学(Монгол Улсын Их Сургууль)",
+    "combined_school_rank": 128,
+    "online_ranks": [
+     1425,
+     1530
+    ],
+    "gold": {
+     "xian": {
+      "p": 0.0018,
+      "p10": 0.0011,
+      "p90": 0.0032,
+      "rank_band_slots": 1
+     },
+     "chengdu": {
+      "p": 0.0014,
+      "p10": 0.0009,
+      "p90": 0.0021,
+      "rank_band_slots": 1
+     },
+     "wuhan": {
+      "p": 0.0018,
+      "p10": 0.0011,
+      "p90": 0.0032,
+      "rank_band_slots": 1
+     },
+     "nanjing": {
+      "p": 0.0014,
+      "p10": 0.0009,
+      "p90": 0.0021,
+      "rank_band_slots": 1
+     },
+     "shenyang": {
+      "p": 0.0018,
+      "p10": 0.0011,
+      "p90": 0.0032,
+      "rank_band_slots": 1
+     },
+     "shanghai": {
+      "p": 0.0017,
+      "p10": 0.0011,
+      "p90": 0.0029,
+      "rank_band_slots": 1
+     },
+     "nanchang": {
+      "p": 0.0017,
+      "p10": 0.0011,
+      "p90": 0.003,
+      "rank_band_slots": 1
+     }
+    }
+   },
+   {
+    "team": "NUM-BSB",
+    "school": "蒙古国立大学(Монгол Улсын Их Сургууль)",
+    "combined_school_rank": 128,
+    "online_ranks": [
+     1507,
+     1515
+    ],
+    "gold": {
+     "xian": {
+      "p": 0.0017,
+      "p10": 0.001,
+      "p90": 0.003,
+      "rank_band_slots": 1
+     },
+     "chengdu": {
+      "p": 0.0013,
+      "p10": 0.0009,
+      "p90": 0.002,
+      "rank_band_slots": 1
+     },
+     "wuhan": {
+      "p": 0.0017,
+      "p10": 0.001,
+      "p90": 0.003,
+      "rank_band_slots": 1
+     },
+     "nanjing": {
+      "p": 0.0013,
+      "p10": 0.0009,
+      "p90": 0.002,
+      "rank_band_slots": 1
+     },
+     "shenyang": {
+      "p": 0.0017,
+      "p10": 0.001,
+      "p90": 0.003,
+      "rank_band_slots": 1
+     },
+     "shanghai": {
+      "p": 0.0016,
+      "p10": 0.001,
+      "p90": 0.0027,
+      "rank_band_slots": 1
+     },
+     "nanchang": {
+      "p": 0.0016,
+      "p10": 0.001,
+      "p90": 0.0028,
+      "rank_band_slots": 1
+     }
+    }
+   },
+   {
+    "team": "NUM-SOTS",
+    "school": "蒙古国立大学(Монгол Улсын Их Сургууль)",
+    "combined_school_rank": 128,
+    "online_ranks": [
+     1523,
+     1779
+    ],
+    "gold": {
+     "xian": {
+      "p": 0.0014,
+      "p10": 0.0008,
+      "p90": 0.0024,
+      "rank_band_slots": 1
+     },
+     "chengdu": {
+      "p": 0.0011,
+      "p10": 0.0007,
+      "p90": 0.0016,
+      "rank_band_slots": 1
+     },
+     "wuhan": {
+      "p": 0.0014,
+      "p10": 0.0008,
+      "p90": 0.0025,
+      "rank_band_slots": 1
+     },
+     "nanjing": {
+      "p": 0.0011,
+      "p10": 0.0007,
+      "p90": 0.0016,
+      "rank_band_slots": 1
+     },
+     "shenyang": {
+      "p": 0.0014,
+      "p10": 0.0008,
+      "p90": 0.0025,
+      "rank_band_slots": 1
+     },
+     "shanghai": {
+      "p": 0.0013,
+      "p10": 0.0008,
+      "p90": 0.0022,
+      "rank_band_slots": 1
+     },
+     "nanchang": {
+      "p": 0.0013,
+      "p10": 0.0008,
+      "p90": 0.0023,
+      "rank_band_slots": 1
+     }
+    }
+   },
+   {
+    "team": "NUM-BTsCh",
+    "school": "蒙古国立大学(Монгол Улсын Их Сургууль)",
+    "combined_school_rank": 128,
+    "online_ranks": [
+     1975,
+     1811
+    ],
+    "gold": {
+     "xian": {
+      "p": 0.001,
+      "p10": 0.0006,
+      "p90": 0.0017,
+      "rank_band_slots": 1
+     },
+     "chengdu": {
+      "p": 0.0008,
+      "p10": 0.0005,
+      "p90": 0.0012,
+      "rank_band_slots": 1
+     },
+     "wuhan": {
+      "p": 0.001,
+      "p10": 0.0006,
+      "p90": 0.0018,
+      "rank_band_slots": 1
+     },
+     "nanjing": {
+      "p": 0.0008,
+      "p10": 0.0005,
+      "p90": 0.0012,
+      "rank_band_slots": 1
+     },
+     "shenyang": {
+      "p": 0.001,
+      "p10": 0.0006,
+      "p90": 0.0018,
+      "rank_band_slots": 1
+     },
+     "shanghai": {
+      "p": 0.0009,
+      "p10": 0.0006,
+      "p90": 0.0016,
+      "rank_band_slots": 1
+     },
+     "nanchang": {
+      "p": 0.0009,
+      "p10": 0.0006,
+      "p90": 0.0017,
+      "rank_band_slots": 1
+     }
+    }
+   },
+   {
+    "team": "NUM-GZB",
+    "school": "蒙古国立大学(Монгол Улсын Их Сургууль)",
+    "combined_school_rank": 128,
+    "online_ranks": [
+     2406
+    ],
+    "gold": {
+     "xian": {
+      "p": 0.0005,
+      "p10": 0.0003,
+      "p90": 0.001,
+      "rank_band_slots": 1
+     },
+     "chengdu": {
+      "p": 0.0004,
+      "p10": 0.0003,
+      "p90": 0.0007,
+      "rank_band_slots": 1
+     },
+     "wuhan": {
+      "p": 0.0005,
+      "p10": 0.0003,
+      "p90": 0.001,
+      "rank_band_slots": 1
+     },
+     "nanjing": {
+      "p": 0.0004,
+      "p10": 0.0003,
+      "p90": 0.0007,
+      "rank_band_slots": 1
+     },
+     "shenyang": {
+      "p": 0.0005,
+      "p10": 0.0003,
+      "p90": 0.001,
+      "rank_band_slots": 1
+     },
+     "shanghai": {
+      "p": 0.0005,
+      "p10": 0.0003,
+      "p90": 0.0009,
+      "rank_band_slots": 1
+     },
+     "nanchang": {
+      "p": 0.0005,
+      "p10": 0.0003,
+      "p90": 0.0009,
+      "rank_band_slots": 1
+     }
+    }
+   },
+   {
+    "team": "NUM-GBZ",
+    "school": "蒙古国立大学(Монгол Улсын Их Сургууль)",
+    "combined_school_rank": 128,
+    "online_ranks": [
+     2407
+    ],
+    "gold": {
+     "xian": {
+      "p": 0.0005,
+      "p10": 0.0003,
+      "p90": 0.001,
+      "rank_band_slots": 1
+     },
+     "chengdu": {
+      "p": 0.0004,
+      "p10": 0.0003,
+      "p90": 0.0007,
+      "rank_band_slots": 1
+     },
+     "wuhan": {
+      "p": 0.0005,
+      "p10": 0.0003,
+      "p90": 0.001,
+      "rank_band_slots": 1
+     },
+     "nanjing": {
+      "p": 0.0004,
+      "p10": 0.0003,
+      "p90": 0.0007,
+      "rank_band_slots": 1
+     },
+     "shenyang": {
+      "p": 0.0005,
+      "p10": 0.0003,
+      "p90": 0.001,
+      "rank_band_slots": 1
+     },
+     "shanghai": {
+      "p": 0.0005,
+      "p10": 0.0003,
+      "p90": 0.0009,
+      "rank_band_slots": 1
+     },
+     "nanchang": {
+      "p": 0.0005,
+      "p10": 0.0003,
+      "p90": 0.0009,
+      "rank_band_slots": 1
+     }
+    }
+   }
+  ]
+ },
+ "rating_fit_2026_gold_cf": {
+  "hongkong": 2505.0,
+  "shanghai": 2518.0,
+  "shenyang": 2527.0,
+  "nanjing": 2541.0,
+  "xian": 2556.0,
+  "nanchang": 2562.0,
+  "chengdu": 2573.0,
+  "wuhan": 2575.0
+ }
+}
