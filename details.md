@@ -3760,3 +3760,38 @@ Run: `python3 scripts/build_quota_evidence.py`, `python3 -m arch_b.online_gold`,
 (network once for contest dates), `python3 -m arch_b.tabfm_gold [--score FILE]`.
 Tests: `tests/test_quota_teams.py`, `tests/test_tabfm_gold.py` (99 pass).
 
+### Managed TabFM run on the gold table (2026-09-27)
+
+Run in `test-gemeni-501216` / `us-central1` from this session (gcloud user
+login, revoked afterwards). Dataset `tabfm_gold_research` (7-day expiry) was
+created, `teams.csv` loaded with `schema.json`, and then deleted after the run.
+A smoke query (Hefei 2023 → 4 Chengdu 2024 rows, NULL features included)
+confirmed that NULLs are accepted and that the BOOL label comes back as
+`'true'`/`'false'` in `predicted_gold_probs`. Then the four `predict.sql` calls ran;
+each was dry-run first and capped at 1 GiB billed. Each billed the 10 MiB
+minimum (1.6–2.0 MB processed), 55–88 s, 0.9 M slot-ms in total. Total
+≈ 50 MiB billed including the smoke query: well under $0.01 on demand, and
+before the 2026-10-30 token pricing. The job ledger is
+`output/tabfm_gold_predictions/ledger.json`; predictions are
+`output/tabfm_gold_predictions/{all_features,pre_registration}.csv`.
+
+Held-out log loss (Δ vs online-only, contest-bootstrap 95% CI):
+
+| model | 2024 | 2025 | 2024 linked / unlinked | 2025 linked / unlinked |
+|---|---|---|---|---|
+| online_only (logistic) | 0.1705 | 0.1885 | 0.1649 / 0.2398 | 0.1613 / 0.2254 |
+| best logistic (pre-registration) | −0.0019 [−0.018, +0.014] | −0.0201 [−0.034, −0.004] | 0.1669 / 0.1896 | 0.1663 / 0.1713 |
+| **TabFM, all 45 features** | −0.0102 [−0.019, −0.004] | **−0.0325 [−0.045, −0.019]** | 0.1605 / 0.1579 | 0.1601 / 0.1506 |
+| **TabFM, 35 pre-registration** | **−0.0218 [−0.033, −0.013]** | −0.0239 [−0.041, −0.005] | 0.1507 / 0.1222 | 0.1660 / 0.1628 |
+
+TabFM beats online-only in both held-out seasons with intervals excluding
+zero, beats the tuned logistic baselines, and, unlike them, improves on
+linked teams as well. That is the online-strength × history interaction a
+linear model cannot represent. Neither feature set wins both seasons: the
+pre-registration set is best in 2024 (one training season), the full set in
+2025. This is one managed-backend run with unexposed settings (checkpoint,
+seed, ensemble count) and no repeat, so it is a research result. It does not
+replace the shipped `online_gold` model, which predicts from online ranks
+alone for 2026 teams. A 2026 use would need 2026 rows (history and rules
+features exist before registration) and a pre-registered comparison.
+

@@ -489,10 +489,14 @@ team with 45 pre-contest features in four availability tiers (online, rules,
 history, registration). History covers members' previous-season medals and
 the team's earlier regionals this season. Labels are `gold` (BOOL, so
 `AI.PREDICT` classifies), `medal` and `rank_pct`. `predict.sql` has the four
-leave-season-out calls. No cloud run has been made. Local L2-logistic baselines:
+leave-season-out calls. Local L2-logistic baselines:
 adding online, rules and history features beats online strength alone in 2025
 (−0.020 log loss) and ties in 2024, mostly through teams with no online link.
-Results: `output/tabfm_gold.md`.
+Managed TabFM (BigQuery, 2026-09-27, ≈50 MiB billed) beats all of them in both
+seasons: −0.022 (2024, pre-registration features) and −0.033 (2025, all
+features) log loss vs online strength alone, with 95% intervals excluding zero,
+and it also improves on linked teams. Results: `output/tabfm_gold.md`; predictions
+and job ledger in `output/tabfm_gold_predictions/`.
 
 ### Interactive viewer
 

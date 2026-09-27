@@ -169,6 +169,28 @@
       -0.00623,
       0.01648
      ]
+    },
+    "tabfm_all_features": {
+     "log_loss": 0.16028,
+     "brier": 0.04587,
+     "log_loss_linked": 0.16047,
+     "log_loss_unlinked": 0.15787,
+     "delta_vs_online_only": -0.0102,
+     "delta_ci95": [
+      -0.01894,
+      -0.00352
+     ]
+    },
+    "tabfm_pre_registration": {
+     "log_loss": 0.14864,
+     "brier": 0.04344,
+     "log_loss_linked": 0.15075,
+     "log_loss_unlinked": 0.12221,
+     "delta_vs_online_only": -0.02183,
+     "delta_ci95": [
+      -0.03326,
+      -0.01282
+     ]
     }
    }
   },
@@ -230,6 +252,28 @@
      "delta_ci95": [
       -0.02788,
       0.01638
+     ]
+    },
+    "tabfm_all_features": {
+     "log_loss": 0.15608,
+     "brier": 0.04423,
+     "log_loss_linked": 0.16012,
+     "log_loss_unlinked": 0.15062,
+     "delta_vs_online_only": -0.03246,
+     "delta_ci95": [
+      -0.04504,
+      -0.01916
+     ]
+    },
+    "tabfm_pre_registration": {
+     "log_loss": 0.1646,
+     "brier": 0.04749,
+     "log_loss_linked": 0.16596,
+     "log_loss_unlinked": 0.16278,
+     "delta_vs_online_only": -0.02394,
+     "delta_ci95": [
+      -0.04094,
+      -0.00517
      ]
     }
    }
