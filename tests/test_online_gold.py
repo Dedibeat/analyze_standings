@@ -6,6 +6,7 @@ from arch_b.online_gold import (
     load,
     logistic,
     online_strengths,
+    quota_split,
     rules_line,
     school_slots,
 )
@@ -36,6 +37,25 @@ class OnlineGoldTest(unittest.TestCase):
         line_2024 = rules_line("2024", "shenyang", self.data, self.strengths)
         line_2025 = rules_line("2025", "shenyang", self.data, self.strengths)
         self.assertLess(line_2025, line_2024)
+
+
+class QuotaRhoTest(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.data = load()
+        cls.strengths = online_strengths(cls.data["online_teams"])
+
+    def test_rho_moves_the_line_from_capacity_to_band_share(self):
+        # rho=0: all capacity golds go to band teams (deepest line); rho=1:
+        # quota teams keep their seat share of golds (shallowest line)
+        lines = [rules_line("2026", "xian", self.data, self.strengths, rho) for rho in (0.0, 0.44, 1.0)]
+        self.assertLessEqual(lines[0], lines[1])
+        self.assertLessEqual(lines[1], lines[2])
+
+    def test_quota_rho_is_estimated_between_zero_and_one(self):
+        _, rho = quota_split(self.data, self.strengths, ["2023", "2024"])
+        self.assertGreater(rho, 0.2)
+        self.assertLess(rho, 0.7)
 
 
 if __name__ == "__main__":

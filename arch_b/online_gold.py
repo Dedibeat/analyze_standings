@@ -8,14 +8,19 @@ Model.  A team's online strength is ``x = -mean(log online rank)`` over the
 rounds it entered.  Each regional's *rules line* is the strength of the G-th
 best team the slot rules admit from the online ranking (every school's best
 k teams, k = its rank-band slots plus the team-count clause, capped per
-school; G = 10% of the official capacity), i.e. the online strength a gold
-medal needs if only rule-admitted teams came.  Gold is a logistic regression
+school).  Of the G = 10% x capacity golds, quota entrants (invitational, WF,
+host, provincial, wildcard: the seats the online bands do not fill) are
+expected to take a share set by ``rho``, their gold rate relative to
+band-admitted teams, measured on earlier seasons (``quota_split``; ~0.44 and
+stable 2023-2025); the line is the band team holding the last remaining gold.
+Gold is a logistic regression
 
     logit P(gold) = c + b * x + d * line(site)
 
 fit on linked official teams of mainland regionals, 2023-2025 (2022 was held
 online under different rules).  ``d`` is free: the nominal field ignores which
 sites a school's teams actually choose, so only part of the line carries over.
+The 2026 forecast uses the quota-adjusted line with rho from 2023-2025.
 
 Validation trains on earlier seasons and scores 2024 and 2025 with contest-
 clustered bootstrap intervals, against: no site term, a shrunk per-site
@@ -153,7 +158,15 @@ def school_slots(season, rule, data):
     return {s: min(k, cap) for s, k in slots.items()}
 
 
-def rules_line(season, site, data, strengths):
+def rules_line(season, site, data, strengths, rho=0.0):
+    """Strength of the last gold among rule-admitted (band) teams.
+
+    Quota entrants (invitational, WF, host, provincial, wildcard...) fill the
+    share ``q = 1 - band slots / capacity`` of seats and win gold at ``rho``
+    times the band teams' rate, so band teams keep
+    ``G * (1 - q) / (1 - q + rho * q)`` of the G golds.  ``rho = 0`` hands
+    every gold to band teams; ``rho = 1`` treats quota teams as equally strong.
+    """
     rule = data["rules"].get((season, site))
     if not rule or not rule.get("online_bands"):
         return None
@@ -161,11 +174,53 @@ def rules_line(season, site, data, strengths):
     for (s, school, _), t in strengths.items():
         if s == season:
             by_school[school].append(t["x"])
-    field = []
-    for school, k in school_slots(season, rule, data).items():
+    field, slots = [], school_slots(season, rule, data)
+    for school, k in slots.items():
         field.extend(sorted(by_school.get(school, []), reverse=True)[:k])
     field.sort(reverse=True)
-    return field[math.ceil(GOLD_FRACTION * rule["official_capacity"]) - 1]
+    capacity = rule["official_capacity"]
+    q = max(0.0, 1 - sum(slots.values()) / capacity)
+    band_golds = GOLD_FRACTION * capacity * (1 - q) / (1 - q + rho * q)
+    return field[max(1, round(band_golds)) - 1]
+
+
+def quota_split(data, strengths, seasons):
+    """Per mainland regional: seats and golds of band vs quota teams.
+
+    Each school's rule-based online slots go to its strongest-online teams at
+    the site (unlinked teams last); its other teams, and every team of a school
+    without band slots, count as quota entrants.  Returns the per-contest table
+    and the pooled relative gold rate rho = quota rate / band rate.
+    """
+    regional = collections.defaultdict(list)
+    for r in link_regionals(data, strengths):
+        if r["season"] in seasons and r["site"] not in EXCLUDED_SITES:
+            regional[(r["season"], r["site"])].append(r)
+    table = []
+    for (season, site), teams in sorted(regional.items()):
+        rule = data["rules"].get((season, site))
+        if not rule or not rule.get("online_bands"):
+            continue
+        slots = school_slots(season, rule, data)
+        by_school = collections.defaultdict(list)
+        for r in teams:
+            by_school[norm_school(r["school"])].append(r)
+        band = []
+        for school, rs in by_school.items():
+            rs.sort(key=lambda r: -(r["x"] if r["x"] is not None else -1e9))
+            band.extend(rs[:slots.get(school, 0)])
+        band_ids = {id(r) for r in band}
+        quota = [r for r in teams if id(r) not in band_ids]
+        table.append(dict(season=season, site=site, band_seats=len(band), quota_seats=len(quota),
+                          band_golds=sum(r["gold"] for r in band),
+                          quota_golds=sum(r["gold"] for r in quota)))
+    tot = {k: sum(t[k] for t in table) for k in ("band_seats", "quota_seats", "band_golds", "quota_golds")}
+    rho = (tot["quota_golds"] / tot["quota_seats"]) / (tot["band_golds"] / tot["band_seats"])
+    for t in table:
+        t["quota_gold_share"] = round(t["quota_golds"] / max(1, t["band_golds"] + t["quota_golds"]), 3)
+        t["relative_gold_rate"] = round((t["quota_golds"] / max(1, t["quota_seats"]))
+                                        / max(1e-9, t["band_golds"] / max(1, t["band_seats"])), 3)
+    return table, rho
 
 
 # ------------------------------------------------------------------ fitting
@@ -204,10 +259,17 @@ def cf_gold_bars():
 def model_rows(data, strengths):
     linked = [r for r in link_regionals(data, strengths)
               if r["season"] in MODEL_SEASONS and r["site"] not in EXCLUDED_SITES and r["link"]]
-    lines = {k: rules_line(*k, data, strengths) for k in {(r["season"], r["site"]) for r in linked}}
+    contests = {(r["season"], r["site"]) for r in linked}
+    lines = {k: rules_line(*k, data, strengths) for k in contests}
+    # quota-adjusted lines, with rho estimated only from seasons before each test season
+    quota_lines = {}
+    for test in TEST_SEASONS:
+        _, rho = quota_split(data, strengths, [s for s in MODEL_SEASONS if s < test])
+        quota_lines[test] = {k: rules_line(*k, data, strengths, rho) for k in contests}
     by_contest = collections.defaultdict(list)
     for r in linked:
         r["line"] = lines[(r["season"], r["site"])]
+        r["quota_line"] = {t: ql[(r["season"], r["site"])] for t, ql in quota_lines.items()}
         by_contest[(r["season"], r["site"])].append(r)
     for rs in by_contest.values():  # oracle: 10%-line of the linked teams that came
         xs = sorted((r["x"] for r in rs), reverse=True)
@@ -228,14 +290,17 @@ def _site_history(train, key, shrink=1.0):
     return {s: (sum(d.values()) + shrink * grand) / (len(d) + shrink) for s, d in per.items()}, grand
 
 
-VARIANTS = ("online_only", "site_history", "cf_bar_history", "rules_line", "oracle_line")
+VARIANTS = ("online_only", "site_history", "cf_bar_history", "rules_line",
+            "rules_line_quota_adjusted", "oracle_line")
 
 
-def features(rows, variant, train):
+def features(rows, variant, train, test=None):
     if variant == "online_only":
         return [[1, r["x"]] for r in rows]
     if variant == "rules_line":
         return [[1, r["x"], r["line"]] for r in rows]
+    if variant == "rules_line_quota_adjusted":
+        return [[1, r["x"], r["quota_line"][test]] for r in rows]
     if variant == "oracle_line":
         return [[1, r["x"], r["oracle"]] for r in rows]
     if variant == "site_history":  # shrunk historical oracle line of the same site
@@ -259,8 +324,8 @@ def backtest(rows, seed=0):
         y = np.array([r["gold"] for r in held])
         loss = {}
         for v in VARIANTS:
-            w = logistic(features(train, v, train), [r["gold"] for r in train])
-            p = np.clip(sigmoid(np.asarray(features(held, v, train), float) @ w), 1e-6, 1 - 1e-6)
+            w = logistic(features(train, v, train, test), [r["gold"] for r in train])
+            p = np.clip(sigmoid(np.asarray(features(held, v, train, test), float) @ w), 1e-6, 1 - 1e-6)
             loss[v] = (-(y * np.log(p) + (1 - y) * np.log(1 - p)), (p - y) ** 2, w)
         sites = sorted({r["site"] for r in held})
         idx = {s: np.array([i for i, r in enumerate(held) if r["site"] == s]) for s in sites}
@@ -310,8 +375,8 @@ def contest_difficulty(rows):
 
 # ----------------------------------------------------------------- forecast
 
-def fit_final(rows, n_boot=BOOTSTRAPS, seed=1):
-    X = features(rows, "rules_line", rows)
+def fit_final(rows, final_lines, n_boot=BOOTSTRAPS, seed=1):
+    X = [[1, r["x"], final_lines[(r["season"], r["site"])]] for r in rows]
     w = logistic(X, [r["gold"] for r in rows])
     rng = np.random.default_rng(seed)
     contests = sorted({(r["season"], r["site"]) for r in rows})
@@ -323,9 +388,9 @@ def fit_final(rows, n_boot=BOOTSTRAPS, seed=1):
     return w, np.array(boots)
 
 
-def forecast_2026(data, strengths, w, boots):
+def forecast_2026(data, strengths, w, boots, rho):
     sites = [r for r in data["rules"].values() if r["season"] == 2026]
-    lines = {r["site"]: rules_line("2026", r["site"], data, strengths) for r in sites
+    lines = {r["site"]: rules_line("2026", r["site"], data, strengths, rho) for r in sites
              if r.get("online_bands")}
 
     def prob(x, line):
@@ -394,8 +459,17 @@ def markdown(result):
         L.append(f"| {o['season']} | {o['site']} | {o['online_rank_for_even_gold']} | "
                  f"{o['cf_gold_bar'] or '—'} | {o.get('cf_bar_implied_by_online', '—')} | "
                  f"{o.get('fit_minus_online', '—')} |")
+    q = result["quota"]
+    L += ["", "## Quota entrants (not admitted by online rank bands)", "",
+          f"Pooled gold rate of quota entrants relative to band teams: rho = {q['rho']}.", "",
+          "| season | site | band seats | quota seats | band golds | quota golds | quota share of golds | relative rate |",
+          "|---|---|---|---|---|---|---|---|"]
+    for t in q["contests"]:
+        L.append(f"| {t['season']} | {t['site']} | {t['band_seats']} | {t['quota_seats']} | {t['band_golds']} | "
+                 f"{t['quota_golds']} | {t['quota_gold_share']:.0%} | {t['relative_gold_rate']} |")
     L += ["", "## 2026 regionals ranked for gold (easiest first)", "",
-          "Rules line = online rank of the G-th best rule-admitted team (higher = easier). "
+          f"Rules line = online rank of the band team holding the last gold after quota "
+          f"entrants take their share (rho = {result['quota']['rho']}; higher = easier). "
           "Cells: gold chance for a team with that online rank in both rounds (10th–90th "
           "percentile over contest-bootstrap refits). The last column is the rating-fit "
           "chooser (`arch_b.medal_predict`) for comparison; it did not improve held-out gold "
@@ -434,9 +508,12 @@ def run(schools=()):
     result = {"model_rows": len(rows),
               "link_counts": dict(collections.Counter(f"{r['season']}/{r['link']}" for r in rows)),
               "backtest": backtest(rows), "contest_difficulty": contest_difficulty(rows)}
-    w, boots = fit_final(rows)
+    table, rho = quota_split(data, strengths, MODEL_SEASONS)
+    result["quota"] = {"rho": round(rho, 3), "contests": table}
+    final_lines = {k: rules_line(*k, data, strengths, rho) for k in {(r["season"], r["site"]) for r in rows}}
+    w, boots = fit_final(rows, final_lines)
     result["final_coef"] = [round(float(c), 3) for c in w]
-    result["forecast_2026"], lines = forecast_2026(data, strengths, w, boots)
+    result["forecast_2026"], lines = forecast_2026(data, strengths, w, boots, rho)
     result["schools"] = {q: school_forecast(q, data, strengths, w, boots, lines) for q in schools}
     result["rating_fit_2026_gold_cf"] = rating_fit_2026()
     return result

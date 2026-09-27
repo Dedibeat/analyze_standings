@@ -3456,6 +3456,7 @@ teams, k = rank-band + team-count slots, capped; G = 10% of official capacity).
 | + same-site history | +0.0001 [−0.0008, +0.0010] | **+0.0046** [+0.0005, +0.0097] |
 | + rating-fit CF gold bar history | −0.0000 [−0.0006, +0.0005] | **+0.0008** [+0.0001, +0.0017] |
 | + rules line | **−0.0004** [−0.0008, −0.0000] | **−0.0013** [−0.0028, −0.0000] |
+| + rules line, quota-adjusted (ρ from earlier seasons; shipped) | **−0.0005** [−0.0011, +0.0001] | **−0.0016** [−0.0044, +0.0000] |
 | + oracle line (actual attendees) | −0.0017 [−0.0031, −0.0008] | −0.0044 [−0.0114, +0.0003] |
 
 Online strength dominates (held-out gold rate ≈ prediction within ~15 points
@@ -3477,35 +3478,38 @@ disagreements: Kunming 2024 **+151** (fit says much harder), Nanjing 2024
 contest-level fit-bias audit, not proven bias (online-to-onsite form and
 unlinked quota teams also move the online estimate).
 
-**2026 forecast** (`output/online_gold.md`): easiest → hardest by rules line
-Wuhan ≈ Shenyang (#92) > Xi'an (#91) > Nanchang (#89) > Shanghai (#87) >
-Chengdu = Nanjing (#74: one slot per top-160 school plus the team-count clause).
-Differences are modest (a team ranked #100 in both rounds: 59% vs 53%).
-The rating-fit chooser (`arch_b.medal_predict`) ranks Wuhan hardest from its
-single 2025 contest; its city history did not help held-out gold prediction.
-National University of Mongolia (combined rank 128, one band slot at every
-mainland site): NUM-R^3 (online #544/#349) ≈ 2.8–3.6% gold depending on site,
-NUM-MNM ≈ 0.7–0.9%, the rest ≤ 0.3%, conditional on attending.
-Site differences for NUM-R^3 are small against its uncertainty (10th–90th
-percentile ≈ 2.5–5.9% at the easiest sites, 2.2–3.8% at Chengdu/Nanjing).
-NUM's own record in `regional_teams.csv` points the other way from the
-unmodelled site: every NUM silver since 2022 came at Hong Kong/Macau (ranks
-22–30 of 82–149 official teams; 2025 N^3 30th, gold line 13th), while its
-mainland best is bronze (Hangzhou 2024 116th; Nanjing/Wuhan 2025).
+**Quota entrants (measured, not assumed).** Seats the online bands do not
+fill go to invitational, WF, host, provincial, girls' and wildcard teams. Per
+2023–2025 mainland regional, each school's band slots were given to its
+strongest-online teams present and the rest counted as quota entrants
+(`quota_split`). Quota entrants win gold at **ρ ≈ 0.44** of band teams' rate,
+stable from earlier seasons (0.44 from 2023 alone, 0.40 from 2023–24, 0.44 from
+all); their share of golds is 21%/21%/25% by season, while per contest it is
+noisy (9–37%, relative rate 0.16–0.89 on 3–15 quota golds), so ρ is pooled,
+not per site. Band teams keep G·(1−q)/(1−q+ρq) of the G golds (q = planned
+quota seat share = 1 − band slots/capacity); ρ = 0 was the first shipped line
+(quota teams never win gold), ρ = 1 the online-slots-only alternative that
+reproduces the ChatGPT order. The ρ-adjusted line improves on the ρ = 0 line in
+both held-out seasons (table above; intervals just touch zero) and ships.
 
-**Sensitivity: how strong are non-online quota teams?** G = 10% of full
-official capacity (shipped) implicitly treats invitational/WF/host/provincial
-entrants as weak, so quota-heavy sites (Xi'an, Nanchang: ~100 invitational
-slots) look easier. Setting G = 10% of the online-admitted slots instead
-(quota teams as strong as online ones) reproduces the ChatGPT order: for a team
-at online #110 in both rounds, Shenyang 64% > Wuhan ≈ Shanghai 59% > Xi'an ≈
-Nanchang 55% > Chengdu = Nanjing 54% (shipped: Wuhan ≈ Shenyang ≈ Xi'an 53% >
-Nanchang ≈ Shanghai 52% > Chengdu = Nanjing 47%). Held-out Δlog loss for the
-alternative: 2024 −0.0005 [−0.0011, +0.0001], 2025 −0.0026 [−0.0089, +0.0022]
-(shipped: −0.0004 [−0.0006, −0.0000], −0.0012 [−0.0026, −0.0000]); the data do
-not separate them. Robust across both (and GPT's): Shenyang and Wuhan near the
-top, Chengdu/Nanjing last; Shanghai vs Xi'an/Nanchang depends on the quota
-assumption.
+**2026 forecast** (`output/online_gold.md`, ρ = 0.443): easiest → hardest
+Shenyang (line ≈ online #89) > Wuhan (#79) > Xi'an = Shanghai (#74) ≈
+Nanchang (#73) > Chengdu = Nanjing (#68: one slot per top-160 school plus the
+team-count clause). A team ranked #100 in both rounds: 69% / 65% / 62% / 59%.
+Robust across ρ = 0, 0.44, 1 and GPT's order: Shenyang/Wuhan near the top,
+Chengdu/Nanjing last; Xi'an/Nanchang move with ρ because of their ~100
+invitational seats. The rating-fit chooser (`arch_b.medal_predict`) ranks
+Wuhan hardest from its single 2025 contest; its city history did not help
+held-out gold prediction.
+
+National University of Mongolia (combined rank 128, one band slot at every
+mainland site), conditional on attending: NUM-R^3 (online #544/#349) Shenyang
+5.3%, Wuhan 4.5%, Xi'an/Shanghai/Nanchang 4.0%, Chengdu/Nanjing 3.6%; NUM-MNM
+0.9–1.4%; the rest ≤ 0.5%. NUM's own record in `regional_teams.csv` points to
+the unmodelled site: every NUM silver since 2022 came at Hong Kong/Macau
+(official ranks 22–39 of 82–149 teams; 2025 N^3 30th with the gold line at
+13th), while its mainland best is bronze (Hangzhou 2024 116th; Nanjing/Wuhan
+2025).
 
 **Pre-existing bugs found (not fixed here).** (1) `scripts/build_xcpcio_official.py`
 treats every XCPCIO team as official when a board has no `group` field, but the

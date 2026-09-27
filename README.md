@@ -441,7 +441,9 @@ python3 -m arch_b.online_gold --school 复旦大学  # per-team forecast for a s
 
 Independent of the rating fit: gold chance at a regional is modelled from a
 team's official online ranks plus a site "rules line" derived from the
-hand-encoded slot rules (`data/ec_online/slot_rules.json`). Trained on earlier
+hand-encoded slot rules (`data/ec_online/slot_rules.json`), with the golds
+won by quota entrants (invitational/WF/host teams, measured at ~0.44× the band
+teams' gold rate on earlier seasons) taken out first. Trained on earlier
 seasons, online strength alone predicts held-out gold well; the rules line adds
 a small consistent gain (2024 and 2025), while per-site history and the rating
 fit's CF gold bars do not. The same data independently confirm the Shenyang
