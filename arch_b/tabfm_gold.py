@@ -17,8 +17,9 @@ Rank features enter as log(rank); the L2 strength of each model is chosen by
 leave-one-contest-out log loss inside the training seasons.
 
 A TabFM run (``data/tabfm_gold/predict.sql``) is scored against them with
-``--score FILE``, a CSV of ``row_id`` and ``p_gold`` (the probability of the
-``true`` class from ``predicted_gold_probs``).  Differences carry contest-
+``--score FILE`` (repeatable, one file per feature set; the model is named
+``tabfm_<file stem>``), a CSV of ``row_id`` and ``p_gold`` (the probability
+of the ``true`` class from ``predicted_gold_probs``).  Differences carry contest-
 bootstrap 95% intervals.
 
     python3 -m arch_b.tabfm_gold                      # baselines
@@ -181,13 +182,14 @@ def markdown(res):
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
-    ap.add_argument("--score", help="TabFM predictions CSV with row_id,p_gold")
+    ap.add_argument("--score", action="append", default=[],
+                    help="TabFM predictions CSV with row_id,p_gold (repeatable)")
     args = ap.parse_args()
     rows, meta = load()
     preds, chosen = baselines(rows, meta)
-    if args.score:
-        for split, p in read_predictions(args.score, rows, meta).items():
-            preds[split]["tabfm"] = p
+    for path in args.score:
+        for split, p in read_predictions(path, rows, meta).items():
+            preds[split][f"tabfm_{Path(path).stem}"] = p
     res = {"l2_chosen": chosen, "models": model_features(meta), "evaluation": evaluate(rows, meta, preds)}
     OUT.mkdir(exist_ok=True)
     (OUT / "tabfm_gold.json").write_text(json.dumps(res, ensure_ascii=False, indent=1) + "\n")
