@@ -75,6 +75,26 @@ disagreement and solve rate explain much of the largest correction. The small
 DE–TabFM gap remains uncertain across contests. Proposed next work isolates
 these mechanisms and obtains fresh transfer evidence before promotion.
 
+The [DE release audit](de_release_audit.md) (2026-09-28) reruns DE on the fit
+with the EC online-round rosters attached (`scripts/attach_online_rosters.py`,
+not yet applied). DE scores 226.3 LOCO / 225.7 LORO against the gym map's 246.1.
+Its per-contest levels also agree best with the independent CF-gym population
+(robust contest-offset SD 96, against 133 raw and 120 for the gym map).
+- **Open decisions before a switch:** no fresh confirmation set exists; 225
+  appearances lie outside any field-size evidence (clipping DE's features is
+  recommended); and online-round ratings rest on an equal online/onsite
+  assumption. Held-out verified teams contradict that assumption by about 100
+  CF-scale points.
+- **Other findings:** the survival fit compresses team abilities (CF slope 2.85
+  vs binary 0.98) because it reads sequential solving as weakness. Team-season
+  offsets help solve prediction but hurt CF calibration.
+- **Bug fixed on the way:** the gym map now sorts ties stably, so shipped
+  ratings reproduce on every platform.
+
+Reproduce with `python3 -m arch_b.de_release_audit /tmp/tagged_rosters.json`
+and `python3 -m arch_b.fit_mechanism_audit /tmp/tagged_rosters.json`, after
+running the attach script.
+
 The [experiment roadmap](experiment_roadmap.md) records the remaining audits,
 fresh-confirmation requirements, and longer-term rating research. Its correction
 and anchor-contest influence audits now have the bounded results linked above;

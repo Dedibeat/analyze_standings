@@ -46,8 +46,13 @@ PETROZ = os.path.join(DATA, "petroz_2022_2026.json")
 
 
 def load_joint_dataset(season_key=False, min_solve_hours=None,
-                       supplemental_paths=None, identity_paths=None):
-    """Load the exact standings/identity configuration used by the joint fit."""
+                       supplemental_paths=None, identity_paths=None, tagged=None):
+    """Load the exact standings/identity configuration used by the joint fit.
+
+    ``tagged`` replaces ``data/tagged.json`` (e.g. a roster-attached candidate
+    from ``scripts/attach_online_rosters.py``); ``None`` keeps the shipped file.
+    """
+    tagged = TAGGED if tagged is None else tagged
     extra = [
         path for path in os.environ.get("ARCHB_EXTRA_CONTESTS", "").split(os.pathsep)
         if path
@@ -56,10 +61,10 @@ def load_joint_dataset(season_key=False, min_solve_hours=None,
                     else list(supplemental_paths))
     identity_supplemental = (supplemental if identity_paths is None
                              else list(identity_paths))
-    paths = [TAGGED] + supplemental + extra
+    paths = [tagged] + supplemental + extra
 
     raw_all = []
-    for p in [TAGGED] + identity_supplemental + extra:
+    for p in [tagged] + identity_supplemental + extra:
         with open(p) as f:
             raw_all.extend(json.load(f))
     raw_all = dedupe_contests(raw_all)
@@ -74,7 +79,7 @@ def load_joint_dataset(season_key=False, min_solve_hours=None,
 def estimate_joint(sigma_theta=SIGMA_THETA, sigma_b=SIGMA_B, fit_fn=fit,
                    season_key=False, min_solve_hours=None, verbose=True,
                    gym_merge=None, supplemental_paths=None,
-                   identity_paths=None, prior=None):
+                   identity_paths=None, prior=None, tagged=None):
     """Fit tagged + supplemental + Universal Cup standings in one MAP.
 
     Returns ``(ds, theta, b, history, uf)``. ``uf`` is the union-find identity
@@ -103,7 +108,8 @@ def estimate_joint(sigma_theta=SIGMA_THETA, sigma_b=SIGMA_B, fit_fn=fit,
     keeps the shipped default. ``identity_paths`` can separately override which
     supplements participate in union-find construction, allowing diagnostics to
     distinguish identity-link changes from added likelihood evidence; by default
-    it follows ``supplemental_paths``. ``ARCHB_EXTRA_CONTESTS`` is an
+    it follows ``supplemental_paths``. ``tagged`` replaces ``data/tagged.json``
+    (see ``load_joint_dataset``). ``ARCHB_EXTRA_CONTESTS`` is an
     ``os.pathsep``-separated list of standings JSON files used only by data-side
     experiments; it does not change the shipped default inputs.
     """
@@ -111,7 +117,8 @@ def estimate_joint(sigma_theta=SIGMA_THETA, sigma_b=SIGMA_B, fit_fn=fit,
         gym_merge = float(os.environ["ARCHB_GYM_MERGE"])
     ds, uf, season_by_cid = load_joint_dataset(
         season_key=season_key, min_solve_hours=min_solve_hours,
-        supplemental_paths=supplemental_paths, identity_paths=identity_paths)
+        supplemental_paths=supplemental_paths, identity_paths=identity_paths,
+        tagged=tagged)
 
     if prior is None:
         mu, sd = np.full(len(ds.teams), float(MU0)), sigma_theta
