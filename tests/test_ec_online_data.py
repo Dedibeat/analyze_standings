@@ -4,6 +4,7 @@ import json
 import unittest
 from pathlib import Path
 
+from arch_b.online_gold import norm_name, norm_school
 from scripts.build_ec_online_data import _segment
 
 DATA = Path(__file__).resolve().parent.parent / "data" / "ec_online"
@@ -41,6 +42,24 @@ class OnlineDataTest(unittest.TestCase):
                     if r["season"] == "2026" and r["table"] == "combined"}
         num = [s for s in combined if s.startswith("蒙古国立大学")]
         self.assertEqual([combined[s] for s in num], [128])
+
+    def test_every_ranked_school_has_a_combined_rank(self):
+        # 2026 PDFs print 西 as U+2EC4 etc.; unfolded, those schools lost their slots
+        combined = collections.defaultdict(set)
+        for r in rows("online_schools.csv"):
+            if r["table"] == "combined":
+                combined[r["season"]].add(r["school"])
+        for r in rows("online_teams.csv"):
+            if r["rank"]:
+                self.assertIn(r["school"], combined[r["season"]], (r["season"], r["school"]))
+
+    def test_every_ranked_2025_2026_team_has_a_pta_roster(self):
+        def key(r):
+            return r["season"], r["round"], norm_school(r["school"]), norm_name(r["team"])
+        roster = {key(r) for r in rows("online_rosters.csv")}
+        missing = [key(r) for r in rows("online_teams.csv") if r["season"] in ("2025", "2026")
+                   and key(r) not in roster]
+        self.assertEqual(missing, [])
 
     def test_rosters_mostly_have_three_members(self):
         rs = rows("online_rosters.csv")

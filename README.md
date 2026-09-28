@@ -435,6 +435,7 @@ the descriptive city/time chart; `--report` prints that analysis.
 
 ```bash
 python3 scripts/build_ec_online_data.py        # official online rankings, rosters, regional results
+python3 scripts/add_pta_rosters.py              # + 2025-2026 registration rosters (PTA exports in data/)
 python3 -m arch_b.online_gold                   # backtest, rating-fit comparison, 2026 forecast
 python3 -m arch_b.online_gold --school 复旦大学  # per-team forecast for a school
 ```
@@ -442,17 +443,19 @@ python3 -m arch_b.online_gold --school 复旦大学  # per-team forecast for a s
 Independent of the rating fit: gold chance at a regional is modelled from a
 team's official online ranks plus a site "rules line" derived from the
 hand-encoded slot rules (`data/ec_online/slot_rules.json`), with the golds
-won by quota entrants (invitational/WF/host teams, measured at ~0.44× the band
+won by quota entrants (invitational/WF/host teams, measured at ~0.39× the band
 teams' gold rate on earlier seasons) taken out first. Trained on earlier
 seasons, online strength alone predicts held-out gold well; the rules line adds
-a small consistent gain (2024 and 2025), while per-site history and the rating
-fit's CF gold bars do not. The same data independently confirm the Shenyang
+a small gain in both 2024 and 2025 (intervals touch zero), while per-site
+history and the rating fit's CF gold bars do not. The same data independently confirm the Shenyang
 2024→2025 swing and flag Kunming/Nanjing 2024 as the largest fit-vs-online
 disagreements. Results: `output/online_gold.md`; details in `details.md`.
-Hong Kong/Macau are not modelled. The 2025–2026 PTA rosters are now in
-`data/` (`icpc_2025_online_1_teams.csv`, `icpc_teams_2025_online_2_fixed.csv`,
-`icpc_2026_ec_round1_teams.csv`, `icpc_2026_ec_online_round2_teams.csv`) but
-are not yet used; see `details.md`.
+Hong Kong/Macau are not modelled. The 2025–2026 registration rosters (PTA
+exports in `data/`: `icpc_2025_online_1_teams.csv`,
+`icpc_teams_2025_online_2_fixed.csv`, `icpc_2026_ec_round1_teams.csv`,
+`icpc_2026_ec_online_round2_teams.csv`) are added by `add_pta_rosters.py`; they
+link 90% of 2025 mainland regional teams to an online result (57% by name
+alone).
 
 ```bash
 python3 scripts/build_quota_evidence.py        # WF/host/invitational/provincial evidence + Shanghai lists
@@ -466,18 +469,19 @@ provincial/local, girls, or unexplained (wildcards, problem setters,
 second-round applications). The inferred band seats reproduce Shanghai's
 published per-school online seats exactly (2024, 2025), and WF + host explain
 68 of the 71 published reward schools. Quota teams hold 39% of seats but win
-22% of golds (142 of 648); 89% of those golds come from the extra teams of
+20% of golds (130 of 648); 91% of those golds come from the extra teams of
 top-50 online schools (mostly WF/host seats), and quota teams from schools
 ranked below 100 practically never win gold. Results:
 `output/quota_teams.md` (per team: `output/quota_teams.csv`).
 
-The best quota-gold predictor, school rank, is implemented as the
-`rules_line_school_rank` variant of `arch_b.online_gold`. Top-50 schools are
-expected to fill 1.39 quota seats per WF/host entitlement seat and win gold at
-1.38× the band rate; all other quota teams win at 0.07×. Before registration it
-predicts each contest's quota golds better than a pooled rate (MAE 1.58 vs
-2.52), but it does not improve held-out gold prediction (worse in 2024, slightly
-better in 2025). The 2026 forecast therefore keeps the pooled line and shows
+The school-rank quota model is implemented as the `rules_line_school_rank`
+variant of `arch_b.online_gold`. (It was the best quota-gold predictor before
+the 2025 rosters; with them, grouping known quota teams by channel does better,
+MAE 1.49 vs 1.85.) Top-50 schools are expected to fill 1.39 quota seats per
+WF/host entitlement seat and win gold at 1.26× the band rate; all other quota
+teams win at 0.05×. Before registration it predicts each contest's quota golds
+better than a pooled rate (MAE 1.68 vs 2.27), but it does not improve held-out
+gold prediction (worse in 2024, slightly better in 2025). The 2026 forecast therefore keeps the pooled line and shows
 the school-rank line beside it.
 
 ```bash
@@ -491,20 +495,22 @@ team with 45 pre-contest features in four availability tiers (online, rules,
 history, registration). History covers members' previous-season medals and
 the team's earlier regionals this season. Labels are `gold` (BOOL, so
 `AI.PREDICT` classifies), `medal` and `rank_pct`. `predict.sql` has the four
-leave-season-out calls. Local L2-logistic baselines:
-adding online, rules and history features beats online strength alone in 2025
-(−0.020 log loss) and ties in 2024, mostly through teams with no online link.
-Managed TabFM (BigQuery, 2026-09-27, ≈50 MiB billed) beats all of them in both
-seasons: −0.022 (2024, pre-registration features) and −0.033 (2025, all
-features) log loss vs online strength alone, with 95% intervals excluding zero,
-and it also improves on linked teams. Results: `output/tabfm_gold.md`; predictions
-and job ledger in `output/tabfm_gold_predictions/`.
-A pre-season 2026 TabFM forecast (every 2026 online team at every site, 28
-features knowable now) is in `output/tabfm_forecast_2026.md`. Without member and
-earlier-regional history it no longer beats online strength on linked teams,
-and it runs high for 2026 (especially Shanghai, whose rules fall outside the
-training range). It is a research comparison; use `output/online_gold.md` for
-decisions.
+leave-season-out calls. Local L2-logistic baselines barely beat online strength
+alone once the 2025 rosters link 90% of teams: their earlier 2025 gain came
+from teams with no online link. Managed TabFM (BigQuery, rerun 2026-09-28,
+≈150 MiB billed) beats online strength alone in both seasons with all 45
+features (−0.009 in 2024, −0.015 in 2025) and with the 32 forecast features
+(−0.023, −0.013), with 95% intervals excluding zero. A repeat on identical 2024
+inputs reproduced the all-features call but moved the pre-registration call
+from −0.022 to −0.010. Single-run rankings between feature sets are therefore
+within run noise. Results: `output/tabfm_gold.md`; predictions and job ledgers
+in `output/tabfm_gold_predictions/`.
+A pre-season 2026 TabFM forecast (every 2026 online team at every site, 32
+features knowable now, including members' 2025 results from the registration
+rosters) is in `output/tabfm_forecast_2026.md`. Near online #100 it agrees with
+the online-gold model within 3 points. It runs high further down (27% vs a
+backtested 20% for #141–280) and barely separates the sites. It is a research
+comparison; use `output/online_gold.md` for decisions.
 
 ### Interactive viewer
 
