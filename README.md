@@ -452,6 +452,58 @@ disagreements. Results: `output/online_gold.md`; details in `details.md`.
 Hong Kong/Macau are not modelled, and 2025–2026 rosters (only on PTA) are
 missing.
 
+```bash
+python3 scripts/build_quota_evidence.py        # WF/host/invitational/provincial evidence + Shanghai lists
+python3 -m arch_b.quota_teams                   # which teams entered each regional on a quota seat, and why
+```
+
+Every official team of the 2023–2025 mainland regionals is labelled band
+(online rank-band seat) or quota, and each quota team gets the channel that
+explains its seat: host, World Finals school, invitational medal, non-mainland,
+provincial/local, girls, or unexplained (wildcards, problem setters,
+second-round applications). The inferred band seats reproduce Shanghai's
+published per-school online seats exactly (2024, 2025), and WF + host explain
+68 of the 71 published reward schools. Quota teams hold 39% of seats but win
+22% of golds (142 of 648); 89% of those golds come from the extra teams of
+top-50 online schools (mostly WF/host seats), and quota teams from schools
+ranked below 100 practically never win gold. Results:
+`output/quota_teams.md` (per team: `output/quota_teams.csv`).
+
+The best quota-gold predictor, school rank, is implemented as the
+`rules_line_school_rank` variant of `arch_b.online_gold`. Top-50 schools are
+expected to fill 1.39 quota seats per WF/host entitlement seat and win gold at
+1.38× the band rate; all other quota teams win at 0.07×. Before registration it
+predicts each contest's quota golds better than a pooled rate (MAE 1.58 vs
+2.52), but it does not improve held-out gold prediction (worse in 2024, slightly
+better in 2025). The 2026 forecast therefore keeps the pooled line and shows
+the school-rank line beside it.
+
+```bash
+python3 scripts/build_tabfm_gold_data.py   # team-level table + BigQuery schema + AI.PREDICT SQL
+python3 -m arch_b.tabfm_gold                # local baselines on the same splits
+python3 -m arch_b.tabfm_gold --score p.csv  # score TabFM output (row_id,p_gold)
+```
+
+`data/tabfm_gold/` holds one row per official 2023–2025 mainland regional
+team with 45 pre-contest features in four availability tiers (online, rules,
+history, registration). History covers members' previous-season medals and
+the team's earlier regionals this season. Labels are `gold` (BOOL, so
+`AI.PREDICT` classifies), `medal` and `rank_pct`. `predict.sql` has the four
+leave-season-out calls. Local L2-logistic baselines:
+adding online, rules and history features beats online strength alone in 2025
+(−0.020 log loss) and ties in 2024, mostly through teams with no online link.
+Managed TabFM (BigQuery, 2026-09-27, ≈50 MiB billed) beats all of them in both
+seasons: −0.022 (2024, pre-registration features) and −0.033 (2025, all
+features) log loss vs online strength alone, with 95% intervals excluding zero,
+and it also improves on linked teams. Results: `output/tabfm_gold.md`; predictions
+and job ledger in `output/tabfm_gold_predictions/`.
+A pre-season 2026 TabFM forecast (every 2026 online team at every site, 28
+features knowable now) is in `output/tabfm_forecast_2026.md`. Without member and
+earlier-regional history it no longer beats online strength on linked teams,
+and it runs high for 2026 (especially Shanghai, whose rules fall outside the
+training range). It is a research comparison; use `output/online_gold.md` for
+decisions.
+
 ### Interactive viewer
 
 ```bash
@@ -567,6 +619,12 @@ Module self-checks:
   2022–2024 online rosters, 2022–2025 regional official standings and medals,
   and hand-encoded 2023–2026 slot rules; built by
   `scripts/build_ec_online_data.py`, consumed by `arch_b.online_gold`.
+  `quota_evidence.json` (quota-channel evidence and Shanghai's published
+  allocation lists) is built by `scripts/build_quota_evidence.py`, consumed by
+  `arch_b.quota_teams`.
+- `data/tabfm_gold/` — team-level gold-prediction table for TabFM (`teams.csv`,
+  BigQuery `schema.json`, `features.json`, `predict.sql`); built by
+  `scripts/build_tabfm_gold_data.py`, baselines/scoring in `arch_b.tabfm_gold`.
 - `output/problem_ratings.json` — Architecture A ratings;
   `output/problem_ratings_b.json` — Architecture B (binary) ratings;
   `output/problem_ratings_survival.json` — Architecture B (survival) ratings;

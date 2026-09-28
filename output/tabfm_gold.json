@@ -1,0 +1,304 @@
+{
+ "l2_chosen": {
+  "test_2024": {
+   "prior": 0.3,
+   "online_only": 0.3,
+   "online_rules": 0.3,
+   "pre_registration": 3.0,
+   "all_features": 3.0
+  },
+  "test_2025": {
+   "prior": 0.3,
+   "online_only": 0.3,
+   "online_rules": 0.3,
+   "pre_registration": 10.0,
+   "all_features": 3.0
+  }
+ },
+ "models": {
+  "prior": [],
+  "online_only": [
+   "online_x"
+  ],
+  "online_rules": [
+   "online_x",
+   "site_rules_line_x"
+  ],
+  "pre_registration": [
+   "online_x",
+   "online_rank_r1",
+   "online_rank_r2",
+   "online_solved_r1",
+   "online_solved_r2",
+   "online_rounds",
+   "online_link",
+   "school_rank_combined",
+   "school_rank_best_round",
+   "school_online_teams",
+   "school_top100_teams",
+   "band_slots",
+   "school_wf",
+   "school_host",
+   "school_invitational",
+   "school_local",
+   "school_non_mainland",
+   "site_capacity",
+   "site_band_seats",
+   "site_quota_share",
+   "site_school_cap",
+   "site_two_slot_band",
+   "site_team_count_clause",
+   "site_rules_line_x",
+   "site_top50_entitlement",
+   "season_order",
+   "members_prev_regionals",
+   "members_prev_golds",
+   "members_prev_best_medal",
+   "members_prev_best_rank_pct",
+   "earlier_regionals",
+   "earlier_best_medal",
+   "earlier_best_rank_pct",
+   "school_prev_golds",
+   "school_prev_medals"
+  ],
+  "all_features": [
+   "online_x",
+   "online_rank_r1",
+   "online_rank_r2",
+   "online_solved_r1",
+   "online_solved_r2",
+   "online_rounds",
+   "online_link",
+   "school_rank_combined",
+   "school_rank_best_round",
+   "school_online_teams",
+   "school_top100_teams",
+   "band_slots",
+   "school_wf",
+   "school_host",
+   "school_invitational",
+   "school_local",
+   "school_non_mainland",
+   "site_capacity",
+   "site_band_seats",
+   "site_quota_share",
+   "site_school_cap",
+   "site_two_slot_band",
+   "site_team_count_clause",
+   "site_rules_line_x",
+   "site_top50_entitlement",
+   "season_order",
+   "members_prev_regionals",
+   "members_prev_golds",
+   "members_prev_best_medal",
+   "members_prev_best_rank_pct",
+   "earlier_regionals",
+   "earlier_best_medal",
+   "earlier_best_rank_pct",
+   "school_prev_golds",
+   "school_prev_medals",
+   "admission",
+   "quota_channel",
+   "team_index_in_school",
+   "school_teams_at_site",
+   "field_teams",
+   "field_linked_share",
+   "field_top50_quota_teams",
+   "field_line_x",
+   "field_strength_rank",
+   "x_minus_field_line"
+  ]
+ },
+ "evaluation": {
+  "test_2024": {
+   "teams": 2094,
+   "linked": 1939,
+   "golds": 210,
+   "models": {
+    "prior": {
+     "log_loss": 0.32572,
+     "brier": 0.09023,
+     "log_loss_linked": 0.33195,
+     "log_loss_unlinked": 0.24784,
+     "delta_vs_online_only": 0.15525,
+     "delta_ci95": [
+      0.13767,
+      0.17201
+     ]
+    },
+    "online_only": {
+     "log_loss": 0.17047,
+     "brier": 0.0491,
+     "log_loss_linked": 0.16493,
+     "log_loss_unlinked": 0.23982,
+     "delta_vs_online_only": 0.0,
+     "delta_ci95": [
+      0.0,
+      0.0
+     ]
+    },
+    "online_rules": {
+     "log_loss": 0.17046,
+     "brier": 0.0491,
+     "log_loss_linked": 0.16492,
+     "log_loss_unlinked": 0.2398,
+     "delta_vs_online_only": -1e-05,
+     "delta_ci95": [
+      -3e-05,
+      0.0
+     ]
+    },
+    "pre_registration": {
+     "log_loss": 0.1686,
+     "brier": 0.05147,
+     "log_loss_linked": 0.16692,
+     "log_loss_unlinked": 0.18958,
+     "delta_vs_online_only": -0.00187,
+     "delta_ci95": [
+      -0.0182,
+      0.01444
+     ]
+    },
+    "all_features": {
+     "log_loss": 0.17502,
+     "brier": 0.05155,
+     "log_loss_linked": 0.17421,
+     "log_loss_unlinked": 0.18514,
+     "delta_vs_online_only": 0.00455,
+     "delta_ci95": [
+      -0.00623,
+      0.01648
+     ]
+    },
+    "tabfm_all_features": {
+     "log_loss": 0.16028,
+     "brier": 0.04587,
+     "log_loss_linked": 0.16047,
+     "log_loss_unlinked": 0.15787,
+     "delta_vs_online_only": -0.0102,
+     "delta_ci95": [
+      -0.01894,
+      -0.00352
+     ]
+    },
+    "tabfm_pre_registration": {
+     "log_loss": 0.14864,
+     "brier": 0.04344,
+     "log_loss_linked": 0.15075,
+     "log_loss_unlinked": 0.12221,
+     "delta_vs_online_only": -0.02183,
+     "delta_ci95": [
+      -0.03326,
+      -0.01282
+     ]
+    },
+    "tabfm_forecast_set": {
+     "log_loss": 0.15797,
+     "brier": 0.04678,
+     "log_loss_linked": 0.15626,
+     "log_loss_unlinked": 0.17944,
+     "delta_vs_online_only": -0.0125,
+     "delta_ci95": [
+      -0.021,
+      -0.00604
+     ]
+    }
+   }
+  },
+  "test_2025": {
+   "teams": 2231,
+   "linked": 1282,
+   "golds": 220,
+   "models": {
+    "prior": {
+     "log_loss": 0.32205,
+     "brier": 0.08889,
+     "log_loss_linked": 0.38612,
+     "log_loss_unlinked": 0.2355,
+     "delta_vs_online_only": 0.13351,
+     "delta_ci95": [
+      0.10494,
+      0.15889
+     ]
+    },
+    "online_only": {
+     "log_loss": 0.18854,
+     "brier": 0.05163,
+     "log_loss_linked": 0.16127,
+     "log_loss_unlinked": 0.22539,
+     "delta_vs_online_only": 0.0,
+     "delta_ci95": [
+      0.0,
+      0.0
+     ]
+    },
+    "online_rules": {
+     "log_loss": 0.18818,
+     "brier": 0.05149,
+     "log_loss_linked": 0.16062,
+     "log_loss_unlinked": 0.22542,
+     "delta_vs_online_only": -0.00036,
+     "delta_ci95": [
+      -0.00071,
+      -0.0
+     ]
+    },
+    "pre_registration": {
+     "log_loss": 0.16842,
+     "brier": 0.04678,
+     "log_loss_linked": 0.16627,
+     "log_loss_unlinked": 0.17134,
+     "delta_vs_online_only": -0.02012,
+     "delta_ci95": [
+      -0.03358,
+      -0.00445
+     ]
+    },
+    "all_features": {
+     "log_loss": 0.18218,
+     "brier": 0.0486,
+     "log_loss_linked": 0.1764,
+     "log_loss_unlinked": 0.18999,
+     "delta_vs_online_only": -0.00636,
+     "delta_ci95": [
+      -0.02788,
+      0.01638
+     ]
+    },
+    "tabfm_all_features": {
+     "log_loss": 0.15608,
+     "brier": 0.04423,
+     "log_loss_linked": 0.16012,
+     "log_loss_unlinked": 0.15062,
+     "delta_vs_online_only": -0.03246,
+     "delta_ci95": [
+      -0.04504,
+      -0.01916
+     ]
+    },
+    "tabfm_pre_registration": {
+     "log_loss": 0.1646,
+     "brier": 0.04749,
+     "log_loss_linked": 0.16596,
+     "log_loss_unlinked": 0.16278,
+     "delta_vs_online_only": -0.02394,
+     "delta_ci95": [
+      -0.04094,
+      -0.00517
+     ]
+    },
+    "tabfm_forecast_set": {
+     "log_loss": 0.17989,
+     "brier": 0.04962,
+     "log_loss_linked": 0.16979,
+     "log_loss_unlinked": 0.19355,
+     "delta_vs_online_only": -0.00865,
+     "delta_ci95": [
+      -0.02698,
+      0.01356
+     ]
+    }
+   }
+  }
+ }
+}

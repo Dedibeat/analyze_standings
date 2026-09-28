@@ -24,8 +24,10 @@ The 2026 forecast uses the quota-adjusted line with rho from 2023-2025.
 
 Validation trains on earlier seasons and scores 2024 and 2025 with contest-
 clustered bootstrap intervals, against: no site term, a shrunk per-site
-history intercept, the rating fit's historical CF gold bar, and an oracle
-line computed from the teams that actually attended.
+history intercept, the rating fit's historical CF gold bar, a school-rank
+quota line (top-50 schools' quota teams at their own gold rate,
+``arch_b.quota_teams``; not adopted) and an oracle line computed from the
+teams that actually attended.
 
 Hong Kong / Macau are not modelled: their fields come from registration, not
 rank bands, and their English team/school names do not link to the online
@@ -61,10 +63,15 @@ FORECAST_RANKS = (10, 25, 50, 100, 200)
 
 # ------------------------------------------------------------------ loading
 
+SCHOOL_ALIAS = re.compile(r"[(（]山东省科学院[)）]")  # 齐鲁工业大学's official long form
+TRADITIONAL = str.maketrans("學門灣臺國華醫東會", "学门湾台国华医东会")
+
+
 def norm_school(s):
-    s = unicodedata.normalize("NFKC", s or "").lower()
-    s = re.sub(r"[(（][^)）]*[)）]", "", s)
-    return "".join(c for c in s if c.isalnum())
+    """Keep campus qualifiers: 哈尔滨工业大学(威海) is its own school with its own
+    online rank and slots (``大连理工大学(盘锦校区)`` == ``大连理工大学盘锦校区``)."""
+    s = SCHOOL_ALIAS.sub("", unicodedata.normalize("NFKC", s or ""))
+    return "".join(c for c in s.translate(TRADITIONAL).lower() if c.isalnum())
 
 
 def norm_name(s):
@@ -121,13 +128,13 @@ def link_regionals(data, strengths):
         if key not in strengths:
             votes = collections.Counter()
             for m in r["members"].split("|"):
-                votes.update(roster.get((season, school, norm_name(m)), ()))
+                votes.update(sorted(roster.get((season, school, norm_name(m)), ())))  # deterministic ties
             best = votes.most_common(1)
             key, how = ((season, school, best[0][0]), "roster") if best and best[0][1] >= 2 else (None, "")
             if key not in strengths:
                 key, how = None, ""
         out.append(dict(season=season, site=r["site"], team=r["team"], school=r["school"],
-                        gold=int(r["medal"] == "gold"), link=how,
+                        gold=int(r["medal"] == "gold"), link=how, online_key=key,
                         x=strengths[key]["x"] if key else None))
     return out
 
@@ -158,7 +165,7 @@ def school_slots(season, rule, data):
     return {s: min(k, cap) for s, k in slots.items()}
 
 
-def rules_line(season, site, data, strengths, rho=0.0):
+def rules_line(season, site, data, strengths, rho=0.0, top50_seats=None, rho_top50=None):
     """Strength of the last gold among rule-admitted (band) teams.
 
     Quota entrants (invitational, WF, host, provincial, wildcard...) fill the
@@ -166,6 +173,10 @@ def rules_line(season, site, data, strengths, rho=0.0):
     times the band teams' rate, so band teams keep
     ``G * (1 - q) / (1 - q + rho * q)`` of the G golds.  ``rho = 0`` hands
     every gold to band teams; ``rho = 1`` treats quota teams as equally strong.
+
+    With ``top50_seats`` (expected quota teams from top-50 online schools,
+    ``arch_b.quota_teams.school_rank_quota_model``) those seats win at
+    ``rho_top50`` and the remaining quota seats at ``rho``.
     """
     rule = data["rules"].get((season, site))
     if not rule or not rule.get("online_bands"):
@@ -180,8 +191,26 @@ def rules_line(season, site, data, strengths, rho=0.0):
     field.sort(reverse=True)
     capacity = rule["official_capacity"]
     q = max(0.0, 1 - sum(slots.values()) / capacity)
-    band_golds = GOLD_FRACTION * capacity * (1 - q) / (1 - q + rho * q)
+    if top50_seats is None:
+        weight = rho * q
+    else:
+        q50 = min(q, top50_seats / capacity)
+        weight = rho_top50 * q50 + rho * (q - q50)
+    band_golds = GOLD_FRACTION * capacity * (1 - q) / (1 - q + weight)
     return field[max(1, round(band_golds)) - 1]
+
+
+def school_rank_lines(contests, data, strengths, train_seasons):
+    """Rules lines whose quota adjustment uses the school-rank model fit on
+    ``train_seasons``: kappa x top-50 WF/host entitlement seats at rho_top50,
+    the rest of the planned quota seats at rho_rest."""
+    from arch_b import quota_teams as qt  # imports this module; import lazily
+    ev = qt.load_evidence()
+    m = qt.school_rank_quota_model(qt.team_table(data, strengths, ev, train_seasons), data, ev)
+    lines = {k: rules_line(*k, data, strengths, m["rho_rest"],
+                           top50_seats=m["kappa"] * qt.elite_entitlement(*k, data, ev),
+                           rho_top50=m["rho_top50"]) for k in contests}
+    return lines, m
 
 
 def quota_split(data, strengths, seasons):
@@ -262,14 +291,17 @@ def model_rows(data, strengths):
     contests = {(r["season"], r["site"]) for r in linked}
     lines = {k: rules_line(*k, data, strengths) for k in contests}
     # quota-adjusted lines, with rho estimated only from seasons before each test season
-    quota_lines = {}
+    quota_lines, rank_lines = {}, {}
     for test in TEST_SEASONS:
-        _, rho = quota_split(data, strengths, [s for s in MODEL_SEASONS if s < test])
+        earlier = [s for s in MODEL_SEASONS if s < test]
+        _, rho = quota_split(data, strengths, earlier)
         quota_lines[test] = {k: rules_line(*k, data, strengths, rho) for k in contests}
+        rank_lines[test], _ = school_rank_lines(contests, data, strengths, earlier)
     by_contest = collections.defaultdict(list)
     for r in linked:
         r["line"] = lines[(r["season"], r["site"])]
         r["quota_line"] = {t: ql[(r["season"], r["site"])] for t, ql in quota_lines.items()}
+        r["rank_line"] = {t: rl[(r["season"], r["site"])] for t, rl in rank_lines.items()}
         by_contest[(r["season"], r["site"])].append(r)
     for rs in by_contest.values():  # oracle: 10%-line of the linked teams that came
         xs = sorted((r["x"] for r in rs), reverse=True)
@@ -291,7 +323,7 @@ def _site_history(train, key, shrink=1.0):
 
 
 VARIANTS = ("online_only", "site_history", "cf_bar_history", "rules_line",
-            "rules_line_quota_adjusted", "oracle_line")
+            "rules_line_quota_adjusted", "rules_line_school_rank", "oracle_line")
 
 
 def features(rows, variant, train, test=None):
@@ -301,6 +333,8 @@ def features(rows, variant, train, test=None):
         return [[1, r["x"], r["line"]] for r in rows]
     if variant == "rules_line_quota_adjusted":
         return [[1, r["x"], r["quota_line"][test]] for r in rows]
+    if variant == "rules_line_school_rank":
+        return [[1, r["x"], r["rank_line"][test]] for r in rows]
     if variant == "oracle_line":
         return [[1, r["x"], r["oracle"]] for r in rows]
     if variant == "site_history":  # shrunk historical oracle line of the same site
@@ -473,18 +507,21 @@ def markdown(result):
           "Cells: gold chance for a team with that online rank in both rounds (10th–90th "
           "percentile over contest-bootstrap refits). The last column is the rating-fit "
           "chooser (`arch_b.medal_predict`) for comparison; it did not improve held-out gold "
-          "prediction above.", "",
-          "| # | site | date | rules line (online rank) | " +
+          "prediction above. The school-rank line uses the quota model of `arch_b.quota_teams` "
+          "(top-50 schools' WF/host entitlement at their own gold rate); it is shown for "
+          "comparison because it did not beat the pooled line in the backtest.", "",
+          "| # | site | date | rules line (online rank) | school-rank line | " +
           " | ".join(f"online #{k}" for k in FORECAST_RANKS) + " | rating-fit gold bar |",
-          "|---|---|---|---|" + "---|" * (len(FORECAST_RANKS) + 1)]
+          "|---|---|---|---|---|" + "---|" * (len(FORECAST_RANKS) + 1)]
     cf = result.get("rating_fit_2026_gold_cf", {})
     for e in sorted(result["forecast_2026"], key=lambda e: e.get("easiest_rank", 99)):
         if "easiest_rank" not in e:
-            L.append(f"| — | {e['site']} | {e['date']} | not modelled | " + " | ".join("—" for _ in FORECAST_RANKS)
+            L.append(f"| — | {e['site']} | {e['date']} | not modelled | — | " + " | ".join("—" for _ in FORECAST_RANKS)
                      + f" | {cf.get(e['site'], '—')} |")
             continue
         cells = [f"{g['p']:.0%} ({g['p10']:.0%}–{g['p90']:.0%})" for g in e["gold_by_online_rank"].values()]
         L.append(f"| {e['easiest_rank']} | {e['site']} | {e['date']} | {e['rules_line_online_rank']} | "
+                 f"{e['school_rank_line_online_rank']} | "
                  + " | ".join(cells) + f" | {cf.get(e['site'], '—')} |")
     for school, teams in result.get("schools", {}).items():
         L += ["", f"## {school} teams, 2026", ""]
@@ -514,6 +551,11 @@ def run(schools=()):
     w, boots = fit_final(rows, final_lines)
     result["final_coef"] = [round(float(c), 3) for c in w]
     result["forecast_2026"], lines = forecast_2026(data, strengths, w, boots, rho)
+    rank_lines, m = school_rank_lines([("2026", site) for site in lines], data, strengths, MODEL_SEASONS)
+    result["quota"]["school_rank_model"] = {k: round(v, 3) for k, v in m.items()}
+    for e in result["forecast_2026"]:
+        if e["site"] in lines:
+            e["school_rank_line_online_rank"] = round(math.exp(-rank_lines[("2026", e["site"])]), 1)
     result["schools"] = {q: school_forecast(q, data, strengths, w, boots, lines) for q in schools}
     result["rating_fit_2026_gold_cf"] = rating_fit_2026()
     return result

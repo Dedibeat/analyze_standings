@@ -1,0 +1,405 @@
+{
+ "rows": 6473,
+ "features": [
+  {
+   "name": "online_x",
+   "type": "FLOAT64",
+   "tier": "online",
+   "description": "-mean(log online rank) over rounds entered; NULL if unlinked"
+  },
+  {
+   "name": "online_rank_r1",
+   "type": "INT64",
+   "tier": "online",
+   "description": "round-1 team rank; NULL if absent or unranked"
+  },
+  {
+   "name": "online_rank_r2",
+   "type": "INT64",
+   "tier": "online",
+   "description": "round-2 team rank; NULL if absent or unranked"
+  },
+  {
+   "name": "online_solved_r1",
+   "type": "INT64",
+   "tier": "online",
+   "description": "round-1 problems solved"
+  },
+  {
+   "name": "online_solved_r2",
+   "type": "INT64",
+   "tier": "online",
+   "description": "round-2 problems solved"
+  },
+  {
+   "name": "online_rounds",
+   "type": "INT64",
+   "tier": "online",
+   "description": "online rounds the linked team entered (0-2)"
+  },
+  {
+   "name": "online_link",
+   "type": "STRING",
+   "tier": "online",
+   "description": "how the regional team was linked: name / roster / none"
+  },
+  {
+   "name": "school_rank_combined",
+   "type": "INT64",
+   "tier": "online",
+   "description": "school's combined online rank (slot rules use it)"
+  },
+  {
+   "name": "school_rank_best_round",
+   "type": "INT64",
+   "tier": "online",
+   "description": "school's better per-round school rank"
+  },
+  {
+   "name": "school_online_teams",
+   "type": "INT64",
+   "tier": "online",
+   "description": "school's teams in the online rounds"
+  },
+  {
+   "name": "school_top100_teams",
+   "type": "INT64",
+   "tier": "online",
+   "description": "school's distinct teams ranked <= 100 in a round"
+  },
+  {
+   "name": "band_slots",
+   "type": "INT64",
+   "tier": "rules",
+   "description": "school's rank-band slots at this site"
+  },
+  {
+   "name": "school_wf",
+   "type": "BOOL",
+   "tier": "rules",
+   "description": "school reached a WF counted this season"
+  },
+  {
+   "name": "school_host",
+   "type": "BOOL",
+   "tier": "rules",
+   "description": "school hosts an EC regional this or last season"
+  },
+  {
+   "name": "school_invitational",
+   "type": "BOOL",
+   "tier": "rules",
+   "description": "school medalled at this site's spring invitational"
+  },
+  {
+   "name": "school_local",
+   "type": "BOOL",
+   "tier": "rules",
+   "description": "school is on the site province's provincial board"
+  },
+  {
+   "name": "school_non_mainland",
+   "type": "BOOL",
+   "tier": "rules",
+   "description": "Hong Kong / Macau / Taiwan / foreign school"
+  },
+  {
+   "name": "site_capacity",
+   "type": "INT64",
+   "tier": "rules",
+   "description": "notice's official capacity"
+  },
+  {
+   "name": "site_band_seats",
+   "type": "INT64",
+   "tier": "rules",
+   "description": "sum of rank-band slots"
+  },
+  {
+   "name": "site_quota_share",
+   "type": "FLOAT64",
+   "tier": "rules",
+   "description": "1 - band seats / capacity"
+  },
+  {
+   "name": "site_school_cap",
+   "type": "INT64",
+   "tier": "rules",
+   "description": "ordinary per-school team cap"
+  },
+  {
+   "name": "site_two_slot_band",
+   "type": "INT64",
+   "tier": "rules",
+   "description": "last school rank with 2 band slots (0 if none)"
+  },
+  {
+   "name": "site_team_count_clause",
+   "type": "BOOL",
+   "tier": "rules",
+   "description": ">=3 teams in the top N clause"
+  },
+  {
+   "name": "site_rules_line_x",
+   "type": "FLOAT64",
+   "tier": "rules",
+   "description": "online strength of the 10% line among rule-admitted teams"
+  },
+  {
+   "name": "site_top50_entitlement",
+   "type": "INT64",
+   "tier": "rules",
+   "description": "top-50 schools' WF/host quota seats (quota_teams)"
+  },
+  {
+   "name": "season_order",
+   "type": "INT64",
+   "tier": "rules",
+   "description": "position of the regional in the season's calendar"
+  },
+  {
+   "name": "members_prev_regionals",
+   "type": "INT64",
+   "tier": "history",
+   "description": "members with a previous-season official regional; NULL w/o members"
+  },
+  {
+   "name": "members_prev_golds",
+   "type": "INT64",
+   "tier": "history",
+   "description": "members with a previous-season regional gold"
+  },
+  {
+   "name": "members_prev_best_medal",
+   "type": "INT64",
+   "tier": "history",
+   "description": "best previous-season medal of a member (0-3)"
+  },
+  {
+   "name": "members_prev_best_rank_pct",
+   "type": "FLOAT64",
+   "tier": "history",
+   "description": "best previous-season official rank / field"
+  },
+  {
+   "name": "earlier_regionals",
+   "type": "INT64",
+   "tier": "history",
+   "description": "this season's earlier regionals of this team"
+  },
+  {
+   "name": "earlier_best_medal",
+   "type": "INT64",
+   "tier": "history",
+   "description": "best medal there (0-3)"
+  },
+  {
+   "name": "earlier_best_rank_pct",
+   "type": "FLOAT64",
+   "tier": "history",
+   "description": "best official rank / field there; NULL if none"
+  },
+  {
+   "name": "school_prev_golds",
+   "type": "INT64",
+   "tier": "history",
+   "description": "school's previous-season regional golds"
+  },
+  {
+   "name": "school_prev_medals",
+   "type": "INT64",
+   "tier": "history",
+   "description": "school's previous-season regional medals"
+  },
+  {
+   "name": "admission",
+   "type": "STRING",
+   "tier": "registration",
+   "description": "band (online seat) or quota"
+  },
+  {
+   "name": "quota_channel",
+   "type": "STRING",
+   "tier": "registration",
+   "description": "quota channel (quota_teams); '' for band teams"
+  },
+  {
+   "name": "team_index_in_school",
+   "type": "INT64",
+   "tier": "registration",
+   "description": "1 = school's strongest-online team at the site"
+  },
+  {
+   "name": "school_teams_at_site",
+   "type": "INT64",
+   "tier": "registration",
+   "description": "school's official teams at the site"
+  },
+  {
+   "name": "field_teams",
+   "type": "INT64",
+   "tier": "registration",
+   "description": "official teams at the site"
+  },
+  {
+   "name": "field_linked_share",
+   "type": "FLOAT64",
+   "tier": "registration",
+   "description": "share of the field linked to an online team"
+  },
+  {
+   "name": "field_top50_quota_teams",
+   "type": "INT64",
+   "tier": "registration",
+   "description": "quota teams from top-50 online schools"
+  },
+  {
+   "name": "field_line_x",
+   "type": "FLOAT64",
+   "tier": "registration",
+   "description": "strength of the 10% line among linked attendees"
+  },
+  {
+   "name": "field_strength_rank",
+   "type": "INT64",
+   "tier": "registration",
+   "description": "team's online-strength rank among linked attendees"
+  },
+  {
+   "name": "x_minus_field_line",
+   "type": "FLOAT64",
+   "tier": "registration",
+   "description": "online_x - field_line_x"
+  }
+ ],
+ "labels": {
+  "gold": "BOOL",
+  "medal": "STRING",
+  "rank_pct": "FLOAT64"
+ },
+ "ids": [
+  "row_id",
+  "season",
+  "site",
+  "school",
+  "team"
+ ],
+ "splits": {
+  "test_2024": {
+   "train": [
+    "2023"
+   ],
+   "test": "2024"
+  },
+  "test_2025": {
+   "train": [
+    "2023",
+    "2024"
+   ],
+   "test": "2025"
+  }
+ },
+ "feature_limit": "AI.PREDICT accepts up to 50 feature columns and 10 classes (docs, 2026-09-27)",
+ "tiers": {
+  "online": [
+   "online_x",
+   "online_rank_r1",
+   "online_rank_r2",
+   "online_solved_r1",
+   "online_solved_r2",
+   "online_rounds",
+   "online_link",
+   "school_rank_combined",
+   "school_rank_best_round",
+   "school_online_teams",
+   "school_top100_teams"
+  ],
+  "rules": [
+   "band_slots",
+   "school_wf",
+   "school_host",
+   "school_invitational",
+   "school_local",
+   "school_non_mainland",
+   "site_capacity",
+   "site_band_seats",
+   "site_quota_share",
+   "site_school_cap",
+   "site_two_slot_band",
+   "site_team_count_clause",
+   "site_rules_line_x",
+   "site_top50_entitlement",
+   "season_order"
+  ],
+  "history": [
+   "members_prev_regionals",
+   "members_prev_golds",
+   "members_prev_best_medal",
+   "members_prev_best_rank_pct",
+   "earlier_regionals",
+   "earlier_best_medal",
+   "earlier_best_rank_pct",
+   "school_prev_golds",
+   "school_prev_medals"
+  ],
+  "registration": [
+   "admission",
+   "quota_channel",
+   "team_index_in_school",
+   "school_teams_at_site",
+   "field_teams",
+   "field_linked_share",
+   "field_top50_quota_teams",
+   "field_line_x",
+   "field_strength_rank",
+   "x_minus_field_line"
+  ]
+ },
+ "null_features": {
+  "online_x": 1507,
+  "online_rank_r1": 1944,
+  "online_rank_r2": 1930,
+  "online_solved_r1": 1937,
+  "online_solved_r2": 1900,
+  "online_rounds": 0,
+  "online_link": 0,
+  "school_rank_combined": 81,
+  "school_rank_best_round": 81,
+  "school_online_teams": 0,
+  "school_top100_teams": 0,
+  "band_slots": 0,
+  "school_wf": 0,
+  "school_host": 0,
+  "school_invitational": 0,
+  "school_local": 0,
+  "school_non_mainland": 0,
+  "site_capacity": 0,
+  "site_band_seats": 0,
+  "site_quota_share": 0,
+  "site_school_cap": 0,
+  "site_two_slot_band": 0,
+  "site_team_count_clause": 0,
+  "site_rules_line_x": 0,
+  "site_top50_entitlement": 0,
+  "season_order": 0,
+  "members_prev_regionals": 406,
+  "members_prev_golds": 406,
+  "members_prev_best_medal": 406,
+  "members_prev_best_rank_pct": 2949,
+  "earlier_regionals": 0,
+  "earlier_best_medal": 0,
+  "earlier_best_rank_pct": 4376,
+  "school_prev_golds": 0,
+  "school_prev_medals": 0,
+  "admission": 0,
+  "quota_channel": 0,
+  "team_index_in_school": 0,
+  "school_teams_at_site": 0,
+  "field_teams": 0,
+  "field_linked_share": 0,
+  "field_top50_quota_teams": 0,
+  "field_line_x": 0,
+  "field_strength_rank": 1507,
+  "x_minus_field_line": 1507
+ }
+}
