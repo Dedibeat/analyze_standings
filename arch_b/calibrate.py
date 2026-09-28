@@ -112,7 +112,7 @@ def _gym_shape(records):
     if len(x) < 10 * NBINS:
         return None
     x, y = np.array(x, float), np.array(y, float)
-    o = np.argsort(x)
+    o = np.argsort(x, kind="stable")  # raw b ties (1-decimal values) must bin identically everywhere
     xs, ys = x[o], y[o]
     edges = np.linspace(0, len(xs), NBINS + 1).astype(int)
     bx = np.array([np.median(xs[a:c]) for a, c in zip(edges[:-1], edges[1:])])
