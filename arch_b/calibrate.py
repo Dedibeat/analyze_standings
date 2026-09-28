@@ -28,23 +28,29 @@ improves 477 → 434). A curved map fit on the CF anchors *alone* scores worse t
 affine (297), so the gain is the gym information, not map flexibility. If the gym
 file is missing the module falls back to the plain affine map.
 
-    python -m arch_b.calibrate            # report all models; calibrate survival
-    python -m arch_b.calibrate --binary   # calibrate the binary model instead
+This composed map is a scalar map, so it stays the map for team abilities,
+performances and medal bars (the exporters and ``arch_b.medals`` build it).
+Shipped *problem* ratings use DE instead (2026-09-28 release,
+``de_release_audit.md``): the affine on raw survival ``b`` plus a residual ridge
+on binary-minus-survival, conditional SE, solve rate and log field size, with
+those features clipped to the anchor range. DE needs per-problem features, so
+it is undefined for an arbitrary ability.
 
-Writes output/problem_ratings_calibrated.json: every record gains
-``difficulty_cf`` (clipped to [800, 4000]) and explicitly limited uncertainty
-components. ``difficulty_cf_fit_se`` is the conditional Laplace SE of ``b``
-scaled by the local slope of the composed map. ``difficulty_cf_level_sd`` is the
-hierarchical contest-level component, and ``difficulty_cf_partial_se`` is their
-quadrature. The partial SE is not a calibrated CF prediction interval: it omits
-mapping/variance-component uncertainty and residual CF discrepancy.
+    python -m arch_b.calibrate            # report all models; ship DE ratings
+
+Writes output/problem_ratings_calibrated.json (the survival records plus
+``difficulty_cf``, clipped to [800, 4000]; no uncertainty field, since the old
+gym-map SEs do not describe DE and DE has none of its own) and
+output/problem_calibration.json (the DE settings, anchor feature ranges and
+input hashes). Consumers read problem ratings from that file via
+``problem_cf``, never from their own refit.
 """
 
 import contextlib
+import hashlib
 import io
 import json
 import os
-import sys
 from collections import defaultdict
 
 import numpy as np
@@ -158,46 +164,66 @@ def _report(name, our, cf, grp, shape):
     return slope, intercept
 
 
-def main(use_binary=False):
-    pick = None
+def problem_cf(problems):
+    """Shipped DE ``difficulty_cf`` per fitted appearance, keyed by (contest_id, label).
+
+    ``problems`` is a fit's ``ds.problems``. The key is corroborated by
+    problem_id (task id alone merges shared-task appearances such as Luxor); a
+    missing or mismatched appearance means the artifact is from another fit.
+    """
+    with open(os.path.join(OUT, "problem_ratings_calibrated.json"), encoding="utf-8") as f:
+        shipped = {(r["contest_id"], r["problem_label"]): r for r in json.load(f)}
+    out = {}
+    for cid, label, pid, _name in problems:
+        r = shipped[(int(cid), label)]
+        if r["problem_id"] != pid:
+            raise RuntimeError(f"problem_ratings_calibrated.json is from another fit: {cid} {label}")
+        out[(int(cid), label)] = r["difficulty_cf"]
+    return out
+
+
+def main():
     for name, fname in MODELS:
         path = os.path.join(OUT, fname)
         if not os.path.exists(path):
             continue
         records = json.load(open(path))
         our, cf, grp = _anchors(records)
-        shape = _gym_shape(records)
-        slope, intercept = _report(name, our, cf, grp, shape)
-        chosen = (name == "arch B binary") if use_binary else (name == "arch B survival")
-        if chosen:
-            pick = (name, records, shape, slope, intercept)
+        _report(name, our, cf, grp, _gym_shape(records))
 
-    name, records, shape, slope, intercept = pick
-    if shape is None:
-        print("(gym_difficulty.json unavailable — plain affine map)")
-        shape = lambda t: np.asarray(t, float)
-    from .hier_calibrate import level_sd  # imports this module; keep it lazy
-    by_contest, default_level = level_sd(records)
-    for r in records:
-        d = float(r["difficulty"])
-        r["difficulty_cf"] = round(float(np.clip(
-            slope * shape(np.array([d]))[0] + intercept, elo.LO, elo.HI)), 1)
-        if "difficulty_se" in r:
-            # local slope of the composed map via central difference
-            h = 10.0
-            dz = (shape(np.array([d + h]))[0] - shape(np.array([d - h]))[0]) / (2 * h)
-            fit_se = abs(slope * dz) * r["difficulty_se"]
-            level = by_contest.get(r["contest_id"], default_level)
-            r["difficulty_cf_fit_se"] = round(float(fit_se), 1)
-            r["difficulty_cf_level_sd"] = round(float(level), 1)
-            r["difficulty_cf_partial_se"] = round(float(np.hypot(fit_se, level)), 1)
-            r.pop("difficulty_cf_se", None)
+    # DE (de_release_audit.md): residual ridge on raw survival b with
+    # binary-minus-survival, conditional SE, solve rate and log field size,
+    # features clipped to the anchor range; alpha/lambda chosen on inner folds.
+    from .calibration_experiment import _full_rows, build_anchor_table
+    from .de_release_audit import DE, full_anchor_fit  # imports this module; keep it lazy
+    paths = {m: os.path.join(OUT, f"problem_ratings_{m}.json") for m in ("survival", "b")}
+    records, binary = (json.load(open(paths[m], encoding="utf-8")) for m in ("survival", "b"))
+    anchors = build_anchor_table(records, binary)
+    pred, (alpha, lam) = full_anchor_fit(anchors, _full_rows(records, binary), "clip", DE)
+    if not np.isfinite(pred).all():
+        raise RuntimeError("non-finite DE prediction")
+    for r, p in zip(records, pred):
+        r["difficulty_cf"] = round(float(np.clip(p, elo.LO, elo.HI)), 1)
     out = os.path.join(OUT, "problem_ratings_calibrated.json")
     with open(out, "w") as f:
         json.dump(records, f, indent=2, ensure_ascii=False)
-    print(f"\ncalibrated {name} (cf = {slope:.2f}*f(b) {intercept:+.0f}) "
-          f"-> {os.path.normpath(out)}")
+    meta = {"method": "DE, features clipped to the anchor range (de_release_audit.md)",
+            "scope": "problem difficulty only; team abilities, performances and medal bars "
+                     "use the scalar gym-shape map",
+            "features": DE, "ridge_alpha": alpha, "lambda": lam,
+            "anchors": len(anchors), "anchor_contests": len({a["cf_contest"] for a in anchors}),
+            "anchor_feature_range": {f: [min(a[f] for a in anchors), max(a[f] for a in anchors)]
+                                     for f in DE},
+            "display": [elo.LO, elo.HI, "rounded to 0.1"],
+            "uncertainty": "unavailable",
+            "inputs_sha256": {os.path.basename(p): hashlib.sha256(open(p, "rb").read()).hexdigest()
+                              for p in paths.values()}}
+    with open(os.path.join(OUT, "problem_calibration.json"), "w") as f:
+        json.dump(meta, f, indent=2)
+        f.write("\n")
+    print(f"\ncalibrated arch B survival with DE (alpha={alpha}, lambda={lam}, "
+          f"{len(anchors)} anchors) -> {os.path.normpath(out)}")
 
 
 if __name__ == "__main__":
-    main(use_binary="--binary" in sys.argv)
+    main()

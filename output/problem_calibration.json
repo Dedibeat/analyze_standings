@@ -1,0 +1,47 @@
+{
+  "method": "DE, features clipped to the anchor range (de_release_audit.md)",
+  "scope": "problem difficulty only; team abilities, performances and medal bars use the scalar gym-shape map",
+  "features": [
+    "raw_b",
+    "binary_minus_survival",
+    "conditional_fit_se",
+    "solve_rate",
+    "log_field_size"
+  ],
+  "ridge_alpha": 1.0,
+  "lambda": 1.0,
+  "anchors": 185,
+  "anchor_contests": 15,
+  "anchor_feature_range": {
+    "raw_b": [
+      1178.4,
+      2936.8
+    ],
+    "binary_minus_survival": [
+      -703.0000000000001,
+      461.0999999999999
+    ],
+    "conditional_fit_se": [
+      9.8,
+      169.1
+    ],
+    "solve_rate": [
+      0.0,
+      1.0
+    ],
+    "log_field_size": [
+      4.356708826689592,
+      5.780743515792329
+    ]
+  },
+  "display": [
+    800.0,
+    4000.0,
+    "rounded to 0.1"
+  ],
+  "uncertainty": "unavailable",
+  "inputs_sha256": {
+    "problem_ratings_survival.json": "015813357ffdc5231bda7e7456151e871b2066651160ea592207e2f9ebb16332",
+    "problem_ratings_b.json": "8f51ee465e8060d08fa23658dfb65c94494dd3cfe2952966ca451c12fb0c91c7"
+  }
+}

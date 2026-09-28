@@ -24,9 +24,11 @@ across contests, and targeted collection of missing evidence. It records fresh
 diagnostics and proposed experiments, not implemented model changes.
 
 The bounded [calibration residual experiment](calibration_experiment_report.md)
-now records a nested 15-contest CF-anchor control: raw affine 246.9061,
+recorded a nested 15-contest CF-anchor control: raw affine 246.9061,
 gym-shaped affine 245.4277, and ridge residual 229.6269 RMSE. This is a
-research-only proxy result. The managed [BigQuery TabFM result](tabfm_bigquery_report.md)
+research-only proxy result. Since the 2026-09-28 DE release,
+`output/calibration_experiment.json` holds the same control rerun on the
+roster-fixed fit (246.9288 / 246.1274 / 229.4028). The managed [BigQuery TabFM result](tabfm_bigquery_report.md)
 completed the full 185-anchor comparison: TabFM reaches 231.2865 RMSE, improving
 on raw/gym but not the frozen DE control (226.5661), so no shipped calibration or
 rating artifact changed. Reproduce the controls with
@@ -76,15 +78,17 @@ DE–TabFM gap remains uncertain across contests. Proposed next work isolates
 these mechanisms and obtains fresh transfer evidence before promotion.
 
 The [DE release audit](de_release_audit.md) (2026-09-28) reruns DE on the fit
-with the EC online-round rosters attached (`scripts/attach_online_rosters.py`,
-not yet applied). DE scores 226.3 LOCO / 225.7 LORO against the gym map's 246.1.
+with the EC online-round rosters attached (`scripts/attach_online_rosters.py`).
+**DE is now the shipped problem calibration** (released 2026-09-28, see
+"Calibrated Codeforces-point ratings" below). DE scores 226.3 LOCO / 225.7 LORO against the gym map's 246.1.
 Its per-contest levels also agree best with the independent CF-gym population
 (robust contest-offset SD 96, against 133 raw and 120 for the gym map).
-- **Open decisions before a switch:** no fresh confirmation set exists; 225
-  appearances lie outside any field-size evidence (clipping DE's features is
-  recommended); and online-round ratings rest on an equal online/onsite
-  assumption. Held-out verified teams contradict that assumption by about 100
-  CF-scale points.
+- **Decisions taken at release:** shipped without a fresh confirmation set
+  (none exists); DE's features are clipped to the anchor range, which bounds
+  the 225 appearances outside any field-size evidence; online-round problems
+  get no special handling, although their ratings rest on an equal
+  online/onsite assumption that held-out verified teams contradict by about
+  100 CF-scale points.
 - **Other findings:** the survival fit compresses team abilities (CF slope 2.85
   vs binary 0.98) because it reads sequential solving as weakness. Team-season
   offsets help solve prediction but hurt CF calibration.
@@ -181,7 +185,7 @@ AOJ practice statistics:
 ./.venv/bin/python -m arch_b.aoj --refresh      # rebuild the matched AOJ validation artifact
 ./.venv/bin/python -m arch_b.external_validate  # Codeforces + Kattis + gym + AOJ, all models
 ./.venv/bin/python -m arch_b.predict_eval       # held-out response imputation (binary vs survival)
-./.venv/bin/python -m arch_b.calibrate     # affine map to Codeforces points
+./.venv/bin/python -m arch_b.calibrate     # DE problem ratings in Codeforces points
 ./.venv/bin/python -m arch_b.metric        # THE optimization metric: LOCO CF-point RMSE + guards
 ./.venv/bin/python -m arch_b.data_influence # explain supplemental-contest effects
 ```
@@ -246,17 +250,26 @@ essential even though merely maximizing the number of new links is not useful.
 
 ### Calibrated Codeforces-point ratings
 
-`arch_b.calibrate` maps the (relative) survival scale to CF points in two legs: a
-monotone **shape** learned from the ~660 gym-mirror difficulties (nearly CF-native
-in scale; it cannot reorder our problems) and an **affine** leg fit on the official
-CF ratings of all 15 rated mirror contests (185 anchor problems, auto-mapped).
-Current saved joint-fit leave-one-contest-out: shaped RMSE **245.43** vs
-plain-affine **246.91**. The paired contest-bootstrap difference includes zero
-([-9.63, +6.16] CF); the earlier 266 vs 288 improvement is historical. Writes
-`output/problem_ratings_calibrated.json` with `difficulty_cf`, conditional
-`difficulty_cf_fit_se`, `difficulty_cf_level_sd`, and their
-`difficulty_cf_partial_se` quadrature. The partial SE is deliberately not called
-a total: it is not a calibrated CF prediction interval (see the current review).
+Since 2026-09-28 the shipped **problem** ratings use **DE**
+([de_release_audit.md](de_release_audit.md)). DE is the plain affine on raw survival `b` plus a
+residual ridge on binary-minus-survival difficulty, conditional SE, solve rate
+and log field size. The ridge features are clipped to the range of the 185 CF
+anchors (15 mirror contests), and alpha/lambda are chosen on inner contest folds
+(currently 1 / 1). On the roster-fixed fit, nested leave-one-contest-out RMSE is
+**226.0** (clipped DE) against 246.1 for the gym map and 246.9 for the plain
+affine. `arch_b.calibrate` writes
+`output/problem_ratings_calibrated.json` (`difficulty_cf` in [800, 4000]; **no
+uncertainty field** — the old gym-map SEs do not describe DE) and
+`output/problem_calibration.json` (settings, anchor feature ranges, input
+hashes). The viewer, virtual calculator and UCup-only export read problem
+ratings from that file (`calibrate.problem_cf`), so all consumers agree.
+
+DE needs per-problem features, so it cannot map a team ability. Team
+abilities, performances and medal bars keep the scalar map: a monotone
+**shape** learned from the ~660 gym-mirror difficulties, then an **affine**
+leg fit on the same CF anchors. `arch_b.metric` also still scores that map on
+the raw fit (246.3 on the roster-fixed fit). The two axes no longer share one
+map.
 
 ### Anchoring audit (2026-08-21)
 
@@ -316,10 +329,11 @@ The five steps the audit proposed, as built and measured (baseline metric 244.3)
    estimate; it cannot establish absence of bias in unanchored regions or prove
    that the gym/LLM disagreement is a referee artifact. LOCO does not improve
    (245.4 vs 248.3), so the
-   shipped map stays the plain affine. The exported uncertainty components are
-   the conditional fit SE (`difficulty_cf_fit_se`) and calibration level SD
-   (`difficulty_cf_level_sd`) plus their explicitly partial quadrature; these are
-   not advertised as a calibrated prediction interval.
+   shipped map stays the plain affine. Until the 2026-09-28 DE release, the
+   exported uncertainty components were the conditional fit SE
+   (`difficulty_cf_fit_se`) and calibration level SD (`difficulty_cf_level_sd`)
+   plus their explicitly partial quadrature; these were not advertised as a
+   calibrated prediction interval.
 5. **Ability-side CF anchoring** (`arch_b/cf_prior.py`): the CPHoF participant
    ratings as a time-accurate, roster-complete, leak-free prior on team ability.
    Measured **inert** (57 anchored identities, metric moves <= 0.2), so it is
@@ -565,10 +579,10 @@ left untouched).
 ./.venv/bin/python -m arch_b.export_viewer
 ```
 
-Writes `output/ratings_viewer_b.html` from the **survival** fit, with every
-difficulty and ability mapped to **Codeforces-equivalent points** and each problem
-difficulty shown with its Laplace standard error (±SE). This is the recommended
-viewer. It is published live via GitHub Pages:
+Writes `output/ratings_viewer_b.html` from the **survival** fit in
+**Codeforces-equivalent points**: problem difficulties are the shipped DE
+ratings (no ±SE, since DE has none), and team abilities/performances use the
+scalar gym-shape map. This is the recommended viewer. It is published live via GitHub Pages:
 
 **<https://dedibeat.github.io/analyze_standings/output/ratings_viewer_b.html>**
 
@@ -593,9 +607,10 @@ standings to get a hypothetical rank, then the same Elo rank-inversion
 primitive `arch_b.medals` uses for every real team's `performance_elo`
 converts that rank plus the real field's fitted abilities into a rating. The
 standings table shows every real team's own calibrated performance
-alongside yours for direct comparison. The CF-points mapping is the same
-gym-shape + affine calibration as `arch_b.calibrate`, sampled into a dense
-lookup table at export time so the browser doesn't need to re-fit it.
+alongside yours for direct comparison. The performance mapping is the scalar
+gym-shape + affine map, sampled into a dense lookup table at export time so the
+browser doesn't need to re-fit it. The reference problems table shows the
+shipped DE problem ratings.
 Self-contained, no server; recomputes live as you edit solved/penalty.
 
 ### Contest-linking graph
@@ -656,7 +671,8 @@ Module self-checks:
 - `output/problem_ratings.json` — Architecture A ratings;
   `output/problem_ratings_b.json` — Architecture B (binary) ratings;
   `output/problem_ratings_survival.json` — Architecture B (survival) ratings;
-  `output/problem_ratings_calibrated.json` — survival ratings mapped to CF points;
+  `output/problem_ratings_calibrated.json` — DE-calibrated problem ratings in CF points
+  (settings in `output/problem_calibration.json`);
   `output/gym_difficulty.json` — independent CF-scale difficulty from gym mirrors.
 - `output/ratings_viewer.html` — generated interactive viewer.
 - `output/virtual_calc.html` — generated virtual-contest performance calculator.

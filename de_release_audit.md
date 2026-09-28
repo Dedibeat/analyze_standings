@@ -1,5 +1,10 @@
 # DE release audit on the roster-fixed fit (2026-09-28)
 
+**Status: released 2026-09-28.** The roster fix is applied to `data/tagged.json`,
+and DE with features clipped to the anchor range is the shipped problem
+calibration. Online-round problems get no special handling. See "DE release"
+in `details.md`.
+
 **Candidate:** the DE calibration on the survival/binary pair refit with the EC
 online-round rosters attached. DE is `raw_b` plus binary-minus-survival,
 conditional SE, solve rate and `log1p` field size. The roster fix is
