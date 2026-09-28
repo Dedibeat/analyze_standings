@@ -449,8 +449,10 @@ a small consistent gain (2024 and 2025), while per-site history and the rating
 fit's CF gold bars do not. The same data independently confirm the Shenyang
 2024→2025 swing and flag Kunming/Nanjing 2024 as the largest fit-vs-online
 disagreements. Results: `output/online_gold.md`; details in `details.md`.
-Hong Kong/Macau are not modelled, and 2025–2026 rosters (only on PTA) are
-missing.
+Hong Kong/Macau are not modelled. The 2025–2026 PTA rosters are now in
+`data/` (`icpc_2025_online_1_teams.csv`, `icpc_teams_2025_online_2_fixed.csv`,
+`icpc_2026_ec_round1_teams.csv`, `icpc_2026_ec_online_round2_teams.csv`) but
+are not yet used; see `details.md`.
 
 ```bash
 python3 scripts/build_quota_evidence.py        # WF/host/invitational/provincial evidence + Shanghai lists
