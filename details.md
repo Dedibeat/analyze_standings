@@ -3895,3 +3895,56 @@ converting the lists to `online_rosters.csv` rows, adding the aliases, then
 re-running `online_gold`, `quota_teams` and the TabFM table, and testing the
 fit attachment with `arch_b.metric`.
 
+
+
+## Diagnosis: regionals whose 50% gold line sits past online #100 (2026-09-30)
+
+**Question.** Five regionals have an online rank for an even gold chance
+(`contest_difficulty`) past #100: Shenyang 2025 **151**, Xi'an 2025 **127**,
+Hangzhou 2024 110, Shanghai 2024 106, Chengdu 2024 100.3. Is linking the cause?
+No code changed; checks were run from scratch scripts on `arch_b.online_gold`.
+
+**Answer: no, linking does not cause it.** Only two of the five are outliers.
+
+- The mean line over all 18 contests is **98.7**. The three 2024 lines are
+  within noise of it. In those contests 92–97% of golds are linked, and
+  keeping only name links moves them by <4 ranks (104 / 108 / 110).
+- **Randomly dropping 2024 links to 2025's rate (57%)** leaves every 2024 line
+  unchanged (medians within 2.4 ranks; 10–90% band ±12). So a low link rate
+  adds noise, not depth.
+- **Name linking is not biased toward golds.** With 2023–24 roster links as
+  the reference, gold teams keep their online name *less* often at the same
+  strength (logit coefficient −0.44; online #51–100: 74% vs 89%, #101–200: 64%
+  vs 74%). Under-linking golds would make lines *shallower*, so 2025's
+  name-only linking cannot explain deep 2025 lines.
+- **Transitive linking** (an unlinked team takes the online key of a linked
+  team with ≥2 of the same members at another regional that season) adds 73
+  rows and moves Shenyang 2025 151 → 147 and Xi'an 2025 127 → 128.
+- No duplicate online keys inside any of the five contests. The deep linked
+  golds are real name matches with poor online rounds (e.g. 北航 13级大风
+  #853/#236).
+
+**What does explain it.**
+
+1. **Field strength (Shenyang/Xi'an 2025).** Strong schools attended in normal
+   numbers (57–58 teams from combined top-20 schools, like every site). But
+   only 12 / 15 linked teams are online top-100, versus 16–26 at the other
+   2025 sites. That gives 3.3 / 2.7 golds per linked top-100 team, against a
+   median of 1.4. So golds went deep. This matches independent evidence:
+   Shenyang 2025 has the lowest CF gold bar of all (2382), its two-slot band
+   widened to 1–100, and Xi'an seats ~120 invitational teams.
+   One third of their golds (13/40, 11/40) are unlinked teams from elite schools
+   (清华, 上交, 浙大, 北航, 电子科大, 哈工大). Those golds are simply missing
+   from the fit; as shown above, their absence does not deepen the line.
+2. **Zero-solve imputation (2024 only, small).** 2024 PDFs list zero-solve
+   teams without a rank, so a strong team that skipped a round gets the
+   unranked-tail midpoint: 北交 羊羊羊 [2260, 51] → effective #339; 南开
+   [53, 2385]. Ignoring an imputed round when the team has a ranked one moves
+   Hangzhou 2024 110 → 105 and Shanghai 2024 106 → 101 (and Shenyang 2024
+   83 → 75). The effect is 1.6% of 2024 linked teams and none in 2023/2025.
+   This is not a linking problem but it is a real aggregation choice in
+   `online_strengths`; left unchanged here.
+
+**Not tested.** The PTA registration lists (2025 linking 57% → 90%) are not in
+this checkout (they are untracked), so the 2025 lines could not be re-run with
+roster links. The tests above predict the change would be small.
