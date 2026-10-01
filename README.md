@@ -484,7 +484,11 @@ a small gain in both 2024 and 2025 (intervals touch zero), while per-site
 history and the rating fit's CF gold bars do not. The same data independently confirm the Shenyang
 2024→2025 swing and flag Kunming/Nanjing 2024 as the largest fit-vs-online
 disagreements. Results: `output/online_gold.md`; details in `details.md`.
-Hong Kong/Macau are not modelled. The 2025–2026 registration rosters (PTA
+Hong Kong/Macau are not modelled, but `arch_b.hk_link` (needs `pypinyin`)
+links their English-named teams to online results by matching roster members
+in pinyin: 79% / 77% of the 2024 / 2025 Hong Kong official teams and 25 of 28
+golds (`output/hk_link.md`). The 2022 Hong Kong and 2023 Macau boards list no
+members, so those two contests link only 5–9% by name. The 2025–2026 registration rosters (PTA
 exports in `data/`: `icpc_2025_online_1_teams.csv`,
 `icpc_teams_2025_online_2_fixed.csv`, `icpc_2026_ec_round1_teams.csv`,
 `icpc_2026_ec_online_round2_teams.csv`) are added by `add_pta_rosters.py`; they
@@ -494,6 +498,7 @@ alone).
 ```bash
 python3 scripts/build_quota_evidence.py        # WF/host/invitational/provincial evidence + Shanghai lists
 python3 -m arch_b.quota_teams                   # which teams entered each regional on a quota seat, and why
+python3 -m arch_b.hk_link                       # Hong Kong/Macau teams linked to online results (pinyin members)
 ```
 
 Every official team of the 2023–2025 mainland regionals is labelled band

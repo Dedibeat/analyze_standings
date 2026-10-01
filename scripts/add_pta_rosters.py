@@ -14,6 +14,10 @@ appear (checked by team names: 4-16 shared names each, 1 for 华北科技学院)
 2026 ranking already uses most new names, so the map is per season; with it
 every ranked 2025 and 2026 team matches a roster by school + team name.
 
+It also writes ``school_names_en.csv`` (PTA English school name -> the
+ranking's Chinese name; school names only), which ``arch_b.hk_link`` uses to
+check the school of Hong Kong/Macau teams listed under English names.
+
     python3 scripts/add_pta_rosters.py
 """
 
@@ -22,6 +26,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "data" / "ec_online" / "online_rosters.csv"
+SCHOOLS_EN = ROOT / "data" / "ec_online" / "school_names_en.csv"
 PTA_FILES = {
     ("2025", "1"): "icpc_2025_online_1_teams.csv",
     ("2025", "2"): "icpc_teams_2025_online_2_fixed.csv",
@@ -46,30 +51,37 @@ PTA_SCHOOL_ALIAS = {
 
 
 def pta_rows():
-    out = []
+    out, schools_en = [], {}
     for (season, rnd), name in PTA_FILES.items():
         with open(ROOT / "data" / name, encoding="utf-8-sig") as f:
             for r in csv.DictReader(f):
                 if r["review_status"] != "REVIEWED":
                     continue
-                school = r["school_name_cn"].strip()
+                school = PTA_SCHOOL_ALIAS[season].get(r["school_name_cn"].strip(), r["school_name_cn"].strip())
+                if r["school_name_en"].strip():
+                    schools_en.setdefault(r["school_name_en"].strip(), school)  # 2025 (older) names first
                 members = [m.strip() for m in r["members"].split("/") if m.strip()]
-                out.append(dict(season=season, round=rnd, school=PTA_SCHOOL_ALIAS[season].get(school, school),
+                out.append(dict(season=season, round=rnd, school=school,
                                 team=r["team_name"].strip(), members="|".join(members)))
-    return out
+    return out, schools_en
 
 
 def main():
     with open(OUT, encoding="utf-8") as f:
         rows = list(csv.DictReader(f))
     seasons = {s for s, _ in PTA_FILES}
-    new = pta_rows()
+    new, schools_en = pta_rows()
     rows = [r for r in rows if r["season"] not in seasons] + new
     with open(OUT, "w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=["season", "round", "school", "team", "members"], lineterminator="\n")
         w.writeheader()
         w.writerows(rows)
+    with open(SCHOOLS_EN, "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f, lineterminator="\n")
+        w.writerow(["school_en", "school"])
+        w.writerows(sorted(schools_en.items()))
     print(f"{len(new)} PTA roster rows for {sorted(seasons)} -> {OUT} ({len(rows)} rows)")
+    print(f"{len(schools_en)} English school names -> {SCHOOLS_EN}")
 
 
 if __name__ == "__main__":
