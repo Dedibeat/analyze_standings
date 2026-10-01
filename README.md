@@ -24,9 +24,11 @@ across contests, and targeted collection of missing evidence. It records fresh
 diagnostics and proposed experiments, not implemented model changes.
 
 The bounded [calibration residual experiment](calibration_experiment_report.md)
-now records a nested 15-contest CF-anchor control: raw affine 246.9061,
+recorded a nested 15-contest CF-anchor control: raw affine 246.9061,
 gym-shaped affine 245.4277, and ridge residual 229.6269 RMSE. This is a
-research-only proxy result. The managed [BigQuery TabFM result](tabfm_bigquery_report.md)
+research-only proxy result. Since the 2026-09-28 DE release,
+`output/calibration_experiment.json` holds the same control rerun on the
+roster-fixed fit (246.9288 / 246.1274 / 229.4028). The managed [BigQuery TabFM result](tabfm_bigquery_report.md)
 completed the full 185-anchor comparison: TabFM reaches 231.2865 RMSE, improving
 on raw/gym but not the frozen DE control (226.5661), so no shipped calibration or
 rating artifact changed. Reproduce the controls with
@@ -75,6 +77,28 @@ disagreement and solve rate explain much of the largest correction. The small
 DE–TabFM gap remains uncertain across contests. Proposed next work isolates
 these mechanisms and obtains fresh transfer evidence before promotion.
 
+The [DE release audit](de_release_audit.md) (2026-09-28) reruns DE on the fit
+with the EC online-round rosters attached (`scripts/attach_online_rosters.py`).
+**DE is now the shipped problem calibration** (released 2026-09-28, see
+"Calibrated Codeforces-point ratings" below). DE scores 226.3 LOCO / 225.7 LORO against the gym map's 246.1.
+Its per-contest levels also agree best with the independent CF-gym population
+(robust contest-offset SD 96, against 133 raw and 120 for the gym map).
+- **Decisions taken at release:** shipped without a fresh confirmation set
+  (none exists); DE's features are clipped to the anchor range, which bounds
+  the 225 appearances outside any field-size evidence; online-round problems
+  get no special handling, although their ratings rest on an equal
+  online/onsite assumption that held-out verified teams contradict by about
+  100 CF-scale points.
+- **Other findings:** the survival fit compresses team abilities (CF slope 2.85
+  vs binary 0.98) because it reads sequential solving as weakness. Team-season
+  offsets help solve prediction but hurt CF calibration.
+- **Bug fixed on the way:** the gym map now sorts ties stably, so shipped
+  ratings reproduce on every platform.
+
+Reproduce with `python3 -m arch_b.de_release_audit /tmp/tagged_rosters.json`
+and `python3 -m arch_b.fit_mechanism_audit /tmp/tagged_rosters.json`, after
+running the attach script.
+
 The [experiment roadmap](experiment_roadmap.md) records the remaining audits,
 fresh-confirmation requirements, and longer-term rating research. Its correction
 and anchor-contest influence audits now have the bounded results linked above;
@@ -83,11 +107,11 @@ managed pilot.
 
 ## Run
 
-Requires Python 3 + numpy. A project venv is used:
+Requires Python 3 + numpy (`pypinyin` for the Hong Kong modules). A project venv is used:
 
 ```bash
 python3 -m venv .venv
-./.venv/bin/pip install numpy
+./.venv/bin/pip install numpy pypinyin
 ./.venv/bin/python -m arch_a.run
 ```
 
@@ -161,7 +185,7 @@ AOJ practice statistics:
 ./.venv/bin/python -m arch_b.aoj --refresh      # rebuild the matched AOJ validation artifact
 ./.venv/bin/python -m arch_b.external_validate  # Codeforces + Kattis + gym + AOJ, all models
 ./.venv/bin/python -m arch_b.predict_eval       # held-out response imputation (binary vs survival)
-./.venv/bin/python -m arch_b.calibrate     # affine map to Codeforces points
+./.venv/bin/python -m arch_b.calibrate     # DE problem ratings in Codeforces points
 ./.venv/bin/python -m arch_b.metric        # THE optimization metric: LOCO CF-point RMSE + guards
 ./.venv/bin/python -m arch_b.data_influence # explain supplemental-contest effects
 ```
@@ -226,17 +250,26 @@ essential even though merely maximizing the number of new links is not useful.
 
 ### Calibrated Codeforces-point ratings
 
-`arch_b.calibrate` maps the (relative) survival scale to CF points in two legs: a
-monotone **shape** learned from the ~660 gym-mirror difficulties (nearly CF-native
-in scale; it cannot reorder our problems) and an **affine** leg fit on the official
-CF ratings of all 15 rated mirror contests (185 anchor problems, auto-mapped).
-Current saved joint-fit leave-one-contest-out: shaped RMSE **245.43** vs
-plain-affine **246.91**. The paired contest-bootstrap difference includes zero
-([-9.63, +6.16] CF); the earlier 266 vs 288 improvement is historical. Writes
-`output/problem_ratings_calibrated.json` with `difficulty_cf`, conditional
-`difficulty_cf_fit_se`, `difficulty_cf_level_sd`, and their
-`difficulty_cf_partial_se` quadrature. The partial SE is deliberately not called
-a total: it is not a calibrated CF prediction interval (see the current review).
+Since 2026-09-28 the shipped **problem** ratings use **DE**
+([de_release_audit.md](de_release_audit.md)). DE is the plain affine on raw survival `b` plus a
+residual ridge on binary-minus-survival difficulty, conditional SE, solve rate
+and log field size. The ridge features are clipped to the range of the 185 CF
+anchors (15 mirror contests), and alpha/lambda are chosen on inner contest folds
+(currently 1 / 1). On the roster-fixed fit, nested leave-one-contest-out RMSE is
+**226.0** (clipped DE) against 246.1 for the gym map and 246.9 for the plain
+affine. `arch_b.calibrate` writes
+`output/problem_ratings_calibrated.json` (`difficulty_cf` in [800, 4000]; **no
+uncertainty field** — the old gym-map SEs do not describe DE) and
+`output/problem_calibration.json` (settings, anchor feature ranges, input
+hashes). The viewer, virtual calculator and UCup-only export read problem
+ratings from that file (`calibrate.problem_cf`), so all consumers agree.
+
+DE needs per-problem features, so it cannot map a team ability. Team
+abilities, performances and medal bars keep the scalar map: a monotone
+**shape** learned from the ~660 gym-mirror difficulties, then an **affine**
+leg fit on the same CF anchors. `arch_b.metric` also still scores that map on
+the raw fit (246.3 on the roster-fixed fit). The two axes no longer share one
+map.
 
 ### Anchoring audit (2026-08-21)
 
@@ -296,10 +329,11 @@ The five steps the audit proposed, as built and measured (baseline metric 244.3)
    estimate; it cannot establish absence of bias in unanchored regions or prove
    that the gym/LLM disagreement is a referee artifact. LOCO does not improve
    (245.4 vs 248.3), so the
-   shipped map stays the plain affine. The exported uncertainty components are
-   the conditional fit SE (`difficulty_cf_fit_se`) and calibration level SD
-   (`difficulty_cf_level_sd`) plus their explicitly partial quadrature; these are
-   not advertised as a calibrated prediction interval.
+   shipped map stays the plain affine. Until the 2026-09-28 DE release, the
+   exported uncertainty components were the conditional fit SE
+   (`difficulty_cf_fit_se`) and calibration level SD (`difficulty_cf_level_sd`)
+   plus their explicitly partial quadrature; these were not advertised as a
+   calibrated prediction interval.
 5. **Ability-side CF anchoring** (`arch_b/cf_prior.py`): the CPHoF participant
    ratings as a time-accurate, roster-complete, leak-free prior on team ability.
    Measured **inert** (57 anchored identities, metric moves <= 0.2), so it is
@@ -435,6 +469,7 @@ the descriptive city/time chart; `--report` prints that analysis.
 
 ```bash
 python3 scripts/build_ec_online_data.py        # official online rankings, rosters, regional results
+python3 scripts/add_pta_rosters.py              # + 2025-2026 registration rosters (PTA exports in data/)
 python3 -m arch_b.online_gold                   # backtest, rating-fit comparison, 2026 forecast
 python3 -m arch_b.online_gold --school 复旦大学  # per-team forecast for a school
 ```
@@ -442,21 +477,40 @@ python3 -m arch_b.online_gold --school 复旦大学  # per-team forecast for a s
 Independent of the rating fit: gold chance at a regional is modelled from a
 team's official online ranks plus a site "rules line" derived from the
 hand-encoded slot rules (`data/ec_online/slot_rules.json`), with the golds
-won by quota entrants (invitational/WF/host teams, measured at ~0.44× the band
+won by quota entrants (invitational/WF/host teams, measured at ~0.39× the band
 teams' gold rate on earlier seasons) taken out first. Trained on earlier
 seasons, online strength alone predicts held-out gold well; the rules line adds
-a small consistent gain (2024 and 2025), while per-site history and the rating
-fit's CF gold bars do not. The same data independently confirm the Shenyang
+a small gain in both 2024 and 2025 (intervals touch zero), while per-site
+history and the rating fit's CF gold bars do not. The same data independently confirm the Shenyang
 2024→2025 swing and flag Kunming/Nanjing 2024 as the largest fit-vs-online
 disagreements. Results: `output/online_gold.md`; details in `details.md`.
-Hong Kong/Macau are not modelled. The 2025–2026 PTA rosters are now in
-`data/` (`icpc_2025_online_1_teams.csv`, `icpc_teams_2025_online_2_fixed.csv`,
-`icpc_2026_ec_round1_teams.csv`, `icpc_2026_ec_online_round2_teams.csv`) but
-are not yet used; see `details.md`.
+Hong Kong/Macau are not modelled, but `arch_b.hk_link` (needs `pypinyin`)
+links their English-named teams to online results by matching roster members
+in pinyin: 79% / 77% of the 2024 / 2025 Hong Kong official teams and 25 of 28
+golds (`output/hk_link.md`). The 2022 Hong Kong and 2023 Macau boards list no
+members, so those two contests link only 5–9% by name. `arch_b.hk_gold` turns
+these links into a Hong Kong gold model: fit on 2024 + 2025 and checked across
+the two years, it puts the 2026 coin flip at online #77 (a team at #100: 34%,
+range 21–49% for a harder or easier field; mainland sites give 54–57%). A
+mainland gold earlier in the same season is the strongest extra signal (most
+Hong Kong golds had one). Predicting the field from school attendance does not
+beat "same field as last year". Results: `output/hk_gold.md`. `arch_b.online_medals` extends the gold
+model to silver and bronze (top 30% / 60% lines, a quota rate per level, Hong
+Kong per level): a team at online #300 has about 8% / 48% / 36% gold / silver /
+bronze on the mainland, and Hong Kong is the hardest gold but the easiest medal
+for weaker teams. Results: `output/online_medals.md`. Ways to improve these forecasts, and the hand-off state: `forecast_next_steps.md`. The 2025–2026 registration rosters (PTA
+exports in `data/`: `icpc_2025_online_1_teams.csv`,
+`icpc_teams_2025_online_2_fixed.csv`, `icpc_2026_ec_round1_teams.csv`,
+`icpc_2026_ec_online_round2_teams.csv`) are added by `add_pta_rosters.py`; they
+link 90% of 2025 mainland regional teams to an online result (57% by name
+alone).
 
 ```bash
 python3 scripts/build_quota_evidence.py        # WF/host/invitational/provincial evidence + Shanghai lists
 python3 -m arch_b.quota_teams                   # which teams entered each regional on a quota seat, and why
+python3 -m arch_b.hk_link                       # Hong Kong/Macau teams linked to online results (pinyin members)
+python3 -m arch_b.hk_gold                       # Hong Kong field history, gold backtest and 2026 forecast
+python3 -m arch_b.online_medals                 # gold / silver / bronze chances per 2026 site (incl. Hong Kong)
 ```
 
 Every official team of the 2023–2025 mainland regionals is labelled band
@@ -466,18 +520,19 @@ provincial/local, girls, or unexplained (wildcards, problem setters,
 second-round applications). The inferred band seats reproduce Shanghai's
 published per-school online seats exactly (2024, 2025), and WF + host explain
 68 of the 71 published reward schools. Quota teams hold 39% of seats but win
-22% of golds (142 of 648); 89% of those golds come from the extra teams of
+20% of golds (130 of 648); 91% of those golds come from the extra teams of
 top-50 online schools (mostly WF/host seats), and quota teams from schools
 ranked below 100 practically never win gold. Results:
 `output/quota_teams.md` (per team: `output/quota_teams.csv`).
 
-The best quota-gold predictor, school rank, is implemented as the
-`rules_line_school_rank` variant of `arch_b.online_gold`. Top-50 schools are
-expected to fill 1.39 quota seats per WF/host entitlement seat and win gold at
-1.38× the band rate; all other quota teams win at 0.07×. Before registration it
-predicts each contest's quota golds better than a pooled rate (MAE 1.58 vs
-2.52), but it does not improve held-out gold prediction (worse in 2024, slightly
-better in 2025). The 2026 forecast therefore keeps the pooled line and shows
+The school-rank quota model is implemented as the `rules_line_school_rank`
+variant of `arch_b.online_gold`. (It was the best quota-gold predictor before
+the 2025 rosters; with them, grouping known quota teams by channel does better,
+MAE 1.49 vs 1.85.) Top-50 schools are expected to fill 1.39 quota seats per
+WF/host entitlement seat and win gold at 1.26× the band rate; all other quota
+teams win at 0.05×. Before registration it predicts each contest's quota golds
+better than a pooled rate (MAE 1.68 vs 2.27), but it does not improve held-out
+gold prediction (worse in 2024, slightly better in 2025). The 2026 forecast therefore keeps the pooled line and shows
 the school-rank line beside it.
 
 ```bash
@@ -491,20 +546,22 @@ team with 45 pre-contest features in four availability tiers (online, rules,
 history, registration). History covers members' previous-season medals and
 the team's earlier regionals this season. Labels are `gold` (BOOL, so
 `AI.PREDICT` classifies), `medal` and `rank_pct`. `predict.sql` has the four
-leave-season-out calls. Local L2-logistic baselines:
-adding online, rules and history features beats online strength alone in 2025
-(−0.020 log loss) and ties in 2024, mostly through teams with no online link.
-Managed TabFM (BigQuery, 2026-09-27, ≈50 MiB billed) beats all of them in both
-seasons: −0.022 (2024, pre-registration features) and −0.033 (2025, all
-features) log loss vs online strength alone, with 95% intervals excluding zero,
-and it also improves on linked teams. Results: `output/tabfm_gold.md`; predictions
-and job ledger in `output/tabfm_gold_predictions/`.
-A pre-season 2026 TabFM forecast (every 2026 online team at every site, 28
-features knowable now) is in `output/tabfm_forecast_2026.md`. Without member and
-earlier-regional history it no longer beats online strength on linked teams,
-and it runs high for 2026 (especially Shanghai, whose rules fall outside the
-training range). It is a research comparison; use `output/online_gold.md` for
-decisions.
+leave-season-out calls. Local L2-logistic baselines barely beat online strength
+alone once the 2025 rosters link 90% of teams: their earlier 2025 gain came
+from teams with no online link. Managed TabFM (BigQuery, rerun 2026-09-28,
+≈150 MiB billed) beats online strength alone in both seasons with all 45
+features (−0.009 in 2024, −0.015 in 2025) and with the 32 forecast features
+(−0.023, −0.013), with 95% intervals excluding zero. A repeat on identical 2024
+inputs reproduced the all-features call but moved the pre-registration call
+from −0.022 to −0.010. Single-run rankings between feature sets are therefore
+within run noise. Results: `output/tabfm_gold.md`; predictions and job ledgers
+in `output/tabfm_gold_predictions/`.
+A pre-season 2026 TabFM forecast (every 2026 online team at every site, 32
+features knowable now, including members' 2025 results from the registration
+rosters) is in `output/tabfm_forecast_2026.md`. Near online #100 it agrees with
+the online-gold model within 3 points. It runs high further down (27% vs a
+backtested 20% for #141–280) and barely separates the sites. It is a research
+comparison; use `output/online_gold.md` for decisions.
 
 ### Interactive viewer
 
@@ -539,10 +596,10 @@ left untouched).
 ./.venv/bin/python -m arch_b.export_viewer
 ```
 
-Writes `output/ratings_viewer_b.html` from the **survival** fit, with every
-difficulty and ability mapped to **Codeforces-equivalent points** and each problem
-difficulty shown with its Laplace standard error (±SE). This is the recommended
-viewer. It is published live via GitHub Pages:
+Writes `output/ratings_viewer_b.html` from the **survival** fit in
+**Codeforces-equivalent points**: problem difficulties are the shipped DE
+ratings (no ±SE, since DE has none), and team abilities/performances use the
+scalar gym-shape map. This is the recommended viewer. It is published live via GitHub Pages:
 
 **<https://dedibeat.github.io/analyze_standings/output/ratings_viewer_b.html>**
 
@@ -567,9 +624,10 @@ standings to get a hypothetical rank, then the same Elo rank-inversion
 primitive `arch_b.medals` uses for every real team's `performance_elo`
 converts that rank plus the real field's fitted abilities into a rating. The
 standings table shows every real team's own calibrated performance
-alongside yours for direct comparison. The CF-points mapping is the same
-gym-shape + affine calibration as `arch_b.calibrate`, sampled into a dense
-lookup table at export time so the browser doesn't need to re-fit it.
+alongside yours for direct comparison. The performance mapping is the scalar
+gym-shape + affine map, sampled into a dense lookup table at export time so the
+browser doesn't need to re-fit it. The reference problems table shows the
+shipped DE problem ratings.
 Self-contained, no server; recomputes live as you edit solved/penalty.
 
 ### Contest-linking graph
@@ -630,7 +688,8 @@ Module self-checks:
 - `output/problem_ratings.json` — Architecture A ratings;
   `output/problem_ratings_b.json` — Architecture B (binary) ratings;
   `output/problem_ratings_survival.json` — Architecture B (survival) ratings;
-  `output/problem_ratings_calibrated.json` — survival ratings mapped to CF points;
+  `output/problem_ratings_calibrated.json` — DE-calibrated problem ratings in CF points
+  (settings in `output/problem_calibration.json`);
   `output/gym_difficulty.json` — independent CF-scale difficulty from gym mirrors.
 - `output/ratings_viewer.html` — generated interactive viewer.
 - `output/virtual_calc.html` — generated virtual-contest performance calculator.

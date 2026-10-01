@@ -155,6 +155,26 @@
   "mode": "NULLABLE"
  },
  {
+  "name": "members_prev_regionals",
+  "type": "INT64",
+  "mode": "NULLABLE"
+ },
+ {
+  "name": "members_prev_golds",
+  "type": "INT64",
+  "mode": "NULLABLE"
+ },
+ {
+  "name": "members_prev_best_medal",
+  "type": "INT64",
+  "mode": "NULLABLE"
+ },
+ {
+  "name": "members_prev_best_rank_pct",
+  "type": "FLOAT64",
+  "mode": "NULLABLE"
+ },
+ {
   "name": "school_prev_golds",
   "type": "INT64",
   "mode": "NULLABLE"

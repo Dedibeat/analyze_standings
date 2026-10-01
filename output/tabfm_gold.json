@@ -171,61 +171,61 @@
      ]
     },
     "tabfm_all_features": {
-     "log_loss": 0.16028,
-     "brier": 0.04587,
-     "log_loss_linked": 0.16047,
-     "log_loss_unlinked": 0.15787,
-     "delta_vs_online_only": -0.0102,
+     "log_loss": 0.16122,
+     "brier": 0.04601,
+     "log_loss_linked": 0.16147,
+     "log_loss_unlinked": 0.15808,
+     "delta_vs_online_only": -0.00926,
      "delta_ci95": [
-      -0.01894,
-      -0.00352
+      -0.01764,
+      -0.00269
      ]
     },
     "tabfm_pre_registration": {
-     "log_loss": 0.14864,
-     "brier": 0.04344,
-     "log_loss_linked": 0.15075,
-     "log_loss_unlinked": 0.12221,
-     "delta_vs_online_only": -0.02183,
+     "log_loss": 0.16035,
+     "brier": 0.04561,
+     "log_loss_linked": 0.15964,
+     "log_loss_unlinked": 0.16918,
+     "delta_vs_online_only": -0.01013,
      "delta_ci95": [
-      -0.03326,
-      -0.01282
+      -0.02852,
+      0.00558
      ]
     },
     "tabfm_forecast_set": {
-     "log_loss": 0.15797,
-     "brier": 0.04678,
-     "log_loss_linked": 0.15626,
-     "log_loss_unlinked": 0.17944,
-     "delta_vs_online_only": -0.0125,
+     "log_loss": 0.14786,
+     "brier": 0.04339,
+     "log_loss_linked": 0.14942,
+     "log_loss_unlinked": 0.12836,
+     "delta_vs_online_only": -0.02261,
      "delta_ci95": [
-      -0.021,
-      -0.00604
+      -0.03346,
+      -0.01333
      ]
     }
    }
   },
   "test_2025": {
    "teams": 2231,
-   "linked": 1282,
+   "linked": 2019,
    "golds": 220,
    "models": {
     "prior": {
      "log_loss": 0.32205,
      "brier": 0.08889,
-     "log_loss_linked": 0.38612,
-     "log_loss_unlinked": 0.2355,
-     "delta_vs_online_only": 0.13351,
+     "log_loss_linked": 0.33494,
+     "log_loss_unlinked": 0.19931,
+     "delta_vs_online_only": 0.165,
      "delta_ci95": [
-      0.10494,
-      0.15889
+      0.13269,
+      0.19397
      ]
     },
     "online_only": {
-     "log_loss": 0.18854,
-     "brier": 0.05163,
-     "log_loss_linked": 0.16127,
-     "log_loss_unlinked": 0.22539,
+     "log_loss": 0.15706,
+     "brier": 0.04501,
+     "log_loss_linked": 0.15435,
+     "log_loss_unlinked": 0.18281,
      "delta_vs_online_only": 0.0,
      "delta_ci95": [
       0.0,
@@ -233,69 +233,69 @@
      ]
     },
     "online_rules": {
-     "log_loss": 0.18818,
-     "brier": 0.05149,
-     "log_loss_linked": 0.16062,
-     "log_loss_unlinked": 0.22542,
-     "delta_vs_online_only": -0.00036,
+     "log_loss": 0.15666,
+     "brier": 0.04488,
+     "log_loss_linked": 0.15388,
+     "log_loss_unlinked": 0.1831,
+     "delta_vs_online_only": -0.0004,
      "delta_ci95": [
-      -0.00071,
-      -0.0
+      -0.00085,
+      6e-05
      ]
     },
     "pre_registration": {
-     "log_loss": 0.16842,
-     "brier": 0.04678,
-     "log_loss_linked": 0.16627,
-     "log_loss_unlinked": 0.17134,
-     "delta_vs_online_only": -0.02012,
+     "log_loss": 0.1554,
+     "brier": 0.04383,
+     "log_loss_linked": 0.15683,
+     "log_loss_unlinked": 0.14177,
+     "delta_vs_online_only": -0.00166,
      "delta_ci95": [
-      -0.03358,
-      -0.00445
+      -0.01667,
+      0.01488
      ]
     },
     "all_features": {
-     "log_loss": 0.18218,
-     "brier": 0.0486,
-     "log_loss_linked": 0.1764,
-     "log_loss_unlinked": 0.18999,
-     "delta_vs_online_only": -0.00636,
+     "log_loss": 0.14859,
+     "brier": 0.04255,
+     "log_loss_linked": 0.15045,
+     "log_loss_unlinked": 0.13087,
+     "delta_vs_online_only": -0.00847,
      "delta_ci95": [
-      -0.02788,
-      0.01638
+      -0.01874,
+      0.00188
      ]
     },
     "tabfm_all_features": {
-     "log_loss": 0.15608,
-     "brier": 0.04423,
-     "log_loss_linked": 0.16012,
-     "log_loss_unlinked": 0.15062,
-     "delta_vs_online_only": -0.03246,
+     "log_loss": 0.14185,
+     "brier": 0.04291,
+     "log_loss_linked": 0.14589,
+     "log_loss_unlinked": 0.10337,
+     "delta_vs_online_only": -0.0152,
      "delta_ci95": [
-      -0.04504,
-      -0.01916
+      -0.02508,
+      -0.00682
      ]
     },
     "tabfm_pre_registration": {
-     "log_loss": 0.1646,
-     "brier": 0.04749,
-     "log_loss_linked": 0.16596,
-     "log_loss_unlinked": 0.16278,
-     "delta_vs_online_only": -0.02394,
+     "log_loss": 0.15289,
+     "brier": 0.04513,
+     "log_loss_linked": 0.15661,
+     "log_loss_unlinked": 0.11743,
+     "delta_vs_online_only": -0.00417,
      "delta_ci95": [
-      -0.04094,
-      -0.00517
+      -0.0176,
+      0.01046
      ]
     },
     "tabfm_forecast_set": {
-     "log_loss": 0.17989,
-     "brier": 0.04962,
-     "log_loss_linked": 0.16979,
-     "log_loss_unlinked": 0.19355,
-     "delta_vs_online_only": -0.00865,
+     "log_loss": 0.14391,
+     "brier": 0.04275,
+     "log_loss_linked": 0.14754,
+     "log_loss_unlinked": 0.10936,
+     "delta_vs_online_only": -0.01314,
      "delta_ci95": [
-      -0.02698,
-      0.01356
+      -0.02587,
+      -0.00118
      ]
     }
    }

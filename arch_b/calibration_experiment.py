@@ -75,14 +75,19 @@ def _raw_problem_features():
     return result
 
 
-def build_anchor_table(records=None):
-    """Return only anchor labels and deployment-available completed-contest inputs."""
+def build_anchor_table(records=None, binary_records=None):
+    """Return only anchor labels and deployment-available completed-contest inputs.
+
+    ``records`` / ``binary_records`` default to the saved survival / binary fits.
+    """
     if records is None:
         base = os.path.join(os.path.dirname(__file__), os.pardir, "output")
         records = _load_json(os.path.join(base, "problem_ratings_survival.json"))
     base = os.path.join(os.path.dirname(__file__), os.pardir, "output")
+    if binary_records is None:
+        binary_records = _load_json(os.path.join(base, "problem_ratings_b.json"))
     binary = {(int(r["contest_id"]), r["problem_label"]): float(r["difficulty"])
-              for r in _load_json(os.path.join(base, "problem_ratings_b.json"))}
+              for r in binary_records}
     evidence = _raw_problem_features()
     by_name = {(int(r["contest_id"]), _norm(r["problem_name"])): r for r in records}
     contests_like = defaultdict(list)
@@ -131,11 +136,13 @@ def _matrix(rows):
     return np.array([[r[name] for name in FEATURES] for r in rows], float)
 
 
-def _full_rows(records):
+def _full_rows(records, binary_records=None):
     """Unlabeled completed-contest rows for explicitly non-OOF diagnostics only."""
     base = os.path.join(os.path.dirname(__file__), os.pardir, "output")
+    if binary_records is None:
+        binary_records = _load_json(os.path.join(base, "problem_ratings_b.json"))
     binary = {(int(r["contest_id"]), r["problem_label"]): float(r["difficulty"])
-              for r in _load_json(os.path.join(base, "problem_ratings_b.json"))}
+              for r in binary_records}
     evidence = _raw_problem_features()
     rows = []
     for r in records:

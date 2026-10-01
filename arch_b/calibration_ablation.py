@@ -26,7 +26,7 @@ GROUPS = {
     "E": ("conditional_fit_se", "solve_rate", "log_field_size"),
     "T": ("log_median_solve_seconds", "timing_missing"),
 }
-CONTROL_DET_RMSE = 229.6269246
+CONTROL_DET_RMSE = 229.4028153  # roster-fixed fit (2026-09-28); was 229.6269246
 
 
 def bundle_features(bundle):

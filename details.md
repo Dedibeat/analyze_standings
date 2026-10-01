@@ -3840,7 +3840,7 @@ Once 2026 registration lists or early-regional results exist, the full
 feature sets (which did beat online-only) become usable for the later sites.
 
 
-## PTA registration lists for 2025–2026 (2026-09-28, reviewed, not integrated)
+## PTA registration lists for 2025–2026 (2026-09-28, review)
 
 **Files** (downloaded by the user from PTA into `data/`, untracked; columns
 `team_id, team_name, team_name_en, school_name_cn/en, province, city, leader,
@@ -3890,8 +3890,627 @@ effect on calibrated LOCO is **untested**: identity fixes are the only changes
 that have improved it before, but qualifier removal was neutral. The 2026 lists
 do not affect the fit yet (no 2026 contest is loaded).
 
-**Not done:** no builder, alias table or model rerun. Integration means
-converting the lists to `online_rosters.csv` rows, adding the aliases, then
-re-running `online_gold`, `quota_teams` and the TabFM table, and testing the
-fit attachment with `arch_b.metric`.
+**Status:** the forecast side is integrated in the next section. The fit
+attachment is still untested with `arch_b.metric`.
 
+
+## Forecast experiments redone with the 2025–2026 rosters (2026-09-28)
+
+**Data.** `scripts/add_pta_rosters.py` appends the REVIEWED rows of the four PTA
+lists to `data/ec_online/online_rosters.csv` (10,025 rows) and is idempotent.
+School aliases are **per season**: the 2025 ranking uses the old names (10
+aliases), while the 2026 ranking already uses most new names (only 湖南理工大学 →
+湖南理工学院). A single table broke 22 round-1 and 12 round-2 matches in 2026. With the aliases, every
+ranked 2025 and 2026 team matches a roster (new test). The raw PTA exports stay
+untracked in `data/` because they also carry coach names. The duplicate
+`icpc_2025_online_2_teams.csv` is unused.
+
+**Bug fixed: 2026 school names with CJK radicals.** The 2026 school-ranking PDF
+prints 西, 民, 长, 门, 青, 齐, 龙, 黄, 车 and 马 as CJK Radicals Supplement code points
+(U+2E80–2EFF, e.g. ⻄ U+2EC4). NFKC folds only Kangxi radicals (U+2F00–2FDF), so
+the 2026-09-27 note above that NFKC fixes them is wrong. Across the three tables,
+84 `online_schools.csv` rows kept the radicals. So **413 of 2,893 2026 online
+teams (84 schools, including 西北工业大学, 西安电子科技大学 and 江西师范大学) had no
+combined school rank**, and therefore no band slots in any 2026 forecast.
+`build_ec_online_data.nfkc` now maps them. The committed CSV was rewritten with
+that function (no PDF cache locally), and a test checks that every ranked team's
+school has a combined rank. 2022–2025 data are unaffected.
+
+**Online-gold model** (`output/online_gold.md`). 2025 held-out teams linked to
+an online result rose from 1,282 to 2,019 (mainland link rate 57% → 90%).
+
+| test | online only | rules line | + quota adjusted (shipped) | school-rank line | oracle line |
+|---|---|---|---|---|---|
+| 2024 (1,939, unchanged) | 0.1659 | −0.0002 [−0.0006, +0.0001] | −0.0003 [−0.0007, +0.0001] | −0.0001 [−0.0004, +0.0001] | −0.0013 [−0.0022, −0.0006] |
+| 2025 (2,019; was 1,282) | 0.1545 | −0.0008 [−0.0017, +0.0001] | −0.0010 [−0.0029, +0.0003] | −0.0011 [−0.0029, +0.0003] | −0.0040 [−0.0078, −0.0003] |
+
+The rules-line gain holds in sign but its 2025 interval now crosses zero. Site
+history still hurts (+0.0040). ρ falls from **0.441 to 0.394**: renamed band
+teams had been counted as quota entrants, and 12 golds move from quota to band
+teams (quota golds 142 → 130; WF 1.47 → 1.36×, host 0.91 → 0.80×). Spearman with
+the CF gold bar is −0.479 (was −0.503). **2026 lines** (both fixes): Shenyang
+75.7 > Wuhan 73.0 > Xi'an = Shanghai 70.2 > Nanchang 68.6 > Chengdu = Nanjing
+68.4, previously 88.7 … 68.6. The radical fix alone moved Shenyang from 88.7 to
+75.7, because the dropped strong schools had made every line too easy. A team at
+online #100 now has 57/56/55/55/55/54/54% (was 66/63/61/60/60/58/58). The sites
+are much closer than before; the order is unchanged. NUM-R^3: 3.3–3.7%.
+
+**Quota model** (`output/quota_teams.md`). The Shanghai validation is unchanged
+(151/151, 159/159). 118 of 130 quota golds (91%) come from top-50 schools.
+Per-contest quota golds from known quota teams (MAE): pooled 1.75, **by channel
+1.49**, by school rank 1.85 (the earlier best), by team rank 2.08. Before
+registration, the school-rank model still beats the pooled rate (MAE 1.68 vs
+2.27), with ρ_top50 1.26 and ρ_rest 0.05, but it still does not improve
+held-out gold prediction.
+
+**TabFM table.** The 2023–2024 rows are unchanged. The 2025 rows gain online
+features (NULL `online_x` 1,507 → 770 overall). The 2026 grid adds the four
+member-history features: 32 features instead of 28; every team has a roster, 929
+have a member from a 2025 regional and 117 a 2025 gold medallist. Local 2025
+baselines: online-only improves from 0.1885 to 0.1571, and the rich-feature
+logistic gains mostly vanish (pre-registration −0.0017 [−0.0167, +0.0149], was
+−0.0201; all −0.0085 [−0.0187, +0.0019]). Those gains had come from standing in
+for missing links.
+
+**Managed TabFM run 2** (`test-gemeni-501216`, us-central1, via `bq`; gcloud
+already configured). Dataset `tabfm_gold_research` (7-day expiry) was created
+and deleted after the run. Eight `AI.PREDICT` jobs: the six backtests, and the
+2026 forecast twice (again after the radical fix). Each was dry-run first and
+capped at 1 GiB billed. 10 MiB was billed per backtest and 20 MiB per forecast,
+≈ 150 MiB with the checks and exports (< $0.001). Ledgers are in
+`output/tabfm_gold_predictions/`.
+
+| model | 2024 | 2025 | 2025 linked / unlinked |
+|---|---|---|---|
+| online_only (logistic) | 0.1705 | 0.1571 | 0.1543 / 0.1828 |
+| TabFM, all 45 | −0.0093 [−0.0176, −0.0027] | **−0.0152 [−0.0251, −0.0068]** | 0.1459 / 0.1034 |
+| TabFM, 35 pre-registration | −0.0101 [−0.0285, +0.0056] | −0.0042 [−0.0176, +0.0105] | 0.1566 / 0.1174 |
+| TabFM, 32 forecast set | **−0.0226 [−0.0335, −0.0133]** | −0.0131 [−0.0259, −0.0012] | 0.1475 / 0.1094 |
+
+**Run-to-run noise.** The 2024 split had byte-identical inputs in both runs
+(checked against the uploaded table), so it is a repeat. The all-features call
+reproduced (correlation 0.9998, log loss 0.1603 vs 0.1612). **The
+pre-registration call did not:** correlation 0.969, mean |Δp| 0.033, max 0.44,
+and Δ moved from −0.0218 to −0.0101. The contest bootstrap does not include
+this noise, so feature-set rankings from a single managed run are unreliable.
+The 32-feature forecast set beating its 35-feature superset in both seasons
+fits that noise. In this run, TabFM beats online strength alone with the
+all-features and forecast sets in both seasons (intervals exclude zero). That
+includes 2025 linked teams, where the old 28-feature set had lost (0.1698 vs
+0.1613).
+
+**2026 TabFM forecast** (`output/tabfm_forecast_2026.md`). Within-cap teams
+ranked #141–280 average 27% gold (26–29% by site; backtest 20%, actual 18%). The
+old run gave 26% with Shanghai at 34%. This run gave 38% before the radical fix,
+when 12% of those teams lacked a school rank, a feature that is never missing in
+training. At online #100 TabFM and the online-gold model agree within 3 points
+at every site (e.g. Shenyang 57/57, Nanjing 56/54, Shanghai 54/55). TabFM barely
+separates the sites (top-300 mean 43.4–45.8%) and is higher below #150. Member
+history moves it strongly: within the band, teams with no 2025 gold member get
+23%, and teams with one or more get 41–48%. NUM-R^3: 3.5–5.0%. **Decision:**
+unchanged. The online-gold forecast is the one to use; TabFM is a research
+comparison that now agrees with it near #100.
+
+**Tests.** 100 of 101 pass. The failure,
+`test_calibration_experiment.test_locked_raw_and_gym_controls_reproduce_documented_loco`
+(245.567 vs 245.4277), also fails on the committed state without these changes.
+
+Run: `python3 scripts/add_pta_rosters.py`, then `online_gold`, `quota_teams`,
+`build_tabfm_gold_data.py` and `tabfm_gold` as above (on Windows, set
+`PYTHONUTF8=1`).
+
+
+## Rosters as rating-fit identity links (2026-09-28, experiment, not shipped)
+
+**Question.** Can the online-round rosters improve the rating fit? The other new
+findings do not touch the fit. The CJK-radical bug is in `online_schools.csv`
+only: the fit's member normalizer (NFKD) folds Kangxi radicals, and only 10
+Radicals Supplement characters occur in the fit data (one member name). ρ, the
+aliases and TabFM do not feed the fit.
+
+**What was missing.** QOJ 1794/1799 (2024 online rounds 1/2) and 2513/2524 (2025
+rounds 1/2) are in the fit, but their rows carry members on only 4–9 rows each.
+Their ~2,400–2,600 teams per round therefore link to other contests only through
+trusted team names (mostly to each other). The 2024 boards embed the school
+(`team (<b>school</b>)`), and the 2024 rosters were already in
+`online_rosters.csv`.
+
+**Method** (scratch scripts; `tagged.json` untouched). Members from the same
+round's roster were attached to rows without them. The key is school + team for
+2024 and a unique team name for 2025, and the solved count had to match the PKU
+ranking; zero-solve rows are absent from the ranking and match by key alone.
+Attached rows: 2,315 / 2,423 (2024) and 2,185 / 2,449 (2025). Rows in the 2025
+rounds linked to a non-online contest rose from 240 / 205 to ~1,400 / ~1,300.
+Variant A attaches 2025 only; B attaches 2024 and 2025.
+
+**Results.**
+
+- **North-star metric** (`arch_b.metric`, this machine): baseline **245.4**, A 245.5,
+  B 246.3, i.e. neutral within the 5-point keep threshold. Every guard is
+  unchanged (gym EC 0.977, Kattis 0.795, raw LOCO 246.9). The CF anchors contain
+  no Asia East regional, which is where the links act.
+- **Held-out Asia East cells.** A fixed 20% of cells, keyed by contest, row and
+  problem, was hidden in the 36 contests sharing ≥50 teams with the online
+  rounds, and the survival fit was scored on those 67,063 cells. Log loss:
+  baseline 0.22088; A 0.22038 (Δ −0.00050 [−0.00107, −0.00005]); B **0.22020
+  (Δ −0.00069 [−0.00141, −0.00005])**; AUC 0.9701 → 0.9704. The 2024–2025
+  contests improve (most −0.002 to −0.005). The 2022–2023 ones get slightly
+  worse (+0.0003 to +0.0017), because identities are season-agnostic, so later
+  online form leaks into earlier seasons' abilities. The size is comparable to
+  the supplemental-contest corroboration (−0.00044).
+- **What moves** (full fits, B − baseline). The four online rounds' own problems
+  become **35–54 rating points easier** (2025 r2 −54, r1 −45, 2024 r1 −38, r2
+  −35). Their level had rested on the ~200 teams linked before. Regional
+  problems barely move (mostly under 5 points; mean |shift| 1.9 over 3,159
+  problems).
+
+**Verdict.** This is a small, real gain for Asia East prediction and a
+correction of the online-round problem levels. It is not a metric win. Shipping
+it would mean attaching members in the data layer (or at load time from
+`online_rosters.csv`) and accepting the slight 2022–2023 regression, or pairing
+it with season-scoped identity for these rows.
+
+
+## DE release audit on the roster-fixed fit (2026-09-28)
+
+**Request.** Prepare to ship the binary-survival disagreement calibration (DE)
+with this session's roster data fix. Run the audits documented in the repo
+(`shipped_fit_update_plan.md`, `calibration_interpretation.md`,
+`experiment_roadmap.md`) and consider six ChatGPT recommendations. The user also
+pointed to Halpin (2022), *Differential item functioning via robust scaling*.
+The full write-up is [de_release_audit.md](de_release_audit.md). No production
+rating, calibration or export changed.
+
+**Code.**
+- `scripts/attach_online_rosters.py` is the roster fix as a data-layer script.
+  It reproduces the tested variant B exactly and is idempotent. It has not been
+  applied to `data/tagged.json`.
+- `arch_b.de_release_audit` (calibration layer) and `arch_b.fit_mechanism_audit`
+  (fit layer) write `output/de_release_audit.json` and
+  `output/fit_mechanism_audit.json`.
+- `joint.load_joint_dataset`/`estimate_joint` take a `tagged` path, and
+  `calibration_experiment.build_anchor_table`/`_full_rows` take in-memory binary
+  records.
+- Tests: `tests/test_release_audit.py`.
+
+**Bug fixed: platform-dependent gym map.**
+- **Cause:** `calibrate._gym_shape` used `np.argsort`'s unstable default on
+  one-decimal difficulties with ties.
+- **Effect on Windows (numpy 1.26):** rerunning the calibration would move
+  2,949 of 3,159 shipped ratings by up to 17.2 points.
+- **Test symptom:** `test_calibration_experiment` got 245.567 instead of the
+  documented 245.4277. That is the failure the previous section attributed to
+  the committed state.
+- **Fix:** a stable sort. It reproduces the shipped ratings and the documented
+  LOCO exactly, and all 108 tests now pass.
+
+**Results (candidate = roster-fixed fit):**
+- **DE on the candidate.** LOCO 226.32 (raw 246.93, gym map 246.13) and LORO
+  225.69. DE is chosen in 15/15 folds and wins 10/15 contests against the gym
+  map. The proxy guards are unchanged, and `arch_b.metric` reads 246.3 on the
+  candidate (245.4 now).
+- **Leave-one-evidence-feature-out and safer variants** (#6): SE +1.9, solve
+  rate +6.8, field size +0.7 [−4.7, +5.5]. A blend alone scores 241.2;
+  blend + evidence 225.5; clipping to the training range 226.0; Mahalanobis
+  shrinkage 225.6.
+- **Stress test.** With the three smallest-field anchor contests held out, DE is
+  worse than raw (211.0 vs 201.0); clipping gives 204.1. Every other tail
+  favours DE.
+- **Gym-population robust scaling** (655 non-anchor problems; Halpin-style
+  bisquare contest offsets). DE's per-contest levels agree best: offset SD 96
+  against raw 133 and the gym map 120. The gym map was fit on this data. DE
+  also wins on both field tails, so field size is useful beyond the anchor
+  range; dropping it is worse (122).
+- **Catalog.** 137 appearances (fields under 31, partial North America boards)
+  and 88 (fields over 1,083, including all online rounds) are outside every
+  field-size evidence. DE moves them +188 and −143; clipping moves them +55
+  and −34.
+- **Online vs onsite** (#1; 2,013 roster-verified teams, whole appearances
+  held out). Hidden online rows are under-predicted by +0.35 solves
+  (survival) / +0.29 (binary); hidden onsite rows are over-predicted by −0.11 /
+  −0.20. The paired online-minus-onsite offset is +69 [+62, +76] survival
+  points and +102 [+88, +117] binary points (≈ CF points). It is concentrated
+  in the stronger two-thirds of teams. Online mirror rows on regional boards
+  show +0.95 solves.
+- **Online offset inside the fit.** It cannot be estimated for all-online
+  contests: it trades one-for-one with those problems' levels (−137 / −131,
+  held-out Δ −0.0001). The online-round ratings therefore rest on the
+  equal-performance assumption that these data contradict.
+- **Disagreement decomposition** (#2). The ability-scale and likelihood parts
+  each recover only part of DE's gain (231.9 / 232.7; both together 229.6; D
+  226.3). CF ≈ 0.98 × θ_binary and 0.98 × b_binary, but 2.85 × θ_survival and
+  1.65 × b_survival. The survival fit compresses abilities.
+- **Timing** (#3). The survival conditional-time PIT rises from 0.49 on a
+  team's first solve to 0.82 on its 11th or later: sequential solving is read
+  as weakness. In-sample, final solves are over-predicted for weak rows
+  (2.42 vs 1.62) and under-predicted for strong rows (6.90 vs 8.45). No new
+  timing model was built.
+- **Team-season offsets** (#4). They improve held-out log loss by 0.0024–0.0034
+  in every season, 2022–23 included, but CF LOCO gets worse (DE 230.0 at
+  τ = 100, +3.7 [+0.2, +7.5]). They suit team-performance outputs, not this
+  release.
+- **Fresh anchors** (#5). A fresh CF problemset has 159 newly rated problems in
+  26 contests; none of them is in the data. The only shared tasks are the five
+  Luxor pairs.
+
+**Verdict.** DE passes every development and independent check that could be
+run. Three decisions are still open:
+- accepting the release without a fresh confirmation set (none exists);
+- the policy for the 225 appearances outside any field evidence (clipping is
+  recommended);
+- labelling the online-round problems as a separate scale.
+
+Release steps are listed at the end of `de_release_audit.md`.
+
+Run (≈25 min): `python3 scripts/attach_online_rosters.py data/tagged.json /tmp/tagged_rosters.json`,
+then `python3 -m arch_b.de_release_audit /tmp/tagged_rosters.json` and
+`python3 -m arch_b.fit_mechanism_audit /tmp/tagged_rosters.json` (on Windows set
+`PYTHONUTF8=1`).
+
+
+## DE release (2026-09-28)
+
+**Request.** Redeploy the ratings with DE in `../my-react-app`. The four open
+release choices were put to the user. The answers: use the roster-fixed fit;
+clip DE's features to the anchor range; give online-round problems no special
+handling; and release DE to every problem-rating consumer. This follows the
+release steps at the end of [de_release_audit.md](de_release_audit.md).
+
+**Data.** `scripts/attach_online_rosters.py` was applied in place to
+`data/tagged.json`. The result's SHA-256 (`8c9ddf74…`) is the audited
+candidate's, and a second run leaves it unchanged. Only members of online-round
+rows change; the serialization is identical.
+
+**Fits.** `arch_b.run` and `arch_b.run --survival` were rerun (3,159 problems
+each). On the saved survival file, raw and gym LOCO are 246.9288 and 246.1274,
+exactly the audit's candidate. `arch_b.metric` reads **246.3** (245.4 before),
+and every guard passes (Kattis .795, AOJ .563, solve count .997, raw LOCO
+246.9).
+
+**Calibration** (`arch_b.calibrate`). The shipped `difficulty_cf` is now DE
+with clipped features. `full_anchor_fit(..., "clip", DE)` is reused from
+`arch_b.de_release_audit` rather than reimplemented. Inner folds select
+alpha = 1, lambda = 1, as in the audit.
+- **Match with the audit:** the output equals the audit's catalog entry for
+  clipped DE exactly. Against the previous shipped ratings the mean change is
+  +69.96, the |change| quantiles are 107.7 / 256.6 / 315.5 / 544.3, and
+  1,677 / 599 / 44 problems move by ≥100 / 200 / 400. Online-round problems
+  move −73.6, and Aobayama 1965 H goes to 2695.8.
+- **Range:** 800–3996, mean 2517; 10 problems sit on the 800 floor.
+- **No uncertainty field.** The gym-map `difficulty_cf_fit_se`,
+  `difficulty_cf_level_sd` and `difficulty_cf_partial_se` do not describe DE,
+  and DE has no SE of its own (update plan, finding 3).
+- **`output/problem_calibration.json`** (new) records the method, features,
+  alpha/lambda, anchor feature ranges, display rule and the raw-fit input
+  hashes.
+- **`--binary` removed:** DE uses both fits, so a binary-only calibration no
+  longer applies.
+- Rollback is the previous commit: all outputs are tracked.
+
+**Consumers.** `calibrate.problem_cf(ds.problems)` reads the shipped file keyed
+by `(contest_id, problem_label)`, and a `problem_id` mismatch stops the build.
+The exporters use it for problem rows; their own full-precision refits no
+longer rate problems.
+- `export_viewer`: problem difficulty is DE. The ±SE column is gone
+  (`chipSe` removed from the template), and so is the now-unused Laplace SE
+  call.
+- `export_virtual_calc`: the reference problems table is DE.
+- `export_ucup_only`: `ucup_only_ratings.json` is now a filtered copy of the
+  shipped file, so the script no longer fits anything.
+- **Parity check:** 1,579 viewer, 2,934 calculator and 684 UCup-only problem
+  rows all equal the shipped values at their display precision (0
+  mismatches).
+
+**Kept on the scalar gym-shape map** (update plan, finding 2): team abilities
+and performances in the viewer, the calculator's performance lookup, and
+`arch_b.medals`. `medals` and `export_medal_viewer` were rerun on the new fit;
+the Shanghai gold city mean moves 2474.2 → 2471.2. The difficulties in
+`medal_badges.json` stay on the gym map, so they differ from the shipped DE
+ratings. This is by design: badges are defined on the raw fitted order. The
+metric also still scores the gym map on the raw fit, so it measures the fit
+rather than the shipped DE calibration.
+
+**Tests.** Pins moved to the new fit:
+- `test_calibration_experiment`: raw 246.9288, gym 246.1274.
+- `calibration_ablation.CONTROL_DET_RMSE`: 229.4028153.
+- `test_medal_predict`: Shanghai 2471.2.
+
+`output/calibration_experiment.json` was regenerated with `--baseline-only`
+(DET 229.4028), so the DET-reproduction test compares against the current
+fit. All 108 tests pass.
+
+**Not regenerated** (historical or unaffected):
+- Architecture A outputs;
+- the research artifacts (`calibration_ablation*.json`,
+  `calibration_audit.json`, `shipped_fit_audit.json`, `data_influence.json`,
+  `de_release_audit.json`, `fit_mechanism_audit.json`), which record their own
+  runs;
+- `online_gold.json`, whose rating-fit comparison reads `medal_badges.json`
+  and so is a few CF points stale;
+- `medal_predict_viz.html`, which has no generator.
+
+**App deploy.** `../my-react-app/data/problem_rating.json` is a byte copy of
+the shipped file; the app's `DETAILS.md` has the details.
+
+Run: `python3 scripts/attach_online_rosters.py data/tagged.json data/tagged.json`,
+`arch_b.run`, `arch_b.run --survival`, `arch_b.calibrate`, then the exporters,
+`arch_b.medals`, `arch_b.export_medal_viewer` and `arch_b.metric` (on Windows
+set `PYTHONUTF8=1`).
+
+
+## Hong Kong / Macau teams linked to online results (2026-10-01)
+
+**Why.** `arch_b.online_gold` excludes Hong Kong/Macau. One reason is that
+their XCPCIO boards list English (pinyin) team, school and member names, so
+the Chinese name/roster links of `link_regionals` never fire. This is step 1
+toward a Hong Kong forecast: measure how many of those teams can be tied to an
+online-qualifier result.
+
+**Method** (`arch_b.hk_link`, needs `pip install pypinyin`; 0.55.0 used).
+Every Chinese roster member in `online_rosters.csv` becomes pinyin spellings:
+all readings of each character (heteronyms, capped at 16 per name part),
+surname first and last, compound surnames (欧阳, 司马, …) split as two
+characters, ü spellings merged (lyu/lv/lu). A regional team links to the roster
+team of the same season with the most shared members, if ≥ 2. The school is
+ignored for matching and checked afterwards. `scripts/add_pta_rosters.py` now
+also writes `data/ec_online/school_names_en.csv`, PTA's 611 English school
+names mapped to the ranking's Chinese names (school names only). Teams without
+members fall back to mapped school + team name. "(Coach)" entries in the
+member lists are dropped.
+
+**Results** (`output/hk_link.md`):
+
+| contest | official | linked | golds linked | school check same / unmapped / different |
+|---|---|---|---|---|
+| 2022 Hong Kong | 115 | 6 (5%, name only) | 1 / 12 | 6 / 0 / 0 |
+| 2023 Macau | 82 | 7 (9%, name only) | 1 / 8 | 7 / 0 / 0 |
+| 2024 Hong Kong | 149 | 118 (79%) | 13 / 15 | 102 / 15 / 1 |
+| 2025 Hong Kong | 126 | 97 (77%) | 12 / 13 | 91 / 6 / 0 |
+
+- **Correctness.** The one school disagreement is a campus alias: PTA
+  北京交通大学（威海） vs the 2024 ranking's 北京交通大学威海校区. The link itself
+  is right. Shuffling roster members across teams within a season (3 seeds)
+  gives 0–2 chance links per season against ~100 real ones, so about 1% of
+  links are false.
+- **Ties.** 9 links tie between two roster teams, always at the same school.
+  A 3-vs-3 tie is one line-up renamed between the online rounds; a 2-vs-2 tie
+  is a line-up split across two online teams. `online_strengths` keys by
+  name, so the chosen team carries only one round's rank. This is the known
+  cross-round rename issue, not fixed here.
+- **Who stays unlinked in 2024/2025** (31 and 29 teams):
+  - 10 / 9 local Hong Kong/Macau teams. They mostly did not play the mainland
+    online rounds; PolyU and HKU teams that did match only one member.
+  - 16 / 16 teams from schools that played online, but at most one member of
+    this line-up was on an online roster. These are likely quota entrants, or
+    players who skipped the online rounds. Checks on BUPT, Shanghai University
+    and USTC found no roster team sharing two surnames, so the pinyin
+    conversion is not the cause.
+  - 5 / 4 teams from schools with no online team: the Mongolian schools
+    (NUM did not enter the online rounds before 2026), plus English names not
+    in the PTA table.
+- **Unlinked golds:** HKUST2 (local) and USTC "Xitao Village" in 2024; Xiamen
+  University of Technology "Nice Nature" (two listed members, one roster hit)
+  in 2025.
+
+**Missing data.** The XCPCIO boards of Hong Kong 2022 (`47th/hongkong`) and
+Macau 2023 (`48th/macau`) carry **no members** (checked in `team.json`: no
+member field). Team names rarely survive from the online rounds: 11 of 12 Hong
+Kong 2022 golds and 7 of 8 Macau 2023 golds stay unlinked, including the
+mainland winners. No public member list was found: the Macau 2023 contest
+sites (cis.um.edu.mo/icpc2023 → 404; icpc2023.scimeeting.cn) show none, and
+icpc.global lists no members. Unless such lists turn up, only 2024 and 2025
+are usable for a Hong Kong model: about 215 linked teams and 25 linked golds.
+
+**Linked golds' online strength.** Median exp(mean log online rank) is #32.5
+(2024) and #50.2 (2025), against 2026 mainland coin-flip lines near #68–76.
+This is descriptive only, not yet a fitted line (step 2).
+
+**Not changed:** `arch_b.online_gold` still excludes Hong Kong/Macau, and no
+other output was regenerated. `online_rosters.csv` is unchanged by the
+`add_pta_rosters.py` rerun.
+
+Run: `python3 scripts/add_pta_rosters.py` (raw PTA exports in `data/`), then
+`python3 -m arch_b.hk_link` (on Windows set `PYTHONUTF8=1`). Tests:
+`tests/test_hk_link.py`.
+
+
+## Hong Kong field and gold chances (2026-10-01)
+
+**Question.** Can the Hong Kong field be estimated from earlier fields
+(2022–2025), online ranks and previous results, and turned into a 2026 gold
+forecast? Module: `arch_b.hk_gold`, built on the `arch_b.hk_link` links.
+
+**Selection rules** (official notices; the PDFs' Chinese text was read through
+the site's pdf.js viewer, because `pdftotext` returns only digits):
+
+| | 2023 Macau | 2024 HK | 2025 HK | 2026 HK |
+|---|---|---|---|---|
+| date | 11-18/19 | 12-21/22 | 11-29/30 | 2027-01-09/10 (HKU) |
+| non-local / local official seats | 65 / 15 | 95 / 15 | 100 / 20 | 95 / 20 |
+| round 1 | 1 team/school, by online rank if oversubscribed | same | same | same, until 10-30 |
+| round 2 | as round 1 (by 10-21) | first-come extra team | same | same, before 11-14 |
+| round 3 | host/setter schools | applications | applications | applications |
+| notes | max 2 EC regionals per student | same | not stated | up to 10 EC-Final places (below) |
+
+The 2026 EC-Final places go to Hong Kong medal teams in rank order. A team
+is skipped if any member is already on the EC-Final first-round list, and a
+school gets at most 3 − x (4 − x with reward seats) such places.
+
+**Field (2024/2025 linked teams):**
+- Non-local schools: 107 and 110, of which 31 and 33 are top-50 by combined
+  online rank. 62% of 2024's schools returned in 2025.
+- Multi-team schools dropped from 28 to 1 in 2025.
+- Coin-flip online rank (shared slope with the mainland contests): **#80
+  (2024), #74 (2025)**, the hardest site of each season except Chengdu 2025
+  (#79). Mainland sites ranged from #79 to #134.
+- A school often sends a weaker team: the Hong Kong team is the school's best
+  online team in only 39/118 and 34/97 cases.
+- **11 of 13 and 9 of 12 linked golds had already won a mainland gold earlier
+  that season.** Of the 14 and 13 teams that arrived with one, 11 and 9 won
+  gold at Hong Kong.
+- 2022 and 2023 are known only at school level, and their rules differed
+  (2022: 2–3 teams per school; 2023: an 80-team Macau contest).
+
+**Field prediction (train one season, test the other):**
+- School attendance, logistic on previous Hong Kong attendance (t−1, t−2)
+  and log school rank: AUC 0.87 (2024→2025) and 0.76 (2025→2024). Expected
+  top-50 schools 34.4 vs 33 actual and 33.1 vs 31. A previous Hong Kong medal
+  adds nothing.
+- Turning attendance into a gold line does not work. Simulating which team
+  each school sends (absolute online position by school-rank band, line = 10%
+  of the linked share) gives absolute log-rank errors of 0.28 / 0.52, against
+  0.23 for "same line as the training season".
+- For 2026 the attendance model is also biased: both previous fields
+  (2024/2025) were large, which the training seasons never had, so it
+  predicts ~130 schools for 95 seats. Not used.
+
+**Gold models (held-out log loss, expected / actual golds):**
+
+| model | 2024 | 2025 |
+|---|---|---|
+| mainland online-only | 0.1026 (14.7 / 13) | 0.1227 (14.1 / 12) |
+| mainland oracle line (actual HK field) | 0.1036 (11.1 / 13) | 0.1258 (9.4 / 12) |
+| **HK online-only (other year)** | **0.1007 (12.3 / 13)** | **0.1165 (12.6 / 12)** |
+| HK + earlier mainland gold | 0.0880 (12.5 / 13) | 0.1119 (12.3 / 12) |
+| HK + member with previous-season gold | 0.1165 | 0.1219 |
+
+- The mainland coefficients under-predict Hong Kong golds when given its
+  actual field, because Hong Kong golds concentrate among strong online teams.
+- Members' previous-season golds (8/13 and 10/12 golds had one) add nothing
+  beyond online rank.
+
+**2026 forecast** (`output/hk_gold.md`): Hong Kong-only model on 2024 + 2025
+(215 teams, 25 golds), coin flip at **online #77**:
+
+| | #25 | #50 | #100 | #200 | #300 |
+|---|---|---|---|---|---|
+| P(gold) | 94% | 75% | 34% | 8% | 3% |
+| 90% CI (team bootstrap) | 85–99% | 57–89% | 21–50% | 3–13% | 1–6% |
+
+- **Harder / easier field band:** the coin flip moved by ±0.253 in log rank,
+  the SD of consecutive-season changes at the same mainland site (7 pairs). At
+  #100 this gives 21% / 49%.
+- **Update after the mainland contests:** P(gold) at #100 is 19% for a team
+  without a 2026 mainland gold and 58% for one with it.
+- **For comparison:** the mainland online-gold model gives 54–57% at #100.
+  For the same online rank, Hong Kong is the harder gold.
+- **NUM-R^3** (online #544/#349): **1.3%** (0.7–2.4% across the band); other
+  NUM teams ≤ 0.3%.
+- **Not modelled:** the new EC-Final places and the January date. The
+  direction of their effect is unknown. Every Hong Kong gold in 2024/2025
+  came from a team that also played a mainland regional, and teams already on
+  the EC-Final list gain no EC place at Hong Kong in 2026.
+
+**Hong Kong vs the rating fit.** The rating fit's CF gold bars put Hong Kong
+in the middle or easy end: 2024 bar 2517 (4th of 6 with bars), 2025 2473 (5th
+of 7), and the 2026 chooser ranks it easiest (2505). Online evidence ranks it
+hardest. Added to the contest-difficulty comparison, Hong Kong 2025 is the
+largest fit-minus-online gap of all 20 contests (−137 CF; Hong Kong 2024 −71),
+and the Spearman correlation between coin-flip rank and CF bar falls from
+−0.48 to −0.26. The online measure is checked directly on Hong Kong gold
+outcomes (calibrated across years). The rating-fit chooser's within-season
+pair ordering was 47.9%. So for "where does a given team have the better gold
+chance", the online evidence is the one to use.
+
+**Data gaps found:**
+- The 2026 Hong Kong registration is not on PTA's public contest list. The
+  2026 season shows the online rounds, the Shenzhen/Shenyang invitationals
+  and Xi'an/Chengdu/Wuhan/Nanjing.
+- Earlier PTA seasons need a login (`/api/seasons` returns
+  `REG_REQUIRE_ADMIN_USER`), so it is unknown whether the 2024/2025 Hong Kong
+  lists are there.
+- The 2026 mainland registration team lists are public via
+  `/api/teams/public` (not yet used).
+
+Run: `python3 -m arch_b.hk_gold [--school NAME]` (needs the XCPCIO config
+cache or network for contest dates, via `scripts/build_tabfm_gold_data.py`;
+on Windows set `PYTHONUTF8=1`). Tests: `tests/test_hk_gold.py`.
+
+
+## Silver and bronze chances (2026-10-01)
+
+**Request.** Forecast regionals by silver and bronze chance as well as gold.
+
+**Labels.** Every 2022–2025 board gives medals to 10% / 20% / 30% of official
+solvers (within rounding; the 2022 boards use the 10/20/30 rule), so gold,
+silver-or-better and any medal are the top 10% / 30% / 60%.
+
+**Model** (`arch_b.online_medals`):
+- Each level k reuses the online-gold model:
+  `logit P(medal ≥ k) = c_k + b_k x + d_k line_k`.
+- `line_k` is the rule-admitted team at 10% / 30% / 60% of capacity, after
+  the quota entrants' share at their own measured rate (ρ = 0.394 / 0.467 /
+  0.651).
+- Class probabilities are differences of the cumulative ones, made monotone.
+  No crossings occurred in either test season.
+- Hong Kong uses a Hong Kong-only `c_k + b_k x` per level on its 2024–2025
+  linked teams.
+- `online_gold` gained three default-preserving parameters (`rules_line(…,
+  fraction)`, `quota_split(…, won)`, `medal` on linked rows). Its full output
+  is unchanged, and the gold level reproduces it exactly: backtest Δ −0.0003 /
+  −0.0010; 2026 P(gold) at online #100 55.2% for Xi'an.
+
+**Backtest** (train earlier seasons; Δ log loss vs online-only, contest-bootstrap
+95% CI):
+
+| level | 2024 rules line | 2024 oracle | 2025 rules line | 2025 oracle |
+|---|---|---|---|---|
+| gold | −0.0003 [−0.0007, +0.0001] | −0.0013 | −0.0010 [−0.0029, +0.0003] | −0.0040 |
+| silver or better | +0.0043 [−0.0006, +0.0113] | −0.0035 | −0.0051 [−0.0113, +0.0007] | −0.0110 |
+| any medal | +0.0004 [−0.0046, +0.0069] | −0.0100 | −0.0018 [−0.0043, +0.0001] | −0.0048 |
+
+Four-class log loss: 2024 online-only 0.8941 vs rules line 0.9002; 2025 0.8776
+vs 0.8713. For silver and bronze, the rules lines are a wash. Mainland site
+differences at those levels are small in the forecast anyway and not
+validated. The oracle line (the actual attending field) helps at every level,
+so registration lists would matter more for silver/bronze than the slot rules
+do.
+
+**Hong Kong backtest** (train the other year):
+- Hong Kong-only beats the mainland online-only model on 2024 at every level
+  (any medal 0.525 vs 0.609) and loses slightly on 2025 at silver+ and medal
+  (0.326 vs 0.315, 0.496 vs 0.488). Summed over both years it is better.
+- Expected vs actual counts: silver+ 39.1 / 37 and 31.0 / 32; any medal
+  71.3 / 80 and 67.6 / 61. The medal share of linked teams varies by year
+  (68% vs 63%).
+
+**2026 forecast** (`output/online_medals.md`; conditional on attending;
+gold / silver / bronze):
+
+| online rank | mainland sites (range) | Hong Kong |
+|---|---|---|
+| #100 | 54–57% / 39–41% / 3–4% | 34% / 56% / 8% |
+| #200 | 18–20% / 58–62% / 16–20% | 8% / 63% / 23% |
+| #300 | 8–9% / 46–53% / 32–38% (any 91–93%) | 3% / 50% / 36% (89%) |
+| #500 | 2–3% / 21–27% / 48–52% (any 73–78%) | 1% / 29% / 48% (78%) |
+
+- **Hong Kong is the hardest gold and the easiest medal for weaker teams.**
+  Its field has a weak tail: half of the linked teams are below online #750,
+  and 60% of the field gets a medal. A team at online #1171 has 45% for any
+  medal at Hong Kong vs 22–26% on the mainland.
+- **NUM-R^3** (online #544/#349): any medal 80–84% everywhere. Silver chance:
+  Hong Kong 34%, Shenyang 34%, Wuhan 30%, Chengdu/Nanjing 27%. Gold:
+  1.3% at Hong Kong, 3.3–3.7% on the mainland. NUM-MNM: any medal 47–54% on
+  the mainland, 64% at Hong Kong.
+
+Run: `python3 -m arch_b.online_medals [--school NAME]` (~30 s; on Windows set
+`PYTHONUTF8=1`). Tests: `tests/test_online_medals.py`.
+
+
+## Hand-off for a cloud session (2026-10-01)
+
+- `forecast_next_steps.md` holds the module state, the ranked ways to improve
+  the forecasts (registered 2026 fields, in-season updates, member history for
+  silver/bronze, merging renamed teams) with the PTA API details, and the open
+  asks to the user.
+- **PTA exports now committed.** The four PTA exports used by
+  `add_pta_rosters.py` are committed at the user's request (the coach names
+  are public on PTA's team pages). This replaces the earlier note that they
+  stay untracked. `icpc_2025_online_2_teams.csv` (byte-identical to the 2026
+  round-2 file) stays uncommitted.
+- **XCPCIO configs committed.** The 28 cached `config.json` files in
+  `data/ec_online_cache/xcpcio/` are force-added, because `arch_b.hk_gold`
+  reads contest dates from them. Without them a fresh clone downloads them,
+  and XCPCIO often fails (curl exit 35/52 in this session). The rest of the
+  cache stays ignored.
+- **Setup:** `pip install numpy pypinyin` (README updated).
