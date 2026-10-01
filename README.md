@@ -488,7 +488,13 @@ Hong Kong/Macau are not modelled, but `arch_b.hk_link` (needs `pypinyin`)
 links their English-named teams to online results by matching roster members
 in pinyin: 79% / 77% of the 2024 / 2025 Hong Kong official teams and 25 of 28
 golds (`output/hk_link.md`). The 2022 Hong Kong and 2023 Macau boards list no
-members, so those two contests link only 5–9% by name. The 2025–2026 registration rosters (PTA
+members, so those two contests link only 5–9% by name. `arch_b.hk_gold` turns
+these links into a Hong Kong gold model: fit on 2024 + 2025 and checked across
+the two years, it puts the 2026 coin flip at online #77 (a team at #100: 34%,
+range 21–49% for a harder or easier field; mainland sites give 54–57%). A
+mainland gold earlier in the same season is the strongest extra signal (most
+Hong Kong golds had one). Predicting the field from school attendance does not
+beat "same field as last year". Results: `output/hk_gold.md`. The 2025–2026 registration rosters (PTA
 exports in `data/`: `icpc_2025_online_1_teams.csv`,
 `icpc_teams_2025_online_2_fixed.csv`, `icpc_2026_ec_round1_teams.csv`,
 `icpc_2026_ec_online_round2_teams.csv`) are added by `add_pta_rosters.py`; they
@@ -499,6 +505,7 @@ alone).
 python3 scripts/build_quota_evidence.py        # WF/host/invitational/provincial evidence + Shanghai lists
 python3 -m arch_b.quota_teams                   # which teams entered each regional on a quota seat, and why
 python3 -m arch_b.hk_link                       # Hong Kong/Macau teams linked to online results (pinyin members)
+python3 -m arch_b.hk_gold                       # Hong Kong field history, gold backtest and 2026 forecast
 ```
 
 Every official team of the 2023–2025 mainland regionals is labelled band
