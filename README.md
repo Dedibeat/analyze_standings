@@ -107,11 +107,11 @@ managed pilot.
 
 ## Run
 
-Requires Python 3 + numpy. A project venv is used:
+Requires Python 3 + numpy (`pypinyin` for the Hong Kong modules). A project venv is used:
 
 ```bash
 python3 -m venv .venv
-./.venv/bin/pip install numpy
+./.venv/bin/pip install numpy pypinyin
 ./.venv/bin/python -m arch_a.run
 ```
 
@@ -498,7 +498,7 @@ beat "same field as last year". Results: `output/hk_gold.md`. `arch_b.online_med
 model to silver and bronze (top 30% / 60% lines, a quota rate per level, Hong
 Kong per level): a team at online #300 has about 8% / 48% / 36% gold / silver /
 bronze on the mainland, and Hong Kong is the hardest gold but the easiest medal
-for weaker teams. Results: `output/online_medals.md`. The 2025–2026 registration rosters (PTA
+for weaker teams. Results: `output/online_medals.md`. Ways to improve these forecasts, and the hand-off state: `forecast_next_steps.md`. The 2025–2026 registration rosters (PTA
 exports in `data/`: `icpc_2025_online_1_teams.csv`,
 `icpc_teams_2025_online_2_fixed.csv`, `icpc_2026_ec_round1_teams.csv`,
 `icpc_2026_ec_online_round2_teams.csv`) are added by `add_pta_rosters.py`; they
