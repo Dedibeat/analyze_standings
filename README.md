@@ -494,7 +494,11 @@ the two years, it puts the 2026 coin flip at online #77 (a team at #100: 34%,
 range 21–49% for a harder or easier field; mainland sites give 54–57%). A
 mainland gold earlier in the same season is the strongest extra signal (most
 Hong Kong golds had one). Predicting the field from school attendance does not
-beat "same field as last year". Results: `output/hk_gold.md`. The 2025–2026 registration rosters (PTA
+beat "same field as last year". Results: `output/hk_gold.md`. `arch_b.online_medals` extends the gold
+model to silver and bronze (top 30% / 60% lines, a quota rate per level, Hong
+Kong per level): a team at online #300 has about 8% / 48% / 36% gold / silver /
+bronze on the mainland, and Hong Kong is the hardest gold but the easiest medal
+for weaker teams. Results: `output/online_medals.md`. The 2025–2026 registration rosters (PTA
 exports in `data/`: `icpc_2025_online_1_teams.csv`,
 `icpc_teams_2025_online_2_fixed.csv`, `icpc_2026_ec_round1_teams.csv`,
 `icpc_2026_ec_online_round2_teams.csv`) are added by `add_pta_rosters.py`; they
@@ -506,6 +510,7 @@ python3 scripts/build_quota_evidence.py        # WF/host/invitational/provincial
 python3 -m arch_b.quota_teams                   # which teams entered each regional on a quota seat, and why
 python3 -m arch_b.hk_link                       # Hong Kong/Macau teams linked to online results (pinyin members)
 python3 -m arch_b.hk_gold                       # Hong Kong field history, gold backtest and 2026 forecast
+python3 -m arch_b.online_medals                 # gold / silver / bronze chances per 2026 site (incl. Hong Kong)
 ```
 
 Every official team of the 2023–2025 mainland regionals is labelled band
