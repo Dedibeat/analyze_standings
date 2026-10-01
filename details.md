@@ -3931,3 +3931,27 @@ was a silver medal at every 2024–2025 mainland site (4–6 solved). NUM's best
 mainland ranks were 116 (Hangzhou 2024) and 168 (Nanjing 2025). The 7-site
 figure is an estimate: it assumes the new Nanchang site adds admits at the
 6-site average rate.
+
+**2026 projection (`--project-2026`, 2026-10-01).** The 7/6 scaling above is
+biased: in a leave-one-site-out test it overshoots the true 5-site depth by
+5–11 ranks. Replaced by a replay: each season's real teams (school, number of
+sites, strength = mean logit rank percentile) are redrawn onto the 2026
+capacities (`slot_rules.json`, 7 sites, 2,516 seats vs 2,200 in 2025) with
+Gaussian rank noise, 230 seats. The noise is calibrated so the same replay
+reproduces that season's real 6-site depth (2024: 86 vs 86; 2025: 91 vs 91;
+2023 is barely identified, every noise scale replays 87–89). The 316 extra 2026
+seats bound the answer: as second sites of one-site teams (more duplicates,
+deeper) or as new teams (shallower).
+
+| base season | extra seats → second sites | extra seats → new teams |
+|---|---|---|
+| 2023 (weak calibration) | 70 (67–73) | 61 (58–63) |
+| 2024 | 77 (75–80) | 71 (68–73) |
+| 2025 | 79 (77–82) | 75 (73–77) |
+
+Median (10–90%) qualifying rank. Estimate for 2026: **~75, plausible 70–80,
+the same at every mainland site** (±1 by site order: Wuhan/Shenyang 400, Xi'an
+380, Nanchang 360, Shanghai 336, Chengdu/Nanjing 320 by capacity). Rank 75 was
+silver everywhere in 2023–2025 (4 solved at Shenyang 2025 / Nanjing 2024 /
+Xi'an 2023, 6 at Chengdu). Untested: team-strength drift, Nanchang's field (no
+history), and whether 2026 teams still play at most two sites.
