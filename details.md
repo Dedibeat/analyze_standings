@@ -3895,3 +3895,33 @@ converting the lists to `online_rosters.csv` rows, adding the aliases, then
 re-running `online_gold`, `quota_teams` and the TabFM table, and testing the
 fit attachment with `arch_b.metric`.
 
+
+## EC-Final regional cutoff: how deep a mainland seat reaches (2026-10-01)
+
+**Question.** Under the 2026 EC-Final rule (`The 2026 ICPC Asia East Continent
+Final 名额分配办法`, icpc.pku.edu.cn, 2026-09-03), what regional rank wins one
+of the 230 mainland seats? The rule: sites ordered by valid teams; admit rank 1
+of each site, then rank 2, ...; skip a team sharing a member with an admitted
+team (2025 公示 wording: "有 1 名选手相同") and schools already at 3 teams. Hong
+Kong gives 10 more seats (medal teams only, after round 1). The notice has no
+Mongolia-specific rule; Mongolian schools qualify like any other school, or
+apply for one of the ≤10 incentive seats (激励名额).
+
+**Method** (`scripts/ecfinal_cutoff.py`). Replays the rule on
+`regional_teams.csv`. Validated on 2025 (240 seats, 6 mainland sites): 231/240
+simulated teams are in the published 2025 qualifier table; the 9 misses are
+teams replaced by same-school substitutes (2025 allowed a school's top-90
+team to substitute).
+
+| season | mainland sites | 240 seats reach rank | 2026 rule (230 seats, 7 sites, 7/6 scaling) |
+|---|---|---|---|
+| 2023 | 6 | 87 | ~70 |
+| 2024 | 6 | 86 | ~70 |
+| 2025 | 6 | 91 (actual 84–91 by site) | ~75 |
+
+Only ~45% of teams above the cutoff are admitted (each team plays two sites;
+top schools hit the 3-team cap), so the bar is far below 240/6 ≈ 40. Rank 70–75
+was a silver medal at every 2024–2025 mainland site (4–6 solved). NUM's best
+mainland ranks were 116 (Hangzhou 2024) and 168 (Nanjing 2025). The 7-site
+figure is an estimate: it assumes the new Nanchang site adds admits at the
+6-site average rate.
