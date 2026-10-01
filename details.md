@@ -4401,6 +4401,17 @@ school gets at most 3 − x (4 − x with reward seats) such places.
   came from a team that also played a mainland regional, and teams already on
   the EC-Final list gain no EC place at Hong Kong in 2026.
 
+**Hong Kong vs the rating fit.** The rating fit's CF gold bars put Hong Kong
+in the middle or easy end: 2024 bar 2517 (4th of 6 with bars), 2025 2473 (5th
+of 7), and the 2026 chooser ranks it easiest (2505). Online evidence ranks it
+hardest. Added to the contest-difficulty comparison, Hong Kong 2025 is the
+largest fit-minus-online gap of all 20 contests (−137 CF; Hong Kong 2024 −71),
+and the Spearman correlation between coin-flip rank and CF bar falls from
+−0.48 to −0.26. The online measure is checked directly on Hong Kong gold
+outcomes (calibrated across years). The rating-fit chooser's within-season
+pair ordering was 47.9%. So for "where does a given team have the better gold
+chance", the online evidence is the one to use.
+
 **Data gaps found:**
 - The 2026 Hong Kong registration is not on PTA's public contest list. The
   2026 season shows the online rounds, the Shenzhen/Shenyang invitationals
