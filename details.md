@@ -3919,6 +3919,12 @@ team to substitute).
 | 2024 | 6 | 86 | ~70 |
 | 2025 | 6 | 91 (actual 84–91 by site) | ~75 |
 
+2025 per site (simulated; the 240th seat went to Nanjing in tier 91, so an
+eligible team at rank ≤91 qualified at Wuhan/Shenyang/Xi'an/Nanjing and ≤90 at
+Chengdu/Shanghai): last admitted Wuhan #88 (5 solved), Shenyang #91 (4), Xi'an
+#90 (5), Nanjing #91 (4), Chengdu #90 (6), Shanghai #84 (5; its #85–90 were all
+already-admitted or capped). Every last-admitted team was a silver medallist.
+
 Only ~45% of teams above the cutoff are admitted (each team plays two sites;
 top schools hit the 3-team cap), so the bar is far below 240/6 ≈ 40. Rank 70–75
 was a silver medal at every 2024–2025 mainland site (4–6 solved). NUM's best
