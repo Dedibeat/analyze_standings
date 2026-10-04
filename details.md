@@ -4516,6 +4516,67 @@ Run: `python3 -m arch_b.online_medals [--school NAME]` (~30 s; on Windows set
 - **Setup:** `pip install numpy pypinyin` (README updated).
 
 
+## EC-Final regional cutoff: how deep a mainland seat reaches (2026-10-01)
+
+**Question.** Under the 2026 EC-Final rule (`The 2026 ICPC Asia East Continent
+Final 名额分配办法`, icpc.pku.edu.cn, 2026-09-03), what regional rank wins one
+of the 230 mainland seats? The rule: sites ordered by valid teams; admit rank 1
+of each site, then rank 2, ...; skip a team sharing a member with an admitted
+team (2025 公示 wording: "有 1 名选手相同") and schools already at 3 teams. Hong
+Kong gives 10 more seats (medal teams only, after round 1). The notice has no
+Mongolia-specific rule; Mongolian schools qualify like any other school, or
+apply for one of the ≤10 incentive seats (激励名额).
+
+**Method** (`scripts/ecfinal_cutoff.py`). Replays the rule on
+`regional_teams.csv`. Validated on 2025 (240 seats, 6 mainland sites): 231/240
+simulated teams are in the published 2025 qualifier table; the 9 misses are
+teams replaced by same-school substitutes (2025 allowed a school's top-90
+team to substitute).
+
+| season | mainland sites | 240 seats reach rank | 2026 rule (230 seats, 7 sites, 7/6 scaling) |
+|---|---|---|---|
+| 2023 | 6 | 87 | ~70 |
+| 2024 | 6 | 86 | ~70 |
+| 2025 | 6 | 91 (actual 84–91 by site) | ~75 |
+
+2025 per site (simulated; the 240th seat went to Nanjing in tier 91, so an
+eligible team at rank ≤91 qualified at Wuhan/Shenyang/Xi'an/Nanjing and ≤90 at
+Chengdu/Shanghai): last admitted Wuhan #88 (5 solved), Shenyang #91 (4), Xi'an
+#90 (5), Nanjing #91 (4), Chengdu #90 (6), Shanghai #84 (5; its #85–90 were all
+already-admitted or capped). Every last-admitted team was a silver medallist.
+
+Only ~45% of teams above the cutoff are admitted (each team plays two sites;
+top schools hit the 3-team cap), so the bar is far below 240/6 ≈ 40. Rank 70–75
+was a silver medal at every 2024–2025 mainland site (4–6 solved). NUM's best
+mainland ranks were 116 (Hangzhou 2024) and 168 (Nanjing 2025). The 7-site
+figure is an estimate: it assumes the new Nanchang site adds admits at the
+6-site average rate.
+
+**2026 projection (`--project-2026`, 2026-10-01).** The 7/6 scaling above is
+biased: in a leave-one-site-out test it overshoots the true 5-site depth by
+5–11 ranks. Replaced by a replay: each season's real teams (school, number of
+sites, strength = mean logit rank percentile) are redrawn onto the 2026
+capacities (`slot_rules.json`, 7 sites, 2,516 seats vs 2,200 in 2025) with
+Gaussian rank noise, 230 seats. The noise is calibrated so the same replay
+reproduces that season's real 6-site depth (2024: 86 vs 86; 2025: 91 vs 91;
+2023 is barely identified, every noise scale replays 87–89). The 316 extra 2026
+seats bound the answer: as second sites of one-site teams (more duplicates,
+deeper) or as new teams (shallower).
+
+| base season | extra seats → second sites | extra seats → new teams |
+|---|---|---|
+| 2023 (weak calibration) | 70 (67–73) | 61 (58–63) |
+| 2024 | 77 (75–80) | 71 (68–73) |
+| 2025 | 79 (77–82) | 75 (73–77) |
+
+Median (10–90%) qualifying rank. Estimate for 2026: **~75, plausible 70–80,
+the same at every mainland site** (±1 by site order: Wuhan/Shenyang 400, Xi'an
+380, Nanchang 360, Shanghai 336, Chengdu/Nanjing 320 by capacity). Rank 75 was
+silver everywhere in 2023–2025 (4 solved at Shenyang 2025 / Nanjing 2024 /
+Xi'an 2023, 6 at Chengdu). Untested: team-strength drift, Nanchang's field (no
+history), and whether 2026 teams still play at most two sites.
+
+
 ## 2026 EC online rounds added; "ICPC" contest names fixed (2026-10-04)
 
 **Request.** The EC online rounds were all named "ICPC", so Online I and II
