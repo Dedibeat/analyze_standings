@@ -563,6 +563,34 @@ the online-gold model within 3 points. It runs high further down (27% vs a
 backtested 20% for #141–280) and barely separates the sites. It is a research
 comparison; use `output/online_gold.md` for decisions.
 
+### Time-varying team ratings (research, 2026-10-04)
+
+```bash
+python3 -m arch_b.dynamic_rating   # ~6 min; writes output/dynamic_rating.{json,md}
+```
+
+Tests whether team ratings that move with time predict team performance
+better than the shipped one-ability-per-team fit. Every model is refit month
+by month on earlier contests only; 2023 tunes and 2024–2026 is scored.
+
+- **Static ratings are too high early and too low late.** Within a team,
+  static-fit residuals rise about 15 points/year (about 40 for weak teams).
+  CF-anchor residuals trend the same way by contest year.
+- **A Codeforces-style per-contest update (Kalman filter) forecasts worse**
+  than the static joint fit (pair accuracy −0.004). Each contest's
+  difficulties are frozen when it is processed.
+- **A joint random-walk fit** (TrueSkill Through Time style) gains a little
+  (+0.0005 to +0.0010), mostly for teams with long histories. It does not
+  improve CF-calibrated problem ratings, so nothing shipped changed.
+- **Bigger gains:**
+  - deflating ratings that rest on EC online rounds when forecasting onsite
+    contests (+0.002);
+  - giving new rosters a prior from their members' earlier teams. About 26%
+    of new rosters have a known member; adding them lifts pair accuracy by
+    +0.043 over rating them at the flat 2000.
+
+Details: `details.md` (2026-10-04 entry).
+
 ### Interactive viewer
 
 ```bash
@@ -674,7 +702,8 @@ Module self-checks:
   analysis (with `export_medal_viewer` + `medal_viewer_template.html` for the
   medal viewer), `twopl`/`twopl_region` 2PL discrimination
   prototype, `export_virtual_calc` + `virtual_calc_template.html` for the
-  virtual-contest performance calculator); reuses `arch_a.load` and `arch_a.elo`.
+  virtual-contest performance calculator, `dynamic_rating` time-varying team
+  ratings and month-by-month forecast test); reuses `arch_a.load` and `arch_a.elo`.
 - `data/ec_online/` — official Asia East online rankings (teams, schools),
   2022–2024 online rosters, 2022–2025 regional official standings and medals,
   and hand-encoded 2023–2026 slot rules; built by
