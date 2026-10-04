@@ -267,7 +267,11 @@ ratings from that file (`calibrate.problem_cf`), so all consumers agree.
 DE needs per-problem features, so it cannot map a team ability. Team
 abilities, performances and medal bars keep the scalar map: a monotone
 **shape** learned from the ~660 gym-mirror difficulties, then an **affine**
-leg fit on the same CF anchors. `arch_b.metric` also still scores that map on
+leg fit on the same CF anchors. Team performance in the virtual calculator
+(and the medal viewer's cutoff teams) uses that map on the **binary** fit,
+whose ability and difficulty axes both track CF at slope ~1; the survival
+fit compresses abilities (see the 2026-10-04 calibrated-performance entry in
+`details.md`). `arch_b.metric` also still scores that map on
 the raw fit (246.3 on the roster-fixed fit). The two axes no longer share one
 map.
 
@@ -436,7 +440,8 @@ a dot-range chart of the bronze/silver/gold bars per contest (sorted by gold bar
 click a row to open the contest), a per-contest detail view (problems as lettered
 lollipops on the difficulty axis against the three medal-bar thresholds and the
 platinum zone, plus a table with band solve rates), and a sortable lowest-gold-team
-table.
+table. Cutoff teams' performance is shown in CF points (`performance_cf`): the
+binary-fit performance the virtual calculator shows for the same standings row.
 
 ### Regional medal-cutoff chooser
 
@@ -654,9 +659,10 @@ standings to get a hypothetical rank, then the same Elo rank-inversion
 primitive `arch_b.medals` uses for every real team's `performance_elo`
 converts that rank plus the real field's fitted abilities into a rating. The
 standings table shows every real team's own calibrated performance
-alongside yours for direct comparison. The performance mapping is the scalar
-gym-shape + affine map, sampled into a dense lookup table at export time so the
-browser doesn't need to re-fit it. The reference problems table shows the
+alongside yours for direct comparison. Abilities and performances come from the
+**binary** fit (`performance_fit`), mapped to CF by the scalar gym-shape +
+affine map of that fit's difficulties, sampled into a dense lookup table at
+export time so the browser doesn't need to re-fit it. The reference problems table shows the
 shipped DE problem ratings.
 Self-contained, no server; recomputes live as you edit solved/penalty.
 
