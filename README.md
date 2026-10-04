@@ -654,7 +654,7 @@ Module self-checks:
 
 ## Layout
 
-- `data/tagged.json` — full input standings (146 contests); `data/ucup_s3.json`,
+- `data/tagged.json` — full input standings (148 contests); `data/ucup_s3.json`,
   `data/ucup_s4.json` — the Universal Cup seasons used to anchor the scale.
 - `data/icpc_2020_2021.json` — 14 older Asia East ICPC standings;
   `data/petroz_2022_2026.json` — 57 recent Petrozavodsk camp standings. Both are
@@ -702,6 +702,11 @@ Module self-checks:
 - `scripts/cphof_cf_participants.py` — resumable, rate-limited builder for that
   artifact; raw source responses are cached under the gitignored
   `data/cphof_cache/`.
+- `scripts/add_qoj_contest.py` — adds one QOJ contest's standings to
+  `data/tagged.json` (`python3 scripts/add_qoj_contest.py 4071 --name "EC Online (I)"
+  --region "Asia East Continent"`). QOJ shows contests only to logged-in users, so
+  it needs `QOJ_USERNAME`/`QOJ_PASSWORD`. Then rerun the release steps (see the
+  2026-10-04 entry in `details.md`).
 - `scripts/fetch_qoj_supplemental.py` — standings-only QOJ category collector;
   `scripts/fetch_xcpcio_standings.py` — resumable converter for XCPCIO-hosted
   official boards. Their broader camp/provincial datasets were tested and

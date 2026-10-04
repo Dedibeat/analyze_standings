@@ -2,16 +2,16 @@
 
     python3 scripts/attach_online_rosters.py IN.json OUT.json
 
-The 2024/2025 EC online rounds (QOJ 1794/1799, 2513/2524) are in the rating fit,
-but their QOJ rows carry members on only 4-9 rows each, so their ~2,500 teams
-link to other contests only through trusted names. ``online_rosters.csv`` has
+The 2024-2026 EC online rounds (QOJ 1794/1799, 2513/2524, 4071/4113) are in the
+rating fit, but their QOJ rows carry members on only a few rows each, so their
+~2,500 teams link to other contests only through trusted names. ``online_rosters.csv`` has
 the official registration roster of every ranked team. A row gets its roster
 when the key is unambiguous and the solved count agrees with the official
 PKU ranking (``online_teams.csv``; zero-solve teams are not ranked and match on
 the key alone):
 
 * 2024 boards print ``team (<b>school</b>)``, so the key is school + team;
-* 2025 boards print the team name only, which must be unique in both the
+* 2025-2026 boards print the team name only, which must be unique in both the
   round's roster and the board.
 
 Rows that already have >=2 members are left alone, so rerunning is a no-op.
@@ -30,7 +30,8 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), os.pardir))
 from arch_b.online_gold import norm_name, norm_school  # noqa: E402
 
 EC = os.path.join(os.path.dirname(__file__), os.pardir, "data", "ec_online")
-ROUNDS = {1794: ("2024", "1"), 1799: ("2024", "2"), 2513: ("2025", "1"), 2524: ("2025", "2")}
+ROUNDS = {1794: ("2024", "1"), 1799: ("2024", "2"), 2513: ("2025", "1"), 2524: ("2025", "2"),
+          4071: ("2026", "1"), 4113: ("2026", "2")}
 SCHOOL_MARK = re.compile(r"^(.*?)\s*\(<b>(.*?)</b>\)\s*$")
 
 

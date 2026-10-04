@@ -39,8 +39,9 @@ A model-free sanity badge is reported alongside: the weakest medal band
 solved the problem. It anchors on the band *majority* rather than the boundary
 cohort, so it skews one tier easier where the two disagree (~24% of problems).
 
-Scope: Asia East Continent contests that actually award medals — the 6 online
-qualifiers (contest_name "ICPC") and the EC-Final warm-ups are excluded.
+Scope: Asia East Continent contests that actually award medals — the online
+qualifiers (contest_name "EC Online (I)"/"(II)") and the EC-Final warm-ups are
+excluded.
 Includes EC-Finals (Shanghai 2023 = 48th EC-Final, China 2024 = 49th EC-Final).
 
 Bars and difficulties are also reported in Codeforces points through the same
@@ -130,7 +131,7 @@ def medal_contests():
         cid = c["contest_id"]
         name = c["contest_name"].strip()
         if (c["region"] == "Asia East Continent"
-                and name != "ICPC"                      # online qualifiers
+                and not name.startswith("EC Online")    # online qualifiers
                 and "warm up" not in name.lower()       # EC-Final warm-ups
                 and cid in xcpcio):                     # must have XCPCIO data
             out[cid] = c
