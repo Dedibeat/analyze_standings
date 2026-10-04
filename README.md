@@ -566,7 +566,7 @@ comparison; use `output/online_gold.md` for decisions.
 ### Time-varying team ratings (research, 2026-10-04)
 
 ```bash
-python3 -m arch_b.dynamic_rating   # ~6 min; writes output/dynamic_rating.{json,md}
+python3 -m arch_b.dynamic_rating   # ~7 min; writes output/dynamic_rating.{json,md}
 ```
 
 Tests whether team ratings that move with time predict team performance
@@ -580,8 +580,10 @@ by month on earlier contests only; 2023 tunes and 2024–2026 is scored.
   than the static joint fit (pair accuracy −0.004). Each contest's
   difficulties are frozen when it is processed.
 - **A joint random-walk fit** (TrueSkill Through Time style) gains a little
-  (+0.0005 to +0.0010), mostly for teams with long histories. It does not
-  improve CF-calibrated problem ratings, so nothing shipped changed.
+  (+0.0005 to +0.0010), mostly for teams with long histories.
+- **CF RMSE is unmoved** (q = 25–100, within about 1 point): the north-star
+  goes 244.6 → 245.0–245.6, and the shipped DE calibration 225.6 →
+  224.6–225.3 (not significant). Nothing shipped changed.
 - **Bigger gains:**
   - deflating ratings that rest on EC online rounds when forecasting onsite
     contests (+0.002);

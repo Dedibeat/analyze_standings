@@ -39,6 +39,15 @@ CF-anchor raw LOCO (binary difficulties) and mean residual (predicted − CF) by
 | q=50 | 247.47 | +0.70 [-0.53, +1.81] | +120 | +29 | -10 | -14 | -65 |
 | q=100 | 249.15 | +2.37 [-0.38, +5.17] | +107 | +30 | -12 | -10 | -72 |
 
+CF-anchor RMSE (185 anchors, 15 contests; `arch_b.metric` and the shipped DE calibration's nested LOCO), random-walk fits by q (q = 0 is the shipped fit):
+
+| q | north-star (survival, gym-shaped) | survival raw | binary gym-shaped | binary raw | DE ridge | DE clip (shipped) | Δ DE clip vs q=0 [95% CI] | gym EC / Kattis / AOJ guards |
+|---|---|---|---|---|---|---|---|---|
+| 0 | 244.6 | 246.7 | 257.5 | 246.8 | 225.9 | 225.6 |  | 0.977 / 0.795 / 0.563 |
+| 25 | 245.6 | 246.6 | 257.7 | 247.0 | 225.1 | 225.3 | -0.27 [-1.71, +0.74] | 0.977 / 0.796 / 0.563 |
+| 50 | 245.0 | 247.1 | 257.7 | 247.5 | 225.3 | 224.6 | -1.00 [-3.89, +1.39] | 0.978 / 0.797 / 0.563 |
+| 100 | 245.1 | 248.2 | 258.5 | 249.2 | 225.7 | 224.9 | -0.67 [-4.90, +3.24] | 0.978 / 0.797 / 0.563 |
+
 ## Forecasts
 
 Pair accuracy (higher is better), pair log loss and held-out solve log loss (lower is better); Δ vs the base with a contest-bootstrap 95% interval.

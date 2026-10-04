@@ -8,7 +8,7 @@ import numpy as np
 from arch_a import elo
 from arch_a.load import load
 from arch_b import dynamic_rating as dr
-from arch_b import model
+from arch_b import model, survival
 
 ROOT = os.path.join(os.path.dirname(__file__), os.pardir)
 
@@ -60,10 +60,12 @@ class DynamicRatingTest(unittest.TestCase):
         self.day = np.array([dr._day("2024-01-01") + 180.0 * c for c in range(4)])
 
     def test_q0_is_the_static_fit(self):
-        theta, b, _ = model.fit(self.ds, verbose=False)
-        node_theta, node_b, node_of_row, _, _ = dr.smooth_fit(self.ds, self.day, q=0.0)
-        np.testing.assert_allclose(node_b, b, atol=1e-3)
-        np.testing.assert_allclose(node_theta[node_of_row], theta[self.ds.team_of_row], atol=1e-3)
+        for kind, mod in (("binary", model), ("survival", survival)):
+            theta, b, _ = mod.fit(self.ds, verbose=False)
+            node_theta, node_b, node_of_row, _, _ = dr.smooth_fit(self.ds, self.day, q=0.0, kind=kind)
+            np.testing.assert_allclose(node_b, b, atol=1e-3, err_msg=kind)
+            np.testing.assert_allclose(node_theta[node_of_row], theta[self.ds.team_of_row], atol=1e-3,
+                                       err_msg=kind)
 
     def test_random_walk_tracks_an_improving_team(self):
         riser = self.ds.teams.index(next(t for t in self.ds.teams if "riser" in t))
@@ -148,6 +150,13 @@ class DynamicRatingResultTest(unittest.TestCase):
         delta = test["static+members"]["minus_static+cold_MU0"]
         self.assertGreater(delta["accuracy"][1], 0)        # whole interval above zero
         self.assertLess(delta["cell_log_loss"][2], 0)
+
+    def test_cf_rmse_q0_is_the_shipped_metric(self):
+        cf = self.out["cf_rmse"]
+        self.assertAlmostEqual(cf["0"]["survival"]["gym_shaped"], 244.6, delta=0.05)   # arch_b.metric
+        self.assertAlmostEqual(cf["0"]["survival"]["raw_affine"], 246.7, delta=0.05)
+        for q in ("25", "50", "100"):
+            self.assertEqual(cf[q]["survival"]["anchors"], [185, 15])
 
     def test_cf_filter_loses_to_the_joint_fit(self):
         test = self.out["forecast"]["history/test_2024_2026"]

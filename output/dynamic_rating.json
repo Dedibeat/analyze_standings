@@ -155,6 +155,200 @@
    }
   }
  },
+ "cf_rmse": {
+  "0": {
+   "survival": {
+    "raw_affine": 246.66112665658807,
+    "gym_shaped": 244.5900069338317,
+    "guards": {
+     "gym_ec_spearman": 0.9774522835553136,
+     "gym_pooled_spearman": 0.9691057016331522,
+     "kattis_pooled_spearman": 0.7953671664146907,
+     "aoj_within_spearman": 0.5629187396351576,
+     "solvecount_sanity": 0.9972489631508746
+    },
+    "anchors": [
+     185,
+     15
+    ]
+   },
+   "binary": {
+    "raw_affine": 246.7809066989529,
+    "gym_shaped": 257.5355229710818,
+    "guards": {
+     "gym_ec_spearman": 0.9822919723038315,
+     "gym_pooled_spearman": 0.9702022003968461,
+     "kattis_pooled_spearman": 0.7814012436241041,
+     "aoj_within_spearman": 0.5604933151092499,
+     "solvecount_sanity": 1.0
+    },
+    "anchors": [
+     185,
+     15
+    ]
+   },
+   "de": {
+    "de_ridge": 225.86599232944175,
+    "de_clip": 225.60731412040002
+   }
+  },
+  "25": {
+   "survival": {
+    "raw_affine": 246.59382943410893,
+    "gym_shaped": 245.5972643412626,
+    "guards": {
+     "gym_ec_spearman": 0.9774695479145995,
+     "gym_pooled_spearman": 0.9689647872131762,
+     "kattis_pooled_spearman": 0.7963368222870345,
+     "aoj_within_spearman": 0.5629187396351576,
+     "solvecount_sanity": 0.9972413740548083
+    },
+    "anchors": [
+     185,
+     15
+    ]
+   },
+   "binary": {
+    "raw_affine": 246.9736564159626,
+    "gym_shaped": 257.6739656656298,
+    "guards": {
+     "gym_ec_spearman": 0.9820707373354732,
+     "gym_pooled_spearman": 0.9700647031355069,
+     "kattis_pooled_spearman": 0.7811942463031194,
+     "aoj_within_spearman": 0.5604933151092499,
+     "solvecount_sanity": 1.0
+    },
+    "anchors": [
+     185,
+     15
+    ]
+   },
+   "de": {
+    "de_ridge": 225.14647731516965,
+    "de_clip": 225.3409512432532
+   },
+   "de_minus_q0": {
+    "de_ridge": {
+     "difference": -0.7195150142721047,
+     "bootstrap_2.5_97.5": [
+      -1.9744636625306229,
+      0.26858794957756027
+     ]
+    },
+    "de_clip": {
+     "difference": -0.2663628771468325,
+     "bootstrap_2.5_97.5": [
+      -1.7097781708153512,
+      0.7448678605874366
+     ]
+    }
+   }
+  },
+  "50": {
+   "survival": {
+    "raw_affine": 247.07797075590256,
+    "gym_shaped": 245.0352655341698,
+    "guards": {
+     "gym_ec_spearman": 0.9775223275272737,
+     "gym_pooled_spearman": 0.9690505612079444,
+     "kattis_pooled_spearman": 0.7974033666674497,
+     "aoj_within_spearman": 0.5629187396351576,
+     "solvecount_sanity": 0.9964973622679556
+    },
+    "anchors": [
+     185,
+     15
+    ]
+   },
+   "binary": {
+    "raw_affine": 247.4776363494778,
+    "gym_shaped": 257.7296460689552,
+    "guards": {
+     "gym_ec_spearman": 0.9816509665641112,
+     "gym_pooled_spearman": 0.9698346176448043,
+     "kattis_pooled_spearman": 0.7813973511032664,
+     "aoj_within_spearman": 0.5604933151092499,
+     "solvecount_sanity": 1.0
+    },
+    "anchors": [
+     185,
+     15
+    ]
+   },
+   "de": {
+    "de_ridge": 225.28545055719164,
+    "de_clip": 224.603670307542
+   },
+   "de_minus_q0": {
+    "de_ridge": {
+     "difference": -0.5805417722501147,
+     "bootstrap_2.5_97.5": [
+      -2.729156280093837,
+      1.0545301978227672
+     ]
+    },
+    "de_clip": {
+     "difference": -1.00364381285803,
+     "bootstrap_2.5_97.5": [
+      -3.894059242195713,
+      1.3881972198174692
+     ]
+    }
+   }
+  },
+  "100": {
+   "survival": {
+    "raw_affine": 248.1550634634923,
+    "gym_shaped": 245.10735426212602,
+    "guards": {
+     "gym_ec_spearman": 0.9775622821873355,
+     "gym_pooled_spearman": 0.9686152612175231,
+     "kattis_pooled_spearman": 0.7973008513804689,
+     "aoj_within_spearman": 0.5629187396351576,
+     "solvecount_sanity": 0.9964973622679556
+    },
+    "anchors": [
+     185,
+     15
+    ]
+   },
+   "binary": {
+    "raw_affine": 249.150275256582,
+    "gym_shaped": 258.4523306358807,
+    "guards": {
+     "gym_ec_spearman": 0.981203330865568,
+     "gym_pooled_spearman": 0.9694748405020409,
+     "kattis_pooled_spearman": 0.7803451287332345,
+     "aoj_within_spearman": 0.5604933151092499,
+     "solvecount_sanity": 1.0
+    },
+    "anchors": [
+     185,
+     15
+    ]
+   },
+   "de": {
+    "de_ridge": 225.6908459257529,
+    "de_clip": 224.93272310571462
+   },
+   "de_minus_q0": {
+    "de_ridge": {
+     "difference": -0.17514640368884216,
+     "bootstrap_2.5_97.5": [
+      -3.4876162687036505,
+      2.8386236860620278
+     ]
+    },
+    "de_clip": {
+     "difference": -0.6745910146854044,
+     "bootstrap_2.5_97.5": [
+      -4.895814220300844,
+      3.2436083299870107
+     ]
+    }
+   }
+  }
+ },
  "members": {
   "static": {
    "coef": {

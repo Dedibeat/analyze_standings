@@ -105,13 +105,11 @@ def _guard_failures(guards, raw_rmse, calibrated_rmse, coverage):
     return failed
 
 
-def main(use_binary=False):
-    t0 = time.time()
-    mod = model if use_binary else survival
-    with contextlib.redirect_stdout(io.StringIO()):   # silence the fit trace
-        ds, theta, b, history, _ = estimate_joint(
-            fit_fn=mod.fit, min_solve_hours=MIN_SOLVE_HOURS)
+def score(ds, b):
+    """Raw and gym-calibrated LOCO CF RMSE, guard values and anchor coverage of ``b``.
 
+    Returns ``(raw_rmse, calibrated_rmse, guards, coverage)``.
+    """
     # Fitted difficulties keyed both ways the yardsticks join.
     by_label = {(int(cid), label): float(b[p])
                 for p, (cid, label, pid, name) in enumerate(ds.problems)}
@@ -185,13 +183,23 @@ def main(use_binary=False):
     }
 
     coverage = (len(our), len(set(grp)))
+    return raw_rmse, calibrated_rmse, guards, coverage
+
+
+def main(use_binary=False):
+    t0 = time.time()
+    mod = model if use_binary else survival
+    with contextlib.redirect_stdout(io.StringIO()):   # silence the fit trace
+        ds, theta, b, history, _ = estimate_joint(
+            fit_fn=mod.fit, min_solve_hours=MIN_SOLVE_HOURS)
+    raw_rmse, calibrated_rmse, guards, coverage = score(ds, b)
     failed = _guard_failures(guards, raw_rmse, calibrated_rmse, coverage)
     fail = [name for name in GUARDS if name in failed]
     raw_fail = "raw_loco_cf_rmse" in failed
     metric_fail = "calibrated_loco_cf_rmse" in failed
     coverage_fail = "anchor_coverage" in failed
     print(f"model={'binary' if use_binary else 'survival'}  "
-          f"anchors: {len(our)} problems / {len(set(grp))} contests  "
+          f"anchors: {coverage[0]} problems / {coverage[1]} contests  "
           f"({time.time() - t0:.0f}s)")
     if coverage_fail:
         print("GUARD anchor_coverage="

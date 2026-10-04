@@ -46,7 +46,7 @@ import numpy as np
 
 from arch_a import elo
 from arch_a.load import _norm_member
-from . import model
+from . import model, survival
 from .joint import OLDER_ICPC, PETROZ, TAGGED, UCUP, WF, load_joint_dataset
 from .model import MU0, SIGMA_B, SIGMA_THETA
 from .run import MIN_SOLVE_HOURS
@@ -229,8 +229,18 @@ def _chain_solve(diag, off, rhs, first, by_pos):
     return x[:n]
 
 
+def _cell_terms(kind, theta, b, y, rho):
+    """Per-cell residual and curvature: binary ``y - pi, pi(1 - pi)``;
+    survival ``y - Lambda, Lambda`` with ``Lambda = ln2 * exp((theta - b)/S) * rho``."""
+    if kind == "binary":
+        p = elo.pi(theta, b)
+        return y - p, p * (1 - p)
+    lam = survival.LN2 * np.exp((theta - b) / elo.S) * rho
+    return y - lam, lam
+
+
 def smooth_fit(ds, day, q=100.0, drift=0.0, sigma0=SIGMA_THETA, cell_mask=None,
-               eps=0.5, max_iter=400):
+               kind="binary", eps=0.5, max_iter=400):
     """Joint MAP with a random-walk ability per team (TrueSkill Through Time style).
 
     Each team has one ability per appearance day. Consecutive abilities differ
@@ -247,7 +257,8 @@ def smooth_fit(ds, day, q=100.0, drift=0.0, sigma0=SIGMA_THETA, cell_mask=None,
     shipped binary fit (one ability per team). The objective is concave. It is
     maximised by block-coordinate Newton, with the ability block solved
     exactly as one tridiagonal system per team. ``cell_mask`` restricts the
-    observed cells (e.g. contests before a date).
+    observed cells (e.g. contests before a date). ``kind="survival"`` uses the
+    shipped solve-time likelihood (``survival.fit``) instead of the binary one.
 
     Returns ``(node_theta, b, node_of_row, node_team, node_day)``. Rows without
     a cell in the mask have node -1.
@@ -256,6 +267,7 @@ def smooth_fit(ds, day, q=100.0, drift=0.0, sigma0=SIGMA_THETA, cell_mask=None,
     node_of_row, node_team, node_day, first = _nodes(ds, day, np.unique(ds.obs_row[m]))
     obs_node, obs_prob = node_of_row[ds.obs_row[m]], ds.obs_prob[m]
     y = ds.obs_y[m].astype(float)
+    rho = survival._survival_observations(ds)[3][m] if kind == "survival" else None
     n_nodes, n_probs = len(node_team), len(ds.problems)
     dt = np.zeros(n_nodes)
     dt[1:] = np.where(first[1:], 0.0, (node_day[1:] - node_day[:-1]) / YEAR)
@@ -269,16 +281,16 @@ def smooth_fit(ds, day, q=100.0, drift=0.0, sigma0=SIGMA_THETA, cell_mask=None,
     s2 = elo.S ** 2
     theta, b = np.full(n_nodes, MU0), np.full(n_probs, MU0)
     for _ in range(max_iter):
-        p = elo.pi(theta[obs_node], b[obs_prob])
+        resid, info = _cell_terms(kind, theta[obs_node], b[obs_prob], y, rho)
         step = np.where(first, 0.0, theta - np.roll(theta, 1) - drift * dt)
-        grad = (np.bincount(obs_node, y - p, n_nodes) / elo.S - node_prec * (theta - MU0)
+        grad = (np.bincount(obs_node, resid, n_nodes) / elo.S - node_prec * (theta - MU0)
                 - edge_prec * step + next_prec * np.append(step[1:], 0.0))
-        diag = np.bincount(obs_node, p * (1 - p), n_nodes) / s2 + node_prec + edge_prec + next_prec
+        diag = np.bincount(obs_node, info, n_nodes) / s2 + node_prec + edge_prec + next_prec
         new = np.clip(theta + _chain_solve(diag, -edge_prec, grad, first, by_pos), elo.LO, elo.HI)
         change, theta = np.abs(new - theta).max(), new
-        p = elo.pi(theta[obs_node], b[obs_prob])
-        grad = -np.bincount(obs_prob, y - p, n_probs) / elo.S - (b - MU0) / SIGMA_B ** 2
-        neg_h = np.bincount(obs_prob, p * (1 - p), n_probs) / s2 + 1.0 / SIGMA_B ** 2
+        resid, info = _cell_terms(kind, theta[obs_node], b[obs_prob], y, rho)
+        grad = -np.bincount(obs_prob, resid, n_probs) / elo.S - (b - MU0) / SIGMA_B ** 2
+        neg_h = np.bincount(obs_prob, info, n_probs) / s2 + 1.0 / SIGMA_B ** 2
         new = np.clip(b + grad / neg_h, elo.LO, elo.HI)
         change, b = max(change, np.abs(new - b).max()), new
         if change < eps:
@@ -532,6 +544,45 @@ def cf_anchor_check(ds, theta_row, b, contest_year):
     return rows, pred, years
 
 
+def cf_rmse(ds, day, qs=(0.0, 25.0, 50.0, 100.0)):
+    """CF-anchor RMSE of the random-walk fits; ``q = 0`` is the shipped binary/survival pair.
+
+    Per q:
+    * ``arch_b.metric`` scores for both likelihoods: raw affine LOCO, the
+      north-star gym-shaped LOCO (survival) and the guards;
+    * the shipped DE calibration's nested LOCO, ridge and clipped features
+      (``de_release_audit``), with a paired contest bootstrap against q = 0.
+    """
+    from .calibration_experiment import build_anchor_table
+    from .de_release_audit import DE, contest_bootstrap, loco, problem_records, rmse, with_binary
+    from .metric import score
+    y = ds.obs_y.astype(float)
+    rho = survival._survival_observations(ds)[3]
+    out, base = {}, None
+    for q in qs:
+        entry, recs = {}, {}
+        for kind in ("survival", "binary"):
+            theta, b, node_of_row, _, _ = smooth_fit(ds, day, q=q, kind=kind)
+            _, info = _cell_terms(kind, theta[node_of_row[ds.obs_row]], b[ds.obs_prob], y, rho)
+            se = 1 / np.sqrt(np.bincount(ds.obs_prob, info, len(b)) / elo.S ** 2 + 1 / SIGMA_B ** 2)
+            recs[kind] = problem_records(ds, b, se)
+            raw, shaped, guards, coverage = score(ds, b)
+            entry[kind] = {"raw_affine": raw, "gym_shaped": shaped, "guards": guards,
+                           "anchors": list(coverage)}
+        rows = with_binary(build_anchor_table(recs["survival"], recs["binary"]), recs["binary"])
+        preds = {name: loco(rows, kind, DE)[0] for name, kind in (("de_ridge", "ridge"), ("de_clip", "clip"))}
+        entry["de"] = {name: rmse(pred, rows) for name, pred in preds.items()}
+        if base is None:
+            base = (rows, preds)
+        else:
+            assert [r["row_id"] for r in rows] == [r["row_id"] for r in base[0]]
+            entry["de_minus_q0"] = {name: contest_bootstrap(rows, preds[name], base[1][name], n=5000)
+                                    for name in preds}
+        out[str(int(q))] = entry
+        print(f"done cf_rmse q={q}", file=sys.stderr, flush=True)
+    return out
+
+
 # ---- experiment ----
 
 def run():
@@ -595,6 +646,7 @@ def run():
             "residual_by_year": {str(y): float(np.mean((pred_q - cf_y)[anchor_years == y]))
                                  for y in sorted(set(anchor_years))}}
     out["retrospective"] = retro
+    out["cf_rmse"] = cf_rmse(ds, day)
 
     # 2. Forecasts, month by month.
     bounds = month_starts()
@@ -711,6 +763,20 @@ def _md(out):
         d = cf[q]["minus_static"]
         lines.append(f"| q={q} | {cf[q]['loco']:.2f} | {d['difference']:+.2f} [{d['bootstrap_2.5_97.5'][0]:+.2f}, "
                      f"{d['bootstrap_2.5_97.5'][1]:+.2f}] | " + " | ".join(f"{v:+.0f}" for v in cf[q]["residual_by_year"].values()) + " |")
+    lines += ["", "CF-anchor RMSE (185 anchors, 15 contests; `arch_b.metric` and the shipped DE calibration's "
+              "nested LOCO), random-walk fits by q (q = 0 is the shipped fit):", "",
+              "| q | north-star (survival, gym-shaped) | survival raw | binary gym-shaped | binary raw | "
+              "DE ridge | DE clip (shipped) | Δ DE clip vs q=0 [95% CI] | gym EC / Kattis / AOJ guards |",
+              "|---|---|---|---|---|---|---|---|---|"]
+    for q, v in out["cf_rmse"].items():
+        d = v.get("de_minus_q0", {}).get("de_clip")
+        g = v["survival"]["guards"]
+        lines.append(f"| {q} | {v['survival']['gym_shaped']:.1f} | {v['survival']['raw_affine']:.1f} | "
+                     f"{v['binary']['gym_shaped']:.1f} | {v['binary']['raw_affine']:.1f} | {v['de']['de_ridge']:.1f} | "
+                     f"{v['de']['de_clip']:.1f} | "
+                     + (f"{d['difference']:+.2f} [{d['bootstrap_2.5_97.5'][0]:+.2f}, {d['bootstrap_2.5_97.5'][1]:+.2f}]"
+                        if d else "") +
+                     f" | {g['gym_ec_spearman']:.3f} / {g['kattis_pooled_spearman']:.3f} / {g['aoj_within_spearman']:.3f} |")
     lines += ["", "## Forecasts", "",
               "Pair accuracy (higher is better), pair log loss and held-out solve log loss (lower is better); "
               "Δ vs the base with a contest-bootstrap 95% interval.", ""]

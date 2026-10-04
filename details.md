@@ -4672,9 +4672,33 @@ Static-fit performance minus rating, by position in the team's observed span
   overall LOCO does not improve: 246.78 → 247.47 (q = 50, +0.70 [−0.53,
   +1.81]) and 249.15 (q = 100, +2.37 [−0.38, +5.17]). In exploration, q = 150
   / 200 were significantly worse (+4.6 / +7.1).
+- **CF RMSE of the random-walk fits** (`cf_rmse`; survival and binary refit
+  with the same q). These are the project's own scores:
+  - `arch_b.metric`: raw affine LOCO, the north-star gym-shaped LOCO and the
+    guards. `metric.main` now delegates to a new `metric.score(ds, b)`, and
+    its output is unchanged (244.6 / 246.7, same guards).
+  - the shipped DE calibration's nested LOCO, ridge and clipped features
+    (`de_release_audit.loco`), with a paired contest bootstrap against q = 0.
+
+  q = 0 reproduces the shipped numbers.
+
+  | q | north-star (survival, gym-shaped) | survival raw | binary raw | DE ridge | DE clip (shipped) | Δ DE clip vs q = 0 |
+  |---|---|---|---|---|---|---|
+  | 0 | 244.6 | 246.7 | 246.8 | 225.9 | 225.6 | |
+  | 25 | 245.6 | 246.6 | 247.0 | 225.1 | 225.3 | −0.27 [−1.71, +0.74] |
+  | 50 | 245.0 | 247.1 | 247.5 | 225.3 | 224.6 | −1.00 [−3.89, +1.39] |
+  | 100 | 245.1 | 248.2 | 249.2 | 225.7 | 224.9 | −0.67 [−4.90, +3.24] |
+
+  - **All moves are within about 1 point.** That is under the 5-point keep
+    threshold and far inside the ±20 noise floor of `program.md`.
+  - **The north-star gets slightly worse** (+0.4 to +1.0).
+  - **DE gets slightly better, but not significantly.**
+  - **Guards are unchanged:** gym EC 0.977–0.978, Kattis 0.795–0.797, AOJ
+    0.563, solve-count sanity ≥ 0.996.
 - **Conclusion for problem ratings:** this is a real bias of the static fit,
-  but letting abilities move does not calibrate problems better. Team-season
-  offsets did the same in the DE audit. Nothing changed in the shipped fit.
+  but letting abilities move does not calibrate problems measurably better or
+  worse. Team-season offsets in the DE audit were similar (+3.7 there).
+  Nothing changed in the shipped fit.
 
 **2. Forecasts.** At each month start from 2023-01, every model is refit on
 the contests that started before the month. It then forecasts every row of
@@ -4774,6 +4798,6 @@ The 2023 tuning rows agree (+0.0219 / +0.0255).
 - **Real dates:** contest start times from QOJ (needs a logged-in session) or
   ICPC sources would replace the proxy.
 
-Run (~6 min): `python3 -m arch_b.dynamic_rating` (on Windows set
+Run (~7 min): `python3 -m arch_b.dynamic_rating` (on Windows set
 `PYTHONUTF8=1`). Tests: `tests/test_dynamic_rating.py`. This environment
 needed `pip install numpy` first.
