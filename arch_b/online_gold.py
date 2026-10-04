@@ -134,7 +134,7 @@ def link_regionals(data, strengths):
             if key not in strengths:
                 key, how = None, ""
         out.append(dict(season=season, site=r["site"], team=r["team"], school=r["school"],
-                        gold=int(r["medal"] == "gold"), link=how, online_key=key,
+                        gold=int(r["medal"] == "gold"), medal=r["medal"], link=how, online_key=key,
                         x=strengths[key]["x"] if key else None))
     return out
 
@@ -165,8 +165,10 @@ def school_slots(season, rule, data):
     return {s: min(k, cap) for s, k in slots.items()}
 
 
-def rules_line(season, site, data, strengths, rho=0.0, top50_seats=None, rho_top50=None):
-    """Strength of the last gold among rule-admitted (band) teams.
+def rules_line(season, site, data, strengths, rho=0.0, top50_seats=None, rho_top50=None,
+               fraction=GOLD_FRACTION):
+    """Strength of the last gold among rule-admitted (band) teams (``fraction``
+    of capacity; ``arch_b.online_medals`` passes 0.3 / 0.6 for silver / bronze).
 
     Quota entrants (invitational, WF, host, provincial, wildcard...) fill the
     share ``q = 1 - band slots / capacity`` of seats and win gold at ``rho``
@@ -196,7 +198,7 @@ def rules_line(season, site, data, strengths, rho=0.0, top50_seats=None, rho_top
     else:
         q50 = min(q, top50_seats / capacity)
         weight = rho_top50 * q50 + rho * (q - q50)
-    band_golds = GOLD_FRACTION * capacity * (1 - q) / (1 - q + weight)
+    band_golds = fraction * capacity * (1 - q) / (1 - q + weight)
     return field[max(1, round(band_golds)) - 1]
 
 
@@ -213,13 +215,14 @@ def school_rank_lines(contests, data, strengths, train_seasons):
     return lines, m
 
 
-def quota_split(data, strengths, seasons):
+def quota_split(data, strengths, seasons, won=lambda r: r["gold"]):
     """Per mainland regional: seats and golds of band vs quota teams.
 
     Each school's rule-based online slots go to its strongest-online teams at
     the site (unlinked teams last); its other teams, and every team of a school
     without band slots, count as quota entrants.  Returns the per-contest table
-    and the pooled relative gold rate rho = quota rate / band rate.
+    and the pooled relative gold rate rho = quota rate / band rate (``won``
+    picks the outcome; ``arch_b.online_medals`` counts silver or better, etc.).
     """
     regional = collections.defaultdict(list)
     for r in link_regionals(data, strengths):
@@ -241,8 +244,8 @@ def quota_split(data, strengths, seasons):
         band_ids = {id(r) for r in band}
         quota = [r for r in teams if id(r) not in band_ids]
         table.append(dict(season=season, site=site, band_seats=len(band), quota_seats=len(quota),
-                          band_golds=sum(r["gold"] for r in band),
-                          quota_golds=sum(r["gold"] for r in quota)))
+                          band_golds=sum(won(r) for r in band),
+                          quota_golds=sum(won(r) for r in quota)))
     tot = {k: sum(t[k] for t in table) for k in ("band_seats", "quota_seats", "band_golds", "quota_golds")}
     rho = (tot["quota_golds"] / tot["quota_seats"]) / (tot["band_golds"] / tot["band_seats"])
     for t in table:

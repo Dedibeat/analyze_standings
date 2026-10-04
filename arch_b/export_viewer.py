@@ -2,15 +2,15 @@
 
     python -m arch_b.export_viewer
 
-Runs the UCup-anchored **survival** fit over the filtered tagged.json, maps every
-difficulty and ability to Codeforces-equivalent points with the affine calibration
-(``arch_b.calibrate``), and bundles per-contest problem difficulties (with their
-Laplace standard errors) and team abilities/performances into
+Runs the UCup-anchored **survival** fit over the filtered tagged.json and bundles
+per-contest problem difficulties and team abilities/performances into
 output/ratings_viewer_b.html. Self-contained -- opens from disk, no server.
 
-Difficulty is CF-validated; team theta/performance share the same latent scale, so
-the *same* affine map is applied to them (an extrapolation, not separately
-validated -- the theta-vs-difficulty coin-flip relationship is preserved by it).
+Problem difficulties are the shipped DE ratings from
+output/problem_ratings_calibrated.json (``arch_b.calibrate.problem_cf``; no
+uncertainty estimate). DE needs per-problem features, so team theta/performance
+use the scalar gym-shape + affine map instead (an extrapolation, not separately
+validated). The two axes therefore no longer share one map.
 """
 
 import json
@@ -23,8 +23,7 @@ from arch_a.fixedpoint import _performance_ratings
 from arch_a.load import _max_solve_seconds, dedupe_contests, row_solved_any, team_key
 from . import survival
 from .joint import TAGGED, estimate_joint
-from .calibrate import _anchors, _gym_shape
-from .hier_calibrate import level_sd
+from .calibrate import _anchors, _gym_shape, problem_cf
 from .run import MIN_SOLVE_HOURS
 
 OUT_DIR = os.path.join(os.path.dirname(__file__), os.pardir, "output")
@@ -34,7 +33,6 @@ TEMPLATE = os.path.join(os.path.dirname(__file__), "viewer_template.html")
 def build_data():
     ds, theta, b, _, uf = estimate_joint(
         fit_fn=survival.fit, min_solve_hours=MIN_SOLVE_HOURS, verbose=False)
-    se_theta, se_b = survival.laplace_se(ds, theta, b)
 
     rows_by_contest = [np.where(ds.contest_of_row == ci)[0] for ci in range(len(ds.contests))]
     rho = _performance_ratings(theta, ds, rows_by_contest)
@@ -51,23 +49,15 @@ def build_data():
     to_cf = lambda x: float(np.clip(  # noqa: E731
         slope * shape(np.asarray([x], float))[0] + intercept, LO, HI))
 
-    # Problem difficulties (CF points) + partial SE, per contest. This combines
-    # conditional fit and contest-level components but is not a calibrated CF
-    # prediction interval (see calibrate.py).
-    level_by_contest, default_level = level_sd(recs)
+    # Problem difficulties are the shipped DE ratings (calibrate.py), which
+    # carry no uncertainty estimate; to_cf above is only for team numbers.
+    cf_of = problem_cf(ds.problems)
     prob_by_contest = {}
     for p, (cid, label, pid, name) in enumerate(ds.problems):
-        h = 10.0
-        local_slope = abs(slope * float(
-            (shape(np.asarray([b[p] + h]))[0] -
-             shape(np.asarray([b[p] - h]))[0]) / (2 * h)))
         solved = int(ds.solved_count[p])
         prob_by_contest.setdefault(int(cid), []).append({
             "label": label, "name": name,
-            "difficulty": round(to_cf(b[p]), 0),
-            "difficulty_partial_se": round(float(np.hypot(
-                local_slope * se_b[p],
-                level_by_contest.get(int(cid), default_level))), 0),
+            "difficulty": round(cf_of[(int(cid), label)], 0),
             "solved": solved,
         })
 

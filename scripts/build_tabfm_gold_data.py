@@ -257,14 +257,17 @@ def build(ctx):
 
 def forecast_2026(ctx):
     """Every 2026 online team at every 2026 mainland site ("if it attends"),
-    pre-registration features minus ``FORECAST_EXCLUDED``: 2026 members are
-    unknown (PTA rosters; a same-name 2025 team exists for only 161 of 2,893) and no
-    2026 regional has been held yet."""
+    pre-registration features minus ``FORECAST_EXCLUDED``: no 2026 regional has
+    been held yet.  Members come from the online registration roster (round 2's
+    when the team entered both); teams without one get NULL member features."""
     data, strengths, ev, dates, by_school, (online, schools, depth) = ctx
     raw = {}
     for r in data["online_teams"]:
         if r["season"] == "2026":
             raw.setdefault((r["season"], og.norm_school(r["school"]), og.norm_name(r["team"])), r)
+    members = {(r["season"], og.norm_school(r["school"]), og.norm_name(r["team"])):
+               {og.norm_name(m) for m in r["members"].split("|") if m.strip()}
+               for r in sorted(data["online_rosters"], key=lambda r: r["round"]) if r["season"] == "2026"}
     rows = []
     for site in sorted(s for (season, s) in dates if season == "2026"):
         rule = data["rules"][("2026", site)]
@@ -282,15 +285,13 @@ def forecast_2026(ctx):
                              online_link="name", band_slots=slots.get(school, 0), school_wf="wf" in ch,
                              school_host="host" in ch, school_invitational="invitational" in ch,
                              school_local="local" in ch, school_non_mainland="non_mainland" in ch, **site_f,
-                             **history(dict(school=school, team=name, members=set()), by_school, "2026",
-                                       dates[("2026", site)])))
+                             **history(dict(school=school, team=name, members=members.get(key, set())),
+                                       by_school, "2026", dates[("2026", site)])))
     return rows
 
 
-# Unknowable before the 2026 season: members (PTA rosters) and earlier 2026 results.
-FORECAST_EXCLUDED = ("members_prev_regionals", "members_prev_golds", "members_prev_best_medal",
-                     "members_prev_best_rank_pct", "earlier_regionals", "earlier_best_medal",
-                     "earlier_best_rank_pct")
+# Unknowable before the 2026 season: earlier 2026 regional results.
+FORECAST_EXCLUDED = ("earlier_regionals", "earlier_best_medal", "earlier_best_rank_pct")
 
 
 def forecast_sql(features):

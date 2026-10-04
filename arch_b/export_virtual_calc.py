@@ -21,7 +21,9 @@ resulting rho to CF points itself (the shape+affine map from
 instead of re-derived in JS). Every real team also carries its own calibrated
 performance (from its actual rank, ``arch_a.fixedpoint._performance_ratings``)
 so the standings table shows CF-equivalent performance for real and virtual
-teams side by side.
+teams side by side. The problems table is reference only and shows the shipped
+DE problem ratings (``arch_b.calibrate.problem_cf``), which are not on the
+scalar map used for performances.
 
 Writes output/virtual_calc.html: self-contained, no server, one page per
 contest picked from a dropdown (same grouping as ratings_viewer_b.html).
@@ -37,7 +39,7 @@ from arch_a.fixedpoint import _performance_ratings
 from arch_a.load import _max_solve_seconds, dedupe_contests, row_solved_any
 from . import survival
 from .joint import PETROZ, TAGGED, UCUP, estimate_joint
-from .calibrate import _anchors, _gym_shape
+from .calibrate import _anchors, _gym_shape, problem_cf
 from .run import MIN_SOLVE_HOURS
 
 # Contest sources offered in the picker: the tagged.json regionals, the
@@ -72,16 +74,16 @@ def _performance_lookup(ds, rho, to_cf):
     }
 
 
-def _contests_from(ds, theta, b, to_cf, paths):
-    """Build the picker's contest list for the fit (ds/theta/b) from its raw
-    standings ``paths``. Contest ids repeated across ``paths`` (17 UCup rounds
+def _contests_from(ds, theta, cf_of, to_cf, paths):
+    """Build the picker's contest list for the fit (ds/theta; problem ratings
+    ``cf_of``) from its raw standings ``paths``. Contest ids repeated across ``paths`` (17 UCup rounds
     are also tagged.json entries) are deduplicated the same way the fit
     deduplicates them, so each contest is listed once."""
     prob_by_contest = {}
-    for p, (cid, label, pid, name) in enumerate(ds.problems):
+    for cid, label, pid, name in ds.problems:
         prob_by_contest.setdefault(int(cid), []).append({
             "label": label, "name": name,
-            "difficulty_cf": round(to_cf(b[p]), 0),
+            "difficulty_cf": round(cf_of[(int(cid), label)], 0),
         })
 
     # each real team's own calibrated performance in that contest, from its
@@ -151,7 +153,7 @@ def build_data():
     xs = np.arange(elo.LO, elo.HI + LOOKUP_STEP, LOOKUP_STEP)
     ys = [round(to_cf(x), 1) for x in xs]
 
-    contests = _contests_from(ds, theta, b, to_cf, SOURCES)
+    contests = _contests_from(ds, theta, problem_cf(ds.problems), to_cf, SOURCES)
 
     contests.sort(key=lambda c: (-(c["year"] or 0), c["name"]))
     return {"scale": {"lo": elo.LO, "hi": elo.HI},

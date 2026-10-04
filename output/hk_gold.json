@@ -1,0 +1,505 @@
+{
+ "field": [
+  {
+   "season": "2022",
+   "site": "hongkong",
+   "official": 115,
+   "golds": 12,
+   "local": 21,
+   "nonlocal_schools": 51,
+   "multi_team_schools": 30,
+   "top50_schools": 17,
+   "top100_schools": 24,
+   "returning_schools": null,
+   "linked": 6,
+   "linked_golds": 1,
+   "gold_line_online_rank": null,
+   "coin_flip_online_rank": null,
+   "linked_with_earlier_gold": null,
+   "golds_with_earlier_gold": null
+  },
+  {
+   "season": "2023",
+   "site": "macau",
+   "official": 82,
+   "golds": 8,
+   "local": 15,
+   "nonlocal_schools": 59,
+   "multi_team_schools": 8,
+   "top50_schools": 22,
+   "top100_schools": 33,
+   "returning_schools": 26,
+   "linked": 7,
+   "linked_golds": 1,
+   "gold_line_online_rank": null,
+   "coin_flip_online_rank": null,
+   "linked_with_earlier_gold": null,
+   "golds_with_earlier_gold": null
+  },
+  {
+   "season": "2024",
+   "site": "hongkong",
+   "official": 149,
+   "golds": 15,
+   "local": 14,
+   "nonlocal_schools": 107,
+   "multi_team_schools": 28,
+   "top50_schools": 31,
+   "top100_schools": 49,
+   "returning_schools": 40,
+   "linked": 118,
+   "linked_golds": 13,
+   "gold_line_online_rank": 66.4,
+   "coin_flip_online_rank": 80.1,
+   "linked_with_earlier_gold": 14,
+   "golds_with_earlier_gold": 11
+  },
+  {
+   "season": "2025",
+   "site": "hongkong",
+   "official": 126,
+   "golds": 13,
+   "local": 15,
+   "nonlocal_schools": 110,
+   "multi_team_schools": 1,
+   "top50_schools": 33,
+   "top100_schools": 58,
+   "returning_schools": 66,
+   "linked": 97,
+   "linked_golds": 12,
+   "gold_line_online_rank": 53.0,
+   "coin_flip_online_rank": 74.1,
+   "linked_with_earlier_gold": 13,
+   "golds_with_earlier_gold": 9
+  }
+ ],
+ "mainland_coin_flip_online_rank": {
+  "2023 hangzhou": 96.4,
+  "2023 hefei": 88.4,
+  "2023 jinan": 78.3,
+  "2023 nanjing": 91.2,
+  "2023 shenyang": 94.9,
+  "2023 xian": 86.5,
+  "2024 chengdu": 98.8,
+  "2024 hangzhou": 108.5,
+  "2024 kunming": 98.0,
+  "2024 nanjing": 96.9,
+  "2024 shanghai": 104.4,
+  "2024 shenyang": 81.6,
+  "2025 chengdu": 78.8,
+  "2025 nanjing": 89.1,
+  "2025 shanghai": 85.2,
+  "2025 shenyang": 133.9,
+  "2025 wuhan": 95.0,
+  "2025 xian": 127.2
+ },
+ "field_backtest": [
+  {
+   "train": "2024",
+   "test": "2025",
+   "attendance_auc": 0.872,
+   "schools_expected": 121.5,
+   "schools_actual": 107,
+   "top50_expected": 34.4,
+   "top50_actual": 33,
+   "coef": [
+    0.69,
+    2.36,
+    0.97,
+    -0.49
+   ],
+   "line_actual": 53.0,
+   "line_simulated": 70.0,
+   "line_simulated_80": [
+    52.4,
+    101.6
+   ],
+   "line_same_as_train": 66.4,
+   "abs_log_error_simulated": 0.278,
+   "abs_log_error_same_as_train": 0.226
+  },
+  {
+   "train": "2025",
+   "test": "2024",
+   "attendance_auc": 0.758,
+   "schools_expected": 91.2,
+   "schools_actual": 101,
+   "top50_expected": 33.1,
+   "top50_actual": 31,
+   "coef": [
+    2.56,
+    1.94,
+    1.19,
+    -0.9
+   ],
+   "line_actual": 66.4,
+   "line_simulated": 39.5,
+   "line_simulated_80": [
+    25.0,
+    62.6
+   ],
+   "line_same_as_train": 53.0,
+   "abs_log_error_simulated": 0.52,
+   "abs_log_error_same_as_train": 0.226
+  }
+ ],
+ "gold_backtest": {
+  "2024": {
+   "teams": 118,
+   "golds": 13,
+   "variants": {
+    "mainland_online_only": {
+     "log_loss": 0.1026,
+     "expected_golds": 14.7
+    },
+    "mainland_oracle_line": {
+     "log_loss": 0.1036,
+     "expected_golds": 11.1
+    },
+    "hk_online_only": {
+     "log_loss": 0.1007,
+     "expected_golds": 12.3
+    },
+    "hk_earlier_mainland_gold": {
+     "log_loss": 0.088,
+     "expected_golds": 12.5
+    },
+    "hk_members_prev_gold": {
+     "log_loss": 0.1165,
+     "expected_golds": 11.6
+    }
+   }
+  },
+  "2025": {
+   "teams": 97,
+   "golds": 12,
+   "variants": {
+    "mainland_online_only": {
+     "log_loss": 0.1227,
+     "expected_golds": 14.1
+    },
+    "mainland_oracle_line": {
+     "log_loss": 0.1258,
+     "expected_golds": 9.4
+    },
+    "hk_online_only": {
+     "log_loss": 0.1165,
+     "expected_golds": 12.6
+    },
+    "hk_earlier_mainland_gold": {
+     "log_loss": 0.1119,
+     "expected_golds": 12.3
+    },
+    "hk_members_prev_gold": {
+     "log_loss": 0.1219,
+     "expected_golds": 12.4
+    }
+   }
+  }
+ },
+ "year_shift_sd_log_rank": 0.253,
+ "year_shift_pairs": 7,
+ "forecast_2026": {
+  "coef_online_only": [
+   10.851,
+   2.5
+  ],
+  "coef_earlier_gold": [
+   8.368,
+   2.133,
+   1.797
+  ],
+  "coin_flip_online_rank": 76.7,
+  "grid": [
+   {
+    "online_rank": 10,
+    "p": 0.994,
+    "ci90": [
+     0.975,
+     0.999
+    ],
+    "p_harder_field": 0.989,
+    "p_easier_field": 0.997,
+    "p_after_mainland_gold": 0.995,
+    "p_without_mainland_gold": 0.969
+   },
+   {
+    "online_rank": 25,
+    "p": 0.943,
+    "ci90": [
+     0.854,
+     0.988
+    ],
+    "p_harder_field": 0.898,
+    "p_easier_field": 0.969,
+    "p_after_mainland_gold": 0.964,
+    "p_without_mainland_gold": 0.818
+   },
+   {
+    "online_rank": 50,
+    "p": 0.745,
+    "ci90": [
+     0.572,
+     0.889
+    ],
+    "p_harder_field": 0.608,
+    "p_easier_field": 0.846,
+    "p_after_mainland_gold": 0.861,
+    "p_without_mainland_gold": 0.506
+   },
+   {
+    "online_rank": 75,
+    "p": 0.514,
+    "ci90": [
+     0.347,
+     0.694
+    ],
+    "p_harder_field": 0.36,
+    "p_easier_field": 0.666,
+    "p_after_mainland_gold": 0.723,
+    "p_without_mainland_gold": 0.302
+   },
+   {
+    "online_rank": 100,
+    "p": 0.34,
+    "ci90": [
+     0.205,
+     0.495
+    ],
+    "p_harder_field": 0.215,
+    "p_easier_field": 0.493,
+    "p_after_mainland_gold": 0.585,
+    "p_without_mainland_gold": 0.19
+   },
+   {
+    "online_rank": 150,
+    "p": 0.158,
+    "ci90": [
+     0.073,
+     0.24
+    ],
+    "p_harder_field": 0.09,
+    "p_easier_field": 0.261,
+    "p_after_mainland_gold": 0.373,
+    "p_without_mainland_gold": 0.09
+   },
+   {
+    "online_rank": 200,
+    "p": 0.084,
+    "ci90": [
+     0.031,
+     0.134
+    ],
+    "p_harder_field": 0.046,
+    "p_easier_field": 0.147,
+    "p_after_mainland_gold": 0.243,
+    "p_without_mainland_gold": 0.051
+   },
+   {
+    "online_rank": 300,
+    "p": 0.032,
+    "ci90": [
+     0.008,
+     0.057
+    ],
+    "p_harder_field": 0.017,
+    "p_easier_field": 0.059,
+    "p_after_mainland_gold": 0.119,
+    "p_without_mainland_gold": 0.022
+   },
+   {
+    "online_rank": 500,
+    "p": 0.009,
+    "ci90": [
+     0.002,
+     0.02
+    ],
+    "p_harder_field": 0.005,
+    "p_easier_field": 0.017,
+    "p_after_mainland_gold": 0.044,
+    "p_without_mainland_gold": 0.008
+   }
+  ],
+  "schools": {
+   "蒙古国立大学": [
+    {
+     "team": "NUM-R^3",
+     "school": "蒙古国立大学(Монгол Улсын Их Сургууль)",
+     "online_ranks": [
+      544,
+      349
+     ],
+     "mean_online_rank": 435.7,
+     "p": 0.013,
+     "ci90": [
+      0.002,
+      0.027
+     ],
+     "p_harder_field": 0.007,
+     "p_easier_field": 0.024,
+     "p_after_mainland_gold": 0.058,
+     "p_without_mainland_gold": 0.01
+    },
+    {
+     "team": "NUM-MNM",
+     "school": "蒙古国立大学(Монгол Улсын Их Сургууль)",
+     "online_ranks": [
+      585,
+      981
+     ],
+     "mean_online_rank": 757.6,
+     "p": 0.003,
+     "ci90": [
+      0.0,
+      0.009
+     ],
+     "p_harder_field": 0.002,
+     "p_easier_field": 0.006,
+     "p_after_mainland_gold": 0.018,
+     "p_without_mainland_gold": 0.003
+    },
+    {
+     "team": "NUM-B2D",
+     "school": "蒙古国立大学(Монгол Улсын Их Сургууль)",
+     "online_ranks": [
+      1171
+     ],
+     "mean_online_rank": 1171.0,
+     "p": 0.001,
+     "ci90": [
+      0.0,
+      0.004
+     ],
+     "p_harder_field": 0.001,
+     "p_easier_field": 0.002,
+     "p_after_mainland_gold": 0.007,
+     "p_without_mainland_gold": 0.001
+    },
+    {
+     "team": "NUM-XOX",
+     "school": "蒙古国立大学(Монгол Улсын Их Сургууль)",
+     "online_ranks": [
+      837,
+      2095
+     ],
+     "mean_online_rank": 1324.2,
+     "p": 0.001,
+     "ci90": [
+      0.0,
+      0.003
+     ],
+     "p_harder_field": 0.0,
+     "p_easier_field": 0.002,
+     "p_after_mainland_gold": 0.006,
+     "p_without_mainland_gold": 0.001
+    },
+    {
+     "team": "NUM-SEA",
+     "school": "蒙古国立大学(Монгол Улсын Их Сургууль)",
+     "online_ranks": [
+      1425,
+      1530
+     ],
+     "mean_online_rank": 1476.6,
+     "p": 0.001,
+     "ci90": [
+      0.0,
+      0.002
+     ],
+     "p_harder_field": 0.0,
+     "p_easier_field": 0.001,
+     "p_after_mainland_gold": 0.005,
+     "p_without_mainland_gold": 0.001
+    },
+    {
+     "team": "NUM-BSB",
+     "school": "蒙古国立大学(Монгол Улсын Их Сургууль)",
+     "online_ranks": [
+      1507,
+      1515
+     ],
+     "mean_online_rank": 1511.0,
+     "p": 0.001,
+     "ci90": [
+      0.0,
+      0.002
+     ],
+     "p_harder_field": 0.0,
+     "p_easier_field": 0.001,
+     "p_after_mainland_gold": 0.004,
+     "p_without_mainland_gold": 0.001
+    },
+    {
+     "team": "NUM-SOTS",
+     "school": "蒙古国立大学(Монгол Улсын Их Сургууль)",
+     "online_ranks": [
+      1523,
+      1779
+     ],
+     "mean_online_rank": 1646.0,
+     "p": 0.0,
+     "ci90": [
+      0.0,
+      0.002
+     ],
+     "p_harder_field": 0.0,
+     "p_easier_field": 0.001,
+     "p_after_mainland_gold": 0.004,
+     "p_without_mainland_gold": 0.001
+    },
+    {
+     "team": "NUM-BTsCh",
+     "school": "蒙古国立大学(Монгол Улсын Их Сургууль)",
+     "online_ranks": [
+      1975,
+      1811
+     ],
+     "mean_online_rank": 1891.2,
+     "p": 0.0,
+     "ci90": [
+      0.0,
+      0.001
+     ],
+     "p_harder_field": 0.0,
+     "p_easier_field": 0.001,
+     "p_after_mainland_gold": 0.003,
+     "p_without_mainland_gold": 0.0
+    },
+    {
+     "team": "NUM-GZB",
+     "school": "蒙古国立大学(Монгол Улсын Их Сургууль)",
+     "online_ranks": [
+      2406
+     ],
+     "mean_online_rank": 2406.0,
+     "p": 0.0,
+     "ci90": [
+      0.0,
+      0.001
+     ],
+     "p_harder_field": 0.0,
+     "p_easier_field": 0.0,
+     "p_after_mainland_gold": 0.002,
+     "p_without_mainland_gold": 0.0
+    },
+    {
+     "team": "NUM-GBZ",
+     "school": "蒙古国立大学(Монгол Улсын Их Сургууль)",
+     "online_ranks": [
+      2407
+     ],
+     "mean_online_rank": 2407.0,
+     "p": 0.0,
+     "ci90": [
+      0.0,
+      0.001
+     ],
+     "p_harder_field": 0.0,
+     "p_easier_field": 0.0,
+     "p_after_mainland_gold": 0.002,
+     "p_without_mainland_gold": 0.0
+    }
+   ]
+  }
+ }
+}

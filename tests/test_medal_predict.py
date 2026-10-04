@@ -17,7 +17,7 @@ class MedalPredictTest(unittest.TestCase):
 
     def test_regular_city_mean_excludes_ec_final(self):
         self.assertEqual(self.predictor.city_n["Shanghai"], 1)
-        self.assertEqual(self.predictor.city_mean["Shanghai"], 2474.2)
+        self.assertEqual(self.predictor.city_mean["Shanghai"], 2482.1)
 
     def test_city_estimate_is_partially_pooled(self):
         raw = self.predictor.city_mean["Wuhan"]

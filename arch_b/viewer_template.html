@@ -35,7 +35,6 @@
   .scroll { max-height:72vh; overflow:auto; }
   tbody tr:hover { background:#f2f7fd; }
   .rating { font-weight:600; padding:1px 7px; border-radius:10px; color:#fff; }
-  .se { color:var(--muted); font-size:11px; margin-left:4px; }
   .aff { color:var(--muted); font-size:12px; }
   .hidden { display:none; }
   .meta a { color:var(--accent); text-decoration:none; }
@@ -49,7 +48,7 @@
 <header>
   <h1>ICPC problem &amp; team ratings</h1>
   <div class="sub">Architecture B &mdash; solve-time survival model, mapped to <b>Codeforces-equivalent points</b>.
-    Difficulty &plusmn; its Laplace standard error. Click a column header to sort.</div>
+    Problem difficulty uses the DE calibration (no uncertainty estimate); team numbers use the gym-shape map. Click a column header to sort.</div>
   <div class="controls">
     <select id="contest"></select>
     <span class="meta" id="meta"></span>
@@ -65,7 +64,7 @@
         <thead><tr>
           <th data-k="label">#</th>
           <th data-k="name" class="name">Name</th>
-          <th data-k="difficulty" class="num" title="Codeforces-calibrated difficulty &plusmn; partial standard error">Difficulty</th>
+          <th data-k="difficulty" class="num" title="Codeforces-calibrated difficulty (DE)">Difficulty</th>
           <th data-k="solved" class="num">Solved</th>
         </tr></thead>
         <tbody></tbody>
@@ -107,7 +106,6 @@ function ratingColor(v){
   return `hsl(${hue} 62% 48%)`;
 }
 function chip(v){ return `<span class="rating" style="background:${ratingColor(v)}">${v}</span>`; }
-function chipSe(v, se){ return chip(v) + `<span class="se">&plusmn;${se}</span>`; }
 
 // group contests under a per-year <optgroup> (already sorted year desc, name asc)
 let curYear, group;
@@ -142,7 +140,7 @@ function renderProbs(c){
     <tr>
       <td>${p.label}</td>
       <td class="name">${esc(p.name)}</td>
-      <td class="num" title="partial SE; not a calibrated prediction interval">${chipSe(p.difficulty, p.difficulty_partial_se)}</td>
+      <td class="num">${chip(p.difficulty)}</td>
       <td class="num">${p.solved}</td>
     </tr>`).join("");
   markSorted("#probs", sortState.probs);
