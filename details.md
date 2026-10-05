@@ -5044,9 +5044,14 @@ matched QOJ rows.
   Hong Kong, Shanghai, Nanjing. Shenyang drops to 6th and Xi'an to last.
   Forward-validation gold RMSE rises from below 120 to 148.
 - **Why it matters:** the 2022 bars now reflect a stricter gold line (35 of
-  416–708 teams, about 5–8 %) than later seasons (about 10 %). Whether the
-  chooser should keep 2022 is a modelling decision left to the user.
-  130 of 132 tests pass.
+  416–708 teams, about 5–8 %) than later seasons (about 10 %).
+- **Resolved:** the user chose to accept the corrected results and keep
+  2022 in the chooser. In `tests/test_medal_predict.py` the expected top
+  three is now Hong Kong, Shanghai, Nanjing, and the gold RMSE limit rose
+  from 120 to 160. The old limit was 120 against an RMSE of 105.6; the new
+  RMSE is 147.9. The README's forward-validation figures are updated:
+  RMSE 148 CF and pair ordering 54.2 %, previously 105 and 47.9 %. All
+  132 tests pass.
 - **`online_gold`** uses the bars only in its `cf_bar_history` backtest
   variant and the `contest_difficulty` table. Because the board link
   changed, it now also gets a Xi'an 2023 bar. Its outputs are stale until

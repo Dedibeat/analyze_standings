@@ -461,10 +461,13 @@ uses only the 25 ordinary 2022–2025 regionals and partially pools each host ci
 with one overall-mean pseudo-contest. EC Finals do not contaminate ordinary-city
 baselines, and one-off hosts no longer get full weight.
 
-Forward validation (train on earlier seasons, predict 2023–2025) gives **105 CF
-gold-bar RMSE** and **47.9% correct pair ordering** over 19 contests after the
-full-cell rating correction. The pair ordering is therefore weak in this
-snapshot; use the city ranking as a rough shortlist, not a reliable ordering.
+Forward validation (train on earlier seasons, predict 2023–2025) gives **148 CF
+gold-bar RMSE** and **54.2% correct pair ordering** over 19 contests, on the
+medal cutoffs taken from the XCPCIO boards. It was 105 / 47.9% before 2022's
+real 35/70/105 medal counts replaced the 10/30/60% rule. The 2022 gold lines
+were stricter than later seasons, which raises the error. The pair ordering is
+therefore weak in this snapshot; use the city ranking as a rough shortlist, not
+a reliable ordering.
 The [2026 ICPC Global city list](https://icpc.global/regionals/results) was checked
 on 2026-07-27; dates were still absent, and temporal order is weak historically, so
 the chooser does not invent positions. All current error bands overlap: use the
