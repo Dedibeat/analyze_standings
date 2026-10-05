@@ -4925,3 +4925,57 @@ Run (Windows: `PYTHONUTF8=1`): `python3 -m arch_b.export_virtual_calc`,
 `python3 -m arch_b.medals`, `python3 -m arch_b.export_medal_viewer`. Then,
 in `../my-react-app`, run `python3 scripts/export_contest_fields.py` and copy
 `output/medal_viewer.html` to `data/medal_viewer.html`.
+
+
+## Medal cutoffs disagree with the real boards (diagnosis, 2026-10-05; not fixed)
+
+**Report.** On the app, a virtual result for Xi'an 2022 (QOJ 1051) of 6 solved
+in 357 minutes showed a performance of 2435 CF. The medal page shows a silver
+bar of 2282 CF and a silver cutoff team of 6 solved in 565 minutes. The user
+knows this result did not earn silver.
+
+**The Contests page is right.** XCPCIO's run data puts 6/357 at official
+rank 106. The last silver team, 华中农业大学-吸金石, solved 6 in 352 minutes
+and has a calculator performance of 2436. Rank 106 is the first bronze.
+
+**The medal page is wrong.** `medals.py` puts the silver cutoff at official
+rank 153 (⌈0.30 × 507⌉), and the board puts it at 105. Two bugs cause this:
+
+1. **Star teams counted as official.** For the 47th/48th seasons,
+   `scripts/build_xcpcio_official.py` reads only `group: ["official"]`. Those
+   boards mark teams with `"official": 1` / `"unofficial": 1` instead. So the
+   whole team list is used, and 3–103 star (打星) teams per contest count as
+   official. For Xi'an 2022: 476 official + 46 star teams, so the repo
+   counts 507 solving teams where the board has 470.
+2. **Assumed 10/30/60 % rule.** Each board's `config.json` has
+   `medal.official` with per-tier counts. All five 2022 regionals give
+   35/70/105, so the cumulative cutoffs are 35/105/210. The repo's percentages
+   give 51/153/305 for Xi'an, 57/169/338 for Jinan, 64/190/379 for Hangzhou,
+   46/138/276 for Nanjing and 74/220/440 for Shenyang. These 2022 counts
+   come from XCPCIO's configs only and were not checked against a second
+   source.
+
+Other contests compared with their board configs (scratch script; cutoffs
+are cumulative gold/silver/bronze):
+
+| contest | repo n | repo cutoffs | board cutoffs |
+|---|---|---|---|
+| Hangzhou 2023 | 474 | 48/143/285 | 45/135/270 |
+| EC-Final 2023 | 320 | 32/96/192 | 28/84/168 |
+| Xi'an 2025 | 215 (399 official; ~50 % name match) | 22/65/129 | 40/120/240 |
+| other 2023–2025 | — | within ~1–5 ranks | — |
+
+Hong Kong & Macau 2022 has no `medal` entry. Xi'an 2023 failed to download.
+
+**Affected.** `medal_badges.json` cutoffs, cutoff teams and their
+`performance_cf`, medal bars, problem badges, and anything that reads the bars
+(`medal_predict`, `online_gold`, `hk_gold`, the medal viewer and the app copy).
+The silver bar of 2282 is a problem-difficulty threshold: the difficulty the
+cutoff cohort solves at 50 %. It is not a team-performance cutoff. Even so, it
+inherits the wrong cohort.
+
+**Proposed fix (awaiting user approval).** Read the `official`/`unofficial`
+flags in the cache builder. Take cutoff ranks from the board's
+`medal.official` counts when present, and keep 10/30/60 % only as the
+fallback. Then rerun `medals` → `export_medal_viewer` and the downstream
+forecasts.
