@@ -4951,9 +4951,17 @@ rank 153 (⌈0.30 × 507⌉), and the board puts it at 105. Two bugs cause this:
    `medal.official` with per-tier counts. All five 2022 regionals give
    35/70/105, so the cumulative cutoffs are 35/105/210. The repo's percentages
    give 51/153/305 for Xi'an, 57/169/338 for Jinan, 64/190/379 for Hangzhou,
-   46/138/276 for Nanjing and 74/220/440 for Shenyang. These 2022 counts
-   come from XCPCIO's configs only and were not checked against a second
-   source.
+   46/138/276 for Nanjing and 74/220/440 for Shenyang. So in 2022, medals
+   did not follow the 10/30/60 % rule for teams that solved at least one
+   problem. For Xi'an, that rule over the board's 470 such official teams
+   gives 47/141/282, while the board's 35/105/210 is 7.4/22.3/44.7 %. Other
+   sources agree with the board. CPC Finder lists 210 awards for Xi'an 2022
+   (35 + 70 + 105). Communication University of China's news
+   (ices.cuc.edu.cn, 2022-11-17) reports bronze for 定福庄好果汁大学 at
+   Shenyang 2022 and honourable mentions for its other two teams. On the
+   board those teams rank 170, 380 and 556 among 704 such official teams.
+   Board counts give bronze, none, none; the rule would give silver, bronze,
+   none.
 
 Other contests compared with their board configs (scratch script; cutoffs
 are cumulative gold/silver/bronze):
