@@ -1,7 +1,11 @@
 """Medal badges for Asia East Continent regionals + the lowest-gold-team analysis.
 
-ICPC East Asia regionals award medals by cumulative percentile of the *official*
-teams that solved at least one problem: gold 10%, silver 30%, bronze 60%. The
+Medal cutoffs are the official medal counts in each XCPCIO board's config.json
+(cumulative gold / gold+silver / all three, as official ranks). These are not
+always 10/30/60%: every 2022 regional awarded a fixed 35/70/105. Only a board
+with no counts (Hong Kong & Macau 2022) falls back to the cumulative percentile
+of the *official* teams that solved at least one problem: gold 10%, silver 30%,
+bronze 60%. The
 official field is sourced from **XCPCIO** (``data/xcpcio_ea_official.json``), which
 hosts the official ICPC scoreboard data — each contest's official teams are
 identified by name-matching XCPCIO's team.json against QOJ standing rows.
@@ -58,6 +62,7 @@ value the virtual calculator shows for that standings row
 Writes output/medal_badges.json: {"contests": [...], "problems": [...]}.
 """
 
+import itertools
 import json
 import math
 import os
@@ -106,7 +111,8 @@ def _load_xcpcio_cache():
                     flat.add(k)
             out[int(cid_str)] = {"board_link": v["board_link"],
                                  "official_set": flat,
-                                 "n_official": v["n_official"]}
+                                 "n_official": v["n_official"],
+                                 "medal": v.get("medal")}
     return out
 
 
@@ -116,6 +122,8 @@ def _is_official(row: dict, xcpcio_set: set) -> bool:
     raw = str(row.get("display_name_raw", "") or "")
     if raw:
         qoj_keys.add(_norm(raw))
+        # 2022 rows: "org-name (members)", where the name itself may hold " - "
+        qoj_keys.add(_norm(_strip_paren(raw)))
         parts = raw.split(" - ")
         for n in range(2, len(parts) + 1):
             qoj_keys.add(_norm(" - ".join(parts[:n])))
@@ -237,7 +245,11 @@ def main():
         bs_sorted = b[ps][order]
         labels_sorted = [ds.problems[p][1] for p in ps[order]]
 
-        cuts = {tier: math.ceil(n * pct) for tier, pct in MEDAL_PCT}
+        if xc["medal"]:   # the board's own counts per tier -> cumulative ranks
+            cuts = dict(zip((t for t, _ in MEDAL_PCT),
+                            itertools.accumulate(xc["medal"][t] for t, _ in MEDAL_PCT)))
+        else:
+            cuts = {tier: math.ceil(n * pct) for tier, pct in MEDAL_PCT}
         bar = {tier: _medal_bar(officials, cuts[tier] - 1, bs_sorted, labels_sorted)
                for tier, _ in MEDAL_PCT}
         bar["silver"] = max(bar["silver"], bar["bronze"])   # enforce tier order

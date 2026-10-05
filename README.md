@@ -412,10 +412,12 @@ derive priors from them.  See
 
 Assigns every problem of the 28 medal-awarding **Asia East Continent** contests a
 **bronze / silver / gold / platinum / star badge** (weakest → hardest) and reports the
-**lowest gold-medal team** per regional. Medals go by cumulative percentile of
-official teams solving ≥1 problem (gold 10%, silver 30%, bronze 60%); the official
-onsite field is recovered by matching the QOJ standings to XCPCIO's official-team
-data. Each tier's
+**lowest gold-medal team** per regional. Medal cutoffs are each XCPCIO board's
+own official medal counts (the 2022 regionals gave a fixed 35/70/105; later
+seasons are about 10% / 30% / 60% cumulative of official teams solving ≥1
+problem, which is the fallback for a board without counts). The official onsite
+field (star teams excluded) is recovered by matching the QOJ standings to
+XCPCIO's official-team data. Each tier's
 **medal bar** is the fitted (survival-model) difficulty at which the boundary
 cohort's actual solve rate crosses 50% (isotonic regression), and a problem gets
 the weakest tier whose bar clears it — badges are monotone in difficulty, and the

@@ -3,10 +3,16 @@
 medal-awarding contests.  Fetched once; consumed by ``arch_b.medals``.
 
 Output: ``data/xcpcio_ea_official.json`` — a dict keyed by QOJ contest_id,
-each value ``{"board_link": ..., "season": ..., "official_keys": [...]}``.
+each value ``{"board_link": ..., "season": ..., "medal": ..., "official_keys": [...]}``.
+``medal`` is the board's per-tier official medal counts from config.json
+(None if the board has none).
 
-Matching strategy (same as scripts/add_xcpcio_official.py):
-- XCPCIO team name + org → multiple normalized candidate keys
+Official teams: ``"group": ["official"]`` (49th/50th) or ``"official": 1``
+(47th/48th; star teams there carry ``"unofficial": 1``).
+
+Matching strategy (scripts/add_xcpcio_official.py has an older copy that
+reads only groups and one name language):
+- XCPCIO team name + org (every language, and "zh(en)") → multiple normalized candidate keys
 - QOJ row team_name + display_name_raw → multiple candidate keys
 - Exact set intersection determines official/unofficial
 """
@@ -42,7 +48,7 @@ EA_XCPCIO_MATCHES: dict[int, tuple[str, str, str]] = {
     1459: ("/icpc/48th/macau",             "48th", "Macau 2023"),
     1472: ("/icpc/48th/jinan",             "48th", "Jinan 2023"),
     1516: ("/icpc/48th/hangzhou",          "48th", "Hangzhou 2023"),
-    1784: ("/icpc/48th/xian-invitational", "48th", "Xi'an 2023"),
+    1784: ("/icpc/48th/xian",              "48th", "Xi'an 2023"),
     1894: ("/icpc/49th/ecfinal",           "48th", "EC-Final 2024 (China)"),
     # -- 49th season (2024-25) --
     1821: ("/icpc/49th/chengdu",           "49th", "Chengdu 2024"),
@@ -71,18 +77,30 @@ def _strip_paren(s: str) -> str:
     return re.sub(r"\s*\([^)]*\)", "", s).strip()
 
 
-def _team_name_str(value) -> str:
-    if isinstance(value, str):
-        return value
+def _name_texts(value) -> tuple[list[str], list[str]]:
+    """Spellings of an XCPCIO name: (usable alone, usable only after the school).
+
+    Bilingual names are a dict of texts. QOJ shows the Chinese text, "zh(en)"
+    (Xi'an 2025) or "school - en" (Xi'an 2023). The English text alone is too
+    generic: "DeepSleep" is also an unofficial UCup team at Xi'an 2025.
+    """
     if isinstance(value, dict):
         texts = value.get("texts", {})
-        return texts.get("zh-CN", "") or texts.get("en", "") or str(value)
-    return str(value or "")
+        zh, en = texts.get("zh-CN", ""), texts.get("en", "")
+        if zh and en:
+            return [zh, f"{zh}({en})"], [en]
+        return [zh or en], []
+    return [str(value or "")], []
 
 
-def _xcpcio_official_keys(board_link: str) -> tuple[list[str], bool]:
-    """Return (list of official key lists, has_explicit_groups)."""
-    url = f"https://board.xcpcio.com/data{board_link}/team.json"
+def _is_official(team: dict) -> bool:
+    # 49th/50th boards use groups; 47th/48th boards set "official": 1
+    # (star teams carry "unofficial": 1 instead).
+    return "official" in team.get("group", []) or bool(team.get("official"))
+
+
+def _fetch(board_link: str, name: str):
+    url = f"https://board.xcpcio.com/data{board_link}/{name}"
     cmd = [
         "curl", "-sL", "--retry", "3", "--retry-delay", "2",
         "--max-time", "60",
@@ -93,30 +111,50 @@ def _xcpcio_official_keys(board_link: str) -> tuple[list[str], bool]:
     result = subprocess.run(cmd, capture_output=True, text=True, timeout=70)
     if result.returncode != 0:
         raise RuntimeError(f"curl failed: {result.stderr[:200]}")
-    teams = json.loads(result.stdout)
+    return json.loads(result.stdout)
+
+
+def _xcpcio_official_keys(board_link: str) -> tuple[list[str], bool, dict | None]:
+    """Return (list of official key lists, has_explicit_groups, medal counts).
+
+    Medal counts are the board's own per-tier counts for official teams,
+    ``{"gold": g, "silver": s, "bronze": b}``, or None when the board has none.
+    """
+    teams = _fetch(board_link, "team.json")
     team_list = list(teams.values()) if isinstance(teams, dict) else teams
 
-    has_groups = any("official" in t.get("group", []) for t in team_list)
+    has_groups = any(_is_official(t) for t in team_list)
     if has_groups:
-        official_teams = [t for t in team_list if "official" in t.get("group", [])]
+        official_teams = [t for t in team_list if _is_official(t)]
     else:
         official_teams = team_list
 
+    # Xi'an 2023 gives only an organization id; names are in organizations.json.
+    org_names = {}
+    if any("organization_id" in t for t in official_teams):
+        org_names = {o["id"]: o["name"] for o in _fetch(board_link, "organizations.json")}
+
     all_keys = []
     for t in official_teams:
-        name = _team_name_str(t.get("name", ""))
-        org = str(t.get("organization", "") or "")
-        name_s = _strip_paren(name)
-        org_s = _strip_paren(org)
-        keys = {_norm(name), _norm(name_s)}
-        if org:
-            for sep in [" - ", "-", ": "]:
-                keys.add(_norm(f"{org}{sep}{name}"))
-                keys.add(_norm(f"{org_s}{sep}{name}"))
-                keys.add(_norm(f"{org}{sep}{name_s}"))
-                keys.add(_norm(f"{org_s}{sep}{name_s}"))
+        orgs = [o for o in sum(_name_texts(t.get("organization")
+                                            or org_names.get(t.get("organization_id"), "")), [])
+                if o]
+        alone, with_org = _name_texts(t.get("name", ""))
+        keys = set()
+        for name in alone:
+            keys |= {_norm(name), _norm(_strip_paren(name))}
+        for name in alone + with_org:
+            name_s = _strip_paren(name)
+            for org in orgs:
+                org_s = _strip_paren(org)
+                for sep in [" - ", "-", ": "]:
+                    keys.add(_norm(f"{org}{sep}{name}"))
+                    keys.add(_norm(f"{org_s}{sep}{name}"))
+                    keys.add(_norm(f"{org}{sep}{name_s}"))
+                    keys.add(_norm(f"{org_s}{sep}{name_s}"))
         all_keys.append(sorted(keys))
-    return all_keys, has_groups
+    medal = _fetch(board_link, "config.json").get("medal", {}).get("official")
+    return all_keys, has_groups, medal
 
 
 def build_cache(matches: dict, output_path: Path) -> dict:
@@ -125,13 +163,14 @@ def build_cache(matches: dict, output_path: Path) -> dict:
     for qoj_id, (board_link, season, label) in sorted(matches.items()):
         print(f"  {label:30s} ({season}/{board_link.split('/')[-1]}) ...", end=" ", flush=True)
         try:
-            keys, has_groups = _xcpcio_official_keys(board_link)
+            keys, has_groups, medal = _xcpcio_official_keys(board_link)
             cache[str(qoj_id)] = {
                 "board_link": board_link,
                 "season": season,
                 "label": label,
                 "has_explicit_groups": has_groups,
                 "n_official": len(keys),
+                "medal": medal,
                 "official_keys": keys,
             }
             tag = "groups" if has_groups else "all-xcpcio"
@@ -169,11 +208,11 @@ def main():
             for qoj_id, (board_link, season, label) in sorted(missing.items()):
                 print(f"  {label:30s} ({season}/{board_link.split('/')[-1]}) ...", end=" ", flush=True)
                 try:
-                    keys, has_groups = _xcpcio_official_keys(board_link)
+                    keys, has_groups, medal = _xcpcio_official_keys(board_link)
                     new_entries[str(qoj_id)] = {
                         "board_link": board_link, "season": season, "label": label,
                         "has_explicit_groups": has_groups,
-                        "n_official": len(keys), "official_keys": keys,
+                        "n_official": len(keys), "medal": medal, "official_keys": keys,
                     }
                     tag = "groups" if has_groups else "all-xcpcio"
                     print(f"OK ({len(keys)} teams, {tag})")
