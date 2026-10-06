@@ -4925,3 +4925,27 @@ Run (Windows: `PYTHONUTF8=1`): `python3 -m arch_b.export_virtual_calc`,
 `python3 -m arch_b.medals`, `python3 -m arch_b.export_medal_viewer`. Then,
 in `../my-react-app`, run `python3 scripts/export_contest_fields.py` and copy
 `output/medal_viewer.html` to `data/medal_viewer.html`.
+
+## Related published work (2026-10-06, literature search)
+
+[related_work.md](related_work.md) lists published work for a paper on the
+main result. Every entry was looked up except three marked in the file.
+
+- **Closest prior work:** Forišek (2009, *Olympiads in Informatics* 3)
+  built an IRT rating system for programming contests on TopCoder and
+  Slovak olympiad data. It rates tasks and contestants together and found
+  that solve times are roughly log-normal. A paper here must cite and
+  compare with it.
+- **What differs here:** ICPC teams with no native rating, contests linked
+  through recurring teams and rosters, a survival time layer, and
+  calibration to Codeforces points with outside validation.
+- **Also close:** Easy2Hard-Bench (NeurIPS 2024 D&B) rates Codeforces
+  problems, but uses Codeforces' own ratings. Luo & Dickey (2025) find that
+  Codeforces ratings predict World Finals ranks better than any ICPC tier.
+  Bezirhan & von Davier (AIME-Con 2026) use anchored Bradley–Terry with LLM
+  judges, the same design as `llm_crosscontest`.
+- **Not found:** no published paper rates ICPC problems from team standings
+  across linked contests on a Codeforces-point scale. This holds only for
+  this search.
+
+No code or output changed.

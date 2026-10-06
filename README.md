@@ -754,6 +754,9 @@ Module self-checks:
 - `external_data_sources.md` — internet-source audit covering CPHoF/Codeforces
   participant identities, ICPC Global/Contest API metadata, and AOJ/solved.ac
   difficulty signals, with measured overlap and a fit experiment order.
+- `related_work.md` — published work related to this repository (IRT ratings
+  for programming contests, ICPC data, rating systems, LLM difficulty
+  estimation), each with how it differs from this work.
 
 See `details.md` for the no-Codeforces-data anchoring choice, the `$DEFAULT`
 team-id handling, the two architectures, and what's deliberately out of scope.
