@@ -4531,7 +4531,9 @@ apply for one of the ≤10 incentive seats (激励名额).
 `regional_teams.csv` (XCPCIO boards, official ranks recomputed from
 `run.json`). Validated on 2025 with `--check-2025` (2026-10-07; corrects the
 first pass, which assumed all 240 seats were mainland): Hong Kong had 126 valid
-teams (< 130, "按给定数目提取") and gave **1** seat — HKU "Hot Kpop Union",
+teams (< 130, "按给定数目提取" — the number is stated nowhere, neither in the
+rule nor in the HK notice; **1 is inferred** from the 公示 counts, and HKU's seat
+could instead be its Nanjing #92 team with Hot Kpop Union as a substitute) and gave **1** seat — HKU "Hot Kpop Union",
 Hong Kong rank 7 (ranks 1–5 already held mainland seats; rank 6, Xiamen
 University of Technology's two-member team, was passed over for an unstated
 reason) — so the mainland had **239**. With 239 the replay matches the published
@@ -4986,3 +4988,12 @@ rank ≤ 75 (947); with the best member's previous-year mainland rank 130–250
 nearer **~10%** per site than the online-only 13.8%. Hong Kong: members' HK
 ranks 30 / 39 / 42 sit at the needed ≤ 32–37; 2/6 HK 2025 teams with a member
 at HK 2024 #20–50 finished ≤ 35 (too few to fit), so ~20–30%.
+
+**NUM at the 2025 EC-Final (2026-10-07).** NUM is in neither the 12 Dec 2025
+公示 (first allocation, Tables 1–2) nor the EC-Final board
+(`board.xcpcio.com/icpc/50th/ecfinal`: 306 teams, 280 official). The coach
+reports N^3 was invited from Hong Kong 2025; that would have come through the
+channels outside the first allocation — the second registration round
+(6–10 Jan 2026, leftover seats, per the 18 Dec invitation notice) or a 推广名额
+applied for by email — which are not published, and the invitation was
+evidently not taken up.
