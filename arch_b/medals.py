@@ -39,15 +39,19 @@ A model-free sanity badge is reported alongside: the weakest medal band
 solved the problem. It anchors on the band *majority* rather than the boundary
 cohort, so it skews one tier easier where the two disagree (~24% of problems).
 
-Scope: Asia East Continent contests that actually award medals — the 6 online
-qualifiers (contest_name "ICPC") and the EC-Final warm-ups are excluded.
+Scope: Asia East Continent contests that actually award medals — the online
+qualifiers (contest_name "EC Online (I)"/"(II)") and the EC-Final warm-ups are
+excluded.
 Includes EC-Finals (Shanghai 2023 = 48th EC-Final, China 2024 = 49th EC-Final).
 
 Bars and difficulties are also reported in Codeforces points through the same
 gym-shaped two-leg map as ``arch_b.calibrate`` (monotone, so CF-space badges
 are identical). The lowest-gold-team record additionally carries the classic
 Elo rank-inversion performance (labelled ``performance_elo``) and the fitted
-theta, for the cross-contest gold-bar analysis.
+theta, for the cross-contest gold-bar analysis. Every cutoff team also carries
+``performance_cf``: its performance in CF points on the binary fit, the same
+value the virtual calculator shows for that standings row
+(``export_virtual_calc.performance_fit``).
 
     python -m arch_b.medals
 
@@ -67,6 +71,7 @@ from arch_a.load import dedupe_contests, team_key
 from . import survival
 from .joint import TAGGED, estimate_joint
 from .calibrate import _anchors, _gym_shape
+from .export_virtual_calc import performance_fit
 from .run import MIN_SOLVE_HOURS
 
 OUT = os.path.join(os.path.dirname(__file__), os.pardir, "output")
@@ -130,7 +135,7 @@ def medal_contests():
         cid = c["contest_id"]
         name = c["contest_name"].strip()
         if (c["region"] == "Asia East Continent"
-                and name != "ICPC"                      # online qualifiers
+                and not name.startswith("EC Online")    # online qualifiers
                 and "warm up" not in name.lower()       # EC-Final warm-ups
                 and cid in xcpcio):                     # must have XCPCIO data
             out[cid] = c
@@ -201,6 +206,7 @@ def main():
                 "problem_name": name, "difficulty": float(b[p])}
                for p, (cid, label, _pid, name) in enumerate(ds.problems)]
     to_cf = _cf_map(records)
+    perf_cf = performance_fit()[3]  # (contest_id, source row) -> (team, CF performance)
 
     team_idx = {tk: i for i, tk in enumerate(ds.teams)}
     contest_idx = {cid: ci for ci, cid in enumerate(ds.contests)}
@@ -263,6 +269,7 @@ def main():
                 "solved": ct["total_solved"],
                 "penalty_seconds": ct.get("penalty_seconds"),
                 "performance_elo": round(float(perf), 1),
+                "performance_cf": perf_cf[(cid, c["standings"].index(ct))][1],
                 "theta": round(float(theta[ti]), 1) if ti is not None else None,
             }
 

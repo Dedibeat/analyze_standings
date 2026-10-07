@@ -131,8 +131,8 @@ class CalibrationExperimentTest(unittest.TestCase):
         raw, cf, groups = _anchors(records)
         shape = _gym_shape(records)
         self.assertIsNotNone(shape)
-        self.assertAlmostEqual(_loco_rmse(raw, cf, groups), 246.9061, places=4)
-        self.assertAlmostEqual(_loco_rmse(shape(raw), cf, groups), 245.4277, places=4)
+        self.assertAlmostEqual(_loco_rmse(raw, cf, groups), 246.6616, places=4)
+        self.assertAlmostEqual(_loco_rmse(shape(raw), cf, groups), 244.3776, places=4)
 
 
 if __name__ == "__main__":

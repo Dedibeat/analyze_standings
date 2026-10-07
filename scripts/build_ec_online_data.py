@@ -15,7 +15,8 @@ Outputs (``data/ec_online/``):
 
 * ``online_teams.csv``   season, round, rank, school, team, solved, penalty
 * ``online_schools.csv`` season, table (round1/round2/combined), rank, school
-* ``online_rosters.csv`` season, round, school, team, members (2022-2024 only)
+* ``online_rosters.csv`` season, round, school, team, members (2022-2024 here;
+  ``scripts/add_pta_rosters.py`` appends 2025-2026)
 * ``regional_teams.csv`` one row per regional team with official rank and medal
 * ``sources.json``       every URL used
 
@@ -59,7 +60,7 @@ ONLINE_PDFS = {
 # Online registration lists (报名公示) with rosters.  Each entry: (season,
 # round, pdf id, layout, column x-starts).  "team" layouts have one row per
 # team with three member columns; "member" layouts repeat the team per member.
-# 2025/2026 lists are only published on uep.pintia.cn and are not included.
+# 2025/2026 lists are only published on uep.pintia.cn; add_pta_rosters.py adds them.
 ROSTER_PDFS = [
     (2022, 1, "20220909125001826069", "team",
      {"school": 53, "team": 157, "coach": 279, "m1": 344, "m2": 409, "m3": 474}),
@@ -100,8 +101,13 @@ LABELS = {"rank": {"#", "排名"}, "school": {"学校"}, "team": {"队名", "队
 EMPTY_CELL_COST = 1e4
 
 
+# CJK Radicals Supplement code points in the 2026 PDFs (西北 printed as ⻄北, ...).
+# NFKC folds Kangxi radicals (U+2F00-2FDF) but not these, so map them here.
+RADICALS = str.maketrans("⺠⻄⻋⻓⻔⻘⻢⻩⻬⻰", "民西车长门青马黄齐龙")
+
+
 def nfkc(s):
-    return unicodedata.normalize("NFKC", s or "")
+    return unicodedata.normalize("NFKC", s or "").translate(RADICALS)
 
 
 def fetch(url, dest):

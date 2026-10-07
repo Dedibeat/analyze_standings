@@ -208,8 +208,9 @@ footer li { margin-top: 3px; }
   <section class="card">
     <div class="card-head"><h2>Lowest gold-medal team, per regional</h2></div>
     <p class="card-sub">The team at the gold cutoff (rank ⌈0.10·n⌉ among official solving teams).
-    Performance is the classic Elo rank-inversion rating and θ the fitted ability — both on the
-    raw model scale; the gold bar is on CF-equivalent points. Click a column to sort, a row to
+    Performance is the team's Elo rank-inversion rating in CF-equivalent points (the same value
+    the virtual calculator shows); θ is the fitted ability on the raw model scale; the gold bar is
+    on CF-equivalent points. Click a column to sort, a row to
     open the contest.</p>
     <div class="tbl-wrap"><table id="lgTable"></table></div>
   </section>
@@ -500,7 +501,7 @@ function renderDetail() {
         el("div", { class: "row" },
           el("span", null, "solved ", el("b", null, String(t.solved))),
           el("span", null, "full-field rank ", el("b", null, String(t.rank_full_field))),
-          el("span", null, "perf (Elo, raw) ", el("b", null, fmt(t.performance_elo))),
+          el("span", null, "perf ", el("b", null, fmt(t.performance_cf)), " CF"),
           t.penalty_seconds != null ? el("span", null, "penalty ", el("b", null, Math.floor(t.penalty_seconds / 60) + "m")) : null));
     }));
 
@@ -643,7 +644,7 @@ function renderLgTable() {
     ["aff", "University", c => c.cutoff_teams.gold.affiliation || "", false],
     ["solved", "Solved", c => c.cutoff_teams.gold.solved, true],
     ["n", "Official teams", c => c.official_solving_teams, true],
-    ["perf", "Perf (Elo, raw)", c => c.cutoff_teams.gold.performance_elo, true],
+    ["perf", "Perf (CF)", c => c.cutoff_teams.gold.performance_cf, true],
     ["theta", "θ (raw)", c => c.cutoff_teams.gold.theta ?? -1, true],
     ["goldbar", "Gold bar (CF)", c => c.medal_bar_cf.gold, true],
   ];
@@ -671,7 +672,7 @@ function renderLgTable() {
       el("td", { class: "mutedtx" }, ct.gold.affiliation || "—"),
       el("td", { class: "num" }, String(ct.gold.solved)),
       el("td", { class: "num" }, String(c.official_solving_teams)),
-      el("td", { class: "num" }, fmt(ct.gold.performance_elo)),
+      el("td", { class: "num" }, fmt(ct.gold.performance_cf)),
       el("td", { class: "num" }, ct.gold.theta == null ? "—" : fmt(ct.gold.theta)),
       el("td", { class: "num" }, fmt(c.medal_bar_cf.gold)));
   });
