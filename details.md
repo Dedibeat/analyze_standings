@@ -3908,10 +3908,23 @@ Mongolia-specific rule; Mongolian schools qualify like any other school, or
 apply for one of the ≤10 incentive seats (激励名额).
 
 **Method** (`scripts/ecfinal_cutoff.py`). Replays the rule on
-`regional_teams.csv`. Validated on 2025 (240 seats, 6 mainland sites): 231/240
-simulated teams are in the published 2025 qualifier table; the 9 misses are
-teams replaced by same-school substitutes (2025 allowed a school's top-90
-team to substitute).
+`regional_teams.csv` (XCPCIO boards, official ranks recomputed from
+`run.json`). Validated on 2025 with `--check-2025` (2026-10-07; corrects the
+first pass, which assumed all 240 seats were mainland): Hong Kong had 126 valid
+teams (< 130, "按给定数目提取") and gave **1** seat — HKU "Hot Kpop Union",
+Hong Kong rank 7 (ranks 1–5 already held mainland seats; rank 6, Xiamen
+University of Technology's two-member team, was passed over for an unstated
+reason) — so the mainland had **239**. With 239 the replay matches the published
+per-school qualifier seats (公示 Table 1, sum 240) for **125/125 schools**, and
+233/240 teams appear in Table 2; the 7 others were swapped by their schools for
+substitutes allowed by the 2025 rule (a school's top-90 regional team, top-15
+at Hong Kong), e.g. 北京大学 飞带不长队 → 呆呆鸟. Outputs:
+`output/ecfinal_2025_allocation.csv` (every entry examined, in order, with the
+decision) and `output/ecfinal_2025_school_check.csv`. Sources: rule
+https://icpc.pku.edu.cn/docs/2025-11/413b953ddb2f444794033d868ddbd07c.pdf,
+公示 https://icpc.pku.edu.cn/docs/2025-12/0629355dfddf43fd8d34ffad3fd0a3bb.pdf.
+2023/2024 still assume 240 mainland seats (their Hong Kong/Macau allocation was
+not checked; at most ~1 rank of effect).
 
 | season | mainland sites | 240 seats reach rank | 2026 rule (230 seats, 7 sites, 7/6 scaling) |
 |---|---|---|---|
@@ -3919,11 +3932,12 @@ team to substitute).
 | 2024 | 6 | 86 | ~70 |
 | 2025 | 6 | 91 (actual 84–91 by site) | ~75 |
 
-2025 per site (simulated; the 240th seat went to Nanjing in tier 91, so an
-eligible team at rank ≤91 qualified at Wuhan/Shenyang/Xi'an/Nanjing and ≤90 at
-Chengdu/Shanghai): last admitted Wuhan #88 (5 solved), Shenyang #91 (4), Xi'an
-#90 (5), Nanjing #91 (4), Chengdu #90 (6), Shanghai #84 (5; its #85–90 were all
-already-admitted or capped). Every last-admitted team was a silver medallist.
+2025 per site (239 mainland seats; the last went to Shenyang #91 in tier 91,
+so an eligible team at rank ≤91 qualified at Wuhan/Shenyang and ≤90 at
+Xi'an/Nanjing/Chengdu/Shanghai): last admitted Wuhan #88 (5 solved), Shenyang
+#91 (4), Xi'an #90 (5), Nanjing #84 (4), Chengdu #90 (6), Shanghai #84 (5); the
+gaps (e.g. Nanjing #85–90) were teams already admitted or capped. Every
+last-admitted team was a silver medallist.
 
 Only ~45% of teams above the cutoff are admitted (each team plays two sites;
 top schools hit the 3-team cap), so the bar is far below 240/6 ≈ 40. Rank 70–75
