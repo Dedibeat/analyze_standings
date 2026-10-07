@@ -4976,3 +4976,13 @@ two mainland sites, "at least one" was 22.9% vs 13.3% per site (independence
 Not in the model: member history (Tamir: Nanjing 2025 #168, HK #39/#42;
 Dugarjantsan: Shanghai 2025 #209, HK 2025 #30), which points slightly lower on
 the mainland and supports the Hong Kong route; the projected K's own error.
+
+**Member history check (2026-10-07).** NUM had no 2025 online rows (only Inner
+Mongolia schools), so NUM's online-vs-onsite gap can't be measured. N^3 (2025:
+Shanghai #209, HK #30 silver) shares one member with NUM-R^3 (Dugarjantsan
+Bilguun). Over 2024–2025 mainland entries at online #300–600, 16.3% reached
+rank ≤ 75 (947); with the best member's previous-year mainland rank 130–250
+(R^3: Tamir #168, Dugarjantsan #209) 10.4% (307). So R^3's mainland chance is
+nearer **~10%** per site than the online-only 13.8%. Hong Kong: members' HK
+ranks 30 / 39 / 42 sit at the needed ≤ 32–37; 2/6 HK 2025 teams with a member
+at HK 2024 #20–50 finished ≤ 35 (too few to fit), so ~20–30%.
