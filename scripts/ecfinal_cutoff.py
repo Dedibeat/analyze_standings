@@ -125,6 +125,81 @@ def project_2026(reps=200):
                   f"(10-90% {d[reps // 10]}-{d[9 * reps // 10]})")
 
 
+def check_2025(list_txt):
+    """Replay 2025 step by step and compare with the published 公示 tables.
+
+    2025 had 239 mainland seats: Hong Kong (126 valid teams, < 130) gave its
+    fixed number of teams, one (HKU, Hong Kong rank 7).  Writes
+    output/ecfinal_2025_allocation.csv (every entry examined, in order) and
+    output/ecfinal_2025_school_check.csv (per-school seats vs Table 1).
+    """
+    text = open(list_txt, encoding="utf-8").read()
+    table1 = text[text.find("表一"):text.find("三. EC-Final 晋级队伍名单")]
+    table2 = re.sub(r"\s+", "", text[text.find("表二"):text.find("在获得第一次名额分配的高校报名结束后")])
+    published = {}
+    for line in table1.splitlines():
+        m = re.match(r"^\s*(\d+)\s+(\S+(?:\s\S+)?)\s+(\d+)(?:\s+(\d+))?(?:\s+(\d+))?\s*$", line)
+        if m:
+            nums = [int(v) for v in m.groups()[2:] if v]
+            published[m.group(2).replace(" ", "")] = (nums[0], nums[1] if len(nums) == 3 else 0)
+
+    def listed(x):
+        return sum(m in table2 for m in members(x)) >= 2 or re.sub(r"\s+", "", x["team"]) in table2
+
+    by = collections.defaultdict(list)
+    for x in ROWS:
+        if x["season"] == "2025" and x["official"] == "1" and x["official_rank"] and x["site"] not in NON_MAINLAND:
+            by[x["site"]].append(x)
+    for L in by.values():
+        L.sort(key=lambda x: int(x["official_rank"]))
+    order = sorted(by, key=lambda s: -sum(int(x["solved"] or 0) > 0 for x in by[s]))
+    admitted_at, per_school, log, seat, k = {}, collections.Counter(), [], 0, 0
+    while seat < 239:
+        for s in order:
+            if seat >= 239:
+                break
+            x = by[s][k]
+            prior = next((v for m, v in admitted_at.items() if m & members(x)), None)
+            if prior:
+                decision = f"skip: team already admitted at {prior}"
+            elif per_school[x["school"]] >= 3:
+                decision = "skip: school already has 3"
+            else:
+                seat += 1
+                per_school[x["school"]] += 1
+                admitted_at[frozenset(members(x))] = f"{s} #{x['official_rank']}"
+                decision = "admitted"
+            log.append((seat if decision == "admitted" else "", k + 1, s, x, decision))
+        k += 1
+    hk = next(x for x in ROWS if x["season"] == "2025" and x["site"] == "hongkong" and x["official_rank"] == "7")
+    log.append((240, "", "hongkong", hk, "admitted: Hong Kong fixed seat (126 valid teams < 130)"))
+    per_school["香港大学"] += 1  # Table 1 uses the Chinese name
+
+    with open("output/ecfinal_2025_allocation.csv", "w", encoding="utf-8-sig", newline="") as f:
+        w = csv.writer(f)
+        w.writerow(["step", "seat", "tier", "site", "official_rank", "school", "team", "members", "solved",
+                    "penalty_minutes", "medal", "decision", "in_published_table2"])
+        for step, (seat_no, tier, s, x, decision) in enumerate(log, 1):
+            w.writerow([step, seat_no, tier, s, x["official_rank"], x["school"], x["team"], x["members"],
+                        x["solved"], x["penalty_minutes"], x["medal"], decision,
+                        ("yes" if listed(x) else "no") if seat_no else ""])
+    with open("output/ecfinal_2025_school_check.csv", "w", encoding="utf-8-sig", newline="") as f:
+        w = csv.writer(f)
+        w.writerow(["school", "published_qualifier_seats", "published_reward_seats", "simulated_seats", "match"])
+        for school in sorted(set(published) | set(per_school)):
+            pub, reward = published.get(school, (0, 0))
+            w.writerow([school, pub, reward, per_school[school], "yes" if pub == per_school[school] else "NO"])
+    admitted = [row for row in log if row[0]]
+    hits = sum(listed(row[3]) for row in admitted)
+    same = sum(published.get(s, (0, 0))[0] == per_school[s] for s in set(published) | set(per_school))
+    print(f"2025 check: {hits}/240 simulated teams are in Table 2; per-school seats match Table 1 for "
+          f"{same}/{len(set(published) | set(per_school))} schools (Table 1 total {sum(v[0] for v in published.values())})")
+    for s in order:
+        last = [row for row in admitted if row[2] == s][-1]
+        print(f"  {s}: last admitted #{last[3]['official_rank']} ({last[3]['solved']} solved, "
+              f"{last[3]['penalty_minutes']} min); walk reached rank {max(row[1] for row in log if row[2] == s)}")
+
+
 def main():
     for season in ("2023", "2024", "2025"):
         order, counts, taken = admits_by_depth(season)
@@ -133,12 +208,7 @@ def main():
         print(f"{season}: {len(order)} mainland sites; 240 seats reach rank {d240}; "
               f"2026 rule (230 seats, 7 sites) ~rank {d230_7}")
     if "--check-2025" in sys.argv:
-        text = open(sys.argv[sys.argv.index("--check-2025") + 1], encoding="utf-8").read()
-        text = re.sub(r"\s+", "", text[text.find("表二"):text.find("在获得第一次名额分配的高校报名结束后")])
-        _, counts, taken = admits_by_depth("2025")
-        sim = {frozenset(members(x)) for x in taken[:240]}
-        hit = sum(sum(m in text for m in s) >= 2 for s in sim)
-        print(f"2025 check: {hit}/240 simulated teams appear in the published qualifier table")
+        check_2025(sys.argv[sys.argv.index("--check-2025") + 1])
     if "--project-2026" in sys.argv:
         project_2026()
 
