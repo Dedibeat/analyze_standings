@@ -526,6 +526,7 @@ python3 -m arch_b.online_medals                 # gold / silver / bronze chances
 ```bash
 python3 scripts/ecfinal_cutoff.py --project-2026   # how deep a 2026 mainland EC-Final seat reaches (~rank 75)
 python3 scripts/ecfinal_chance.py --team '*'       # a school's EC-Final chance per regional and per two-regional plan
+python3 scripts/ecfinal_retro.py 2025 7/626 5/890  # chance at each past regional from typed-in online results
 ```
 
 EC-Final chance per regional: P(rank ≤ the projected qualifying rank) from
