@@ -523,6 +523,21 @@ python3 -m arch_b.hk_gold                       # Hong Kong field history, gold 
 python3 -m arch_b.online_medals                 # gold / silver / bronze chances per 2026 site (incl. Hong Kong)
 ```
 
+```bash
+python3 scripts/ecfinal_cutoff.py --project-2026   # how deep a 2026 mainland EC-Final seat reaches (~rank 75)
+python3 scripts/ecfinal_chance.py --team '*'       # a school's EC-Final chance per regional and per two-regional plan
+```
+
+EC-Final chance per regional: P(rank ≤ the projected qualifying rank) from
+online strength plus the members' best previous-season mainland rank. The
+history term is held-out better in 2024 and 2025. Hong Kong uses its own
+online-only model at the replayed depth of its 10 places. Mainland sites
+differ (SD 0.38 log-odds), but no pre-registration feature predicted which
+site would be easier, so all mainland sites get one number. A shared
+team-season effect combines two regionals. For NUM-R^3: one mainland site
+12%, Hong Kong 19%, two mainland sites 22%, mainland + Hong Kong 28%. Details
+are in `details.md` (2026-10-08).
+
 Every official team of the 2023–2025 mainland regionals is labelled band
 (online rank-band seat) or quota, and each quota team gets the channel that
 explains its seat: host, World Finals school, invitational medal, non-mainland,

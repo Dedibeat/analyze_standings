@@ -38,7 +38,8 @@ level in both test seasons (Δ log loss vs online-only):
 For silver/bronze the slot-rule lines are a wash, which is why the mainland
 sites barely differ in `online_medals.md`. PTA's public team lists exist for
 Xi'an, Chengdu, Wuhan and Nanjing (deadlines 10-03 to 10-18). The other
-sites' lists appear when their registration opens. Registered ≠ attended, so
+sites' lists appear when their registration opens. (On 2026-10-08 the API
+returned `REG_TEAM_NOT_PUBLISHED` for every 2026 regional, Shanghai included.) Registered ≠ attended, so
 expect a gain between the two columns.
 
 PTA API (public, no login; header `Accept: application/json;charset=UTF-8`;
