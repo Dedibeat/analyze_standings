@@ -643,6 +643,12 @@ regionals and on 8 CCPC contests (2024–2025).
   multiple-testing correction either.
 - **2026, P per regional:** dsu and fenwick 25%, fft 23%, convex hull and
   rolling hash 21%.
+- **Hidden cycles or patterns** (`python scripts/technique_patterns.py`;
+  report `output/technique_patterns.md`): no season cycle, drift, site style
+  or shared ICPC/CCPC fashion. Every regional so far has a graph problem; this
+  is suggestive only (Holm p = .14). The solid pattern is slots: greedy and
+  implementation problems sit early, while geometry and data structures sit
+  late.
 
 Details: `details.md` (2026-10-10 entry).
 
