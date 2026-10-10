@@ -619,6 +619,33 @@ by month on earlier contests only; 2023 tunes and 2024–2026 is scored.
 
 Details: `details.md` (2026-10-04 entry).
 
+### Techniques in EC regionals and a 2026 forecast (2026-10-10)
+
+```bash
+python scripts/technique_forecast.py   # writes output/technique_forecast.{md,json}
+```
+
+Which named techniques (the Gemini 128-id taxonomy, from the Technique Atlas)
+appear in the 27 ICPC Asia East regionals of 2022–2025. The script forecasts
+the chance of each one at a 2026 regional and tests the forecast on the 2025
+regionals and on 8 CCPC contests (2024–2025).
+
+- **56% of problems use no named technique**, and 90% of positions 1–3 need
+  none. The tags leave out ambient dp, greedy and math. General categories
+  are derived from each technique's taxonomy category. That catches only
+  15–16% of DeepSeek's dp and math problems, so dp / greedy / math are
+  reported for ICPC only. The CCPC problems have no DeepSeek tags.
+- **Model:** each technique's past presence rate, shrunk toward its category's
+  rate. It beats a uniform rate on ICPC 2025 (log loss gain .020) and on CCPC
+  (.022). Its top-20 list covers 39% / 42% of named problems (a random list
+  covers 18%).
+- **No site effect and no trend.** The ICPC-vs-CCPC differences do not survive
+  multiple-testing correction either.
+- **2026, P per regional:** dsu and fenwick 25%, fft 23%, convex hull and
+  rolling hash 21%.
+
+Details: `details.md` (2026-10-10 entry).
+
 ### Interactive viewer
 
 ```bash
@@ -743,6 +770,9 @@ Module self-checks:
 - `data/tabfm_gold/` — team-level gold-prediction table for TabFM (`teams.csv`,
   BigQuery `schema.json`, `features.json`, `predict.sql`); built by
   `scripts/build_tabfm_gold_data.py`, baselines/scoring in `arch_b.tabfm_gold`.
+- `data/techniques_atlas.json` — named-technique tags and taxonomy snapshot from
+  `../my-react-app/data/techniques_viewer.html`, consumed by
+  `scripts/technique_forecast.py` (report `output/technique_forecast.{md,json}`).
 - `output/problem_ratings.json` — Architecture A ratings;
   `output/problem_ratings_b.json` — Architecture B (binary) ratings;
   `output/problem_ratings_survival.json` — Architecture B (survival) ratings;

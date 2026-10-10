@@ -1,0 +1,2803 @@
+{
+ "alpha": 16,
+ "decay": 1.0,
+ "tuning_grid": [
+  {
+   "alpha": 1,
+   "decay": 0.25,
+   "logloss": 0.27086211919939557
+  },
+  {
+   "alpha": 1,
+   "decay": 0.5,
+   "logloss": 0.2684470590636825
+  },
+  {
+   "alpha": 1,
+   "decay": 0.75,
+   "logloss": 0.2692852766827901
+  },
+  {
+   "alpha": 1,
+   "decay": 1.0,
+   "logloss": 0.2711890400285244
+  },
+  {
+   "alpha": 2,
+   "decay": 0.25,
+   "logloss": 0.2609889391577849
+  },
+  {
+   "alpha": 2,
+   "decay": 0.5,
+   "logloss": 0.258657631619788
+  },
+  {
+   "alpha": 2,
+   "decay": 0.75,
+   "logloss": 0.2592270194569399
+  },
+  {
+   "alpha": 2,
+   "decay": 1.0,
+   "logloss": 0.2608196584851884
+  },
+  {
+   "alpha": 4,
+   "decay": 0.25,
+   "logloss": 0.253864106062193
+  },
+  {
+   "alpha": 4,
+   "decay": 0.5,
+   "logloss": 0.25153809655396686
+  },
+  {
+   "alpha": 4,
+   "decay": 0.75,
+   "logloss": 0.2516582835557515
+  },
+  {
+   "alpha": 4,
+   "decay": 1.0,
+   "logloss": 0.25273853692518355
+  },
+  {
+   "alpha": 8,
+   "decay": 0.25,
+   "logloss": 0.2505859828300189
+  },
+  {
+   "alpha": 8,
+   "decay": 0.5,
+   "logloss": 0.24817207968592328
+  },
+  {
+   "alpha": 8,
+   "decay": 0.75,
+   "logloss": 0.24769845458869222
+  },
+  {
+   "alpha": 8,
+   "decay": 1.0,
+   "logloss": 0.24808373743849862
+  },
+  {
+   "alpha": 16,
+   "decay": 0.25,
+   "logloss": 0.25118918634644616
+  },
+  {
+   "alpha": 16,
+   "decay": 0.5,
+   "logloss": 0.24873656707572778
+  },
+  {
+   "alpha": 16,
+   "decay": 0.75,
+   "logloss": 0.24773677836671762
+  },
+  {
+   "alpha": 16,
+   "decay": 1.0,
+   "logloss": 0.2474391281108563
+  },
+  {
+   "alpha": 32,
+   "decay": 0.25,
+   "logloss": 0.25420233929581965
+  },
+  {
+   "alpha": 32,
+   "decay": 0.5,
+   "logloss": 0.25191336859865116
+  },
+  {
+   "alpha": 32,
+   "decay": 0.75,
+   "logloss": 0.2506907443537212
+  },
+  {
+   "alpha": 32,
+   "decay": 1.0,
+   "logloss": 0.2499879123182287
+  },
+  {
+   "alpha": 64,
+   "decay": 0.25,
+   "logloss": 0.2576844843754919
+  },
+  {
+   "alpha": 64,
+   "decay": 0.5,
+   "logloss": 0.2557216710391209
+  },
+  {
+   "alpha": 64,
+   "decay": 0.75,
+   "logloss": 0.25458489639705767
+  },
+  {
+   "alpha": 64,
+   "decay": 1.0,
+   "logloss": 0.25382314201212314
+  }
+ ],
+ "tests": [
+  {
+   "test": "ICPC regionals 2025",
+   "contests": 7,
+   "problems": 90,
+   "named_problems": 38,
+   "novel_share": 0.18421052631578946,
+   "logloss_model": 0.21694079278981349,
+   "logloss_uniform": 0.23680513101777542,
+   "logloss_category_only": 0.23490197917181202,
+   "brier_model": 0.056430893967786354,
+   "brier_uniform": 0.05956926618303531,
+   "gain_vs_uniform": [
+    0.019864338227959213,
+    0.009503264297466753,
+    0.03052021043550229
+   ],
+   "coverage": {
+    "10": [
+     0.2631578947368421,
+     0.09149658101947783
+    ],
+    "20": [
+     0.39473684210526316,
+     0.18072679237463737
+    ],
+    "30": [
+     0.5263157894736842,
+     0.2676906340654786
+    ]
+   },
+   "calibration": [
+    [
+     0.05,
+     399,
+     0.029218353121861808,
+     0.02756892230576441
+    ],
+    [
+     0.1,
+     315,
+     0.05999532360643481,
+     0.05396825396825397
+    ],
+    [
+     0.2,
+     161,
+     0.13677719221197476,
+     0.15527950310559005
+    ],
+    [
+     1.01,
+     21,
+     0.22962962962962966,
+     0.19047619047619047
+    ]
+   ]
+  },
+  {
+   "test": "CCPC 2024-2025",
+   "contests": 8,
+   "problems": 104,
+   "named_problems": 50,
+   "novel_share": 0.16,
+   "logloss_model": 0.23556135083163338,
+   "logloss_uniform": 0.2573817108486367,
+   "logloss_category_only": 0.254437548315677,
+   "brier_model": 0.06259990128425463,
+   "brier_uniform": 0.06625915527343713,
+   "gain_vs_uniform": [
+    0.021820360017000454,
+    0.01837312286132644,
+    0.02498847290398
+   ],
+   "coverage": {
+    "10": [
+     0.24,
+     0.08973917322834644
+    ],
+    "20": [
+     0.42,
+     0.17750984251968505
+    ],
+    "30": [
+     0.54,
+     0.2633120078740157
+    ]
+   },
+   "calibration": [
+    [
+     0.05,
+     456,
+     0.02921835312186179,
+     0.02631578947368421
+    ],
+    [
+     0.1,
+     360,
+     0.05999532360643476,
+     0.06944444444444445
+    ],
+    [
+     0.2,
+     184,
+     0.1367771922119748,
+     0.15760869565217392
+    ],
+    [
+     1.01,
+     24,
+     0.22962962962962966,
+     0.2916666666666667
+    ]
+   ]
+  }
+ ],
+ "ccpc_added_to_training": {
+  "logloss_icpc_only": 0.21694079278981349,
+  "logloss_icpc_plus_ccpc2024": 0.2165618833902854
+ },
+ "site_test": [
+  {
+   "season": 2024,
+   "sites": [
+    "Hangzhou",
+    "Hong Kong",
+    "Nanjing",
+    "Shenyang"
+   ],
+   "pooled": 0.24068520786517694,
+   "beta=2": 0.2760879982342769,
+   "beta=4": 0.25858489123432654,
+   "beta=8": 0.24898278460280912,
+   "beta=16": 0.24435089701129675
+  },
+  {
+   "season": 2025,
+   "sites": [
+    "Chengdu",
+    "Hong Kong",
+    "Nanjing",
+    "Shanghai",
+    "Shenyang",
+    "Xi'an"
+   ],
+   "pooled": 0.21706283348083313,
+   "beta=2": 0.23070609650397608,
+   "beta=4": 0.22114649689365698,
+   "beta=8": 0.21716817954829923,
+   "beta=16": 0.21614542738401776
+  }
+ ],
+ "trends": [
+  {
+   "tag": "data-structures",
+   "slope": -0.29931972789115674,
+   "p": 0.10272431892026994,
+   "holm_p": 1.0
+  },
+  {
+   "tag": "dp",
+   "slope": -0.19387755102040835,
+   "p": 0.16670832291927018,
+   "holm_p": 1.0
+  },
+  {
+   "tag": "geometry",
+   "slope": -0.020408163265306138,
+   "p": 0.9225193701574607,
+   "holm_p": 1.0
+  },
+  {
+   "tag": "graph",
+   "slope": 0.19047619047619063,
+   "p": 0.36890777305673583,
+   "holm_p": 1.0
+  },
+  {
+   "tag": "math",
+   "slope": 0.2823129251700682,
+   "p": 0.12196950762309422,
+   "holm_p": 1.0
+  },
+  {
+   "tag": "misc",
+   "slope": -0.034013605442176895,
+   "p": 0.5451137215696076,
+   "holm_p": 1.0
+  },
+  {
+   "tag": "paradigms / offline",
+   "slope": 0.02040816326530612,
+   "p": 0.9167708072981755,
+   "holm_p": 1.0
+  },
+  {
+   "tag": "string",
+   "slope": -0.044217687074829946,
+   "p": 0.7960509872531867,
+   "holm_p": 1.0
+  },
+  {
+   "tag": "(no named technique)",
+   "slope": -0.07142857142857141,
+   "p": 0.8300424893776556,
+   "holm_p": 1.0
+  },
+  {
+   "tag": "general:math",
+   "slope": -0.3129251700680273,
+   "p": 0.4213946513371657,
+   "holm_p": 1.0
+  },
+  {
+   "tag": "general:greedy",
+   "slope": 0.11564625850340139,
+   "p": 0.7125718570357411,
+   "holm_p": 1.0
+  },
+  {
+   "tag": "general:data-structures",
+   "slope": -0.044217687074829995,
+   "p": 0.8830292426893277,
+   "holm_p": 1.0
+  },
+  {
+   "tag": "general:constructive",
+   "slope": 0.340136054421769,
+   "p": 0.0804798800299925,
+   "holm_p": 1.0
+  },
+  {
+   "tag": "general:dynamic-programming",
+   "slope": -0.030612244897959207,
+   "p": 0.9470132466883279,
+   "holm_p": 1.0
+  },
+  {
+   "tag": "general:graphs",
+   "slope": -0.13605442176870763,
+   "p": 0.42764308922769306,
+   "holm_p": 1.0
+  },
+  {
+   "tag": "general:combinatorics",
+   "slope": 0.05102040816326539,
+   "p": 0.8305423644088977,
+   "holm_p": 1.0
+  },
+  {
+   "tag": "general:trees",
+   "slope": 0.07823129251700685,
+   "p": 0.6955761059735066,
+   "holm_p": 1.0
+  },
+  {
+   "tag": "general:geometry",
+   "slope": 0.023809523809523805,
+   "p": 0.9092726818295426,
+   "holm_p": 1.0
+  },
+  {
+   "tag": "general:strings",
+   "slope": -0.20068027210884365,
+   "p": 0.20994751312171958,
+   "holm_p": 1.0
+  },
+  {
+   "tag": "general:implementation",
+   "slope": -0.20408163265306142,
+   "p": 0.10697325668582855,
+   "holm_p": 1.0
+  },
+  {
+   "tag": "general:binary-search",
+   "slope": 0.1496598639455783,
+   "p": 0.2991752061984504,
+   "holm_p": 1.0
+  },
+  {
+   "tag": "general:bitwise",
+   "slope": 0.24489795918367366,
+   "p": 0.1419645088727818,
+   "holm_p": 1.0
+  },
+  {
+   "tag": "general:number-theory",
+   "slope": -0.04081632653061228,
+   "p": 0.8557860534866284,
+   "holm_p": 1.0
+  },
+  {
+   "tag": "general:brute-force",
+   "slope": -0.037414965986394585,
+   "p": 0.8085478630342414,
+   "holm_p": 1.0
+  },
+  {
+   "tag": "general:shortest-paths",
+   "slope": -0.13945578231292527,
+   "p": 0.16220944763809048,
+   "holm_p": 1.0
+  },
+  {
+   "tag": "general:game-theory",
+   "slope": 0.1666666666666667,
+   "p": 0.07773056735816046,
+   "holm_p": 1.0
+  }
+ ],
+ "icpc_vs_ccpc": [
+  {
+   "tag": "data-structures",
+   "icpc": 1.8571428571428572,
+   "ccpc": 2.125,
+   "p": 0.5811047238190452,
+   "holm_p": 1.0
+  },
+  {
+   "tag": "dp",
+   "icpc": 0.42857142857142855,
+   "ccpc": 1.125,
+   "p": 0.08972756810797301,
+   "holm_p": 0.7178205448637841
+  },
+  {
+   "tag": "geometry",
+   "icpc": 0.8571428571428571,
+   "ccpc": 0.375,
+   "p": 0.27093226693326666,
+   "holm_p": 1.0
+  },
+  {
+   "tag": "graph",
+   "icpc": 1.7857142857142858,
+   "ccpc": 1.0,
+   "p": 0.09172706823294176,
+   "holm_p": 0.7178205448637841
+  },
+  {
+   "tag": "math",
+   "icpc": 1.5714285714285714,
+   "ccpc": 1.375,
+   "p": 0.8092976755811048,
+   "holm_p": 1.0
+  },
+  {
+   "tag": "misc",
+   "icpc": 0.07142857142857142,
+   "ccpc": 0.0,
+   "p": 1.0,
+   "holm_p": 1.0
+  },
+  {
+   "tag": "paradigms / offline",
+   "icpc": 0.5714285714285714,
+   "ccpc": 0.875,
+   "p": 0.48037990502374406,
+   "holm_p": 1.0
+  },
+  {
+   "tag": "string",
+   "icpc": 0.5,
+   "ccpc": 1.0,
+   "p": 0.05823544113971507,
+   "holm_p": 0.5241189702574356
+  },
+  {
+   "tag": "(no named technique)",
+   "icpc": 7.142857142857143,
+   "ccpc": 6.75,
+   "p": 0.7288177955511123,
+   "holm_p": 1.0
+  }
+ ],
+ "derived_vs_general": [
+  {
+   "category": "graph",
+   "deepseek_tags": "graphs/trees/shortest-paths/flows/matching/dfs-and-similar/dsu",
+   "deepseek_problems": 97,
+   "derived_problems": 41,
+   "recall": 0.38144329896907214,
+   "precision": 0.9024390243902439
+  },
+  {
+   "category": "dp",
+   "deepseek_tags": "dynamic-programming",
+   "deepseek_problems": 54,
+   "derived_problems": 15,
+   "recall": 0.14814814814814814,
+   "precision": 0.5333333333333333
+  },
+  {
+   "category": "data-structures",
+   "deepseek_tags": "data-structures",
+   "deepseek_problems": 62,
+   "derived_problems": 59,
+   "recall": 0.5806451612903226,
+   "precision": 0.6101694915254238
+  },
+  {
+   "category": "math",
+   "deepseek_tags": "math/number-theory/combinatorics/probabilities",
+   "deepseek_problems": 163,
+   "derived_problems": 32,
+   "recall": 0.15950920245398773,
+   "precision": 0.8125
+  },
+  {
+   "category": "string",
+   "deepseek_tags": "strings/hashing",
+   "deepseek_problems": 29,
+   "derived_problems": 17,
+   "recall": 0.4827586206896552,
+   "precision": 0.8235294117647058
+  },
+  {
+   "category": "geometry",
+   "deepseek_tags": "geometry",
+   "deepseek_problems": 31,
+   "derived_problems": 21,
+   "recall": 0.4838709677419355,
+   "precision": 0.7142857142857143
+  }
+ ],
+ "per_regional_2026": {
+  "data-structures": 2.185185185185185,
+  "dp": 0.5555555555555556,
+  "geometry": 0.7777777777777778,
+  "graph": 1.5185185185185186,
+  "math": 1.1851851851851851,
+  "misc": 0.07407407407407407,
+  "paradigms / offline": 0.5555555555555556,
+  "string": 0.6296296296296297,
+  "(no named technique)": 7.222222222222222,
+  "general:math": 4.814814814814815,
+  "general:greedy": 2.4814814814814814,
+  "general:data-structures": 2.2962962962962963,
+  "general:constructive": 2.259259259259259,
+  "general:dynamic-programming": 2.0,
+  "general:graphs": 1.962962962962963,
+  "general:combinatorics": 1.8888888888888888,
+  "general:trees": 1.6296296296296295,
+  "general:geometry": 1.1481481481481481,
+  "general:strings": 1.037037037037037,
+  "general:implementation": 0.7777777777777778,
+  "general:binary-search": 0.7407407407407407,
+  "general:bitwise": 0.6666666666666666,
+  "general:number-theory": 0.5555555555555556,
+  "general:brute-force": 0.48148148148148145,
+  "general:shortest-paths": 0.37037037037037035,
+  "general:game-theory": 0.37037037037037035
+ },
+ "forecast_2026": [
+  {
+   "id": "dsu",
+   "category": "data-structures",
+   "tier": "notebook",
+   "p": 0.24513350559862188,
+   "expected_regionals_of_8": 1.961068044788975,
+   "p_any_of_8": 0.8945707315150155,
+   "seen_regionals": 9,
+   "of": 27,
+   "problems": 11,
+   "median_position": 10
+  },
+  {
+   "id": "fenwick",
+   "category": "data-structures",
+   "tier": "notebook",
+   "p": 0.24513350559862188,
+   "expected_regionals_of_8": 1.961068044788975,
+   "p_any_of_8": 0.8945707315150155,
+   "seen_regionals": 9,
+   "of": 27,
+   "problems": 10,
+   "median_position": 11
+  },
+  {
+   "id": "fft",
+   "category": "math",
+   "tier": "notebook",
+   "p": 0.2286981210323157,
+   "expected_regionals_of_8": 1.8295849682585257,
+   "p_any_of_8": 0.8747449874579653,
+   "seen_regionals": 9,
+   "of": 27,
+   "problems": 9,
+   "median_position": 8
+  },
+  {
+   "id": "convex-hull",
+   "category": "geometry",
+   "tier": "notebook",
+   "p": 0.21131208728107953,
+   "expected_regionals_of_8": 1.6904966982486362,
+   "p_any_of_8": 0.8502932164317147,
+   "seen_regionals": 8,
+   "of": 27,
+   "problems": 9,
+   "median_position": 11
+  },
+  {
+   "id": "rolling-hash",
+   "category": "string",
+   "tier": "notebook",
+   "p": 0.20985044240858197,
+   "expected_regionals_of_8": 1.6788035392686558,
+   "p_any_of_8": 0.8480591994787248,
+   "seen_regionals": 8,
+   "of": 27,
+   "problems": 8,
+   "median_position": 9
+  },
+  {
+   "id": "lazy-segment-tree",
+   "category": "data-structures",
+   "tier": "notebook",
+   "p": 0.19862187769164513,
+   "expected_regionals_of_8": 1.588975021533161,
+   "p_any_of_8": 0.8299017459598955,
+   "seen_regionals": 7,
+   "of": 27,
+   "problems": 7,
+   "median_position": 8
+  },
+  {
+   "id": "sqrt-decomposition",
+   "category": "data-structures",
+   "tier": "extension",
+   "p": 0.19862187769164513,
+   "expected_regionals_of_8": 1.588975021533161,
+   "p_any_of_8": 0.8299017459598955,
+   "seen_regionals": 7,
+   "of": 27,
+   "problems": 7,
+   "median_position": 9
+  },
+  {
+   "id": "sweep-line",
+   "category": "geometry",
+   "tier": "extension",
+   "p": 0.18805627332759114,
+   "expected_regionals_of_8": 1.5044501866207292,
+   "p_any_of_8": 0.8111106616536686,
+   "seen_regionals": 7,
+   "of": 27,
+   "problems": 8,
+   "median_position": 11
+  },
+  {
+   "id": "segment-tree",
+   "category": "data-structures",
+   "tier": "notebook",
+   "p": 0.17536606373815677,
+   "expected_regionals_of_8": 1.4029285099052542,
+   "p_any_of_8": 0.7861596644343938,
+   "seen_regionals": 6,
+   "of": 27,
+   "problems": 7,
+   "median_position": 7
+  },
+  {
+   "id": "max-flow",
+   "category": "graph",
+   "tier": "notebook",
+   "p": 0.15977605512489232,
+   "expected_regionals_of_8": 1.2782084409991386,
+   "p_any_of_8": 0.751594943556636,
+   "seen_regionals": 6,
+   "of": 27,
+   "problems": 6,
+   "median_position": 11
+  },
+  {
+   "id": "bitset-optimization",
+   "category": "data-structures",
+   "tier": "extension",
+   "p": 0.1521102497846684,
+   "expected_regionals_of_8": 1.216881998277347,
+   "p_any_of_8": 0.7328746634503629,
+   "seen_regionals": 5,
+   "of": 27,
+   "problems": 6,
+   "median_position": 12
+  },
+  {
+   "id": "persistent-data-structures",
+   "category": "data-structures",
+   "tier": "extension",
+   "p": 0.1521102497846684,
+   "expected_regionals_of_8": 1.216881998277347,
+   "p_any_of_8": 0.7328746634503629,
+   "seen_regionals": 5,
+   "of": 27,
+   "problems": 5,
+   "median_position": 11
+  },
+  {
+   "id": "sparse-table",
+   "category": "data-structures",
+   "tier": "notebook",
+   "p": 0.1521102497846684,
+   "expected_regionals_of_8": 1.216881998277347,
+   "p_any_of_8": 0.7328746634503629,
+   "seen_regionals": 5,
+   "of": 27,
+   "problems": 5,
+   "median_position": 9
+  },
+  {
+   "id": "binary-lifting",
+   "category": "paradigms / offline",
+   "tier": "extension",
+   "p": 0.14613838644846397,
+   "expected_regionals_of_8": 1.1691070915877118,
+   "p_any_of_8": 0.7174470032195114,
+   "seen_regionals": 5,
+   "of": 27,
+   "problems": 6,
+   "median_position": 10
+  },
+  {
+   "id": "kmp",
+   "category": "string",
+   "tier": "notebook",
+   "p": 0.11682718659462844,
+   "expected_regionals_of_8": 0.9346174927570275,
+   "p_any_of_8": 0.6298604146743562,
+   "seen_regionals": 4,
+   "of": 27,
+   "problems": 4,
+   "median_position": 12
+  },
+  {
+   "id": "bipartite-matching",
+   "category": "graph",
+   "tier": "notebook",
+   "p": 0.11326442721791559,
+   "expected_regionals_of_8": 0.9061154177433247,
+   "p_any_of_8": 0.6177451100995923,
+   "seen_regionals": 4,
+   "of": 27,
+   "problems": 4,
+   "median_position": 13
+  },
+  {
+   "id": "dijkstra",
+   "category": "graph",
+   "tier": "notebook",
+   "p": 0.11326442721791559,
+   "expected_regionals_of_8": 0.9061154177433247,
+   "p_any_of_8": 0.6177451100995923,
+   "seen_regionals": 4,
+   "of": 27,
+   "problems": 4,
+   "median_position": 9
+  },
+  {
+   "id": "euler-tour-flattening",
+   "category": "graph",
+   "tier": "extension",
+   "p": 0.11326442721791559,
+   "expected_regionals_of_8": 0.9061154177433247,
+   "p_any_of_8": 0.6177451100995923,
+   "seen_regionals": 4,
+   "of": 27,
+   "problems": 4,
+   "median_position": 8
+  },
+  {
+   "id": "functional-graph",
+   "category": "graph",
+   "tier": "extension",
+   "p": 0.11326442721791559,
+   "expected_regionals_of_8": 0.9061154177433247,
+   "p_any_of_8": 0.6177451100995923,
+   "seen_regionals": 4,
+   "of": 27,
+   "problems": 4,
+   "median_position": 9
+  },
+  {
+   "id": "sieve",
+   "category": "math",
+   "tier": "notebook",
+   "p": 0.11241905126487384,
+   "expected_regionals_of_8": 0.8993524101189907,
+   "p_any_of_8": 0.614819959213369,
+   "seen_regionals": 4,
+   "of": 27,
+   "problems": 4,
+   "median_position": 9
+  },
+  {
+   "id": "sos-dp",
+   "category": "math",
+   "tier": "notebook",
+   "p": 0.11241905126487384,
+   "expected_regionals_of_8": 0.8993524101189907,
+   "p_any_of_8": 0.614819959213369,
+   "seen_regionals": 4,
+   "of": 27,
+   "problems": 4,
+   "median_position": 9
+  },
+  {
+   "id": "rerooting",
+   "category": "dp",
+   "tier": "extension",
+   "p": 0.11024978466838932,
+   "expected_regionals_of_8": 0.8819982773471146,
+   "p_any_of_8": 0.6072241164428249,
+   "seen_regionals": 4,
+   "of": 27,
+   "problems": 5,
+   "median_position": 8
+  },
+  {
+   "id": "centroid-decomposition",
+   "category": "data-structures",
+   "tier": "extension",
+   "p": 0.10559862187769166,
+   "expected_regionals_of_8": 0.8447889750215333,
+   "p_any_of_8": 0.5904945578298509,
+   "seen_regionals": 3,
+   "of": 27,
+   "problems": 3,
+   "median_position": 5
+  },
+  {
+   "id": "cdq-divide-and-conquer",
+   "category": "paradigms / offline",
+   "tier": "extension",
+   "p": 0.09962675854148723,
+   "expected_regionals_of_8": 0.7970140683318978,
+   "p_any_of_8": 0.5681025534500972,
+   "seen_regionals": 3,
+   "of": 27,
+   "problems": 4,
+   "median_position": 12
+  },
+  {
+   "id": "heavy-light-decomposition",
+   "category": "graph",
+   "tier": "notebook",
+   "p": 0.09000861326442722,
+   "expected_regionals_of_8": 0.7200689061154177,
+   "p_any_of_8": 0.529783079199694,
+   "seen_regionals": 3,
+   "of": 27,
+   "problems": 3,
+   "median_position": 12
+  },
+  {
+   "id": "lca-binary-lifting",
+   "category": "graph",
+   "tier": "notebook",
+   "p": 0.09000861326442722,
+   "expected_regionals_of_8": 0.7200689061154177,
+   "p_any_of_8": 0.529783079199694,
+   "seen_regionals": 3,
+   "of": 27,
+   "problems": 3,
+   "median_position": 9
+  },
+  {
+   "id": "min-cost-flow",
+   "category": "graph",
+   "tier": "notebook",
+   "p": 0.09000861326442722,
+   "expected_regionals_of_8": 0.7200689061154177,
+   "p_any_of_8": 0.529783079199694,
+   "seen_regionals": 3,
+   "of": 27,
+   "problems": 3,
+   "median_position": 10
+  },
+  {
+   "id": "generating-functions",
+   "category": "math",
+   "tier": "extension",
+   "p": 0.08916323731138545,
+   "expected_regionals_of_8": 0.7133058984910836,
+   "p_any_of_8": 0.5262770681989346,
+   "seen_regionals": 3,
+   "of": 27,
+   "problems": 3,
+   "median_position": 10
+  },
+  {
+   "id": "matroid",
+   "category": "math",
+   "tier": "extension",
+   "p": 0.08916323731138545,
+   "expected_regionals_of_8": 0.7133058984910836,
+   "p_any_of_8": 0.5262770681989346,
+   "seen_regionals": 3,
+   "of": 27,
+   "problems": 3,
+   "median_position": 11
+  },
+  {
+   "id": "digit-dp",
+   "category": "dp",
+   "tier": "extension",
+   "p": 0.08699397071490095,
+   "expected_regionals_of_8": 0.6959517657192076,
+   "p_any_of_8": 0.5171756503217477,
+   "seen_regionals": 3,
+   "of": 27,
+   "problems": 3,
+   "median_position": 10
+  },
+  {
+   "id": "li-chao-tree",
+   "category": "data-structures",
+   "tier": "extension",
+   "p": 0.08234280792420327,
+   "expected_regionals_of_8": 0.6587424633936262,
+   "p_any_of_8": 0.49714383181715704,
+   "seen_regionals": 2,
+   "of": 27,
+   "problems": 2,
+   "median_position": 12
+  },
+  {
+   "id": "line-container",
+   "category": "data-structures",
+   "tier": "notebook",
+   "p": 0.08234280792420327,
+   "expected_regionals_of_8": 0.6587424633936262,
+   "p_any_of_8": 0.49714383181715704,
+   "seen_regionals": 2,
+   "of": 27,
+   "problems": 2,
+   "median_position": 12
+  },
+  {
+   "id": "segment-tree-merging",
+   "category": "data-structures",
+   "tier": "notebook",
+   "p": 0.08234280792420327,
+   "expected_regionals_of_8": 0.6587424633936262,
+   "p_any_of_8": 0.49714383181715704,
+   "seen_regionals": 2,
+   "of": 27,
+   "problems": 2,
+   "median_position": 10
+  },
+  {
+   "id": "exchange-argument",
+   "category": "paradigms / offline",
+   "tier": "extension",
+   "p": 0.07637094458799885,
+   "expected_regionals_of_8": 0.6109675567039908,
+   "p_any_of_8": 0.47036010407701334,
+   "seen_regionals": 2,
+   "of": 27,
+   "problems": 2,
+   "median_position": 4
+  },
+  {
+   "id": "meet-in-the-middle",
+   "category": "paradigms / offline",
+   "tier": "extension",
+   "p": 0.07637094458799885,
+   "expected_regionals_of_8": 0.6109675567039908,
+   "p_any_of_8": 0.47036010407701334,
+   "seen_regionals": 2,
+   "of": 27,
+   "problems": 2,
+   "median_position": 8
+  },
+  {
+   "id": "convex-polygon-queries",
+   "category": "geometry",
+   "tier": "notebook",
+   "p": 0.07177720356014929,
+   "expected_regionals_of_8": 0.5742176284811943,
+   "p_any_of_8": 0.44891595027388753,
+   "seen_regionals": 2,
+   "of": 27,
+   "problems": 2,
+   "median_position": 13
+  },
+  {
+   "id": "palindromic-tree",
+   "category": "string",
+   "tier": "extension",
+   "p": 0.0703155586876517,
+   "expected_regionals_of_8": 0.5625244695012136,
+   "p_any_of_8": 0.44193536314058623,
+   "seen_regionals": 2,
+   "of": 27,
+   "problems": 2,
+   "median_position": 8
+  },
+  {
+   "id": "suffix-automaton",
+   "category": "string",
+   "tier": "extension",
+   "p": 0.0703155586876517,
+   "expected_regionals_of_8": 0.5625244695012136,
+   "p_any_of_8": 0.44193536314058623,
+   "seen_regionals": 2,
+   "of": 27,
+   "problems": 2,
+   "median_position": 13
+  },
+  {
+   "id": "dsu-on-tree",
+   "category": "graph",
+   "tier": "notebook",
+   "p": 0.06675279931093885,
+   "expected_regionals_of_8": 0.5340223944875108,
+   "p_any_of_8": 0.42459508485877107,
+   "seen_regionals": 2,
+   "of": 27,
+   "problems": 2,
+   "median_position": 10
+  },
+  {
+   "id": "tree-hashing",
+   "category": "graph",
+   "tier": "extension",
+   "p": 0.06675279931093885,
+   "expected_regionals_of_8": 0.5340223944875108,
+   "p_any_of_8": 0.42459508485877107,
+   "seen_regionals": 2,
+   "of": 27,
+   "problems": 2,
+   "median_position": 11
+  },
+  {
+   "id": "virtual-tree",
+   "category": "graph",
+   "tier": "notebook",
+   "p": 0.06675279931093885,
+   "expected_regionals_of_8": 0.5340223944875108,
+   "p_any_of_8": 0.42459508485877107,
+   "seen_regionals": 2,
+   "of": 27,
+   "problems": 2,
+   "median_position": 9
+  },
+  {
+   "id": "floor-sum",
+   "category": "math",
+   "tier": "extension",
+   "p": 0.06590742335789708,
+   "expected_regionals_of_8": 0.5272593868631766,
+   "p_any_of_8": 0.42041202605478933,
+   "seen_regionals": 2,
+   "of": 27,
+   "problems": 2,
+   "median_position": 13
+  },
+  {
+   "id": "gaussian-elimination",
+   "category": "math",
+   "tier": "notebook",
+   "p": 0.06590742335789708,
+   "expected_regionals_of_8": 0.5272593868631766,
+   "p_any_of_8": 0.42041202605478933,
+   "seen_regionals": 2,
+   "of": 27,
+   "problems": 2,
+   "median_position": 12
+  },
+  {
+   "id": "xor-linear-basis",
+   "category": "math",
+   "tier": "notebook",
+   "p": 0.06590742335789708,
+   "expected_regionals_of_8": 0.5272593868631766,
+   "p_any_of_8": 0.42041202605478933,
+   "seen_regionals": 2,
+   "of": 27,
+   "problems": 2,
+   "median_position": 13
+  },
+  {
+   "id": "bitmask-dp",
+   "category": "dp",
+   "tier": "extension",
+   "p": 0.06373815676141258,
+   "expected_regionals_of_8": 0.5099052540913006,
+   "p_any_of_8": 0.40955616171428444,
+   "seen_regionals": 2,
+   "of": 27,
+   "problems": 2,
+   "median_position": 10
+  },
+  {
+   "id": "slope-trick",
+   "category": "dp",
+   "tier": "extension",
+   "p": 0.06373815676141258,
+   "expected_regionals_of_8": 0.5099052540913006,
+   "p_any_of_8": 0.40955616171428444,
+   "seen_regionals": 2,
+   "of": 27,
+   "problems": 2,
+   "median_position": 12
+  },
+  {
+   "id": "mo-algorithm",
+   "category": "data-structures",
+   "tier": "extension",
+   "p": 0.0590869939707149,
+   "expected_regionals_of_8": 0.4726959517657192,
+   "p_any_of_8": 0.3856784167889711,
+   "seen_regionals": 1,
+   "of": 27,
+   "problems": 1,
+   "median_position": 10
+  },
+  {
+   "id": "segment-tree-beats",
+   "category": "data-structures",
+   "tier": "extension",
+   "p": 0.0590869939707149,
+   "expected_regionals_of_8": 0.4726959517657192,
+   "p_any_of_8": 0.3856784167889711,
+   "seen_regionals": 1,
+   "of": 27,
+   "problems": 1,
+   "median_position": 8
+  },
+  {
+   "id": "treap",
+   "category": "data-structures",
+   "tier": "notebook",
+   "p": 0.0590869939707149,
+   "expected_regionals_of_8": 0.4726959517657192,
+   "p_any_of_8": 0.3856784167889711,
+   "seen_regionals": 1,
+   "of": 27,
+   "problems": 1,
+   "median_position": 12
+  },
+  {
+   "id": "ternary-search",
+   "category": "paradigms / offline",
+   "tier": "extension",
+   "p": 0.053115130634510475,
+   "expected_regionals_of_8": 0.4249210450760838,
+   "p_any_of_8": 0.35378443439243357,
+   "seen_regionals": 1,
+   "of": 27,
+   "problems": 1,
+   "median_position": 13
+  },
+  {
+   "id": "circle-tangents",
+   "category": "geometry",
+   "tier": "notebook",
+   "p": 0.048521389606660914,
+   "expected_regionals_of_8": 0.3881711168532873,
+   "p_any_of_8": 0.3282738786418985,
+   "seen_regionals": 1,
+   "of": 27,
+   "problems": 1,
+   "median_position": 8
+  },
+  {
+   "id": "closest-pair",
+   "category": "geometry",
+   "tier": "notebook",
+   "p": 0.048521389606660914,
+   "expected_regionals_of_8": 0.3881711168532873,
+   "p_any_of_8": 0.3282738786418985,
+   "seen_regionals": 1,
+   "of": 27,
+   "problems": 1,
+   "median_position": 12
+  },
+  {
+   "id": "half-plane-intersection",
+   "category": "geometry",
+   "tier": "extension",
+   "p": 0.048521389606660914,
+   "expected_regionals_of_8": 0.3881711168532873,
+   "p_any_of_8": 0.3282738786418985,
+   "seen_regionals": 1,
+   "of": 27,
+   "problems": 1,
+   "median_position": 11
+  },
+  {
+   "id": "lattice-geometry",
+   "category": "geometry",
+   "tier": "notebook",
+   "p": 0.048521389606660914,
+   "expected_regionals_of_8": 0.3881711168532873,
+   "p_any_of_8": 0.3282738786418985,
+   "seen_regionals": 1,
+   "of": 27,
+   "problems": 1,
+   "median_position": 8
+  },
+  {
+   "id": "minkowski-sum",
+   "category": "geometry",
+   "tier": "extension",
+   "p": 0.048521389606660914,
+   "expected_regionals_of_8": 0.3881711168532873,
+   "p_any_of_8": 0.3282738786418985,
+   "seen_regionals": 1,
+   "of": 27,
+   "problems": 1,
+   "median_position": 5
+  },
+  {
+   "id": "aho-corasick",
+   "category": "string",
+   "tier": "notebook",
+   "p": 0.047059744734163335,
+   "expected_regionals_of_8": 0.3764779578733067,
+   "p_any_of_8": 0.3199742052785308,
+   "seen_regionals": 1,
+   "of": 27,
+   "problems": 1,
+   "median_position": 12
+  },
+  {
+   "id": "lyndon-factorization",
+   "category": "string",
+   "tier": "extension",
+   "p": 0.047059744734163335,
+   "expected_regionals_of_8": 0.3764779578733067,
+   "p_any_of_8": 0.3199742052785308,
+   "seen_regionals": 1,
+   "of": 27,
+   "problems": 1,
+   "median_position": 11
+  },
+  {
+   "id": "suffix-array",
+   "category": "string",
+   "tier": "notebook",
+   "p": 0.047059744734163335,
+   "expected_regionals_of_8": 0.3764779578733067,
+   "p_any_of_8": 0.3199742052785308,
+   "seen_regionals": 1,
+   "of": 27,
+   "problems": 1,
+   "median_position": 11
+  },
+  {
+   "id": "2-sat",
+   "category": "graph",
+   "tier": "extension",
+   "p": 0.043496985357450474,
+   "expected_regionals_of_8": 0.3479758828596038,
+   "p_any_of_8": 0.2993667478160904,
+   "seen_regionals": 1,
+   "of": 27,
+   "problems": 1,
+   "median_position": 7
+  },
+  {
+   "id": "articulation-points",
+   "category": "graph",
+   "tier": "notebook",
+   "p": 0.043496985357450474,
+   "expected_regionals_of_8": 0.3479758828596038,
+   "p_any_of_8": 0.2993667478160904,
+   "seen_regionals": 1,
+   "of": 27,
+   "problems": 1,
+   "median_position": 9
+  },
+  {
+   "id": "bridges",
+   "category": "graph",
+   "tier": "notebook",
+   "p": 0.043496985357450474,
+   "expected_regionals_of_8": 0.3479758828596038,
+   "p_any_of_8": 0.2993667478160904,
+   "seen_regionals": 1,
+   "of": 27,
+   "problems": 1,
+   "median_position": 7
+  },
+  {
+   "id": "dominator-tree",
+   "category": "graph",
+   "tier": "notebook",
+   "p": 0.043496985357450474,
+   "expected_regionals_of_8": 0.3479758828596038,
+   "p_any_of_8": 0.2993667478160904,
+   "seen_regionals": 1,
+   "of": 27,
+   "problems": 1,
+   "median_position": 12
+  },
+  {
+   "id": "eulerian-path",
+   "category": "graph",
+   "tier": "extension",
+   "p": 0.043496985357450474,
+   "expected_regionals_of_8": 0.3479758828596038,
+   "p_any_of_8": 0.2993667478160904,
+   "seen_regionals": 1,
+   "of": 27,
+   "problems": 1,
+   "median_position": 10
+  },
+  {
+   "id": "floyd-warshall",
+   "category": "graph",
+   "tier": "extension",
+   "p": 0.043496985357450474,
+   "expected_regionals_of_8": 0.3479758828596038,
+   "p_any_of_8": 0.2993667478160904,
+   "seen_regionals": 1,
+   "of": 27,
+   "problems": 1,
+   "median_position": 11
+  },
+  {
+   "id": "min-cut-modeling",
+   "category": "graph",
+   "tier": "extension",
+   "p": 0.043496985357450474,
+   "expected_regionals_of_8": 0.3479758828596038,
+   "p_any_of_8": 0.2993667478160904,
+   "seen_regionals": 1,
+   "of": 27,
+   "problems": 1,
+   "median_position": 11
+  },
+  {
+   "id": "minimum-spanning-tree",
+   "category": "graph",
+   "tier": "extension",
+   "p": 0.043496985357450474,
+   "expected_regionals_of_8": 0.3479758828596038,
+   "p_any_of_8": 0.2993667478160904,
+   "seen_regionals": 1,
+   "of": 27,
+   "problems": 1,
+   "median_position": 3
+  },
+  {
+   "id": "planar-graph-duality",
+   "category": "graph",
+   "tier": "extension",
+   "p": 0.043496985357450474,
+   "expected_regionals_of_8": 0.3479758828596038,
+   "p_any_of_8": 0.2993667478160904,
+   "seen_regionals": 1,
+   "of": 27,
+   "problems": 1,
+   "median_position": 10
+  },
+  {
+   "id": "scc",
+   "category": "graph",
+   "tier": "notebook",
+   "p": 0.043496985357450474,
+   "expected_regionals_of_8": 0.3479758828596038,
+   "p_any_of_8": 0.2993667478160904,
+   "seen_regionals": 1,
+   "of": 27,
+   "problems": 1,
+   "median_position": 5
+  },
+  {
+   "id": "catalan-numbers",
+   "category": "math",
+   "tier": "notebook",
+   "p": 0.042651609404408715,
+   "expected_regionals_of_8": 0.3412128752352697,
+   "p_any_of_8": 0.29439753029188875,
+   "seen_regionals": 1,
+   "of": 27,
+   "problems": 1,
+   "median_position": 10
+  },
+  {
+   "id": "discrete-log-kth-root",
+   "category": "math",
+   "tier": "notebook",
+   "p": 0.042651609404408715,
+   "expected_regionals_of_8": 0.3412128752352697,
+   "p_any_of_8": 0.29439753029188875,
+   "seen_regionals": 1,
+   "of": 27,
+   "problems": 1,
+   "median_position": 8
+  },
+  {
+   "id": "hall-theorem",
+   "category": "math",
+   "tier": "extension",
+   "p": 0.042651609404408715,
+   "expected_regionals_of_8": 0.3412128752352697,
+   "p_any_of_8": 0.29439753029188875,
+   "seen_regionals": 1,
+   "of": 27,
+   "problems": 1,
+   "median_position": 11
+  },
+  {
+   "id": "lagrange-interpolation",
+   "category": "math",
+   "tier": "extension",
+   "p": 0.042651609404408715,
+   "expected_regionals_of_8": 0.3412128752352697,
+   "p_any_of_8": 0.29439753029188875,
+   "seen_regionals": 1,
+   "of": 27,
+   "problems": 1,
+   "median_position": 12
+  },
+  {
+   "id": "lucas-theorem",
+   "category": "math",
+   "tier": "extension",
+   "p": 0.042651609404408715,
+   "expected_regionals_of_8": 0.3412128752352697,
+   "p_any_of_8": 0.29439753029188875,
+   "seen_regionals": 1,
+   "of": 27,
+   "problems": 1,
+   "median_position": 5
+  },
+  {
+   "id": "miller-rabin-pollard-rho",
+   "category": "math",
+   "tier": "notebook",
+   "p": 0.042651609404408715,
+   "expected_regionals_of_8": 0.3412128752352697,
+   "p_any_of_8": 0.29439753029188875,
+   "seen_regionals": 1,
+   "of": 27,
+   "problems": 1,
+   "median_position": 11
+  },
+  {
+   "id": "mobius-inversion",
+   "category": "math",
+   "tier": "notebook",
+   "p": 0.042651609404408715,
+   "expected_regionals_of_8": 0.3412128752352697,
+   "p_any_of_8": 0.29439753029188875,
+   "seen_regionals": 1,
+   "of": 27,
+   "problems": 1,
+   "median_position": 11
+  },
+  {
+   "id": "primitive-root",
+   "category": "math",
+   "tier": "notebook",
+   "p": 0.042651609404408715,
+   "expected_regionals_of_8": 0.3412128752352697,
+   "p_any_of_8": 0.29439753029188875,
+   "seen_regionals": 1,
+   "of": 27,
+   "problems": 1,
+   "median_position": 5
+  },
+  {
+   "id": "sprague-grundy",
+   "category": "math",
+   "tier": "extension",
+   "p": 0.042651609404408715,
+   "expected_regionals_of_8": 0.3412128752352697,
+   "p_any_of_8": 0.29439753029188875,
+   "seen_regionals": 1,
+   "of": 27,
+   "problems": 1,
+   "median_position": 12
+  },
+  {
+   "id": "aliens-trick",
+   "category": "dp",
+   "tier": "extension",
+   "p": 0.040482342807924204,
+   "expected_regionals_of_8": 0.32385874246339363,
+   "p_any_of_8": 0.2815049692884948,
+   "seen_regionals": 1,
+   "of": 27,
+   "problems": 1,
+   "median_position": 10
+  },
+  {
+   "id": "divide-and-conquer-dp",
+   "category": "dp",
+   "tier": "notebook",
+   "p": 0.040482342807924204,
+   "expected_regionals_of_8": 0.32385874246339363,
+   "p_any_of_8": 0.2815049692884948,
+   "seen_regionals": 1,
+   "of": 27,
+   "problems": 1,
+   "median_position": 12
+  },
+  {
+   "id": "longest-increasing-subsequence",
+   "category": "dp",
+   "tier": "extension",
+   "p": 0.040482342807924204,
+   "expected_regionals_of_8": 0.32385874246339363,
+   "p_any_of_8": 0.2815049692884948,
+   "seen_regionals": 1,
+   "of": 27,
+   "problems": 1,
+   "median_position": 6
+  },
+  {
+   "id": "matrix-exponentiation",
+   "category": "dp",
+   "tier": "extension",
+   "p": 0.040482342807924204,
+   "expected_regionals_of_8": 0.32385874246339363,
+   "p_any_of_8": 0.2815049692884948,
+   "seen_regionals": 1,
+   "of": 27,
+   "problems": 1,
+   "median_position": 5
+  },
+  {
+   "id": "2d-data-structures",
+   "category": "data-structures",
+   "tier": "extension",
+   "p": 0.03583118001722653,
+   "expected_regionals_of_8": 0.28664944013781224,
+   "p_any_of_8": 0.2531650001069776,
+   "seen_regionals": 0,
+   "of": 27,
+   "problems": 0,
+   "median_position": null
+  },
+  {
+   "id": "fractional-cascading",
+   "category": "data-structures",
+   "tier": "extension",
+   "p": 0.03583118001722653,
+   "expected_regionals_of_8": 0.28664944013781224,
+   "p_any_of_8": 0.2531650001069776,
+   "seen_regionals": 0,
+   "of": 27,
+   "problems": 0,
+   "median_position": null
+  },
+  {
+   "id": "kd-tree",
+   "category": "data-structures",
+   "tier": "extension",
+   "p": 0.03583118001722653,
+   "expected_regionals_of_8": 0.28664944013781224,
+   "p_any_of_8": 0.2531650001069776,
+   "seen_regionals": 0,
+   "of": 27,
+   "problems": 0,
+   "median_position": null
+  },
+  {
+   "id": "link-cut-tree",
+   "category": "data-structures",
+   "tier": "extension",
+   "p": 0.03583118001722653,
+   "expected_regionals_of_8": 0.28664944013781224,
+   "p_any_of_8": 0.2531650001069776,
+   "seen_regionals": 0,
+   "of": 27,
+   "problems": 0,
+   "median_position": null
+  },
+  {
+   "id": "merge-sort-tree",
+   "category": "data-structures",
+   "tier": "extension",
+   "p": 0.03583118001722653,
+   "expected_regionals_of_8": 0.28664944013781224,
+   "p_any_of_8": 0.2531650001069776,
+   "seen_regionals": 0,
+   "of": 27,
+   "problems": 0,
+   "median_position": null
+  },
+  {
+   "id": "offline-dynamic-connectivity",
+   "category": "data-structures",
+   "tier": "extension",
+   "p": 0.03583118001722653,
+   "expected_regionals_of_8": 0.28664944013781224,
+   "p_any_of_8": 0.2531650001069776,
+   "seen_regionals": 0,
+   "of": 27,
+   "problems": 0,
+   "median_position": null
+  },
+  {
+   "id": "removable-priority-queue",
+   "category": "data-structures",
+   "tier": "notebook",
+   "p": 0.03583118001722653,
+   "expected_regionals_of_8": 0.28664944013781224,
+   "p_any_of_8": 0.2531650001069776,
+   "seen_regionals": 0,
+   "of": 27,
+   "problems": 0,
+   "median_position": null
+  },
+  {
+   "id": "small-to-large",
+   "category": "data-structures",
+   "tier": "extension",
+   "p": 0.03583118001722653,
+   "expected_regionals_of_8": 0.28664944013781224,
+   "p_any_of_8": 0.2531650001069776,
+   "seen_regionals": 0,
+   "of": 27,
+   "problems": 0,
+   "median_position": null
+  },
+  {
+   "id": "top-tree",
+   "category": "data-structures",
+   "tier": "extension",
+   "p": 0.03583118001722653,
+   "expected_regionals_of_8": 0.28664944013781224,
+   "p_any_of_8": 0.2531650001069776,
+   "seen_regionals": 0,
+   "of": 27,
+   "problems": 0,
+   "median_position": null
+  },
+  {
+   "id": "wavelet-tree",
+   "category": "data-structures",
+   "tier": "extension",
+   "p": 0.03583118001722653,
+   "expected_regionals_of_8": 0.28664944013781224,
+   "p_any_of_8": 0.2531650001069776,
+   "seen_regionals": 0,
+   "of": 27,
+   "problems": 0,
+   "median_position": null
+  },
+  {
+   "id": "quick-select",
+   "category": "misc",
+   "tier": "notebook",
+   "p": 0.03244329600918748,
+   "expected_regionals_of_8": 0.25954636807349984,
+   "p_any_of_8": 0.23191123735847907,
+   "seen_regionals": 1,
+   "of": 27,
+   "problems": 1,
+   "median_position": 9
+  },
+  {
+   "id": "zobrist-hashing",
+   "category": "misc",
+   "tier": "notebook",
+   "p": 0.03244329600918748,
+   "expected_regionals_of_8": 0.25954636807349984,
+   "p_any_of_8": 0.23191123735847907,
+   "seen_regionals": 1,
+   "of": 27,
+   "problems": 1,
+   "median_position": 13
+  },
+  {
+   "id": "parallel-binary-search",
+   "category": "paradigms / offline",
+   "tier": "extension",
+   "p": 0.029859316681022107,
+   "expected_regionals_of_8": 0.23887453344817686,
+   "p_any_of_8": 0.21534682115379222,
+   "seen_regionals": 0,
+   "of": 27,
+   "problems": 0,
+   "median_position": null
+  },
+  {
+   "id": "3d-geometry",
+   "category": "geometry",
+   "tier": "extension",
+   "p": 0.025265575653172546,
+   "expected_regionals_of_8": 0.20212460522538037,
+   "p_any_of_8": 0.18512605220520084,
+   "seen_regionals": 0,
+   "of": 27,
+   "problems": 0,
+   "median_position": null
+  },
+  {
+   "id": "delaunay-voronoi",
+   "category": "geometry",
+   "tier": "extension",
+   "p": 0.025265575653172546,
+   "expected_regionals_of_8": 0.20212460522538037,
+   "p_any_of_8": 0.18512605220520084,
+   "seen_regionals": 0,
+   "of": 27,
+   "problems": 0,
+   "median_position": null
+  },
+  {
+   "id": "minimum-enclosing-circle",
+   "category": "geometry",
+   "tier": "notebook",
+   "p": 0.025265575653172546,
+   "expected_regionals_of_8": 0.20212460522538037,
+   "p_any_of_8": 0.18512605220520084,
+   "seen_regionals": 0,
+   "of": 27,
+   "problems": 0,
+   "median_position": null
+  },
+  {
+   "id": "rotating-calipers",
+   "category": "geometry",
+   "tier": "extension",
+   "p": 0.025265575653172546,
+   "expected_regionals_of_8": 0.20212460522538037,
+   "p_any_of_8": 0.18512605220520084,
+   "seen_regionals": 0,
+   "of": 27,
+   "problems": 0,
+   "median_position": null
+  },
+  {
+   "id": "manacher",
+   "category": "string",
+   "tier": "notebook",
+   "p": 0.023803930780674967,
+   "expected_regionals_of_8": 0.19043144624539973,
+   "p_any_of_8": 0.1752991605106149,
+   "seen_regionals": 0,
+   "of": 27,
+   "problems": 0,
+   "median_position": null
+  },
+  {
+   "id": "min-rotation",
+   "category": "string",
+   "tier": "notebook",
+   "p": 0.023803930780674967,
+   "expected_regionals_of_8": 0.19043144624539973,
+   "p_any_of_8": 0.1752991605106149,
+   "seen_regionals": 0,
+   "of": 27,
+   "problems": 0,
+   "median_position": null
+  },
+  {
+   "id": "suffix-tree",
+   "category": "string",
+   "tier": "extension",
+   "p": 0.023803930780674967,
+   "expected_regionals_of_8": 0.19043144624539973,
+   "p_any_of_8": 0.1752991605106149,
+   "seen_regionals": 0,
+   "of": 27,
+   "problems": 0,
+   "median_position": null
+  },
+  {
+   "id": "z-function",
+   "category": "string",
+   "tier": "notebook",
+   "p": 0.023803930780674967,
+   "expected_regionals_of_8": 0.19043144624539973,
+   "p_any_of_8": 0.1752991605106149,
+   "seen_regionals": 0,
+   "of": 27,
+   "problems": 0,
+   "median_position": null
+  },
+  {
+   "id": "0-1-bfs",
+   "category": "graph",
+   "tier": "extension",
+   "p": 0.020241171403962102,
+   "expected_regionals_of_8": 0.16192937123169682,
+   "p_any_of_8": 0.15091047189036844,
+   "seen_regionals": 0,
+   "of": 27,
+   "problems": 0,
+   "median_position": null
+  },
+  {
+   "id": "bellman-ford",
+   "category": "graph",
+   "tier": "extension",
+   "p": 0.020241171403962102,
+   "expected_regionals_of_8": 0.16192937123169682,
+   "p_any_of_8": 0.15091047189036844,
+   "seen_regionals": 0,
+   "of": 27,
+   "problems": 0,
+   "median_position": null
+  },
+  {
+   "id": "difference-constraints",
+   "category": "graph",
+   "tier": "extension",
+   "p": 0.020241171403962102,
+   "expected_regionals_of_8": 0.16192937123169682,
+   "p_any_of_8": 0.15091047189036844,
+   "seen_regionals": 0,
+   "of": 27,
+   "problems": 0,
+   "median_position": null
+  },
+  {
+   "id": "directed-mst",
+   "category": "graph",
+   "tier": "extension",
+   "p": 0.020241171403962102,
+   "expected_regionals_of_8": 0.16192937123169682,
+   "p_any_of_8": 0.15091047189036844,
+   "seen_regionals": 0,
+   "of": 27,
+   "problems": 0,
+   "median_position": null
+  },
+  {
+   "id": "general-matching",
+   "category": "graph",
+   "tier": "extension",
+   "p": 0.020241171403962102,
+   "expected_regionals_of_8": 0.16192937123169682,
+   "p_any_of_8": 0.15091047189036844,
+   "seen_regionals": 0,
+   "of": 27,
+   "problems": 0,
+   "median_position": null
+  },
+  {
+   "id": "global-min-cut",
+   "category": "graph",
+   "tier": "notebook",
+   "p": 0.020241171403962102,
+   "expected_regionals_of_8": 0.16192937123169682,
+   "p_any_of_8": 0.15091047189036844,
+   "seen_regionals": 0,
+   "of": 27,
+   "problems": 0,
+   "median_position": null
+  },
+  {
+   "id": "gomory-hu-tree",
+   "category": "graph",
+   "tier": "extension",
+   "p": 0.020241171403962102,
+   "expected_regionals_of_8": 0.16192937123169682,
+   "p_any_of_8": 0.15091047189036844,
+   "seen_regionals": 0,
+   "of": 27,
+   "problems": 0,
+   "median_position": null
+  },
+  {
+   "id": "hungarian-algorithm",
+   "category": "graph",
+   "tier": "extension",
+   "p": 0.020241171403962102,
+   "expected_regionals_of_8": 0.16192937123169682,
+   "p_any_of_8": 0.15091047189036844,
+   "seen_regionals": 0,
+   "of": 27,
+   "problems": 0,
+   "median_position": null
+  },
+  {
+   "id": "konig-theorem",
+   "category": "graph",
+   "tier": "extension",
+   "p": 0.020241171403962102,
+   "expected_regionals_of_8": 0.16192937123169682,
+   "p_any_of_8": 0.15091047189036844,
+   "seen_regionals": 0,
+   "of": 27,
+   "problems": 0,
+   "median_position": null
+  },
+  {
+   "id": "kruskal-reconstruction-tree",
+   "category": "graph",
+   "tier": "notebook",
+   "p": 0.020241171403962102,
+   "expected_regionals_of_8": 0.16192937123169682,
+   "p_any_of_8": 0.15091047189036844,
+   "seen_regionals": 0,
+   "of": 27,
+   "problems": 0,
+   "median_position": null
+  },
+  {
+   "id": "max-clique",
+   "category": "graph",
+   "tier": "notebook",
+   "p": 0.020241171403962102,
+   "expected_regionals_of_8": 0.16192937123169682,
+   "p_any_of_8": 0.15091047189036844,
+   "seen_regionals": 0,
+   "of": 27,
+   "problems": 0,
+   "median_position": null
+  },
+  {
+   "id": "berlekamp-massey",
+   "category": "math",
+   "tier": "extension",
+   "p": 0.01939579545092034,
+   "expected_regionals_of_8": 0.15516636360736272,
+   "p_any_of_8": 0.14503170819826694,
+   "seen_regionals": 0,
+   "of": 27,
+   "problems": 0,
+   "median_position": null
+  },
+  {
+   "id": "burnside-polya",
+   "category": "math",
+   "tier": "extension",
+   "p": 0.01939579545092034,
+   "expected_regionals_of_8": 0.15516636360736272,
+   "p_any_of_8": 0.14503170819826694,
+   "seen_regionals": 0,
+   "of": 27,
+   "problems": 0,
+   "median_position": null
+  },
+  {
+   "id": "crt",
+   "category": "math",
+   "tier": "notebook",
+   "p": 0.01939579545092034,
+   "expected_regionals_of_8": 0.15516636360736272,
+   "p_any_of_8": 0.14503170819826694,
+   "seen_regionals": 0,
+   "of": 27,
+   "problems": 0,
+   "median_position": null
+  },
+  {
+   "id": "fwht",
+   "category": "math",
+   "tier": "notebook",
+   "p": 0.01939579545092034,
+   "expected_regionals_of_8": 0.15516636360736272,
+   "p_any_of_8": 0.14503170819826694,
+   "seen_regionals": 0,
+   "of": 27,
+   "problems": 0,
+   "median_position": null
+  },
+  {
+   "id": "lgv-lemma",
+   "category": "math",
+   "tier": "extension",
+   "p": 0.01939579545092034,
+   "expected_regionals_of_8": 0.15516636360736272,
+   "p_any_of_8": 0.14503170819826694,
+   "seen_regionals": 0,
+   "of": 27,
+   "problems": 0,
+   "median_position": null
+  },
+  {
+   "id": "lp-simplex",
+   "category": "math",
+   "tier": "extension",
+   "p": 0.01939579545092034,
+   "expected_regionals_of_8": 0.15516636360736272,
+   "p_any_of_8": 0.14503170819826694,
+   "seen_regionals": 0,
+   "of": 27,
+   "problems": 0,
+   "median_position": null
+  },
+  {
+   "id": "matrix-tree-theorem",
+   "category": "math",
+   "tier": "extension",
+   "p": 0.01939579545092034,
+   "expected_regionals_of_8": 0.15516636360736272,
+   "p_any_of_8": 0.14503170819826694,
+   "seen_regionals": 0,
+   "of": 27,
+   "problems": 0,
+   "median_position": null
+  },
+  {
+   "id": "polynomial-operations",
+   "category": "math",
+   "tier": "extension",
+   "p": 0.01939579545092034,
+   "expected_regionals_of_8": 0.15516636360736272,
+   "p_any_of_8": 0.14503170819826694,
+   "seen_regionals": 0,
+   "of": 27,
+   "problems": 0,
+   "median_position": null
+  },
+  {
+   "id": "schreier-sims",
+   "category": "math",
+   "tier": "extension",
+   "p": 0.01939579545092034,
+   "expected_regionals_of_8": 0.15516636360736272,
+   "p_any_of_8": 0.14503170819826694,
+   "seen_regionals": 0,
+   "of": 27,
+   "problems": 0,
+   "median_position": null
+  },
+  {
+   "id": "stern-brocot",
+   "category": "math",
+   "tier": "notebook",
+   "p": 0.01939579545092034,
+   "expected_regionals_of_8": 0.15516636360736272,
+   "p_any_of_8": 0.14503170819826694,
+   "seen_regionals": 0,
+   "of": 27,
+   "problems": 0,
+   "median_position": null
+  },
+  {
+   "id": "broken-profile-dp",
+   "category": "dp",
+   "tier": "extension",
+   "p": 0.017226528854435832,
+   "expected_regionals_of_8": 0.13781223083548666,
+   "p_any_of_8": 0.12978333202171322,
+   "seen_regionals": 0,
+   "of": 27,
+   "problems": 0,
+   "median_position": null
+  },
+  {
+   "id": "connected-component-dp",
+   "category": "dp",
+   "tier": "extension",
+   "p": 0.017226528854435832,
+   "expected_regionals_of_8": 0.13781223083548666,
+   "p_any_of_8": 0.12978333202171322,
+   "seen_regionals": 0,
+   "of": 27,
+   "problems": 0,
+   "median_position": null
+  },
+  {
+   "id": "knuth-optimization",
+   "category": "dp",
+   "tier": "notebook",
+   "p": 0.017226528854435832,
+   "expected_regionals_of_8": 0.13781223083548666,
+   "p_any_of_8": 0.12978333202171322,
+   "seen_regionals": 0,
+   "of": 27,
+   "problems": 0,
+   "median_position": null
+  },
+  {
+   "id": "open-close-interval-trick",
+   "category": "dp",
+   "tier": "extension",
+   "p": 0.017226528854435832,
+   "expected_regionals_of_8": 0.13781223083548666,
+   "p_any_of_8": 0.12978333202171322,
+   "seen_regionals": 0,
+   "of": 27,
+   "problems": 0,
+   "median_position": null
+  },
+  {
+   "id": "simulated-annealing",
+   "category": "misc",
+   "tier": "notebook",
+   "p": 0.009187482055699109,
+   "expected_regionals_of_8": 0.07349985644559287,
+   "p_any_of_8": 0.0711793149715535,
+   "seen_regionals": 0,
+   "of": 27,
+   "problems": 0,
+   "median_position": null
+  }
+ ],
+ "positions": {
+  "ICPC regionals 2022-2025": [
+   {
+    "positions": "1-3",
+    "per_contest": 3.0,
+    "median_cf": 1670.9,
+    "named_share": 0.09876543209876543,
+    "general": [
+     [
+      "math",
+      1.2962962962962963
+     ],
+     [
+      "greedy",
+      1.0
+     ],
+     [
+      "constructive",
+      0.5555555555555556
+     ],
+     [
+      "implementation",
+      0.5185185185185185
+     ],
+     [
+      "graphs",
+      0.37037037037037035
+     ],
+     [
+      "strings",
+      0.25925925925925924
+     ],
+     [
+      "bitwise",
+      0.25925925925925924
+     ],
+     [
+      "brute-force",
+      0.2222222222222222
+     ]
+    ],
+    "techniques": [
+     [
+      "dsu",
+      2
+     ],
+     [
+      "minimum-spanning-tree",
+      1
+     ],
+     [
+      "dijkstra",
+      1
+     ],
+     [
+      "binary-lifting",
+      1
+     ],
+     [
+      "rolling-hash",
+      1
+     ],
+     [
+      "sos-dp",
+      1
+     ],
+     [
+      "xor-linear-basis",
+      1
+     ],
+     [
+      "exchange-argument",
+      1
+     ]
+    ],
+    "categories": [
+     [
+      "graph",
+      2
+     ],
+     [
+      "data-structures",
+      2
+     ],
+     [
+      "paradigms / offline",
+      2
+     ],
+     [
+      "math",
+      2
+     ],
+     [
+      "string",
+      1
+     ]
+    ]
+   },
+   {
+    "positions": "4-6",
+    "per_contest": 3.0,
+    "median_cf": 2327.6,
+    "named_share": 0.35802469135802467,
+    "general": [
+     [
+      "math",
+      0.8888888888888888
+     ],
+     [
+      "greedy",
+      0.7777777777777778
+     ],
+     [
+      "dynamic-programming",
+      0.7037037037037037
+     ],
+     [
+      "trees",
+      0.48148148148148145
+     ],
+     [
+      "graphs",
+      0.4444444444444444
+     ],
+     [
+      "data-structures",
+      0.4444444444444444
+     ],
+     [
+      "constructive",
+      0.4444444444444444
+     ],
+     [
+      "combinatorics",
+      0.4074074074074074
+     ]
+    ],
+    "techniques": [
+     [
+      "segment-tree",
+      3
+     ],
+     [
+      "sweep-line",
+      2
+     ],
+     [
+      "fenwick",
+      2
+     ],
+     [
+      "functional-graph",
+      2
+     ],
+     [
+      "centroid-decomposition",
+      2
+     ],
+     [
+      "tree-hashing",
+      1
+     ],
+     [
+      "lazy-segment-tree",
+      1
+     ],
+     [
+      "heavy-light-decomposition",
+      1
+     ]
+    ],
+    "categories": [
+     [
+      "data-structures",
+      11
+     ],
+     [
+      "graph",
+      8
+     ],
+     [
+      "geometry",
+      4
+     ],
+     [
+      "math",
+      3
+     ],
+     [
+      "dp",
+      2
+     ],
+     [
+      "string",
+      2
+     ],
+     [
+      "paradigms / offline",
+      2
+     ]
+    ]
+   },
+   {
+    "positions": "7-9",
+    "per_contest": 3.0,
+    "median_cf": 2840.4,
+    "named_share": 0.5925925925925926,
+    "general": [
+     [
+      "math",
+      1.1851851851851851
+     ],
+     [
+      "combinatorics",
+      0.7407407407407407
+     ],
+     [
+      "graphs",
+      0.6296296296296297
+     ],
+     [
+      "constructive",
+      0.5925925925925926
+     ],
+     [
+      "data-structures",
+      0.5555555555555556
+     ],
+     [
+      "trees",
+      0.5185185185185185
+     ],
+     [
+      "dynamic-programming",
+      0.4074074074074074
+     ],
+     [
+      "greedy",
+      0.2962962962962963
+     ]
+    ],
+    "techniques": [
+     [
+      "rolling-hash",
+      5
+     ],
+     [
+      "rerooting",
+      4
+     ],
+     [
+      "euler-tour-flattening",
+      4
+     ],
+     [
+      "sparse-table",
+      4
+     ],
+     [
+      "fft",
+      4
+     ],
+     [
+      "lazy-segment-tree",
+      4
+     ],
+     [
+      "sqrt-decomposition",
+      3
+     ],
+     [
+      "segment-tree",
+      2
+     ]
+    ],
+    "categories": [
+     [
+      "data-structures",
+      18
+     ],
+     [
+      "graph",
+      17
+     ],
+     [
+      "math",
+      12
+     ],
+     [
+      "geometry",
+      6
+     ],
+     [
+      "string",
+      6
+     ],
+     [
+      "dp",
+      5
+     ],
+     [
+      "paradigms / offline",
+      4
+     ],
+     [
+      "misc",
+      1
+     ]
+    ]
+   },
+   {
+    "positions": "10+",
+    "per_contest": 3.814814814814815,
+    "median_cf": 3468.9,
+    "named_share": 0.6407766990291263,
+    "general": [
+     [
+      "math",
+      1.4444444444444444
+     ],
+     [
+      "data-structures",
+      1.0740740740740742
+     ],
+     [
+      "dynamic-programming",
+      0.7777777777777778
+     ],
+     [
+      "geometry",
+      0.7407407407407407
+     ],
+     [
+      "constructive",
+      0.6666666666666666
+     ],
+     [
+      "combinatorics",
+      0.6296296296296297
+     ],
+     [
+      "graphs",
+      0.5185185185185185
+     ],
+     [
+      "trees",
+      0.48148148148148145
+     ]
+    ],
+    "techniques": [
+     [
+      "fenwick",
+      6
+     ],
+     [
+      "dsu",
+      6
+     ],
+     [
+      "convex-hull",
+      6
+     ],
+     [
+      "sweep-line",
+      4
+     ],
+     [
+      "persistent-data-structures",
+      4
+     ],
+     [
+      "fft",
+      4
+     ],
+     [
+      "max-flow",
+      4
+     ],
+     [
+      "binary-lifting",
+      3
+     ]
+    ],
+    "categories": [
+     [
+      "data-structures",
+      28
+     ],
+     [
+      "math",
+      15
+     ],
+     [
+      "graph",
+      14
+     ],
+     [
+      "geometry",
+      11
+     ],
+     [
+      "string",
+      8
+     ],
+     [
+      "dp",
+      8
+     ],
+     [
+      "paradigms / offline",
+      7
+     ],
+     [
+      "misc",
+      1
+     ]
+    ]
+   }
+  ],
+  "CCPC 2024-2025": [
+   {
+    "positions": "1-3",
+    "per_contest": 3.0,
+    "median_cf": 1753.0,
+    "named_share": 0.125,
+    "general": [],
+    "techniques": [
+     [
+      "dijkstra",
+      1
+     ],
+     [
+      "fenwick",
+      1
+     ],
+     [
+      "xor-linear-basis",
+      1
+     ]
+    ],
+    "categories": [
+     [
+      "graph",
+      1
+     ],
+     [
+      "data-structures",
+      1
+     ],
+     [
+      "math",
+      1
+     ]
+    ]
+   },
+   {
+    "positions": "4-6",
+    "per_contest": 3.0,
+    "median_cf": 2490.7,
+    "named_share": 0.3333333333333333,
+    "general": [],
+    "techniques": [
+     [
+      "lazy-segment-tree",
+      1
+     ],
+     [
+      "rolling-hash",
+      1
+     ],
+     [
+      "discrete-log-kth-root",
+      1
+     ],
+     [
+      "dsu-on-tree",
+      1
+     ],
+     [
+      "lagrange-interpolation",
+      1
+     ],
+     [
+      "generating-functions",
+      1
+     ],
+     [
+      "exchange-argument",
+      1
+     ],
+     [
+      "matrix-exponentiation",
+      1
+     ]
+    ],
+    "categories": [
+     [
+      "math",
+      3
+     ],
+     [
+      "string",
+      2
+     ],
+     [
+      "graph",
+      2
+     ],
+     [
+      "data-structures",
+      1
+     ],
+     [
+      "paradigms / offline",
+      1
+     ],
+     [
+      "dp",
+      1
+     ]
+    ]
+   },
+   {
+    "positions": "7-9",
+    "per_contest": 3.0,
+    "median_cf": 3051.1,
+    "named_share": 0.7083333333333334,
+    "general": [],
+    "techniques": [
+     [
+      "dsu",
+      2
+     ],
+     [
+      "rotating-calipers",
+      1
+     ],
+     [
+      "convex-hull",
+      1
+     ],
+     [
+      "digit-dp",
+      1
+     ],
+     [
+      "crt",
+      1
+     ],
+     [
+      "lca-binary-lifting",
+      1
+     ],
+     [
+      "sweep-line",
+      1
+     ],
+     [
+      "sqrt-decomposition",
+      1
+     ]
+    ],
+    "categories": [
+     [
+      "data-structures",
+      7
+     ],
+     [
+      "dp",
+      3
+     ],
+     [
+      "math",
+      3
+     ],
+     [
+      "graph",
+      3
+     ],
+     [
+      "geometry",
+      2
+     ],
+     [
+      "string",
+      2
+     ],
+     [
+      "paradigms / offline",
+      1
+     ]
+    ]
+   },
+   {
+    "positions": "10+",
+    "per_contest": 4.0,
+    "median_cf": 3482.0,
+    "named_share": 0.6875,
+    "general": [],
+    "techniques": [
+     [
+      "suffix-array",
+      2
+     ],
+     [
+      "rolling-hash",
+      2
+     ],
+     [
+      "segment-tree",
+      2
+     ],
+     [
+      "mobius-inversion",
+      2
+     ],
+     [
+      "cdq-divide-and-conquer",
+      2
+     ],
+     [
+      "bitmask-dp",
+      2
+     ],
+     [
+      "binary-lifting",
+      2
+     ],
+     [
+      "sparse-table",
+      1
+     ]
+    ],
+    "categories": [
+     [
+      "data-structures",
+      8
+     ],
+     [
+      "dp",
+      5
+     ],
+     [
+      "paradigms / offline",
+      5
+     ],
+     [
+      "string",
+      4
+     ],
+     [
+      "math",
+      4
+     ],
+     [
+      "graph",
+      2
+     ],
+     [
+      "geometry",
+      1
+     ]
+    ]
+   }
+  ]
+ }
+}
