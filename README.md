@@ -585,7 +585,7 @@ about online #1–107), **ecfinal** anchors P(EC-Final seat) ≥ 50%
 regional boards are in `regional_teams.csv`, a team's actual best result
 replaces the prediction. `--board` matches anchors on any XCPCIO board (same
 school and ≥ 2 shared members, one-to-one, else school + team name) and counts
-how many the team beat. `--overlap` lists every board with its share of
+how many the team beat (`--solved N --penalty M` instead of `--team` scores a virtual run, e.g. a QOJ mirror). `--overlap` lists every board with its share of
 2026-online contestants and anchors present; the 2025 CCPC stations held as
 many anchors as ICPC regionals, the spring 2026 invitationals and provincials
 far fewer. Details in `details.md`.

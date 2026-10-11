@@ -5110,3 +5110,35 @@ regionals in the fit with ≥ 100 official solvers: gold 2610 / **2712** / 2774,
 rank 75 2415 / **2456** / 2556. The boundary teams' off-online performances
 agree (2661 vs 2712; 2483 vs 2456). Their online-round performances run
 ~150 higher (online offset).
+
+### CCPC sets on QOJ for a virtual strength test (2026-10-11 follow-up)
+
+Request: which CCPC contests to use to test strength now; they must be on
+QOJ. The 12th-season stations (Changchun 17–18 Oct, Jingzhou 7–8 Nov, Leshan
+14–15 Nov, Xiamen 21–22 Nov 2026, per ccpc.io) have not happened, so the
+candidates are past CCPC sets with a QOJ mirror in the fit:
+
+| set | QOJ | Spearman of per-problem solves, QOJ vs onsite | onsite gold / ecfinal anchors | onsite teams at the gold / ECF 50% line |
+|---|---|---|---|---|
+| CCPC 2025 Jinan | 2693 (UCup "GP of Jinan") | 0.96 | 14 / 16 | 4 / 12 |
+| CCPC 2025 Chongqing | 3387 (UCup "Chongqing") | 0.99 | 17 / 9 | 4 / 9 |
+| CCPC 2025 Zhengzhou | 2661 (UCup "GP of Zhengzhou") | 0.93 | 10 / 12 | 2 / 11 |
+
+The correlation confirms the UCup stages are the CCPC sets. CCPC 2025 Harbin
+(QOJ 2575) holds one problem in the data (unusable). "GP of Nanyang" (QOJ
+3727, April 2026, 13 problems) is probably the 11th CCPC Final; it has no
+XCPCIO board and one anchor on QOJ, so it gives a calculator performance but
+no anchor comparison. The 2026 CCPC invitationals (Nanchang, Qinhuangdao,
+Guizhou) are not in the QOJ data. No NUM team played any of these sets.
+Anchor counts: 2026-online rosters seen onsite (≥ 2 members), so these are the
+2026 anchors' 2025 selves.
+
+**Bug fixed.** CCPC boards mark accepted runs `CORRECT`, not `ACCEPTED`;
+`regional_standings` counted only `ACCEPTED`, so every CCPC team scored 0
+solved and `--board` comparisons on CCPC boards were wrong (overlap and anchor
+counts were unaffected: they use rosters only). Now both count. ICPC boards
+use `ACCEPTED` and are unchanged.
+
+`--solved N --penalty M` (instead of `--team`) compares a virtual run with
+the onsite anchors; e.g. Jinan, 6 solved / 800 min: beat 7 of 15 gold and 14
+of 16 ecfinal anchors.

@@ -360,7 +360,7 @@ def regional_standings(board, kind="icpc"):
     for (tid, _), cell in by_cell.items():
         wrong = 0
         for r in cell:
-            if r["status"] == "ACCEPTED":
+            if r["status"] in ("ACCEPTED", "CORRECT"):
                 minutes = r["timestamp"] // per_second // 60
                 score[tid][0] += 1
                 score[tid][1] += minutes * 60 + wrong * penalty

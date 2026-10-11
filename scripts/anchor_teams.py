@@ -21,6 +21,7 @@ official rank <= 75 at a mainland site -> ecfinal (a proxy until the EC-Final
 
     python3 scripts/anchor_teams.py                       # write output/anchor_teams.csv
     python3 scripts/anchor_teams.py --board ccpc/12th/harbin --team NUM-R^3
+    python3 scripts/anchor_teams.py --board ccpc/11th/jinan --solved 6 --penalty 800   # a virtual run
     python3 scripts/anchor_teams.py --overlap [--since 2026-03-01]
 
 ``--board`` takes an XCPCIO board link (as in board.xcpcio.com/<link>), finds
@@ -205,12 +206,16 @@ def match(teams, rows):
     return pairs
 
 
-def compare(link, query, teams):
+def compare(link, query, teams, result=None):
+    """``result`` = (solved, penalty minutes) of a virtual run; else ``query`` names our team on the board."""
     rows = board_rows(link)
-    ours = [r for r in rows if query in r["team"]]
-    if len(ours) != 1:
-        sys.exit(f"--team {query!r} matches {len(ours)} teams on {link}: {[r['team'] for r in ours][:10]}")
-    me = ours[0]
+    if result:
+        me = {"team": "virtual", "school": "-", "solved": result[0], "penalty_minutes": result[1]}
+    else:
+        ours = [r for r in rows if query in r["team"]]
+        if len(ours) != 1:
+            sys.exit(f"--team {query!r} matches {len(ours)} teams on {link}: {[r['team'] for r in ours][:10]}")
+        me = ours[0]
     key = (-me["solved"], me["penalty_minutes"])
     print(f"{link}: {me['team']} ({me['school']}) solved {me['solved']}, penalty {me['penalty_minutes']}")
     pairs = match([t for t in teams if t["tier"]], rows)
@@ -270,6 +275,8 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--board", help="XCPCIO board link, e.g. ccpc/12th/harbin")
     ap.add_argument("--team", help="our team on --board (substring of its name)")
+    ap.add_argument("--solved", type=int, help="instead of --team: solved count of a virtual run")
+    ap.add_argument("--penalty", type=int, default=0, help="with --solved: penalty minutes")
     ap.add_argument("--overlap", action="store_true", help="list boards by overlap with the 2026 online field")
     ap.add_argument("--since", type=datetime.date.fromisoformat, default=datetime.date(2026, 3, 1))
     args = ap.parse_args()
@@ -279,7 +286,7 @@ def main():
     print(f"{len(teams)} teams in both 2026 online rounds; anchors: gold {tiers['gold']}, "
           f"ecfinal {tiers['ecfinal']} -> {OUT.relative_to(og.ROOT)}")
     if args.board:
-        compare(args.board, args.team or "", teams)
+        compare(args.board, args.team or "", teams, None if args.solved is None else (args.solved, args.penalty))
     if args.overlap:
         overlap(args.since, teams)
 
