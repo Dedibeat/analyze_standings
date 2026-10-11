@@ -568,6 +568,28 @@ the online-gold model within 3 points. It runs high further down (27% vs a
 backtested 20% for #141–280) and barely separates the sites. It is a research
 comparison; use `output/online_gold.md` for decisions.
 
+### Anchor teams for non-regional contests (2026-10-11)
+
+```bash
+python3 scripts/anchor_teams.py                                    # output/anchor_teams.csv
+python3 scripts/anchor_teams.py --board ccpc/12th/harbin --team NUM-R^3  # anchors present / beaten
+python3 scripts/anchor_teams.py --overlap [--since 2026-03-01]     # XCPCIO boards by 2026-online overlap
+```
+
+To judge a result on CCPC, provincial or invitational boards, the 2,153 teams
+that played both 2026 EC online rounds (paired across rounds by PTA roster, so
+renamed teams count) are tiered by their predicted chance at one mainland 2026
+regional: **gold** anchors have P(gold) ≥ 50% (`arch_b.online_gold`, 88 teams,
+about online #1–107), **ecfinal** anchors P(EC-Final seat) ≥ 50%
+(`scripts/ecfinal_chance.py`, 83 more, about #112–205). Once 51st-season
+regional boards are in `regional_teams.csv`, a team's actual best result
+replaces the prediction. `--board` matches anchors on any XCPCIO board (same
+school and ≥ 2 shared members, one-to-one, else school + team name) and counts
+how many the team beat. `--overlap` lists every board with its share of
+2026-online contestants and anchors present; the 2025 CCPC stations held as
+many anchors as ICPC regionals, the spring 2026 invitationals and provincials
+far fewer. Details in `details.md`.
+
 ### Time-varying team ratings (research, 2026-10-04)
 
 ```bash
