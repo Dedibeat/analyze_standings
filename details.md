@@ -5069,3 +5069,25 @@ previously empty member fields.
 
 Tests: `tests/test_anchor_teams.py`. This environment needed
 `pip install numpy pypinyin`.
+
+### Anchor performances on recent contests (2026-10-11 follow-up)
+
+Scratch query (not shipped): `export_virtual_calc.performance_fit()` CF
+performances (the app's calibrated binary-fit numbers) for every anchor row in
+the fit's contests with QOJ id ≥ 3500 (~March 2026 on). Anchors matched to
+rows by ≥ 2 members, in Chinese or in pinyin (`hk_link.pinyin_variants`); every
+non-EC-online hit was checked by hand (the NAC/APAC 2026 hits are QOJ mirrors
+played by 人大/同济/港中深; pre-university affiliations such as THU1 are the
+same people). 166/171 anchors have EC Online 2026 rows; 25 gold and 24 ecfinal
+anchors also played another contest (mostly UCup S4: Shenzhen, Shaanxi and
+Hubei mirrors of the 2026 Shenzhen invitational, Shaanxi provincial and Wuhan
+invitational; GP Wulin/Kyoto/Zagreb/India/Kamigō).
+
+| tier | EC Online 2026 perf, quartiles | other 2026 contests, quartiles (rows) |
+|---|---|---|
+| gold | 2870 / 2999 / 3188 | 2447 / 2691 / 3144 (44) |
+| ecfinal | 2620 / 2712 / 2790 | 2440 / 2500 / 2670 (28) |
+
+Anchors perform ~200–300 lower off the online rounds, consistent with the
+DE audit's online offset (+102 binary points) plus selection (anchors were
+picked on online form).
