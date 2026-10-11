@@ -5091,3 +5091,22 @@ invitational; GP Wulin/Kyoto/Zagreb/India/Kamigō).
 Anchors perform ~200–300 lower off the online rounds, consistent with the
 DE audit's online offset (+102 binary points) plus selection (anchors were
 picked on online form).
+
+### Teams at the 50% line, and the cutoff in performance terms (2026-10-11 follow-up)
+
+Scratch query (not shipped). Boundary teams: P in [0.4, 0.6] in
+`output/anchor_teams.csv` — 25 at the gold line (geometric-mean online rank
+94–127), 56 at the EC-Final line (#178–246). Their 2026 performances
+(`performance_fit`, matched as above):
+
+| line | EC Online 2026 perf, quartiles | other 2026 contests, quartiles (rows) |
+|---|---|---|
+| gold (P ≈ 0.5) | 2747 / 2836 / 2881 | 2343 / 2661 / 2851 (10) |
+| EC-Final (P ≈ 0.5) | 2510 / 2618 / 2707 | 2432 / 2483 / 2663 (21) |
+
+Cross-check against the real cutoffs: performance of the official
+⌈10%⌉-th team and of official rank 75, on the 18 mainland 2023–2025
+regionals in the fit with ≥ 100 official solvers: gold 2610 / **2712** / 2774,
+rank 75 2415 / **2456** / 2556. The boundary teams' off-online performances
+agree (2661 vs 2712; 2483 vs 2456). Their online-round performances run
+~150 higher (online offset).
