@@ -5142,3 +5142,15 @@ use `ACCEPTED` and are unchanged.
 `--solved N --penalty M` (instead of `--team`) compares a virtual run with
 the onsite anchors; e.g. Jinan, 6 solved / 800 min: beat 7 of 15 gold and 14
 of 16 ecfinal anchors.
+
+### Spoiler-free target places for a CCPC 2025 Jinan virtual (2026-10-11 follow-up)
+
+Ranks only (scratch query; no solve counts reported to the user). Onsite
+field 320 teams; QOJ 2693 field 413 (UCup teams, stronger). Cutoff
+performances (2023–2025 medians and quartiles above) converted to ranks; for
+onsite, each result gets the QOJ performance of the same (solved, penalty).
+
+| line | onsite rank (q25 perf … q75 perf) | QOJ 2693 rank | onsite ranks of anchors / 50%-line teams |
+|---|---|---|---|
+| EC-Final (perf 2456) | **83** (99 … 63) | **149** (168 … 123) | ecfinal anchors median 84.5; ECF 50%-line teams median 101.5 (12 teams, 18–162) |
+| gold (perf 2712) | **42** (55 … 33) | **94** (113 … 80) | gold anchors median 29; gold 50%-line teams 21/25/30/199 |
