@@ -5154,3 +5154,8 @@ onsite, each result gets the QOJ performance of the same (solved, penalty).
 |---|---|---|---|
 | EC-Final (perf 2456) | **83** (99 … 63) | **149** (168 … 123) | ecfinal anchors median 84.5; ECF 50%-line teams median 101.5 (12 teams, 18–162) |
 | gold (perf 2712) | **42** (55 … 33) | **94** (113 … 80) | gold anchors median 29; gold 50%-line teams 21/25/30/199 |
+
+**Result (2026-10-11):** virtual 4 solved / 484 min → QOJ rank 164/413,
+performance ≈ 2425; onsite-equivalent rank 95/320 (4-solvers span 84–140, so
+any 5th solve lands ≤ 83). Onsite anchors beaten: gold 2/15, ecfinal 8/16 —
+at the EC-Final line (target 83, range 63–99), below gold.
