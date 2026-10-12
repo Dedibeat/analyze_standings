@@ -5978,8 +5978,8 @@ per-problem results).
 **Unseen CCPC sets on QOJ (set-level only).**
 - Harbin 2024 (QOJ 1817) has the cleanest ladder.
 - Jinan 2024 (1843) and Zhengzhou 2024 (1873) are average.
-- Zhengzhou 2025 (2661) is the highest-rated set, with the most rejected runs
-  (3.54 per accepted run).
+- Zhengzhou 2025 (2661) is the highest-rated set, with the most rejected runs of any
+  CCPC set (3.54 per accepted run).
 - Chongqing 2025 (3387) discriminates below average but has no flat problem.
 
 Run (~15 s once boards are cached; on Windows set `PYTHONUTF8=1`):
