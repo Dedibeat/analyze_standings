@@ -392,8 +392,10 @@ def regional_standings(board, kind="icpc"):
 
 def medal_counts(season, config, rows):
     """(gold, silver, bronze, source): board counts, else ICPC's 10/20/30%
-    of official teams that solved at least one problem."""
-    board = (config.get("medal") or {}).get("official")
+    of official teams that solved at least one problem.  XCPCIO's "ccpc"
+    medal preset (a string instead of counts) is that same rule."""
+    board = config.get("medal")
+    board = board.get("official") if isinstance(board, dict) else None
     if board and season not in PLACEHOLDER_MEDAL_SEASONS:
         return board["gold"], board["silver"], board["bronze"], "board"
     n = sum(1 for r in rows if r["official"] and r["solved"] > 0)

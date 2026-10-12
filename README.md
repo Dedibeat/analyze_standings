@@ -674,6 +674,34 @@ regionals and on 8 CCPC contests (2024–2025).
 
 Details: `details.md` (2026-10-10 entry).
 
+### CCPC medal vs ICPC EC regional medal (2026-10-12)
+
+```bash
+python3 scripts/ccpc_icpc_medals.py [--board 11th/jinan --solved 4 --penalty 484]
+# writes output/ccpc_icpc_medals.{md,json}; --board places a virtual run
+```
+
+Official teams of the 16 CCPC regional stations of 2022–2025 are linked to the
+same season's ICPC EC regionals by school and ≥ 2 shared members. Hong Kong
+boards are linked by pinyin. That gives 4,050 mainland pairs for 2023–2025.
+The report shows ranks, percentiles and medals only, so it spoils no contest.
+
+- **A CCPC medal is about one notch harder than an ICPC medal** for the same
+  teams. CCPC gold → ICPC gold 71%. CCPC silver → ICPC silver or better 75%
+  and rank ≤ 75 (the EC-Final line) 57%. CCPC bronze → ICPC medal 80% and
+  rank ≤ 75 19%. A CCPC medal predicts better than a medal at another ICPC
+  regional (ICPC gold → gold 61%).
+- **Even odds** at a 260-team station: ICPC gold at CCPC rank ~24 (the CCPC
+  gold line), rank ≤ 75 at ~59 (mid-silver), ICPC silver at ~93.
+- **Stable** across 2023–2025. Station field strength shifts the curve by
+  ±0.5 log-odds but does not repeat by city.
+- **Jinan 2025 virtual** (4 solved / 484 min): official rank 80 / 259, CCPC
+  bronze, 2 places short of silver. That maps to mainland ICPC rank ≤ 75 at
+  36% (43% with Jinan 2025's field offset). This assumes virtual form equals
+  onsite form.
+
+Details: `details.md` (2026-10-12 entry).
+
 ### Interactive viewer
 
 ```bash
