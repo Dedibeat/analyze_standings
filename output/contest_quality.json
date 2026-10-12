@@ -1,0 +1,1483 @@
+{
+ "contests": [
+  {
+   "kind": "icpc",
+   "board": "47th/xian",
+   "season": "2022",
+   "site": "xian",
+   "link": "icpc/47th/xian",
+   "label": "ICPC xian 2022",
+   "field": 470,
+   "mainland": true,
+   "problems": 12,
+   "auc": 0.8984223171013096,
+   "flat": 0,
+   "dead": 0,
+   "tie_gold": 0.10851063829787234,
+   "rejects": 1.533570300157978,
+   "diff_median": 2253.25,
+   "diff_q75": 3021.0,
+   "consistency": [
+    0.6895259913937422,
+    569
+   ],
+   "consistency_rho": 0.6895259913937422,
+   "gold_even": null,
+   "ecf_even": null,
+   "perf_gold": 2697.4354684626123,
+   "perf_bronze": 1979.584217176644
+  },
+  {
+   "kind": "icpc",
+   "board": "47th/jinan",
+   "season": "2022",
+   "site": "jinan",
+   "link": "icpc/47th/jinan",
+   "label": "ICPC jinan 2022",
+   "field": 504,
+   "mainland": true,
+   "problems": 13,
+   "auc": 0.9140574544341679,
+   "flat": 0,
+   "dead": 1,
+   "tie_gold": 0.06547619047619048,
+   "rejects": 3.0931069958847734,
+   "diff_median": 2711.7,
+   "diff_q75": 3210.3,
+   "consistency": [
+    0.6537065108829078,
+    684
+   ],
+   "consistency_rho": 0.6537065108829078,
+   "gold_even": null,
+   "ecf_even": null,
+   "perf_gold": 2690.578528815977,
+   "perf_bronze": 2009.7686757279862
+  },
+  {
+   "kind": "icpc",
+   "board": "47th/hangzhou",
+   "season": "2022",
+   "site": "hangzhou",
+   "link": "icpc/47th/hangzhou",
+   "label": "ICPC hangzhou 2022",
+   "field": 543,
+   "mainland": true,
+   "problems": 13,
+   "auc": 0.9039964942928634,
+   "flat": 1,
+   "dead": 3,
+   "tie_gold": 0.09208103130755065,
+   "rejects": 3.8131364562118124,
+   "diff_median": 2811.4,
+   "diff_q75": 3465.6,
+   "consistency": [
+    0.6695638607424492,
+    726
+   ],
+   "consistency_rho": 0.6695638607424492,
+   "gold_even": null,
+   "ecf_even": null,
+   "perf_gold": 2685.115725752942,
+   "perf_bronze": 1993.1558821436147
+  },
+  {
+   "kind": "icpc",
+   "board": "47th/nanjing",
+   "season": "2022",
+   "site": "nanjing",
+   "link": "icpc/47th/nanjing",
+   "label": "ICPC nanjing 2022",
+   "field": 416,
+   "mainland": true,
+   "problems": 13,
+   "auc": 0.9066184251174545,
+   "flat": 0,
+   "dead": 2,
+   "tie_gold": 0.09615384615384616,
+   "rejects": 2.8818051575931234,
+   "diff_median": 2733.7,
+   "diff_q75": 3462.4,
+   "consistency": [
+    0.5812279125439996,
+    536
+   ],
+   "consistency_rho": 0.5812279125439996,
+   "gold_even": null,
+   "ecf_even": null,
+   "perf_gold": 2716.6654050204806,
+   "perf_bronze": 1995.5915055718012
+  },
+  {
+   "kind": "icpc",
+   "board": "47th/hefei",
+   "season": "2022",
+   "site": "hefei",
+   "link": "icpc/47th/hefei",
+   "label": "ICPC hefei 2022",
+   "field": 451,
+   "mainland": true,
+   "problems": 13,
+   "auc": 0.9172242234703561,
+   "flat": 0,
+   "dead": 1,
+   "tie_gold": 0.05543237250554324,
+   "rejects": 3.6320861678004537,
+   "diff_median": null,
+   "diff_q75": null,
+   "consistency": [
+    0.693960709137775,
+    593
+   ],
+   "consistency_rho": 0.693960709137775,
+   "gold_even": null,
+   "ecf_even": null,
+   "perf_gold": null,
+   "perf_bronze": null
+  },
+  {
+   "kind": "icpc",
+   "board": "47th/shenyang",
+   "season": "2022",
+   "site": "shenyang",
+   "link": "icpc/47th/shenyang",
+   "label": "ICPC shenyang 2022",
+   "field": 704,
+   "mainland": true,
+   "problems": 13,
+   "auc": 0.8688466834647092,
+   "flat": 2,
+   "dead": 4,
+   "tie_gold": 0.1690340909090909,
+   "rejects": 2.0855696202531644,
+   "diff_median": 2851.3,
+   "diff_q75": 3567.0,
+   "consistency": [
+    0.6742895073933787,
+    757
+   ],
+   "consistency_rho": 0.6742895073933787,
+   "gold_even": null,
+   "ecf_even": null,
+   "perf_gold": 2468.080734140991,
+   "perf_bronze": 1913.0838090882025
+  },
+  {
+   "kind": "icpc",
+   "board": "47th/hongkong",
+   "season": "2022",
+   "site": "hongkong",
+   "link": "icpc/47th/hongkong",
+   "label": "ICPC hongkong 2022",
+   "field": 114,
+   "mainland": false,
+   "problems": 12,
+   "auc": 0.8949262280615545,
+   "flat": 1,
+   "dead": 2,
+   "tie_gold": 0.03508771929824561,
+   "rejects": 2.6736596736596736,
+   "diff_median": 2421.7,
+   "diff_q75": 2878.275,
+   "consistency": null,
+   "consistency_rho": null,
+   "gold_even": null,
+   "ecf_even": null,
+   "perf_gold": 2469.504035320021,
+   "perf_bronze": 1940.5301487378947
+  },
+  {
+   "kind": "icpc",
+   "board": "48th/nanjing",
+   "season": "2023",
+   "site": "nanjing",
+   "link": "icpc/48th/nanjing",
+   "label": "ICPC nanjing 2023",
+   "field": 331,
+   "mainland": true,
+   "problems": 13,
+   "auc": 0.9102535448709551,
+   "flat": 0,
+   "dead": 3,
+   "tie_gold": 0.09667673716012085,
+   "rejects": 2.3582647718773373,
+   "diff_median": 2463.0,
+   "diff_q75": 3266.7,
+   "consistency": [
+    0.8203649378855407,
+    347
+   ],
+   "consistency_rho": 0.8203649378855407,
+   "gold_even": [
+    0.09054932988172484,
+    0.0705707931263162,
+    0.11548103161577268
+   ],
+   "ecf_even": [
+    0.2557065051473545,
+    0.212945582609293,
+    0.30374033557936253
+   ],
+   "perf_gold": 2667.8238331231505,
+   "perf_bronze": 2028.0768769458264
+  },
+  {
+   "kind": "icpc",
+   "board": "48th/xian",
+   "season": "2023",
+   "site": "xian",
+   "link": "icpc/48th/xian",
+   "label": "ICPC xian 2023",
+   "field": 367,
+   "mainland": true,
+   "problems": 14,
+   "auc": 0.862374884422766,
+   "flat": 2,
+   "dead": 2,
+   "tie_gold": 0.0653950953678474,
+   "rejects": 3.04861693210394,
+   "diff_median": 2688.65,
+   "diff_q75": 3128.75,
+   "consistency": null,
+   "consistency_rho": null,
+   "gold_even": null,
+   "ecf_even": null,
+   "perf_gold": 2723.5959618143143,
+   "perf_bronze": 2133.0203578037294
+  },
+  {
+   "kind": "icpc",
+   "board": "48th/jinan",
+   "season": "2023",
+   "site": "jinan",
+   "link": "icpc/48th/jinan",
+   "label": "ICPC jinan 2023",
+   "field": 333,
+   "mainland": true,
+   "problems": 13,
+   "auc": 0.9202027417534717,
+   "flat": 1,
+   "dead": 1,
+   "tie_gold": 0.057057057057057055,
+   "rejects": 2.03573883161512,
+   "diff_median": 2513.8,
+   "diff_q75": 3272.3,
+   "consistency": [
+    0.800176475366908,
+    411
+   ],
+   "consistency_rho": 0.800176475366908,
+   "gold_even": [
+    0.09189523103814608,
+    0.07330923590339805,
+    0.11461053200536207
+   ],
+   "ecf_even": [
+    0.24309871111602377,
+    0.2073143889625049,
+    0.2828556849972262
+   ],
+   "perf_gold": 2704.036001991022,
+   "perf_bronze": 2046.2927843621615
+  },
+  {
+   "kind": "icpc",
+   "board": "48th/hefei",
+   "season": "2023",
+   "site": "hefei",
+   "link": "icpc/48th/hefei",
+   "label": "ICPC hefei 2023",
+   "field": 342,
+   "mainland": true,
+   "problems": 12,
+   "auc": 0.9065190723223095,
+   "flat": 0,
+   "dead": 1,
+   "tie_gold": 0.06725146198830409,
+   "rejects": 2.164285714285714,
+   "diff_median": 2500.95,
+   "diff_q75": 3013.625,
+   "consistency": [
+    0.7983520026879536,
+    405
+   ],
+   "consistency_rho": 0.7983520026879536,
+   "gold_even": [
+    0.10489525752227165,
+    0.08472511175671044,
+    0.1291894552108112
+   ],
+   "ecf_even": [
+    0.21389591705226382,
+    0.18024395547156244,
+    0.2519001261703925
+   ],
+   "perf_gold": 2600.595071104999,
+   "perf_bronze": 1932.927876772117
+  },
+  {
+   "kind": "icpc",
+   "board": "48th/hangzhou",
+   "season": "2023",
+   "site": "hangzhou",
+   "link": "icpc/48th/hangzhou",
+   "label": "ICPC hangzhou 2023",
+   "field": 434,
+   "mainland": true,
+   "problems": 13,
+   "auc": 0.8729808292644219,
+   "flat": 0,
+   "dead": 3,
+   "tie_gold": 0.07373271889400922,
+   "rejects": 2.21865715983363,
+   "diff_median": 2797.2,
+   "diff_q75": 3215.2,
+   "consistency": [
+    0.7272285067356817,
+    468
+   ],
+   "consistency_rho": 0.7272285067356817,
+   "gold_even": [
+    0.08885632554160294,
+    0.07093550893318624,
+    0.11076480493326138
+   ],
+   "ecf_even": [
+    0.18027156589914842,
+    0.1508780552627988,
+    0.21394857933418662
+   ],
+   "perf_gold": 2678.9648861578316,
+   "perf_bronze": 1987.9242026361294
+  },
+  {
+   "kind": "icpc",
+   "board": "48th/macau",
+   "season": "2023",
+   "site": "macau",
+   "link": "icpc/48th/macau",
+   "label": "ICPC macau 2023",
+   "field": 70,
+   "mainland": false,
+   "problems": 11,
+   "auc": 0.8678216799918008,
+   "flat": 2,
+   "dead": 2,
+   "tie_gold": 0.12857142857142856,
+   "rejects": 2.8284518828451883,
+   "diff_median": 2507.1,
+   "diff_q75": 3044.3,
+   "consistency": null,
+   "consistency_rho": null,
+   "gold_even": null,
+   "ecf_even": null,
+   "perf_gold": 2775.384401527709,
+   "perf_bronze": 2003.8350291785907
+  },
+  {
+   "kind": "icpc",
+   "board": "48th/shenyang",
+   "season": "2023",
+   "site": "shenyang",
+   "link": "icpc/48th/shenyang",
+   "label": "ICPC shenyang 2023",
+   "field": 289,
+   "mainland": true,
+   "problems": 13,
+   "auc": 0.8745760497239525,
+   "flat": 0,
+   "dead": 4,
+   "tie_gold": 0.08304498269896193,
+   "rejects": 2.0275229357798166,
+   "diff_median": 2642.5,
+   "diff_q75": 3413.6,
+   "consistency": [
+    0.7114350642934776,
+    349
+   ],
+   "consistency_rho": 0.7114350642934776,
+   "gold_even": [
+    0.10051127269744063,
+    0.07887838584171111,
+    0.1272574465532842
+   ],
+   "ecf_even": [
+    0.2964640051028184,
+    0.2520935493691968,
+    0.34504113280922305
+   ],
+   "perf_gold": 2682.695850996516,
+   "perf_bronze": 2050.722551113603
+  },
+  {
+   "kind": "icpc",
+   "board": "49th/kunming",
+   "season": "2024",
+   "site": "kunming",
+   "link": "icpc/49th/kunming",
+   "label": "ICPC kunming 2024",
+   "field": 444,
+   "mainland": true,
+   "problems": 13,
+   "auc": 0.891041401424128,
+   "flat": 1,
+   "dead": 1,
+   "tie_gold": 0.10135135135135136,
+   "rejects": 2.0864836872087,
+   "diff_median": 2578.1,
+   "diff_q75": 3195.8,
+   "consistency": [
+    0.691201662108382,
+    681
+   ],
+   "consistency_rho": 0.691201662108382,
+   "gold_even": [
+    0.08668771642994527,
+    0.07229373094100057,
+    0.10362747523309693
+   ],
+   "ecf_even": [
+    0.15467739291459331,
+    0.1332243996693584,
+    0.17887204175897878
+   ],
+   "perf_gold": 2807.4770327494844,
+   "perf_bronze": 2185.1928561905042
+  },
+  {
+   "kind": "icpc",
+   "board": "49th/nanjing",
+   "season": "2024",
+   "site": "nanjing",
+   "link": "icpc/49th/nanjing",
+   "label": "ICPC nanjing 2024",
+   "field": 334,
+   "mainland": true,
+   "problems": 13,
+   "auc": 0.8672046673563047,
+   "flat": 2,
+   "dead": 4,
+   "tie_gold": 0.09580838323353294,
+   "rejects": 2.419753086419753,
+   "diff_median": 2826.2,
+   "diff_q75": 3358.6,
+   "consistency": [
+    0.6354725980998661,
+    475
+   ],
+   "consistency_rho": 0.6354725980998661,
+   "gold_even": [
+    0.0939057225306001,
+    0.07650911401878784,
+    0.11476637981066205
+   ],
+   "ecf_even": [
+    0.23307867867863222,
+    0.20072648429368387,
+    0.26889103604390246
+   ],
+   "perf_gold": 2818.9087634246416,
+   "perf_bronze": 2318.875705012135
+  },
+  {
+   "kind": "icpc",
+   "board": "49th/chengdu",
+   "season": "2024",
+   "site": "chengdu",
+   "link": "icpc/49th/chengdu",
+   "label": "ICPC chengdu 2024",
+   "field": 307,
+   "mainland": true,
+   "problems": 13,
+   "auc": 0.9090712679693407,
+   "flat": 0,
+   "dead": 1,
+   "tie_gold": 0.08794788273615635,
+   "rejects": 1.72838749233599,
+   "diff_median": 2467.3,
+   "diff_q75": 3034.5,
+   "consistency": [
+    0.6608830466700235,
+    389
+   ],
+   "consistency_rho": 0.6608830466700235,
+   "gold_even": [
+    0.08917566199257601,
+    0.06837968035577988,
+    0.11551203720759096
+   ],
+   "ecf_even": [
+    0.24489996119218288,
+    0.20510701562509726,
+    0.28960046950554
+   ],
+   "perf_gold": 2780.4482507468356,
+   "perf_bronze": 2276.093921401095
+  },
+  {
+   "kind": "icpc",
+   "board": "49th/hongkong",
+   "season": "2024",
+   "site": "hongkong",
+   "link": "icpc/49th/hongkong",
+   "label": "ICPC hongkong 2024",
+   "field": 149,
+   "mainland": false,
+   "problems": 13,
+   "auc": 0.8811032116528166,
+   "flat": 2,
+   "dead": 5,
+   "tie_gold": 0.020134228187919462,
+   "rejects": 2.6935064935064936,
+   "diff_median": 2888.8,
+   "diff_q75": 3468.9,
+   "consistency": [
+    0.8214033037005138,
+    58
+   ],
+   "consistency_rho": 0.8214033037005138,
+   "gold_even": null,
+   "ecf_even": null,
+   "perf_gold": 2913.245180885866,
+   "perf_bronze": 2406.4553452029013
+  },
+  {
+   "kind": "icpc",
+   "board": "49th/shanghai",
+   "season": "2024",
+   "site": "shanghai",
+   "link": "icpc/49th/shanghai",
+   "label": "ICPC shanghai 2024",
+   "field": 335,
+   "mainland": true,
+   "problems": 13,
+   "auc": 0.8828627495353888,
+   "flat": 0,
+   "dead": 2,
+   "tie_gold": 0.06567164179104477,
+   "rejects": 3.170364500792393,
+   "diff_median": 2897.7,
+   "diff_q75": 3351.4,
+   "consistency": [
+    0.751940232151314,
+    378
+   ],
+   "consistency_rho": 0.751940232151314,
+   "gold_even": [
+    0.09242777228814021,
+    0.07147022318597351,
+    0.11874488807693422
+   ],
+   "ecf_even": [
+    0.22843840488612885,
+    0.18893894952109622,
+    0.2734118774151943
+   ],
+   "perf_gold": 2862.941239170179,
+   "perf_bronze": 2357.7223971675066
+  },
+  {
+   "kind": "icpc",
+   "board": "49th/hangzhou",
+   "season": "2024",
+   "site": "hangzhou",
+   "link": "icpc/49th/hangzhou",
+   "label": "ICPC hangzhou 2024",
+   "field": 364,
+   "mainland": true,
+   "problems": 13,
+   "auc": 0.9160876697770572,
+   "flat": 0,
+   "dead": 1,
+   "tie_gold": 0.12087912087912088,
+   "rejects": 2.687620269403464,
+   "diff_median": 2624.1,
+   "diff_q75": 3125.7,
+   "consistency": [
+    0.7169657797720914,
+    510
+   ],
+   "consistency_rho": 0.7169657797720914,
+   "gold_even": [
+    0.1008771391974002,
+    0.081148124597599,
+    0.12475151319238094
+   ],
+   "ecf_even": [
+    0.2382321625063253,
+    0.20406797795381987,
+    0.27613166738475553
+   ],
+   "perf_gold": 2851.64591618374,
+   "perf_bronze": 2273.1566922609936
+  },
+  {
+   "kind": "icpc",
+   "board": "49th/shenyang",
+   "season": "2024",
+   "site": "shenyang",
+   "link": "icpc/49th/shenyang",
+   "label": "ICPC shenyang 2024",
+   "field": 300,
+   "mainland": true,
+   "problems": 13,
+   "auc": 0.8901042053408893,
+   "flat": 1,
+   "dead": 1,
+   "tie_gold": 0.08666666666666667,
+   "rejects": 2.478439425051335,
+   "diff_median": 2870.1,
+   "diff_q75": 3430.9,
+   "consistency": [
+    0.787464745432328,
+    437
+   ],
+   "consistency_rho": 0.787464745432328,
+   "gold_even": [
+    0.05934088667039937,
+    0.04595313121531712,
+    0.07631696584761691
+   ],
+   "ecf_even": [
+    0.2210798542344011,
+    0.1872431086531557,
+    0.25908208344657696
+   ],
+   "perf_gold": 2921.260622267335,
+   "perf_bronze": 2380.6658142155184
+  },
+  {
+   "kind": "icpc",
+   "board": "50th/nanjing",
+   "season": "2025",
+   "site": "nanjing",
+   "link": "icpc/50th/nanjing",
+   "label": "ICPC nanjing 2025",
+   "field": 335,
+   "mainland": true,
+   "problems": 13,
+   "auc": 0.9030528665592013,
+   "flat": 1,
+   "dead": 1,
+   "tie_gold": 0.03283582089552239,
+   "rejects": 1.9348184818481848,
+   "diff_median": 2615.3,
+   "diff_q75": 2808.8,
+   "consistency": [
+    0.7093108685543702,
+    432
+   ],
+   "consistency_rho": 0.7093108685543702,
+   "gold_even": [
+    0.08911627585257002,
+    0.07047822202142458,
+    0.112088827163974
+   ],
+   "ecf_even": [
+    0.2541027553118713,
+    0.2167938524276174,
+    0.2954105511743217
+   ],
+   "perf_gold": 2778.2397270927886,
+   "perf_bronze": 2209.835472538006
+  },
+  {
+   "kind": "icpc",
+   "board": "50th/wuhan",
+   "season": "2025",
+   "site": "wuhan",
+   "link": "icpc/50th/wuhan",
+   "label": "ICPC wuhan 2025",
+   "field": 442,
+   "mainland": true,
+   "problems": 13,
+   "auc": 0.8587964495884068,
+   "flat": 3,
+   "dead": 2,
+   "tie_gold": 0.08144796380090498,
+   "rejects": 2.1253713606654783,
+   "diff_median": 2758.3,
+   "diff_q75": 3419.4,
+   "consistency": [
+    0.6366678047857545,
+    651
+   ],
+   "consistency_rho": 0.6366678047857545,
+   "gold_even": [
+    0.09006453822274138,
+    0.07369081238575345,
+    0.1096457798949311
+   ],
+   "ecf_even": [
+    0.16572261457280005,
+    0.14100289085876366,
+    0.19379831515805201
+   ],
+   "perf_gold": 2848.4733386473,
+   "perf_bronze": 2165.590572795344
+  },
+  {
+   "kind": "icpc",
+   "board": "50th/chengdu",
+   "season": "2025",
+   "site": "chengdu",
+   "link": "icpc/50th/chengdu",
+   "label": "ICPC chengdu 2025",
+   "field": 320,
+   "mainland": true,
+   "problems": 13,
+   "auc": 0.9160319619167979,
+   "flat": 0,
+   "dead": 2,
+   "tie_gold": 0.05625,
+   "rejects": 2.079136690647482,
+   "diff_median": 2428.8,
+   "diff_q75": 2873.9,
+   "consistency": [
+    0.7039276383561924,
+    434
+   ],
+   "consistency_rho": 0.7039276383561924,
+   "gold_even": [
+    0.07727799661091507,
+    0.060699055515604165,
+    0.09791317244937561
+   ],
+   "ecf_even": [
+    0.2656522307568796,
+    0.2266595224272747,
+    0.3086754681839801
+   ],
+   "perf_gold": 2897.608861028468,
+   "perf_bronze": 2278.3748929477015
+  },
+  {
+   "kind": "icpc",
+   "board": "50th/hongkong",
+   "season": "2025",
+   "site": "hongkong",
+   "link": "icpc/50th/hongkong",
+   "label": "ICPC hongkong 2025",
+   "field": 126,
+   "mainland": false,
+   "problems": 12,
+   "auc": 0.9247785092309616,
+   "flat": 0,
+   "dead": 3,
+   "tie_gold": 0.06349206349206349,
+   "rejects": 3.023598820058997,
+   "diff_median": 2838.75,
+   "diff_q75": 3102.525,
+   "consistency": [
+    0.7285455016852477,
+    57
+   ],
+   "consistency_rho": 0.7285455016852477,
+   "gold_even": null,
+   "ecf_even": null,
+   "perf_gold": 2857.7557625871996,
+   "perf_bronze": 2190.224304493873
+  },
+  {
+   "kind": "icpc",
+   "board": "50th/xian",
+   "season": "2025",
+   "site": "xian",
+   "link": "icpc/50th/xian",
+   "label": "ICPC xian 2025",
+   "field": 398,
+   "mainland": true,
+   "problems": 13,
+   "auc": 0.9183789193477256,
+   "flat": 0,
+   "dead": 3,
+   "tie_gold": 0.06281407035175879,
+   "rejects": 2.2077681874229347,
+   "diff_median": 2482.3,
+   "diff_q75": 3068.2,
+   "consistency": [
+    0.6995887098729181,
+    497
+   ],
+   "consistency_rho": 0.6995887098729181,
+   "gold_even": [
+    0.15081962688426567,
+    0.12486051764651303,
+    0.1810591611474196
+   ],
+   "ecf_even": [
+    0.297226731986678,
+    0.25743755754378955,
+    0.3403469762602936
+   ],
+   "perf_gold": 2828.3873532646676,
+   "perf_bronze": 2275.2931410648325
+  },
+  {
+   "kind": "icpc",
+   "board": "50th/shanghai",
+   "season": "2025",
+   "site": "shanghai",
+   "link": "icpc/50th/shanghai",
+   "label": "ICPC shanghai 2025",
+   "field": 295,
+   "mainland": true,
+   "problems": 13,
+   "auc": 0.8621479551299309,
+   "flat": 2,
+   "dead": 1,
+   "tie_gold": 0.07796610169491526,
+   "rejects": 3.019047619047619,
+   "diff_median": 2687.9,
+   "diff_q75": 3216.2,
+   "consistency": [
+    0.7011817543619431,
+    443
+   ],
+   "consistency_rho": 0.7011817543619431,
+   "gold_even": [
+    0.06997013176905639,
+    0.05408429778396581,
+    0.09007767179806268
+   ],
+   "ecf_even": [
+    0.2539099975166956,
+    0.21547083043485085,
+    0.2966139260366191
+   ],
+   "perf_gold": 2821.1028585584245,
+   "perf_bronze": 2198.8485086620985
+  },
+  {
+   "kind": "icpc",
+   "board": "50th/shenyang",
+   "season": "2025",
+   "site": "shenyang",
+   "link": "icpc/50th/shenyang",
+   "label": "ICPC shenyang 2025",
+   "field": 400,
+   "mainland": true,
+   "problems": 13,
+   "auc": 0.8439107299896917,
+   "flat": 1,
+   "dead": 1,
+   "tie_gold": 0.09,
+   "rejects": 1.9620886981402004,
+   "diff_median": 2598.8,
+   "diff_q75": 3190.7,
+   "consistency": [
+    0.6481354117710539,
+    497
+   ],
+   "consistency_rho": 0.6481354117710539,
+   "gold_even": [
+    0.12874343443507733,
+    0.10438365119364214,
+    0.15778648096782255
+   ],
+   "ecf_even": [
+    0.26083716534337925,
+    0.2235026998452717,
+    0.30198269914889214
+   ],
+   "perf_gold": 2755.1169901224357,
+   "perf_bronze": 2163.0318864120027
+  },
+  {
+   "kind": "ccpc",
+   "board": "8th/guilin",
+   "season": "2022",
+   "site": "guilin",
+   "link": "ccpc/8th/guilin",
+   "label": "CCPC guilin 2022",
+   "field": 239,
+   "mainland": true,
+   "problems": 13,
+   "auc": 0.8827185151987202,
+   "flat": 0,
+   "dead": 2,
+   "tie_gold": 0.0794979079497908,
+   "rejects": 2.2812793979303856,
+   "diff_median": null,
+   "diff_q75": null,
+   "consistency": [
+    0.7098588333266176,
+    415
+   ],
+   "consistency_rho": 0.7098588333266176,
+   "gold_even": null,
+   "ecf_even": null,
+   "perf_gold": null,
+   "perf_bronze": null
+  },
+  {
+   "kind": "ccpc",
+   "board": "8th/weihai",
+   "season": "2022",
+   "site": "weihai",
+   "link": "ccpc/8th/weihai",
+   "label": "CCPC weihai 2022",
+   "field": 238,
+   "mainland": true,
+   "problems": 13,
+   "auc": 0.9129928003042519,
+   "flat": 0,
+   "dead": 1,
+   "tie_gold": 0.08823529411764706,
+   "rejects": 1.3917940466613032,
+   "diff_median": null,
+   "diff_q75": null,
+   "consistency": [
+    0.6887724291990467,
+    396
+   ],
+   "consistency_rho": 0.6887724291990467,
+   "gold_even": null,
+   "ecf_even": null,
+   "perf_gold": null,
+   "perf_bronze": null
+  },
+  {
+   "kind": "ccpc",
+   "board": "8th/guangzhou",
+   "season": "2022",
+   "site": "guangzhou",
+   "link": "ccpc/8th/guangzhou",
+   "label": "CCPC guangzhou 2022",
+   "field": 238,
+   "mainland": true,
+   "problems": 13,
+   "auc": 0.8389007932984516,
+   "flat": 4,
+   "dead": 2,
+   "tie_gold": 0.08403361344537816,
+   "rejects": 1.3823870220162224,
+   "diff_median": null,
+   "diff_q75": null,
+   "consistency": [
+    0.6920016897063952,
+    403
+   ],
+   "consistency_rho": 0.6920016897063952,
+   "gold_even": null,
+   "ecf_even": null,
+   "perf_gold": null,
+   "perf_bronze": null
+  },
+  {
+   "kind": "ccpc",
+   "board": "8th/mianyang",
+   "season": "2022",
+   "site": "mianyang",
+   "link": "ccpc/8th/mianyang",
+   "label": "CCPC mianyang 2022",
+   "field": 236,
+   "mainland": true,
+   "problems": 13,
+   "auc": 0.8747573374517308,
+   "flat": 2,
+   "dead": 3,
+   "tie_gold": 0.059322033898305086,
+   "rejects": 1.9892280071813286,
+   "diff_median": null,
+   "diff_q75": null,
+   "consistency": [
+    0.7154527086044626,
+    409
+   ],
+   "consistency_rho": 0.7154527086044626,
+   "gold_even": null,
+   "ecf_even": null,
+   "perf_gold": null,
+   "perf_bronze": null
+  },
+  {
+   "kind": "ccpc",
+   "board": "9th/qinhuangdao",
+   "season": "2023",
+   "site": "qinhuangdao",
+   "link": "ccpc/9th/qinhuangdao",
+   "label": "CCPC qinhuangdao 2023",
+   "field": 239,
+   "mainland": true,
+   "problems": 13,
+   "auc": 0.8636213190219244,
+   "flat": 2,
+   "dead": 1,
+   "tie_gold": 0.12133891213389121,
+   "rejects": 1.5148514851485149,
+   "diff_median": null,
+   "diff_q75": null,
+   "consistency": [
+    0.7917504289631792,
+    285
+   ],
+   "consistency_rho": 0.7917504289631792,
+   "gold_even": null,
+   "ecf_even": null,
+   "perf_gold": null,
+   "perf_bronze": null
+  },
+  {
+   "kind": "ccpc",
+   "board": "9th/guilin",
+   "season": "2023",
+   "site": "guilin",
+   "link": "ccpc/9th/guilin",
+   "label": "CCPC guilin 2023",
+   "field": 239,
+   "mainland": true,
+   "problems": 13,
+   "auc": 0.9151248093581088,
+   "flat": 0,
+   "dead": 1,
+   "tie_gold": 0.0794979079497908,
+   "rejects": 2.2804878048780486,
+   "diff_median": null,
+   "diff_q75": null,
+   "consistency": [
+    0.7767287714752376,
+    263
+   ],
+   "consistency_rho": 0.7767287714752376,
+   "gold_even": null,
+   "ecf_even": null,
+   "perf_gold": null,
+   "perf_bronze": null
+  },
+  {
+   "kind": "ccpc",
+   "board": "9th/harbin",
+   "season": "2023",
+   "site": "harbin",
+   "link": "ccpc/9th/harbin",
+   "label": "CCPC harbin 2023",
+   "field": 233,
+   "mainland": true,
+   "problems": 13,
+   "auc": 0.8722599920872055,
+   "flat": 0,
+   "dead": 2,
+   "tie_gold": 0.10300429184549356,
+   "rejects": 2.1389473684210527,
+   "diff_median": null,
+   "diff_q75": null,
+   "consistency": [
+    0.6832545594021431,
+    252
+   ],
+   "consistency_rho": 0.6832545594021431,
+   "gold_even": null,
+   "ecf_even": null,
+   "perf_gold": null,
+   "perf_bronze": null
+  },
+  {
+   "kind": "ccpc",
+   "board": "9th/shenzhen",
+   "season": "2023",
+   "site": "shenzhen",
+   "link": "ccpc/9th/shenzhen",
+   "label": "CCPC shenzhen 2023",
+   "field": 231,
+   "mainland": true,
+   "problems": 13,
+   "auc": 0.8904125138080425,
+   "flat": 1,
+   "dead": 2,
+   "tie_gold": 0.06493506493506493,
+   "rejects": 2.236065573770492,
+   "diff_median": null,
+   "diff_q75": null,
+   "consistency": [
+    0.7983827493261456,
+    266
+   ],
+   "consistency_rho": 0.7983827493261456,
+   "gold_even": null,
+   "ecf_even": null,
+   "perf_gold": null,
+   "perf_bronze": null
+  },
+  {
+   "kind": "ccpc",
+   "board": "10th/harbin",
+   "season": "2024",
+   "site": "harbin",
+   "link": "ccpc/10th/harbin",
+   "label": "CCPC harbin 2024",
+   "field": 279,
+   "mainland": true,
+   "problems": 13,
+   "auc": 0.9304829081919052,
+   "flat": 0,
+   "dead": 2,
+   "tie_gold": 0.05017921146953405,
+   "rejects": 1.8230337078651686,
+   "diff_median": 2512.5,
+   "diff_q75": 3003.0,
+   "consistency": [
+    0.6995694444161303,
+    389
+   ],
+   "consistency_rho": 0.6995694444161303,
+   "gold_even": null,
+   "ecf_even": null,
+   "perf_gold": 2765.266976588149,
+   "perf_bronze": 2070.2751295331136
+  },
+  {
+   "kind": "ccpc",
+   "board": "10th/jinan",
+   "season": "2024",
+   "site": "jinan",
+   "link": "ccpc/10th/jinan",
+   "label": "CCPC jinan 2024",
+   "field": 280,
+   "mainland": true,
+   "problems": 13,
+   "auc": 0.8897562471459197,
+   "flat": 1,
+   "dead": 2,
+   "tie_gold": 0.07142857142857142,
+   "rejects": 1.781505728314239,
+   "diff_median": 2718.1,
+   "diff_q75": 3251.4,
+   "consistency": [
+    0.7211629901285074,
+    406
+   ],
+   "consistency_rho": 0.7211629901285074,
+   "gold_even": null,
+   "ecf_even": null,
+   "perf_gold": 2810.516444885967,
+   "perf_bronze": 2085.5878054468712
+  },
+  {
+   "kind": "ccpc",
+   "board": "10th/chongqing",
+   "season": "2024",
+   "site": "chongqing",
+   "link": "ccpc/10th/chongqing",
+   "label": "CCPC chongqing 2024",
+   "field": 278,
+   "mainland": true,
+   "problems": 13,
+   "auc": 0.884878546112575,
+   "flat": 0,
+   "dead": 2,
+   "tie_gold": 0.07553956834532374,
+   "rejects": 1.543491301739652,
+   "diff_median": null,
+   "diff_q75": null,
+   "consistency": [
+    0.7054056991060222,
+    358
+   ],
+   "consistency_rho": 0.7054056991060222,
+   "gold_even": null,
+   "ecf_even": null,
+   "perf_gold": null,
+   "perf_bronze": null
+  },
+  {
+   "kind": "ccpc",
+   "board": "10th/zhengzhou",
+   "season": "2024",
+   "site": "zhengzhou",
+   "link": "ccpc/10th/zhengzhou",
+   "label": "CCPC zhengzhou 2024",
+   "field": 276,
+   "mainland": true,
+   "problems": 13,
+   "auc": 0.885883557934092,
+   "flat": 0,
+   "dead": 1,
+   "tie_gold": 0.08333333333333333,
+   "rejects": 2.5958029197080292,
+   "diff_median": 2860.2,
+   "diff_q75": 3369.6,
+   "consistency": [
+    0.6708203372166599,
+    401
+   ],
+   "consistency_rho": 0.6708203372166599,
+   "gold_even": null,
+   "ecf_even": null,
+   "perf_gold": 2791.6426015646784,
+   "perf_bronze": 2142.1704575579024
+  },
+  {
+   "kind": "ccpc",
+   "board": "11th/harbin",
+   "season": "2025",
+   "site": "harbin",
+   "link": "ccpc/11th/harbin",
+   "label": "CCPC harbin 2025",
+   "field": 252,
+   "mainland": true,
+   "problems": 13,
+   "auc": 0.8945551164901537,
+   "flat": 0,
+   "dead": 2,
+   "tie_gold": 0.12301587301587301,
+   "rejects": 1.7291666666666667,
+   "diff_median": null,
+   "diff_q75": null,
+   "consistency": [
+    0.687491313307486,
+    363
+   ],
+   "consistency_rho": 0.687491313307486,
+   "gold_even": null,
+   "ecf_even": null,
+   "perf_gold": null,
+   "perf_bronze": null
+  },
+  {
+   "kind": "ccpc",
+   "board": "11th/jinan",
+   "season": "2025",
+   "site": "jinan",
+   "link": "ccpc/11th/jinan",
+   "label": "CCPC jinan 2025",
+   "field": 259,
+   "mainland": true,
+   "problems": 13,
+   "auc": 0.8667511259115893,
+   "flat": 2,
+   "dead": 3,
+   "tie_gold": 0.10038610038610038,
+   "rejects": 1.9621052631578948,
+   "diff_median": 2902.1,
+   "diff_q75": 3343.4,
+   "consistency": [
+    0.6368429881079547,
+    392
+   ],
+   "consistency_rho": 0.6368429881079547,
+   "gold_even": null,
+   "ecf_even": null,
+   "perf_gold": 2786.7502622841903,
+   "perf_bronze": 2094.7002910090428
+  },
+  {
+   "kind": "ccpc",
+   "board": "11th/zhengzhou",
+   "season": "2025",
+   "site": "zhengzhou",
+   "link": "ccpc/11th/zhengzhou",
+   "label": "CCPC zhengzhou 2025",
+   "field": 250,
+   "mainland": true,
+   "problems": 13,
+   "auc": 0.9070136254202606,
+   "flat": 0,
+   "dead": 2,
+   "tie_gold": 0.08,
+   "rejects": 3.538083538083538,
+   "diff_median": 3002.3,
+   "diff_q75": 3276.1,
+   "consistency": [
+    0.7098238119485167,
+    379
+   ],
+   "consistency_rho": 0.7098238119485167,
+   "gold_even": null,
+   "ecf_even": null,
+   "perf_gold": 2780.1806856917656,
+   "perf_bronze": 2074.852835664321
+  },
+  {
+   "kind": "ccpc",
+   "board": "11th/chongqing",
+   "season": "2025",
+   "site": "chongqing",
+   "link": "ccpc/11th/chongqing",
+   "label": "CCPC chongqing 2025",
+   "field": 258,
+   "mainland": true,
+   "problems": 13,
+   "auc": 0.8627090961050337,
+   "flat": 0,
+   "dead": 1,
+   "tie_gold": 0.08914728682170543,
+   "rejects": 1.7931654676258992,
+   "diff_median": 2610.8,
+   "diff_q75": 3215.4,
+   "consistency": [
+    0.7398640534398983,
+    403
+   ],
+   "consistency_rho": 0.7398640534398983,
+   "gold_even": null,
+   "ecf_even": null,
+   "perf_gold": 2808.377872267216,
+   "perf_bronze": 2110.923625896679
+  }
+ ],
+ "compare": {
+  "auc": {
+   "icpc": 0.8891998870162633,
+   "ccpc": 0.8886207381322343,
+   "diff": 0.0005791488840289905,
+   "n": [
+    18,
+    12
+   ],
+   "lo": -0.012620421287245304,
+   "hi": 0.013793857397482737
+  },
+  "flat": {
+   "icpc": 0.7777777777777778,
+   "ccpc": 0.5,
+   "diff": 0.2777777777777778,
+   "n": [
+    18,
+    12
+   ],
+   "lo": -0.2222222222222222,
+   "hi": 0.7777777777777779
+  },
+  "dead": {
+   "icpc": 1.8888888888888888,
+   "ccpc": 1.75,
+   "diff": 0.13888888888888884,
+   "n": [
+    18,
+    12
+   ],
+   "lo": -0.33333333333333326,
+   "hi": 0.6388888888888888
+  },
+  "tie_gold": {
+   "icpc": 0.07793316980929305,
+   "ccpc": 0.08681717680539015,
+   "diff": -0.008884006996097107,
+   "n": [
+    18,
+    12
+   ],
+   "lo": -0.020893384579711162,
+   "hi": 0.0037713566105707585
+  },
+  "rejects": {
+   "icpc": 2.3195758802488387,
+   "ccpc": 2.078058902114933,
+   "diff": 0.2415169781339057,
+   "n": [
+    18,
+    12
+   ],
+   "lo": -0.08164948645299412,
+   "hi": 0.5177676246486226
+  },
+  "consistency_rho": {
+   "icpc": 0.7176645434650472,
+   "ccpc": 0.71842476223649,
+   "diff": -0.0007602187714428332,
+   "n": [
+    17,
+    12
+   ],
+   "lo": -0.03221565051679102,
+   "hi": 0.031100572599217884
+  },
+  "diff_median": {
+   "icpc": 2652.9083333333333,
+   "ccpc": 2767.6666666666665,
+   "diff": -114.75833333333321,
+   "n": [
+    12,
+    6
+   ],
+   "lo": -246.87666666666627,
+   "hi": 15.877499999999541
+  },
+  "diff_q75": {
+   "icpc": 3172.8416666666667,
+   "ccpc": 3243.15,
+   "diff": -70.3083333333334,
+   "n": [
+    12,
+    6
+   ],
+   "lo": -192.7462499999992,
+   "hi": 53.26624999999988
+  }
+ },
+ "associations": {
+  "auc": [
+   0.16898954703832755,
+   0.29825,
+   41
+  ],
+  "flat": [
+   0.07909407665505229,
+   0.60725,
+   41
+  ],
+  "dead": [
+   -0.004878048780487806,
+   0.98,
+   41
+  ],
+  "tie_gold": [
+   -0.3855400696864112,
+   0.01275,
+   41
+  ],
+  "rejects": [
+   0.07613240418118468,
+   0.644,
+   41
+  ],
+  "field": [
+   -0.37299651567944264,
+   0.01575,
+   41
+  ]
+ },
+ "pooled_even": {
+  "gold": 0.0929438912063428,
+  "silver+": 0.3575329369036356,
+  "medal": 0.7996924242507295,
+  "ecf_line": 0.22820682383262628
+ },
+ "mirror_offset": {
+  "bands": [
+   {
+    "lo": 0,
+    "hi": 2200,
+    "n": 622,
+    "diff": -214.07657799361087
+   },
+   {
+    "lo": 2200,
+    "hi": 2400,
+    "n": 595,
+    "diff": -227.68121946664843
+   },
+   {
+    "lo": 2400,
+    "hi": 2600,
+    "n": 512,
+    "diff": -174.9055750913932
+   },
+   {
+    "lo": 2600,
+    "hi": 2800,
+    "n": 343,
+    "diff": -151.94007556119897
+   },
+   {
+    "lo": 2800,
+    "hi": 4000,
+    "n": 291,
+    "diff": -82.86421391367357
+   }
+  ],
+  "n": 2363,
+  "diff": -183.83687842058626
+ }
+}

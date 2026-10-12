@@ -686,8 +686,9 @@ same season's ICPC EC regionals by school and ≥ 2 shared members. Hong Kong
 boards are linked by pinyin. That gives 4,050 mainland pairs for 2023–2025.
 The report shows ranks, percentiles and medals only, so it spoils no contest.
 
-- **A CCPC medal is about one notch harder than an ICPC medal** for the same
-  teams. CCPC gold → ICPC gold 71%. CCPC silver → ICPC silver or better 75%
+- **A CCPC silver or bronze is harder than the ICPC one; gold is about
+  equal** (a team at the CCPC gold line has even odds of ICPC gold). CCPC
+  gold → ICPC gold 71%. CCPC silver → ICPC silver or better 75%
   and rank ≤ 75 (the EC-Final line) 57%. CCPC bronze → ICPC medal 80% and
   rank ≤ 75 19%. A CCPC medal predicts better than a medal at another ICPC
   regional (ICPC gold → gold 61%).
@@ -701,6 +702,41 @@ The report shows ranks, percentiles and medals only, so it spoils no contest.
   onsite form.
 
 Details: `details.md` (2026-10-12 entry).
+
+### ICPC regionals vs CCPC stations: medal difficulty and problem quality (2026-10-12)
+
+```bash
+python3 scripts/contest_quality.py   # writes output/contest_quality.{md,json}
+```
+
+The 44 onsite boards: 28 ICPC EC regionals and 16 CCPC stations, 2022–2025.
+Everything is reported per contest, never per problem, so no set is spoiled.
+
+- **Medals, measured with the same teams.** A team at the CCPC gold line has
+  even odds of gold at an average mainland regional. Three regionals were
+  clearly harder: Shenyang 2024 needed about a top-6% CCPC finish, Shanghai
+  2025 about top 7%, Chengdu 2025 about top 8%. Xi'an and Shenyang 2025 were
+  easier.
+- **Rank ≤ 75 (the EC-Final line)** was hardest at the 434–444-team fields:
+  Kunming 2024, Wuhan 2025 and Hangzhou 2023.
+- **Gold lines in CF-equivalent performance**, within a season: Shenyang
+  2024 2921, Hong Kong 2024 2913 and Chengdu 2025 2898 top the list.
+- **Mirror check.** CCPC sets exist only as UCup mirrors. There the same
+  teams read about 180 lower than on onsite ICPC boards, so CCPC
+  performance lines are not comparable with ICPC ones.
+- **Problem difficulty**: CCPC sets rate ~115 higher at the median problem
+  (2024–2025). This is not significant, and those ratings also come from
+  mirrors.
+- **Quality, from standings only.** Five measures: discrimination, problems
+  nobody solved, ties at the gold line, rejected runs per accepted run, and
+  ranking consistency with the same teams' other contests. ICPC and CCPC are
+  indistinguishable on all of them.
+  - CCPC Harbin 2024 is the cleanest set.
+  - A crowded gold line goes with less consistent rankings (suggestive:
+    p = .013 before multiple-testing correction).
+  - Standings cannot show originality, statement clarity or test strength.
+
+Details: `details.md` (2026-10-12, second entry).
 
 ### Interactive viewer
 

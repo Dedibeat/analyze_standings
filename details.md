@@ -5849,3 +5849,138 @@ CCPC invitationals and provincials, and the girls' and vocational contests.
 Run (~10 s once the boards are cached; on Windows set `PYTHONUTF8=1`):
 `python scripts/ccpc_icpc_medals.py --board 11th/jinan --solved 4 --penalty 484`.
 Tests: `python -m unittest tests.test_ccpc_icpc_medals`.
+
+## ICPC regionals vs CCPC stations: medal difficulty and problem quality (2026-10-12)
+
+**Request.** Are some hard regionals harder than CCPC, and what about problem
+quality? No solution spoilers. As before, unseen sets get no problem-level
+detail: every number here is per contest (no labels, names, techniques or
+per-problem results).
+
+**Data** (`scripts/contest_quality.py` → `output/contest_quality.{md,json}`).
+- **Boards.** 44 onsite XCPCIO boards: the 28 ICPC EC regionals of 2022–2025
+  and the 16 CCPC stations. Official teams with ≥ 1 solve ("field").
+- **Cache.** The ICPC `run.json` files were not cached on this machine. They
+  were downloaded into the git-ignored cache.
+- **Boards are final.** No board has frozen or pending runs. The 47th ICPC and
+  8th CCPC boards report every failure as `REJECTED`, compile errors included.
+
+**1. ICPC medals measured against CCPC (same teams).**
+- **Method.** Linked pairs as in the CCPC medal entry above (mainland
+  2023–2025). A logistic in logit CCPC percentile, with the pooled slope and
+  each regional's own intercept. The result is the CCPC percentile at which a
+  team has even odds at that regional; 90% intervals come from the intercept's
+  Fisher SE (team clustering ignored, so slightly narrow).
+- **Pooled even odds vs the CCPC medal lines (0.10 / 0.30 / 0.60):** ICPC
+  gold 0.093, silver or better 0.358, any medal 0.800; rank ≤ 75 at 0.228.
+- **Correction to the entry above.** ICPC gold is about as hard as CCPC gold:
+  a team right at the CCPC gold line has ~47% chance of ICPC gold. ICPC silver
+  is easier than CCPC silver, and ICPC bronze much easier. The "one notch" is
+  in silver and bronze, not gold.
+- **Gold harder than a CCPC gold** (interval below 0.10):
+
+  | regional | even odds (90%) | ≈ rank at a 260-team station |
+  |---|---|---|
+  | Shenyang 2024 | 0.059 (0.046–0.076) | 15 |
+  | Shanghai 2025 | 0.070 (0.054–0.090) | 18 |
+  | Chengdu 2025 | 0.077 (0.061–0.098) | 20 |
+
+- **Easier:** Xi'an 2025 0.151 (0.125–0.181) and Shenyang 2025 0.129
+  (0.104–0.158). The other 12 regionals (0.087–0.105) are within noise of the
+  CCPC gold line.
+- **Rank ≤ 75** is hardest at the largest fields: Kunming 2024 0.155, Wuhan
+  2025 0.166 and Hangzhou 2023 0.180 (434–444 teams). Easiest are Xi'an 2025
+  and Shenyang 2023 at ~0.30, which is the CCPC silver line.
+- **Not covered:** Xi'an 2023 (its board lists members for 2 of 418 teams),
+  the 2022 season, and Hong Kong / Macau.
+
+**2. Medal lines in CF-equivalent performance.**
+- **Method.** The last gold / bronze medallist's (solved, penalty) is placed in
+  the contest's QOJ board in the joint fit (`performance_fit`), as the
+  virtual calculator does.
+- **ICPC, within a season:**
+  - 2024: Shenyang 2921, Hong Kong 2913, Shanghai 2863, Hangzhou 2852, Nanjing
+    2819, Kunming 2807, Chengdu 2780.
+  - 2025: Chengdu 2898, Hong Kong 2858, Wuhan 2848, Xi'an 2828, Shanghai 2821,
+    Nanjing 2778, Shenyang 2755.
+- **2022–2023 lines sit ~150 lower** (2023: 2601–2724, Macau 2775). Field
+  growth and the fit's scale are not separated.
+- **Agreement with the even odds is loose.** Spearman is −0.30 over 17
+  regionals; the expected sign is negative. Both measures put Shenyang 2024 and
+  Chengdu 2025 among the hardest. Xi'an 2025 disagrees: easy by even odds,
+  2828 by performance.
+
+**Mirror check (new).**
+- **The gap.** CCPC sets are in the fit only as UCup mirrors, while ICPC
+  boards hold the onsite teams. For the same teams in the same season (2,363
+  linked pairs with both sets in the fit), the CCPC result placed on the mirror
+  reads 184 lower than the ICPC result on its onsite board. Banded by the mean
+  of the two (so no regression to the mean), the gap is −83 above 2800 and
+  −150 to −230 below.
+- **Cause unknown.** The mirror field may read differently from an onsite
+  field, or teams may genuinely play below their ICPC level at CCPC; these
+  data cannot separate the two.
+- **Consequences.**
+  - CCPC performance lines (gold 2765–2811, bronze 2070–2142 in 2024–2025)
+    cannot be compared with ICPC lines.
+  - Any comparison of a mirror-board performance with onsite-board lines
+    carries this offset. That includes the 2026-10-11 Jinan targets, where it
+    is partly offset by regression to the mean. The linked-team mapping (the
+    CCPC medal entry above) avoids both.
+
+**3. Problem difficulty** (CF rating of the set's median / upper-quartile problem).
+- **CCPC vs ICPC (2024–2025, the seasons with CCPC ratings):** CCPC 2768 /
+  3243, ICPC 2653 / 3173. The differences, −115 (−247 … +16) and −70, are
+  not significant, and the CCPC ratings also come from mirrors.
+- **Hardest median problem:** CCPC Zhengzhou 2025 3002, CCPC Jinan 2025 2902,
+  ICPC Shanghai 2024 2898.
+- **Easiest:** ICPC Chengdu 2025 2429 and Xi'an 2022 2253.
+
+**4. Problem quality, from the onsite standings.**
+- **Measures.**
+  - Mean per-problem discrimination: the AUC of the rest score, solvers vs
+    non-solvers. Ties count half, so it is read relatively.
+  - "Flat" problems: AUC < 0.80, about the lowest 10%.
+  - Problems no official team solved.
+  - The share of the field on the gold line's solve count.
+  - Rejected runs per accepted run.
+  - Consistency: Spearman with the same teams' percentiles at the season's
+    other contests.
+- **ICPC = CCPC on every measure** (2023–2025, 18 vs 12 contests; no 90%
+  interval excludes zero):
+
+  | measure | ICPC | CCPC |
+  |---|---|---|
+  | discrimination | 0.889 | 0.889 |
+  | flat problems per set | 0.8 | 0.5 |
+  | unsolved problems per set | 1.9 | 1.8 |
+  | share of field at the gold line's solve count | 7.8% | 8.7% |
+  | rejected runs per accepted run | 2.32 | 2.08 |
+  | consistency | 0.72 | 0.72 |
+
+- **Cleanest ladders:** CCPC Harbin 2024 (0.930, no flat problem, 5% at the
+  gold line), then Hong Kong 2025, Jinan 2023, Xi'an 2025, Hangzhou 2024 and
+  Chengdu 2025 (0.916–0.925).
+- **Weakest:** CCPC Guangzhou 2022 (0.839, 4 flat), Shenyang 2025 (0.844),
+  Wuhan 2025 (0.859, 3 flat), then Shanghai 2025, Xi'an 2023, CCPC Chongqing
+  2025, CCPC Qinhuangdao 2023 and CCPC Jinan 2025 (0.862–0.867).
+- **The signals barely agree.** Across 41 contests, consistency goes with only
+  two measures, neither surviving Holm over six tests (≈ .08):
+  - the crowd at the gold line (ρ −0.39, permutation p = .013);
+  - field size (ρ −0.37, p = .016).
+
+  Discrimination, flat and unsolved counts and the rejection rate show
+  nothing.
+- **Not measurable from standings:** originality, statement clarity, test
+  strength and how instructive a set is. Write-ups that judge these discuss
+  solutions, so none were read.
+
+**Unseen CCPC sets on QOJ (set-level only).**
+- Harbin 2024 (QOJ 1817) has the cleanest ladder.
+- Jinan 2024 (1843) and Zhengzhou 2024 (1873) are average.
+- Zhengzhou 2025 (2661) is the highest-rated set, with the most rejected runs
+  (3.54 per accepted run).
+- Chongqing 2025 (3387) discriminates below average but has no flat problem.
+
+Run (~15 s once boards are cached; on Windows set `PYTHONUTF8=1`):
+`python scripts/contest_quality.py`. Tests: `python -m unittest tests.test_contest_quality`.
