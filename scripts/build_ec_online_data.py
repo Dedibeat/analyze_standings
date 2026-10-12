@@ -338,9 +338,9 @@ def _text(value):
     return str(value or "")
 
 
-def regional_standings(board):
-    base = f"https://board.xcpcio.com/data/icpc/{board}/"
-    cache = CACHE / "xcpcio" / board.replace("/", "_")
+def regional_standings(board, kind="icpc"):
+    base = f"https://board.xcpcio.com/data/{kind}/{board}/"
+    cache = CACHE / "xcpcio" / (board if kind == "icpc" else f"{kind}/{board}").replace("/", "_")
     config = json.loads(fetch(base + "config.json", cache / "config.json").read_text())
     teams = json.loads(fetch(base + "team.json", cache / "team.json").read_text())
     runs = json.loads(fetch(base + "run.json", cache / "run.json").read_text())
@@ -360,7 +360,7 @@ def regional_standings(board):
     for (tid, _), cell in by_cell.items():
         wrong = 0
         for r in cell:
-            if r["status"] == "ACCEPTED":
+            if r["status"] in ("ACCEPTED", "CORRECT"):
                 minutes = r["timestamp"] // per_second // 60
                 score[tid][0] += 1
                 score[tid][1] += minutes * 60 + wrong * penalty
@@ -374,7 +374,7 @@ def regional_standings(board):
         group = t.get("group")
         official = "official" in group if group is not None else bool(t.get("official"))
         girl = ("girl" in group) if group is not None else bool(t.get("girl"))
-        members = [_text(m.get("name") if isinstance(m, dict) else m) for m in t.get("members") or []]
+        members = [_text(m.get("name", m) if isinstance(m, dict) else m) for m in t.get("members") or []]
         solved, pen = score[tid]
         rows.append(dict(team_id=tid, team=_text(t.get("name")),
                          school=_text(t.get("organization") or orgs.get(t.get("organization_id"), "")),
