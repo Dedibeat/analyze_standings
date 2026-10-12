@@ -11,17 +11,20 @@ How hard the medals are:
 
 * ``gold_even`` (mainland ICPC 2023-2025): the CCPC percentile at which a team
   has even odds of gold at this regional, from the linked CCPC/ICPC pairs of
-  ``ccpc_icpc_medals`` (pooled slope, the regional's own intercept).  The CCPC
-  gold line is at percentile 0.10, so a value below 0.10 means this regional's
-  gold is harder than a CCPC gold.  ``ecf_even``: the same for rank <= 75.
+  ``ccpc_icpc_medals`` (pooled slope, the regional's own intercept).
+  ``ecf_even``: the same for rank <= 75.  Benchmark (``pooled_even_icpc``):
+  with one ICPC regional's percentile, even odds of gold at another sit near
+  0.07, well inside that regional's own 0.10 gold line (regression to the
+  mean).  So a regional whose gold is as hard as a CCPC gold has
+  ``gold_even`` near that benchmark, and a larger value means an easier gold.
   The interval is from the intercept's Fisher standard error.
 * ``perf_gold`` / ``perf_bronze``: the CF-equivalent performance of the last
   gold / bronze medallist.  Their (solved, penalty) is placed in the contest's
   QOJ board in the joint fit (``export_virtual_calc.performance_fit``), as the
   virtual calculator does.  Only for contests with a QOJ board in the fit.
-  ICPC boards hold the onsite teams; a CCPC set only has a UCup mirror, which
-  reads lower for the same teams (``mirror_offset``), so lines are compared
-  ICPC with ICPC and CCPC with CCPC.
+  ICPC boards hold the onsite teams; a CCPC set only has a UCup mirror.  The
+  same teams read the same on both (``mirror_offset``: CCPC mirror minus ICPC
+  board, same season, about 0), so the lines are comparable.
 
 How hard the problems are: ``diff_median`` / ``diff_q75``, the CF difficulty
 (``output/problem_ratings_calibrated.json``) of the set's median and
@@ -58,6 +61,7 @@ import numpy as np
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 sys.path.insert(0, os.path.dirname(__file__))
 from arch_a import elo  # noqa: E402
+from arch_a.load import dedupe_contests  # noqa: E402
 from arch_b import export_virtual_calc as ev  # noqa: E402
 from arch_b.joint import TAGGED, UCUP  # noqa: E402
 import build_ec_online_data as bd  # noqa: E402
@@ -193,14 +197,15 @@ def even_odds_by_regional(pairs):
 def performance(cids):
     """perf(QOJ id, solved, penalty minutes): CF performance of that result placed in the QOJ board."""
     _, theta, to_cf, row_lookup = ev.performance_fit()
-    boards = {}
+    raw = []
     for path in [TAGGED] + list(UCUP):
         with open(path, encoding="utf-8") as f:
-            for c in json.load(f):
-                if c["contest_id"] in cids:
-                    rows = [(s["total_solved"], s["penalty_seconds"], row_lookup[(c["contest_id"], i)][0])
-                            for i, s in enumerate(c["standings"]) if (c["contest_id"], i) in row_lookup]
-                    boards[c["contest_id"]] = tuple(np.array(x) for x in zip(*rows))
+            raw += [c for c in json.load(f) if c["contest_id"] in cids]
+    boards = {}
+    for c in dedupe_contests(raw):  # the fit's copy (tagged.json first): row_lookup indexes its rows
+        rows = [(s["total_solved"], s["penalty_seconds"], row_lookup[(c["contest_id"], i)][0])
+                for i, s in enumerate(c["standings"]) if (c["contest_id"], i) in row_lookup]
+        boards[c["contest_id"]] = tuple(np.array(x) for x in zip(*rows))
     cache = {}
 
     def perf(cid, solved, penalty):
@@ -254,18 +259,18 @@ def markdown(res):
            "CCPC percentile at which a team has even odds of gold / rank <= 75 at the regional, with a 90% "
            "interval. CCPC lines: gold 0.10, silver 0.30, bronze 0.60. Pooled over all mainland regionals "
            f"2023-2025: gold {pooled['gold']:.3f}, rank <= 75 {pooled['ecf_line']:.3f}, silver or better "
-           f"{pooled['silver+']:.3f}, any medal {pooled['medal']:.3f}. Below 0.10 = this regional's gold is "
-           "harder than a CCPC gold.", "",
+           f"{pooled['silver+']:.3f}, any medal {pooled['medal']:.3f}. Benchmark: with one ICPC regional's "
+           f"percentile, even odds of gold at another regional sit at {res['pooled_even_icpc']['gold']:.3f} "
+           "(not at its own 0.10 line: teams regress to the mean). So a regional whose gold is as hard as a "
+           f"CCPC gold has a value near {res['pooled_even_icpc']['gold']:.3f}; above it, the gold is easier.", "",
            "| regional | field | gold even | rank <= 75 even |", "|---|---|---|---|"]
     for r in sorted((r for r in rows if r["gold_even"]), key=lambda r: r["gold_even"][0]):
         out.append(f"| {r['label']} | {r['field']} | {even(r['gold_even'])} | {even(r['ecf_even'])} |")
     out += ["", "## Medal lines in CF-equivalent performance, and problem difficulty", "",
             "Performance of the last gold / bronze medallist, its (solved, penalty) placed in the contest's "
             "QOJ board in the joint fit. ICPC boards hold the onsite teams; CCPC sets only have a UCup mirror, "
-            "which reads lower for the same teams (next table), so compare ICPC with ICPC and CCPC with CCPC, "
-            "within a season (2022-2023 lines sit ~150 below 2024-2025; field growth and the fit's scale "
-            "are not separated). Problem difficulty: CF rating of the "
-            "set's median and upper-quartile problem.", "",
+            "on which the same teams read the same as on the onsite boards (next table). Problem difficulty: "
+            "CF rating of the set's median and upper-quartile problem.", "",
             "| season | contest | field | perf gold | perf bronze | median problem | q75 problem |",
             "|---|---|---|---|---|---|---|"]
     for r in sorted((r for r in rows if r["perf_gold"]), key=lambda r: (r["season"], r["kind"], -r["perf_gold"])):
@@ -304,8 +309,8 @@ def markdown(res):
 
 def compare(rows, seed=2026, n_boot=4000):
     """ICPC (mainland) minus CCPC means, bootstrap over contests, over the 2023-2025 seasons in which the
-    CCPC side has the metric (problem difficulty: 2024-2025).  Performance lines are left out: the CCPC
-    mirror path reads lower than the onsite boards."""
+    CCPC side has the metric (problem difficulty: 2024-2025).  Performance lines are left out: CCPC has
+    them only for the six sets with a QOJ mirror."""
     rng = np.random.default_rng(seed)
     out = {}
     for k in ("auc", "flat", "dead", "tie_gold", "rejects", "consistency_rho", "diff_median", "diff_q75"):
@@ -368,6 +373,8 @@ def main():
                                             for t in ("gold", "bronze"))
     res = dict(contests=rows, compare=compare(rows), associations=associations(rows),
                pooled_even={k: 1 / (1 + math.exp(w[0] / w[1])) for k, (w, _) in cm.curve(model_pairs, n_boot=0).items()},
+               pooled_even_icpc={k: 1 / (1 + math.exp(w[0] / w[1])) for k, (w, _) in cm.curve(
+                   [(a, b) for a, b in cm.icpc_pairs(icpc) if a["season"] in cm.og.MODEL_SEASONS], n_boot=0).items()},
                mirror_offset=mirror_offset(pairs, perf))
     OUT.with_suffix(".json").write_text(json.dumps(res, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
     OUT.with_suffix(".md").write_text(markdown(res), encoding="utf-8")

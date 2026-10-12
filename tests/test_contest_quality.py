@@ -1,6 +1,12 @@
+import json
+import os
 import sys
+import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
+
+import numpy as np
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
@@ -60,6 +66,21 @@ class ContestQualityTest(unittest.TestCase):
         out = cq.compare(rows, n_boot=10)
         self.assertEqual(out["diff_median"]["diff"], 1.0)  # 2023 ICPC left out: no CCPC difficulty that season
         self.assertEqual(out["auc"]["n"], (6, 6))
+
+    def test_performance_places_a_result_in_the_fits_copy_of_a_repeated_contest(self):
+        def board(n):  # solved n, n-1, ..., 1; one minute more penalty per row
+            return {"contest_id": 7, "problems": [],
+                    "standings": [{"total_solved": n - i, "penalty_seconds": 60 * i} for i in range(n)]}
+        theta = np.array([2000.0, 1800.0, 1600.0, 1400.0])
+        with tempfile.TemporaryDirectory() as d:
+            tagged, ucup = os.path.join(d, "tagged.json"), os.path.join(d, "ucup.json")
+            for path, n in ((tagged, 4), (ucup, 2)):  # the UCup copy of the same contest is shorter
+                with open(path, "w", encoding="utf-8") as f:
+                    json.dump([board(n)], f)
+            with mock.patch.object(cq, "TAGGED", tagged), mock.patch.object(cq, "UCUP", [ucup]),                     mock.patch.object(cq.ev, "performance_fit",
+                                      lambda: (None, theta, lambda t: t, {(7, i): (i, 0) for i in range(4)})):
+                perf = cq.performance({7})
+        self.assertEqual(perf(7, 1, 3), cq.elo.performance_rating(4, theta))  # last of the four tagged rows
 
 
 if __name__ == "__main__":

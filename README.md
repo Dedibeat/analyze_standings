@@ -686,8 +686,10 @@ same season's ICPC EC regionals by school and ≥ 2 shared members. Hong Kong
 boards are linked by pinyin. That gives 4,050 mainland pairs for 2023–2025.
 The report shows ranks, percentiles and medals only, so it spoils no contest.
 
-- **A CCPC silver or bronze is harder than the ICPC one; gold is about
-  equal** (a team at the CCPC gold line has even odds of ICPC gold). CCPC
+- **A CCPC medal is harder than the ICPC one at every tier, gold included.**
+  A team at the CCPC gold line has a 47% chance of ICPC gold. A team at an
+  ICPC gold line has 34% at another regional. An average ICPC gold line is
+  worth about CCPC rank 35 of 260. CCPC
   gold → ICPC gold 71%. CCPC silver → ICPC silver or better 75%
   and rank ≤ 75 (the EC-Final line) 57%. CCPC bronze → ICPC medal 80% and
   rank ≤ 75 19%. A CCPC medal predicts better than a medal at another ICPC
@@ -712,21 +714,23 @@ python3 scripts/contest_quality.py   # writes output/contest_quality.{md,json}
 The 44 onsite boards: 28 ICPC EC regionals and 16 CCPC stations, 2022–2025.
 Everything is reported per contest, never per problem, so no set is spoiled.
 
-- **Medals, measured with the same teams.** A team at the CCPC gold line has
-  even odds of gold at an average mainland regional. Three regionals were
-  clearly harder: Shenyang 2024 needed about a top-6% CCPC finish, Shanghai
-  2025 about top 7%, Chengdu 2025 about top 8%. Xi'an and Shenyang 2025 were
-  easier.
+- **Medals, measured with the same teams.** An average ICPC gold is easier
+  than a CCPC gold. Only the hardest regionals reached CCPC gold level: by
+  linked teams Shenyang 2024, Shanghai 2025 and Chengdu 2025 (about a top
+  6–8% CCPC finish for even odds); by performance Chengdu 2025, Shenyang
+  2024 and Wuhan 2025. None was clearly harder. Xi'an and Shenyang 2025 were
+  the easiest.
 - **Rank ≤ 75 (the EC-Final line)** was hardest at the 434–444-team fields:
   Kunming 2024, Wuhan 2025 and Hangzhou 2023.
-- **Gold lines in CF-equivalent performance**, within a season: Shenyang
-  2024 2921, Hong Kong 2024 2913 and Chengdu 2025 2898 top the list.
+- **Gold lines in CF-equivalent performance:** CCPC 2765–2811 (2024–2025);
+  ICPC median about 2690. The highest ICPC lines are Chengdu 2025 2799,
+  Shenyang 2024 2779 and Wuhan 2025 2774.
 - **Mirror check.** CCPC sets exist only as UCup mirrors. There the same
-  teams read about 180 lower than on onsite ICPC boards, so CCPC
-  performance lines are not comparable with ICPC ones.
+  teams read the same as on onsite ICPC boards (+9), so the lines are
+  comparable. (A first run reported −184; that was a board-copy bug, fixed
+  the same day.)
 - **Problem difficulty**: CCPC sets rate ~115 higher at the median problem
-  (2024–2025). This is not significant, and those ratings also come from
-  mirrors.
+  (2024–2025), which is not significant.
 - **Quality, from standings only.** Five measures: discrimination, problems
   nobody solved, ties at the gold line, rejected runs per accepted run, and
   ranking consistency with the same teams' other contests. ICPC and CCPC are
@@ -737,6 +741,39 @@ Everything is reported per contest, never per problem, so no set is spoiled.
   - Standings cannot show originality, statement clarity or test strength.
 
 Details: `details.md` (2026-10-12, second entry).
+
+### CCPC findings vs the 2026 forecast and the ratings (2026-10-12)
+
+These checks used scratch queries; the only code change is the
+`contest_quality` fix. Contest-level numbers only.
+
+- **Bug fixed.** `contest_quality.performance` ranked results against the UCup
+  copy of 15 ICPC boards stored twice, overstating their lines by 70–290.
+  The −184 "mirror offset" came from this bug. A regression test covers it.
+- **The ratings pass a rating-free check.** For the same teams in the same
+  season, CCPC mirror minus ICPC board is +9 by performance and +23 by the
+  problem-implied rating (shipped DE ratings).
+- **Gold difficulty per regional** (16 mainland regionals, within season):
+  - The online-rank and CCPC-percentile measures, which use no ratings,
+    agree with each other at Spearman 0.80.
+  - The fit's gold-line performance agrees with them at 0.74–0.81.
+  - The CF medal bar agrees with them at only 0.54–0.56.
+  - The bar's largest misses are Shanghai 2025 and Nanjing 2024 (bars too
+    low) and Xi'an 2025 and Kunming 2024 (bars too high).
+  - So `medal_predict`'s "Shanghai / Nanjing are easy gold cities" is not
+    supported. Site difficulty does not repeat by city, so `online_gold`
+    remains the 2026 forecast.
+- **An earlier same-season CCPC result as a forecast update.** It is worth
+  about as much as an earlier ICPC regional:
+  - In 2024 it improved held-out log loss for the 916 teams that had one
+    (EC-Final line −0.021).
+  - In 2025 it did nothing; only 208 teams had one.
+  - Not shipped.
+- **NUM-R^3, what-if.** Online plus members' history gives a ~10% chance of
+  rank ≤ 75. With the Jinan virtual's CCPC place (0.309) counted as onsite
+  it is ~14%, and with a real top-15% CCPC finish ~24%.
+
+Details: `details.md` (2026-10-12, third entry).
 
 ### Interactive viewer
 
