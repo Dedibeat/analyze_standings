@@ -274,8 +274,9 @@ def sigmoid(z):
     return 1 / (1 + np.exp(-np.asarray(z, float)))
 
 
-def cf_gold_bars():
-    """(season, site) -> the rating fit's CF gold bar (output/medal_badges.json)."""
+def cf_gold_bars(line=False):
+    """(season, site) -> the rating fit's CF gold bar (output/medal_badges.json),
+    or with ``line`` its gold line: the CF performance of the last gold team."""
     path = OUT / "medal_badges.json"
     boards = json.loads((ROOT / "data" / "xcpcio_ea_official.json").read_text())
     season_of = {"47th": "2022", "48th": "2023", "49th": "2024", "50th": "2025"}
@@ -284,7 +285,8 @@ def cf_gold_bars():
         link = boards.get(str(c["contest_id"]), {}).get("board_link", "")
         parts = link.strip("/").split("/")  # icpc/<season>/<site>
         if len(parts) == 3 and parts[1] in season_of:
-            bars[(season_of[parts[1]], parts[2])] = c["medal_bar_cf"]["gold"]
+            bars[(season_of[parts[1]], parts[2])] = (c["cutoff_teams"]["gold"]["performance_cf"] if line
+                                                     else c["medal_bar_cf"]["gold"])
     return bars
 
 
@@ -383,7 +385,9 @@ def backtest(rows, seed=0):
 
 def contest_difficulty(rows):
     """Per regional: online rank at which gold is a coin flip (shared slope,
-    per-contest intercept), next to the rating fit's CF gold bar."""
+    per-contest intercept), next to the rating fit's CF gold line and gold bar.
+    The fit's side of the disagreement is the line. The bar is a problem
+    threshold and tracks gold difficulty less well (details.md, 2026-10-13)."""
     contests = sorted({(r["season"], r["site"]) for r in rows})
     col = {c: i for i, c in enumerate(contests)}
     X = []
@@ -392,21 +396,24 @@ def contest_difficulty(rows):
         onehot[col[(r["season"], r["site"])]] = 1.0
         X.append(onehot + [r["x"]])
     w = logistic(X, [r["gold"] for r in rows], l2=1e-4)
-    slope, bars = w[-1], cf_gold_bars()
+    slope, bars, lines = w[-1], cf_gold_bars(), cf_gold_bars(line=True)
     out = [dict(season=s, site=site, online_rank_for_even_gold=round(math.exp(w[col[(s, site)]] / slope), 1),
-                cf_gold_bar=bars.get((s, site)),
+                cf_gold_line=lines.get((s, site)), cf_gold_bar=bars.get((s, site)),
                 linked_teams=sum(1 for r in rows if (r["season"], r["site"]) == (s, site)))
            for s, site in contests]
-    have = [o for o in out if o["cf_gold_bar"] is not None]
+    have = [o for o in out if o["cf_gold_line"] is not None]
     a, b = np.polyfit([math.log(o["online_rank_for_even_gold"]) for o in have],
-                      [o["cf_gold_bar"] for o in have], 1)
-    for o in have:  # CF bar the online evidence implies, and the disagreement
-        o["cf_bar_implied_by_online"] = round(a * math.log(o["online_rank_for_even_gold"]) + b, 1)
-        o["fit_minus_online"] = round(o["cf_gold_bar"] - o["cf_bar_implied_by_online"], 1)
-    ranks = [np.argsort(np.argsort(v)) for v in
-             ([o["online_rank_for_even_gold"] for o in have], [o["cf_gold_bar"] for o in have])]
-    rho = float(np.corrcoef(*ranks)[0, 1])
-    return {"slope": round(float(slope), 3), "spearman_rank_vs_bar": round(rho, 3),
+                      [o["cf_gold_line"] for o in have], 1)
+    for o in have:  # CF gold line the online evidence implies, and the disagreement
+        o["cf_line_implied_by_online"] = round(a * math.log(o["online_rank_for_even_gold"]) + b, 1)
+        o["fit_minus_online"] = round(o["cf_gold_line"] - o["cf_line_implied_by_online"], 1)
+
+    def spearman(key):
+        ranks = [np.argsort(np.argsort(v)) for v in
+                 ([o["online_rank_for_even_gold"] for o in have], [o[key] for o in have])]
+        return round(float(np.corrcoef(*ranks)[0, 1]), 3)
+    return {"slope": round(float(slope), 3), "spearman_rank_vs_line": spearman("cf_gold_line"),
+            "spearman_rank_vs_bar": spearman("cf_gold_bar"),
             "cf_points_per_log_rank": round(float(a), 1), "contests": out}
 
 
@@ -488,14 +495,18 @@ def markdown(result):
                      f"{m['delta_ci95'][1]:+.4f}] | {m['brier']:.4f} |")
     cd = result["contest_difficulty"]
     L += ["", "## Contest difficulty: online evidence vs the rating fit", "",
-          f"Spearman(online rank for an even gold chance, CF gold bar) = {cd['spearman_rank_vs_bar']} "
-          "(negative = agreement: harder contests need a better online rank and have a higher bar).", "",
-          "| season | site | online rank for 50% gold | CF gold bar | bar implied by online | fit − online |",
-          "|---|---|---|---|---|---|"]
+          f"Spearman(online rank for an even gold chance, CF gold line) = {cd['spearman_rank_vs_line']}; "
+          f"with the CF gold bar it is {cd['spearman_rank_vs_bar']} "
+          "(negative = agreement: harder contests need a better online rank and have a higher line).", "",
+          "The gold line is the last gold team's CF performance. The bar is the problem difficulty the gold-cutoff "
+          "teams solve at 50%: it sets the badges, but it tracks gold difficulty less well, so fit − online is "
+          "read on the line.", "",
+          "| season | site | online rank for 50% gold | CF gold line | line implied by online | fit − online | CF gold bar |",
+          "|---|---|---|---|---|---|---|"]
     for o in cd["contests"]:
         L.append(f"| {o['season']} | {o['site']} | {o['online_rank_for_even_gold']} | "
-                 f"{o['cf_gold_bar'] or '—'} | {o.get('cf_bar_implied_by_online', '—')} | "
-                 f"{o.get('fit_minus_online', '—')} |")
+                 f"{o['cf_gold_line'] or '—'} | {o.get('cf_line_implied_by_online', '—')} | "
+                 f"{o.get('fit_minus_online', '—')} | {o['cf_gold_bar'] or '—'} |")
     q = result["quota"]
     L += ["", "## Quota entrants (not admitted by online rank bands)", "",
           f"Pooled gold rate of quota entrants relative to band teams: rho = {q['rho']}.", "",

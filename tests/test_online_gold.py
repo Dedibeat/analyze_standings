@@ -1,8 +1,11 @@
+import math
 import unittest
+from unittest import mock
 
 import numpy as np
 
 from arch_b.online_gold import (
+    contest_difficulty,
     load,
     logistic,
     online_strengths,
@@ -56,6 +59,24 @@ class QuotaRhoTest(unittest.TestCase):
         _, rho = quota_split(self.data, self.strengths, ["2023", "2024"])
         self.assertGreater(rho, 0.2)
         self.assertLess(rho, 0.7)
+
+
+class ContestDifficultyTest(unittest.TestCase):
+    def test_fit_minus_online_is_read_on_the_gold_line_not_the_bar(self):
+        rng = np.random.default_rng(1)
+        rows = []
+        for site, even in (("a", 40.0), ("b", 80.0), ("c", 160.0)):  # online rank with a 50% gold chance
+            x = rng.normal(-math.log(even), 1.0, 4000)
+            p = 1 / (1 + np.exp(-2.0 * (x + math.log(even))))
+            rows += [dict(season="2025", site=site, x=v, gold=int(u < q)) for v, u, q in zip(x, rng.random(4000), p)]
+        lines = {("2025", "a"): 2800.0, ("2025", "b"): 2700.0, ("2025", "c"): 2600.0}  # linear in log rank
+        bars = {("2025", "a"): 2500.0, ("2025", "b"): 2900.0, ("2025", "c"): 2700.0}
+        with mock.patch("arch_b.online_gold.cf_gold_bars", lambda line=False: lines if line else bars):
+            cd = contest_difficulty(rows)
+        for o in cd["contests"]:
+            self.assertAlmostEqual(o["fit_minus_online"], 0, delta=15)
+            self.assertEqual(o["cf_gold_bar"], bars[(o["season"], o["site"])])
+        self.assertEqual(cd["spearman_rank_vs_line"], -1.0)
 
 
 if __name__ == "__main__":

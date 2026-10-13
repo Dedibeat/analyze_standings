@@ -492,8 +492,10 @@ teams' gold rate on earlier seasons) taken out first. Trained on earlier
 seasons, online strength alone predicts held-out gold well; the rules line adds
 a small gain in both 2024 and 2025 (intervals touch zero), while per-site
 history and the rating fit's CF gold bars do not. The same data independently confirm the Shenyang
-2024→2025 swing and flag Kunming/Nanjing 2024 as the largest fit-vs-online
-disagreements. Results: `output/online_gold.md`; details in `details.md`.
+2024→2025 swing. The fit-vs-online comparison reads the fit's gold line (the
+last gold team's performance), which tracks gold difficulty better than the
+bar. Its largest disagreements are Xi'an 2023, Wuhan 2025 and Hefei 2023.
+Results: `output/online_gold.md`; details in `details.md`.
 Hong Kong/Macau are not modelled, but `arch_b.hk_link` (needs `pypinyin`)
 links their English-named teams to online results by matching roster members
 in pinyin: 79% / 77% of the 2024 / 2025 Hong Kong official teams and 25 of 28
@@ -774,6 +776,30 @@ These checks used scratch queries; the only code change is the
   it is ~14%, and with a real top-15% CCPC finish ~24%.
 
 Details: `details.md` (2026-10-12, third entry).
+
+### Bar misses and performance inflation/deflation (2026-10-13)
+
+- **Bar misses: fixed by reading the gold line.**
+  - The CF gold bar is a problem threshold, with reliability 0.61 as a gold
+    difficulty measure. The gold line (the last gold team's performance)
+    scores 0.85.
+  - `online_gold.contest_difficulty` now compares the online evidence with
+    the line. The bar stays for the badges.
+  - Shanghai 2025 goes from −118 to +24, Xi'an 2025 from +66 to +4, Kunming
+    2024 from +156 to +81, and Nanjing 2024 from −114 to −64.
+- **Inflation and deflation: measured, not fixed.**
+  - Strong teams read +33 to +62 CF higher at a 440-team than at a 300-team
+    regional.
+  - Against the problem-implied rating, EC-Final reads −73 and the EC online
+    rounds +89.
+  - Neither weakly identified rivals nor the team-vs-team curve causes this.
+    The curve is 345 in sample and 435–480 out of sample, so the shipped 400
+    stands.
+  - A field-size correction helps the gold lines only by about ±12 CF, so
+    it is not shipped.
+  - Compare performances within one contest type.
+
+Details: `details.md` (2026-10-13).
 
 ### Interactive viewer
 
