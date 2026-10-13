@@ -4,7 +4,8 @@ from types import SimpleNamespace
 import numpy as np
 
 from arch_a.fixedpoint import _performance_ratings
-from arch_b.export_virtual_calc import MIN_EVENT_FIELD, _performance_lookup, _rank_official_within_event
+from arch_b.export_virtual_calc import (MIN_EVENT_FIELD, _event_participations, _performance_lookup,
+                                        _rank_official_within_event)
 
 
 class VirtualCalculatorExportTest(unittest.TestCase):
@@ -32,6 +33,14 @@ class VirtualCalculatorExportTest(unittest.TestCase):
         alone = SimpleNamespace(team_of_row=np.arange(n_official), rank_of_row=np.arange(1, n_official + 1))
         np.testing.assert_allclose(out[n_mirror:], _performance_ratings(theta[n_mirror:], alone, [np.arange(n_official)]))
         np.testing.assert_array_equal(out[:n_mirror], rho[:n_mirror])  # mirror rows keep the whole board
+
+    def test_only_official_rows_of_a_merged_board_are_flagged_as_event_rows(self):
+        n = MIN_EVENT_FIELD + 5
+        ds = SimpleNamespace(contests=[1, 2], contest_of_row=np.repeat([0, 1], n),
+                             official_of_row=np.concatenate([np.arange(n) >= 5, np.ones(n, bool)]),
+                             participation_of_row=[(1, i) for i in range(n)] + [(2, i) for i in range(n)])
+        # contest 1 merges 5 mirror rows with its official field; contest 2 is all official
+        self.assertEqual(_event_participations(ds), {(1, i) for i in range(5, n)})
 
     def test_an_event_below_the_minimum_field_keeps_the_whole_board(self):
         n = MIN_EVENT_FIELD + 9  # MIN_EVENT_FIELD - 1 official rows

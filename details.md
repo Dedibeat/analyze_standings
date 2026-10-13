@@ -6514,3 +6514,25 @@ probabilities are unchanged). Scratch scripts are not kept. Rebuild the
 decomposition from `estimate_joint(fit_fn=model.fit)`, `_cf_map`,
 `_performance_ratings` and `problem_cf`. Rebuild the population labels from
 the standings' `team_id`.
+
+### App sync (2026-10-13 follow-up)
+
+Request: apply the fix to the app's Medals page, Contests page and
+performances (`../my-react-app`, commit `d3cd4a7`).
+- **`export_virtual_calc`:** each team in `virtual_calc.html`'s DATA carries
+  `"event": true` when its performance is ranked within its event
+  (`_event_participations`). This covers 47,761 rows in 203 of 243 contests.
+  Test: `test_only_official_rows_of_a_merged_board_are_flagged_as_event_rows`.
+- **`medal_viewer_template.html`:** the lowest-gold caption now says
+  performance is ranked among the contest's official teams, and why.
+- **In the app:**
+  - The re-exported `contest_fields` rows carry the flag.
+  - An official result on an event row shows its rank among the official
+    teams ("Rank 14 of 358 official teams", Nanjing 2024).
+  - A missing official row is inserted among the official teams.
+  - Virtual results still use the whole board and are unchanged.
+- **Checked in node over every contest against the old app code:**
+  - virtual results and official results outside event fields are unchanged;
+  - official event rows reproduce the analyzer's values.
+- **Checked on a local dev server** (throwaway account, temporary database
+  deleted). The app's DETAILS.md has the rest.

@@ -25,6 +25,9 @@ be re-fit client side, so it is sampled once here instead of re-derived in
 JS). Every real team also carries its own calibrated performance (from its
 actual rank, ``arch_a.fixedpoint._performance_ratings``) so the standings
 table shows CF-equivalent performance for real and virtual teams side by side.
+An official row of a board that also holds online mirror entries is ranked
+within its own event instead and carries ``"event": true`` (``event_field``);
+a virtual entry, like the mirror rows, is ranked on the whole board.
 The problems table is reference only and shows the shipped DE problem ratings
 (``arch_b.calibrate.problem_cf``), which are not on the scalar map used for
 performances.
@@ -95,6 +98,17 @@ def event_field(official):
     return np.ones(len(official), bool)
 
 
+def _event_participations(ds):
+    """Source participations ranked within their own event (``event_field``), not the whole board."""
+    out = set()
+    for ci in range(len(ds.contests)):
+        rows = np.where(ds.contest_of_row == ci)[0]
+        field = rows[event_field(ds.official_of_row[rows])]
+        if len(field) < len(rows):
+            out.update(ds.participation_of_row[r] for r in field)
+    return out
+
+
 def _rank_official_within_event(theta, ds, rows_by_contest, rho):
     """Re-rank each merged board's official rows within their own field (``event_field``)."""
     rho = rho.copy()
@@ -152,6 +166,7 @@ def _contests_from(ds, theta, cf_of, row_lookup, paths):
             raw.extend(json.load(f))
     raw = dedupe_contests(raw)  # match load(): drop repeated contest entries
     raw = [c for c in raw if _max_solve_seconds(c) >= MIN_SOLVE_HOURS * 3600]  # match load()
+    in_event = _event_participations(ds)
     contests = []
     for c in raw:
         cid = c["contest_id"]
@@ -172,6 +187,8 @@ def _contests_from(ds, theta, cf_of, row_lookup, paths):
                 "theta": round(float(theta[idx]), 2),
                 "performance": perf,
             })
+            if (cid, source_row) in in_event:  # performance ranked among the event's own rows
+                teams[-1]["event"] = True
         if not teams:
             continue
         teams.sort(key=lambda t: t["rank"])
