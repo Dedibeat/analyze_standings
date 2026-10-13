@@ -39,7 +39,7 @@ import os
 import numpy as np
 
 from arch_a import elo
-from arch_a.fixedpoint import _performance_ratings
+from arch_a.fixedpoint import _bisect_contest, _performance_ratings
 from arch_a.load import _max_solve_seconds, dedupe_contests, row_solved_any
 from . import model
 from .joint import PETROZ, TAGGED, UCUP, estimate_joint
@@ -57,6 +57,11 @@ OUT_DIR = os.path.join(os.path.dirname(__file__), os.pardir, "output")
 TEMPLATE = os.path.join(os.path.dirname(__file__), "virtual_calc_template.html")
 
 LOOKUP_STEP = 5.0  # CF-point granularity of the embedded to_cf sample table
+
+# Smallest official field ranked on its own when a board also holds mirror rows;
+# a smaller event keeps the whole board, since a rank among a handful of rows
+# measures nothing (eq. perf pins its first and last place to the bounds).
+MIN_EVENT_FIELD = 30
 
 
 def _cf_map(records):
@@ -78,6 +83,31 @@ def _performance_lookup(ds, rho, to_cf):
     }
 
 
+def event_field(official):
+    """Rows an official result is ranked against: the official rows when the board
+    also holds mirror rows and the official field has at least MIN_EVENT_FIELD rows,
+    else every row. Mirror entries play online and finish ~100 CF above the same
+    teams onsite, so on a merged board they push the onsite rows down by the
+    board's mirror share (details.md, 2026-10-13)."""
+    official = np.asarray(official, bool)
+    if official.sum() >= MIN_EVENT_FIELD and not official.all():
+        return official
+    return np.ones(len(official), bool)
+
+
+def _rank_official_within_event(theta, ds, rows_by_contest, rho):
+    """Re-rank each merged board's official rows within their own field (``event_field``)."""
+    rho = rho.copy()
+    for rows in rows_by_contest:
+        field = rows[event_field(ds.official_of_row[rows])]
+        if len(field) == len(rows):
+            continue
+        rank = ds.rank_of_row[field]
+        ahead = np.searchsorted(np.sort(rank), rank, "left").astype(float)  # official rows ranked above
+        rho[field] = _bisect_contest(theta[ds.team_of_row[field]], ahead, elo.LO, elo.HI, 1e-4)
+    return rho
+
+
 def performance_fit():
     """The fit team performance is measured on: ``(ds, theta, to_cf, row_lookup)``.
 
@@ -87,7 +117,9 @@ def performance_fit():
     primitive as export_viewer.py / medals.py). Keyed by the source participation
     rather than resolved team identity. Identity is intentionally shared across
     contests (and can collide inside one contest after roster unioning), while
-    every standings row has its own rank-derived performance.
+    every standings row has its own rank-derived performance. An official row of a
+    board that also holds mirror rows is ranked within its own event
+    (``event_field``); mirror rows, like a virtual entry, are ranked on the whole board.
     """
     ds, theta, b, _, _uf = estimate_joint(
         fit_fn=model.fit, min_solve_hours=MIN_SOLVE_HOURS, verbose=False)
@@ -97,6 +129,7 @@ def performance_fit():
     to_cf = _cf_map(records)
     rows_by_contest = [np.where(ds.contest_of_row == ci)[0] for ci in range(len(ds.contests))]
     rho = _performance_ratings(theta, ds, rows_by_contest)
+    rho = _rank_official_within_event(theta, ds, rows_by_contest, rho)
     return ds, theta, to_cf, _performance_lookup(ds, rho, to_cf)
 
 

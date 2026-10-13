@@ -20,11 +20,12 @@ How hard the medals are:
   The interval is from the intercept's Fisher standard error.
 * ``perf_gold`` / ``perf_bronze``: the CF-equivalent performance of the last
   gold / bronze medallist.  Their (solved, penalty) is placed in the contest's
-  QOJ board in the joint fit (``export_virtual_calc.performance_fit``), as the
-  virtual calculator does.  Only for contests with a QOJ board in the fit.
-  ICPC boards hold the onsite teams; a CCPC set only has a UCup mirror.  The
-  same teams read the same on both (``mirror_offset``: CCPC mirror minus ICPC
-  board, same season, about 0), so the lines are comparable.
+  QOJ board in the joint fit (``export_virtual_calc.performance_fit``) and
+  ranked against the board's onsite rows only: the boards also hold UCup and
+  QOJ mirror entries, which play online and finish ~100 CF above the same teams
+  onsite (``export_virtual_calc.event_field``).  Only for contests with a QOJ
+  board in the fit.  ``mirror_offset``: the same teams' CCPC line minus their
+  ICPC line, same season.
 
 How hard the problems are: ``diff_median`` / ``diff_q75``, the CF difficulty
 (``output/problem_ratings_calibrated.json``) of the set's median and
@@ -195,7 +196,9 @@ def even_odds_by_regional(pairs):
 
 
 def performance(cids):
-    """perf(QOJ id, solved, penalty minutes): CF performance of that result placed in the QOJ board."""
+    """perf(QOJ id, solved, penalty minutes): CF performance of that onsite result placed in the
+    QOJ board, ranked within the event's own rows when the board also holds mirror rows
+    (``ev.event_field``)."""
     _, theta, to_cf, row_lookup = ev.performance_fit()
     raw = []
     for path in [TAGGED] + list(UCUP):
@@ -203,9 +206,12 @@ def performance(cids):
             raw += [c for c in json.load(f) if c["contest_id"] in cids]
     boards = {}
     for c in dedupe_contests(raw):  # the fit's copy (tagged.json first): row_lookup indexes its rows
-        rows = [(s["total_solved"], s["penalty_seconds"], row_lookup[(c["contest_id"], i)][0])
+        rows = [(s["total_solved"], s["penalty_seconds"], row_lookup[(c["contest_id"], i)][0],
+                 str(s.get("team_id") or "").startswith("$DEFAULT"))
                 for i, s in enumerate(c["standings"]) if (c["contest_id"], i) in row_lookup]
-        boards[c["contest_id"]] = tuple(np.array(x) for x in zip(*rows))
+        s, p, idx, official = (np.array(x) for x in zip(*rows))
+        field = ev.event_field(official)
+        boards[c["contest_id"]] = (s[field], p[field], idx[field])
     cache = {}
 
     def perf(cid, solved, penalty):

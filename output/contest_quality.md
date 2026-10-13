@@ -32,49 +32,49 @@ Performance of the last gold / bronze medallist, its (solved, penalty) placed in
 
 | season | contest | field | perf gold | perf bronze | median problem | q75 problem |
 |---|---|---|---|---|---|---|
-| 2022 | ICPC nanjing 2022 | 416 | 2717 | 1996 | 2734 | 3462 |
-| 2022 | ICPC xian 2022 | 470 | 2697 | 1980 | 2253 | 3021 |
-| 2022 | ICPC jinan 2022 | 504 | 2691 | 2010 | 2712 | 3210 |
-| 2022 | ICPC hangzhou 2022 | 543 | 2685 | 1993 | 2811 | 3466 |
-| 2022 | ICPC hongkong 2022 | 114 | 2470 | 1941 | 2422 | 2878 |
-| 2022 | ICPC shenyang 2022 | 704 | 2468 | 1913 | 2851 | 3567 |
-| 2023 | ICPC macau 2023 | 70 | 2775 | 2004 | 2507 | 3044 |
-| 2023 | ICPC jinan 2023 | 333 | 2704 | 2046 | 2514 | 3272 |
-| 2023 | ICPC shenyang 2023 | 289 | 2683 | 2051 | 2642 | 3414 |
-| 2023 | ICPC hangzhou 2023 | 434 | 2679 | 1988 | 2797 | 3215 |
-| 2023 | ICPC nanjing 2023 | 331 | 2668 | 2028 | 2463 | 3267 |
-| 2023 | ICPC hefei 2023 | 342 | 2601 | 1933 | 2501 | 3014 |
-| 2023 | ICPC xian 2023 | 367 | 2529 | 1928 | 2689 | 3129 |
-| 2024 | CCPC jinan 2024 (mirror) | 280 | 2811 | 2086 | 2718 | 3251 |
-| 2024 | CCPC zhengzhou 2024 (mirror) | 276 | 2792 | 2142 | 2860 | 3370 |
-| 2024 | CCPC harbin 2024 (mirror) | 279 | 2765 | 2070 | 2512 | 3003 |
-| 2024 | ICPC shenyang 2024 | 300 | 2779 | 2020 | 2870 | 3431 |
-| 2024 | ICPC kunming 2024 | 444 | 2737 | 2043 | 2578 | 3196 |
-| 2024 | ICPC shanghai 2024 | 335 | 2684 | 1985 | 2898 | 3351 |
-| 2024 | ICPC hangzhou 2024 | 364 | 2682 | 2018 | 2624 | 3126 |
-| 2024 | ICPC hongkong 2024 | 149 | 2622 | 1903 | 2889 | 3469 |
-| 2024 | ICPC chengdu 2024 | 307 | 2615 | 2033 | 2467 | 3034 |
-| 2024 | ICPC nanjing 2024 | 334 | 2598 | 2042 | 2826 | 3359 |
-| 2025 | CCPC chongqing 2025 (mirror) | 258 | 2808 | 2111 | 2611 | 3215 |
-| 2025 | CCPC jinan 2025 (mirror) | 259 | 2787 | 2095 | 2902 | 3343 |
-| 2025 | CCPC zhengzhou 2025 (mirror) | 250 | 2780 | 2075 | 3002 | 3276 |
-| 2025 | ICPC chengdu 2025 | 320 | 2799 | 2019 | 2429 | 2874 |
-| 2025 | ICPC wuhan 2025 | 442 | 2774 | 2033 | 2758 | 3419 |
-| 2025 | ICPC hongkong 2025 | 126 | 2735 | 1914 | 2839 | 3103 |
-| 2025 | ICPC shanghai 2025 | 295 | 2722 | 2048 | 2688 | 3216 |
-| 2025 | ICPC nanjing 2025 | 335 | 2688 | 2000 | 2615 | 2809 |
-| 2025 | ICPC xian 2025 | 398 | 2567 | 1954 | 2482 | 3068 |
-| 2025 | ICPC shenyang 2025 | 400 | 2499 | 1983 | 2599 | 3191 |
+| 2022 | ICPC nanjing 2022 | 416 | 2772 | 2028 | 2734 | 3462 |
+| 2022 | ICPC xian 2022 | 470 | 2734 | 1988 | 2253 | 3021 |
+| 2022 | ICPC hangzhou 2022 | 543 | 2733 | 2004 | 2811 | 3466 |
+| 2022 | ICPC jinan 2022 | 504 | 2730 | 2013 | 2712 | 3210 |
+| 2022 | ICPC shenyang 2022 | 704 | 2499 | 1921 | 2851 | 3567 |
+| 2022 | ICPC hongkong 2022 | 114 | 2464 | 1935 | 2422 | 2878 |
+| 2023 | ICPC macau 2023 | 70 | 2848 | 1963 | 2507 | 3044 |
+| 2023 | ICPC shenyang 2023 | 289 | 2809 | 2088 | 2642 | 3414 |
+| 2023 | ICPC nanjing 2023 | 331 | 2802 | 2077 | 2463 | 3267 |
+| 2023 | ICPC jinan 2023 | 333 | 2793 | 2063 | 2514 | 3272 |
+| 2023 | ICPC hangzhou 2023 | 434 | 2734 | 2015 | 2797 | 3215 |
+| 2023 | ICPC hefei 2023 | 342 | 2699 | 1944 | 2501 | 3014 |
+| 2023 | ICPC xian 2023 | 367 | 2614 | 1919 | 2689 | 3129 |
+| 2024 | CCPC jinan 2024 (mirror) | 280 | 2868 | 2087 | 2718 | 3251 |
+| 2024 | CCPC harbin 2024 (mirror) | 279 | 2850 | 2081 | 2512 | 3003 |
+| 2024 | CCPC zhengzhou 2024 (mirror) | 276 | 2816 | 2125 | 2860 | 3370 |
+| 2024 | ICPC shenyang 2024 | 300 | 2844 | 2081 | 2870 | 3431 |
+| 2024 | ICPC chengdu 2024 | 307 | 2792 | 2064 | 2467 | 3034 |
+| 2024 | ICPC kunming 2024 | 444 | 2789 | 2052 | 2578 | 3196 |
+| 2024 | ICPC nanjing 2024 | 334 | 2767 | 2090 | 2826 | 3359 |
+| 2024 | ICPC hangzhou 2024 | 364 | 2747 | 2038 | 2624 | 3126 |
+| 2024 | ICPC shanghai 2024 | 335 | 2743 | 2034 | 2898 | 3351 |
+| 2024 | ICPC hongkong 2024 | 149 | 2687 | 1947 | 2889 | 3469 |
+| 2025 | CCPC jinan 2025 (mirror) | 259 | 2867 | 2093 | 2902 | 3343 |
+| 2025 | CCPC chongqing 2025 (mirror) | 258 | 2858 | 2105 | 2611 | 3215 |
+| 2025 | CCPC zhengzhou 2025 (mirror) | 250 | 2852 | 2085 | 3002 | 3276 |
+| 2025 | ICPC chengdu 2025 | 320 | 2826 | 2037 | 2429 | 2874 |
+| 2025 | ICPC shanghai 2025 | 295 | 2803 | 2047 | 2688 | 3216 |
+| 2025 | ICPC nanjing 2025 | 335 | 2787 | 2042 | 2615 | 2809 |
+| 2025 | ICPC wuhan 2025 | 442 | 2771 | 2026 | 2758 | 3419 |
+| 2025 | ICPC hongkong 2025 | 126 | 2732 | 1919 | 2839 | 3103 |
+| 2025 | ICPC shenyang 2025 | 400 | 2692 | 1991 | 2599 | 3191 |
+| 2025 | ICPC xian 2025 | 398 | 2643 | 1953 | 2482 | 3068 |
 
-**Mirror check.** 2363 linked (CCPC, ICPC) pairs with both sets in the fit: CCPC result on the mirror minus ICPC result on the onsite board, mean +9, by the mean of the two:
+**Mirror check.** 2363 linked (CCPC, ICPC) pairs with both sets in the fit: CCPC result on the mirror minus ICPC result on the onsite board, mean -8, by the mean of the two:
 
 | mean performance | n | CCPC mirror − ICPC onsite |
 |---|---|---|
-| 0–2200 | 948 | +12 |
-| 2200–2400 | 530 | -9 |
-| 2400–2600 | 410 | +14 |
-| 2600–2800 | 260 | +18 |
-| 2800–4000 | 215 | +25 |
+| 0–2200 | 881 | -1 |
+| 2200–2400 | 498 | -43 |
+| 2400–2600 | 413 | -13 |
+| 2600–2800 | 281 | -1 |
+| 2800–4000 | 290 | +33 |
 
 ## Problem quality
 

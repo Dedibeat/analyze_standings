@@ -315,6 +315,10 @@ class Dataset:
 
     raw_solved_count: np.ndarray  # problem index -> problem_solved_in_contest (reported)
 
+    # row -> the event's own (domjudge, ``$DEFAULT...`` id) standings row; the other
+    # rows of a board are mirror entries (UCup teams, QOJ accounts)
+    official_of_row: np.ndarray = None
+
 
 def load(path=DATA_PATH, uf=None, season_key=False, min_solve_hours=None):
     """Load one file (str path) or several (list of paths) into one Dataset.
@@ -393,6 +397,7 @@ def load(path=DATA_PATH, uf=None, season_key=False, min_solve_hours=None):
     n_problems = len(problems)
 
     team_of_row, contest_of_row, rank_of_row, participation_of_row = [], [], [], []
+    official_of_row = []
     row_chunks, prob_chunks, y_chunks, tau_chunks, wrong_chunks = [], [], [], [], []
 
     for c in raw:
@@ -415,6 +420,7 @@ def load(path=DATA_PATH, uf=None, season_key=False, min_solve_hours=None):
             contest_of_row.append(ci)
             rank_of_row.append(int(s["rank"]))
             participation_of_row.append((cid, source_row))
+            official_of_row.append(str(s.get("team_id") or "").startswith("$DEFAULT"))
 
             y = np.zeros(len(block), dtype=bool)
             tau = np.full(len(block), np.nan, dtype=np.float32)
@@ -468,6 +474,7 @@ def load(path=DATA_PATH, uf=None, season_key=False, min_solve_hours=None):
         raw_solved_count=np.array(
             [x if x is not None else -1 for x in raw_solved_count], dtype=int
         ),
+        official_of_row=np.array(official_of_row, dtype=bool),
     )
 
 

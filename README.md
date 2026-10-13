@@ -494,7 +494,7 @@ a small gain in both 2024 and 2025 (intervals touch zero), while per-site
 history and the rating fit's CF gold bars do not. The same data independently confirm the Shenyang
 2024→2025 swing. The fit-vs-online comparison reads the fit's gold line (the
 last gold team's performance), which tracks gold difficulty better than the
-bar. Its largest disagreements are Xi'an 2023, Wuhan 2025 and Hefei 2023.
+bar. Its largest disagreements are Xi'an 2023, Hefei 2023 and Xi'an 2025.
 Results: `output/online_gold.md`; details in `details.md`.
 Hong Kong/Macau are not modelled, but `arch_b.hk_link` (needs `pypinyin`)
 links their English-named teams to online results by matching roster members
@@ -754,7 +754,8 @@ These checks used scratch queries; the only code change is the
   The −184 "mirror offset" came from this bug. A regression test covers it.
 - **The ratings pass a rating-free check.** For the same teams in the same
   season, CCPC mirror minus ICPC board is +9 by performance and +23 by the
-  problem-implied rating (shipped DE ratings).
+  problem-implied rating (shipped DE ratings). With the 2026-10-13
+  event-field ranking it is −8 by performance.
 - **Gold difficulty per regional** (16 mainland regionals, within season):
   - The online-rank and CCPC-percentile measures, which use no ratings,
     agree with each other at Spearman 0.80.
@@ -785,21 +786,41 @@ Details: `details.md` (2026-10-12, third entry).
     scores 0.85.
   - `online_gold.contest_difficulty` now compares the online evidence with
     the line. The bar stays for the badges.
-  - Shanghai 2025 goes from −118 to +24, Xi'an 2025 from +66 to +4, Kunming
-    2024 from +156 to +81, and Nanjing 2024 from −114 to −64.
-- **Inflation and deflation: measured, not fixed.**
-  - Strong teams read +33 to +62 CF higher at a 440-team than at a 300-team
-    regional.
-  - Against the problem-implied rating, EC-Final reads −73 and the EC online
-    rounds +89.
-  - Neither weakly identified rivals nor the team-vs-team curve causes this.
-    The curve is 345 in sample and 435–480 out of sample, so the shipped 400
-    stands.
-  - A field-size correction helps the gold lines only by about ±12 CF, so
-    it is not shipped.
-  - Compare performances within one contest type.
+  - With the fix below as well, fit − online is +33 for Shanghai 2025, +9
+    for Nanjing 2024, +33 for Kunming 2024 and −53 for Xi'an 2025 (it was
+    −118, −114, +156 and +66 on the bar).
+- **Inflation and deflation: root cause found, and fixed for performance.**
+  - **The cause.** QOJ boards of onsite contests are merged boards: the
+    event's own official rows next to UCup teams and QOJ accounts. 171
+    boards in the fit are mixed this way.
+    - Mirror entries play online and finish far above the same teams onsite.
+      The same team rates +82 higher by solves as a UCup entry (47 teams);
+      the DE audit's paired offset is +102.
+    - Ranked against the whole board, onsite results were dragged down by
+      the board's mirror share.
+    - Big onsite fields carry relatively few mirror entries. So strong
+      teams seemed to read +33 to +62 CF higher at 440-team than at
+      300-team regionals.
+  - **The fix.** An official row of a merged board is now ranked within its
+    own event (`export_virtual_calc.event_field`, at least 30 rows). This
+    applies in `performance_fit` and in `contest_quality.performance`.
+    - The field-size effect goes (top-team slope +65 → +3).
+    - The gold lines agree better with the rating-free referees (reliability
+      0.84 → 0.89).
+    - The lines rise: gold cutoffs by a median of +66.
+    - Within the event's field, performance and problem difficulty agree
+      across strengths.
+  - **Unchanged:** mirror rows and virtual calculator entries are still
+    ranked on the whole board, as online entries.
+  - **The EC-Final (−73) and online-round (+89) offsets come from the DE
+    problem ratings.** Performance agrees with the fit's own problems at
+    every contest type, within +15 to +25. DE's solve-rate and
+    survival-timing terms shift whole contest types (EC-Final +127, online
+    −39 per problem). DE is unchanged here; re-auditing it is the next step.
+  - **Ruled out earlier:** weakly identified rivals and the team-vs-team
+    curve (345 in sample, 435–480 out of sample, so 400 stands).
 
-Details: `details.md` (2026-10-13).
+Details: `details.md` (2026-10-13, both entries).
 
 ### Interactive viewer
 
@@ -862,7 +883,10 @@ standings to get a hypothetical rank, then the same Elo rank-inversion
 primitive `arch_b.medals` uses for every real team's `performance_elo`
 converts that rank plus the real field's fitted abilities into a rating. The
 standings table shows every real team's own calibrated performance
-alongside yours for direct comparison. Abilities and performances come from the
+alongside yours for direct comparison. On a board that merges an event's official rows with
+online mirror entries, an official row is ranked within its own event, while your virtual entry is
+ranked on the whole board, like the mirror entries. So the same scoreline can read up to ~100 lower
+as a virtual entry: mirror entries finish well above the same teams onsite (2026-10-13). Abilities and performances come from the
 **binary** fit (`performance_fit`), mapped to CF by the scalar gym-shape +
 affine map of that fit's difficulties, sampled into a dense lookup table at
 export time so the browser doesn't need to re-fit it. The reference problems table shows the

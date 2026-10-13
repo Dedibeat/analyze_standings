@@ -82,6 +82,24 @@ class ContestQualityTest(unittest.TestCase):
                 perf = cq.performance({7})
         self.assertEqual(perf(7, 1, 3), cq.elo.performance_rating(4, theta))  # last of the four tagged rows
 
+    def test_performance_ranks_an_onsite_result_among_the_boards_onsite_rows(self):
+        n_mirror, n_official = 5, cq.ev.MIN_EVENT_FIELD  # five UCup entries on top of the board
+        ids = [f"ucup-team{i}" for i in range(n_mirror)] + [f"$DEFAULT_DAT_PREFIX_{i}" for i in range(n_official)]
+        n = len(ids)
+        contest = {"contest_id": 7, "problems": [], "standings": [
+            {"team_id": t, "total_solved": 50 - i, "penalty_seconds": 0} for i, t in enumerate(ids)]}
+        theta = np.linspace(3000, 1500, n)
+        with tempfile.TemporaryDirectory() as d:
+            tagged = os.path.join(d, "tagged.json")
+            with open(tagged, "w", encoding="utf-8") as f:
+                json.dump([contest], f)
+            with mock.patch.object(cq, "TAGGED", tagged), mock.patch.object(cq, "UCUP", []), \
+                    mock.patch.object(cq.ev, "performance_fit",
+                                      lambda: (None, theta, lambda t: t, {(7, i): (i, 0) for i in range(n)})):
+                perf = cq.performance({7})
+        # level with the 4th onsite row: 4th among the onsite rows, 9th on the whole board
+        self.assertEqual(perf(7, 50 - n_mirror - 3, 0), cq.elo.performance_rating(4, theta[n_mirror:]))
+
 
 if __name__ == "__main__":
     unittest.main()
