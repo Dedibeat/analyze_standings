@@ -515,7 +515,13 @@ exports in `data/`: `icpc_2025_online_1_teams.csv`,
 `icpc_teams_2025_online_2_fixed.csv`, `icpc_2026_ec_round1_teams.csv`,
 `icpc_2026_ec_online_round2_teams.csv`) are added by `add_pta_rosters.py`; they
 link 90% of 2025 mainland regional teams to an online result (57% by name
-alone).
+alone). `arch_b.hk_field_2026` links the 2026 Hong Kong registration list
+(`data/icpc_51_asia_hkmo_teams.csv`, an early export of 88 teams) to the 2026
+online rounds by Chinese member names (78 of 88). The list is still much weaker
+than the 2024/2025 fields (gold line online #368 vs #53–66), because most
+strong schools have not registered yet. With the 2025 schools that have not
+registered yet added back, the gold line returns to #71 and the forecast is
+unchanged. Results: `output/hk_field_2026.md`.
 
 ```bash
 python3 scripts/build_quota_evidence.py        # WF/host/invitational/provincial evidence + Shanghai lists
@@ -523,6 +529,7 @@ python3 -m arch_b.quota_teams                   # which teams entered each regio
 python3 -m arch_b.hk_link                       # Hong Kong/Macau teams linked to online results (pinyin members)
 python3 -m arch_b.hk_gold                       # Hong Kong field history, gold backtest and 2026 forecast
 python3 -m arch_b.online_medals                 # gold / silver / bronze chances per 2026 site (incl. Hong Kong)
+python3 -m arch_b.hk_field_2026                 # 2026 Hong Kong registration list vs online results and past fields
 ```
 
 ```bash

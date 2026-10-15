@@ -1,0 +1,3400 @@
+{
+ "registered": 88,
+ "status": {
+  "PENDING_REVIEW": 88
+ },
+ "created": [
+  "2026-10-11T16:01:10Z",
+  "2026-10-15T05:12:55Z"
+ ],
+ "link": {
+  "members": 78,
+  "unlinked": 10
+ },
+ "field": [
+  {
+   "field": "2024 hongkong (official)",
+   "teams": 149,
+   "nonlocal_teams": 135,
+   "linked": 118,
+   "median_online_rank": 753.0,
+   "within": {
+    "50": 7,
+    "100": 13,
+    "200": 22,
+    "500": 42
+   },
+   "line_online_rank": {
+    "gold": 66.4,
+    "silver_plus": 416.7,
+    "medal": 964.5
+   },
+   "expected_absolute": {
+    "gold": 12.6,
+    "silver_plus": 37.6,
+    "medal": 76.2
+   }
+  },
+  {
+   "field": "2025 hongkong (official)",
+   "teams": 126,
+   "nonlocal_teams": 111,
+   "linked": 97,
+   "median_online_rank": 775.5,
+   "within": {
+    "50": 7,
+    "100": 16,
+    "200": 18,
+    "500": 34
+   },
+   "line_online_rank": {
+    "gold": 53.0,
+    "silver_plus": 431.4,
+    "medal": 827.4
+   },
+   "expected_absolute": {
+    "gold": 12.3,
+    "silver_plus": 31.3,
+    "medal": 64.7
+   }
+  },
+  {
+   "field": "2026 registered so far",
+   "teams": 88,
+   "nonlocal_teams": 87,
+   "linked": 78,
+   "median_online_rank": 1006.5,
+   "within": {
+    "50": 1,
+    "100": 2,
+    "200": 5,
+    "500": 10
+   },
+   "line_online_rank": {
+    "gold": 367.7,
+    "silver_plus": 733.7,
+    "medal": 1088.7
+   },
+   "expected_absolute": {
+    "gold": 2.2,
+    "silver_plus": 14.0,
+    "medal": 43.3
+   }
+  },
+  {
+   "field": "2026 scenario: + 51 unregistered 2025 schools, top 95",
+   "teams": 95,
+   "nonlocal_teams": 95,
+   "linked": 95,
+   "median_online_rank": 708.0,
+   "within": {
+    "50": 6,
+    "100": 14,
+    "200": 19,
+    "500": 33
+   },
+   "line_online_rank": {
+    "gold": 70.5,
+    "silver_plus": 388.4,
+    "medal": 804.3
+   },
+   "expected_absolute": {
+    "gold": 11.1,
+    "silver_plus": 32.3,
+    "medal": 66.9
+   }
+  }
+ ],
+ "backtest": {
+  "2024": {
+   "gold": {
+    "actual": 13,
+    "absolute": {
+     "log_loss": 0.1007,
+     "expected": 12.3
+    },
+    "field_relative": {
+     "log_loss": 0.101,
+     "expected": 14.4
+    }
+   },
+   "silver_plus": {
+    "actual": 37,
+    "absolute": {
+     "log_loss": 0.4155,
+     "expected": 39.1
+    },
+    "field_relative": {
+     "log_loss": 0.4342,
+     "expected": 38.7
+    }
+   },
+   "medal": {
+    "actual": 80,
+    "absolute": {
+     "log_loss": 0.5249,
+     "expected": 71.3
+    },
+    "field_relative": {
+     "log_loss": 0.5208,
+     "expected": 77.5
+    }
+   }
+  },
+  "2025": {
+   "gold": {
+    "actual": 12,
+    "absolute": {
+     "log_loss": 0.1165,
+     "expected": 12.6
+    },
+    "field_relative": {
+     "log_loss": 0.1181,
+     "expected": 10.9
+    }
+   },
+   "silver_plus": {
+    "actual": 32,
+    "absolute": {
+     "log_loss": 0.3255,
+     "expected": 31.0
+    },
+    "field_relative": {
+     "log_loss": 0.3223,
+     "expected": 31.7
+    }
+   },
+   "medal": {
+    "actual": 61,
+    "absolute": {
+     "log_loss": 0.4963,
+     "expected": 67.6
+    },
+    "field_relative": {
+     "log_loss": 0.4824,
+     "expected": 63.8
+    }
+   }
+  }
+ },
+ "lines_registered": {
+  "gold": 367.7,
+  "silver_plus": 733.7,
+  "medal": 1088.7
+ },
+ "lines_scenario": {
+  "gold": 70.5,
+  "silver_plus": 388.4,
+  "medal": 804.3
+ },
+ "teams": [
+  {
+   "school": "北京大学",
+   "school_en": "Peking University",
+   "team": "飞带不长队",
+   "members": "蒋承佑/方心童/郑钧",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-12T00:03:53Z",
+   "local": false,
+   "online_teams": {
+    "2": "飞带不长队"
+   },
+   "online_ranks": {
+    "2": 4
+   },
+   "link": "members",
+   "x": -1.3862943611198906,
+   "field_position": 1,
+   "mean_online_rank": 4.0,
+   "best_online_rank": 4,
+   "scenario_position": 1,
+   "absolute": {
+    "gold": 0.9994,
+    "silver": 0.0004,
+    "bronze": 0.0001
+   },
+   "field_relative_registered": {
+    "gold": 1.0,
+    "silver": 0.0,
+    "bronze": 0.0
+   },
+   "field_relative_scenario": {
+    "gold": 0.9998,
+    "silver": 0.0,
+    "bronze": 0.0001
+   }
+  },
+  {
+   "school": "福州大学",
+   "school_en": "Fuzhou University",
+   "team": "Evil Must Fail",
+   "members": "程棋晖/陈宇/陈建涛",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-12T07:57:17Z",
+   "local": false,
+   "online_teams": {
+    "1": "惡即斬",
+    "2": "惡即斬"
+   },
+   "online_ranks": {
+    "1": 36,
+    "2": 234
+   },
+   "link": "members",
+   "x": -4.519420026906905,
+   "field_position": 2,
+   "mean_online_rank": 91.8,
+   "best_online_rank": 36,
+   "scenario_position": 12,
+   "absolute": {
+    "gold": 0.3899,
+    "silver": 0.5277,
+    "bronze": 0.0669
+   },
+   "field_relative_registered": {
+    "gold": 0.9887,
+    "silver": 0.0,
+    "bronze": 0.0032
+   },
+   "field_relative_scenario": {
+    "gold": 0.5078,
+    "silver": 0.4051,
+    "bronze": 0.0729
+   }
+  },
+  {
+   "school": "杭州电子科技大学",
+   "school_en": "Hangzhou Dianzi University",
+   "team": "2026杭电负1队",
+   "members": "马文浩/何卓锟/黄光升",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-13T04:19:51Z",
+   "local": false,
+   "online_teams": {
+    "1": "2026杭电负1队"
+   },
+   "online_ranks": {
+    "1": 120
+   },
+   "link": "members",
+   "x": -4.787491742782046,
+   "field_position": 3,
+   "mean_online_rank": 120.0,
+   "best_online_rank": 120,
+   "scenario_position": 16,
+   "absolute": {
+    "gold": 0.2464,
+    "silver": 0.6227,
+    "bronze": 0.1067
+   },
+   "field_relative_registered": {
+    "gold": 0.977,
+    "silver": 0.0,
+    "bronze": 0.0097
+   },
+   "field_relative_scenario": {
+    "gold": 0.3342,
+    "silver": 0.5258,
+    "bronze": 0.117
+   }
+  },
+  {
+   "school": "华东师范大学",
+   "school_en": "East China Normal University",
+   "team": "你是我的天才女友",
+   "members": "马鸣远/程籽实/高润琪",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-12T08:36:01Z",
+   "local": false,
+   "online_teams": {
+    "1": "ecnu02",
+    "2": "ecnu02"
+   },
+   "online_ranks": {
+    "1": 130,
+    "2": 129
+   },
+   "link": "members",
+   "x": -4.863673427408627,
+   "field_position": 4,
+   "mean_online_rank": 129.5,
+   "best_online_rank": 129,
+   "scenario_position": 17,
+   "absolute": {
+    "gold": 0.2128,
+    "silver": 0.6387,
+    "bronze": 0.1211
+   },
+   "field_relative_registered": {
+    "gold": 0.9719,
+    "silver": 0.0,
+    "bronze": 0.0129
+   },
+   "field_relative_scenario": {
+    "gold": 0.2903,
+    "silver": 0.5505,
+    "bronze": 0.133
+   }
+  },
+  {
+   "school": "天津大学",
+   "school_en": "Tianjin University",
+   "team": "永远跟榜走",
+   "members": "赵文瑞/刘天轩/冯开淇",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-12T12:00:43Z",
+   "local": false,
+   "online_teams": {
+    "1": "永远跟榜走",
+    "2": "永远跟榜走"
+   },
+   "online_ranks": {
+    "1": 203,
+    "2": 170
+   },
+   "link": "members",
+   "x": -5.224502208046024,
+   "field_position": 5,
+   "mean_online_rank": 185.8,
+   "best_online_rank": 170,
+   "scenario_position": 19,
+   "absolute": {
+    "gold": 0.0988,
+    "silver": 0.6418,
+    "bronze": 0.2096
+   },
+   "field_relative_registered": {
+    "gold": 0.9291,
+    "silver": 0.0,
+    "bronze": 0.0418
+   },
+   "field_relative_scenario": {
+    "gold": 0.1343,
+    "silver": 0.5859,
+    "bronze": 0.2302
+   }
+  },
+  {
+   "school": "江南大学",
+   "school_en": "Jiangnan University",
+   "team": "禁忌「莱瓦汀」",
+   "members": "董万里/刘珺哲/赵泓博",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-13T06:01:43Z",
+   "local": false,
+   "online_teams": {
+    "1": "禁忌莱瓦汀",
+    "2": "禁忌莱瓦汀"
+   },
+   "online_ranks": {
+    "1": 339,
+    "2": 255
+   },
+   "link": "members",
+   "x": -5.683631826269438,
+   "field_position": 6,
+   "mean_online_rank": 294.0,
+   "best_online_rank": 255,
+   "scenario_position": 22,
+   "absolute": {
+    "gold": 0.0336,
+    "silver": 0.5071,
+    "bronze": 0.3566
+   },
+   "field_relative_registered": {
+    "gold": 0.7924,
+    "silver": 0.0,
+    "bronze": 0.1426
+   },
+   "field_relative_scenario": {
+    "gold": 0.0432,
+    "silver": 0.4645,
+    "bronze": 0.3842
+   }
+  },
+  {
+   "school": "西南交通大学",
+   "school_en": "Southwest Jiaotong University",
+   "team": "donqless",
+   "members": "顾兴哲/张景暄/林一",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-13T14:16:28Z",
+   "local": false,
+   "online_teams": {
+    "1": "swjtuaaa猪猪批发",
+    "2": "swjtu长存不灭的过去逐渐消逝的未来"
+   },
+   "online_ranks": {
+    "1": 197,
+    "2": 575
+   },
+   "link": "members",
+   "x": -5.81878688476767,
+   "field_position": 7,
+   "mean_online_rank": 336.6,
+   "best_online_rank": 197,
+   "scenario_position": 24,
+   "absolute": {
+    "gold": 0.0242,
+    "silver": 0.4514,
+    "bronze": 0.3985
+   },
+   "field_relative_registered": {
+    "gold": 0.7263,
+    "silver": 0.0103,
+    "bronze": 0.1816
+   },
+   "field_relative_scenario": {
+    "gold": 0.0305,
+    "silver": 0.4103,
+    "bronze": 0.425
+   }
+  },
+  {
+   "school": "中国科学院大学",
+   "school_en": "University of Chinese Academy of Sciences",
+   "team": "啥",
+   "members": "石曜铭/吕安哲/尤俊翔",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-13T10:58:08Z",
+   "local": false,
+   "online_teams": {
+    "1": "啥",
+    "2": "啥"
+   },
+   "online_ranks": {
+    "1": 313,
+    "2": 432
+   },
+   "link": "members",
+   "x": -5.907314389392132,
+   "field_position": 8,
+   "mean_online_rank": 367.7,
+   "best_online_rank": 313,
+   "scenario_position": 25,
+   "absolute": {
+    "gold": 0.0195,
+    "silver": 0.4138,
+    "bronze": 0.4233
+   },
+   "field_relative_registered": {
+    "gold": 0.6766,
+    "silver": 0.0244,
+    "bronze": 0.2042
+   },
+   "field_relative_scenario": {
+    "gold": 0.0242,
+    "silver": 0.3737,
+    "bronze": 0.4479
+   }
+  },
+  {
+   "school": "吉林大学",
+   "school_en": "Jilin University",
+   "team": "金色心电图",
+   "members": "张力文/刘子涵/才青卓",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-11T16:51:55Z",
+   "local": false,
+   "online_teams": {
+    "1": "金色心电图",
+    "2": "金色心电图"
+   },
+   "online_ranks": {
+    "1": 289,
+    "2": 522
+   },
+   "link": "members",
+   "x": -5.962047137997535,
+   "field_position": 9,
+   "mean_online_rank": 388.4,
+   "best_online_rank": 289,
+   "scenario_position": 28,
+   "absolute": {
+    "gold": 0.017,
+    "silver": 0.3905,
+    "bronze": 0.4372
+   },
+   "field_relative_registered": {
+    "gold": 0.6436,
+    "silver": 0.0341,
+    "bronze": 0.2185
+   },
+   "field_relative_scenario": {
+    "gold": 0.0209,
+    "silver": 0.3511,
+    "bronze": 0.4602
+   }
+  },
+  {
+   "school": "蒙古国立大学(Монгол Улсын Их Сургууль)",
+   "school_en": "National University of Mongolia",
+   "team": "NUM-R^3",
+   "members": "Dugarjantsan Bilguun/Tamir Jamiyangarav/Munkh-Erdene Bayarjargal",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-12T06:35:13Z",
+   "local": false,
+   "online_teams": {
+    "1": "numr3",
+    "2": "numr3"
+   },
+   "online_ranks": {
+    "1": 544,
+    "2": 349
+   },
+   "link": "members",
+   "x": -6.077010584529185,
+   "field_position": 10,
+   "mean_online_rank": 435.7,
+   "best_online_rank": 349,
+   "scenario_position": 30,
+   "absolute": {
+    "gold": 0.0128,
+    "silver": 0.3424,
+    "bronze": 0.4621
+   },
+   "field_relative_registered": {
+    "gold": 0.5701,
+    "silver": 0.0557,
+    "bronze": 0.2492
+   },
+   "field_relative_scenario": {
+    "gold": 0.0155,
+    "silver": 0.3049,
+    "bronze": 0.4805
+   }
+  },
+  {
+   "school": "哈尔滨工业大学（深圳）",
+   "school_en": "Harbin Institute of Technology, Shenzhen",
+   "team": "奶龙耄耋Doro合体",
+   "members": "李杰/樊卓意/牛志洋",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-13T04:27:58Z",
+   "local": false,
+   "online_teams": {
+    "1": "奶龙耄耋doro合体",
+    "2": "奶龙耄耋doro合体"
+   },
+   "online_ranks": {
+    "1": 605,
+    "2": 420
+   },
+   "link": "members",
+   "x": -6.222741584654128,
+   "field_position": 11,
+   "mean_online_rank": 504.1,
+   "best_online_rank": 420,
+   "scenario_position": 34,
+   "absolute": {
+    "gold": 0.009,
+    "silver": 0.2848,
+    "bronze": 0.4836
+   },
+   "field_relative_registered": {
+    "gold": 0.4727,
+    "silver": 0.0831,
+    "bronze": 0.287
+   },
+   "field_relative_scenario": {
+    "gold": 0.0105,
+    "silver": 0.2502,
+    "bronze": 0.4942
+   }
+  },
+  {
+   "school": "青岛理工大学",
+   "school_en": "Qingdao University of Technology",
+   "team": "Make QUT Great Forever!",
+   "members": "方同俊/付俊潇/王鹏宇",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-12T08:38:46Z",
+   "local": false,
+   "online_teams": {
+    "1": "qut崭新之日",
+    "2": "qut崭新之日"
+   },
+   "online_ranks": {
+    "1": 236,
+    "2": 1107
+   },
+   "link": "members",
+   "x": -6.236620368867124,
+   "field_position": 12,
+   "mean_online_rank": 511.1,
+   "best_online_rank": 236,
+   "scenario_position": 35,
+   "absolute": {
+    "gold": 0.0087,
+    "silver": 0.2796,
+    "bronze": 0.485
+   },
+   "field_relative_registered": {
+    "gold": 0.4634,
+    "silver": 0.0856,
+    "bronze": 0.2904
+   },
+   "field_relative_scenario": {
+    "gold": 0.0101,
+    "silver": 0.2453,
+    "bronze": 0.4947
+   }
+  },
+  {
+   "school": "华南理工大学",
+   "school_en": "South China University of Technology",
+   "team": "香草抹茶冰淇零",
+   "members": "郑理耀/玉梓卓/胡涵秋",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-12T12:04:48Z",
+   "local": false,
+   "online_teams": {
+    "1": "香草抹茶冰淇零",
+    "2": "香草抹茶冰淇零"
+   },
+   "online_ranks": {
+    "1": 446,
+    "2": 608
+   },
+   "link": "members",
+   "x": -6.255246916993116,
+   "field_position": 13,
+   "mean_online_rank": 520.7,
+   "best_online_rank": 446,
+   "scenario_position": 36,
+   "absolute": {
+    "gold": 0.0083,
+    "silver": 0.2727,
+    "bronze": 0.4867
+   },
+   "field_relative_registered": {
+    "gold": 0.451,
+    "silver": 0.0888,
+    "bronze": 0.2949
+   },
+   "field_relative_scenario": {
+    "gold": 0.0096,
+    "silver": 0.2388,
+    "bronze": 0.4953
+   }
+  },
+  {
+   "school": "西南科技大学",
+   "school_en": "Southwest University of Science and Technology",
+   "team": "miaowmiaowmimi",
+   "members": "刘星宇/王思咏/黄义",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-12T12:26:33Z",
+   "local": false,
+   "online_teams": {
+    "1": "西南科技大学默认队名",
+    "2": "西南科技大小默认队名"
+   },
+   "online_ranks": {
+    "1": 293,
+    "2": 1037
+   },
+   "link": "members",
+   "x": -6.312129908623298,
+   "field_position": 14,
+   "mean_online_rank": 551.2,
+   "best_online_rank": 293,
+   "scenario_position": 37,
+   "absolute": {
+    "gold": 0.0072,
+    "silver": 0.2521,
+    "bronze": 0.4906
+   },
+   "field_relative_registered": {
+    "gold": 0.4135,
+    "silver": 0.098,
+    "bronze": 0.3083
+   },
+   "field_relative_scenario": {
+    "gold": 0.0083,
+    "silver": 0.2196,
+    "bronze": 0.4954
+   }
+  },
+  {
+   "school": "武汉大学",
+   "school_en": "Wuhan University",
+   "team": "永恒的武汉大学",
+   "members": "赵天星/李致远/田子轶",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-13T12:50:17Z",
+   "local": false,
+   "online_teams": {
+    "1": "永恒的武汉大学",
+    "2": "永恒的武汉大学"
+   },
+   "online_ranks": {
+    "1": 1179,
+    "2": 273
+   },
+   "link": "members",
+   "x": -6.340946847861165,
+   "field_position": 15,
+   "mean_online_rank": 567.3,
+   "best_online_rank": 273,
+   "scenario_position": 38,
+   "absolute": {
+    "gold": 0.0067,
+    "silver": 0.2421,
+    "bronze": 0.4918
+   },
+   "field_relative_registered": {
+    "gold": 0.3948,
+    "silver": 0.1023,
+    "bronze": 0.3147
+   },
+   "field_relative_scenario": {
+    "gold": 0.0077,
+    "silver": 0.2102,
+    "bronze": 0.4947
+   }
+  },
+  {
+   "school": "江西财经大学",
+   "school_en": "Jiangxi University of Finance and Economics",
+   "team": "别开香槟开早了",
+   "members": "孙天成/罗文轩/杨源鑫",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-13T06:47:48Z",
+   "local": false,
+   "online_teams": {
+    "1": "别开香槟开早了",
+    "2": "别开香槟开早了"
+   },
+   "online_ranks": {
+    "1": 466,
+    "2": 766
+   },
+   "link": "members",
+   "x": -6.392683901933118,
+   "field_position": 16,
+   "mean_online_rank": 597.5,
+   "best_online_rank": 466,
+   "scenario_position": 39,
+   "absolute": {
+    "gold": 0.0059,
+    "silver": 0.2247,
+    "bronze": 0.4927
+   },
+   "field_relative_registered": {
+    "gold": 0.3621,
+    "silver": 0.1093,
+    "bronze": 0.3256
+   },
+   "field_relative_scenario": {
+    "gold": 0.0067,
+    "silver": 0.1942,
+    "bronze": 0.492
+   }
+  },
+  {
+   "school": "山西大学",
+   "school_en": "Shanxi University",
+   "team": "黑马的最后一搏",
+   "members": "柳伟康/许烨/姜铭远",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-12T08:35:24Z",
+   "local": false,
+   "online_teams": {
+    "1": "老师说有学分加就来了",
+    "2": "老师说有学分加就来了"
+   },
+   "online_ranks": {
+    "1": 777,
+    "2": 472
+   },
+   "link": "members",
+   "x": -6.406209667976601,
+   "field_position": 17,
+   "mean_online_rank": 605.6,
+   "best_online_rank": 472,
+   "scenario_position": 40,
+   "absolute": {
+    "gold": 0.0057,
+    "silver": 0.2203,
+    "bronze": 0.4927
+   },
+   "field_relative_registered": {
+    "gold": 0.3538,
+    "silver": 0.1109,
+    "bronze": 0.3282
+   },
+   "field_relative_scenario": {
+    "gold": 0.0064,
+    "silver": 0.1901,
+    "bronze": 0.491
+   }
+  },
+  {
+   "school": "昆明理工大学",
+   "school_en": "Kunming University of Science and Technology",
+   "team": "N.P.L.G",
+   "members": "程继飏/樊睿/姚舜禹",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-13T07:06:06Z",
+   "local": false,
+   "online_teams": {
+    "1": "nplg",
+    "2": "nplg"
+   },
+   "online_ranks": {
+    "1": 866,
+    "2": 447
+   },
+   "link": "members",
+   "x": -6.433221751588002,
+   "field_position": 18,
+   "mean_online_rank": 622.2,
+   "best_online_rank": 447,
+   "scenario_position": 41,
+   "absolute": {
+    "gold": 0.0053,
+    "silver": 0.2117,
+    "bronze": 0.4923
+   },
+   "field_relative_registered": {
+    "gold": 0.3374,
+    "silver": 0.114,
+    "bronze": 0.3333
+   },
+   "field_relative_scenario": {
+    "gold": 0.006,
+    "silver": 0.1822,
+    "bronze": 0.4886
+   }
+  },
+  {
+   "school": "广东技术师范大学",
+   "school_en": "Guangdong Polytechnic Normal University",
+   "team": "HK奶龙",
+   "members": "黄宇凡/陈锦旺/高睿梓",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-12T10:30:58Z",
+   "local": false,
+   "online_teams": {
+    "1": "奶龙",
+    "2": "奶龙"
+   },
+   "online_ranks": {
+    "1": 760,
+    "2": 603
+   },
+   "link": "members",
+   "x": -6.517617815003781,
+   "field_position": 19,
+   "mean_online_rank": 677.0,
+   "best_online_rank": 603,
+   "scenario_position": 44,
+   "absolute": {
+    "gold": 0.0043,
+    "silver": 0.1863,
+    "bronze": 0.4882
+   },
+   "field_relative_registered": {
+    "gold": 0.2887,
+    "silver": 0.1215,
+    "bronze": 0.3473
+   },
+   "field_relative_scenario": {
+    "gold": 0.0048,
+    "silver": 0.1591,
+    "bronze": 0.4783
+   }
+  },
+  {
+   "school": "电子科技大学",
+   "school_en": "University of Electronic Science and Technology of China",
+   "team": "UESTC_泰拉马桶",
+   "members": "黄雪锋/赵聪/吕东阳",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-12T11:38:05Z",
+   "local": false,
+   "online_teams": {
+    "1": "uestc泰拉马桶",
+    "2": "uestc泰拉马桶"
+   },
+   "online_ranks": {
+    "1": 683,
+    "2": 713
+   },
+   "link": "members",
+   "x": -6.547988139992543,
+   "field_position": 20,
+   "mean_online_rank": 697.8,
+   "best_online_rank": 683,
+   "scenario_position": 45,
+   "absolute": {
+    "gold": 0.004,
+    "silver": 0.1777,
+    "bronze": 0.4857
+   },
+   "field_relative_registered": {
+    "gold": 0.2722,
+    "silver": 0.1234,
+    "bronze": 0.3515
+   },
+   "field_relative_scenario": {
+    "gold": 0.0044,
+    "silver": 0.1513,
+    "bronze": 0.4735
+   }
+  },
+  {
+   "school": "成都锦城学院",
+   "school_en": "Chengdu Jincheng College",
+   "team": "Random",
+   "members": "赵燚/杨哲/何轩逸",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-15T01:01:34Z",
+   "local": false,
+   "online_teams": {
+    "1": "牛来",
+    "2": "牛来"
+   },
+   "online_ranks": {
+    "1": 621,
+    "2": 804
+   },
+   "link": "members",
+   "x": -6.560465175556223,
+   "field_position": 21,
+   "mean_online_rank": 706.6,
+   "best_online_rank": 621,
+   "scenario_position": 47,
+   "absolute": {
+    "gold": 0.0039,
+    "silver": 0.1743,
+    "bronze": 0.4845
+   },
+   "field_relative_registered": {
+    "gold": 0.2656,
+    "silver": 0.1241,
+    "bronze": 0.3531
+   },
+   "field_relative_scenario": {
+    "gold": 0.0043,
+    "silver": 0.1483,
+    "bronze": 0.4714
+   }
+  },
+  {
+   "school": "青岛科技大学",
+   "school_en": "Qingdao University of Science and Technology",
+   "team": "qust superman",
+   "members": "王景冉/张中正/徐展鹏",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-14T12:17:37Z",
+   "local": false,
+   "online_teams": {
+    "1": "青稞一队",
+    "2": "青稞一队"
+   },
+   "online_ranks": {
+    "1": 841,
+    "2": 596
+   },
+   "link": "members",
+   "x": -6.562416163519149,
+   "field_position": 22,
+   "mean_online_rank": 708.0,
+   "best_online_rank": 596,
+   "scenario_position": 48,
+   "absolute": {
+    "gold": 0.0039,
+    "silver": 0.1737,
+    "bronze": 0.4843
+   },
+   "field_relative_registered": {
+    "gold": 0.2646,
+    "silver": 0.1242,
+    "bronze": 0.3533
+   },
+   "field_relative_scenario": {
+    "gold": 0.0042,
+    "silver": 0.1478,
+    "bronze": 0.4711
+   }
+  },
+  {
+   "school": "上海科技大学",
+   "school_en": "ShanghaiTech University",
+   "team": "打acm都是图领奖",
+   "members": "陈籽安/伍行/马锐泽",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-13T10:28:44Z",
+   "local": false,
+   "online_teams": {
+    "1": "打acm都是图领奖",
+    "2": "打acm都是图领奖"
+   },
+   "online_ranks": {
+    "1": 871,
+    "2": 618
+   },
+   "link": "members",
+   "x": -6.598065217155097,
+   "field_position": 23,
+   "mean_online_rank": 733.7,
+   "best_online_rank": 618,
+   "scenario_position": 49,
+   "absolute": {
+    "gold": 0.0035,
+    "silver": 0.1642,
+    "bronze": 0.4804
+   },
+   "field_relative_registered": {
+    "gold": 0.2464,
+    "silver": 0.1257,
+    "bronze": 0.3573
+   },
+   "field_relative_scenario": {
+    "gold": 0.0039,
+    "silver": 0.1392,
+    "bronze": 0.4646
+   }
+  },
+  {
+   "school": "上海海事大学",
+   "school_en": "Shanghai Maritime University",
+   "team": "期末后 Algorithm Time",
+   "members": "张君睿/常缪洋/郑天罡",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-12T08:22:31Z",
+   "local": false,
+   "online_teams": {
+    "1": "放学后algorithmtime",
+    "2": "放学后algorithmtime"
+   },
+   "online_ranks": {
+    "1": 806,
+    "2": 675
+   },
+   "link": "members",
+   "x": -6.603398216689579,
+   "field_position": 24,
+   "mean_online_rank": 737.6,
+   "best_online_rank": 675,
+   "scenario_position": 50,
+   "absolute": {
+    "gold": 0.0035,
+    "silver": 0.1629,
+    "bronze": 0.4798
+   },
+   "field_relative_registered": {
+    "gold": 0.2437,
+    "silver": 0.1259,
+    "bronze": 0.3579
+   },
+   "field_relative_scenario": {
+    "gold": 0.0038,
+    "silver": 0.138,
+    "bronze": 0.4635
+   }
+  },
+  {
+   "school": "合肥工业大学宣城校区",
+   "school_en": "Hefei University of Technology Xuancheng Campus‌",
+   "team": "最后留下的路标",
+   "members": "余杭润/敬佳宝/杨麒",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-12T08:00:23Z",
+   "local": false,
+   "online_teams": {
+    "1": "宣冰糖",
+    "2": "最后留下的路标"
+   },
+   "online_ranks": {
+    "1": 969,
+    "2": 604
+   },
+   "link": "members",
+   "x": -6.63991940491279,
+   "field_position": 25,
+   "mean_online_rank": 765.0,
+   "best_online_rank": 604,
+   "scenario_position": 52,
+   "absolute": {
+    "gold": 0.0032,
+    "silver": 0.1536,
+    "bronze": 0.4749
+   },
+   "field_relative_registered": {
+    "gold": 0.2261,
+    "silver": 0.1267,
+    "bronze": 0.3612
+   },
+   "field_relative_scenario": {
+    "gold": 0.0034,
+    "silver": 0.1297,
+    "bronze": 0.4561
+   }
+  },
+  {
+   "school": "合肥工业大学",
+   "school_en": "Hefei University of Technology",
+   "team": "Daily Exercise",
+   "members": "韩昆桦/谢麒翰/舒雨飞",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-13T08:51:07Z",
+   "local": false,
+   "online_teams": {
+    "1": "合工大2601",
+    "2": "合工大2601"
+   },
+   "online_ranks": {
+    "1": 543,
+    "2": 1177
+   },
+   "link": "members",
+   "x": -6.683916713597106,
+   "field_position": 26,
+   "mean_online_rank": 799.4,
+   "best_online_rank": 543,
+   "scenario_position": 56,
+   "absolute": {
+    "gold": 0.0028,
+    "silver": 0.143,
+    "bronze": 0.4682
+   },
+   "field_relative_registered": {
+    "gold": 0.2061,
+    "silver": 0.127,
+    "bronze": 0.3642
+   },
+   "field_relative_scenario": {
+    "gold": 0.0031,
+    "silver": 0.1203,
+    "bronze": 0.4462
+   }
+  },
+  {
+   "school": "嘉应学院",
+   "school_en": "Jiaying University",
+   "team": "HK GaGaXiang",
+   "members": "廖世毅/郑景升/吴烨昊",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-12T01:27:32Z",
+   "local": false,
+   "online_teams": {
+    "1": "我们的胆子真是肥嘟嘟的",
+    "2": "我们的胆子真是肥嘟嘟的"
+   },
+   "online_ranks": {
+    "1": 801,
+    "2": 832
+   },
+   "link": "members",
+   "x": -6.704846693944784,
+   "field_position": 27,
+   "mean_online_rank": 816.4,
+   "best_online_rank": 801,
+   "scenario_position": 58,
+   "absolute": {
+    "gold": 0.0027,
+    "silver": 0.1382,
+    "bronze": 0.4647
+   },
+   "field_relative_registered": {
+    "gold": 0.197,
+    "silver": 0.1268,
+    "bronze": 0.3653
+   },
+   "field_relative_scenario": {
+    "gold": 0.0029,
+    "silver": 0.116,
+    "bronze": 0.4413
+   }
+  },
+  {
+   "school": "香港城市大学（东莞）",
+   "school_en": "City University of Hong Kong (Dongguan)",
+   "team": "Fairy Blue",
+   "members": "童孖瑜/李冉曦/袁庚麒",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-14T01:07:46Z",
+   "local": false,
+   "online_teams": {
+    "1": "fairyblue",
+    "2": "fairyblue"
+   },
+   "online_ranks": {
+    "1": 787,
+    "2": 853
+   },
+   "link": "members",
+   "x": -6.708493897954542,
+   "field_position": 28,
+   "mean_online_rank": 819.3,
+   "best_online_rank": 787,
+   "scenario_position": 59,
+   "absolute": {
+    "gold": 0.0027,
+    "silver": 0.1374,
+    "bronze": 0.4641
+   },
+   "field_relative_registered": {
+    "gold": 0.1955,
+    "silver": 0.1268,
+    "bronze": 0.3654
+   },
+   "field_relative_scenario": {
+    "gold": 0.0029,
+    "silver": 0.1153,
+    "bronze": 0.4404
+   }
+  },
+  {
+   "school": "四川大学",
+   "school_en": "Sichuan University",
+   "team": "渡川",
+   "members": "黄乐天/孙博康/阳帆",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-15T02:37:20Z",
+   "local": false,
+   "online_teams": {
+    "1": "渡川",
+    "2": "渡川"
+   },
+   "online_ranks": {
+    "1": 672,
+    "2": 1016
+   },
+   "link": "members",
+   "x": -6.7169434843307885,
+   "field_position": 29,
+   "mean_online_rank": 826.3,
+   "best_online_rank": 672,
+   "scenario_position": 60,
+   "absolute": {
+    "gold": 0.0026,
+    "silver": 0.1355,
+    "bronze": 0.4626
+   },
+   "field_relative_registered": {
+    "gold": 0.1919,
+    "silver": 0.1267,
+    "bronze": 0.3658
+   },
+   "field_relative_scenario": {
+    "gold": 0.0028,
+    "silver": 0.1136,
+    "bronze": 0.4383
+   }
+  },
+  {
+   "school": "四川农业大学",
+   "school_en": "Sichuan Agricultural University",
+   "team": "钢铁般的意志",
+   "members": "淡鹏宇/曾一铭/江雅奥",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-14T05:10:22Z",
+   "local": false,
+   "online_teams": {
+    "1": "我们有铁牌",
+    "2": "我们有铁牌"
+   },
+   "online_ranks": {
+    "1": 704,
+    "2": 1017
+   },
+   "link": "members",
+   "x": -6.740695376103301,
+   "field_position": 30,
+   "mean_online_rank": 846.1,
+   "best_online_rank": 704,
+   "scenario_position": 61,
+   "absolute": {
+    "gold": 0.0025,
+    "silver": 0.1303,
+    "bronze": 0.4582
+   },
+   "field_relative_registered": {
+    "gold": 0.1822,
+    "silver": 0.1262,
+    "bronze": 0.3665
+   },
+   "field_relative_scenario": {
+    "gold": 0.0026,
+    "silver": 0.109,
+    "bronze": 0.4323
+   }
+  },
+  {
+   "school": "中央民族大学",
+   "school_en": "Minzu University of China",
+   "team": "Infinite_progress",
+   "members": "陈柯文/马雨衡/郭镒闻",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-12T07:07:39Z",
+   "local": false,
+   "online_teams": {
+    "1": "愿此行终抵繁星",
+    "2": "愿此行终抵繁星"
+   },
+   "online_ranks": {
+    "1": 1068,
+    "2": 720
+   },
+   "link": "members",
+   "x": -6.776397115765121,
+   "field_position": 31,
+   "mean_online_rank": 876.9,
+   "best_online_rank": 720,
+   "scenario_position": 62,
+   "absolute": {
+    "gold": 0.0023,
+    "silver": 0.1228,
+    "bronze": 0.4512
+   },
+   "field_relative_registered": {
+    "gold": 0.1684,
+    "silver": 0.1251,
+    "bronze": 0.3669
+   },
+   "field_relative_scenario": {
+    "gold": 0.0024,
+    "silver": 0.1024,
+    "bronze": 0.4229
+   }
+  },
+  {
+   "school": "广东海洋大学",
+   "school_en": "Guangdong Ocean University",
+   "team": "wildcard players",
+   "members": "冯崇凯/蒋世融/周嘉琪",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-12T08:00:11Z",
+   "local": false,
+   "online_teams": {
+    "1": "循此苦旅终抵群星",
+    "2": "轻松铁之"
+   },
+   "online_ranks": {
+    "1": 1037,
+    "2": 838
+   },
+   "link": "members",
+   "x": -6.837552654355806,
+   "field_position": 32,
+   "mean_online_rank": 932.2,
+   "best_online_rank": 838,
+   "scenario_position": 66,
+   "absolute": {
+    "gold": 0.0019,
+    "silver": 0.1107,
+    "bronze": 0.4379
+   },
+   "field_relative_registered": {
+    "gold": 0.1466,
+    "silver": 0.1223,
+    "bronze": 0.366
+   },
+   "field_relative_scenario": {
+    "gold": 0.002,
+    "silver": 0.0919,
+    "bronze": 0.4058
+   }
+  },
+  {
+   "school": "温州医科大学",
+   "school_en": "Wenzhou Medical University",
+   "team": "患者自述这题昨天晚上明明会做",
+   "members": "黄熠/朱蔚骐/周涛",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-12T07:31:13Z",
+   "local": false,
+   "online_teams": {
+    "1": "wmub",
+    "2": "wmub"
+   },
+   "online_ranks": {
+    "1": 1527,
+    "2": 573
+   },
+   "link": "members",
+   "x": -6.840973010966686,
+   "field_position": 33,
+   "mean_online_rank": 935.4,
+   "best_online_rank": 573,
+   "scenario_position": 67,
+   "absolute": {
+    "gold": 0.0019,
+    "silver": 0.1101,
+    "bronze": 0.4371
+   },
+   "field_relative_registered": {
+    "gold": 0.1455,
+    "silver": 0.1221,
+    "bronze": 0.3659
+   },
+   "field_relative_scenario": {
+    "gold": 0.002,
+    "silver": 0.0913,
+    "bronze": 0.4049
+   }
+  },
+  {
+   "school": "韶关学院",
+   "school_en": "Shaoguan University",
+   "team": "可是雾月真的好可爱",
+   "members": "朱子睿/叶福都/谢泽栩",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-12T16:28:25Z",
+   "local": false,
+   "online_teams": {
+    "1": "可是雾月真的好可爱",
+    "2": "可是雾月真的好可爱"
+   },
+   "online_ranks": {
+    "1": 1050,
+    "2": 859
+   },
+   "link": "members",
+   "x": -6.856157182567912,
+   "field_position": 34,
+   "mean_online_rank": 949.7,
+   "best_online_rank": 859,
+   "scenario_position": 68,
+   "absolute": {
+    "gold": 0.0019,
+    "silver": 0.1073,
+    "bronze": 0.4336
+   },
+   "field_relative_registered": {
+    "gold": 0.1405,
+    "silver": 0.1212,
+    "bronze": 0.3653
+   },
+   "field_relative_scenario": {
+    "gold": 0.0019,
+    "silver": 0.0889,
+    "bronze": 0.4004
+   }
+  },
+  {
+   "school": "辽宁科技大学",
+   "school_en": "University of Science and Technology Liaoning",
+   "team": "ROLL快乐企鹅之蓝眼王朝",
+   "members": "陈子轩/季芷欧/夏智儒",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-12T08:53:44Z",
+   "local": false,
+   "online_teams": {
+    "1": "roll快乐企鹅之蓝眼王朝",
+    "2": "roll快乐企鹅之蓝眼王朝"
+   },
+   "online_ranks": {
+    "1": 835,
+    "2": 1124
+   },
+   "link": "members",
+   "x": -6.876040377652245,
+   "field_position": 35,
+   "mean_online_rank": 968.8,
+   "best_online_rank": 835,
+   "scenario_position": 70,
+   "absolute": {
+    "gold": 0.0018,
+    "silver": 0.1037,
+    "bronze": 0.4289
+   },
+   "field_relative_registered": {
+    "gold": 0.1341,
+    "silver": 0.12,
+    "bronze": 0.3643
+   },
+   "field_relative_scenario": {
+    "gold": 0.0018,
+    "silver": 0.0858,
+    "bronze": 0.3946
+   }
+  },
+  {
+   "school": "河南师范大学",
+   "school_en": "Henan Normal University",
+   "team": "样例过了就是过了",
+   "members": "王巍/赵晨曦/赵柯行",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-13T16:23:21Z",
+   "local": false,
+   "online_teams": {
+    "1": "样例过了就是过了",
+    "2": "样例过了就是过了"
+   },
+   "online_ranks": {
+    "1": 1173,
+    "2": 827
+   },
+   "link": "members",
+   "x": -6.8925622718385835,
+   "field_position": 36,
+   "mean_online_rank": 984.9,
+   "best_online_rank": 827,
+   "scenario_position": 71,
+   "absolute": {
+    "gold": 0.0017,
+    "silver": 0.1008,
+    "bronze": 0.4248
+   },
+   "field_relative_registered": {
+    "gold": 0.1291,
+    "silver": 0.1189,
+    "bronze": 0.3633
+   },
+   "field_relative_scenario": {
+    "gold": 0.0018,
+    "silver": 0.0832,
+    "bronze": 0.3896
+   }
+  },
+  {
+   "school": "山东工程职业技术大学",
+   "school_en": "Shandong Vocational and Technical University of Engineering",
+   "team": "代打南桥杯",
+   "members": "臧泰运/王东瑞/朱业康",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-12T08:38:16Z",
+   "local": false,
+   "online_teams": {
+    "1": "南桥杯省三落榜"
+   },
+   "online_ranks": {
+    "1": 995
+   },
+   "link": "members",
+   "x": -6.902742737158593,
+   "field_position": 37,
+   "mean_online_rank": 995.0,
+   "best_online_rank": 995,
+   "scenario_position": 74,
+   "absolute": {
+    "gold": 0.0016,
+    "silver": 0.099,
+    "bronze": 0.4223
+   },
+   "field_relative_registered": {
+    "gold": 0.126,
+    "silver": 0.1181,
+    "bronze": 0.3627
+   },
+   "field_relative_scenario": {
+    "gold": 0.0017,
+    "silver": 0.0817,
+    "bronze": 0.3865
+   }
+  },
+  {
+   "school": "成都大学",
+   "school_en": "Chengdu University",
+   "team": "抱走Sakura的小黄鸭",
+   "members": "姜昊冉/万世鑫/邓英超",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-13T08:39:23Z",
+   "local": false,
+   "online_teams": {
+    "1": "抱走sakura的小黄鸭",
+    "2": "抱走sakura的小黄鸭"
+   },
+   "online_ranks": {
+    "1": 1213,
+    "2": 821
+   },
+   "link": "members",
+   "x": -6.9056875091982395,
+   "field_position": 38,
+   "mean_online_rank": 997.9,
+   "best_online_rank": 821,
+   "scenario_position": 75,
+   "absolute": {
+    "gold": 0.0016,
+    "silver": 0.0985,
+    "bronze": 0.4216
+   },
+   "field_relative_registered": {
+    "gold": 0.1251,
+    "silver": 0.1179,
+    "bronze": 0.3624
+   },
+   "field_relative_scenario": {
+    "gold": 0.0017,
+    "silver": 0.0813,
+    "bronze": 0.3856
+   }
+  },
+  {
+   "school": "广东工业大学",
+   "school_en": "Guangdong University of Technology",
+   "team": "循序渐进",
+   "members": "邱启涵/何炜华/钟敦复",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-14T12:10:04Z",
+   "local": false,
+   "online_teams": {
+    "1": "循序渐进",
+    "2": "循序渐进"
+   },
+   "online_ranks": {
+    "1": 1137,
+    "2": 888
+   },
+   "link": "members",
+   "x": -6.912560118371353,
+   "field_position": 39,
+   "mean_online_rank": 1004.8,
+   "best_online_rank": 888,
+   "scenario_position": 76,
+   "absolute": {
+    "gold": 0.0016,
+    "silver": 0.0974,
+    "bronze": 0.4198
+   },
+   "field_relative_registered": {
+    "gold": 0.1231,
+    "silver": 0.1174,
+    "bronze": 0.3619
+   },
+   "field_relative_scenario": {
+    "gold": 0.0017,
+    "silver": 0.0803,
+    "bronze": 0.3835
+   }
+  },
+  {
+   "school": "西南石油大学",
+   "school_en": "Southwest Petroleum University",
+   "team": "All Last 才是开始",
+   "members": "罗赐曦/龚云飞/黄禹霖",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-12T07:24:13Z",
+   "local": false,
+   "online_teams": {
+    "1": "昇天",
+    "2": "接地"
+   },
+   "online_ranks": {
+    "1": 1608,
+    "2": 632
+   },
+   "link": "members",
+   "x": -6.915817921942885,
+   "field_position": 40,
+   "mean_online_rank": 1008.1,
+   "best_online_rank": 632,
+   "scenario_position": 77,
+   "absolute": {
+    "gold": 0.0016,
+    "silver": 0.0968,
+    "bronze": 0.419
+   },
+   "field_relative_registered": {
+    "gold": 0.1222,
+    "silver": 0.1172,
+    "bronze": 0.3617
+   },
+   "field_relative_scenario": {
+    "gold": 0.0016,
+    "silver": 0.0798,
+    "bronze": 0.3825
+   }
+  },
+  {
+   "school": "东北农业大学",
+   "school_en": "Northeast Agricultural University",
+   "team": "Nailong hahaha",
+   "members": "宋秉轩/祝宏睿/金迪",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-12T08:16:20Z",
+   "local": false,
+   "online_teams": {
+    "1": "捧腹大笑奶龙",
+    "2": "捧腹大笑奶龙"
+   },
+   "online_ranks": {
+    "1": 826,
+    "2": 1238
+   },
+   "link": "members",
+   "x": -6.918923613382759,
+   "field_position": 41,
+   "mean_online_rank": 1011.2,
+   "best_online_rank": 826,
+   "scenario_position": 79,
+   "absolute": {
+    "gold": 0.0016,
+    "silver": 0.0963,
+    "bronze": 0.4182
+   },
+   "field_relative_registered": {
+    "gold": 0.1213,
+    "silver": 0.117,
+    "bronze": 0.3615
+   },
+   "field_relative_scenario": {
+    "gold": 0.0016,
+    "silver": 0.0794,
+    "bronze": 0.3816
+   }
+  },
+  {
+   "school": "青岛农业大学",
+   "school_en": "Qingdao Agricultural University",
+   "team": "岁末将阑",
+   "members": "刘世征/张方博/王科锦",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-12T11:54:18Z",
+   "local": false,
+   "online_teams": {
+    "1": "岁末将阑"
+   },
+   "online_ranks": {
+    "1": 1024
+   },
+   "link": "members",
+   "x": -6.931471805599453,
+   "field_position": 42,
+   "mean_online_rank": 1024.0,
+   "best_online_rank": 1024,
+   "scenario_position": 80,
+   "absolute": {
+    "gold": 0.0015,
+    "silver": 0.0943,
+    "bronze": 0.415
+   },
+   "field_relative_registered": {
+    "gold": 0.1177,
+    "silver": 0.116,
+    "bronze": 0.3604
+   },
+   "field_relative_scenario": {
+    "gold": 0.0016,
+    "silver": 0.0776,
+    "bronze": 0.3777
+   }
+  },
+  {
+   "school": "广西大学",
+   "school_en": "Guangxi University",
+   "team": "你是我的梦幻之AC",
+   "members": "李丹琳/杨富杰/张天诺",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-12T08:00:24Z",
+   "local": false,
+   "online_teams": {
+    "1": "你是我的梦幻之ac",
+    "2": "你是我的梦幻之ac"
+   },
+   "online_ranks": {
+    "1": 842,
+    "2": 1266
+   },
+   "link": "members",
+   "x": -6.939698808473224,
+   "field_position": 43,
+   "mean_online_rank": 1032.5,
+   "best_online_rank": 842,
+   "scenario_position": 81,
+   "absolute": {
+    "gold": 0.0015,
+    "silver": 0.0929,
+    "bronze": 0.4129
+   },
+   "field_relative_registered": {
+    "gold": 0.1155,
+    "silver": 0.1153,
+    "bronze": 0.3597
+   },
+   "field_relative_scenario": {
+    "gold": 0.0015,
+    "silver": 0.0764,
+    "bronze": 0.3752
+   }
+  },
+  {
+   "school": "西南财经大学",
+   "school_en": "Southwestern University of Finance and Economics",
+   "team": "swollen kskbl",
+   "members": "张熙伟/刘思涵/林祥兴",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-12T11:24:33Z",
+   "local": false,
+   "online_teams": {
+    "1": "taffy要吃到胖乎乎然后噜噜噜噜噜",
+    "2": "taffy要吃到胖乎乎然后噜噜噜噜噜"
+   },
+   "online_ranks": {
+    "1": 956,
+    "2": 1185
+   },
+   "link": "members",
+   "x": -6.9701279833103165,
+   "field_position": 44,
+   "mean_online_rank": 1064.4,
+   "best_online_rank": 956,
+   "scenario_position": 84,
+   "absolute": {
+    "gold": 0.0014,
+    "silver": 0.0881,
+    "bronze": 0.4048
+   },
+   "field_relative_registered": {
+    "gold": 0.1074,
+    "silver": 0.1129,
+    "bronze": 0.3568
+   },
+   "field_relative_scenario": {
+    "gold": 0.0014,
+    "silver": 0.0723,
+    "bronze": 0.3657
+   }
+  },
+  {
+   "school": "浙江理工大学",
+   "school_en": "Zhejiang Sci-Tech University",
+   "team": "最后一舞",
+   "members": "任麒源/胡涛/姚仁杰",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-15T05:12:55Z",
+   "local": false,
+   "online_teams": {
+    "2": "浙理屠龙刀"
+   },
+   "online_ranks": {
+    "2": 1083
+   },
+   "link": "members",
+   "x": -6.9874902470009905,
+   "field_position": 45,
+   "mean_online_rank": 1083.0,
+   "best_online_rank": 1083,
+   "scenario_position": 85,
+   "absolute": {
+    "gold": 0.0013,
+    "silver": 0.0855,
+    "bronze": 0.4001
+   },
+   "field_relative_registered": {
+    "gold": 0.103,
+    "silver": 0.1114,
+    "bronze": 0.3549
+   },
+   "field_relative_scenario": {
+    "gold": 0.0014,
+    "silver": 0.07,
+    "bronze": 0.3602
+   }
+  },
+  {
+   "school": "海南大学",
+   "school_en": "Hainan University",
+   "team": "挂科梭哈学长和旮旯高手加上原神手子将会摧毁算法竞赛",
+   "members": "李俊飞/陈诺/余睿涵",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-12T14:42:59Z",
+   "local": false,
+   "online_teams": {
+    "1": "挂科梭哈学长和旮旯高手加上原神手子将会摧毁算法竞赛",
+    "2": "挂科梭哈学长和旮旯高手加上原神手子将会摧毁算法竞赛"
+   },
+   "online_ranks": {
+    "1": 806,
+    "2": 1460
+   },
+   "link": "members",
+   "x": -6.989137728604505,
+   "field_position": 46,
+   "mean_online_rank": 1084.8,
+   "best_online_rank": 806,
+   "scenario_position": 86,
+   "absolute": {
+    "gold": 0.0013,
+    "silver": 0.0852,
+    "bronze": 0.3997
+   },
+   "field_relative_registered": {
+    "gold": 0.1026,
+    "silver": 0.1112,
+    "bronze": 0.3547
+   },
+   "field_relative_scenario": {
+    "gold": 0.0014,
+    "silver": 0.0698,
+    "bronze": 0.3596
+   }
+  },
+  {
+   "school": "广州大学",
+   "school_en": "Guangzhou University",
+   "team": "黑月是否嚎叫？",
+   "members": "周昊焌/李轩/彭铭熙",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-14T00:48:48Z",
+   "local": false,
+   "online_teams": {
+    "1": "兔已着陆",
+    "2": "兔已着陆"
+   },
+   "online_ranks": {
+    "1": 1162,
+    "2": 1020
+   },
+   "link": "members",
+   "x": -6.992727921845086,
+   "field_position": 47,
+   "mean_online_rank": 1088.7,
+   "best_online_rank": 1020,
+   "scenario_position": 87,
+   "absolute": {
+    "gold": 0.0013,
+    "silver": 0.0847,
+    "bronze": 0.3987
+   },
+   "field_relative_registered": {
+    "gold": 0.1017,
+    "silver": 0.1109,
+    "bronze": 0.3543
+   },
+   "field_relative_scenario": {
+    "gold": 0.0013,
+    "silver": 0.0694,
+    "bronze": 0.3585
+   }
+  },
+  {
+   "school": "福建师范大学",
+   "school_en": "Fujian Normal University",
+   "team": "Fujian Tour Group",
+   "members": "林锦轩/周傲宇/徐大淦",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-12T05:14:39Z",
+   "local": false,
+   "online_teams": {
+    "1": "福建旅行团",
+    "2": "福建旅行团"
+   },
+   "online_ranks": {
+    "1": 1558,
+    "2": 762
+   },
+   "link": "members",
+   "x": -6.99355239105867,
+   "field_position": 48,
+   "mean_online_rank": 1089.6,
+   "best_online_rank": 762,
+   "scenario_position": 88,
+   "absolute": {
+    "gold": 0.0013,
+    "silver": 0.0846,
+    "bronze": 0.3984
+   },
+   "field_relative_registered": {
+    "gold": 0.1015,
+    "silver": 0.1108,
+    "bronze": 0.3542
+   },
+   "field_relative_scenario": {
+    "gold": 0.0013,
+    "silver": 0.0693,
+    "bronze": 0.3582
+   }
+  },
+  {
+   "school": "山东大学（威海）",
+   "school_en": "Shandong University, Weihai",
+   "team": "面向样例编程队",
+   "members": "陈春磊/陈家旭/谢松正",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-13T05:42:39Z",
+   "local": false,
+   "online_teams": {
+    "1": "面向样例编程队",
+    "2": "面向样例编程队"
+   },
+   "online_ranks": {
+    "1": 1429,
+    "2": 839
+   },
+   "link": "members",
+   "x": -6.998470442198537,
+   "field_position": 49,
+   "mean_online_rank": 1095.0,
+   "best_online_rank": 839,
+   "scenario_position": 90,
+   "absolute": {
+    "gold": 0.0013,
+    "silver": 0.0839,
+    "bronze": 0.3971
+   },
+   "field_relative_registered": {
+    "gold": 0.1003,
+    "silver": 0.1104,
+    "bronze": 0.3536
+   },
+   "field_relative_scenario": {
+    "gold": 0.0013,
+    "silver": 0.0686,
+    "bronze": 0.3567
+   }
+  },
+  {
+   "school": "东北师范大学",
+   "school_en": "Northeast Normal University",
+   "team": "WA to WF",
+   "members": "李金瑞/张俊才/罗昊洋",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-12T09:29:59Z",
+   "local": false,
+   "online_teams": {
+    "1": "与你相wa到世界尽头",
+    "2": "与你相wa到世界尽头"
+   },
+   "online_ranks": {
+    "1": 972,
+    "2": 1245
+   },
+   "link": "members",
+   "x": -7.0031233066796235,
+   "field_position": 50,
+   "mean_online_rank": 1100.1,
+   "best_online_rank": 972,
+   "scenario_position": 91,
+   "absolute": {
+    "gold": 0.0013,
+    "silver": 0.0832,
+    "bronze": 0.3958
+   },
+   "field_relative_registered": {
+    "gold": 0.0992,
+    "silver": 0.11,
+    "bronze": 0.353
+   },
+   "field_relative_scenario": {
+    "gold": 0.0013,
+    "silver": 0.0681,
+    "bronze": 0.3552
+   }
+  },
+  {
+   "school": "广东金融学院",
+   "school_en": "Guangdong University of Finance",
+   "team": "燃烧精血也要AK",
+   "members": "张建镇/翁博/叶兆谦",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-12T07:44:09Z",
+   "local": false,
+   "online_teams": {
+    "1": "燃烧精血也要ak",
+    "2": "燃烧精血也要ak"
+   },
+   "online_ranks": {
+    "1": 1584,
+    "2": 766
+   },
+   "link": "members",
+   "x": -7.004445371057481,
+   "field_position": 51,
+   "mean_online_rank": 1101.5,
+   "best_online_rank": 766,
+   "scenario_position": 92,
+   "absolute": {
+    "gold": 0.0013,
+    "silver": 0.083,
+    "bronze": 0.3955
+   },
+   "field_relative_registered": {
+    "gold": 0.0989,
+    "silver": 0.1099,
+    "bronze": 0.3529
+   },
+   "field_relative_scenario": {
+    "gold": 0.0013,
+    "silver": 0.0679,
+    "bronze": 0.3548
+   }
+  },
+  {
+   "school": "惠州学院",
+   "school_en": "Huizhou University",
+   "team": "某科学的超电磁炮",
+   "members": "陈润/梁浩霆/余德滢",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-12T14:25:03Z",
+   "local": false,
+   "online_teams": {
+    "1": "漫无止境的八月迭代尚未寻得ac出口",
+    "2": "沧海一栗"
+   },
+   "online_ranks": {
+    "1": 1143,
+    "2": 1081
+   },
+   "link": "members",
+   "x": -7.013526740717009,
+   "field_position": 52,
+   "mean_online_rank": 1111.6,
+   "best_online_rank": 1081,
+   "scenario_position": 93,
+   "absolute": {
+    "gold": 0.0013,
+    "silver": 0.0817,
+    "bronze": 0.3929
+   },
+   "field_relative_registered": {
+    "gold": 0.0967,
+    "silver": 0.1091,
+    "bronze": 0.3518
+   },
+   "field_relative_scenario": {
+    "gold": 0.0013,
+    "silver": 0.0668,
+    "bronze": 0.3519
+   }
+  },
+  {
+   "school": "中国计量大学",
+   "school_en": "China Jiliang University",
+   "team": "队友们都还在看着呢，再让我ac一题吧",
+   "members": "缪俊杰/戴圣泽/吕昀哲",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-12T15:07:36Z",
+   "local": false,
+   "online_teams": {
+    "1": "直到变成一只猫娘",
+    "2": "直到变成一只猫娘"
+   },
+   "online_ranks": {
+    "1": 822,
+    "2": 1530
+   },
+   "link": "members",
+   "x": -7.02238170472133,
+   "field_position": 53,
+   "mean_online_rank": 1121.5,
+   "best_online_rank": 822,
+   "scenario_position": 94,
+   "absolute": {
+    "gold": 0.0012,
+    "silver": 0.0804,
+    "bronze": 0.3905
+   },
+   "field_relative_registered": {
+    "gold": 0.0946,
+    "silver": 0.1082,
+    "bronze": 0.3506
+   },
+   "field_relative_scenario": {
+    "gold": 0.0012,
+    "silver": 0.0657,
+    "bronze": 0.349
+   }
+  },
+  {
+   "school": "桂林电子科技大学",
+   "school_en": "Guilin University of Electronic Technology",
+   "team": "sleeping",
+   "members": "廖飞扬/杨明煊/王靖凯",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-12T09:15:19Z",
+   "local": false,
+   "online_teams": {
+    "1": "开局睡觉考核队友的来",
+    "2": "开局睡觉考核队友的来"
+   },
+   "online_ranks": {
+    "1": 653,
+    "2": 1966
+   },
+   "link": "members",
+   "x": -7.032666714991771,
+   "field_position": 54,
+   "mean_online_rank": 1133.0,
+   "best_online_rank": 653,
+   "scenario_position": 95,
+   "absolute": {
+    "gold": 0.0012,
+    "silver": 0.079,
+    "bronze": 0.3876
+   },
+   "field_relative_registered": {
+    "gold": 0.0923,
+    "silver": 0.1073,
+    "bronze": 0.3493
+   },
+   "field_relative_scenario": {
+    "gold": 0.0012,
+    "silver": 0.0645,
+    "bronze": 0.3457
+   }
+  },
+  {
+   "school": "华南师范大学",
+   "school_en": "South China Normal University",
+   "team": "你，去打xcpc了对吧，和我不认识的人一起",
+   "members": "李雅雯/施铄/林昊",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-14T08:43:42Z",
+   "local": false,
+   "online_teams": {
+    "1": "你去打xcpc了对吧和我不认识的人一起",
+    "2": "你去打xcpc了对吧和我不认识的人一起"
+   },
+   "online_ranks": {
+    "1": 1310,
+    "2": 990
+   },
+   "link": "members",
+   "x": -7.037743679661917,
+   "field_position": 55,
+   "mean_online_rank": 1138.8,
+   "best_online_rank": 990,
+   "scenario_position": 96,
+   "absolute": {
+    "gold": 0.0012,
+    "silver": 0.0783,
+    "bronze": 0.3861
+   },
+   "field_relative_registered": {
+    "gold": 0.0912,
+    "silver": 0.1068,
+    "bronze": 0.3486
+   },
+   "field_relative_scenario": {
+    "gold": 0.0012,
+    "silver": 0.0639,
+    "bronze": 0.3441
+   }
+  },
+  {
+   "school": "苏州工学院",
+   "school_en": "Suzhou University of Technology",
+   "team": "超级地球真理部",
+   "members": "黄尔嘉/顾心媛/张威",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-11T16:23:40Z",
+   "local": false,
+   "online_teams": {
+    "1": "超级地球真理部",
+    "2": "超级地球真理部"
+   },
+   "online_ranks": {
+    "1": 1447,
+    "2": 897
+   },
+   "link": "members",
+   "x": -7.03815179434514,
+   "field_position": 56,
+   "mean_online_rank": 1139.3,
+   "best_online_rank": 897,
+   "scenario_position": 97,
+   "absolute": {
+    "gold": 0.0012,
+    "silver": 0.0782,
+    "bronze": 0.386
+   },
+   "field_relative_registered": {
+    "gold": 0.0911,
+    "silver": 0.1068,
+    "bronze": 0.3485
+   },
+   "field_relative_scenario": {
+    "gold": 0.0012,
+    "silver": 0.0638,
+    "bronze": 0.344
+   }
+  },
+  {
+   "school": "南阳师范学院",
+   "school_en": "Nanyang Normal University",
+   "team": "aaa",
+   "members": "买睿妤/黄雯建/闵龙隆",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-12T07:56:43Z",
+   "local": false,
+   "online_teams": {
+    "1": "大四老登打爆小登",
+    "2": "大四老登打爆小登"
+   },
+   "online_ranks": {
+    "1": 1050,
+    "2": 1357
+   },
+   "link": "members",
+   "x": -7.084788551493219,
+   "field_position": 57,
+   "mean_online_rank": 1193.7,
+   "best_online_rank": 1050,
+   "scenario_position": 99,
+   "absolute": {
+    "gold": 0.001,
+    "silver": 0.072,
+    "bronze": 0.3727
+   },
+   "field_relative_registered": {
+    "gold": 0.0812,
+    "silver": 0.1023,
+    "bronze": 0.3416
+   },
+   "field_relative_scenario": {
+    "gold": 0.001,
+    "silver": 0.0585,
+    "bronze": 0.3289
+   }
+  },
+  {
+   "school": "南阳理工学院",
+   "school_en": "Nanyang Institute of Technology",
+   "team": "wawawawa...",
+   "members": "任吉康/姚涵旭/宋忱宪",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-13T11:55:12Z",
+   "local": false,
+   "online_teams": {
+    "1": "再wa一发",
+    "2": "再wa一发"
+   },
+   "online_ranks": {
+    "1": 1351,
+    "2": 1056
+   },
+   "link": "members",
+   "x": -7.085421901113203,
+   "field_position": 58,
+   "mean_online_rank": 1194.4,
+   "best_online_rank": 1056,
+   "scenario_position": 100,
+   "absolute": {
+    "gold": 0.001,
+    "silver": 0.0719,
+    "bronze": 0.3725
+   },
+   "field_relative_registered": {
+    "gold": 0.0811,
+    "silver": 0.1023,
+    "bronze": 0.3415
+   },
+   "field_relative_scenario": {
+    "gold": 0.001,
+    "silver": 0.0585,
+    "bronze": 0.3287
+   }
+  },
+  {
+   "school": "安徽师范大学",
+   "school_en": "Anhui Normal University",
+   "team": "天天ac",
+   "members": "刘一申/刘子阳/陈建宇",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-13T06:40:09Z",
+   "local": false,
+   "online_teams": {
+    "1": "天天ac",
+    "2": "天天ac"
+   },
+   "online_ranks": {
+    "1": 2204,
+    "2": 693
+   },
+   "link": "members",
+   "x": -7.119529584731354,
+   "field_position": 59,
+   "mean_online_rank": 1235.9,
+   "best_online_rank": 693,
+   "scenario_position": 102,
+   "absolute": {
+    "gold": 0.001,
+    "silver": 0.0677,
+    "bronze": 0.3625
+   },
+   "field_relative_registered": {
+    "gold": 0.0745,
+    "silver": 0.0989,
+    "bronze": 0.3359
+   },
+   "field_relative_scenario": {
+    "gold": 0.001,
+    "silver": 0.0549,
+    "bronze": 0.3177
+   }
+  },
+  {
+   "school": "山东财经大学",
+   "school_en": "Shandong University of Finance and Economics",
+   "team": "拿到属于我们的一切",
+   "members": "潘文驰/孟庆睿/袁硕",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-12T09:30:26Z",
+   "local": false,
+   "online_teams": {
+    "1": "拿到属于我们的一切",
+    "2": "拿到属于我们的一切"
+   },
+   "online_ranks": {
+    "1": 1061,
+    "2": 1466
+   },
+   "link": "members",
+   "x": -7.12863001053029,
+   "field_position": 60,
+   "mean_online_rank": 1247.2,
+   "best_online_rank": 1061,
+   "scenario_position": 103,
+   "absolute": {
+    "gold": 0.0009,
+    "silver": 0.0666,
+    "bronze": 0.3598
+   },
+   "field_relative_registered": {
+    "gold": 0.0728,
+    "silver": 0.098,
+    "bronze": 0.3343
+   },
+   "field_relative_scenario": {
+    "gold": 0.0009,
+    "silver": 0.0539,
+    "bronze": 0.3148
+   }
+  },
+  {
+   "school": "浙江工商大学",
+   "school_en": "Zhejiang Gongshang University",
+   "team": "404隐藏",
+   "members": "李鸿腾/江伟杰/黄郑昊",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-13T01:00:37Z",
+   "local": false,
+   "online_teams": {
+    "1": "404隐藏",
+    "2": "404隐藏"
+   },
+   "online_ranks": {
+    "1": 1765,
+    "2": 930
+   },
+   "link": "members",
+   "x": -7.15554527775735,
+   "field_position": 61,
+   "mean_online_rank": 1281.2,
+   "best_online_rank": 930,
+   "scenario_position": 105,
+   "absolute": {
+    "gold": 0.0009,
+    "silver": 0.0634,
+    "bronze": 0.3518
+   },
+   "field_relative_registered": {
+    "gold": 0.0681,
+    "silver": 0.0952,
+    "bronze": 0.3294
+   },
+   "field_relative_scenario": {
+    "gold": 0.0009,
+    "silver": 0.0513,
+    "bronze": 0.3061
+   }
+  },
+  {
+   "school": "湖北经济学院",
+   "school_en": "Hubei University of Economics",
+   "team": "直到罚时变成一块铁牌",
+   "members": "郑奥/黄子睿/杨晨",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-12T07:47:08Z",
+   "local": false,
+   "online_teams": {
+    "1": "直到罚时变成一块铁牌",
+    "2": "直到罚时变成一块铁牌"
+   },
+   "online_ranks": {
+    "1": 1442,
+    "2": 1293
+   },
+   "link": "members",
+   "x": -7.219253348308376,
+   "field_position": 62,
+   "mean_online_rank": 1365.5,
+   "best_online_rank": 1293,
+   "scenario_position": 108,
+   "absolute": {
+    "gold": 0.0007,
+    "silver": 0.0566,
+    "bronze": 0.3328
+   },
+   "field_relative_registered": {
+    "gold": 0.058,
+    "silver": 0.0887,
+    "bronze": 0.3169
+   },
+   "field_relative_scenario": {
+    "gold": 0.0007,
+    "silver": 0.0455,
+    "bronze": 0.2857
+   }
+  },
+  {
+   "school": "五邑大学",
+   "school_en": "Wuyi University (Guangdong)",
+   "team": "问号好想玩原神",
+   "members": "刘文浩/张艺钟/黄达聪",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-12T09:41:11Z",
+   "local": false,
+   "online_teams": {
+    "1": "问号好想玩原神",
+    "2": "问号好想玩原神"
+   },
+   "online_ranks": {
+    "1": 1644,
+    "2": 1163
+   },
+   "link": "members",
+   "x": -7.231822864067395,
+   "field_position": 63,
+   "mean_online_rank": 1382.7,
+   "best_online_rank": 1163,
+   "scenario_position": 109,
+   "absolute": {
+    "gold": 0.0007,
+    "silver": 0.0553,
+    "bronze": 0.329
+   },
+   "field_relative_registered": {
+    "gold": 0.0562,
+    "silver": 0.0874,
+    "bronze": 0.3143
+   },
+   "field_relative_scenario": {
+    "gold": 0.0007,
+    "silver": 0.0444,
+    "bronze": 0.2817
+   }
+  },
+  {
+   "school": "山东理工大学",
+   "school_en": "Shandong University of Technology",
+   "team": "CEren WAka",
+   "members": "阎梁珏琛/吴涛/吕康宁",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-12T12:44:02Z",
+   "local": false,
+   "online_teams": {
+    "1": "柚子厨占领世界",
+    "2": "柚子厨占领世界"
+   },
+   "online_ranks": {
+    "1": 1116,
+    "2": 1773
+   },
+   "link": "members",
+   "x": -7.248967224507732,
+   "field_position": 64,
+   "mean_online_rank": 1406.7,
+   "best_online_rank": 1116,
+   "scenario_position": 110,
+   "absolute": {
+    "gold": 0.0007,
+    "silver": 0.0536,
+    "bronze": 0.3238
+   },
+   "field_relative_registered": {
+    "gold": 0.0538,
+    "silver": 0.0857,
+    "bronze": 0.3107
+   },
+   "field_relative_scenario": {
+    "gold": 0.0007,
+    "silver": 0.043,
+    "bronze": 0.2762
+   }
+  },
+  {
+   "school": "华中师范大学",
+   "school_en": "Central China Normal University",
+   "team": "是区不是凶",
+   "members": "魏子洲/朱怡鑫/周铭鲜",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-14T07:05:55Z",
+   "local": false,
+   "online_teams": {
+    "1": "是区不是凶",
+    "2": "是区不是凶"
+   },
+   "online_ranks": {
+    "1": 1166,
+    "2": 1752
+   },
+   "link": "members",
+   "x": -7.264923819203387,
+   "field_position": 65,
+   "mean_online_rank": 1429.3,
+   "best_online_rank": 1166,
+   "scenario_position": 111,
+   "absolute": {
+    "gold": 0.0007,
+    "silver": 0.0521,
+    "bronze": 0.319
+   },
+   "field_relative_registered": {
+    "gold": 0.0517,
+    "silver": 0.0841,
+    "bronze": 0.3072
+   },
+   "field_relative_scenario": {
+    "gold": 0.0006,
+    "silver": 0.0417,
+    "bronze": 0.2712
+   }
+  },
+  {
+   "school": "广州城市理工学院",
+   "school_en": "Guangzhou City University of Technology",
+   "team": "CunHao",
+   "members": "吴志威/林书涵/郑权峰",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-13T14:54:51Z",
+   "local": false,
+   "online_teams": {
+    "1": "gcu村好队",
+    "2": "村好队"
+   },
+   "online_ranks": {
+    "1": 1394,
+    "2": 1640
+   },
+   "link": "members",
+   "x": -7.321192056069357,
+   "field_position": 66,
+   "mean_online_rank": 1512.0,
+   "best_online_rank": 1394,
+   "scenario_position": 113,
+   "absolute": {
+    "gold": 0.0006,
+    "silver": 0.047,
+    "bronze": 0.3021
+   },
+   "field_relative_registered": {
+    "gold": 0.0447,
+    "silver": 0.0784,
+    "bronze": 0.2946
+   },
+   "field_relative_scenario": {
+    "gold": 0.0006,
+    "silver": 0.0375,
+    "bronze": 0.2538
+   }
+  },
+  {
+   "school": "江苏理工学院",
+   "school_en": "Jiangsu University of Technology",
+   "team": "Loading......",
+   "members": "陈敏钰/匡睿/高元宸",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-12T08:24:48Z",
+   "local": false,
+   "online_teams": {
+    "1": "正在加载中",
+    "2": "正在加载中"
+   },
+   "online_ranks": {
+    "1": 1385,
+    "2": 1834
+   },
+   "link": "members",
+   "x": -7.3738550357189245,
+   "field_position": 67,
+   "mean_online_rank": 1593.8,
+   "best_online_rank": 1385,
+   "scenario_position": 116,
+   "absolute": {
+    "gold": 0.0005,
+    "silver": 0.0427,
+    "bronze": 0.2864
+   },
+   "field_relative_registered": {
+    "gold": 0.0391,
+    "silver": 0.0732,
+    "bronze": 0.2823
+   },
+   "field_relative_scenario": {
+    "gold": 0.0005,
+    "silver": 0.0339,
+    "bronze": 0.238
+   }
+  },
+  {
+   "school": "东莞城市学院",
+   "school_en": "Dongguan City University",
+   "team": "东莞城市学院先锋队",
+   "members": "朱镇江/鲁莹莹/范俊希",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-13T14:10:58Z",
+   "local": false,
+   "online_teams": {
+    "1": "东莞城市学院先锋队",
+    "2": "东莞城市学院旗帜队"
+   },
+   "online_ranks": {
+    "1": 2049,
+    "2": 1315
+   },
+   "link": "members",
+   "x": -7.403349546425383,
+   "field_position": 68,
+   "mean_online_rank": 1641.5,
+   "best_online_rank": 1315,
+   "scenario_position": 117,
+   "absolute": {
+    "gold": 0.0005,
+    "silver": 0.0404,
+    "bronze": 0.2776
+   },
+   "field_relative_registered": {
+    "gold": 0.0362,
+    "silver": 0.0703,
+    "bronze": 0.2752
+   },
+   "field_relative_scenario": {
+    "gold": 0.0004,
+    "silver": 0.0321,
+    "bronze": 0.2293
+   }
+  },
+  {
+   "school": "武昌首义学院",
+   "school_en": "Wuchang Shouyi University",
+   "team": "ciallo~",
+   "members": "卢艺/李紫康/朱天翔",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-12T12:49:56Z",
+   "local": false,
+   "online_teams": {
+    "1": "wmc不会梦到热葡萄"
+   },
+   "online_ranks": {
+    "1": 1646
+   },
+   "link": "members",
+   "x": -7.406103381237015,
+   "field_position": 69,
+   "mean_online_rank": 1646.0,
+   "best_online_rank": 1646,
+   "scenario_position": 119,
+   "absolute": {
+    "gold": 0.0005,
+    "silver": 0.0402,
+    "bronze": 0.2768
+   },
+   "field_relative_registered": {
+    "gold": 0.0359,
+    "silver": 0.07,
+    "bronze": 0.2745
+   },
+   "field_relative_scenario": {
+    "gold": 0.0004,
+    "silver": 0.0319,
+    "bronze": 0.2285
+   }
+  },
+  {
+   "school": "江汉大学",
+   "school_en": "Jianghan University",
+   "team": "返回零;",
+   "members": "李尧斐/陈子杰/熊振庭",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-15T03:19:44Z",
+   "local": false,
+   "online_teams": {
+    "1": "不动的大图书馆",
+    "2": "不动的大图书馆"
+   },
+   "online_ranks": {
+    "1": 1682,
+    "2": 1718
+   },
+   "link": "members",
+   "x": -7.438327471538547,
+   "field_position": 70,
+   "mean_online_rank": 1699.9,
+   "best_online_rank": 1682,
+   "scenario_position": 120,
+   "absolute": {
+    "gold": 0.0004,
+    "silver": 0.0379,
+    "bronze": 0.2674
+   },
+   "field_relative_registered": {
+    "gold": 0.0331,
+    "silver": 0.067,
+    "bronze": 0.2666
+   },
+   "field_relative_scenario": {
+    "gold": 0.0004,
+    "silver": 0.03,
+    "bronze": 0.2192
+   }
+  },
+  {
+   "school": "成都东软学院",
+   "school_en": "Chengdu Neusoft University",
+   "team": "大狗大狗喵喵叫",
+   "members": "李禹霏/余涛/黄健",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-12T08:29:24Z",
+   "local": false,
+   "online_teams": {
+    "1": "大狗大狗喵喵叫",
+    "2": "大狗大狗喵喵叫"
+   },
+   "online_ranks": {
+    "1": 2247,
+    "2": 1351
+   },
+   "link": "members",
+   "x": -7.462975805072764,
+   "field_position": 71,
+   "mean_online_rank": 1742.3,
+   "best_online_rank": 1351,
+   "scenario_position": 121,
+   "absolute": {
+    "gold": 0.0004,
+    "silver": 0.0362,
+    "bronze": 0.2603
+   },
+   "field_relative_registered": {
+    "gold": 0.031,
+    "silver": 0.0647,
+    "bronze": 0.2605
+   },
+   "field_relative_scenario": {
+    "gold": 0.0004,
+    "silver": 0.0286,
+    "bronze": 0.2123
+   }
+  },
+  {
+   "school": "燕京理工学院",
+   "school_en": "Yanching Institute of Technology",
+   "team": "YIT",
+   "members": "张子航/马翔/武瑞琛",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-13T11:18:36Z",
+   "local": false,
+   "online_teams": {
+    "1": "千言万语汇成一句我爱你",
+    "2": "假如借我三天马翔"
+   },
+   "online_ranks": {
+    "1": 2031,
+    "2": 1536
+   },
+   "link": "members",
+   "x": -7.476610237644001,
+   "field_position": 72,
+   "mean_online_rank": 1766.2,
+   "best_online_rank": 1536,
+   "scenario_position": 122,
+   "absolute": {
+    "gold": 0.0004,
+    "silver": 0.0353,
+    "bronze": 0.2564
+   },
+   "field_relative_registered": {
+    "gold": 0.0299,
+    "silver": 0.0635,
+    "bronze": 0.2571
+   },
+   "field_relative_scenario": {
+    "gold": 0.0004,
+    "silver": 0.0278,
+    "bronze": 0.2085
+   }
+  },
+  {
+   "school": "西安建筑科技大学",
+   "school_en": "Xi'an University of Architecture and Technology",
+   "team": "根本赢不了，我听不懂！",
+   "members": "张渊博/邹凯/刘济荣",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-12T07:42:51Z",
+   "local": false,
+   "online_teams": {
+    "1": "根本赢不了我听不懂",
+    "2": "根本赢不了我听不懂"
+   },
+   "online_ranks": {
+    "1": 1740,
+    "2": 1899
+   },
+   "link": "members",
+   "x": -7.505361551510431,
+   "field_position": 73,
+   "mean_online_rank": 1817.8,
+   "best_online_rank": 1740,
+   "scenario_position": 123,
+   "absolute": {
+    "gold": 0.0004,
+    "silver": 0.0334,
+    "bronze": 0.2482
+   },
+   "field_relative_registered": {
+    "gold": 0.0278,
+    "silver": 0.0609,
+    "bronze": 0.25
+   },
+   "field_relative_scenario": {
+    "gold": 0.0003,
+    "silver": 0.0263,
+    "bronze": 0.2006
+   }
+  },
+  {
+   "school": "西南大学",
+   "school_en": "Southwest University",
+   "team": "AFOpointer",
+   "members": "宋治桥/郑顺睿/刘书言",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-12T10:08:28Z",
+   "local": false,
+   "online_teams": {
+    "1": "算法进阶退役指南",
+    "2": "算法进阶退役指南"
+   },
+   "online_ranks": {
+    "1": 2110,
+    "2": 1591
+   },
+   "link": "members",
+   "x": -7.513280627403949,
+   "field_position": 74,
+   "mean_online_rank": 1832.2,
+   "best_online_rank": 1591,
+   "scenario_position": 124,
+   "absolute": {
+    "gold": 0.0004,
+    "silver": 0.033,
+    "bronze": 0.246
+   },
+   "field_relative_registered": {
+    "gold": 0.0272,
+    "silver": 0.0602,
+    "bronze": 0.248
+   },
+   "field_relative_scenario": {
+    "gold": 0.0003,
+    "silver": 0.0259,
+    "bronze": 0.1985
+   }
+  },
+  {
+   "school": "山东石油化工学院",
+   "school_en": "Shandong Institute of Petroleum and Chemical Technology",
+   "team": "SharedBrainOffline",
+   "members": "李倍源/孙启翔/何海扬",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-12T09:02:40Z",
+   "local": false,
+   "online_teams": {
+    "1": "共享大脑未连接",
+    "2": "共享大脑未连接"
+   },
+   "online_ranks": {
+    "1": 1817,
+    "2": 1986
+   },
+   "link": "members",
+   "x": -7.549409956500645,
+   "field_position": 75,
+   "mean_online_rank": 1899.6,
+   "best_online_rank": 1817,
+   "scenario_position": 125,
+   "absolute": {
+    "gold": 0.0003,
+    "silver": 0.0308,
+    "bronze": 0.236
+   },
+   "field_relative_registered": {
+    "gold": 0.0247,
+    "silver": 0.0571,
+    "bronze": 0.239
+   },
+   "field_relative_scenario": {
+    "gold": 0.0003,
+    "silver": 0.0242,
+    "bronze": 0.189
+   }
+  },
+  {
+   "school": "福州工商学院",
+   "school_en": "Fuzhou Technology and Business University",
+   "team": "Vaccaria",
+   "members": "余延鳐/詹钤正/廖武东",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-12T08:28:09Z",
+   "local": false,
+   "online_teams": {
+    "1": "王不留行",
+    "2": "王不留行"
+   },
+   "online_ranks": {
+    "1": 2303,
+    "2": 1847
+   },
+   "link": "members",
+   "x": -7.631642940009963,
+   "field_position": 76,
+   "mean_online_rank": 2062.4,
+   "best_online_rank": 1847,
+   "scenario_position": 126,
+   "absolute": {
+    "gold": 0.0003,
+    "silver": 0.0264,
+    "bronze": 0.2139
+   },
+   "field_relative_registered": {
+    "gold": 0.0199,
+    "silver": 0.0504,
+    "bronze": 0.2186
+   },
+   "field_relative_scenario": {
+    "gold": 0.0002,
+    "silver": 0.0206,
+    "bronze": 0.1684
+   }
+  },
+  {
+   "school": "安徽建筑大学",
+   "school_en": "Anhui Jianzhu University",
+   "team": "acacac",
+   "members": "程伟宁/孙林川/王乃炜",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-13T02:06:00Z",
+   "local": false,
+   "online_teams": {
+    "1": "我永远喜欢小野寺小咲"
+   },
+   "online_ranks": {
+    "1": 2186
+   },
+   "link": "members",
+   "x": -7.689828668736484,
+   "field_position": 77,
+   "mean_online_rank": 2186.0,
+   "best_online_rank": 2186,
+   "scenario_position": 128,
+   "absolute": {
+    "gold": 0.0002,
+    "silver": 0.0237,
+    "bronze": 0.199
+   },
+   "field_relative_registered": {
+    "gold": 0.0171,
+    "silver": 0.046,
+    "bronze": 0.2045
+   },
+   "field_relative_scenario": {
+    "gold": 0.0002,
+    "silver": 0.0184,
+    "bronze": 0.1549
+   }
+  },
+  {
+   "school": "厦门大学嘉庚学院",
+   "school_en": "Xiamen University Tan Kah Kee College",
+   "team": "请输入文本",
+   "members": "涂家胤/庄严/何佶",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-13T11:14:38Z",
+   "local": false,
+   "online_teams": {
+    "1": "涂队要带飞",
+    "2": "请输入文本"
+   },
+   "online_ranks": {
+    "1": 2314,
+    "2": 2250
+   },
+   "link": "members",
+   "x": -7.732709201476045,
+   "field_position": 78,
+   "mean_online_rank": 2281.8,
+   "best_online_rank": 2250,
+   "scenario_position": 129,
+   "absolute": {
+    "gold": 0.0002,
+    "silver": 0.0219,
+    "bronze": 0.1885
+   },
+   "field_relative_registered": {
+    "gold": 0.0153,
+    "silver": 0.043,
+    "bronze": 0.1942
+   },
+   "field_relative_scenario": {
+    "gold": 0.0002,
+    "silver": 0.017,
+    "bronze": 0.1454
+   }
+  }
+ ],
+ "unlinked": [
+  {
+   "school": "河北师范大学",
+   "school_en": "Hebei Normal University",
+   "team": "随便",
+   "members": "王一飞/郑杰鸣/武怡淼",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-14T14:18:00Z",
+   "local": false,
+   "online_teams": {},
+   "online_ranks": {},
+   "link": "",
+   "x": null
+  },
+  {
+   "school": "汕头大学",
+   "school_en": "Shantou University",
+   "team": "甲鸟双区",
+   "members": "郑永鹏/潘佳阳",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-14T13:12:37Z",
+   "local": false,
+   "online_teams": {},
+   "online_ranks": {},
+   "link": "",
+   "x": null
+  },
+  {
+   "school": "北京交通大学（威海）",
+   "school_en": "Beijing Jiaotong University, Weihai",
+   "team": "bjv001",
+   "members": "邹承轩/孟孙繁钰/林唯宇",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-14T08:56:24Z",
+   "local": false,
+   "online_teams": {},
+   "online_ranks": {},
+   "link": "",
+   "x": null
+  },
+  {
+   "school": "河南大学",
+   "school_en": "Henan University",
+   "team": "O(1) Team",
+   "members": "李想/吴逸轩/献超前",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-13T07:47:14Z",
+   "local": false,
+   "online_teams": {},
+   "online_ranks": {},
+   "link": "",
+   "x": null
+  },
+  {
+   "school": "阳光学院",
+   "school_en": "Yango University",
+   "team": "Give it up, there’s no future in playing galgames",
+   "members": "郑俊杰/刘笑宇/张起荣",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-13T01:41:03Z",
+   "local": false,
+   "online_teams": {},
+   "online_ranks": {},
+   "link": "",
+   "x": null
+  },
+  {
+   "school": "井冈山大学",
+   "school_en": "Jinggangshan University",
+   "team": "HK",
+   "members": "杨文源",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-12T14:48:37Z",
+   "local": false,
+   "online_teams": {},
+   "online_ranks": {},
+   "link": "",
+   "x": null
+  },
+  {
+   "school": "中北大学",
+   "school_en": "North University of China",
+   "team": "1231212414",
+   "members": "李兴隆/邓英昊/刘灿阳",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-12T09:08:00Z",
+   "local": false,
+   "online_teams": {},
+   "online_ranks": {},
+   "link": "",
+   "x": null
+  },
+  {
+   "school": "沈阳化工大学",
+   "school_en": "Shenyang University of Chemical Technology",
+   "team": "Medal come, come",
+   "members": "王泽鹏/罗祥/刘洪运",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-12T08:28:02Z",
+   "local": false,
+   "online_teams": {},
+   "online_ranks": {},
+   "link": "",
+   "x": null
+  },
+  {
+   "school": "南京晓庄学院",
+   "school_en": "Nanjing Xiaozhuang University",
+   "team": "老登",
+   "members": "李鸣锬/黄齐/王思博",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-11T17:07:54Z",
+   "local": false,
+   "online_teams": {},
+   "online_ranks": {},
+   "link": "",
+   "x": null
+  },
+  {
+   "school": "香港大学",
+   "school_en": "The University of Hong Kong",
+   "team": "string Team_Name = \"void\"",
+   "members": "王梓言/刘冠宇/武皓炀",
+   "status": "PENDING_REVIEW",
+   "created": "2026-10-11T16:01:10Z",
+   "local": true,
+   "online_teams": {},
+   "online_ranks": {},
+   "link": "",
+   "x": null
+  }
+ ],
+ "selection": {
+  "NUM-R^3": {
+   "best_online_rank": 349,
+   "mean_online_rank": 435.7,
+   "ahead_by_best": 12,
+   "ahead_by_mean": 9,
+   "scenario_position": 30,
+   "scenario_pool": 129,
+   "scenario_cut_online_rank": 1133.0
+  }
+ },
+ "returning_schools": {
+  "2024": 35,
+  "2025": 40
+ },
+ "missing_medal_schools": {
+  "上海交通大学": [
+   "2024 #9 gold",
+   "2025 #3 gold"
+  ],
+  "上海大学": [
+   "2024 #5 gold"
+  ],
+  "东南大学": [
+   "2024 #83 bronze",
+   "2024 #101 -",
+   "2025 #14 silver"
+  ],
+  "东莞理工学院": [
+   "2024 #49 bronze",
+   "2025 #39 silver"
+  ],
+  "中国人民大学": [
+   "2025 #19 silver"
+  ],
+  "中国科学技术大学": [
+   "2024 #43 silver"
+  ],
+  "中山大学": [
+   "2024 #54 bronze",
+   "2024 #35 silver",
+   "2025 #18 silver"
+  ],
+  "北京航空航天大学": [
+   "2024 #2 gold",
+   "2025 #13 gold"
+  ],
+  "华中科技大学": [
+   "2024 #30 silver",
+   "2024 #79 bronze",
+   "2025 #89 -"
+  ],
+  "南京大学": [
+   "2024 #21 silver",
+   "2025 #15 silver"
+  ],
+  "南京航空航天大学": [
+   "2024 #7 gold",
+   "2025 #20 silver"
+  ],
+  "南京邮电大学": [
+   "2025 #27 silver"
+  ],
+  "南开大学": [
+   "2025 #16 silver"
+  ],
+  "南方科技大学": [
+   "2024 #13 gold",
+   "2025 #9 gold"
+  ],
+  "同济大学": [
+   "2024 #36 silver",
+   "2024 #26 silver",
+   "2025 #23 silver"
+  ],
+  "哈尔滨工业大学": [
+   "2024 #3 gold",
+   "2025 #4 gold"
+  ],
+  "哈尔滨工业大学威海": [
+   "2024 #41 silver",
+   "2024 #82 bronze",
+   "2025 #103 -"
+  ],
+  "复旦大学": [
+   "2025 #2 gold"
+  ],
+  "广东以色列理工学院": [
+   "2024 #42 silver"
+  ],
+  "昆山杜克大学": [
+   "2024 #24 silver",
+   "2024 #106 -",
+   "2025 #63 bronze"
+  ],
+  "暨南大学": [
+   "2025 #29 silver"
+  ],
+  "清华大学": [
+   "2025 #17 silver"
+  ],
+  "湘潭大学": [
+   "2025 #26 silver"
+  ],
+  "西北工业大学": [
+   "2024 #23 silver"
+  ],
+  "西安交通大学": [
+   "2024 #89 bronze",
+   "2024 #108 -",
+   "2025 #10 gold"
+  ],
+  "西安电子科技大学": [
+   "2024 #22 silver",
+   "2025 #124 -"
+  ],
+  "香港中文大学深圳": [
+   "2024 #72 bronze",
+   "2024 #6 gold",
+   "2025 #5 gold"
+  ],
+  "香港科技大学广州": [
+   "2024 #105 -",
+   "2025 #11 gold"
+  ]
+ }
+}

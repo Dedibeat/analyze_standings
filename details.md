@@ -6536,3 +6536,99 @@ performances (`../my-react-app`, commit `d3cd4a7`).
   - official event rows reproduce the analyzer's values.
 - **Checked on a local dev server** (throwaway account, temporary database
   deleted). The app's DETAILS.md has the rest.
+
+## 2026 Hong Kong registration list: the early field (2026-10-15)
+
+**Data.** `data/icpc_51_asia_hkmo_teams.csv` is the PTA export of the 51st
+Asia Hong Kong/Macau registration, downloaded by the user on 10-15. It has
+the same columns as the online-round exports:
+- 88 teams from 88 schools, registered 10-11 16:01 to 10-15 05:12 UTC, all
+  `PENDING_REVIEW`;
+- 87 non-local teams plus HKU, the only local team (local seats are by
+  application, so most local teams are probably not on this list);
+- one 2-member team (汕头大学) and one 1-member team (井冈山大学).
+
+**Rules re-read** (notice: https://icpc.pku.edu.cn/docs/2026-08/8f9a5ef234f04f5690f8a35eb52fee9f.pdf):
+- About 120 teams, including about 5 star teams (over-quota school teams and
+  Hong Kong/Macau secondary-school teams).
+- 95 non-local seats. **Round 1** runs until 10-30, one team per school. If
+  more than 95 register, the 95 are taken "按网络预选赛排名从高到低". The
+  notice does not say which online round counts or how the two are combined.
+- **Round 2**, before 11-14: one extra team per school, first-come. **Round 3**:
+  applications.
+- 20 local seats, at most 2 per school (HKU included), by application. HKU
+  allocates any seats left over.
+- The EC-Final rule is as recorded on 2026-10-08.
+
+**Linking** (`arch_b.hk_field_2026`). The list has Chinese member names, so
+no pinyin step is needed. In each online round a line-up links to the
+same-school 2026 online team sharing at least 2 members, or failing that to
+the same school + team name. A line-up renamed between the rounds keeps both
+ranks (西南石油大学: round 1 as 昇天, round 2 as 接地).
+- 78 of 88 teams link, all by members.
+- 10 do not: HKU (local), and 9 line-ups that mix members of different online
+  teams or have members on no roster.
+
+**Field** (linked teams; online rank = exp(mean log rank)):
+
+| field | linked | median online rank | within #50 / #100 / #200 / #500 | gold / silver+ / medal line (online rank) | expected golds (absolute model) |
+|---|---|---|---|---|---|
+| 2024 Hong Kong (149 official) | 118 | 753 | 7 / 13 / 22 / 42 | 66 / 417 / 965 | 12.6 |
+| 2025 Hong Kong (126 official) | 97 | 776 | 7 / 16 / 18 / 34 | 53 / 431 / 827 | 12.3 |
+| 2026 registered so far (88) | 78 | 1006 | 1 / 2 / 5 / 10 | 368 / 734 / 1089 | 2.2 |
+| 2026 scenario: + 51 unregistered 2025 schools, top 95 | 95 | 708 | 6 / 14 / 19 / 33 | 71 / 388 / 804 | 11.1 |
+
+- **The early list is far weaker than the 2024/2025 fields, because the
+  strong schools have not registered yet.** 40 of the 91 linked non-local
+  schools of the 2025 field are on the list. 28 schools with a 2024/2025
+  Hong Kong gold or silver are missing, among them 上海交通大学, 复旦大学, 清华大学,
+  哈尔滨工业大学, 北京航空航天大学, 南方科技大学, 香港中文大学深圳, 香港科技大学广州
+  and 西安交通大学.
+- **Scenario.** Every 2025 school not yet registered comes back with a team
+  as strong as its 2025 Hong Kong team (2025 online ranks), and round 1 keeps
+  the top 95 by online rank. This brings the field back to the 2024/2025
+  level: gold line #71, 11.1 expected golds. The early list therefore does not
+  change the Hong Kong forecast yet. It will once round 1 closes.
+- **The round-1 cut would bite.** In the scenario, 24 of the 78 linked
+  registrants fall outside the top 95: every team at online #1,139 or worse.
+
+**Field-relative model.** `logit P(medal ≥ k) = c_k + b_k (x − line_k)`, where
+line_k is the linked team at 10% / 30% / 60% of the field. The line's
+coefficient is fixed at −b_k, not estimated, because there are only two
+seasons. Compared with the absolute Hong Kong model (`c_k + b_k x`), training
+on one year and testing on the other (log loss, with expected / actual counts):
+
+| test | gold: absolute / relative | silver+: absolute / relative | any medal: absolute / relative |
+|---|---|---|---|
+| 2024 | 0.1007 / 0.1010 (12.3, 14.4 / 13) | 0.4155 / 0.4342 | 0.5249 / 0.5208 (71.3, 77.5 / 80) |
+| 2025 | 0.1165 / 0.1181 (12.6, 10.9 / 12) | 0.3255 / 0.3223 | 0.4963 / 0.4824 (67.6, 63.8 / 61) |
+
+- For gold it is a wash. For any medal it is better in both years.
+- It is worth using once the list closes. On today's incomplete list it is
+  meaningless: it would give NUM-R^3 57% gold. The absolute model stays the
+  forecast for now.
+
+**Teams** (`output/hk_field_2026.md` lists all 78; gold / silver / bronze from
+the absolute model, conditional on attending):
+- Strongest registered: 北京大学 飞带不长队 (round 2 #4, ~100% gold); 福州大学
+  (#36 / #234: 39% gold, 51% in the scenario); 杭州电子科技大学 (#120: 25%);
+  华东师范大学 (#130 / #129: 21%); 天津大学 (#203 / #170: 10%).
+- **NUM-R^3** (#544 / #349):
+  - 10th of the 78 linked registrants by mean online rank (12 non-local
+    teams ahead by best-round rank), and 30th of 129 in the scenario.
+  - Safe from the round-1 cut: it drops out only if about 65 more teams
+    stronger than it register.
+  - Gold / silver / bronze: 1.3% / 34% / 46% (absolute model, unchanged from
+    2026-10-01); 1.6% / 30% / 48% (field-relative, scenario).
+
+**Not changed:** `hk_gold`, `online_medals` and `ecfinal_chance`. The Hong
+Kong EC-Final depth (rank 32–37) is not recomputed, because that needs to
+know which Hong Kong teams already hold a mainland round-1 seat.
+`icpc_2025_online_2_teams.csv` is still the 2026 round-2 list. Its content is
+identical; only its CRLF line endings differ, which is why its MD5 changed.
+It stays uncommitted.
+
+Run: `python3 -m arch_b.hk_field_2026 [--file CSV] [--team NAME]` (on Windows
+set `PYTHONUTF8=1`). Tests: `tests/test_hk_field_2026.py`, which pins this
+export's counts (88 / 78). Rerun on a fresh export after round 1 closes
+(10-30) and update the tests' counts.
