@@ -6632,3 +6632,62 @@ Run: `python3 -m arch_b.hk_field_2026 [--file CSV] [--team NAME]` (on Windows
 set `PYTHONUTF8=1`). Tests: `tests/test_hk_field_2026.py`, which pins this
 export's counts (88 / 78). Rerun on a fresh export after round 1 closes
 (10-30) and update the tests' counts.
+
+### Updated export (2026-10-17 follow-up)
+
+**Data.** `data/icpc_hk_macau_regional_teams.csv` is the user's PTA export of
+10-17 (registrations up to 14:30 UTC). It is now the module's default; the
+10-15 file stays as a snapshot.
+- 106 teams, all `PENDING_REVIEW`: the 88 of 10-15 plus 18 new ones. None was
+  removed. One team was renamed (昆明理工大学 N.P.L.G → 数论、概率论、线性代数滚出我的 ICPC).
+- One new team (北京理工大学) was created on 10-14, before the 10-15 export's
+  last entry, yet was not in it. So PTA's public list can lag.
+- 福建师范大学 now has two teams. Round 1 allows one per school, so the
+  module now treats a school's later registration as a round-2 entry: it is
+  left out of the round-1 pool and the scenario (`extra` in the table).
+- 95 of 106 teams link to the online rounds. The new unlinked team is
+  南方科技大学 SUSTech-Ok. Its three members are on no 2025 or 2026 online
+  roster and no regional board. SUSTech's 2025 Hong Kong gold line-up (online
+  team 南方科技大学1队) has not registered.
+
+**Round 1 is already oversubscribed.** There are 104 non-local round-1 teams
+for 95 seats, so 9 would be cut if the list closed now. 10 of the 104 have no
+online result, and the notice does not say how they are ranked:
+- if they are ranked last, 9 of the 10 are cut, SUSTech-Ok among them;
+- if they are kept, the 9 weakest rated teams are cut (online rank worse
+  than #1,723).
+
+**Field** (as in the 10-15 table):
+
+| field | linked | median | within #50 / #100 / #200 / #500 | gold / silver+ / medal line | expected golds |
+|---|---|---|---|---|---|
+| 2026 registered, 10-15 | 78 | 1006 | 1 / 2 / 5 / 10 | 368 / 734 / 1089 | 2.2 |
+| 2026 registered, 10-17 | 95 | 998 | 2 / 3 / 7 / 16 | 294 / 708 / 1089 | 3.6 |
+| scenario (+ 44 unregistered 2025 schools, top 95) | 95 | 708 | 6 / 12 / 17 / 33 | 71 / 374 / 799 | 10.8 |
+
+- **The strong new teams:**
+
+  | team | online ranks | P(gold) |
+  |---|---|---|
+  | 香港中文大学（深圳） Mynoghra | #18 / #61 | 89% |
+  | 中山大学 SYSU_2333er | #127 / #84 | 32% |
+  | 武汉工程大学 | #266 | 4% |
+  | 北京航空航天大学 蒟蒻果冻 | #250 / #302 | 4% |
+  | 北京科技大学 | #283 / #306 | 3% |
+  | 江西农业大学 | #176 / #589 | 3% |
+
+- 23 schools with a 2024/2025 Hong Kong gold or silver have still not
+  registered (28 on 10-15). Among them are 上海交通大学, 复旦大学, 清华大学,
+  哈尔滨工业大学, 南京大学, 西安交通大学 and 香港科技大学广州.
+- The list is still far weaker than the 2024/2025 fields. The scenario still
+  puts the gold line at #71, so the forecast is unchanged.
+
+**NUM-R^3:**
+- 16th of the 95 linked teams (15 round-1 teams ahead by mean online rank,
+  18 by best-round rank), and still 30th in the scenario (of 138).
+- It stays in under either reading of the cut.
+- Gold / silver / bronze: 1.3% / 34% / 46% (absolute model, unchanged);
+  2% / 29% / 49% (field-relative, scenario).
+
+Tests now pin the 10-17 export: 106 / 95 teams, the extra 福建师范大学 team,
+and 104 round-1 teams with 9 cut.

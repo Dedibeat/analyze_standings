@@ -516,10 +516,12 @@ exports in `data/`: `icpc_2025_online_1_teams.csv`,
 `icpc_2026_ec_online_round2_teams.csv`) are added by `add_pta_rosters.py`; they
 link 90% of 2025 mainland regional teams to an online result (57% by name
 alone). `arch_b.hk_field_2026` links the 2026 Hong Kong registration list
-(`data/icpc_51_asia_hkmo_teams.csv`, an early export of 88 teams) to the 2026
-online rounds by Chinese member names (78 of 88). The list is still much weaker
-than the 2024/2025 fields (gold line online #368 vs #53–66), because most
-strong schools have not registered yet. With the 2025 schools that have not
+(`data/icpc_hk_macau_regional_teams.csv`, the 10-17 export of 106 teams;
+the 10-15 snapshot `icpc_51_asia_hkmo_teams.csv` had 88) to the 2026 online
+rounds by Chinese member names (95 of 106). Round 1 is already oversubscribed
+(104 non-local teams for 95 seats), but the list is still much weaker than
+the 2024/2025 fields (gold line online #294 vs #53–66), because most strong
+schools have not registered yet. With the 2025 schools that have not
 registered yet added back, the gold line returns to #71 and the forecast is
 unchanged. Results: `output/hk_field_2026.md`.
 
