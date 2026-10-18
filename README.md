@@ -837,19 +837,33 @@ Details: `details.md` (2026-10-13, both entries).
 python3 scripts/ccpc_difficulty_rank.py   # writes output/ccpc_difficulty_rank.md
 ```
 
-The 9 CCPC sets with full problem ratings, hardest first: fewest problems
-rated ≤ 2400 CF, ties by a 2400-rated team's expected solves. Ranks and
-verdicts only, so nothing is spoiled. Each set is compared with the 18
-mainland ICPC regionals of 2023–2025 at bronze, silver and gold, in two ways:
+19 CCPC sets, hardest first: fewest problems rated ≤ 2400 CF, ties by a
+2400-rated team's expected solves. Ranks and verdicts only, so nothing is
+spoiled.
 
-- **Medal:** is the last medallist's performance higher? Yes at every tier
-  for all six stations. The finals and the 2017 set have no onsite board.
-- **Problems only:** does a team at that tier's regional line need more
-  rating to solve as much? The two finals, both Zhengzhou sets and Jinan 2025
-  are harder. Jinan 2024 is the same. Chongqing 2025 is the same (marginally
-  easier at bronze). Harbin 2024 and Qinhuangdao 2017 are easier.
+- **Which sets.** 9 sets have full shipped ratings. 10 more stations are rated
+  from their onsite XCPCIO boards: the 2022–2023 stations, 10th Chongqing and
+  11th Harbin. Their onsite teams are linked to fitted teams by shared
+  members, and each problem is rated with those abilities held fixed, then
+  mapped onto the shipped scale. The fit and the shipped ratings are
+  unchanged.
+- **Comparison.** Each set is compared with the mainland ICPC regionals of
+  2023–2025 at bronze, silver and gold, in two ways:
+  - **Medal:** is the last medallist's performance higher? Yes at every tier
+    for almost every station. 11th Harbin is the same as a regional, and
+    10th Chongqing is the same at bronze and silver. The finals and the 2017
+    set have no onsite board.
+  - **Problems only:** does a team at that tier's regional line need more
+    rating to solve as much? The two finals, Guangzhou 2022, both Zhengzhou
+    sets and Jinan 2025 are harder at every tier.
+- **The easy sets** have easier problems at every tier: 10th Chongqing
+  (2024), 8th Weihai (2022), 11th Harbin (2025), 10th Harbin (2024) and
+  Qinhuangdao 2017.
+- **Check.** Held out of the fit, the onsite method reproduces the shipped
+  ratings of the six rated stations in set-level terms, with the same
+  order.
 
-Details: `details.md` (2026-10-18 entry).
+Details: `details.md` (2026-10-18 entry and its follow-up).
 
 ### Interactive viewer
 
