@@ -831,6 +831,26 @@ Details: `details.md` (2026-10-12, third entry).
 
 Details: `details.md` (2026-10-13, both entries).
 
+### CCPC sets ranked by problem difficulty (2026-10-18)
+
+```bash
+python3 scripts/ccpc_difficulty_rank.py   # writes output/ccpc_difficulty_rank.md
+```
+
+The 9 CCPC sets with full problem ratings, hardest first: fewest problems
+rated ≤ 2400 CF, ties by a 2400-rated team's expected solves. Ranks and
+verdicts only, so nothing is spoiled. Each set is compared with the 18
+mainland ICPC regionals of 2023–2025 at bronze, silver and gold, in two ways:
+
+- **Medal:** is the last medallist's performance higher? Yes at every tier
+  for all six stations. The finals and the 2017 set have no onsite board.
+- **Problems only:** does a team at that tier's regional line need more
+  rating to solve as much? The two finals, both Zhengzhou sets and Jinan 2025
+  are harder. Jinan 2024 is the same. Chongqing 2025 is the same (marginally
+  easier at bronze). Harbin 2024 and Qinhuangdao 2017 are easier.
+
+Details: `details.md` (2026-10-18 entry).
+
 ### Interactive viewer
 
 ```bash
