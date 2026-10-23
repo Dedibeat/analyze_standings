@@ -6767,10 +6767,31 @@ have no online result of their own.
 - 49 registered round-1 teams have a better school rank. It keeps a round-1
   seat while no more than 45 of the 74 unregistered non-local schools ranked
   above it register by 10-30.
-- That looks safe. 31 of those 74 schools played Hong Kong in 2024 or 2025;
-  43 played it in neither year. Even if all 31 come back, NUM-R^3 is 81st.
-  The 2024 and 2025 fields held 51 and 56 linked non-local schools from that
-  year's combined top 127. NUM-R^3 would need about 95 such schools to be cut.
+- That looks safe. 34 of those 74 schools played Hong Kong in 2024 or 2025
+  (school-level, by English board name; 31 by linked teams only), 40 in
+  neither year. Even if all 34 come back, NUM-R^3 is 84th. The 2024 and 2025
+  fields held 51 and 56 linked non-local schools from that year's combined
+  top 127. NUM-R^3 would need about 95 such schools to be cut.
+- **Chance of the round-1 cut** (follow-up question). The 123 non-local
+  top-127 schools split into 73 with a 2024/2025 Hong Kong team and 50
+  without. Registered so far: 22 + 5 on 10-15, 30 + 8 on 10-17, 39 + 10 on
+  10-23, so about 2 a day lately and 4 a day since 10-11. Each school is
+  treated as an independent coin with that pace's per-day rate, carried over
+  the 7 days to 10-30. The table gives P(46 or more of the 74 register):
+
+  | assumption | P(past-HK) / P(other) | expected new | P(cut) |
+  |---|---|---|---|
+  | 10-17 → 10-23 pace | 0.24 / 0.06 | 10 | ~0 |
+  | 10-11 → 10-23 average pace | 0.36 / 0.12 | 17 | ~0 |
+  | 3× the average pace (deadline rush) | 0.74 / 0.32 | 38 | 2.7% |
+  | every past-HK school + 20% of the others | 1 / 0.20 | 42 | 9% |
+  | every past-HK school + 30% of the others | 1 / 0.30 | 46 | 56% |
+
+  The last two rows need a 100% return of past-HK schools (2024 → 2025 was
+  62%), so the estimate is about 1%, under 3% even with a heavy deadline
+  rush. It assumes that first teams registered after 10-30 cannot displace
+  round-1 seats, and that PTA cuts by the shown rank. It does not cover
+  review rejection or travel problems.
 - In the scenario it is 73rd of 155 by school rank, and the cut falls at
   school #207.
 - By team strength it is 23rd of the 112 linked teams (20 round-1 teams
