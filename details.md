@@ -6691,3 +6691,97 @@ online result, and the notice does not say how they are ranked:
 
 Tests now pin the 10-17 export: 106 / 95 teams, the extra 福建师范大学 team,
 and 104 round-1 teams with 9 cut.
+
+### Updated export (2026-10-23 follow-up)
+
+**Data.** `data/icpc_hk_macau_public_teams_20261023.xlsx` is the user's PTA
+export of 10-23 (file stamp 22:45). It is now the module's default; the
+10-15 and 10-17 CSVs stay as snapshots.
+- **PTA changed the format.** It is now an xlsx with English school names,
+  no team id, no creation time and no province, plus a new "Online ranking"
+  column. The module maps each English school name to its Chinese name and
+  province through the PTA CSV exports (2026 online rounds + the two Hong
+  Kong lists). All 129 rows map. It takes `created_at` from an earlier Hong
+  Kong export with the same line-up; the 24 teams new since 10-17 have none
+  and count as registered later.
+- 129 teams, all `Pending`: the 106 of 10-17, minus one, plus 24 new. 广西大学
+  swapped its line-up (你是我的梦幻之AC → 队名Wa2了, different members). Two
+  teams were renamed (成都锦城学院 Random → x x xxx; 西南大学 AFOpointer →
+  算法进阶退役指南).
+- 6 local teams now: two each from HKU, CUHK and HKUST. Local schools may
+  enter two, so they are no longer counted as `extra`. 福建师范大学 BBQ team is
+  still the only non-local extra.
+- 112 of 129 link (11 unlinked on 10-17). The new unlinked teams are CUHK ×2,
+  HKU's second team, 大连理工大学, 山东科技大学 and 昆山杜克大学. Their members are
+  on no 2026 online roster of their school.
+
+**The selection rank is the school's combined online rank.** On all 129
+rows, the export's "Online ranking" equals the school's 2026 `combined` rank
+in `online_schools.csv`. Two teams of one school show the same number (CUHK 8,
+HKUST 18, HKU 73, 福建师范大学 176). NUM-R^3 shows 128. So round 1's
+"按网络预选赛排名" is a school ranking, not a team ranking. This settles both
+open points of 10-17:
+- which round counts: neither alone; it is the combined school table;
+- teams with no online result of their own: they carry their school's rank.
+  SUSTech-Ok is school #9, so it is safe, not cut.
+
+The module now ranks round 1 by school rank, linked or not. The scenario's
+top-95 cut also uses school rank: a late 2025 school gets its 2026 combined
+rank, or goes last if it has none.
+
+**Round 1 if it closed now:** 123 non-local teams. The second 福建师范大学 team
+waits for round 2, so 122 compete for 95 seats and 27 would be cut. The last
+team kept is school #284; every team from #286 down is cut. 13 of the 122
+have no online result of their own.
+
+**Field** (as in the 10-15 table):
+
+| field | linked | median | within #50 / #100 / #200 / #500 | gold / silver+ / medal line | expected golds |
+|---|---|---|---|---|---|
+| 2026 registered, 10-17 | 95 | 998 | 2 / 3 / 7 / 16 | 294 / 708 / 1089 | 3.6 |
+| 2026 registered, 10-23 | 112 | 957 | 3 / 5 / 11 / 23 | 186 / 679 / 1083 | 5.2 |
+| scenario on 10-17, cut by school rank | 89 | – | – | 70 / 368 / 799 | 10.8 |
+| scenario on 10-23 (+ 33 unregistered 2025 schools, top 95 by school rank) | 86 | 680 | 5 / 10 / 16 / 32 | 80 / 382 / 816 | 9.1 |
+
+- The strongest new teams: HKUST 喵喵喵幼儿园 (local, #34 / #63: 78% gold),
+  HKUST(GZ) BPM 222.22 (#80 / #80: 47%), NUAA (#99 / #183: 20%) and RUC
+  (#170 / #162: 13%).
+- **Returning strong schools send weaker line-ups than in 2025.** That is
+  why the scenario's gold line moved from #70 to #80. Of the 2025 schools
+  that registered since 10-17, the four strongest had 2025 Hong Kong teams at
+  online #42–#109. Their 2026 line-ups sit at #80–#382 (西安交通大学: #50 →
+  #382; HKUST(GZ): #42 → #80; NUAA: #72 → #135; RUC: #109 → #166). The
+  scenario assumes every school still missing returns at its 2025 strength.
+  If they follow the same pattern, the real gold line will be weaker than
+  #80.
+- 17 schools with a 2024/2025 Hong Kong gold or silver are still not
+  registered (23 on 10-17), among them 上海交通大学, 复旦大学, 清华大学,
+  哈尔滨工业大学, 南京大学 and 上海大学. 58 of the 2025 field's linked
+  non-local schools have registered (47 on 10-17).
+- Pre-existing quirk, not fixed: `hk_gold.is_local` treats the 2025 board's
+  "Beijing Normal-Hong Kong Baptist University" (北师香港浸会大学, Zhuhai) as
+  local. So "returning" undercounts by one, as does the 2025 non-local
+  count. It is registered (school #255), so the scenario is unaffected.
+
+**NUM-R^3** (school #128; online #544 / #349):
+- 49 registered round-1 teams have a better school rank. It keeps a round-1
+  seat while no more than 45 of the 74 unregistered non-local schools ranked
+  above it register by 10-30.
+- That looks safe. 31 of those 74 schools played Hong Kong in 2024 or 2025;
+  43 played it in neither year. Even if all 31 come back, NUM-R^3 is 81st.
+  The 2024 and 2025 fields held 51 and 56 linked non-local schools from that
+  year's combined top 127. NUM-R^3 would need about 95 such schools to be cut.
+- In the scenario it is 73rd of 155 by school rank, and the cut falls at
+  school #207.
+- By team strength it is 23rd of the 112 linked teams (20 round-1 teams
+  ahead by mean online rank).
+- Gold / silver / bronze: 1.3% / 34% / 46% (absolute, unchanged);
+  2% / 29% / 49% (field-relative, scenario, unchanged at the shown
+  precision).
+
+Tests pin the 10-23 export: 129 / 112 teams, 122 round-1 teams with 27 cut,
+and "Online ranking" equal to the combined school rank on all 129 rows
+(NUM-R^3 128). The early-list check is now "gold line > 2× the 2024/2025
+line" (#186 vs #66), down from 3×, because the list is filling in.
+`pypinyin` (needed by `arch_b.hk_link`) was missing in this environment and
+was installed; `openpyxl` reads the xlsx.

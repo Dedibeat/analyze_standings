@@ -516,14 +516,16 @@ exports in `data/`: `icpc_2025_online_1_teams.csv`,
 `icpc_2026_ec_online_round2_teams.csv`) are added by `add_pta_rosters.py`; they
 link 90% of 2025 mainland regional teams to an online result (57% by name
 alone). `arch_b.hk_field_2026` links the 2026 Hong Kong registration list
-(`data/icpc_hk_macau_regional_teams.csv`, the 10-17 export of 106 teams;
-the 10-15 snapshot `icpc_51_asia_hkmo_teams.csv` had 88) to the 2026 online
-rounds by Chinese member names (95 of 106). Round 1 is already oversubscribed
-(104 non-local teams for 95 seats), but the list is still much weaker than
-the 2024/2025 fields (gold line online #294 vs #53–66), because most strong
-schools have not registered yet. With the 2025 schools that have not
-registered yet added back, the gold line returns to #71 and the forecast is
-unchanged. Results: `output/hk_field_2026.md`.
+(`data/icpc_hk_macau_public_teams_20261023.xlsx`, the 10-23 export of 129
+teams; CSV snapshots of 10-17 (106) and 10-15 (88) stay in `data/`) to the
+2026 online rounds by Chinese member names (112 of 129). The export's "Online
+ranking" is the school's 2026 combined online rank, so the round-1 cut is by
+school: 122 round-1 non-local teams for 95 seats, cut below school #284 if it
+closed now; NUM-R^3 (school #128) is safe unless 46 of the 74 unregistered
+schools above it register. The list is still weaker than the 2024/2025
+fields (gold line online #186 vs #53–66). With the 2025 schools that have not
+registered yet added back, the gold line is #80, and returning strong schools
+are sending weaker line-ups than in 2025; NUM-R^3's chances are unchanged. Results: `output/hk_field_2026.md`.
 
 ```bash
 python3 scripts/build_quota_evidence.py        # WF/host/invitational/provincial evidence + Shanghai lists

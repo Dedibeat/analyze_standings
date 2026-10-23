@@ -90,8 +90,8 @@ more TabFM runs (run-to-run noise; gains vanished once rosters were linked).
 ## Open asks to the user
 
 - The Hong Kong 2026 registration / accepted list, or where it is published.
-  (2026-10-17: PTA export of 106 teams in `data/icpc_hk_macau_regional_teams.csv`, 10-15 snapshot in
-  `icpc_51_asia_hkmo_teams.csv`, analysed by `arch_b.hk_field_2026`; a fresh export after round 1
-  closes (10-30) is still needed.)
+  (2026-10-23: PTA export of 129 teams in `data/icpc_hk_macau_public_teams_20261023.xlsx`, CSV snapshots
+  of 10-17 and 10-15, analysed by `arch_b.hk_field_2026`; its "Online ranking" column showed the round-1
+  cut is by combined school rank. A fresh export after round 1 closes (10-30) is still needed.)
 - A PTA login in the browser, to check for Hong Kong 2024/2025 registration lists.
 - Any 2022 Hong Kong / 2023 Macau team lists with members (low priority).
