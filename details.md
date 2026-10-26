@@ -6806,3 +6806,103 @@ and "Online ranking" equal to the combined school rank on all 129 rows
 line" (#186 vs #66), down from 3×, because the list is filling in.
 `pypinyin` (needed by `arch_b.hk_link`) was missing in this environment and
 was installed; `openpyxl` reads the xlsx.
+
+### Updated export (2026-10-26 follow-up)
+
+**Data.** `data/icpc_hk_macau_public_teams_20261026.xlsx`, the user's PTA
+export of 10-26 (file stamp 19:53, UTC+8), same xlsx format; now the default.
+- 143 teams, all `Pending`: the 129 of 10-23 plus 15 new, minus one.
+  山东大学（威海） swapped its line-up (面向样例编程队 → Attack on MilkFrog).
+  惠州学院 renamed its team (某科学的超电磁炮 → 沧海一粟). One new team is local:
+  澳门大学.
+- 124 link. The two new unlinked teams are 新疆大学 and 烟台大学.
+- "Online ranking" again equals the combined school rank on all 143 rows.
+
+**Round 1 is filling fast with schools ranked above NUM-R^3.** 10 of the 15
+new teams come from schools above #128: 山东大学 #21, 东北大学秦皇岛分校 #22,
+东南大学 #24, 西北工业大学 #25, 同济大学 #28, 杭州师范大学 #35, 深圳技术大学
+#49, 哈尔滨工业大学（威海） #55, 上海大学 #62 and 大连理工大学盘锦校区 #124. 9
+of the 10 had a 2024/2025 Hong Kong team.
+- If round 1 closed now: 135 round-1 non-local teams for 95 seats, so 40 are
+  cut. The last team kept is school #248 (#284 on 10-23).
+- NUM-R^3: 59 registered teams ahead (49 on 10-23), so it is 60th. 35 more
+  of the 64 unregistered non-local schools above it can register before it
+  is cut; the 36th would cut it.
+
+**Cut risk, now in the module** (`cut_risk`, in `selection[team]`).
+`SNAPSHOTS` records when each export was taken: a CSV's last registration,
+or an xlsx file name's stamp. Round 1 is assumed to close at the end of
+10-30, UTC+8 (`ROUND1_CLOSE`), so 4.17 days are left. The schools above the
+team are split into those with a 2024/2025 Hong Kong team (linked, or by the
+board's English school name) and the rest. Each group's per-day rate comes
+from the last two snapshots. Each school registers independently at its
+group's rate, carried to the close at 1× / 2× / 3× that rate, plus a stress
+row where every past-Hong Kong school returns. P(cut) is exact (convolved
+binomials).
+
+| assumption | P(register): past-HK (25 left) / other (39 left) | expected new | P(cut) |
+|---|---|---|---|
+| 1× the 10-23 → 10-26 pace | 0.36 / 0.04 | 10.4 | ~0 |
+| 2× | 0.59 / 0.07 | 17.5 | ~0 |
+| 3× | 0.74 / 0.10 | 22.5 | ~0 |
+| every past-HK school, others at 3× | 1 / 0.10 | 29.1 | 0.2% |
+
+- The previous estimate underestimated the pace. From the 10-17 → 10-23
+  pace it expected about 4–5 schools above NUM-R^3 by 10-26; 10 came, about
+  2× faster. The 2× / 3× rows cover that.
+- Even so, the cut needs all 25 remaining past-HK schools plus 11 of the 39
+  others. Only 1 of those 39 registered in the last 3 days, and 11 of the
+  50 since 10-11. So the chance stays **under 1%**, though the margin shrank
+  from 45 to 35.
+- Reading `cut_risk` on the 10-23 file reproduces the earlier estimate (need
+  46; 10.4 expected at 1×; 1.8% for every past-HK school with others at 3×).
+- **Break-even** (`break_even_p_other`). Suppose every one of the 25
+  past-HK schools returns, which at even 3× the pace has about a 0.05%
+  chance. The cut then needs 11 of the 39 others. That has a 5% chance if
+  each registers with probability 0.17, and 50% at 0.27. Their pace so far
+  gives 0.04 (last 3 days) or 0.07 (average since 10-11). So it takes 2.6×
+  to 4.5× their average pace on top of a full past-HK return.
+
+**User notes (10-26), recorded as given:**
+- In past Hong Kong rounds, an oversubscribed non-local list meant an extra
+  selection contest. This year it is school rank alone, so weak line-ups
+  from well-ranked schools get in, as seen (山东大学 #21 → a #1638 team).
+  This conflicts with the 2026-10-01 reading of the 2024/2025 notices
+  ("by online rank if oversubscribed"); not re-checked.
+- Hong Kong has 10 EC-Final places this year against 1 in 2025 (the 2025
+  count was inferred on 2026-10-08). This likely explains both the fast
+  registration and the second line-ups from strong schools: places go to
+  medal teams in rank order, skipping teams with a member on the mainland
+  round-1 list, with at most 3 − x per school. That makes Hong Kong a route
+  for a school's lower teams. The 10-place rule was in the 08-28 notice,
+  before registration opened on 10-11, so the pace used above already
+  reflects it.
+
+**Field** (as in the 10-15 table):
+
+| field | linked | median | within #50 / #100 / #200 / #500 | gold / silver+ / medal line | expected golds |
+|---|---|---|---|---|---|
+| 2026 registered, 10-23 | 112 | 957 | 3 / 5 / 11 / 23 | 186 / 679 / 1083 | 5.2 |
+| 2026 registered, 10-26 | 124 | 947 | 3 / 5 / 12 / 27 | 198 / 658 / 1064 | 5.4 |
+| scenario on 10-26 (+ 27 unregistered 2025 schools, top 95 by school rank) | 86 | 652 | 5 / 9 / 16 / 34 | 92 / 382 / 776 | 8.7 |
+
+- Strong schools again sent second line-ups. 山东大学 (school #21) entered a
+  #1638 team, 哈工大威海 (#55) a #1607, 东北大学秦皇岛 (#22) a #622, 上海大学
+  (#62) a #726. Only 西北工业大学 (#198), 东南大学 (#394) and 同济大学 (#411)
+  are stronger than NUM-R^3 (#436). So the scenario's gold line weakened
+  again, #80 → #92.
+- 12 schools with a 2024/2025 Hong Kong gold or silver are still not
+  registered (17 on 10-23): 上海交通大学, 复旦大学, 清华大学, 哈尔滨工业大学,
+  中国科学技术大学, 南京大学, 南开大学, 南京邮电大学, 暨南大学, 湘潭大学,
+  西安电子科技大学 and 广东以色列理工学院.
+
+**NUM-R^3**:
+- 26th of the 124 linked teams by team strength (23 round-1 teams stronger),
+  though 60th by school rank.
+- Gold / silver / bronze: 1.3% / 34% / 46% (absolute, unchanged);
+  3.1% / 28% / 48% (field-relative, scenario).
+
+Tests pin the 10-26 export: 143 / 124 teams, 135 round-1 teams with 40
+cut, the rank check on 143 rows, and NUM-R^3's cut risk (59 ahead, need 36
+of 64, 9 + 1 registered since 10-23, P(cut) rising with the pace and below
+1%).

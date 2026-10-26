@@ -12,6 +12,8 @@ it is an xlsx with English school names, no creation time and an "Online
 ranking" column, which is the school's 2026 combined online rank
 (``online_schools.csv``): the round-1 cut is by school, so a line-up with no
 online result of its own still has a rank.
+For a team (``--team``) it gives the chance of the round-1 cut from the pace at
+which schools ranked above it registered between the last two ``SNAPSHOTS``.
 
 It compares that field with the 2024 / 2025 Hong Kong fields (``arch_b.hk_link``)
 and gives each registered team its gold / silver / bronze chance from two Hong
@@ -32,6 +34,7 @@ import collections
 import csv
 import json
 import math
+from datetime import datetime
 from pathlib import Path
 
 import numpy as np
@@ -41,7 +44,15 @@ from arch_b import hk_link as hk
 from arch_b import online_gold as og
 from arch_b import online_medals as om
 
-REGISTRATION = og.ROOT / "data" / "icpc_hk_macau_public_teams_20261023.xlsx"  # 10-23 export
+REGISTRATION = og.ROOT / "data" / "icpc_hk_macau_public_teams_20261026.xlsx"  # 10-26 export
+SNAPSHOTS = {  # export -> when taken (UTC): a CSV's last registration, an xlsx file name's stamp (UTC+8)
+    "icpc_51_asia_hkmo_teams.csv": "2026-10-15T05:12",
+    "icpc_hk_macau_regional_teams.csv": "2026-10-17T14:30",
+    "icpc_hk_macau_public_teams_20261023.xlsx": "2026-10-23T14:45",
+    "icpc_hk_macau_public_teams_20261026.xlsx": "2026-10-26T11:53",
+}
+ROUND1_CLOSE = "2026-10-30T16:00"  # end of 10-30 in UTC+8 (the notice gives the date only)
+PACES = (1, 2, 3)
 HK_EXPORTS = [og.ROOT / "data" / n for n in ("icpc_51_asia_hkmo_teams.csv", "icpc_hk_macau_regional_teams.csv")]
 PTA_EXPORTS = [og.ROOT / "data" / n for n in ("icpc_2026_ec_round1_teams.csv", "icpc_2026_ec_online_round2_teams.csv")] \
     + HK_EXPORTS  # PTA CSVs: English school name -> Chinese name and province
@@ -101,6 +112,51 @@ def round_ranks(online_teams, season="2026"):
             out[(rnd, og.norm_school(r["school"]), og.norm_name(r["team"]))] = \
                 int(r["rank"]) if r["rank"] else (ranked + 1 + len(rs)) / 2
     return out
+
+
+def binom_tail(groups, k):
+    """P(sum of independent Binomial(n, p) over (n, p) in ``groups`` >= k)."""
+    pmf = np.array([1.0])
+    for n, p in groups:
+        pmf = np.convolve(pmf, [math.comb(n, i) * p ** i * (1 - p) ** (n - i) for i in range(n + 1)])
+    return float(pmf[k:].sum())
+
+
+def cut_risk(path, top, past_hk, room):
+    """Chance that more than ``room`` of the schools in ``top`` (non-local, better school rank) not registered yet
+    register before round 1 closes. Each registers at its group's per-day rate between the last two snapshots
+    (groups: had a 2024/2025 Hong Kong team or not), carried to the close at 1x / 2x / 3x that rate; the last
+    row has every past-Hong Kong school return. None without an earlier snapshot."""
+    names = list(SNAPSHOTS)
+    if Path(path).name not in names[1:]:
+        return None
+    names = names[names.index(Path(path).name) - 1:][:2]
+    t0, t1, close = (datetime.fromisoformat(v) for v in (SNAPSHOTS[names[0]], SNAPSHOTS[names[1]], ROUND1_CLOSE))
+    reg0, reg1 = ({og.norm_school(r["school_name_cn"]) for r in read_registration(og.ROOT / "data" / n)} for n in names)
+    days, left = (t1 - t0).total_seconds() / 86400, max(0.0, (close - t1).total_seconds() / 86400)
+    groups = {}
+    for g, schools in (("past_hk", top & past_hk), ("other", top - past_hk)):
+        before, after = len(schools - reg0), len(schools - reg1)
+        groups[g] = dict(schools=len(schools), unregistered=after, registered_since=before - after,
+                         per_day=math.log(before / after) / days if after else 0.0)
+    rows = []
+    for name, ps in [(f"{k}x the pace", {g: 1 - math.exp(-k * v["per_day"] * left) for g, v in groups.items()})
+                     for k in PACES] + [(f"every past-HK school, others at {PACES[-1]}x", {"past_hk": 1.0, "other": 1 - math.exp(
+                         -PACES[-1] * groups["other"]["per_day"] * left)})]:
+        n = [(groups[g]["unregistered"], ps[g]) for g in groups]
+        rows.append(dict(assumption=name, p_past_hk=round(ps["past_hk"], 3), p_other=round(ps["other"], 3),
+                         expected_new=round(sum(a * b for a, b in n), 1), p_cut=round(binom_tail(n, room + 1), 4)))
+    # If every past-Hong Kong school returns: the chance per other school that gives a 5% / 50% cut.
+    k, n = room + 1 - groups["past_hk"]["unregistered"], groups["other"]["unregistered"]
+    break_even = {}
+    for target in (0.05, 0.5):
+        lo, hi = 0.0, 1.0
+        for _ in range(40):
+            mid = (lo + hi) / 2
+            lo, hi = (mid, hi) if binom_tail([(n, mid)], k) < target else (lo, mid)
+        break_even[str(target)] = round(hi, 3)
+    return dict(since=names[0], days=round(days, 2), days_left=round(left, 2), need=room + 1, groups=groups,
+                scenarios=rows, others_needed=k, break_even_p_other=break_even)
 
 
 def school_ranks(data, season="2026"):
@@ -234,18 +290,22 @@ def run(path=REGISTRATION, teams=("NUM-R^3",)):
                  field_relative_scenario=predict(w_rel, r["x"], line_sc))
 
     provinces = {og.norm_school(cn): p for cn, p in pta_schools().values()}
+    smap = hk.school_map()  # schools with a 2024/2025 Hong Kong team, linked or by the board's English name
+    past_hk = {r["online_school"] or smap.get(hk.norm_school_en(r["school"]))
+               for r in hk_all if r["season"] in om.HK_SEASONS} - {None}
     selection = {}  # round 1 picks by school rank if more than 95 non-local teams register
     for t in teams:
         r = next((q for q in linked if q["team"] == t), None)
         if r is not None:
             ahead = sum((q["school_rank"] or math.inf) < r["school_rank"] for q in round1)
+            top = {s for s, k in ranks.items() if k < r["school_rank"] and provinces.get(s) not in LOCAL_PROVINCES}
             selection[t] = dict(
                 school_rank=r["school_rank"], best_online_rank=r["best_online_rank"],
                 mean_online_rank=r["mean_online_rank"], ahead=ahead, room=NONLOCAL_SEATS - 1 - ahead,
-                unregistered_ahead=sum(k < r["school_rank"] and s not in registered
-                                       and provinces.get(s) not in LOCAL_PROVINCES for s, k in ranks.items()),
+                unregistered_ahead=len(top - registered),
                 scenario_position=r["scenario_position"], scenario_pool=len(pool),
-                scenario_cut_school_rank=pool[:NONLOCAL_SEATS][-1][0])
+                scenario_cut_school_rank=pool[:NONLOCAL_SEATS][-1][0],
+                cut_risk=cut_risk(path, top, past_hk, NONLOCAL_SEATS - 1 - ahead))
 
     kept, cut = round1[:NONLOCAL_SEATS], round1[NONLOCAL_SEATS:]  # if round 1 closed now
     cut_now = dict(round1_nonlocal=len(round1), unlinked=sum(r["x"] is None for r in round1), cut=len(cut),
@@ -347,6 +407,23 @@ def markdown(res):
         L.append(f"| {t} | {v['school_rank']} | {v['best_online_rank']} / {v['mean_online_rank']} | {v['ahead']} | "
                  f"{v['room']} | {v['unregistered_ahead']} | {v['scenario_position']} of {v['scenario_pool']} | "
                  f"{v['scenario_cut_school_rank']} |")
+    for t, v in res["selection"].items():
+        c = v["cut_risk"]
+        if c is None:
+            continue
+        g = c["groups"]
+        L += ["", f"Chance {t} is cut in round 1: it is cut if {c['need']} more of the {v['unregistered_ahead']} "
+              f"unregistered non-local schools above it register in the {c['days_left']} days left (to {ROUND1_CLOSE} "
+              f"UTC). Since `{c['since']}` ({c['days']} days), {g['past_hk']['registered_since']} of the schools with a "
+              f"2024/2025 Hong Kong team registered ({g['past_hk']['unregistered']} of {g['past_hk']['schools']} left) "
+              f"and {g['other']['registered_since']} of the others ({g['other']['unregistered']} of "
+              f"{g['other']['schools']} left). Each school registers independently at its group's rate.", "",
+              "| assumption | P(register): past-HK / other | expected new | P(cut) |", "|---|---|---|---|"]
+        L += [f"| {r['assumption']} | {r['p_past_hk']} / {r['p_other']} | {r['expected_new']} | {r['p_cut']:.1%} |"
+              for r in c["scenarios"]]
+        L += ["", f"If every past-HK school returns, the cut needs {c['others_needed']} of the {g['other']['unregistered']} "
+              f"others: a 5% / 50% chance if each registers with probability {c['break_even_p_other']['0.05']} / "
+              f"{c['break_even_p_other']['0.5']} (at the pace above: {c['scenarios'][0]['p_other']})."]
     return "\n".join(L) + "\n"
 
 
