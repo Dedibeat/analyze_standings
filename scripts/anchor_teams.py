@@ -120,8 +120,8 @@ def ecfinal_model(data, strengths):
     for r in og.link_regionals(data, strengths):
         k = (r["season"], r["site"], r["school"], r["team"])
         if r["season"] in og.MODEL_SEASONS and r["site"] not in og.EXCLUDED_SITES and r["link"] and k in ranks:
-            rows.append(dict(r, rank=ranks[k]))
-    w = ecc.fit(rows)
+            rows.append(dict(r, rank=ranks[k][0]))  # (rank, members)
+    w = ecc.fit(rows, use_h=False)  # online rank only: rows carry no members' history
     return lambda x: sum(wk * ecc.prob(w, x, k) for k, wk in ecc.K_2026.items())
 
 
