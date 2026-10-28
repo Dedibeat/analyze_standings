@@ -1,6 +1,6 @@
 {
- "file": "icpc_hk_macau_public_teams_20261026.xlsx",
- "registered": 143,
+ "file": "icpc_hk_macau_public_teams_20261028.xlsx",
+ "registered": 144,
  "extra_teams": [
   [
    "福建师范大学",
@@ -8,20 +8,20 @@
   ]
  ],
  "status": {
-  "Pending": 143
+  "Pending": 144
  },
  "created": [
   "2026-10-11T16:01:10Z",
   "2026-10-17T14:30:45Z"
  ],
- "created_unknown": 39,
+ "created_unknown": 43,
  "rank_check": {
-  "rows": 143,
+  "rows": 144,
   "mismatches": []
  },
  "link": {
-  "members": 124,
-  "unlinked": 19
+  "members": 123,
+  "unlinked": 21
  },
  "field": [
   {
@@ -72,10 +72,10 @@
   },
   {
    "field": "2026 registered so far",
-   "teams": 143,
-   "nonlocal_teams": 136,
-   "linked": 124,
-   "median_online_rank": 947.4,
+   "teams": 144,
+   "nonlocal_teams": 137,
+   "linked": 123,
+   "median_online_rank": 963.4,
    "within": {
     "50": 3,
     "100": 5,
@@ -85,20 +85,20 @@
    "line_online_rank": {
     "gold": 197.6,
     "silver_plus": 657.7,
-    "medal": 1064.4
+    "medal": 1088.7
    },
    "expected_absolute": {
     "gold": 5.4,
-    "silver_plus": 27.3,
-    "medal": 72.0
+    "silver_plus": 27.1,
+    "medal": 71.0
    }
   },
   {
-   "field": "2026 scenario: + 27 unregistered 2025 schools, top 95 by school rank",
+   "field": "2026 scenario: + 25 unregistered 2025 schools, top 95 by school rank",
    "teams": 95,
    "nonlocal_teams": 95,
-   "linked": 86,
-   "median_online_rank": 651.8,
+   "linked": 85,
+   "median_online_rank": 646.0,
    "within": {
     "50": 5,
     "100": 9,
@@ -106,14 +106,14 @@
     "500": 34
    },
    "line_online_rank": {
-    "gold": 91.8,
+    "gold": 80.0,
     "silver_plus": 382.2,
-    "medal": 775.5
+    "medal": 750.5
    },
    "expected_absolute": {
     "gold": 8.7,
-    "silver_plus": 29.1,
-    "medal": 59.1
+    "silver_plus": 29.0,
+    "medal": 58.4
    }
   }
  ],
@@ -192,12 +192,12 @@
  "lines_registered": {
   "gold": 197.6,
   "silver_plus": 657.7,
-  "medal": 1064.4
+  "medal": 1088.7
  },
  "lines_scenario": {
-  "gold": 91.8,
+  "gold": 80.0,
   "silver_plus": 382.2,
-  "medal": 775.5
+  "medal": 750.5
  },
  "teams": [
   {
@@ -234,7 +234,7 @@
     "bronze": 0.0
    },
    "field_relative_scenario": {
-    "gold": 0.9999,
+    "gold": 0.9998,
     "silver": 0.0,
     "bronze": 0.0001
    }
@@ -275,9 +275,9 @@
     "bronze": 0.0026
    },
    "field_relative_scenario": {
-    "gold": 0.97,
-    "silver": 0.0172,
-    "bronze": 0.0104
+    "gold": 0.9572,
+    "silver": 0.03,
+    "bronze": 0.0103
    }
   },
   {
@@ -313,12 +313,12 @@
    "field_relative_registered": {
     "gold": 0.9904,
     "silver": 0.0011,
-    "bronze": 0.006
+    "bronze": 0.0061
    },
    "field_relative_scenario": {
-    "gold": 0.9294,
-    "silver": 0.046,
-    "bronze": 0.0202
+    "gold": 0.901,
+    "silver": 0.0744,
+    "bronze": 0.0199
    }
   },
   {
@@ -354,12 +354,12 @@
    "field_relative_registered": {
     "gold": 0.9596,
     "silver": 0.0156,
-    "bronze": 0.0182
+    "bronze": 0.0184
    },
    "field_relative_scenario": {
-    "gold": 0.7516,
-    "silver": 0.1786,
-    "bronze": 0.0579
+    "gold": 0.6766,
+    "silver": 0.2537,
+    "bronze": 0.0572
    }
   },
   {
@@ -395,12 +395,12 @@
    "field_relative_registered": {
     "gold": 0.9426,
     "silver": 0.025,
-    "bronze": 0.0238
+    "bronze": 0.0242
    },
    "field_relative_scenario": {
-    "gold": 0.6766,
-    "silver": 0.2337,
-    "bronze": 0.0746
+    "gold": 0.5912,
+    "silver": 0.3191,
+    "bronze": 0.0737
    }
   },
   {
@@ -436,12 +436,12 @@
    "field_relative_registered": {
     "gold": 0.9229,
     "silver": 0.0366,
-    "bronze": 0.03
+    "bronze": 0.0304
    },
    "field_relative_scenario": {
-    "gold": 0.6037,
-    "silver": 0.2855,
-    "bronze": 0.0921
+    "gold": 0.5129,
+    "silver": 0.3762,
+    "bronze": 0.091
    }
   },
   {
@@ -475,12 +475,12 @@
    "field_relative_registered": {
     "gold": 0.8888,
     "silver": 0.0572,
-    "bronze": 0.0401
+    "bronze": 0.0406
    },
    "field_relative_scenario": {
-    "gold": 0.5045,
-    "silver": 0.3517,
-    "bronze": 0.1194
+    "gold": 0.413,
+    "silver": 0.4431,
+    "bronze": 0.1179
    }
   },
   {
@@ -516,12 +516,12 @@
    "field_relative_registered": {
     "gold": 0.8669,
     "silver": 0.0708,
-    "bronze": 0.0463
+    "bronze": 0.047
    },
    "field_relative_scenario": {
-    "gold": 0.4534,
-    "silver": 0.383,
-    "bronze": 0.1355
+    "gold": 0.3645,
+    "silver": 0.472,
+    "bronze": 0.1339
    }
   },
   {
@@ -557,12 +557,12 @@
    "field_relative_registered": {
     "gold": 0.8545,
     "silver": 0.0786,
-    "bronze": 0.0498
+    "bronze": 0.0505
    },
    "field_relative_scenario": {
-    "gold": 0.4278,
-    "silver": 0.3978,
-    "bronze": 0.1444
+    "gold": 0.3408,
+    "silver": 0.4848,
+    "bronze": 0.1426
    }
   },
   {
@@ -598,12 +598,12 @@
    "field_relative_registered": {
     "gold": 0.7699,
     "silver": 0.132,
-    "bronze": 0.0733
+    "bronze": 0.0742
    },
    "field_relative_scenario": {
-    "gold": 0.2987,
-    "silver": 0.4586,
-    "bronze": 0.1993
+    "gold": 0.2275,
+    "silver": 0.5298,
+    "bronze": 0.1967
    }
   },
   {
@@ -639,12 +639,12 @@
    "field_relative_registered": {
     "gold": 0.7119,
     "silver": 0.1683,
-    "bronze": 0.0895
+    "bronze": 0.0907
    },
    "field_relative_scenario": {
-    "gold": 0.2393,
-    "silver": 0.4744,
-    "bronze": 0.2334
+    "gold": 0.1786,
+    "silver": 0.535,
+    "bronze": 0.2304
    }
   },
   {
@@ -680,12 +680,12 @@
    "field_relative_registered": {
     "gold": 0.6766,
     "silver": 0.19,
-    "bronze": 0.0996
+    "bronze": 0.1009
    },
    "field_relative_scenario": {
-    "gold": 0.2103,
-    "silver": 0.4775,
-    "bronze": 0.2533
+    "gold": 0.1555,
+    "silver": 0.5323,
+    "bronze": 0.2499
    }
   },
   {
@@ -710,7 +710,7 @@
    "field_position": 13,
    "mean_online_rank": 266.0,
    "best_online_rank": 266,
-   "scenario_position": 68,
+   "scenario_position": 67,
    "absolute": {
     "gold": 0.0428,
     "silver": 0.5454,
@@ -719,12 +719,12 @@
    "field_relative_registered": {
     "gold": 0.485,
     "silver": 0.2973,
-    "bronze": 0.1608
+    "bronze": 0.1629
    },
    "field_relative_scenario": {
-    "gold": 0.1071,
-    "silver": 0.4424,
-    "bronze": 0.3533
+    "gold": 0.0765,
+    "silver": 0.4729,
+    "bronze": 0.3479
    }
   },
   {
@@ -760,12 +760,12 @@
    "field_relative_registered": {
     "gold": 0.4632,
     "silver": 0.3079,
-    "bronze": 0.1687
+    "bronze": 0.171
    },
    "field_relative_scenario": {
-    "gold": 0.099,
-    "silver": 0.4344,
-    "bronze": 0.364
+    "gold": 0.0706,
+    "silver": 0.4628,
+    "bronze": 0.3583
    }
   },
   {
@@ -792,7 +792,7 @@
    "field_position": 15,
    "mean_online_rank": 294.0,
    "best_online_rank": 255,
-   "scenario_position": 61,
+   "scenario_position": 60,
    "absolute": {
     "gold": 0.0336,
     "silver": 0.5071,
@@ -801,12 +801,12 @@
    "field_relative_registered": {
     "gold": 0.4184,
     "silver": 0.328,
-    "bronze": 0.1859
+    "bronze": 0.1885
    },
    "field_relative_scenario": {
-    "gold": 0.0839,
-    "silver": 0.4158,
-    "bronze": 0.3857
+    "gold": 0.0596,
+    "silver": 0.4402,
+    "bronze": 0.3794
    }
   },
   {
@@ -833,7 +833,7 @@
    "field_position": 16,
    "mean_online_rank": 294.3,
    "best_online_rank": 283,
-   "scenario_position": 63,
+   "scenario_position": 62,
    "absolute": {
     "gold": 0.0336,
     "silver": 0.5068,
@@ -842,12 +842,12 @@
    "field_relative_registered": {
     "gold": 0.4179,
     "silver": 0.3283,
-    "bronze": 0.1862
+    "bronze": 0.1887
    },
    "field_relative_scenario": {
-    "gold": 0.0837,
-    "silver": 0.4156,
-    "bronze": 0.3859
+    "gold": 0.0594,
+    "silver": 0.4399,
+    "bronze": 0.3797
    }
   },
   {
@@ -883,12 +883,12 @@
    "field_relative_registered": {
     "gold": 0.3605,
     "silver": 0.3503,
-    "bronze": 0.2104
+    "bronze": 0.2133
    },
    "field_relative_scenario": {
-    "gold": 0.067,
-    "silver": 0.3877,
-    "bronze": 0.4128
+    "gold": 0.0473,
+    "silver": 0.4074,
+    "bronze": 0.4057
    }
   },
   {
@@ -915,7 +915,7 @@
    "field_position": 18,
    "mean_online_rank": 336.6,
    "best_online_rank": 197,
-   "scenario_position": 53,
+   "scenario_position": 52,
    "absolute": {
     "gold": 0.0242,
     "silver": 0.4514,
@@ -924,12 +924,12 @@
    "field_relative_registered": {
     "gold": 0.3335,
     "silver": 0.3588,
-    "bronze": 0.2228
+    "bronze": 0.2259
    },
    "field_relative_scenario": {
-    "gold": 0.0599,
-    "silver": 0.373,
-    "bronze": 0.4249
+    "gold": 0.0422,
+    "silver": 0.3907,
+    "bronze": 0.4175
    }
   },
   {
@@ -965,12 +965,12 @@
    "field_relative_registered": {
     "gold": 0.301,
     "silver": 0.3671,
-    "bronze": 0.2387
+    "bronze": 0.2421
    },
    "field_relative_scenario": {
-    "gold": 0.052,
-    "silver": 0.3538,
-    "bronze": 0.4391
+    "gold": 0.0365,
+    "silver": 0.3692,
+    "bronze": 0.4311
    }
   },
   {
@@ -1006,12 +1006,12 @@
    "field_relative_registered": {
     "gold": 0.2829,
     "silver": 0.3706,
-    "bronze": 0.2481
+    "bronze": 0.2517
    },
    "field_relative_scenario": {
-    "gold": 0.0478,
-    "silver": 0.3424,
-    "bronze": 0.4467
+    "gold": 0.0336,
+    "silver": 0.3566,
+    "bronze": 0.4383
    }
   },
   {
@@ -1047,12 +1047,12 @@
    "field_relative_registered": {
     "gold": 0.2623,
     "silver": 0.3736,
-    "bronze": 0.2592
+    "bronze": 0.263
    },
    "field_relative_scenario": {
-    "gold": 0.0433,
-    "silver": 0.3288,
-    "bronze": 0.4549
+    "gold": 0.0303,
+    "silver": 0.3417,
+    "bronze": 0.4462
    }
   },
   {
@@ -1088,12 +1088,12 @@
    "field_relative_registered": {
     "gold": 0.254,
     "silver": 0.3744,
-    "bronze": 0.2639
+    "bronze": 0.2678
    },
    "field_relative_scenario": {
-    "gold": 0.0415,
-    "silver": 0.323,
-    "bronze": 0.4581
+    "gold": 0.0291,
+    "silver": 0.3355,
+    "bronze": 0.4492
    }
   },
   {
@@ -1129,12 +1129,12 @@
    "field_relative_registered": {
     "gold": 0.2463,
     "silver": 0.375,
-    "bronze": 0.2683
+    "bronze": 0.2723
    },
    "field_relative_scenario": {
-    "gold": 0.0399,
-    "silver": 0.3176,
-    "bronze": 0.461
+    "gold": 0.028,
+    "silver": 0.3296,
+    "bronze": 0.4519
    }
   },
   {
@@ -1170,12 +1170,12 @@
    "field_relative_registered": {
     "gold": 0.2295,
     "silver": 0.3755,
-    "bronze": 0.2782
+    "bronze": 0.2824
    },
    "field_relative_scenario": {
-    "gold": 0.0365,
-    "silver": 0.3054,
-    "bronze": 0.4671
+    "gold": 0.0255,
+    "silver": 0.3164,
+    "bronze": 0.4576
    }
   },
   {
@@ -1211,12 +1211,12 @@
    "field_relative_registered": {
     "gold": 0.2266,
     "silver": 0.3755,
-    "bronze": 0.28
+    "bronze": 0.2842
    },
    "field_relative_scenario": {
-    "gold": 0.036,
-    "silver": 0.3033,
-    "bronze": 0.4681
+    "gold": 0.0251,
+    "silver": 0.3141,
+    "bronze": 0.4586
    }
   },
   {
@@ -1243,7 +1243,7 @@
    "field_position": 26,
    "mean_online_rank": 435.7,
    "best_online_rank": 349,
-   "scenario_position": 77,
+   "scenario_position": 76,
    "absolute": {
     "gold": 0.0128,
     "silver": 0.3424,
@@ -1252,18 +1252,18 @@
    "field_relative_registered": {
     "gold": 0.2,
     "silver": 0.3736,
-    "bronze": 0.2968
+    "bronze": 0.3014
    },
    "field_relative_scenario": {
-    "gold": 0.0308,
-    "silver": 0.2825,
-    "bronze": 0.4765
+    "gold": 0.0215,
+    "silver": 0.2918,
+    "bronze": 0.4664
    }
   },
   {
    "school": "山东大学（威海）",
    "school_en": "Shandong University, Weihai",
-   "team": "Attack on MilkFrog",
+   "team": "进击的奶蛙",
    "members": "赵禹权/陈汶泽/刘艺航",
    "status": "Pending",
    "created": "",
@@ -1293,12 +1293,12 @@
    "field_relative_registered": {
     "gold": 0.1549,
     "silver": 0.3617,
-    "bronze": 0.328
+    "bronze": 0.3333
    },
    "field_relative_scenario": {
-    "gold": 0.0228,
-    "silver": 0.2433,
-    "bronze": 0.4866
+    "gold": 0.0159,
+    "silver": 0.2502,
+    "bronze": 0.4752
    }
   },
   {
@@ -1334,12 +1334,12 @@
    "field_relative_registered": {
     "gold": 0.1446,
     "silver": 0.357,
-    "bronze": 0.3356
+    "bronze": 0.3411
    },
    "field_relative_scenario": {
-    "gold": 0.0211,
-    "silver": 0.2335,
-    "bronze": 0.4877
+    "gold": 0.0147,
+    "silver": 0.2399,
+    "bronze": 0.4761
    }
   },
   {
@@ -1366,7 +1366,7 @@
    "field_position": 29,
    "mean_online_rank": 511.1,
    "best_online_rank": 236,
-   "scenario_position": 60,
+   "scenario_position": 59,
    "absolute": {
     "gold": 0.0087,
     "silver": 0.2796,
@@ -1375,12 +1375,12 @@
    "field_relative_registered": {
     "gold": 0.14,
     "silver": 0.3547,
-    "bronze": 0.339
+    "bronze": 0.3447
    },
    "field_relative_scenario": {
-    "gold": 0.0203,
-    "silver": 0.229,
-    "bronze": 0.488
+    "gold": 0.0141,
+    "silver": 0.2352,
+    "bronze": 0.4762
    }
   },
   {
@@ -1416,12 +1416,12 @@
    "field_relative_registered": {
     "gold": 0.1341,
     "silver": 0.3513,
-    "bronze": 0.3435
+    "bronze": 0.3493
    },
    "field_relative_scenario": {
-    "gold": 0.0193,
-    "silver": 0.2231,
-    "bronze": 0.4883
+    "gold": 0.0134,
+    "silver": 0.229,
+    "bronze": 0.4763
    }
   },
   {
@@ -1448,7 +1448,7 @@
    "field_position": 31,
    "mean_online_rank": 551.2,
    "best_online_rank": 293,
-   "scenario_position": 71,
+   "scenario_position": 70,
    "absolute": {
     "gold": 0.0072,
     "silver": 0.2521,
@@ -1457,12 +1457,12 @@
    "field_relative_registered": {
     "gold": 0.1173,
     "silver": 0.3399,
-    "bronze": 0.3564
+    "bronze": 0.3626
    },
    "field_relative_scenario": {
-    "gold": 0.0166,
-    "silver": 0.2056,
-    "bronze": 0.4875
+    "gold": 0.0116,
+    "silver": 0.2107,
+    "bronze": 0.475
    }
   },
   {
@@ -1498,12 +1498,12 @@
    "field_relative_registered": {
     "gold": 0.1095,
     "silver": 0.3334,
-    "bronze": 0.3625
+    "bronze": 0.3689
    },
    "field_relative_scenario": {
-    "gold": 0.0154,
-    "silver": 0.1971,
-    "bronze": 0.4862
+    "gold": 0.0107,
+    "silver": 0.2018,
+    "bronze": 0.4735
    }
   },
   {
@@ -1539,12 +1539,12 @@
    "field_relative_registered": {
     "gold": 0.0967,
     "silver": 0.321,
-    "bronze": 0.3725
+    "bronze": 0.3793
    },
    "field_relative_scenario": {
-    "gold": 0.0134,
-    "silver": 0.1823,
-    "bronze": 0.4827
+    "gold": 0.0093,
+    "silver": 0.1864,
+    "bronze": 0.4694
    }
   },
   {
@@ -1580,12 +1580,12 @@
    "field_relative_registered": {
     "gold": 0.0936,
     "silver": 0.3176,
-    "bronze": 0.3749
+    "bronze": 0.3818
    },
    "field_relative_scenario": {
-    "gold": 0.013,
-    "silver": 0.1786,
-    "bronze": 0.4815
+    "gold": 0.009,
+    "silver": 0.1826,
+    "bronze": 0.4681
    }
   },
   {
@@ -1621,12 +1621,12 @@
    "field_relative_registered": {
     "gold": 0.0878,
     "silver": 0.3109,
-    "bronze": 0.3792
+    "bronze": 0.3863
    },
    "field_relative_scenario": {
-    "gold": 0.0121,
-    "silver": 0.1716,
-    "bronze": 0.4788
+    "gold": 0.0084,
+    "silver": 0.1753,
+    "bronze": 0.4652
    }
   },
   {
@@ -1662,12 +1662,12 @@
    "field_relative_registered": {
     "gold": 0.0876,
     "silver": 0.3107,
-    "bronze": 0.3794
+    "bronze": 0.3865
    },
    "field_relative_scenario": {
-    "gold": 0.0121,
-    "silver": 0.1713,
-    "bronze": 0.4787
+    "gold": 0.0084,
+    "silver": 0.175,
+    "bronze": 0.4651
    }
   },
   {
@@ -1694,7 +1694,7 @@
    "field_position": 37,
    "mean_online_rank": 657.7,
    "best_online_rank": 452,
-   "scenario_position": 54,
+   "scenario_position": 53,
    "absolute": {
     "gold": 0.0046,
     "silver": 0.1947,
@@ -1703,12 +1703,12 @@
    "field_relative_registered": {
     "gold": 0.0764,
     "silver": 0.2957,
-    "bronze": 0.3875
+    "bronze": 0.395
    },
    "field_relative_scenario": {
-    "gold": 0.0104,
-    "silver": 0.157,
-    "bronze": 0.4716
+    "gold": 0.0072,
+    "silver": 0.1602,
+    "bronze": 0.4576
    }
   },
   {
@@ -1744,12 +1744,12 @@
    "field_relative_registered": {
     "gold": 0.0711,
     "silver": 0.2877,
-    "bronze": 0.3911
+    "bronze": 0.3987
    },
    "field_relative_scenario": {
-    "gold": 0.0096,
-    "silver": 0.1499,
-    "bronze": 0.4671
+    "gold": 0.0067,
+    "silver": 0.1528,
+    "bronze": 0.453
    }
   },
   {
@@ -1785,12 +1785,12 @@
    "field_relative_registered": {
     "gold": 0.0705,
     "silver": 0.2868,
-    "bronze": 0.3914
+    "bronze": 0.3991
    },
    "field_relative_scenario": {
-    "gold": 0.0096,
-    "silver": 0.1491,
-    "bronze": 0.4666
+    "gold": 0.0066,
+    "silver": 0.152,
+    "bronze": 0.4524
    }
   },
   {
@@ -1826,12 +1826,12 @@
    "field_relative_registered": {
     "gold": 0.0659,
     "silver": 0.2791,
-    "bronze": 0.3943
+    "bronze": 0.4022
    },
    "field_relative_scenario": {
-    "gold": 0.0089,
-    "silver": 0.1427,
-    "bronze": 0.462
+    "gold": 0.0062,
+    "silver": 0.1454,
+    "bronze": 0.4476
    }
   },
   {
@@ -1867,12 +1867,12 @@
    "field_relative_registered": {
     "gold": 0.0638,
     "silver": 0.2755,
-    "bronze": 0.3954
+    "bronze": 0.4034
    },
    "field_relative_scenario": {
-    "gold": 0.0086,
-    "silver": 0.1398,
-    "bronze": 0.4597
+    "gold": 0.006,
+    "silver": 0.1424,
+    "bronze": 0.4453
    }
   },
   {
@@ -1908,12 +1908,12 @@
    "field_relative_registered": {
     "gold": 0.0635,
     "silver": 0.275,
-    "bronze": 0.3956
+    "bronze": 0.4036
    },
    "field_relative_scenario": {
-    "gold": 0.0086,
-    "silver": 0.1394,
-    "bronze": 0.4594
+    "gold": 0.0059,
+    "silver": 0.142,
+    "bronze": 0.4449
    }
   },
   {
@@ -1949,12 +1949,12 @@
    "field_relative_registered": {
     "gold": 0.0627,
     "silver": 0.2734,
-    "bronze": 0.3961
+    "bronze": 0.4041
    },
    "field_relative_scenario": {
-    "gold": 0.0084,
-    "silver": 0.1381,
-    "bronze": 0.4584
+    "gold": 0.0059,
+    "silver": 0.1407,
+    "bronze": 0.4439
    }
   },
   {
@@ -1990,12 +1990,12 @@
    "field_relative_registered": {
     "gold": 0.0596,
     "silver": 0.2677,
-    "bronze": 0.3977
+    "bronze": 0.4058
    },
    "field_relative_scenario": {
-    "gold": 0.008,
-    "silver": 0.1337,
-    "bronze": 0.4545
+    "gold": 0.0055,
+    "silver": 0.1361,
+    "bronze": 0.4399
    }
   },
   {
@@ -2031,12 +2031,12 @@
    "field_relative_registered": {
     "gold": 0.0581,
     "silver": 0.2647,
-    "bronze": 0.3984
+    "bronze": 0.4066
    },
    "field_relative_scenario": {
-    "gold": 0.0078,
-    "silver": 0.1314,
-    "bronze": 0.4524
+    "gold": 0.0054,
+    "silver": 0.1338,
+    "bronze": 0.4378
    }
   },
   {
@@ -2063,7 +2063,7 @@
    "field_position": 46,
    "mean_online_rank": 737.6,
    "best_online_rank": 675,
-   "scenario_position": 119,
+   "scenario_position": 117,
    "absolute": {
     "gold": 0.0035,
     "silver": 0.1629,
@@ -2072,12 +2072,12 @@
    "field_relative_registered": {
     "gold": 0.0573,
     "silver": 0.2632,
-    "bronze": 0.3987
+    "bronze": 0.407
    },
    "field_relative_scenario": {
-    "gold": 0.0077,
-    "silver": 0.1303,
-    "bronze": 0.4513
+    "gold": 0.0053,
+    "silver": 0.1326,
+    "bronze": 0.4367
    }
   },
   {
@@ -2113,12 +2113,12 @@
    "field_relative_registered": {
     "gold": 0.0522,
     "silver": 0.2526,
-    "bronze": 0.4007
+    "bronze": 0.4092
    },
    "field_relative_scenario": {
-    "gold": 0.007,
-    "silver": 0.1225,
-    "bronze": 0.4435
+    "gold": 0.0048,
+    "silver": 0.1247,
+    "bronze": 0.4287
    }
   },
   {
@@ -2145,7 +2145,7 @@
    "field_position": 48,
    "mean_online_rank": 799.4,
    "best_online_rank": 543,
-   "scenario_position": 101,
+   "scenario_position": 102,
    "absolute": {
     "gold": 0.0028,
     "silver": 0.143,
@@ -2154,12 +2154,12 @@
    "field_relative_registered": {
     "gold": 0.0467,
     "silver": 0.2399,
-    "bronze": 0.4019
+    "bronze": 0.4107
    },
    "field_relative_scenario": {
-    "gold": 0.0062,
-    "silver": 0.1138,
-    "bronze": 0.4332
+    "gold": 0.0043,
+    "silver": 0.1157,
+    "bronze": 0.4183
    }
   },
   {
@@ -2186,7 +2186,7 @@
    "field_position": 49,
    "mean_online_rank": 806.1,
    "best_online_rank": 692,
-   "scenario_position": 121,
+   "scenario_position": 119,
    "absolute": {
     "gold": 0.0028,
     "silver": 0.1411,
@@ -2195,12 +2195,12 @@
    "field_relative_registered": {
     "gold": 0.0457,
     "silver": 0.2375,
-    "bronze": 0.402
+    "bronze": 0.4109
    },
    "field_relative_scenario": {
-    "gold": 0.0061,
-    "silver": 0.1122,
-    "bronze": 0.4312
+    "gold": 0.0042,
+    "silver": 0.114,
+    "bronze": 0.4163
    }
   },
   {
@@ -2236,12 +2236,12 @@
    "field_relative_registered": {
     "gold": 0.0442,
     "silver": 0.2339,
-    "bronze": 0.4021
+    "bronze": 0.411
    },
    "field_relative_scenario": {
-    "gold": 0.0059,
-    "silver": 0.1098,
-    "bronze": 0.4281
+    "gold": 0.0041,
+    "silver": 0.1116,
+    "bronze": 0.4131
    }
   },
   {
@@ -2268,7 +2268,7 @@
    "field_position": 51,
    "mean_online_rank": 819.3,
    "best_online_rank": 787,
-   "scenario_position": 126,
+   "scenario_position": 124,
    "absolute": {
     "gold": 0.0027,
     "silver": 0.1374,
@@ -2277,12 +2277,12 @@
    "field_relative_registered": {
     "gold": 0.0438,
     "silver": 0.2329,
-    "bronze": 0.4021
+    "bronze": 0.411
    },
    "field_relative_scenario": {
-    "gold": 0.0058,
-    "silver": 0.1091,
-    "bronze": 0.4271
+    "gold": 0.004,
+    "silver": 0.1109,
+    "bronze": 0.4122
    }
   },
   {
@@ -2318,12 +2318,12 @@
    "field_relative_registered": {
     "gold": 0.0429,
     "silver": 0.2305,
-    "bronze": 0.402
+    "bronze": 0.4111
    },
    "field_relative_scenario": {
-    "gold": 0.0057,
-    "silver": 0.1075,
-    "bronze": 0.425
+    "gold": 0.0039,
+    "silver": 0.1092,
+    "bronze": 0.41
    }
   },
   {
@@ -2350,7 +2350,7 @@
    "field_position": 53,
    "mean_online_rank": 846.1,
    "best_online_rank": 704,
-   "scenario_position": 116,
+   "scenario_position": 115,
    "absolute": {
     "gold": 0.0025,
     "silver": 0.1303,
@@ -2359,12 +2359,12 @@
    "field_relative_registered": {
     "gold": 0.0403,
     "silver": 0.2237,
-    "bronze": 0.4017
+    "bronze": 0.4109
    },
    "field_relative_scenario": {
-    "gold": 0.0053,
-    "silver": 0.1032,
-    "bronze": 0.4188
+    "gold": 0.0037,
+    "silver": 0.1048,
+    "bronze": 0.4039
    }
   },
   {
@@ -2391,7 +2391,7 @@
    "field_position": 54,
    "mean_online_rank": 846.3,
    "best_online_rank": 665,
-   "scenario_position": 111,
+   "scenario_position": 110,
    "absolute": {
     "gold": 0.0025,
     "silver": 0.1303,
@@ -2400,53 +2400,12 @@
    "field_relative_registered": {
     "gold": 0.0403,
     "silver": 0.2237,
-    "bronze": 0.4017
+    "bronze": 0.4109
    },
    "field_relative_scenario": {
-    "gold": 0.0053,
-    "silver": 0.1032,
-    "bronze": 0.4188
-   }
-  },
-  {
-   "school": "河北科技大学",
-   "school_en": "Hebei University of Science and Technology",
-   "team": "Waibibabu",
-   "members": "娄京涵/武昀昊/布绍磊",
-   "status": "Pending",
-   "created": "",
-   "local": false,
-   "school_rank": 248,
-   "export_rank": 248,
-   "online_teams": {
-    "1": "歪比巴布thinking",
-    "2": "歪比巴布thinking"
-   },
-   "online_ranks": {
-    "1": 704,
-    "2": 1075
-   },
-   "link": "members",
-   "x": -6.768427148359903,
-   "round1": true,
-   "field_position": 55,
-   "mean_online_rank": 869.9,
-   "best_online_rank": 704,
-   "scenario_position": 116,
-   "absolute": {
-    "gold": 0.0023,
-    "silver": 0.1244,
-    "bronze": 0.4528
-   },
-   "field_relative_registered": {
-    "gold": 0.0375,
-    "silver": 0.2159,
-    "bronze": 0.4009
-   },
-   "field_relative_scenario": {
-    "gold": 0.0049,
-    "silver": 0.0983,
-    "bronze": 0.4114
+    "gold": 0.0037,
+    "silver": 0.1048,
+    "bronze": 0.4038
    }
   },
   {
@@ -2470,10 +2429,10 @@
    "link": "members",
    "x": -6.776397115765121,
    "round1": true,
-   "field_position": 56,
+   "field_position": 55,
    "mean_online_rank": 876.9,
    "best_online_rank": 720,
-   "scenario_position": 122,
+   "scenario_position": 120,
    "absolute": {
     "gold": 0.0023,
     "silver": 0.1228,
@@ -2482,12 +2441,12 @@
    "field_relative_registered": {
     "gold": 0.0368,
     "silver": 0.2137,
-    "bronze": 0.4006
+    "bronze": 0.41
    },
    "field_relative_scenario": {
-    "gold": 0.0048,
-    "silver": 0.097,
-    "bronze": 0.4092
+    "gold": 0.0033,
+    "silver": 0.0985,
+    "bronze": 0.3942
    }
   },
   {
@@ -2511,10 +2470,10 @@
    "link": "members",
    "x": -6.803230484258627,
    "round1": true,
-   "field_position": 57,
+   "field_position": 56,
    "mean_online_rank": 900.8,
    "best_online_rank": 617,
-   "scenario_position": 65,
+   "scenario_position": 64,
    "absolute": {
     "gold": 0.0021,
     "silver": 0.1174,
@@ -2523,12 +2482,12 @@
    "field_relative_registered": {
     "gold": 0.0343,
     "silver": 0.2063,
-    "bronze": 0.3993
+    "bronze": 0.4088
    },
    "field_relative_scenario": {
-    "gold": 0.0045,
-    "silver": 0.0925,
-    "bronze": 0.4017
+    "gold": 0.0031,
+    "silver": 0.0939,
+    "bronze": 0.3867
    }
   },
   {
@@ -2552,10 +2511,10 @@
    "link": "members",
    "x": -6.820476789333725,
    "round1": true,
-   "field_position": 58,
+   "field_position": 57,
    "mean_online_rank": 916.4,
    "best_online_rank": 813,
-   "scenario_position": 128,
+   "scenario_position": 126,
    "absolute": {
     "gold": 0.002,
     "silver": 0.114,
@@ -2564,12 +2523,12 @@
    "field_relative_registered": {
     "gold": 0.0328,
     "silver": 0.2015,
-    "bronze": 0.3982
+    "bronze": 0.4078
    },
    "field_relative_scenario": {
-    "gold": 0.0043,
-    "silver": 0.0898,
-    "bronze": 0.3968
+    "gold": 0.003,
+    "silver": 0.0911,
+    "bronze": 0.3818
    }
   },
   {
@@ -2593,10 +2552,10 @@
    "link": "members",
    "x": -6.820664292349363,
    "round1": true,
-   "field_position": 59,
+   "field_position": 58,
    "mean_online_rank": 916.6,
    "best_online_rank": 761,
-   "scenario_position": 125,
+   "scenario_position": 123,
    "absolute": {
     "gold": 0.002,
     "silver": 0.114,
@@ -2605,12 +2564,12 @@
    "field_relative_registered": {
     "gold": 0.0328,
     "silver": 0.2015,
-    "bronze": 0.3982
+    "bronze": 0.4077
    },
    "field_relative_scenario": {
-    "gold": 0.0043,
-    "silver": 0.0897,
-    "bronze": 0.3967
+    "gold": 0.003,
+    "silver": 0.0911,
+    "bronze": 0.3818
    }
   },
   {
@@ -2634,10 +2593,10 @@
    "link": "members",
    "x": -6.837552654355806,
    "round1": true,
-   "field_position": 60,
+   "field_position": 59,
    "mean_online_rank": 932.2,
    "best_online_rank": 838,
-   "scenario_position": 131,
+   "scenario_position": 129,
    "absolute": {
     "gold": 0.0019,
     "silver": 0.1107,
@@ -2646,53 +2605,12 @@
    "field_relative_registered": {
     "gold": 0.0314,
     "silver": 0.1969,
-    "bronze": 0.3969
+    "bronze": 0.4066
    },
    "field_relative_scenario": {
-    "gold": 0.0041,
-    "silver": 0.0871,
-    "bronze": 0.3918
-   }
-  },
-  {
-   "school": "温州医科大学",
-   "school_en": "Wenzhou Medical University",
-   "team": "患者自述这题昨天晚上明明会做",
-   "members": "黄熠/朱蔚骐/周涛",
-   "status": "Pending",
-   "created": "2026-10-12T07:31:13Z",
-   "local": false,
-   "school_rank": 207,
-   "export_rank": 207,
-   "online_teams": {
-    "1": "wmub",
-    "2": "wmub"
-   },
-   "online_ranks": {
-    "1": 1527,
-    "2": 573
-   },
-   "link": "members",
-   "x": -6.840973010966686,
-   "round1": true,
-   "field_position": 61,
-   "mean_online_rank": 935.4,
-   "best_online_rank": 573,
-   "scenario_position": 102,
-   "absolute": {
-    "gold": 0.0019,
-    "silver": 0.1101,
-    "bronze": 0.4371
-   },
-   "field_relative_registered": {
-    "gold": 0.0311,
-    "silver": 0.196,
-    "bronze": 0.3967
-   },
-   "field_relative_scenario": {
-    "gold": 0.0041,
-    "silver": 0.0866,
-    "bronze": 0.3908
+    "gold": 0.0028,
+    "silver": 0.0884,
+    "bronze": 0.3769
    }
   },
   {
@@ -2716,7 +2634,7 @@
    "link": "members",
    "x": -6.85123531548129,
    "round1": true,
-   "field_position": 62,
+   "field_position": 60,
    "mean_online_rank": 945.0,
    "best_online_rank": 669,
    "scenario_position": 28,
@@ -2728,12 +2646,12 @@
    "field_relative_registered": {
     "gold": 0.0303,
     "silver": 0.1933,
-    "bronze": 0.3958
+    "bronze": 0.4055
    },
    "field_relative_scenario": {
-    "gold": 0.004,
-    "silver": 0.085,
-    "bronze": 0.3878
+    "gold": 0.0027,
+    "silver": 0.0862,
+    "bronze": 0.3729
    }
   },
   {
@@ -2757,10 +2675,10 @@
    "link": "members",
    "x": -6.856157182567912,
    "round1": true,
-   "field_position": 63,
+   "field_position": 61,
    "mean_online_rank": 949.7,
    "best_online_rank": 859,
-   "scenario_position": 133,
+   "scenario_position": 131,
    "absolute": {
     "gold": 0.0019,
     "silver": 0.1073,
@@ -2769,12 +2687,12 @@
    "field_relative_registered": {
     "gold": 0.0299,
     "silver": 0.1919,
-    "bronze": 0.3954
+    "bronze": 0.4051
    },
    "field_relative_scenario": {
-    "gold": 0.0039,
-    "silver": 0.0843,
-    "bronze": 0.3864
+    "gold": 0.0027,
+    "silver": 0.0855,
+    "bronze": 0.3714
    }
   },
   {
@@ -2798,7 +2716,7 @@
    "link": "members",
    "x": -6.870478627948337,
    "round1": true,
-   "field_position": 64,
+   "field_position": 62,
    "mean_online_rank": 963.4,
    "best_online_rank": 902,
    "scenario_position": 36,
@@ -2810,12 +2728,12 @@
    "field_relative_registered": {
     "gold": 0.0288,
     "silver": 0.1882,
-    "bronze": 0.3941
+    "bronze": 0.4038
    },
    "field_relative_scenario": {
-    "gold": 0.0038,
-    "silver": 0.0822,
-    "bronze": 0.3821
+    "gold": 0.0026,
+    "silver": 0.0833,
+    "bronze": 0.3672
    }
   },
   {
@@ -2839,7 +2757,7 @@
    "link": "members",
    "x": -6.871721482180123,
    "round1": true,
-   "field_position": 65,
+   "field_position": 63,
    "mean_online_rank": 964.6,
    "best_online_rank": 583,
    "scenario_position": 81,
@@ -2851,12 +2769,12 @@
    "field_relative_registered": {
     "gold": 0.0287,
     "silver": 0.1878,
-    "bronze": 0.3939
+    "bronze": 0.4037
    },
    "field_relative_scenario": {
-    "gold": 0.0037,
-    "silver": 0.082,
-    "bronze": 0.3817
+    "gold": 0.0026,
+    "silver": 0.0831,
+    "bronze": 0.3668
    }
   },
   {
@@ -2880,10 +2798,10 @@
    "link": "members",
    "x": -6.876040377652245,
    "round1": true,
-   "field_position": 66,
+   "field_position": 64,
    "mean_online_rank": 968.8,
    "best_online_rank": 835,
-   "scenario_position": 130,
+   "scenario_position": 128,
    "absolute": {
     "gold": 0.0018,
     "silver": 0.1037,
@@ -2892,12 +2810,12 @@
    "field_relative_registered": {
     "gold": 0.0284,
     "silver": 0.1867,
-    "bronze": 0.3935
+    "bronze": 0.4033
    },
    "field_relative_scenario": {
-    "gold": 0.0037,
-    "silver": 0.0814,
-    "bronze": 0.3804
+    "gold": 0.0026,
+    "silver": 0.0825,
+    "bronze": 0.3655
    }
   },
   {
@@ -2921,10 +2839,10 @@
    "link": "members",
    "x": -6.8925622718385835,
    "round1": true,
-   "field_position": 67,
+   "field_position": 65,
    "mean_online_rank": 984.9,
    "best_online_rank": 827,
-   "scenario_position": 114,
+   "scenario_position": 113,
    "absolute": {
     "gold": 0.0017,
     "silver": 0.1008,
@@ -2933,12 +2851,12 @@
    "field_relative_registered": {
     "gold": 0.0272,
     "silver": 0.1824,
-    "bronze": 0.3918
+    "bronze": 0.4017
    },
    "field_relative_scenario": {
-    "gold": 0.0035,
-    "silver": 0.079,
-    "bronze": 0.3754
+    "gold": 0.0025,
+    "silver": 0.0801,
+    "bronze": 0.3606
    }
   },
   {
@@ -2960,10 +2878,10 @@
    "link": "members",
    "x": -6.902742737158593,
    "round1": true,
-   "field_position": 68,
+   "field_position": 66,
    "mean_online_rank": 995.0,
    "best_online_rank": 995,
-   "scenario_position": 141,
+   "scenario_position": 139,
    "absolute": {
     "gold": 0.0016,
     "silver": 0.099,
@@ -2972,12 +2890,12 @@
    "field_relative_registered": {
     "gold": 0.0265,
     "silver": 0.1798,
-    "bronze": 0.3906
+    "bronze": 0.4006
    },
    "field_relative_scenario": {
-    "gold": 0.0034,
-    "silver": 0.0776,
-    "bronze": 0.3723
+    "gold": 0.0024,
+    "silver": 0.0786,
+    "bronze": 0.3575
    }
   },
   {
@@ -3001,10 +2919,10 @@
    "link": "members",
    "x": -6.9056875091982395,
    "round1": true,
-   "field_position": 69,
+   "field_position": 67,
    "mean_online_rank": 997.9,
    "best_online_rank": 821,
-   "scenario_position": 73,
+   "scenario_position": 72,
    "absolute": {
     "gold": 0.0016,
     "silver": 0.0985,
@@ -3013,12 +2931,12 @@
    "field_relative_registered": {
     "gold": 0.0263,
     "silver": 0.179,
-    "bronze": 0.3903
+    "bronze": 0.4002
    },
    "field_relative_scenario": {
-    "gold": 0.0034,
-    "silver": 0.0772,
-    "bronze": 0.3714
+    "gold": 0.0024,
+    "silver": 0.0782,
+    "bronze": 0.3566
    }
   },
   {
@@ -3042,7 +2960,7 @@
    "link": "members",
    "x": -6.912560118371353,
    "round1": true,
-   "field_position": 70,
+   "field_position": 68,
    "mean_online_rank": 1004.8,
    "best_online_rank": 888,
    "scenario_position": 13,
@@ -3054,12 +2972,12 @@
    "field_relative_registered": {
     "gold": 0.0258,
     "silver": 0.1773,
-    "bronze": 0.3895
+    "bronze": 0.3994
    },
    "field_relative_scenario": {
-    "gold": 0.0034,
-    "silver": 0.0762,
-    "bronze": 0.3693
+    "gold": 0.0023,
+    "silver": 0.0772,
+    "bronze": 0.3545
    }
   },
   {
@@ -3083,10 +3001,10 @@
    "link": "members",
    "x": -6.915817921942885,
    "round1": true,
-   "field_position": 71,
+   "field_position": 69,
    "mean_online_rank": 1008.1,
    "best_online_rank": 632,
-   "scenario_position": 110,
+   "scenario_position": 109,
    "absolute": {
     "gold": 0.0016,
     "silver": 0.0968,
@@ -3095,12 +3013,12 @@
    "field_relative_registered": {
     "gold": 0.0256,
     "silver": 0.1764,
-    "bronze": 0.3891
+    "bronze": 0.3991
    },
    "field_relative_scenario": {
-    "gold": 0.0033,
-    "silver": 0.0758,
-    "bronze": 0.3683
+    "gold": 0.0023,
+    "silver": 0.0768,
+    "bronze": 0.3535
    }
   },
   {
@@ -3124,10 +3042,10 @@
    "link": "members",
    "x": -6.918923613382759,
    "round1": true,
-   "field_position": 72,
+   "field_position": 70,
    "mean_online_rank": 1011.2,
    "best_online_rank": 826,
-   "scenario_position": 129,
+   "scenario_position": 127,
    "absolute": {
     "gold": 0.0016,
     "silver": 0.0963,
@@ -3136,12 +3054,12 @@
    "field_relative_registered": {
     "gold": 0.0254,
     "silver": 0.1756,
-    "bronze": 0.3887
+    "bronze": 0.3987
    },
    "field_relative_scenario": {
-    "gold": 0.0033,
-    "silver": 0.0753,
-    "bronze": 0.3674
+    "gold": 0.0023,
+    "silver": 0.0764,
+    "bronze": 0.3526
    }
   },
   {
@@ -3163,10 +3081,10 @@
    "link": "members",
    "x": -6.931471805599453,
    "round1": true,
-   "field_position": 73,
+   "field_position": 71,
    "mean_online_rank": 1024.0,
    "best_online_rank": 1024,
-   "scenario_position": 139,
+   "scenario_position": 137,
    "absolute": {
     "gold": 0.0015,
     "silver": 0.0943,
@@ -3175,12 +3093,12 @@
    "field_relative_registered": {
     "gold": 0.0245,
     "silver": 0.1725,
-    "bronze": 0.3871
+    "bronze": 0.3972
    },
    "field_relative_scenario": {
-    "gold": 0.0032,
-    "silver": 0.0737,
-    "bronze": 0.3635
+    "gold": 0.0022,
+    "silver": 0.0746,
+    "bronze": 0.3488
    }
   },
   {
@@ -3204,10 +3122,10 @@
    "link": "members",
    "x": -6.9701279833103165,
    "round1": true,
-   "field_position": 74,
+   "field_position": 72,
    "mean_online_rank": 1064.4,
    "best_online_rank": 956,
-   "scenario_position": 66,
+   "scenario_position": 65,
    "absolute": {
     "gold": 0.0014,
     "silver": 0.0881,
@@ -3216,51 +3134,12 @@
    "field_relative_registered": {
     "gold": 0.0222,
     "silver": 0.163,
-    "bronze": 0.3818
+    "bronze": 0.3919
    },
    "field_relative_scenario": {
-    "gold": 0.0029,
-    "silver": 0.0687,
-    "bronze": 0.3514
-   }
-  },
-  {
-   "school": "浙江理工大学",
-   "school_en": "Zhejiang Sci-Tech University",
-   "team": "最后一舞",
-   "members": "任麒源/胡涛/姚仁杰",
-   "status": "Pending",
-   "created": "2026-10-15T05:12:55Z",
-   "local": false,
-   "school_rank": 79,
-   "export_rank": 79,
-   "online_teams": {
-    "2": "浙理屠龙刀"
-   },
-   "online_ranks": {
-    "2": 1083
-   },
-   "link": "members",
-   "x": -6.9874902470009905,
-   "round1": true,
-   "field_position": 75,
-   "mean_online_rank": 1083.0,
-   "best_online_rank": 1083,
-   "scenario_position": 52,
-   "absolute": {
-    "gold": 0.0013,
-    "silver": 0.0855,
-    "bronze": 0.4001
-   },
-   "field_relative_registered": {
-    "gold": 0.0212,
-    "silver": 0.1588,
-    "bronze": 0.3791
-   },
-   "field_relative_scenario": {
-    "gold": 0.0027,
-    "silver": 0.0666,
-    "bronze": 0.346
+    "gold": 0.002,
+    "silver": 0.0696,
+    "bronze": 0.3369
    }
   },
   {
@@ -3284,10 +3163,10 @@
    "link": "members",
    "x": -6.989137728604505,
    "round1": true,
-   "field_position": 76,
+   "field_position": 73,
    "mean_online_rank": 1084.8,
    "best_online_rank": 806,
-   "scenario_position": 113,
+   "scenario_position": 112,
    "absolute": {
     "gold": 0.0013,
     "silver": 0.0852,
@@ -3296,12 +3175,12 @@
    "field_relative_registered": {
     "gold": 0.0211,
     "silver": 0.1584,
-    "bronze": 0.3788
+    "bronze": 0.389
    },
    "field_relative_scenario": {
-    "gold": 0.0027,
-    "silver": 0.0664,
-    "bronze": 0.3454
+    "gold": 0.0019,
+    "silver": 0.0672,
+    "bronze": 0.3309
    }
   },
   {
@@ -3325,10 +3204,10 @@
    "link": "members",
    "x": -6.992727921845086,
    "round1": true,
-   "field_position": 77,
+   "field_position": 74,
    "mean_online_rank": 1088.7,
    "best_online_rank": 1020,
-   "scenario_position": 69,
+   "scenario_position": 68,
    "absolute": {
     "gold": 0.0013,
     "silver": 0.0847,
@@ -3337,12 +3216,12 @@
    "field_relative_registered": {
     "gold": 0.0209,
     "silver": 0.1575,
-    "bronze": 0.3783
+    "bronze": 0.3884
    },
    "field_relative_scenario": {
-    "gold": 0.0027,
-    "silver": 0.0659,
-    "bronze": 0.3443
+    "gold": 0.0019,
+    "silver": 0.0668,
+    "bronze": 0.3298
    }
   },
   {
@@ -3366,7 +3245,7 @@
    "link": "members",
    "x": -6.99355239105867,
    "round1": true,
-   "field_position": 78,
+   "field_position": 75,
    "mean_online_rank": 1089.6,
    "best_online_rank": 762,
    "scenario_position": 93,
@@ -3378,12 +3257,12 @@
    "field_relative_registered": {
     "gold": 0.0209,
     "silver": 0.1573,
-    "bronze": 0.3781
+    "bronze": 0.3883
    },
    "field_relative_scenario": {
-    "gold": 0.0027,
-    "silver": 0.0658,
-    "bronze": 0.344
+    "gold": 0.0019,
+    "silver": 0.0667,
+    "bronze": 0.3296
    }
   },
   {
@@ -3407,7 +3286,7 @@
    "link": "members",
    "x": -7.0031233066796235,
    "round1": true,
-   "field_position": 79,
+   "field_position": 76,
    "mean_online_rank": 1100.1,
    "best_online_rank": 972,
    "scenario_position": 32,
@@ -3419,12 +3298,12 @@
    "field_relative_registered": {
     "gold": 0.0203,
     "silver": 0.1551,
-    "bronze": 0.3766
+    "bronze": 0.3868
    },
    "field_relative_scenario": {
-    "gold": 0.0026,
-    "silver": 0.0647,
-    "bronze": 0.341
+    "gold": 0.0018,
+    "silver": 0.0655,
+    "bronze": 0.3266
    }
   },
   {
@@ -3448,7 +3327,7 @@
    "link": "members",
    "x": -7.004445371057481,
    "round1": true,
-   "field_position": 80,
+   "field_position": 77,
    "mean_online_rank": 1101.5,
    "best_online_rank": 766,
    "scenario_position": 82,
@@ -3460,12 +3339,12 @@
    "field_relative_registered": {
     "gold": 0.0203,
     "silver": 0.1548,
-    "bronze": 0.3764
+    "bronze": 0.3866
    },
    "field_relative_scenario": {
-    "gold": 0.0026,
-    "silver": 0.0645,
-    "bronze": 0.3406
+    "gold": 0.0018,
+    "silver": 0.0653,
+    "bronze": 0.3262
    }
   },
   {
@@ -3489,10 +3368,10 @@
    "link": "members",
    "x": -7.013526740717009,
    "round1": true,
-   "field_position": 81,
+   "field_position": 78,
    "mean_online_rank": 1111.6,
    "best_online_rank": 1081,
-   "scenario_position": 136,
+   "scenario_position": 134,
    "absolute": {
     "gold": 0.0013,
     "silver": 0.0817,
@@ -3501,12 +3380,53 @@
    "field_relative_registered": {
     "gold": 0.0198,
     "silver": 0.1527,
-    "bronze": 0.3748
+    "bronze": 0.3851
    },
    "field_relative_scenario": {
-    "gold": 0.0026,
-    "silver": 0.0635,
-    "bronze": 0.3377
+    "gold": 0.0018,
+    "silver": 0.0643,
+    "bronze": 0.3233
+   }
+  },
+  {
+   "school": "太原理工大学",
+   "school_en": "Taiyuan University of Technology",
+   "team": "Newbie Party",
+   "members": "林挺/肖溪峪/樊云哲",
+   "status": "Pending",
+   "created": "",
+   "local": false,
+   "school_rank": 325,
+   "export_rank": 325,
+   "online_teams": {
+    "1": "蒟蒻派对",
+    "2": "蒟蒻派对"
+   },
+   "online_ranks": {
+    "1": 1015,
+    "2": 1232
+   },
+   "link": "members",
+   "x": -7.019519017784676,
+   "round1": true,
+   "field_position": 79,
+   "mean_online_rank": 1118.2,
+   "best_online_rank": 1015,
+   "scenario_position": 140,
+   "absolute": {
+    "gold": 0.0012,
+    "silver": 0.0808,
+    "bronze": 0.3913
+   },
+   "field_relative_registered": {
+    "gold": 0.0195,
+    "silver": 0.1513,
+    "bronze": 0.3841
+   },
+   "field_relative_scenario": {
+    "gold": 0.0017,
+    "silver": 0.0636,
+    "bronze": 0.3215
    }
   },
   {
@@ -3530,10 +3450,10 @@
    "link": "members",
    "x": -7.02238170472133,
    "round1": true,
-   "field_position": 82,
+   "field_position": 80,
    "mean_online_rank": 1121.5,
    "best_online_rank": 822,
-   "scenario_position": 120,
+   "scenario_position": 118,
    "absolute": {
     "gold": 0.0012,
     "silver": 0.0804,
@@ -3542,53 +3462,12 @@
    "field_relative_registered": {
     "gold": 0.0193,
     "silver": 0.1506,
-    "bronze": 0.3733
+    "bronze": 0.3836
    },
    "field_relative_scenario": {
-    "gold": 0.0025,
-    "silver": 0.0624,
-    "bronze": 0.3349
-   }
-  },
-  {
-   "school": "桂林电子科技大学",
-   "school_en": "Guilin University of Electronic Technology",
-   "team": "sleeping",
-   "members": "廖飞扬/杨明煊/王靖凯",
-   "status": "Pending",
-   "created": "2026-10-12T09:15:19Z",
-   "local": false,
-   "school_rank": 227,
-   "export_rank": 227,
-   "online_teams": {
-    "1": "开局睡觉考核队友的来",
-    "2": "开局睡觉考核队友的来"
-   },
-   "online_ranks": {
-    "1": 653,
-    "2": 1966
-   },
-   "link": "members",
-   "x": -7.032666714991771,
-   "round1": true,
-   "field_position": 83,
-   "mean_online_rank": 1133.0,
-   "best_online_rank": 653,
-   "scenario_position": 109,
-   "absolute": {
-    "gold": 0.0012,
-    "silver": 0.079,
-    "bronze": 0.3876
-   },
-   "field_relative_registered": {
-    "gold": 0.0188,
-    "silver": 0.1483,
-    "bronze": 0.3715
-   },
-   "field_relative_scenario": {
-    "gold": 0.0024,
-    "silver": 0.0613,
-    "bronze": 0.3316
+    "gold": 0.0017,
+    "silver": 0.0632,
+    "bronze": 0.3206
    }
   },
   {
@@ -3612,10 +3491,10 @@
    "link": "members",
    "x": -7.037743679661917,
    "round1": true,
-   "field_position": 84,
+   "field_position": 81,
    "mean_online_rank": 1138.8,
    "best_online_rank": 990,
-   "scenario_position": 55,
+   "scenario_position": 54,
    "absolute": {
     "gold": 0.0012,
     "silver": 0.0783,
@@ -3624,12 +3503,12 @@
    "field_relative_registered": {
     "gold": 0.0186,
     "silver": 0.1471,
-    "bronze": 0.3706
+    "bronze": 0.3809
    },
    "field_relative_scenario": {
-    "gold": 0.0024,
-    "silver": 0.0607,
-    "bronze": 0.33
+    "gold": 0.0017,
+    "silver": 0.0615,
+    "bronze": 0.3158
    }
   },
   {
@@ -3653,10 +3532,10 @@
    "link": "members",
    "x": -7.03815179434514,
    "round1": true,
-   "field_position": 85,
+   "field_position": 82,
    "mean_online_rank": 1139.3,
    "best_online_rank": 897,
-   "scenario_position": 124,
+   "scenario_position": 122,
    "absolute": {
     "gold": 0.0012,
     "silver": 0.0782,
@@ -3665,12 +3544,12 @@
    "field_relative_registered": {
     "gold": 0.0185,
     "silver": 0.147,
-    "bronze": 0.3705
+    "bronze": 0.3808
    },
    "field_relative_scenario": {
-    "gold": 0.0024,
-    "silver": 0.0607,
-    "bronze": 0.3299
+    "gold": 0.0017,
+    "silver": 0.0614,
+    "bronze": 0.3156
    }
   },
   {
@@ -3694,7 +3573,7 @@
    "link": "members",
    "x": -7.062700225574705,
    "round1": true,
-   "field_position": 86,
+   "field_position": 83,
    "mean_online_rank": 1167.6,
    "best_online_rank": 1095,
    "scenario_position": 94,
@@ -3706,12 +3585,12 @@
    "field_relative_registered": {
     "gold": 0.0174,
     "silver": 0.1415,
-    "bronze": 0.366
+    "bronze": 0.3763
    },
    "field_relative_scenario": {
-    "gold": 0.0022,
-    "silver": 0.058,
-    "bronze": 0.322
+    "gold": 0.0016,
+    "silver": 0.0587,
+    "bronze": 0.308
    }
   },
   {
@@ -3735,10 +3614,10 @@
    "link": "members",
    "x": -7.084788551493219,
    "round1": true,
-   "field_position": 87,
+   "field_position": 84,
    "mean_online_rank": 1193.7,
    "best_online_rank": 1050,
-   "scenario_position": 115,
+   "scenario_position": 114,
    "absolute": {
     "gold": 0.001,
     "silver": 0.072,
@@ -3747,12 +3626,12 @@
    "field_relative_registered": {
     "gold": 0.0164,
     "silver": 0.1367,
-    "bronze": 0.3617
+    "bronze": 0.372
    },
    "field_relative_scenario": {
-    "gold": 0.0021,
-    "silver": 0.0557,
-    "bronze": 0.315
+    "gold": 0.0015,
+    "silver": 0.0563,
+    "bronze": 0.301
    }
   },
   {
@@ -3776,10 +3655,10 @@
    "link": "members",
    "x": -7.085421901113203,
    "round1": true,
-   "field_position": 88,
+   "field_position": 85,
    "mean_online_rank": 1194.4,
    "best_online_rank": 1056,
-   "scenario_position": 135,
+   "scenario_position": 133,
    "absolute": {
     "gold": 0.001,
     "silver": 0.0719,
@@ -3788,12 +3667,12 @@
    "field_relative_registered": {
     "gold": 0.0164,
     "silver": 0.1366,
-    "bronze": 0.3616
+    "bronze": 0.3719
    },
    "field_relative_scenario": {
-    "gold": 0.0021,
-    "silver": 0.0556,
-    "bronze": 0.3148
+    "gold": 0.0015,
+    "silver": 0.0563,
+    "bronze": 0.3008
    }
   },
   {
@@ -3817,7 +3696,7 @@
    "link": "members",
    "x": -7.119529584731354,
    "round1": true,
-   "field_position": 89,
+   "field_position": 86,
    "mean_online_rank": 1235.9,
    "best_online_rank": 693,
    "scenario_position": 99,
@@ -3829,12 +3708,12 @@
    "field_relative_registered": {
     "gold": 0.015,
     "silver": 0.1294,
-    "bronze": 0.3545
+    "bronze": 0.3649
    },
    "field_relative_scenario": {
-    "gold": 0.0019,
-    "silver": 0.0522,
-    "bronze": 0.3039
+    "gold": 0.0013,
+    "silver": 0.0528,
+    "bronze": 0.2902
    }
   },
   {
@@ -3858,10 +3737,10 @@
    "link": "members",
    "x": -7.12863001053029,
    "round1": true,
-   "field_position": 90,
+   "field_position": 87,
    "mean_online_rank": 1247.2,
    "best_online_rank": 1061,
-   "scenario_position": 138,
+   "scenario_position": 136,
    "absolute": {
     "gold": 0.0009,
     "silver": 0.0666,
@@ -3870,12 +3749,12 @@
    "field_relative_registered": {
     "gold": 0.0146,
     "silver": 0.1275,
-    "bronze": 0.3526
+    "bronze": 0.3629
    },
    "field_relative_scenario": {
-    "gold": 0.0019,
-    "silver": 0.0513,
-    "bronze": 0.301
+    "gold": 0.0013,
+    "silver": 0.0519,
+    "bronze": 0.2874
    }
   },
   {
@@ -3899,10 +3778,10 @@
    "link": "members",
    "x": -7.146505507818317,
    "round1": true,
-   "field_position": 91,
+   "field_position": 88,
    "mean_online_rank": 1269.7,
    "best_online_rank": 844,
-   "scenario_position": 132,
+   "scenario_position": 130,
    "absolute": {
     "gold": 0.0009,
     "silver": 0.0645,
@@ -3911,12 +3790,12 @@
    "field_relative_registered": {
     "gold": 0.0139,
     "silver": 0.1239,
-    "bronze": 0.3487
+    "bronze": 0.3591
    },
    "field_relative_scenario": {
-    "gold": 0.0018,
-    "silver": 0.0497,
-    "bronze": 0.2953
+    "gold": 0.0012,
+    "silver": 0.0502,
+    "bronze": 0.2818
    }
   },
   {
@@ -3940,10 +3819,10 @@
    "link": "members",
    "x": -7.15554527775735,
    "round1": true,
-   "field_position": 92,
+   "field_position": 89,
    "mean_online_rank": 1281.2,
    "best_online_rank": 930,
-   "scenario_position": 78,
+   "scenario_position": 77,
    "absolute": {
     "gold": 0.0009,
     "silver": 0.0634,
@@ -3952,12 +3831,12 @@
    "field_relative_registered": {
     "gold": 0.0136,
     "silver": 0.1221,
-    "bronze": 0.3467
+    "bronze": 0.357
    },
    "field_relative_scenario": {
-    "gold": 0.0018,
-    "silver": 0.0488,
-    "bronze": 0.2924
+    "gold": 0.0012,
+    "silver": 0.0494,
+    "bronze": 0.279
    }
   },
   {
@@ -3981,10 +3860,10 @@
    "link": "members",
    "x": -7.219253348308376,
    "round1": true,
-   "field_position": 93,
+   "field_position": 90,
    "mean_online_rank": 1365.5,
    "best_online_rank": 1293,
-   "scenario_position": 143,
+   "scenario_position": 141,
    "absolute": {
     "gold": 0.0007,
     "silver": 0.0566,
@@ -3993,12 +3872,12 @@
    "field_relative_registered": {
     "gold": 0.0115,
     "silver": 0.11,
-    "bronze": 0.3319
+    "bronze": 0.3422
    },
    "field_relative_scenario": {
-    "gold": 0.0015,
-    "silver": 0.0434,
-    "bronze": 0.2724
+    "gold": 0.001,
+    "silver": 0.0438,
+    "bronze": 0.2595
    }
   },
   {
@@ -4022,10 +3901,10 @@
    "link": "members",
    "x": -7.228683274698805,
    "round1": true,
-   "field_position": 94,
+   "field_position": 91,
    "mean_online_rank": 1378.4,
    "best_online_rank": 1097,
-   "scenario_position": 57,
+   "scenario_position": 56,
    "absolute": {
     "gold": 0.0007,
     "silver": 0.0556,
@@ -4034,12 +3913,53 @@
    "field_relative_registered": {
     "gold": 0.0112,
     "silver": 0.1083,
-    "bronze": 0.3296
+    "bronze": 0.3399
    },
    "field_relative_scenario": {
-    "gold": 0.0014,
-    "silver": 0.0426,
-    "bronze": 0.2695
+    "gold": 0.001,
+    "silver": 0.043,
+    "bronze": 0.2567
+   }
+  },
+  {
+   "school": "重庆邮电大学",
+   "school_en": "Chongqing University of Posts and Telecommunications",
+   "team": "憧憬成为acm高手",
+   "members": "黄成辉/李永康/邓翔怀",
+   "status": "Pending",
+   "created": "",
+   "local": false,
+   "school_rank": 29,
+   "export_rank": 29,
+   "online_teams": {
+    "1": "憧憬成为acm高手",
+    "2": "憧憬成为acm高手"
+   },
+   "online_ranks": {
+    "1": 1254,
+    "2": 1523
+   },
+   "link": "members",
+   "x": -7.231265537044014,
+   "round1": true,
+   "field_position": 92,
+   "mean_online_rank": 1382.0,
+   "best_online_rank": 1254,
+   "scenario_position": 24,
+   "absolute": {
+    "gold": 0.0007,
+    "silver": 0.0553,
+    "bronze": 0.3291
+   },
+   "field_relative_registered": {
+    "gold": 0.0111,
+    "silver": 0.1079,
+    "bronze": 0.3392
+   },
+   "field_relative_scenario": {
+    "gold": 0.001,
+    "silver": 0.0428,
+    "bronze": 0.2559
    }
   },
   {
@@ -4063,10 +3983,10 @@
    "link": "members",
    "x": -7.231822864067395,
    "round1": true,
-   "field_position": 95,
+   "field_position": 93,
    "mean_online_rank": 1382.7,
    "best_online_rank": 1163,
-   "scenario_position": 146,
+   "scenario_position": 144,
    "absolute": {
     "gold": 0.0007,
     "silver": 0.0553,
@@ -4075,12 +3995,12 @@
    "field_relative_registered": {
     "gold": 0.0111,
     "silver": 0.1078,
-    "bronze": 0.3288
+    "bronze": 0.3391
    },
    "field_relative_scenario": {
-    "gold": 0.0014,
-    "silver": 0.0423,
-    "bronze": 0.2685
+    "gold": 0.001,
+    "silver": 0.0428,
+    "bronze": 0.2558
    }
   },
   {
@@ -4104,10 +4024,10 @@
    "link": "members",
    "x": -7.243559722915968,
    "round1": true,
-   "field_position": 96,
+   "field_position": 94,
    "mean_online_rank": 1399.1,
    "best_online_rank": 1298,
-   "scenario_position": 123,
+   "scenario_position": 121,
    "absolute": {
     "gold": 0.0007,
     "silver": 0.0541,
@@ -4116,12 +4036,12 @@
    "field_relative_registered": {
     "gold": 0.0108,
     "silver": 0.1057,
-    "bronze": 0.326
+    "bronze": 0.3362
    },
    "field_relative_scenario": {
-    "gold": 0.0014,
-    "silver": 0.0414,
-    "bronze": 0.2649
+    "gold": 0.001,
+    "silver": 0.0418,
+    "bronze": 0.2522
    }
   },
   {
@@ -4145,7 +4065,7 @@
    "link": "members",
    "x": -7.248967224507732,
    "round1": true,
-   "field_position": 97,
+   "field_position": 95,
    "mean_online_rank": 1406.7,
    "best_online_rank": 1116,
    "scenario_position": 50,
@@ -4157,12 +4077,12 @@
    "field_relative_registered": {
     "gold": 0.0106,
     "silver": 0.1047,
-    "bronze": 0.3246
+    "bronze": 0.3348
    },
    "field_relative_scenario": {
-    "gold": 0.0014,
-    "silver": 0.041,
-    "bronze": 0.2632
+    "gold": 0.0009,
+    "silver": 0.0414,
+    "bronze": 0.2506
    }
   },
   {
@@ -4186,7 +4106,7 @@
    "link": "members",
    "x": -7.264923819203387,
    "round1": true,
-   "field_position": 98,
+   "field_position": 96,
    "mean_online_rank": 1429.3,
    "best_online_rank": 1166,
    "scenario_position": 98,
@@ -4198,12 +4118,12 @@
    "field_relative_registered": {
     "gold": 0.0102,
     "silver": 0.102,
-    "bronze": 0.3206
+    "bronze": 0.3308
    },
    "field_relative_scenario": {
-    "gold": 0.0013,
-    "silver": 0.0398,
-    "bronze": 0.2583
+    "gold": 0.0009,
+    "silver": 0.0402,
+    "bronze": 0.2459
    }
   },
   {
@@ -4227,7 +4147,7 @@
    "link": "members",
    "x": -7.316251182779599,
    "round1": true,
-   "field_position": 99,
+   "field_position": 97,
    "mean_online_rank": 1504.6,
    "best_online_rank": 1440,
    "scenario_position": 30,
@@ -4239,12 +4159,12 @@
    "field_relative_registered": {
     "gold": 0.0089,
     "silver": 0.0935,
-    "bronze": 0.3075
+    "bronze": 0.3176
    },
    "field_relative_scenario": {
-    "gold": 0.0011,
-    "silver": 0.0361,
-    "bronze": 0.2428
+    "gold": 0.0008,
+    "silver": 0.0365,
+    "bronze": 0.2309
    }
   },
   {
@@ -4268,10 +4188,10 @@
    "link": "members",
    "x": -7.316504687912988,
    "round1": true,
-   "field_position": 100,
+   "field_position": 98,
    "mean_online_rank": 1504.9,
    "best_online_rank": 1366,
-   "scenario_position": 70,
+   "scenario_position": 69,
    "absolute": {
     "gold": 0.0006,
     "silver": 0.0474,
@@ -4280,12 +4200,12 @@
    "field_relative_registered": {
     "gold": 0.0089,
     "silver": 0.0935,
-    "bronze": 0.3074
+    "bronze": 0.3175
    },
    "field_relative_scenario": {
-    "gold": 0.0011,
-    "silver": 0.0361,
-    "bronze": 0.2428
+    "gold": 0.0008,
+    "silver": 0.0364,
+    "bronze": 0.2308
    }
   },
   {
@@ -4309,10 +4229,10 @@
    "link": "members",
    "x": -7.321192056069357,
    "round1": true,
-   "field_position": 101,
+   "field_position": 99,
    "mean_online_rank": 1512.0,
    "best_online_rank": 1394,
-   "scenario_position": 149,
+   "scenario_position": 147,
    "absolute": {
     "gold": 0.0006,
     "silver": 0.047,
@@ -4321,12 +4241,12 @@
    "field_relative_registered": {
     "gold": 0.0088,
     "silver": 0.0927,
-    "bronze": 0.3062
+    "bronze": 0.3163
    },
    "field_relative_scenario": {
-    "gold": 0.0011,
-    "silver": 0.0358,
-    "bronze": 0.2414
+    "gold": 0.0008,
+    "silver": 0.0361,
+    "bronze": 0.2295
    }
   },
   {
@@ -4348,7 +4268,7 @@
    "link": "members",
    "x": -7.333023014386481,
    "round1": true,
-   "field_position": 102,
+   "field_position": 100,
    "mean_online_rank": 1530.0,
    "best_online_rank": 1530,
    "scenario_position": null,
@@ -4360,12 +4280,12 @@
    "field_relative_registered": {
     "gold": 0.0085,
     "silver": 0.0909,
-    "bronze": 0.3031
+    "bronze": 0.3131
    },
    "field_relative_scenario": {
-    "gold": 0.0011,
-    "silver": 0.035,
-    "bronze": 0.2379
+    "gold": 0.0008,
+    "silver": 0.0353,
+    "bronze": 0.2261
    }
   },
   {
@@ -4389,7 +4309,7 @@
    "link": "members",
    "x": -7.367384441088658,
    "round1": false,
-   "field_position": 103,
+   "field_position": 101,
    "mean_online_rank": 1583.5,
    "best_online_rank": 1577,
    "scenario_position": null,
@@ -4401,12 +4321,12 @@
    "field_relative_registered": {
     "gold": 0.0077,
     "silver": 0.0856,
-    "bronze": 0.2941
+    "bronze": 0.3039
    },
    "field_relative_scenario": {
-    "gold": 0.001,
-    "silver": 0.0328,
-    "bronze": 0.2278
+    "gold": 0.0007,
+    "silver": 0.0331,
+    "bronze": 0.2164
    }
   },
   {
@@ -4430,10 +4350,10 @@
    "link": "members",
    "x": -7.369287150562926,
    "round1": true,
-   "field_position": 104,
+   "field_position": 102,
    "mean_online_rank": 1586.5,
    "best_online_rank": 1435,
-   "scenario_position": 64,
+   "scenario_position": 63,
    "absolute": {
     "gold": 0.0005,
     "silver": 0.043,
@@ -4442,12 +4362,12 @@
    "field_relative_registered": {
     "gold": 0.0077,
     "silver": 0.0854,
-    "bronze": 0.2936
+    "bronze": 0.3034
    },
    "field_relative_scenario": {
-    "gold": 0.001,
-    "silver": 0.0327,
-    "bronze": 0.2273
+    "gold": 0.0007,
+    "silver": 0.033,
+    "bronze": 0.2159
    }
   },
   {
@@ -4471,10 +4391,10 @@
    "link": "members",
    "x": -7.3738550357189245,
    "round1": true,
-   "field_position": 105,
+   "field_position": 103,
    "mean_online_rank": 1593.8,
    "best_online_rank": 1385,
-   "scenario_position": 148,
+   "scenario_position": 146,
    "absolute": {
     "gold": 0.0005,
     "silver": 0.0427,
@@ -4483,12 +4403,12 @@
    "field_relative_registered": {
     "gold": 0.0076,
     "silver": 0.0847,
-    "bronze": 0.2923
+    "bronze": 0.3022
    },
    "field_relative_scenario": {
-    "gold": 0.001,
-    "silver": 0.0324,
-    "bronze": 0.226
+    "gold": 0.0007,
+    "silver": 0.0327,
+    "bronze": 0.2146
    }
   },
   {
@@ -4512,7 +4432,7 @@
    "link": "members",
    "x": -7.38198823609788,
    "round1": true,
-   "field_position": 106,
+   "field_position": 104,
    "mean_online_rank": 1606.8,
    "best_online_rank": 1374,
    "scenario_position": 41,
@@ -4524,12 +4444,12 @@
    "field_relative_registered": {
     "gold": 0.0074,
     "silver": 0.0835,
-    "bronze": 0.2902
+    "bronze": 0.3
    },
    "field_relative_scenario": {
-    "gold": 0.001,
-    "silver": 0.0319,
-    "bronze": 0.2236
+    "gold": 0.0007,
+    "silver": 0.0322,
+    "bronze": 0.2124
    }
   },
   {
@@ -4553,10 +4473,10 @@
    "link": "members",
    "x": -7.387385560053598,
    "round1": true,
-   "field_position": 107,
+   "field_position": 105,
    "mean_online_rank": 1615.5,
    "best_online_rank": 1559,
-   "scenario_position": 62,
+   "scenario_position": 61,
    "absolute": {
     "gold": 0.0005,
     "silver": 0.0416,
@@ -4565,12 +4485,12 @@
    "field_relative_registered": {
     "gold": 0.0073,
     "silver": 0.0827,
-    "bronze": 0.2887
+    "bronze": 0.2985
    },
    "field_relative_scenario": {
-    "gold": 0.0009,
-    "silver": 0.0316,
-    "bronze": 0.2221
+    "gold": 0.0007,
+    "silver": 0.0318,
+    "bronze": 0.2109
    }
   },
   {
@@ -4592,7 +4512,7 @@
    "link": "members",
    "x": -7.401231264413015,
    "round1": true,
-   "field_position": 108,
+   "field_position": 106,
    "mean_online_rank": 1638.0,
    "best_online_rank": 1638,
    "scenario_position": 17,
@@ -4604,12 +4524,12 @@
    "field_relative_registered": {
     "gold": 0.0071,
     "silver": 0.0808,
-    "bronze": 0.285
+    "bronze": 0.2947
    },
    "field_relative_scenario": {
-    "gold": 0.0009,
-    "silver": 0.0307,
-    "bronze": 0.2182
+    "gold": 0.0006,
+    "silver": 0.031,
+    "bronze": 0.2071
    }
   },
   {
@@ -4633,10 +4553,10 @@
    "link": "members",
    "x": -7.403349546425383,
    "round1": true,
-   "field_position": 109,
+   "field_position": 107,
    "mean_online_rank": 1641.5,
    "best_online_rank": 1315,
-   "scenario_position": 147,
+   "scenario_position": 145,
    "absolute": {
     "gold": 0.0005,
     "silver": 0.0404,
@@ -4645,12 +4565,12 @@
    "field_relative_registered": {
     "gold": 0.007,
     "silver": 0.0805,
-    "bronze": 0.2844
+    "bronze": 0.2942
    },
    "field_relative_scenario": {
-    "gold": 0.0009,
-    "silver": 0.0306,
-    "bronze": 0.2176
+    "gold": 0.0006,
+    "silver": 0.0309,
+    "bronze": 0.2065
    }
   },
   {
@@ -4672,10 +4592,10 @@
    "link": "members",
    "x": -7.406103381237015,
    "round1": true,
-   "field_position": 110,
+   "field_position": 108,
    "mean_online_rank": 1646.0,
    "best_online_rank": 1646,
-   "scenario_position": 154,
+   "scenario_position": 152,
    "absolute": {
     "gold": 0.0005,
     "silver": 0.0402,
@@ -4684,12 +4604,12 @@
    "field_relative_registered": {
     "gold": 0.007,
     "silver": 0.0801,
-    "bronze": 0.2837
+    "bronze": 0.2934
    },
    "field_relative_scenario": {
-    "gold": 0.0009,
-    "silver": 0.0304,
-    "bronze": 0.2168
+    "gold": 0.0006,
+    "silver": 0.0307,
+    "bronze": 0.2058
    }
   },
   {
@@ -4713,10 +4633,10 @@
    "link": "members",
    "x": -7.438327471538547,
    "round1": true,
-   "field_position": 111,
+   "field_position": 109,
    "mean_online_rank": 1699.9,
    "best_online_rank": 1682,
-   "scenario_position": 155,
+   "scenario_position": 153,
    "absolute": {
     "gold": 0.0004,
     "silver": 0.0379,
@@ -4725,12 +4645,12 @@
    "field_relative_registered": {
     "gold": 0.0064,
     "silver": 0.0757,
-    "bronze": 0.275
+    "bronze": 0.2846
    },
    "field_relative_scenario": {
-    "gold": 0.0008,
-    "silver": 0.0286,
-    "bronze": 0.2079
+    "gold": 0.0006,
+    "silver": 0.0289,
+    "bronze": 0.1972
    }
   },
   {
@@ -4754,10 +4674,10 @@
    "link": "members",
    "x": -7.443379422027489,
    "round1": true,
-   "field_position": 112,
+   "field_position": 110,
    "mean_online_rank": 1708.5,
    "best_online_rank": 1433,
-   "scenario_position": 150,
+   "scenario_position": 148,
    "absolute": {
     "gold": 0.0004,
     "silver": 0.0375,
@@ -4766,12 +4686,12 @@
    "field_relative_registered": {
     "gold": 0.0063,
     "silver": 0.075,
-    "bronze": 0.2737
+    "bronze": 0.2832
    },
    "field_relative_scenario": {
-    "gold": 0.0008,
-    "silver": 0.0284,
-    "bronze": 0.2065
+    "gold": 0.0006,
+    "silver": 0.0286,
+    "bronze": 0.1958
    }
   },
   {
@@ -4795,10 +4715,10 @@
    "link": "members",
    "x": -7.4518907796828575,
    "round1": true,
-   "field_position": 113,
+   "field_position": 111,
    "mean_online_rank": 1723.1,
    "best_online_rank": 1392,
-   "scenario_position": 137,
+   "scenario_position": 135,
    "absolute": {
     "gold": 0.0004,
     "silver": 0.0369,
@@ -4807,12 +4727,12 @@
    "field_relative_registered": {
     "gold": 0.0062,
     "silver": 0.0739,
-    "bronze": 0.2714
+    "bronze": 0.2808
    },
    "field_relative_scenario": {
-    "gold": 0.0008,
-    "silver": 0.0279,
-    "bronze": 0.2041
+    "gold": 0.0005,
+    "silver": 0.0281,
+    "bronze": 0.1936
    }
   },
   {
@@ -4836,10 +4756,10 @@
    "link": "members",
    "x": -7.462975805072764,
    "round1": true,
-   "field_position": 114,
+   "field_position": 112,
    "mean_online_rank": 1742.3,
    "best_online_rank": 1351,
-   "scenario_position": 151,
+   "scenario_position": 149,
    "absolute": {
     "gold": 0.0004,
     "silver": 0.0362,
@@ -4848,12 +4768,12 @@
    "field_relative_registered": {
     "gold": 0.006,
     "silver": 0.0725,
-    "bronze": 0.2684
+    "bronze": 0.2778
    },
    "field_relative_scenario": {
-    "gold": 0.0008,
-    "silver": 0.0273,
-    "bronze": 0.2012
+    "gold": 0.0005,
+    "silver": 0.0275,
+    "bronze": 0.1907
    }
   },
   {
@@ -4877,10 +4797,10 @@
    "link": "members",
    "x": -7.476610237644001,
    "round1": true,
-   "field_position": 115,
+   "field_position": 113,
    "mean_online_rank": 1766.2,
    "best_online_rank": 1536,
-   "scenario_position": 153,
+   "scenario_position": 151,
    "absolute": {
     "gold": 0.0004,
     "silver": 0.0353,
@@ -4889,12 +4809,12 @@
    "field_relative_registered": {
     "gold": 0.0058,
     "silver": 0.0707,
-    "bronze": 0.2647
+    "bronze": 0.274
    },
    "field_relative_scenario": {
-    "gold": 0.0007,
-    "silver": 0.0266,
-    "bronze": 0.1975
+    "gold": 0.0005,
+    "silver": 0.0268,
+    "bronze": 0.1872
    }
   },
   {
@@ -4918,10 +4838,10 @@
    "link": "members",
    "x": -7.481279807515776,
    "round1": true,
-   "field_position": 116,
+   "field_position": 114,
    "mean_online_rank": 1774.5,
    "best_online_rank": 1519,
-   "scenario_position": 145,
+   "scenario_position": 143,
    "absolute": {
     "gold": 0.0004,
     "silver": 0.035,
@@ -4930,12 +4850,12 @@
    "field_relative_registered": {
     "gold": 0.0057,
     "silver": 0.0702,
-    "bronze": 0.2634
+    "bronze": 0.2727
    },
    "field_relative_scenario": {
-    "gold": 0.0007,
-    "silver": 0.0264,
-    "bronze": 0.1963
+    "gold": 0.0005,
+    "silver": 0.0266,
+    "bronze": 0.186
    }
   },
   {
@@ -4959,10 +4879,10 @@
    "link": "members",
    "x": -7.505361551510431,
    "round1": true,
-   "field_position": 117,
+   "field_position": 115,
    "mean_online_rank": 1817.8,
    "best_online_rank": 1740,
-   "scenario_position": 156,
+   "scenario_position": 154,
    "absolute": {
     "gold": 0.0004,
     "silver": 0.0334,
@@ -4971,12 +4891,12 @@
    "field_relative_registered": {
     "gold": 0.0054,
     "silver": 0.0672,
-    "bronze": 0.2569
+    "bronze": 0.2661
    },
    "field_relative_scenario": {
-    "gold": 0.0007,
-    "silver": 0.0252,
-    "bronze": 0.1899
+    "gold": 0.0005,
+    "silver": 0.0254,
+    "bronze": 0.18
    }
   },
   {
@@ -5000,7 +4920,7 @@
    "link": "members",
    "x": -7.513280627403949,
    "round1": true,
-   "field_position": 118,
+   "field_position": 116,
    "mean_online_rank": 1832.2,
    "best_online_rank": 1591,
    "scenario_position": 83,
@@ -5012,12 +4932,12 @@
    "field_relative_registered": {
     "gold": 0.0052,
     "silver": 0.0663,
-    "bronze": 0.2547
+    "bronze": 0.2639
    },
    "field_relative_scenario": {
-    "gold": 0.0007,
-    "silver": 0.0248,
-    "bronze": 0.1879
+    "gold": 0.0005,
+    "silver": 0.025,
+    "bronze": 0.178
    }
   },
   {
@@ -5041,7 +4961,7 @@
    "link": "members",
    "x": -7.5209360273003085,
    "round1": true,
-   "field_position": 119,
+   "field_position": 117,
    "mean_online_rank": 1846.3,
    "best_online_rank": 1701,
    "scenario_position": 89,
@@ -5053,12 +4973,12 @@
    "field_relative_registered": {
     "gold": 0.0051,
     "silver": 0.0654,
-    "bronze": 0.2527
+    "bronze": 0.2618
    },
    "field_relative_scenario": {
-    "gold": 0.0007,
-    "silver": 0.0244,
-    "bronze": 0.1859
+    "gold": 0.0005,
+    "silver": 0.0246,
+    "bronze": 0.1761
    }
   },
   {
@@ -5080,10 +5000,10 @@
    "link": "members",
    "x": -7.53955882930103,
    "round1": true,
-   "field_position": 120,
+   "field_position": 118,
    "mean_online_rank": 1881.0,
    "best_online_rank": 1881,
-   "scenario_position": 75,
+   "scenario_position": 74,
    "absolute": {
     "gold": 0.0003,
     "silver": 0.0314,
@@ -5092,12 +5012,12 @@
    "field_relative_registered": {
     "gold": 0.0049,
     "silver": 0.0632,
-    "bronze": 0.2477
+    "bronze": 0.2567
    },
    "field_relative_scenario": {
-    "gold": 0.0006,
-    "silver": 0.0236,
-    "bronze": 0.1812
+    "gold": 0.0004,
+    "silver": 0.0238,
+    "bronze": 0.1716
    }
   },
   {
@@ -5121,10 +5041,10 @@
    "link": "members",
    "x": -7.549409956500645,
    "round1": true,
-   "field_position": 121,
+   "field_position": 119,
    "mean_online_rank": 1899.6,
    "best_online_rank": 1817,
-   "scenario_position": 157,
+   "scenario_position": 155,
    "absolute": {
     "gold": 0.0003,
     "silver": 0.0308,
@@ -5133,12 +5053,12 @@
    "field_relative_registered": {
     "gold": 0.0048,
     "silver": 0.0621,
-    "bronze": 0.245
+    "bronze": 0.254
    },
    "field_relative_scenario": {
-    "gold": 0.0006,
-    "silver": 0.0231,
-    "bronze": 0.1787
+    "gold": 0.0004,
+    "silver": 0.0233,
+    "bronze": 0.1692
    }
   },
   {
@@ -5162,10 +5082,10 @@
    "link": "members",
    "x": -7.631642940009963,
    "round1": true,
-   "field_position": 122,
+   "field_position": 120,
    "mean_online_rank": 2062.4,
    "best_online_rank": 1847,
-   "scenario_position": 158,
+   "scenario_position": 156,
    "absolute": {
     "gold": 0.0003,
     "silver": 0.0264,
@@ -5174,12 +5094,53 @@
    "field_relative_registered": {
     "gold": 0.0038,
     "silver": 0.0535,
-    "bronze": 0.2232
+    "bronze": 0.2316
    },
    "field_relative_scenario": {
-    "gold": 0.0005,
-    "silver": 0.0197,
-    "bronze": 0.159
+    "gold": 0.0003,
+    "silver": 0.0199,
+    "bronze": 0.1504
+   }
+  },
+  {
+   "school": "广州软件学院",
+   "school_en": "Guangzhou University of Software",
+   "team": "转生铁牌",
+   "members": "赖奕文/钟文贤/曾嘉政",
+   "status": "Pending",
+   "created": "",
+   "local": false,
+   "school_rank": 471,
+   "export_rank": 471,
+   "online_teams": {
+    "1": "转生铁牌",
+    "2": "转生铁牌"
+   },
+   "online_ranks": {
+    "1": 2124,
+    "2": 2035
+   },
+   "link": "members",
+   "x": -7.639653740119263,
+   "round1": true,
+   "field_position": 121,
+   "mean_online_rank": 2079.0,
+   "best_online_rank": 2035,
+   "scenario_position": 157,
+   "absolute": {
+    "gold": 0.0003,
+    "silver": 0.026,
+    "bronze": 0.2118
+   },
+   "field_relative_registered": {
+    "gold": 0.0037,
+    "silver": 0.0528,
+    "bronze": 0.2294
+   },
+   "field_relative_scenario": {
+    "gold": 0.0003,
+    "silver": 0.0196,
+    "bronze": 0.1486
    }
   },
   {
@@ -5201,10 +5162,10 @@
    "link": "members",
    "x": -7.689828668736484,
    "round1": true,
-   "field_position": 123,
+   "field_position": 122,
    "mean_online_rank": 2186.0,
    "best_online_rank": 2186,
-   "scenario_position": 159,
+   "scenario_position": 158,
    "absolute": {
     "gold": 0.0002,
     "silver": 0.0237,
@@ -5213,12 +5174,12 @@
    "field_relative_registered": {
     "gold": 0.0033,
     "silver": 0.0481,
-    "bronze": 0.2081
+    "bronze": 0.2162
    },
    "field_relative_scenario": {
-    "gold": 0.0004,
-    "silver": 0.0176,
-    "bronze": 0.1461
+    "gold": 0.0003,
+    "silver": 0.0178,
+    "bronze": 0.138
    }
   },
   {
@@ -5242,10 +5203,10 @@
    "link": "members",
    "x": -7.732709201476045,
    "round1": true,
-   "field_position": 124,
+   "field_position": 123,
    "mean_online_rank": 2281.8,
    "best_online_rank": 2250,
-   "scenario_position": 160,
+   "scenario_position": 159,
    "absolute": {
     "gold": 0.0002,
     "silver": 0.0219,
@@ -5254,12 +5215,12 @@
    "field_relative_registered": {
     "gold": 0.0029,
     "silver": 0.0445,
-    "bronze": 0.1973
+    "bronze": 0.2051
    },
    "field_relative_scenario": {
-    "gold": 0.0004,
-    "silver": 0.0162,
-    "bronze": 0.137
+    "gold": 0.0003,
+    "silver": 0.0163,
+    "bronze": 0.1294
    }
   }
  ],
@@ -5425,6 +5386,22 @@
    "round1": true
   },
   {
+   "school": "南昌大学",
+   "school_en": "Nanchang University",
+   "team": "MRCWINNER",
+   "members": "洪轩/谢佳宏/翁仔睿",
+   "status": "Pending",
+   "created": "",
+   "local": false,
+   "school_rank": 139,
+   "export_rank": 139,
+   "online_teams": {},
+   "online_ranks": {},
+   "link": "",
+   "x": null,
+   "round1": true
+  },
+  {
    "school": "大连理工大学",
    "school_en": "Dalian University of Technology",
    "team": "中国奶龙大学0队",
@@ -5521,6 +5498,22 @@
    "round1": true
   },
   {
+   "school": "湖北工业大学",
+   "school_en": "Hubei University of Technology",
+   "team": "八分钱难倒菲比",
+   "members": "梅锦昕/李怡爽/黄胡智宇",
+   "status": "Pending",
+   "created": "",
+   "local": false,
+   "school_rank": 199,
+   "export_rank": 199,
+   "online_teams": {},
+   "online_ranks": {},
+   "link": "",
+   "x": null,
+   "round1": true
+  },
+  {
    "school": "烟台大学",
    "school_en": "Yantai University",
    "team": "全国硕士研究生统一招生考试已经过去 22 天",
@@ -5577,56 +5570,58 @@
    "ahead": 59,
    "room": 35,
    "unregistered_ahead": 64,
-   "scenario_position": 77,
-   "scenario_pool": 162,
+   "scenario_position": 76,
+   "scenario_pool": 161,
    "scenario_cut_school_rank": 178,
    "cut_risk": {
-    "since": "icpc_hk_macau_public_teams_20261023.xlsx",
-    "days": 2.88,
-    "days_left": 4.17,
+    "since": "icpc_hk_macau_public_teams_20261026.xlsx",
+    "days": 1.75,
+    "days_left": 2.42,
     "need": 36,
     "groups": {
      "past_hk": {
       "schools": 73,
       "unregistered": 25,
-      "registered_since": 9,
-      "per_day": 0.10674492951713198
+      "registered_since": 1,
+      "withdrawn": 1,
+      "per_day": 0.02335465717487783
      },
      "other": {
       "schools": 50,
       "unregistered": 39,
-      "registered_since": 1,
-      "per_day": 0.008789210100621335
+      "registered_since": 0,
+      "withdrawn": 0,
+      "per_day": 0.0
      }
     },
     "scenarios": [
      {
       "assumption": "1x the pace",
-      "p_past_hk": 0.359,
-      "p_other": 0.036,
-      "expected_new": 10.4,
+      "p_past_hk": 0.055,
+      "p_other": 0.0,
+      "expected_new": 1.4,
       "p_cut": 0.0
      },
      {
       "assumption": "2x the pace",
-      "p_past_hk": 0.59,
-      "p_other": 0.071,
-      "expected_new": 17.5,
+      "p_past_hk": 0.107,
+      "p_other": 0.0,
+      "expected_new": 2.7,
       "p_cut": 0.0
      },
      {
       "assumption": "3x the pace",
-      "p_past_hk": 0.737,
-      "p_other": 0.104,
-      "expected_new": 22.5,
+      "p_past_hk": 0.156,
+      "p_other": 0.0,
+      "expected_new": 3.9,
       "p_cut": 0.0
      },
      {
       "assumption": "every past-HK school, others at 3x",
       "p_past_hk": 1.0,
-      "p_other": 0.104,
-      "expected_new": 29.1,
-      "p_cut": 0.0016
+      "p_other": 0.0,
+      "expected_new": 25.0,
+      "p_cut": 0.0
      }
     ],
     "others_needed": 11,
@@ -5638,17 +5633,12 @@
   }
  },
  "cut_now": {
-  "round1_nonlocal": 135,
-  "unlinked": 15,
-  "cut": 40,
-  "last_kept_school_rank": 248,
-  "first_cut_school_rank": 250,
+  "round1_nonlocal": 136,
+  "unlinked": 17,
+  "cut": 41,
+  "last_kept_school_rank": 250,
+  "first_cut_school_rank": 251,
   "cut_teams": [
-   [
-    "沈阳化工大学",
-    "Medal come, come",
-    250
-   ],
    [
     "上海海事大学",
     "期末后 Algorithm Time",
@@ -5760,6 +5750,11 @@
     322
    ],
    [
+    "太原理工大学",
+    "Newbie Party",
+    325
+   ],
+   [
     "湖北经济学院",
     "直到罚时变成一块铁牌",
     330
@@ -5835,6 +5830,11 @@
     455
    ],
    [
+    "广州软件学院",
+    "转生铁牌",
+    471
+   ],
+   [
     "安徽建筑大学",
     "acacac",
     481
@@ -5848,7 +5848,7 @@
  },
  "returning_schools": {
   "2024": 58,
-  "2025": 64
+  "2025": 66
  },
  "missing_medal_schools": {
   "上海交通大学": [
@@ -5880,6 +5880,10 @@
   ],
   "暨南大学": [
    "2025 #29 silver"
+  ],
+  "浙江理工大学": [
+   "2024 #33 silver",
+   "2024 #27 silver"
   ],
   "清华大学": [
    "2025 #17 silver"

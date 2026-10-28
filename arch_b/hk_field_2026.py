@@ -44,12 +44,13 @@ from arch_b import hk_link as hk
 from arch_b import online_gold as og
 from arch_b import online_medals as om
 
-REGISTRATION = og.ROOT / "data" / "icpc_hk_macau_public_teams_20261026.xlsx"  # 10-26 export
+REGISTRATION = og.ROOT / "data" / "icpc_hk_macau_public_teams_20261028.xlsx"  # 10-28 export
 SNAPSHOTS = {  # export -> when taken (UTC): a CSV's last registration, an xlsx file name's stamp (UTC+8)
     "icpc_51_asia_hkmo_teams.csv": "2026-10-15T05:12",
     "icpc_hk_macau_regional_teams.csv": "2026-10-17T14:30",
     "icpc_hk_macau_public_teams_20261023.xlsx": "2026-10-23T14:45",
     "icpc_hk_macau_public_teams_20261026.xlsx": "2026-10-26T11:53",
+    "icpc_hk_macau_public_teams_20261028.xlsx": "2026-10-28T05:50",
 }
 ROUND1_CLOSE = "2026-10-30T16:00"  # end of 10-30 in UTC+8 (the notice gives the date only)
 PACES = (1, 2, 3)
@@ -125,7 +126,8 @@ def binom_tail(groups, k):
 def cut_risk(path, top, past_hk, room):
     """Chance that more than ``room`` of the schools in ``top`` (non-local, better school rank) not registered yet
     register before round 1 closes. Each registers at its group's per-day rate between the last two snapshots
-    (groups: had a 2024/2025 Hong Kong team or not), carried to the close at 1x / 2x / 3x that rate; the last
+    (new registrations among the group's schools not registered at the first; groups: had a 2024/2025 Hong Kong
+    team or not; a school that withdrew counts as not registered), carried to the close at 1x / 2x / 3x; the last
     row has every past-Hong Kong school return. None without an earlier snapshot."""
     names = list(SNAPSHOTS)
     if Path(path).name not in names[1:]:
@@ -136,9 +138,12 @@ def cut_risk(path, top, past_hk, room):
     days, left = (t1 - t0).total_seconds() / 86400, max(0.0, (close - t1).total_seconds() / 86400)
     groups = {}
     for g, schools in (("past_hk", top & past_hk), ("other", top - past_hk)):
-        before, after = len(schools - reg0), len(schools - reg1)
-        groups[g] = dict(schools=len(schools), unregistered=after, registered_since=before - after,
-                         per_day=math.log(before / after) / days if after else 0.0)
+        at_risk = schools - reg0
+        new = len(at_risk & reg1)
+        groups[g] = dict(schools=len(schools), unregistered=len(schools - reg1), registered_since=new,
+                         withdrawn=len(schools & reg0 - reg1),
+                         per_day=(math.log(len(at_risk) / (len(at_risk) - new)) / days if new < len(at_risk) else math.inf)
+                         if at_risk else 0.0)
     rows = []
     for name, ps in [(f"{k}x the pace", {g: 1 - math.exp(-k * v["per_day"] * left) for g, v in groups.items()})
                      for k in PACES] + [(f"every past-HK school, others at {PACES[-1]}x", {"past_hk": 1.0, "other": 1 - math.exp(
@@ -415,9 +420,10 @@ def markdown(res):
         L += ["", f"Chance {t} is cut in round 1: it is cut if {c['need']} more of the {v['unregistered_ahead']} "
               f"unregistered non-local schools above it register in the {c['days_left']} days left (to {ROUND1_CLOSE} "
               f"UTC). Since `{c['since']}` ({c['days']} days), {g['past_hk']['registered_since']} of the schools with a "
-              f"2024/2025 Hong Kong team registered ({g['past_hk']['unregistered']} of {g['past_hk']['schools']} left) "
-              f"and {g['other']['registered_since']} of the others ({g['other']['unregistered']} of "
-              f"{g['other']['schools']} left). Each school registers independently at its group's rate.", "",
+              f"2024/2025 Hong Kong team registered ({g['past_hk']['withdrawn']} withdrew; {g['past_hk']['unregistered']} "
+              f"of {g['past_hk']['schools']} left) and {g['other']['registered_since']} of the others "
+              f"({g['other']['withdrawn']} withdrew; {g['other']['unregistered']} of {g['other']['schools']} left). Each "
+              "school registers independently at its group's rate.", "",
               "| assumption | P(register): past-HK / other | expected new | P(cut) |", "|---|---|---|---|"]
         L += [f"| {r['assumption']} | {r['p_past_hk']} / {r['p_other']} | {r['expected_new']} | {r['p_cut']:.1%} |"
               for r in c["scenarios"]]
