@@ -1,0 +1,70 @@
+{
+  "scope": "Read-only audit; cached calibration fits, no candidate model",
+  "dataset": {
+    "contests": 262,
+    "identities": 35862,
+    "appearances": 78201,
+    "problems": 3185,
+    "cells": 991268,
+    "mixed_imported_and_other_boards": 232,
+    "repeated_contest_identity_groups": 448,
+    "excess_rows_in_repeated_groups": 475,
+    "zero_solve_rows_dropped": 11867,
+    "dropped_with_wrong_attempts": 2105,
+    "zero_solve_problems": 122,
+    "one_solve_problems": 106
+  },
+  "calibration": {
+    "anchors": 185,
+    "contests": 15,
+    "outside_anchor_range": {
+      "raw_b": 101,
+      "binary_minus_survival": 453,
+      "conditional_fit_se": 277,
+      "solve_rate": 0,
+      "log_field_size": 1636
+    },
+    "scores": {
+      "DE_clipped_nested_loco": 225.60731412040002,
+      "survival_affine_loco": 246.6615528984793,
+      "survival_gym_loco": 244.37756789939698,
+      "binary_affine_loco": 246.77953698557033,
+      "binary_gym_loco": 257.5343704298585
+    },
+    "selected_alpha_lambda": [
+      1.0,
+      1.0
+    ],
+    "shipped_reproduced": true,
+    "metadata_ranges_match_current_anchors": true,
+    "metadata_matches_saved_fits": {
+      "problem_ratings_survival.json": false,
+      "problem_ratings_b.json": false
+    }
+  },
+  "local_cache": {
+    "config_directories": 59,
+    "run_directories": 38,
+    "configs_with_numeric_start_end": 59,
+    "timed_configs_with_runs": 38,
+    "unique_run_file_hashes": 38,
+    "gym_raw_checkpoint_exists": false,
+    "note": "Directory inventory only; aliases, joins and run completeness require audit."
+  },
+  "cache_manifest_sha256": "35db0567cc2e648d195fe45f18d4c6aae144b83635f1f249c96773c7d23cd573",
+  "inputs_sha256": {
+    "data/tagged.json": "b12775cdafc6fe040d43c48319b26f031be02aed82c678f42052be327e903b91",
+    "data/icpc_2020_2021.json": "bfd8ce8a33491d373f1a60b4543ce273d4a5559faac709588d866f41931d67bd",
+    "data/petroz_2022_2026.json": "84961ea5542fa1281a567e54cacc14ac91311d6599dcf29470d15c7dc456cb84",
+    "data/wf_tagged_format.json": "63eba1ca8a996a97e9e471553ce67ed058ffc6cd197241df0330372ed88329de",
+    "data/ucup_s3.json": "8c74b4b963ce8f33027624e53c8dde320180704d93a96714e5e802e7ab4b7615",
+    "data/ucup_s4.json": "021e02abd20750ae77357a02922da1ac754572f923735cd28501344692732e23",
+    "output/problem_ratings_survival.json": "0919c24e7b726c5baa4d476732fdb9fb3d295b070c21c762696e660a33072986",
+    "output/problem_ratings_b.json": "41abe0809af8b50f909a6d6385b822f2d75e56f15d33231c68cea68d76b47f1c",
+    "output/problem_ratings_calibrated.json": "43d3c6c934559703b6e0339ff7f33b9dffe8496fdceae074d44d3d099e3d879d",
+    "output/problem_calibration.json": "961252a2f5403555779f562429348f8e68b076a759499677781a8fd63e3abaa3",
+    "data/cf_problemset.json": "1e3f7c1da8c2f2939d34c4a81f080b064bb96c853f3082c79e615e7b369e4df8",
+    "data/cf_team_contests.txt": "7db8711fb86393dc21efc622153ea944e4091a059061b601909a684f99f3c9ac",
+    "output/gym_difficulty.json": "7da4bc82ce6a9442567c2badaf410bfd7af8ade2d98d8f9ff872e89ea3166038"
+  }
+}

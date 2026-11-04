@@ -11,6 +11,16 @@ define each other, so they are solved either by an alternating fixed point
 (**Architecture B**); teams recurring across contests link everything onto one
 scale.
 
+The [2026-11-04 rating rethink](rating_rethink.md) proposes a context-aware binary
+model, separate completion/timing components and member-informed team priors.
+Fresh diagnostics reproduce shipped DE calibration (225.61 nested development
+LOCO RMSE), favor binary over survival for response imputation, and identify
+stale calibration metadata hashes. The report prioritizes experiments for
+onsite/mirror separation, field-composition transfer and stricter forecasting;
+it also inventories locally cached submission logs. No production estimator or
+rating changed. Reproduce the read-only audit with
+`./.venv/bin/python -m scripts.rating_rethink_audit`.
+
 The [2026-09-05 experiment review](experiment_review.md) records the audit that
 found held-out-label leakage, incorrect rank/AUC tie handling, incomplete
 uncertainty labels, and participation-key collisions. The concrete correctness
