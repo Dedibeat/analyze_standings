@@ -78,7 +78,8 @@ Fixed conventions:
 - **Counting/combinatorial DP and graph/tree problems** produce the long chains: 35 of our 75
   wrong runs come from 16 problems in these two topics.
 - **Greedy without proof:** many greedy problems are solved cleanly, but the failures are all
-  unproven orders or assumptions (2524 C, 1053 A, 1051 E, 2661 B, 4071 A ×4).
+  unproven orders or assumptions (2524 C, 1053 A, 1051 E, 2661 B, 4071 A ×4 by Dedi before
+  Erdene's first-try takeover).
 - **Topics we cannot do at all yet:** geometry, flows/matching, XOR linear basis, polynomial
   interpolation, discrete log / multiplicative orders. These are exactly the "next problems" we
   missed (§5).
@@ -123,21 +124,22 @@ From the sheet (51 credited solves with idea/implementation roles; 31 solves hav
 | member | solo solves | first try | wrong runs | median pace | in pairs | topics |
 |---|---|---|---|---|---|---|
 | **Tamir** | 9 | 6 | 7 | **×1.19** | idea ×3 (1053 A, 1071 G, 4113 K), implementation ×2 (1071 K, 1794 L) | greedy/observation, heavy implementation, constructive |
-| **Erdene** | 18 | 11 | 17 | ×1.48 | idea ×1 (1096 F) | interactive, greedy, DP, data structures, easy-problem speed |
-| **Dedi** | 20 | 10 | 18 | ×1.47 | idea ×2 (1071 K, 1794 L), implementation ×4 (1096 F, 1053 A, 1071 G, 4113 K) | math/number theory, constructive, counting, strings |
+| **Erdene** | 18 | 12 | 13 | ×1.48 | idea ×1 (1096 F); took over 4071 A | interactive, greedy, DP, data structures, easy-problem speed |
+| **Dedi** | 20 | 10 | 18 (+4 on 4071 A, handed over) | ×1.47 | idea ×2 (1071 K, 1794 L), implementation ×4 (1096 F, 1053 A, 1071 G, 4113 K) | math/number theory, constructive, counting, strings |
 
 - **Erdene** is the team's interactive and communication solver: 4607 H, 4607 I and 1071 I, all first
   try. Also fast on easy problems (4607 M 23') and structural data structures (2693 L at gold pace),
   plus knapsack DP (1071 C).
+  - *Rescues:* 4071 A in the official round. After Dedi's four wrong tries he took it over and
+    was accepted first try.
   - *Fails on* model/maths chains: 4607 D (two wrong models, then overflow), 2661 G (wrong idea,
-    max-heap, three toggles), 1794 G (median off-by-one, then a blind change), 4071 A (4 wrong in the
-    official round).
+    max-heap, three toggles), 1794 G (median off-by-one, then a blind change).
 - **Dedi** carries the most problems and the insight-heavy maths: 1794 C at 68' vs 126', 1071 A,
   1799 G/L, and a correct idea for 2661 J. He writes most of the brute-force testers seen in the code
   (4607 C, 4593 C/J, 2661 J), but **after** the first WA.
   - *Fails on* implementation details: the 4607 C modulus (×3), the 4593 C sentinel and 4593 J array
     size, 2693 F casework (×2), 2661 M comparison, the 2661 J leftover bound, and the 1799 L identical
-    resubmit.
+    resubmit. In the official round, 4 wrong tries on 4071 A before Erdene solved it.
   - *Overloaded:* 2 of 4 problems at 4593, both stalled; 4 of 6 at 1799; 3 of 4 at 4113.
 - **Tamir** has the best relative pace and the cleanest heavy implementation (1053 D first try,
   4607 K first try, 2693 K's constructive proof). He is the idea source in three pair solves,
@@ -171,8 +173,11 @@ From the sheet (51 credited solves with idea/implementation roles; 31 solves hav
   - invariant: 2575 I.
 
 ### When to switch or give up
-- The long stalls were all solo: 2661 B 169 min (Tamir), 4593 J 95 min (Dedi, also on C), 2524 C
-  74 min, 1053 A 100 min, 4607 C 86 min. **No chain shows a teammate re-reading the code.**
+- The long stalls were solo: 2661 B 169 min (Tamir), 4593 J 95 min (Dedi, also on C), 2524 C
+  74 min, 1053 A 100 min, 4607 C 86 min.
+- **The one recorded handover worked.** 4071 A: Dedi made 4 wrong tries, Erdene took over and was
+  accepted first try. Handing over after two WAs would have saved 40 penalty minutes in an
+  official round.
 - **The silent finish:** 7 of 14 virtuals ended with 80+ minutes and no submission:
   1051 176 min, 1799 163, 2513 131, 4593 110, 2693 85, 1096 84, 1485 82. In each, the field's next
   problem was solvable for a team at our level (several were upsolved later, e.g. 2513 J).
@@ -329,7 +334,8 @@ The team is accepted to both regionals (user, 2026-11-04). The target is set by 
 3. **Time caps:**
    - 25 minutes on an easy problem without a submission → a second member reads the statement.
    - **2 WAs on the same problem → stop submitting:** write the brute force and generator, or hand
-     the code to a teammate for a cold read of statement + code.
+     the problem to a teammate for a cold read of statement + code. 4071 A shows it works: Erdene's
+     takeover was AC first try, but only after 4 WAs.
    - 45 minutes stuck on any problem → switch.
 4. **Pre-submit checklist** (one line each, all from our bugs):
    - (a) every constant copied from the statement: modulus, bounds, k ≥ 2 — 4607 C, 1485 L;
@@ -391,7 +397,8 @@ code and reads those problems first, and a **backup**, who can take it when the 
 - **Every submission by Dedi gets the constants line of the checklist read aloud by a teammate**
   (modulus, bounds, INF, array sizes).
 - **Erdene keeps interactive problems for the last two hours** if one is open, and is the team's
-  cold reader for graph/DS chains.
+  cold reader for graph/DS chains. His 4071 A takeover (first-try AC after Dedi's 4 WAs) is the
+  model.
 - **Tamir needs a visible share of the problems.** He has no recorded solve at 4593 or 1799.
   Owning geometry and constructive gives him problems that the other two do not take.
 
@@ -414,8 +421,8 @@ still apply to owners: an owner stuck on their own category hands it to the back
 - **Members for 1051, 1485, 2513, 2524 and 2575** (31 solves), and for 4071 F and M.
 - 4607 E (3336557–3336988): who wrote it?
 - 1053 C and 1071 M: who wrote them?
-- 4071 A (4 wrong) and 4113 A (3 wrong): wrong idea or implementation? Is that account's code
-  recoverable anywhere?
+- 4071 A (Dedi's 4 wrong, then Erdene AC) and 4113 A (3 wrong, member not recorded): wrong idea or
+  implementation? Is that account's code recoverable anywhere?
 - **Tamir at 4593 and 1799:** what was he working on (no recorded solve)?
 - In the silent finishes (1051, 1799, 2513, 4593, 2693, 1096, 1485): was the field's next problem
   read, and by whom?

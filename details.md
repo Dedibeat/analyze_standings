@@ -7379,6 +7379,11 @@ skipped at the user's request.
   it.
 - NUM-R^3 is accepted to Shenyang (2026-11-15) and Hong Kong (~2027-01-07/08).
   EC-Final is 2027-01-22/23.
+- 4071 A: Dedi made the four wrong tries; Erdene took it over and got AC first
+  try. This is noted in the sheet copy's "Additional info" and should be
+  mirrored in the ODS. Erdene's record becomes 12 first-try solves and 13 wrong
+  tries. It is the season's only recorded handover after a stall, and it
+  worked; summary §5 and §6.3 cite it.
 
 **Script.** `scripts/team_r3_digest.py` (new) prints one contest's problem
 table:
