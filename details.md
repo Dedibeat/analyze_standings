@@ -7362,3 +7362,109 @@ Run: `QOJ_USERNAME=Dedibeat QOJ_PASSWORD=… python3 scripts/fetch_team_r3.py
 `python3 scripts/fetch_xcpcio_standings.py icpc data/team_r3/boards/xcpcio_51st.json
 --board-link /icpc/51st/xian --board-link /icpc/51st/chengdu` and
 `python3 scripts/team_r3_participations.py`.
+
+## NUM-R^3 coach review: dossiers, bug classes, strategy (2026-11-04, second entry)
+
+**Request.** Act as the team's coach: read every problem of the 16
+participations (statement, editorial, all our runs), write a dossier per
+contest, rebuild each timeline, then synthesise strengths and weaknesses, bug
+classes, per-member profiles and a plan. Step 0 (shortest public ACs) was
+skipped at the user's request.
+
+**User facts given during the work.**
+- Erdene was absent at Jinan 2022 (1053), not at Jinan 2025 (2693). The
+  sheet's note is moved in `members_solved.csv`; the ODS should get the same
+  fix.
+- In a sheet pair "A + B", A proposed the idea and B most likely implemented
+  it.
+- NUM-R^3 is accepted to Shenyang (2026-11-15) and Hong Kong (~2027-01-07/08).
+  EC-Final is 2027-01-22/23.
+
+**Script.** `scripts/team_r3_digest.py` (new) prints one contest's problem
+table:
+- field solves on the onsite official field;
+- the top group's median solve time;
+- our status and member;
+- the medal and EC-Final (≈ 75) lines and our rank on that field;
+- our runs by minute (start recovered from the board row);
+- optionally every attempt at a problem with diffs.
+
+Field choices:
+- XCPCIO official for the 2026 regionals.
+- The cached XCPCIO CCPC boards for 2575/2661/2693. QOJ's "official" CCPC rows
+  are not the onsite field: Harbin has 343 there vs 260 official onsite.
+- XCPCIO rows of `regional_teams.csv` with medals 35/70/105 for the 2022
+  regionals (the 2026-10-05 diagnosis). QOJ's 2022 "official" rows are larger
+  sets: Shenyang has 1004 vs 708.
+- QOJ for the online rounds, using the NUM-R^3 row for 4071/4113.
+
+Bugs found while building it:
+- A verdict string "AC, WA" (a failed run on QOJ) was first read as an AC,
+  which shifted 1794's minutes by 55. It now requires `AC ✓`.
+
+**Ranks on the onsite fields differ from the 2026-11-04 first pass** (which
+used other boards). On the right field:
+- Hangzhou 2022: #19 / 556, gold.
+- Xi'an 2022: #106 / 476, 5 min from silver.
+- Jinan 2022: #92 / 511, silver.
+- Shenyang 2022: #88 / 708, silver.
+- CCPC Harbin: #118 / 260, bronze.
+- CCPC Zhengzhou: #127 / 260, bronze.
+- CCPC Jinan: #80 / 260, bronze (silver ends at #78).
+
+**Main findings** (`output/team_r3_coach/summary.md`).
+- **Problem sets.** We solve the field's standard set for our count almost
+  every time. The rank comes from penalty and from the 6th/7th problem.
+- **Wrong runs.** 68 penalised wrong runs in the 14 virtuals (1360 min). Each is
+  classified, and the per-contest counts equal the boards' wrong tries. By
+  class:
+
+  | class | runs |
+  |---|---|
+  | unproven idea | 14 |
+  | casework | 11 |
+  | memory/time not estimated | 10 |
+  | structure misuse | 8 |
+  | edge parameters | 7 |
+  | blind resubmission | 6 |
+  | overflow/sentinel | 5 |
+  | debug leftovers | 4 |
+  | misread constant | 3 |
+
+  One-line fixes would have crossed a medal or EC-Final line in 5 of the 9
+  regional/CCPC virtuals. Example: Chengdu 2026, where the modulus and the
+  overflow are exactly the 60 min to gold.
+- **Silent finishes.** 7 of 14 virtuals had 80+ minutes with no submission at
+  the end.
+- **Members.** Erdene goes 3/3 first try on interactive problems. Dedi carries
+  the most problems, and his bugs are constants and sentinels. Tamir has the
+  best pace and no recorded solve at 4593/1799.
+- **Library gaps.** No flow, geometry, XOR-basis or interpolation code in 179
+  submissions.
+- **Official vs virtual.** The official 2026 online rounds ran at pace ×1.55
+  vs ×1.25 in the online virtuals.
+
+**Verified by testing.**
+- 4607 E: our final code plus two local fixes (orientation-safe triangle test,
+  no sorting of output vertices) passes 14,000 random cases against a brute
+  force. Scratch harness, not in the repo.
+- A parallel agent (Codex), stopped by the user, wrote
+  `output/team_r3_coach/{1053,2661}_checks.{py,json}`. These are brute-force
+  and UBSan checks; they confirm the 1053 A/E/C and 2661 B/G/J/M diagnoses and
+  are kept as evidence.
+- Its own versions of 1053.md, 2661.md and 4113.md were overwritten by this
+  session before the overlap was noticed. They were untracked and are lost.
+
+**Data notes.**
+- The QOJ virtual board sometimes counts one try fewer than the account's
+  in-contest runs: 4607 E 4 vs 5, 2661 J 1 vs 2, 1053 C 1 vs 2. The dossiers
+  give both numbers.
+- 1794 L's AC was found with GPT's help (sheet note); the dossier reports the
+  rank without it, #136.
+- 1051, 1485, 2513, 2524, 2575 (and 4071 F/M) have no member data. 31 solves
+  are marked unknown, and the open questions are listed in the summary.
+
+**Not done.** Step 0 (shortest public ACs). The library comparison uses
+editorials and our own code only.
+
+Run: `python3 scripts/team_r3_digest.py <contest> [<problem> --code]`.

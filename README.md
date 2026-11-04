@@ -674,6 +674,24 @@ gives board solves, calibrated difficulty and the member who solved it
 (`data/team_r3/members_solved.csv`, from the team's spreadsheet). Details are
 in `details.md`.
 
+### NUM-R^3 coach review: problem dossiers, bug classes, plan (2026-11-04)
+
+```bash
+python3 scripts/team_r3_digest.py 4607            # problem table, medal/EC-Final lines, our runs by minute
+python3 scripts/team_r3_digest.py 4607 E --code   # every attempt at E, with diffs between attempts
+```
+
+`output/team_r3_coach/<contest>.md` has one dossier per contest (the 16
+participations): the idea and difficulty of every problem, our outcome and
+member, every wrong run read and diffed, a comparison with the editorial, and a
+timeline against the field. `output/team_r3_coach/summary.md` has the synthesis:
+topics, the 68 penalised wrong runs by bug class, per-member profiles, strategy,
+and a plan for Shenyang (2026-11-15), Hong Kong and EC-Final. The digest takes
+the onsite field from XCPCIO for the 2026 regionals, the CCPC stations and the
+2022 regionals, and from the QOJ board for the online rounds.
+`1053_checks.py` and `2661_checks.py` are brute-force and UBSan checks of our
+runs, kept as evidence. Details are in `details.md`.
+
 ### Time-varying team ratings (research, 2026-10-04)
 
 ```bash
