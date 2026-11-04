@@ -1,0 +1,63 @@
+You are given a tree with $n$ vertices. Vertex $i$ has a weight $z_i$. The $n-1$ edges are numbered from $1$ to $n-1$ in the order they are given in the input.
+
+You have to answer $q$ independent queries. A query is given by three integers $l$, $r$, $f$ with $1 \le l \le f \le r \le n-1$. For this query, build a graph on the $n$ vertices that contains exactly the edges whose index lies in $[l, r]$, except that edge number $f$ is deleted. Formally, the edge set is $\{\, i : l \le i \le r,\ i \neq f \,\}$.
+
+This graph is a forest. The weight of a connected component is the sum of the weights of the vertices it contains (an isolated vertex forms a component of weight equal to its own weight). For each query output the maximum component weight.
+
+Input
+
+The first line contains one integer $T$ ($1 \le T \le 10^5$), denoting the number of test cases. The description of the test cases follows.
+
+The first line of each test case contains one integer $n$ ($2 \le n \le 2 \times 10^5$).
+
+Each of the next $n-1$ lines contains two integers $u_i$ and $v_i$ ($1 \le u_i, v_i \le n$, $u_i \neq v_i$), denoting the two endpoints of edge $i$.
+
+The next line contains $n$ integers $z_1, z_2, \dots, z_n$ ($1 \le z_i \le 100$), denoting the vertex weights.
+
+The next line contains one integer $q$ ($1 \le q \le 2 \times 10^5$), denoting the number of queries.
+
+Each of the next $q$ lines contains three integers $l$, $r$, $f$ ($1 \le l \le f \le r \le n-1$) describing one query.
+
+It is guaranteed that, within a single test file, the sum of $n$ over all test cases does not exceed $2 \times 10^5$, and the sum of $q$ over all test cases does not exceed $2 \times 10^5$.
+
+Output
+
+For each test case print $q$ lines. The $i$-th of them must contain a single integer, denoting the answer to the $i$-th query of that test case.
+
+Examples
+
+Input 1
+
+2
+5
+1 2
+2 3
+3 4
+4 5
+10 20 30 40 50
+3
+1 4 2
+2 4 4
+1 1 1
+2
+1 2
+7 5
+1
+1 1 1Output 1
+
+120
+90
+50
+7Note
+
+In the first test case the tree is a path $1-2-3-4-5$; edge $i$ connects $i$ and $i+1$, and the weights are $10, 20, 30, 40, 50$.
+
+
+Query $(1,4,2)$: keep edges $\{1,3,4\}$. The component $\{1,2\}$ has weight $30$, and the component $\{3,4,5\}$ has weight $120$; therefore, the maximum component weight is $120$.
+
+Query $(2,4,4)$: keep edges $\{2,3\}$. The components $\{2,3,4\}$, $\{1\}$, and $\{5\}$ have weights $90$, $10$, and $50$, respectively; therefore, the maximum component weight is $90$.
+
+Query $(1,1,1)$: no edge is kept, every vertex is isolated; the answer is the largest weight $50$.
+
+
+In the second test case the only edge is deleted by the query, so both vertices are isolated and the answer is $\max(7,5) = 7$.

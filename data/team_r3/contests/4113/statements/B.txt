@@ -1,0 +1,72 @@
+Natsu is eating bread at Sensei's café when a piece of bread falls onto the floor and starts rolling.
+
+The fallen bread can be regarded as a convex polygon in a two-dimensional plane. Its $n$ vertices, listed in counterclockwise order, are $A_1,A_2,\ldots,A_n$. The vertices are pairwise distinct, and no three vertices are collinear. The floor can be regarded as the horizontal line $y=0$.
+
+Initially, the bread touches the floor along edge $(A_n,A_1)$. Let the position of vertex $A_n$ at this moment be the origin. The bread rolls in the positive direction of the $x$-axis; that is, $A_n=(0,0)$ and $A_1=(x_1,0)$, where $x_1>0$. The bread then starts rolling. The rolling process can be abstracted as an infinite sequence of rotations performed in order. In the $i$-th rotation, the entire bread is rotated clockwise about the current position of vertex $A_{((i-1)\bmod n)+1}$ until $A_{(i\bmod n)+1}$ touches the floor for the first time, that is, until its $y$-coordinate becomes $0$ for the first time.
+
+As a romantic philosopher, Natsu considers the rolling of the bread to be a coincidental and romantic event. For the sake of this romance, after the $k$-th rotation, Natsu records the distance $L(k)$ rolled by the bread and the area $S(k)$ swept out by the bread. You need to calculate their ratio as $k$ tends to infinity, namely:
+
+$$
+\lim_{k\to +\infty}\frac{S(k)}{L(k)}
+$$
+
+The distance $L(k)$ rolled by the bread after the $k$-th rotation is defined as the distance from the origin to the position of vertex $A_{(k\bmod n)+1}$ when the $k$-th rotation ends. The area $S(k)$ swept out by the bread after the $k$-th rotation is defined as the area of the union of all regions covered by the convex-polygon bread at all moments from the beginning of the first rotation to the end of the $k$-th rotation.
+
+Input
+
+The first line contains one positive integer $T$ $(1\leq T\leq 10^3)$, denoting the number of test cases.
+
+For each test case, the first line contains one integer $n$ $(3\leq n\leq 10^5)$, denoting the number of vertices of the convex-polygon bread.
+
+The next $n$ lines each contain two integers $x_i,y_i$ $(0\leq |x_i|,y_i\leq 10^9)$. The $i$-th line denotes the coordinates of vertex $A_i$ when the bread has just fallen onto the floor.
+
+It is guaranteed that $y_1$, $x_n$, and $y_n$ are all $0$, and that $x_1>0$.
+
+It is guaranteed that vertices $A_1,A_2,\ldots,A_n$ are pairwise distinct, no three vertices are collinear, and they form a convex polygon in counterclockwise order.
+
+It is guaranteed that the sum of $n$ over all test cases in one test file does not exceed $3\times 10^5$.
+
+Output
+
+For each test case, output one floating-point number on one line, denoting the answer. Your answer is considered correct if and only if its relative or absolute error compared with the standard answer does not exceed $10^{-9}$.
+
+Suppose that your answer is $a$ and the standard answer is $b$. Your answer is considered correct if
+
+$$
+\frac{|a-b|}{\max\{b,1\}}\leq 10^{-9}
+$$
+
+Examples
+
+Input 1
+
+2
+3
+2 0
+1 5
+0 0
+4
+1 0
+1 1
+0 1
+0 0Output 1
+
+4.908664519941197
+1.384172075579563Note
+
+For the first test case, the process from the beginning of the first rotation to the end of the fourth rotation is shown below:
+
+
+
+
+
+When $k=4$, we have:
+
+$$
+\begin{aligned}
+L(k)&=4+3\sqrt{26}\approx19.297058541 \\
+S(k)&=\frac{120}{13}+13\sqrt3+\frac{91\pi}{6}
+  +43\arctan\frac15
+  \approx87.882927382
+\end{aligned}
+$$

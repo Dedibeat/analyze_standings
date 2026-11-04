@@ -1,0 +1,94 @@
+As the chief judge of The 2026 ICPC Asia EC Regionals Online Contest (II), Mr. J has diligently finished preparing and reviewing all the problems. Today, the contest is finally about to begin!
+
+
+
+
+
+Since last year's contest was harshly criticized, Mr. J cares greatly about this year's reputation. Therefore, he has set himself a goal: this year's contest should not receive too many negative reviews. To quantify the negative impact of these reviews, Mr. J assigns a score to each type of negative review:
+
+$$
+\begin{array}{|l|c|}
+\hline
+\text{Type of negative review} & \text{Score} \\
+\hline
+\text{WrongProblem}X & 100 \\
+\text{SameProblem}X & 30 \\
+\text{UnreasonableProblemArrangement} & 10 \\
+\text{UnreasonableLimitForProblem}X & 5 \\
+\text{WeakTestsForProblem}X & 3 \\
+\text{BadProblem}X & 1 \\
+\hline
+\end{array}
+$$
+
+If a negative review does not match any of the negative-review types in the table, its score is $0$. Matching is case-sensitive, and the string must exactly match the corresponding form in the table. For a type containing $X$, $X$ is a placeholder; when matching, it must be replaced by exactly one uppercase English letter from $\{\texttt{A},\texttt{B},\ldots,\texttt{L}\}$.
+
+If you need to copy the concrete string corresponding to a type of negative review, we recommend referring to the first test case in the sample.
+
+Mr. J has an expected total negative-review score $P$ in mind. If the total score of all negative reviews is greater than $P$, Mr. J is a Joker; otherwise, Mr. J remains a qualified Judger. You have now collected all $n$ negative reviews. Determine whether Mr. J is a Joker or a Judger.
+
+Input
+
+The first line contains a positive integer $T$ $(1\leq T\leq 10^3)$, denoting the number of test cases.
+
+For each test case, the first line contains two integers $n,P$ $(0\leq n\leq 10^3,0\leq P\leq 10^5)$, denoting the number of negative reviews and the expected total negative-review score, respectively.
+
+The next $n$ lines each contain a string $S$ $(1\leq |S|\leq 50)$ consisting only of uppercase and lowercase English letters, denoting one negative review.
+
+It is guaranteed that, within a single test file, the sum of $n$ over all test cases does not exceed $10^3$.
+
+Output
+
+For each test case, if the total negative-review score is greater than $P$, output the string $\texttt{Joker}$ on one line; otherwise, output the string $\texttt{Judger}$ on one line.
+
+Examples
+
+Input 1
+
+5
+6 0
+WrongProblemA
+SameProblemA
+UnreasonableProblemArrangement
+UnreasonableLimitForProblemA
+WeakTestsForProblemA
+BadProblemA
+6 105
+WrongProblemA
+BadProblemC
+wrongProblemB
+WrongProblemN
+WrongProblemAA
+UnreasonableProblemArrangementExtra
+7 49
+SameProblemJ
+UnreasonableProblemArrangement
+UnreasonableLimitForProblemA
+WeakTestsForProblemC
+BadProblemH
+SameProblemj
+BadProblem
+4 140
+WrongProblemJ
+SameProblemA
+UnreasonableProblemArrangement
+BadProblemJ
+2 1
+BadProblemJ
+BadProblemJOutput 1
+
+Joker
+Judger
+Judger
+Joker
+JokerNote
+
+For the first test case, the scores of the $6$ negative reviews are $100,30,10,5,3,1$, respectively. Their total score is $149>P$.
+
+For the second test case, the scores of the $6$ negative reviews are $100,1,0,0,0,0$, respectively. Their total score is $101\leq P$.
+
+For the third test case, the scores of the $7$ negative reviews are $30,10,5,3,1,0,0$, respectively. Their total score is $49\leq P$.
+
+For the fourth test case, the scores of the $4$ negative reviews are $100,30,10,1$, respectively. Their total score is $141>P$.
+
+For the fifth test case, the scores of the $2$ negative reviews are $1,1$, respectively. Their total score is $2>P$. Note that duplicate negative reviews are also counted.

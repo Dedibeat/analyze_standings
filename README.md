@@ -651,23 +651,28 @@ far fewer. Details in `details.md`.
 ### NUM-R^3 participations: team-account data (2026-11-04)
 
 ```bash
-QOJ_USERNAME=TEAM_R3 QOJ_PASSWORD=... python3 scripts/fetch_team_r3.py 4071 4113 ...  # cache in data/team_r3/
+QOJ_USERNAME=Dedibeat QOJ_PASSWORD=... python3 scripts/fetch_team_r3.py 4071 4113 ...  # cache in data/team_r3/
 python3 scripts/team_r3_participations.py      # output/team_r3_participations.{md,json}
 ```
 
 `fetch_team_r3.py` logs in without a browser (`../p1/qoj/BROWSERLESS_AUTH.md`)
-and stores every TEAM_R3 submission with its source, and each contest's
-dashboard, per-problem statements and all attachments (statements, tutorials),
-PDFs also as text. Files already on disk are reused; it waits out QOJ's
-Cloudflare 429 rate limit (about 3 pages a minute once triggered). TEAM_R3
-has QOJ Training Mode on, which hides every scoreboard, so boards come from
-`data/tagged*.json`, `data/ucup_s4.json`, `data/petroz_2022_2026.json` and
-XCPCIO (`data/team_r3/boards/`). `team_r3_participations.py` lists the 14
-virtuals and the 2 official 2026 online rounds with solved problems, a bounded
-penalty and rank range (the virtual start time is not visible), board solves,
-calibrated difficulty and the member who solved each problem
-(`data/team_r3/members_solved.csv`, from the team's spreadsheet). Details in
-`details.md`.
+and stores every TEAM_R3 submission with its source, plus each contest's
+dashboard, per-problem statements (the HTML problem page when QOJ refuses the
+PDF) and all attachments (statements, tutorials), PDFs also as text. It also
+saves the QOJ boards with and without unofficial rows. Files already on disk are
+reused. It waits out QOJ's Cloudflare 429 rate limit (about 3 pages a minute
+once triggered).
+
+Log in with a personal account: TEAM_R3 has QOJ Training Mode on, which hides
+every board. The submissions read are always TEAM_R3's.
+
+`team_r3_participations.py` lists the 14 virtuals and the 2 official 2026
+online rounds. For each it gives TEAM_R3's exact QOJ row (solved, penalty) and
+its rank against the official onsite field (`data/tagged_official.json`, the
+UCup/Petrozavodsk files, or XCPCIO in `data/team_r3/boards/`). Per problem it
+gives board solves, calibrated difficulty and the member who solved it
+(`data/team_r3/members_solved.csv`, from the team's spreadsheet). Details are
+in `details.md`.
 
 ### Time-varying team ratings (research, 2026-10-04)
 
@@ -1028,8 +1033,8 @@ Module self-checks:
   artifact; raw source responses are cached under the gitignored
   `data/cphof_cache/`.
 - `data/team_r3/` — the TEAM_R3 account's submissions (`submissions.json`,
-  `code/`), its contests' dashboards, statements and tutorials (`contests/`;
-  PDFs/zips are git-ignored), boards QOJ hides from it (`boards/`) and the
+  `code/`), its contests' dashboards, statements, tutorials and QOJ boards
+  (`contests/`; PDFs/zips are git-ignored), XCPCIO boards (`boards/`) and the
   member attribution (`members_solved.csv`); built by `scripts/fetch_team_r3.py`.
 - `scripts/add_qoj_contest.py` — adds one QOJ contest's standings to
   `data/tagged.json` (`python3 scripts/add_qoj_contest.py 4071 --name "EC Online (I)"

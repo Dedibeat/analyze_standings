@@ -1,0 +1,41 @@
+
+			<p>The exponent of a group is the least common multiple of the orders of all elements in the group, but this has nothing to do with this problem. It&#39;s just to make the title start with E.</p>
+<p>Little Ma gives you a positive integer $n$.</p>
+<p>For each integer $a$ with $1 \le a \le n$, define $\operatorname{ord}_n(a)$ as the smallest positive integer $x$ satisfying:</p>
+<p>$$
+a^x \equiv 1 \pmod n
+$$</p>
+<p>If no such positive integer $x$ exists, define $\operatorname{ord}_n(a)=0$.</p>
+<p>Compute:</p>
+<p>$$
+\sum_{a=1}^{n}\operatorname{ord}_n(a)
+$$</p>
+<h3>Input</h3>
+<p>The first line contains an integer $T$ $(1\leq T\leq 10^3)$, the number of test cases.</p>
+<p>Each of the next $T$ lines contains one positive integer $n$ $(1\leq n\leq 10^9)$.</p>
+<h3>Output</h3>
+<p>For each test case, output one integer in a single line: the required sum.</p>
+<h3>Examples</h3>
+<h4>Input 1</h4>
+<pre>5
+1
+5
+8
+54
+9653618</pre><h4>Output 1</h4>
+<pre>1
+11
+7
+183
+9856882167209</pre><h4>Input 2</h4>
+<pre>5
+48
+2
+4
+8
+16</pre><h4>Output 2</h4>
+<pre>47
+1
+3
+7
+23</pre>		

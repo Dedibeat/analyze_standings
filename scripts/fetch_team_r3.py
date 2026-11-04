@@ -1,7 +1,12 @@
 #!/usr/bin/env python3
 """Download the team account's QOJ submissions and the contests they were made in.
 
-    QOJ_USERNAME=TEAM_R3 QOJ_PASSWORD=... python3 scripts/fetch_team_r3.py [contest_id ...]
+    QOJ_USERNAME=Dedibeat QOJ_PASSWORD=... python3 scripts/fetch_team_r3.py [contest_id ...]
+
+The submissions are always TEAM_R3's; QOJ_USERNAME is only the account that
+reads the pages. TEAM_R3 itself has QOJ "Training Mode" on (kept on for
+spoiler-free virtuals), which answers every /contest/<id>/standings with 404,
+so log in with a personal account (Dedibeat) to get the boards.
 
 Everything goes under data/team_r3/ and is reused on the next run: a file that
 already exists is not fetched again (delete it to refresh). The submission list
@@ -12,11 +17,12 @@ itself is re-read every run so new submissions are picked up.
     contests/<id>/dashboard.json     name, year, problems (id/label/name), attachments
     contests/<id>/attachments/       every dashboard attachment (statements,
                                      tutorials, ...), PDFs also as .txt
-    contests/<id>/statements/<L>.pdf per-problem statement (+ .txt), when QOJ has one
-
-No scoreboards: TEAM_R3 has QOJ "Training Mode" on, which answers every
-/contest/<id>/standings with 404 (kept on deliberately, for spoiler-free
-virtuals). Boards come from data/tagged.json and XCPCIO instead.
+    contests/<id>/statements/<L>.pdf per-problem statement (+ .txt); when QOJ
+                                     refuses the PDF (4113: 403), <L>.html and
+                                     <L>.txt from the problem page instead
+    contests/<id>/standings_all.json      board with unofficial/virtual rows
+                                          (TEAM_R3's virtual row is on it)
+    contests/<id>/standings_official.json board with official rows only
 
 Contests are the ones given on the command line plus every contest the account
 submitted in. Login is the browserless flow of ../p1/qoj/BROWSERLESS_AUTH.md
@@ -41,13 +47,14 @@ import qoj  # noqa: E402
 
 BASE = "https://qoj.ac"
 OUT = Path(__file__).resolve().parent.parent / "data" / "team_r3"
-COOKIES = OUT / ".cookies.json"
+TEAM = "TEAM_R3"
 TOKEN = re.compile(r'_token\s*:\s*"([A-Za-z0-9]{60})"')
 ROW = re.compile(r"<tr>(.*?)</tr>", re.S)
 CELL = re.compile(r"<td>(.*?)</td>", re.S)
 # qoj.CONTEST_PROBLEM_RE misses links with a /statement/<lang> suffix (e.g. contest 2575)
 PROBLEM = re.compile(r'<tr>\s*<td(?:\s+[^>]*)?>([A-Z]+)</td>\s*<td>\s*'
                      r'<a href="/contest/\d+/problem/(\d+)(?:/[^"]*)?">(.+?)</a>', re.S)
+ARTICLE = re.compile(r'<article class="uoj-article[^"]*"\s*>(.*?)</article>', re.S)
 CODE = re.compile(r'<pre><code class="sh_[^"]*">(.*?)</code></pre>', re.S)
 
 
@@ -87,8 +94,9 @@ def login():
     user, password = os.environ.get("QOJ_USERNAME"), os.environ.get("QOJ_PASSWORD")
     if not user:
         raise SystemExit("set QOJ_USERNAME (and QOJ_PASSWORD for a fresh login)")
-    if COOKIES.exists():
-        jar = json.loads(COOKIES.read_text())
+    cookies = OUT / f".cookies-{user}.json"
+    if cookies.exists():
+        jar = json.loads(cookies.read_text())
         s = session_from(jar)
         if logged_in(s, user):
             return s, user, jar
@@ -105,7 +113,7 @@ def login():
         raise SystemExit(f"QOJ rejected the login ({body[:40]!r})")
     jar = {c.name: c.value for c in s.cookies.jar}
     OUT.mkdir(parents=True, exist_ok=True)
-    COOKIES.write_text(json.dumps(jar))
+    cookies.write_text(json.dumps(jar))
     return s, user, jar
 
 
@@ -188,19 +196,34 @@ def fetch_contest(cid):
             pdf_with_text(d / "attachments" / (stem + ext), data)
     for p in dash["problems"]:
         pdf = d / "statements" / f"{p['problem_label']}.pdf"
-        miss = pdf.with_suffix(".missing")
-        if pdf.exists() or miss.exists():
+        if pdf.with_suffix(".txt").exists():
             continue
         try:
             data = polite(qoj.fetch_pdf, f"{BASE}/download.php?type=statement&id={p['problem_id']}"
                                  f"&contest_id={cid}")
-        except OSError as e:
+        except OSError:
             data = b""
-            print(f"  {cid} {p['problem_label']}: no statement ({e})", file=sys.stderr)
         if data[:4] == b"%PDF":
             pdf_with_text(pdf, data)
-        else:
-            save(miss, data)  # QOJ served no per-problem PDF; the full set is in attachments
+            continue
+        # no PDF served: the problem page carries the statement as HTML (LaTeX source)
+        page = polite(qoj.fetch_text, f"{url}/problem/{p['problem_id']}")
+        m = ARTICLE.search(page)
+        if not m:
+            print(f"  {cid} {p['problem_label']}: no statement", file=sys.stderr)
+            continue
+        save(pdf.with_suffix(".html"), m.group(1).encode())
+        pdf.with_suffix(".txt").write_text(text(re.sub(r"<(?:/p|br\s*/?|/h\d|/li)>", "\n",
+                                                       m.group(1))), encoding="utf-8")
+    for name, extra in (("standings_all", None), ("standings_official", "show_unofficial_mode=")):
+        if (d / f"{name}.json").exists():
+            continue
+        try:
+            rows = qoj.parse_full_standings(polite(qoj.fetch_text, f"{url}/standings", extra))
+        except urllib.error.HTTPError as e:  # 404 under Training Mode (TEAM_R3)
+            print(f"  {cid} {name}: {e}", file=sys.stderr)
+            continue
+        save(d / f"{name}.json", rows)
     return dash
 
 
@@ -208,7 +231,7 @@ def main():
     s, user, jar = login()
     os.environ["QOJ_COOKIES"] = "; ".join(f"{k}={v}" for k, v in jar.items())
 
-    subs = fetch_submissions(s, user)
+    subs = fetch_submissions(s, TEAM)
     save(OUT / "submissions.json", subs)
     print(f"{len(subs)} submissions", file=sys.stderr)
     for sub in subs:

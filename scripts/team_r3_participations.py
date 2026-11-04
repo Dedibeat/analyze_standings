@@ -14,10 +14,12 @@ output/team_r3_participations.json and .md.
   TEAM_R3 submissions (TEAM_R3 has only 28-byte test runs on 4071).
 * Virtual: every other contest where TEAM_R3 has in-contest submissions
   (QOJ's <sup>#</sup> marker). TEAM_R3 has QOJ Training Mode on, so its own
-  virtual row cannot be read. The start time is unknown, so the penalty is
-  bounded instead of guessed: the start is no later than the first in-contest
-  submission and no earlier than 5 h before the last accepted one. The rank
-  range is taken over that interval against the official board.
+  virtual row is read from the QOJ board that scripts/fetch_team_r3.py saves
+  when run with a personal account (contests/<id>/standings_all.json). Without
+  that board the start time is unknown, so the penalty is bounded instead of
+  guessed: the start is no later than the first in-contest submission and no
+  earlier than 5 h before the last accepted one. Ranks are against the
+  official board (ICPC/CCPC onsite field, not QOJ's Universal Cup field).
 """
 
 import csv
@@ -47,6 +49,10 @@ def load_boards(ids):
             cid = int(c["contest_id"])
             if cid in ids and cid not in boards:
                 boards[cid] = (name, c["standings"])
+    for cid in OFFICIAL:  # QOJ's official-only board, saved by fetch_team_r3.py
+        path = TEAM / "contests" / str(cid) / "standings_official.json"
+        if path.exists():
+            boards[cid] = ("QOJ official", json.loads(path.read_text()))
     for c in json.loads((TEAM / "boards" / "xcpcio_51st.json").read_text()):
         cid = next(k for k, v in XCPCIO.items() if v == c["board_link"])
         boards[cid] = ("xcpcio " + c["board_link"],
@@ -134,9 +140,20 @@ def main():
         else:
             ins = [x for x in by_contest[cid] if x["in_contest"]]
             solved, wrong, lo, hi = virtual(ins)
-            e.update(kind="virtual",
+            # QOJ's own board (read with a non-Training-Mode account) has the exact row
+            qoj_board = TEAM / "contests" / str(cid) / "standings_all.json"
+            own = next((r for r in json.loads(qoj_board.read_text()) if r["team_id"] == "TEAM_R3"),
+                       None) if qoj_board.exists() else None
+            if own:
+                solved = {lab for lab, c in own["problems"].items() if c["solved"]}
+                wrong = {lab: c["wrong_attempts"] for lab, c in own["problems"].items()
+                         if c["wrong_attempts"]}
+                lo = hi = own["penalty_seconds"]
+            e.update(kind="virtual", exact=own is not None,
                      date=datetime.datetime.fromtimestamp(min(map(ts, ins))).date().isoformat(),
                      solved=sorted(solved), wrong=dict(wrong),
+                     solve_min={lab: c["time_seconds"] // 60 for lab, c in own["problems"].items()
+                                if c["solved"]} if own else None,
                      penalty_min=[int(lo // 60), int(hi // 60)],
                      rank=[rank_of(rows, len(solved), lo), rank_of(rows, len(solved), hi)]
                      if rows else None)

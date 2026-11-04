@@ -2,8 +2,8 @@
  {
   "contest_id": 4113,
   "title": "The 2026 ICPC Asia East Continent Online Contest (II)",
-  "board": "tagged.json",
-  "board_teams": 2689,
+  "board": "QOJ official",
+  "board_teams": 2636,
   "upsolved": [],
   "kind": "official",
   "date": null,
@@ -22,63 +22,63 @@
    482
   ],
   "rank": [
-   366,
-   366
+   352,
+   352
   ],
   "problems": [
    {
     "label": "A",
     "name": "All Closed",
-    "board_solves": 124,
+    "board_solves": 115,
     "difficulty_cf": 2769.3,
     "ours": false,
     "member": null,
-    "statement": false
+    "statement": true
    },
    {
     "label": "B",
     "name": "Bread",
-    "board_solves": 1,
+    "board_solves": 0,
     "difficulty_cf": 3910.7,
     "ours": false,
     "member": null,
-    "statement": false
+    "statement": true
    },
    {
     "label": "C",
     "name": "Cut Tree",
-    "board_solves": 3,
+    "board_solves": 2,
     "difficulty_cf": 3803.4,
     "ours": false,
     "member": null,
-    "statement": false
+    "statement": true
    },
    {
     "label": "D",
     "name": "Divide and Conquer",
-    "board_solves": 638,
+    "board_solves": 620,
     "difficulty_cf": 2119.7,
     "ours": true,
     "member": "Dedi",
-    "statement": false
+    "statement": true
    },
    {
     "label": "E",
     "name": "Exponent",
-    "board_solves": 102,
+    "board_solves": 93,
     "difficulty_cf": 2841.8,
     "ours": false,
     "member": null,
-    "statement": false
+    "statement": true
    },
    {
     "label": "F",
     "name": "Folding Game of Ohto Ai",
-    "board_solves": 18,
+    "board_solves": 16,
     "difficulty_cf": 3417.0,
     "ours": false,
     "member": null,
-    "statement": false
+    "statement": true
    },
    {
     "label": "G",
@@ -87,52 +87,52 @@
     "difficulty_cf": 3982.2,
     "ours": false,
     "member": null,
-    "statement": false
+    "statement": true
    },
    {
     "label": "H",
     "name": "Hidden Track (Easy Version)",
-    "board_solves": 101,
+    "board_solves": 95,
     "difficulty_cf": 2849.5,
     "ours": false,
     "member": null,
-    "statement": false
+    "statement": true
    },
    {
     "label": "I",
     "name": "Island",
-    "board_solves": 61,
+    "board_solves": 58,
     "difficulty_cf": 3029.8,
     "ours": false,
     "member": null,
-    "statement": false
+    "statement": true
    },
    {
     "label": "J",
     "name": "Joker or Judger",
-    "board_solves": 2524,
+    "board_solves": 2488,
     "difficulty_cf": 827.4,
     "ours": true,
     "member": "Erdene",
-    "statement": false
+    "statement": true
    },
    {
     "label": "K",
     "name": "K-MEX",
-    "board_solves": 1056,
+    "board_solves": 1027,
     "difficulty_cf": 1907.8,
     "ours": true,
     "member": "Tamir + Dedi",
-    "statement": false
+    "statement": true
    },
    {
     "label": "L",
     "name": "Loop",
-    "board_solves": 2204,
+    "board_solves": 2171,
     "difficulty_cf": 1414.5,
     "ours": true,
     "member": "Dedi",
-    "statement": false
+    "statement": true
    }
   ],
   "sheet_only": [],
@@ -148,6 +148,7 @@
   "board_teams": 2554,
   "upsolved": [],
   "kind": "virtual",
+  "exact": true,
   "date": "2026-08-20",
   "solved": [
    "A",
@@ -158,20 +159,26 @@
    "L"
   ],
   "wrong": {
-   "L": 1,
    "D": 3,
    "G": 5,
    "I": 1,
-   "A": 0,
-   "J": 0
+   "L": 1
+  },
+  "solve_min": {
+   "A": 16,
+   "D": 64,
+   "G": 217,
+   "I": 160,
+   "J": 82,
+   "L": 19
   },
   "penalty_min": [
-   663,
-   1254
+   758,
+   758
   ],
   "rank": [
-   374,
-   514
+   417,
+   417
   ],
   "problems": [
    {
@@ -301,6 +308,7 @@
   "board_teams": 2323,
   "upsolved": [],
   "kind": "virtual",
+  "exact": true,
   "date": "2026-08-22",
   "solved": [
    "A",
@@ -313,18 +321,23 @@
   "wrong": {
    "F": 1,
    "G": 2,
-   "L": 4,
-   "M": 0,
-   "A": 0,
-   "C": 0
+   "L": 4
+  },
+  "solve_min": {
+   "A": 32,
+   "C": 68,
+   "F": 53,
+   "G": 174,
+   "L": 240,
+   "M": 7
   },
   "penalty_min": [
-   669,
-   1072
+   714,
+   714
   ],
   "rank": [
-   88,
-   124
+   96,
+   96
   ],
   "problems": [
    {
@@ -458,6 +471,7 @@
    "J"
   ],
   "kind": "virtual",
+  "exact": true,
   "date": "2026-09-03",
   "solved": [
    "A",
@@ -469,21 +483,24 @@
    "M"
   ],
   "wrong": {
-   "M": 2,
-   "G": 0,
-   "I": 0,
-   "B": 0,
-   "A": 0,
-   "D": 0,
-   "C": 0
+   "M": 2
+  },
+  "solve_min": {
+   "A": 79,
+   "B": 34,
+   "C": 168,
+   "D": 139,
+   "G": 22,
+   "I": 33,
+   "M": 110
   },
   "penalty_min": [
-   472,
-   1547
+   625,
+   625
   ],
   "rank": [
-   137,
-   306
+   147,
+   147
   ],
   "problems": [
    {
@@ -623,6 +640,7 @@
   "board_teams": 2575,
   "upsolved": [],
   "kind": "virtual",
+  "exact": true,
   "date": "2026-09-09",
   "solved": [
    "C",
@@ -633,18 +651,22 @@
   ],
   "wrong": {
    "C": 3,
-   "J": 2,
-   "D": 0,
-   "H": 0,
-   "E": 0
+   "J": 2
+  },
+  "solve_min": {
+   "C": 99,
+   "D": 106,
+   "E": 187,
+   "H": 155,
+   "J": 243
   },
   "penalty_min": [
-   763,
-   1174
+   890,
+   890
   ],
   "rank": [
-   292,
-   386
+   345,
+   345
   ],
   "problems": [
    {
@@ -775,6 +797,7 @@
   "board_teams": 2450,
   "upsolved": [],
   "kind": "virtual",
+  "exact": true,
   "date": "2026-09-10",
   "solved": [
    "A",
@@ -785,20 +808,24 @@
    "L"
   ],
   "wrong": {
-   "L": 3,
    "G": 1,
-   "F": 0,
-   "J": 0,
-   "I": 0,
-   "A": 0
+   "L": 3
+  },
+  "solve_min": {
+   "A": 45,
+   "F": 11,
+   "G": 137,
+   "I": 26,
+   "J": 17,
+   "L": 86
   },
   "penalty_min": [
-   338,
-   1379
+   402,
+   402
   ],
   "rank": [
-   502,
-   834
+   514,
+   514
   ],
   "problems": [
    {
@@ -923,6 +950,7 @@
   "board_teams": 522,
   "upsolved": [],
   "kind": "virtual",
+  "exact": true,
   "date": "2026-10-01",
   "solved": [
    "C",
@@ -933,20 +961,23 @@
    "L"
   ],
   "wrong": {
-   "E": 2,
-   "J": 0,
-   "C": 0,
-   "F": 0,
-   "G": 0,
-   "L": 0
+   "E": 2
+  },
+  "solve_min": {
+   "C": 18,
+   "E": 123,
+   "F": 23,
+   "G": 48,
+   "J": 14,
+   "L": 91
   },
   "penalty_min": [
-   287,
-   1417
+   357,
+   357
   ],
   "rank": [
-   109,
-   248
+   116,
+   116
   ],
   "problems": [
    {
@@ -1078,6 +1109,7 @@
   "board_teams": 643,
   "upsolved": [],
   "kind": "virtual",
+  "exact": true,
   "date": "2026-10-02",
   "solved": [
    "A",
@@ -1089,22 +1121,27 @@
    "K"
   ],
   "wrong": {
-   "D": 1,
    "A": 1,
+   "D": 1,
    "G": 2,
-   "M": 2,
-   "F": 0,
-   "K": 0,
-   "C": 0,
-   "I": 0
+   "M": 1
+  },
+  "solve_min": {
+   "A": 100,
+   "C": 167,
+   "D": 18,
+   "F": 23,
+   "G": 173,
+   "I": 275,
+   "K": 50
   },
   "penalty_min": [
-   790,
-   1060
+   886,
+   886
   ],
   "rank": [
-   18,
-   31
+   24,
+   24
   ],
   "problems": [
    {
@@ -1131,7 +1168,7 @@
     "board_solves": 299,
     "difficulty_cf": 2130.3,
     "ours": true,
-    "member": "Erdehe",
+    "member": "Erdene",
     "statement": true
    },
    {
@@ -1238,6 +1275,7 @@
   "board_teams": 568,
   "upsolved": [],
   "kind": "virtual",
+  "exact": true,
   "date": "2026-10-08",
   "solved": [
    "A",
@@ -1247,20 +1285,24 @@
    "M"
   ],
   "wrong": {
-   "E": 1,
    "A": 2,
-   "C": 2,
-   "K": 0,
-   "M": 0,
-   "D": 0
+   "C": 1,
+   "E": 1
+  },
+  "solve_min": {
+   "A": 227,
+   "D": 205,
+   "E": 57,
+   "K": 11,
+   "M": 18
   },
   "penalty_min": [
-   524,
-   941
+   578,
+   578
   ],
   "rank": [
-   90,
-   156
+   98,
+   98
   ],
   "problems": [
    {
@@ -1390,8 +1432,8 @@
  {
   "contest_id": 4071,
   "title": "The 2026 ICPC Asia East Continent Online Contest (I)",
-  "board": "tagged.json",
-  "board_teams": 2754,
+  "board": "QOJ official",
+  "board_teams": 2535,
   "upsolved": [],
   "kind": "official",
   "date": null,
@@ -1413,14 +1455,14 @@
    877
   ],
   "rank": [
-   588,
-   588
+   544,
+   544
   ],
   "problems": [
    {
     "label": "A",
     "name": "Recall",
-    "board_solves": 1108,
+    "board_solves": 1019,
     "difficulty_cf": 1881.3,
     "ours": true,
     "member": "Erdene",
@@ -1429,7 +1471,7 @@
    {
     "label": "B",
     "name": "Mod",
-    "board_solves": 2,
+    "board_solves": 0,
     "difficulty_cf": 3813.7,
     "ours": false,
     "member": null,
@@ -1438,7 +1480,7 @@
    {
     "label": "C",
     "name": "Permutation Inversions",
-    "board_solves": 1693,
+    "board_solves": 1587,
     "difficulty_cf": 1629.2,
     "ours": true,
     "member": "Dedi",
@@ -1447,7 +1489,7 @@
    {
     "label": "D",
     "name": "Sequence",
-    "board_solves": 758,
+    "board_solves": 704,
     "difficulty_cf": 2048.8,
     "ours": true,
     "member": "Tamir",
@@ -1456,7 +1498,7 @@
    {
     "label": "E",
     "name": "LCM Permutation",
-    "board_solves": 1,
+    "board_solves": 0,
     "difficulty_cf": 3872.0,
     "ours": false,
     "member": null,
@@ -1465,7 +1507,7 @@
    {
     "label": "F",
     "name": "50 Years of Excellence",
-    "board_solves": 2620,
+    "board_solves": 2482,
     "difficulty_cf": 800.0,
     "ours": true,
     "member": "",
@@ -1474,7 +1516,7 @@
    {
     "label": "G",
     "name": "Toll Gates on a Tight Schedule",
-    "board_solves": 157,
+    "board_solves": 135,
     "difficulty_cf": 2666.8,
     "ours": false,
     "member": null,
@@ -1483,7 +1525,7 @@
    {
     "label": "H",
     "name": "The First Problem",
-    "board_solves": 68,
+    "board_solves": 57,
     "difficulty_cf": 2968.4,
     "ours": false,
     "member": null,
@@ -1492,7 +1534,7 @@
    {
     "label": "I",
     "name": "A Lamp of Moon",
-    "board_solves": 2,
+    "board_solves": 1,
     "difficulty_cf": 3813.4,
     "ours": false,
     "member": null,
@@ -1501,7 +1543,7 @@
    {
     "label": "J",
     "name": "String",
-    "board_solves": 141,
+    "board_solves": 120,
     "difficulty_cf": 2708.6,
     "ours": false,
     "member": null,
@@ -1510,7 +1552,7 @@
    {
     "label": "K",
     "name": "Wolf Game",
-    "board_solves": 24,
+    "board_solves": 15,
     "difficulty_cf": 3302.1,
     "ours": false,
     "member": null,
@@ -1519,7 +1561,7 @@
    {
     "label": "L",
     "name": "Longest Common Prefix",
-    "board_solves": 1103,
+    "board_solves": 1039,
     "difficulty_cf": 1890.9,
     "ours": true,
     "member": "Dedi",
@@ -1528,7 +1570,7 @@
    {
     "label": "M",
     "name": "Check In",
-    "board_solves": 2557,
+    "board_solves": 2419,
     "difficulty_cf": 960.3,
     "ours": true,
     "member": "",
@@ -1537,7 +1579,7 @@
    {
     "label": "N",
     "name": "Red Sequence",
-    "board_solves": 186,
+    "board_solves": 153,
     "difficulty_cf": 2601.4,
     "ours": false,
     "member": null,
@@ -1557,6 +1599,7 @@
   "board_teams": 1004,
   "upsolved": [],
   "kind": "virtual",
+  "exact": true,
   "date": "2026-10-09",
   "solved": [
    "C",
@@ -1566,17 +1609,21 @@
   ],
   "wrong": {
    "C": 1,
-   "L": 1,
-   "D": 0,
-   "F": 0
+   "L": 1
+  },
+  "solve_min": {
+   "C": 24,
+   "D": 5,
+   "F": 215,
+   "L": 151
   },
   "penalty_min": [
-   415,
-   775
+   435,
+   435
   ],
   "rank": [
-   182,
-   287
+   193,
+   193
   ],
   "problems": [
    {
@@ -1710,6 +1757,7 @@
   "board_teams": 413,
   "upsolved": [],
   "kind": "virtual",
+  "exact": true,
   "date": "2026-10-11",
   "solved": [
    "C",
@@ -1718,18 +1766,21 @@
    "L"
   ],
   "wrong": {
-   "F": 2,
-   "C": 0,
-   "L": 0,
-   "K": 0
+   "F": 2
+  },
+  "solve_min": {
+   "C": 31,
+   "F": 215,
+   "K": 116,
+   "L": 82
   },
   "penalty_min": [
-   359,
-   825
+   484,
+   484
   ],
   "rank": [
-   149,
-   210
+   164,
+   164
   ],
   "problems": [
    {
@@ -1865,6 +1916,7 @@
    "J"
   ],
   "kind": "virtual",
+  "exact": true,
   "date": "2026-10-16",
   "solved": [
    "B",
@@ -1872,18 +1924,23 @@
    "M"
   ],
   "wrong": {
-   "M": 2,
    "B": 5,
    "G": 5,
-   "J": 2
+   "J": 1,
+   "M": 2
+  },
+  "solve_min": {
+   "B": 220,
+   "G": 99,
+   "M": 32
   },
   "penalty_min": [
-   528,
-   830
+   591,
+   591
   ],
   "rank": [
-   210,
-   263
+   222,
+   222
   ],
   "problems": [
    {
@@ -2019,6 +2076,7 @@
   "board_teams": 760,
   "upsolved": [],
   "kind": "virtual",
+  "exact": true,
   "date": "2026-10-23",
   "solved": [
    "A",
@@ -2028,19 +2086,23 @@
    "L"
   ],
   "wrong": {
-   "L": 3,
    "J": 3,
-   "A": 0,
-   "G": 0,
-   "K": 0
+   "L": 3
+  },
+  "solve_min": {
+   "A": 34,
+   "G": 54,
+   "J": 260,
+   "K": 125,
+   "L": 114
   },
   "penalty_min": [
-   538,
-   906
+   707,
+   707
   ],
   "rank": [
-   239,
-   320
+   275,
+   275
   ],
   "problems": [
    {
@@ -2180,6 +2242,7 @@
   "board_teams": 402,
   "upsolved": [],
   "kind": "virtual",
+  "exact": true,
   "date": "2026-10-25",
   "solved": [
    "C",
@@ -2188,18 +2251,22 @@
    "M"
   ],
   "wrong": {
-   "J": 1,
    "C": 1,
-   "M": 0,
-   "H": 0
+   "J": 1
+  },
+  "solve_min": {
+   "C": 132,
+   "H": 168,
+   "J": 153,
+   "M": 43
   },
   "penalty_min": [
-   364,
-   1064
+   536,
+   536
   ],
   "rank": [
-   28,
-   152
+   86,
+   86
   ],
   "problems": [
    {
@@ -2331,6 +2398,7 @@
   "board_teams": 319,
   "upsolved": [],
   "kind": "virtual",
+  "exact": true,
   "date": "2026-11-01",
   "solved": [
    "C",
@@ -2343,19 +2411,23 @@
   "wrong": {
    "C": 4,
    "D": 3,
-   "E": 5,
-   "M": 0,
-   "K": 0,
-   "I": 0,
-   "H": 0
+   "E": 4
+  },
+  "solve_min": {
+   "C": 117,
+   "D": 79,
+   "H": 286,
+   "I": 156,
+   "K": 93,
+   "M": 23
   },
   "penalty_min": [
-   755,
-   976
+   894,
+   894
   ],
   "rank": [
-   27,
-   40
+   35,
+   35
   ],
   "problems": [
    {
@@ -2382,7 +2454,7 @@
     "board_solves": 129,
     "difficulty_cf": null,
     "ours": true,
-    "member": null,
+    "member": "Dedi",
     "statement": true
    },
    {
@@ -2391,7 +2463,7 @@
     "board_solves": 312,
     "difficulty_cf": null,
     "ours": true,
-    "member": "Erdene / Dedi",
+    "member": "Erdene",
     "statement": true
    },
    {
@@ -2477,9 +2549,7 @@
    }
   ],
   "sheet_only": [],
-  "solved_not_in_sheet": [
-   "C"
-  ],
+  "solved_not_in_sheet": [],
   "tutorial": [
    "Tutorial (zh)"
   ]

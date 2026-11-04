@@ -7300,50 +7300,64 @@ git-ignored).**
 - **Member attribution:** `members_solved.csv`, the sheet as exported by
   LibreOffice.
 
-**First-pass results.** The virtual start time cannot be read, so the
-penalty is not guessed. It is bounded: the start is no later than the first
-in-contest submission and no earlier than 5 h before the last accepted run.
-The rank range follows from that.
+**Follow-up (same day): personal account and fixed sheet.**
+- The user fixed the sheet: Chengdu 2026's second D is now C (Dedi), and
+  "Erdehe" is now Erdene. 1051, 1485, 2513, 2524 and 2575 still have no
+  sheet rows.
+- **Dedibeat fills the gaps.** The fetcher's `QOJ_USERNAME` is now only the
+  reading account: the submission list is always TEAM_R3's, and cookies are
+  kept per account (`.cookies-<user>.json`, git-ignored). Run as Dedibeat
+  (no Training Mode), it saves each contest's QOJ board twice:
+  `standings_all.json` (with virtual rows) and `standings_official.json`.
+  TEAM_R3's own virtual row is on `standings_all`, so every virtual now has
+  its exact solved count, solve times, wrong tries and penalty.
+- **4113 statements.** QOJ refuses the PDFs with 403 for Dedibeat too, but
+  the problem page carries the statement as HTML (with LaTeX). When the PDF
+  is refused, the fetcher saves `<L>.html` and a text version.
+- **Rate limits.** The Dedibeat run made about 60 requests and was not
+  rate-limited.
 
-| contest | kind | date | solved | penalty (min) | rank / board |
+**Results.** These are exact QOJ virtual rows, ranked by solved/penalty
+against the official onsite field. The 2026 online rounds use QOJ's
+official board. For 4593/4607 the field is XCPCIO's official ICPC teams,
+not QOJ's Universal Cup field.
+
+| contest | kind | date | solved | penalty (min) | rank / official teams |
 |---|---|---|---|---|---|
-| 4071 EC Online I 2026 | official | | 6 | 877 | 588 / 2754 (all rows) |
-| 4113 EC Online II 2026 | official | | 4 | 482 | 366 / 2689 (all rows) |
-| 1485 EC Online I 2023 | virtual | 08-20 | 6 | 663–1254 | 374–514 / 2554 |
-| 1794 EC Online I 2024 | virtual | 08-22 | 6 | 669–1072 | 88–124 / 2323 |
-| 2513 EC Online I 2025 | virtual | 09-03 | 7 | 472–1547 | 137–306 / 2279 |
-| 2524 EC Online II 2025 | virtual | 09-09 | 5 | 763–1174 | 292–386 / 2575 |
-| 1799 EC Online II 2024 | virtual | 09-10 | 6 | 338–1379 | 502–834 / 2450 |
-| 1051 Xi'an 2022 | virtual | 10-01 | 6 | 287–1417 | 109–248 / 522 |
-| 1071 Hangzhou 2022 | virtual | 10-02 | 7 | 790–1060 | 18–31 / 643 |
-| 1053 Jinan 2022 | virtual | 10-08 | 5 | 524–941 | 90–156 / 568 |
-| 1096 Shenyang 2022 | virtual | 10-09 | 4 | 415–775 | 182–287 / 1004 |
-| 2693 CCPC Jinan 2025 | virtual | 10-11 | 4 | 359–825 | 149–210 / 413 |
-| 2661 CCPC Zhengzhou 2025 | virtual | 10-16 | 3 | 528–830 | 210–263 / 418 |
-| 2575 CCPC Harbin 2025 | virtual | 10-23 | 5 | 538–906 | 239–320 / 760 |
-| 4593 Xi'an 2026 | virtual | 10-25 | 4 | 364–1064 | 28–152 / 402 official |
-| 4607 Chengdu 2026 | virtual | 11-01 | 6 | 755–976 | 27–40 / 319 official |
+| 4071 EC Online I 2026 | official | | 6 | 877 | 544 / 2535 |
+| 4113 EC Online II 2026 | official | | 4 | 482 | 352 / 2636 |
+| 1485 EC Online I 2023 | virtual | 08-20 | 6 | 758 | 417 / 2554 |
+| 1794 EC Online I 2024 | virtual | 08-22 | 6 | 714 | 96 / 2323 |
+| 2513 EC Online I 2025 | virtual | 09-03 | 7 | 625 | 147 / 2279 |
+| 2524 EC Online II 2025 | virtual | 09-09 | 5 | 890 | 345 / 2575 |
+| 1799 EC Online II 2024 | virtual | 09-10 | 6 | 402 | 514 / 2450 |
+| 1051 Xi'an 2022 | virtual | 10-01 | 6 | 357 | 116 / 522 |
+| 1071 Hangzhou 2022 | virtual | 10-02 | 7 | 886 | 24 / 643 |
+| 1053 Jinan 2022 | virtual | 10-08 | 5 | 578 | 98 / 568 |
+| 1096 Shenyang 2022 | virtual | 10-09 | 4 | 435 | 193 / 1004 |
+| 2693 CCPC Jinan 2025 | virtual | 10-11 | 4 | 484 | 164 / 413 |
+| 2661 CCPC Zhengzhou 2025 | virtual | 10-16 | 3 | 591 | 222 / 418 |
+| 2575 CCPC Harbin 2025 | virtual | 10-23 | 5 | 707 | 275 / 760 |
+| 4593 Xi'an 2026 | virtual | 10-25 | 4 | 536 | 86 / 402 |
+| 4607 Chengdu 2026 | virtual | 11-01 | 6 | 894 | 35 / 319 |
 
-- **Validation:** every scoreline recorded earlier falls inside these bounds.
-  - Jinan 2025: 4/484, rank 164.
-  - Xi'an 2026: 4/511, rank 86.
-  - Online virtuals from `../my-react-app`: 6/714, 6/402, 7/626, 5/890.
-  - Official 2026 rounds: 6/877 and 4/482, exactly.
-- **Tightening the ranges:** the ranges are wide because the window is 5 h.
-  Typed-in scorelines (the app's participations, or the team's own notes)
-  would pin them down.
-- **Sheet vs submissions:**
-  - 1051, 1485, 2513, 2524 and 2575 have no sheet rows.
-  - 4607 C is accepted in-contest but missing from the sheet, which lists D
-    twice (Erdene and Dedi); one of them is probably C.
-  - 2661 J is a post-contest upsolve, as the sheet's note says.
-  - "Erdehe" (1071 C) is a typo for Erdene.
+- **Agreement with earlier records:**
+  - The rows reproduce every scoreline recorded earlier: 6/714, 6/402,
+    7/626 (625 here), 5/890, Jinan 4/484 (#164), Xi'an 4/536 (#86, the
+    "official rank" reading of 2026-10-26) and 4071's official #544.
+  - All exact penalties lie inside the bounds of the first pass.
+  - 4113 is #352 on QOJ's official board, against #349 in the PTA ranking of
+    2026-10-08.
+- **Fallback:** without a QOJ board (e.g. running only as TEAM_R3), the
+  script still falls back to the start-time bounds.
+- **Not on any board:** TEAM_R3's 0-solve row on 4071 is the 28-byte test,
+  not a participation.
 
 **Not done.** The analysis itself: per-member load, problem difficulty
 reached against the field, time-to-solve and wrong-attempt patterns, virtual
 vs official gap. The data for it is in place.
 
-Run: `QOJ_USERNAME=TEAM_R3 QOJ_PASSWORD=… python3 scripts/fetch_team_r3.py
+Run: `QOJ_USERNAME=Dedibeat QOJ_PASSWORD=… python3 scripts/fetch_team_r3.py
 4071 4113 4607 4593 1071 1053 2693 2661 1096 1794 1799`, then
 `python3 scripts/fetch_xcpcio_standings.py icpc data/team_r3/boards/xcpcio_51st.json
 --board-link /icpc/51st/xian --board-link /icpc/51st/chengdu` and
