@@ -363,6 +363,53 @@ The team is accepted to both regionals (user, 2026-11-04). The target is set by 
 | Going silent in the last hour | 1051 (176 min), 1799 (163), 2513 (131), 4593 (110), 2693, 1096, 1485 |
 | Solo stalls on easy problems | 2661 B 169 min, 4593 J 95 min, 2524 C 74 min, 1053 A 100 min |
 
+### 6.5 If the team specialises: who takes which category
+
+Based on the 51 attributed solves (31 more are unknown, so treat this as a starting split to
+revisit after Shenyang). Each category has a **primary owner**, who studies it, owns its library
+code and reads those problems first, and a **backup**, who can take it when the owner is busy.
+
+| category | primary | backup | evidence |
+|---|---|---|---|
+| interactive / communication | **Erdene** | Dedi | 4607 H, 4607 I, 1071 I: 3 of 3 first try |
+| data structures (segment tree, Fenwick, DSU, LCA, SCC) | **Erdene** | Tamir | 2693 L at gold pace; owner of the retyped pieces (1485 G, 1794 L) |
+| graphs, trees, flows / matching (Dinic, MCMF, Hall, König) | **Erdene** | Tamir | nobody covers flows today (1051 B, 1794 H); the graph/structure library sits with the DS owner |
+| math, number theory, bits / XOR basis, interpolation | **Dedi** | Tamir | 1794 C (68′ vs 126′), 1071 A, 1799 G/L, 2661 J idea |
+| counting / combinatorial DP, probability | **Dedi** | Erdene | 4607 C (right method), 1799 L, 2661 J; the missed 1053 C, 2661 I, 2513 J |
+| strings (trie, hashing, Manacher, Z/KMP) | **Dedi** | Tamir | 4071 L, 1071 K idea |
+| geometry (new) | **Tamir** | Erdene | needs exact, careful casework code; Tamir has the fewest implementation slips and best pace (1053 D, 4607 K first try) |
+| constructive / proof-heavy | **Tamir** | Dedi | 2693 K, 4607 K; constructive is the team's best-pace topic (×1.17) |
+| long implementation / simulation | **Tamir** | Erdene | 1053 D (3.5 KB, first try), 2693 K |
+| easy problems / opening | **Erdene** | everyone | 4607 M 23′, 4593 M; fastest on the first problem |
+
+**How it changes a contest:**
+- **Opening:** Erdene codes the first easy problem while Tamir and Dedi read.
+- **Dedi thinks, Tamir types** on long maths/counting implementations. The fastest pair solve of
+  the season was exactly this split (1071 K: Dedi's idea, Tamir's code, 35′ ahead of the gold
+  median). It also moves code away from Dedi's main bug class (constants, sentinels, array sizes:
+  4607 C, 4593 C/J).
+- **Every submission by Dedi gets the constants line of the checklist read aloud by a teammate**
+  (modulus, bounds, INF, array sizes).
+- **Erdene keeps interactive problems for the last two hours** if one is open, and is the team's
+  cold reader for graph/DS chains.
+- **Tamir needs a visible share of the problems.** He has no recorded solve at 4593 or 1799.
+  Owning geometry and constructive gives him problems that the other two do not take.
+
+**Training split** (problem lists from 6.1):
+- **Erdene:** the flows block (1051 B, 1794 H, 2524 C), the graphs/trees block (1799 E, 1071 M,
+  2661 D, 1096 E, 4071 G), interactive (4113 H, 4593 L), and the library: Dinic/MCMF, DSU, LCA ×2,
+  SCC, Kruskal tree.
+- **Dedi:** the number theory/bits block (2693 A, 4113 A, 2524 I, 4113 E), the counting block
+  (1053 C, 2661 I, 2693 E, 2513 J, 4607 A), and the library: modint/CRT, XOR basis, Lagrange,
+  knapsack with deletion.
+- **Tamir:** the geometry block (4607 E, 1485 K, 2575 B, 2524 A) and the geometry library;
+  constructive re-solves; and the heavy re-solve 2661 B (his 169-minute chain).
+- **All three:** the observation block (2575 I, 4071 A, 4071 N) and the checklist drills. A
+  specialist still has to be able to solve the easy and greedy problems in every category.
+
+**Risk:** specialisation must not recreate the solo stalls of §5. The 2-WA and 45-minute rules
+still apply to owners: an owner stuck on their own category hands it to the backup for a cold read.
+
 ## 7. Open questions (answers would sharpen the per-member picture)
 - **Members for 1051, 1485, 2513, 2524 and 2575** (31 solves), and for 4071 F and M.
 - 4607 E (3336557–3336988): who wrote it?

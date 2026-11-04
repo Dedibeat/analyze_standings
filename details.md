@@ -7464,6 +7464,16 @@ used other boards). On the right field:
 - 1051, 1485, 2513, 2524, 2575 (and 4071 F/M) have no member data. 31 solves
   are marked unknown, and the open questions are listed in the summary.
 
+**Plan.** The plan in the summary (§6) is phased around those dates. Its §6.5
+gives a specialisation split, asked for by the user:
+- Erdene: interactive, data structures, graphs and flows, the opening.
+- Dedi: maths, number theory and bits, counting, strings.
+- Tamir: geometry, constructive, long implementation.
+
+Each category has a backup. Dedi gives ideas and Tamir types (the 1071 K
+pattern). The summary is published as a private artifact:
+https://claude.ai/artifact/4i24BaGeoogkxfA45ZTjp7.
+
 **Not done.** Step 0 (shortest public ACs). The library comparison uses
 editorials and our own code only.
 
