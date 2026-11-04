@@ -1,0 +1,1111 @@
+The 2026 ICPC Asia Xi’an
+Regional Contest
+Contest Session
+October 18, 2026
+
+Problem List
+A
+B
+C
+D
+E
+F
+G
+H
+I
+J
+K
+L
+M
+
+And Revive The Melody
+Break the Speakers
+Cryptarithm
+Don't Fight The Music
+Ether Strike
+False Amber
+Gungnir Fracture
+Hydra
+Incyde
+Journey
+Kikai No Tsubasa
+Lucid Traveler
+Melodiniq
+
+This problem set should contain 13 (thirteen) problems on 25 (twenty-five) numbered pages.
+Please inform a runner immediately if something is missing from your problem set.
+
+problem.coffee
+
+Hosted By
+
+Problem Set Prepared By
+
+Cfz 出题组
+Cfz Problem Setting Group
+
+The 2026 ICPC Asia Xi’an Regional Contest
+Xi’an, Shaanxi, China, October, 18th, 2026
+
+Problem A. And Revive The Melody
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+3 seconds
+1024 megabytes
+
+Setsuna is studying music theory. There are n distinct pitches, numbered 1, 2, · · · , n. Setsuna wants to
+compose a melody P in which every pitch appears exactly once. We call a sub-melody Q compact if and
+only if there exist integers l ≤ r such that the set of pitches appearing in Q is exactly {l, l + 1, · · · , r}.
+To compose the harmony, Setsuna specifies some requirements using two strings a, b, each of length n:
+• For the sub-melody P [1, i] consisting of the first i pitches:
+– If ai = 1, this sub-melody must be compact.
+– If ai = 0, this sub-melody must not be compact.
+– If ai = ?, there is no restriction on this sub-melody.
+• For the sub-melody P [i, n] consisting of the last n + 1 − i pitches:
+– If bi = 1, this sub-melody must be compact.
+– If bi = 0, this sub-melody must not be compact.
+– If bi = ?, there is no restriction on this sub-melody.
+After solving Don’t Fight The Music, Setsuna wants to enumerate all melodies that satisfy the
+requirements. You need to help Setsuna find the number of such melodies so that she can check her
+result. Since the answer may be large, output it modulo 998244353.
+
+Input
+This problem contains multiple test cases.
+The first line contains a positive integer T (1 ≤ T ≤ 104 ), representing the number of test cases.
+For each test case:
+• The first line contains an integer n (2 ≤ n ≤ 2 × 105 ).
+• The next two lines each contain a string of length n, namely a and b.
+It is guaranteed that the sum of n over all test cases does not exceed 2 × 105 , and that the strings contain
+only the characters 1, 0, and ?.
+
+Output
+For each test case, output one line containing an integer representing the answer.
+
+Page 1 of 25
+
+The 2026 ICPC Asia Xi’an Regional Contest
+Xi’an, Shaanxi, China, October, 18th, 2026
+
+Example
+standard input
+4
+2
+?1
+1?
+3
+???
+0??
+4
+??1?
+?0??
+5
+1??01
+10??1
+
+standard output
+2
+0
+8
+36
+
+Note
+For the third test case, all melodies that satisfy the requirements are listed below:
+• [2, 1, 3, 4]
+• [2, 3, 1, 4]
+• [2, 3, 4, 1]
+• [2, 4, 3, 1]
+• [3, 1, 2, 4]
+• [3, 2, 1, 4]
+• [3, 2, 4, 1]
+• [3, 4, 2, 1]
+
+Page 2 of 25
+
+The 2026 ICPC Asia Xi’an Regional Contest
+Xi’an, Shaanxi, China, October, 18th, 2026
+
+Problem B. Break The Speakers
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+2 seconds
+1024 megabytes
+
+Milk has a tree with n nodes. Node i has a non-negative integer weight ai . Shama wants to destroy the
+tree. She may perform one of the following three operations:
+• Choose a node whose weight is 0 and whose degree is ≤ 1, then delete the node and its incident
+edge, if any.
+• Choose a node whose weight is nonzero and set ai ← ai − 1.
+• Choose a node and set its weight to the MEX of the weights of all its neighboring nodes.
+Shama wants to delete all nodes as quickly as possible. You need to help her find the minimum number
+of operations required to achieve this goal.
+Recall that the MEX of a set is the smallest non-negative integer that does not occur in the set.
+
+Input
+This problem contains multiple test cases.
+The first line contains a positive integer T (1 ≤ T ≤ 2 × 104 ), representing the number of test cases.
+For each test case:
+• The first line contains an integer n (1 ≤ n ≤ 2 × 105 ).
+• The next n − 1 lines each contain two integers ui , vi (1 ≤ ui , vi ≤ n), representing an edge of the
+tree.
+• The last line contains n integers ai (0 ≤ ai ≤ 109 ).
+It is guaranteed that, in each test case, the given n − 1 edges form a tree, and that the sum of n over all
+test cases does not exceed 2 × 105 .
+
+Output
+For each test case, output one line containing an integer representing the answer.
+
+Example
+standard input
+1
+5
+1 2
+1 3
+2 4
+2 5
+1 0 0 4 2
+
+standard output
+9
+
+Note
+One optimal strategy for the sample is as follows:
+
+Page 3 of 25
+
+The 2026 ICPC Asia Xi’an Regional Contest
+Xi’an, Shaanxi, China, October, 18th, 2026
+• Delete node 3.
+• Decrease a1 by 1, then delete node 1.
+• Apply the MEX operation once to a4 , then decrease a4 by 1 and delete node 4.
+• Delete node 2.
+• Apply the MEX operation once to a5 , then delete node 5.
+This uses 9 operations in total.
+
+Page 4 of 25
+
+The 2026 ICPC Asia Xi’an Regional Contest
+Xi’an, Shaanxi, China, October, 18th, 2026
+
+Problem C. Cryptarithm
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+2 seconds
+1024 megabytes
+
+Ris is trying to enter a password using a mouse. The password she needs to enter is an integer sequence
+b of length m, while her clipboard contains a sequence a of length n. To complete her task, Ris may use
+the following three operations to modify a workspace c that is initially empty:
+• Paste: pay a cost of x and append every element of a, in order, to the end of c.
+• Scroll: pay a cost of y and increase or decrease one element of c by 1.
+• Delete: pay a cost of z and delete one element from c.
+You need to help Ris find the minimum total cost among all ways to transform c into b.
+
+Input
+This problem contains multiple test cases.
+The first line contains a positive integer T (1 ≤ T ≤ 104 ), representing the number of test cases.
+For each test case:
+• The first line contains five integers n, m, x, y, z (1 ≤ n, m ≤ 3000, 0 ≤ x, y, z ≤ 106 ).
+• The second line contains n integers ai (0 ≤ ai ≤ 109 ).
+• The third line contains m integers bi (0 ≤ bi ≤ 109 ).
+It is guaranteed that the sum of n · m over all test cases does not exceed 9 × 106 , and that the sum of
+n + m over all test cases does not exceed 2 × 105 .
+
+Output
+For each test case, output one line containing an integer representing the answer.
+
+Example
+standard input
+4
+6 7 3 2 5
+1 1 4 5 1 4
+1 9 1 9 8 1 0
+3 2 5 6 7
+11 45 14
+1919 810
+1 7 0 0 0
+998244353
+1 0 1 0 0 0 0
+1 1 1000000 1000000 1000000
+0
+1000000000
+
+standard output
+63
+15872
+0
+1000000001000000
+
+Page 5 of 25
+
+The 2026 ICPC Asia Xi’an Regional Contest
+Xi’an, Shaanxi, China, October, 18th, 2026
+
+Note
+For the first test case, one optimal sequence of operations is as follows:
+• Paste twice. Then c becomes [1, 1, 4, 5, 1, 4, 1, 1, 4, 5, 1, 4].
+• Delete 5 elements, keeping the bold elements from the previous line. Then c becomes
+[1, 5, 1, 4, 5, 1, 4].
+• Scroll 16 times to adjust the bold elements from the previous line. Then c becomes [1, 9, 1, 9, 8, 1, 0].
+The total cost is 2 · 3 + 16 · 2 + 5 · 5 = 63.
+
+Page 6 of 25
+
+The 2026 ICPC Asia Xi’an Regional Contest
+Xi’an, Shaanxi, China, October, 18th, 2026
+
+Problem D. Don’t Fight The Music
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+2 seconds
+1024 megabytes
+
+Setsuna is studying music theory. There are n distinct pitches, numbered 1, 2, · · · , n. Setsuna wants to
+compose a melody P in which every pitch appears exactly once. We call a sub-melody Q compact if and
+only if there exist integers l ≤ r such that the set of pitches appearing in Q is exactly {l, l + 1, · · · , r}.
+To compose the harmony, Setsuna specifies some requirements using two strings a, b, each of length n:
+• For the sub-melody P [1, i] consisting of the first i pitches:
+– If ai = 1, this sub-melody must be compact.
+– If ai = 0, this sub-melody must not be compact.
+– If ai = ?, there is no restriction on this sub-melody.
+• For the sub-melody P [i, n] consisting of the last n + 1 − i pitches:
+– If bi = 1, this sub-melody must be compact.
+– If bi = 0, this sub-melody must not be compact.
+– If bi = ?, there is no restriction on this sub-melody.
+Before solving And Revive The Melody, Setsuna wants to find one melody that satisfies all the
+requirements. You need to help Setsuna find any such melody, or report that no such melody exists.
+
+Input
+This problem contains multiple test cases.
+The first line contains a positive integer T (1 ≤ T ≤ 104 ), representing the number of test cases.
+For each test case:
+• The first line contains an integer n (2 ≤ n ≤ 2 × 105 ).
+• The next two lines each contain a string of length n, namely a and b.
+It is guaranteed that the sum of n over all test cases does not exceed 2 × 105 , and that the strings contain
+only the characters 1, 0, and ?.
+
+Output
+For each test case, output one line:
+• If no solution exists, output the integer −1.
+• Otherwise, output n integers P1 , P2 , · · · , Pn representing a valid answer.
+
+Page 7 of 25
+
+The 2026 ICPC Asia Xi’an Regional Contest
+Xi’an, Shaanxi, China, October, 18th, 2026
+
+Example
+standard input
+4
+2
+?1
+1?
+3
+???
+0??
+4
+??1?
+?0??
+5
+1??01
+10??1
+
+standard output
+1 2
+-1
+2 3 1 4
+2 1 3 5 4
+
+Note
+For the third test case, all constrained sub-melodies are listed below:
+• [2, 3, 1] is compact.
+• [3, 1, 4] is not compact.
+
+Page 8 of 25
+
+The 2026 ICPC Asia Xi’an Regional Contest
+Xi’an, Shaanxi, China, October, 18th, 2026
+
+Problem E. Ether Strike
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+6 seconds
+1024 megabytes
+
+An intense dissatisfaction with the world,
+and a compulsion to do something about it...
+— Akira Complex, Ether Strike
+
+Hikari has collected n glass shards, numbered from 1 to n. Each shard has 64 binary attributes. The k-th
+bit describes the k-th attribute, so the attribute value of a shard is an integer in [0, 264 ).
+Then, m events happen to the “world”. Each event is one of the following:
+1. A fracture of the first type has its own attribute value x and affects every shard whose index is
+in [l, r]. If an affected shard differs from the fracture in more than d attributes, it is forcibly
+transformed into a shard with attribute value x.
+2. Hikari needs to deal with the shards whose indices are in [l, r]. You need to tell her the sum of their
+attribute values.
+3. A fracture of the second type has its own attribute value x and affects every shard whose index is
+in [l, r]. Every affected shard is forcibly transformed into a shard with attribute value x.
+
+Input
+The first line contains three integers n, m, d (1 ≤ n, m ≤ 2 × 105 , d = 3), representing the number of
+shards, the number of events, and the attribute threshold, respectively.
+The second line contains n integers ai (0 ≤ ai < 264 ), representing the initial attribute value of each
+shard.
+The next m lines each begin with an integer opt, representing the type of the event:
+• If opt = 1, three more integers l, r, x follow (1 ≤ l ≤ r ≤ n, 0 ≤ x < 264 ), describing a fracture of
+the first type.
+• If opt = 2, two more integers l, r follow (1 ≤ l ≤ r ≤ n), describing a query from Hikari; since the
+answer is large, you have to output it modulo 264 .
+• If opt = 3, three more integers l, r, x follow (1 ≤ l ≤ r ≤ n, 0 ≤ x < 264 ), describing a fracture of
+the second type.
+It is guaranteed that at least one event has opt = 2.
+
+Output
+For each query from Hikari, output one line containing an integer representing the sum of the attribute
+values modulo 264 .
+
+Page 9 of 25
+
+The 2026 ICPC Asia Xi’an Regional Contest
+Xi’an, Shaanxi, China, October, 18th, 2026
+
+Examples
+standard input
+
+standard output
+9223372036854775885
+9223372036854775871
+18446744073709551612
+13835058055282163711
+16140901064495857660
+0
+
+6 11 3
+0 7 15 56 9223372036854775808
+18446744073709551615
+2 1 6
+1 1 6 0
+2 1 6
+3 2 5 18446744073709551615
+2 1 6
+1 1 4 17293822569102704640
+2 1 6
+1 3 6 18446744073709551615
+2 1 6
+3 1 3 1
+2 1 6
+8 10 3
+56 0 7 63 9223372036854775808
+9223372036854775815
+17293822569102704640 15
+2 1 8
+1 1 4 0
+1 1 4 7
+2 1 4
+1 5 8 17293822569102704640
+2 5 8
+3 3 6 18446744073709551615
+2 1 8
+1 1 8 18446744073709551615
+2 1 8
+
+17293822569102704788
+14
+5764607523034234880
+16140901064495857667
+18446744073709551608
+
+Note
+To ensure that the PDF is displayed correctly, several blank lines have been inserted into the last sample.
+You can download the original sample from Domjudge.
+For the first sample, let H = 263 , U = 264 − 1, and F = 15 · 260 .
+• Initially, the sequence is [0, 7, 15, 56, H, U ].
+• In the second event, the numbers of differing attributes are 0, 3, 4, 3, 1, 64, respectively. Since d = 3,
+the sequence becomes [0, 7, 0, 56, H, 0].
+• After the fourth event, the sequence is [0, U, U, U, U, 0].
+• After the sixth event, the sequence is [F, F, F, F, U, 0].
+• After the eighth event, the sequence is [F, F, U, U, U, U ].
+• After the tenth event, the sequence is [1, 1, 1, U, U, U ].
+Each query asks for the sum modulo 264 . In particular, the last answer is 0 because 3 + 3(264 − 1) = 3 · 264 .
+
+Page 10 of 25
+
+The 2026 ICPC Asia Xi’an Regional Contest
+Xi’an, Shaanxi, China, October, 18th, 2026
+
+Problem F. False Amber
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+2 seconds
+1024 megabytes
+
+Ras and Salt are playing a simplified version of Texas Hold’em called CAFE MiLK Poker. The game uses
+2n cards with ranks 1 ∼ 2n, and proceeds as follows:
+• One chip is placed in the center of the table. Each player has m chips and n cards.
+• Ras and Salt each draw one card uniformly at random from their own deck.
+• Both players know the two complete decks and the card they drew, but neither knows the card
+drawn by the other player.
+• Ras may choose to check or go all-in.
+• If Ras checks, both players reveal their cards, and the player with the higher card takes the chip
+on the table.
+• If Ras goes all-in:
+– Salt may choose to fold or call.
+– If Salt folds, Ras takes the chip on the table.
+– If Salt calls, both players reveal their cards, and the player with the higher card takes a total
+of m + 1 chips from the table and the other player.
+Ras and Salt may each use a mixed strategy π = pi : whenever the player makes a decision while holding
+card i, they choose one action with probability pi and the other action with probability (1 − pi ). Both
+players want to maximize their own expected profit, defined as the number of chips they have at the
+end of the game minus m.
+You are Chiffon, Ras’s best friend, and you know that Salt can read minds: although she cannot know
+which card Ras drew, she can know Ras’s strategy! Therefore, you need to help Ras find a strategy that
+maximizes her expected profit. Formally, you need to choose a mixed strategy πr for Ras that maximizes
+Ras’s expected profit when Salt may choose her strategy πs based on πr .
+
+Input
+This problem contains multiple test cases.
+The first line contains a positive integer T (1 ≤ T ≤ 104 ), representing the number of test cases.
+For each test case:
+• The first line contains two integers n, m (1 ≤ n ≤ 2 × 105 , 1 ≤ m ≤ 109 ).
+• The second line contains n integers ai (1 ≤ ai ≤ 2n), representing Ras’s cards.
+• The third line contains n integers bi (1 ≤ bi ≤ 2n), representing Salt’s cards.
+It is guaranteed that the sum of n over all test cases does not exceed 2 × 105 , and that all ai and bi are
+pairwise distinct; in other words, every integer from 1 through 2n occurs exactly once.
+
+Output
+For each test case, output one line containing a floating-point number representing the answer.
+Your answer is considered correct if its absolute or relative error does not exceed 10−6 . Formally, let your
+|a−b|
+answer be a and the correct answer be b. Your answer is accepted if and only if max(1,|b|)
+≤ 10−6 .
+Page 11 of 25
+
+The 2026 ICPC Asia Xi’an Regional Contest
+Xi’an, Shaanxi, China, October, 18th, 2026
+
+Example
+standard input
+3
+1 1
+1
+2
+2 2
+1 4
+2 3
+3 10
+3 6 1
+5 2 4
+
+standard output
+0.000000000000000
+0.833333333333333
+0.747474747474747
+
+Note
+In the first test case, Ras never goes all-in.
+In the second test case, Ras goes all-in with probability 23 when she draws card 1, and always goes all-in
+when she draws card 4. One possible strategy for Salt in this case is to always call. Therefore:
+• With probability 16 , Ras draws card 1 and checks, earning a profit of 0.
+• With probability 13 , Ras draws card 1 and goes all-in, earning a profit of −2.
+• With probability 12 , Ras draws card 4 and goes all-in, earning a profit of 3.
+Her expected profit is 16 · 0 + 13 · (−2) + 21 · 3 = 56 .
+
+Page 12 of 25
+
+The 2026 ICPC Asia Xi’an Regional Contest
+Xi’an, Shaanxi, China, October, 18th, 2026
+
+Problem G. Gungnir Fracture
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+2 seconds
+1024 megabytes
+
+Geopelia is collecting the fragments of Gungnir. Gungnir has 2n types of fragments, numbered
+0, 1, · · · , 2n − 1. To restore it, for every 0 ≤ i < 2n , Geopelia needs exactly ai fragments marked i.
+To obtain these fragments, Geopelia may perform the following operation any number of times:
+• Choose two integers m and k satisfying 0 ≤ m < 2n and 0 ≤ k < 2n .
+• Obtain one fragment marked with each of 0 ⊕ k, 1 ⊕ k, · · · , m ⊕ k.
+Recall that ⊕ denotes the bitwise exclusive OR of two non-negative integers.
+Help Geopelia find the minimum number of operations required to restore Gungnir. Note that Geopelia
+cannot remove any fragment she has obtained.
+
+Input
+The first line of the input contains an integer T (1 ≤ T ≤ 104 ) indicating the number of test cases. For
+each test case:
+• The first line contains an integer n (0 ≤ n ≤ 19).
+• The second line contains 2n integers a0 , a1 , . . . , a2n −1 (0 ≤ ai ≤ 106 ), where ai is the required
+number of fragments marked i.
+It is guaranteed that the sum of 2n over all test cases does not exceed 219 .
+
+Output
+For each test case, output one integer representing the minimum number of operations.
+
+Example
+standard input
+5
+0
+100000
+1
+114 514
+2
+1 1 1 1
+3
+0 13 0 0 0 7 2 1
+4
+1 2 2 1 3 3 3 3 1 0 0 0 0 0 0 0
+
+standard output
+100000
+514
+1
+21
+3
+
+Page 13 of 25
+
+The 2026 ICPC Asia Xi’an Regional Contest
+Xi’an, Shaanxi, China, October, 18th, 2026
+
+Problem H. Hydra
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+2 seconds
+1024 megabytes
+
+Neko is fighting a long battle against the Ocean Gangster. The battle consists of a sequence of rounds,
+all numbered by positive integers.
+Neko has two defensive abilities: Metallization and Plating. Both abilities initially have level 0.
+At the beginning of each round, Neko may perform any number of upgrades:
+• Pay x to increase the Metallization level by 1.
+• Pay y to increase the Plating level by 1.
+After all upgrades have been performed, the round is resolved in the following order:
+1. Let the current Metallization and Plating levels be M and P , respectively. Neko gains M + P points
+of armor.
+2. If the Ocean Gangster deals b points of damage in this round, Neko loses max(0, b − M − P ) health
+points.
+3. At the end of the round, all armor gained in this round disappears. The Metallization level remains
+unchanged, while the Plating level becomes max(P − 1, 0).
+The Ocean Gangster will make n attacks in total. The i-th attack occurs in round ai and deals bi points
+of damage. The attack rounds are given in strictly increasing order. The Ocean Gangster does not attack
+in any round that is not listed. Note that even if there is no attack in a round, the Plating level still
+changes according to the rule above at the end of that round.
+As a genius gaming streamer, Neko wants to lose no health points to any attack. Find the minimum total
+cost required to achieve this goal.
+
+Input
+This problem contains multiple test cases.
+The first line contains a positive integer T (1 ≤ T ≤ 5 × 105 ), representing the number of test cases.
+For each test case:
+• The first line contains three integers n, x, y (1 ≤ n ≤ 5 × 105 , 1 ≤ x, y ≤ 109 ), representing the
+number of attacks, the cost of increasing the Metallization level by 1, and the cost of increasing the
+Plating level by 1, respectively.
+• The next n lines each contain two integers ai , bi (1 ≤ ai , bi ≤ 109 ), representing an attack of bi
+damage made by the Ocean Gangster in round ai .
+It is guaranteed that the sum of n over all test cases does not exceed 5 × 105 , and that a1 < a2 < · · · < an .
+
+Output
+For each test case, output one line containing an integer representing the minimum cost required to lose
+no health points to any attack.
+
+Page 14 of 25
+
+The 2026 ICPC Asia Xi’an Regional Contest
+Xi’an, Shaanxi, China, October, 18th, 2026
+
+Example
+standard input
+2
+3 5 2
+1 3
+10 5
+20 2
+3 100 1
+1 5
+2 5
+3 5
+
+standard output
+18
+7
+
+Note
+In the first test case, Neko can first increase the Metallization level to 2 in round 1:
+• In round 1, increase the Plating level to 1, obtaining 2 + 1 = 3 points of armor in total.
+• In round 10, increase the Plating level to 3, obtaining 2 + 3 = 5 points of armor in total.
+• In round 20, the 2 points of armor provided by Metallization are suﬀicient.
+The total cost is 2 × 5 + (1 + 3) × 2 = 18.
+In the second test case, Neko does not need to upgrade Metallization. In round 1, increase the Plating
+level to 5. At the end of this round, its level decreases to 4. In each of rounds 2 and 3, increase the Plating
+level by 1. This provides 5 points of armor in all three rounds, for a total cost of 5 + 1 + 1 = 7.
+
+Page 15 of 25
+
+The 2026 ICPC Asia Xi’an Regional Contest
+Xi’an, Shaanxi, China, October, 18th, 2026
+
+Problem I. Incyde
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+2 seconds
+1024 megabytes
+
+Vanessa has n memories about humanity, numbered 0, 1, · · · , n − 1, arranged in this order on a circle.
+Vanessa divides them into m contiguous intervals, computes the sum Si of the elements in each interval,
+and defines the weight of the division as the greatest common divisor of all the Si .
+(n)
+Through the Eye of Horus, Vanessa sees all m
+possible divisions, but she cannot endure so many
+memories. You need to help her calculate the product of the weights of all divisions. Since the answer
+may be large, output it modulo 109 + 123.
+Recall that a positive integer is a common divisor of a set S if and only if it divides every element of S.
+
+Input
+This problem contains multiple test cases.
+The first line contains a positive integer T (1 ≤ T ≤ 100), representing the number of test cases.
+For each test case, the only line contains two integers n, m (2 ≤ m ≤ n ≤ 1012 ).
+
+Output
+For each test case, output one line containing an integer representing the answer.
+
+Example
+standard input
+8
+4 2
+5 2
+10 3
+2026 1018
+1000000123 114514
+2000000247 1000000123
+67325072148 1145141919
+999000122877 1997
+
+standard output
+108
+400
+895412257
+711051382
+1
+52312939
+472236908
+0
+
+Note
+For the first test case, the weights of all six divisions are listed below:
+• gcd(0, 1 + 2 + 3) = 6
+• gcd(0 + 1, 2 + 3) = 1
+• gcd(0 + 1 + 2, 3) = 3
+• gcd(1, 2 + 3 + 0) = 1
+• gcd(1 + 2, 3 + 0) = 3
+• gcd(2, 3 + 0 + 1) = 2
+Therefore, the answer is 6 · 1 · 3 · 1 · 3 · 2 = 108.
+
+Page 16 of 25
+
+The 2026 ICPC Asia Xi’an Regional Contest
+Xi’an, Shaanxi, China, October, 18th, 2026
+
+Problem J. Journey
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+2 seconds
+1024 megabytes
+
+Ritmo and Fisica are building a tuning device. A tuning device consists of a sequence a in which every
+integer in 1 ∼ n occurs exactly twice, and a regular bracket sequence s containing n pairs of brackets.
+A tuning device works correctly if and only if it satisfies the following conditions:
+• Create one vertex for each index.
+• For every pair of matching brackets whose indices in s are (li , ri ), add an edge between these two
+vertices.
+• For every value in a, let (xi , yi ) be the indices of its two occurrences, and add an edge between
+these two vertices.
+• The procedure above produces one cycle containing all 2n vertices and all 2n edges.
+Ritmo has already installed a. Now you need to help Fisica find a corresponding sequence s. It can be
+proven that such a regular bracket sequence always exists.
+Recall that a bracket sequence is regular if and only if it can be constructed using the following rules:
+• () is a regular bracket sequence.
+• If A is a regular bracket sequence, then ( + A + ) is a regular bracket sequence.
+• If A, B are regular bracket sequences, then A + B is a regular bracket sequence.
+
+Input
+This problem contains multiple test cases.
+The first line contains a positive integer T (1 ≤ T ≤ 104 ), representing the number of test cases.
+For each test case:
+• The first line contains an integer n (2 ≤ n ≤ 2 × 105 ).
+• The second line contains 2n integers ai (1 ≤ ai ≤ n).
+It is guaranteed that the sum of n over all test cases does not exceed 2 × 105 , and that every integer in
+1 ∼ n occurs exactly twice in a.
+
+Output
+For each test case, output a regular bracket sequence s of length 2n representing a valid answer.
+
+Page 17 of 25
+
+The 2026 ICPC Asia Xi’an Regional Contest
+Xi’an, Shaanxi, China, October, 18th, 2026
+
+Example
+standard input
+5
+2
+1 2 1 2
+2
+2 2 1 1
+3
+1 2 3 1 2 3
+4
+1 2 3 4 3 2 1 4
+7
+3 6 7 1 5 6 2 2 4 3 4 7 1 5
+
+standard output
+()()
+(())
+()()()
+()()()()
+()()()(()())()
+
+Page 18 of 25
+
+The 2026 ICPC Asia Xi’an Regional Contest
+Xi’an, Shaanxi, China, October, 18th, 2026
+
+Problem K. Kikai No Tsubasa
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+2 seconds
+1024 megabytes
+
+This is a communication problem.
+Teto is studying the following NP-complete problem:
+• You are given an undirected simple graph G with n vertices and m edges. The vertices are numbered
+from 1 to n.
+• A permutation p = [p1 , p2 , · · · , pn ] of 1, 2, · · · , n is a valid labeling of the graph if and only if
+pu + pv ≤ n + 1 for every edge (u, v).
+• It is guaranteed that at least one valid labeling exists. You need to find any valid labeling of the
+given graph.
+In the year 6202, Teto not only invented an eﬀicient algorithm for this problem with the help of a quantum
+computer, but also invented a time machine! Now, Teto wants to bring a solution to this problem back
+in time and accelerate the research into the algorithm. However, she finds that she cannot remember too
+much information: besides remembering the graph exactly, she can remember only 5 × 105 additional
+bits. Can you help her compress the information in the solution?
+More specifically, you need to design a program that, given G and p, can generate a non-empty binary
+string s of length at most 5 × 105 , and can then independently find a valid labeling p′ using only G and
+s. Note that p′ only needs to be a valid labeling of the graph and does not have to be identical to p.
+To test your program, the judging system will run the same program twice on each test, corresponding
+to the two processes described above. The two runs do not share memory, files, or any other state. Apart
+from the same graph and the binary string output on the first run, the second run receives no information
+from the first run.
+
+Input
+The first line of each run contains a string op (op ∈ {first, second}), denoting which run of the program
+it is.
+The second line contains two integers n and m (2 ≤ n ≤ 105 , 0 ≤ m ≤ 5 × 105 ), denoting the number of
+vertices and the number of edges, respectively. It is guaranteed that n is even.
+The next m lines follow. The i-th of these lines contains two integers ui , vi (1 ≤ ui < vi ≤ n), denoting
+an edge connecting vertices ui and vi .
+If op = first, the last line contains n integers p1 , p2 , · · · , pn , representing a valid labeling given to the
+program.
+If op = second, the last line contains a non-empty binary string s, representing the information output
+on the first run. It is guaranteed that the graph and the order of its edges are identical in both
+runs.
+It is guaranteed that all edges in the graph are distinct. If op = first, it is also guaranteed that p is a
+permutation of 1, 2, · · · , n and that pu + pv ≤ n + 1 for every edge (u, v).
+
+Interaction Protocol
+If op = first, output a non-empty string s consisting only of the characters 0 and 1, where |s| ≤ 5×105 .
+Do not output anything else.
+If op = second, output a permutation p′1 , p′2 , · · · , p′n of 1, 2, · · · , n such that p′u + p′v ≤ n + 1 for every
+edge (u, v).
+Page 19 of 25
+
+The 2026 ICPC Asia Xi’an Regional Contest
+Xi’an, Shaanxi, China, October, 18th, 2026
+
+Examples
+standard input
+first
+8 7
+1 5
+2 6
+3 7
+4 8
+1 2
+2 3
+3 4
+1 2 3 4 8 7 6 5
+second
+8 7
+1 5
+2 6
+3 7
+4 8
+1 2
+2 3
+3 4
+1001101010010100010011010
+
+standard output
+1001101010010100010011010
+
+4 1 3 2 5 8 6 7
+
+Page 20 of 25
+
+The 2026 ICPC Asia Xi’an Regional Contest
+Xi’an, Shaanxi, China, October, 18th, 2026
+
+Problem L. Lucid Traveler
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+4 seconds
+1024 megabytes
+
+This is an interactive problem.
+Having awakened, Ivy is exploring the road network of Node 08.
+Node 08 can be modeled as an n-vertex edge cactus, and Ivy needs to find every edge in the graph.
+Fortunately, she may ask the Eye of Horus some queries. In each query, Ivy chooses two vertices x and
+y and a set of vertices S containing neither x nor y. The Eye of Horus tells her whether x and y are
+connected after all vertices in S, together with their incident edges, are deleted from the graph. However,
+the Eye of Horus has limited computational power, so such a query incurs a cost of max(|S| − 1, 0).
+Time is limited. Ivy may make at most 3n2 queries, and the sum of the costs of all queries must not
+exceed n⌈log2 n⌉ + 2n. You need to help Ivy devise a strategy that is guaranteed to determine every edge
+in the graph.
+Recall that an edge cactus is an undirected simple connected graph in which every edge belongs to at
+most one simple cycle. A simple graph is a graph with neither multiple edges nor self-loops.
+Note that the interactor is adaptive, meaning that the graph for each test case is not pre-determined.
+The interactor always guarantees that there is at least one graph consistent with all previous replies, but
+it may choose its reply based on your query. The interactor determines the final graph only when you
+submit your final answer.
+
+Input
+There are multiple test cases. The first line of the input contains an integer T (1 ≤ T ≤ 128) indicating
+the number of test cases. For each test case:
+The first line contains an integer n (2 ≤ n ≤ 128) indicating the number of vertices in the graph.
+It is guaranteed that the sum of n over all test cases does not exceed 256.
+The query-count and query-cost limits are evaluated separately for each test case.
+
+Interaction Protocol
+To ask a query, output one line. First output ? followed by a space, then print three integers x, y, and
+k, followed by k integers s1 , s2 , . . . , sk , all separated by spaces. Here, k = |S|, 1 ≤ x, y ≤ n, x ̸= y,
+0 ≤ k ≤ n − 2, and s1 , s2 , . . . , sk must be pairwise distinct and different from both x and y.
+After flushing your output, your program should read a single integer t indicating the answer to your
+query. If x and y are still connected after deleting S, then t = 1; otherwise, t = 0. Recall that you can ask
+at most 3n2 queries for a test case, and the sum of the costs of all queries must not exceed n⌈log2 n⌉ + 2n.
+If you want to report all edges in the graph, first output one line. First output ! followed by a space, then
+print an integer m indicating the number of edges. Then output m lines, where the i-th line contains two
+integers ui and vi indicating an edge. The edges may be listed in any order, and the endpoints of each
+edge may be listed in either order, but the same edge must not be printed more than once.
+After flushing your output, your program should continue processing the next test case, or exit
+immediately if there are no more test cases. Note that your final answer does not count as a query
+and incurs no query cost.
+To flush your output, you can use:
+• fflush(stdout) (if you use printf) or cout.flush() (if you use cout) in C and C++.
+• System.out.flush() in Java and Kotlin.
+Page 21 of 25
+
+The 2026 ICPC Asia Xi’an Regional Contest
+Xi’an, Shaanxi, China, October, 18th, 2026
+• sys.stdout.flush() in Python.
+
+Example
+standard input
+
+standard output
+
+2
+3
+? 1 2 1 3
+1
+! 3
+1 2
+1 3
+2 3
+6
+? 2 6 2 4 5
+0
+? 1 4 0
+1
+? 1 4 2 2 5
+0
+! 7
+1 2
+4 5
+1 5
+2 4
+4 3
+4 6
+3 6
+
+Page 22 of 25
+
+The 2026 ICPC Asia Xi’an Regional Contest
+Xi’an, Shaanxi, China, October, 18th, 2026
+
+Problem M. Melodiniq
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+1024 megabytes
+
+Uni and her teammates are unlocking a high-diﬀiculty song through Linked VERSE. During the unlocking
+process, four players simultaneously play a song containing n notes.
+Each player starts with a Gauge of 2000. For every note, each player receives one of five judgements:
+• JUSTICE HEAVEN (H): This judgement does not decrease the player’s Gauge.
+• JUSTICE CRITICAL (C): This judgement does not decrease the player’s Gauge.
+• JUSTICE (J): This judgement decreases the player’s Gauge by 50.
+• ATTACK (A): This judgement decreases the player’s Gauge by 100.
+• MISS (M): This judgement decreases the player’s Gauge by 200.
+Meanwhile, each player has an independent combo counter. When a player receives a JUSTICE HEAVEN
+judgement, their own combo count increases by 1; receiving any other judgement resets only their own
+combo count. When a player’s combo count reaches 100, they increase the Gauge of each of the other
+three players by 30 and reset their own combo count.
+For each note, the corresponding judgements of all players are resolved simultaneously; that is, each
+player’s Gauge changes directly to the value obtained after all changes are applied at once. After the
+resolution, if a player’s Gauge is ≥ 2000, it is set to 2000.
+However, Uni notices that after the judgements for all notes have been resolved, if a player’s Gauge was
+≤ 0 at any point, their Gauge is forcibly set to 0 before the game ends. Can you help her find each
+player’s Gauge at the end of the game?
+
+Input
+This problem contains multiple test cases.
+The first line contains a positive integer T (1 ≤ T ≤ 104 ), representing the number of test cases.
+For each test case:
+• The first line contains an integer n (1 ≤ n ≤ 105 ).
+• Each of the next four lines contains a string s of length n, where the i-th character represents that
+player’s judgement on the i-th note.
+It is guaranteed that the sum of n over all test cases does not exceed 105 , and that every string contains
+only the five characters H, C, J, A, and M.
+
+Output
+For each test case, output four integers representing the final Gauge values of the four players, in input
+order.
+
+Page 23 of 25
+
+The 2026 ICPC Asia Xi’an Regional Contest
+Xi’an, Shaanxi, China, October, 18th, 2026
+
+Example
+standard input
+3
+5
+CCCCC
+JJJJJ
+AAAAA
+MMMMM
+10
+HCJAMHCJAM
+CHCHCHCHCH
+JAMJAMJAMJ
+MAJHAMMACH
+103
+MMMMMMMMMMCCCCCCCCCC
+CCCCCCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCCCCCC
+CCC
+HHHHHHHHHHHHHHHHHHHH
+HHHHHHHHHHHHHHHHHHHH
+HHHHHHHHHHHHHHHHHHHH
+HHHHHHHHHHHHHHHHHHHH
+HHHHHHHHHHHHHHHHHHHH
+HHH
+CJCJCJCJHHHHHHHHHHHH
+HHHHHHHHHHHHHHHHHHHH
+HHHHHHHHHHHHHHHHHHHH
+HHHHHJJJCJCJCJCJCJCJ
+CJCJCJCJCJCJCJCJCJCJ
+CJC
+HHHHHHHHHHHHHHHHHHHH
+HHHHHHHHHHHHHHHHHHHH
+HHHHHHHHHHHHHHHAHHHH
+HHHHHHHHHHHHHHHHHHHH
+HHHHHHHHHHHHHHHHHHHH
+HHH
+
+standard output
+2000 1750 1500 1000
+1300 2000 900 1050
+0 2000 830 1930
+
+Note
+To ensure that the PDF is displayed correctly, several blank lines have been inserted into the last sample.
+You can download the original sample from Domjudge.
+
+Page 24 of 25
+
+The 2026 ICPC Asia Xi’an Regional Contest
+Xi’an, Shaanxi, China, October, 18th, 2026
+
+Illustrator: Nagisa11
+
+Page 25 of 25
+
+

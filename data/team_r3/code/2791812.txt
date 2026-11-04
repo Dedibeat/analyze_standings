@@ -1,0 +1,70 @@
+#include<bits/stdc++.h>
+using namespace std;
+using ll = long long;
+const int N = 1e6 + 1;
+const ll mod = 998244353;
+ll inv[N];
+int dsu[N];
+int sz[N];
+set<int> st[N];
+int get(int u)
+{
+    if(dsu[u] == u) return u;
+    return dsu[u] = get(u);
+}
+signed main()
+{
+    ios::sync_with_stdio(0); cin.tie(0);
+    int n; cin >> n;
+    inv[1] = 1;
+    for(int i = 2; i <= n; i++) 
+    {
+        inv[i] = mod - mod / i * inv[mod % i] % mod;
+    }
+    iota(dsu, dsu + n + 1, 0);
+    fill(sz, sz + n + 1, 1);
+    vector<pair<int, int>> A, B;
+    for(int i = 1; i < n; i++)
+    {
+        int u, v; cin >> u >> v;
+        A.push_back({u, v});
+    }
+    for(int i = 1; i < n; i++)
+    {
+        int u, v; cin >> u >> v;
+        st[u].insert(i);
+        st[v].insert(i);
+    }
+    ll ans = 1;
+    for(auto [u, v] : A)
+    {
+        u = get(u), v = get(v);
+        if(st[u].size() < st[v].size()) swap(st[u], st[v]);
+        int inter = 0;
+        for(int x : st[v])
+        {
+            if(st[u].count(x)) 
+            {
+                inter++;
+                st[u].erase(x);
+            }
+            else 
+            {
+                st[u].insert(x);
+            }
+        }
+        if(inter == 1)
+        {
+            ans = ans * inv[sz[u]] % mod;
+            ans = ans * inv[sz[v]] % mod;
+        }
+        else 
+        {
+            ans = 0;
+            break;
+        }
+        dsu[v] = u;
+        sz[u] += sz[v];
+    }
+    cout << ans << "\n";
+}

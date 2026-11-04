@@ -1,0 +1,56 @@
+Sorting
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+1024 megabytes
+
+You are given m pairs (ai , bi ), 1 ≤ ai < bi ≤ n, we define the following program to sort a permutation:
+f o r i = 1 to 1000000000000000000:
+f o r j = 1 t o m:
+if p[a[ j ]] > p[b[ j ] ] :
+swap ( p [ a [ j ] ] , p [ b [ j ] ] )
+Check whether it can sort every permutation p of length n.
+
+Input
+The first line contains two integers n and m (2 ≤ n ≤ 2 × 105 , 1 ≤ m ≤ 2 × 105 ). The following are m
+lines, every line contains two integers (ai , bi ) (1 ≤ ai < bi ≤ n).
+
+Output
+Output Yes if it can sort every permutation of length n, and No if it cannot.
+
+Examples
+standard input
+
+standard output
+
+5 7
+1 3
+1 3
+2 4
+3 5
+1 4
+2 5
+1 5
+
+No
+
+5 8
+2 3
+3 5
+1 5
+3 4
+1 3
+4 5
+2 5
+1 2
+
+Yes
+
+Page 1 of 1
+
+

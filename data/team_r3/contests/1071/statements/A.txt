@@ -1,0 +1,50 @@
+The 2022 ICPC Asia Hangzhou Regional Programming Contest
+Hangzhou Normal University, December, 04, 2022
+
+Problem A. Modulo Ruins the Legend
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+1024 megabytes
+
+Grammy has a sequence of integers a1 , a2 , . . . , an . She thinks that the elements in the sequence are too
+large, so she decided to add an arithmetic progression to the sequence. Formally, she can choose two
+non-negative integers s, d, and add s + kd to ak for each k ∈ [1, n].
+Since we want to ruin the legend, please tell her the minimum sum of elements modulo m after the
+operation. Note that you should minimize the sum after taking the modulo.
+
+Input
+The first line contains two integers n, m (1 ≤ n ≤ 105 , 1 ≤ m ≤ 109 ).
+The second line contains n integers a1 , a2 , . . . , an (0 ≤ ai < m), denoting the initial sequence.
+
+Output
+Output exactly two lines.
+The first line contains one integer, denoting the minimum sum of elements modulo m.
+The second line contains two integers s, d (0 ≤ s, d < m), denoting the integers chosen by Grammy.
+If there are multiple solutions, output any.
+
+Examples
+standard input
+
+standard output
+
+6 24
+1 1 4 5 1 4
+
+1
+0 5
+
+7 29
+1 9 1 9 8 1 0
+
+0
+0 0
+
+Page 1 of 16
+
+

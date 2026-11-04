@@ -1,0 +1,57 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+#define int long long
+#define ff first
+#define ss second
+#define pb push_back
+#define all(a) (a).begin(),(a).end()
+#define rall(a) (a).rbegin(),(a).rend()
+#define sz(a) (int)(a).size()
+
+void solve() {
+    int n;
+    cin >> n;
+    vector<int> a(n + 1);
+
+    for(int i = 1; i <= n; i++) cin >> a[i];
+
+    stack<int> s;
+
+    vector<int> nxt(n + 1), prv(n + 1);
+
+    for(int i = 1; i <= n; i++) {
+        while(!s.empty() && a[s.top()] < a[i]) s.pop();
+        if(s.empty()) prv[i] = 0;
+        else prv[i] = s.top();
+        s.push(i);
+    }
+
+    while(!s.empty()) s.pop();
+
+    for(int i = n; i > 0; i--) {
+        while(!s.empty() && a[s.top()] < a[i]) s.pop();
+        if(s.empty()) nxt[i] = n + 1;
+        else nxt[i] = s.top();
+        s.push(i);
+    }
+
+    for(int i = 1; i <= n; i++) {
+        if(a[i] == a[prv[i]]) prv[i] = i - 1;
+    }
+
+    int ans = 0;
+    for(int i = 1; i <= n; i++) {
+        // cout << prv[i] << " " << nxt[i] << '\n';
+        ans += (nxt[i] - prv[i] - 2);
+    }
+    cout << ans << "\n";
+}
+
+signed main() {
+    ios_base::sync_with_stdio(0);cin.tie(0);
+    int t = 1;
+    cin >> t;
+    while(t--) solve();
+    return 0;
+}

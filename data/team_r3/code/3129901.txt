@@ -1,0 +1,57 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+#define int long long
+#define ff first 
+#define ss second
+#define sz(a) (int)(a).size()
+#define pb push_back
+#define rep(i, a, b) for(int i = (a); i < (b); i++)
+#define repd(i, a, b) for(int i = (a); i >= (b); i--)
+#define all(x) (x).begin(), (x).end()
+#define rall(x) (x).rbegin(), (x).rend()
+#define hha(x) cout << #x << " = " << x << ' ';
+#define hhal(x) cout << #x << " = " << x << endl;
+#define print(v) cout << #v << " = " << ' '; for(auto x : v) cout << x << ' '; cout << endl;
+
+void solve() {
+    int n, k; cin >> n >> k;
+    int x = (n % k);
+    if(x == 0) x = k;
+    int y = k - x;
+    int t = n / 2;
+    int a = t, b = -t;
+    int A = (n + k - 1) / k, B = A - 1;
+    {
+        int d = (a / B);
+        a -= d * B;
+        b += d * A;
+    }
+    if(a > x || b < 0)
+    {
+        cout << "NO\n";
+        return;
+    }
+    if(b > y)
+    {
+        int dif = (b - y);
+        int d = (dif + A - 1) / A;
+        b -= d * A;
+        a += d * B;
+    }
+    if(a > x || b < 0)
+    {
+        cout << "NO\n";
+        return;
+    }
+    //hhal(n); hha(a); hha(b); hhal(a * A + b * B);
+    cout << "YES\n";
+}
+
+signed main() {
+    ios_base::sync_with_stdio(0); cin.tie(0);
+    srand(time(NULL));
+    int t; cin >> t; while(t--)
+    solve();
+    return 0;
+}

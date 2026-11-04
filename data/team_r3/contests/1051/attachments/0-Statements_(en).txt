@@ -1,0 +1,852 @@
+The 2022 ICPC Asia Xi’an Regional Contest
+Northwestern Polytechnical University, November 13, 2022
+
+Problem A. Bridge
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+2 seconds
+512 megabytes
+
+There are n countries numbered from 1 to n in Erathia. Each country can be regarded as a chain with
+m + 1 nodes numbered from 1 to m + 1. Initially, node (a, b) is connected with node (a, b + 1) by a
+street where node (a, b) denotes the b-th node of the a-th country. There are no bridges between any two
+countries at first.
+You need to process q queries of the following two types.
+• 1 a b (1 ≤ a < n, 1 ≤ b ≤ m). Build a bridge between node (a, b) and node (a + 1, b). It is guranteed
+that at any time, each node is connected with at most one bridge.
+• 2 a (1 ≤ a ≤ n). A hero will walk through Erathia. This hero starts from (a, 1). If the hero is
+at (x, y) and there is a unvisited bridge connected to him, he passes it, or he goes to (x, y + 1).
+Once he arrived the (m + 1)-th node of any conutry, he stops. Please note that “unvisited bridge” is
+independently judged for each query.
+Your task is to print which country the hero is in at last for the second kind of query. It can be proved
+that the hero’s route is always unique under these constraints.
+
+Input
+The first line contains three integers n, m and q (1 ≤ n, m, q ≤ 105 ).
+Each of the following q lines represents a query with format described above.
+
+Output
+For each query of type 2, output a line with an integer representing the answer.
+
+Example
+standard input
+3 4 13
+2 2
+1 1 3
+2 1
+2 2
+2 3
+1 2 4
+2 1
+2 2
+2 3
+1 2 1
+2 1
+2 2
+2 3
+
+standard output
+2
+2
+1
+3
+3
+1
+2
+3
+2
+1
+
+Page 1 of 14
+
+The 2022 ICPC Asia Xi’an Regional Contest
+Northwestern Polytechnical University, November 13, 2022
+
+Problem B. Cells Coloring
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+512 megabytes
+
+You are given an n × m grid. Some of the cells are obstacles, the others are empty. Choose a non-negative
+integer k and color all empty cells with k + 1 colors 0, 1, 2, . . . k. You can not color two cells in the same
+row or same column with the same non-zero color.
+You are given two non-negative integers c and d. For a coloring plan, define z as the number of the cells
+with color 0. Define the cost of the plan is ck + dz.
+Find the minimum cost.
+
+Input
+The first line contains four integers n, m (1 ≤ n, m ≤ 250), c and d (0 ≤ c, d ≤ 109 ).
+The i-th line of the next n lines contains a string of m characters. The j-th character is ‘*’ if the cell in
+the i-th row and the j-th column is an obstacle. The j-th character is ‘.’ if the cell in the i-th row and
+the j-th column is empty.
+
+Output
+Output a line with a single number, representing the answer.
+
+Examples
+standard input
+
+standard output
+
+3 4 2 1
+.***
+*..*
+**..
+
+4
+
+3 4 1 2
+.***
+*..*
+**..
+
+2
+
+Page 2 of 14
+
+The 2022 ICPC Asia Xi’an Regional Contest
+Northwestern Polytechnical University, November 13, 2022
+
+Problem C. Clone Ranran
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+512 megabytes
+
+Ranran needs to prepare a contest! A contest is made of c problems, and Ranran can do one of the
+following two things:
+• Clone himself in a minutes. That is, after a minutes, there will be one more Ranran.
+• Prepare a problem in b minutes. That is, after b minutes, there will be one more problem.
+Note that a cloned Ranran can also do the two things above. A Ranran cannot do the two things at the
+same time.
+Ranran wants to prepare the contest as fast as possible. But he is very lazy, so he asks you to find the
+minimum number of minutes to prepare the contest.
+You need to answer T queries independently.
+
+Input
+The first line contains an integer T (1 ≤ T ≤ 105 ).
+Each of the next T lines contains three integers a, b and c (1 ≤ a, b, c ≤ 109 ), representing a query.
+
+Output
+For each test case, output a line with a single integer representing the answer.
+
+Example
+standard input
+5
+1 1 1
+2 3 3
+9 9 9
+3 26 47
+1064 822 1048576
+
+standard output
+1
+7
+45
+44
+21860
+
+Page 3 of 14
+
+The 2022 ICPC Asia Xi’an Regional Contest
+Northwestern Polytechnical University, November 13, 2022
+
+Problem D. Contests
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+2 seconds
+512 megabytes
+
+There are n contestants and they take part in m contests. You are given the ranklist of each contest. The
+ranklist of the k-th contest is a sequence ak , indicating that the ak,i -th contestant’s rank is i.
+SolarPea and PolarSea are two of the n contestants. SolarPea wants to prove that he is stronger than
+PolarSea.
+Define x is l-stronger than y, if and only if there exists a sequence b of length l + 1, such that b1 = x,
+bl+1 = y, and for all 1 ≤ i ≤ k, bi has a smaller rank than bi+1 in at least one contest.
+There are q queries. In the i-th query, SolarPea is contestant x and PolarSea is contestant y. Please find
+the minimum positive number l such that SolarPea is l-stronger than PolarSea.
+
+Input
+The first line contains two integers n (2 ≤ n ≤ 105 ) and m (1 ≤ m ≤ 5).
+The i-th of the next m lines contains n intergers ai,1 , ai,2 , . . . , ai,n . It is guaranteed that ai is a permutaion
+of 1, 2, . . . , n.
+The next line contains an integer q (1 ≤ q ≤ 105 ).
+Each of the next q lines contains two integers x and y (1 ≤ x, y ≤ n, x 6= y), representing a query.
+
+Output
+For each query, output a number l representing the answer. If there is no legal l, output −1.
+
+Example
+standard input
+6 2
+1 3 2 5 4 6
+2 1 4 3 6 5
+4
+1 4
+5 3
+6 1
+5 2
+
+standard output
+1
+2
+5
+3
+
+Page 4 of 14
+
+The 2022 ICPC Asia Xi’an Regional Contest
+Northwestern Polytechnical University, November 13, 2022
+
+Problem E. Find Maximum
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+512 megabytes
+
+We define a function f (x) over all non-negative integer x as follows:
+
+
+(x = 0)
+1
+x
+f (x) = f ( 3 ) + 1
+(x > 0 ∧ x mod 3 = 0)
+
+
+f (x − 1) + 1 (x > 0 ∧ x mod 3 6= 0)
+Calculate maxrx=l f (x).
+You need to answer T queries independently.
+
+Input
+The first line contains a single integer T (1 ≤ T ≤ 104 ).
+Each of the next T lines contains two integers l and r (1 ≤ l ≤ r ≤ 1018 ), representing a query.
+
+Output
+Output T lines. The i-th line contains a single integer, representing the answer to the i-th query.
+
+Example
+standard input
+10
+1 2
+1 3
+1 4
+1 5
+2 3
+2 4
+2 5
+3 4
+3 5
+4 5
+
+standard output
+3
+3
+4
+5
+3
+4
+5
+4
+5
+5
+
+Page 5 of 14
+
+The 2022 ICPC Asia Xi’an Regional Contest
+Northwestern Polytechnical University, November 13, 2022
+
+Problem F. Hotel
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+512 megabytes
+
+You are doing volunteer work for a programming competition in an ancient hotel. Unfortunately, the hotel
+provides no phone signal or tap water since it can be dated back to the Qin Dynasty, and you have to
+assign the contestants to the hotel rooms manually instead of using the internet apps. Fortunately, the
+hotel has sufficient rooms, and you have taken a computer that lets you do some computation locally.
+There are n teams, each with exactly 3 contestants. There are 2 types of rooms in the hotel, the single
+room and double room, which can receive at most 1 and 2 contestants, respectively. To avoid embarrassing
+contestants, if two contestants are assigned to a double room, they must come from the same team and
+have the same gender.
+The cost of each room of the same type is the same, but different types may have different costs.
+Your program needs to calculate the minimum price the host has to pay. The teams are waiting in
+the registration hall now, and the competition finance officer relies on you to save costs and make a
+fortune by the residual value. Be quick, or the finance officer will sue you for violating his reputation!
+
+Input
+The first line of input contains three integers n, c1 and c2 (1 ≤ n, c1 , c2 ≤ 1 000), denoting the number of
+teams, the cost of a single room and a double room respectively.
+In the following n lines, each line contains a string S with exactly 3 uppercase English letters. The letters
+in a string denote the genders of the contestants in one team and will be represented by A to Z, respecting
+the diversity of human beings.
+
+Output
+The output should contain a single integer, denoting the minimum cost of hotel allocation for contestants.
+
+Examples
+standard input
+
+standard output
+
+3 1 3
+MMM
+MMM
+FFF
+
+9
+
+3 3 1
+ABC
+DEF
+GHI
+
+9
+
+10 438 438
+WWW
+SOU
+PUN
+ETC
+OME
+CFI
+NAL
+GOO
+DHO
+TEL
+
+12264
+
+Page 6 of 14
+
+The 2022 ICPC Asia Xi’an Regional Contest
+Northwestern Polytechnical University, November 13, 2022
+
+Problem G. Perfect Word
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+512 megabytes
+
+You are given n strings and required to find the length of the longest perfect word.
+A string t is called a perfect word, if and only if every non-empty substring of t appears in the given
+strings.
+A string s is called a substring of t if and only if it can be obtained by removing several (possibly zero)
+characters from the beginning or end of t.
+
+Input
+The first line contains a single integer n (1 ≤ n ≤ 105 ).
+Each of the next n lines contains a string consisting of lowercase English letters.
+It is guaranteed that the total length of the given strings is no more than 105 .
+
+Output
+Output an integer, representing the length of the longest perfect word.
+
+Example
+standard input
+4
+a
+t
+b
+ab
+
+standard output
+2
+
+Page 7 of 14
+
+The 2022 ICPC Asia Xi’an Regional Contest
+Northwestern Polytechnical University, November 13, 2022
+
+Problem H. Power of Two
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+2 seconds
+512 megabytes
+
+22
+
+22
+22
+
+22
+
+22
+
+SolarPea likes blowing up PolarSea’s blog by sending power tower of 2. As the tower is too high, the stack
+of the web page overflows. So the blog no longer works.
+Now SolarPea has n powers of two a1 , a2 , . . . , an , x bitwise AND operators, y bitwise OR operators and
+z bitwise XOR operators. It is guaranteed that n = x + y + z.
+Solarpea wants to construct an arithmetic expression with these numbers and operators. Formally, define
+x0 = 0 and xi = xi−1 opi bi , where b is a permutation of a, which means we can rearrange a to get b, and
+opi is one of the three types of bitwise operators above. Then xn is the result of the expresstion.
+The larger the expression, the more likely it is to make PolarSea’s blog unable to work. SolarPea wants
+you to help him to find the largest xn and construct such an expression. If there are multiple solutions,
+output any of them.
+You need to process T test cases independently.
+
+Input
+The first line contains a single integer T (1 ≤ T ≤ 105 ), denoting the number of test cases.
+For each test case, the first line contains four integers n, x, y and z (0 ≤ x, y, z ≤ n ≤ 65 536, n = x+y+z).
+The next line contains n integers c1 , c2 , . . . , cn (0 ≤ ci < n), where ai = 2ci .
+It is guaranteed that the sum of n over all test cases is no more than 1 048 576.
+
+Output
+For each test case, output three lines.
+The first line contains a 01-string of length n, representing the binary form of the largest xn .
+The next line contains a single 1-indexed string op of length n, where opi represents the i-th operator.
+Here, we denote AND as & (ASCII 38), OR as | (ASCII 124), and XOR as ˆ (ASCII 94). You should
+guarantee that there is exactly x AND operators, y OR operators and z XOR operators.
+The third line contains n integers d1 , d2 , . . . , dn , the i-th of which representing the logarithm of bi with
+base 2. That is, d is a permutaion of c.
+If there are multiple solutions, output any of them.
+
+Page 8 of 14
+
+The 2022 ICPC Asia Xi’an Regional Contest
+Northwestern Polytechnical University, November 13, 2022
+
+Example
+standard input
+4
+4 3 0 1
+1 0 1 0
+4 1 0 3
+1 0 1 0
+8 0 2 6
+1 5 5 7 1 5 5 7
+8 0 0 8
+1 5 5 7 1 5 5 7
+
+standard output
+0010
+&&^&
+0 0 1 1
+0011
+^^&^
+0 1 0 1
+10100000
+^^|^^^^|
+1 5 5 7 1 5 5 7
+00000000
+^^^^^^^^
+1 5 5 7 1 5 5 7
+
+Note
+2 22
+Q
+Q 2 22 2 22
+2
+
+
+
+(222 )
+
+
+
+
+
+
+
+
+
+
+
+
+R22
+Q22 
+
+22 
+
+2 2
+
+
+
+
+
+2 2
+
+22
+
+P2 
+
+
+P22
+
+P2
+2
+
+22
+22
+
+2
+
+
+
+
+
+
+Q
+
+R 22
+P2
+2
+P2
+
+
+
+22
+
+2
+ R 22 
+
+2
+2
+
+( 222 )
+
+2
+
+22
+22
+
+
+
+
+
+
+
+2 2
+(22) 22 
+2
+2 2 2
+
+P 2
+P
+2
+2
+22 2 22 22
+Z 2 2
+2 2
+
+
+
+
+P2 
+
+2
+
+2 22 2
+2 22 2
+2
+
+22
+
+2
+
+2
+2 2 22 2
+)
+(
+2
+22 2
+2
+
+2
+
+Page 9 of 14
+
+2
+
+
+22
+
+(P222 ) R 22
+2 
+
+2
+2
+
+
+2 2
+
+The 2022 ICPC Asia Xi’an Regional Contest
+Northwestern Polytechnical University, November 13, 2022
+
+Problem I. Square Grid
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+4 seconds
+512 megabytes
+
+Given a square grid, its lattice points labeled from (0, 0) to (n, n), and a number t.
+You need to answer q queries in this format: given A = (x0 , y0 ) and B = (x1 , y1 ), how many ways are
+there to move from A to B in exactly t steps so that in each step you move from a lattice point to one of
+its neighbors (up, down, left, right). Calculate the answer modulo 998 244 353.
+
+Input
+The first line contains three integers n (1 ≤ n ≤ 105 ), t (1 ≤ t ≤ 109 ) and q (1 ≤ q ≤ 3 × 105 ).
+Each of the following q lines contains four integers x0 , y0 , x1 and y1 (0 ≤ x0 , y0 , x1 , y1 ≤ n), representing
+a query.
+
+Output
+For each query, output a line containing one integer, representing the answer to the query modulo
+998 244 353.
+
+Examples
+standard input
+
+standard output
+
+2 5 3
+0 0 1 2
+1 1 2 1
+0 0 2 2
+
+30
+64
+0
+
+5 20 5
+0 0 5 5
+1 1 4 4
+2 2 3 3
+2 3 2 3
+1 2 5 2
+
+615136704
+443203969
+899931333
+464755094
+679729107
+
+Page 10 of 14
+
+The 2022 ICPC Asia Xi’an Regional Contest
+Northwestern Polytechnical University, November 13, 2022
+
+Problem J. Strange Sum
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+512 megabytes
+
+Given a sequence a1 , a2 , . . . , an .
+You are going to select zero or more elements of a so that: if you select ai , then in any interval of length
+i (formally, in a[j, j + i − 1] for any 1 ≤ j ≤ n − i + 1) you can select at most 2 elements.
+Calculate the maximal sum of the elements you select.
+
+Input
+The first line contains an integer n (2 ≤ n ≤ 105 ).
+The second line contains n integers a1 , a2 , . . . , an (−109 ≤ ai ≤ 109 ).
+
+Output
+Output a single integer denoting the answer.
+
+Examples
+standard input
+
+standard output
+
+4
+1 4 3 2
+
+7
+
+3
+-10 -10 -10
+
+0
+
+Page 11 of 14
+
+The 2022 ICPC Asia Xi’an Regional Contest
+Northwestern Polytechnical University, November 13, 2022
+
+Problem K. Streets
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+2 seconds
+512 megabytes
+
+You are given n vertical lines with x-coordinates x1 , x2 , . . . , xn and weights a1 , a2 , . . . , an and m horizontal
+lines with y-coordinates y1 , y2 , . . . , ym and weights b1 , b2 , . . . , bm .
+Call a rectangle good if and only if all of its four edges lie on the given lines. On this basis, define the cost
+of a good rectangle as the sum of the costs of its four segments. The cost of a segment is the product of
+its length and the weight of the line it belongs.
+Find the maximum area of good rectangles with cost no more than c. Note that the length and the width
+of the rectangle can be zero, so the answer always exists.
+You need to answer T queries with different c.
+
+Input
+The first line contains three integers n, m (2 ≤ n, m ≤ 5 000) and T (1 ≤ T ≤ 100).
+The second line contains n integers x1 , x2 , . . . , xn (1 ≤ x1 < x2 < . . . < xn ≤ 105 ).
+The third line contains n integers a1 , a2 , . . . , an (1 ≤ ai ≤ 107 ).
+The fourth line contains m integers y1 , y2 , . . . , yn (1 ≤ y1 < y2 < . . . < yn ≤ 105 ).
+The fifth line contains m integers b1 , b2 , . . . , bn (1 ≤ bi ≤ 107 ).
+Each of the next T lines contains a single integer c (1 ≤ c ≤ 4 × 1012 ), representing a query.
+
+Output
+For each query, output one line representing the answer.
+
+Page 12 of 14
+
+The 2022 ICPC Asia Xi’an Regional Contest
+Northwestern Polytechnical University, November 13, 2022
+
+Example
+standard input
+3 4 20
+1 3 4
+3 1 2
+1 3 4 7
+4 2 1 2
+1
+5
+6
+7
+9
+10
+11
+12
+15
+16
+17
+22
+23
+28
+30
+35
+43
+47
+49
+57
+
+standard output
+0
+0
+1
+1
+1
+2
+2
+3
+3
+4
+4
+6
+6
+9
+9
+12
+12
+12
+18
+18
+
+Page 13 of 14
+
+The 2022 ICPC Asia Xi’an Regional Contest
+Northwestern Polytechnical University, November 13, 2022
+
+Problem L. Tree
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+2 seconds
+512 megabytes
+
+You are given a tree T with n nodes. The tree is rooted at 1. Define subtree(u) as the set of nodes in the
+subtree of u.
+Call a subset of nodes S good if and only if S satisfies at least one of the following contidions:
+• For all u, v ∈ S where u 6= v, either u ∈ subtree(v) or v ∈ subtree(u).
+• For all u, v ∈ S where u 6= v, both u ∈
+/ subtree(v) and v ∈
+/ subtree(u).
+You need to partition all nodes of T into several good subsets. Calculate the minimum number of subsets.
+
+Input
+The first line contains a single integer Q (1 ≤ Q ≤ 105 ), denoting the number of test cases.
+For each test case, the first line contains an integer n (1 ≤ n ≤ 106 ). The next line contains n − 1 integers
+p2 , p3 , . . . , pn (1 ≤ pi < i), indicating that there is an edge between pi and i for each i = 2, 3, . . . , n.
+It is guaranteed that the sum of n over all test cases is no more than 106 .
+
+Output
+For each test case, output a single integer representing the answer.
+
+Example
+standard input
+2
+7
+1 1 2 2 2 3
+5
+1 2 3 4
+
+standard output
+3
+1
+
+Page 14 of 14
+
+

@@ -1,0 +1,79 @@
+Fortress
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+6 seconds
+1024 megabytes
+
+In a distant land, there is a fortress. If we represent the orientation using a Cartesian coordinate system,
+the territory of the fortress can be viewed as a circle centered at the origin with radius R. The boundary
+of the fortress territory is surrounded by high walls, and it is impossible to see the outside from within
+the fortress.
+Inside the fortress, there are some buildings. For convenience, the boundaries of the buildings are
+represented by n possibly overlapping rectangles whose edges are parallel to the coordinate axes.
+A point inside the fortress is considered blocked if it strictly lies within any of the rectangles (points on
+the boundary of the rectangles are not considered to be inside).
+Little S is a guard of this fortress. He stands at some unblocked point (x, y) inside the fortress. Little S can
+guard another point (x′ , y ′ ) inside the fortress if and only if every point on the line segment (x, y) − (x′ , y ′ )
+(including the two endpoints) is not blocked. The task is to calculate the area of the set of points that
+Little S can guard, which represents the area of the fortress land that Little S can oversee.
+
+Input
+This problem contains multiple test cases. The first line of input contains an integer T (1 ≤ T ≤ 105 ),
+indicating the number of test cases.
+For each test case:
+The first line contains two integers R, n (0 < R ≤ 106 , 0 ≤ n ≤ 105 ), representing the radius of the fortress
+and the number of rectangles.
+The next n lines each contain four integers x1 , y1 , x2 , y2 (|x1 |, |x2 |, |y1 |, |y2 | ≤ 106 , x1 < x2 , y1 < y2 ),
+describing a rectangle, where (x1 , y1 ) represents the coordinates of the bottom-left corner and (x2 , y2 )
+represents the coordinates of the top-right corner. It is guaranteed that all rectangles are strictly within
+the fortress territory and do not touch the boundary of the territory.
+The last line contains two integers x, y (|x|, |y| ≤ 106 , x2 + y 2 < R2 ), representing the coordinates of Little
+S. It is guaranteed that the point (x, y) is not blocked.
+It is guaranteed that the total sum of n across all test cases does not exceed 105 .
+
+Output
+For each test case, output a single line with a real number representing the area of the set of points that
+Little S can guard within the fortress.
+The answer will be considered correct if the relative or absolute error compared to the standard answer is
+less than 10−6 . In other words, if your output is a and the standard answer is b, your output is considered
+|a−b|
+correct if and only if max(1,b)
+≤ 10−6 .
+
+Page 1 of 3
+
+Example
+standard input
+2
+2 3
+-1 -1 0 0
+-1 -1 0 1
+0 -1 1 0
+1 1
+26 5
+-3 -23 10 21
+-15 3 -5 14
+-12 -18 -10 -15
+-5 -6 -2 8
+7 -23 10 -19
+-10 0
+
+standard output
+5.598332050807308
+513.142778328943998
+
+Note
+For the first test case, the corresponding image is as follows:
+
+For the second test case, the corresponding image is as follows:
+
+Page 2 of 3
+
+Page 3 of 3
+
+

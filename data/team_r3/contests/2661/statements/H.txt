@@ -1,0 +1,76 @@
+Random Shuffle
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+2 seconds
+1024 megabytes
+
+There is an array a of length n, where the i-th number is ai . Additionally, each number has a score, and
+the score of the i-th number is ci . Alice and Bob take turns, with Alice going first.
+In the current round, the player first copies the array a to array b and runs a random shuffle program to
+randomly shuffle array b. Specifically, the random shuffle program will select one of the permutations of
+b with equal probability and replace the original array b with it. Suppose the current length of array a
+is m, then the player can choose an integer k such that 0 ≤ k ≤ m and a[1 . . . k] = b[1 . . . k], and then
+delete a[1 . . . k] (i.e., the prefix of length k of a) and obtain the score of the deleted numbers. The game
+ends when the array a is emptied.
+Note that the array a and its score array c will not be shuffled throughout the entire process, but only
+their prefixes will be removed.
+Both Alice and Bob want to maximize their scores. Alice wants to know what her expected score is when
+both players adopt optimal strategies.
+Alice also made q groups of modifications (modifying the array and scores), and she wants you to find
+the answer for the initial array, as well as the answers after each group of modifications.
+
+Input
+The first line contains an integer n (1 ≤ n ≤ 106 ), representing the length of the initial array a.
+The second line contains n integers a1 , a2 , . . . , an (1 ≤ ai ≤ n), representing the initial array a.
+The third line contains n integers c1 , c2 , . . . , cn (1 ≤ ci ≤ 106 ), representing the score of each number in
+the array.
+The next line contains an integer q (0 ≤ q ≤ 10), representing the number of modifications.
+The following describes q groups of modifications:
+For each group of modifications, the first line contains ki (1 ≤ ki ≤ 105 ), indicating the number of
+modifications in this group.
+The next ki lines each contain three integers pj , xj , yj (1 ≤ pj , xj ≤ n, 1 ≤ yj ≤ 106 ), indicating that apj
+is modified to xj and cpj is modified to yj .
+It is guaranteed that p1 < p2 < · · · < pki .
+
+Output
+Output a total of q + 1 lines, each line containing a floating-point number representing the answer.
+The first line is the answer for the initial array, followed by q lines for the answers after each group of
+modifications.
+An answer is considered correct if the relative or absolute error compared to the standard answer does
+not exceed 10−9 .
+
+Page 1 of 2
+
+Examples
+standard input
+2
+1 2
+1 1
+2
+1
+2 1 2
+1
+1 1 2
+6
+1 1 4 5 1 4
+2 3 3 3 3 3
+0
+
+standard output
+1.333333333333
+3.000000000000
+4.000000000000
+
+9.013888888889
+
+Note
+This problem has a large input size, please use an efficient input method.
+
+Page 2 of 2
+
+

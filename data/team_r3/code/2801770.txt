@@ -1,0 +1,241 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+#define int long long
+#define ff first
+#define ss second
+#define pb push_back
+#define all(a) (a).begin(),(a).end()
+#define rall(a) (a).rbegin(),(a).rend()
+#define sz(a) (int)(a).size()
+// Strongly connected components, Kosaraju.
+// Complexity: O(n + m); condense() O(m log m).
+// Comp ids are in topological order (every edge has comp[u] <= comp[v]),
+// so DP over the DAG can just loop components in id order.
+// Usage: SCC s(n); s.addEdge(u,v); int c = s.build();
+//        auto dag = s.condense(c); // deduped SCC DAG, dag[comp] = successors
+struct SCC {
+    int n;
+    vector<vector<int>> g, rg;
+    vector<int> comp;
+    SCC(int n = 0) { init(n); }
+    void init(int n_) {
+        n = n_;
+        g.assign(n, {});
+        rg.assign(n, {});
+        
+    }
+    void addEdge(int u, int v) {
+        g[u].push_back(v);
+        rg[v].push_back(u);
+    }
+    vector<int> build() {
+        comp.assign(n, -1);
+        vector<int> order, vis(n);
+        function<void(int)> dfs1 = [&](int v) {
+            vis[v] = 1;
+            for (int to : g[v]) if (!vis[to]) dfs1(to);
+            order.push_back(v);
+        };
+        function<void(int, int)> dfs2 = [&](int v, int c) {
+            comp[v] = c;
+            for (int to : rg[v]) if (comp[to] == -1) dfs2(to, c);
+        };
+        for (int i = 0; i < n; i++) if (!vis[i]) dfs1(i);
+        reverse(order.begin(), order.end());
+        int cnt = 0;
+        for (int v : order) if (comp[v] == -1) dfs2(v, cnt++);
+        return order;
+    }
+};
+using bts = bitset<2005>;
+struct GRAPH
+{
+    int n;
+    SCC scc;
+    vector<vector<int>> g;
+    vector<bts> a, dp;
+    vector<int> dsu;
+    GRAPH(int n) : n(n), scc(n), g(n), a(n), dsu(n), dp(n)
+    {
+        iota(all(dsu), 0);
+        for(int u = 0; u < n; u++)
+        {
+            a[u].reset();
+            a[u].set(u);
+        }
+    }
+    int get(int u)
+    {
+        if(u == dsu[u]) return u;
+        return dsu[u] = get(dsu[u]);
+    }
+    void link(int u, int v)
+    {
+        u = get(u), v = get(v);
+        if(u == v) return;
+        dsu[v] = u;
+        a[u] |= a[v];
+    }
+    void add_edge(int u, int v)
+    {
+        scc.addEdge(u, v);
+        g[u].push_back(v);
+    }
+    void add_cyc(vector<int> c)
+    {
+        for(int i = 1; i < c.size(); i++)
+            link(c[i - 1], c[i]);
+    }
+    void build()
+    {
+        auto ord = scc.build();
+        auto &comp = scc.comp;
+        reverse(all(ord));
+        vector<vector<int>> C(n);
+        for(int u = 0; u < n; u++)
+        {
+            C[comp[u]].push_back(u);
+        }
+        for(int u = 0; u < n; u++)
+        {
+            add_cyc(C[u]);
+        }
+        for(int u = 0; u < n; u++) 
+        {
+            dp[u] = a[u];
+        }
+        for(int u : ord)
+        {
+            for(int v : g[u])
+            {
+                if(get(u) == get(v)) continue;
+                dp[get(u)] |= dp[get(v)];
+            }
+        }
+    }
+    int query(int u, int v)
+    {
+        return dp[get(u)][get(v)];
+    }
+};
+
+int take() {
+    char a, b;
+    cin >> a >> b;
+    int c = (a - 48) * 50 + (b - 48);
+    return c;
+}
+
+void solve() {
+
+    int n, l, q;
+    cin >> n >> l >> q;
+
+    GRAPH G(n);
+    G.build();
+    vector<vector<int>> br(l + 1, vector<int> (n + 1));
+
+    for(int i = 1; i <= l; i++) {
+        for(int j = 1; j <= n; j++) {
+            br[i][j] = take();
+
+            // cout << br[i][j] << " ";
+        }
+        // cout << "\n";
+    }
+
+    vector<array<int, 4>> query(q);
+    
+    for(int i = 0; i < q; i++) {
+        query[i] = {take(), take(), take(), i};
+    }
+    sort(all(query), [](array<int, 4> a, array<int, 4> b) {
+        return a[2] < b[2];
+    });
+
+    int cur = 0;
+    vector<bool> ans(q);
+    for(auto &[a, b, c, d] : query) {
+        // cout << a << " " << b << " " << c << "\n";
+        while(cur < c) {
+            cur++;
+            vector<int> &x = br[cur];
+
+            vector<int> cnt(n + 1, 0);
+            for(int i = 1; i <= n; i++) {
+                cnt[x[i]]++;
+            }
+
+            bool unen = 1;
+            int u = -1, v = -1;
+
+
+
+            for(int i = 1; i <= n; i++) {
+                if(cnt[i] != 1) unen = 0;
+            }
+
+
+
+            if(unen) {
+                vector<int> cycle = {};
+                vector<bool> vis(n + 1, 0);
+                for(int i = 1; i <= n; i++) {
+                    if(vis[i]) continue;
+                    
+                    int p = i;
+                    while(!vis[p]) {
+                        vis[p] = 1;
+                        cycle.pb(p - 1);
+                        p = x[p];
+                    }
+                    // for(int i = 0; i < sz(cycle); i++) cout << cycle[i] << " ";
+                    // cout << "\n";
+                    G.add_cyc(cycle);
+                    cycle = {};
+                }
+
+
+            } else {
+                int t = 0;
+                for(int i = 1; i <= n; i++) {
+                    if(cnt[i] != 1) t++;
+                    if(cnt[i] == 2) u = i;
+                    if(cnt[i] == 0) v = i;
+                }
+                if(t != 2) continue;
+                // cout << v << " ***\n";
+                
+                for(int i = 1; i <= n; i++) {
+                    if(x[i] == u) G.add_edge(i - 1, v - 1);
+                }
+                
+            }
+
+            G.build();
+            // for(int i = 0; i < n; i++) {
+            //     for(int j = 0; j < n; j++) {
+            //         cout << G.dp[i][j] << " ";
+            //     }
+            //     cout << "\n";
+            // }
+        }
+
+        // cout << G.dp[2][2] << "yyy\n";
+        ans[d] = G.query(a - 1, b - 1);
+        // else ans[d] = 1;
+
+    }
+    for(int i = 0; i < q; i++) cout << ans[i];
+    cout << "\n";
+    
+}
+
+signed main() {
+    ios_base::sync_with_stdio(0);cin.tie(0);
+    int t = 1;
+    cin >> t;
+    while(t--) solve();
+    return 0;
+}

@@ -1,0 +1,54 @@
+Wolf Game
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+2 seconds
+1024 megabytes
+
+There are n people standing in a row from left to right. Each person is either a villager or a werewolf.
+Villagers always tell the truth. Werewolves may tell either the truth or a lie. It is also known that no two
+adjacent people are both werewolves.
+The statement of the i-th person is described by a pair (di , bi ):
+• if di = L, the person says that there are exactly bi werewolves to their left;
+• if di = R, the person says that there are exactly bi werewolves to their right.
+For each test case, construct any possible assignment of people to villagers and werewolves, or determine
+that no such assignment exists.
+
+Input
+The first line contains an integer T (1 ≤ T ≤ 105 ), the number of test cases.
+Each test case consists of three lines. The first line contains an integer n (2 ≤ n ≤ 5 · 105 ). The second line
+contains a string d of length n, consisting only of characters L and R. The third line contains n integers
+b1 , b2 , . . . , bn (0 ≤ bi ≤ n).
+The sum of n over all test cases does not exceed 5 · 105 .
+
+Output
+For each test case, if there is no valid assignment, print -1.
+Otherwise print a binary sequence of length n. The i-th value must be 0 if the i-th person is a villager,
+and 1 if the i-th person is a werewolf. You may print it either as one binary string or as n space-separated
+integers.
+
+Example
+standard input
+3
+3
+RLL
+1 0 0
+3
+RRR
+2 0 1
+5
+RRLRR
+1 2 1 1 0
+
+standard output
+001
+-1
+10101
+
+Page 1 of 1
+
+

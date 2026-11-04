@@ -1,0 +1,181 @@
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+
+#define int long long
+#define sz(a) (int)(a).size()
+#define pb push_back
+#define all(x) x.begin(), x.end()
+#define rall(x) x.rbegin(), x.rend()
+#define FOR(i, a, b) for(int i = (a); i < (b); i++)
+#define FORD(i, a, b) for(int i = (a); i >= (b); i++)
+#define ff first
+#define ss second 
+#define _ << ' ' <<
+#define hha(x) cout << #x << " = " << x << " "
+#define hhal(x) cout << #x << " = " << x << endl
+#define print(v) cout << #v << " = "; for(auto x : v) cout << x << " "; cout << endl;
+
+
+const int mod = 1e9 + 9;
+const int base = 43;
+
+// int pow(int a, int n) {
+//     int s = 1;
+//     while(n > 0) {
+//         if(n % 2 == 1) s = s * a % mod;
+//         a = a * a % mod;
+//         n /= 2;
+//     }
+//     return s;
+// }
+
+int Hash(vector<int> &a) {
+    int xors = 0;
+    for(int x : a) xors ^= x;
+    int s = 0;
+    int p = 1;
+    // a.push_back(xors);
+    for(int i = 0; i < sz(a); i++) {
+        s = (s + a[i] * p % mod) % mod;
+        p = p * base % mod;
+    }
+    return (s + xors * p % mod) % mod;
+}
+
+
+void solve() {
+    int n, m;
+    cin >> n >> m;
+
+    vector<vector<int>> adj;
+    adj.assign(n + 1, {});
+    vector<int> a(n + 1), b(n + 1);
+    vector<int> vis(n + 1, 0);
+    int cnt = 0;
+    for(int i = 1; i <= m; i++) {
+        int u, v;
+        cin >> u >> v;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+        if(!vis[u]) {
+            cnt++;
+            vis[u] = 1;
+        }
+        if(!vis[v]) {
+            cnt++;
+            vis[v] = 1;
+        }
+    }
+    if(n == 2) {
+        if(m == 1) {
+            cout << "YES\n1 2\n";
+        } else cout << "NO\n";
+        return;
+    }
+    
+    int l = 0;
+    map<int, int> M;
+
+
+
+    for(int i = 1; i <= n; i++) {
+        if(!vis[i]) continue;
+        sort(all(adj[i]));
+        a[i] = Hash(adj[i]);
+        b[i] = cnt - sz(adj[i]);
+        // mp[a[i]].push_back(i);
+        if(M.find(a[i]) == M.end()) {
+            M[a[i]] = l++;
+        }
+        a[i] = M[a[i]];
+    }
+    
+    vector<vector<int>> mp;
+    mp.assign(l, {});
+
+    for(int i = 1; i <= n; i++) {
+        if(!vis[i]) continue;
+        b[i] = cnt - sz(adj[i]);
+        mp[a[i]].push_back(i);
+    }
+
+    for(int i = 1; i <= n; i++) {
+        if(!vis[i]) continue;
+        if(b[i] != sz(mp[a[i]])) {
+            cout << "NO\n";
+            return;
+        }
+    }
+    
+    if(sz(mp) == cnt && cnt + 1 == n) {
+        int root = -1;
+        for(int i = 1; i <= n; i++) {
+            if(!vis[i]) {
+                root = i;
+                break;
+            }
+        }
+        cout << "YES\n";
+        for(int i = 1; i <= n; i++) {
+            if(i != root) {
+                cout << root << " " << i << "\n";
+            }
+        }
+        return;
+    }
+    if(sz(mp) == 2 && cnt + 2 == n) {
+        vector<int> x;
+        for(int i = 1; i <= n; i++) {
+            if(!vis[i]) x.push_back(i);
+        }
+        cout << "YES\n";
+        cout << x[0] << " " << x[1] << "\n";
+        for(int i = 0; i < 2; i++) {
+            for(auto j : mp[i]) {
+                cout << j << " " << x[i] << "\n";
+            }
+        }
+        return;
+    }
+
+    if(cnt + sz(mp) + 1 <= n) {
+        int root = -1;
+        for(int i = 1; i <= n; i++) {
+            if(!vis[i]) {
+                root = i;
+                vis[i] = 1;
+                break;
+            }
+        }
+        vector<int> x;
+        for(int i = 1; i <= n; i++) {
+            if(!vis[i]) x.push_back(i);
+        }
+
+        cout << "YES\n";
+        for(int i : x) {
+            cout << root << " " << i << "\n";
+        }
+
+        for(int i = 0; i < sz(mp); i++) {
+            for(auto j : mp[i]) {
+                cout << j << " " << x[i] << "\n";
+            }
+        }
+        return;
+
+    }
+    cout << "NO\n";
+
+}   
+
+signed main() {
+    ios_base::sync_with_stdio(0); cin.tie(0);
+    int t = 1;
+    cin >> t;
+    while(t--) {
+        solve();
+    }
+    return 0;
+}

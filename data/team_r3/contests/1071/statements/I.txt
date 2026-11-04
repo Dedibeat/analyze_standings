@@ -1,0 +1,62 @@
+The 2022 ICPC Asia Hangzhou Regional Programming Contest
+Hangzhou Normal University, December, 04, 2022
+
+Problem I. Guess Cycle Length
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+1024 megabytes
+
+This is an interactive problem.
+Grammy has a directed cyclic graph of n vertices (1 ≤ n ≤ 109 ) numbered from 1 to n. A directed cyclic
+graph is a directed graph of n vertices that form one cycle. Specifically, there are n vertices and n edges
+in the graph, and there exists a permutation p1 , p2 , . . . , pn such that there is a one-way edge from pi to
+p(i mod n)+1 .
+Initially, there is a token on a predetermined vertex.
+You can ask Grammy to move the token in the following way:
+“walk x” where 0 ≤ x ≤ 109 . In response to the query, Grammy will move the token through exactly x
+edges and tell you the position of the token after moving.
+You win if you guess the number of vertices in the hidden graph (number n) by making no more than 104
+queries.
+The vertices in the graph and the initial position of the token are fixed in advance.
+
+Interaction Protocol
+You can make no more than 104 queries. To make a query, output “walk x” (0 ≤ x ≤ 109 ) on a separate
+line, then you should read the response from standard input.
+In response to the query, the interactor will move the token through exactly x edges and output the
+position of the token after moving.
+To give your answer, print “guess n” on a separate line, where n is the size of the hidden graph
+(1 ≤ n ≤ 109 ). The output of the answer is not counted towards the limit of 104 queries.
+After that, your program should terminate.
+After printing a query, do not forget to output end of line and flush the output. To do this, use
+fflush(stdout) or cout.flush() in C++, System.out.flush() in Java, flush(output) in Pascal,
+or stdout.flush() in Python.
+It is guaranteed that the vertices in the graph and the initial position of the token are fixed in advance.
+
+Example
+standard input
+
+standard output
+walk 0
+
+3
+walk 1
+10
+walk 2
+4
+walk 3
+5
+walk 4
+3
+walk 6
+5
+guess 10
+
+Page 11 of 16
+
+

@@ -1,0 +1,99 @@
+Who Can Win
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+1024 megabytes
+
+In ICPC contests, the scoreboard is frozen during the last hour. Submissions made during the freeze are
+shown with result Unknown.
+You are given multiple submission logs from old ICPC contests. However, the results of submissions made
+after the freeze are hidden. For each contest, determine all teams that could possibly be the champion.
+Rules
+Each submission is represented as a tuple:
+(teamname, problemid, time, result)
+• teamname: a string of at most 10 characters, consisting of uppercase or lowercase letters and digits.
+It identifies the team that made the submission.
+• problemid: a single uppercase letter (A–Z) that identifies the problem being attempted.
+• time: an integer between 0 and 299, inclusive, representing the number of minutes from the start
+of the contest.
+• result: the outcome of the submission:
+– Accepted: the submission correctly solves the problem.
+– Rejected: the submission does not solve the problem.
+– Unknown: the submission result is unknown because it was made after the scoreboard was frozen.
+– Note: a submission has result Unknown if and only if its time ≥ 240.
+For a contest where all results are known, a team’s score is determined by:
+1. Solved problems: the number of problems for which this team has at least one Accepted
+submission.
+2. Penalty time: the total time consumed by all problems that the team solved (0 if none).
+• For each solved problem, calculate the time as follows:
+(a) Take the submission time of the team’s first Accepted submission for that problem.
+(b) Add 20 minutes for each of the team’s submissions to the same problem that occurred
+earlier in time and had result Rejected.
+• A submission is considered earlier than another if its submission time is smaller.
+• Note: a team will never make more than one submission in the same minute.
+A champion team is one with the highest number of solved problems and, among them, the smallest
+penalty time. Multiple champion teams may exist if they have the same number of solved problems and
+the same penalty time.
+Please determine all teams that could possibly be champions for any scenario where each Unknown
+submission is replaced independently by either Accepted or Rejected.
+
+Page 1 of 2
+
+Input
+The first line contains an integer T (1 ≤ T ≤ 10000) — the number of contests.
+For each contest:
+• The first line contains an integer s (1 ≤ s ≤ 105 ) — the number of submissions for this contest.
+• Each of the next s lines describes a submission in the format:
+teamname problemid time result
+It is guaranteed that:
+• T ≤ 10000 and
+
+P
+
+s ≤ 105 over all contests.
+
+• teamname consists of at most 10 uppercase/lowercase letters and digits.
+• problemid is a single uppercase letter (A–Z).
+• time is an integer between 0 and 299, inclusive.
+• result is Accepted, Rejected, or Unknown.
+• Each contest has at least one Accepted submission.
+• A team will never make more than one submission in the same minute.
+
+Output
+Output T lines, one for each contest. Each line contains all team names that could possibly be champions
+for that contest, in lexicographical order, separated by spaces.
+
+Example
+standard input
+3
+4
+ASYYPIbf7 D 268 Unknown
+3NhYHv8w B 13 Accepted
+ASYYPIbf7 B 173 Accepted
+dnrkAsPqrA A 107 Accepted
+6
+T1 A 10 Rejected
+T1 A 241 Unknown
+T1 B 200 Accepted
+T2 A 100 Accepted
+T3 C 50 Accepted
+T4 D 250 Unknown
+4
+Alpha A 100 Accepted
+Beta B 100 Accepted
+Gamma C 240 Unknown
+Delta D 299 Unknown
+
+standard output
+3NhYHv8w ASYYPIbf7
+T1 T3
+Alpha Beta
+
+Page 2 of 2
+
+

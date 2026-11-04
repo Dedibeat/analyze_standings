@@ -1,0 +1,224 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define int long long
+#define ff first 
+#define ss second 
+#define all(a) (a).begin(),(a).end()
+#define rall(a) (a).rbegin(),(a).rend()
+#define print(x) cout << #x << " = "; for(auto i : x) cout << i << " "; cout << "\n";
+#define hha(x) cout << #x << " = " << x << " ";
+#define hhal(x) cout << #x << " = " << x << "\n";
+void ass(int x)
+{
+    if(x) exit(1);
+}
+using T = int;
+const int inf = 1e9 + 7;
+int sgn(T x) 
+{
+    if(x == 0) return 0;
+    else if(x > 0) return 1;
+    else return -1;
+}
+struct P
+{
+    T x, y;
+    int idx = 0;
+    bool operator<(P p) const 
+    {
+        if(x != p.x) return x < p.x;
+        return y < p.y;
+    }
+    bool operator==(P p) const 
+    {
+        return x == p.x && y == p.y;
+    }
+    P operator+(P p) const { return {x + p.x, y + p.y};}
+    P operator-(P p) const { return {x - p.x, y - p.y};}
+    P operator*(T k) const { return {x * k, y * k};}
+    P operator/(T k) const { return {x / k, y / k};}
+};
+ostream& operator<<(ostream &os, P pt)
+{
+    return os << "(" << pt.x << "," << pt.y << ")";
+}
+T dot(P a, P b) { return a.x * b.x + a.y * b.y; }
+T cross(P a, P b) { return a.x * b.y - a.y * b.x; }
+int ori(P a, P b, P c) { return sgn(cross(b - a,c - a)); }
+int onsegment(P a, P b, P p)
+{
+    return ori(a, b, p) == 0 && sgn(dot(p - a, p - b)) <= 0;
+}
+vector<P> Chull(vector<P> p)
+{
+    sort(p.begin(), p.end());
+    p.erase(unique(p.begin(), p.end()), p.end());
+    if(p.size() <= 1) return p;
+    vector<P> h;
+    for(P pt : p)
+    {
+        while(h.size() >= 2 && ori(h[h.size() - 2], h.back(), pt) <= 0)
+            h.pop_back();
+        h.push_back(pt);
+    }
+    int lower = h.size();
+    for(int i = p.size() - 2; i >= 0; i--)
+    {
+        P pt = p[i];
+        while(h.size() > lower && ori(h[h.size() - 2], h.back(), pt) <= 0)
+            h.pop_back();
+        h.push_back(pt);
+    }
+    h.pop_back();
+    return h;
+}
+int intri(vector<P> p, P q)
+{
+    assert(p.size() == 3);
+    sort(p.begin(), p.end());
+    //print(p);
+    int a = ori(p[0], p[2], q), b = ori(p[0], p[1], q);
+    int o = ori(p[2], p[1], q); // double check
+    //hha(a); hha(b); hhal(o);
+    if(a < 0 || b > 0 || o < 0) return -1;
+    if(a == 0 || b == 0 || o == 0) return 0;
+    return 1;
+}
+int check(vector<P> p, P q, int &L)
+{
+    int n = p.size();
+    if(n < 3) return -1;
+    int a = ori(p[0], p[1], q), b = ori(p[0], p[n - 1], q);
+    if(a <= 0 || b >= 0) return -1;
+    int l = 1, r = n - 1;
+    while(r - l > 1)
+    {
+        int mid = (l + r) / 2;
+        if(ori(p[0], p[mid], q) >= 0) l = mid;
+        else r = mid;
+    }
+    L = l;
+    int o = ori(p[l], p[(l + 1) % n], q);
+    if(o < 0) return -1;
+    if(o == 0) return 0;
+    return 1;
+}
+void out(vector<P> p)
+{
+    sort(p.begin(), p.end());
+    //print(p);
+    cout << p.size() << "\n";
+    for(auto &pt : p) cout << pt.idx + 1 << " ";
+    cout << "\n";
+}
+void solve() {
+    int n, q; cin >> n >> q;
+    vector<P> p(n);
+    for(int i = 0; i < n; i++)
+    {
+        cin >> p[i].x >> p[i].y;
+        p[i].idx = i;
+    }
+    auto h = Chull(p);
+    int m = h.size();
+    //print(h);
+    int spec = -1;
+    if(h.size() == 4)
+    {
+        for(int i = 0; i < n; i++)
+        {
+            if(ori(h[0], h[2], p[i]) != 0 && ori(h[1], h[3], p[i]) != 0)
+            {
+                spec = i;
+                break;
+            }
+        }
+    }
+    //hhal(spec);
+    while(q--)
+    {
+        P tar; cin >> tar.x >> tar.y;
+        int j;
+        int res = check(h, tar, j);
+        if(res <= 0)
+        {
+            cout << "-1\n";
+            continue;
+        }
+        if(h.size() == 3)
+        {
+            out(h);
+            continue;
+        }
+        if(h.size() == 4)
+        {
+            if(spec == -1)
+            {
+                out(h);
+                continue;
+            }
+            int flg = 0;
+            for(int i = 0; i < 4; i++)
+            {
+                if(intri({h[i], h[(i + 1) % m], h[(i + 2) % m]}, tar) == 1)
+                {
+                    out({h[i], h[(i + 1) % m], h[(i + 2) % m]});
+                    flg = 1;
+                    break;
+                }
+            }
+            if(flg) continue;
+            for(int i = 0; i < 4; i++)
+            {
+                if(intri({h[i], h[(i + 1) % m], p[spec]}, tar) == 1)
+                {
+                    out({h[i], h[(i + 1) % m], p[spec]});
+                    break;
+                }
+            }
+            if(flg) for(;;);
+            continue;
+        }
+        if(intri({h[0], h[j], h[j + 1]}, tar) == 1)
+        {
+            out({h[0], h[j], h[j + 1]});
+            continue;
+        }
+        if(intri({h[0], h[j - 1], h[j + 1]}, tar) == 1)
+        {
+            out({h[0], h[j - 1], h[j + 1]});
+            continue;
+        }
+        if(intri({h[j - 1], h[j], h[j + 1]}, tar) == 1)
+        {
+            out({h[j - 1], h[j], h[j + 1]});
+            continue;
+        }
+        {
+            int k = (j - 2 + m) % m;
+            if(intri({h[k], h[j], h[j + 1]}, tar) == 1)
+            {
+                out({h[k], h[j], h[j + 1]});
+                continue;
+            }
+        }
+        {
+            int k = (j + 2 + m) % m;
+            if(intri({h[k], h[j], h[j - 1]}, tar) == 1)
+            {
+                out({h[k], h[j], h[j - 1]});
+                continue;
+            }
+        }
+        ass(0);
+    }
+
+}
+
+
+signed main() {
+    ios_base::sync_with_stdio(0);cin.tie(0);
+    int t; cin >> t; while(t--)
+    solve();
+    return 0;
+}

@@ -1,0 +1,122 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+#define int long long
+#define ff first 
+#define ss second
+#define pb push_back
+#define rep(i, a, b) for(int i = (a); i < (b); i++)
+#define repd(i, a, b) for(int i = (a); i >= (b); i--)
+#define all(x) (x).begin(), (x).end()
+#define rall(x) (x).rbegin(), (x).rend()
+#define hha(x) cout << #x << " = " << x << ' ';
+#define hhal(x) cout << #x << " = " << x << endl;
+#define print(v) cout << #v << " = " << ' '; for(auto x : v) cout << x << ' '; cout << endl;
+const int mod = 998244353;
+// Factorials/inverses mod prime, auto-extending. C(n,k) is O(1) after extend.
+using ll = long long;
+int fact[505];
+void solve() {
+    int n; cin >> n;
+    vector<vector<int>> g(n + 1);
+    for(int i = 1; i < n; i++)
+    {
+        int u, v; cin >> u >> v;
+        g[u].push_back(v);
+        g[v].push_back(u);
+    }
+    vector<vector<int>> dp(n + 1, vector<int>(n));
+    vector<int> sz(n + 1, 1), comb(n + 1, 1), combup(n + 1, 1);
+    auto init = [&](auto &&self, int u, int p) -> void
+    {
+        //hhal(u);
+        comb[u] = 1, sz[u] = 1;
+        int cnt = 0;
+        for(int v : g[u])
+        {
+            if(v == p) continue;
+            //hhal(v);
+            self(self, v, u);
+            //hhal(v);
+            sz[u] += sz[v];
+            comb[u] = comb[u] * comb[v] % mod;
+            cnt++;
+        }
+        comb[u] = comb[u] * fact[cnt] % mod;
+    };
+    init(init, 1, -1);
+    dp[1][0] = 1;
+    combup[1] = 1;
+    auto dfs = [&](auto &&self, int u, int p) -> void
+    {
+        vector<int> ch;
+        for(int v : g[u])
+        {
+            if(v == p) continue;
+            ch.push_back(v);
+        }
+        int len = ch.size();
+        vector<int> suf(len + 1, 1), pref(n + 1, 1);
+        for(int i = 0; i < len; i++) pref[i + 1] = pref[i] * comb[ch[i]] % mod;
+        for(int i = len - 1; i >= 0; i--) suf[i] = suf[i + 1] * comb[ch[i]] % mod;
+        for(int i = 0; i < len; i++)
+        {
+            combup[ch[i]] = (combup[u] * pref[i] % mod) * suf[i + 1] % mod;
+        }
+        //hha(u); print(pref); print(suf);
+        for(int v : ch)
+        {
+            vector<vector<int>> dpcur(n + 1, vector<int>(len + 1)), dpnxt(n + 1, vector<int>(len + 1));
+            for(int i = 0; i + 1 < n; i++) dpcur[i + 1][0] = dp[u][i];
+            for(int w : ch)
+            {
+                if(v == w) continue;
+                dpnxt = dpcur;
+                for(int i = 0; i + sz[w] < n; i++)
+                {
+                    for(int j = 0; j < len; j++)
+                    {
+                        dpnxt[i + sz[w]][j + 1] += dpcur[i][j] % mod;
+                        dpnxt[i + sz[w]][j + 1] %= mod;
+                    }
+                }
+                dpcur = dpnxt;
+            }
+            //hha(u); hhal(v);
+            for(int i = 0; i < n; i++) 
+            {
+                //print(dpcur[i]);
+                for(int j = 0; j < len; j++)
+                {
+                    int c = dpcur[i][j] * fact[j] % mod;
+                    c = c * fact[len - j - 1] % mod;
+                    dp[v][i] = (dp[v][i] + c) % mod;
+                }
+
+            }
+        }
+        for(int v : ch) self(self, v, u);
+        int c = comb[u] * combup[u] % mod;
+        //hha(u); hha(comb[u]); hhal(combup[u]);
+        for(int i = 0; i < n; i++) dp[u][i] = dp[u][i] * c % mod;
+    };
+    dfs(dfs, 1, -1);
+    for(int i = 1; i <= n; i++)
+    {
+        for(int j = 0; j < n; j++)
+        {
+            cout << dp[i][j] << " ";
+        }
+        cout << "\n";
+    }
+}
+
+signed main() {
+    ios_base::sync_with_stdio(0); cin.tie(0);
+    srand(time(NULL));
+    fact[0] = 1;
+    for(int i = 1; i <= 500; i++) fact[i] = fact[i - 1] * i % mod;
+    //int t; cin >> t; while(t--)
+    solve();
+    return 0;
+}

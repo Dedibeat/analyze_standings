@@ -1,0 +1,66 @@
+Play It by Ear
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+1024 megabytes
+
+You are playing a popular card game. There are 2n distinct cards labeled 1 through 2n, shuffled uniformly
+at random and piled up into a deck. You draw the top n cards as your starting hand, and the remaining
+deck order is hidden from you. Each turn, you choose any one card from your hand, play it by placing
+it at the bottom of the deck, and then draw the current top card, so your hand size remains n.
+You have m quests to complete in order: the i-th quest requires you to play the card labeled ai , and it
+becomes active only after the (i − 1)-th quest is completed (unless it is the first quest, which is initially
+active). Playing the card labeled ai before the i-th quest is active does not count toward the i-th quest.
+You know any of a1 , a2 , . . . , am (values may repeat) in advance.
+Assuming you play cards under the optimal pure strategy, compute the minimum expected number of
+turns needed to complete all m quests over the random initial shuffle, modulo 998 244 353.
+Formally, a pure strategy means that at each turn, the card chosen depends only on the observable history,
+and identical known information (initial hand, respective played and drawn cards in past turns, and quest
+completion status) deterministically yields the same chosen card. For a pure strategy σ and an initial
+shuffle π, let fσ (π) be the number of turns needed to complete all m quests when following σ; the value
+to be computed equals (minσ E[fσ (π)]) mod 998 244 353, where the expectation E[·] is taken over the
+uniform distribution on all (2n)! possible shuffles of the initial deck.
+
+Input
+The first line of the input contains an integer T (1 ≤ T ≤ 1 000), denoting the number of test cases. For
+each test case:
+The first line contains two integers n and m (2 ≤ n ≤ 5 000, 1 ≤ m ≤ 2 × 105 ).
+The second line contains m integers a1 , a2 , . . . , am (1 ≤ ai ≤ 2n).
+It is guaranteed that the sum of n over all test cases does not exceed 5 000, and the sum of m over all
+test cases does not exceed 2 × 105 .
+
+Output
+For each test case, since the minimum expected number of turns can be denoted by an irreducible
+fraction pq , you only need to print an integer r in one line satisfying 0 ≤ r < 998 244 353 and r · q ≡ p
+(mod 998 244 353). It can be proved that such r exists and is unique.
+
+Example
+standard input
+3
+2 1
+1
+3 7
+2 5 1 2 6 2 1
+1000 2
+1116 1116
+
+standard output
+249561090
+299473317
+748684517
+
+Note
+For the first test case of the sample case, an optimal pure strategy is: if the card labeled 1 is in your initial
+hand, play it immediately; otherwise repeatedly play any card until you draw it and play it in your next
+Page 1 of 2
+
+turn. Hence the minimum expected number of turns is 21 × 1 + 14 × 2 + 14 × 3 = 74 .
+
+Page 2 of 2
+
+

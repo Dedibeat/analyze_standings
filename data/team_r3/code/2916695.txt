@@ -1,0 +1,56 @@
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+
+#define int long long
+#define sz(a) (int)(a).size()
+#define pb push_back
+#define all(x) x.begin(), x.end()
+#define rall(x) x.rbegin(), x.rend()
+#define FOR(i, a, b) for(int i = (a); i < (b); i++)
+#define FORD(i, a, b) for(int i = (a); i >= (b); i++)
+#define ff first
+#define ss second 
+#define _ << ' ' <<
+#define hha(x) cout << #x << " = " << x << " "
+#define hhal(x) cout << #x << " = " << x << endl
+#define print(v) cout << #v << " = "; for(auto x : v) cout << x << " "; cout << endl;
+const int mod = 998244353;
+int Pow(int x, int n)
+{
+    x = (x + mod) % mod;
+    int ans = 1;
+    while(n)
+    {
+        if(n & 1) ans = ans * x % mod;
+        n >>= 1;
+        x = x * x % mod;
+    }
+    return ans;
+}
+void solve() {
+    int n, m; cin >> n >> m;
+    int M = Pow(2, m);
+    int A = M * Pow(M - 1, n - 1) % mod;
+    int add = 0;
+    if(n % 2 == 0)
+    {
+        int k = n / 2;
+        add = M * Pow(M - 1, k - 1) % mod;
+        if(k % 2 == 1) add = (mod - add);
+    }
+    int rem = (A - add + mod) % mod;
+    int per = rem * Pow(M, mod - 2) % mod;
+    int ans = (per + add) % mod;
+    cout << ans << "\n";
+}   
+
+signed main() {
+    ios_base::sync_with_stdio(0); cin.tie(0);
+    int t = 1;
+    cin >> t;
+    while(t--) {
+        solve();
+    }
+    return 0;
+}

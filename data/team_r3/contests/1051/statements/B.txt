@@ -1,0 +1,49 @@
+Cells Coloring
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+512 megabytes
+
+You are given an n × m grid. Some of the cells are obstacles, the others are empty. Choose a non-negative
+integer k and color all empty cells with k + 1 colors 0, 1, 2, . . . k. You can not color two cells in the same
+row or same column with the same non-zero color.
+You are given two non-negative integers c and d. For a coloring plan, define z as the number of the cells
+with color 0. Define the cost of the plan is ck + dz.
+Find the minimum cost.
+
+Input
+The first line contains four integers n, m (1 ≤ n, m ≤ 250), c and d (0 ≤ c, d ≤ 109 ).
+The i-th line of the next n lines contains a string of m characters. The j-th character is ‘*’ if the cell in
+the i-th row and the j-th column is an obstacle. The j-th character is ‘.’ if the cell in the i-th row and
+the j-th column is empty.
+
+Output
+Output a line with a single number, representing the answer.
+
+Examples
+standard input
+
+standard output
+
+3 4 2 1
+.***
+*..*
+**..
+
+4
+
+3 4 1 2
+.***
+*..*
+**..
+
+2
+
+Page 1 of 1
+
+

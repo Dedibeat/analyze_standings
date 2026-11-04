@@ -1,0 +1,48 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+#define int long long
+#define pb push_back
+#define rep(i, a, b) for(int i = (a); i < (b); i++)
+#define repd(i, a, b) for(int i = (d); i >= (b); i--)
+#define all(x) (x).begin(), (x).end()
+#define rall(x) (x).rbegin(), (x).rend()
+#define hha(x) cout << #x << " = " << x << ' ';
+#define hhal(x) cout << #x << " = " << x << endl;
+#define print(v) cout << #v << " = " << ' '; for(auto x : v) cout << x << ' '; cout << endl;
+
+void solve() {
+    int n; cin >> n;
+    unordered_set<string> st;
+    auto check = [&](string &s)
+    {
+        for(int i = 2; i < s.size(); i++)
+        {
+            if(s[i - 2] == 'b' && s[i - 1] == 'i' && s[i] == 'e')
+                return true;
+        }
+        return false;
+    };
+    for(int i = 0; i < n; i++)
+    {
+        int m; cin >> m;
+        int ok = 0;
+        while(m--)
+        {
+            string s; cin >> s;
+            if(check(s) && !st.count(s)) 
+            {
+                cout << s << "\n";
+                st.insert(s);
+                ok = 1;
+            }
+        }
+        if(!ok) cout << "Time to play Genshin Impact, Teacher Rice!\n";
+    }
+}
+
+signed main() {
+    ios_base::sync_with_stdio(0); cin.tie(0);
+    solve();
+    return 0;
+}

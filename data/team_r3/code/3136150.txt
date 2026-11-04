@@ -1,0 +1,25 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+#define int long long
+#define pb push_back
+#define all(x) (x).begin(), (x).end()
+#define rall(x) (x).rbegin(), (x).rend()
+#define rep(i, a, b) for(int i = (a); i < (b); i++)
+#define repd(i, a, b) for(int i = (a); i >= (b); i--)
+#define hha(x) cout << #x << ' ' << x << ' ';
+#define hhal(x) cout << #x << ' ' << x << '\n';
+#define print(v) cout << #v << ' '; for(auto &x : v) cout << x << ' '; cout << '\n';
+
+signed main() {
+    ios_base::sync_with_stdio(0); cin.tie(0);
+    string s;
+    cin >> s;
+
+    int t = 0;
+
+    for(char c : s) {
+        t += (c == 'T');
+    }
+    cout << (t == 3 ? "T1\n" : "DRX\n");
+}

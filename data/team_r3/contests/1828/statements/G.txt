@@ -1,0 +1,74 @@
+Binary Tree
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+1024 megabytes
+
+This is an interactive problem.
+Given a binary tree with n vertices, your task is to find a special vertex s in the tree with at most
+p = blog2 nc queries. That is to say, p is the largest integer such that 2p ≤ n.
+Each query consists of two different vertices u and v. The interactor will output an integer t (0 ≤ t ≤ 2)
+as the answer. Let d(a, b) be the number of edges on the simple path from vertex a to vertex b.
+• If t = 0, then vertex u is nearer to the special vertex. That is, d(u, s) < d(v, s).
+• If t = 1, then the distances from u and v to the special vertex are the same. That is, d(u, s) = d(v, s).
+• If t = 2, then vertex v is nearer to the special vertex. That is, d(u, s) > d(v, s).
+Note that the interactor is adaptive, meaning that the answer for each test case is not pre-determined.
+The interactor can determine the special vertex according to your queries, as long as its answer does not
+conflict with the previous queries and answers.
+
+Input
+There are multiple test cases. The first line of the input contains an integer T indicating the number of
+test cases. For each test case:
+The first line contains an integer n (2 ≤ n ≤ 105 ) indicating the number of vertices in the binary tree.
+For the following n lines, the i-th line contains two integers xi and yi (0 ≤ xi , yi ≤ n), indicating the left
+and right child of the i-th vertex. If xi = 0, then the i-th vertex has no left child; if yi = 0, then the i-th
+vertex has no right child.
+It is guaranteed that the sum of n for all test cases will not exceed 2 × 105 .
+
+Interaction Protocol
+To ask a query, output one line. First output ? followed by a space, then print two different integers u
+and v (1 ≤ u, v ≤ n) separated by a space. After flushing your output, your program should read a single
+integer t indicating the answer to your query.
+If you want to guess the special vertex, output one line. First output ! followed by a space, then print
+an integer s (1 ≤ s ≤ n) indicating the special vertex. After flushing your output, your program should
+continue processing the next test case, or exit immediately if there are no more test cases. Note that your
+guess does not count as a query.
+To flush your output, you can use:
+• fflush(stdout) (if you use printf) or cout.flush() (if you use cout) in C and C++.
+• System.out.flush() in Java.
+• stdout.flush() in Python.
+
+Page 1 of 2
+
+Example
+standard input
+
+standard output
+
+2
+5
+0 0
+1 5
+2 4
+0 0
+0 0
+? 5 1
+1
+? 1 4
+0
+! 2
+2
+0 2
+0 0
+? 2 1
+2
+! 1
+
+Page 2 of 2
+
+

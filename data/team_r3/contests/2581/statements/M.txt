@@ -1,0 +1,55 @@
+Many Convex Polygons
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+2 seconds
+1024 megabytes
+
+Given
+the n vertices P (0), P (1), · · · , P (n − 1) of a convex polygon in counter-clockwise order, there are
+
+n
+ways
+to choose k vertices P (i0 ), P (i1 ), · · · , P (ik−1 ) (0 ≤ i0 < i1 < · · · < ik−1 < n). By connecting
+k
+the selected vertices in counter-clockwise order (that is, for each 0 ≤ j < k, connect vertices P (ij ) and
+P (i(j+1) mod k )), a convex polygon with k vertices can be formed.
+For each 3 ≤ k ≤ n, consider all convex polygons with k vertices formed in the above manner. Calculate
+twice the sum of the areas of these convex polygons.
+
+Input
+There is only one test case in each test file.
+The first line contains an integer n (3 ≤ n ≤ 2 × 105 ), indicating the number of vertices of the convex
+polygon.
+For the following n lines, the i-th line contains two integers xi and yi (−109 ≤ xi , yi ≤ 109 ), indicating the
+coordinates of the i-th vertex of the convex polygon. The vertices are given in counter-clockwise order,
+and no three vertices are collinear.
+
+Output
+Output (n − 2) lines, each containing one integer, where the i-th line is the answer to k = i + 2.
+It can be proven that the answer is an integer. Since the answer may be large, output the answer modulo
+998 244 353.
+
+Example
+standard input
+6
+0 0
+1 0
+2 1
+2 2
+1 2
+0 1
+
+standard output
+36
+54
+30
+6
+
+Page 1 of 1
+
+

@@ -1,0 +1,71 @@
+Grid Filling Game
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+1024 megabytes
+
+You are playing a grid filling game. On the game interface, several squares are arranged in a row, and you
+need to fill each square with a positive integer. The system will then calculate the score based on the
+numbers you fill in.
+Before each round of the game starts, the system will provide you with constraints for filling the squares.
+Suppose there are n squares arranged in a row for the current game, the system will provide two positive
+integers li , ri for the i-th square, indicating that the number xi you fill in the i-th square must satisfy
+li ≤ xi ≤ ri . After you have filled in the numbers, the system will separate the sequence of squares into
+several segments based on adjacent squares with different numbers. The system will then calculate the
+sum of the squares of the lengths of each segment, which is referred to as the continuity of the filling
+scheme.
+For example, for the filling scheme x = [1, 1, 3, 3, 5, 5, 5, 3, 3], the segmentation result is 1, 1, 3, 3, 5, 5, 5, 3, 3,
+and the continuity corresponds to 22 + 22 + 32 + 22 = 21.
+The goal of this game is to minimize continuity. You need to determine the minimum value of continuity
+under the optimal filling strategy.
+
+Input
+You need to answer for multiple rounds of the game. The first line contains an integer T (1 ≤ T ≤ 105 ),
+representing the number of game rounds.
+For each round of the game:
+The first line of input contains a positive integer n (1 ≤ n ≤ 106 ), representing the number of squares.
+The next line contains n positive integers li (1 ≤ li ≤ 109 ), representing the lower bound constraints for
+each square.
+The following line contains n positive integers ri (1 ≤ ri ≤ 109 , li ≤ ri ), representing the upper bound
+constraints for each square.
+It is guaranteed that the total sum of n across all games does not exceed 106 .
+
+Output
+For each round of the game, output a single integer representing the minimum value of continuity.
+
+Example
+standard input
+3
+3
+1 1 4
+5 1 4
+6
+1 2 3 4 4 4
+3 3 3 4 5 6
+7
+1 1 2 2 1 1 1
+1 2 2 2 2 1 1
+
+standard output
+3
+6
+17
+
+Page 1 of 2
+
+Note
+For the first round of the game, one possible filling scheme is x = [3, 1, 4], which corresponds to a continuity
+of 12 + 12 + 12 = 3.
+For the second round of the game, one possible filling scheme is x = [1, 2, 3, 4, 5, 6], which corresponds to
+a continuity of 12 + 12 + 12 + 12 + 12 + 12 = 6.
+For the third round of the game, one possible filling scheme is x = [1, 1, 2, 2, 2, 1, 1], which corresponds to
+a continuity of 22 + 32 + 22 = 17.
+
+Page 2 of 2
+
+

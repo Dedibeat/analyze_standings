@@ -1,0 +1,60 @@
+Strange Binary
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+256 megabytes
+
+A normal binary decomposition can be represented as n = a31 a30 · · · a0 , where ai ∈ {0, 1}.
+Now, there is a strange binary decomposition, still represented as n = a31 a30 · · · a0 , but it needs to satisfy:
+1. For i = 0, 1, · · · , 31, ai ∈ {−1, 0, 1}.
+2. For i = 0, 1, · · · , 30, ai and ai+1 cannot both be 0, i.e., a2i + a2i+1 6= 0.
+3.
+
+31
+X
+
+ai 2i = n
+
+i=0
+
+Given a non-negative integer n, find the above binary decomposition of n, or determine that it cannot be
+decomposed.
+
+Input
+The first line contains an integer T (1 ≤ T ≤ 104 ), representing the number of test cases.
+For each test case, there is one line containing a non-negative integer n (0 ≤ n < 230 ), representing the
+number to be decomposed.
+
+Output
+For each test case, output a string YES if n can be decomposed, or NO if n cannot be decomposed.
+If the first line is YES, then output 32 integers a0 , a1 , . . . , a31 , divided into 4 lines with 8 integers on each
+line.
+
+Example
+standard input
+3
+0
+3
+5
+
+standard output
+NO
+YES
+1 -1 -1 -1 -1 -1 -1 -1
+-1 -1 -1 -1 -1 -1 -1 -1
+-1 -1 -1 -1 -1 -1 -1 -1
+-1 -1 -1 -1 -1 -1 -1 1
+YES
+-1 1 -1 -1 -1 -1 -1 -1
+-1 -1 -1 -1 -1 -1 -1 -1
+-1 -1 -1 -1 -1 -1 -1 -1
+-1 -1 -1 -1 -1 -1 -1 1
+
+Page 1 of 1
+
+

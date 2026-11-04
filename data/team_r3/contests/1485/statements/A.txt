@@ -1,0 +1,119 @@
+Qualifiers Ranking Rules
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+128 megabytes
+
+The following is the current ranking rules for the ICPC Asia EC Online Qualifiers, and there will be two
+online contests.
+1. In each contest, only the rank of the top-ranked team from each university will be taken as the score
+of that university;
+2. In each contest, participating universities will be ranked according to their scores;
+3. The two rankings of universities are combined using the merge sorting method. For any two universities
+that obtain the same ranking in different contests, the university that received this ranking in the first
+contest will be ranked first.
+4. Delete duplicate universities and obtain the final ranking of all participating universities (only the
+highest rankings for each university are retained).
+Now assuming that there are n teams in the first contest and m teams in the second contest.
+For each contest, given the ranking of each team and the university to which it belongs, please output
+the final ranking of all participating universities according to the above rules.
+You can better understand this process through the sample.
+
+Input
+The first line contains two integers n, m (1 ≤ n, m ≤ 104 ) , representing the number of teams participating
+in the first contest and the second contest.
+Then following n lines, the i-th line contains a string si (1 ≤ |si | ≤ 10) only consisting of uppercase
+letters, representing the abbreviation of the university to which the i-th ranked team in the first contest
+belongs.
+Then following m lines, the i-th line contains a string ti (1 ≤ |ti | ≤ 10) only consisting of uppercase letters,
+representing the abbreviation of the university to which the i-th ranked team in the second contest belongs.
+It’s guaranteed that each university has only one abbreviation.
+
+Output
+Output several lines, the i-th line contains a string, representing the abbreviation of the i-th ranked
+university in the final ranking.
+You should ensure that the abbreviation of any participating universities appears exactly once.
+
+Page 1 of 3
+
+Example
+standard input
+14 10
+THU
+THU
+THU
+THU
+XDU
+THU
+ZJU
+THU
+ZJU
+THU
+NJU
+WHU
+THU
+HEU
+PKU
+THU
+PKU
+PKU
+ZJU
+NUPT
+THU
+NJU
+CSU
+ZJU
+
+standard output
+THU
+PKU
+XDU
+ZJU
+NJU
+NUPT
+WHU
+HEU
+CSU
+
+Note
+Sample is part of the results in 2022 ICPC Asia EC Online Contest.
+In the first contest, the ranking of the universities is:
+THU
+XDU
+ZJU
+NJU
+WHU
+HEU
+In the second contest, the ranking of the universities is:
+PKU
+THU
+ZJU
+NUPT
+NJU
+CSU
+
+Page 2 of 3
+
+By combining these two rankings according to the rules, the rankings of the universities is:
+THU
+PKU
+XDU
+THU
+ZJU
+ZJU
+NJU
+NUPT
+WHU
+NJU
+HEU
+CSU
+By deleting duplicate universities we will get the final ranking.
+
+Page 3 of 3
+
+

@@ -1,0 +1,67 @@
+Regional Champion
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+2 seconds
+1024 megabytes
+
+Arona wants to win the regional championship. So Plana generates the following problem for Arona based
+on the keyword “region”.
+Given three integers n, m, and k, you need to draw n circles, m triangles, and k lines on a plane to divide
+it into as many regions as possible.
+Of course, Arona’s drawing skills and mathematical abilities are very poor. So she comes to you for help.
+
+Input
+There are multiple test cases. The first line of the input contains an T (1 ≤ T ≤ 5 × 103 ) indicating the
+number of test cases. For each test case:
+The first and only line contains three integers n, m, and k (0 ≤ n, m, k ≤ 100, n + m + k > 0) indicating
+the number of circles, triangles, and lines.
+It is guaranteed that the sum of (max(n, m, k))3 of all test cases does not exceed 107 .
+
+Output
+For each test case:
+First, output one line containing one integer, indicating the maximum number of regions that can be
+divided into.
+Then output n lines. Each of these lines contains three integers x, y, and R (−103 ≤ x, y ≤ 103 ,
+1 ≤ R ≤ 103 ) separated by a space, representing the coordinates of the center of the circle, as well
+as the radius of the circle.
+Next, output m lines. Each of these lines contains six integers x1 , y1 , x2 , y2 , x3 , and y3
+(−103 ≤ x1 , y1 , x2 , y2 , x3 , y3 ≤ 103 , (x1 , y1 ) ̸= (x2 , y2 ), (x1 , y1 ) ̸= (x3 , y3 ), (x2 , y2 ) ̸= (x3 , y3 )) separated
+by a space, representing the coordinates of the three vertices in the triangle.
+At last, output k lines. Each of these lines contains four integers x1 , y1 , x2 , and y2
+(−103 ≤ x1 , y1 , x2 , y2 ≤ 103 , (x1 , y1 ) ̸= (x2 , y2 )) separated by a space, representing the coordinates of
+two points on the line.
+It can be proven that, even with the limits specified above, we can always reach the optimal answer.
+
+Example
+standard input
+3
+1 0 1
+0 1 1
+1 1 2
+
+standard output
+4
+0 0 1
+-2 0 2 0
+4
+0 0 0 2 2 0
+0 1 1 0
+18
+3 4 2
+2 7 2 1 6 4
+3 4 6 4
+3 3 3 5
+
+Page 1 of 2
+
+Note
+The third sample test case is shown below.
+
+Page 2 of 2
+
+

@@ -1,0 +1,59 @@
+Range Periodicity Query
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+2 seconds
+1024 megabytes
+
+For a string w = w1 w2 . . . wlen , we say that an integer p is a period of w if wi = wi+p holds for all i
+(1 ≤ i ≤ len − p) and 1 ≤ p ≤ len.
+You will be given a string d = d1 d2 . . . dn to generate n + 1 strings S0 , S1 , S2 , . . . , Sn , where S0 is an empty
+string, and for all i (1 ≤ i ≤ n):
+• When di is a lowercase English letter, Si = di + Si−1 .
+• When di is an uppercase English letter, assume its lowercase version is ci , then Si = Si−1 + ci .
+Here, “+” denotes concatenation of strings.
+You will then be given a sequence of integers p1 , p2 , . . . , pm . You need to answer q queries, in each query, you
+will be given three integers k, l and r. You need to find the minimum number among pl , pl+1 , . . . , pr−1 , pr
+such that it is a period of string Sk , or determine there is no answer.
+
+Input
+The first line contains a single integer n (1 ≤ n ≤ 500 000) denoting the number of non-empty strings.
+The second line contains a string d of length n consists of lowercase and uppercase English letters.
+The third line contains a single integer m (1 ≤ m ≤ 500 000) denoting the length of the sequence p.
+The fourth line contains m integers p1 , p2 , . . . , pm (1 ≤ pi ≤ n).
+The fifth line contains a single integer q (1 ≤ q ≤ 500 000) denoting the number of queries.
+Each of the next q lines contains three integers k, l and r (1 ≤ k ≤ n, 1 ≤ l ≤ r ≤ m), denoting a query.
+
+Output
+For each query, print a single line containing an integer denoting the answer. Note that when there is no
+answer, please print “-1” instead.
+
+Example
+standard input
+7
+AABAAba
+9
+4 3 2 1 7 5 3 6 1
+6
+1 4 4
+2 1 4
+2 1 3
+3 3 5
+5 4 7
+7 8 9
+
+standard output
+1
+1
+2
+-1
+3
+6
+
+Page 1 of 1
+
+

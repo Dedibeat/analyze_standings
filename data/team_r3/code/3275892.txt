@@ -1,0 +1,47 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+#define int long long 
+#define all(a) (a).begin(),(a).end()
+#define rall(a) (a).rbegin(),(a).rend()
+#define pb push_back
+#define hha(a) cout << #a << " = " << a << " ";
+#define hhal(a) cout << #a << " = " << a << "\n";
+#define print(x) cout << #x << " = "; for(auto a : x) cout << a << " "; cout << "\n";
+
+void solve() {
+    int n, x, y; cin >> n >> x >> y;
+    int ans = 0;
+    int delta = x;
+    int cur = 0;
+    int pre = 0;
+    vector<pair<int, int>> evs;
+    for(int i = 0; i < n; i++) {
+        int a, b; cin >> a >> b;
+        cur = max(0ll, cur - (a - pre));
+        if(cur < b) {
+            ans += (b - cur) * y;
+            evs.pb({cur, -y});
+            evs.pb({b, y});
+            cur = b;
+        }
+        pre = a;
+    }
+    sort(all(evs));
+    int last = 0;
+    int cand = ans;
+    for(auto [m, change] : evs) {
+        cand += delta * (m - last);
+        ans = min(ans, cand);
+        last = m;
+        delta += change;
+    }
+    cout << ans << '\n';
+}
+
+signed main() {
+    ios_base::sync_with_stdio(0);cin.tie(0);
+    int t; cin >> t; while(t--)
+    solve();
+    return 0;
+}

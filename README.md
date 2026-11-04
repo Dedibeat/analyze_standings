@@ -648,6 +648,27 @@ how many the team beat (`--solved N --penalty M` instead of `--team` scores a vi
 many anchors as ICPC regionals, the spring 2026 invitationals and provincials
 far fewer. Details in `details.md`.
 
+### NUM-R^3 participations: team-account data (2026-11-04)
+
+```bash
+QOJ_USERNAME=TEAM_R3 QOJ_PASSWORD=... python3 scripts/fetch_team_r3.py 4071 4113 ...  # cache in data/team_r3/
+python3 scripts/team_r3_participations.py      # output/team_r3_participations.{md,json}
+```
+
+`fetch_team_r3.py` logs in without a browser (`../p1/qoj/BROWSERLESS_AUTH.md`)
+and stores every TEAM_R3 submission with its source, and each contest's
+dashboard, per-problem statements and all attachments (statements, tutorials),
+PDFs also as text. Files already on disk are reused; it waits out QOJ's
+Cloudflare 429 rate limit (about 3 pages a minute once triggered). TEAM_R3
+has QOJ Training Mode on, which hides every scoreboard, so boards come from
+`data/tagged*.json`, `data/ucup_s4.json`, `data/petroz_2022_2026.json` and
+XCPCIO (`data/team_r3/boards/`). `team_r3_participations.py` lists the 14
+virtuals and the 2 official 2026 online rounds with solved problems, a bounded
+penalty and rank range (the virtual start time is not visible), board solves,
+calibrated difficulty and the member who solved each problem
+(`data/team_r3/members_solved.csv`, from the team's spreadsheet). Details in
+`details.md`.
+
 ### Time-varying team ratings (research, 2026-10-04)
 
 ```bash
@@ -1006,6 +1027,10 @@ Module self-checks:
 - `scripts/cphof_cf_participants.py` — resumable, rate-limited builder for that
   artifact; raw source responses are cached under the gitignored
   `data/cphof_cache/`.
+- `data/team_r3/` — the TEAM_R3 account's submissions (`submissions.json`,
+  `code/`), its contests' dashboards, statements and tutorials (`contests/`;
+  PDFs/zips are git-ignored), boards QOJ hides from it (`boards/`) and the
+  member attribution (`members_solved.csv`); built by `scripts/fetch_team_r3.py`.
 - `scripts/add_qoj_contest.py` — adds one QOJ contest's standings to
   `data/tagged.json` (`python3 scripts/add_qoj_contest.py 4071 --name "EC Online (I)"
   --region "Asia East Continent"`). QOJ shows contests only to logged-in users, so

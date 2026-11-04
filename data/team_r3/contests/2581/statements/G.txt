@@ -1,0 +1,60 @@
+Bucket Bonanza
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+2 seconds
+1024 megabytes
+
+Welcome to Mr. Ant Tenna’s TV Time! In this round of game, you’re given n buckets, where the i-th
+bucket has a maximum capacity of vi volumes of water. At the start of the game, all buckets will be fully
+filled with water, and your mission is to keep it contained as much as you can for the next t seconds. But
+here’s the twist: these buckets are broken! The i-th bucket has a leaking speed of li , meaning that every
+second after the game starts, the i-th bucket dribbles away li volumes of water.
+Before the game starts, you may merge any number of buckets into one. The resulting bucket has a
+capacity equal to the maximum capacity among the merged buckets, and a leaking speed equal to the
+minimum leaking speed among the merged buckets. You can do the merging an arbitrary number of times,
+but they must be performed before filling any water.
+Tenna poses q questions, where the i-th question has a time limit ti . For each 1 ≤ i ≤ q, calculate the
+maximum total retained volume after ti seconds. Note that each question is independent.
+
+Input
+There are multiple test cases. The first line of the input contains an integer T (1 ≤ T ≤ 5×104 ) indicating
+the number of test cases. For each test case:
+The first line contains an integer n (1 ≤ n ≤ 2 × 105 ), indicating the number of buckets.
+The second line contains n integers v1 , v2 , · · · , vn (1 ≤ vi ≤ 4 × 1013 ), where vi is the capacity of the i-th
+bucket.
+The third line contains n integers l1 , l2 , · · · , ln (0 ≤ li ≤ 109 ), where li is the leaking speed of the i-th
+bucket.
+The fourth line contains an integer q (1 ≤ q ≤ 2 × 105 ), indicating the number of questions.
+The fifth line contains q integers t1 , t2 , · · · , tq (0 ≤ ti ≤ 109 ), where ti is the time limit for the i-th query.
+It’s guaranteed that neither the sum of n nor the sum of q of all test cases will exceed 2 × 105 .
+
+Output
+For each test case, output one line containing q integers separated by a space, where the i-th integer is
+the maximum total retained volume after ti seconds.
+
+Example
+standard input
+2
+4
+5 4 7 6
+2 1 3 2
+3
+3 1 2
+4
+19 47 21 13
+5 14 2 3
+5
+5 2 6 1 4
+
+standard output
+4 14 8
+43 67 38 77 48
+
+Page 1 of 1
+
+

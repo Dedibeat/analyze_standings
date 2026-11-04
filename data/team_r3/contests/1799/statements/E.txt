@@ -1,0 +1,107 @@
+Escape
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+2 seconds
+256 megabytes
+
+Sneaker wakes up in a vast maze, and now he wants to escape from it.
+Through the map found in every room of the maze, Sneaker learns the structure of the maze. The maze
+consists of n rooms, with Sneaker starting in room 1, and the exit is in room n. Additionally, there are
+m two-way passages in the maze, each connecting two different rooms, and the two directions of each
+passage are isolated from each other.
+It is guaranteed that no two different passages connect the same pair of rooms, and there is no passage
+that connects a room to itself.
+Moreover, it is guaranteed that any two rooms can be reached from each other through a series of passages.
+Sneaker also discovers that there are k slayer robots in the maze. The i-th slayer robot initially stays in
+room si . Obviously, Sneaker does not want and cannot encounter these slayer robots.
+If Sneaker starts moving, each slayer robot will move simultaneously. Specifically, Sneaker will choose a
+passage connected to the room he is currently in and move to the room on the other side of the passage.
+At the same time, each slayer robot will randomly choose a passage connected to the room it is in and
+move to the room on the other side of the passage. Every slayer robot will enter and exit the passage at
+the same time as Sneaker.
+All slayer robots will record the passages they pass through. If a slayer robot travels through a passage
+that is the same as the last recorded passage, it can choose to erase both occurrences of this passage from
+its record. In other words, the slayer robot can choose to undo a record.
+For example, if a slayer robot currently has a record of passages (1, 2), (2, 7), (7, 3) and is now in room 3, it
+can choose to move through a new passage, say (3, 6), and its record will become (1, 2), (2, 7), (7, 3), (3, 6),
+with the robot ending up in room 6. Alternatively, it can move through passage (3, 7) to return to room
+7, and its record will become (1, 2), (2, 7).
+Furthermore, if the slayer robot then chooses to move through a passage back to room 2, its record will
+become (1, 2). However, if it moves from room 3 directly to room 2, its record cannot become (1, 2);
+instead, it will become (1, 2), (2, 7), (7, 3), (3, 2).
+Additionally, all slayer robots share a same self-destruct parameter d. If a slayer robot arrives in a room
+and finds that its record of passages exceeds d, it will immediately self-destruct. If Sneaker enters a room
+and finds that a slayer robot is in the process of self-destructing or has already self-destructed, it is not
+considered an encounter with the robot.
+Now, Sneaker wants to plan a route with the minimum number of passages and ensure that he will not
+encounter any slayer robot. Can you help him?
+Note: If Sneaker is moving from room x to room y through a passage, and a slayer robot is moving in
+the opposite direction, from room y to room x through the same passage, Sneaker will not encounter
+the slayer robot because the two directions of the passage are isolated from each other. The sneaker only
+knows the initial position of each slayer robot, but does not know their positions at every moment. If
+both a slayer robot and Sneaker arrive at room n at the same time, then Sneaker is considered to have
+encountered the slayer robot and cannot escape from the maze.
+
+Input
+The first line contains an integer T (1 ≤ T ≤ 105 ), representing the number of test cases.
+For each test case, the first line contains three integers n, m, and d (2 ≤ n ≤ 2 × 105 ,
+n − 1 ≤ m ≤ min{5 × 105 , n(n−1)
+}, 1 ≤ d < n), which represent the number of rooms in the maze,
+2
+Page 1 of 2
+
+the number of passages, and the self-destruct parameter, respectively.
+The next m lines each contain two integers xi and yi (1 ≤ xi < yi ≤ n), indicating that the i-th passage
+connects room xi and room yi .
+It is guaranteed that for any i 6= j, xi 6= xj or yi 6= yj .
+It is guaranteed that any two rooms can be reached from each other through a series of passages.
+The (m + 2)-th line contains several integers. The first integer k (0 ≤ k ≤ n − 2) represents the number
+of slayer robots, followed by k integers s1 , s2 , . . . , sk (2 ≤ si < n) which represent the initial room where
+each slayer robot is.
+It is guaranteed that the sum of n over all test cases does not exceed 5 × 105 , and the sum of m over all
+test cases does not exceed 2 × 106 .
+
+Output
+For each test case, if there exists a valid route, output a single integer p in the first line, representing the
+minimum number of passages in the valid route.
+In the second line, output p + 1 integers z0 = 1, z1 , . . . , zp = n, representing the sequence of rooms that
+the route passes through.
+If no valid route exists, output a single integer −1.
+
+Example
+standard input
+2
+7 8 2
+1 2
+2 3
+3 7
+2 5
+5 6
+3 6
+1 4
+4 5
+1 4
+7 8 2
+1 2
+2 3
+3 7
+2 5
+5 6
+3 6
+1 4
+4 5
+1 5
+
+standard output
+3
+1 2 3 7
+-1
+
+Page 2 of 2
+
+

@@ -1,0 +1,76 @@
+E
+
+Enclose the Point
+
+Time limit: 1s
+
+There are n points P1 , P2 , . . . , Pn in the plane. VegiCat has q queries for you. Each
+query gives a point P .
+For each query, construct a simple polygon using some of the given points as its
+vertices. The polygon must contain P strictly inside it and have the minimum
+number of vertices. If no such polygon exists, output −1.
+A simple polygon is a closed polygonal chain with at least three distinct vertices.
+Adjacent edges intersect only at their common endpoint, and nonadjacent edges do
+not intersect.
+
+Examples of simple and non-simple polygons
+
+Input
+The ﬁrst line contains an integer T (1 ≤ T ≤ 2 · 104 ), the number of test cases. The description of the test cases
+follows.
+The ﬁrst line of each test case contains two positive integers n and q (3 ≤ n ≤ 105 , 1 ≤ q ≤ 105 ), representing
+the number of given points and the number of queries.
+The i-th of the next n lines contains two integers xi and yi (−109 ≤ xi , yi ≤ 109 ), the coordinates of Pi . It is
+guaranteed that these n points are pairwise distinct.
+Each of the next q lines contains two integers x and y (−109 ≤ x, y ≤ 109 ), the coordinates of the queried point.
+It is guaranteed that the sum of n over all test cases does not exceed 105 .
+It is guaranteed that the sum of q over all test cases does not exceed 105 .
+
+Output
+For each query, if no polygon satisfying the requirements exists, output one integer −1 on a line.
+Otherwise, output a polygon with the minimum number of vertices. On the ﬁrst line, output one integer m,
+the number of vertices.
+On the second line, output m integers a1 , a2 , . . . , am (1 ≤ ai ≤ n), the indices of the vertices in order. The
+polygon is Pa1 Pa2 . . . Pam . The vertices may be output in either clockwise or counterclockwise order.
+The indices must be pairwise distinct, and the output polygon must be simple and contain the queried point
+strictly inside it. If there are multiple solutions, output any of them.
+
+Problem E: Enclose the Point
+
+1
+
+Sample Input 1
+
+Sample Output 1
+
+2
+5 1
+0 4
+-3 0
+-3 -3
+3 -3
+3 0
+0 0
+3 1
+0 4
+-3 0
+3 0
+0 0
+
+3
+4 1 2
+-1
+
+Note
+In the ﬁrst test case, the triangle P4 P1 P2 contains the queried point P = (0, 0) strictly inside it. Since a polygon
+has at least three vertices, this triangle has the minimum number of vertices.
+In the second test case, the only possible polygon is the triangle P1 P2 P3 . The queried point P = (0, 0) lies on
+the edge P2 P3 , so the answer is −1.
+
+Illustrations of the sample test cases
+
+2
+
+Problem E: Enclose the Point
+
+

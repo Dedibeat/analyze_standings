@@ -1,0 +1,65 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define int long long
+#define ff first 
+#define ss second
+#define pb push_back
+#define rep(i, a, b) for(int i = (a); i < (b); i++)
+#define repd(i, a, b) for(int i = (a); i >= (b); i--)
+#define all(x) (x).begin(), (x).end()
+#define rall(x) (x).rbegin(), (x).rend()
+#define hha(x) cout << #x << " = " << x << ' ';
+#define hhal(x) cout << #x << " = " << x << endl;
+#define print(v) cout << #v << " = " << ' '; for(auto x : v) cout << x << ' '; cout << endl;
+
+void solve() {
+    int n, m; cin >> n >> m;
+    m = n - m;
+    vector<int> a(n);
+    for(int &x : a) cin >> x;
+    priority_queue<pair<int, int>> q;
+    for(int i = 0; i < n; i++)
+    {
+        q.push({a[i], i});
+    }
+    int cnt = 0, ans = 1e18;
+    auto comp = [&]()
+    {
+        auto b = a;
+        sort(all(b));
+        vector<int> p(n + 1);
+        for(int i = 0; i < n; i++) p[i + 1] = p[i] + b[i];
+        for(int i = 0; i <= n - m; i++)
+        {
+            int lo = i, hi = i + m - 1;
+            int mid = (lo + hi) / 2;
+            int sumL = p[mid + 1] - p[lo];
+            int sumR = p[hi + 1] - p[mid];
+            int cntL = mid + 1 - lo;
+            int cntR = hi + 1 - mid;
+            int cost = b[mid] * cntL - sumL + sumR - b[mid] * cntR;
+            ans = min(ans, cnt + cost);
+        }
+    };
+    while(q.size())
+    {
+        auto [x, i] = q.top(); q.pop();
+        comp();
+        if(a[i] >= 2)
+        {
+            a[i] /= 2;
+            cnt++;
+            q.push({a[i], i});
+        }
+    }
+    ans = min(ans, cnt);
+    cout << ans << '\n';
+}
+
+signed main() {
+    ios_base::sync_with_stdio(0); cin.tie(0);
+    srand(time(NULL));
+    int t; cin >> t; while(t--)
+    solve();
+    return 0;
+}

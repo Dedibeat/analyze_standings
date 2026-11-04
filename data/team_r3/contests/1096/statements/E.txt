@@ -1,0 +1,65 @@
+The 1st Universal Cup
+Stage 1: Shenyang, January 28-29, 2023
+
+Problem E. Graph Completing
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+512 megabytes
+
+Given a simple connected undirected graph with n vertices and m edges, you may add as many edges
+(possibly zero) as you want and count the number of different ways modulo 998 244 353 to make the graph
+biconnected while keeping it simple. Two ways of adding edges are considered different, if and only if there
+exists at least an edge (u, v) added in one way and not added in the other.
+Note that:
+• A simple graph contains no self-loops and no multiple edges.
+• For any two different vertices in a connected graph, there always exists at least a path from one
+vertex to the other.
+• For any two different vertices in a biconnected graph, there always exist two or more paths sharing
+no common edges from one vertex to the other.
+
+Figure: a simple graph, a connected graph, and a biconnected graph
+
+As shown above, the graph on the left is simple but not connected because the 3rd vertex can’t reach
+any other vertex by a path, while the graph in the middle is connected but not biconnected because it’s
+impossible to find two paths sharing no common edges from the 3rd vertex to any other vertex.
+
+Input
+The first line contains two integers n (2 ≤ n ≤ 5 000) and m (n−1 ≤ m ≤ min( n(n−1)
+, 10 000)), specifying
+2
+the number of vertices and edges in the given graph.
+Then m lines follow, the i-th of which contains two integers u and v (1 ≤ u, v ≤ n), indicating that the
+i-th edge connects the u-th and the v-th vertices.
+
+Output
+Output a line containing a single integer, indicating the number of different ways of adding edges modulo
+998 244 353.
+
+Examples
+standard input
+
+standard output
+
+3 2
+1 2
+2 3
+
+1
+
+4 4
+1 2
+2 3
+3 4
+4 1
+
+4
+
+Page 5 of 16
+
+

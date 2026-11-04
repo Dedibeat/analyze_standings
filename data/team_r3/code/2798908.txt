@@ -1,0 +1,79 @@
+#include <bits/stdc++.h> 
+using namespace std;
+#define int long long
+const long long MOD=998244353;
+
+int ans[200100], par[200100], s[200100], f[200100], d[200100], fac[200100];
+
+vector<int> child[200100], adj[200100], order;
+
+int solve(vector<int> a) {
+    int temp=1;
+    int sum=0;
+    for(auto u: a) {
+        sum=sum+u;
+    }
+    temp=fac[sum];
+    
+    for(auto u: a) {
+        temp=temp*inv(fac[u]);
+    }
+
+    return temp;
+}
+
+void dfs(int x) {
+    for(auto u: adj[x]) {
+        if(u!=par[x]) {
+            child[x].push_back(u);
+            dfs(u);
+        }
+    }
+
+    order.push_back(x);
+}
+
+int main() {
+   int n; cin>>n;
+   for(int i=1; i<=n; i++) {
+    fac[i]=fac[i-1]*i;
+   }
+   for(int i=2; i<=n; i++) {
+    cin>>par[i];
+    adj[par[i]].push_back(i);
+    adj[i].push_back(par[i]);
+   }
+   
+   par[1]=0;
+
+   dfs(1);
+
+   for(auto u: order) {
+      s[u]=1;
+      vector<int> sad;
+      f[u]=1;
+      for(auto v: child[u]) {
+        s[u]+=s[v];
+        sad.push_back(s[v]);
+        f[u]=f[u]*f[v];
+      }
+
+      f[u]=f[u]*solve(sad);
+   }
+
+   for(int i=1; i<=n; i++) {
+    ans[i]=d[i];
+    vector<int> sad;
+    for(auto u: child[i]) {
+        ans[i]=ans[i]*f[u];
+        sad.push_back(s[u]);
+    }
+
+    sad.push_back(n-i);
+   }
+
+   for(int i=1; i<=n; i++) {
+    cout<<ans[i]<<" ";
+   }
+   cout<<endl;
+}

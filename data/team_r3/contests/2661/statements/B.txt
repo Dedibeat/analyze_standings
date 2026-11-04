@@ -1,0 +1,81 @@
+Cutting Chocolate
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1.5 seconds
+1024 megabytes
+
+Little L has a piece of chocolate of size L × W × H. Inside the chocolate, there are n almonds, with the
+i-th almond located at the center of the unit cube [xi − 1, xi ] × [yi − 1, yi ] × [zi − 1, zi ]. No two almonds
+occupy the same position.
+Now, Little L wants to cut this piece of chocolate into several smaller pieces. Specifically, he wants to make
+p, q, r cuts along the three dimensions, respectively. Each cut must be made along integer coordinates, no
+two cuts can be made at the same coordinate in the same dimension, and cuts cannot be made at the
+edges of the chocolate (i.e., at coordinates 0 or L, W , H).
+Formally, a cut in the x direction at coordinate k (0 < k < L) means cutting the chocolate along the
+plane x = k. The same applies for the y and z directions.
+Additionally, for the (p + 1)(q + 1)(r + 1) pieces of chocolate after the cuts, Little L hopes that each piece
+contains the same number of almonds. Little L wants to know how many essentially different cutting
+methods satisfy this condition. Two cutting methods are considered different if there exists a position in
+one dimension such that the first method cuts at this position while the second does not. Output the
+result modulo 109 + 7.
+
+Input
+The first line of each test case contains three integers L, W, H (1 ≤ L, W, H ≤ 109 ), representing the size
+of the chocolate.
+The second line contains three integers p, q, r (0 ≤ p, q, r ≤ 106 ), representing the number of cuts in the
+x, y, and z directions, respectively.
+The third line contains an integer n (1 ≤ n ≤ 106 ), representing the number of almonds.
+The following n lines each contain three integers xi , yi , zi (1 ≤ xi ≤ L, 1 ≤ yi ≤ W, 1 ≤ zi ≤ H),
+representing the position of an almond. It is guaranteed that all triples (xi , yi , zi ) are distinct.
+
+Output
+A single line containing an integer that represents the result modulo 109 + 7.
+
+Page 1 of 2
+
+Examples
+standard input
+
+standard output
+
+4 4 1
+1 1 0
+4
+1 2 1
+2 4 1
+3 1 1
+4 3 1
+
+1
+
+3 3 3
+1 1 1
+3
+1 1 1
+2 2 2
+3 3 3
+
+0
+
+9 9 9
+1 1 1
+8
+1 1 2
+2 2 8
+1 9 1
+2 8 9
+8 2 1
+9 2 9
+9 8 1
+8 9 7
+
+180
+
+Page 2 of 2
+
+

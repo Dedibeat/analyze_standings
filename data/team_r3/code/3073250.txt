@@ -1,0 +1,44 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+#define int long long
+#define pb push_back
+#define rep(i, a, b) for(int i = (a); i < (b); i++)
+#define repd(i, a, b) for(int i = (d); i >= (b); i--)
+#define all(x) (x).begin(), (x).end()
+#define rall(x) (x).rbegin(), (x).rend()
+#define hha(x) cout << #x << " = " << x << ' ';
+#define hhal(x) cout << #x << " = " << x << endl;
+#define print(v) cout << #v << " = " << ' '; for(auto x : v) cout << x << ' '; cout << endl;
+
+void solve() {
+    int n; cin >> n;
+    set<pair<int, string>> st;
+    rep(i, 0, n) {
+        string s; cin >> s;
+        st.insert({s.size(), s});
+    }
+    int ans = 1;
+    set<pair<int, string>> erased;
+    for(auto [sz, s] : st) {
+        if(sz == 1) continue;
+        string s1, s2;
+        int m = s.size();
+        rep(i, 0, m - 1) s1.pb(s[i]);
+        rep(i, 1, m) s2.pb(s[i]);
+        if(st.find({sz - 1, s1}) != st.end() && st.find({sz - 1, s2}) != st.end() && erased.find({sz - 1, s1}) == erased.end() && erased.find({sz - 1, s2}) == erased.end()) {
+            ans = sz;
+        }
+        else {
+            erased.insert({sz, s});
+        }
+    }
+    cout << ans << '\n';
+}
+
+signed main() {
+    ios_base::sync_with_stdio(0); cin.tie(0);
+    //int t; cin >> t; while(t--)
+    solve();
+    return 0;
+}

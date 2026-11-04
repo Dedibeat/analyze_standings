@@ -1,0 +1,75 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define F first 
+#define S second 
+#define all(x) (x).begin(), (x).end()
+#define log(x) cout << #x << ": " << x << " ";
+#define logl(x) cout << #x << ": " << x << endl;
+#define print(v) cout << #v << ": "; \
+            for(auto x : v) cout << x << " "; \
+            cout << endl;
+template<typename T, typename U>
+ostream &operator<<(ostream &os, const pair<T, U> &p)
+{
+    return os << "(" << p.F << "," << p.S << ")";
+}
+using ll = long long;
+const int N = 5001;
+int dp[N][N], dp2[N][N];
+int cnt[N][N], cnt2[N][N];
+ll comp(string s, string t, int flg)
+{
+    memset(dp, 0, sizeof(dp));
+    memset(dp2, 0, sizeof(dp2));
+    memset(cnt, 0, sizeof(cnt));
+    memset(cnt2, 0, sizeof(cnt2));
+    int n = s.size(), m = t.size();
+    for(int i = 0; i < n; i++)
+    for(int j = i + 1; j < n; j++)
+    {
+        if(s[i] == s[j])
+        {
+            dp[i][j] = (i ? dp[i - 1][j - 1] : 0) + 1;
+        }
+        if(i + 2 <= j)
+        {
+            int k = max(i + 2, j + 1 - dp[i][j]);
+            cnt[i + 1][k - 1]++;
+            cnt[i + 1][j]--;
+        }
+    }
+    for(int i = n - 1; i >= 0; i--)
+    for(int j = m - 1; j >= 0; j--)
+    {
+        if(s[i] == t[j]) dp2[i][j] = dp2[i + 1][j + 1] + 1;
+        int k = i + dp2[i][j];
+        cnt2[i][i]++;
+        cnt2[i][k]--;
+    }
+    ll ans = 0;
+    for(int i = 0; i < n; i++)
+    {
+        ll sum = flg, need = 0;
+        for(int j = i; j < n; j++)
+        {
+            sum += cnt[i][j];
+            need += cnt2[i][j];
+            ans += sum * need;
+        }
+    }
+    //logl(ans);
+    return ans;
+}
+void solve()
+{
+    string s, t; cin >> s >> t;
+    int ans = 0;
+    ans += comp(s, t, 1);
+    ans += comp(t, s, 0);
+    cout << ans << endl;
+}
+signed main()
+{
+    ios::sync_with_stdio(0); cin.tie(NULL);
+    solve();
+}

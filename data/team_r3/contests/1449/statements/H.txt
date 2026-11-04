@@ -1,0 +1,86 @@
+Line Graph Sequence
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+2 seconds
+512 megabytes
+
+In the mathematical discipline of graph theory, the line graph of a simple undirected graph G is another
+simple undirected graph L(G) that represents the adjacency between every two edges in G.
+Precisely speaking, for an undirected graph G without self-loops or multiple edges, its line graph L(G) is
+a graph such that
+• each vertex of L(G) represents an edge of G; and
+• two vertices of L(G) are adjacent if and only if their corresponding edges share a common endpoint
+in G.
+
+Figure: Generation of the Line Graph
+
+Given a simple undirected graph G, you need to find the minimum number of vertices among all the
+graphs in sequence L0 (G), L1 (G), . . . , Lk−1 (G), where L0 (G) = G and Lt (G) = L(Lt−1 (G)) for each
+positive integer t.
+
+Input
+The input contains several test cases, and the first line contains a single integer T (1 ≤ T ≤ 105 ), denoting
+the number of test cases.
+For each test case:
+The first line contains three integers n (1 ≤ n ≤ 105 ), m (0 ≤ m ≤ min
+
+
+
+n(n−1)
+, 105
+2
+
+
+
+)), and k
+
+(1 ≤ k ≤ 105 ), denoting the number of vertices and edges in graph G and the length of the line graph
+
+sequence.
+
+Then m lines follow, each of which contains two integers u and v (1 ≤ u, v ≤ n), denoting an undirected
+edge connecting the u-th and the v-th vertices in graph G. It is guaranteed that graph G contains no
+self-loops or multiple edges.
+It is guaranteed that the total number of vertices and edges in all test cases do not exceed 105 respectively.
+
+Output
+For each test case, output a line containing a single integer, indicating the minimum number of vertices
+among all the graphs in the sequence L0 (G), L1 (G), . . . , Lk−1 (G).
+
+Page 1 of 2
+
+Example
+standard input
+4
+5 5 3
+1 2
+1 3
+1 4
+2 5
+4 5
+5 4 3
+1 2
+1 3
+1 4
+1 5
+5 4 3
+1 2
+2 3
+3 4
+4 5
+5 0 3
+
+standard output
+5
+4
+3
+0
+
+Page 2 of 2
+
+

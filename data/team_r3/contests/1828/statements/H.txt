@@ -1,0 +1,74 @@
+Border Jump 2
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+2 seconds
+1024 megabytes
+
+You are given a string S consisting of lower-cased English letters. You need to perform some operations
+on S until it becomes empty. Each time you can perform one of the following three operations:
+1. Delete the first character of S.
+2. Delete the last character of S.
+3. Choose a good substring S 0 of S and replace S with S 0 .
+A non-empty string S 0 is called a good substring of string S if and only if S 0 6= S, S 0 is a prefix of S,
+and the reverse of S 0 is a suffix of S. The reverse of a string p1 p2 · · · pk of length k is another string
+pk pk−1 · · · p1 of length k.
+What’s the maximum number of type 3 operations can you perform?
+
+Input
+There are multiple test cases. The first line of the input contains an integer T indicating the number of
+test cases. For each test case:
+The first and only line contains a string S (1 ≤ |S| ≤ 105 ) consisting of lower-cased English letters.
+It is guaranteed that the sum of |S| over all test cases does not exceed 2 × 105 .
+
+Output
+For each test case, output one line containing one integer indicating the maximum number of type 3
+operations you can perform.
+
+Example
+standard input
+
+standard output
+
+3
+aaaa
+abbaabba
+xy
+
+3
+4
+0
+
+Note
+op. 3
+
+op. 3
+
+op. 3
+
+op. 2
+
+For the first sample test case: aaaa −−−→ aaa −−−→ aa −−−→ a −−−→ ∅.
+op. 3
+
+op. 1
+
+op. 3
+
+op. 1
+
+op. 3
+
+For the second sample test case: abbaabba −−−→ abbaabb −−−→ bbaabb −−−→ bbaab −−−→ baab −−−→ baa
+op. 1
+op. 3
+op. 1
+−−−→ aa −−−→ a −−−→ ∅.
+
+Page 1 of 1
+
+

@@ -1,0 +1,72 @@
+Check In
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+1024 megabytes
+
+In an ICPC contest, every participating team must first check in at the registration desk. You are asked
+to maintain the information system used for the sign-in process.
+There is a roster containing the names of n teams. All team names are pairwise distinct, and every name
+consists only of uppercase or lowercase English letters.
+After the roster, there are m queries. Each query gives a name (which also consists only of uppercase
+or lowercase English letters). For each query, you must classify it into exactly one of the following three
+outcomes:
+• **Successful sign-in** — the name belongs to a valid team, and that team has not signed in before.
+• **Not a valid team** — the name does not belong to any team in the roster.
+• **Already signed in** — the name belongs to a valid team, but that team has already signed in
+earlier.
+
+Input
+The first line contains two integers n and m (1 ≤ n, m ≤ 105 ) — the number of teams in the roster and
+the number of queries.
+The next n lines each contain a team name. All team names are distinct.
+The next m lines each contain a query name.
+Every name (both roster names and query names) consists only of uppercase or lowercase English letters.
+The total number of characters over all names (roster names and query names combined) does not exceed
+106 .
+
+Output
+For each of the m queries, print one line containing exactly one of the following words:
+• ‘OK‘ — if the query results in a successful sign-in;
+• ‘WRONG‘ — if the name is not a valid team;
+• ‘REPEAT‘ — if the name has already signed in.
+
+Page 1 of 2
+
+Example
+standard input
+5 9
+RebornAsaVegetableDog
+LetItRot
+NaiveBirds
+OpenYourBrain
+CaptainTakesMeNot
+CaptainTakesMeNot
+OpenYourBrain
+NaiveBirds
+LetItRot
+RebornAsaVegetableDog
+NaiveBirds
+OneStepAway
+Metempsychosis
+CaptainTakesMeNot
+
+standard output
+OK
+OK
+OK
+OK
+OK
+REPEAT
+WRONG
+WRONG
+REPEAT
+
+Page 2 of 2
+
+

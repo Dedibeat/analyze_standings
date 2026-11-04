@@ -1,0 +1,89 @@
+The End?
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+1024 megabytes
+
+At the 2025 League of Legends Season 15 World Championship, T1 battled KT Rolster in a full five-game
+series, ultimately defeating KT with a 3-2 score to claim the championship. This match was exceptionally
+significant, giving birth to multiple new historical records.
+As T1’s star mid-laner, Faker has now achieved six World Championship titles in his personal career with
+this victory, further cementing his status as the “Greatest Player of All Time” in League of Legends. Besides
+Faker, his teammates Oner, Gumayusi, and Keria also accomplished the remarkable feat of securing three
+consecutive World Championship titles. Meanwhile, the newly joined top-laner Doran filled the gap in his
+personal accolades by winning his first World Championship.
+The journey for the LPL region, however, was full of drama. The highly-touted first seed Bilibili Gaming
+(BLG) suffered a surprising upset loss to the North American team 100 Thieves in the very first round
+of the Swiss Stage. They were then eliminated in the crucial qualification match by Top Esports (TES),
+stopping at the Top 16 as a first seed and becoming one of the major upsets of the tournament. TES
+itself was swept 3-0 by T1 in the semi-finals, leaving the LPL region absent from the finals. Has the LPL
+reached its conclusion?
+When we look back at the journey of the two finalist teams, everything began with the life-or-death
+knockout stage. The eight-team single-elimination bracket stipulated that teams were placed into the
+bracket based on their performance in the Swiss Stage, entering a series of head-to-head battles where the
+loser was immediately eliminated. The entire stage consisted of three rounds: the quarter-finals, where
+eight teams were narrowed down to four; the semi-finals, where these four teams produced two finalists;
+and the finals, where one ultimate champion was crowned from these two teams.
+For Season 16, can our Team 1 win the championship? Please find the maximum probability of Team 1
+winning the entire tournament.
+More specifically, there are 8 teams participating in a single-elimination tournament. Each team i has two
+strength values ai and bi .
+Before the tournament starts, you need to assign each team to a distinct seed from 1 to 8. The tournament
+follows the standard single-elimination bracket format:
+• Round 1: seed 1 vs seed 2, seed 3 vs seed 4, seed 5 vs seed 6, seed 7 vs seed 8
+• Round 2: winner of (1, 2) vs winner of (3, 4), winner of (5, 6) vs winner of (7, 8)
+• Round 3 (Final): winner of upper bracket (1, 2, 3, 4) vs winner of lower bracket (5, 6, 7, 8)
+When two teams compete against each other, the team with the smaller seed number uses its a-value as
+its strength, and the team with the larger seed number uses its b-value as its strength. If a team with
+x
+strength x competes against a team with strength y, the probability that the first team wins is x+y
+.
+You need to find the maximum probability of team 1 winning the entire tournament, considering all
+possible assignments of teams to seeds.
+
+Input
+The input consists of 8 lines. The i-th line contains two integers ai and bi (1 ≤ ai , bi ≤ 100), denoting the
+two strength values of team i.
+
+Output
+Output a line containing a real number, denoting the maximum probability that team 1 wins the
+tournament.
+Page 1 of 2
+
+Your answer is acceptable if its absolute or relative error does not exceed 10−6 . Formally speaking, suppose
+|a−b|
+that your output is a and the jury’s answer is b, and your output is accepted if and only if max(1,|b|)
+≤ 10−6 .
+
+Examples
+standard input
+10 80
+20 70
+30 60
+40 50
+50 40
+60 30
+70 20
+80 10
+100 100
+100 100
+100 100
+100 100
+100 100
+100 100
+100 100
+100 100
+
+standard output
+0.329505822460368
+
+0.125000000000000
+
+Page 2 of 2
+
+

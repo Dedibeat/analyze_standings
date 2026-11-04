@@ -1,0 +1,54 @@
+Pen Pineapple Apple Pen
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+4 seconds
+1024 megabytes
+
+In the spirit of the viral hit Pen-Pineapple-Apple-Pen (PPAP) by PIKOTARO, you need to find
+the number of ways to select four non-overlapping substrings from left to right in the given string
+S = s1 s2 . . . sn consisting only of lowercase English letters, so that the four substrings mimic the iconic
+PPAP structure:
+pen pineapple apple pen
+More specifically, choosing eight integers i1 , j1 , i2 , j2 , i3 , j3 , i4 , j4 (1 ≤ i1 ≤ j1 < i2 ≤ j2 < i3 ≤ j3 < i4 ≤ j4 ≤ n),
+such that:
+• The first and fourth substrings are identical: si1 si1 +1 . . . sj1 = si4 si4 +1 . . . sj4 . This represents the
+matching “pen” at the beginning and end.
+• The third substring is a strict suffix of the second substring. That is, there exists an integer k2
+(i2 < k2 ≤ j2 ) such that sk2 sk2 +1 . . . sj2 = si3 si3 +1 . . . sj3 . This captures the relationship between
+“pineapple” and “apple”, where the latter is a strict suffix of the former.
+You need to find the number of valid 8-tuples (i1 , j1 , i2 , j2 , i3 , j3 , i4 , j4 ) satisfying the above conditions.
+
+Input
+There is only one test case in each test file.
+The first and only line contains a string S (1 ≤ |S| ≤ 5 × 103 ) indicating the given string consisting only
+of lowercase English letters.
+
+Output
+Output one line containing one integer, indicating the number of valid PPAP-style selections. As the
+answer might be large, output it modulo 998 244 353.
+
+Examples
+standard input
+
+standard output
+
+ppaap
+
+1
+
+ppapppap
+
+16
+
+penpineappleapplepen
+
+1502
+
+Page 1 of 1
+
+

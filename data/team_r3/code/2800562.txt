@@ -1,0 +1,41 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+#define int long long
+#define ff first
+#define ss second
+#define pb push_back
+#define all(a) (a).begin(),(a).end()
+#define rall(a) (a).rbegin(),(a).rend()
+#define sz(a) (int)(a).size()
+
+void solve() {
+    int n;
+    cin >> n;
+    set<string> st[30];
+    for(int i = 1; i <= n; i++) {
+        string a, c;
+        char b;
+        cin >> a >> b >> c;
+
+        if(c == "accepted") {
+            st[b - 'A'].insert(a);
+        }
+    }
+    int x, mx = 0;
+    for(int i = 0; i < 26; i++) {
+        if(sz(st[i]) > mx) {
+            mx = sz(st[i]);
+            x = i;
+        }
+    }
+    cout << char(x + 'A') << "\n";
+}
+
+signed main() {
+    ios_base::sync_with_stdio(0);cin.tie(0);
+    int t = 1;
+    cin >> t;
+    while(t--) solve();
+    return 0;
+}

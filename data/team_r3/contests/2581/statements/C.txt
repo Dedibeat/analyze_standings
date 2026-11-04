@@ -1,0 +1,47 @@
+Distributing Candies
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+1024 megabytes
+
+BaoBao and DreamGrid are good friends who often share candies together. Now BaoBao has a candies,
+and DreamGrid has b candies, making a total of n = a + b candies.
+What’s more, BaoBao finds that these n candies can be divided into a piles with the same amount of
+candies, while DreamGrid finds that these n candies can also be divided into b piles with the same amount
+of candies.
+After mixing the candies together, they forget how many candies each of them had. You need to help
+them find a possible pair of positive integers a and b, or indicate that it is impossible.
+
+Input
+There are multiple test cases. The first line of the input contains an integer T (1 ≤ T ≤ 105 ), indicating
+the number of test cases. For each test case:
+The first and only line contains an integer n (1 ≤ n ≤ 1018 ), indicating the total number of candies.
+
+Output
+For each test case:
+• If there exist such positive integers a and b, first output Yes in one line, then output two integers a
+and b separated by a space in another line. If there are multiple valid answers, you can output any
+of them.
+• Otherwise, if there do not exist such positive integers a and b, just output No in one line.
+
+Example
+standard input
+3
+1
+6
+7
+
+standard output
+No
+Yes
+3 3
+No
+
+Page 1 of 1
+
+

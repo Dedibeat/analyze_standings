@@ -1,0 +1,77 @@
+Make SYSU Great Again IV
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+2 seconds
+1024 megabytes
+
+As you know, you are participating in the Chinese Constructive Problem Contest (CCPC), and without
+a doubt, the proposing school, Sun Yat-sen University, as the Kingdom of Construction, is very eager for
+you to challenge some related problems.
+Little U is a student in the Kingdom of Construction. In an algorithm class, Little U learned about the
+MCOP (Matrix Chain Ordering Problem). Here is an introduction to MCOP:
+Given a sequence of positive integers of length n ≥ 3, [w1 , w2 , . . . , wn ], as input to the algorithm. The
+following formula multiplies n − 1 matrices to ultimately obtain a new matrix:
+
+M = M1 × M2 × · · · × Mn−1
+
+where Mi is a matrix of size wi × wi+1 . Matrix multiplication satisfies the associative law, so changing
+the order of multiplication will yield the same final matrix M , but the number of operations may differ.
+The goal of the problem is to find an optimal multiplication strategy among (n − 2)! possible strategies,
+such that the total number of operations required for matrix multiplication is minimized. Here, it is
+assumed that multiplying matrices of sizes p × q and q × r will yield a matrix of size p × r, requiring
+pqr operations. The minimum total number of operations required to compute M under the optimal
+strategy is denoted as MCOP([w1 , w2 , . . . , wn ]).
+Little U has learned how to solve this problem with sufficiently good time complexity in class, but as a
+student of the Kingdom of Construction, Little U naturally thought of the following problem:
+Given an integer X, satisfying 1 ≤ X ≤ 109 . You need to construct an integer sequence of length l,
+[a1 , a2 , . . . , al ], that meets the following requirements:
+• 3 ≤ l ≤ 6;
+• For all i ∈ [1, l], 1 ≤ ai ≤ 4000;
+• MCOP([a1 , a2 , . . . , al ]) = X.
+Little U has already implemented a checker using the algorithm learned in class, and what you need to
+do is solve this construction problem.
+
+Input
+This problem contains multiple test cases. The first line of input contains an integer T (1 ≤ T ≤ 500),
+representing the number of test cases.
+For each test case, the input consists of a single line with an integer X (1 ≤ X ≤ 109 ), the meaning of
+which has been given in the problem.
+
+Output
+For each test case: first output a line with an integer l (3 ≤ l ≤ 6), representing the length of the
+constructed sequence. Then output a line with l integers, representing the constructed sequence.
+Page 1 of 2
+
+It can be proven that for any input X, there is always a construction that meets the requirements. If
+there are multiple constructions that meet the requirements, output any one of them.
+
+Example
+standard input
+2
+90
+10
+
+standard output
+4
+5 3 2 6
+3
+1 1 10
+
+Note
+For the first test case, the constructed sequence is [5, 3, 2, 6], which represents the need to perform a chain
+multiplication of three matrices of sizes 5 × 3, 3 × 2, and 2 × 6. Consider two multiplication strategies:
+• First, multiply M1 and M2 to obtain a matrix of size 5 × 2, then multiply with M3 , corresponding to
+the expression (M1 ×M2 )×M3 . The total number of operations at this point is 5×3×2+5×2×6 = 90;
+• First, multiply M2 and M3 to obtain a matrix of size 3 × 6, then multiply with M1 ,
+corresponding to the expression M1 × (M2 × M3 ). The total number of operations at this point
+is 3 × 2 × 6 + 5 × 3 × 6 = 126.
+Here, the goal is to minimize the total number of operations, so MCOP([5, 3, 2, 6]) = min(90, 126) = 90.
+
+Page 2 of 2
+
+

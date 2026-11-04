@@ -1,0 +1,67 @@
+Tree and Subgraph Problem
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+1024 megabytes
+
+Given an unrooted tree containing n nodes, where each node has a color represented by a positive integer
+ci for the i-th node.
+Assume that S and T are sets of nodes in the tree. An ordered pair (S, T ) is considered valid if all the
+following conditions are met:
+• Both S and T are non-empty sets;
+• All nodes in S have the same color, and all nodes in T have the same color;
+• The subgraph sub(S) of the set of nodes S is defined as the smallest connected subgraph of
+the tree that contains the set of nodes S, and similarly for sub(T ). It is required that sub(S) and
+sub(T ) do not intersect, meaning they have no common nodes or edges.
+Determine the number of all valid ordered pairs (S, T ) modulo 998244353. It should be noted that if
+S ̸= T , then the ordered pair (S, T ) is considered different from the ordered pair (T, S).
+
+Input
+This problem contains multiple test cases. The first line of input contains an integer T (1 ≤ T ≤ 104 ),
+representing the number of test cases.
+For each test case:
+The first line contains an integer n (1 ≤ n ≤ 2 × 105 ), representing the number of nodes in the unrooted
+tree.
+The second line contains n integers c1 , c2 , . . . , cn (1 ≤ ci ≤ n), representing the color of each node.
+The next n − 1 lines each contain two integers u, v (1 ≤ u, v ≤ n, u ̸= v), representing the edges of the
+tree. It is guaranteed that these n − 1 edges form a tree structure.
+The data guarantees that the total sum of n across all test cases does not exceed 2 × 105 .
+
+Output
+For each test case, output a single line containing an integer, representing the number of ordered pairs
+modulo 998244353.
+
+Page 1 of 2
+
+Example
+standard input
+3
+2
+1 1
+1 2
+5
+1 1 1 2 2
+1 2
+2 3
+3 4
+4 5
+5
+1 2 1 2 1
+1 2
+1 3
+2 4
+2 5
+
+standard output
+2
+54
+42
+
+Page 2 of 2
+
+

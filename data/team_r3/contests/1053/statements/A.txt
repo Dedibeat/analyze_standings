@@ -1,0 +1,53 @@
+2022 International Collegiate Programming Contest, Jinan Site
+Qilu University of Technology (Shandong Academy of Sciences), November 27, 2022
+
+Problem A. Tower
+Input ﬁle:
+Output ﬁle:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+6 seconds
+512 megabytes
+
+Prof. Pang built n block towers with diﬀerent heights. The i-th tower has height ai .
+Prof. Shou doesn’t like these towers because of their arbitrary heights. He decides to ﬁrst remove exactly
+m of them, and then perform some (or none) of the following operations:
+• Choose a tower and increase its height ai by 1.
+• Choose a tower and decrease its height ai by 1.
+• Choose a tower and divide its height ai by 2. If the new height is not an integer, it is rounded down.
+Prof. Shou can never choose a removed tower. If after an operation, the height of a tower will become 0,
+that operation is not allowed. Under these constraints, Prof. Shou can perform an arbitrary number of
+operations in arbitrary order.
+Prof. Shou would like all the towers that are not removed to have the same heights. Please calculate the
+minimum number of operations to achieve this.
+
+Input
+The ﬁrst line contains one integer T (1 ≤ T ≤ 10), the number of test cases.
+For each test case, the ﬁrst line contains two integers n, m (1 ≤ n ≤ 500, 0 ≤ m < n), the number of
+towers, and the number of towers Prof. Shou should delete before performing the operations.
+The next line contains n integers a1 , . . . , an (1 ≤ ai ≤ 109 ), the initial heights of the towers.
+
+Output
+For each test case, output the minimum number of operations in one line.
+
+Example
+standard input
+3
+2 0
+2 6
+5 0
+1 2 3 4 5
+5 3
+1 2 3 4 5
+
+standard output
+2
+4
+1
+
+Page 1 of 18
+
+

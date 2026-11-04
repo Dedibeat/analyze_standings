@@ -1,0 +1,66 @@
+Bingo
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+1024 megabytes
+
+Given two integers n, m and an integer sequence a1 , a2 , · · · , anm of length n × m, we’re going to fill a
+grid of n rows and m columns with the integers from the sequence. More specifically, let (i, j) be the cell
+on the i-th row and the j-th column, we’ll put the ((i − 1) × m + j)-th element of the sequence (that is,
+a(i−1)×m+j ) into that cell.
+We say an integer k is a “bingo integer” of the sequence, if after filling all the cells, at least one of the two
+following conditions is satisfied.
+• There is at least one row, where all integers in the cells of that row are less than or equal to k.
+• There is at least one column, where all integers in the cells of that column are less than or equal to
+k.
+It is easy to see that a sequence may have multiple bingo integers, however in this problem, we’re only
+interested in the smallest bingo integer.
+Calculate the sum of the smallest bingo integers for all (nm)! permutations of the given sequence. As the
+answer may be large, output the answer modulo 998 244 353.
+
+Input
+There are multiple test cases. The first line of the input contains an integer T indicating the number of
+test cases. For each test case:
+The first line contains two integers n and m (1 ≤ n, m ≤ 2 × 105 , 1 ≤ n × m ≤ 2 × 105 ), indicating the
+number of rows and columns of the grid.
+The second line contains n × m integers a1 , a2 , · · · , anm (0 ≤ ai < 998 244 353) indicating the given
+sequence.
+It’s guaranteed that the sum of n × m of all test cases will not exceed 4 × 105 .
+
+Output
+For each test case, output one line containing one integer indicating the answer.
+
+Example
+standard input
+4
+2 2
+1 3 2 4
+3 1
+10 10 10
+1 3
+20 10 30
+3 4
+1 1 4 5 1 4 1 9 1 9 8 10
+
+standard output
+56
+60
+60
+855346687
+
+Note
+For the first sample test case, if 1 and 2 are not on the same row or column, then the smallest bingo
+integer will be 3, otherwise the smallest bingo integer will be 2. There are 8 permutations where 1 and 2
+are not on the same row or column, so the answer is 8 × 3 + (4! − 8) × 2 = 56.
+Page 1 of 2
+
+For the second sample test case, the smallest bingo integer is always 10, so the answer is 3! × 10 = 60.
+
+Page 2 of 2
+
+

@@ -1,0 +1,101 @@
+#include <bits/stdc++.h>
+using namespace std;
+ 
+#define int long long
+#define pb push_back
+#define all(x) (x).begin(), (x).end()
+#define rall(x) (x).rbegin(), (x).rend()
+#define rep(i, a, b) for(int i = (a); i < (b); i++)
+#define repd(i, a, b) for(int i = (a); i >= (b); i--)
+#define hha(x) cout << #x << ' ' << x << ' ';
+#define hhal(x) cout << #x << ' ' << x << '\n';
+#define print(v) cout << #v << ' '; for(auto &x : v) cout << x << ' '; cout << '\n';
+int comp(vector<int> &a, vector<int> &b, int l)
+{
+    int n = a.size(), m = b.size();
+    // print(a);
+    // print(b);
+    int mask = ((1LL << (l + 2)) - 1);
+    map<int, int> mp;
+    for(int i = 0; i + 1 < m; i++)
+    {
+        if((b[i] ^ b[i + 1]) == 1) mp[b[i] & mask]++;
+    }
+    int ans = 0;
+    int x = (1LL << (l + 2)) - 2;
+    int y = (1LL << (l + 1)) - 2;
+    for(int j = 0; j + 1 < n; j++)
+    {
+        if((a[j] ^ a[j + 1]) == x)
+        {
+            // if(mp.count((a[j] & mask) ^ y))
+            // {
+            //     hha(l); hha(x); hhal(y); 
+            //     hha(a[j]); hhal(mask);
+            //     ans += mp[(a[j] & mask) ^ y];
+            // }
+            ans += mp[(a[j] & mask) ^ y];
+        }
+    }
+    return ans;
+}
+int solve(vector<int> a, vector<int> b, int n, int m) {
+    int ans = 0;
+    for(int l = 0; l < 30; l++)
+    {
+        int mask = (1LL << (l + 1));
+        int ret = comp(a, b, l);
+        ans += ret;
+    }
+    return ans;
+}
+int brute(vector<int> a, vector<int> b, int n, int m)
+{
+    // print(a);
+    // print(b);
+    int ans = 0;
+    for(int i = 0; i + 1 < n; i++)
+    for(int j = 0; j + 1 < m; j++)
+    {
+        vector<int> c = {a[i] ^ b[j], a[i] ^ b[j + 1], a[i + 1] ^ b[j], a[i + 1] ^ b[j + 1]};
+        // print(c);
+        if(c[1] == c[0] + 1) 
+        if(c[2] == c[0] + 2)
+        if(c[3] == c[0] + 3)
+            ans++;
+    }
+    return ans;
+}
+void test(int n, int m, int k)
+{
+    for(int it = 0; it < 100000; it++)
+    {
+        vector<int> a(n), b(m);
+        for(int &x : a) x = rand() % k;
+        for(int &x : b) x = rand() % k;
+        int res1 = solve(a, b, n, m);
+        int res2 = brute(a, b, n, m);
+        if(res1 != res2)
+        {
+            print(a);
+            print(b);
+            hha(res1); hhal(res2);
+            exit(1);
+        }
+    }
+    exit(0);
+}
+signed main() {
+    ios_base::sync_with_stdio(0); cin.tie(0);
+    // test(10, 10, 20);
+    // return 0;
+    int t; cin >> t; while(t--)
+    {
+        int n, m; cin >> n >> m;
+        vector<int> a(n), b(m);
+        for(auto &x : a) cin >> x;
+        for(auto &y : b) cin >> y;
+        cout << solve(a, b, n, m) << "\n";
+    }
+}
+ 

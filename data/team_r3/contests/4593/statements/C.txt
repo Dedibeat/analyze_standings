@@ -1,0 +1,67 @@
+Cryptarithm
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+2 seconds
+1024 megabytes
+
+Ris is trying to enter a password using a mouse. The password she needs to enter is an integer sequence
+b of length m, while her clipboard contains a sequence a of length n. To complete her task, Ris may use
+the following three operations to modify a workspace c that is initially empty:
+• Paste: pay a cost of x and append every element of a, in order, to the end of c.
+• Scroll: pay a cost of y and increase or decrease one element of c by 1.
+• Delete: pay a cost of z and delete one element from c.
+You need to help Ris find the minimum total cost among all ways to transform c into b.
+
+Input
+This problem contains multiple test cases.
+The first line contains a positive integer T (1 ≤ T ≤ 104 ), representing the number of test cases.
+For each test case:
+• The first line contains five integers n, m, x, y, z (1 ≤ n, m ≤ 3000, 0 ≤ x, y, z ≤ 106 ).
+• The second line contains n integers ai (0 ≤ ai ≤ 109 ).
+• The third line contains m integers bi (0 ≤ bi ≤ 109 ).
+It is guaranteed that the sum of n · m over all test cases does not exceed 9 × 106 , and that the sum of
+n + m over all test cases does not exceed 2 × 105 .
+
+Output
+For each test case, output one line containing an integer representing the answer.
+
+Example
+standard input
+4
+6 7 3 2 5
+1 1 4 5 1 4
+1 9 1 9 8 1 0
+3 2 5 6 7
+11 45 14
+1919 810
+1 7 0 0 0
+998244353
+1 0 1 0 0 0 0
+1 1 1000000 1000000 1000000
+0
+1000000000
+
+standard output
+63
+15872
+0
+1000000001000000
+
+Page 1 of 2
+
+Note
+For the first test case, one optimal sequence of operations is as follows:
+• Paste twice. Then c becomes [1, 1, 4, 5, 1, 4, 1, 1, 4, 5, 1, 4].
+• Delete 5 elements, keeping the bold elements from the previous line. Then c becomes
+[1, 5, 1, 4, 5, 1, 4].
+• Scroll 16 times to adjust the bold elements from the previous line. Then c becomes [1, 9, 1, 9, 8, 1, 0].
+The total cost is 2 · 3 + 16 · 2 + 5 · 5 = 63.
+
+Page 2 of 2
+
+

@@ -1,0 +1,88 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define int long long
+#define all(v) (v).begin(), (v).end()
+#define hha(x) cout << #x << " = " << x << " "
+#define hhal(x) cout << #x << " = " << x << endl
+#define print(v) cout << #v << " = "; for(auto x : v) cout << x << " "; cout << endl;
+#define rep(i, a, b) for(int i = (a); i < (b); i++)
+const int inf = 1e18;
+void solve()
+{
+    int n, m; cin >> n >> m;
+    vector<vector<pair<int, int>>> g(n + 1);
+    vector<vector<int>> t(n + 1);
+    for(int i = 1; i < n; i++)
+    {
+        int u, v, w; cin >> u >> v >> w;
+        g[u].push_back({w, v});
+        g[v].push_back({w, u});
+    }
+    while(m--)
+    {
+        int u, v; cin >> u >> v;
+        t[u].push_back(v);
+        t[v].push_back(u);
+    }
+    
+    vector<int> d(n + 1, inf), par(n + 1);
+    vector<int> ord, revord;
+    auto dfs = [&](auto &&self, int u, int p = -1) -> void
+    {
+        par[u] = p;
+        ord.push_back(u);
+        for(auto [w, v] : g[u])
+        {
+            if(v == p) continue;
+            d[v] = d[u] + w;
+            self(self, v, u);
+        }
+        revord.push_back(u);
+    };
+    d[1] = 0;
+    dfs(dfs, 1);
+    //cout << "DONE :" << endl;
+    int ans = accumulate(d.begin() + 1, d.end(), 0LL);
+    cout << ans << "\n";
+    for(int i = 1; i <= n; i++)
+    {
+        vector<int> forw(n + 1, inf), bck(n + 1, inf);
+        for(int u = 1; u <= n; u++)
+        {
+            for(int v : t[u])
+            {
+                forw[u] = min(forw[u], d[v]);
+                bck[u] = min(bck[u], d[v]);
+            }
+        }
+        for(int u : ord) 
+        {
+            for(auto [w, v] : g[u])
+            {
+                if(par[u] == v) continue;
+                forw[v] = min(forw[v], forw[u] + w);
+            }
+        }
+        for(int u : revord)
+        {
+            for(auto [w, v] : g[u])
+            {
+                if(par[u] == v) continue;
+                bck[u] = min(bck[u], bck[v] + w);
+            }
+        }
+        for(int i = 1; i <= n; i++)
+        {
+            d[i] = min({d[i], forw[i], bck[i]});
+        }
+        ans = accumulate(d.begin() + 1, d.end(), 0LL);
+        cout << ans << "\n";
+    }
+    //cout << "\n";
+}
+signed main()
+{
+    ios::sync_with_stdio(0); cin.tie(NULL);
+    //int t; cin >> t; while(t--)
+    solve();
+}

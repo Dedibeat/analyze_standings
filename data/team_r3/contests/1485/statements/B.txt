@@ -1,0 +1,56 @@
+String
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+256 megabytes
+
+Given two strings S1 and S2 of equal length (indexed from 1).
+Now you need to answer q queries, with each query consists of a string T .
+The query asks how many triplets of integers (i, j, k) (1 ≤ i ≤ j < k ≤ |S1 |) satisfy the condition
+S1 [i, j] + S2 [j + 1, k] = T .
+Here S[l, r] denotes the substring of S with index form l to r, and “+” denotes concatenation of strings.
+
+Input
+The first line contains a string S1 .
+The second line contains a string S2 .
+It is guaranteed that 1 ≤ |S1 | = |S2 | ≤ 105 .
+The third line contains a positive integer q (1 ≤ q ≤ 2 × 105 ), representing the number of queries.
+The next q lines each contain a string T (1 ≤ |T | ≤ 2 × 105 ), representing the query strings.
+P
+It is guaranteed that
+|T | ≤ 2 × 105 and all the strings input only consisting of lowercase letters.
+
+Output
+For each query, output a line with a positive integer representing the number of triplets that satisfy the
+condition.
+
+Example
+standard input
+aaababaa
+aababbca
+7
+aa
+abb
+aab
+ab
+abc
+bb
+ba
+
+standard output
+3
+1
+3
+2
+2
+1
+0
+
+Page 1 of 1
+
+

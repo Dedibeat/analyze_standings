@@ -1,0 +1,67 @@
+The 2022 ICPC Asia Hangzhou Regional Programming Contest
+Hangzhou Normal University, December, 04, 2022
+
+Problem K. Master of Both
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+1024 megabytes
+
+Professor Hui-Bot is the master of string theory and advanced data structures, so he came up with an
+interesting problem. Given a sequence of n strings consisting of only lowercase English letters, how many
+inversions are there in this sequence when the strings are compared by lexicographical order?
+As the most extraordinary student of Hui-Bot, Putata and Budada mastered superb string theory and
+advanced data structure skills respectively, and they solved this problem together with ease. However,
+there are q different parallel universes, where the characters in the alphabet are not appearing in the
+original order.
+Formally, the alphabet in each universe is a string, which is a permutation of the 26 lowercase English
+letter, denoting the order each character appears.
+A string a is lexicographically smaller than a string b if and only if one of the following holds:
+• a is a prefix of b, but a 6= b;
+• in the first position where a and b differ, the string a has a letter that appears earlier in the alphabet
+than the corresponding letter in b.
+The number of inversions in a sequence a of length n is the number of ordered pairs (i, j) such that
+1 ≤ i < j ≤ n, aj < ai .
+Please help Putata and Budada in each universe to solve the problem.
+
+Input
+The first line of the input contains two integers n, q (1 ≤ n ≤ 5 × 105 , 1 ≤ q ≤ 5 × 104 ), denoting the
+length of the sequence.
+For the following n lines, the i-th line contains a string si (1 ≤ |si | ≤ 106 ). It is guaranteed that the string
+n
+P
+consists of only lowercase English letters, and
+|si | ≤ 106 .
+i=1
+
+For the following q lines, each line contains a string t, denoting the alphabet in one universe. It is
+guaranteed that t is a permutation of 26 lowercase English letters.
+
+Output
+Output q lines, denoting the answer in q universes.
+
+Example
+standard input
+5 3
+aac
+oiputata
+aaa
+suikabudada
+aba
+abcdefghijklmnopqrstuvwxyz
+qwertyuiopasdfghjklzxcvbnm
+aquickbrownfxjmpsvethlzydg
+
+standard output
+4
+3
+4
+
+Page 13 of 16
+
+

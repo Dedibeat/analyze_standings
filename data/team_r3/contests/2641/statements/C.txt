@@ -1,0 +1,83 @@
+Buggy Painting Software II
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+2 seconds
+1024 megabytes
+
+This is a communication problem.
+Well... after surviving the nightmarish stutter in Problem B. Buggy Painting Software I, Sulfox soon
+faces a far more serious bug — his painting software saves any color image in black-and-white format.
+Here, a color image supports m distinct colors labeled 1 through m, and can be viewed as a sequence of
+length 3m composed of color labels, where each color appears exactly three times. A black-and-white
+image supports only black (labeled 0) and white (labeled 1), and can be viewed as a binary sequence.
+When saving a color image, the software chooses a non-empty bipartition (S0 , S1 ) of S = {1, 2, . . . , m}
+(so S0 ∪ S1 = S, S0 ∩ S1 = ∅, and both S0 and S1 are non-empty) and converts the original sequence into
+a binary sequence of the same length by mapping every color in S0 to 0 and every color in S1 to 1. The
+resulting binary sequence will be the saved black-and-white image.
+To outsmart this bug, Sulfox wants to create n color images with respective integer feature values
+x1 , x2 , . . . , xn (values may repeat) ranging from 1 to m. Your task is to help Sulfox design these color
+images so that each image’s feature remains identifiable even after the color loss. More specifically, the i-th
+color image (1 ≤ i ≤ n) must satisfy that, no matter how the non-empty bipartition (S0 , S1 ) is chosen,
+its feature value xi can always be recovered from the saved black-and-white image.
+To verify the correctness of your design, your program will be run twice on each test: first for constructing
+n color images, and then for recovering the original feature values from n black-and-white images. The
+second run will receive exactly the n binary sequences mapped from each of the n sequences you output
+in the first run by independently chosen non-empty bipartitions. Apart from that, the second run will
+receive no additional information from the first run. Your solution passes a test if you correctly recover
+the corresponding feature value from each black-and-white image.
+Note that the applied bipartitions are unpredictable and may be adaptive to your design, and different
+bipartitions may apply to the color images with the same feature value.
+
+Input
+The first line contains three integers op (op ∈ {1, 2}), n, and m (2 ≤ n, m ≤ 5 × 105 , nm ≤ 106 ), denoting
+which run of the program it is, the number of color images, and the number of distinct colors, respectively.
+It is guaranteed that n and m remain consistent across both runs.
+If op = 1, your program must construct the color images. The next n lines follow, where the i-th line
+contains a single integer xi (1 ≤ xi ≤ m), representing the feature value for the i-th image to be designed.
+If op = 2, your program must recover the feature values. The next n lines follow, each describing a blackand-white image. Each line contains 3m space-separated integers of 0 or 1, forming a binary sequence
+that results from one of your designed color images. These n sequences are given in an arbitrary order
+and do not necessarily correspond to the order in which the feature values were given in the first run.
+
+Output
+If op = 1, output n lines, where the i-th line describes the designed color image for the i-th feature value
+xi from the input. Each line contains 3m space-separated integers. The sequence on each line must be a
+valid color image, i.e., a sequence where each integer from 1 to m appears exactly three times.
+If op = 2, output n lines. For each of the n binary sequences given in the input, output a single line
+containing one integer, representing the original feature value recovered from that image. The order of
+your output must correspond to the order of the binary sequences in the input.
+
+Page 1 of 2
+
+Examples
+standard input
+1 2 3
+1
+2
+2 2 3
+1 1 0 1 1 0 1 1 0
+0 0 0 1 1 1 0 0 0
+
+standard output
+1 1 1 2 2 2 3 3 3
+1 2 3 1 2 3 1 2 3
+2
+1
+
+Note
+The example shows two runs of a certain solution on the sample case.
+In the first run, a simple (and incorrect for general cases) strategy is used: feature value 1 is designed as
+consecutive blocks of three identical colors, and feature value 2 is designed as a repeating pattern of three
+distinct colors.
+In the second run, the first binary sequence (from bipartition (S0 = {3}, S1 = {1, 2})) is identified by its
+repeating pattern of three to recover feature value 2, while the second binary sequence (from bipartition
+(S0 = {1, 3}, S1 = {2})) is identified by its consecutive blocks of three to recover feature value 1. Since
+the judge provides these sequences in a swapped order, the output is 2 and then 1.
+
+Page 2 of 2
+
+

@@ -1,0 +1,57 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+#define int long long
+#define pb push_back
+#define rep(i, a, b) for(int i = (a); i < (b); i++)
+#define repd(i, a, b) for(int i = (d); i >= (b); i--)
+#define all(x) (x).begin(), (x).end()
+#define rall(x) (x).rbegin(), (x).rend()
+#define hha(x) cout << #x << " = " << x << ' ';
+#define hhal(x) cout << #x << " = " << x << endl;
+#define print(v) cout << #v << " = " << ' '; for(auto x : v) cout << x << ' '; cout << endl;
+int egcd(int a, int b, int &x, int &y)
+{
+    if(!b) 
+    {
+        x = 1; y = 0;
+        return a;
+    }
+    int x1, y1;
+    int g = egcd(b, a % b, x1, y1);
+    x = y1;
+    y = x1 - y1 * (a / b);
+    return g;
+}
+void solve() {
+    int n, m; cin >> n >> m;
+    vector<int> a(n);
+    for(auto &x : a) cin >> x;
+    int S = accumulate(all(a), 0LL) % m;
+    // hhal(S);
+    int A = (n * (n + 1) / 2) % m;
+    int B = n % m;
+    int s = 0, d = 0;
+    // hha(A); hhal(B);
+    int g = egcd(A, B, d, s);
+    // hha(d); hha(s); hhal(g);
+    d = (d % m + m) % m;
+    s = (s % m + m) % m;
+    int invg = 0, tmp = 0;
+    int gg = egcd(g, m, invg, tmp);
+    int mn = S % gg;
+    int R = (mn - S + m) % m;
+    int t = (R / gg) * invg % m;
+    // hhal(mn);
+    // hhal(t);
+    d = d * t % m;
+    s = s * t % m;
+    cout << (S + A * d + B * s) % m << "\n";
+    cout << s << " " << d << "\n";
+}
+
+signed main() {
+    ios_base::sync_with_stdio(0); cin.tie(0);
+    solve();
+    return 0;
+}

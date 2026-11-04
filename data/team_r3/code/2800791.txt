@@ -1,0 +1,53 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define ff first
+#define ss second
+#define pb push_back
+#define all(a) (a).begin(),(a).end()
+#define rall(a) (a).rbegin(),(a).rend()
+#define sz(a) (int)(a).size()
+using Q = priority_queue<int, vector<int>, greater<>>;
+void solve() {
+    int n; cin >> n;
+    vector<Q> q(n + 1);
+    for(int i = 0; i < n; i++)
+    {
+        int l, r; cin >> l >> r;
+        //cout << l << " " << r << endl;
+        q[l].push(r);
+    }
+    auto merge = [&](int i, int j)
+    {
+        //cout << "MERGE " << i << " " << j << endl;
+        if(q[i].size() > q[j].size()) swap(q[i], q[j]);
+        while(q[i].size())
+        {
+            int x = q[i].top(); q[i].pop();
+            q[j].push(x);
+        }
+    };
+    for(int i = 1; i <= n; i++)
+    {
+        if(q[i].empty())
+        {
+            cout << "0\n";
+            return;
+        }
+        int lo = q[i].top(); q[i].pop();
+        if(q[i].size() && q[i].top() == lo)
+        {
+            cout << "0\n";
+            return;
+        }
+        if(q[i].size()) merge(i, lo + 1);
+    }
+    cout << "1\n";
+}
+
+signed main() {
+    ios_base::sync_with_stdio(0);cin.tie(0);
+    int t = 1;
+    cin >> t;
+    while(t--) solve();
+    return 0;
+}

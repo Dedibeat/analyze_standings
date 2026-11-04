@@ -1,0 +1,50 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define int long long
+#define all(v) (v).begin(), (v).end()
+#define hha(x) cout << #x << " = " << x << " "
+#define hhal(x) cout << #x << " = " << x << endl
+#define print(v) cout << #v << " = "; for(auto x : v) cout << x << " "; cout << endl;
+#define rep(i, a, b) for(int i = (a); i < (b); i++)
+void solve()
+{
+    int m, n; cin >> m >> n;
+    vector<pair<int, int>> v(m);
+    map<int, vector<int>> mp;
+    for(auto &[l, r] : v) cin >> l >> r, mp[l].push_back(r);
+    sort(all(v));
+    priority_queue<int, vector<int>, greater<>> q;
+    int sub = 0;
+    for(int i = 1; i < n; i++)
+    {
+        // while(q.size() && q.top() <= i) 
+        // {
+        //     q.top(), q.pop();
+        // }
+        if(q.empty())
+        {
+            auto it = mp.lower_bound(i);
+            if(it == mp.end()) break;
+            i = it -> first;
+        }
+        for(int r : mp[i]) q.push(r);
+        while(q.size() && q.top() <= i) 
+        {
+            q.top(), q.pop();
+        }
+        if(q.size()) 
+        {
+            //hha(i); hhal(q.top());
+            sub++;
+            q.pop();
+        }
+    }
+    cout << n - sub << "\n";
+
+}
+signed main()
+{
+    ios::sync_with_stdio(0); cin.tie(NULL);
+    int t; cin >> t; while(t--)
+    solve();
+}

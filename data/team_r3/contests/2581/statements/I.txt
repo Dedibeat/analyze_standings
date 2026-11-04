@@ -1,0 +1,94 @@
+Chi Fan
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+2 seconds
+1024 megabytes
+
+Grammy has two teammates A and B. Usually, the two teammates go out to eat at nice restaurants every
+day, while Grammy generally eats at the school cafeteria. Eating at the school cafeteria saves time and
+money, while going out sometimes incurs taxi fares. Even so, there are times when Grammy chooses to
+go out with her teammates to improve her meals.
+As the end of the month approaches, Grammy has only m yuan left for her living expenses, and she needs
+to pass the next n days with this money. On the i-th day, she has two choices:
+• Eat at the cafeteria, gaining a satisfaction of ai and spending bi yuan.
+• Go out to eat with her teammates, gaining a satisfaction of ci and spending di yuan.
+Since A and B go out to eat every day, there will be taxi fares each day. Let ei be the taxi fare on the
+i-th day, the three of them have established a rule for paying the taxi fare:
+pi
+• If Grammy does not go out to eat on the i-th day, then there is a 100
+probability that A will pay
+pi
+for the taxi fare, and a (1 − 100 ) probability that B will pay.
+
+• If Grammy goes out to eat on the i-th day, and since the last time Grammy paid for the taxi fare
+(or since the first day, if Grammy has never paid for the taxi fare), both A and B have each paid
+for the taxi fare at least once (regardless of whether Grammy went out to eat at that time), then
+Grammy will pay for the taxi fare this time. Otherwise, one of the teammates will pay according to
+the previous rule.
+Each day, Grammy will choose her action before the meal. She will know who paid the taxi fare on the
+previous day, and her goal is to maximize the expected total satisfaction, while ensuring that the total
+expenses do not exceed m yuan in the worst-case scenario. If she makes optimal decisions every day, what
+is the expected value of the total satisfaction?
+
+Input
+There is only one test case in each test file.
+The first line contains two integers n and m (1 ≤ n ≤ 2 × 103 , 1 ≤ m ≤ 5 × 103 ), indicating the number
+of days and the total expense limit.
+For the following n lines, the i-th line contains six integers ai , bi , ci , di , ei , and pi (0 ≤ bi , di , ei ≤ 5 × 103 ,
+0 ≤ ai , ci ≤ 109 , 0 ≤ pi ≤ 100). Their meanings are described above.
+
+Output
+Output one line containing one single number, indicating the maximum expected value of total satisfaction.
+If there does not exist a plan where the total expenses will be less than or equal to m yuan in the worst-case
+scenario, output −1.
+Your answer will be considered correct if its absolute or relative error does not exceed 10−6 . Formally
+speaking, suppose that your output is a and the jury’s answer is b, your output is accepted if and only if
+|a−b|
+−6
+max(1,|b|) ≤ 10 .
+
+Page 1 of 2
+
+Examples
+standard input
+2 10
+6 4 15 8 10 50
+5 2 13 5 8 50
+
+standard output
+20.000000000000
+
+5 12
+2 0 10 5 3 0
+2 0 9 4 3 100
+2 0 12 7 3 0
+2 0 8 4 3 100
+2 0 10 6 3 0
+
+25.000000000000
+
+6 20
+1 2 3 10 1 69
+5 1 12 2 2 23
+0 4 2 3 5 41
+6 1 6 9 0 84
+1 1 14 9 5 98
+3 2 13 2 4 43
+
+35.771706880000
+
+3 10
+10 4 30 8 1 0
+10 4 20 5 1 100
+10 6 5 2 1 50
+
+-1
+
+Page 2 of 2
+
+

@@ -1,0 +1,66 @@
+Xiangqi
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+1024 megabytes
+
+Chinese chess (Xiangqi) is a popular game enjoyed by people of all ages. This was even noted at the 49th
+ICPC World Finals.
+
+Photo taken in the 49th ICPC World Finals
+Today, having just learned the rules of Xiangqi, you challenge the grandmaster Nanani. The grandmaster
+does not want to overwhelm you, so you will play a simplified version of the game with the following rules:
+• The chessboard has 9 columns and 10 rows. Only two pieces are placed: a Knight and a Rook. If
+a piece is at column x and row y, we denote its position by (x, y). Both the Rook and the Knight
+must stay within the chessboard and may not move outside it.
+• The two players take turns moving their pieces. If, after a player’s move, their piece moves to the
+exact position of the opponent’s piece, it is said that they have “captured” the opponent’s piece,
+and the game ends.
+• The moving rules for the Knight are as follows:
+– It can move from (xN , yN ) to (xN + 2, yN ± 1), if (xN + 1, yN ) is empty.
+– It can move from (xN , yN ) to (xN − 2, yN ± 1), if (xN − 1, yN ) is empty.
+– It can move from (xN , yN ) to (xN ± 1, yN + 2), if (xN , yN + 1) is empty.
+– It can move from (xN , yN ) to (xN ± 1, yN − 2), if (xN , yN − 1) is empty.
+• The Rook can move to any other position in the same row or column, but cannot jump over the
+other piece.
+
+Page 1 of 2
+
+• Each player must move their piece on their turn. It can be proven that the current player always
+has a way to move their piece in any situation.
+The grandmaster controls the Knight, and you control the Rook, with the grandmaster moving first. Does
+the Rook have a strategy such that, no matter how the Knight responds, the Rook can capture the Knight
+in finitely many moves without being captured by the Knight?
+
+Input
+There are multiple test cases. The first line of the input contains an integer T (1 ≤ T ≤ 8010) indicating
+the number of test cases. For each test case:
+The first and only line contains four integers xN , yN , xR and yR (1 ≤ xN , xR ≤ 9, 1 ≤ yN , yR ≤ 10),
+where (xN , yN ) is the initial position of the Knight, and (xR , yR ) is the initial position of the Rook. It is
+guaranteed that the initial positions of the two pieces are different.
+
+Output
+For each test case output one line. If such a strategy exists for the Rook, output YES, or otherwise, output
+NO.
+
+Example
+standard input
+2
+1 5 2 5
+1 1 2 3
+
+standard output
+YES
+NO
+
+Note
+The sample test cases are shown as follows. Red pieces represent Knight, and black pieces represent Rook.
+
+Page 2 of 2
+
+

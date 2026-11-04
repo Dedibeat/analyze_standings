@@ -1,0 +1,52 @@
+502 Bad Gateway
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+2 seconds
+256 megabytes
+
+Welcome to the Internet Connection Practice Competition (ICPC) this year! In the competition, you and
+your teammates will fight against the Obstacle Maker System (OMS) to connect to the server successfully!
+Be careful with every refresh operation, as the system may assign you unknown obstacles.
+To simplify the problem, we model the competition process into the following form:
+Each team has a timer during the competition, and the goal is to get the remaining time to 0 as quickly as
+possible. At the beginning of the 0-th second, the OMS will uniformly and randomly generate an integer
+t0 in [1, T ] and initialize the remaining time of your timer to t0 seconds. Next, at the end of each second
+(starting with the 0-th second), the following events occur in order:
+• The remaining time of the timer will be decreased by 1. If the remaining time of the timer is zero at
+this time, the number of seconds from the start of the competition to this moment is your penalty.
+• Otherwise, you can do nothing after this or use the refresh operation on OMS once. If you choose
+to refresh your timer, OMS will uniformly and randomly generate a new integer t0 in [1, T ] and set
+the remaining time of your timer to t0 .
+Your goal is to minimize your penalty. Please calculate the expected penalty using the optimal strategy.
+During the contest, you always know the remaining time of the timer, and the value of T .
+
+Input
+The first line contains a single integer n (1 ≤ n ≤ 106 ), representing the number of test cases.
+For the following n lines, each line contains a single integer Ti (1 ≤ Ti ≤ 109 ), representing the interval
+for generating random numbers is [1, Ti ] for the i-th test case.
+
+Output
+For each test case, output a single line with two positive integers xi , yi where gcd(xi , yi ) = 1, representing
+the expected penalty using the optimal strategy is xi /yi . It can be proved that the answer can always be
+described as a fraction.
+
+Example
+standard input
+3
+1
+2
+3
+
+standard output
+1 1
+3 2
+2 1
+
+Page 1 of 1
+
+

@@ -1,0 +1,82 @@
+False Amber
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+2 seconds
+1024 megabytes
+
+Ras and Salt are playing a simplified version of Texas Hold’em called CAFE MiLK Poker. The game uses
+2n cards with ranks 1 ∼ 2n, and proceeds as follows:
+• One chip is placed in the center of the table. Each player has m chips and n cards.
+• Ras and Salt each draw one card uniformly at random from their own deck.
+• Both players know the two complete decks and the card they drew, but neither knows the card
+drawn by the other player.
+• Ras may choose to check or go all-in.
+• If Ras checks, both players reveal their cards, and the player with the higher card takes the chip on
+the table.
+• If Ras goes all-in:
+– Salt may choose to fold or call.
+– If Salt folds, Ras takes the chip on the table.
+– If Salt calls, both players reveal their cards, and the player with the higher card takes a total
+of m + 1 chips from the table and the other player.
+Ras and Salt may each use a mixed strategy π = pi : whenever the player makes a decision while holding
+card i, they choose one action with probability pi and the other action with probability (1 − pi ). Both
+players want to maximize their own expected profit, defined as the number of chips they have at the
+end of the game minus m.
+You are Chiffon, Ras’s best friend, and you know that Salt can read minds: although she cannot know
+which card Ras drew, she can know Ras’s strategy! Therefore, you need to help Ras find a strategy that
+maximizes her expected profit. Formally, you need to choose a mixed strategy πr for Ras that maximizes
+Ras’s expected profit when Salt may choose her strategy πs based on πr .
+
+Input
+This problem contains multiple test cases.
+The first line contains a positive integer T (1 ≤ T ≤ 104 ), representing the number of test cases.
+For each test case:
+• The first line contains two integers n, m (1 ≤ n ≤ 2 × 105 , 1 ≤ m ≤ 109 ).
+• The second line contains n integers ai (1 ≤ ai ≤ 2n), representing Ras’s cards.
+• The third line contains n integers bi (1 ≤ bi ≤ 2n), representing Salt’s cards.
+It is guaranteed that the sum of n over all test cases does not exceed 2 × 105 , and that all ai and bi are
+pairwise distinct; in other words, every integer from 1 through 2n occurs exactly once.
+
+Output
+For each test case, output one line containing a floating-point number representing the answer.
+Your answer is considered correct if its absolute or relative error does not exceed 10−6 . Formally, let your
+|a−b|
+answer be a and the correct answer be b. Your answer is accepted if and only if max(1,|b|)
+≤ 10−6 .
+Page 1 of 2
+
+Example
+standard input
+3
+1 1
+1
+2
+2 2
+1 4
+2 3
+3 10
+3 6 1
+5 2 4
+
+standard output
+0.000000000000000
+0.833333333333333
+0.747474747474747
+
+Note
+In the first test case, Ras never goes all-in.
+In the second test case, Ras goes all-in with probability 32 when she draws card 1, and always goes all-in
+when she draws card 4. One possible strategy for Salt in this case is to always call. Therefore:
+• With probability 16 , Ras draws card 1 and checks, earning a profit of 0.
+• With probability 31 , Ras draws card 1 and goes all-in, earning a profit of −2.
+• With probability 21 , Ras draws card 4 and goes all-in, earning a profit of 3.
+Her expected profit is 16 · 0 + 13 · (−2) + 21 · 3 = 56 .
+
+Page 2 of 2
+
+

@@ -1,0 +1,66 @@
+Dividing Sequence
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+1024 megabytes
+
+Alice got a sequence A constructed by her neighbors. Since Alice doesn’t like long sequences, she decides
+to divide the sequence into two (possibly empty) sequences B and C and give them back to her neighbors.
+Her division should meet the following constraints:
+• B and C are both subsequences of sequence A.
+• Each element of A belongs to exactly one of the sequences B or C.
+• B ≤ C in lexicographical order.
+Here we define a sequence P = p1 , p2 , · · · , pu of length u to be lexicographically smaller than a sequence
+Q = q1 , q2 , · · · , qv of length v if one of the following constraints is true:
+• u < v and P is a prefix of Q.
+• There exists an integer 1 ≤ k ≤ min(u, v) such that pi = qi for all 1 ≤ i < k and pk < qk .
+As a fair girl, Alice hopes to divide fairly such that the lexicographical order of C is as small as possible.
+Please tell Alice the minimum possible C.
+
+Input
+There are multiple test cases. The first line of the input contains an integer T (1 ≤ T ≤ 104 ) indicating
+the number of test cases. For each test case:
+The first line contains an integer n (1 ≤ n ≤ 5 × 103 ) indicating the length of the sequence A.
+The second line contains n integers a1 , a2 , · · · , an (1 ≤ ai ≤ 105 ), where ai is the i-th element of sequence
+A.
+It is guaranteed that the sum of n of all test cases does not exceed 104 .
+
+Output
+For each test case output two lines. First output one line containing one integer m indicating the length
+of the optimal C. Then output a second line containing m integers c1 , c2 , · · · , cm separated by a space,
+where ci is the i-th element of the optimal C.
+
+Example
+standard input
+5
+5
+3 1 2 3 2
+3
+1 1 2
+3
+3 3 3
+5
+1 3 1 3 1
+5
+2 2 1 3 3
+
+standard output
+1
+3
+3
+1 1 2
+2
+3 3
+3
+1 3 1
+4
+2 1 3 3
+
+Page 1 of 1
+
+

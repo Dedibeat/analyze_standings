@@ -1,0 +1,62 @@
+Permutation Counting 4
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+3 seconds
+1024 megabytes
+
+Given n pairs (li , ri ), you need to count how many permutations p of size n there are such that li ≤ pi ≤ ri .
+You only need to output the answer modulo 2.
+
+Input
+The input consists of multiple test cases. The first line contains a single integer t (1 ≤ t ≤ 106 ) — the
+number of test cases. The description of the test cases follows.
+The first line contains one single integer n (1 ≤ n ≤ 106 ) — the size of the permutation p you need to
+count.
+Then, the i-th line of the following n lines contains two integers li , ri (1 ≤ li ≤ ri ≤ n).
+It is guaranteed that the sum of n over all test cases does not exceed 106 .
+
+Output
+For each test case, output one single integer representing the answer modulo 2.
+
+Example
+standard input
+4
+5
+1 2
+1 5
+1 2
+1 2
+2 2
+5
+1 1
+2 4
+2 3
+5 5
+3 4
+5
+3 5
+1 2
+3 4
+3 5
+3 3
+5
+1 5
+1 4
+4 5
+5 5
+1 2
+
+standard output
+0
+1
+0
+0
+
+Page 1 of 1
+
+

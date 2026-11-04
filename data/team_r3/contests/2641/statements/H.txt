@@ -1,0 +1,57 @@
+Cute Young Diagram Counting
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+2 seconds
+1024 megabytes
+
+A Young diagram is a finite set of cells, arranged in left-aligned rows, with the row lengths in nonincreasing order. It can be uniquely represented by an unordered integer partition λ = (λ1 , λ2 , . . . , λr )
+satisfying λ1 ≥ λ2 ≥ · · · ≥ λr ≥ 1, where r corresponds to the number of rows of the Young diagram, and
+λi corresponds to the number of cells in the i-th row for i = 1, 2, . . . , r.
+The conjugate of a Young diagram λ is another Young diagram obtained by transposing rows and
+columns, represented by the conjugate partition λT . More specifically, if λ has c = λ1 columns, then
+λT = (µ1 , µ2 , . . . , µc ) where µj = |{ i : λi ≥ j }| for j = 1, 2, . . . , c.
+For a cell at the i-th row and the j-th column that belongs to λ, let the subdiagram anchored at (i, j) be
+the set of all cells (x, y) of λ with x ≥ i and y ≥ j. It is easy to see that, this set is itself a Young diagram
+when viewed with (i, j) as its top-left corner.
+Define the cuteness of a Young diagram λ as the number of distinct Young diagrams that can be obtained
+from λ by performing the following operation any number (possibly zero) of times: choose any cell (i, j)
+of the current Young diagram, take the subdiagram anchored at (i, j), and replace it with its conjugate
+anchored at the same position. The operation is allowed if and only if the overall set of cells still forms a
+valid Young diagram; otherwise the operation is denied and undone, as illustrated below.
+
+You are given a non-increasing sequence of positive integers a1 , a2 , . . . , an . For each i = 1, 2, . . . , n, compute
+the cuteness of the Young diagram λ(i) , modulo 998 244 353, where λ(i) = (a1 , a2 , . . . , ai ).
+
+Input
+The first line contains a single integer n (1 ≤ n ≤ 106 ), denoting the length of the given sequence.
+The second line contains n integers a1 , a2 , . . . , an (1 ≤ ai ≤ n). It is guaranteed that a1 ≥ a2 ≥ · · · ≥ an .
+
+Output
+Output n integers separated by spaces, where the i-th integer represents the cuteness of the Young diagram
+λ(i) , modulo 998 244 353.
+
+Example
+standard input
+3
+3 2 1
+
+standard output
+2 3 1
+
+Note
+For the sample case:
+
+Page 1 of 2
+
+• The distinct Young diagrams that can be obtained from λ(1) are (3) and (1, 1, 1);
+• The distinct Young diagrams that can be obtained from λ(2) are (3, 2), (3, 1, 1), and (2, 2, 1);
+• The only Young diagram that can be obtained from λ(3) is (3, 2, 1) itself.
+
+Page 2 of 2
+
+

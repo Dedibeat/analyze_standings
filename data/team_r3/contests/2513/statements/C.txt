@@ -1,0 +1,66 @@
+Canvas Painting
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+2 seconds
+1024 megabytes
+
+In the Kingdom of Flealand, there is a long canvas divided into n segments, numbered from 1 to n. Each
+segment is initially painted with a unique color, such that the color of segment i is ai = i.
+The royal artist Crysflea has received m magical paint spells. Each spell affects a continuous interval [l, r]
+on the canvas. When a spell is cast, the artist may choose **any two positions** u and v within this
+interval (l ≤ u, v ≤ r), and repaint segment u with the color of segment v, i.e., perform au = av .
+The spells can be used in **any order**, and each spell may be used at most once.
+After all spells are used, the artist wishes to admire the canvas. Help the artist **minimize the number
+of distinct colors** that remain on the canvas.
+
+Input
+The input contains multiple test cases.
+The first line contains a single integer T (1 ≤ T ≤ 2 × 105 ) — the number of test cases.
+For each test case: - The first line contains two integers m (1 ≤ m ≤ 2 × 105 ) and n (1 ≤ n ≤ 109 ) —
+the number of spells and the length of the canvas. - The next m lines each contain two integers l and r
+(1 ≤ l ≤ r ≤ n) — describing one paint spell.
+P
+The total number of spells across all test cases satisfies
+m ≤ 2 × 105
+
+Output
+For each test case, output a single integer — the minimum number of distinct colors on the canvas after
+applying the spells.
+
+Example
+standard input
+4
+3 3
+1 3
+2 2
+2 3
+4 4
+1 4
+2 3
+2 3
+4 4
+6 7
+1 4
+2 3
+3 4
+3 6
+5 7
+5 6
+2 1
+1 1
+1 1
+
+standard output
+1
+2
+1
+1
+
+Page 1 of 1
+
+

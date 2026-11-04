@@ -1,0 +1,46 @@
+the Median of the Median of the Median
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+2 seconds
+1024 megabytes
+
+Today is YQH’s birthday, and she received a positive integer sequence of length n, denoted as {ai }ni=1 , as
+a gift.
+YQH is very interested in medians, so she wants to find the median of the median of the median for
+this sequence. Specifically, let bl,r be the median of the multiset {ai }l≤i≤r , and let cl,r be the median of
+the multiset {bi,j }l≤i≤j≤r . Then, what YQH wants to find is the median of the multiset {cl,r }1≤l≤r≤n .
+However, she finds this task too difficult, so she asked you for help.
+Note: If you are not familiar with the concept of a median, the median of a multiset of size m is the
+dm/2e-th smallest element in it.
+
+Input
+A single positive integer on the first line represents n.
+The second line contains n positive integers representing a1 , . . . , an .
+It is guaranteed that 1 ≤ n ≤ 2000 and 1 ≤ ai ≤ 109 .
+
+Output
+Output a single line with one integer representing the answer.
+
+Examples
+standard input
+
+standard output
+
+4
+1 3 1 7
+
+1
+
+8
+3 3 8 4 5 3 8 5
+
+4
+
+Page 1 of 1
+
+

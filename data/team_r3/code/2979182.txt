@@ -1,0 +1,88 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define int unsigned long long 
+#define ff first 
+#define ss second
+#define sz(a) (int)(a).size()
+#define all(a) (a).begin(),(a).end()
+#define rall(a) (a).rbegin(),(a).rend()
+#define pb push_back 
+#define _ << " " <<
+const int inf = 2e18;
+const int N = 90;
+
+int n, m, c;
+vector<int> adj[N], adj_t[N], g[N], lvl[N];
+vector<int> w(N), dist(N, -1), vis(N), ans(N);
+
+void solve() {
+    
+    cin >> n >> m >> c;
+
+    for(int i = 0; i < n; i++) cin >> w[i];
+
+    for(int i = 0; i < m; i++) {
+        int u, v;
+        cin >> u >> v;
+        u--, v--;
+        g[u].pb(v);
+    }
+
+    queue<int> q;
+    q.push(0);
+    vis[0] = 1;
+    dist[0] = 0;
+    while(!q.empty()) {
+        int u = q.front();
+        q.pop();
+
+        for(int v : g[u]) {
+            if(!vis[v]) {
+                vis[v] = 1;
+                dist[v] = dist[u] + 1;
+                q.push(v);
+            }
+        }
+    }
+
+
+    if(dist[n - 1] == -1) {
+        cout << 0;
+        return;
+    }  
+
+
+    for(int u = 0; u < n; u++) {
+        if(dist[u] != -1) lvl[dist[u]].pb(u);
+
+
+        for(int v : g[u]) {
+            if(dist[u] + 1 == dist[v]) {
+                adj[u].pb(v);
+                adj_t[v].pb(u);
+            }
+        }
+    }
+    ans[0] = 1;
+    for(int i = 0; i < dist[n - 1]; i++) {
+
+        for(int u : lvl[i]) {
+            for(int v : adj[u]) {
+                ans[v] += ans[u];
+            } 
+
+
+        }
+    }
+    cout << ans[n - 1] << '\n';
+
+    
+}
+
+signed main() {
+    ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
+    int t = 1;
+    // cin >> t;
+    while(t--) solve();
+    return 0;
+}

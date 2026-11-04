@@ -1,0 +1,52 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define int long long
+
+void solve()
+{
+
+}
+signed main()
+{
+    ios::sync_with_stdio(0); cin.tie(0);
+    int n, m; cin >> n >> m;
+    set<string> st;
+    vector<string> a, b;
+    for(int i = 0; i < n; i++) {
+        string s; cin >> s;
+        if(st.find(s) == st.end()) {
+            st.insert(s);
+            a.push_back(s);
+        }
+    }
+    st.clear();
+    for(int i = 0; i < m; i++) {
+        string s; cin >> s;
+        if(st.find(s) == st.end()) {
+            st.insert(s);
+            b.push_back(s);
+        }
+    }
+    st.clear();
+    int pos1 = 0, pos2 = 0;
+    vector<string> ans;
+    while(pos1 < a.size() || pos2 < b.size()) {
+        if(pos1 < a.size()) {
+            string s = a[pos1];
+            if(st.find(s) == st.end()) {
+                st.insert(s);
+                ans.push_back(s);
+            }
+            pos1++;
+        }
+        if(pos2 < b.size()) {
+            string s = b[pos2];
+            if(st.find(s) == st.end()) {
+                st.insert(s);
+                ans.push_back(s);
+            }
+            pos2++;
+        }
+    }
+    for(auto &x : ans) cout << x << '\n';
+}

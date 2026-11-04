@@ -1,0 +1,81 @@
+Ordainer of Inexorable Judgment
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+1024 megabytes
+
+Neuvillette is the Chief Justice of Fontaine, known as the Iudex, and he is renowned for his unassailable
+impartiality. As a playable character in the world-famous game Genshin Impact, he is known for his
+powerful charged attack that can hit enemies within a specific range.
+Since he is very powerful, many players use him while challenging almost every quest. However, not
+everybody in Teyvat is happy about this, especially other ADC (Attack Damage Carry) characters,
+including Kamisato Ayaka, Keqing, etc. Together, they decide to persuade Mihoyo to nerf Neuvillette in
+the game. To do so, they must submit a report about Neuvillette’s total damage in several scenarios.
+
+Created from Genshin Impact official material
+Each battle scenario happens on a two-dimensional plane. Neuvillette stands on (0, 0) facing (x0 , y0 )
+initially, making a charged attack which lasts for t units of time, and rotates 1 rad counter-clockwise per
+unit of time. That is to say, Neuvillette turns a circle counter-clockwise in 2π units of time.
+Consider a ray from (0, 0) towards the direction Neuvillette faces. The attack range is the set of points
+whose distance to the ray is at most d. If the target, whose shape is a convex polygon, has common points
+with the attack range, it will suffer 1 continued damage per unit of time.
+As an experienced programmer, you are summoned by Ayaka. This time, your task is to calculate the
+damage the target incurs in the first t units of time.
+
+Input
+There is only one test case in each test file.
+The first line contains five integers n, x0 , y0 , d, and t (3 ≤ n ≤ 100, −104 ≤ x0 , y0 ≤ 104 , x20 + y02 > 0,
+1 ≤ d, t ≤ 104 ).
+For the following n lines, the i-th line contains two integers xi and yi (−104 ≤ xi , yi ≤ 104 ), indicating
+the coordinates of the i-th vertex of the convex polygon.
+All n vertices are given in counter-clockwise order, and any three of them are not collinear. It is also
+guaranteed that the shape has no common points with the circle centered at (0, 0) with radius d. That is
+to say, there does not exist a point inside or on the boundary of the convex polygon, while at the same
+time inside or on the boundary of the circle.
+
+Page 1 of 2
+
+Output
+Output one line containing one real number, indicating the damage the target incurs in the first t units
+of time.
+Your answer will be considered correct if its absolute or relative error does not exceed 10−6 . Formally
+speaking, suppose that your output is a and the jury’s answer is b, your output is accepted if and only if
+|a−b|
+−6
+max(1,|b|) ≤ 10 .
+
+Examples
+standard input
+3 1 0 1 1
+1 2
+2 1
+2 2
+
+standard output
+1.000000000000
+
+3 1 0 1 2
+1 2
+2 1
+2 2
+
+1.570796326795
+
+3 1 0 1 10000
+1 2
+2 1
+2 2
+
+2500.707752257475
+
+Note
+The figure below simultaneously shows the initial state of the sample test cases.
+
+Page 2 of 2
+
+

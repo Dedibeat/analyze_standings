@@ -1,0 +1,52 @@
+2022 International Collegiate Programming Contest, Jinan Site
+Qilu University of Technology (Shandong Academy of Sciences), November 27, 2022
+
+Problem K. Stack Sort
+Input ﬁle:
+Output ﬁle:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+512 megabytes
+
+You are given a permutation with n numbers, a1 , a2 , . . . , an (1 ≤ ai ≤ n, ai ̸= aj when i ̸= j).
+You want to sort these numbers using m stacks. Speciﬁcally, you should complete the following task:
+Initially, all stacks are empty. You need to push each number ai to the top of one of the m stacks one by
+one, in the order of a1 , a2 , . . . , an . After pushing all numbers in the stacks, you pop all the elements
+from the stacks in a clever order so that the ﬁrst number you pop is 1, the second number you pop is 2,
+and so on. If you pop an element from a stack S, you cannot pop any element from the other
+stacks until S becomes empty.
+What is the minimum possible m to complete the task?
+
+Input
+The ﬁrst line contains one integer T (1 ≤ T ≤ 105 ), the number of test cases.
+For each test case, the ﬁrst line contains one positive integer n (1 ≤ n ≤ 5 × 105 ). The next line contains
+n integers a1 , . . . , an (1 ≤ ai ≤ n) denoting the permutation. It is guaranteed that a1 , . . . , an form a
+permutation, i.e. ai =
+̸ aj for i ̸= j.
+It is guaranteed that the sum of n over all test cases is no more than 5 × 105 .
+
+Output
+For each test case, output the minimum possible m in one line.
+
+Example
+standard input
+3
+3
+1 2 3
+3
+3 2 1
+5
+1 4 2 5 3
+
+standard output
+3
+1
+4
+
+Page 16 of 18
+
+

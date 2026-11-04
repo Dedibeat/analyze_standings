@@ -1,0 +1,69 @@
+The 1st Universal Cup
+Stage 1: Shenyang, January 28-29, 2023
+
+Problem I. Quartz Collection
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+2 seconds
+512 megabytes
+
+There is a shop selling n types of quartz in Byteland. Only two pieces of each type of quartz will be on
+sale every day, and the second piece will be on sale only after the first piece has been sold.
+Two wizards Alice and Bob are collecting these n types of quartz to strengthen their wand. Due to the
+quartz shortage, they reach an agreement that either of them buy only one piece of each type each day.
+Both of them wants to minimize their own cost each day. To reflect fairness, Alice buys one piece of quartz
+first, and then Bob and Alice buy two pieces in turn until only one piece remains. The one who still hasn’t
+collected all types of quartz buys the last piece.
+In each of the following m days, the prices of the two pieces of one type of quartz will change permanently,
+and Alice wants to know the minimum cost for her to collect all types of quartz if both Alice and Bob
+take the best strategy on the first day and each of the following m days.
+
+Input
+The first line contains two integers n and m (1 ≤ n, m ≤ 105 ), indicating the number of types of quartz
+and the number of following days.
+Then n lines follow, the i-th of which contains two integers a and b (1 ≤ a, b ≤ 105 ), indicating the prices
+of the first piece and the second piece of the i-th type of quartz on sale respectively.
+Then m lines follow, each line contains three integers t (1 ≤ t ≤ n), x and y (1 ≤ x, y ≤ 105 ), indicating
+that the prices of the first piece and the second piece of the t-th type of quartz on sale will change to x
+and y respectively.
+
+Output
+Output m + 1 lines, each containing a single integer, indicating the minimum cost for Alice to collect all
+types of quartz on the first day and each of the following m days.
+
+Example
+standard input
+4 5
+2 4
+5 7
+1 7
+2 1
+4 5 2
+1 6 2
+4 4 3
+2 1 3
+3 6 6
+
+standard output
+13
+14
+15
+14
+10
+13
+
+Note
+In the sample case, one of the best strategies on the first day is as follows:
+• Alice buys the first piece of the third type of quartz.
+• Bob buys the first piece of the first type and the second type.
+• Alice buys the second piece of the first type and the second type.
+• Bob buys the second piece of the third type and the first piece of the fourth type.
+• Alice buys the second piece of the fourth type, which is also the last piece of quartz.
+Page 9 of 16
+
+

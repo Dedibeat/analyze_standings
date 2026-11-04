@@ -1,0 +1,1184 @@
+The 2026 ICPC Asia Chengdu
+Regional Contest
+Hosted by UESTC
+
+Problems
+A
+B
+C
+D
+E
+F
+G
+H
+I
+J
+K
+L
+M
+
+Average of Averages
+Bouncing Particles
+Counting Arrays
+Duel of Wrath
+Enclose the Point
+First Word
+Graph Reconstruction
+Hidden Order
+Invisible Edges
+Joint Relocation
+Keep Your Distance
+Long Slides
+Minimum Records
+
+Copyright © 2026. This work is licensed under the Creative Commons Attribution-ShareAlike 4.0
+International License.
+https://creativecommons.org/licenses/by-sa/4.0/
+
+A
+
+Average of Averages
+
+Time limit: 1s
+
+The average of averages is not always the average.
+VegiCat has just learned about segment trees and wants to practice using them.
+For a positive integer n, he considers the sequence ai = i (1 ≤ i ≤ n). He decides to
+build a segment tree to answer range average queries on this sequence.
+In VegiCat’s segment tree, each node corresponds to an interval [l, r] and stores a
+value vl,r , which VegiCat intends to represent the average over that interval. The
+root corresponds to the entire interval [1, n].
+However, VegiCat mistakenly assumes that a parent interval’s average always equals
+the average of the values stored in its two child nodes. Therefore, he adds the values stored in the two child
+nodes and divides the sum by 2.
+VegiCat ﬁrst constructs the segment tree by calling Build(1, n). After the segment tree has been built, he
+answers a query for an interval [L, R] by calling Query(1, n, L, R). The two recursive procedures are given in
+Algorithm 1.
+Algorithm 1 Build and Query
+1: procedure Build(l, r)
+2:
+if l = r then
+3:
+vl,l ← al
+4:
+return
+5:
+end if⌊
+⌋
+l+r
+6:
+m←
+2
+7:
+Build(l, m)
+8:
+Build(m + 1, r)
+vl,m + vm+1,r
+9:
+vl,r ←
+2
+10: end procedure
+11: procedure Query(l, r, L, R)
+12:
+if L ≤ l and r ≤ R then
+13:
+return vl,r
+14:
+end if⌊
+⌋
+
+l+r
+2
+16:
+if R ≤ m then
+17:
+return Query(l, m, L, R)
+18:
+else if L > m then
+19:
+return Query(m + 1, r, L, R)
+20:
+end if
+21:
+x ← Query(l, m, L, R)
+22:
+y ← Query(m + 1, r, L, R)
+x+y
+23:
+return
+2
+24: end procedure
+15:
+
+m←
+
+Although VegiCat’s algorithm is incorrect in general, it returns the correct average for some intervals. Count
+the number of such intervals.
+
+Problem A: Average of Averages
+
+3
+
+For an interval [L, R], its true average is
+∑R
+
+i=L ai
+
+R−L+1
+
+.
+
+More precisely, count the number of pairs (L, R) satisfying 1 ≤ L ≤ R ≤ n such that
+∑R
+Query(1, n, L, R) =
+
+i=L ai
+
+R−L+1
+
+.
+
+All averages are computed as exact rational numbers, without rounding or truncation.
+
+Input
+The ﬁrst line contains an integer T (1 ≤ T ≤ 104 ), the number of test cases. The description of the test cases
+follows.
+Each of the next T lines contains one integer n (1 ≤ n ≤ 106 ), the length of the sequence.
+It is guaranteed that the sum of n over all test cases does not exceed 2 · 106 .
+
+Output
+For each test case, output an integer — the number of intervals [L, R] for which VegiCat’s query procedure
+returns exactly the true average.
+
+Sample Input 1
+
+Sample Output 1
+
+3
+1
+5
+14
+
+1
+10
+35
+
+Note
+For the second test case, n = 5, there are 10 valid intervals:
+[1, 1], [1, 2], [2, 2], [2, 3], [2, 5],
+[3, 3], [3, 4], [4, 4], [4, 5], [5, 5].
+For example, querying [2, 5] returns
+2+3
+4+5
+2 + 2
+
+2
+
+=
+
+7
+,
+2
+
+which equals the true average of 2, 3, 4, 5. Thus, [2, 5] is counted.
+In contrast, querying [1, 5] returns
+1+2
+2 +3
+
+2
+
++ 4+5
+27
+2
+=
+,
+2
+8
+
+while its true average is 3. Thus, [1, 5] is not counted.
+
+4
+
+Problem A: Average of Averages
+
+B
+
+Bouncing Particles
+
+Time limit: 2s
+
+This problem has an attachment. You can use it to simulate and visualize
+the movements of the particles.
+VegiCat observes particles on a grid with n rows and n columns. The lower-left cell
+has coordinates (1, 1). The horizontal coordinate increases from left to right, and
+the vertical coordinate increases from bottom to top. Each particle has a horizontal
+direction (left or right) and a vertical direction (up or down). At the beginning of
+each step, each particle adjusts its directions as follows:
+
+• Its horizontal direction is reversed if the next cell in that direction is outside the grid.
+• Its vertical direction is reversed if the next cell in that direction is outside the grid.
+After these adjustments, a particle at (x, y) produces two child particles:
+• One at (x − 1, y) if its horizontal direction is left, or at (x + 1, y) if it is right;
+• One at (x, y − 1) if its vertical direction is down, or at (x, y + 1) if it is up.
+Both child particles inherit the parent’s horizontal and vertical directions. The parent then disappears.
+Multiple particles may occupy the same cell at the same time, regardless of their directions. They do not
+interact or change each other’s directions.
+At time 0, there are four particles at (x0 , y0 ), with the following direction pairs:
+• Right and up;
+• Left and up;
+• Right and down;
+• Left and down.
+At each step, all particles simultaneously adjust their directions and then split as described above.
+You are given q queries. Each query gives integers A, B, C and a time t. For each query, ﬁnd the number of
+grid cells (x, y) that satisfy Ax + By + C = 0 and contain at least one particle at time t.
+
+Input
+The ﬁrst line contains an integer T (1 ≤ T ≤ 105 ), the number of test cases. The description of the test cases
+follows.
+The ﬁrst line of each test case contains four integers n, x0 , y0 , q (2 ≤ n ≤ 109 , 1 ≤ x0 , y0 ≤ n, 1 ≤ q ≤ 105 ). The
+grid has n rows and n columns. The initial cell is (x0 , y0 ), and there are q queries.
+Each of the next q lines contains four integers A, B, C and t (|A|, |B|, |C| ≤ 109 , 0 ≤ t ≤ 109 ). This describes a
+query for the line Ax + By + C = 0 at time t. It is guaranteed that A and B are not both 0 simultaneously.
+It is guaranteed that the sum of q over all test cases does not exceed 105 .
+
+Output
+For each query, output one integer on one line: the number of grid cells (x, y) that satisfy Ax + By + C = 0
+and contain at least one particle at time t.
+
+Sample Input 1
+
+Sample Output 1
+
+1
+6 5 5 4
+2 -1 -5 0
+1 -1 0 1
+11 45 14 2
+1 0 -5 3
+
+1
+0
+0
+3
+
+Problem B: Bouncing Particles
+
+5
+
+Note
+The ﬁgure below shows the particle evolution in the sample, as well as the queried straight lines, where the
+gray cells represent the cells containing integer points through which the straight line passes, and all splitting
+directions have undergone legality adjustments. Since the third query is too far away from the grid under
+consideration, the line of the third query is omitted here.
+Particles in the same cell with the same direction pair are drawn as a single symbol; multiplicities are omitted.
+
+6
+
+Problem B: Bouncing Particles
+
+C
+
+Counting Arrays
+
+Time limit: 2s
+
+VegiCat gives you two integers n and m. Consider integer arrays a1 , a2 , . . . , an such
+that
+a1 = 0,
+
+0 ≤ ai+1 − ai ≤ 1
+
+(1 ≤ i < n).
+
+Let si = a1 +a2 +. . .+ai be the preﬁx sums of a. VegiCat also tells you the preﬁx sums
+at m positions; that is, you are given m constraints of the form spj = vj (1 ≤ j ≤ m).
+Count the number of arrays satisfying all constraints, modulo 998244353. If no array
+satisﬁes all the constraints, the answer is 0.
+
+Input
+The ﬁrst line contains an integer T (1 ≤ T ≤ 104 ), the number of test cases. The description of the test cases
+follows.
+Each test case is given as follows:
+The ﬁrst line contains two integers n and m (1 ≤ n ≤ 100, 0 ≤ m ≤ n), the length of the array and the number
+of preﬁx sum constraints, respectively.
+The j-th of the next m lines contains two integers pj and vj (1 ≤ pj ≤ n, 0 ≤ vj ≤ 109 ). This describes a
+constraint: the sum of the ﬁrst pj elements of the array must equal vj .
+The positions pj are given in strictly increasing order.
+
+Output
+For each test case, output an integer — the number of valid arrays modulo 998244353.
+
+Sample Input 1
+
+Sample Output 1
+
+6
+1 0
+3 1
+3 1
+3 1
+2 0
+4 1
+4 3
+5 2
+1 0
+5 4
+5 2
+2 0
+5 10
+
+1
+1
+2
+2
+2
+0
+
+Note
+Without any preﬁx constraints there are exactly 2n−1 such arrays, because each of the n − 1 adjacent diﬀerences
+may independently be 0 or 1.
+In the second test case, the only array with s3 = 1 is (0, 0, 1).
+In the third test case, s2 = 0 forces a2 = 0, after which a3 may be 0 or 1.
+In the fourth test case, the arrays are (0, 1, 1, 1) and (0, 0, 1, 2).
+In the ﬁfth test case, the arrays with s5 = 4 are (0, 0, 1, 1, 2) and (0, 1, 1, 1, 1).
+In the sixth test case, s2 = 0 forces a1 = a2 = 0, so s5 ≤ 6. The constraint s5 = 10 is impossible.
+
+Problem C: Counting Arrays
+
+7
+
+This page is intentionally left blank.
+
+D
+
+Duel of Wrath
+
+Time limit: 1s
+
+VegiCat and VegiDog are playing a special duel in Slay the Spire. VegiCat plays as
+Watcher A, and VegiDog plays as Watcher B. A and B have base attack powers a and
+b and initial health values hA and hB , respectively.
+At the start of each round, the game determines each Watcher’s stance for that round.
+Each Watcher can be in one of the following two stances:
+• Normal: damage dealt and damage received are unchanged.
+• Wrath: damage dealt and damage received are both doubled.
+For each attack, the damage initially equals the attacker’s base attack power. It is
+doubled if the attacker is in Wrath and doubled again if the defender is in Wrath.
+Thus, the damage in each round is as follows:
+• If both characters are in Normal, A deals a damage to B, and B deals b damage to A.
+• If exactly one character is in Wrath, A deals 2a damage to B, and B deals 2b damage to A.
+• If both characters are in Wrath, A deals 4a damage to B, and B deals 4b damage to A.
+Each round, both characters attack once simultaneously, and both health values decrease simultaneously. Both
+attacks take eﬀect even if either character’s health becomes 0 or less during the round. At the end of the
+round, a character with health less than or equal to 0 dies. If either character dies, the battle ends immediately;
+otherwise, the next round begins. Base attack powers never change, and health is never restored.
+The stances for each round are determined by the game, not by the players. Any combination of the two
+characters’ stances is possible in each round.
+VegiCat wins only if B dies while A remains alive. If both characters die in the same round, VegiCat does not
+win. Determine whether VegiCat will win regardless of how both characters’ stances change.
+
+Input
+The ﬁrst line contains an integer T (1 ≤ T ≤ 105 ), the number of test cases. The description of the test cases
+follows.
+Each test case contains one line with four integers a, b, hA , and hB (1 ≤ a, b, hA , hB ≤ 1018 ), giving the
+characters’ base attack powers and initial health values, respectively.
+
+Output
+For each test case, output YES if VegiCat will win regardless of how both characters’ stances change, and NO
+otherwise. Output each answer on a separate line.
+You can output the answer in any case. For example, yEs, yes, Yes, and YES are all accepted as positive
+responses.
+
+Sample Input 1
+
+Sample Output 1
+
+5
+1 1 5 1
+1 1 4 1
+1 1 1 1
+1 1 1 5
+2 3 13 2
+
+YES
+NO
+NO
+NO
+YES
+
+Sample Input 2
+
+Sample Output 2
+
+4
+3 2 18 13
+3 2 16 13
+3 2 9 13
+3 2 17 13
+
+YES
+NO
+NO
+YES
+
+Problem D: Duel of Wrath
+
+9
+
+Note
+In the ﬁrst test case of the ﬁrst sample, B always dies in the ﬁrst round. A receives at most 4 damage in that
+round and remains alive.
+In the second test case of the ﬁrst sample, A wins if both characters are normal in the ﬁrst round. If both
+characters are in Wrath in the ﬁrst round, both die. Therefore, the answer is NO.
+In the second test case of the second sample, if both characters are normal for the ﬁrst 4 rounds, their remaining
+health values are 8 and 1. If both enter Wrath in round 5, both die, so victory is not guaranteed.
+
+10
+
+Problem D: Duel of Wrath
+
+E
+
+Enclose the Point
+
+Time limit: 1s
+
+There are n points P1 , P2 , . . . , Pn in the plane. VegiCat has q queries for you. Each
+query gives a point P .
+For each query, construct a simple polygon using some of the given points as its
+vertices. The polygon must contain P strictly inside it and have the minimum
+number of vertices. If no such polygon exists, output −1.
+A simple polygon is a closed polygonal chain with at least three distinct vertices.
+Adjacent edges intersect only at their common endpoint, and nonadjacent edges do
+not intersect.
+
+Examples of simple and non-simple polygons
+
+Input
+The ﬁrst line contains an integer T (1 ≤ T ≤ 2 · 104 ), the number of test cases. The description of the test cases
+follows.
+The ﬁrst line of each test case contains two positive integers n and q (3 ≤ n ≤ 105 , 1 ≤ q ≤ 105 ), representing
+the number of given points and the number of queries.
+The i-th of the next n lines contains two integers xi and yi (−109 ≤ xi , yi ≤ 109 ), the coordinates of Pi . It is
+guaranteed that these n points are pairwise distinct.
+Each of the next q lines contains two integers x and y (−109 ≤ x, y ≤ 109 ), the coordinates of the queried point.
+It is guaranteed that the sum of n over all test cases does not exceed 105 .
+It is guaranteed that the sum of q over all test cases does not exceed 105 .
+
+Output
+For each query, if no polygon satisfying the requirements exists, output one integer −1 on a line.
+Otherwise, output a polygon with the minimum number of vertices. On the ﬁrst line, output one integer m,
+the number of vertices.
+On the second line, output m integers a1 , a2 , . . . , am (1 ≤ ai ≤ n), the indices of the vertices in order. The
+polygon is Pa1 Pa2 . . . Pam . The vertices may be output in either clockwise or counterclockwise order.
+The indices must be pairwise distinct, and the output polygon must be simple and contain the queried point
+strictly inside it. If there are multiple solutions, output any of them.
+
+Problem E: Enclose the Point
+
+11
+
+Sample Input 1
+
+Sample Output 1
+
+2
+5 1
+0 4
+-3 0
+-3 -3
+3 -3
+3 0
+0 0
+3 1
+0 4
+-3 0
+3 0
+0 0
+
+3
+4 1 2
+-1
+
+Note
+In the ﬁrst test case, the triangle P4 P1 P2 contains the queried point P = (0, 0) strictly inside it. Since a polygon
+has at least three vertices, this triangle has the minimum number of vertices.
+In the second test case, the only possible polygon is the triangle P1 P2 P3 . The queried point P = (0, 0) lies on
+the edge P2 P3 , so the answer is −1.
+
+Illustrations of the sample test cases
+
+12
+
+Problem E: Enclose the Point
+
+F
+
+First Word
+
+Time limit: 5s
+
+VegiCat has a string S of n lowercase English letters. He wants to build a dictionary
+that contains k distinct nonempty substrings of S as its words. A substring is a
+contiguous part of a string. Substrings with the same content are treated as the same
+word, even if they occur at diﬀerent positions in S.
+Let π be a mapping from the letters a, b, . . . , z to the corresponding letters in a
+permutation of the 26 lowercase English letters. For example, the permutation
+qwertyuiopasdfghjklzxcvbnm deﬁnes the following mapping:
+c a b c d e f g h i j k l m n o p q r s t u v w x y z
+π(c) q w e r t y u i o p a s d f g h j k l z x c v b n m
+
+For a string u = u1 u2 · · · um , deﬁne
+
+π(u) = π(u1 )π(u2 ) · · · π(um ).
+
+For example, with the mapping above, π(apple) = qhhst.
+VegiCat wants the dictionary to contain a word w such that, after applying any such mapping π to every word
+in the dictionary, π(w) is always the lexicographically smallest word in the resulting dictionary.
+For each k = 1, 2, . . . , n, ﬁnd the number of dictionaries that contain k distinct words and satisfy the requirement,
+modulo 998244353. Two dictionaries are considered diﬀerent if and only if they contain diﬀerent sets of words
+before any mapping is applied.
+Recall that string a is lexicographically smaller than string b if a is a preﬁx of b (and a ̸= b), or there exists an
+index i (1 ≤ i ≤ min(|a|, |b|)) such that ai < bi , and for any index j (1 ≤ j < i) aj = bj .
+
+Input
+The ﬁrst line contains an integer T (1 ≤ T ≤ 104 ), the number of test cases. The description of the test cases
+follows.
+The ﬁrst line of each test case contains an integer n (1 ≤ n ≤ 105 ).
+The second line contains a string S of length n, consisting only of lowercase English letters.
+It is guaranteed that the sum of n over all test cases does not exceed 105 .
+
+Output
+For each test case, output n integers on one line. The k-th integer represents the number of dictionaries that
+contain k distinct words and satisfy the requirement, modulo 998244353.
+
+Sample Input 1
+
+Sample Output 1
+
+3
+3
+aab
+4
+ppqq
+7
+abcaabc
+
+5 4 3
+8 10 11 10
+21 52 87 119 139 128 84
+
+Note
+Each dictionary below is written as a set of words.
+For the ﬁrst test case, S = aab, the dictionaries that satisfy the requirement for k = 1, 2, 3 are:
+k
+1
+2
+3
+
+Problem F: First Word
+
+Word sets that satisfy the requirement
+{a}, {b}, {aa}, {ab}, {aab}
+{a, aa}, {a, ab}, {a, aab}, {aa, aab}
+{a, aa, ab}, {a, aa, aab}, {a, ab, aab}
+
+Number of dictionaries
+5
+4
+3
+
+13
+
+This page is intentionally left blank.
+
+G
+
+Graph Reconstruction
+
+Time limit: 2s
+
+VegiCat has an n × n integer matrix A = (aij ). For each 1 ≤ i, j ≤ n:
+• If i = j, i = 1, or j = 1, then aij = −1.
+• Otherwise, aij is a nonnegative integer.
+Help VegiCat construct an undirected simple graph G with n vertices, numbered from
+1 to n.
+For every pair of distinct vertices i, j with i > 1 and j > 1, the graph must satisfy the
+following condition: after deleting vertices i and j, together with all edges that have
+an endpoint at either vertex, exactly aij edges must remain.
+Each pair of vertices i, j is considered separately. That is, for each pair, start with G before any vertices or
+edges have been deleted.
+It is guaranteed that at least one such graph exists. If there are multiple solutions, output any of them.
+
+Input
+The ﬁrst line contains an integer T (1 ≤ T ≤ 6 · 104 ), the number of test cases. The description of the test cases
+follows.
+For each test case, the ﬁrst line contains an integer n (4 ≤ n ≤ 103 ), denoting the number of vertices in the
+graph.
+Then each of the next n lines contains n space-separated integers aij (−1 ≤ aij ≤ (n−3)(n−2)
+), representing the
+2
+matrix A described in the statement.
+It is guaranteed that the total sum of n2 over all test cases does not exceed 1.2 · 106 , and that at least one graph
+corresponding to matrix A exists.
+
+Output
+For each test case, output the adjacency matrix of the graph you construct. Output n lines, each containing n
+space-separated integers. Each integer must be either 0 or 1. The entry in the i-th row and j-th column is 1 if
+there is an edge between vertices i and j, and 0 otherwise. If there are multiple solutions, output any of them.
+
+Sample Input 1
+
+Sample Output 1
+
+2
+5
+-1 -1 -1 -1 -1
+-1 -1 3 1 2
+-1 3 -1 2 2
+-1 1 2 -1 1
+-1 2 2 1 -1
+7
+-1 -1 -1 -1 -1 -1 -1
+-1 -1 4 5 3 6 5
+-1 4 -1 5 4 5 5
+-1 5 5 -1 5 7 5
+-1 3 4 5 -1 4 4
+-1 6 5 7 4 -1 5
+-1 5 5 5 4 5 -1
+
+0 1 0 1 1
+1 0 0 0 0
+0 0 0 1 0
+1 0 1 0 1
+1 0 0 1 0
+0 1 1 0 1 0 0
+1 0 0 0 0 1 1
+1 0 0 0 1 0 1
+0 0 0 0 1 1 0
+1 0 1 1 0 0 1
+0 1 0 1 0 0 0
+0 1 1 0 1 0 0
+
+Note
+The actual input matrix will only have a single space between two integers. The extra spaces in the sample are
+designed to enhance the readability of the layout.
+
+Problem G: Graph Reconstruction
+
+15
+
+This page is intentionally left blank.
+
+H
+
+Hidden Order
+
+Time limit: 1s
+
+This is an interactive problem.
+VegiCat knows an array a1 , a2 , . . . , an , where each element is 0, 1, or 2. He does not
+want to tell you its values, but you can ask him questions. In each query, you choose
+two indices i and j, and VegiCat tells you whether ai > aj .
+VegiCat asks you to output the indices in nondecreasing order of the corresponding
+array values. That is, ﬁnd a permutation p1 , p2 , . . . , pn of 1, 2, . . . , n such that
+ap1 ≤ ap2 ≤ · · · ≤ apn .
+You may make at most 2n − 3 queries in each test case.
+The interactor is adaptive. This means that the array is not ﬁxed in advance. The interactor guarantees
+that there always exists at least one array with elements in {0, 1, 2} consistent with all responses given so far.
+Your ﬁnal permutation must be valid for every array consistent with all responses.
+
+Input
+The ﬁrst line contains an integer T (1 ≤ T ≤ 250), the number of test cases. The description of the test cases
+follows.
+Each test case begins with an integer n (2 ≤ n ≤ 500), the length of the array.
+The sum of n over all test cases does not exceed 500.
+
+Interaction
+To make a query, output a line in the following format:
+? i j
+Here, 1 ≤ i, j ≤ n. After each query, read one integer:
+• 1, if ai > aj ;
+• 0, if ai ≤ aj .
+Queries with i = j and repeated queries are allowed and are included in the query count.
+When you have determined the order, output a line in the following format:
+! p_1 p_2 ... p_n
+Each index from 1 to n must appear exactly once. Printing the answer does not count as a query.
+If your answer is correct, proceed to the next test case by reading its n, or terminate your program if this was
+the last test case. The interactor does not send a separate conﬁrmation after an answer.
+After outputting each query or answer, output a newline and ﬂush the output buﬀer. To ﬂush your output, you
+can use:
+• fflush(stdout) or cout.flush() in C/C++;
+• System.out.flush() in Java and Kotlin;
+• sys.stdout.flush() in Python.
+If you make an invalid query, exceed the query limit, or print an incorrect answer, you will receive a Wrong
+Answer verdict. Output that does not follow the speciﬁed format is also judged Wrong Answer. In these
+cases, the interactor terminates without sending an error response.
+
+Problem H: Hidden Order
+
+17
+
+Read
+
+Sample Interaction 1
+
+Write
+
+2
+3
+? 1 2
+1
+? 2 3
+1
+! 3 2 1
+2
+? 1 2
+0
+! 1 2
+
+Note
+In the ﬁrst test case, the queries ? 1 2 and ? 2 3 both return 1, so a1 > a2 > a3 . Therefore, (3, 2, 1) is a
+correct answer.
+In the second test case, the query ? 1 2 returns 0, so a1 ≤ a2 . Therefore, (1, 2) is a correct answer.
+
+18
+
+Problem H: Hidden Order
+
+I
+
+Invisible Edges
+
+Time limit: 1s
+
+This is a multi-pass problem.
+VegiCat and VegiDog play a game with a forest of n vertices, numbered from 1 to n,
+and m edges. A forest is an undirected graph with no cycles. It is not necessarily
+connected.
+In the ﬁrst stage, VegiCat assigns an integer au (1 ≤ au ≤ 2n) to each vertex u. The
+values may repeat.
+After VegiCat ﬁnishes assigning the values, the vertices are renumbered. Let
+p1 , p2 , . . . , pn be a permutation of 1, 2, . . . , n, in which each integer from 1 to n appears
+exactly once. For each u, the vertex originally numbered u is now numbered pu .
+Each edge (u, v) becomes (pu , pv ). Each vertex keeps its assigned value. Let bi be the value at vertex i after
+renumbering. Then bpu = au .
+In the second stage, VegiDog receives only n and b1 , b2 , . . . , bn , without the original forest or p. He must recover
+all edges using the new vertex numbers.
+Design strategies for both players that work for every valid forest and every permutation p.
+
+Input
+Your program will run twice: ﬁrst as VegiCat, then as VegiDog. The test cases appear in the same order in
+both runs.
+First Run. The ﬁrst line contains the string cat, indicating that you play VegiCat.
+The second line contains an integer T (1 ≤ T ≤ 104 ), the number of test cases. The description of the test cases
+follows.
+The ﬁrst line of each test case contains two integers n and m (1 ≤ n ≤ 2 · 105 , 0 ≤ m < n), the number of
+vertices and edges.
+Each of the next m lines contains two integers u and v (1 ≤ u, v ≤ n, u ̸= v), describing an undirected edge
+between vertices u and v.
+It is guaranteed that the graph has no cycles or multiple edges.
+It is guaranteed that the sum of n over all test cases does not exceed 2 · 105 .
+Second Run. The ﬁrst line contains the string dog, indicating that you play VegiDog.
+The second line contains an integer T (1 ≤ T ≤ 104 ), the number of test cases. The description of the test cases
+follows.
+The ﬁrst line of each test case contains an integer n (1 ≤ n ≤ 2 · 105 ), the number of vertices.
+The second line contains n integers b1 , b2 , . . . , bn (1 ≤ bi ≤ 2n), the assigned values in the new vertex order.
+It is guaranteed that the sum of n over all test cases does not exceed 2 · 105 .
+
+Output
+First Run. For each test case, output n integers a1 , a2 , . . . , an (1 ≤ ai ≤ 2n) on one line. The integer ai is the
+value assigned to vertex i.
+Second Run. For each test case, output an integer m on the ﬁrst line, the number of edges. Each of the
+next m lines must contain two integers u and v (1 ≤ u, v ≤ n, u ̸= v), describing an edge using the new vertex
+numbers.
+Output each edge once, in any order. Either endpoint may come ﬁrst. If m = 0, output only 0.
+
+Problem I: Invisible Edges
+
+19
+
+Sample 1
+Input
+cat
+4
+1 0
+4 3
+1 2
+4 3
+2 3
+7 2
+6 4
+7 1
+10 7
+10 9
+7 9
+10 5
+4 8
+3 7
+4 10
+1 2
+
+Input
+dog
+4
+1
+1
+4
+5 2 5 8
+7
+11 7 2 11 11 3 4
+10
+16 3 13 5 10 12 19 6 2 3
+
+Pass 1
+
+Output
+
+1
+2 5 8 5
+11 11 4 11 3 7 2
+10 13 12 5 3 2 16 6 19 3
+
+Pass 2
+
+Output
+
+0
+3
+1 4
+2 1
+4 3
+2
+4 3
+5 2
+7
+1 7
+4 8
+5 3
+6 1
+7 10
+10 2
+10 4
+
+Note
+In the ﬁrst test case, the forest has one vertex and no edges. VegiCat assigns the value 1 to the vertex, and
+VegiDog outputs 0.
+In the last test case, the permutation is p = [5, 3, 6, 4, 2, 9, 1, 8, 7, 10].
+VegiCat assigns a7 = 16. Since p7 = 1, VegiDog receives b1 = 16.
+The original edge (3, 7) becomes (p3 , p7 ) = (6, 1).
+The original edge (4, 10) becomes (p4 , p10 ) = (4, 10). The sample outputs this edge as (10, 4), which represents
+the same undirected edge.
+The sample illustrates the input and output formats. Its outputs are correct for the graphs and permutations
+shown. However, the sample assignments are not guaranteed to be part of a strategy that works for every valid
+forest and every permutation.
+
+20
+
+Problem I: Invisible Edges
+
+J
+
+Joint Relocation
+
+Time limit: 4s
+
+VegiCat owns a company with n employees in k nonempty teams. The employees live
+along a straight road, represented by a number line. VegiCat wants to arrange two
+meeting points for them.
+VegiCat divides the teams into two sets, A and B, with each team in exactly one set.
+He chooses a meeting point for each set at any real coordinate. All employees on
+the same team must go to the same meeting point. Each team in set A goes
+to the meeting point for A, and each team in set B goes to the meeting point for B.
+Either set may be empty.
+Let SA list the home positions of all employees on teams in A, and deﬁne SB similarly
+for B. Each employee is counted separately, even when home positions repeat.
+For a list S = (x1 , x2 , . . . , xm ) of home positions, the minimum total distance for these employees to travel to
+one meeting point is
+m
+∑
+M (S) = min
+|xj − p|.
+p∈R
+
+j=1
+
+Deﬁne M (S) = 0 when S is empty. Help VegiCat minimize M (SA ) + M (SB ) over all ways to divide the teams
+into the two sets.
+
+Input
+The ﬁrst line contains an integer T (1 ≤ T ≤ 3 · 105 ), the number of test cases. The description of the test cases
+follows.
+The ﬁrst line of each test case contains two integers n and k (1 ≤ k ≤ n ≤ 3 · 105 ), denoting the number of
+employees and the number of teams, respectively.
+Each of the next k lines describes one team. The i-th line contains an integer mi (1 ≤ mi ≤ n), the number of
+employees on team i, followed by mi integers xi,1 , . . . , xi,mi (1 ≤ xi,j ≤ 107 ), their home positions. The sum of
+all mi in a test case is n.
+Home positions may repeat and may be given in any order.
+It is guaranteed that the sum of n over all test cases does not exceed 3 · 105 .
+
+Output
+For each test case, output an integer — the minimum possible total travel distance.
+
+Sample Input 1
+
+Sample Output 1
+
+2
+4 2
+2 1 3
+2 8 10
+8 3
+3 4 12 1
+2 3 2
+3 9 8 10
+
+4
+15
+
+Note
+In the ﬁrst test case, VegiCat sends team 1 to a meeting point at position 1 and team 2 to a meeting point at
+position 8. The employees in each team travel a total distance of 2, giving the answer 4.
+In the second test case, VegiCat chooses meeting points at 3 and 9. He sends teams 1 and 2 to the ﬁrst meeting
+point, and team 3 to the second. The employees in teams 1, 2, and 3 travel total distances of 12, 1, and 2,
+respectively, giving the answer 15.
+
+Problem J: Joint Relocation
+
+21
+
+This page is intentionally left blank.
+
+K
+
+Keep Your Distance
+
+Time limit: 1s
+
+VegiCat is on a mine-sweeping mission. There are n mines on a number line. Mine i
+is at the integer coordinate ai . The mines are numbered in order of their coordinates,
+so a1 ≤ a2 ≤ · · · ≤ an . Mine coordinates may repeat.
+VegiCat tests each mine once, in the order 1, 2, . . . , n. For mine i, he chooses an
+integer coordinate bi as the test location, which may be negative or zero. The error
+of this test is |ai − bi |.
+For each 2 ≤ i ≤ n, an integer li is given, specifying the minimum required distance
+between the test locations for mines i − 1 and i. These locations must satisfy
+|bi − bi−1 | ≥ li .
+Help VegiCat minimize the largest test error; that is, ﬁnd
+(
+)
+min
+max |ai − bi | .
+b1 ,...,bn ∈Z
+|bi −bi−1 |≥li
+(2≤i≤n)
+
+1≤i≤n
+
+Input
+The ﬁrst line contains an integer T (1 ≤ T ≤ 104 ), the number of test cases. The description of the test cases
+follows.
+The ﬁrst line of each test case contains an integer n (2 ≤ n ≤ 105 ), the number of mines.
+The second line contains n integers a1 , a2 , . . . , an (1 ≤ ai ≤ 109 ), where ai is the coordinate of mine i. It is
+guaranteed that a1 ≤ a2 ≤ · · · ≤ an .
+The third line contains n − 1 integers l2 , l3 , . . . , ln (1 ≤ li ≤ 109 ), where li is the minimum distance between the
+test locations for mines i − 1 and i.
+It is guaranteed that the sum of n over all test cases does not exceed 105 .
+
+Output
+For each test case, output an integer — the minimum possible value of the largest test error.
+
+Sample Input 1
+
+Sample Output 1
+
+2
+2
+1 1
+1
+7
+2 6 12 14 14 16 19
+11 8 4 2 10 9
+
+1
+6
+
+Note
+In the ﬁrst test case, choosing b1 = 1 and b2 = 2 gives a maximum error of 1. An error of 0 would require
+b1 = b2 = 1, which violates the distance requirement.
+In the second test case, one optimal choice is b = [−4, 7, 15, 10, 8, 22, 13]. All required distances are satisﬁed,
+and the maximum error is 6.
+
+Problem K: Keep Your Distance
+
+23
+
+This page is intentionally left blank.
+
+L
+
+Long Slides
+
+Time limit: 2s
+
+This problem has an attachment. You can use it to simulate and visualize
+the movements of the robot.
+VegiCat has a robot on an inﬁnite two-dimensional grid. He wants it to move from
+cell s = (sx , sy ) to cell t = (tx , ty ). Each cell has integer coordinates. The cells s and
+t may be the same.
+The robot follows a string p of instructions. Each character is L, R, U, or D. Let |p|
+denote the length of p.
+The robot starts at s. Before it executes any instructions, you may place at most
+|p| obstacles in distinct cells. The coordinates (x, y) of each obstacle must satisfy
+−2 · 109 ≤ x, y ≤ 2 · 109 . Neither s nor t may contain an obstacle. Each obstacle occupies one cell and remains
+ﬁxed throughout the process; all other cells are free of obstacles.
+The robot executes the instructions p1 , p2 , . . . , p|p| in order. For each instruction, starting from its current cell
+(x, y), it moves along the following sequence of cells:
+• L: (x, y) → (x − 1, y) → (x − 2, y) → · · · ;
+• R: (x, y) → (x + 1, y) → (x + 2, y) → · · · ;
+• U: (x, y) → (x, y + 1) → (x, y + 2) → · · · ;
+• D: (x, y) → (x, y − 1) → (x, y − 2) → · · · .
+The robot repeatedly takes one step in the speciﬁed direction while the next cell contains no obstacle. It stops
+in the cell immediately before the ﬁrst obstacle in that direction. If the next cell in the speciﬁed direction
+already contains an obstacle before the instruction starts, the robot stays in place, but the instruction is still
+completed. If there is no obstacle ahead in that direction, the robot would move forever, and the placement is
+invalid.
+The robot may reach t before all instructions are completed. It must still execute all remaining instructions.
+Construct any obstacle placement satisfying the requirements above such that the robot ﬁnishes at t after the
+last instruction, or report that no such placement exists.
+
+Input
+The ﬁrst line contains an integer T (1 ≤ T ≤ 105 ), the number of test cases. The description of the test cases
+follows.
+The ﬁrst line of each test case contains two integers sx and sy (−109 ≤ sx , sy ≤ 109 ), the coordinates of the
+starting cell.
+The second line contains two integers tx and ty (−109 ≤ tx , ty ≤ 109 ), the coordinates of the target cell.
+The third line contains the instruction string p (1 ≤ |p| ≤ 105 ), consisting only of the characters L, R, U, and D.
+It is guaranteed that the sum of |p| over all test cases does not exceed 105 .
+
+Output
+For each test case, output an answer in input order. Obstacle placements for diﬀerent test cases are independent.
+If no valid placement exists, output NO on a line by itself.
+Otherwise, output YES on the ﬁrst line. On the second line, output an integer k (0 ≤ k ≤ |p|), the number of
+obstacles.
+Then output k lines. The i-th of these lines must contain two integers xi and yi (−2 · 109 ≤ xi , yi ≤ 2 · 109 ),
+specifying an obstacle in cell (xi , yi ).
+All k coordinate pairs must be distinct, and none may equal s or t. The placement must allow every instruction
+to ﬁnish and leave the robot at t after the last instruction. If there are multiple solutions, output any of them.
+You can output the yes or no verdict in any case. For example, yEs, yes, Yes, and YES are all accepted as
+positive responses.
+
+Problem L: Long Slides
+
+25
+
+Sample Input 1
+
+Sample Output 1
+
+6
+0 0
+1 0
+RL
+0 0
+-1 0
+URD
+0 0
+8 0
+RLR
+0 0
+0 0
+UDUD
+0 0
+2 5
+RDULR
+0 0
+1 1
+RURURU
+
+NO
+NO
+YES
+2
+-1 0
+9 0
+YES
+2
+0 -1
+0 1
+YES
+5
+-1 5
+2 -1
+2 6
+3 0
+3 5
+YES
+3
+1 2
+2 0
+2 1
+
+26
+
+Problem L: Long Slides
+
+M
+
+Minimum Records
+
+Time limit: 1s
+
+VegiCat has n closed integer intervals [l1 , r1 ], [l2 , r2 ], . . . , [ln , rn ].
+He wants to construct a sequence a1 , a2 , . . . , an by choosing an integer ai from each
+interval [li , ri ]. That is, li ≤ ai ≤ ri for every 1 ≤ i ≤ n.
+A position i is called a record position if ai > aj for every 1 ≤ j < i. In particular,
+position 1 is always a record position.
+Help VegiCat minimize the number of record positions. Output this minimum number.
+
+Input
+The ﬁrst line contains an integer T (1 ≤ T ≤ 104 ), the number of test cases. The description of the test cases
+follows.
+The ﬁrst line of each test case contains an integer n (1 ≤ n ≤ 106 ), the number of intervals.
+The i-th of the next n lines contains two integers li , ri (−109 ≤ li ≤ ri ≤ 109 ), describing the interval available
+at position i.
+It is guaranteed that the sum of n over all test cases does not exceed 106 .
+
+Output
+For each test case, output an integer — the minimum possible number of record positions.
+
+Sample Input 1
+
+Sample Output 1
+
+2
+4
+1 1
+1 100
+20 20
+30 30
+8
+-3 -1
+-5 4
+0 1
+2 2
+1 8
+5 6
+10 12
+12 12
+
+2
+4
+
+Note
+In the ﬁrst test case, one optimal sequence is a = [1, 100, 20, 30]. Its record positions are 1 and 2.
+In the second test case, one optimal sequence is a = [−1, 4, 1, 2, 8, 6, 12, 12]. Its record positions are 1, 2, 5, and
+7. Position 8 is not a record because its value equals the maximum seen so far.
+
+Problem M: Minimum Records
+
+27
+
+This page is intentionally left blank.
+
+

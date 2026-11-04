@@ -1,0 +1,80 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+#define int long long
+#define all(a) (a).begin(), (a).end()
+#define rall(a) (a).rbegin(), (a).rend()
+#define pb push_back
+#define hha(a) cout << #a << " = " << a << " ";
+#define hhal(a) cout << #a << " = " << a << "\n";
+#define print(x)          \
+    cout << #x << " = ";  \
+    for (auto a : x)      \
+        cout << a << " "; \
+    cout << "\n";
+
+void solve()
+{
+    int n;
+    cin >> n;
+    vector<string> s(4);
+    for (auto &x : s)
+        cin >> x;
+    vector<int> score(4, 2000), combo(4, 0);
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < 4; j++)
+        {
+            if (s[j][i] == 'H')
+            {
+                combo[j]++;
+                if (combo[j] == 100)
+                {
+                    for (int k = 0; k < 4; k++)
+                    {
+                        if (k != j && score[k] > 0)
+                            score[k] += 30;
+                    }
+                    combo[j] = 0;
+                }
+            }
+        }
+        for (int j = 0; j < 4; j++)
+        {
+            if (s[j][i] != 'H')
+            {
+                combo[j] = 0;
+                if (s[j][i] == 'J')
+                {
+                    score[j] -= 50;
+                }
+                else if (s[j][i] == 'A')
+                {
+                    score[j] -= 100;
+                }
+                else if (s[j][i] == 'M')
+                {
+                    score[j] -= 200;
+                }
+            }
+        }
+        for (int j = 0; j < 4; j++)
+        {
+            score[j] = min(2000ll, score[j]);
+        }
+    }
+    for (auto &x : score)
+        cout << max(0ll, x) << ' ';
+    cout << '\n';
+}
+
+signed main()
+{
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+    int t;
+    cin >> t;
+    while (t--)
+        solve();
+    return 0;
+}

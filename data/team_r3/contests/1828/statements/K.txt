@@ -1,0 +1,68 @@
+Strips
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+1024 megabytes
+
+There are w cells arranged in a row, numbered from 1 to w from left to right. Among the cells, n of them
+are red, m of them are black, and the remaining (w − n − m) cells are white.
+You need to cover all the red cells with some strips. Each strip must cover k continuous cells. Find a way
+to cover all red cells while satisfying all the following constraints:
+• Each red cell is covered by a strip.
+• No black cell is covered by a strip.
+• No two strips cover the same cell. That is, each cell is covered by at most one strip.
+• The number of strips used is as small as possible.
+
+Input
+There are multiple test cases. The first line of the input contains an integer T indicating the number of
+test cases. For each test case:
+The first line contains four integers n, m, k and w (1 ≤ n, m ≤ 105 , 1 ≤ k ≤ w ≤ 109 , n + m ≤ w),
+indicating the number of red cells, the number of black cells, the length of each strip and the total number
+of cells.
+The second line contains n integers a1 , a2 , · · · , an (1 ≤ ai ≤ w), indicating that cell ai is red.
+The third line contains m integers b1 , b2 , · · · , bm (1 ≤ bi ≤ w), indicating that cell bi is black.
+It’s guaranteed that the given (n + m) cells are distinct. It’s also guaranteed that neither the sum of n
+nor the sum of m of all test cases will exceed 2 × 105 .
+
+Output
+For each test case:
+If it is possible to cover all the red cells while satisfying all constraints, first output one line containing
+one integer c indicating the smallest number of strips used. Then output another line containing c integers
+l1 , l2 , · · · , lc (1 ≤ li ≤ w − k + 1) separated by a space, where li is the left-most cell covered by the i-th
+strip. If there are multiple valid answers, you can output any of them.
+If it is not possible to do so, just output -1 in one line.
+
+Page 1 of 2
+
+Example
+standard input
+4
+5 2 3 16
+7 11 2 9 14
+13 5
+3 2 4 11
+6 10 2
+1 11
+2 1 2 6
+1 5
+3
+2 1 2 6
+1 5
+2
+
+standard output
+4
+6 2 14 9
+-1
+2
+1 4
+-1
+
+Page 2 of 2
+
+

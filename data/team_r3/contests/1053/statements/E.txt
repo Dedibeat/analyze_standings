@@ -1,0 +1,53 @@
+2022 International Collegiate Programming Contest, Jinan Site
+Qilu University of Technology (Shandong Academy of Sciences), November 27, 2022
+
+Problem E. Identical Parity
+Input ﬁle:
+Output ﬁle:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+512 megabytes
+
+Let the value of a sequence be the sum of all numbers in it.
+Determine whether there exists a permutation of length n such that the values of all subsegments of
+length k of the permutation share the same parity. The values share the same parity means that they are
+all odd numbers or they are all even numbers.
+A subsegment of a permutation is a contiguous subsequence of that permutation. A permutation of length
+n is a sequence in which each integer from 1 to n appears exactly once.
+
+Input
+The ﬁrst line contains one integer T (1 ≤ T ≤ 105 ), the number of test cases.
+For each test case, the only line contains two integers n, k (1 ≤ k ≤ n ≤ 109 ).
+
+Output
+For each test case, output “Yes” (without quotes) if there exists a valid permutation, or “No” (without
+quotes) otherwise.
+You can output “Yes” and “No” in any case (for example, strings “YES”, “yEs” and “yes” will be recognized
+as positive responses).
+
+Example
+standard input
+3
+3 1
+4 2
+5 3
+
+standard output
+No
+Yes
+Yes
+
+Note
+In the ﬁrst test case, it can be shown that there does not exist any valid permutation.
+In the second test case, [1, 2, 3, 4] is one of the valid permutations. Its subsegments of length 2 are
+[1, 2], [2, 3], [3, 4]. Their values are 3, 5, 7, respectively. They share the same parity.
+In the third test case, [1, 2, 3, 5, 4] is one of the valid permutations. Its subsegments of length 3 are
+[1, 2, 3], [2, 3, 5], [3, 5, 4]. Their values are 6, 10, 12, respectively. They share the same parity.
+
+Page 8 of 18
+
+

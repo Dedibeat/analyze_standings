@@ -1,0 +1,64 @@
+The 1st Universal Cup
+Stage 1: Shenyang, January 28-29, 2023
+
+Problem K. Security at Museums
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+512 megabytes
+
+Recently a museum of arts in Byteland is open to the public. The museum is modeled as a polygon, and
+there is an art placed on each vertex of the polygon.
+A group of thieves are coveting the arts in the museum and they have chosen at least two arts to steal
+from the museum at night when all is still. After sneaking into the museum, each of them will work on
+stealing one of the chosen art simultaneously.
+To be on the safe side, the thieves have chosen the arts in such a manner that every two thieves can
+see each other, i.e., every point of the straight line segment between them lies in the interior or on the
+boundary of the museum, when they are working on stealing the arts.
+You, the administrator of the museum, need to anticipate the thieves’ actions, i.e., compute the number
+of different sets of the arts that might be chosen by the thieves, to ruin their plans. The answer could be
+extremely large, so you only need to output it modulo 998 244 353.
+
+Input
+The first line contains an integer n (3 ≤ n ≤ 200), specifying the number of vertices of the polygon.
+Then n lines follow, each containing two integers x and y (−106 ≤ x, y ≤ 106 ) that give the coordinates
+(x, y) of the vertices of the polygon in counter-clockwise order.
+The polygon is simple, i.e., its vertices are distinct and no two edges of the polygon intersect or touch,
+except that consecutive edges touch at their common vertex. In addition, no two consecutive edges are
+collinear.
+
+Output
+Output a line containing a single integer, indicating the number of different sets of arts that might be
+chosen by the thieves modulo 998 244 353.
+
+Examples
+standard input
+7
+0 20
+40 0
+40 20
+70 50
+50 70
+30 50
+0 50
+3
+0 2022
+-2022 -2022
+2022 0
+
+standard output
+56
+
+4
+
+Note
+In the second sample case, all the sets that contain at least two arts are counted.
+
+Page 12 of 16
+
+

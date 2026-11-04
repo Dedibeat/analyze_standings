@@ -1,0 +1,59 @@
+M
+
+Minimum Records
+
+Time limit: 1s
+
+VegiCat has n closed integer intervals [l1 , r1 ], [l2 , r2 ], . . . , [ln , rn ].
+He wants to construct a sequence a1 , a2 , . . . , an by choosing an integer ai from each
+interval [li , ri ]. That is, li ≤ ai ≤ ri for every 1 ≤ i ≤ n.
+A position i is called a record position if ai > aj for every 1 ≤ j < i. In particular,
+position 1 is always a record position.
+Help VegiCat minimize the number of record positions. Output this minimum number.
+
+Input
+The ﬁrst line contains an integer T (1 ≤ T ≤ 104 ), the number of test cases. The description of the test cases
+follows.
+The ﬁrst line of each test case contains an integer n (1 ≤ n ≤ 106 ), the number of intervals.
+The i-th of the next n lines contains two integers li , ri (−109 ≤ li ≤ ri ≤ 109 ), describing the interval available
+at position i.
+It is guaranteed that the sum of n over all test cases does not exceed 106 .
+
+Output
+For each test case, output an integer — the minimum possible number of record positions.
+
+Sample Input 1
+
+Sample Output 1
+
+2
+4
+1 1
+1 100
+20 20
+30 30
+8
+-3 -1
+-5 4
+0 1
+2 2
+1 8
+5 6
+10 12
+12 12
+
+2
+4
+
+Note
+In the ﬁrst test case, one optimal sequence is a = [1, 100, 20, 30]. Its record positions are 1 and 2.
+In the second test case, one optimal sequence is a = [−1, 4, 1, 2, 8, 6, 12, 12]. Its record positions are 1, 2, 5, and
+7. Position 8 is not a record because its value equals the maximum seen so far.
+
+Problem M: Minimum Records
+
+1
+
+This page is intentionally left blank.
+
+

@@ -1,0 +1,57 @@
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+
+#define int long long
+#define sz(a) (int)(a).size()
+#define pb push_back
+#define all(x) x.begin(), x.end()
+#define rall(x) x.rbegin(), x.rend()
+#define FOR(i, a, b) for(int i = (a); i < (b); i++)
+#define FORD(i, a, b) for(int i = (a); i >= (b); i++)
+#define ff first
+#define ss second 
+#define _ << ' ' <<
+#define hha(x) cout << #x << " = " << x << " "
+#define hhal(x) cout << #x << " = " << x << endl
+#define print(v) cout << #v << " = "; for(auto x : v) cout << x << " "; cout << endl;
+int Pow[200005];
+const int mod = 998244353;
+void solve() {
+    int n; cin >> n;
+    vector<int> a(n);
+    for(auto &x : a) cin >> x;
+    sort(all(a));
+    int ans = a[0] * Pow[n - 1] % mod;
+    //print(a);
+    int x = 0;
+    for(int i = 1; i < n; i++)
+    {
+        x = (x * 3 + 1) % mod;
+        int comb = (x + 1) * Pow[n - i - 1] % mod;
+        //hha(i); hhal(comb);
+        ans = (ans + comb * a[i]) % mod;
+    }
+    // int tot = 0;
+    // for(int mask = 1; mask < (1 << n); mask++)
+    // {
+    //     vector<int> v;
+    //     for(int i = 0; i < n; i++) if(mask & (1 << i)) v.push_back(a[i]);
+    //     tot += v[0];
+    //     for(int i = 1; i < v.size(); i++) tot += v[i] * (1 << (i - 1));
+    // }
+    // cout << tot % mod << endl;
+    cout << ans << "\n";
+}   
+
+signed main() {
+    ios_base::sync_with_stdio(0); cin.tie(0);
+    Pow[0] = 1;
+    for(int i = 1; i < 2e5 + 5; i++) Pow[i] = Pow[i - 1] * 2 % mod;
+    int t = 1;
+    cin >> t;
+    while(t--) {
+        solve();
+    }
+    return 0;
+}

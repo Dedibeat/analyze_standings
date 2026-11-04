@@ -1,0 +1,32 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define int long long
+using db = double;
+db D(db x, db y, db i, db j)
+{
+    return (x - i) * (x - i) + (y - j) * (y - j);
+}
+void solve()
+{
+    double r1, x1, y1, r2, x2, y2;
+    {
+        db x, y, i, j; cin >> x >> y >> i >> j;
+        x1 = x + (i - x) / 2;
+        y1 = y + (j - y) / 2;
+        r1 = D(x1, y1, x, y);
+    }
+    {
+        db x, y, i, j; cin >> x >> y >> i >> j;
+        x2 = x + (i - x) / 2;
+        y2 = y + (j - y) / 2;
+        r2 = D(x2, y2, x, y);
+    }
+    db dist = abs(x1 - x2) + abs(y1 - y2);
+    cout << fixed << setprecision(18) << dist - sqrt(r2 * 2.0) << "\n";
+}
+signed main()
+{
+    ios::sync_with_stdio(0); cin.tie(0);
+    int t; cin >> t; while(t--) 
+    solve();
+}

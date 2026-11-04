@@ -1,0 +1,98 @@
+Longest Common Prefix
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+1024 megabytes
+
+You are given n lowercase English strings s1 , s2 , . . . , sn .
+For each pair of integers (i, j) satisfying 1 ≤ j ≤ i ≤ n, define fi,j as the maximum possible length of the
+longest common prefix of exactly j strings selected from the first i strings. Formally,
+fi,j =
+
+max
+
+T ⊆{1,2,...,i},|T |=j
+
+|LCP (sk | k ∈ T )| .
+
+The longest common prefix of a single string is the string itself.
+For each i = 1, 2, . . . , n, calculate
+i
+X
+
+(fi,j ⊕ j) ,
+
+j=1
+
+where ⊕ denotes the bitwise XOR operation.
+
+Input
+The first line contains an integer n (1 ≤ n ≤ 5 · 105 ), the number of strings.
+Each of the next n lines contains a non-empty string si consisting only of lowercase English letters.
+It is guaranteed that
+n
+X
+
+|si | ≤ 5 · 105 .
+
+i=1
+
+Output
+Print n lines.
+The i-th line should contain one integer:
+i
+X
+
+(fi,j ⊕ j) .
+
+j=1
+
+Page 1 of 2
+
+Examples
+standard input
+
+standard output
+
+4
+a
+ab
+abc
+abcd
+
+0
+6
+4
+12
+
+8
+ab
+b
+ba
+ab
+aa
+ba
+a
+bb
+
+3
+5
+9
+10
+14
+20
+28
+36
+
+Note
+The longest common prefix of several strings is the longest string that is a prefix of every selected string.
+The symbol ⊕ denotes the bitwise XOR operation.
+
+Page 2 of 2
+
+

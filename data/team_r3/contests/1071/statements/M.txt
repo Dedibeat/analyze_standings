@@ -1,0 +1,69 @@
+The 2022 ICPC Asia Hangzhou Regional Programming Contest
+Hangzhou Normal University, December, 04, 2022
+
+Problem M. Please Save Pigeland
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+3 seconds
+1024 megabytes
+
+Some horrible disease called Mysterious Oscar is spreading in Pigeland. The Pigeland has n cities and is
+connected by n − 1 bi-directional roads. The i-th road is connecting city ui and city vi , with length wi . It
+is guaranteed that for every city it is possible to travel to any other city using these roads.
+Now, there are k distinct cities c1 , c2 , . . . , ck having the horrible disease. As the leader of the Pigeland,
+Putata and Budada are going to save the Pigeland. First they will find a city r to build up a hospital,
+without considering whether city r is infected by the disease. Then, they will use the rest of their money
+to build the only vehicle which could travel in Pigeland, the Pigpigcar. Because they are strapped for
+cash, they can only build one Pigpigcar, and once a Pigpigcar is built, some parameter d of the Pigpigcar
+is set, and could not be changed. The Pigpigcar having parameter d can only travel from one city to
+the other, where the distance between the two cities should be a multiple of d. Formally, if you want to
+travel from city u to city v, the distance of the shortest path between u, v should be p × d, where p is a
+non-negative integer, and this would cost p Pigecoins. Please notice that if you want to travel from city
+u to city v, it is not necessary to stop at every city on the path from u to v, the Pigpigcar can directly
+go from u to v, if the minimum distance between u and v is a multiple of d.
+For the following k days, Putata and Budada will take the following actions to save the Pigeland. On the
+i-th day, they will travel to city ci from city r along the shortest path between city r and city ci using
+the Pigpigcar, cure all the piggies in the city and then travel back to city r from city ci .
+Putata and Budada want you to choose the proper city r to build the hospital, and the parameter d of
+the Pigpigcar they should build, so that the Pigecoins spent during the travel is minimized. Please help
+them to find the minimum number of Pigecoins spent.
+
+Input
+The first line contains two integers n, k (1 ≤ n ≤ 5 × 105 , 1 ≤ k ≤ n), denoting the number of cities and
+the number of cities having disease.
+The second line contains k distinct integers c1 , c2 , . . . , ck (1 ≤ ci ≤ n), denoting the cities having disease.
+For the following n − 1 lines, each line contains three integers u, v, w (1 ≤ u, v ≤ n, u 6= v, 1 ≤ w ≤ 107 ),
+denoting a road connecting city u and v with length w.
+It is guaranteed that you can go from any city to any other city using these roads.
+
+Output
+Output one integer in one line, denoting the minimum number of Pigecoins spent.
+
+Example
+standard input
+5 3
+3 4 5
+1 2 2
+2 3 4
+2 5 4
+3 4 6
+
+standard output
+8
+
+Note
+In the sample, you should choose city 1 to build hospital and build a Pigpigcar with parameter 6, the
+Page 15 of 16
+
+The 2022 ICPC Asia Hangzhou Regional Programming Contest
+Hangzhou Normal University, December, 04, 2022
+distance between city 1 and city 3, 4, 5 is 6, 12, 6, so the total Pigcoins costed is 1 × 2 + 2 × 2 + 1 × 2 = 8.
+
+Page 16 of 16
+
+

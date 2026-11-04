@@ -1,0 +1,60 @@
+cover
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+8 seconds
+512 megabytes
+
+You are given an array a1,2,··· ,n of length n and m modification operations. The i-th operation is
+described by three parameters li , ri , ci , indicating that you may choose to set all elements in the subarray
+ali , ali +1 , · · · , ari to ci . For each operation, you can choose to either apply it or skip it.
+Your goal is to maximize the number of contiguous segments in the final array by optimally deciding
+whether to apply
+P each operation (processed in the given order). The number of contiguous segments is
+defined as 1 + ni=2 [ai 6= ai−1 ], which counts the number of adjacent distinct elements plus one.
+Additionally, all operations satisfy the following special property: for any two operations i < j, the interval
+[lj , rj ] is not a subinterval of [li , ri ]. In other words, there are no i < j such that both li ≤ lj and rj ≤ ri
+hold simultaneously.
+
+Input
+The input consists of multiple test cases. The first line contains an integer T (1 ≤ T ≤ 10000), denoting
+the number of test cases.
+Each test case consists of the following parts:
+• The first line contains two positive integers n(1 ≤ n ≤ 3 × 105 ) and m(1 ≤ m ≤ 3 × 105 ), denoting
+the length of the array and the number of operations, respectively.
+• The second line contains n positive integers a1 , a2 , · · · , an (1 ≤ ai ≤ n), representing the initial
+array.
+• The next m lines each contain three integers lk , rk , ck , describing the k-th operation (1 ≤ lk ≤ rk ≤ n,
+1 ≤ ck ≤ n).
+It is guaranteed that the sum of n across all test cases does not exceed 3 × 105 , and the sum of m does
+not exceed 3 × 105 .
+
+Output
+Output a single integer, representing the maximum number of contiguous segments achievable after
+optimally applying the operations.
+
+Example
+standard input
+2
+5 5
+1 1 1 1 1
+1 2 3
+2 3 4
+1 3 4
+2 4 4
+5 5 3
+3 1
+1 1 1
+2 2 2
+
+standard output
+4
+3
+
+Page 1 of 1
+
+

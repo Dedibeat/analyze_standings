@@ -1,0 +1,73 @@
+Protection War
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+7 seconds
+1024 megabytes
+
+The city of Country X is under attack by Country Y! To defend itself, Country X has set up n rows of
+fortifications, numbered consecutively from 1, 2, . . . , n. The military strength of the fortification numbered
+i is ai . A fortification is considered defeated if its military strength is zero. Initially, no fortifications are
+defeated.
+The battle lasts for a total of q days, and each morning, one of the following events occurs:
+• Troop Movement: Given parameters x, y, the military strength of the fortification numbered x is set
+to y.
+• Reinforcement: Given parameters l, r, v, the military strength of the fortifications numbered
+l, l + 1, . . . , r is increased by v (including fortifications that are already defeated).
+• Recruitment: The military strength of all fortifications that are not defeated is increased by 1.
+• Training: Let bi = max{r − l + 1 | 1 ≤ l ≤ i ≤ r ≤ n, s.t.∀l ≤ j ≤ r, aj > 0}, which is the length
+of the longest continuous segment containing fortification i that has not been defeated. For all
+1 ≤ i ≤ n, set ai := ai + bi .
+• Parade: Given parameters l, r, inquire about the total military strength of the fortifications numbered
+l, l + 1, . . . , r.
+Every evening, a rout event occurs: For the fortification numbered i, if i < n and the fortification numbered
+i + 1 has already been defeated by noon that day, then this fortification will also be defeated (i.e., its
+military strength becomes zero).
+As the commander-in-chief of Country X, you need to provide the correct result for each “parade”
+operation.
+
+Input
+The first line contains two integers, n and q, representing the number of fortifications and the number of
+days, respectively.
+The second line contains n integers, representing a1 , . . . , an , the initial military strength of each
+fortification.
+The next q lines describe the events that occur each morning for q days. In the i-th line, the first integer
+op indicates what event occurs on the i-th day:
+• If op = 1, a troop movement occurs, and the parameters x, y are given next.
+• If op = 2, a reinforcement occurs, and the parameters l, r, v are given next.
+• If op = 3, a recruitment occurs.
+• If op = 4, a training occurs.
+• If op = 5, a parade occurs, and the parameters l, r are given next.
+It is guaranteed that 1 ≤ n, q ≤ 3 × 105 and 1 ≤ ai ≤ 105 . For the troop movement event, it is guaranteed
+that 1 ≤ x ≤ n and 0 ≤ y ≤ 105 . For the reinforcement event, it is guaranteed that 1 ≤ l ≤ r ≤ n and
+1 ≤ v ≤ 105 . For the parade event, it is guaranteed that 1 ≤ l ≤ r ≤ n.
+Page 1 of 2
+
+Output
+For each “parade” event, output one integer per line representing the answer.
+
+Example
+standard input
+10 8
+1 2 3 4 5 6 7 8 9 10
+1 5 0
+4
+5 1 10
+2 1 7 10
+5 1 7
+1 5 0
+3
+5 1 7
+
+standard output
+74
+97
+71
+
+Page 2 of 2
+
+

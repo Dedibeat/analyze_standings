@@ -1,0 +1,61 @@
+Tree Shuffling
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+3 seconds
+256 megabytes
+
+Froggy has an unrooted tree T with n vertices, where each vertex has an initial weight. Initially, the
+weight of vertex i is i.
+Froggy can perform at most 1 operation sequentially as follows:
+• Select several distinct vertices x1 , x2 , · · · , xk , such that for i = 1, 2, · · · , k − 1, there exists an edge
+in tree T connecting vertex xi and vertex xi+1 .
+• From the set x1 , x2 , · · · , xk , choose an even number of vertices u1 , u2 , · · · , u2l (vertices can be chosen
+repeatedly). For i = 1, 2, · · · , l, sequentially swap the weights of vertex u2i−1 and vertex u2i .
+Let ai denote the weight of vertex i after all operations. How many distinct sequences a1 , a2 , · · · , an can
+Froggy obtain? Output the answer modulo 998244353.
+
+Input
+The first line contains a positive integer T (1 ≤ T ≤ 103 ), indicating the number of test cases.
+For each test case, the first line contains an integer n (1 ≤ n ≤ 3000), representing the number of vertices
+in the tree.
+The next n − 1 lines each contain two positive integers x, y (1 ≤ x, y ≤ n, x ̸= y), representing the two
+endpoints of an edge in tree T .
+It is guaranteed that the sum of n over all test cases in a single test point does not exceed 1.5 × 104 .
+
+Output
+For each test case, output one integer representing the answer modulo 998244353.
+
+Example
+standard input
+3
+5
+1 2
+1 3
+1 4
+1 5
+6
+1 2
+1 3
+1 4
+2 5
+2 6
+6
+1 2
+2 3
+2 4
+3 5
+4 6
+
+standard output
+23
+80
+155
+
+Page 1 of 1
+
+

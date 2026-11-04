@@ -1,0 +1,105 @@
+The 50th Petrozavodsk Programming Camp, Winter 2026
+Day 4: Harbin Contest, Sunday, February 1, 2026
+
+Problem D. Director and Excitement
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+5 seconds
+1024 mebibytes
+
+The Cook Chicken Potato Contest is one of the most renowned events in the culinary world.
+The competition venue provides k cooking stations, and before the start, the participants will be
+divided into k equally sized teams by the Contest Director, known as Small Q.
+To test the teamwork among participants and to add more excitement to the competition, Small
+Q wants to arrange the teams in such a way that the strength di!erences among participants
+in the same team are as large as possible. Let the strengths of the participants be denoted as
+a1 , a2 , . . . , an , and their respective team assignments as t1 , t2 , . . . , tn . Small Q defines the excitement level of the competition as:
+D = min
+
+1→i<j→n
+
+)︃
+
+|ai → aj |, ti = tj
++↑,
+ti =
+↓ tj
+
+Now, there are n potential participants. The possible strength of the i-th participant is described
+by an interval [𝜔i , ri ], indicating that their actual strength during a certain competition could
+turn out to be any real number within that interval. The participants are sorted by strength in
+non-decreasing order, which means that, for all 1 ↔ i < j ↔ n, we have 𝜔i ↔ 𝜔j and ri ↔ rj .
+
+Small Q has q competition plans, where the i-th plan is to invite participants with indices between
+Li and Ri . You need to help Small Q determine whether he can arrange the teams in such a way
+that it would be possible for the excitement level of the competition to be at least Di .
+
+Input
+The first line of input contains an integer t (1 ↔ t ↔ 105 ), the number of test cases. For each test
+case:
+The first line contains two integers, n and k (1 ↔ n ↔ 5 · 105 , 1 ↔ k ↔ min(5, n)), representing the
+number of potential participants and the number of teams.
+The next n lines contain two integers, 𝜔i and ri (0 ↔ 𝜔i ↔ ri ↔ 1012 ) for the i-th participant,
+indicating the possible strength they can exhibit. For all 1 ↔ i < n, we have 𝜔i ↔ 𝜔i+1 and
+ri ↔ ri+1 .
+The next line contains an integer q (1 ↔ q ↔ 105 ), indicating the number of competition plans.
+
+The next q lines contain three integers: Li , Ri , and Di (1 ↔ Li ↔ Ri ↔ n, (Ri → Li + 1) is divisible
+by k, and 0 ↔ Di ↔ 1012 ), indicating that the i-th competition plan is to invite participants with
+indices from Li to Ri , and Small Q expects the excitement level to be at least Di .
+The sum of n over all test cases is at most 106 . The sum of q over all test cases is at most 105 .
+
+Output
+For each test case, output q lines. For the i-th output, print “YES” or “NO” to indicate whether
+Small Q’s expectation for the i-th plan can possibly be met.
+
+Page 8 of 30
+
+The 50th Petrozavodsk Programming Camp, Winter 2026
+Day 4: Harbin Contest, Sunday, February 1, 2026
+
+Example
+standard input
+2
+4 2
+1 1
+3 3
+4 4
+6 6
+3
+1 2 3
+3 4 2
+1 4 2
+5 1
+1 3
+2 3
+4 6
+7 10
+8 12
+6
+1 3 2
+1 3 3
+2 4 4
+2 4 5
+3 5 4
+3 5 5
+
+standard output
+YES
+YES
+YES
+YES
+NO
+YES
+NO
+YES
+NO
+
+Page 9 of 30
+
+

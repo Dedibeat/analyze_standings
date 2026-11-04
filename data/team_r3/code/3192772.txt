@@ -1,0 +1,142 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+#define int long long
+#define pb push_back
+#define all(x) (x).begin(), (x).end()
+#define rall(x) (x).rbegin(), (x).rend()
+#define rep(i, a, b) for(int i = (a); i < (b); i++)
+#define repd(i, a, b) for(int i = (a); i >= (b); i--)
+#define hha(x) cout << #x << ' ' << x << ' ';
+#define hhal(x) cout << #x << ' ' << x << '\n';
+#define print(v) cout << #v << ' '; for(auto &x : v) cout << x << ' '; cout << '\n';
+const int mod = 1e9 + 7;
+const int inf = 2e18;
+
+void pp(vector<array<int, 3>> a) {
+    for(auto [x, y, z] : a) {
+        cout << x << " " << y << " " << z << "\n";
+    }
+    cout << "\n";
+}
+
+void solve() {
+
+    int a, b, c;
+    cin >> a >> b >> c;
+
+    int p, q, r;
+    cin >> p >> q >> r;
+
+
+    int n;
+    cin >> n;
+    vector<array<int, 3>> point(n);
+
+    for(auto &[x, y, z] : point) {
+        cin >> x >> y >> z;
+    }
+
+    if(p >= a || q >= b || r >= c) {
+        cout << "0\n";
+        return;
+    }
+    if(n % (p + 1) != 0)
+    {
+        cout << "0\n";
+        return;
+    }
+    if((n / (p + 1)) % (q + 1) != 0) 
+    {
+        cout << "0\n";
+        return;
+    }
+    if((n / (p + 1) / (q + 1)) % (r + 1) != 0) 
+    {
+        cout << "0\n";
+        return;
+    }
+    int ans = 1;
+ 
+    int cur = n / (p + 1);
+
+    vector<pair<int, int>> X(p, {-inf, inf}), Y(q, {-inf, inf}), Z(r, {-inf, inf});
+
+
+    vector<int> a1, a2, a3;
+
+    a1.push_back(0);
+
+
+    for(int l : a1) {
+
+        int en = l + cur * (p + 1);
+        // hha(l); hhal(en -1 );
+
+        sort(point.begin() + l, point.begin() + l + cur * (p + 1), [](auto x, auto y) {
+            return x[0] < y[0];
+        });
+
+        for(int i = 0; i < p; i++) {
+            X[i].first = max(X[i].first, point[l + (i + 1) * cur - 1][0]);
+            X[i].second = min(X[i].second, point[l + (i + 1) * cur][0]);
+
+            if(i == 0) a2.push_back(l);
+            a2.push_back(l + (i + 1) * cur);
+        }
+    }
+    // pp(point);
+    
+    cur /= (q + 1);
+    // print(a2);
+    // hhal(cur);
+    if(a2.empty()) a2 = {0};
+    for(int l : a2) {
+
+        int en = l + cur * (q + 1);
+        // hha(l); hhal(en - 1);
+        sort(point.begin() + l, point.begin() + l + cur * (q + 1), [](auto x, auto y) {
+            return x[1] < y[1];
+        });
+
+        for(int i = 0; i < q; i++) {
+            Y[i].first = max(Y[i].first, point[l + (i + 1) * cur - 1][1]);
+            Y[i].second = min(Y[i].second, point[l + (i + 1) * cur][1]);
+
+            if(i == 0) a3.push_back(l);
+            a3.push_back(l + (i + 1) * cur);
+        }
+    }
+    // pp(point);
+    if(a3.empty()) a3 = {0};
+    cur /= (r + 1);
+    for(int l : a3) {
+        int en = l + cur * (r + 1);
+        // hha(l); hhal(en - 1);
+        sort(point.begin() + l, point.begin() + l + cur * (r + 1), [](auto x, auto y) {
+            return x[2] < y[2];
+        });
+
+        for(int i = 0; i < r; i++) {
+            Z[i].first = max(Z[i].first, point[l + (i + 1) * cur - 1][2]);
+            Z[i].second = min(Z[i].second, point[l + (i + 1) * cur][2]);
+        }
+    }
+    // pp(point);
+    for(auto [l, r] : X) {
+        ans = ans * max(0LL, r - l) % mod;
+    }
+    for(auto [l, r] : Y) {
+        ans = ans * max(0LL, r - l) % mod;
+    }
+    for(auto [l, r] : Z) {
+        ans = ans * max(0LL, r - l) % mod;
+    }   
+    cout << ans << "\n";
+
+}
+signed main() {
+    ios_base::sync_with_stdio(0); cin.tie(0);
+    //int t; cin >> t; while(t--)
+    solve();
+}

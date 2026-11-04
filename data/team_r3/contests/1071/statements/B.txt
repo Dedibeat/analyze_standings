@@ -1,0 +1,115 @@
+The 2022 ICPC Asia Hangzhou Regional Programming Contest
+Hangzhou Normal University, December, 04, 2022
+
+Problem B. Useful Algorithm
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+6 seconds
+1024 megabytes
+
+Putata is learning some useful algorithm called Binary Adding these days. This algorithm allows you to
+calculate the sum of two m-bit binary integers.
+An integer x is called to be a m-bit binary integer, if and only if 0 ≤ x < 2m . The binary representation of
+m−1
+P
+m is a 0-indexed sequence v of length m, where ∀0 ≤ i < m, vi ∈ {0, 1}, and x =
+vi 2i . It is guaranteed
+i=0
+
+that for all m-bit binary integers, each one have its unique binary representation.
+
+The Binary Adding algorithm for calculating the sum of two m-bit binary integers with binary
+m−1
+representation {ai }m−1
+i=0 , {bi }i=0 is shown below:
+Algorithm 1 BinaryAdding(a, b)
+Input: input parameters a[0, . . . , m − 1], b[0, . . . , m − 1]
+Output: output result sum[0, . . . , m], carry[0, . . . , m]
+1: carry[0] := 0
+2: for i := 0 to m − 1 do
+3:
+sum[i] := a[i] ⊕ b[i] ⊕ carry[i]
+4:
+carry[i + 1] := (a[i] ∧ b[i]) ∨ (a[i] ∧ carry[i]) ∨ (b[i] ∧ carry[i])
+denotes or operation.
+5: sum[m] := carry[m]
+6: return sum[0, . . . , m], carry[0, . . . , m]
+
+. ⊕ denotes xor operation
+. ∧ denotes and operation, ∨
+
+In order to test if Putata really mastered this algorithm, Budada is going to prepare tests for
+Putata. Before preparing his tests, Budada devised a way to calculate the difficulty of a problem.
+m−1
+Assume the problem is to calculate the sum of {ai }m−1
+i=0 , {bi }i=0 , then we define the carry set of a, b,
+S(a, b) = {x|when calling BinaryAdding(a, b), carryx = 1}. Budada has an integer sequence {wi }m
+i=1 ,
+denoting the difficulty of calculation when a carry occurred at the corresponding bit. The Carry
+Difficulty is the maximum difficulty among all bits where a carry occurred. If there’s no carry occurred,
+the Carry Difficulty is 0.
+The problem database of Budada is an integer sequence {ci }ni=1 . Each integer has a corresponding
+Numerical difficulty, which is also an integer sequence {di }ni=1 . Please notice that ci are not necessarily
+pairwise distinct, and for some ci = cj , di might not be equal to dj . A Binary Adding problem consists
+of two integers, so when Budada chooses ci and cj to set a test, the Numerical difficulty of this problem
+is di + dj .
+Budada wants to prepare the most difficult test for Putata, so he will choose two integers i, j such
+that 1 ≤ i, j ≤ n (not necessarily distinct), and use ci , cj to set a test. He wants to maximize
+the Test Difficulty, which is the product of the Carry Difficulty and Numerical difficulty of
+this test, and he asked you to tell him this production. Formally, the maximum Test Difficulty is
+max {max{max{wx |x ∈ S(ci , cj )}, 0} · (di + dj )}.
+1≤i,j≤n
+
+Budada also has q updates for his problem database, each time he will select an integer i, and modify
+ci , di . You are asked to answer the maximum Test Difficulty of q + 1 versions of the problem database.
+
+Input
+The first line contains three integers n, m, q (1 ≤ n, q ≤ 105 , 1 ≤ m ≤ 16), corresponding to the meaning
+described above.
+
+Page 2 of 16
+
+The 2022 ICPC Asia Hangzhou Regional Programming Contest
+Hangzhou Normal University, December, 04, 2022
+The second line contains m integers, the i-th integer is wi (1 ≤ wi ≤ 109 ).
+The third line contains n integers, the i-th integer is ci (0 ≤ ci < 2m ).
+The fourth line contains n integers, the i-th integer is di (1 ≤ di ≤ 109 ).
+For the following q lines, each line contains three integers x, u, v, let lastans denotes the maximum
+Test Difficulty of the last version of the problem database, and x0 = x ⊕ lastans, u0 = u ⊕ lastans,
+v 0 = v ⊕ lastans (1 ≤ x0 ≤ n, 0 ≤ u0 < 2m , 1 ≤ v 0 ≤ 109 ), this represents Budada changes cx0 to u0 ,
+and dx0 to v 0 . Here, “⊕” denotes the bitwise XOR operator. Please notice that you should use 64-bit
+integer to store x, u, v.
+
+Output
+Output q + 1 lines, denoting the maximum Test Difficulty of the q + 1 versions of the problem database.
+
+Example
+standard input
+5 3 3
+1 2 4
+0 0 1 2 7
+10 10 5 3 1
+27 24 29
+20 16 19
+13 8 9
+
+standard output
+24
+16
+8
+0
+
+Note
+The decrypted operations are:
+x0 = 3, u0 = 0, v 0 = 5.
+x0 = 4, u0 = 0, v 0 = 3.
+x0 = 5, u0 = 0, v 0 = 1.
+
+Page 3 of 16
+
+

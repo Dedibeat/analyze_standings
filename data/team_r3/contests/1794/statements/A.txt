@@ -1,0 +1,58 @@
+World Cup
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+1024 megabytes
+
+The Chinese team is participating in the FIFA World Cup 4202, which includes 32 teams, and the Chinese
+team has number 1, each with a unique strength value ai . Matches between any two teams will have a
+winner, which is the team with the higher strength value winning.
+In the group stage, the 32 teams will be divided into 8 groups, each group consists of 4 teams and plays
+a round-robin tournament in which each team is scheduled for three matches against other teams in the
+same group. The number of winning matches is used to rank the teams in a group. The top two teams
+from each group will advance to the knockout stage.
+The knockout stage is a single-elimination tournament in which teams play each other in one-off matches.
+It begins with the round of 16, in which the first place of each group plays against the second place of
+another group. This is followed by the quarter-finals, the semi-finals, and the final.
+Specifically, denote A1 as the first place of group A, C2 as the second place of group C, and so on. The
+matches in the round of 16 are (1).A1 vs B2, (2).C1 vs D2, (3).E1 vs F2, (4).G1 vs H2, (5).B1 vs A2,
+(6).D1 vs C2, (7).F1 vs E2, (8).H1 vs G2.
+Then, the matches of the quarter-finals are between (9).winners of (1) and (2), (10).winners of (3) and
+(4), (11).winners of (5) and (6), (12).winners of (7) and (8).
+The semi-finals are between (13).winners of (9) and (10), (14).winners of (11) and (12).
+And the final is between (15).winners of (13) and (14).
+Given the strength of every team a1 , . . . , a32 , suppose you can manipulate the grouping scheme, what is
+the best possible result for the Chinese team? Specifically, output
+• 1 if the Chinese team wins the championship,
+• 2 if the Chinese team loses in the final,
+• 4 if the Chinese team loses in the semi-final,
+• 8 if the Chinese team loses in the quarter-final,
+• 16 if the Chinese team loses in the round of 16,
+• 32 if the Chinese team does not advance to the knockout stage.
+
+Input
+Each test contains multiple test cases. The first line contains the number of test cases t(1 ≤ t ≤ 103 ). The
+descriptions of the test cases follow.
+The only line of a test case contains 32 different integers, indicating a1 , . . . , a32 (1 ≤ ai ≤ 109 ).
+
+Output
+For each test case, print one line with one integer indicating the answer to the question.
+
+Example
+standard input
+1
+32 31 30 29 28 27 26 25 24 23 22 21 20
+19 18 17 16 15 14 13 12 11 10 9 8 7 6
+5 4 3 2 1
+
+standard output
+1
+
+Page 1 of 1
+
+

@@ -1,0 +1,52 @@
+The 1st Universal Cup
+Stage 1: Shenyang, January 28-29, 2023
+
+Problem C. Clamped Sequence
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+512 megabytes
+
+Given an integer sequence a1 , a2 , . . . , an and a positive
+Pn−1 integer d, you need to clamp the sequence to a
+range [l, r] satisfying 0 ≤ r − l ≤ d that maximize i=1 |ai − ai+1 |, where |x| is the absolute value of x.
+More specifically, clamping the sequence to the range [l, r] makes each element
+
+ai < l;
+ l,
+ai , l ≤ ai ≤ r;
+ai :=
+
+r,
+ai > r.
+Both l and r are arbitrary real numbers decided by you under the given constraints. It can be shown that
+the maximum sum is always an integer.
+
+Input
+The first line contains two integers n (2 ≤ n ≤ 5 000) and d (1 ≤ d ≤ 109 ), denoting the length of the
+given sequence and the given parameter respectively.
+The second line contains n integers a1 , a2 , . . . , an (−109 ≤ ai ≤ 109 ), denoting the given sequence.
+
+Output
+Output a line containing a single integer, denoting the maximum sum.
+
+Example
+standard input
+8 3
+3 1 4 1 5 9 2 6
+
+standard output
+15
+
+Note
+In the sample case, you can clamp the given sequence to the range [1, 4] to make it [3, 1, 4, 1, 4, 4, 2, 4],
+and the resulting sum is the maximum 15.
+
+Page 3 of 16
+
+

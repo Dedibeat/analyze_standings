@@ -1,0 +1,981 @@
+2025 CCPC ZhengZhou Onsite
+,
+
+Problem A. Challenge Matrix Multiplication II
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+3 seconds
+1024 megabytes
+
+As is well known, the APSP (All Possible Shortest Path) problem has a profound connection with min+
+matrix multiplication. Today, we want you to solve the following problem:
+GivenPx, construct
+an undirected unweighted connected graph (i.e., all edge weights are 1) such
+n Pn
+that i=1 j=i+1 dis(i, j) = x. Here, dis(i, j) represents the shortest path length between node i and
+node j.
+This problem is certainly very simple... Unfortunately, your resources are limited, so you hope to find a
+graph with no more than 85 nodes that meets the requirements.
+
+Input
+A single test case contains multiple data sets.
+The first line of input is the number of data sets T (1 ≤ T ≤ 2000), representing the number of data sets
+contained in this test case.
+For each data set, there is one line with an integer x (1 ≤ x ≤ 105 ), representing the constraint that
+needs to be satisfied. It is guaranteed that there exists at least one graph with no more than 85 nodes
+that meets the condition.
+
+Output
+For each data set, output the number of nodes n you used on the first line (2 ≤ n ≤ 85). Then output
+n − 1 lines, where the i-th line is a binary string of length n − i. The j-th character of the i-th line is 1 if
+and only if there is an edge between node i and node i + j.
+
+Example
+standard input
+4
+1
+3
+6
+8
+
+standard output
+2
+1
+3
+11
+1
+4
+111
+11
+1
+4
+110
+10
+1
+
+Page 1 of 19
+
+2025 CCPC ZhengZhou Onsite
+,
+
+Problem B. Cutting Chocolate
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1.5 seconds
+1024 megabytes
+
+Little L has a piece of chocolate of size L × W × H. Inside the chocolate, there are n almonds, with the
+i-th almond located at the center of the unit cube [xi − 1, xi ] × [yi − 1, yi ] × [zi − 1, zi ]. No two almonds
+occupy the same position.
+Now, Little L wants to cut this piece of chocolate into several smaller pieces. Specifically, he wants to make
+p, q, r cuts along the three dimensions, respectively. Each cut must be made along integer coordinates, no
+two cuts can be made at the same coordinate in the same dimension, and cuts cannot be made at the
+edges of the chocolate (i.e., at coordinates 0 or L, W , H).
+Formally, a cut in the x direction at coordinate k (0 < k < L) means cutting the chocolate along the
+plane x = k. The same applies for the y and z directions.
+Additionally, for the (p + 1)(q + 1)(r + 1) pieces of chocolate after the cuts, Little L hopes that each piece
+contains the same number of almonds. Little L wants to know how many essentially different cutting
+methods satisfy this condition. Two cutting methods are considered different if there exists a position in
+one dimension such that the first method cuts at this position while the second does not. Output the
+result modulo 109 + 7.
+
+Input
+The first line of each test case contains three integers L, W, H (1 ≤ L, W, H ≤ 109 ), representing the size
+of the chocolate.
+The second line contains three integers p, q, r (0 ≤ p, q, r ≤ 106 ), representing the number of cuts in the
+x, y, and z directions, respectively.
+The third line contains an integer n (1 ≤ n ≤ 106 ), representing the number of almonds.
+The following n lines each contain three integers xi , yi , zi (1 ≤ xi ≤ L, 1 ≤ yi ≤ W, 1 ≤ zi ≤ H),
+representing the position of an almond. It is guaranteed that all triples (xi , yi , zi ) are distinct.
+
+Output
+A single line containing an integer that represents the result modulo 109 + 7.
+
+Page 2 of 19
+
+2025 CCPC ZhengZhou Onsite
+,
+
+Examples
+standard input
+
+standard output
+
+4 4 1
+1 1 0
+4
+1 2 1
+2 4 1
+3 1 1
+4 3 1
+
+1
+
+3 3 3
+1 1 1
+3
+1 1 1
+2 2 2
+3 3 3
+
+0
+
+9 9 9
+1 1 1
+8
+1 1 2
+2 2 8
+1 9 1
+2 8 9
+8 2 1
+9 2 9
+9 8 1
+8 9 7
+
+180
+
+Page 3 of 19
+
+2025 CCPC ZhengZhou Onsite
+,
+
+Problem C. Basic Counting Practice Problems
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+4 seconds
+1024 megabytes
+
+Consider a tree with n nodes, where node 1 is the root. Each node i in the tree has a weight pi , such that
+p1 , p2 , . . . , pn is a permutation.
+Let Lu,v denote the maximum weight of any node on the simple path from node u to node v (including
+u and v). Let subtree(i) represent the set of nodes that make up the subtree of node i. We define
+Si = {u|u ∈ subtree(i) ∧ Lu,i ≤ pi }, which is the set of nodes that can be reached starting from i, only
+moving to children and only passing through nodes with weights less than or equal to pi . Let fi = |Si |,
+which represents the size of the set of nodes.
+We define the value of a node as qfi , where q is a given value sequence q1 , q2 , . . . , qn .
+Now we want to compute, for each pair (i, j), the sum of the values of node i for all weight configurations
+that satisfy pi = j. Since the answer may be very large, please output the result modulo 109 + 7.
+
+Input
+The first line contains one integer n (1 ≤ n ≤ 700), representing the number of nodes in the tree.
+The next line contains n integers, representing q1 , q2 , . . . , qn (0 ≤ qi < 109 + 7).
+The following n − 1 lines each contain two integers u, v, representing an edge in the tree.
+
+Output
+Output n lines, each containing n integers. The i-th line and the j-th integer represent the corresponding
+answer modulo 109 + 7.
+
+Examples
+standard input
+
+standard output
+
+3
+1 1 2
+1 2
+2 3
+
+2 2 4
+2 2 2
+2 2 2
+
+4
+1 2 3 4
+1 2
+2 3
+1 4
+
+6 10 16 24
+6 8 10 12
+6 6 6 6
+6 6 6 6
+
+7
+3 7 2 4 1 8 9
+1 2
+1 3
+2 4
+4 5
+3 6
+4 7
+
+2160 3120 3168 2952 2160 3720 6480
+2160 2640 2640 2412 2208 2280 2880
+2160 2640 3120 3600 4080 4560 5040
+2160 3120 3648 3744 3408 2640 1440
+2160 2160 2160 2160 2160 2160 2160
+2160 2160 2160 2160 2160 2160 2160
+2160 2160 2160 2160 2160 2160 2160
+
+Page 4 of 19
+
+2025 CCPC ZhengZhou Onsite
+,
+
+Problem D. Diameter of a Tree
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+1024 megabytes
+
+Given an unrooted tree with n nodes, you need to assign a distinct weight to each node, with weights
+forming a permutation of the numbers from 1 to n.
+For any assignment scheme, we consider all diameters of the tree (i.e., the longest simple path in the
+tree). Among these diameters, we select the one with the lexicographically largest weight sequence
+(arranging the weights of the nodes along the path in order and comparing lexicographically).
+Your goal is to minimize the lexicographic order of the weight sequence corresponding to this
+"lexicographically largest diameter"among all possible assignment schemes.
+
+Input
+A single test case contains multiple data groups.
+The first line of input is the number of data groups T (1 ≤ T ≤ 105 ), representing the number of data
+groups in this test case.
+For each data group, the first line contains an integer n (2 ≤ n ≤ 2 · 105 ) indicating the number of nodes.
+The next n − 1 lines each contain two integers u, v (1 ≤ u, v ≤ n), representing an edge of the tree.
+P
+It is guaranteed that across all data,
+n ≤ 2 · 105 .
+
+Output
+For each set of data, output a line of several integers representing the smallest possible lexicographical
+order of the diameter with the largest lexicographical order.
+
+Page 5 of 19
+
+2025 CCPC ZhengZhou Onsite
+,
+
+Example
+standard input
+5
+5
+1 2
+1 3
+2 4
+2 5
+4
+1 2
+1 3
+1 4
+6
+1 2
+1 3
+2 4
+2 5
+3 6
+8
+1 2
+2 3
+1 4
+2 5
+3 6
+1 7
+7 8
+10
+1 2
+2 3
+2 4
+4 7
+4 8
+1 5
+5 6
+6 9
+1 10
+
+standard output
+3 4 5 1
+3 4 2
+3 4 5 6 1
+2 3 4 5 6 1
+3 4 5 6 7 8 1
+
+Page 6 of 19
+
+2025 CCPC ZhengZhou Onsite
+,
+
+Problem E. Doo Doo Doo
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+2 seconds
+1024 megabytes
+
+Little Ika: Doo Doo Doo ∼.
+Hyacinthia wants to go to the center of the "Cloud End Ruins"Eye of Dawn to search for loot, but there are
+n walls blocking her path. The i-th wall is a circle centered at the origin (0, 0) with a radius
+of ri . There are
+
+
+ki doors on the wall, and the coordinates of the j-th door are given by ri · cos 2π
+·
+p
+,
+r
+·
+sin 2π
+i,j
+i
+M
+M · pi,j .
+The thickness of the wall and the width of the doors are negligible, and Hyacinthia cannot fly over the
+walls.
+Hyacinthia wants to ask you m times. Each time she will tell you her starting point, and you need to
+answer what the shortest distance to the center is. The starting point is guaranteed to be on the inner
+side of a wall and right next to the wall surface.
+
+Input
+The first line contains two integers n, m (2 ≤ n ≤ 2 · 105 , 1 ≤ m ≤ 2 · 105 ), representing the number of
+walls and the number of queries.
+The next n lines describe each wall. Each line starts with two integers ri , ki (1 ≤ ri ≤ 108 , 0 ≤ ki ≤ 2·105 ),
+representing that the i-th wall is a circle with radius ri and has ki doors. Following
+of the j-th door
+this are ki integers pi,1 , pi,2 , . . . , pi,k
+i , representing that the coordinates
+2π
+8.
+are
+ri · cos 2π
+·
+p
+,
+r
+·
+sin
+·
+p
+,
+where
+M
+=
+3.6
+·
+10
+It
+is
+guaranteed that
+i,j
+i
+i,j P
+M
+M
+n
+5
+0 ≤ pi,1 < pi,2 < · · · < pi,ki < M , kn = 0, i=1 ki ≤ 2 · 10 , and 1 ≤ r1 < r2 < · · · < rn ≤ 108 .
+The next m lines each contain two integers
+ ti , qi , indicating
+ that if Hyacinthia starts from the inside of
+2π
+2π
+the ti -th wall at the point rti · cos M · qi , rti · sin M · qi , what is the shortest distance to the origin
+(if it is not reachable, please output ”-1”).
+
+Output
+For each query, output a single line with a floating-point number representing the answer. If it is not
+reachable, output ”-1”. An answer is considered correct if the relative or absolute error does not exceed
+10−6 compared to the standard answer.
+
+Example
+standard input
+3 4
+2 2 0 90000000
+5 0
+8 0
+1 114514
+2 0
+2 180000000
+3 233
+
+standard output
+2.0000000000
+5.0000000000
+7.4056093871
+-1
+
+Page 7 of 19
+
+2025 CCPC ZhengZhou Onsite
+,
+
+Problem F. Challenge NPC II
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+3 seconds
+1024 megabytes
+
+Tajian is solving the following problem:
+Given a graph with n points, the initial graph has no edges. Tajian has some edges to add to the graph,
+and he has divided these edges into k groups, where the i-th group contains ci edges. For each x ∈ [1, n],
+Tajian wants to know the minimum number of groups of edges he needs to select from these k groups
+to add to the graph in order to ensure that the number of connected components in the graph does not
+exceed x.
+Although it is not immediately obvious, there are papers that indicate that the minimum coloring number
+of a spanning tree is an NPC problem. However, Tajian does not know this, so he wants you to help him
+solve this problem.
+
+Input
+A single test case contains multiple data sets.
+The first line of input is the number of data sets T (1 ≤ T ≤ 103 ), representing the number of data sets
+in this test case.
+For each data set, the first line contains two integers n, k (2 ≤ n ≤ 16, 1 ≤ k ≤ 200), representing the
+number of points and the number of groups of edges.
+The next section describes the information for the k groups of edges. For the i-th group of edges, the first
+line contains an integer ci (1 ≤ ci ≤ 200), representing the number of edges in this group. The following
+ci lines each contain two integers u, v (1 ≤ u, v ≤ n, u ̸= v), representing an edge in this group.
+P
+P n
+For a single data set, it is guaranteed that
+ci ≤ 200. For all data, it is guaranteed that
+2 ≤ 216 .
+
+Output
+For each data set, output a line of n integers, where the i-th integer represents the answer when x = i.
+If it is impossible to ensure that the number of connected components does not exceed i under any
+circumstances, output ”-1”.
+
+Page 8 of 19
+
+2025 CCPC ZhengZhou Onsite
+,
+
+Example
+standard input
+4
+3 3
+1
+1 2
+1
+2 3
+1
+1 3
+4 3
+1
+2 3
+2
+1 2
+1 3
+1
+3 4
+6 2
+3
+1 2
+3 4
+5 6
+2
+2 3
+4 5
+4 2
+1
+2 3
+2
+1 3
+1 2
+
+standard output
+2 1 0
+2 1 1 0
+2 2 1 1 1 0
+-1 1 1 0
+
+Page 9 of 19
+
+2025 CCPC ZhengZhou Onsite
+,
+
+Problem G. Plus Xor
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+1024 megabytes
+
+Given integers a, b, c, you can perform one of the following operations each time:
+• a←a+b
+• a←a⊕b
+where ⊕ represents the binary XOR operation.
+You can perform any number of operations, and you want to know if you can ultimately make a equal to
+c.
+
+Input
+A single test case contains multiple data sets.
+The first line of the input is the number of data sets T (1 ≤ T ≤ 103 ), representing the number of data
+sets in this test case.
+For each data set, there is a line with three integers a, b, c (0 ≤ a, c ≤ 1018 , 1 ≤ b ≤ 1000).
+P 2
+It is guaranteed that in a single test case,
+b ≤ 106 .
+
+Output
+For each data set, if it is possible to ultimately make a equal to c, output "YES"; otherwise, output "NO".
+
+Example
+standard input
+5
+1 6 7
+7 5 13
+8 3 16
+7 6 17
+2 7 8
+
+standard output
+YES
+NO
+YES
+YES
+NO
+
+Page 10 of 19
+
+2025 CCPC ZhengZhou Onsite
+,
+
+Problem H. Random Shuffle
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+2 seconds
+1024 megabytes
+
+There is an array a of length n, where the i-th number is ai . Additionally, each number has a score, and
+the score of the i-th number is ci . Alice and Bob take turns, with Alice going first.
+In the current round, the player first copies the array a to array b and runs a random shuffle program to
+randomly shuffle array b. Specifically, the random shuffle program will select one of the permutations of
+b with equal probability and replace the original array b with it. Suppose the current length of array a
+is m, then the player can choose an integer k such that 0 ≤ k ≤ m and a[1 . . . k] = b[1 . . . k], and then
+delete a[1 . . . k] (i.e., the prefix of length k of a) and obtain the score of the deleted numbers. The game
+ends when the array a is emptied.
+Note that the array a and its score array c will not be shuffled throughout the entire process, but only
+their prefixes will be removed.
+Both Alice and Bob want to maximize their scores. Alice wants to know what her expected score is when
+both players adopt optimal strategies.
+Alice also made q groups of modifications (modifying the array and scores), and she wants you to find
+the answer for the initial array, as well as the answers after each group of modifications.
+
+Input
+The first line contains an integer n (1 ≤ n ≤ 106 ), representing the length of the initial array a.
+The second line contains n integers a1 , a2 , . . . , an (1 ≤ ai ≤ n), representing the initial array a.
+The third line contains n integers c1 , c2 , . . . , cn (1 ≤ ci ≤ 106 ), representing the score of each number in
+the array.
+The next line contains an integer q (0 ≤ q ≤ 10), representing the number of modifications.
+The following describes q groups of modifications:
+For each group of modifications, the first line contains ki (1 ≤ ki ≤ 105 ), indicating the number of
+modifications in this group.
+The next ki lines each contain three integers pj , xj , yj (1 ≤ pj , xj ≤ n, 1 ≤ yj ≤ 106 ), indicating that apj
+is modified to xj and cpj is modified to yj .
+It is guaranteed that p1 < p2 < · · · < pki .
+
+Output
+Output a total of q + 1 lines, each line containing a floating-point number representing the answer.
+The first line is the answer for the initial array, followed by q lines for the answers after each group of
+modifications.
+An answer is considered correct if the relative or absolute error compared to the standard answer does
+not exceed 10−9 .
+
+Page 11 of 19
+
+2025 CCPC ZhengZhou Onsite
+,
+
+Examples
+standard input
+2
+1 2
+1 1
+2
+1
+2 1 2
+1
+1 1 2
+6
+1 1 4 5 1 4
+2 3 3 3 3 3
+0
+
+standard output
+1.333333333333
+3.000000000000
+4.000000000000
+
+9.013888888889
+
+Note
+This problem has a large input size, please use an efficient input method.
+
+Page 12 of 19
+
+2025 CCPC ZhengZhou Onsite
+,
+
+Problem I. Dumb Problem II
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1.5 seconds
+1024 megabytes
+
+For a permutation p of length n, we define f (p) to represent the position of the prefix maximum.
+Specifically, f (p) = {i|1 ≤ i ≤ n, s.t. ∀1 ≤ j < i, pi > pj }.
+Similarly, let g(p) represent the set of numbers of the prefix maximum, that is, g(p) = {pi |i ∈ f (p)}.
+Now there are k independently and uniformly randomly chosen permutations p1 , p2 , . . . , pk from all
+permutations of length n (can be repeated). Little A wants to know how many essentially different g(p)
+there are expected among these permutations. The goal is to find out how many essentially different sets
+are expected among g(p1 ), g(p2 ), . . . , g(pk )? The answer should be output modulo 998244353.
+
+Input
+A single line containing two integers n, k (1 ≤ n, k ≤ 5000).
+
+Output
+A single line containing an integer representing the result of the answer modulo 998244353.
+
+Examples
+standard input
+
+standard output
+
+1 1
+
+1
+
+3 2
+
+388206139
+
+3 4
+
+408232647
+
+112 646
+
+928854225
+
+Note
+For the first sample, the answer is 1.
+For the second sample, the answer is 31
+18 .
+For the third sample, the answer is 1711
+648 .
+
+Page 13 of 19
+
+2025 CCPC ZhengZhou Onsite
+,
+
+Problem J. Subrectangle Count
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+2 seconds
+1024 megabytes
+
+Given an integer sequence of length n(n ≥ 2), denoted as a1,2,...,n , and an integer sequence
+of length m(m ≥ 2), denoted as b1,2,...,m , we can construct an n × m matrix c such that
+ci,j = ai ⊕ bj (1 ≤ i ≤ n, 1 ≤ j ≤ m), where ⊕ denotes the bitwise XOR operation.
+Determine
+how many
+
+ pairs (i, j)(1 ≤
+ i < n, 1 ≤ j < m) satisfy that the subrectangle region of c given
+ci,j
+ci,j+1
+x
+x+1
+by
+is of the form
+, meaning that ci,j+1 = ci,j + 1, ci+1,j = ci,j + 2, and
+ci+1,j ci+1,j+1
+x+2 x+3
+ci+1,j+1 = ci,j + 3.
+
+Input
+The first line contains an integer T (1 ≤ T ≤ 105 ), representing the number of test cases.
+For each test case:
+The first line contains two space-separated integers n, m(2 ≤ n, m ≤ 2 × 105 ), representing the number of
+rows and columns of c.
+The second line contains n space-separated integers, representing a1 , a2 , . . . , an (0 ≤ ai < 230 ).
+The third line contains m space-separated integers, representing b1 , b2 , . . . , bm (0 ≤ bi < 230 ).
+It is guaranteed that the sum of n does not exceed 2 × 105 and the sum of m does not exceed 2 × 105 .
+
+Output
+For each test case, output a single line containing an integer, representing how many pairs (i, j) satisfy
+the condition.
+
+Example
+standard input
+5
+2 2
+0 2
+0 1
+3 3
+6 4 2
+6 7 10
+5 4
+4 6 5 1 3
+1 0 2 3
+7 2
+7 3 1 4 0 0 1
+6 5
+5 5
+1 7 5 3 1
+3 2 7 7 6
+
+standard output
+1
+2
+1
+0
+6
+
+Page 14 of 19
+
+2025 CCPC ZhengZhou Onsite
+,
+
+Problem K. Parentheses and Swapping
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+1024 megabytes
+
+A parentheses sequence is a string composed of the characters ( and ). A parentheses sequence s1,2,...,m
+is defined as valid if it satisfies one of the following conditions:
+• s is empty.
+• s1 = (, sm = ), and s2,3,...,m−1 is valid.
+• There exists a position k(1 ≤ k < n) such that s1,2,...,k is valid, and sk+1,k+2,...,m is valid.
+Two positions i, j(1 ≤ i < j ≤ m) in the parentheses sequence s1,2,...,m are said to be matched if and only
+if both si,i+1,...,j and si+1,i+2,...,j−1 are valid.
+Given an integer sequence of length n, a1 , a2 , . . . , an , where n is guaranteed to be even. We construct
+a new integer sequence c1 , c2 , . . . , cn through a valid parentheses sequence b1 , b2 , . . . , bn , such that
+∀1 ≤ i ≤ n, ci = api , where pi is the position matched with position i in b1,2,...,n .
+Find a valid parentheses sequence b1,2,...,n such that the lexicographical order of c1,2,...,n is minimized. If
+there are multiple solutions, output any one of them.
+
+Input
+The first line contains an integer T (1 ≤ T ≤ 2.5 × 105 ), indicating the number of test cases.
+For each test case:
+The first line contains an integer n(1 ≤ n ≤ 5 × 105 ), indicating the length of the sequence a, and it is
+guaranteed that n is even.
+The second line contains n space-separated integers, representing a1 , a2 , . . . , an (1 ≤ ai ≤ n).
+It is guaranteed that the sum of n does not exceed 5 × 105 .
+
+Output
+For each test case, output a line containing a string of length n, representing b1,2,...,n .
+
+Example
+standard input
+5
+6
+4 1 5 4 1 1
+4
+1 2 3 2
+4
+1 3 1 2
+2
+2 1
+8
+8 5 2 6 1 4 3 7
+
+standard output
+((()))
+()()
+(())
+()
+((()))()
+
+Page 15 of 19
+
+2025 CCPC ZhengZhou Onsite
+,
+
+Problem L. Triangle Grid
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+4 seconds
+1024 megabytes
+
+Little L has a regular triangular grid, where each grid line is a segment connecting the corresponding
+n division points of adjacent edges. These grid lines divide the regular triangle into several congruent
+smaller regular triangles.
+For each intersection point of the grid lines in the figure, we represent it with a coordinate (x, y). The x
+coordinate from top to bottom ranges from 1 to n + 1. x = 1 represents the topmost point, while x = n + 1
+represents the bottom line. For the i-th row, the y coordinates of the grid points from left to right range
+from 1 to i.
+In the triangular grid, there are several regular triangles, which may be oriented upright or inverted. For
+each orientation of the triangle, we represent it with three numbers x, y, d. Here, (x, y) represents the
+coordinates of the diagonal vertices of its edge parallel to the grid’s bottom line, and d represents its side
+length (the length of the segment).
+For example, in the figure below, the blue regular triangle is an upright triangle, with (x, y, d) = (4, 2, 3).
+The yellow regular triangle is an inverted triangle, with (x, y, d) = (6, 3, 2).
+Now, for each unit small regular triangle grid (a regular triangle with a side length of 1, regardless of
+orientation), there is a number written on it. Initially, all numbers on the grids are 0. Little L will perform
+the following operations:
+• Choose a regular triangle and add w to all numbers on the grids within it.
+• Choose a regular triangle and query the sum of all numbers on the grids within it.
+He hopes you can compute the answer for each query operation. Since Little L does not like large numbers,
+you only need to output the result of the answer modulo 232 .
+
+Page 16 of 19
+
+2025 CCPC ZhengZhou Onsite
+,
+
+Input
+The first line of input contains two integers n, q (2 ≤ n ≤ 105 , 1 ≤ q ≤ 105 ).
+The next q lines each represent an operation.
+Each line starts with five numbers opt, type, x, y, d (opt ∈ {1, 2}, type ∈ {0, 1}, 1 ≤ x ≤ n+1, 1 ≤ y ≤ x, 1 ≤ d ≤ n).
+opt represents the type of operation, where opt = 1 is a modification operation, and opt = 2 is a query
+operation. type indicates the type of triangle for this operation, where type = 0 is for an upright triangle,
+and type = 1 is for an inverted triangle. x, y, d describe this triangle. If opt = 1, there is an additional
+number w (0 ≤ w < 232 ) that indicates the number added during this modification operation.
+It is guaranteed that all input triangles have a non-zero area and are valid triangles completely contained
+within the larger triangle.
+
+Output
+For each query with opt = 2, output a single number on a new line, representing the sum within the area
+modulo 232 .
+
+Page 17 of 19
+
+2025 CCPC ZhengZhou Onsite
+,
+
+Examples
+standard input
+
+standard output
+
+5 5
+1 0 3 3 2 2
+1 1 6 4 2 3
+2 0 1 1 5
+2 0 3 2 3
+2 1 5 3 2
+
+20
+11
+3
+
+10 10
+1 0 1 1 5 2
+1 1 3 2 1 6
+1 1 6 4 2 1
+2 0 10 3 1
+2 1 5 2 1
+2 1 6 4 2
+1 0 7 7 1 7
+1 1 9 3 1 3
+1 0 9 5 2 4
+2 0 6 1 2
+
+0
+2
+12
+0
+
+Page 18 of 19
+
+2025 CCPC ZhengZhou Onsite
+,
+
+Problem M. Replacement
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+1024 megabytes
+
+Given a binary string s of length n (01 string). You need to replace one character in s[2 . . . n − 1] with ⊕,
+so that the final value of the expression is as large as possible.
+⊕ represents the binary XOR operation. After the replacement, both sides of ⊕ are treated as binary
+numbers.
+
+Input
+A single test case contains multiple data sets.
+The first line of input is the number of data sets T (1 ≤ T ≤ 105 ), representing the number of data sets
+in this test case.
+For each data set, there is one line containing a binary string s (3 ≤ |s| ≤ 5 · 105 ).
+P
+It is guaranteed that in a single test case,
+|s| ≤ 5 · 105 .
+
+Output
+For each data set, output one line containing a binary string that represents the largest result in binary
+form (the number string cannot contain leading 0s except for the single digit 0).
+
+Example
+standard input
+5
+010
+0110
+1000
+10101
+01000
+
+standard output
+0
+10
+10
+100
+10
+
+Page 19 of 19
+
+

@@ -1,0 +1,60 @@
+Game
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+256 megabytes
+
+Alice and Bob are playing a game. Initially, Alice has x chips, and Bob has y chips.
+The game proceeds in several rounds. In each round, Alice wins with a probability of p0 , Bob wins with
+a probability of p1 , and there is a probability of 1 − p0 − p1 for a draw.
+If there is a draw, the game immediately moves to the next round. Otherwise, if the number of the winner’s
+chips is not smaller than the number of the loser’s chips, the winner wins the entire game, and the game
+ends; otherwise, the loser loses an amount of chips equal to the winner’s current chips, and the game
+moves to the next round.
+Note that after each round of the game, no one’s chips will increase.
+You are asked to find the probability that Alice will ultimately win the entire game.
+
+Input
+The first line contains an integer T (1 ≤ T ≤ 105 ), representing the number of test cases.
+For each test case, the first line contains two integers x and y (1 ≤ x, y ≤ 109 ), representing the initial
+number of chips Alice and Bob have, respectively.
+The second line contains three non-negative integers a0 , a1 , and b (1 ≤ a0 + a1 ≤ b < 998244353),
+representing p0 = ab0 , p1 = ab1 .
+
+Output
+For each test case, output one line containing an integer representing the probability that Alice will win
+the entire game, modulo 998244353.
+
+Example
+standard input
+3
+1 1
+2 2 6
+1 3
+2 3 6
+3 4
+7 3 15
+
+standard output
+499122177
+910398850
+220911476
+
+Note
+For the first test case, since both players have the same number of chips and the same probability of
+winning a round, the probability of either Alice or Bob winning the entire game is 12 .
+For the second test case, Alice must win three rounds before Bob wins a single round to win the entire
+game. If a round does not end in a draw, Alice wins with a probability of 52 , so Alice’s final winning
+3
+8
+probability is 25 = 125
+.
+
+Page 1 of 1
+
+

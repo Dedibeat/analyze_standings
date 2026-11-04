@@ -1,0 +1,102 @@
+Three Rectangles
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+512 megabytes
+
+A rectangular board with sides parallel to the coordinate axes lies on a two-dimensional plane. The
+bottom-left corner of the region is at coordinate (0, 0) while the top-right corner is at coordinate (H, W ).
+Given three rectangular cards, you need to put these three cards fully inside the board to cover the whole
+board and find the number of different placements. Here the cards should not be rotated or flipped, the
+sides of each card should be parallel to the coordinate axes, and the corners of each card should have
+integral coordinates.
+Two placements are considered different if and only if there exists a card with different locations in the
+two placements. Since the answer may be large, output it modulo 109 + 7.
+
+Input
+The input contains several test cases, and the first line contains a single integer T (1 ≤ T ≤ 105 ), denoting
+the number of test cases.
+For each test case:
+The first line contains two integers H and W (1 ≤ H, W ≤ 109 ), denoting the height and the width of
+the rectangular board.
+Then three lines follow, the i-th of which contains two integers hi (1 ≤ hi ≤ H) and wi (1 ≤ wi ≤ W ),
+denoting the height and the width of the i-th rectangular card.
+
+Output
+For each test case, output a line containing a single integer, indicating the number of different placements
+that satisfy the conditions, modulo 109 + 7.
+
+Page 1 of 2
+
+Examples
+standard input
+
+standard output
+
+5
+2 2
+1 1
+1 1
+1 1
+2 2
+1 1
+1 2
+1 2
+2 2
+1 1
+1 2
+2 1
+2 2
+1 2
+1 2
+1 2
+2 2
+1 2
+1 2
+2 1
+
+0
+8
+4
+6
+4
+
+4
+1 3
+1 1
+1 2
+1 3
+1 4
+1 1
+1 2
+1 3
+1 5
+1 1
+1 2
+1 3
+1 6
+1 1
+1 2
+1 3
+
+6
+12
+14
+6
+
+1
+1000000000 1000000000
+1 1
+1 1
+1000000000 1000000000
+
+2401
+
+Page 2 of 2
+
+

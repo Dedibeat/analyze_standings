@@ -1,0 +1,51 @@
+Prefix of Suffixes
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+128 megabytes
+
+Ms. Wozzie has a variable-length array S. Initially S is empty, and the array will be manipulated N times,
+each time adding a number to the end of S.
+She wants to check the current state of the array when she adds the i-th number P
+Si , soP
+she will give you
+i −1
+a pair of Ai , Bi at the same time, and wants you to output the current value of ni=1 i+z
+Aj × B i .
+j=i
+Define zi as the longest common prefix of [Si , . . . , Sn ] and [S1 , . . . , Sn ] where n is the current length.
+Recall that the longest common prefix of [a1 , . . . , an ] and [b1 , . . . , bm ] is the largest L satisfying:
+ai = bi , ∀1 ≤ i ≤ L.
+To make sure you answered her question in real time, she will encrypt the number Si she is currently
+adding backward through your last answer, the exact decryption is given in the input format.
+
+Input
+The first line contains an integer N (2 ≤ N ≤ 3 × 105 ) indicating the number of operations.
+For the next N lines, the i-th line contains three integers Si0 , Ai , Bi (0 ≤ Si0 < N, 1 ≤ Ai , Bi ≤ 1000)
+representing the encrypted Si and Ai , Bi .
+For decryption: the value of Si is (Si0 + lastans) mod N , where lastans denotes the last output answer.
+In particular, initially, lastans = 0.
+
+Output
+Output N lines, with the ith line representing the answer after the i-th operations on S.
+
+Example
+standard input
+3
+0 1 2
+1 2 3
+2 3 4
+
+standard output
+2
+12
+18
+
+Page 1 of 1
+
+

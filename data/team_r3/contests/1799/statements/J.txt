@@ -1,0 +1,47 @@
+Stacking of Goods
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+128 megabytes
+
+You are a grocery store owner, and there are n goods in your store. Each good i has an associated weight
+wi , initial volume vi , and compression coefficient ci .
+You stack all the goods into one pile to keep the store tidy. Because goods can be compressed, assuming
+that the sum of the weights of the items above the goods i is W (Not including itself), then after stacking,
+the actual volume of the goods i will become vi − ci × W .
+The space in your store is really limited, so you want to know the minimum possible value of the sum of
+the actual volumes of the items.
+
+Input
+The first line contains a single integer n (1 ≤ n ≤ 105 ), representing the number of goods.
+For the following n lines, each line contains three integers wi , vi , ci (1 ≤ wi ≤ 105 , 1 ≤ vi ≤ 1012 , 0 ≤ ci < Pviwi ),
+representing the weight, volume, and compression coefficient of the i-th good.
+It’s guaranteed that the actual volume of each good will never be compressed into a negative number or
+zero.
+
+Output
+A single integer represents the answer.
+
+Example
+standard input
+3
+1 8 1
+2 9 2
+3 10 2
+
+standard output
+16
+
+Note
+A possible optimal solution is that the order of goods in the pile from bottom to top is 1, 2, 3. The actual
+volume of good 1 is 8 − 1 × (2 + 3) = 3; the actual volume of good 2 is 9 − 2 × 3 = 3; and the actual
+volume of good 3 is 10 since there are no other goods above it.
+
+Page 1 of 1
+
+

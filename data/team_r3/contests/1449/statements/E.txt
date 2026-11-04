@@ -1,0 +1,61 @@
+Sheep Eat Wolves
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+2 seconds
+512 megabytes
+
+Farmer John has x sheep and one day, y wolves came to the river where he was herding the sheep.
+For safety reasons, Farmer John wants to immediately transport all x sheep back to his house on the
+other side of the river. There is a boat on the riverbank that Farmer John can use to transport up to
+p animals with him at a time. Farmer John can only use this boat to transport animals back and forth
+between the two riverbanks.
+However, if there is a group of animals that are not under Farmer John’s supervision, and this group
+includes both wolves and sheep, and the number of wolves is strictly greater than the number of sheep
+plus q, the wolves will eat the sheep. A group of animals can be under Farmer John’s supervision if and
+only if they are on the boat or on the same side of the river as Farmer John.
+Now Farmer John wants to know the minimum number of trips required to safely transport all the sheep
+back to his house on the other side of the river, or determine if it is impossible.
+
+Input
+The only line contains four integers, x (1 ≤ x ≤ 100) denoting the number of sheep, y (1 ≤ y ≤ 100)
+denoting the number of wolves, p (1 ≤ p ≤ 100) denoting the maximum number of animals that can
+be transported in one trip with Farmer John, and q (0 ≤ q ≤ 100) denoting the threshold at which the
+wolves will eat the sheep when the number of wolves in a group not under Farmer John’s supervision is
+strictly greater than the number of sheep plus q.
+
+Output
+Output a line containing a single integer, indicating the minimum number of trips required to safely
+transport all x sheep back to Farmer John’s house on the other side of the river. If it is impossible to
+safely transport all x sheep back home, output −1 in one line.
+
+Examples
+standard input
+
+standard output
+
+4 4 3 1
+
+3
+
+3 5 2 0
+
+5
+
+2 5 1 1
+
+-1
+
+Note
+
+Page 1 of 2
+
+Figure: One possible solution for the first sample case
+
+Page 2 of 2
+
+

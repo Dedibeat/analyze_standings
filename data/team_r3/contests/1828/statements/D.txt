@@ -1,0 +1,75 @@
+Toe-Tac-Tics
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+1024 megabytes
+
+Alice and Bob are playing Toe-Tac-Tics on n boards with 3 rows and 3 columns. Some cells on the boards
+are initially empty, while the others already contain some marks. Alice moves first, and they take turns to
+select a board and put their marks into an empty cell on that board. Alice’s mark is ‘x’ and Bob’s mark
+is ‘o’.
+Each player must make sure that no three same marks are in any row, column, or diagonal on any board
+after his/her move. The player who cannot make a valid move on their turn loses, and the other player
+wins.
+Given the initial state of the n boards, you need to determine who wins, assuming both players play
+optimally for victory.
+
+Input
+There are multiple test cases. The first line of the input contains an integer T indicating the number of
+test cases. For each test case:
+The first line contains an integer n (1 ≤ n ≤ 105 ), indicating the number of boards in the game.
+Then n boards of size 3 × 3 follow. For each board:
+• There will first be an empty line if it is not the first board.
+• For the following three lines, the i-th line contains a string si,1 si,2 , si,3 of length 3 consisting of
+characters ‘x’, ‘o’, and ‘.’, describing a board of size 3 × 3. Let (i, j) be the cell on the i-th row and
+the j-th column. If si,j = ‘x’ then cell (i, j) contains a mark ‘x’; If si,j = ‘o’ then cell (i, j) contains
+a mark ‘o’; If si,j = ‘.’ then cell (i, j) is empty.
+It is guaranteed that no three same marks are in any row, column, or diagonal on any board. It is also
+guaranteed that the sum of n for all test cases does not exceed 105 .
+
+Output
+For each test case, output Alice if Alice wins the game, or Bob if Bob wins the game.
+
+Page 1 of 2
+
+Example
+standard input
+4
+1
+...
+...
+...
+1
+...
+oo.
+oo.
+2
+...
+oo.
+oo.
+
+standard output
+Alice
+Alice
+Bob
+Bob
+
+...
+xx.
+xx.
+2
+..x
+xo.
+...
+xo.
+o..
+.x.
+
+Page 2 of 2
+
+

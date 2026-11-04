@@ -1,0 +1,132 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define int long long
+#define F first 
+#define S second 
+#define all(a) (a).begin(),(a).end()
+#define rall(a) (a).rbegin(),(a).rend()
+#define print(x) cout << #x << " = "; for(auto i : x) cout << i << " "; cout << "\n";
+#define hha(x) cout << #x << " = " << x << " ";
+#define hhal(x) cout << #x << " = " << x << "\n";
+vector<int> manacher_odd(string s) {
+    int n = s.size();
+    s = char(1) + s + char(2);
+    vector<int> p(n + 2);
+    int l = 0, r = 1;
+    for(int i = 1; i <= n; i++) {
+        p[i] = min(r - i, p[l + (r - i)]);
+        while(s[i - p[i]] == s[i + p[i]]) {
+            p[i]++;
+        }
+        if(i + p[i] > r) {
+            l = i - p[i], r = i + p[i];
+        }
+    }
+    return vector<int>(begin(p) + 1, end(p) - 1);
+}
+void solve() {
+    int n;
+    string s;
+    cin >> n >> s;
+    vector<pair<int, int>> v;
+    string t;
+    for(int i = 0; i < n; i++)
+    {
+        if(s[i] == 'w')
+        {
+            v.push_back({i, 0});
+            v.push_back({i, 1});
+            t.push_back('v');
+            t.push_back('v');
+        }
+        else 
+        {
+            v.push_back({i, -1});
+            t.push_back(s[i]);
+        }
+    }
+    //hhal(t);
+    string u;
+    for(int i = 0; i < t.size(); i++)
+    {
+        u += t[i];
+        if(i + 1 < t.size()) u += '#';
+    }
+    //hhal(u);
+    auto man = manacher_odd(u);
+    vector<array<int, 4>> pal;
+    // print(man);
+    for(int i = 1; i < u.size() - 1; i++)
+    {
+        int l = i - man[i] + 1;
+        int r = i + man[i] - 1;
+        int L = (l + 1) / 2;
+        int R = r / 2;
+        if(L < R) 
+        {
+            pal.push_back({v[L].F, v[R].F, v[L].S, v[R].S});
+        }
+    }
+    vector<int> pre(n), suf(n);
+    //print(s);
+    
+    for(int i = 1; i < n; i++)
+    {
+        if(s[i] == 'w') pre[i] = i;
+        if(s[i] == 'w' && s[i - 1] == 'w') pre[i] = pre[i - 1];
+    }
+    for(int i = n - 1; i >= 0; i--)
+    {
+        if(s[i] == 'w') suf[i] = i;
+        if(s[i] == 'w' && s[i + 1] == 'w') suf[i] = suf[i + 1];
+    }
+    int ans = 1, ansl = 0;
+    auto add = [&](int l, int r)
+    {
+        int len = (r - l + 1);
+        if(ans < len) ans = len, ansl = l;
+    };
+    // print(pre);
+    for(auto [l, r, m1, m2] : pal)
+    {
+        if(s[l] == 'w' && s[r] == 'w' && pre[r] <= l) continue;
+        // hha(l); hha(r); hha(m1); hhal(m2);
+        if((m1 == -1 || m1 == 0) && (m2 == -1 || m2 == 1)) 
+        {
+            add(l, r);
+            continue;
+        }
+        // hha(l); hha(r); hha(m1); hhal(m2);
+        if(m1 == -1 || m2 == -1)
+        {
+            add(l + 1, r - 1);
+            continue;
+        }
+        // hha(l); hha(r); hha(m1); hhal(m2);
+        if(m1 == 0)
+        {
+            int d1 = suf[l] - l + 1;
+            int d2 = r - pre[r];
+            int d = min(d1, d2);
+            // hhal(d);
+            add(l + d + 1, r - d - 2);
+        }
+        if(m1 == 1)
+        {
+            int d1 = suf[l] - l;
+            int d2 = r - pre[r] + 1;
+            int d = min(d1, d2);
+            // hhal(d);
+            add(l + d + 2, r - d - 1);
+        }
+    }
+    cout << s.substr(ansl, ans) << "\n";
+}
+
+
+signed main() {
+    ios_base::sync_with_stdio(0);cin.tie(0);
+    int t; cin >> t; while(t--)
+    solve();
+    return 0;
+}

@@ -1,0 +1,96 @@
+Rectangular Wooden Block
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+256 megabytes
+
+Mr. Noya has a pet hamster that loves to gnaw on wood.
+One day, Mr. Noya brought home a rectangular wooden block with dimensions L × W × H, meaning it
+has a length of L units, a width of W units, and a height of H units, divided into L × W × H unit cubes.
+Using one vertex of the block as the origin, the length direction as the x-axis, the width direction as the
+y-axis, and the height direction as the z-axis, a spatial coordinate system O − xyz is established. The unit
+cube with x-coordinate in [i − 1, i), y-coordinate in [j − 1, j), and z-coordinate in [k − 1, k) is denoted as
+(i, j, k).
+Note: The block does not necessarily have length greater than width (i.e., it is not required that W ≤ L);
+the terms are just used to fix the directions.
+Mr. Noya does not want the wooden block to be completely gnawed away by his hamster, so he decides
+to reinforce it. Reinforcing the unit cube at (i, j, k) has a cost V (i, j, k). Additionally, there are three
+matrices A, B, C representing constraints from the three orthogonal views (front view, side view, and top
+view):
+• For matrix A = {aij }H×L , if aij = 0, then for all 1 ≤ p ≤ W , the cube at (j, p, i) must not be
+reinforced. If aij = 1, at least one of these cubes must be reinforced.
+• For matrix B = {bij }H×W , if bij = 0, then for all 1 ≤ q ≤ L, the cube at (q, j, i) must not be
+reinforced. If bij = 1, at least one of these cubes must be reinforced.
+• For matrix C = {cij }W ×L , if cij = 0, then for all 1 ≤ r ≤ H, the cube at (j, i, r) must not be
+reinforced. If cij = 1, any number (including zero) of these cubes may be reinforced.
+Note: Mr. Noya can reinforce each unit cube at most once.
+Note: For matrix C, a non-zero value does not require reinforcing at least one unit cube.
+Under the above conditions, Mr. Noya wants to minimize the total cost of reinforcing the wooden block.
+Can you help him?
+Note: You do not need to consider the issue of unit cubes being suspended in air.
+
+Input
+The first line contains a positive integer T (1 ≤ T ≤ 5 × 103 ), indicating the number of test cases.
+For each test case, the first line contains three positive integers L, W , H (1 ≤ L × W × H ≤ 103 ),
+representing the length, width, and height of the block.
+The next line contains L × W × H integers. The [(i − 1) × W + j − 1] × H + k-th integer is V (i, j, k)
+(−109 ≤ V (i, j, k) ≤ 109 ).
+Then follow H lines. The i-th line is a binary string of length L, denoted ai1 ai2 · · · aiL , representing the
+i-th row of matrix A.
+Then follow H lines. The i-th line is a binary string of length W , denoted bi1 bi2 · · · biW , representing the
+i-th row of matrix B.
+Then follow W lines. The i-th line is a binary string of length L, denoted ci1 ci2 · · · ciL , representing the
+i-th row of matrix C.
+It is guaranteed that the sum of L × W × H over all test cases in a single test point does not exceed
+5 × 103 .
+Page 1 of 2
+
+Output
+For each test case, the first line contains a string YES or NO indicating whether Mr. Noya’s conditions can
+be satisfied.
+If the conditions can be satisfied, then output on the second line an integer representing the minimum
+reinforcement cost of the cuboid; on the third line a nonnegative integer representing the number k
+of reinforced unit cubes; followed by k lines, each containing three positive integers representing the
+coordinates of each reinforced unit cube. Note that each unit cube can be reinforced at most once.
+If there are multiple valid solutions, outputting any one of them will be considered correct.
+
+Example
+standard input
+2
+3 2 2
+1 1 4 5 -1 4 -1 9 1 9 8 1
+011
+111
+11
+11
+111
+111
+1 2 2
+1 2 3 4
+0
+0
+01
+01
+1
+1
+
+standard output
+YES
+5
+6
+2 1 1
+2 2 1
+3 1 1
+1 1 2
+2 1 2
+3 2 2
+NO
+
+Page 2 of 2
+
+

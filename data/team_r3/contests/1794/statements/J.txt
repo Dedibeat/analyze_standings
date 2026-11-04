@@ -1,0 +1,50 @@
+Rivals
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+4 seconds
+1024 megabytes
+
+You are playing a game. There are n enemies in this game. The health point of the i-th enemy is ai , and
+the first c enemies are “key” enemies.
+There are k rounds in the game. In each round, let S be the enemies with health point ai greater than 0
+(i.e. S = {i|1 ≤ i ≤ n ∧ ai > 0}), and you will choose one enemy from the set S with the same probability
+1
+(i.e. for each i in S, you will choose it with probability |S|
+) and decrease its health point by 1 (i.e. let ai
+be ai − 1).
+If after k rounds, the health point of every “key” enemy has been decreased to 0, you win the game;
+otherwise, you lose the game.
+P
+Now for each k such that 1 ≤ k ≤ ni=1 ai , you need to count the probability of winning the game after
+k rounds. You only need to output the answer modulo 998 244 353.
+
+Input
+The first line contains two integers n, c (1 ≤ c ≤ n ≤ 30) — the number of enemies and “key” enemies.
+The second line contains n integers, the i-th integer of which is ai (1 ≤ ai ≤ 10) — the health point of
+the i-th enemy in the beginning.
+
+Output
+P
+The output contains ni=1 ai integers. The k-th integer represents the probability of winning the game
+after k rounds modulo 998 244 353.
+
+Examples
+standard input
+5 3
+1 1 1 1 1
+8 5
+3 5 3 2 2 5 4 4
+
+standard output
+0 0 299473306 199648871 1
+
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 851829480 293319617 603094447
+
+Page 1 of 1
+
+

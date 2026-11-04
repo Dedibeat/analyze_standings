@@ -1,0 +1,63 @@
+Square Kingdom
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+4 seconds
+1024 megabytes
+
+In the Square Kingdom, n residents numbered from 1 to n live alone on top of a tall stone pillar. The
+2
+height of the pillar for the i-th resident is i + ab units above the ground.
+Since everyone lives so high up, the only way to visit a neighbor is by using a ladder. The kingdom builds
+one ladder for every pair of residents. The length of each ladder is exactly the absolute difference in height
+between the two pillars it connects.
+With n(n−1)
+ladders in total, it becomes hard to manage them all. You are asked for the length of the
+2
+k-th ladder in ascending order of length. This information will help the kingdom plan repairs, deliveries,
+and community events.
+
+Input
+The only line contains four integers n (2 ≤ n ≤ 1012 ), k (1 ≤ k ≤ min
+
+n
+
+n(n−1)
+, 1012
+2
+
+o
+), a (1 ≤ a ≤ 106 ),
+
+and b (0 ≤ b ≤ 1012 ).
+
+Output
+Output a line containing two integers p and q, denoting that the length of the k-th ladder in ascending
+order of length can be represented as pq with two integers p and q (p ≥ 0, q ≥ 1, gcd(p, q) = 1), where
+gcd(p, q) is the greatest common divisor of p and q.
+
+Examples
+standard input
+3 1 3 1
+standard output
+11 3
+standard input
+3 2 3 1
+standard output
+17 3
+standard input
+3 3 3 1
+standard output
+28 3
+standard input
+1414215 1000000000000 1000000 1000000000000
+standard output
+4823373069559 1
+
+Page 1 of 1
+
+

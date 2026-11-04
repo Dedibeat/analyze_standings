@@ -1,0 +1,55 @@
+The 1st Universal Cup
+Stage 1: Shenyang, January 28-29, 2023
+
+Problem H. P-P-Palindrome
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+3 seconds
+512 megabytes
+
+Given n strings S1 , S2 , . . . Sn , you need to calculate the number of different P-P-Palindromes given by
+these n strings.
+A palindrome is a string that can be read the same from left to right and from right to left. For example,
+“a”, “level”, and “otto” are palindromes, while “aab” and “icpc” are not.
+A P-P-Palindrome is an ordered pair of nonempty palindromes (P, Q) such that both P and Q
+are the substrings of some in S1 , S2 , . . . Sn and P + Q is also a palindrome. Here P + Q means
+concatenating P and Q in order, or more specifically, let P = p1 p2 . . . p|P | and Q = q1 q2 . . . q|Q| , then
+P + Q = p1 p2 . . . p|P | q1 q2 . . . q|Q| , where |S| is the length of string S.
+Note that two P-P-Palindromes are considered different if and only if P differs or Q differs.
+
+Input
+The first line contains an integer n (1 ≤ n ≤ 106 ), indicating the number of given strings.
+Then n lines follow, the i-th of which contains a string Si (1 ≤ |Si | ≤ 106 ) consisting of lowercase English
+letters only.
+It is guaranteed that the total length of the given strings does not exceed 106 .
+
+Output
+Output a line containing a single integer, indicating the number of different P-P-Palindromes given by
+the n strings.
+
+Examples
+standard input
+
+standard output
+
+2
+aaaa
+aaa
+
+16
+
+3
+abaaa
+abbbba
+bbbaba
+
+28
+
+Page 8 of 16
+
+

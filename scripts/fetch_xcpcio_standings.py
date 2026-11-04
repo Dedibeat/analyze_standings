@@ -111,6 +111,10 @@ def _convert(board_link, family, official_only):
     teams = list(teams)
     organizations = _organization_names(board_link, config)
     labels = [str(label) for label in config.get("problem_id", [])]
+    # newer boards (e.g. 51st season) list {"id", "label"} under "problems" instead
+    problem_labels = {str(p["id"]): str(p["label"]) for p in config.get("problems") or []
+                      if isinstance(p, dict)}
+    labels = labels or list(problem_labels.values())
     if not labels:
         raise ValueError("config has no problem_id list")
 
@@ -141,7 +145,9 @@ def _convert(board_link, family, official_only):
         if official_only and team_id not in official_ids:
             continue
         problem = run.get("problem_id")
-        if isinstance(problem, int) and 0 <= problem < len(labels):
+        if str(problem) in problem_labels:
+            label = problem_labels[str(problem)]
+        elif isinstance(problem, int) and 0 <= problem < len(labels):
             label = labels[problem]
         else:
             label = str(problem)

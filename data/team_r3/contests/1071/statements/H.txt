@@ -1,0 +1,61 @@
+The 2022 ICPC Asia Hangzhou Regional Programming Contest
+Hangzhou Normal University, December, 04, 2022
+
+Problem H. RPG Pro League
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+1024 megabytes
+
+The International Computer Playing Company (ICPC) is recently scheduling the annual RPG Pro League
+(RPL). In the RPG game, there are three kinds of different roles: Damager, Synergier, and Buffer. A team
+consists of exactly four players. Only the following two types of teams are allowed in RPL:
+• One Damager, two Synergiers, and one Buffer.
+• Two Damagers, one Synergier, and one Buffer.
+Before the real competition, the ICPC decides to hold an exhibition game. There are n players, labeled
+by 1, 2, . . . , n. The i-th player can only play roles in set Si , and the price to invite him to participate in
+the exhibition game is pi dollars.
+You are working for the ICPC. Your job is to select which players to invite such that they can make the
+maximum number of valid teams, and the total cost is minimized. Note that a player can not join multiple
+teams.
+Unfortunately, the players may always adjust their prices. You will be given q events, in each event, the
+price of a player will be changed. Your task is to report the current minimum total cost for maximizing
+the valid teams after each event.
+
+Input
+The first line contains a single integer n (1 ≤ n ≤ 105 ), denoting the number of players.
+Each of the following n lines contains a string Si and an integer pi (1 ≤ |Si | ≤ 3, 1 ≤ pi ≤ 109 ), denoting
+the role set and the price of the i-th player. Si consists of at most three different characters in {’D’, ’S’,
+’B’}, denoting Damager, Synergier, and Buffer, respectively.
+The next line contains a single integer q (1 ≤ q ≤ 105 ), denoting the number of events.
+Each of the following q lines contains two integers xi and yi (1 ≤ xi ≤ n, 1 ≤ yi ≤ 109 ), denoting the
+price of the xi -th player is changed into yi dollars.
+
+Output
+Output q lines, the i-th (1 ≤ i ≤ q) of which contains an integer denoting the minimum total cost for
+maximizing the valid teams after the i-th event.
+
+Example
+standard input
+5
+BS 3
+D 3
+B 2
+D 4
+D 5
+2
+5 2
+1 5
+
+standard output
+10
+12
+
+Page 10 of 16
+
+

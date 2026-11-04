@@ -1,0 +1,49 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+#define int long long
+#define pb push_back
+#define all(x) (x).begin(), (x).end()
+#define rall(x) (x).rbegin(), (x).rend()
+#define rep(i, a, b) for(int i = (a); i < (b); i++)
+#define repd(i, a, b) for(int i = (a); i >= (b); i--)
+#define hha(x) cout << #x << ' ' << x << ' ';
+#define hhal(x) cout << #x << ' ' << x << '\n';
+#define print(v) cout << #v << ' '; for(auto &x : v) cout << x << ' '; cout << '\n';
+void solve() {
+    int n, d; cin >> n >> d;
+    vector<int> a1(n); for(auto &x : a1) cin >> x;
+    int ans = 0;
+    rep(i, 0, n) {
+        vector<int> a = a1;
+        int l = a[i];
+        int r = l + d;
+        rep(j, 0, n) {
+            if(a[j] < l) a[j] = l;
+            else if(a[j] > r) a[j] = r;
+        }
+        int cur = 0;
+        rep(j, 1, n) {
+            cur += abs(a[j] - a[j - 1]);
+        }
+        ans = max(ans, cur);
+        a = a1;
+        r = a[i];
+        l = r - d;
+        rep(j, 0, n) {
+            if(a[j] < l) a[j] = l;
+            else if(a[j] > r) a[j] = r;
+        }
+        cur = 0;
+        rep(j, 1, n) {
+            cur += abs(a[j] - a[j - 1]);
+        }
+        ans = max(ans, cur);
+    }
+    cout << ans << '\n';
+}
+signed main() {
+    ios_base::sync_with_stdio(0); cin.tie(0);
+    //int t; cin >> t; while(t--);
+    solve();
+}

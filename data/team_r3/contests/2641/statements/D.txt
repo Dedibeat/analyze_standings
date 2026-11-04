@@ -1,0 +1,144 @@
+LED Display Renovation
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+1024 megabytes
+
+You have an LED display capable of showing an n-digit integer, where each digit is represented using the
+standard 7-segment layout.
+
+Initially, each of the 7 digit segments in every digit block may be in one of three states:
+• Functional (denoted by ‘W’): behaves correctly, i.e., it lights up or turns off as required by the digit
+being displayed;
+• Stuck ON (denoted by ‘1’): always lit regardless of the digit being displayed;
+• Stuck OFF (denoted by ‘0’): always unlit regardless of the digit being displayed.
+You can renovate at most k digit segments, i.e., convert at most k digit segments into functional. You
+need to maximize the number of integers that can be correctly displayed and find the number of ways to
+achieve the maximum. Note that you can renovate digit segments that are initially functional, and each
+digit segment can be renovated at most once. Two ways of renovation are considered different if there is
+at least one digit segment that is renovated in one way but not in the other.
+An integer is correctly displayed if and only if:
+• It has no leading zeros, unless the integer is exactly 0;
+• It is right-aligned on the display: if the integer has d (1 ≤ d ≤ n) digits, then only the rightmost d
+digit blocks are used, and the leftmost (n − d) blocks should be left blank and show nothing;
+• For each of the d used digit blocks, all 7 digit segments match the target digit’s display pattern
+when functional segments show the correct state for that digit and faulty segments remain stuck in
+their state.
+
+Input
+The first line of the input contains an integer T (1 ≤ T ≤ 100), denoting the number of test cases. For
+each test case:
+The first line contains two integers n (1 ≤ n ≤ 9) and k (0 < k < 7n), denoting the number of digits the
+LED display can show and the number of digit segments you can repair.
+The next 7 lines each contain a string of exactly (5n − 1) characters, describing the initial state of the
+LED display in the form of an ASCII image.
+The display consists of n digit blocks, each occupying 4 columns, separated by single-column gaps. All
+digit segments are represented by two identical characters of ‘W’, ‘0’, or ‘1’, and all other positions are
+filled with the character ‘.’ that are purely for formatting. See the sample input and the notes for details.
+Page 1 of 3
+
+Output
+For each test case, output a line containing two integers, denoting the maximum number of integers that
+can be correctly displayed by renovating at most k digit segments, as well as the number of ways to
+achieve the maximum.
+
+Example
+standard input
+2
+3 2
+.00...00...00.
+0..0.0..0.0..1
+0..0.0..0.0..1
+.00...00...00.
+0..W.0..0.0..1
+0..W.0..0.0..1
+.00...00...00.
+9 62
+.WW...WW...WW...WW...WW...WW...WW...WW...WW.
+W..W.W..W.W..W.W..W.W..W.W..W.W..W.W..W.W..W
+W..W.W..W.W..W.W..W.W..W.W..W.W..W.W..W.W..W
+.WW...WW...WW...WW...WW...WW...WW...WW...WW.
+W..W.W..W.W..W.W..W.W..W.W..W.W..W.W..W.W..W
+W..W.W..W.W..W.W..W.W..W.W..W.W..W.W..W.W..W
+.WW...WW...WW...WW...WW...WW...WW...WW...WW.
+standard output
+2 23
+1000000000 9223372036854775807
+
+Note
+In each digit block of the LED display in the form of an ASCII image, the digit segments are as follows:
+Segment
+0
+1
+2
+3
+4
+5
+6
+
+Part
+Top horizontal
+Upper-left vertical
+Upper-right vertical
+Middle horizontal
+Lower-left vertical
+Lower-right vertical
+Bottom horizontal
+
+Positions (row, column)
+(1, 2), (1, 3)
+(2, 1), (3, 1)
+(2, 4), (3, 4)
+(4, 2), (4, 3)
+(5, 1), (6, 1)
+(5, 4), (6, 4)
+(7, 2), (7, 3)
+
+The display patterns for digits 0, 1, 2, . . . , 9 (1 = lit, 0 = unlit) are as follows:
+
+Page 2 of 3
+
+Digit
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+
+Pattern (segments 0, 1, 2, . . . , 6)
+1110111
+0010010
+1011101
+1011011
+0111010
+1101011
+1101111
+1010010
+1111111
+1111011
+
+Explanation
+All except middle
+Upper-right and lower-right
+Top, upper-right, middle, lower-left, and bottom
+Top, upper-right, middle, lower-right, and bottom
+Upper-left, upper-right, middle, and lower-right
+Top, upper-left, middle, lower-right, and bottom
+All except upper-right
+Top, upper-right, and lower-right
+All segments
+All except lower-left
+
+Page 3 of 3
+
+

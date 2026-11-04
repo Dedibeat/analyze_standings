@@ -1,0 +1,44 @@
+Mod
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+6.5 seconds
+1024 megabytes
+
+Give a strictly increasing sequence a of length n and a initial value v0 .
+For all 0 ≤ v ′ ≤ v0 , find the number of permutations p of length n such that the following procedure
+yields final value v = v ′ :
+1. Initialize v ← v0 ;
+2. For i = 1, 2, . . . , n, update v ← v mod api ;
+Output the answer modulo 998244353.
+
+Input
+The first line contains two integers n and v0 (1 ≤ n < 218 , 1 ≤ v0 < 218 ).
+The second line contains n integers a1 , a2 , . . . , an (1 ≤ a1 < a2 < · · · < an < 218 ).
+
+Output
+Output v0 + 1 integers, where the i-th integer (1 ≤ i ≤ v0 + 1) represents the answer for v ′ = i − 1, modulo
+998244353.
+
+Examples
+standard input
+
+standard output
+
+2 5
+2 3
+
+1 1 0 0 0 0
+
+10 10
+1 2 3 4 5 6 7 8 9 10
+
+3628800 0 0 0 0 0 0 0 0 0 0
+
+Page 1 of 1
+
+

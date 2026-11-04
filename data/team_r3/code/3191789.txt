@@ -1,0 +1,49 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+#define int long long
+#define pb push_back
+#define all(x) (x).begin(), (x).end()
+#define rall(x) (x).rbegin(), (x).rend()
+#define rep(i, a, b) for(int i = (a); i < (b); i++)
+#define repd(i, a, b) for(int i = (a); i >= (b); i--)
+#define hha(x) cout << #x << ' ' << x << ' ';
+#define hhal(x) cout << #x << ' ' << x << endl;
+#define print(v) cout << #v << ' '; for(auto &x : v) cout << x << ' '; cout << endl;
+
+const int inf = 2e18;
+
+void solve() {
+    int a, b, c; cin >> a >> b >> c;
+    int len = (1ll << 10);
+    priority_queue<array<int, 3>, vector<array<int, 3>>, greater<array<int, 3>>> pq;
+    pq.push({a, a % len, a % b});
+    vector<vector<int>> dist((1ll << 10), vector<int>(b, inf));
+    dist[a % len][a % b] = a;
+    while(!pq.empty()) {
+        auto [cur, x, y] = pq.top(); pq.pop();
+        if(cur > dist[x][y] || cur > c) continue;
+        if(cur <= c && c % b == cur % b) {
+            cout << "YES\n";
+            return;
+        }
+        int cur1 = (cur ^ b) + b;
+        int cur2 = cur + b;
+        int x1 = cur1 % len, y1 = cur1 % b;
+        int x2 = cur2 % len, y2 = cur2 % b;
+        if(cur1 < dist[x1][y1]) {
+            dist[x1][y1] = cur1;
+            pq.push({cur1, x1, y1});
+        }
+        if(cur2 < dist[x2][y2]) {
+            dist[x2][y2] = cur2;
+            pq.push({cur2, x2, y2});
+        }
+    }
+    cout << "NO\n";
+}
+signed main() {
+    ios_base::sync_with_stdio(0); cin.tie(0);
+    int t; cin >> t; while(t--)
+    solve();
+}

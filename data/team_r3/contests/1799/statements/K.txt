@@ -1,0 +1,47 @@
+Match
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+256 megabytes
+
+Given two sequences a and b of length n, a bipartite graph is generated in the following manner:
+The nodes of the bipartite graph are divided into two parts: the left side and the right side. There are n
+nodes on both sides. An edge exists between the i-th node on the left side and the j-th node on the right
+side if and only if ai ⊕ bj ≥ k, where ⊕ denotes the bitwise XOR operator.
+For each x in the range [1, n], output the number of matchings of size x in the bipartite graph, with the
+result modulo 998244353.
+
+Input
+The first line contains two non-negative integers n, k,(1 ≤ n ≤ 200, 0 ≤ k < 260 ).
+The second line contains n non-negative integers, representing the sequence a,(0 ≤ ai < 260 ).
+The third line contains n non-negative integers, representing the sequence b,(0 ≤ bi < 260 ).
+
+Output
+Output n non-negative integers, where the i-th integer represents the number of matchings of size i in the
+graph, with the result taken modulo 998244353.
+
+Example
+standard input
+9 5
+1 7 2 8 4 9 2 5 10
+1 3 2 4 5 8 8 8 9
+
+standard output
+51
+1034
+10768
+62195
+200965
+348924
+294444
+97344
+7200
+
+Page 1 of 1
+
+

@@ -1,0 +1,127 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define int long long
+#define ff first 
+#define ss second 
+#define all(a) (a).begin(),(a).end()
+#define rall(a) (a).rbegin(),(a).rend()
+#define print(x) cout << #x << " = "; for(auto i : x) cout << i << " "; cout << "\n";
+#define hha(x) cout << #x << " = " << x << " ";
+#define hhal(x) cout << #x << " = " << x << "\n";
+const int mod = 998244353;
+int dp[105][105][10005];
+int solve(int n, int m, vector<pair<int, int>> v) {
+    v.insert(v.begin(), {1, 0});
+    int ans = 1;
+    vector<int> dpcur(n + 5, 0), dpnxt;
+    dpcur[0] = 1;
+    int lim = n * (n - 1) / 2;
+    for(int i = 0; i < m; i++)
+    {
+        dpnxt.assign(n + 5, 0);
+        int dlen = v[i + 1].ff - v[i].ff;
+        int dval = v[i + 1].ss - v[i].ss;
+        for(int j = 0; j <= v[i].ff; j++)
+        {
+            for(int dj = 0; dj <= dlen; dj++)
+            {
+                int k = j + dj;
+                int dif = dval - j * dlen;
+                if(dif < 0 || dif > lim) continue;
+                dpnxt[k] = (dpnxt[k] + dpcur[j] * dp[dlen][dj][dif] % mod) % mod;
+            }
+        }
+        dpcur = dpnxt;
+    }
+    ans = accumulate(all(dpcur), 0LL);
+    int tail = n - v[m].ff;
+    while(tail--) ans = ans * 2 % mod;
+    return ans;
+
+}
+int brute(int n, int m, vector<pair<int, int>> v)
+{
+    
+    int cnt = 0;
+    for(int mask = 0; mask < (1 << (n - 1)); mask++)
+    {
+        vector<int> a(n);
+        for(int i = 0; i < n - 1; i++)
+        {
+            if(mask & (1 << i)) a[i + 1] = 1;
+            //a[i + 1] += a[i];
+        }
+        //print(a);
+        
+        for(int i = 1; i < n; i++) a[i] += a[i - 1];
+        auto s = a;
+        for(int i = 1; i < n; i++) a[i] += a[i - 1];
+        int ok = 1;
+        for(auto [pos, x] : v) 
+        {
+            if(a[pos - 1] != x) ok = 0;
+        }
+        //hhal(mask);
+        //print(a); 
+        //print(s);
+        cnt += ok;
+    }
+    return cnt;
+}
+void test(int trial, int den, int den2, int n)
+{
+    while(trial--)
+    {
+        vector<int> a(n), vis(n);
+        for(int i = 1; i < n; i++)
+        {
+            if(rand() % den == 0) a[i] = rand() % 4;
+            if(rand() % den2 == 0) vis[i] = 1;
+        }
+        auto o = a;
+        vis[0] = (rand() % den2 == 0);
+        //for(int i = 1; i < n; i++) a[i] += a[i - 1];
+        for(int i = 1; i < n; i++) a[i] += a[i - 1];
+        vector<pair<int, int>> v;
+        for(int i = 0; i < n; i++)
+        {
+            if(vis[i]) v.push_back({i + 1, a[i]});
+        }
+        int m = v.size();
+        int ret1 = solve(n, m, v);
+        int ret2 = brute(n, m, v);
+        if(ret1 != ret2)
+        {
+            hha(trial); hha(ret1); hhal(ret2);
+            print(o);
+            print(a);
+            print(vis);
+            exit(0);
+        }
+        hhal(ret1);
+    }
+    exit(0);
+}
+signed main() {
+    ios_base::sync_with_stdio(0);cin.tie(0);
+    srand(time(NULL));
+    dp[0][0][0] = 1;
+    for(int i = 0; i <= 100; i++)
+    for(int j = 0; j <= 100; j++)
+    for(int sum = 0; sum <= 10000; sum++)
+    {
+        dp[i + 1][j + 1][sum + i + 1] += dp[i][j][sum];
+        dp[i + 1][j + 1][sum + i + 1] %= mod;
+        dp[i + 1][j][sum] += dp[i][j][sum];
+        dp[i + 1][j][sum] %= mod;
+    }
+    //test(1000, 6, 4, 10);
+    int t; cin >> t; while(t--)
+    {
+        int n, m; cin >> n >> m;
+        vector<pair<int, int>> v(m);
+        for(auto &[pos, x] : v) cin >> pos >> x;
+        cout << solve(n, m, v) << "\n";
+    }
+    return 0;
+}

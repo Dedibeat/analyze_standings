@@ -1,0 +1,78 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+#define int long long 
+#define all(a) (a).begin(),(a).end()
+#define rall(a) (a).rbegin(),(a).rend()
+#define pb push_back
+#define hha(a) cout << #a << " = " << a << " ";
+#define hhal(a) cout << #a << " = " << a << "\n";
+#define print(x) cout << #x << " = "; for(auto a : x) cout << a << " "; cout << "\n";
+const int N = 4e5 + 5;
+int f[N];
+int get(int u)
+{
+    return f[u] == u ? u : (f[u] = get(f[u]));
+}
+void link(int u, int v)
+{
+    u = get(u); v = get(v);
+    if(u != v) f[v] = u;
+}
+void solve() {
+    int n; cin >> n;
+    iota(f, f + 2 * n + 1, 0);
+    vector<int> a(2 * n + 1), prv(n + 1);
+    for(int i = 1; i <= 2 * n; i++)
+    {
+        cin >> a[i];
+        if(prv[a[i]] == 0)
+        {
+            prv[a[i]] = i;
+        }
+        else 
+        {
+            link(prv[a[i]], i);
+        }
+    }
+    string s = "(";
+    vector<int> stk;
+    stk.push_back(1);
+    int cnto = 1;
+    for(int i = 2; i < 2 * n; i++)
+    {
+        if(stk.empty())
+        {
+            stk.push_back(i);
+            s += '(';
+            // cnto++;
+        }
+        else 
+        {
+            int tp = stk.back();
+            int ok = (get(i) != get(tp));
+            if(!ok)
+            {
+                stk.push_back(i);
+                s += '(';
+                // cnto++;
+            }
+            else 
+            {
+                stk.pop_back();
+                s += ')';
+                link(tp, i);
+            }
+        }
+    }
+    assert(stk.size() == 1);
+    s += ')';
+    cout << s << "\n";
+}
+
+signed main() {
+    ios_base::sync_with_stdio(0);cin.tie(0);
+    int t; cin >> t; while(t--)
+    solve();
+    return 0;
+}

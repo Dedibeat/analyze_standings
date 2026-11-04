@@ -1,0 +1,106 @@
+The 1st Universal Cup
+Stage 1: Shenyang, January 28-29, 2023
+
+Problem M. Vulpecula
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+5 seconds
+512 megabytes
+
+In the center of the Summer Triangle nestles a little fox, a constellation named Vulpecula, to be precise. It
+is situated in a zone with numerous brilliant stars, but it itself is relatively faint. Even the brightest star
+in the constellation has an apparent magnitude of merely 4.44. However, despite its dimness, Vulpecula
+captures the attention of many stargazers for various reasons. Say, Mu, the protagonist of our problem,
+regards Vulpecula as his favorite constellation because there, he can always see his own reflection.
+Mu lives a stressful life and only by viewing stars can he find some relief. Every night, he would climb
+onto the roof, watching skyward with his telescope and identifying constellations of all shapes. While
+admiring the cosmic wonder, he would occasionally write down some thoughts that crossed his mind. And
+this night started with a strange question: “What in the world are dreams for?”
+Thoughtfully, Mu looked up at the starry fox as the past experience came reeling through his head.
+Although recent years have been even rougher, his striving for dreams has never diminished all the way.
+He gave up money because he should not overvalue it. He gave up prestige because he could not maintain
+it. He gave up the place he longed to settle because he did not deserve it. He gave up everything but...
+“Dreams are like the stars, distant and sometimes insignificant, yet enough to spark up the darkest night.”
+Mu jotted it down on a note and squeezed a smile, before immersing himself in the joy of stargazing again.
+
+The Constellation Vulpecula
+
+Now, let’s get back to the problem. People have associated constellations with animals and mythological
+characters since ancient times. Giving free rein to their imagination, they drew straight lines between the
+stars on a chart and conceived the story behind every constellation. Suppose there are n stars numbered
+from 1 to n in Vulpecula with n − 1 imaginary lines connecting them. Namely, for each pair of stars (s, t),
+there always exists a sequence of stars u0 , u1 , . . . , uk where u0 = s and uk = t, satisfying that star ui−1
+and star ui are linked by a line for each i = 1, 2, . . . , k, and the distance between star s and star t is
+defined as the minimum k among all such sequences.
+Mu is prepared to view those stars in Vulpecula, and he will focus his telescope on one of the n stars.
+Detailed observation, however, requires advanced technology as there will be several obstacles.
+One is that some stars may be too tiny to observe. To tackle it, Mu can screw a knob to zoom in or out.
+Specifically, after selecting the focused star, he will adjust the focal distance to an integer d between 0
+and n − 1 and see all stars whose distance from the focused star is not more than d.
+The other is that some stars may be too faint to observe. Luckily, Mu can use filters to regulate the rays of
+a star. Let ai represent the visibility of star i which is initially 0. A filter denoted as (i, x) only applies to
+star i, and when Mu installs it, ai will become ai ⊕x, where ⊕ denotes the bitwise exclusive-OR operation.
+Mu can pick a set of filters he has got and install them in arbitrary order. He may also pick no filters or
+two or more identical filters.
+Page 15 of 16
+
+The 1st Universal Cup
+Stage 1: Shenyang, January 28-29, 2023
+For a pleasant stargazing experience, Mu will make the visibilities of the stars in sight equal and
+maximized. Playing with a telescope is quite easy, whereas your task is not so simple. Suppose f (d)
+is the maximum visibility under a certain focal distance d. Can you calculate the sum of f (d) over
+d = 0, 1, . . . , n − 1 modulo 264 for each star if it is the focused star?
+
+Input
+The first line contains an integer n (2 ≤ n ≤ 5 × 104 ), denoting the number of stars in Vulpecula.
+The second line contains n − 1 integers p1 , p2 , . . . , pn−1 (1 ≤ pi ≤ i), indicating that there is an imaginary
+line between star pi and star i + 1 for each i = 1, 2, . . . , n − 1. It is guaranteed that the given n − 1
+imaginary lines connect all the stars.
+In the i-th of the following n lines, an integer mi (mi ≥ 0) comes first, denoting the number of filters that
+apply to star i. Then mi integers xi,1 , xi,2 , . . . , xi,mi (0 ≤ xi,j < 264 ) follow, the j-th of which denotes a
+filter (i, xi,j ). It is guaranteed that the sum of mi over i = 1, 2, . . . , n does not exceed 2 × 106 .
+
+Output
+Output n lines, the i-th of which contains a single integer, indicating the sum of f (d) over d = 0, 1, . . . , n−1
+modulo 264 if star i is the focused star.
+
+Examples
+standard input
+
+standard output
+
+2
+1
+2 2 3
+2 1 1
+
+4
+2
+
+5
+1 2 2 3
+3 83 75 58
+4 125 124 58 16
+4 39 125 71 112
+3 69 66 5
+4 48 73 69 6
+
+171
+125
+183
+142
+243
+
+Note
+In the first sample case, if star 1 is the focused star, Mu can install filter (1, 3) to reach f (0) = 3 because
+star 1 is the only star in sight when d = 0. He can successively install filter (1, 2), filter (1, 3) and either
+filter (2, 1) to reach f (1) = 1. Thus, the sum for star 1 is (3 + 1) mod 264 = 4.
+
+Page 16 of 16
+
+

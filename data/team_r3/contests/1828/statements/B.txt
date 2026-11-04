@@ -1,0 +1,51 @@
+Birthday Gift
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+1024 megabytes
+
+Grammy’s birthday is approaching, and she gets a sequence A from her friends as a gift. The sequence
+consists of only 0, 1, and 2. Grammy thinks that the sequence is too long, so she decides to modify A to
+make it shorter.
+Formally, Grammy can perform an arbitrary number of operations. Each time she can choose one of the
+following three operations to perform:
+• Change any 2 into 0 or 1.
+• Choose two adjacent 0s, erase them, and concatenate the rest of the parts.
+• Choose two adjacent 1s, erase them, and concatenate the rest of the parts.
+Calculate the minimum sequence length Grammy can get.
+
+Input
+There are multiple test cases. The first line of the input contains an integer T indicating the number of
+test cases. For each test case:
+The first and only line contains a string of length n (1 ≤ n ≤ 2 × 105 ) consisting of digits 0, 1, and 2,
+indicating the initial sequence A.
+It is guaranteed that the sum of n of all test cases will not exceed 5 × 105 .
+
+Output
+For each test case, output one line containing one integer indicating the minimum sequence length Grammy
+can get.
+
+Example
+standard input
+5
+0110101
+01020102
+0000021111
+1012121010
+0100202010
+
+standard output
+3
+4
+0
+6
+0
+
+Page 1 of 1
+
+

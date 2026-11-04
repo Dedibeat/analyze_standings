@@ -1,0 +1,60 @@
+Challenge Matrix Multiplication II
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+3 seconds
+1024 megabytes
+
+As is well known, the APSP (All Possible Shortest Path) problem has a profound connection with min+
+matrix multiplication. Today, we want you to solve the following problem:
+GivenPx, construct
+an undirected unweighted connected graph (i.e., all edge weights are 1) such
+n Pn
+that i=1 j=i+1 dis(i, j) = x. Here, dis(i, j) represents the shortest path length between node i and
+node j.
+This problem is certainly very simple... Unfortunately, your resources are limited, so you hope to find a
+graph with no more than 85 nodes that meets the requirements.
+
+Input
+A single test case contains multiple data sets.
+The first line of input is the number of data sets T (1 ≤ T ≤ 2000), representing the number of data sets
+contained in this test case.
+For each data set, there is one line with an integer x (1 ≤ x ≤ 105 ), representing the constraint that
+needs to be satisfied. It is guaranteed that there exists at least one graph with no more than 85 nodes
+that meets the condition.
+
+Output
+For each data set, output the number of nodes n you used on the first line (2 ≤ n ≤ 85). Then output
+n − 1 lines, where the i-th line is a binary string of length n − i. The j-th character of the i-th line is 1 if
+and only if there is an edge between node i and node i + j.
+
+Example
+standard input
+4
+1
+3
+6
+8
+
+standard output
+2
+1
+3
+11
+1
+4
+111
+11
+1
+4
+110
+10
+1
+
+Page 1 of 1
+
+

@@ -1,0 +1,132 @@
+I
+
+Invisible Edges
+
+Time limit: 1s
+
+This is a multi-pass problem.
+VegiCat and VegiDog play a game with a forest of n vertices, numbered from 1 to n,
+and m edges. A forest is an undirected graph with no cycles. It is not necessarily
+connected.
+In the ﬁrst stage, VegiCat assigns an integer au (1 ≤ au ≤ 2n) to each vertex u. The
+values may repeat.
+After VegiCat ﬁnishes assigning the values, the vertices are renumbered. Let
+p1 , p2 , . . . , pn be a permutation of 1, 2, . . . , n, in which each integer from 1 to n appears
+exactly once. For each u, the vertex originally numbered u is now numbered pu .
+Each edge (u, v) becomes (pu , pv ). Each vertex keeps its assigned value. Let bi be the value at vertex i after
+renumbering. Then bpu = au .
+In the second stage, VegiDog receives only n and b1 , b2 , . . . , bn , without the original forest or p. He must recover
+all edges using the new vertex numbers.
+Design strategies for both players that work for every valid forest and every permutation p.
+
+Input
+Your program will run twice: ﬁrst as VegiCat, then as VegiDog. The test cases appear in the same order in
+both runs.
+First Run. The ﬁrst line contains the string cat, indicating that you play VegiCat.
+The second line contains an integer T (1 ≤ T ≤ 104 ), the number of test cases. The description of the test cases
+follows.
+The ﬁrst line of each test case contains two integers n and m (1 ≤ n ≤ 2 · 105 , 0 ≤ m < n), the number of
+vertices and edges.
+Each of the next m lines contains two integers u and v (1 ≤ u, v ≤ n, u ̸= v), describing an undirected edge
+between vertices u and v.
+It is guaranteed that the graph has no cycles or multiple edges.
+It is guaranteed that the sum of n over all test cases does not exceed 2 · 105 .
+Second Run. The ﬁrst line contains the string dog, indicating that you play VegiDog.
+The second line contains an integer T (1 ≤ T ≤ 104 ), the number of test cases. The description of the test cases
+follows.
+The ﬁrst line of each test case contains an integer n (1 ≤ n ≤ 2 · 105 ), the number of vertices.
+The second line contains n integers b1 , b2 , . . . , bn (1 ≤ bi ≤ 2n), the assigned values in the new vertex order.
+It is guaranteed that the sum of n over all test cases does not exceed 2 · 105 .
+
+Output
+First Run. For each test case, output n integers a1 , a2 , . . . , an (1 ≤ ai ≤ 2n) on one line. The integer ai is the
+value assigned to vertex i.
+Second Run. For each test case, output an integer m on the ﬁrst line, the number of edges. Each of the
+next m lines must contain two integers u and v (1 ≤ u, v ≤ n, u ̸= v), describing an edge using the new vertex
+numbers.
+Output each edge once, in any order. Either endpoint may come ﬁrst. If m = 0, output only 0.
+
+Problem I: Invisible Edges
+
+1
+
+Sample 1
+Input
+cat
+4
+1 0
+4 3
+1 2
+4 3
+2 3
+7 2
+6 4
+7 1
+10 7
+10 9
+7 9
+10 5
+4 8
+3 7
+4 10
+1 2
+
+Input
+dog
+4
+1
+1
+4
+5 2 5 8
+7
+11 7 2 11 11 3 4
+10
+16 3 13 5 10 12 19 6 2 3
+
+Pass 1
+
+Output
+
+1
+2 5 8 5
+11 11 4 11 3 7 2
+10 13 12 5 3 2 16 6 19 3
+
+Pass 2
+
+Output
+
+0
+3
+1 4
+2 1
+4 3
+2
+4 3
+5 2
+7
+1 7
+4 8
+5 3
+6 1
+7 10
+10 2
+10 4
+
+Note
+In the ﬁrst test case, the forest has one vertex and no edges. VegiCat assigns the value 1 to the vertex, and
+VegiDog outputs 0.
+In the last test case, the permutation is p = [5, 3, 6, 4, 2, 9, 1, 8, 7, 10].
+VegiCat assigns a7 = 16. Since p7 = 1, VegiDog receives b1 = 16.
+The original edge (3, 7) becomes (p3 , p7 ) = (6, 1).
+The original edge (4, 10) becomes (p4 , p10 ) = (4, 10). The sample outputs this edge as (10, 4), which represents
+the same undirected edge.
+The sample illustrates the input and output formats. Its outputs are correct for the graphs and permutations
+shown. However, the sample assignments are not guaranteed to be part of a strategy that works for every valid
+forest and every permutation.
+
+2
+
+Problem I: Invisible Edges
+
+

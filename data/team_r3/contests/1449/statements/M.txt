@@ -1,0 +1,75 @@
+Outro: True Love Waits
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+512 megabytes
+
+People often harbor various interpretations of life. Some navigate it smoothly, discovering its meaning at
+the loftiest peaks, while some encounter misfortune time and time again, lamenting the fleeting nature of
+life akin to the falling of snow, yet burning it to fight for better situations.
+Regardless, life is intricate and filled with worthwhile things to explore. For programmers like you, it is
+reasonable to conceptualize life as touring an infinite graph — a graph consisting of an infinite number
+of vertices and edges, to be precise. Its vertices, indicating all possibilities of life, are numbered starting
+from 0, and for every unordered pair of vertex u and vertex v, if the binary representations of u, v differ
+by exactly one bit which is the w-th bit from low to high, then there exists an undirected edge between
+them with weight w. For example, the undirected edge (2, 6) with weight 3 exists in the graph because
+2 = (10)2 , 6 = (110)2 , where the third bit is the only bit different, but the edge (5, 6) does not exist
+because 5 = (101)2 , 6 = (110)2 , where there are two bits different between the binary representations.
+Initially, you stand on vertex s, and you believe that true love, not necessarily being a certain person,
+should inhabit on vertex t. Then you begin the tour to seek true love in life from dawn to dusk. Every
+moment, you feel unsatisfied with the vertex you are currently on and decide to let go of it. Therefore,
+among all the edges connecting to this vertex, you choose the one with minimum weight, move through
+it to the other vertex, and permanently cut this edge from the graph (Uh, it seems like swearing never
+to come back). Since the tour is endless and the faith in true love is boundless, you become interested in
+when you will reach vertex t for the k-th time (Particularly, the initial state is regarded as the first time
+you reach vertex s). Find out the number of edges you will cut along the tour, modulo 109 + 7, or report
+it’s impossible to reach vertex t for the k-th time.
+
+Input
+The input contains several test cases, and the first line contains a single integer T (1 ≤ T ≤ 105 ), denoting
+the number of test cases.
+6
+
+For each test case, the only line contains three integers s, t, k (0 ≤ s, t < 210 , 1 ≤ k ≤ 109 ), where s, t are
+given in binary representation without any extra leading zeros, and k is given in decimal representation.
+It is guaranteed that the sum of the lengths of binary representations over all test cases does not exceed
+107 .
+
+Output
+For each test case, if it’s impossible to reach vertex t for the k-th time, output −1 in one line. Otherwise,
+output the number of edges you will cut in one line, modulo 109 + 7.
+
+Example
+standard input
+4
+1 10 1
+1 10 2
+100 0 2
+11 11 3
+
+standard output
+2
+-1
+9
+20
+
+Note
+w=1
+
+w=2
+
+In the first test case, you will reach vertex 2 for the first time by trail 1 −−−→ 0 −−−→ 2, so there will be 2
+edges cut. Also starting from vertex 1, it can be proved that once you let go of vertex 2 when you reach
+Page 1 of 2
+
+it for the first time, you will really never come back forever. Thus, the answer for the second test case is
+−1.
+
+Page 2 of 2
+
+

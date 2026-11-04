@@ -1,0 +1,65 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define int long long
+#define ff first 
+#define ss second 
+#define all(a) (a).begin(),(a).end()
+#define rall(a) (a).rbegin(),(a).rend()
+#define print(x) cout << #x << " = "; for(auto i : x) cout << i << " "; cout << "\n";
+#define hha(x) cout << #x << " = " << x << " ";
+#define hhal(x) cout << #x << " = " << x << "\n";
+
+
+void solve() {
+    int n, m; cin >> n >> m;
+    vector<vector<int>> a(n, vector<int>(m));
+    for(auto &row : a)
+    for(auto &x : row) cin >> x;
+    vector<int> v(m);
+    int ans = 0;
+    for(int i = 0; i < n; i++)
+    {
+        priority_queue<pair<int, int>> q;
+        for(int j = 0; j < m; j++)
+        {
+            if(a[i][j] > 0) v[j] += a[i][j];
+        }
+        //print(v);
+        for(int j = 0; j < m; j++)
+        {
+            if(v[j] > 0) q.push({j, v[j]});
+            if(a[i][j] >= 0) continue;
+            int x = -a[i][j];
+            //hha(j); hhal(x);
+            while(q.size() && x)
+            {
+                auto [k, val] = q.top(); q.pop();
+                //hha(k); hhal(val); 
+                if(val <= x)
+                {
+                    x -= val;
+                    v[k] = 0;
+                }
+                else 
+                {
+                    val -= x;
+                    v[k] -= x;
+                    q.push({k, val});
+                    x = 0;
+                }
+            }
+            ans += x;
+        }
+    }
+    //print(v);
+    ans += accumulate(all(v), 0LL);
+    cout << ans << "\n";
+}
+
+
+signed main() {
+    ios_base::sync_with_stdio(0);cin.tie(0);
+    int t; cin >> t; while(t--)
+    solve();
+    return 0;
+}

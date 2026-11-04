@@ -1,0 +1,55 @@
+Pa?sWorD
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+32 megabytes
+
+You need to log into a mysterious system, but you realize you’ve forgotten your password. The system
+does not support resetting password, so the only way to log in is to keep trying.
+Fortunately, you still remember some information about the password:
+Firstly, you are sure that the length of the password is n .
+Then the information you remember can be described by a string s of length n.
+let si represent the i-th character of s :
+• if si is an uppercase letter or a digital character, then the i-th character of the password must be si ;
+• if si is an lowercase letter, then the i-th character of the password might be si or the uppercase
+form of si ;
+• if si is a question mark ‘ ?’ , then the i-th character of the password might be any uppercase letters,
+lowercase letters, and digital characters.
+It’s guaranteed that the string s only contains uppercase letters, lowercase letters, digital characters, and
+question marks ‘ ?’.
+In addition, the system also has several requirements for passwords:
+• At least one uppercase letter appears in the password;
+• At least one lowercase letter appears in the password;
+• At least one digital character appears in the password;
+• Any two adjacent characters in the password cannot be the same.
+Now you want to know, how many possible passwords are there? A possible password should fits both
+your memory and the system’s requirements, and it’s guaranteed that there exists at least one possible
+password.
+You know that this answer will be very large, so you just need to calculate the result modulo 998244353 .
+Please note the unusual memory limit.
+
+Input
+The first line contains a single integer n (3 ≤ n ≤ 105 ) , representing the length of the password .
+The second line contains a string s with length n. It’s guaranteed that the string s only contains uppercase
+letters, lowercase letters, digital characters, and question marks ‘ ?’.
+It’s guaranteed that there exists at least one possible password.
+
+Output
+output a single line containing a single integer, representing the answer modulo 998244353.
+
+Example
+standard input
+4
+a?0B
+
+standard output
+86
+
+Page 1 of 1
+
+
