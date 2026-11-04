@@ -13,15 +13,25 @@ viewer or app output changed.
   metadata hashes are stale as stated: they match neither the 09-28 nor the
   10-04 committed fits.
 - **The audit's first experiment is not identified as written.** A pooled
-  mirror offset in the binary fit is mostly set by the shared ability prior,
-  not by within-team evidence. Mirror entrants are stronger than average, and
-  most of them appear only as mirrors. Only 135 identities appear both as event
-  rows and as UCup mirror rows. Only 2 appear both as event rows and as
-  account mirror rows.
-- **The same-team onsite → mirror lift is real but small in effect:** about
-  +50 to +90 binary points. It changes held-out predictions by at most 1e-4
-  log loss. Adding a mirror term to the shipped likelihood is not justified;
-  the 10-13 event-field ranking fix already handles the ranking side.
+  mirror offset in the binary fit is not pinned down by within-team evidence.
+  For the many teams seen in one context only, the shared ability prior sets
+  it. Mirror entrants are stronger than average, and most appear only as
+  mirrors. Only 135 identities appear both as event rows and as UCup mirror
+  rows; only 2 appear both as event rows and as account mirror rows. The naive
+  offset therefore mixes three things: who enters mirrors, UCup mirror stages
+  versus original UCup stages, and any same-team effect. The data here do not
+  split it cleanly among them.
+- **Same-team association, small in aggregate.** The two estimates of the
+  onsite → mirror gap are reported separately:
+  - per-team weighted gap +51 [+9, +89] (team bootstrap);
+  - joint bridge-model offset +89, falling to +75 and +70 under weaker
+    ability priors.
+
+  Both are associations under the model and ID-based labels, not a verified
+  causal conversion. They change aggregate held-out log loss by at most about
+  1e-4; individual probabilities can move more. A mirror term in the shipped
+  likelihood is not justified, and the 10-13 event-field ranking fix already
+  handles the ranking side.
 - **Binary Rasch difficulties transport across field composition; DE does
   not.**
   - Measured on the strong half of a board rather than the weak half, with
@@ -62,8 +72,10 @@ viewer or app output changed.
      likelihood. The N(2000, 400²) prior then prefers the offset that pulls
      strong mirror-only teams toward 2000.
    - The naive pooled offset (+167) and its by-kind and slope versions (UCup
-     +270; account slope 2.23, about nine prior SDs from zero) measure who
-     enters mirrors, not what mirrors do to a team.
+     +270; account slope 2.23, about nine prior SDs from zero) cannot be read
+     as what mirroring does to a team.
+   - Part of each estimate depends on the prior. Part does not: UCup is still
+     +205 at σθ = 1600, carried by the item 2 bridges.
    - The audit's "add a mirror-by-ability slope" step inherits the problem.
 2. **Bridges are mostly not onsite.** Of the 776 identities seen in two or
    more contexts, only 137 have an onsite event row. The rest link through
@@ -121,7 +133,8 @@ predicted in a context they were never seen in.
 | onsite + ability slope | +68 at 1800, +80 at 2200, +91 at 2600, +103 at 3000 |
 | naive + slope (UCup / account) | +129 → +686 from 1800 to 3000 / account slope 2.23 |
 
-- **Per-team check.** Fix b from the onsite fit. Fit each bridge team's ability
+- **Per-team check**, a second estimator rather than an interval for the
+  joint offset. Fix b from the onsite fit. Fit each bridge team's ability
   separately on its event rows and on its mirror rows. Weighted mean gap:
   **+51 [+9, +89]**, team bootstrap; median +77.
 - **Earlier same-team estimates agree:** +82 [+6, +160] (10-13, 47 teams). The
@@ -141,7 +154,7 @@ bootstrap. Linked = the team has training rows.
 | linked (0.21690) | **−5.6 [−7.6, −3.4]** | +0.9 [−2.2, +4.5] | −0.05 [−1.2, +1.2] | −0.4 [−1.4, +0.8] |
 | linked event rows (0.18505) | **−6.0 [−8.1, −3.5]** | −0.0 [−2.9, +4.2] | −0.3 [−0.8, +0.4] | −0.4 [−0.9, +0.3] |
 | linked mirror rows (0.26741) | **−4.6 [−8.7, −0.7]** | +1.4 [−4.0, +7.1] | −0.3 [−2.0, +1.5] | +0.1 [−1.5, +1.8] |
-| team's context unseen in training (4,052 cells) | −0.2 [−52, +57] | **+149 [+10, +332]** | +34 [−59, +138] | −1 [−82, +83] |
+| team's context unseen in training (4,052 cells, 79 contests) | −0.2 [−52, +57] | **+149 [+10, +332]** | +34 [−59, +138] | −1 [−82, +83] |
 
 **Event-field transfer.** Four folds over the 221 mixed boards. A fold's event
 rows leave training, together with those teams' other rows on the same board.
@@ -150,15 +163,20 @@ Same units.
 | Subset (M0 log loss) | naive | multi | onsite | onsite + slope |
 |---|---|---|---|---|
 | linked event rows (0.22317; 419,539 cells) | −3.9 [−16.3, +8.3] | −4.0 [−9.5, +2.4] | **−0.85 [−1.61, −0.02]** | **−0.90 [−1.65, −0.12]** |
-| teams seen only as mirrors (615 cells) | +59 [−159, +291] | **+738 [+330, +1394]** | −22 [−168, +123] | −56 [−176, +46] |
+| teams seen only as mirrors (615 cells, 13 contests) | +59 [−159, +291] | **+738 [+330, +1394]** | −22 [−168, +123] | −56 [−176, +46] |
 | split-half, all event rows (701,914 cells) | +3.1 [−2.9, +9.2] | −1.8 [−4.6, +1.3] | −0.2 [−0.5, +0.1] | −0.2 [−0.5, +0.2] |
 
 **Reading.**
 - The naive model's small gain is a population mean for mirror entrants (a
   hierarchical-prior effect). It is not evidence of same-team context.
-- The identified onsite term helps only the 137 teams it touches: about
-  −1e-4 overall.
-- Converting by +300 (multi-context) is badly wrong.
+- The identified onsite term touches only 137 teams. Its aggregate effect is
+  about −1e-4 log loss.
+- Its one interval excluding zero (transfer, −0.85 [−1.61, −0.02]) came after
+  looking at four variants and several subsets. That is a reason for a fresh
+  test, not for promotion.
+- Converting by +300 (multi-context) is badly wrong on the few rows where it
+  applies: 615 cells in 13 contests, and 4,052 cells in 79 contests for unseen
+  contexts in the hold-out.
 - No model changes the spacing of event-field difficulties (split-half ≈ 0).
 
 **Difficulties.** On mixed boards, M0's difficulties sit within −3 … +30 of an
@@ -176,8 +194,8 @@ survival north-star by under 2 points.
 
 **Verdict.**
 - Do not add a mirror offset to the shipped fit.
-- If mirror context matters downstream, use the identified +50 to +90 as a
-  bounded same-team correction for forecasts.
+- Keep the onsite-bridge model as a research candidate. Any forecast use of the
+  same-team gap needs a fresh test.
 - Test a prior mean by entry type separately, as a forecasting prior.
 
 ## 4. Experiment 2: does calibration survive a change of field?
@@ -290,10 +308,9 @@ nested LOCO:
    difficulty is invariant in these tests; the survival timing term and the
    solve-rate/SE evidence terms are not. A per-board correction should use
    field information that does not move with who attempted.
-3. **No mirror term in the joint fit.** The identified same-team lift
-   (+50 … +90) is a forecasting adjustment for the 137 teams that bridge
-   contexts. A prior mean by entry type is a separate, testable forecasting
-   idea.
+3. **No universal mirror correction** (+167 or +300) in the joint fit. The
+   onsite-bridge model (joint +89; per-team +51 [+9, +89]) stays a research
+   candidate for the 137 teams that bridge contexts, pending a fresh test.
 4. **The σθ = 800 binary-affine lead (≈ 232 vs 247)** deserves a pre-registered
    check with DE and on held-out data before anyone reads it as a gain.
 5. **Not run here:** experiments 3–5 of the audit (strict-protocol member

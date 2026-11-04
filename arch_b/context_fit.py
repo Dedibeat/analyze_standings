@@ -26,6 +26,13 @@ is predicted in a context it was not seen in, its ability is converted from its
 most frequent context. A board-level context (an online round, say) would be
 confounded with that board's difficulties, so none is fit.
 
+Population control (M4/M5): the ability prior mean is estimated per entry-type
+group (teams seen only as UCup mirrors, only as account mirrors, or in several
+contexts; reference-only teams stay at MU0), with no within-team offset (M4) or
+with the onsite-bridge offset (M5). A team without training rows is predicted
+at its row context's group mean. If M4 matches the naive model's gain, that
+gain comes from who enters mirrors, not from what mirroring does to a team.
+
 Checks, all on the fit's 991,268 cells:
 1. full-data estimates, prior sensitivity, CF guard (affine LOCO on the 185
    dev anchors) and how far each model's mixed-board difficulties sit from an
@@ -62,15 +69,19 @@ SEEDS = (0, 1, 2)
 FOLDS = 4
 SEED = 20261104
 
-# name: (mirror contexts "pooled" or "kind", teams the offsets apply to, slope)
+# name: (mirror contexts "pooled" or "kind", teams the offsets apply to, slope,
+#        prior mean per entry-type group)
 MODELS = {"M0_pooled": None,
-          "M1_naive": ("pooled", "all", False),
-          "M1_multi_context": ("pooled", "multi", False),
-          "M1_onsite_bridge": ("pooled", "onsite", False),
-          "M3_onsite_bridge_slope": ("pooled", "onsite", True)}
-DIAGNOSTIC = {"M2_naive": ("kind", "all", False),
-              "M3_naive": ("kind", "all", True),
-              "M2_multi_context": ("kind", "multi", False)}
+          "M1_naive": ("pooled", "all", False, False),
+          "M1_multi_context": ("pooled", "multi", False, False),
+          "M1_onsite_bridge": ("pooled", "onsite", False, False),
+          "M3_onsite_bridge_slope": ("pooled", "onsite", True, False),
+          "M4_population_means": ("pooled", "none", False, True),
+          "M5_population_means_onsite": ("pooled", "onsite", False, True)}
+DIAGNOSTIC = {"M2_naive": ("kind", "all", False, False),
+              "M3_naive": ("kind", "all", True, False),
+              "M2_multi_context": ("kind", "multi", False, False)}
+GROUPS = ("reference_only", "mirror_ucup_only", "mirror_account_only", "multi_context")
 
 
 # ---- labels ----
@@ -105,13 +116,16 @@ def mixed_boards(ds, ctx):
 
 # ---- fit ----
 
-def fit(ds, ctx, n_ctx, slope=False, cells=None, apply=None, sigma_theta=SIGMA_THETA,
+def fit(ds, ctx, n_ctx, slope=False, cells=None, apply=None, group=None, sigma_theta=SIGMA_THETA,
         sigma_b=SIGMA_B, sigma_delta=SIGMA_DELTA, sigma_gamma=SIGMA_GAMMA, eps=0.5, max_iter=500):
     """MAP of the context model; returns (theta, b, delta, gamma, iterations).
 
     ``cells`` is a boolean mask over observations (default all); ``apply`` a
-    boolean per team: offsets act only on those teams' rows (default all). With
-    every context 0 this is exactly ``model.fit`` (same blocks, same order).
+    boolean per team: offsets act only on those teams' rows (default all).
+    ``group`` (per team) gives every group but 0 its own prior mean, estimated
+    under a flat hyperprior; at the optimum it is the group's mean ability, see
+    ``group_means``. With every context 0 and no groups this is exactly
+    ``model.fit`` (same blocks, same order).
     """
     cells = np.ones(len(ds.obs_y), bool) if cells is None else np.asarray(cells, bool)
     apply = np.ones(len(ds.teams), bool) if apply is None else np.asarray(apply, bool)
@@ -122,6 +136,8 @@ def fit(ds, ctx, n_ctx, slope=False, cells=None, apply=None, sigma_theta=SIGMA_T
     s = elo.S
     theta, b = np.full(len(ds.teams), MU0), np.full(len(ds.problems), MU0)
     delta, gamma = np.zeros(n_ctx), np.zeros(n_ctx)
+    group = np.zeros(len(ds.teams), int) if group is None else np.asarray(group, int)
+    prior = np.full(len(ds.teams), MU0)
 
     def ability():
         return theta[team] + delta[k] + gamma[k] * (theta[team] - MU0)
@@ -129,7 +145,7 @@ def fit(ds, ctx, n_ctx, slope=False, cells=None, apply=None, sigma_theta=SIGMA_T
     def objective():
         gap = (ability() - b[prob]) / s
         return float(np.sum(y * gap - np.logaddexp(0.0, gap))
-                     - 0.5 * np.sum((theta - MU0) ** 2) / sigma_theta ** 2
+                     - 0.5 * np.sum((theta - prior) ** 2) / sigma_theta ** 2
                      - 0.5 * np.sum((b - MU0) ** 2) / sigma_b ** 2
                      - 0.5 * np.sum(delta ** 2) / sigma_delta ** 2
                      - 0.5 * np.sum(gamma ** 2) / sigma_gamma ** 2)
@@ -139,11 +155,15 @@ def fit(ds, ctx, n_ctx, slope=False, cells=None, apply=None, sigma_theta=SIGMA_T
     for _ in range(max_iter):
         lift = 1.0 + gamma[k]
         pi = elo.pi(ability(), b[prob])
-        grad = np.bincount(team, lift * (y - pi), len(theta)) / s - (theta - MU0) / sigma_theta ** 2
+        grad = np.bincount(team, lift * (y - pi), len(theta)) / s - (theta - prior) / sigma_theta ** 2
         neg = np.bincount(team, lift ** 2 * pi * (1 - pi), len(theta)) / s ** 2 + 1 / sigma_theta ** 2
         new = np.clip(theta + grad / neg, elo.LO, elo.HI)
         change = np.max(np.abs(new - theta))
         theta = new
+        if group.any():
+            new = group_means(theta, group)[group]
+            change = max(change, np.max(np.abs(new - prior)))
+            prior = new
 
         pi = elo.pi(ability(), b[prob])
         grad = -np.bincount(prob, y - pi, len(b)) / s - (b - MU0) / sigma_b ** 2
@@ -181,6 +201,21 @@ def fit(ds, ctx, n_ctx, slope=False, cells=None, apply=None, sigma_theta=SIGMA_T
     return theta, b, delta, gamma, len(history)
 
 
+def group_means(theta, group):
+    """Prior mean per group: MU0 for group 0, else the mean ability of its teams."""
+    n = int(group.max()) + 1
+    count = np.bincount(group, None, n)
+    mu = np.where(count > 0, np.bincount(group, theta, n) / np.maximum(count, 1), MU0)
+    mu[0] = MU0
+    return mu
+
+
+def entry_groups(seen):
+    """Group per team from its training rows per context (``GROUPS``); unseen teams are group 0."""
+    kinds = (seen > 0).sum(1)
+    return np.where(kinds >= 2, 3, np.where(kinds == 1, seen.argmax(1), 0))
+
+
 def seen_contexts(ds, ctx, n_ctx, cells):
     """Per team: training rows in each context (teams x n_ctx counts)."""
     rows = np.unique(ds.obs_row[cells])
@@ -192,6 +227,8 @@ def seen_contexts(ds, ctx, n_ctx, cells):
 def apply_rule(rule, seen, has_event):
     if rule == "all":
         return np.ones(len(seen), bool)
+    if rule == "none":
+        return np.zeros(len(seen), bool)
     multi = (seen > 0).sum(1) >= 2
     return multi if rule == "multi" else multi & has_event
 
@@ -209,11 +246,12 @@ def row_ability(theta, delta, gamma, team, k, apply, seen):
 
 
 def model_setup(spec, ctx):
-    """(row contexts, number of contexts, apply rule, slope) for one model spec."""
+    """(row contexts, number of contexts, apply rule, slope, population means) for one model spec."""
     if spec is None:
-        return np.zeros_like(ctx), 1, "all", False
-    kind, rule, slope = spec
-    return ((ctx > 0).astype(int), 2, rule, slope) if kind == "pooled" else (ctx, 3, rule, slope)
+        return np.zeros_like(ctx), 1, "all", False, False
+    kind, rule, slope, population = spec
+    k, n = ((ctx > 0).astype(int), 2) if kind == "pooled" else (ctx, 3)
+    return k, n, rule, slope, population
 
 
 # ---- scoring ----
@@ -319,16 +357,23 @@ class Setup:
         self.y = ds.obs_y.astype(float)
 
     def run_model(self, spec, cells, **kw):
-        """Fit on ``cells``; return (theta, b, delta, gamma, iterations, ability of every cell)."""
+        """Fit on ``cells``; return (theta, b, delta, gamma, iterations, ability of every cell,
+        teams carrying offsets, group prior means or None)."""
         ds = self.ds
-        k, n, rule, slope = model_setup(spec, self.ctx)
+        k, n, rule, slope, population = model_setup(spec, self.ctx)
         seen = seen_contexts(ds, k, n, cells)
         has_event = np.zeros(len(ds.teams), bool)
         has_event[self.cell_team[cells & self.cell_event]] = True
         apply = apply_rule(rule, seen, has_event)
-        theta, b, delta, gamma, it = fit(ds, k, n, slope, cells=cells, apply=apply, **kw)
+        group = entry_groups(seen_contexts(ds, self.ctx, 3, cells)) if population else None
+        theta, b, delta, gamma, it = fit(ds, k, n, slope, cells=cells, apply=apply, group=group, **kw)
         a = row_ability(theta, delta, gamma, self.cell_team, k[ds.obs_row], apply, seen)
-        return theta, b, delta, gamma, it, a, int(apply.sum()) if spec else 0
+        mu = None
+        if population:
+            mu = group_means(theta, group)
+            unseen = (seen.sum(1) == 0)[self.cell_team]
+            a = np.where(unseen, mu[self.cell_ctx], a)    # a new team: its entry type's mean
+        return theta, b, delta, gamma, it, a, int(apply.sum()) if spec else 0, mu
 
 
 def offsets(delta, gamma, names):
@@ -352,12 +397,13 @@ def full_data(su):
     variants += [(f"{n}_sigma_theta_{v:.0f}", {**MODELS, **DIAGNOSTIC}[n], {"sigma_theta": v})
                  for n in ("M2_naive", "M1_multi_context", "M1_onsite_bridge") for v in (800.0, 1600.0)]
     for name, spec, kw in variants:
-        _theta, b, delta, gamma, it, a, n_apply = su.run_model(spec, everything, **kw)
+        _theta, b, delta, gamma, it, a, n_apply, mu = su.run_model(spec, everything, **kw)
         b_event = fixed_ability_b(ds, a, event_cells)
         if bands is None:
             bands = np.digitize(b_event[ok], (1600, 2000, 2400, 2800))
         names = ("reference", "mirror") if len(delta) == 2 else CONTEXTS
         out[name] = {"iterations": it, "teams_with_offsets": n_apply,
+                     **({} if mu is None else {"group_prior_means": dict(zip(GROUPS, map(float, mu)))}),
                      "contexts": offsets(delta, gamma, names), "cf_guard": cf_guard(ds, b),
                      "mixed_board_b_minus_event_only_refit": {
                          labels[i]: [float(np.mean((b - b_event)[ok][bands == i])), int((bands == i).sum())]
@@ -408,7 +454,7 @@ def holdout(su):
         seen = seen_contexts(ds, su.ctx, 3, ~test)
         linked = test & (seen.sum(1) > 0)[su.cell_team]
         switch = linked & (seen[su.cell_team, su.cell_ctx] == 0)
-        subsets = {"all": test, "linked": linked,
+        subsets = {"all": test, "linked": linked, "unlinked": test & ~linked,
                    "linked_event_rows": linked & su.cell_event,
                    "linked_mirror_rows": linked & (su.cell_ctx > 0),
                    "linked_other_reference_rows": linked & (su.cell_ctx == 0) & ~su.cell_event,
@@ -416,7 +462,7 @@ def holdout(su):
                    "linked_on_mixed_boards": linked & on_mixed}
         res = {}
         for name, spec in MODELS.items():
-            _theta, b, _d, _g, _it, a, _n = su.run_model(spec, ~test)
+            _theta, b, _d, _g, _it, a, _n, _mu = su.run_model(spec, ~test)
             p = elo.pi(a, b[ds.obs_prob])
             res[name] = {sub: contest_sums(su.cell_contest[m], su.y[m], p[m]) for sub, m in subsets.items()}
             log(f"holdout seed {seed} {name} done")
@@ -443,7 +489,7 @@ def transfer(su):
         linked = test & (seen.sum(1) > 0)[su.cell_team]
         res = {}
         for name, spec in MODELS.items():
-            _theta, b, _d, _g, _it, a, _n = su.run_model(spec, train)
+            _theta, b, _d, _g, _it, a, _n, _mu = su.run_model(spec, train)
             p = elo.pi(a, b[ds.obs_prob])
             idx, ph = split_half_probs(ds, b, test)
             res[name] = {sub: contest_sums(su.cell_contest[m], su.y[m], p[m]) for sub, m in (

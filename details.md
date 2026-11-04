@@ -7203,3 +7203,29 @@ Both JSONs carry input and code sha256 hashes. Tests:
 - The full suite passes: 196 tests.
 - `.venv` lacked `pypinyin` and `openpyxl`, which 8 existing test modules
   import. Both were installed with pip.
+
+### Hand-off: population control in progress (2026-11-04)
+
+A second Codex review asked for qualified wording and a control model.
+- **Wording (points 2–4)** is fixed in `rating_rethink_experiments.md` only:
+  - the per-team (+51 [+9, +89]) and joint (+89) estimates are reported
+    separately, as associations;
+  - the transfer gain gets a multiple-comparisons caveat;
+  - "aggregate log loss" replaces "predictions";
+  - cell and contest coverage is given for the large losses.
+- **Control (point 1), coded, not yet run.** `context_fit` gains M4 and M5:
+  - M4 estimates a prior mean per entry-type group (`GROUPS`, `entry_groups`,
+    `fit(group=...)`) with no within-team offset;
+  - M5 is M4 plus the onsite-bridge offset;
+  - 2 new tests; `tests/test_context_fit.py` passes (10).
+- **The committed `output/context_experiment.json` predates M4/M5.**
+
+Next:
+1. Run `./.venv/bin/python -m arch_b.context_fit`. It takes about 15–20 min
+   with nothing else running; on Windows set `PYTHONUTF8=1`.
+2. Compare M4 with M1_naive (linked hold-out −5.6e-4).
+   - If M4 matches, the naive gain is a population-structure effect.
+   - Then rewrite the Experiment 1 "Reading" bullet and verdict in the report,
+     and carry points 1–4 into this entry and `README.md`.
+3. Run the full suite and commit. A fresh `.venv` may need `pypinyin` and
+   `openpyxl`.

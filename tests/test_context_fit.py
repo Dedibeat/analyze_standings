@@ -56,6 +56,21 @@ class ContextFitTest(unittest.TestCase):
         np.testing.assert_allclose(cf.row_ability(theta, delta, gamma, team, k, apply, seen), [2300.0, 2150.0])
         np.testing.assert_allclose(cf.row_ability(theta, delta, gamma, team, k, ~apply, seen), [2450.0, 2300.0])
 
+    def test_entry_groups_follow_the_contexts_a_team_was_seen_in(self):
+        seen = np.array([[0, 0, 0], [3, 0, 0], [0, 2, 0], [0, 0, 1], [1, 1, 0]])
+        self.assertEqual(cf.entry_groups(seen).tolist(), [0, 0, 1, 2, 3])
+
+    def test_a_group_prior_mean_follows_its_teams(self):
+        group = np.zeros(len(self.ds.teams), int)
+        strong = np.argsort(model.fit(self.ds, verbose=False)[0])[-20:]
+        group[strong] = 1
+        theta, *_ = cf.fit(self.ds, np.zeros_like(self.ctx), 1, group=group)
+        mu = cf.group_means(theta, group)
+        self.assertEqual(mu[0], cf.MU0)
+        self.assertAlmostEqual(mu[1], theta[strong].mean(), delta=1.0)
+        theta0, *_ = cf.fit(self.ds, np.zeros_like(self.ctx), 1)
+        self.assertGreater(theta[strong].mean(), theta0[strong].mean())   # less shrinkage toward MU0
+
     def test_slope_keeps_the_response_increasing_in_ability(self):
         theta, b, delta, gamma, _ = cf.fit(self.ds, self.ctx, 2, slope=True)
         self.assertGreater(1.0 + gamma[1], 0.0)
