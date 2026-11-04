@@ -1,6 +1,8 @@
 # Rethinking performance and problem ratings
 
 Review: 2026-11-04, implementation inspected at `872b3cc`.
+Experiments 0–2 and a review of this report:
+[rating_rethink_experiments.md](rating_rethink_experiments.md).
 
 **Recommendation:** develop a context-aware binary item-response model as the
 common probability engine, with member-history priors for teams and a separate

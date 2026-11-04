@@ -21,6 +21,18 @@ it also inventories locally cached submission logs. No production estimator or
 rating changed. Reproduce the read-only audit with
 `./.venv/bin/python -m scripts.rating_rethink_audit`.
 
+[rating_rethink_experiments.md](rating_rethink_experiments.md) reviews that
+audit and runs its experiments 0–2.
+- **Mirror context.** A mirror offset in the binary fit is mostly set by the
+  ability prior unless only onsite↔mirror bridge teams carry it. The
+  identified same-team lift is +50 … +90 and barely changes predictions
+  (`arch_b.context_fit`).
+- **Field transport.** Binary difficulties are invariant to who attempted a
+  problem. Shipped DE moves about +190 CF between strong and weak halves of
+  the same board, and loses its accuracy lead on small or weak fields
+  (`arch_b.field_transport`).
+- Nothing shipped changed.
+
 The [2026-09-05 experiment review](experiment_review.md) records the audit that
 found held-out-label leakage, incorrect rank/AUC tie handling, incomplete
 uncertainty labels, and participation-key collisions. The concrete correctness
@@ -961,7 +973,9 @@ Module self-checks:
   medal viewer), `twopl`/`twopl_region` 2PL discrimination
   prototype, `export_virtual_calc` + `virtual_calc_template.html` for the
   virtual-contest performance calculator, `dynamic_rating` time-varying team
-  ratings and month-by-month forecast test); reuses `arch_a.load` and `arch_a.elo`.
+  ratings and month-by-month forecast test, `context_fit` event/mirror context
+  terms in the binary fit, `field_transport` calibration under field changes);
+  reuses `arch_a.load` and `arch_a.elo`.
 - `data/ec_online/` — official Asia East online rankings (teams, schools),
   2022–2024 online rosters, 2022–2025 regional official standings and medals,
   and hand-encoded 2023–2026 slot rules; built by
