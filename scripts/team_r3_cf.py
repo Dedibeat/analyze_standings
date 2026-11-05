@@ -8,11 +8,18 @@ Cache: data/team_r3/cf/ (user.rating, user.status per handle, problemset.problem
 contest.list). Output: output/team_r3_cf.json (one record per timed individual
 participation plus per-member aggregates) and a text report on stdout.
 
+Problem lists: problemset.problems files the problems shared by a Div. 1 / Div. 2 pair only under
+the Div. 1 id, so a Div. 2 round looks like it has only A and B. For every such contest the real
+list (with ratings and tags) is taken from its official standings and kept in
+data/team_r3/cf/contest_problems.json; compact standings rows are cached (gitignored) in
+data/team_r3/cf/standings/ for scripts/team_r3_cf_rounds.py.
+
 Only individual participations count; team entries (earlier teams on ICPC
 mirrors and gyms) are listed as excluded. Gym contests have no problem ratings,
 so they are counted but left out of the rating-based measures.
 """
 import collections
+import gzip
 import json
 import math
 import statistics
@@ -54,6 +61,59 @@ def fetch():
         get(f"https://codeforces.com/api/user.status?handle={h}", D / f"status_{h}.json")
     get("https://codeforces.com/api/problemset.problems", D / "problemset.json")
     get("https://codeforces.com/api/contest.list?gym=false", D / "contest_list.json")
+
+
+STAND = D / "standings"
+
+
+def standings(cid):
+    """Official standings of a non-gym contest, compact: contest, problems (with rating and tags),
+    rows [rank, points, penalty, [[best_sec | -1, rejected, points], ...]] of rated contestants, and
+    our members' rows by handle. Anonymous call without parameters (the only form CF allows)."""
+    f = STAND / f"{cid}.json.gz"
+    if f.exists():
+        return json.loads(gzip.decompress(f.read_bytes()))
+    STAND.mkdir(parents=True, exist_ok=True)
+    with urllib.request.urlopen(f"https://codeforces.com/api/contest.standings?contestId={cid}", timeout=300) as r:
+        data = json.loads(r.read())
+    time.sleep(2.2)
+    if data["status"] != "OK":
+        raise RuntimeError(f"{cid}: {data.get('comment')}")
+    res = data["result"]
+    rows, ours = [], {}
+    for row in res["rows"]:
+        party = row["party"]
+        if party["participantType"] != "CONTESTANT" or party.get("ghost"):
+            continue
+        cells = [[pr.get("bestSubmissionTimeSeconds", -1) if pr["points"] > 0 else -1, pr["rejectedAttemptCount"],
+                  pr["points"]] for pr in row["problemResults"]]
+        rows.append([row["rank"], row["points"], row["penalty"], cells])
+        for m in party["members"]:
+            if m["handle"] in HANDLES:
+                ours[m["handle"]] = rows[-1]
+    out = {"contest": {k: res["contest"].get(k) for k in ("id", "name", "type", "durationSeconds")},
+           "problems": [{k: q.get(k) for k in ("index", "name", "points", "rating", "tags")} for q in res["problems"]],
+           "rows": rows, "ours": ours}
+    f.write_bytes(gzip.compress(json.dumps(out).encode()))
+    return out
+
+
+def contest_problem_lists(contests, by_contest, timed):
+    """{cid: [problem]} for timed contests whose problemset entry is incomplete (parallel Div. 1/2 pair,
+    or an index we submitted that problemset does not list). Cached in contest_problems.json."""
+    f = D / "contest_problems.json"
+    have = {int(k): v for k, v in json.loads(f.read_text()).items()} if f.exists() else {}
+    starts = collections.defaultdict(list)
+    for c in contests.values():
+        starts[c.get("startTimeSeconds")].append(c["id"])
+    for cid, indices in sorted(timed.items()):
+        if cid in have or cid >= 100000 or cid not in contests:
+            continue
+        parallel = [x for x in starts[contests[cid].get("startTimeSeconds")] if x != cid]
+        if parallel or not indices <= {p["index"] for p in by_contest.get(cid, [])}:
+            have[cid] = standings(cid)["problems"]
+    f.write_text(json.dumps({str(k): v for k, v in sorted(have.items())}, ensure_ascii=False, indent=0))
+    return have
 
 
 def division(name):
@@ -101,6 +161,16 @@ def main():
     for p in probs:
         by_contest[p["contestId"]].append(p)
     contests = {c["id"]: c for c in json.loads((D / "contest_list.json").read_text())["result"]}
+    timed = collections.defaultdict(set)
+    for h in HANDLES:
+        for sub in json.loads((D / f"status_{h}.json").read_text())["result"]:
+            if sub["author"]["participantType"] != "PRACTICE":
+                timed[sub["contestId"]].add(sub["problem"]["index"])
+    cprobs = contest_problem_lists(contests, by_contest, timed)
+    for cid, lst in cprobs.items():
+        by_contest[cid] = [dict(q, contestId=cid) for q in lst]
+        for q in lst:
+            prob[(cid, q["index"])] = dict(q, contestId=cid)
 
     parts, excluded, practice, history = [], [], collections.defaultdict(list), {}
     for h, member in HANDLES.items():
@@ -126,17 +196,19 @@ def main():
             gym = cid >= 100000
             kind = ("virtual" if ptype == "VIRTUAL" else "unofficial" if ptype == "OUT_OF_COMPETITION"
                     else "rated" if cid in rated else "unrated")
-            listed = [p["index"] for p in by_contest.get(cid, [])] or sorted({s["problem"]["index"] for s in ss})
+            listed = [p["index"] for p in by_contest.get(cid, [])]
+            listed += sorted({s["problem"]["index"] for s in ss} - set(listed))
             rec = {"handle": h, "member": member, "contest_id": cid, "name": c.get("name", f"gym {cid}"),
                    "division": "gym" if gym else division(c.get("name", "")), "rules": c.get("type"),
                    "kind": kind, "start": start, "duration_min": c.get("durationSeconds", 0) // 60 or None,
-                   "complete_problem_list": bool(by_contest.get(cid)), "problems": []}
+                   "complete_problem_list": bool(by_contest.get(cid)) and len(listed) == len(by_contest[cid]),
+                   "problems": []}
             if cid in rated:
                 r = rated[cid]
                 rec.update(rank=r["rank"], old=r["oldRating"], new=r["newRating"])
             for L in listed:
                 mine = sorted((s for s in ss if s["problem"]["index"] == L), key=lambda s: s["creationTimeSeconds"])
-                meta = prob.get((cid, L), mine[0]["problem"] if mine else {})
+                meta = prob.get((cid, L)) or (mine[0]["problem"] if mine else {})
                 ac = next((s for s in mine if s["verdict"] == "OK"), None)
                 before = [s for s in mine if ac is None or s["creationTimeSeconds"] < ac["creationTimeSeconds"]]
                 tries = [s for s in before if s["verdict"] not in NOT_A_TRY]
@@ -162,7 +234,7 @@ def main():
             if s["verdict"] == "OK":
                 k = (s["contestId"], s["problem"]["index"])
                 practice_ac[member].setdefault(k, s["id"])
-                practice_ac_time[member].setdefault(k, (s["id"], s["creationTimeSeconds"]))
+                practice_ac_time[member].setdefault(k, (s["id"], s["creationTimeSeconds"], s["problem"].get("rating")))
 
     report = {}
     for member in ("Dedi", "Tamir", "Erdene"):
@@ -302,6 +374,13 @@ def main():
             if last is not None:
                 ends.append((r["duration_min"] - last, nxt, r["contest_id"], r["kind"]))
         silent = [e for e in ends if e[0] >= 45]
+        half = collections.defaultdict(lambda: [0, 0])
+        for r in P:
+            last = max((q["last_sub_min"] for q in r["problems"] if q["last_sub_min"] is not None), default=None)
+            if r["kind"] in ("rated", "virtual") and r["duration_min"] and last is not None:
+                half[r["kind"]][1] += 1
+                half[r["kind"]][0] += last < r["duration_min"] / 2
+        m["last_submission_before_half_time"] = {k: tuple(v) for k, v in half.items()}
         reach = [e for e in silent if e[1] and p_solve(th_r, s_r, e[1]) >= 0.3]
         m["silent_end"] = {"participations": len(ends), "median_min": statistics.median(e[0] for e in ends),
                            "silent_ge_45": len(silent), "next_problem_reachable": len(reach),
@@ -323,11 +402,14 @@ def main():
         # Practice: unique ACs per half-year; 2026 ratings; share from contests the member took part in
         took = {r["contest_id"] for r in P}
         vol = collections.Counter(); y26 = []
-        for k, (sid, t) in practice_ac_time[member].items():
+        y26_rating = []
+        for k, (sid, t, rt) in practice_ac_time[member].items():
             vol[half_year(t)] += 1
             if t >= datetime(2026, 1, 1, tzinfo=timezone.utc).timestamp():
                 y26.append(k)
-        rs = sorted(prob[k]["rating"] for k in y26 if prob.get(k, {}).get("rating"))
+                if rt:
+                    y26_rating.append(rt)
+        rs = sorted(y26_rating)
         m["practice"] = {"unique_ac_by_half_year": dict(sorted(vol.items())),
                          "2026_unique_ac": len(y26), "2026_from_own_contests": sum(k[0] in took for k in y26),
                          "2026_rating_quartiles": (rs[len(rs) // 4], rs[len(rs) // 2], rs[3 * len(rs) // 4]) if rs else None}
@@ -355,7 +437,8 @@ def main():
         print(f"\n=== {member}")
         for k in ("rating", "participations", "gyms", "level_rated", "level_rated_recent", "level_virtual",
                   "level_unofficial", "virtual_offset", "theta_by_half_year", "band_rated", "first_try_by_band",
-                  "solve_gap_median", "accuracy", "long_chains", "silent_end", "upsolve", "practice", "exposure", "families",
+                  "solve_gap_median", "accuracy", "long_chains", "silent_end", "last_submission_before_half_time",
+                  "upsolve", "practice", "exposure", "families",
                   "compiler_32bit_by_year"):
             print(f"{k}: {m[k]}")
         print("tags (n >= 8):")

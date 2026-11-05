@@ -708,6 +708,18 @@ and compiler. Writes `output/team_r3_cf.json`; the write-up is
 `output/team_r3_coach/cf.md`. Submission code is not fetched (Cloudflare blocks
 submission pages). Details are in `details.md`.
 
+```bash
+python3 scripts/team_r3_cf_rounds.py     # round by round against the official standings (~100 entries)
+```
+
+Uses each round's full official standings (the anonymous `contest.standings` call)
+and, through `../codeforces_integration`, the editorial of the field's next problem.
+For each round it shows the same-set tier, the next tier and their median minutes.
+Virtual entries are placed by recomputing the score. Writes
+`output/team_r3_cf_rounds.{json,md}`; the analysis of what each member fails and
+solves, with practice lists, is `output/team_r3_coach/cf_rounds.md`. The caches
+`data/team_r3/cf/standings/` and `editorials/` are gitignored.
+
 ### Time-varying team ratings (research, 2026-10-04)
 
 ```bash
