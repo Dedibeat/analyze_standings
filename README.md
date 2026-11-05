@@ -70,6 +70,21 @@ Settings are chosen without CF labels. Run
 (~75 min); results go to `output/hier_binary.json` and
 `output/hier_binary_ratings.json`.
 
+A [hand audit of problem ratings](problem_rating_audit.md) compares 72
+problems, rated by reading their statements and solutions, with both models.
+It also reviews the worst CF anchors.
+- **Middle:** between 5% and 95% solved, both models are sound.
+- **Sign-in problems:** inflated on EC mirror-merged boards (hierarchical
+  +387, DE +209). The cause is mirror accounts that never submitted to a
+  problem being counted as failing it.
+- **EC online:** the 2025 rounds side with the hierarchical fit (bias +3 vs
+  DE +118).
+- **Anchors:** one mislabeled anchor, Uniform Chemistry (CF 3200, about 2000
+  by hand), is 16% of the anchor squared error.
+
+Run `PYTHONUTF8=1 ./.venv/Scripts/python -m scripts.problem_rating_audit`
+(~3 min) → `output/problem_rating_audit.json`.
+
 The [2026-09-05 experiment review](experiment_review.md) records the audit that
 found held-out-label leakage, incorrect rank/AUC tie handling, incomplete
 uncertainty labels, and participation-key collisions. The concrete correctness
