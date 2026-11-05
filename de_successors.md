@@ -28,6 +28,15 @@ invariance is not a requirement across genuinely different task conditions.
    blend/reference-population controls score ~241/~243 and do not establish a
    replacement for DE yet.
 
+5. **Hierarchical binary (added 2026-11-05, run).** Binary Rasch with a
+   board-level ability mean and a set-level difficulty mean, one affine CF map
+   for problems and teams. It removes the strong-board shrinkage bias that
+   DE's solve-rate term corrects after the fact. Full-field CF 229.5 vs DE
+   225.6 (+3.9 [−8.1, +14.5]). Strong − weak mean error 1 point apart (DE:
+   224). It beats both shipped engines at predicting held-out team
+   appearances. The current rival; see
+   [hier_binary_report.md](hier_binary_report.md).
+
 Prefer a candidate that retains useful CF accuracy and materially improves
 field transport. The 185 problems in 15 contests are development evidence already
 used for many choices; a fresh confirmation field is still required.

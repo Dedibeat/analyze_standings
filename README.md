@@ -52,6 +52,24 @@ RMSE to DE (237.8 vs 225.6). DE stays shipped. The scorecard is in
 `prepare --jobs N` and `evaluate`. On Windows, check the frozen inputs out with
 LF line endings first (see `details.md`).
 
+[Hierarchical binary ratings](hier_binary_report.md) are the current DE rival
+(research only; nothing shipped changed). It is binary Rasch with board-level
+ability and problem-set means, and one CF map for problems and teams.
+- **Full fields:** CF RMSE 229.5 vs DE's 225.6 (+3.9 [−8.1, +14.5]).
+- **Field composition:** the strong and weak halves of a board end 1 point
+  apart in mean error (DE: 224). On the weak half, 333 vs 451.
+- **Teams:** held-out appearances are predicted better than by both shipped
+  engines (log loss 0.237 vs binary 0.252 and survival 0.278; rank-pair
+  accuracy 80.7% vs 79.4% / 80.0%). The recorded-date forward replay is level
+  on history pairs and better with member priors (+0.35 pp).
+- **Open issues:** a heavily cut board's level floats up (+52 at a quarter),
+  and EC online rounds read ~140 easier than DE.
+
+Settings are chosen without CF labels. Run
+`PYTHONUTF8=1 OPENBLAS_NUM_THREADS=1 ./.venv/Scripts/python -m arch_b.hier_binary all 10`
+(~75 min); results go to `output/hier_binary.json` and
+`output/hier_binary_ratings.json`.
+
 The [2026-09-05 experiment review](experiment_review.md) records the audit that
 found held-out-label leakage, incorrect rank/AUC tie handling, incomplete
 uncertainty labels, and participation-key collisions. The concrete correctness
