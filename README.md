@@ -42,12 +42,15 @@ Reproduce with `./.venv/bin/python -m arch_b.member_forecast`. This is a
 retrospective roster replay, not fresh confirmation; shipped ratings are unchanged.
 
 [Four DE successor candidates](de_successors.md) are recorded. Candidate #2,
-[stability-penalized DE](de_stability_plan.md), is prepared for a home-PC run:
-install `requirements-de-stability.txt`, then use
-`python -m arch_b.de_stability check`, `prepare --jobs 2`, and `evaluate`.
-The plan gives complete commands. All inputs are tracked; CPU refits are
-resumable under `de_stability_run/`, and reserved stress views do not select
-settings. Only the full-view pipeline check has run here; results await the PC.
+[stability-penalized DE](de_stability_plan.md), has been run. The penalty adds
+nothing: beta = 0 is picked in 8 of 15 folds, CF RMSE is no better than ridge
+without the penalty, and drift falls by at most 2.2%. Resampling without the penalty
+fixes DE's mean shift on small or weak fields, but on full fields it loses 12
+RMSE to DE (237.8 vs 225.6). DE stays shipped. The scorecard is in
+`output/de_stability_evaluation.json`. To rerun: install
+`requirements-de-stability.txt`, then `python -m arch_b.de_stability check`,
+`prepare --jobs N` and `evaluate`. On Windows, check the frozen inputs out with
+LF line endings first (see `details.md`).
 
 The [2026-09-05 experiment review](experiment_review.md) records the audit that
 found held-out-label leakage, incorrect rank/AUC tie handling, incomplete

@@ -13,8 +13,11 @@ invariance is not a requirement across genuinely different task conditions.
 2. **DE trained with a stability penalty.** Fit CF labels while penalizing
    changes in final predictions when the same task is measured on different
    participant samples. Keep every view of a task together in nested validation.
-   Compare against ordinary DE and resampling without the penalty. This is the
-   selected next experiment; see [de_stability_plan.md](de_stability_plan.md).
+   Compare against ordinary DE and resampling without the penalty. Plan:
+   [de_stability_plan.md](de_stability_plan.md). **Run 2026-11-05: no gain.**
+   Beta = 0 was picked in 8 of 15 folds, CF RMSE was no better than unpenalized
+   ridge, and drift fell by at most 2.2%. Unpenalized resampling lost 12 RMSE to DE on
+   full fields (237.8 vs 225.6). Results: `output/de_stability_evaluation.json`.
 3. **Binary difficulty plus a separate timing correction.** Test a small timing
    residual after accounting for strength and solve order, using verified logs
    and durations. Raw binary/survival disagreement is not a pure measure of
