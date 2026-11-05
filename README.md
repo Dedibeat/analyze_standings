@@ -33,6 +33,14 @@ audit and runs its experiments 0–2.
   (`arch_b.field_transport`).
 - Nothing shipped changed.
 
+[Experiment 3](member_forecast_report.md) continues that work with recorded-date
+regional forecasts and exact-roster identity. Member history improves cold-roster
+pair accuracy from 60.3% to 69.9% on matched 2024–2025 development pairs; the fixed
+q=50 random walk provides no useful log-loss gain. Cutoff manifests, missing-data
+coverage and limitations are in the report and `output/member_forecast.json`.
+Reproduce with `./.venv/bin/python -m arch_b.member_forecast`. This is a
+retrospective roster replay, not fresh confirmation; shipped ratings are unchanged.
+
 The [2026-09-05 experiment review](experiment_review.md) records the audit that
 found held-out-label leakage, incorrect rank/AUC tie handling, incomplete
 uncertainty labels, and participation-key collisions. The concrete correctness

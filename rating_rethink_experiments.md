@@ -5,6 +5,11 @@ another model (GPT-6 astra) at `2212261`, and runs the first three
 experiments it proposes. Research only: no shipped fit, calibration, rating,
 viewer or app output changed.
 
+**Continuation (2026-11-05):** [experiment 3](member_forecast_report.md) runs
+recorded-date member-prior and fixed-random-walk forecasts under exact-roster
+identity. Its protocol, coverage and limits supersede the "not run" status for
+those two components below; appearance effects and experiments 4–5 remain open.
+
 ## Summary
 
 - **The audit's reproducible claims hold.** The audit JSON reproduces exactly,
