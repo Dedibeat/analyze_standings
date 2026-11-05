@@ -692,6 +692,22 @@ the onsite field from XCPCIO for the 2026 regionals, the CCPC stations and the
 `1053_checks.py` and `2661_checks.py` are brute-force and UBSan checks of our
 runs, kept as evidence. Details are in `details.md`.
 
+### NUM-R^3 members on Codeforces (2026-11-05)
+
+```bash
+python3 scripts/team_r3_cf.py            # analyse the cached API data (~6 s)
+python3 scripts/team_r3_cf.py --fetch    # refresh data/team_r3/cf/ from the public API first
+```
+
+Covers Dedibeat, t4_4, erdene1231 and Munkh-Erdene.B: rated rounds, virtuals
+and practice. It reports each member's level (the problem rating with a 50%
+in-contest solve rate), the virtual-vs-rated gap at matched dates, topic
+families against expectation, accuracy (first try, test-1 failures under CF
+and ICPC rules, failed system tests), silent finishes, upsolving, practice diet
+and compiler. Writes `output/team_r3_cf.json`; the write-up is
+`output/team_r3_coach/cf.md`. Submission code is not fetched (Cloudflare blocks
+submission pages). Details are in `details.md`.
+
 ### Time-varying team ratings (research, 2026-10-04)
 
 ```bash

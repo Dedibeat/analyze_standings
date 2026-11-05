@@ -18,6 +18,8 @@ Fixed conventions:
   implemented it. 1051, 1485, 2513, 2524, 2575 (and 4071 F, M) have no member data: **unknown**.
 - **Not done.** Step 0 (shortest public ACs) was skipped at the user's request, so library
   comparisons use the editorials and our own code only.
+- **Codeforces.** Individual rated rounds, virtuals and practice of all three are analysed in
+  `cf.md` (§4b below has the short version).
 
 ## 1. Season results
 
@@ -170,6 +172,33 @@ virtuals: Dedi 11 (4607 E 5, 1053 C 2, 1071 M 2, 2661 J 2), Tamir 0, Erdene 0.
   discrete log / orders, knapsack-with-deletion and rerooting tricks. Our 179 submissions contain
   **no** flow, interpolation or XOR-basis code, and the only geometry is Dedi's in-contest attempt
   at 4607 E. Dedi did use an XOR basis at 4113 A, but that code is on the other account.
+
+## 4b. Individual form on Codeforces (details in `cf.md`)
+
+Background (user): Tamir (3rd year) and Erdene (1st year) are former IOI contestants; Dedi (4th year)
+came from maths and started programming as a freshman. Handles: Dedibeat, t4_4, erdene1231 (+ the
+new Munkh-Erdene.B). "Level" = problem rating with a 50% in-contest solve rate in rated rounds, on
+the rating scale.
+
+| | Dedi | Tamir | Erdene |
+|---|---|---|---|
+| rating now / max | 1817 / 2106 | 1632 / 1671 | 1959 / 2204 |
+| rated rounds (last) | 121 (2026-10-26) | 22 (2026-02-26) | 59 (2026-10-24) |
+| level: all rated / last 12 months | 1780 / 1840 | 1690 / 1760 | 1850 / **2050** |
+| first-try ACs | **68%** | 78% | 79% |
+| rejections failing test 1 (the sample) | **36%**, under every rule set | 40% under CF rules, **10–11%** under ICPC rules | 27% |
+| virtual vs rated (time-matched) | same | too few rated rounds | **320 weaker**; 36 of 63 virtuals have no submission after half-time |
+| topic families above / below expectation | number theory/bits, constructive, interactive / **combinatorics, graphs/trees** | graphs/trees, strings / number theory/bits | combinatorics, constructive / interactive |
+
+- **The CF picture matches the ICPC one.**
+  - Dedi's wrong runs are "submitted without checking". Example: 2196 C1, nine idleness verdicts on
+    test 1 in 32 minutes (362490463–362506639).
+  - Tamir is the careful one. Erdene is the strongest individual this season.
+- **Failed system tests are rare** (Dedi 1 in 94 live CF-rules rounds, Erdene 1 in 49, Tamir 0 in 14).
+  Once code passes the samples it is usually right, so the cheap fixes are before the first
+  submission.
+- **Nobody upsolves the next problem.** The first unsolved problem of a rated round is solved later
+  in 25/106 (Dedi), 6/19 (Tamir) and 11/51 (Erdene) rounds.
 
 ## 5. Strategy
 
@@ -368,7 +397,8 @@ The team is accepted to both regionals (user, 2026-11-04). The target is set by 
    - (e) n = 1, k = n, p = 0, empty input; any division by zero — 1053 E, 2661 B;
    - (f) memory in MB and operation count, written down — 1485 D/G/I, 2575 J, 1799 L;
    - (g) no debug caps, test bounds or `test()` calls left — 1071 G, 2661 J;
-   - (h) all samples run and output format checked — 1096 L;
+   - (h) all samples run and output format checked — 1096 L; on CF 36% of Dedi's rejections fail
+     test 1 (`cf.md` §2);
    - (i) for greedy / casework / formula: compared against a brute force on small inputs — 14 runs.
 5. **Never resubmit without a visible diff that fixes a diagnosed bug.** No identical files, toggles
    or `#define int long long` guesses (1799 L, 2661 G, 1794 G). Don't resubmit accepted problems
@@ -390,6 +420,9 @@ The team is accepted to both regionals (user, 2026-11-04). The target is set by 
 | Retyping standard structures in contest | DSU typo 1485 G; custom SCC closure 1794 L; max-heap default 2661 G |
 | Resubmitting after AC | 4593 J 3275839, 4593 C 3276249, 1071 I 3081413–3081454 |
 | Going silent in the last hour | 1051 (176 min), 1799 (163), 2513 (131), 4593 (110), 2693, 1096, 1485 |
+| Submitting before the samples pass (Dedi) | CF: 208 of 577 rejections fail test 1, under CF and ICPC rules alike; 2196 C1, nine idleness runs on test 1 (362490463–362506639) |
+| Abandoning virtuals half-way (Erdene) | CF: in 36 of 63 virtuals no submission after half-time (2180: A at 5′, then nothing); his virtuals rate 320 below his rated rounds |
+| Not upsolving the first unsolved problem | CF: 25/106 (Dedi), 6/19 (Tamir), 11/51 (Erdene) rated rounds |
 | Long stalls on easy problems, even with two people | 2661 B 169 min, 2524 C 74 min; 4593 J 95 min and 1053 A 100 min with two members on each |
 
 ### 6.5 If the team specialises: who takes which category
@@ -444,6 +477,17 @@ code and reads those problems first, and a **backup**, who can take it when the 
 - **All three:** the observation block (2575 I, 4071 A, 4071 N) and the checklist drills. A
   specialist still has to be able to solve the easy and greedy problems in every category.
 
+**What Codeforces adds** (`cf.md` §6; topic z-scores are leads, not proof). Keep this split for
+Shenyang, but test two swaps in the Hong Kong topic weeks:
+- **Counting:** Erdene leads the counting week. On CF Dedi is −1.87 on
+  combinatorics/probability, Erdene +1.16. If it holds, Erdene becomes the owner and Dedi the
+  backup.
+- **Graphs/trees:** Tamir leads the graphs week. On CF Tamir is +1.76, Erdene −0.43, Dedi −1.49.
+- **Dedi** stays the owner of maths/number theory/bits (+1.5 on CF). He gets an interactive template
+  (flush after every query) before acting as interactive backup.
+- **Erdene** moves to a 64-bit compiler. In 2026, 139 of 348 of his submissions still used the
+  32-bit GCC 7, which has no `__int128`.
+
 **Risk:** specialisation must not recreate the long stalls of §5. The 2-WA and 45-minute rules
 still apply to owners: an owner stuck on their own category hands it to the backup for a cold read.
 
@@ -453,3 +497,6 @@ still apply to owners: an owner stuck on their own category hands it to the back
   4113 A and 4113 D (Dedi suspects a type mismatch somewhere).
 - In the silent finishes (1051, 1799, 2513, 4593, 2693, 1096, 1485): was the field's next problem
   read, and by whom?
+- Codeforces code: with a browser `cf_clearance` cookie (passed in the environment, never saved) the
+  CF chains could be read as code (`cf.md` §7). Other handles or platforms used for rounds or
+  upsolving?
