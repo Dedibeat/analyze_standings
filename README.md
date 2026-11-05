@@ -41,6 +41,14 @@ coverage and limitations are in the report and `output/member_forecast.json`.
 Reproduce with `./.venv/bin/python -m arch_b.member_forecast`. This is a
 retrospective roster replay, not fresh confirmation; shipped ratings are unchanged.
 
+[Four DE successor candidates](de_successors.md) are recorded. Candidate #2,
+[stability-penalized DE](de_stability_plan.md), is prepared for a home-PC run:
+install `requirements-de-stability.txt`, then use
+`python -m arch_b.de_stability check`, `prepare --jobs 2`, and `evaluate`.
+The plan gives complete commands. All inputs are tracked; CPU refits are
+resumable under `de_stability_run/`, and reserved stress views do not select
+settings. Only the full-view pipeline check has run here; results await the PC.
+
 The [2026-09-05 experiment review](experiment_review.md) records the audit that
 found held-out-label leakage, incorrect rank/AUC tie handling, incomplete
 uncertainty labels, and participation-key collisions. The concrete correctness
