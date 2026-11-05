@@ -7395,6 +7395,23 @@ skipped at the user's request.
   has Dedi as geometry backup (the only geometry attempt, the right approach)
   and a rule for the last open problem: a teammate reads the diff or runs the
   brute force before each run.
+- (2026-11-05, later) Further answers:
+  - 4071 F and M (bonus problems) were solved by Dedi and Erdene; which took
+    which is not remembered. The sheet copy says "Dedi or Erdene", so neither
+    member's individual stats include them.
+  - 4071 A: Dedi's four runs were a wrong idea or an implementation too
+    complicated to get right.
+  - 4113 A was Dedi's: the start was right (an XOR linear basis), then the idea
+    went wrong. Dedi took A and D because Erdene and Tamir were stuck on them.
+    He suspects a type mismatch somewhere but did not say whether in A or D,
+    and when asked he did not pin it down, so the dossier records it as
+    unattributed. XOR basis is therefore "half there", not a gap nobody covers;
+    the code is on the other account.
+  - Tamir worked on J with Dedi at 4593 and joined late at 1799 (the user
+    confirmed which way round). 4593 J (95 min) and 1053 A (100 min, Tamir's
+    idea, Dedi's code) had two people on them, so the summary no longer calls
+    them solo stalls. That earlier label on 1053 A was my error; the sheet
+    already had it as a pair.
 
 **Script.** `scripts/team_r3_digest.py` (new) prints one contest's problem
 table:

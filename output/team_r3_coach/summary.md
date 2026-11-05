@@ -36,7 +36,7 @@ Fixed conventions:
 | 2513 EC Online I 2025 | online virtual | 7 / 625 | #147 / 2279 (6.5%) | best clean online result |
 | 2524 EC Online II 2025 | online virtual | 5 / 890 | #345 / 2575 (13%) | |
 | 1485 EC Online I 2023 | online virtual | 6 / 758 | #417 / 2554 (16%) | |
-| 1799 EC Online II 2024 | online virtual | 6 / 402 | #514 / 2450 (21%) | |
+| 1799 EC Online II 2024 | online virtual | 6 / 402 | #514 / 2450 (21%) | Tamir joined late |
 | **4071 EC Online I 2026** | **official** | 6 / 877 | **#544 / 2535 (21%)** | standard six at 2× the top-10% penalty |
 | **4113 EC Online II 2026** | **official** | 4 / 482 | **#352 / 2636 (13%)** | standard four, 93 min behind top 10% |
 
@@ -80,9 +80,10 @@ Fixed conventions:
 - **Greedy without proof:** many greedy problems are solved cleanly, but the failures are all
   unproven orders or assumptions (2524 C, 1053 A, 1051 E, 2661 B, 4071 A ×4 by Dedi before
   Erdene's first-try takeover).
-- **Topics we cannot do at all yet:** geometry, flows/matching, XOR linear basis, polynomial
-  interpolation, discrete log / multiplicative orders. These are exactly the "next problems" we
-  missed (§5).
+- **Topics we cannot do at all yet:** geometry, flows/matching, polynomial interpolation, discrete
+  log / multiplicative orders. These are exactly the "next problems" we missed (§5). XOR linear
+  basis is half there: Dedi started 4113 A correctly with one, then the idea went wrong (user,
+  2026-11-05).
 
 ## 3. Recurring bug classes
 
@@ -121,7 +122,8 @@ and 1071 M from the user, 2026-11-05):
 
 ## 4. Per member
 
-From the sheet (51 credited solves with idea/implementation roles; 31 solves have no member data).
+From the sheet (51 credited solves with idea/implementation roles; 31 solves have no member data;
+4071 F and M were Dedi's and Erdene's, split not remembered).
 
 | member | solo solves | first try | wrong runs | median pace | in pairs | topics |
 |---|---|---|---|---|---|---|
@@ -144,26 +146,30 @@ virtuals: Dedi 11 (4607 E 5, 1053 C 2, 1071 M 2, 2661 J 2), Tamir 0, Erdene 0.
   (4607 C, 4593 C/J, 2661 J), but **after** the first WA.
   - *Fails on* implementation details: the 4607 C modulus (×3), the 4593 C sentinel and 4593 J array
     size, 2693 F casework (×2), 2661 M comparison, the 2661 J leftover bound, and the 1799 L identical
-    resubmit. In the official round, 4 wrong tries on 4071 A before Erdene solved it.
+    resubmit. In the official round, 4 wrong tries on 4071 A before Erdene solved it (by his account
+    a wrong idea or an over-complicated implementation).
   - *Takes the last open problem, and it does not go in:* all four unsolved problems we attempted
     in the virtuals were his: 4607 E (263–272'), 1053 C (213–236'), 1071 M (283–286'), 2661 J
     (184–227'). E and J had the editorial's idea and failed on code: three glue bugs in E, one
     leftover loop bound in J. C had an init/`% mod` slip and then lacked the knapsack-deletion trick
-    (TL). M's rerooting code was resubmitted unchanged and never debugged.
-  - *Overloaded:* 2 of 4 problems at 4593, both stalled; 4 of 6 at 1799; 3 of 4 at 4113; 4 of the
+    (TL). M's rerooting code was resubmitted unchanged and never debugged. In the official
+    4113, A (3 runs) was his too: a right XOR-basis start, then a wrong idea.
+  - *Overloaded:* 2 of 4 problems at 4593, both stalled; 4 of 6 at 1799; 3 of 4 at 4113 plus A,
+    the unsolved 5th (he took A and D because the other two were stuck on them); 4 of the
     6 attempted at 1053 (with A's fix and C open at once in the last 35 minutes); at 4607, C and E,
     9 of the 12 in-contest wrong runs.
 - **Tamir** has the best relative pace and the cleanest heavy implementation (1053 D first try,
   4607 K first try, 2693 K's constructive proof). He is the idea source in three pair solves,
   including 1071 G.
   - *Fails on* 2661 B: a missing global verification step, then p = 0 / q = 0 edge cases; 169 minutes.
-  - **No recorded solve at 4593 and 1799.** What he worked on there is unknown (question).
+  - **No recorded solve at 4593 and 1799.** At 4593 he worked on J with Dedi; at 1799 he joined
+    late (user, 2026-11-05).
 - **Pairs that worked:** 1071 K (Dedi idea, Tamir code) 35' ahead of the gold median; 1071 G;
   1096 F; 4113 K. The best contest (1071) had all three members contributing in parallel.
-- **Gaps nobody covers:** geometry, flows/matching (Hall, Dinic, MCMF), XOR linear basis, Lagrange
-  interpolation, discrete log / orders, knapsack-with-deletion and rerooting tricks. Our 179
-  submissions contain **no** flow, interpolation or XOR-basis code, and the only geometry is Dedi's
-  in-contest attempt at 4607 E.
+- **Gaps nobody covers:** geometry, flows/matching (Hall, Dinic, MCMF), Lagrange interpolation,
+  discrete log / orders, knapsack-with-deletion and rerooting tricks. Our 179 submissions contain
+  **no** flow, interpolation or XOR-basis code, and the only geometry is Dedi's in-contest attempt
+  at 4607 E. Dedi did use an XOR basis at 4113 A, but that code is on the other account.
 
 ## 5. Strategy
 
@@ -185,9 +191,12 @@ virtuals: Dedi 11 (4607 E 5, 1053 C 2, 1071 M 2, 2661 J 2), Tamir 0, Erdene 0.
   - invariant: 2575 I.
 
 ### When to switch or give up
-- The long stalls were solo: 2661 B 169 min (Tamir), 4593 J 95 min (Dedi, also on C), 2524 C
-  74 min, 1053 A 100 min, 4607 C 86 min.
-- **The one recorded handover worked.** 4071 A: Dedi made 4 wrong tries, Erdene took over and was
+- **The long stalls:** 2661 B 169 min (Tamir), 4607 C 86 min (Dedi), 2524 C 74 min (member
+  unknown). Two had two people on them and were still long: 4593 J 95 min (Dedi's code, Tamir
+  helping; the fix was one array size) and 1053 A 100 min (Tamir's idea, Dedi's code). A second
+  person on the same chain is not enough; the second person has to do a cold read or a brute force.
+- **The one recorded handover worked.** 4071 A: Dedi made 4 wrong tries (a wrong idea or an
+  over-complicated implementation, by his account), Erdene took over with a fresh start and was
   accepted first try. Handing over after two WAs would have saved 40 penalty minutes in an
   official round.
 - **The silent finish:** 7 of 14 virtuals ended with 80+ minutes and no submission:
@@ -209,7 +218,8 @@ virtuals: Dedi 11 (4607 E 5, 1053 C 2, 1071 M 2, 2661 J 2), Tamir 0, Erdene 0.
 The code shows retyped or missing pieces:
 - DSU retyped as `int get(int …)` in 15 files, with a typo in 1485 G.
 - ext-gcd / modular inverse not normalised (1071 A).
-- No flow, geometry, interpolation or XOR basis anywhere.
+- No flow, geometry, interpolation or XOR basis anywhere (Dedi's 4113 A XOR basis is on the other
+  account).
 - An LCA that doesn't fit memory (1485 G).
 - A hand-rolled SCC with incremental closure that we could not debug (1794 L).
 - The default language left on C++14 (2575 A compile error).
@@ -380,7 +390,7 @@ The team is accepted to both regionals (user, 2026-11-04). The target is set by 
 | Retyping standard structures in contest | DSU typo 1485 G; custom SCC closure 1794 L; max-heap default 2661 G |
 | Resubmitting after AC | 4593 J 3275839, 4593 C 3276249, 1071 I 3081413–3081454 |
 | Going silent in the last hour | 1051 (176 min), 1799 (163), 2513 (131), 4593 (110), 2693, 1096, 1485 |
-| Solo stalls on easy problems | 2661 B 169 min, 4593 J 95 min, 2524 C 74 min, 1053 A 100 min |
+| Long stalls on easy problems, even with two people | 2661 B 169 min, 2524 C 74 min; 4593 J 95 min and 1053 A 100 min with two members on each |
 
 ### 6.5 If the team specialises: who takes which category
 
@@ -393,7 +403,7 @@ code and reads those problems first, and a **backup**, who can take it when the 
 | interactive / communication | **Erdene** | Dedi | 4607 H, 4607 I, 1071 I: 3 of 3 first try |
 | data structures (segment tree, Fenwick, DSU, LCA, SCC) | **Erdene** | Tamir | 2693 L at gold pace; owner of the retyped pieces (1485 G, 1794 L) |
 | graphs, trees, flows / matching (Dinic, MCMF, Hall, König) | **Erdene** | Tamir | nobody covers flows today (1051 B, 1794 H); the graph/structure library sits with the DS owner |
-| math, number theory, bits / XOR basis, interpolation | **Dedi** | Tamir | 1794 C (68′ vs 126′), 1071 A, 1799 G/L, 2661 J idea |
+| math, number theory, bits / XOR basis, interpolation | **Dedi** | Tamir | 1794 C (68′ vs 126′), 1071 A, 1799 G/L, 2661 J idea; 4113 A's XOR-basis start, where the other two had no idea |
 | counting / combinatorial DP, probability | **Dedi** | Erdene | 4607 C (right method), 1799 L, 2661 J; the missed 1053 C, 2661 I, 2513 J |
 | strings (trie, hashing, Manacher, Z/KMP) | **Dedi** | Tamir | 4071 L, 1071 K idea |
 | geometry (new) | **Tamir** | Dedi | needs exact, careful casework code; Tamir has the fewest implementation slips and best pace (1053 D, 4607 K first try). Dedi wrote the only geometry attempt (4607 E): the editorial's approach, lost to three glue bugs |
@@ -417,8 +427,9 @@ code and reads those problems first, and a **backup**, who can take it when the 
 - **Erdene keeps interactive problems for the last two hours** if one is open, and is the team's
   cold reader for graph/DS chains. His 4071 A takeover (first-try AC after Dedi's 4 WAs) is the
   model.
-- **Tamir needs a visible share of the problems.** He has no recorded solve at 4593 or 1799.
-  Owning geometry and constructive gives him problems that the other two do not take.
+- **Tamir needs a visible share of the problems.** He has no recorded solve at 4593 (he helped on
+  Dedi's J) or 1799 (he joined late). Owning geometry and constructive gives him problems that the
+  other two do not take.
 
 **Training split** (problem lists from 6.1):
 - **Erdene:** the flows block (1051 B, 1794 H, 2524 C), the graphs/trees block (1799 E, 1071 M,
@@ -433,13 +444,12 @@ code and reads those problems first, and a **backup**, who can take it when the 
 - **All three:** the observation block (2575 I, 4071 A, 4071 N) and the checklist drills. A
   specialist still has to be able to solve the easy and greedy problems in every category.
 
-**Risk:** specialisation must not recreate the solo stalls of §5. The 2-WA and 45-minute rules
+**Risk:** specialisation must not recreate the long stalls of §5. The 2-WA and 45-minute rules
 still apply to owners: an owner stuck on their own category hands it to the backup for a cold read.
 
 ## 7. Open questions (answers would sharpen the per-member picture)
-- **Members for 1051, 1485, 2513, 2524 and 2575** (31 solves), and for 4071 F and M.
-- 4071 A (Dedi's 4 wrong, then Erdene AC) and 4113 A (3 wrong, member not recorded): wrong idea or
-  implementation? Is that account's code recoverable anywhere?
-- **Tamir at 4593 and 1799:** what was he working on (no recorded solve)?
+- **Members for 1051, 1485, 2513, 2524 and 2575** (31 solves).
+- Is the 4071/4113 account's code recoverable anywhere? It would show what went wrong on 4071 A,
+  4113 A and 4113 D (Dedi suspects a type mismatch somewhere).
 - In the silent finishes (1051, 1799, 2513, 4593, 2693, 1096, 1485): was the field's next problem
   read, and by whom?
