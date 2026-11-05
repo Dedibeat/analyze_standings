@@ -1,5 +1,11 @@
 # Details
 
+**Latest rating design review (2026-11-04):** [rating_rethink.md](rating_rethink.md)
+reassesses performance and problem ratings using the October context/dynamics
+findings and refreshed diagnostics. It proposes staged replacements, not a new
+shipped model. Its experiments 0–2 were reviewed and run the same day:
+[rating_rethink_experiments.md](rating_rethink_experiments.md) (final entry).
+
 **Current review (2026-09-05):** [experiment_review.md](experiment_review.md)
 audits the implementation and historical conclusions at `8a351e0`. In particular,
 the cross-contest LLM LOCO improvement recorded below uses held-out CF labels and
@@ -6692,6 +6698,221 @@ online result, and the notice does not say how they are ranked:
 Tests now pin the 10-17 export: 106 / 95 teams, the extra 福建师范大学 team,
 and 104 round-1 teams with 9 cut.
 
+### Updated export (2026-10-23 follow-up)
+
+**Data.** `data/icpc_hk_macau_public_teams_20261023.xlsx` is the user's PTA
+export of 10-23 (file stamp 22:45). It is now the module's default; the
+10-15 and 10-17 CSVs stay as snapshots.
+- **PTA changed the format.** It is now an xlsx with English school names,
+  no team id, no creation time and no province, plus a new "Online ranking"
+  column. The module maps each English school name to its Chinese name and
+  province through the PTA CSV exports (2026 online rounds + the two Hong
+  Kong lists). All 129 rows map. It takes `created_at` from an earlier Hong
+  Kong export with the same line-up; the 24 teams new since 10-17 have none
+  and count as registered later.
+- 129 teams, all `Pending`: the 106 of 10-17, minus one, plus 24 new. 广西大学
+  swapped its line-up (你是我的梦幻之AC → 队名Wa2了, different members). Two
+  teams were renamed (成都锦城学院 Random → x x xxx; 西南大学 AFOpointer →
+  算法进阶退役指南).
+- 6 local teams now: two each from HKU, CUHK and HKUST. Local schools may
+  enter two, so they are no longer counted as `extra`. 福建师范大学 BBQ team is
+  still the only non-local extra.
+- 112 of 129 link (11 unlinked on 10-17). The new unlinked teams are CUHK ×2,
+  HKU's second team, 大连理工大学, 山东科技大学 and 昆山杜克大学. Their members are
+  on no 2026 online roster of their school.
+
+**The selection rank is the school's combined online rank.** On all 129
+rows, the export's "Online ranking" equals the school's 2026 `combined` rank
+in `online_schools.csv`. Two teams of one school show the same number (CUHK 8,
+HKUST 18, HKU 73, 福建师范大学 176). NUM-R^3 shows 128. So round 1's
+"按网络预选赛排名" is a school ranking, not a team ranking. This settles both
+open points of 10-17:
+- which round counts: neither alone; it is the combined school table;
+- teams with no online result of their own: they carry their school's rank.
+  SUSTech-Ok is school #9, so it is safe, not cut.
+
+The module now ranks round 1 by school rank, linked or not. The scenario's
+top-95 cut also uses school rank: a late 2025 school gets its 2026 combined
+rank, or goes last if it has none.
+
+**Round 1 if it closed now:** 123 non-local teams. The second 福建师范大学 team
+waits for round 2, so 122 compete for 95 seats and 27 would be cut. The last
+team kept is school #284; every team from #286 down is cut. 13 of the 122
+have no online result of their own.
+
+**Field** (as in the 10-15 table):
+
+| field | linked | median | within #50 / #100 / #200 / #500 | gold / silver+ / medal line | expected golds |
+|---|---|---|---|---|---|
+| 2026 registered, 10-17 | 95 | 998 | 2 / 3 / 7 / 16 | 294 / 708 / 1089 | 3.6 |
+| 2026 registered, 10-23 | 112 | 957 | 3 / 5 / 11 / 23 | 186 / 679 / 1083 | 5.2 |
+| scenario on 10-17, cut by school rank | 89 | – | – | 70 / 368 / 799 | 10.8 |
+| scenario on 10-23 (+ 33 unregistered 2025 schools, top 95 by school rank) | 86 | 680 | 5 / 10 / 16 / 32 | 80 / 382 / 816 | 9.1 |
+
+- The strongest new teams: HKUST 喵喵喵幼儿园 (local, #34 / #63: 78% gold),
+  HKUST(GZ) BPM 222.22 (#80 / #80: 47%), NUAA (#99 / #183: 20%) and RUC
+  (#170 / #162: 13%).
+- **Returning strong schools send weaker line-ups than in 2025.** That is
+  why the scenario's gold line moved from #70 to #80. Of the 2025 schools
+  that registered since 10-17, the four strongest had 2025 Hong Kong teams at
+  online #42–#109. Their 2026 line-ups sit at #80–#382 (西安交通大学: #50 →
+  #382; HKUST(GZ): #42 → #80; NUAA: #72 → #135; RUC: #109 → #166). The
+  scenario assumes every school still missing returns at its 2025 strength.
+  If they follow the same pattern, the real gold line will be weaker than
+  #80.
+- 17 schools with a 2024/2025 Hong Kong gold or silver are still not
+  registered (23 on 10-17), among them 上海交通大学, 复旦大学, 清华大学,
+  哈尔滨工业大学, 南京大学 and 上海大学. 58 of the 2025 field's linked
+  non-local schools have registered (47 on 10-17).
+- Pre-existing quirk, not fixed: `hk_gold.is_local` treats the 2025 board's
+  "Beijing Normal-Hong Kong Baptist University" (北师香港浸会大学, Zhuhai) as
+  local. So "returning" undercounts by one, as does the 2025 non-local
+  count. It is registered (school #255), so the scenario is unaffected.
+
+**NUM-R^3** (school #128; online #544 / #349):
+- 49 registered round-1 teams have a better school rank. It keeps a round-1
+  seat while no more than 45 of the 74 unregistered non-local schools ranked
+  above it register by 10-30.
+- That looks safe. 34 of those 74 schools played Hong Kong in 2024 or 2025
+  (school-level, by English board name; 31 by linked teams only), 40 in
+  neither year. Even if all 34 come back, NUM-R^3 is 84th. The 2024 and 2025
+  fields held 51 and 56 linked non-local schools from that year's combined
+  top 127. NUM-R^3 would need about 95 such schools to be cut.
+- **Chance of the round-1 cut** (follow-up question). The 123 non-local
+  top-127 schools split into 73 with a 2024/2025 Hong Kong team and 50
+  without. Registered so far: 22 + 5 on 10-15, 30 + 8 on 10-17, 39 + 10 on
+  10-23, so about 2 a day lately and 4 a day since 10-11. Each school is
+  treated as an independent coin with that pace's per-day rate, carried over
+  the 7 days to 10-30. The table gives P(46 or more of the 74 register):
+
+  | assumption | P(past-HK) / P(other) | expected new | P(cut) |
+  |---|---|---|---|
+  | 10-17 → 10-23 pace | 0.24 / 0.06 | 10 | ~0 |
+  | 10-11 → 10-23 average pace | 0.36 / 0.12 | 17 | ~0 |
+  | 3× the average pace (deadline rush) | 0.74 / 0.32 | 38 | 2.7% |
+  | every past-HK school + 20% of the others | 1 / 0.20 | 42 | 9% |
+  | every past-HK school + 30% of the others | 1 / 0.30 | 46 | 56% |
+
+  The last two rows need a 100% return of past-HK schools (2024 → 2025 was
+  62%), so the estimate is about 1%, under 3% even with a heavy deadline
+  rush. It assumes that first teams registered after 10-30 cannot displace
+  round-1 seats, and that PTA cuts by the shown rank. It does not cover
+  review rejection or travel problems.
+- In the scenario it is 73rd of 155 by school rank, and the cut falls at
+  school #207.
+- By team strength it is 23rd of the 112 linked teams (20 round-1 teams
+  ahead by mean online rank).
+- Gold / silver / bronze: 1.3% / 34% / 46% (absolute, unchanged);
+  2% / 29% / 49% (field-relative, scenario, unchanged at the shown
+  precision).
+
+Tests pin the 10-23 export: 129 / 112 teams, 122 round-1 teams with 27 cut,
+and "Online ranking" equal to the combined school rank on all 129 rows
+(NUM-R^3 128). The early-list check is now "gold line > 2× the 2024/2025
+line" (#186 vs #66), down from 3×, because the list is filling in.
+`pypinyin` (needed by `arch_b.hk_link`) was missing in this environment and
+was installed; `openpyxl` reads the xlsx.
+
+### Updated export (2026-10-26 follow-up)
+
+**Data.** `data/icpc_hk_macau_public_teams_20261026.xlsx`, the user's PTA
+export of 10-26 (file stamp 19:53, UTC+8), same xlsx format; now the default.
+- 143 teams, all `Pending`: the 129 of 10-23 plus 15 new, minus one.
+  山东大学（威海） swapped its line-up (面向样例编程队 → Attack on MilkFrog).
+  惠州学院 renamed its team (某科学的超电磁炮 → 沧海一粟). One new team is local:
+  澳门大学.
+- 124 link. The two new unlinked teams are 新疆大学 and 烟台大学.
+- "Online ranking" again equals the combined school rank on all 143 rows.
+
+**Round 1 is filling fast with schools ranked above NUM-R^3.** 10 of the 15
+new teams come from schools above #128: 山东大学 #21, 东北大学秦皇岛分校 #22,
+东南大学 #24, 西北工业大学 #25, 同济大学 #28, 杭州师范大学 #35, 深圳技术大学
+#49, 哈尔滨工业大学（威海） #55, 上海大学 #62 and 大连理工大学盘锦校区 #124. 9
+of the 10 had a 2024/2025 Hong Kong team.
+- If round 1 closed now: 135 round-1 non-local teams for 95 seats, so 40 are
+  cut. The last team kept is school #248 (#284 on 10-23).
+- NUM-R^3: 59 registered teams ahead (49 on 10-23), so it is 60th. 35 more
+  of the 64 unregistered non-local schools above it can register before it
+  is cut; the 36th would cut it.
+
+**Cut risk, now in the module** (`cut_risk`, in `selection[team]`).
+`SNAPSHOTS` records when each export was taken: a CSV's last registration,
+or an xlsx file name's stamp. Round 1 is assumed to close at the end of
+10-30, UTC+8 (`ROUND1_CLOSE`), so 4.17 days are left. The schools above the
+team are split into those with a 2024/2025 Hong Kong team (linked, or by the
+board's English school name) and the rest. Each group's per-day rate comes
+from the last two snapshots. Each school registers independently at its
+group's rate, carried to the close at 1× / 2× / 3× that rate, plus a stress
+row where every past-Hong Kong school returns. P(cut) is exact (convolved
+binomials).
+
+| assumption | P(register): past-HK (25 left) / other (39 left) | expected new | P(cut) |
+|---|---|---|---|
+| 1× the 10-23 → 10-26 pace | 0.36 / 0.04 | 10.4 | ~0 |
+| 2× | 0.59 / 0.07 | 17.5 | ~0 |
+| 3× | 0.74 / 0.10 | 22.5 | ~0 |
+| every past-HK school, others at 3× | 1 / 0.10 | 29.1 | 0.2% |
+
+- The previous estimate underestimated the pace. From the 10-17 → 10-23
+  pace it expected about 4–5 schools above NUM-R^3 by 10-26; 10 came, about
+  2× faster. The 2× / 3× rows cover that.
+- Even so, the cut needs all 25 remaining past-HK schools plus 11 of the 39
+  others. Only 1 of those 39 registered in the last 3 days, and 11 of the
+  50 since 10-11. So the chance stays **under 1%**, though the margin shrank
+  from 45 to 35.
+- Reading `cut_risk` on the 10-23 file reproduces the earlier estimate (need
+  46; 10.4 expected at 1×; 1.8% for every past-HK school with others at 3×).
+- **Break-even** (`break_even_p_other`). Suppose every one of the 25
+  past-HK schools returns, which at even 3× the pace has about a 0.05%
+  chance. The cut then needs 11 of the 39 others. That has a 5% chance if
+  each registers with probability 0.17, and 50% at 0.27. Their pace so far
+  gives 0.04 (last 3 days) or 0.07 (average since 10-11). So it takes 2.6×
+  to 4.5× their average pace on top of a full past-HK return.
+
+**User notes (10-26), recorded as given:**
+- In past Hong Kong rounds, an oversubscribed non-local list meant an extra
+  selection contest. This year it is school rank alone, so weak line-ups
+  from well-ranked schools get in, as seen (山东大学 #21 → a #1638 team).
+  This conflicts with the 2026-10-01 reading of the 2024/2025 notices
+  ("by online rank if oversubscribed"); not re-checked.
+- Hong Kong has 10 EC-Final places this year against 1 in 2025 (the 2025
+  count was inferred on 2026-10-08). This likely explains both the fast
+  registration and the second line-ups from strong schools: places go to
+  medal teams in rank order, skipping teams with a member on the mainland
+  round-1 list, with at most 3 − x per school. That makes Hong Kong a route
+  for a school's lower teams. The 10-place rule was in the 08-28 notice,
+  before registration opened on 10-11, so the pace used above already
+  reflects it.
+
+**Field** (as in the 10-15 table):
+
+| field | linked | median | within #50 / #100 / #200 / #500 | gold / silver+ / medal line | expected golds |
+|---|---|---|---|---|---|
+| 2026 registered, 10-23 | 112 | 957 | 3 / 5 / 11 / 23 | 186 / 679 / 1083 | 5.2 |
+| 2026 registered, 10-26 | 124 | 947 | 3 / 5 / 12 / 27 | 198 / 658 / 1064 | 5.4 |
+| scenario on 10-26 (+ 27 unregistered 2025 schools, top 95 by school rank) | 86 | 652 | 5 / 9 / 16 / 34 | 92 / 382 / 776 | 8.7 |
+
+- Strong schools again sent second line-ups. 山东大学 (school #21) entered a
+  #1638 team, 哈工大威海 (#55) a #1607, 东北大学秦皇岛 (#22) a #622, 上海大学
+  (#62) a #726. Only 西北工业大学 (#198), 东南大学 (#394) and 同济大学 (#411)
+  are stronger than NUM-R^3 (#436). So the scenario's gold line weakened
+  again, #80 → #92.
+- 12 schools with a 2024/2025 Hong Kong gold or silver are still not
+  registered (17 on 10-23): 上海交通大学, 复旦大学, 清华大学, 哈尔滨工业大学,
+  中国科学技术大学, 南京大学, 南开大学, 南京邮电大学, 暨南大学, 湘潭大学,
+  西安电子科技大学 and 广东以色列理工学院.
+
+**NUM-R^3**:
+- 26th of the 124 linked teams by team strength (23 round-1 teams stronger),
+  though 60th by school rank.
+- Gold / silver / bronze: 1.3% / 34% / 46% (absolute, unchanged);
+  3.1% / 28% / 48% (field-relative, scenario).
+
+Tests pin the 10-26 export: 143 / 124 teams, 135 round-1 teams with 40
+cut, the rank check on 143 rows, and NUM-R^3's cut risk (59 ahead, need 36
+of 64, 9 + 1 registered since 10-23, P(cut) rising with the pace and below
+1%).
+
 ## CCPC sets ranked by problem difficulty (2026-10-18)
 
 **Request.** Rank the CCPC contests by problem difficulty (for example, by
@@ -6874,3 +7095,320 @@ stage 9). It was found by web search, because QOJ pages need a login.
 Run: `python scripts/ccpc_difficulty_rank.py` (~1 min; on Windows set
 `PYTHONUTF8=1`). Tests: `python -m unittest tests.test_ccpc_difficulty_rank`
 (8 pass).
+
+## Xi'an 2026 virtual: rank 86 (2026-10-26)
+
+**Report.** The user: NUM-R^3 placed 86th in a virtual of the 51st Xi'an
+regional (onsite 10-17). No scoreline was given. "86" is read against the
+XCPCIO board `icpc/51st/xian`: 418 teams, 402 official, medals 41 / 82 / 123
+(board counts).
+- If 86 is the overall rank: 4 solved / 511 min, official-equivalent #81.
+- If it is the official rank: 4 / 536.
+Both readings give the same conclusions.
+
+**Placement.**
+- The set was a 4-solve plateau. Only 13 official teams solved 5 or more,
+  and ranks 14–153 all solved 4. A fifth problem would have been gold, inside
+  the top 13; among 4-solvers, penalty decides.
+- Lines at 4 solved: gold (#41) at ≤ 405 min; the 2026 EC-Final estimate
+  (#75, plausible 70–80, 2026-10-01) at 502 min; silver to #123 at 709 min.
+- The virtual is a **silver**, just outside the EC-Final line: 9 min (or
+  34 min) of penalty behind #75, i.e. one or two fewer wrong submissions. It
+  is 106–131 min from gold.
+- NUM's best real mainland ranks were 116 (Hangzhou 2024) and 168 (Nanjing
+  2025).
+
+**Anchors** (`scripts/anchor_teams.py --board icpc/51st/xian --solved 4
+--penalty 511|536`):
+- gold anchors present 11, beaten 0;
+- EC-Final anchors present 15, beaten 6 (5 at 536 min).
+- So: at the EC-Final line, below gold, the same reading as the CCPC Jinan
+  virtual of 10-11.
+- All tiers are still predicted. `regional_teams.csv` has no 51st-season
+  rows yet, so the actual-result override does not fire.
+
+**Hong Kong registrants who played onsite** (10-26 list, matched by school +
+≥ 2 members):
+- **Xi'an:** 9 registrants, the best 四川大学 渡川 at #107 (4 / 618). Then
+  广东工业大学 #129, CUHK 慶曆四年春 #137 (a local team with no online result;
+  this is its first measurement) and 西南财经大学 #143. The virtual beats all 9
+  under either reading.
+- **Chengdu** (`icpc/51st/chengdu`, 10-24; 319 official, medals 32 / 64 / 96):
+  - 香港中文大学（深圳） Mynoghra gold #21 (6 solved);
+  - SUSTech-Ok silver #87 (5 solved; first measurement of this unlinked
+    team);
+  - 杭州电子科技大学 2026杭电负1队 played unofficially, 7 solved;
+  - 4 more registrants at #178–237.
+
+**What it means for Hong Kong** (online-rank equivalent; scratch query, not
+shipped):
+- 203 of the 402 official Xi'an teams link to 2026 online results.
+  Regressing x on log official rank (r = −0.81) gives the typical online rank
+  of a team placing there: #75 → online #315, #81 → #335, #86 → #351. The
+  linked teams placing 70–90 have median online #359.
+- NUM-R^3's online average is #436 (round 2 alone: #349). So the virtual
+  reads as a team about one online-round step stronger.
+- Hong Kong absolute model:
+
+  | strength | gold | silver | bronze |
+  |---|---|---|---|
+  | online #436 (current) | 1.3% | 34% | 46% |
+  | Xi'an #86 equivalent (#351) | 2.2% | 43% | 41% |
+  | Xi'an #81 equivalent (#335) | 2.5% | 45% | 40% |
+
+- **Caveat: a virtual is not onsite form.** Earlier measurements: the online
+  virtuals ran ~2× stronger in rank terms than the official 2026 rounds
+  (2026-10-08). The same scoreline reads up to ~100 CF points lower as a
+  virtual entry (mirror advantage, 2026-10-13). So read the table as an upper
+  bound: silver-or-better somewhere between ~36% and ~47%, gold ~1–2.5%.
+  Either way, the medal band does not change.
+
+**Fix in shared code.** `scripts/anchor_teams.py` had crashed since the
+10-11 merge (`KeyError: 'h'`). Since 10-08, `ecfinal_chance.fit` uses
+members' history by default, and `official_ranks()` returns (rank, members).
+The anchor tiers were defined on the online-only model, so `ecfinal_model`
+now fits with `use_h=False` and takes the rank from the tuple. NUM-R^3 again
+gets the documented 13.8% EC-Final / 3.4% gold; tiers are 88 gold and 83
+EC-Final. A new test, `test_ecfinal_model_uses_online_rank_only`, runs the
+model end to end; the old tests never called it.
+
+**Not done.** `regional_teams.csv` was not rebuilt with the 51st-season
+boards (Xi'an 10-17, Chengdu 10-24). That rebuild would turn on the anchors'
+actual-result tiers and let the Hong Kong EC-Final skip rule see which
+registrants already hold mainland seats.
+
+## Hong Kong registration: 10-28 export (2026-10-28)
+
+**Data.** `data/icpc_hk_macau_public_teams_20261028.xlsx` (file stamp 13:50,
+UTC+8), now the default and the newest `SNAPSHOTS` entry.
+- 144 teams, all `Pending`: the 143 of 10-26, plus 5 new, minus 4 that
+  withdrew. One team was renamed (山东大学（威海） Attack on MilkFrog →
+  进击的奶蛙).
+- New: 重庆邮电大学 (school #29), 南昌大学 (#139), 湖北工业大学 (#199), 太原理工大学
+  (#325) and 广州软件学院 (#471).
+- Withdrawn: 浙江理工大学 (#79; 2024 Hong Kong silvers), 温州医科大学 (#207),
+  桂林电子科技大学 (#227) and 河北科技大学 (#248).
+- 123 link; 南昌大学 and 湖北工业大学 do not.
+
+**Registration has nearly stopped.** In the 1.75 days since 10-26, one school
+above NUM-R^3 registered (重庆邮电大学) and one withdrew (浙江理工大学).
+- NUM-R^3 is still 60th: 59 ahead, room 35, 64 unregistered non-local
+  schools above it.
+- Round 1 if it closed now: 136 non-local teams for 95 seats, cut below
+  school #250.
+
+**Cut risk.** `cut_risk` now counts the registrations among the group's
+schools unregistered at the earlier snapshot. On 10-28 the old net count
+(unregistered before − after) was 0 for the past-HK group, because one
+school registered and one withdrew. A school that withdrew counts as
+unregistered again, and withdrawals are reported per group.
+- In the 2.42 days left, at any multiple of the 10-26 → 10-28 pace, the
+  chance NUM-R^3 is cut is ~0.
+- The "others" group registered nobody in this window, so its stress row
+  reads 0 too. The break-even still applies: with every past-HK school back,
+  each of the 39 others would need a 17% chance to register for a 5% cut.
+- Over the longer 10-23 → 10-28 window (10 of 34 past-HK, 1 of 40 others),
+  even 5× that pace gives 17 expected new schools against the 36 needed. So
+  P(cut) ≈ 0.
+
+**Field.** The registered list is unchanged in strength: gold line online
+#198, 5.4 expected golds. The scenario's gold line moved #92 → #80 only
+because its field has 85 matched teams instead of 86. The 10% line is
+therefore the 8th team rather than the 9th. Expected golds are unchanged at
+8.7.
+- None of the new teams is strong. The best is 太原理工大学 at online #1118;
+  重庆邮电大学 (school #29) entered a #1382 line-up.
+- 13 schools with a 2024/2025 Hong Kong gold or silver are not registered
+  (浙江理工大学 joins the 12 of 10-26).
+
+**NUM-R^3** is 26th of the 123 linked teams by strength (23 round-1 teams
+stronger). Gold / silver / bronze: 1.3% / 34% / 46% absolute (unchanged);
+2.2% / 29% / 47% field-relative, scenario. On the Xi'an virtual reading, at
+most ~2.5% / 45% / 40%.
+
+Tests pin the 10-28 export: 144 / 123 teams, 136 round-1 teams with 41 cut,
+the rank check on 144 rows, and cut-risk counts of 1 + 0 registered and
+1 + 0 withdrawn since 10-26.
+
+## Rethinking performance and problem ratings (2026-11-04)
+
+**Request:** reconsider the whole approach and suggest improvements,
+experiments and replacements. “Performance” is interpreted as team contest
+performance. The review is [rating_rethink.md](rating_rethink.md), based on
+code at `872b3cc`, the earlier reviews, and fresh local checks.
+
+**Recommendation:** test a context-aware binary item-response model, with
+separate timing and member-informed roster priors. Keep survival + DE as the
+problem-calibration benchmark. First separate verified event/mirror conditions
+inside the likelihood; then test calibration under changes in field composition.
+Member carry-over precedes more elaborate dynamics. Distinguish observed contest
+performance, current team strength, and problem difficulty under stated conditions.
+
+**Fresh evidence** (`scripts/rating_rethink_audit.py`, read-only; saved JSON in
+`output/rating_rethink_audit.json`):
+
+- Joint data: 262 contests, 35,862 identities, 78,201 appearances, 3,185 problem
+  appearances, 991,268 cells. There are 122 zero-solve and 106 one-solve problems.
+- 11,867 zero-solve rows are dropped in fitted contests; 2,105 have wrong attempts.
+  448 contest/identity groups have repeated rows (475 excess rows).
+- 232 boards mix `$DEFAULT...` and other IDs. This is an ID-prefix inventory,
+  not verified onsite/mirror coverage; official online rounds also use imported
+  rows. Participation conditions require explicit source-backed labels.
+- Cached-fit CF LOCO: clipped nested DE **225.6073**; survival affine/gym
+  **246.6616 / 244.3776**; binary affine/gym **246.7795 / 257.5344**. The same
+  185 anchors / 15 contests remain development data. These cached, rounded-fit
+  scores are not a fresh raw-fit `arch_b.metric` run.
+- Every shipped rounded DE point reproduces exactly. Both raw-fit hashes in
+  `problem_calibration.json` are stale, although its feature ranges match the
+  current anchors. The audit records actual hashes and flags the mismatch;
+  production metadata is unchanged in this research task.
+- 1,636 appearances fall outside the anchor field-size range and 453 outside
+  the disagreement range (overlapping counts). Clipping is not evidence of
+  successful transport to these populations.
+- XCPCIO cache: 59 config directories with numeric start/end times, 38 with
+  submission logs, 38 distinct run-file hashes. This makes a local timing and
+  participation pilot possible after joins/completeness are audited. These are
+  directory counts, not a verified count of usable unique contests.
+
+**Fresh imputation check** (`arch_b.predict_eval`, refitted from source):
+792,936 training / 198,332 held-out cells, grouped by resolved team/problem.
+Binary log loss / Brier / AUC = **0.1994 / 0.0609 / 0.9737**;
+survival = **0.2289 / 0.0690 / 0.9684**. This remains retained-row imputation,
+not forecasting; the probability win does not by itself replace DE calibration.
+
+**Evaluation changes proposed:** separate completed-contest rating, whole-appearance
+prediction, prospective rank prediction and historical performance scorecards.
+`dynamic_rating` resolves identity on all data, uses approximate dates, and
+uses full-data `b0` in its solve score and member-prior targets. Pair ranking
+does not directly use that ruler, but needs the date/identity audit too. The
+next forecast test should rebuild identities at each cutoff, use recorded dates
+where possible, and avoid target-outcome-derived difficulty rulers. Existing
+forecast results remain research evidence, not a new untouched test.
+
+**Missing:** audited mode/exposure/mirror dates for much of the dataset, broad
+external ability coverage, fresh confirmation data, canonical task-version
+checks, and `data/gym_checkpoints/api_standings.json`. None was invented.
+
+**Reproduce:** `./.venv/bin/python -m scripts.rating_rethink_audit` and
+`./.venv/bin/python -m arch_b.predict_eval`. No candidate model, shipped rating,
+viewer or external app changed. The new audit asserts DE point reproduction
+and serializes only finite results; its output includes input hashes.
+Validation: 15 statistics/release-audit tests pass; the audit script compiles,
+report links resolve, all recorded input hashes still match, and `git diff
+--check` passes.
+
+## Rating rethink reviewed; experiments 0–2 run (2026-11-04, second entry)
+
+**Request:** review the last rating_rethink audit (written by GPT-6 astra) and
+run its experiments. Full report:
+[rating_rethink_experiments.md](rating_rethink_experiments.md). Research only;
+no shipped fit, calibration, rating or export changed.
+
+**Review.**
+- **Every reproducible claim holds.** The audit JSON and `predict_eval`
+  reproduce exactly. Fresh `estimate_joint` fits reproduce both saved fits
+  record for record.
+- **Calibration metadata.** The `problem_calibration.json` hashes match neither
+  the 09-28 nor the 10-04 committed fits; the cause was not found.
+- **Gap.** The proposed pooled mirror offset is not identified by within-team
+  evidence. For single-context teams the shared ability prior sets it.
+  - Only 135 identities have both event rows and UCup mirror rows, and 2 have
+    event and account mirror rows.
+  - The naive estimates are +167 pooled, UCup +270, and an account slope of
+    2.23 (nine prior SDs). They measure who enters mirrors.
+
+**Experiment 1** (`arch_b/context_fit.py` → `output/context_experiment.json`).
+Offsets apply to all teams (naive), multi-context teams, or onsite bridges.
+
+| Teams carrying the offset | Mirror offset at σθ 400 / 800 / 1600 |
+|---|---|
+| naive UCup | +270 / +227 / +205 |
+| multi-context (776 teams) | +300 / +247 / +217 |
+| onsite bridges (137 teams) | **+89 / +75 / +70** |
+
+- **Per-team gap**, b fixed: +51 [+9, +89]. The slope is +12 per 400 of
+  ability.
+- **Whole-appearance hold-out**, three seeds, linked cells:
+  - naive −5.6e-4 [−7.6, −3.4] (a population mean for mirror entrants);
+  - onsite −0.05e-4 [−1.2, +1.2].
+- **Event-field transfer** (identity-safe folds):
+  - onsite −0.85e-4 [−1.61, −0.02];
+  - multi-context +738e-4 on teams seen only as mirrors.
+- **Split-half spacing:** unchanged.
+- **Mixed-board difficulties** sit within −3 … +30 of an event-only refit;
+  context terms move them by at most 11.
+- **Verdict:** no mirror term in the fit.
+- **Incidental:** binary affine LOCO is about 232 at σθ = 800/1600 in every
+  variant, against 247 at 400. This is a lead only.
+
+**Experiment 2** (`arch_b/field_transport.py` → `output/field_transport.json`).
+Boards are re-measured with outside-fold abilities, drawn by team, with an
+identity-safe target and a non-target survival window.
+- **Strong − weak, independent selection** (mean CF, 966 problems):
+  - DE **+188** (solve rate +209, survival b −170, disagreement +80, SE +69);
+  - binary b +5, survival b −95;
+  - blend −72, DE_reference −107;
+  - noise floor about ±3.
+- **Pool − quarter:** DE +65, others +24 … +29.
+- **Anchor RMSE, contest-held-out:**
+  - DE leads only on full fields (228 vs 247–255);
+  - it ties on random halves;
+  - it is worse on quarter (−28 … −31) and weak fields (−40 … −70); those
+    intervals exclude 0.
+- **Deployed-like joint refit** of the 15 anchor boards:
+  - DE leads on the full and event-only boards (+16 … +27 over the others);
+  - on a small event-only field it errs by −116 mean (RMSE 321 vs 276–288);
+  - between that field and an equally small mirror-heavy one, DE moves 98 CF
+    and the blend 4.
+- **On the anchors, field-independent calibrators cost 15–18 LOCO points:**
+  blend 240.67; DE_reference 243.21, +17.6 [+1.7, +34.8].
+- **Verdict:** keep DE shipped, but treat difficulties outside its anchors'
+  field support (EC online, EC-Final, small boards) as extrapolation.
+  Choose any replacement on a fresh confirmation set.
+
+**Defects found and fixed before the final runs.** An interim Codex review
+and my own checks found these:
+- an oscillating per-problem Newton refit (now bisection,
+  `context_fit.solve_decreasing`);
+- same-team rows crossing splits;
+- target solve times setting the survival window;
+- a reference population fit on all data.
+
+Not run: the audit's experiments 3–5. Metadata was not regenerated.
+
+**Reproduce:**
+- `./.venv/bin/python -m arch_b.context_fit`: 49 fits, 30–60 min.
+- `./.venv/bin/python -m arch_b.field_transport`: about 15 min.
+
+Both JSONs carry input and code sha256 hashes. Tests:
+- `tests/test_context_fit.py` (8) and `tests/test_field_transport.py` (7) are
+  new.
+- The full suite passes: 196 tests.
+- `.venv` lacked `pypinyin` and `openpyxl`, which 8 existing test modules
+  import. Both were installed with pip.
+
+### Hand-off: population control in progress (2026-11-04)
+
+A second Codex review asked for qualified wording and a control model.
+- **Wording (points 2–4)** is fixed in `rating_rethink_experiments.md` only:
+  - the per-team (+51 [+9, +89]) and joint (+89) estimates are reported
+    separately, as associations;
+  - the transfer gain gets a multiple-comparisons caveat;
+  - "aggregate log loss" replaces "predictions";
+  - cell and contest coverage is given for the large losses.
+- **Control (point 1), coded, not yet run.** `context_fit` gains M4 and M5:
+  - M4 estimates a prior mean per entry-type group (`GROUPS`, `entry_groups`,
+    `fit(group=...)`) with no within-team offset;
+  - M5 is M4 plus the onsite-bridge offset;
+  - 2 new tests; `tests/test_context_fit.py` passes (10).
+- **The committed `output/context_experiment.json` predates M4/M5.**
+
+Next:
+1. Run `./.venv/bin/python -m arch_b.context_fit`. It takes about 15–20 min
+   with nothing else running; on Windows set `PYTHONUTF8=1`.
+2. Compare M4 with M1_naive (linked hold-out −5.6e-4).
+   - If M4 matches, the naive gain is a population-structure effect.
+   - Then rewrite the Experiment 1 "Reading" bullet and verdict in the report,
+     and carry points 1–4 into this entry and `README.md`.
+3. Run the full suite and commit. A fresh `.venv` may need `pypinyin` and
+   `openpyxl`.

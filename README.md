@@ -11,6 +11,28 @@ define each other, so they are solved either by an alternating fixed point
 (**Architecture B**); teams recurring across contests link everything onto one
 scale.
 
+The [2026-11-04 rating rethink](rating_rethink.md) proposes a context-aware binary
+model, separate completion/timing components and member-informed team priors.
+Fresh diagnostics reproduce shipped DE calibration (225.61 nested development
+LOCO RMSE), favor binary over survival for response imputation, and identify
+stale calibration metadata hashes. The report prioritizes experiments for
+onsite/mirror separation, field-composition transfer and stricter forecasting;
+it also inventories locally cached submission logs. No production estimator or
+rating changed. Reproduce the read-only audit with
+`./.venv/bin/python -m scripts.rating_rethink_audit`.
+
+[rating_rethink_experiments.md](rating_rethink_experiments.md) reviews that
+audit and runs its experiments 0–2.
+- **Mirror context.** A mirror offset in the binary fit is mostly set by the
+  ability prior unless only onsite↔mirror bridge teams carry it. The
+  identified same-team lift is +50 … +90 and barely changes predictions
+  (`arch_b.context_fit`).
+- **Field transport.** Binary difficulties are invariant to who attempted a
+  problem. Shipped DE moves about +190 CF between strong and weak halves of
+  the same board, and loses its accuracy lead on small or weak fields
+  (`arch_b.field_transport`).
+- Nothing shipped changed.
+
 The [2026-09-05 experiment review](experiment_review.md) records the audit that
 found held-out-label leakage, incorrect rank/AUC tie handling, incomplete
 uncertainty labels, and participation-key collisions. The concrete correctness
@@ -516,14 +538,18 @@ exports in `data/`: `icpc_2025_online_1_teams.csv`,
 `icpc_2026_ec_online_round2_teams.csv`) are added by `add_pta_rosters.py`; they
 link 90% of 2025 mainland regional teams to an online result (57% by name
 alone). `arch_b.hk_field_2026` links the 2026 Hong Kong registration list
-(`data/icpc_hk_macau_regional_teams.csv`, the 10-17 export of 106 teams;
-the 10-15 snapshot `icpc_51_asia_hkmo_teams.csv` had 88) to the 2026 online
-rounds by Chinese member names (95 of 106). Round 1 is already oversubscribed
-(104 non-local teams for 95 seats), but the list is still much weaker than
-the 2024/2025 fields (gold line online #294 vs #53–66), because most strong
-schools have not registered yet. With the 2025 schools that have not
-registered yet added back, the gold line returns to #71 and the forecast is
-unchanged. Results: `output/hk_field_2026.md`.
+(`data/icpc_hk_macau_public_teams_20261028.xlsx`, the 10-28 export of 144
+teams; earlier exports of 10-26 (143), 10-23 (129), 10-17 (106) and 10-15 (88)
+stay in `data/`) to the 2026 online rounds by Chinese member names (123 of
+144). The export's "Online ranking" is the school's 2026 combined online rank,
+so the round-1 cut is by school: 136 round-1 non-local teams for 95 seats,
+cut below school #250 if it closed now. NUM-R^3 (school #128) is 60th; it is
+cut only if 36 of the 64 unregistered schools above it register by 10-30,
+and registration has nearly stopped (1 in, 1 out since 10-26), so the
+registration pace (`cut_risk`) puts that at ~0. The list is still weaker than
+the 2024/2025 fields (gold line online #198 vs #53–66). With the 2025 schools
+that have not registered yet added back, the gold line is #80–92, as strong
+schools keep sending weaker line-ups than in 2025; NUM-R^3's chances are unchanged. Results: `output/hk_field_2026.md`.
 
 ```bash
 python3 scripts/build_quota_evidence.py        # WF/host/invitational/provincial evidence + Shanghai lists
@@ -981,7 +1007,9 @@ Module self-checks:
   medal viewer), `twopl`/`twopl_region` 2PL discrimination
   prototype, `export_virtual_calc` + `virtual_calc_template.html` for the
   virtual-contest performance calculator, `dynamic_rating` time-varying team
-  ratings and month-by-month forecast test); reuses `arch_a.load` and `arch_a.elo`.
+  ratings and month-by-month forecast test, `context_fit` event/mirror context
+  terms in the binary fit, `field_transport` calibration under field changes);
+  reuses `arch_a.load` and `arch_a.elo`.
 - `data/ec_online/` — official Asia East online rankings (teams, schools),
   2022–2024 online rosters, 2022–2025 regional official standings and medals,
   and hand-encoded 2023–2026 slot rules; built by

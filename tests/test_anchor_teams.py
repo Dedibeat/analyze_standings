@@ -1,3 +1,4 @@
+import math
 import os
 import sys
 import unittest
@@ -44,6 +45,11 @@ class AnchorTest(unittest.TestCase):
         keys = [(t["s"], t["team"]) for t in teams]
         self.assertEqual(len(keys), len(set(keys)))
         self.assertGreater(len(teams), 2000)
+
+    def test_ecfinal_model_uses_online_rank_only(self):
+        data = at.og.load()
+        p = at.ecfinal_model(data, at.og.online_strengths(data["online_teams"]))
+        self.assertAlmostEqual(p(-(math.log(544) + math.log(349)) / 2), 0.138, places=3)  # NUM-R^3, as on 10-11
 
 
 if __name__ == "__main__":
