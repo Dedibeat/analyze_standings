@@ -85,6 +85,11 @@ It also reviews the worst CF anchors.
 Run `PYTHONUTF8=1 ./.venv/Scripts/python -m scripts.problem_rating_audit`
 (~3 min) → `output/problem_rating_audit.json`.
 
+A [probability-course shortlist](prob_course_candidates.md) picks five main
+problems and four backups from the probability-tagged problems in
+`data/tagged.json`: discrete probability only, each with its core trick, a
+paper version and the answer.
+
 The [2026-09-05 experiment review](experiment_review.md) records the audit that
 found held-out-label leakage, incorrect rank/AUC tie handling, incomplete
 uncertainty labels, and participation-key collisions. The concrete correctness
