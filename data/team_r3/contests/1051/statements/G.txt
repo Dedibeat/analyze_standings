@@ -1,0 +1,42 @@
+The 2022 ICPC Asia Xi’an Regional Contest
+Northwestern Polytechnical University, November 13, 2022
+
+Problem G. Perfect Word
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+512 megabytes
+
+You are given n strings and required to find the length of the longest perfect word.
+A string t is called a perfect word, if and only if every non-empty substring of t appears in the given
+strings.
+A string s is called a substring of t if and only if it can be obtained by removing several (possibly zero)
+characters from the beginning or end of t.
+
+Input
+The first line contains a single integer n (1 ≤ n ≤ 105 ).
+Each of the next n lines contains a string consisting of lowercase English letters.
+It is guaranteed that the total length of the given strings is no more than 105 .
+
+Output
+Output an integer, representing the length of the longest perfect word.
+
+Example
+standard input
+4
+a
+t
+b
+ab
+
+standard output
+2
+
+Page 7 of 14
+
+

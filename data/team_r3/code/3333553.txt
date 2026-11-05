@@ -1,0 +1,36 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define int long long
+#define ff first 
+#define ss second 
+#define all(a) (a).begin(),(a).end()
+#define rall(a) (a).rbegin(),(a).rend()
+#define print(x) cout << #x << " = "; for(auto i : x) cout << i << " "; cout << "\n";
+#define hha(x) cout << #x << " = " << x << " ";
+#define hhal(x) cout << #x << " = " << x << "\n";
+
+
+void solve() {
+    int n; cin >> n;
+    vector<pair<int, int>> a(n);
+    for(auto &x : a) cin >> x.ff >> x.ss;
+    int ans = 1;
+    int cur = a[0].second;
+    int mx = cur;
+    for(int i = 1; i < n; i++) {
+        if(a[i].first > cur) {
+            cur = max(mx, a[i].second);
+            ans++;
+        }
+        mx = max(mx, a[i].second);
+    }
+    cout << ans << '\n';
+}
+
+
+signed main() {
+    ios_base::sync_with_stdio(0);cin.tie(0);
+    int t; cin >> t; while(t--)
+    solve();
+    return 0;
+}

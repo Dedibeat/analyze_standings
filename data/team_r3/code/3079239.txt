@@ -1,0 +1,80 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+#define int long long
+#define pb push_back
+#define rep(i, a, b) for(int i = (a); i < (b); i++)
+#define repd(i, a, b) for(int i = (d); i >= (b); i--)
+#define all(x) (x).begin(), (x).end()
+#define rall(x) (x).rbegin(), (x).rend()
+#define hha(x) cout << #x << " = " << x << ' ';
+#define hhal(x) cout << #x << " = " << x << endl;
+#define print(v) cout << #v << " = " << ' '; for(auto x : v) cout << x << ' '; cout << endl;
+
+struct trie {
+    int cnt;
+    trie *child[27];
+
+    trie() {
+        cnt = 0;
+        for(int i = 0; i < 27; i++) child[i] = NULL;
+    }
+};
+
+int pre[30][30];
+
+void solve() {
+    int n, m;
+    cin >> n >> m;
+
+    vector<string> s(n), t(m);
+
+    for(auto &i : s) {
+        cin >> i;
+        i.pb('a' - 1);
+    }
+    for(auto &i : t) {
+        cin >> i;
+    }
+
+
+    trie *master = new trie();
+    
+
+    for(auto &str : s) {
+        trie *root = master;
+
+        for(int i = 0; i < str.size(); i++) {
+            int k = str[i] - 'a' + 1;
+            for(int j = 0; j < 27; j++) {
+                if(root->child[j] != NULL) {
+                    pre[k][j] += root->child[j]->cnt;
+                }
+            }
+            if(root->child[k] == NULL) root->child[k] = new trie();
+            root = root->child[k];
+            root->cnt++;
+        }
+    }
+
+    for(auto str : t) {
+        int ans = 0;
+
+        for(int i = 0; i < 26; i++) {
+            ans += pre[0][str[i] - 'a' + 1];
+            for(int j = i + 1; j < 26; j++) {
+                ans += pre[str[i] - 'a' + 1][str[j] - 'a' + 1];
+            }
+        }
+        cout << ans << "\n";
+    }
+
+    // cout << n << " " << m << "\n";
+}
+
+signed main() {
+    ios_base::sync_with_stdio(0); cin.tie(0);
+    // int t; cin >> t; while(t--)
+    solve();
+    return 0;
+}

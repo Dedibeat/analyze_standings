@@ -1,0 +1,834 @@
+The 2022 ICPC Asia Hangzhou Regional Programming Contest
+Hangzhou Normal University, December, 04, 2022
+
+Problem A. Modulo Ruins the Legend
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+1024 megabytes
+
+Grammy has a sequence of integers a1 , a2 , . . . , an . She thinks that the elements in the sequence are too
+large, so she decided to add an arithmetic progression to the sequence. Formally, she can choose two
+non-negative integers s, d, and add s + kd to ak for each k ∈ [1, n].
+Since we want to ruin the legend, please tell her the minimum sum of elements modulo m after the
+operation. Note that you should minimize the sum after taking the modulo.
+
+Input
+The first line contains two integers n, m (1 ≤ n ≤ 105 , 1 ≤ m ≤ 109 ).
+The second line contains n integers a1 , a2 , . . . , an (0 ≤ ai < m), denoting the initial sequence.
+
+Output
+Output exactly two lines.
+The first line contains one integer, denoting the minimum sum of elements modulo m.
+The second line contains two integers s, d (0 ≤ s, d < m), denoting the integers chosen by Grammy.
+If there are multiple solutions, output any.
+
+Examples
+standard input
+
+standard output
+
+6 24
+1 1 4 5 1 4
+
+1
+0 5
+
+7 29
+1 9 1 9 8 1 0
+
+0
+0 0
+
+Page 1 of 16
+
+The 2022 ICPC Asia Hangzhou Regional Programming Contest
+Hangzhou Normal University, December, 04, 2022
+
+Problem B. Useful Algorithm
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+6 seconds
+1024 megabytes
+
+Putata is learning some useful algorithm called Binary Adding these days. This algorithm allows you to
+calculate the sum of two m-bit binary integers.
+An integer x is called to be a m-bit binary integer, if and only if 0 ≤ x < 2m . The binary representation of
+m−1
+P
+m is a 0-indexed sequence v of length m, where ∀0 ≤ i < m, vi ∈ {0, 1}, and x =
+vi 2i . It is guaranteed
+i=0
+
+that for all m-bit binary integers, each one have its unique binary representation.
+
+The Binary Adding algorithm for calculating the sum of two m-bit binary integers with binary
+m−1
+representation {ai }m−1
+i=0 , {bi }i=0 is shown below:
+Algorithm 1 BinaryAdding(a, b)
+Input: input parameters a[0, . . . , m − 1], b[0, . . . , m − 1]
+Output: output result sum[0, . . . , m], carry[0, . . . , m]
+1: carry[0] := 0
+2: for i := 0 to m − 1 do
+3:
+sum[i] := a[i] ⊕ b[i] ⊕ carry[i]
+4:
+carry[i + 1] := (a[i] ∧ b[i]) ∨ (a[i] ∧ carry[i]) ∨ (b[i] ∧ carry[i])
+denotes or operation.
+5: sum[m] := carry[m]
+6: return sum[0, . . . , m], carry[0, . . . , m]
+
+. ⊕ denotes xor operation
+. ∧ denotes and operation, ∨
+
+In order to test if Putata really mastered this algorithm, Budada is going to prepare tests for
+Putata. Before preparing his tests, Budada devised a way to calculate the difficulty of a problem.
+m−1
+Assume the problem is to calculate the sum of {ai }m−1
+i=0 , {bi }i=0 , then we define the carry set of a, b,
+S(a, b) = {x|when calling BinaryAdding(a, b), carryx = 1}. Budada has an integer sequence {wi }m
+i=1 ,
+denoting the difficulty of calculation when a carry occurred at the corresponding bit. The Carry
+Difficulty is the maximum difficulty among all bits where a carry occurred. If there’s no carry occurred,
+the Carry Difficulty is 0.
+The problem database of Budada is an integer sequence {ci }ni=1 . Each integer has a corresponding
+Numerical difficulty, which is also an integer sequence {di }ni=1 . Please notice that ci are not necessarily
+pairwise distinct, and for some ci = cj , di might not be equal to dj . A Binary Adding problem consists
+of two integers, so when Budada chooses ci and cj to set a test, the Numerical difficulty of this problem
+is di + dj .
+Budada wants to prepare the most difficult test for Putata, so he will choose two integers i, j such
+that 1 ≤ i, j ≤ n (not necessarily distinct), and use ci , cj to set a test. He wants to maximize
+the Test Difficulty, which is the product of the Carry Difficulty and Numerical difficulty of
+this test, and he asked you to tell him this production. Formally, the maximum Test Difficulty is
+max {max{max{wx |x ∈ S(ci , cj )}, 0} · (di + dj )}.
+1≤i,j≤n
+
+Budada also has q updates for his problem database, each time he will select an integer i, and modify
+ci , di . You are asked to answer the maximum Test Difficulty of q + 1 versions of the problem database.
+
+Input
+The first line contains three integers n, m, q (1 ≤ n, q ≤ 105 , 1 ≤ m ≤ 16), corresponding to the meaning
+described above.
+
+Page 2 of 16
+
+The 2022 ICPC Asia Hangzhou Regional Programming Contest
+Hangzhou Normal University, December, 04, 2022
+The second line contains m integers, the i-th integer is wi (1 ≤ wi ≤ 109 ).
+The third line contains n integers, the i-th integer is ci (0 ≤ ci < 2m ).
+The fourth line contains n integers, the i-th integer is di (1 ≤ di ≤ 109 ).
+For the following q lines, each line contains three integers x, u, v, let lastans denotes the maximum
+Test Difficulty of the last version of the problem database, and x0 = x ⊕ lastans, u0 = u ⊕ lastans,
+v 0 = v ⊕ lastans (1 ≤ x0 ≤ n, 0 ≤ u0 < 2m , 1 ≤ v 0 ≤ 109 ), this represents Budada changes cx0 to u0 ,
+and dx0 to v 0 . Here, “⊕” denotes the bitwise XOR operator. Please notice that you should use 64-bit
+integer to store x, u, v.
+
+Output
+Output q + 1 lines, denoting the maximum Test Difficulty of the q + 1 versions of the problem database.
+
+Example
+standard input
+5 3 3
+1 2 4
+0 0 1 2 7
+10 10 5 3 1
+27 24 29
+20 16 19
+13 8 9
+
+standard output
+24
+16
+8
+0
+
+Note
+The decrypted operations are:
+x0 = 3, u0 = 0, v 0 = 5.
+x0 = 4, u0 = 0, v 0 = 3.
+x0 = 5, u0 = 0, v 0 = 1.
+
+Page 3 of 16
+
+The 2022 ICPC Asia Hangzhou Regional Programming Contest
+Hangzhou Normal University, December, 04, 2022
+
+Problem C. No Bug No Game
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+1024 megabytes
+
+Putata is preparing the RPG Pro League (RPL) held by the International Computer Playing Company
+(ICPC). In this RPG game, the player will wear n items at the same time. Each item can offer the player
+several points of power. There is a magic buff in the game, which can upgrade each item such that they
+can offer several points of bonus power.
+However, the buff is limited, it can only buff at most k points of power. Formally, assume the player is
+wearing nothing initially, and then will wear all the n items one by one. The game server will scan through
+all these n items one by one, according to the permutation that the player
+P wears them. When the server is
+scanning the i-th item, which can offer pi points of power, let sum = 1≤j<i pj denoting the total points
+of power scanned before:
+• If sum + pi ≤ k, the whole item will be upgraded. The buff will offer wi,pi points of bonus power.
+• If sum ≥ k, the item won’t be upgraded. The buff will offer nothing.
+• Otherwise, only a part of the item will be upgraded. The buff will offer wi,k−sum points of bonus
+power.
+Putata is clever, he soon realized that he can adjust the permutation to wear these n items to gain
+more points of bonus power! Unfortunately, Putata doesn’t know the optimal permutation, please write
+a program to help him.
+The behavior of the magic buff performed by the game server is a bug. The game code can work all thanks
+to bugs, so it is possible that wi,a > wi,b where a < b.
+
+Input
+The first line contains two integers n and k (1 ≤ n ≤ 3 000, 0 ≤ k ≤ 3 000), denoting the number of items
+and the limit k.
+Each of the following n lines starts with an integer pi (1 ≤ pi ≤ 10), denoting the base power of the i-th
+item, followed by pi integers wi,1 , wi,2 , . . . , wi,pi (1 ≤ wi,j ≤ 105 ).
+
+Output
+Output a single line containing an integer, denoting the maximum points of total bonus power that can
+be reached. The base power is not included in the answer.
+
+Example
+standard input
+4 5
+2 1 3
+2 1 1
+2 3 1
+2 1 3
+
+standard output
+9
+
+Page 4 of 16
+
+The 2022 ICPC Asia Hangzhou Regional Programming Contest
+Hangzhou Normal University, December, 04, 2022
+
+Problem D. Money Game
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+1024 megabytes
+
+Putata and Budada are organizing a game with n players. Each player has some deposit, which is a real
+number. Player i has ai deposits in the beginning. During each round of the game, the followings happen
+in order:
+• Player 1 gives player 2 half of player 1’s deposit.
+• Player 2 gives player 3 half of player 2’s deposit.
+• ...
+• Player n − 1 gives player n half of player n − 1’s deposit.
+• Player n gives player 1 half of player n’s deposit.
+The n players played this game for exactly 20221204 rounds. Putata wonders how much deposit each player
+has after the game. Please write a program to answer his question.
+
+Input
+The first line contains an integer n (2 ≤ n ≤ 105 ), denoting the number of players.
+The second line contains n integers a1 , a2 , . . . , an (1 ≤ ai ≤ 106 ), denoting the deposit player i has in the
+beginning.
+
+Output
+Output one line with n real numbers, denoting the deposit each player has after they played this game.
+Your answer will be considered correct if its absolute or relative error does not exceed 10−6 . Formally, let
+|a−b|
+your answer be a, and the jury’s answer be b. Your answer will be considered correct if max(1,|b|)
+≤ 10−6 .
+
+Example
+standard input
+2
+4 2
+
+standard output
+4.00 2.00
+
+Note
+During one round, the deposit they have changed as follows: [4, 2] → [2, 4] → [4, 2]. Their deposit does
+not change after this round, so the answer is the same as the input.
+
+Page 5 of 16
+
+The 2022 ICPC Asia Hangzhou Regional Programming Contest
+Hangzhou Normal University, December, 04, 2022
+
+Problem E. Oscar is All You Need
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+1024 megabytes
+
+Putata has a sequence p of length n, where p is a permutation of 1, 2, . . . , n. Budada can perform the
+following operation at most 2n + 1 times:
+• Cut the sequence into three consecutive non-empty parts, and swap the first part and the
+last part. Formally, you should select two integers x, y satisfying that x > 0, y > 0,
+x + y < n, and the sequence will change from p1 , . . . , px , px+1 , . . . , pn−y , pn−y+1 , . . . , pn to
+pn−y+1 , . . . , pn , px+1 , . . . , pn−y , p1 , . . . , px .
+Budada wants to make the lexicographical order of the permutation as small as possible after no more
+than 2n + 1 operations. Please help him find the way to perform operations so that the lexicographical
+order of the permutation is as small as possible.
+A permutation is an array where each integer from 1 to s (where s is the size of permutation) occurs
+exactly once.
+A permutation a is lexicographically smaller than a permutation b if and only if the following condition
+holds:
+• Let x be the smallest integer where ay = by holds for all y ≤ x, then we have x < n and ax+1 < bx+1 .
+
+Input
+The input contains several test cases.
+The first line contains an integer T (1 ≤ T ≤ 120), denoting the number of test cases.
+For each test case, the first line contains an integer n (3 ≤ n ≤ 1000), denoting the length of the
+permutation.
+The second line contains n integers, the i-th integer is pi (1 ≤ pi ≤ n), denoting the permutation. It is
+guaranteed that p is a permutation of 1, 2, . . . , n.
+It is guaranteed that the sum of n in all test cases will not exceed 1000.
+
+Output
+For each test case, output one integer m in the first line, denoting the number of operations. You should
+guarantee that 0 ≤ m ≤ 2n + 1.
+Then output m lines, each line contains two integers x, y, denoting one operation. You should guarantee
+that 0 < x, 0 < y, x + y < n.
+Please notice that you do not have to minimize the number of operations.
+
+Example
+standard input
+2
+3
+1 3 2
+5
+4 1 2 3 5
+
+standard output
+0
+2
+2 1
+1 1
+
+Page 6 of 16
+
+The 2022 ICPC Asia Hangzhou Regional Programming Contest
+Hangzhou Normal University, December, 04, 2022
+
+Problem F. Da Mi Lao Shi Ai Kan De
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1.5 seconds
+1024 megabytes
+
+Grammy has joined n + 1 QQ groups numbered 0 ∼ n. Teacher Rice is in the group 0.
+Every day, Grammy’s friends send messages to some groups in 1 ∼ n, and Grammy will select the messages
+which Teacher Rice likes and forward them to the group 0.
+Here we define a message as a string consisting of lowercase letters, and Teacher Rice likes a message if
+and only if the string “bie” is a substring of the message.
+Now, given the messages in groups 1 ∼ n, Grammy will search messages from group 1 to group n in order,
+checking the messages in the group one by one. For each message, pick out it if Teacher Rice likes it and
+it hasn’t appeared in group 0, and forward it to group 0. Here appear means the same message has been
+forwarded to group 0 before.
+Please output all the messages that Grammy will forward to group 0 in order. For each group, if Grammy
+can’t pick out any message, output “Time to play Genshin Impact, Teacher Rice!” in one line.
+
+Input
+The first line contains a single integer n (1 ≤ n ≤ 104 ), denoting the number of QQ groups. The following
+lines describe the messages in groups 1 to n.
+For the i-th group, the first line contains an integer mi (0 ≤ mi ≤ 104 ), denoting the number of messages
+in this group. The following mi lines each line contains a non-empty string si,j representing a message.
+P
+P
+It is guaranteed that
+mi ≤ 104 ,
+|si,j | ≤ 104 and all the messages only consist of lowercase letters.
+
+Output
+Output each message in a line, denoting all the messages that Grammy will forward to group 0 in order. For
+each group, if Grammy can’t pick out any message, output “Time to play Genshin Impact, Teacher
+Rice!” in one line.
+
+Example
+standard input
+6
+1
+biebie
+1
+adwlknafdoaihfawofd
+3
+ap
+ql
+biebie
+2
+pbpbpbpbpbpbpbpb
+bbbbbbbbbbie
+0
+3
+abie
+bbie
+cbie
+
+standard output
+biebie
+Time to play Genshin Impact, Teacher Rice!
+Time to play Genshin Impact, Teacher Rice!
+bbbbbbbbbbie
+Time to play Genshin Impact, Teacher Rice!
+abie
+bbie
+cbie
+
+Page 7 of 16
+
+The 2022 ICPC Asia Hangzhou Regional Programming Contest
+Hangzhou Normal University, December, 04, 2022
+
+Problem G. Subgraph Isomorphism
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+3 seconds
+1024 megabytes
+
+Grammy wants to get the Turing Award! She decided to solve the Subgraph Isomorphism problem in
+polynomial time.
+Since the problem is indeed too hard, she begins with doing some simplifications and trying to solve the
+simplified problem first.
+Now Grammy has a connected undirected graph G with n vertices and m edges. She wants to know
+whether it is possible to find a tree T with n vertices such that all connected subgraphs of G with n
+vertices and n − 1 edges are isomorphic to T . Grammy knows the answer for sure, but she wants to give
+you a quiz.
+Two graphs G and H are isomorphic if and only if there exists a bijection between the vertex sets of G
+and H (f : V (G) → V (H)) such that any two vertices u and v of G are adjacent in G if and only if f (u)
+and f (v) are adjacent in H.
+Two vertices are adjacent if and only if they are directly connected by an edge.
+
+Input
+The input consists of multiple test cases.
+The first line contains an integer T (1 ≤ T ≤ 105 ), denoting the number of test cases.
+For each test case, the first line contains two integers n, m (1 ≤ n ≤ 105 , n − 1 ≤ m ≤ 105 ), denoting the
+number of vertices and the number of edges respectively.
+Each of the next m lines contains two integers ui , vi (1 ≤ ui , vi ≤ n, ui 6= vi ), denoting an edge (ui , vi ).
+It is guaranteed that there are no multiple edges and the graph is connected.
+It is guaranteed that the sum of n and the sum of m in all test cases will not exceed 106 .
+
+Output
+For each test case, output one line containing either “YES” or “NO”.
+
+Page 8 of 16
+
+The 2022 ICPC Asia Hangzhou Regional Programming Contest
+Hangzhou Normal University, December, 04, 2022
+
+Example
+standard input
+4
+7 6
+1 2
+2 3
+3 4
+4 5
+5 6
+3 7
+3 3
+1 2
+2 3
+3 1
+5 5
+1 2
+2 3
+3 4
+4 1
+1 5
+1 0
+
+standard output
+YES
+YES
+NO
+YES
+
+Page 9 of 16
+
+The 2022 ICPC Asia Hangzhou Regional Programming Contest
+Hangzhou Normal University, December, 04, 2022
+
+Problem H. RPG Pro League
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+1024 megabytes
+
+The International Computer Playing Company (ICPC) is recently scheduling the annual RPG Pro League
+(RPL). In the RPG game, there are three kinds of different roles: Damager, Synergier, and Buffer. A team
+consists of exactly four players. Only the following two types of teams are allowed in RPL:
+• One Damager, two Synergiers, and one Buffer.
+• Two Damagers, one Synergier, and one Buffer.
+Before the real competition, the ICPC decides to hold an exhibition game. There are n players, labeled
+by 1, 2, . . . , n. The i-th player can only play roles in set Si , and the price to invite him to participate in
+the exhibition game is pi dollars.
+You are working for the ICPC. Your job is to select which players to invite such that they can make the
+maximum number of valid teams, and the total cost is minimized. Note that a player can not join multiple
+teams.
+Unfortunately, the players may always adjust their prices. You will be given q events, in each event, the
+price of a player will be changed. Your task is to report the current minimum total cost for maximizing
+the valid teams after each event.
+
+Input
+The first line contains a single integer n (1 ≤ n ≤ 105 ), denoting the number of players.
+Each of the following n lines contains a string Si and an integer pi (1 ≤ |Si | ≤ 3, 1 ≤ pi ≤ 109 ), denoting
+the role set and the price of the i-th player. Si consists of at most three different characters in {’D’, ’S’,
+’B’}, denoting Damager, Synergier, and Buffer, respectively.
+The next line contains a single integer q (1 ≤ q ≤ 105 ), denoting the number of events.
+Each of the following q lines contains two integers xi and yi (1 ≤ xi ≤ n, 1 ≤ yi ≤ 109 ), denoting the
+price of the xi -th player is changed into yi dollars.
+
+Output
+Output q lines, the i-th (1 ≤ i ≤ q) of which contains an integer denoting the minimum total cost for
+maximizing the valid teams after the i-th event.
+
+Example
+standard input
+5
+BS 3
+D 3
+B 2
+D 4
+D 5
+2
+5 2
+1 5
+
+standard output
+10
+12
+
+Page 10 of 16
+
+The 2022 ICPC Asia Hangzhou Regional Programming Contest
+Hangzhou Normal University, December, 04, 2022
+
+Problem I. Guess Cycle Length
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+1024 megabytes
+
+This is an interactive problem.
+Grammy has a directed cyclic graph of n vertices (1 ≤ n ≤ 109 ) numbered from 1 to n. A directed cyclic
+graph is a directed graph of n vertices that form one cycle. Specifically, there are n vertices and n edges
+in the graph, and there exists a permutation p1 , p2 , . . . , pn such that there is a one-way edge from pi to
+p(i mod n)+1 .
+Initially, there is a token on a predetermined vertex.
+You can ask Grammy to move the token in the following way:
+“walk x” where 0 ≤ x ≤ 109 . In response to the query, Grammy will move the token through exactly x
+edges and tell you the position of the token after moving.
+You win if you guess the number of vertices in the hidden graph (number n) by making no more than 104
+queries.
+The vertices in the graph and the initial position of the token are fixed in advance.
+
+Interaction Protocol
+You can make no more than 104 queries. To make a query, output “walk x” (0 ≤ x ≤ 109 ) on a separate
+line, then you should read the response from standard input.
+In response to the query, the interactor will move the token through exactly x edges and output the
+position of the token after moving.
+To give your answer, print “guess n” on a separate line, where n is the size of the hidden graph
+(1 ≤ n ≤ 109 ). The output of the answer is not counted towards the limit of 104 queries.
+After that, your program should terminate.
+After printing a query, do not forget to output end of line and flush the output. To do this, use
+fflush(stdout) or cout.flush() in C++, System.out.flush() in Java, flush(output) in Pascal,
+or stdout.flush() in Python.
+It is guaranteed that the vertices in the graph and the initial position of the token are fixed in advance.
+
+Example
+standard input
+
+standard output
+walk 0
+
+3
+walk 1
+10
+walk 2
+4
+walk 3
+5
+walk 4
+3
+walk 6
+5
+guess 10
+
+Page 11 of 16
+
+The 2022 ICPC Asia Hangzhou Regional Programming Contest
+Hangzhou Normal University, December, 04, 2022
+
+Problem J. Painting
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+2 seconds
+1024 megabytes
+
+Putata likes painting very much. He is now painting on a piece of white paper, which can be regarded
+as a 2D plane. Initially, Putata drew a straight line x = W on the paper. In each of the next n steps,
+Putata will draw a segment. He will start drawing the i-th segment from (0, ai ) to (W, bi ). If his pencil
+touches any other segment drawn before, he will stop drawing at the point he touches other segments.
+After drawing a segment, Putata may think the current figure is not so beautiful, and erase the segment
+he just drew.
+In this problem, your task is to report where each segment will end at.
+
+Input
+The first line contains two integers n and W (1 ≤ n ≤ 3 × 105 , 1 ≤ W ≤ 106 ), denoting the number of
+segments and the parameter W .
+Each of the following n lines contains three integers ai , bi and ci (1 ≤ ai , bi ≤ 106 , 0 ≤ ci ≤ 1). Putata
+will erase the i-th segment if and only if ci = 0. It is guaranteed that (0, ai ) will not coincide with other
+segments.
+
+Output
+Output n lines, the k-th (1 ≤ k ≤ n) of which contains the coordinate (u1 /v1 , u2 /v2 ) where the k-th
+segment will end at. You should guarantee that gcd(u1 , v1 ) = gcd(u2 , v2 ) = 1.
+
+Example
+standard input
+4 3
+1 2 1
+2 1 1
+3 1 0
+3 2 1
+
+standard output
+(3/1,2/1)
+(3/2,3/2)
+(2/1,5/3)
+(3/1,2/1)
+
+Page 12 of 16
+
+The 2022 ICPC Asia Hangzhou Regional Programming Contest
+Hangzhou Normal University, December, 04, 2022
+
+Problem K. Master of Both
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+1024 megabytes
+
+Professor Hui-Bot is the master of string theory and advanced data structures, so he came up with an
+interesting problem. Given a sequence of n strings consisting of only lowercase English letters, how many
+inversions are there in this sequence when the strings are compared by lexicographical order?
+As the most extraordinary student of Hui-Bot, Putata and Budada mastered superb string theory and
+advanced data structure skills respectively, and they solved this problem together with ease. However,
+there are q different parallel universes, where the characters in the alphabet are not appearing in the
+original order.
+Formally, the alphabet in each universe is a string, which is a permutation of the 26 lowercase English
+letter, denoting the order each character appears.
+A string a is lexicographically smaller than a string b if and only if one of the following holds:
+• a is a prefix of b, but a 6= b;
+• in the first position where a and b differ, the string a has a letter that appears earlier in the alphabet
+than the corresponding letter in b.
+The number of inversions in a sequence a of length n is the number of ordered pairs (i, j) such that
+1 ≤ i < j ≤ n, aj < ai .
+Please help Putata and Budada in each universe to solve the problem.
+
+Input
+The first line of the input contains two integers n, q (1 ≤ n ≤ 5 × 105 , 1 ≤ q ≤ 5 × 104 ), denoting the
+length of the sequence.
+For the following n lines, the i-th line contains a string si (1 ≤ |si | ≤ 106 ). It is guaranteed that the string
+n
+P
+consists of only lowercase English letters, and
+|si | ≤ 106 .
+i=1
+
+For the following q lines, each line contains a string t, denoting the alphabet in one universe. It is
+guaranteed that t is a permutation of 26 lowercase English letters.
+
+Output
+Output q lines, denoting the answer in q universes.
+
+Example
+standard input
+5 3
+aac
+oiputata
+aaa
+suikabudada
+aba
+abcdefghijklmnopqrstuvwxyz
+qwertyuiopasdfghjklzxcvbnm
+aquickbrownfxjmpsvethlzydg
+
+standard output
+4
+3
+4
+
+Page 13 of 16
+
+The 2022 ICPC Asia Hangzhou Regional Programming Contest
+Hangzhou Normal University, December, 04, 2022
+
+Problem L. Levenshtein Distance
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+4 seconds
+1024 megabytes
+
+The Levenshtein Distance between two strings is the smallest number of simple one-letter operations
+needed to change one string to the other. The operations are:
+• Adding a letter anywhere in the string.
+• Removing a letter from anywhere in the string.
+• Changing any letter in the string to any other letter.
+You will be given a number k and two strings S and T . Your task is to find the number of non-empty
+substrings of T whose Levenshtein Distance between S is exactly i for every possible non-negative integer
+i (0 ≤ i ≤ k). Two substrings are considered different if and only if they occur in different places.
+
+Input
+The first line contains a single integer k (0 ≤ k ≤ 30), denoting the parameter k.
+The second line contains a string S (1 ≤ |S| ≤ 105 ), denoting the pattern string.
+The third line contains a string T (1 ≤ |T | ≤ 105 ), denoting the text string.
+It is guaranteed that the input strings only consist of lowercase English letters (’a’ to ’z’), uppercase
+English letters (’A’ to ’Z’), and digits (’0’ to ’9’).
+
+Output
+Output k + 1 lines, the i-th (1 ≤ i ≤ k + 1) of which contains an integer denoting the number of substrings
+of T whose Levenshtein Distance between S is exactly i − 1.
+
+Example
+standard input
+4
+aaa
+aabbaab
+
+standard output
+0
+5
+15
+7
+1
+
+Page 14 of 16
+
+The 2022 ICPC Asia Hangzhou Regional Programming Contest
+Hangzhou Normal University, December, 04, 2022
+
+Problem M. Please Save Pigeland
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+3 seconds
+1024 megabytes
+
+Some horrible disease called Mysterious Oscar is spreading in Pigeland. The Pigeland has n cities and is
+connected by n − 1 bi-directional roads. The i-th road is connecting city ui and city vi , with length wi . It
+is guaranteed that for every city it is possible to travel to any other city using these roads.
+Now, there are k distinct cities c1 , c2 , . . . , ck having the horrible disease. As the leader of the Pigeland,
+Putata and Budada are going to save the Pigeland. First they will find a city r to build up a hospital,
+without considering whether city r is infected by the disease. Then, they will use the rest of their money
+to build the only vehicle which could travel in Pigeland, the Pigpigcar. Because they are strapped for
+cash, they can only build one Pigpigcar, and once a Pigpigcar is built, some parameter d of the Pigpigcar
+is set, and could not be changed. The Pigpigcar having parameter d can only travel from one city to
+the other, where the distance between the two cities should be a multiple of d. Formally, if you want to
+travel from city u to city v, the distance of the shortest path between u, v should be p × d, where p is a
+non-negative integer, and this would cost p Pigecoins. Please notice that if you want to travel from city
+u to city v, it is not necessary to stop at every city on the path from u to v, the Pigpigcar can directly
+go from u to v, if the minimum distance between u and v is a multiple of d.
+For the following k days, Putata and Budada will take the following actions to save the Pigeland. On the
+i-th day, they will travel to city ci from city r along the shortest path between city r and city ci using
+the Pigpigcar, cure all the piggies in the city and then travel back to city r from city ci .
+Putata and Budada want you to choose the proper city r to build the hospital, and the parameter d of
+the Pigpigcar they should build, so that the Pigecoins spent during the travel is minimized. Please help
+them to find the minimum number of Pigecoins spent.
+
+Input
+The first line contains two integers n, k (1 ≤ n ≤ 5 × 105 , 1 ≤ k ≤ n), denoting the number of cities and
+the number of cities having disease.
+The second line contains k distinct integers c1 , c2 , . . . , ck (1 ≤ ci ≤ n), denoting the cities having disease.
+For the following n − 1 lines, each line contains three integers u, v, w (1 ≤ u, v ≤ n, u 6= v, 1 ≤ w ≤ 107 ),
+denoting a road connecting city u and v with length w.
+It is guaranteed that you can go from any city to any other city using these roads.
+
+Output
+Output one integer in one line, denoting the minimum number of Pigecoins spent.
+
+Example
+standard input
+5 3
+3 4 5
+1 2 2
+2 3 4
+2 5 4
+3 4 6
+
+standard output
+8
+
+Note
+In the sample, you should choose city 1 to build hospital and build a Pigpigcar with parameter 6, the
+Page 15 of 16
+
+The 2022 ICPC Asia Hangzhou Regional Programming Contest
+Hangzhou Normal University, December, 04, 2022
+distance between city 1 and city 3, 4, 5 is 6, 12, 6, so the total Pigcoins costed is 1 × 2 + 2 × 2 + 1 × 2 = 8.
+
+Page 16 of 16
+
+

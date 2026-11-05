@@ -1,0 +1,96 @@
+2022 International Collegiate Programming Contest, Jinan Site
+Qilu University of Technology (Shandong Academy of Sciences), November 27, 2022
+
+Problem G. Quick Sort
+Input ﬁle:
+Output ﬁle:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+5 seconds
+512 megabytes
+
+When Prof. Pang was young, he wrote the following code for quick sort. Please calculate how many swaps
+are performed when calling quicksort(A, 1, n). A is a given permutation with length n.
+Algorithm 2 An implementation of quick sort
+1: procedure quicksort(A, lo, hi)
+2:
+if lo ≥ 0 and hi ≥ 0 and lo < hi then
+3:
+p ← partition(A, lo, hi)
+4:
+quicksort(A, lo, p)
+5:
+quicksort(A, p + 1, hi)
+6:
+end if
+7: end procedure
+8: procedure partition(A, lo, hi)
+9:
+pivot ← A[f loor((hi + lo)/2)]
+10:
+i ← lo − 1
+11:
+j ← hi + 1
+12:
+while True do
+13:
+repeat
+14:
+i←i+1
+15:
+until A[i] ≥ pivot
+16:
+repeat
+17:
+j ←j−1
+18:
+until A[j] ≤ pivot
+19:
+if i ≥ j then
+20:
+return j
+21:
+end if
+22:
+Swap A[i] with A[j]
+23:
+end while
+24: end procedure
+
+Input
+The ﬁrst line contains one integer T (1 ≤ T ≤ 105 ), the number of test cases.
+For each test case, the ﬁrst line contains one positive integer n (1 ≤ n ≤ 5 × 105 ). The next line contains
+n integers a1 , . . . , an (1 ≤ ai ≤ n) denoting the permutation A. It is guaranteed that a1 , . . . , an form a
+permutation, i.e. ai ̸= aj for i ̸= j.
+It is guaranteed that the sum of n over all test cases is no more than 5 × 105 .
+
+Output
+For each test case, output one line containing the number of swaps performed when calling
+quicksort(A, 1, n).
+
+Page 11 of 18
+
+2022 International Collegiate Programming Contest, Jinan Site
+Qilu University of Technology (Shandong Academy of Sciences), November 27, 2022
+
+Example
+standard input
+3
+3
+3 2 1
+5
+2 4 5 3 1
+10
+7 2 4 6 1 9 10 8 5 3
+
+standard output
+1
+4
+7
+
+Page 12 of 18
+
+

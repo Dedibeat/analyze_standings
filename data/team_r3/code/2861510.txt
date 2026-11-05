@@ -1,0 +1,39 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define int long long
+#define pb push_back
+#define all(v) (v).begin(), (v).end()
+#define hha(x) cout << #x << " = " << x << " "
+#define hhal(x) cout << #x << " = " << x << endl
+#define print(v) cout << #v << " = "; for(auto x : v) cout << x << " "; cout << endl;
+#define rep(i, a, b) for(int i = (a); i < (b); i++)
+
+int gcd(int a, int b) {
+    while(b) {
+        a %= b;
+        swap(a, b);
+    }
+    return a;
+}
+
+void solve()
+{
+    int n, k; cin >> n >> k;
+    vector<pair<int, int>> v;
+    rep(i, 1, n + 1) {
+        v.pb({i, gcd(i, n)});
+    }
+    sort(all(v), [&](auto a, auto b) {
+        return a.second > b.second;
+    });
+    rep(i, 1, k + 1) {
+        cout << i << ' ';
+    }
+    cout << '\n';
+}
+signed main()
+{
+    ios::sync_with_stdio(0); cin.tie(NULL);
+    //int t; cin >> t; while(t--)
+    solve();
+}

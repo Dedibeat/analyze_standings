@@ -1,0 +1,56 @@
+#include <bits/stdc++.h>
+using namespace std;
+using bint = __int128_t;
+using ll = long long;
+#define uint unsigned long long
+#define int long long
+#define sz(a) (int)(a).size()
+#define pb push_back
+#define all(x) x.begin(), x.end()
+#define rall(x) x.rbegin(), x.rend()
+#define FOR(i, a, b) for(int i = (a); i < (b); i++)
+#define FORD(i, a, b) fosr(int i = (a); i >= (b); i++)
+#define ff first
+#define ss second 
+#define _ << ' ' <<
+#define hha(x) cout << #x << " = " << x << " "
+#define hhal(x) cout << #x << " = " << x << endl
+#define print(v) cout << #v << " = "; for(auto x : v) cout << x << " "; cout << endl;
+
+void solve() {
+    int n; cin >> n;
+    auto get = [&](int L)
+    {
+        if(L == 0) return pair<int, int>{1e18, 1};
+        int R = (n - L);
+        int a = L * (L + 1) / 2 + R;
+        int b = L;
+        int g = __gcd((uint)a, (uint)b);
+        return pair<int, int>{a / g, b / g};
+    };
+    auto check = [&](int L)
+    {
+        auto [a1, b1] = get(L - 1);
+        auto [a2, b2] = get(L);
+        return (bint)a1 * b2 >= (bint)a2 * b1;
+    };
+    int lo = 1, hi = n + 1;
+    while(lo + 1 < hi)
+    {
+        int mid = (lo + hi) / 2;
+        if(check(mid)) lo = mid;
+        else hi = mid;
+    }
+    auto [a, b] = get(lo);
+    cout << a << " " << b << "\n";
+}   
+
+signed main() {
+    ios_base::sync_with_stdio(0); cin.tie(0);
+    int t = 1;
+    cin >> t;
+    while(t--) {
+        solve();
+    }
+    return 0;
+}

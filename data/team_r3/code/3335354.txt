@@ -1,0 +1,84 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+#define pb push_back
+#define int long long
+#define ff first 
+#define ss second 
+#define all(a) (a).begin(),(a).end()
+#define rall(a) (a).rbegin(),(a).rend()
+#define print(x) cout << #x << " = "; for(auto i : x) cout << i << " "; cout << endl;
+#define hha(x) cout << #x << " = " << x << " ";
+#define hhal(x) cout << #x << " = " << x << endl;
+
+void encode() {
+    int n, m; cin >> n >> m;
+    vector<vector<int>> g(n + 1);
+    for(int i = 0; i < m; i++) {
+        int u, v; cin >> u >> v;
+        g[u].pb(v);
+        g[v].pb(u);
+    }
+    int timer = 1;
+    vector<int> res(n + 1);
+    vector<int> vis(n + 1, 0);
+    auto dfs = [&](auto &&self, int u) -> void {
+        vis[u] = 1;
+        res[u] = timer++;
+        for(auto &v : g[u]) {
+            if(vis[v] == 1) continue;
+            self(self, v);
+        }
+        timer++;
+    };
+    for(int i = 1; i <= n; i++) {
+        if(vis[i] == 0) {
+            dfs(dfs, i);
+        }
+    }
+    for(int i = 1; i <= n; i++) {
+        cout << res[i] << ' ';
+    }
+    cout << '\n';
+}   
+
+void decode() {
+    int n; cin >> n;
+    vector<int> b(n + 1); 
+    for(int i = 1; i <= n; i++) cin >> b[i];
+    //sort(b.begin() + 1, b.end());
+    vector<int> original(n * 2 + 1, 0);
+    for(int i = 1; i <= n; i++) {
+        original[b[i]] = i;
+    }
+    vector<pair<int, int>> edges;
+    stack<int> stk;
+    for(int i = 1; i <= 2 * n; i++) {
+        if(original[i] != 0) {
+            if(!stk.empty()) {
+                edges.pb({original[i], stk.top()});
+            }
+            stk.push(original[i]);
+        }
+        else {
+            stk.pop();
+        }
+    }
+    cout << edges.size() << '\n';
+    for(auto &x : edges) {
+        cout << x.first << ' ' << x.second << '\n';
+    }
+}
+
+signed main() {
+    ios_base::sync_with_stdio(0);cin.tie(0);
+    string s; cin >> s;
+    if(s == "cat") {
+        int t; cin >> t; while(t--)
+        encode();
+    }
+    else {
+        int t; cin >> t; while(t--)
+        decode();
+    }
+}

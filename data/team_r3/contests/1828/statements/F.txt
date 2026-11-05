@@ -1,0 +1,69 @@
+Subway
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+2.5 seconds
+1024 megabytes
+
+In Pigeland, the subway system is quite advanced. It consists of n sites, numbered from 1 to n, and k
+directed subway lines, numbered from 1 to k. Subway line i travels through sites xi,1 , xi,2 , · · · , xi,pi in
+order, where xi,j is the j-th site visited by line i. It takes wi,j units of time to travel from site xi,j to site
+xi,j+1 on line i.
+When multiple lines meet at the same site, passengers can transfer between lines. If a passenger is at a site
+on line x, while line y also passes through this site, he/she can spend ay × bx units of time to transfer from
+line x to line y, where ay and bx are given coefficients for lines y and x. After transferring, the passenger
+is still at the same site, but on line y.
+You start at site 1. Find the minimum time needed to reach site s for all 2 ≤ s ≤ n. In particular, you can
+start by choosing any line at site 1 with no transfer time cost. It is guaranteed that all sites are reachable
+from site 1.
+
+Input
+There is only one test case in each test file.
+The first line contains two integers n and k (2 ≤ n ≤ 2 × 105 , 1 ≤ k ≤ 2 × 105 ), indicating the number of
+sites and the number of subway lines.
+The second line contains k integers a1 , a2 , · · · , ak (1 ≤ ai ≤ 106 ).
+The third line contains k integers b1 , b2 , · · · , bk (1 ≤ bi ≤ 106 ).
+For the following k lines, the i-th line first contains an integer pi (2 ≤ pi ≤ n), indicating the number of sites
+line i travels through. Then (2pi − 1) integers xi,1 , wi,1 , xi,2 , . . . , xi,pi −1 , wi,pi −1 , xi,pi follow (1 ≤ xi,j ≤ n,
+1 ≤ wi,j ≤ 109 ), where xi,j is the j-th site visited by line i, and wi,j is the travel time from site xi,j to
+site xi,j+1 on line i. The sites traveled through by a subway line are distinct.
+It is guaranteed that
+
+k
+P
+
+(pi − 1) ≤ 2 × 105 .
+
+i=1
+
+Output
+Output one line containing (n − 1) integers d2 , d3 , · · · , dn separated by a space, where di is the minimum
+time cost from site 1 to site i.
+
+Examples
+standard input
+6 3
+1 5 1
+5 5 1
+3 1 2 2 3 3
+3 5 1 2 1 4
+3 3 4 5 4 6
+6 3
+1 5 1
+5 5 1
+5 1 2 2 100 3 100 6 1 4
+5 1 100 2 4 3 100 5 1 4
+2 3 1 5
+
+standard output
+2 5 21 14 18
+
+2 31 43 37 136
+
+Page 1 of 1
+
+

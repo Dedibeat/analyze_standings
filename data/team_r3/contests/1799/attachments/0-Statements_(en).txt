@@ -1,0 +1,806 @@
+The 2024 ICPC Asia EC Regionals Online Contest (II)
+pintia.cn, September, 21, 2024
+
+Problem A. Gambling on Choosing Regionals
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+256 megabytes
+
+"Participate in large regionals if you want to win gold medals; participate in small regionals if you want
+to get the qualify to WF..."
+There will be n teams participating in the 2024 ICPC Regional Contests numbered from 1 to n. Each
+team can be described by a positive integer represents its comprehensive strength and a string represents
+the abbreviation of the university it belongs to. In this problem, we guarantee that the abbreviation of
+each university is unique and the comprehensive strengths of the teams are pairwise distinct. We also
+assume that the stronger team will always be ranked ahead of the weaker team in any contest.
+This year, k regional contests will be held. For the i-th regional contest, every university can select no
+more than ci teams to join the contest. Meanwhile, each team can select no more than 2 regional contests
+to participate in.
+Now, you are asked to calculate the smallest possible rank for each team in the worst case, if they choose
+the regionals optimally. Note that when a team registers, it does not know the registration strategy of other
+teams, even if they are from the same university (but the total number of teams in the same university
+for the i-th regional contest is still limited by the ci , and we always assume that the team currently under
+consideration has priority to register).
+Please refer to the samples to understand the problem better.
+
+Input
+The first line contains two integers n, k (1 ≤ n, k ≤ 105 ), representing the number of teams and the
+number of regional contests.
+The second line contains k integers c1 , · · · , ck (1 ≤ ck ≤ 109 ). Where ci indicates the limit on the number
+of teams from every university in the i-th regional contest.
+For the following n lines, the i-th line indicates the information of the team i. the i-th line contains an
+integer wi (1 ≤ wi ≤ 109 ) and a string Si (1 ≤ |Si | ≤ 10) consisting of uppercase letters, representing the
+comprehensive strength and the abbreviation of the corresponding university of the team i.
+
+Output
+Output n lines.
+For the i-th line, print a single integer representing the smallest possible rank for the team i in the worst
+case, if they choose the regionals optimally.
+
+Page 1 of 16
+
+The 2024 ICPC Asia EC Regionals Online Contest (II)
+pintia.cn, September, 21, 2024
+
+Examples
+standard input
+
+standard output
+
+5 3
+1 2 3
+100 THU
+110 PKU
+95 PKU
+105 THU
+115 PKU
+
+2
+1
+2
+2
+1
+
+5 2
+2 3
+100 THU
+110 PKU
+95 PKU
+105 THU
+115 PKU
+
+4
+2
+4
+3
+1
+
+Page 2 of 16
+
+The 2024 ICPC Asia EC Regionals Online Contest (II)
+pintia.cn, September, 21, 2024
+
+Problem B. Mountain Booking
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+6 seconds
+512 megabytes
+
+Byte Mountain is a beautiful tourist attraction in Byteland. There are n areas on the Byte Mountain,
+labeled by 1, 2, . . . , n, connected by n − 1 undirected roads. There is exactly one path between each pair
+of different areas. In other words, the map of the mountain is a tree with n nodes.
+Assume today is day 0. In each of the next m days, the map of the mountain will be changed a little.
+Formally, in the early morning of day i (1 ≤ i ≤ m), the ki -th road will be closed forever, and another
+new road will be built, but the map of the mountain will always be a tree.
+You are given the road construction plans for all the next m days, together with bookings of p tourists.
+The i-th tourist will visit the bi -th area in the afternoon of day ai , and will leave the mountain that night.
+You are now wondering about some interesting metrics.
+Note that each road is weighted. Let f (u, v) be the maximum value of weights among all the roads on the
+unique single path from u to v (u 6= v). You will be given q queries. In the i-th query, you will be given
+two integers ci and di . You are required to calculate the following metric of the di -th area on the ci -th
+day:
+X
+
+f (bj , di )
+
+1≤j≤p, aj =ci , bj 6=di
+
+Input
+The first line of the input contains four integers n, m, p and q (2 ≤ n ≤ 105 , 1 ≤ m, p, q ≤ 2 × 105 ),
+denoting the number of areas, the number of incoming days, the number of tourists and the number of
+queries, respectively.
+Each of the next n − 1 lines contains three integers ui , vi and wi (1 ≤ ui , vi ≤ n, ui 6= vi , 1 ≤ wi ≤ 109 ),
+denoting a two-way road between the ui -th area and the vi -th area, whose weight is wi . The i-th road is
+labeled by i (1 ≤ i < n). These n − 1 roads describe the map of the mountain at day 0.
+Each of the next m lines contains four integers ki , ui , vi and wi (1 ≤ ki ≤ n − 2 + i, 1 ≤ ui , vi ≤ n, ui 6= vi ,
+1 ≤ wi ≤ 109 ), denoting that at day i the road ki will be closed forever, and the new road labeled by
+n − 1 + i will be built between the ui -th area and the vi -th area, whose weight is wi . It is guaranteed that
+the map of the mountain will always be a tree, and no road will be closed more than once.
+Each of the next p lines contains two integers ai and bi (1 ≤ ai ≤ m, 1 ≤ bi ≤ n), describing a tourist’s
+booking.
+Each of the next q lines contains two integers ci and di (1 ≤ ci ≤ m, 1 ≤ di ≤ n), describing a query.
+
+Output
+For each query, print a single line containing an integer, denoting the answer.
+
+Page 3 of 16
+
+The 2024 ICPC Asia EC Regionals Online Contest (II)
+pintia.cn, September, 21, 2024
+
+Example
+standard input
+5 3 6 6
+1 2 9
+1 3 4
+1 4 6
+4 5 2
+3 3 5 3
+2 1 5 5
+5 3 4 8
+1 3
+2 1
+3 3
+2 4
+1 5
+2 4
+1 1
+1 3
+2 5
+2 3
+3 1
+3 3
+
+standard output
+8
+3
+9
+11
+8
+0
+
+Page 4 of 16
+
+The 2024 ICPC Asia EC Regionals Online Contest (II)
+pintia.cn, September, 21, 2024
+
+Problem C. Prefix of Suffixes
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+128 megabytes
+
+Ms. Wozzie has a variable-length array S. Initially S is empty, and the array will be manipulated N times,
+each time adding a number to the end of S.
+She wants to check the current state of the array when she adds the i-th number P
+Si , soP
+she will give you
+i −1
+a pair of Ai , Bi at the same time, and wants you to output the current value of ni=1 i+z
+Aj × B i .
+j=i
+Define zi as the longest common prefix of [Si , . . . , Sn ] and [S1 , . . . , Sn ] where n is the current length.
+Recall that the longest common prefix of [a1 , . . . , an ] and [b1 , . . . , bm ] is the largest L satisfying:
+ai = bi , ∀1 ≤ i ≤ L.
+To make sure you answered her question in real time, she will encrypt the number Si she is currently
+adding backward through your last answer, the exact decryption is given in the input format.
+
+Input
+The first line contains an integer N (2 ≤ N ≤ 3 × 105 ) indicating the number of operations.
+For the next N lines, the i-th line contains three integers Si0 , Ai , Bi (0 ≤ Si0 < N, 1 ≤ Ai , Bi ≤ 1000)
+representing the encrypted Si and Ai , Bi .
+For decryption: the value of Si is (Si0 + lastans) mod N , where lastans denotes the last output answer.
+In particular, initially, lastans = 0.
+
+Output
+Output N lines, with the ith line representing the answer after the i-th operations on S.
+
+Example
+standard input
+3
+0 1 2
+1 2 3
+2 3 4
+
+standard output
+2
+12
+18
+
+Page 5 of 16
+
+The 2024 ICPC Asia EC Regionals Online Contest (II)
+pintia.cn, September, 21, 2024
+
+Problem D. Query on Tree
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+6 seconds
+512 megabytes
+
+Given a rooted tree with n nodes, where the root is node r = 1, each node has an associated weight ai .
+The distance between two nodes in the tree is defined as the number of edges on the shortest path between
+them.
+The subtree of a node x is defined as the set of all nodes y such that the shortest path from y to the root
+r passes through x.
+You need to support the following three types of operations:
+1. Given x, k, and v, for each node y at a distance exactly k from x, update ay to ay + v, then output
+the maximum of ay .
+2. Given x, k, and v, for each node y at a distance of at most k from x, update ay to ay + v, then output
+the maximum of ay .
+3. Given x and v, update ay to ay + v for every node y in the subtree of x, then output the maximum of
+ay .
+
+Input
+The first line contains an integer T (1 ≤ T ≤ 104 ), representing the number of test cases.
+For each test case, the first line contains two integers n and q (1 ≤ n, q ≤ 2 × 105 ), representing the
+number of nodes in the tree and the number of operations.
+The second line contains n integers a1 , a2 , · · · , an (−1014 ≤ ai ≤ 1014 ), representing the weight of each
+node.
+The next n − 1 lines each contain two integers x and y (1 ≤ x, y ≤ n, x 6= y), representing an edge in the
+tree.
+The next q lines describe the operations. Each line contains three or four integers o, x, v or o, x, k, v
+(o ∈ {1, 2, 3}, 1 ≤ x ≤ n, 0 ≤ k < 10, −109 ≤ v ≤ 109 ), representing the operation type and its
+parameters.
+It is guaranteed that the sum of n over all test cases does not exceed 5 × 105 , and the sum of q over all
+test cases does not exceed 2 × 105 .
+
+Output
+For each test case, output q lines, each containing an integer representing the result of the corresponding
+operation. If no valid node y exists, output GG.
+
+Page 6 of 16
+
+The 2024 ICPC Asia EC Regionals Online Contest (II)
+pintia.cn, September, 21, 2024
+
+Example
+standard input
+1
+5 5
+1 2 1 3 2
+1 2
+2 3
+2 4
+4 5
+2 2 1 0
+1 2 1 3
+3 4 -5
+2 5 2 3
+3 2 -1
+
+standard output
+3
+6
+1
+5
+4
+
+Note
+The initial node weights are a = [1, 2, 1, 3, 2].
+After the 1st operation, the weights remain a = [1, 2, 1, 3, 2].
+After the 2nd operation, the weights become a = [4, 2, 4, 6, 2].
+After the 3rd operation, the weights become a = [4, 2, 4, 1, −3].
+After the 4th operation, the weights become a = [4, 5, 4, 4, 0].
+After the 5th operation, the weights become a = [4, 4, 3, 3, −1].
+
+Page 7 of 16
+
+The 2024 ICPC Asia EC Regionals Online Contest (II)
+pintia.cn, September, 21, 2024
+
+Problem E. Escape
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+2 seconds
+256 megabytes
+
+Sneaker wakes up in a vast maze, and now he wants to escape from it.
+Through the map found in every room of the maze, Sneaker learns the structure of the maze. The maze
+consists of n rooms, with Sneaker starting in room 1, and the exit is in room n. Additionally, there are
+m two-way passages in the maze, each connecting two different rooms, and the two directions of each
+passage are isolated from each other.
+It is guaranteed that no two different passages connect the same pair of rooms, and there is no passage
+that connects a room to itself.
+Moreover, it is guaranteed that any two rooms can be reached from each other through a series of passages.
+Sneaker also discovers that there are k slayer robots in the maze. The i-th slayer robot initially stays in
+room si . Obviously, Sneaker does not want and cannot encounter these slayer robots.
+If Sneaker starts moving, each slayer robot will move simultaneously. Specifically, Sneaker will choose a
+passage connected to the room he is currently in and move to the room on the other side of the passage.
+At the same time, each slayer robot will randomly choose a passage connected to the room it is in and
+move to the room on the other side of the passage. Every slayer robot will enter and exit the passage at
+the same time as Sneaker.
+All slayer robots will record the passages they pass through. If a slayer robot travels through a passage
+that is the same as the last recorded passage, it can choose to erase both occurrences of this passage from
+its record. In other words, the slayer robot can choose to undo a record.
+For example, if a slayer robot currently has a record of passages (1, 2), (2, 7), (7, 3) and is now in room 3, it
+can choose to move through a new passage, say (3, 6), and its record will become (1, 2), (2, 7), (7, 3), (3, 6),
+with the robot ending up in room 6. Alternatively, it can move through passage (3, 7) to return to room
+7, and its record will become (1, 2), (2, 7).
+Furthermore, if the slayer robot then chooses to move through a passage back to room 2, its record will
+become (1, 2). However, if it moves from room 3 directly to room 2, its record cannot become (1, 2);
+instead, it will become (1, 2), (2, 7), (7, 3), (3, 2).
+Additionally, all slayer robots share a same self-destruct parameter d. If a slayer robot arrives in a room
+and finds that its record of passages exceeds d, it will immediately self-destruct. If Sneaker enters a room
+and finds that a slayer robot is in the process of self-destructing or has already self-destructed, it is not
+considered an encounter with the robot.
+Now, Sneaker wants to plan a route with the minimum number of passages and ensure that he will not
+encounter any slayer robot. Can you help him?
+Note: If Sneaker is moving from room x to room y through a passage, and a slayer robot is moving in
+the opposite direction, from room y to room x through the same passage, Sneaker will not encounter
+the slayer robot because the two directions of the passage are isolated from each other. The sneaker only
+knows the initial position of each slayer robot, but does not know their positions at every moment. If
+both a slayer robot and Sneaker arrive at room n at the same time, then Sneaker is considered to have
+encountered the slayer robot and cannot escape from the maze.
+
+Input
+The first line contains an integer T (1 ≤ T ≤ 105 ), representing the number of test cases.
+For each test case, the first line contains three integers n, m, and d (2 ≤ n ≤ 2 × 105 ,
+n − 1 ≤ m ≤ min{5 × 105 , n(n−1)
+}, 1 ≤ d < n), which represent the number of rooms in the maze,
+2
+Page 8 of 16
+
+The 2024 ICPC Asia EC Regionals Online Contest (II)
+pintia.cn, September, 21, 2024
+the number of passages, and the self-destruct parameter, respectively.
+The next m lines each contain two integers xi and yi (1 ≤ xi < yi ≤ n), indicating that the i-th passage
+connects room xi and room yi .
+It is guaranteed that for any i 6= j, xi 6= xj or yi 6= yj .
+It is guaranteed that any two rooms can be reached from each other through a series of passages.
+The (m + 2)-th line contains several integers. The first integer k (0 ≤ k ≤ n − 2) represents the number
+of slayer robots, followed by k integers s1 , s2 , . . . , sk (2 ≤ si < n) which represent the initial room where
+each slayer robot is.
+It is guaranteed that the sum of n over all test cases does not exceed 5 × 105 , and the sum of m over all
+test cases does not exceed 2 × 106 .
+
+Output
+For each test case, if there exists a valid route, output a single integer p in the first line, representing the
+minimum number of passages in the valid route.
+In the second line, output p + 1 integers z0 = 1, z1 , . . . , zp = n, representing the sequence of rooms that
+the route passes through.
+If no valid route exists, output a single integer −1.
+
+Example
+standard input
+2
+7 8 2
+1 2
+2 3
+3 7
+2 5
+5 6
+3 6
+1 4
+4 5
+1 4
+7 8 2
+1 2
+2 3
+3 7
+2 5
+5 6
+3 6
+1 4
+4 5
+1 5
+
+standard output
+3
+1 2 3 7
+-1
+
+Page 9 of 16
+
+The 2024 ICPC Asia EC Regionals Online Contest (II)
+pintia.cn, September, 21, 2024
+
+Problem F. Tourist
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+256 megabytes
+
+On the Codeforces platform, each user has a rating to measure his level. In addition, each user will also
+have a title based on his rating. Recently, because user Tourist’s rating exceeded 4000 points, Codeforces
+administrators decided to provide a new title, “Tourist”, to commemorate this feat.
+You also want to get this title, because it’s cool to be called a “Tourist”! But your current rating is only
+1500 points, which is not enough to get this honor. So, you let the GPT predict your rating changes in
+the next n contests. Specifically, suppose your rating is b points before the i-th contest, then after the
+i-th contest, the GPT predicts that your rating will become b + ci points. You want to know after which
+of those n contests you will get the title of “Tourist” for the first time, or there is no such contest.
+Note that the rating may become negative during this process, and the “Tourist” title will be awarded to
+users with a rating of at least 4000 points.
+
+Input
+The first line contains a single integer n (1 ≤ n ≤ 105 ), representing the number of contests in the future.
+The second line contains n integers c1 , c2 , . . . , cn (|ci | ≤ 109 ). Where ci indicates the change in rating after
+the i-th contest.
+
+Output
+Output a single integer representing the index of the contest after which you will get the title of “Tourist”
+for the first time. If such a contest does not exist, output ‘-1‘.
+
+Examples
+standard input
+5
+1000 1000 1000 -5000 1000
+5
+20 -100 10 -150 5
+
+standard output
+3
+-1
+
+Page 10 of 16
+
+The 2024 ICPC Asia EC Regionals Online Contest (II)
+pintia.cn, September, 21, 2024
+
+Problem G. Game
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+256 megabytes
+
+Alice and Bob are playing a game. Initially, Alice has x chips, and Bob has y chips.
+The game proceeds in several rounds. In each round, Alice wins with a probability of p0 , Bob wins with
+a probability of p1 , and there is a probability of 1 − p0 − p1 for a draw.
+If there is a draw, the game immediately moves to the next round. Otherwise, if the number of the winner’s
+chips is not smaller than the number of the loser’s chips, the winner wins the entire game, and the game
+ends; otherwise, the loser loses an amount of chips equal to the winner’s current chips, and the game
+moves to the next round.
+Note that after each round of the game, no one’s chips will increase.
+You are asked to find the probability that Alice will ultimately win the entire game.
+
+Input
+The first line contains an integer T (1 ≤ T ≤ 105 ), representing the number of test cases.
+For each test case, the first line contains two integers x and y (1 ≤ x, y ≤ 109 ), representing the initial
+number of chips Alice and Bob have, respectively.
+The second line contains three non-negative integers a0 , a1 , and b (1 ≤ a0 + a1 ≤ b < 998244353),
+representing p0 = ab0 , p1 = ab1 .
+
+Output
+For each test case, output one line containing an integer representing the probability that Alice will win
+the entire game, modulo 998244353.
+
+Example
+standard input
+3
+1 1
+2 2 6
+1 3
+2 3 6
+3 4
+7 3 15
+
+standard output
+499122177
+910398850
+220911476
+
+Note
+For the first test case, since both players have the same number of chips and the same probability of
+winning a round, the probability of either Alice or Bob winning the entire game is 12 .
+For the second test case, Alice must win three rounds before Bob wins a single round to win the entire
+game. If a round does not end in a draw, Alice wins with a probability of 52 , so Alice’s final winning
+3
+8
+probability is 25 = 125
+.
+
+Page 11 of 16
+
+The 2024 ICPC Asia EC Regionals Online Contest (II)
+pintia.cn, September, 21, 2024
+
+Problem H. Points Selection
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+3 seconds
+512 megabytes
+
+There are n points p1 , p2 , . . . , pn on the 2D plane. The i-th point pi is located at (xi , yi ) with weight wi .
+Consider a query with parameters (a, b, c), let P
+S(a, b) = {pi |xi ≤ a ∧ yi ≤ b}. The query denotes “Is it
+possible to select a subset T from S such that ( pi ∈T wi ) mod n = c? ” (T ⊆ S)
+Let query(a, b, c) = True/False be the answer to the query with parameters (a, b, c). You are required to
+answer all possible queries. Instead of printing O(n3 ) lines, you only need to compute the following value:
+n X
+n n−1
+X
+X
+ans = (
+a · b · c · [query(a, b, c) = True]) mod 264
+a=1 b=1 c=1
+
+Input
+The first line of the input contains a single integer n (2 ≤ n ≤ 5 × 105 ), denoting the number of points.
+In the next n lines, the i-th line contains three integers xi , yi and wi (1 ≤ xi , yi , wi ≤ n), describing the
+i-th point. Note that two points may share the same location.
+It is guaranteed that all the values of xi , yi and wi are chosen uniformly at random from integers in their
+corresponding ranges. The randomness condition does not apply to the sample test case, but your solution
+must pass the sample as well.
+
+Output
+Print a single line containing a single integer, denoting the value of ans.
+
+Examples
+standard input
+
+standard output
+
+3
+1 2 2
+2 3 1
+3 1 3
+
+75
+
+5
+1 1 4
+5 1 4
+2 3 3
+1 4 1
+2 5 2
+
+1935
+
+Page 12 of 16
+
+The 2024 ICPC Asia EC Regionals Online Contest (II)
+pintia.cn, September, 21, 2024
+
+Problem I. Strange Binary
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+256 megabytes
+
+A normal binary decomposition can be represented as n = a31 a30 · · · a0 , where ai ∈ {0, 1}.
+Now, there is a strange binary decomposition, still represented as n = a31 a30 · · · a0 , but it needs to satisfy:
+1. For i = 0, 1, · · · , 31, ai ∈ {−1, 0, 1}.
+2. For i = 0, 1, · · · , 30, ai and ai+1 cannot both be 0, i.e., a2i + a2i+1 6= 0.
+3.
+
+31
+X
+
+ai 2i = n
+
+i=0
+
+Given a non-negative integer n, find the above binary decomposition of n, or determine that it cannot be
+decomposed.
+
+Input
+The first line contains an integer T (1 ≤ T ≤ 104 ), representing the number of test cases.
+For each test case, there is one line containing a non-negative integer n (0 ≤ n < 230 ), representing the
+number to be decomposed.
+
+Output
+For each test case, output a string YES if n can be decomposed, or NO if n cannot be decomposed.
+If the first line is YES, then output 32 integers a0 , a1 , . . . , a31 , divided into 4 lines with 8 integers on each
+line.
+
+Example
+standard input
+3
+0
+3
+5
+
+standard output
+NO
+YES
+1 -1 -1 -1 -1 -1 -1 -1
+-1 -1 -1 -1 -1 -1 -1 -1
+-1 -1 -1 -1 -1 -1 -1 -1
+-1 -1 -1 -1 -1 -1 -1 1
+YES
+-1 1 -1 -1 -1 -1 -1 -1
+-1 -1 -1 -1 -1 -1 -1 -1
+-1 -1 -1 -1 -1 -1 -1 -1
+-1 -1 -1 -1 -1 -1 -1 1
+
+Page 13 of 16
+
+The 2024 ICPC Asia EC Regionals Online Contest (II)
+pintia.cn, September, 21, 2024
+
+Problem J. Stacking of Goods
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+128 megabytes
+
+You are a grocery store owner, and there are n goods in your store. Each good i has an associated weight
+wi , initial volume vi , and compression coefficient ci .
+You stack all the goods into one pile to keep the store tidy. Because goods can be compressed, assuming
+that the sum of the weights of the items above the goods i is W (Not including itself), then after stacking,
+the actual volume of the goods i will become vi − ci × W .
+The space in your store is really limited, so you want to know the minimum possible value of the sum of
+the actual volumes of the items.
+
+Input
+The first line contains a single integer n (1 ≤ n ≤ 105 ), representing the number of goods.
+For the following n lines, each line contains three integers wi , vi , ci (1 ≤ wi ≤ 105 , 1 ≤ vi ≤ 1012 , 0 ≤ ci < Pviwi ),
+representing the weight, volume, and compression coefficient of the i-th good.
+It’s guaranteed that the actual volume of each good will never be compressed into a negative number or
+zero.
+
+Output
+A single integer represents the answer.
+
+Example
+standard input
+3
+1 8 1
+2 9 2
+3 10 2
+
+standard output
+16
+
+Note
+A possible optimal solution is that the order of goods in the pile from bottom to top is 1, 2, 3. The actual
+volume of good 1 is 8 − 1 × (2 + 3) = 3; the actual volume of good 2 is 9 − 2 × 3 = 3; and the actual
+volume of good 3 is 10 since there are no other goods above it.
+
+Page 14 of 16
+
+The 2024 ICPC Asia EC Regionals Online Contest (II)
+pintia.cn, September, 21, 2024
+
+Problem K. Match
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+256 megabytes
+
+Given two sequences a and b of length n, a bipartite graph is generated in the following manner:
+The nodes of the bipartite graph are divided into two parts: the left side and the right side. There are n
+nodes on both sides. An edge exists between the i-th node on the left side and the j-th node on the right
+side if and only if ai ⊕ bj ≥ k, where ⊕ denotes the bitwise XOR operator.
+For each x in the range [1, n], output the number of matchings of size x in the bipartite graph, with the
+result modulo 998244353.
+
+Input
+The first line contains two non-negative integers n, k,(1 ≤ n ≤ 200, 0 ≤ k < 260 ).
+The second line contains n non-negative integers, representing the sequence a,(0 ≤ ai < 260 ).
+The third line contains n non-negative integers, representing the sequence b,(0 ≤ bi < 260 ).
+
+Output
+Output n non-negative integers, where the i-th integer represents the number of matchings of size i in the
+graph, with the result taken modulo 998244353.
+
+Example
+standard input
+9 5
+1 7 2 8 4 9 2 5 10
+1 3 2 4 5 8 8 8 9
+
+standard output
+51
+1034
+10768
+62195
+200965
+348924
+294444
+97344
+7200
+
+Page 15 of 16
+
+The 2024 ICPC Asia EC Regionals Online Contest (II)
+pintia.cn, September, 21, 2024
+
+Problem L. 502 Bad Gateway
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+2 seconds
+256 megabytes
+
+Welcome to the Internet Connection Practice Competition (ICPC) this year! In the competition, you and
+your teammates will fight against the Obstacle Maker System (OMS) to connect to the server successfully!
+Be careful with every refresh operation, as the system may assign you unknown obstacles.
+To simplify the problem, we model the competition process into the following form:
+Each team has a timer during the competition, and the goal is to get the remaining time to 0 as quickly as
+possible. At the beginning of the 0-th second, the OMS will uniformly and randomly generate an integer
+t0 in [1, T ] and initialize the remaining time of your timer to t0 seconds. Next, at the end of each second
+(starting with the 0-th second), the following events occur in order:
+• The remaining time of the timer will be decreased by 1. If the remaining time of the timer is zero at
+this time, the number of seconds from the start of the competition to this moment is your penalty.
+• Otherwise, you can do nothing after this or use the refresh operation on OMS once. If you choose
+to refresh your timer, OMS will uniformly and randomly generate a new integer t0 in [1, T ] and set
+the remaining time of your timer to t0 .
+Your goal is to minimize your penalty. Please calculate the expected penalty using the optimal strategy.
+During the contest, you always know the remaining time of the timer, and the value of T .
+
+Input
+The first line contains a single integer n (1 ≤ n ≤ 106 ), representing the number of test cases.
+For the following n lines, each line contains a single integer Ti (1 ≤ Ti ≤ 109 ), representing the interval
+for generating random numbers is [1, Ti ] for the i-th test case.
+
+Output
+For each test case, output a single line with two positive integers xi , yi where gcd(xi , yi ) = 1, representing
+the expected penalty using the optimal strategy is xi /yi . It can be proved that the answer can always be
+described as a fraction.
+
+Example
+standard input
+3
+1
+2
+3
+
+standard output
+1 1
+3 2
+2 1
+
+Page 16 of 16
+
+

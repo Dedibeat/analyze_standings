@@ -1,0 +1,58 @@
+The 2022 ICPC Asia Xi’an Regional Contest
+Northwestern Polytechnical University, November 13, 2022
+
+Problem I. Square Grid
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+4 seconds
+512 megabytes
+
+Given a square grid, its lattice points labeled from (0, 0) to (n, n), and a number t.
+You need to answer q queries in this format: given A = (x0 , y0 ) and B = (x1 , y1 ), how many ways are
+there to move from A to B in exactly t steps so that in each step you move from a lattice point to one of
+its neighbors (up, down, left, right). Calculate the answer modulo 998 244 353.
+
+Input
+The first line contains three integers n (1 ≤ n ≤ 105 ), t (1 ≤ t ≤ 109 ) and q (1 ≤ q ≤ 3 × 105 ).
+Each of the following q lines contains four integers x0 , y0 , x1 and y1 (0 ≤ x0 , y0 , x1 , y1 ≤ n), representing
+a query.
+
+Output
+For each query, output a line containing one integer, representing the answer to the query modulo
+998 244 353.
+
+Examples
+standard input
+
+standard output
+
+2 5 3
+0 0 1 2
+1 1 2 1
+0 0 2 2
+
+30
+64
+0
+
+5 20 5
+0 0 5 5
+1 1 4 4
+2 2 3 3
+2 3 2 3
+1 2 5 2
+
+615136704
+443203969
+899931333
+464755094
+679729107
+
+Page 10 of 14
+
+

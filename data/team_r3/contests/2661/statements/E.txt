@@ -1,0 +1,97 @@
+Doo Doo Doo
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+2 seconds
+1024 megabytes
+
+Little Ika: Doo Doo Doo ∼.
+Hyacinthia wants to go to the center of the "Cloud End Ruins"Eye of Dawn to search for loot, but there are
+n walls blocking her path. The i-th wall is a circle centered at the origin (0, 0) with a radius
+of ri . There are
+
+
+2π
+ki doors on the wall, and the coordinates of the j-th door are given by ri · cos M · pi,j , ri · sin 2π
+M · pi,j .
+The thickness of the wall and the width of the doors are negligible, and Hyacinthia cannot fly over the
+walls.
+Hyacinthia wants to ask you m times. Each time she will tell you her starting point, and you need to
+answer what the shortest distance to the center is. The starting point is guaranteed to be on the inner
+side of a wall and right next to the wall surface.
+
+Input
+The first line contains two integers n, m (2 ≤ n ≤ 2 · 105 , 1 ≤ m ≤ 2 · 105 ), representing the number of
+walls and the number of queries.
+The next n lines describe each wall. Each line starts with two integers ri , ki (1 ≤ ri ≤ 108 , 0 ≤ ki ≤ 2·105 ),
+representing that the i-th wall is a circle with radius ri and has ki doors. Following
+of the j-th door
+this are ki integers pi,1 , pi,2 , . . . , pi,k
+i , representing that the coordinates
+2π
+8.
+are
+ri · cos 2π
+·
+p
+·
+p
+,
+r
+·
+sin
+,
+where
+M
+=
+3.6
+·
+10
+It
+is
+guaranteed that
+i,j
+i,j P
+i
+M
+M
+n
+5
+0 ≤ pi,1 < pi,2 < · · · < pi,ki < M , kn = 0, i=1 ki ≤ 2 · 10 , and 1 ≤ r1 < r2 < · · · < rn ≤ 108 .
+The next m lines each contain two integers
+ ti , qi , indicating
+ that if Hyacinthia starts from the inside of
+2π
+2π
+the ti -th wall at the point rti · cos M · qi , rti · sin M · qi , what is the shortest distance to the origin
+(if it is not reachable, please output ”-1”).
+
+Output
+For each query, output a single line with a floating-point number representing the answer. If it is not
+reachable, output ”-1”. An answer is considered correct if the relative or absolute error does not exceed
+10−6 compared to the standard answer.
+
+Example
+standard input
+3 4
+2 2 0 90000000
+5 0
+8 0
+1 114514
+2 0
+2 180000000
+3 233
+
+standard output
+2.0000000000
+5.0000000000
+7.4056093871
+-1
+
+Page 1 of 1
+
+

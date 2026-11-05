@@ -1,0 +1,142 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define int long long
+#define F first 
+#define S second 
+#define all(x) (x).begin(), (x).end()
+#define log(x) cout << #x << ": " << x << " ";
+#define logl(x) cout << #x << ": " << x << endl;
+#define print(v) cout << #v << ": "; \
+            for(auto x : v) cout << x << " "; \
+            cout << endl;
+template<typename T, typename U>
+ostream &operator<<(ostream &os, const pair<T, U> &p)
+{
+    return os << "(" << p.F << "," << p.S << ")";
+}
+
+using ll = long long;
+const ll NTT_MOD = 998244353, mod = NTT_MOD, NTT_G = 3;
+ll ntt_pow(ll a, ll e) {
+    ll r = 1;
+    for (a %= NTT_MOD; e; e >>= 1, a = a * a % NTT_MOD)
+        if (e & 1) r = r * a % NTT_MOD;
+    return r;
+}
+
+void ntt(vector<ll>& a, bool inv) {
+    int n = a.size(); // power of 2
+    for (int i = 1, j = 0; i < n; i++) {
+        int bit = n >> 1;
+        for (; j & bit; bit >>= 1) j ^= bit;
+        j ^= bit;
+        if (i < j) swap(a[i], a[j]);
+    }
+    for (int len = 2; len <= n; len <<= 1) {
+        ll w = ntt_pow(NTT_G, (NTT_MOD - 1) / len);
+        if (inv) w = ntt_pow(w, NTT_MOD - 2);
+        for (int i = 0; i < n; i += len) {
+            ll wn = 1;
+            for (int j = 0; j < len / 2; j++, wn = wn * w % NTT_MOD) {
+                ll u = a[i + j], v = a[i + j + len / 2] * wn % NTT_MOD;
+                a[i + j] = (u + v) % NTT_MOD;
+                a[i + j + len / 2] = (u - v + NTT_MOD) % NTT_MOD;
+            }
+        }
+    }
+    if (inv) {
+        ll ninv = ntt_pow(n, NTT_MOD - 2);
+        for (ll& x : a) x = x * ninv % NTT_MOD;
+    }
+}
+
+vector<ll> conv_ntt(vector<ll> a, vector<ll> b) {
+    if (a.empty() || b.empty()) return {};
+    int res = a.size() + b.size() - 1, n = 1;
+    while (n < res) n <<= 1;
+    assert(n <= (1 << 23)); // beyond 2^23 the roots silently break for this mod
+    a.resize(n); b.resize(n);
+    ntt(a, false); ntt(b, false);
+    for (int i = 0; i < n; i++) a[i] = a[i] * b[i] % NTT_MOD;
+    ntt(a, true);
+    a.resize(res);
+    return a;
+}
+struct Binom {
+    vector<ll> fact{1}, inv{1}, invfact{1};
+    Binom(int n) {
+        ll cur = fact.size() - 1;
+        if (cur >= n) return;
+        fact.resize(n + 1);
+        inv.resize(n + 1);
+        invfact.resize(n + 1);
+        for (ll i = cur + 1; i <= n; i++) {
+            fact[i] = fact[i - 1] * i % mod;
+            if (i == 1) inv[i] = 1;
+            else inv[i] = mod - mod / i * inv[mod % i] % mod;
+            invfact[i] = invfact[i - 1] * inv[i] % mod;
+        }
+    }
+    ll C(ll n, ll k) {
+        if (k < 0 || k > n) return 0;
+        return fact[n] * invfact[k] % mod * invfact[n - k] % mod;
+    }
+};
+void solve()
+{
+    int n; cin >> n;
+    Binom binom(n);
+    vector<pair<int, int>> p(n);
+    for(auto &[x, y] : p) 
+    {
+        cin >> x >> y;
+        x = (x % mod + mod) % mod;
+        y = (y % mod + mod) % mod;
+    }
+    vector<int> f(n);
+    auto pass1 = [&]()
+    {
+        vector<int> X(n + 1), Y(2 * n);
+        for(int i = 0; i < n; i++)
+        {
+            X[n - i] = p[i].F;
+            Y[i] = Y[n + i] = p[i].S;
+        }
+        auto Z = conv_ntt(X, Y);
+        for(int d = 1; d < n; d++)
+        {
+            f[d] = (f[d] + Z[n + d]) % mod;
+        }
+    };
+    pass1();
+    // print(f);
+    for(auto &[x, y] : p)
+    {
+        swap(x, y);
+        // x = -x;
+        // y = -y;
+        x = mod - x;
+    }
+    pass1();
+    // print(f);
+    vector<int> ans(n + 1);
+    {
+        vector<int> L(n + 1), R(n + 1);
+        for(int d = 1; d < n; d++) 
+        {
+            L[d + 1] = f[d] * binom.fact[n - d - 1] % mod;
+        }
+        for(int i = 0; i < n; i++) R[i] = binom.invfact[i];
+        auto Z = conv_ntt(L, R);
+        for(int k = 3; k <= n; k++)
+        {
+            ans[k] = Z[n + 2 - k] * binom.invfact[k - 2] % mod;
+            cout << ans[k] << "\n";
+        }
+    }
+}
+signed main()
+{
+    ios::sync_with_stdio(0); cin.tie(NULL);
+    solve();
+}

@@ -1,0 +1,75 @@
+The 2022 ICPC Asia Hangzhou Regional Programming Contest
+Hangzhou Normal University, December, 04, 2022
+
+Problem G. Subgraph Isomorphism
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+3 seconds
+1024 megabytes
+
+Grammy wants to get the Turing Award! She decided to solve the Subgraph Isomorphism problem in
+polynomial time.
+Since the problem is indeed too hard, she begins with doing some simplifications and trying to solve the
+simplified problem first.
+Now Grammy has a connected undirected graph G with n vertices and m edges. She wants to know
+whether it is possible to find a tree T with n vertices such that all connected subgraphs of G with n
+vertices and n − 1 edges are isomorphic to T . Grammy knows the answer for sure, but she wants to give
+you a quiz.
+Two graphs G and H are isomorphic if and only if there exists a bijection between the vertex sets of G
+and H (f : V (G) → V (H)) such that any two vertices u and v of G are adjacent in G if and only if f (u)
+and f (v) are adjacent in H.
+Two vertices are adjacent if and only if they are directly connected by an edge.
+
+Input
+The input consists of multiple test cases.
+The first line contains an integer T (1 ≤ T ≤ 105 ), denoting the number of test cases.
+For each test case, the first line contains two integers n, m (1 ≤ n ≤ 105 , n − 1 ≤ m ≤ 105 ), denoting the
+number of vertices and the number of edges respectively.
+Each of the next m lines contains two integers ui , vi (1 ≤ ui , vi ≤ n, ui 6= vi ), denoting an edge (ui , vi ).
+It is guaranteed that there are no multiple edges and the graph is connected.
+It is guaranteed that the sum of n and the sum of m in all test cases will not exceed 106 .
+
+Output
+For each test case, output one line containing either “YES” or “NO”.
+
+Page 8 of 16
+
+The 2022 ICPC Asia Hangzhou Regional Programming Contest
+Hangzhou Normal University, December, 04, 2022
+
+Example
+standard input
+4
+7 6
+1 2
+2 3
+3 4
+4 5
+5 6
+3 7
+3 3
+1 2
+2 3
+3 1
+5 5
+1 2
+2 3
+3 4
+4 1
+1 5
+1 0
+
+standard output
+YES
+YES
+NO
+YES
+
+Page 9 of 16
+
+

@@ -1,0 +1,79 @@
+Ursa Minor
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+3 seconds
+512 megabytes
+
+Pixel Art: Ambition, Sulfox, and Charles
+
+Sulfox the fennec fox celebrated his 20th birthday with great joy as he received a special gift — a pixel
+game named World Rebuilder. In this game, he plays the role of an interstellar explorer who journeys
+toward Polaris, the brightest star in the constellation Ursa Minor, and terraforms planets along the way.
+A game level can be determined by a target sequence a1 , a2 , . . . , an and a tool sequence b1 , b2 , . . . , bm . At
+the beginning of this level, there are n (the length of the target sequence) continents with initial altitudes
+of 0, arranged circularly around the equator of the planet where Sulfox landed.
+The “Batch Edit” tool allows Sulfox to modify the altitudes of the continents simultaneously. Whenever he
+uses it, he should firstly select a number k from the tool sequence and choose an arbitrary real number
+x. Then, he can select exactly k consecutive continents and add x to each of their altitudes. The level
+is cleared when the altitudes of the n continents, starting from some continent in some direction, are
+a1 , a2 , . . . , an in order.
+
+Figure: How to adjust the altitudes with the “Batch Edit” tool
+(The selected continents are highlighted)
+
+In fact, the level designer for this game is quite a lazy guy, for he generated each level by selecting
+a contiguous subsequence from a global target sequence A1 , A2 , . . . , AN and a global tool sequence
+B1 , B2 , . . . , BM respectively. What’s worse, he didn’t even bother to check whether each level is possible
+to clear, leaving Sulfox stuck at some levels marked as “easy”!
+Luckily, as a video game, it certainly has multiple version updates to fix bugs (or maybe introduce new
+bugs, who knows?). Now given the global target sequence A1 , A2 , . . . , AN and the global tool sequence
+B1 , B2 , . . . , BM in the initial version, you need to handle Q events of two kinds:
+• Game Update: Change the value of Ap to v in a new version.
+
+Page 1 of 2
+
+• Level Query: Query if Sulfox can clear the level determined by target sequence Al , Al+1 , . . . , Ar and
+tool sequence Bs , Bs+1 , . . . , Bt in the latest version if he can use the tool any number of times.
+
+Input
+The first line contains three integers N , M , and Q (1 ≤ N, M, Q ≤ 2 × 105 ), denoting the length of the
+global target sequence, the length of the global tool sequence, and the number of events, respectively.
+The second line contains N integers A1 , A2 , . . . , AN (0 ≤ Ai ≤ 109 ), denoting the global target sequence
+in the initial version.
+The third line contains M integers B1 , B2 , . . . , BM (1 ≤ Bi ≤ N ), denoting the global tool sequence.
+Then, each of the next Q lines contains an event in one of the following two formats:
+• U p v (1 ≤ p ≤ N , 0 ≤ v ≤ 109 ), denoting an update that changes the value of Ap to v in a new
+version.
+• Q l r s t (1 ≤ l ≤ r ≤ N , 1 ≤ s ≤ t ≤ M ), denoting a query of if Sulfox can clear the level
+determined by target sequence Al , Al+1 , . . . , Ar and tool sequence Bs , Bs+1 , . . . , Bt in the latest
+version. It is guaranteed that each value of Bs , Bs+1 , . . . , Bt does not exceed r − l + 1.
+
+Output
+For each query, output “Yes” in one line if Sulfox can clear the level determined by the given target
+sequence and the given tool sequence in the latest version, or otherwise, output “No” in one line.
+
+Example
+standard input
+6 4 5
+1 1 4 5 1 4
+3 3 2 4
+Q 1 5 1 2
+Q 2 5 3 4
+U 5 2
+Q 1 6 1 2
+Q 2 5 3 4
+
+standard output
+Yes
+No
+No
+Yes
+
+Page 2 of 2
+
+

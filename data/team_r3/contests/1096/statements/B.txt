@@ -1,0 +1,45 @@
+The 1st Universal Cup
+Stage 1: Shenyang, January 28-29, 2023
+
+Problem B. Binary Substrings
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+2 seconds
+512 megabytes
+
+Given an integer n, you need to find a string of length n containing only 0s and 1s that maximize the
+number of different nonempty substrings.
+
+Input
+The only line contains a single integer n (1 ≤ n ≤ 2 × 105 ), the length of the 01-string.
+
+Output
+Output a single 01-string of length n that has the maximum number of different nonempty substrings
+among all the 01-strings of length n. If there are multiple solutions, you may output any.
+
+Examples
+standard input
+
+standard output
+
+2
+
+01
+
+5
+
+00110
+
+Note
+In the first sample case, there are 3 different nonempty substrings “0”, “1”, and “01”.
+In the second sample case, there are 12 different nonempty substrings “0”, “1”, “00”, “01”, “11”, “10”, “001”,
+“011”, “110”, “0011”, “0110”, and “00110”.
+
+Page 2 of 16
+
+

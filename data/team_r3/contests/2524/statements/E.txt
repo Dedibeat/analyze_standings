@@ -1,0 +1,51 @@
+Zero
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+256 megabytes
+
+An integer sequence a1 , a2 , · · · , an is called a zero sequence if and only if it satisfies the following conditions:
+• For i = 1, 2, · · · , n − 1, ai 6= ai+1 .
+• The binary XOR sum of a1 , a2 , · · · , an is 0, i.e.,
+n
+M
+
+ai = 0
+
+i=1
+
+Given n and m, find the number of zero sequences of length n where each element is chosen from the set
+{0, 1, 2, · · · , 2m − 1}.
+
+Input
+The first line contains a positive integer T (1 ≤ T ≤ 104 ), indicating the number of test cases.
+For each test case, one line contains two integers n, m (1 ≤ n ≤ 109 , 0 ≤ m ≤ 109 ), representing the
+length of the sequence and the binary length of the sequence elements, respectively.
+
+Output
+For each test case, output one integer representing the answer modulo 998244353.
+
+Example
+standard input
+5
+1 3
+2 3
+3 3
+4 3
+5 3
+
+standard output
+1
+0
+49
+392
+2401
+
+Page 1 of 1
+
+

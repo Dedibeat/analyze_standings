@@ -1,0 +1,67 @@
+K
+
+Keep Your Distance
+
+Time limit: 1s
+
+VegiCat is on a mine-sweeping mission. There are n mines on a number line. Mine i
+is at the integer coordinate ai . The mines are numbered in order of their coordinates,
+so a1 ≤ a2 ≤ · · · ≤ an . Mine coordinates may repeat.
+VegiCat tests each mine once, in the order 1, 2, . . . , n. For mine i, he chooses an
+integer coordinate bi as the test location, which may be negative or zero. The error
+of this test is |ai − bi |.
+For each 2 ≤ i ≤ n, an integer li is given, specifying the minimum required distance
+between the test locations for mines i − 1 and i. These locations must satisfy
+|bi − bi−1 | ≥ li .
+Help VegiCat minimize the largest test error; that is, ﬁnd
+(
+)
+min
+max |ai − bi | .
+b1 ,...,bn ∈Z
+|bi −bi−1 |≥li
+(2≤i≤n)
+
+1≤i≤n
+
+Input
+The ﬁrst line contains an integer T (1 ≤ T ≤ 104 ), the number of test cases. The description of the test cases
+follows.
+The ﬁrst line of each test case contains an integer n (2 ≤ n ≤ 105 ), the number of mines.
+The second line contains n integers a1 , a2 , . . . , an (1 ≤ ai ≤ 109 ), where ai is the coordinate of mine i. It is
+guaranteed that a1 ≤ a2 ≤ · · · ≤ an .
+The third line contains n − 1 integers l2 , l3 , . . . , ln (1 ≤ li ≤ 109 ), where li is the minimum distance between the
+test locations for mines i − 1 and i.
+It is guaranteed that the sum of n over all test cases does not exceed 105 .
+
+Output
+For each test case, output an integer — the minimum possible value of the largest test error.
+
+Sample Input 1
+
+Sample Output 1
+
+2
+2
+1 1
+1
+7
+2 6 12 14 14 16 19
+11 8 4 2 10 9
+
+1
+6
+
+Note
+In the ﬁrst test case, choosing b1 = 1 and b2 = 2 gives a maximum error of 1. An error of 0 would require
+b1 = b2 = 1, which violates the distance requirement.
+In the second test case, one optimal choice is b = [−4, 7, 15, 10, 8, 22, 13]. All required distances are satisﬁed,
+and the maximum error is 6.
+
+Problem K: Keep Your Distance
+
+1
+
+This page is intentionally left blank.
+
+

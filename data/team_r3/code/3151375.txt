@@ -1,0 +1,92 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+#define int long long
+#define pb push_back
+#define all(x) (x).begin(), (x).end()
+#define rall(x) (x).rbegin(), (x).rend()
+#define rep(i, a, b) for(int i = (a); i < (b); i++)
+#define repd(i, a, b) for(int i = (a); i >= (b); i--)
+#define hha(x) cout << #x << ' ' << x << ' ';
+#define hhal(x) cout << #x << ' ' << x << '\n';
+#define print(v) cout << #v << ' '; for(auto &x : v) cout << x << ' '; cout << '\n';
+struct segtree {
+    int n;
+    vector<int> tree;
+    segtree(int _n) {
+        n = _n;
+        tree.assign(n * 4, 0);
+    }
+    void update(int v, int tl, int tr, int pos, int val) {
+        if(tl == tr) {
+            tree[v] = val;
+            return;
+        }
+        int tm = (tl + tr) / 2;
+        if(pos <= tm) update(v << 1, tl, tm, pos, val);
+        else update(v << 1 | 1, tm + 1, tr, pos, val);
+        tree[v] = tree[v << 1] + tree[v << 1 | 1];
+    }
+    int query(int v, int tl, int tr, int l, int r) {
+        if(tl > r || tr < l) return 0;
+        if(tl >= l && tr <= r) return tree[v];
+        int tm = (tl + tr) / 2;
+        return query(v << 1, tl, tm, l, r) + query(v << 1 | 1, tm + 1, tr, l, r);
+    }
+};
+void solve() {
+    int n, m; cin >> n >> m;
+    vector<int> a(n + 1); rep(i, 1, n + 1) cin >> a[i];
+    vector<pair<int, int>> b(n * 2);
+    vector<int> p(n * 2);
+    rep(i, 1, n + 1) {  
+        b[i] = {a[i], 0};
+    }
+    segtree st(n);
+    rep(i, 1, n) {
+        p[i * 2 - 1] = i + n;
+        p[i * 2] = i + n;
+        b[i + n] = {min(b[i * 2 - 1].first, b[i * 2].first), max(b[i * 2 - 1].first, b[i * 2].first)};
+        st.update(1, 1, n, i, b[i + n].second);
+    }
+    while(m--) {
+        char c; cin >> c;
+        if(c == 'C') {
+            int x, y; cin >> x >> y;
+            int l = b[x].first, r = b[y].first;
+            b[x].first = 0;
+            int cur = x;
+            while(p[cur] != 0) {
+                int i = p[cur] - n;
+                b[i + n] = {min(b[i * 2 - 1].first, b[i * 2].first), max(b[i * 2 - 1].first, b[i * 2].first)};
+                st.update(1, 1, n, i, b[i + n].second);
+                cur = i + n;
+            }
+            b[y].first = l;
+            cur = y;
+            while(p[cur] != 0) {
+                int i = p[cur] - n;
+                b[i + n] = {min(b[i * 2 - 1].first, b[i * 2].first), max(b[i * 2 - 1].first, b[i * 2].first)};
+                st.update(1, 1, n, i, b[i + n].second);
+                cur = i + n;
+            }
+            b[x].first = r;
+            cur = x;
+            while(p[cur] != 0) {
+                int i = p[cur] - n;
+                b[i + n] = {min(b[i * 2 - 1].first, b[i * 2].first), max(b[i * 2 - 1].first, b[i * 2].first)};
+                st.update(1, 1, n, i, b[i + n].second);
+                cur = i + n;
+            }
+        }
+        if(c == 'A') {
+            int l, r; cin >> l >> r;
+            cout << st.query(1, 1, n, l, r) << '\n';
+        }
+    }
+}
+signed main() {
+    ios_base::sync_with_stdio(0); cin.tie(0);
+    //int t; cin >> t; while(t--);
+    solve();
+}

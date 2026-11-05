@@ -1,0 +1,2176 @@
+International Collegiate Programming Contest Asia
+Hangzhou Regional Contest
+Analysis
+
+Zhejiang University
+
+12.04.2022
+
+.
+
+Zhejiang University
+
+.
+
+.
+
+.
+
+.
+
+.
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+12.04.2022
+
+.
+.
+
+.
+
+.
+.
+
+.
+
+.
+
+.
+
+.
+
+1 / 39
+
+.
+
+A. Modulo Ruins the Legend
+Description
+
+Given an array a of length n, add an arithmetic progression to it so that
+the sum after modulo m is minimized.
+
+.
+
+Zhejiang University
+
+.
+
+.
+
+.
+
+.
+
+.
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+12.04.2022
+
+.
+.
+
+.
+
+.
+.
+
+.
+
+.
+
+.
+
+.
+
+2 / 39
+
+.
+
+A. Modulo Ruins the Legend
+Solution
+
+Observation: Adding a arithmetic progression to the sequence is equivalent
+as adding its ”median” element n times. Note that if n is even, the
+”median” element can be x+y
+2 . Hence, d can be restricted to 0 or 1
+without loss of generality.
+The problem now changes into solving the equation an + bm = k. Since n
+is small, we can enumerate b instead of using Extended Euclid Algorithm.
+Total time complexity is Θ(n).
+
+.
+
+Zhejiang University
+
+.
+
+.
+
+.
+
+.
+
+.
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+12.04.2022
+
+.
+.
+
+.
+
+.
+.
+
+.
+
+.
+
+.
+
+.
+
+3 / 39
+
+.
+
+B. Useful Algorithm
+Description
+
+Given two integer sequence c, d of length n and a sequence w of length m,
+each number c is less than 2m . There are also q modifications, each
+modification will change ci , di at one position. Calculate
+max {max{max{wx |x ∈ S(ci , cj )}, 0} · (di + dj )} for the q + 1 versions,
+1≤i,j≤n
+
+where S(a, b) is the set of bits that a carry occurred when calculating
+a + b with their binary representations.
+
+.
+
+Zhejiang University
+
+.
+
+.
+
+.
+
+.
+
+.
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+12.04.2022
+
+.
+.
+
+.
+
+.
+.
+
+.
+
+.
+
+.
+
+.
+
+4 / 39
+
+.
+
+B. Useful Algorithm
+Solution
+
+When calculating x + y with their binary representation, if the carry
+occurred at the i-th bit, we have (x mod 2i+1 ) + (y mod 2i+1 ) ≥ 2i+1 .
+Let Dx = max{di |ci = x}. Then we enumerate the bit where carry
+occurred, say t-th bit, then we are calculating max{Di + Dj |i + j ≥ 2t+1 }.
+
+.
+
+Zhejiang University
+
+.
+
+.
+
+.
+
+.
+
+.
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+12.04.2022
+
+.
+.
+
+.
+
+.
+.
+
+.
+
+.
+
+.
+
+.
+
+5 / 39
+
+.
+
+B. Useful Algorithm
+Solution
+
+Let D′x = max{di |ci = 2t+1 − x}, the formula now is max{Di + D′j |i ≥ j}.
+We can use std::multiset or std::priority_queue to maintain Dx
+and D′x . And use segment tree to maintain max{Di + D′j |i ≥ j}. The time
+complexity is Θ(nm log n + qm2 + qm log n).
+There is also a solution using sqrt decomposition. The time complexity is
+m
+Θ(nm log n + q2 2 + qm log n), which can also pass.
+
+.
+
+Zhejiang University
+
+.
+
+.
+
+.
+
+.
+
+.
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+12.04.2022
+
+.
+.
+
+.
+
+.
+.
+
+.
+
+.
+
+.
+
+.
+
+6 / 39
+
+.
+
+C. No Bug No Game
+Description
+
+Given n items, find a permutation to wear them all such that the k-limited
+magic buff can offer the most points of bonus power.
+
+.
+
+Zhejiang University
+
+.
+
+.
+
+.
+
+.
+
+.
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+12.04.2022
+
+.
+.
+
+.
+
+.
+.
+
+.
+
+.
+
+.
+
+.
+
+7 / 39
+
+.
+
+C. No Bug No Game
+Solution
+
+∑
+∑
+When ni=1 pi ≤ k, the answer is ni=1 wi,pi .
+Otherwise, we can always find an item that is partially upgraded.
+Fix the i-th item to be the partially upgraded one, iterate its upgraded size
+t (0 ≤ t ≤ min(k,
+∑ pi )), then we need to select a subset of items
+∑ S such
+that i ∈
+/ S and j∈S pj = k − t. The target is to maximize j∈S wj,pj .
+Here we have two solutions.
+
+.
+
+Zhejiang University
+
+.
+
+.
+
+.
+
+.
+
+.
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+12.04.2022
+
+.
+.
+
+.
+
+.
+.
+
+.
+
+.
+
+.
+
+.
+
+8 / 39
+
+.
+
+C. No Bug No Game
+Solution1
+
+Consider a simple DP solution with fi,j,t denoting the largest points of
+bonus power when we select items among the first i items, such that the
+total upgraded size is j, and t (0 ≤ t ≤ 1) item is partially upgraded.
+To make transitions, we need to iterate the size of the partially upgraded
+item. Fortunately, the size p is at most 10.
+The time complexity is Θ(nkp).
+
+.
+
+Zhejiang University
+
+.
+
+.
+
+.
+
+.
+
+.
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+12.04.2022
+
+.
+.
+
+.
+
+.
+.
+
+.
+
+.
+
+.
+
+.
+
+9 / 39
+
+.
+
+C. No Bug No Game
+Solution2
+
+When p is unbounded, we can still solve this problem eﬀiciently.
+Consider a divide and conquer solution with solve(l, r) denoting the
+partially upgraded item is indexed in [l, r]:
+When l = r, just iterate the upgraded size of the l-th item and update
+the answer.
+Otherwise, let mid = ⌊ l+r
+2 ⌋, divide the problem into two subproblems
+solve(l, mid) and solve(mid + 1, r). Here we need to add all the items
+indexed in [mid + 1, r] into the left knapsack, and add all the items
+indexed in [l, mid] into the right knapsack.
+The time complexity is T(n) = 2T( n2 ) + Θ(nk) = Θ(nk log n).
+
+.
+
+Zhejiang University
+
+.
+
+.
+
+.
+
+.
+
+.
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+12.04.2022
+
+.
+.
+
+.
+
+.
+.
+
+.
+
+.
+
+.
+
+.
+
+10 / 39
+
+.
+
+D. Circle Money
+Description
+
+There are n people sitting in a cycle, during each round, each person will
+give half of his money to the next one in order. Find the number of money
+each people have after 20221204 rounds.
+
+.
+
+Zhejiang University
+
+.
+
+.
+
+.
+
+.
+
+.
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+12.04.2022
+
+.
+.
+
+.
+
+.
+.
+
+.
+
+.
+
+.
+
+.
+
+11 / 39
+
+.
+
+D. Circle Money
+Solution
+
+The sum of money won’t change. Assume the sum of money is S and
+S
+w = n+1
+. The number of rounds is large enough that the amount of
+money each person have will converge to 2w, w, w, w, . . . , w. Then we just
+have to calculate S and w, the time complexity is Θ(n).
+The proof is left as exercise for the readers.
+
+.
+
+Zhejiang University
+
+.
+
+.
+
+.
+
+.
+
+.
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+12.04.2022
+
+.
+.
+
+.
+
+.
+.
+
+.
+
+.
+
+.
+
+.
+
+12 / 39
+
+.
+
+E. Oscar is all you need
+Description
+
+You are given a permutation of length n. Find the permutation with the
+smallest lexicographical order you can get with the following operation:
+cut the sequence into three consecutive non-empty parts, and swap the
+first part and the last part.
+
+.
+
+Zhejiang University
+
+.
+
+.
+
+.
+
+.
+
+.
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+12.04.2022
+
+.
+.
+
+.
+
+.
+.
+
+.
+
+.
+
+.
+
+.
+
+13 / 39
+
+.
+
+E. Oscar is all you need
+Solution
+
+When n = 3, we only have to check whether we have p1 > p3 .
+When n ≥ 4, we will try to sort the sequence. Assume when we do the
+operation on the sequence, the size of the three parts are x, n − x − y, y,
+we call this op(x, y).
+
+.
+
+Zhejiang University
+
+.
+
+.
+
+.
+
+.
+
+.
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+12.04.2022
+
+.
+.
+
+.
+
+.
+.
+
+.
+
+.
+
+.
+
+.
+
+14 / 39
+
+.
+
+E. Oscar is all you need
+Solution
+
+Let’s use insertion sort to sort the sequence. First we will try to put 1 to
+the beginning of the sequence. If 1 is not the first two elements of the
+sequence, and 1 is at position p, we will just do op(1, n − p + 1). Otherwise
+if 1 is the second element of the array, then we will do op(2, 1), op(1, 1).
+Now 1 is at the beginning of the sequence. Assume now a prefix of length
+i ≥ 1 is sorted, and we will insert the last element of the sequence into its
+position, say after the j-th(1 ≤ j ≤ i) element, then we will just do
+op(j, 2), op(1, j).
+
+.
+
+Zhejiang University
+
+.
+
+.
+
+.
+
+.
+
+.
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+12.04.2022
+
+.
+.
+
+.
+
+.
+.
+
+.
+
+.
+
+.
+
+.
+
+15 / 39
+
+.
+
+E. Oscar is all you need
+Solution
+
+But we can only do this when j < n − 2, this means we can’t use it to sort
+1, 2, . . . , n − 2, n, n − 1. However, sorting it is similar to sort 1, 2, 4, 3, we
+can use BFS to find a solution for such situation. One possible solution is:
+op(1, 1), op(n − 2, 1), op(2, n − 3), op(n − 3, 1), op(1, n − 2). The total
+number of operations is 2(n − 2) + 5 = 2n + 1, which will fit in with the
+constraints.
+We can also do this by selection sort, but need a few more classified
+discussion. The time complexity is Θ(n2 ), which can be optimized to
+Θ(n log n) by using splay, but not needed.
+
+.
+
+Zhejiang University
+
+.
+
+.
+
+.
+
+.
+
+.
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+12.04.2022
+
+.
+.
+
+.
+
+.
+.
+
+.
+
+.
+
+.
+
+.
+
+16 / 39
+
+.
+
+F. Da Mi Lao Shi Ai Kan De
+Description
+
+You are given the messages of n message groups, for each group
+forwarding all messages containing substring bie to group 0 once, or
+report there is no such message.
+
+.
+
+Zhejiang University
+
+.
+
+.
+
+.
+
+.
+
+.
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+12.04.2022
+
+.
+.
+
+.
+
+.
+.
+
+.
+
+.
+
+.
+
+.
+
+17 / 39
+
+.
+
+F. Da Mi Lao Shi Ai Kan De
+Solution
+
+Do what the problem asks.∑Compare the∑strings in any way you like.
+The time complexity is Θ( |s|2 ) or Θ( |s| log n).
+
+.
+
+Zhejiang University
+
+.
+
+.
+
+.
+
+.
+
+.
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+12.04.2022
+
+.
+.
+
+.
+
+.
+.
+
+.
+
+.
+
+.
+
+.
+
+18 / 39
+
+.
+
+G. Subgraph Isomorphism
+Description
+
+Given a connected undirected graph, judge whether all spanning trees are
+isomorphic.
+
+.
+
+Zhejiang University
+
+.
+
+.
+
+.
+
+.
+
+.
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+12.04.2022
+
+.
+.
+
+.
+
+.
+.
+
+.
+
+.
+
+.
+
+.
+
+19 / 39
+
+.
+
+G. Subgraph Isomorphism
+Solution
+
+If the graph is a tree, then the answer is ”Yes”.
+If there are more than one cycle in the graph, then the answer is ”No”.
+The proof is left as an exercise.
+If there is exactly one cycle in the graph, the rooted trees attached to the
+cycle must be of the form abababab or aaaaaaa. The proof is also left as
+an exercise.
+We can use tree hash or carefully implemented sort to detect whether the
+rooted trees are isomorphic.
+The total time complexity is Θ(n) or Θ(n log n), depending on
+implementations.
+
+.
+
+Zhejiang University
+
+.
+
+.
+
+.
+
+.
+
+.
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+12.04.2022
+
+.
+.
+
+.
+
+.
+.
+
+.
+
+.
+
+.
+
+.
+
+20 / 39
+
+.
+
+H. RPG Pro League
+Description
+
+There are three roles in the game. Only two types of teams are valid:
+One Damager, two Synergiers, and one Buffer.
+Two Damagers, one Synergier, and one Buffer.
+We are given the information of n players. Each player can only play a
+certain set of roles. We need to invite players to form the maximum
+number of teams such that the total cost is minimized.
+The cost of each player can be updated.
+
+.
+
+Zhejiang University
+
+.
+
+.
+
+.
+
+.
+
+.
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+12.04.2022
+
+.
+.
+
+.
+
+.
+.
+
+.
+
+.
+
+.
+
+.
+
+21 / 39
+
+.
+
+H. RPG Pro League
+Solution
+
+First let’s find the maximum number of teams.
+Build a bipartite graph with 4 + 7 vertices.
+4 vertices in the left part, denoting 4 slots in a team: a Damager slot,
+a Synergier slot, a Buffer slot, and a flexible slot that can be either a
+Damager or a Synergier.
+7 = 23 − 1 vertices in the right part, denoting the set of roles a player
+can play, respectively.
+For each pair of possible vertices, add arcs between them according to
+the meaning.
+Binary search for the maximum number of teams, and check whether the
+left part can entirely match the right part.
+
+.
+
+Zhejiang University
+
+.
+
+.
+
+.
+
+.
+
+.
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+12.04.2022
+
+.
+.
+
+.
+
+.
+.
+
+.
+
+.
+
+.
+
+.
+
+22 / 39
+
+.
+
+H. RPG Pro League
+Solution
+
+Instead of running MaxFlow, we can do it more eﬀiciently using Hall’s
+Theorem:
+
+Theorem
+Let G be a bipartite graph with partition X, Y.
+G contains a matching of X if and only if |N(S)| ≥ |S| for all S ⊆ X.
+According to Hall’s Theorem, cnt = minS ⌊ |N(S)|
+|S| ⌋. Here S is a non-empty
+subset of the left 4 vertices, and N(S) denotes how many players the set is
+linked to.
+Hence we can find the maximum number of teams cnt in Θ(24 ).
+In addition, given all the values of N(·), we can check whether it is
+possible to reach cnt teams in Θ(24 ).
+.
+
+Zhejiang University
+
+.
+
+.
+
+.
+
+.
+
+.
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+12.04.2022
+
+.
+.
+
+.
+
+.
+.
+
+.
+
+.
+
+.
+
+.
+
+23 / 39
+
+.
+
+H. RPG Pro League
+Solution
+
+Next let’s find the cheapest way to invite players such that they can form
+cnt teams.
+Initially, invite all the players, and we need to cancel some players to cut
+down the cost.
+Take the player with the highest cost, try to cancel him, there are two
+possible results:
+If it’s impossible to form cnt teams, we must invite him.
+If it’s still possible to form cnt teams, we must cancel him, because he
+is the most expensive one.
+Hence we can get the answer by sorting all the players according to the
+cost, and canceling players greedily.
+
+.
+
+Zhejiang University
+
+.
+
+.
+
+.
+
+.
+
+.
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+12.04.2022
+
+.
+.
+
+.
+
+.
+.
+
+.
+
+.
+
+.
+
+.
+
+24 / 39
+
+.
+
+H. RPG Pro League
+Solution
+
+The last question is how to perform cost updates eﬀiciently.
+Actually canceling players is the dual matroid of the matching matroid.
+So when a cost update comes, we may replace one invited player with one
+uninvited player.
+Group all the invited and uninvited players according to the role set they
+can play. Obviously, only the player with the lowest/highest cost in each
+group may be replaced.
+Since there are only 7 groups, try them all and choose the best decision.
+The time complexity is Θ(q log n).
+
+.
+
+Zhejiang University
+
+.
+
+.
+
+.
+
+.
+
+.
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+12.04.2022
+
+.
+.
+
+.
+
+.
+.
+
+.
+
+.
+
+.
+
+.
+
+25 / 39
+
+.
+
+I. Guess Cycle Length
+Description
+
+There is a cycle with n (n ≤ 109 ) vertices, and the vertices are numbered
+from 1 to n in a fixed order. You should guess n in 104 queries.
+Walk forward x vertices and receive your position after walking, where x is
+your output and 1 ≤ x ≤ 109 .
+
+.
+
+Zhejiang University
+
+.
+
+.
+
+.
+
+.
+
+.
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+12.04.2022
+
+.
+.
+
+.
+
+.
+.
+
+.
+
+.
+
+.
+
+.
+
+26 / 39
+
+.
+
+I. Guess Cycle Length
+Solution
+
+Firstly, if the query limit is 105 , then you can use BSGS.
+Since the indices of vertices are not used in the method, we can modify
+the method a bit to utilize the indices.
+We first use 3333 operations to randomly walk on the cycle and obtain a
+sample of the graph. Assume that the maximum index during the walk is
+m, then the probability of m ≤ n ≤ m + 107 is more than 1 − 10−14 . So
+we can use BSGS to solve the remaining part.
+
+.
+
+Zhejiang University
+
+.
+
+.
+
+.
+
+.
+
+.
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+12.04.2022
+
+.
+.
+
+.
+
+.
+.
+
+.
+
+.
+
+.
+
+.
+
+27 / 39
+
+.
+
+I. Guess Cycle Length
+Solution
+
+The final solution is:
+1. walk 3333 steps randomly, assume the maximum index during this step
+is m.
+2. walk 3333 steps with length 1.
+3. walk 1 step with length m.
+4. walk 3333 steps with length 3333.
+If we walked on the same index twice in steps 2 ∼ 4, then we can know the
+cycle length by finding the total travelled length between two operations.
+1
+The total number of queries is Θ((n log 1ε ) 3 ), where ε is the failing
+probability.
+
+.
+
+Zhejiang University
+
+.
+
+.
+
+.
+
+.
+
+.
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+12.04.2022
+
+.
+.
+
+.
+
+.
+.
+
+.
+
+.
+
+.
+
+.
+
+28 / 39
+
+.
+
+J. Painting
+Description
+
+Draw n segments one by one. When drawing the i-th segment, we will
+start at point (0, ai ), and end at (W, bi ). When we touch any segment
+drawn before, stop at the intersection point immediately.
+Report where we will stop for each step.
+
+.
+
+Zhejiang University
+
+.
+
+.
+
+.
+
+.
+
+.
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+12.04.2022
+
+.
+.
+
+.
+
+.
+.
+
+.
+
+.
+
+.
+
+.
+
+29 / 39
+
+.
+
+J. Painting
+Solution
+
+Each segment will stop at the intersection of another segment or the wall.
+Build a tree rooted at the wall. Each segment’s parent on the tree is the
+segment or the wall it hits.
+When drawing a new segment, in order to find its parent, first find the
+segment whose start point is closest to it on both sides via std::set, say
+u and v. Now the path on the tree from u to v is u − LCA(u, v) − v, which
+forms a convex hull. Hence we can binary search on the path and find the
+intersection.
+In order to do binary search and find LCA, binary lifting is needed.
+The time complexity is Θ(n log n).
+
+.
+
+Zhejiang University
+
+.
+
+.
+
+.
+
+.
+
+.
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+12.04.2022
+
+.
+.
+
+.
+
+.
+.
+
+.
+
+.
+
+.
+
+.
+
+30 / 39
+
+.
+
+K. Master of Both
+Description
+
+Given a sequence of n strings, answer q queries: how many inversions are
+there in the sequence with the specified alphabet.
+
+.
+
+Zhejiang University
+
+.
+
+.
+
+.
+
+.
+
+.
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+12.04.2022
+
+.
+.
+
+.
+
+.
+.
+
+.
+
+.
+
+.
+
+.
+
+31 / 39
+
+.
+
+K. Master of Both
+Solution
+
+Consider how we compare two strings s, t, assume their longest common
+prefix is l, then we will compare sl+1 , tl+1 . Hence we only have to count
+cx,y , which means how many 1 ≤ i < j ≤ n satisfy that
+si,LCP(si ,sj ) = x, sj,LCP(si ,sj )+1 = y. Then with the given alphabet, if
+character a < b, then we will add cb,a to answer. We can do the counting
+by inserting all strings into a Trie one by one. Do not forget to count the
+number
+∑ of pairs that sj is a prefix of si . The time complexity is
+Θ( |s| · 26 + q · 262 ).
+Bonus: try to solve it in Θ(26q).
+
+.
+
+Zhejiang University
+
+.
+
+.
+
+.
+
+.
+
+.
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+12.04.2022
+
+.
+.
+
+.
+
+.
+.
+
+.
+
+.
+
+.
+
+.
+
+32 / 39
+
+.
+
+L. Levenshtein Distance
+Description
+
+Given two strings S and T. Find the number of substrings of T whose edit
+distance between S is exactly i for every possible integer i (0 ≤ i ≤ k).
+
+.
+
+Zhejiang University
+
+.
+
+.
+
+.
+
+.
+
+.
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+12.04.2022
+
+.
+.
+
+.
+
+.
+.
+
+.
+
+.
+
+.
+
+.
+
+33 / 39
+
+.
+
+L. Levenshtein Distance
+Solution
+
+Fix a suﬀix T′ of T, then the goal is to find the number of its prefixes
+whose edit distance between S is i for i = 0, 1, 2, . . . , k.
+Let fi,j = x denotes the maximum value of x such that S[1 . . . x] can match
+T′ [1 . . . x + j] after editing i times, because if x can match, then all the
+values below x can also match.
+Note that we can always match pairs of same characters greedily, so
+fi,j = fi,j + LCP(S[fi,j + 1 . . . |S|], T′ [fi,j + j + 1 . . . |T′ |]), here LCP is the
+longest common prefix and can be calculated in O(1) via suﬀix array and
+RMQ.
+After that, we need to edit a character, so we can update fi+1,j−1 , fi+1,j or
+fi+1,j+1 .
+Note that i ≤ k and −i ≤ j ≤ i, hence we can compute all the values of f
+in Θ(k2 ).
+.
+
+Zhejiang University
+
+.
+
+.
+
+.
+
+.
+
+.
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+12.04.2022
+
+.
+.
+
+.
+
+.
+.
+
+.
+
+.
+
+.
+
+.
+
+34 / 39
+
+.
+
+L. Levenshtein Distance
+Solution
+
+For a state fi,j = |S|, we can know the edit distance between
+T′ [1 . . . |S| + j] and S is no more than i.
+However, some prefixes may be ignored when LCP is too long.
+Fortunately, assume edit distance between T′ [1 . . . i] and S is dis(i), we
+have dis(i) = min {dis(i), dis(i + 1) + 1}.
+Hence we can find the answer using dis(·).
+The time complexity is Θ(nk2 ).
+
+.
+
+Zhejiang University
+
+.
+
+.
+
+.
+
+.
+
+.
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+12.04.2022
+
+.
+.
+
+.
+
+.
+.
+
+.
+
+.
+
+.
+
+.
+
+35 / 39
+
+.
+
+M. Please Save the Pigeland
+Description
+
+Given a weighted tree with n vertices and k special vertices c1 , c2 , . . . , ck ,
+you need to choose some vertex x and a parameter d and minimize
+k
+∑
+dis(x,ci )
+and d|dis(x, ci ) for all i.
+d
+
+i=1
+
+.
+
+Zhejiang University
+
+.
+
+.
+
+.
+
+.
+
+.
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+12.04.2022
+
+.
+.
+
+.
+
+.
+.
+
+.
+
+.
+
+.
+
+.
+
+36 / 39
+
+.
+
+M. Please Save the Pigeland
+Description
+
+When we chose vertex x, it’s obvious we should choose
+d = gcd dis(x, ci ).
+∑
+dis(x,ci )
+.
+So now we have to choose vertex x to minimize gcd{dis(x,c
+i )}
+∑
+dis(x, ci ). This can be done
+Let’s iterate vertex x, and try to calculate
+by dynamic programming. We can calculate the number of special vertices
+in the subtree of u and the sum of distance from u to all special vertices in
+its subtree. Then we can do another DFS to calculate the answer.
+
+.
+
+Zhejiang University
+
+.
+
+.
+
+.
+
+.
+
+.
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+12.04.2022
+
+.
+.
+
+.
+
+.
+.
+
+.
+
+.
+
+.
+
+.
+
+37 / 39
+
+.
+
+M. Please Save the Pigeland
+Description
+
+Actually, we can calculate gcd{dis(x, ci )} similarly. We can calculate the
+gcd of all distance from x to the special vertices in its subtree, and use the
+similar way to compute the answer. The only thing we have to do is
+maintaining the gcd of a set S = {a1 , a2 , . . . , am }. We need to support
+merging two sets and add some integer w to all elements in the set. We
+represent the gcd of the set by maintaining two integers
+f = a1 , g = gcd{a2 − a1 , a3 − a1 , . . . , am − a1 }.
+Then adding w to all elements we can change (f, g) to (f + w, g), merging
+two sets (f1 , g1 ), (f2 , g2 ) result in (f1 , gcd{g1 , g2 , f2 − f1 }).
+The time complexity is Θ(n log w).
+
+.
+
+Zhejiang University
+
+.
+
+.
+
+.
+
+.
+
+.
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+12.04.2022
+
+.
+.
+
+.
+
+.
+.
+
+.
+
+.
+
+.
+
+.
+
+38 / 39
+
+.
+
+Thanks!
+
+.
+
+Zhejiang University
+
+.
+
+.
+
+.
+
+.
+
+.
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+. . . .
+. . . .
+
+12.04.2022
+
+.
+.
+
+.
+
+.
+.
+
+.
+
+.
+
+.
+
+.
+
+39 / 39
+
+.
+
+

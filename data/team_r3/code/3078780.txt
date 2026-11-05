@@ -1,0 +1,33 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+#define int long long
+#define pb push_back
+#define rep(i, a, b) for(int i = (a); i < (b); i++)
+#define repd(i, a, b) for(int i = (d); i >= (b); i--)
+#define all(x) (x).begin(), (x).end()
+#define rall(x) (x).rbegin(), (x).rend()
+#define hha(x) cout << #x << " = " << x << ' ';
+#define hhal(x) cout << #x << " = " << x << endl;
+#define print(v) cout << #v << " = " << ' '; for(auto x : v) cout << x << ' '; cout << endl;
+
+void solve() {
+    int n; cin >> n;
+    vector<double> a(n); for(auto &x : a) cin >> x;
+    rep(j, 0, 100) {
+        rep(i, 0, n) {
+            a[(i + 1) % n] += a[i] / 2;
+            a[i] /= 2;
+        }
+    }
+    for(auto &x : a) printf("%.10lf ", x);
+    printf("\n");
+
+}
+
+signed main() {
+    ios_base::sync_with_stdio(0); cin.tie(0);
+    //int t; cin >> t; while(t--)
+    solve();
+    return 0;
+}

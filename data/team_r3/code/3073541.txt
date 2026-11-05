@@ -1,0 +1,52 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+#define int long long
+#define pb push_back
+#define rep(i, a, b) for(int i = (a); i < (b); i++)
+#define repd(i, a, b) for(int i = (d); i >= (b); i--)
+#define all(x) (x).begin(), (x).end()
+#define rall(x) (x).rbegin(), (x).rend()
+#define hha(x) cout << #x << " = " << x << ' ';
+#define hhal(x) cout << #x << " = " << x << endl;
+#define print(v) cout << #v << " = " << ' '; for(auto x : v) cout << x << ' '; cout << endl;
+
+void solve() {
+    int n; cin >> n;
+    vector<int> deg(n + 1, 0);
+    vector<int> par(n + 1, 0);
+    rep(i, 2, n + 1) {
+        int x; cin >> x;
+        par[i] = x;
+        deg[x]++;
+    }
+    set<int> leaf;
+    rep(i, 1, n + 1) {
+        if(deg[i] == 0) {
+            leaf.insert(i);
+        }
+    }
+    int ans = n;
+    int cur = 0;
+    while(leaf.size()) {
+        ans = min(ans, cur + (int)leaf.size());
+        set<int> st;
+        for(auto &v : leaf) {
+            deg[par[v]]--;
+            if(deg[par[v]] == 0) {
+                st.insert(par[v]);
+            }
+        }
+        cur++;
+        leaf.swap(st);
+    }
+    ans = min(ans, cur);
+    cout << ans << '\n';
+}
+
+signed main() {
+    ios_base::sync_with_stdio(0); cin.tie(0);
+    int t; cin >> t; while(t--)
+    solve();
+    return 0;
+}

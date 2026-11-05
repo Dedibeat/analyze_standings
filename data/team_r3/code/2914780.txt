@@ -1,0 +1,85 @@
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+
+#define int long long
+#define sz(a) (int)(a).size()
+#define pb push_back
+#define all(x) x.begin(), x.end()
+#define rall(x) x.rbegin(), x.rend()
+#define FOR(i, a, b) for(int i = (a); i < (b); i++)
+#define FORD(i, a, b) for(int i = (a); i >= (b); i++)
+#define ff first
+#define ss second 
+#define _ << ' ' <<
+#define hha(x) cout << #x << " = " << x << " "
+#define hhal(x) cout << #x << " = " << x << endl
+#define print(v) cout << #v << " = "; for(auto x : v) cout << x << " "; cout << endl;
+
+void solve() {
+    int s; cin >> s;
+    int f1[8];
+    FOR(i, 1, 8) cin >> f1[i];
+    int l = 0, r = s;
+    int ans = 0;
+    while(l <= r) {
+        int f[8];
+        FOR(i, 1, 8) f[i] = f1[i];
+        int mid = (l + r) / 2;
+        int a = f[1], b = f[2], c = f[4];
+        if(a < mid) {
+            if(a + f[3] <= mid) a += f[3], f[3] = 0;
+            else f[3] -= mid - a, a = mid;
+        }
+        if(a < mid) {
+            if(a + f[5] <= mid) a += f[5], f[5] = 0;
+            else f[5] -= mid - a, a = mid;
+        }
+        if(a < mid) {
+            if(a + f[7] <= mid) a += f[7], f[7] = 0;
+            else f[7] -= mid - a, a = mid;
+        }
+        if(b < mid) {
+            if(b + f[3] <= mid) b += f[3], f[3] = 0;
+            else f[3] -= mid - b, b = mid;
+        }
+        if(b < mid) {
+            if(b + f[6] <= mid) b += f[6], f[6] = 0;
+            else f[6] -= mid - b, b = mid;
+        }
+        if(b < mid) {
+            if(b + f[7] <= mid) b += f[7], f[7] = 0;
+            else  f[7] -= mid - b, b = mid;
+        }
+        if(c < mid) {
+            if(c + f[5] <= mid) c += f[5], f[5] = 0;
+            else f[5] -= mid - c, c = mid;
+        }
+        if (c < mid) {
+            if(c + f[6] <= mid) c += f[6], f[6] = 0;
+            else  f[6] -= mid - c, c = mid;
+        }
+        if (c < mid) {
+            if(c + f[7] <= mid) c += f[7], f[7] = 0;
+            else f[7] -= mid - c, c = mid;
+        }
+        if(a < mid || b < mid || c < mid) {
+            r = mid - 1;
+        }
+        else {
+            ans = mid;
+            l = mid + 1;
+        }
+    }
+    cout << ans << '\n';
+}   
+
+signed main() {
+    ios_base::sync_with_stdio(0); cin.tie(0);
+    int t = 1;
+    cin >> t;
+    while(t--) {
+        solve();
+    }
+    return 0;
+}

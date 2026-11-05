@@ -1,0 +1,79 @@
+The 1st Universal Cup
+Stage 1: Shenyang, January 28-29, 2023
+
+Problem L. Tavern Chess
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+4 seconds
+512 megabytes
+
+One day, Alice and Bob are playing an online chess game named “Tavern Chess”, where each player can
+choose at most 7 minions to build a team.
+
+Welcome to Tavern
+
+Each minion has its Hit Points (HP) and Attack (ATK), and the HP is the same as the ATK initially.
+A minion with positive HP is alive and can take attacks, and it dies immediately if its HP becomes zero
+or lower after an attack.
+The battle begins after both Alice and Bob finish building their team and lasts until all the minions
+from one team are dead and the other team wins. In case the last alive minions from the two teams die
+simultaneously, the battle ends in a tie.
+Alice and Bob’s teams take turns to attack, and the team that has more minions takes the first attack.
+In case of a tie, it will be decided by a coin toss — 50% probability for Alice taking the first attack and
+the remaining 50% probability for Bob taking the first attack.
+When a team takes the attack, the leftmost minion with the minimum number of taking attacks
+from the team attacks one of the alive minions from the other team uniformly at random, and then the
+other team takes the attack.
+If a minion with the HP h1 and the ATK a1 attacks another minion with the HP h2 and the ATK a2 ,
+each minion deals damages equal to its ATK to the other one, so the attacker minion will have the HP
+h1 − a2 and the attacked minion will have the HP h2 − a1 after the attack.
+Given Alice’s team and Bob’s team, you need to calculate the probabilities that Alice’s team wins the
+battle, Bob’s team wins the battle, or the battle ends in a tie, respectively.
+
+Input
+The first line contains two integers n and m (1 ≤ n, m ≤ 7), indicating the number of minions in Alice’s
+team and Bob’s team respectively.
+The second line contains n integers a1 , a2 , . . . , an (1 ≤ ai ≤ 109 ), the i-th of which is the HP as well as
+the ATK of the i-th minions from the left from Alice’s team.
+The third line contains m integers b1 , b2 , . . . , bm (1 ≤ bi ≤ 109 ), the i-th of which is the HP as well as the
+ATK of the i-th minions from the left from Bob’s team.
+
+Output
+Output three lines, each containing a single real number, indicating the probabilities that Alice’s team
+wins the battle, Bob’s team wins the battle, or the battle ends in a tie, respectively.
+Page 13 of 16
+
+The 1st Universal Cup
+Stage 1: Shenyang, January 28-29, 2023
+Your answer is acceptable if its absolute error does not exceed 10−9 . Formally speaking, suppose that
+your output is a and the jury’s answer is b, your output is accepted if and only if |a − b| ≤ 10−9 .
+
+Examples
+standard input
+
+standard output
+
+2 3
+2 5
+3 4 1
+
+0.125
+0.75
+0.125
+
+6 6
+1 1 4 5 1 4
+1 1 4 5 1 4
+
+0.241867283950617
+0.241867283950617
+0.516265432098765
+
+Page 14 of 16
+
+

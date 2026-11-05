@@ -1,0 +1,88 @@
+Heavy-light Decomposition
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+1024 megabytes
+
+Heavy-light Decomposition (HLD) is a useful technique applied to trees for efficiently querying chains of
+vertices. Let’s first review the definition of HLD in case you forget.
+You are given a rooted tree with n vertices, numbered from 1 to n. You need to classify each non-root
+vertex as either heavy or light. Each non-leaf vertex has exactly one child classified as heavy, and the
+remaining vertices as light.
+For any non-root vertex v, let u be its parent. Vertex v can be classified as heavy only if the size of its
+subtree is among the largest of all the children of u. More formally, denote the size of the subtree rooted
+at vertex v as sv , and let ch(u) represent the set of children of u. Then, v can be heavy only if sv ≥ sw
+for all w ∈ ch(u). Note that there might be several children of u satisfying this constraint; in this case,
+you should choose one of them to be heavy, and the others to be light.
+After that, all vertices of the tree can be decomposed into several non-overlapping heavy chains, where
+each vertex belongs to exactly one heavy chain. A heavy chain is a sequence of vertices x1 , x2 , . . . , xk
+satisfying all the following constraints.
+• x1 is either the root or a light vertex.
+• For all 2 ≤ i ≤ k, xi is xi−1 ’s child and is a heavy vertex.
+• xk is a leaf.
+
+An HLD example. Heavy chains are marked with solid red edges.
+For example, the above figure shows a valid HLD of the given tree with 12 vertices, where the heavy
+chains are [1, 2, 3, 4, 5], [9, 10, 11], [7, 8], [6], and [12].
+Pig100Ton is a very experienced competitive programming contestant in Pigeland. He wants to know
+whether it is possible to recover the original tree from the heavy chains after HLD. Specifically, he will
+give you the number of vertices n of the original tree and k heavy chains. The i-th chain is described by
+two integers li and ri , indicating a heavy chain li , li + 1, . . . , ri .
+Your task is to construct a tree satisfying the following constraints or to tell Pig100Ton it is impossible:
+• It is a rooted tree that contains n vertices numbered from 1 to n.
+• The k chains provided by Pig100Ton should form a valid HLD of the tree. A valid HLD refers to
+a valid way to classify each non-root vertex as either light or heavy, and then decompose the tree
+into several non-overlapping heavy chains.
+
+Page 1 of 2
+
+Input
+There are multiple test cases. The first line of the input contains an integer T (1 ≤ T ≤ 105 ) indicating
+the number of test cases. For each test case:
+The first line contains two integers n and k (1 ≤ n ≤ 105 , 1 ≤ k ≤ n), indicating the number of vertices
+of the tree and the number of heavy chains after its HLD.
+For the following k lines, the i-th line contains two integers li and ri (1 ≤ li ≤ ri ≤ n), indicating that
+the i-th heavy chain is li , li + 1, . . . , ri .
+It is guaranteed that each of the n vertices belongs to exactly one given heavy chain. It is also guaranteed
+that the sum of n of all test cases does not exceed 2 × 105 .
+
+Output
+For each test case:
+If it is possible to construct such a tree, output one line containing n integers p1 , p2 , · · · , pn separated by
+a space, where pi is the parent of vertex i. pi = 0 indicates that vertex i is the root. If there are multiple
+valid solutions, you may output any one of them.
+If it is not possible to construct such a tree, just output IMPOSSIBLE in one line.
+
+Example
+standard input
+3
+12 5
+1 5
+9 11
+7 8
+6 6
+12 12
+4 3
+1 1
+4 4
+2 3
+2 2
+1 1
+2 2
+
+standard output
+0 1 2 3 4 3 2 7 1 9 10 10
+2 0 2 2
+IMPOSSIBLE
+
+Note
+For the first test case, the sample output is the tree shown in the description.
+
+Page 2 of 2
+
+

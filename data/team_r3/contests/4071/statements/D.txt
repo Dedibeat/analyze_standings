@@ -1,0 +1,53 @@
+Sequence
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+1024 megabytes
+
+Given a 01-sequence s1 , s2 , . . . , sn of length n, define
+
+pi =
+
+i
+X
+
+[si ̸= sj ]
+
+j=1
+
+where [] is the Iverson bracket (1 if the condition holds, 0 otherwise).
+You are given the integer n and the multiset {p′1 , p′2 , . . . , p′n } of the values {p1 , p2 , . . . , pn }.
+Count the number of sequences s that satisfy the condition.
+Output the answer modulo 998244353.
+It is guaranteed that there exists at least one string satisfying the conditions.
+
+Input
+The first line contains a single integer n (1 ≤ n ≤ 105 ).
+The second line contains n integers p′1 , p′2 , . . . , p′n (0 ≤ p′i ≤ n − 1) — the multiset.
+
+Output
+Print a single integer — the number of valid binary strings modulo 998 244 353.
+
+Examples
+standard input
+
+standard output
+
+1
+0
+
+2
+
+3
+0 1 1
+
+4
+
+Page 1 of 1
+
+

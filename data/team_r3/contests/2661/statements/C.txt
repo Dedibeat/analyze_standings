@@ -1,0 +1,76 @@
+Basic Counting Practice Problems
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+4 seconds
+1024 megabytes
+
+Consider a tree with n nodes, where node 1 is the root. Each node i in the tree has a weight pi , such that
+p1 , p2 , . . . , pn is a permutation.
+Let Lu,v denote the maximum weight of any node on the simple path from node u to node v (including
+u and v). Let subtree(i) represent the set of nodes that make up the subtree of node i. We define
+Si = {u|u ∈ subtree(i) ∧ Lu,i ≤ pi }, which is the set of nodes that can be reached starting from i, only
+moving to children and only passing through nodes with weights less than or equal to pi . Let fi = |Si |,
+which represents the size of the set of nodes.
+We define the value of a node as qfi , where q is a given value sequence q1 , q2 , . . . , qn .
+Now we want to compute, for each pair (i, j), the sum of the values of node i for all weight configurations
+that satisfy pi = j. Since the answer may be very large, please output the result modulo 109 + 7.
+
+Input
+The first line contains one integer n (1 ≤ n ≤ 700), representing the number of nodes in the tree.
+The next line contains n integers, representing q1 , q2 , . . . , qn (0 ≤ qi < 109 + 7).
+The following n − 1 lines each contain two integers u, v, representing an edge in the tree.
+
+Output
+Output n lines, each containing n integers. The i-th line and the j-th integer represent the corresponding
+answer modulo 109 + 7.
+
+Examples
+standard input
+
+standard output
+
+3
+1 1 2
+1 2
+2 3
+
+2 2 4
+2 2 2
+2 2 2
+
+4
+1 2 3 4
+1 2
+2 3
+1 4
+
+6 10 16 24
+6 8 10 12
+6 6 6 6
+6 6 6 6
+
+7
+3 7 2 4 1 8 9
+1 2
+1 3
+2 4
+4 5
+3 6
+4 7
+
+2160 3120 3168 2952 2160 3720 6480
+2160 2640 2640 2412 2208 2280 2880
+2160 2640 3120 3600 4080 4560 5040
+2160 3120 3648 3744 3408 2640 1440
+2160 2160 2160 2160 2160 2160 2160
+2160 2160 2160 2160 2160 2160 2160
+2160 2160 2160 2160 2160 2160 2160
+
+Page 1 of 1
+
+

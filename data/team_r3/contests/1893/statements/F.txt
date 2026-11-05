@@ -1,0 +1,83 @@
+Fuzzy Ranking
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+2 seconds
+1024 megabytes
+
+In Pigeland, there are n universities, numbered from 1 to n. Each year, several ranking organizations
+publish rankings of these universities. This year, there are k ranking lists, where each list is a permutation
+of integers from 1 to n, representing the universities. In each ranking, the closer a university is to the
+beginning of the permutation, the better its ranking is in this list.
+
+A true story in the 2024 ICPC World Final.
+Supigar, a year-4 student who wants to apply for PhD programs in Pigeland, has his own method to
+evaluate the n universities comprehensively. He considers that university x is superior to another university
+y if and only if:
+• x is ranked better than y in at least one list, or
+• x is ranked better than z (z 6= x, z 6= y) in at least one list, and z is superior to y.
+Clearly, under this definition, there might exist some pairs of universities x and y (x < y) such that x is
+superior to y while y is also superior to x. Supigar calls such pairs fuzzy.
+Supigar has q queries, where the i-th query can be represented by three integers idi , li and ri (li ≤ ri ). For
+each query, he will consider the idi -th rank list and all the universities between the li -th position and the
+ri -th position (both inclusive) in that list. He wants to know, among these universities, how many pairs
+of them are fuzzy. Note that the definition of fuzzy pairs requires considering the superior relationships
+among all k rank lists.
+
+Input
+There are multiple test cases. The first line of the input contains an integer T (1 ≤ T ≤ 2×105 ) indicating
+the number of test cases. For each test case:
+The first line contains three integers n, k, and q (1 ≤ n, k, q ≤ 2 × 105 , 1 ≤ n × k ≤ 2 × 105 ) indicating
+the number of universities, rank lists, and queries, respectively.
+Page 1 of 2
+
+For the following k lines, the i-th line contains n distinct integers ai,1 , ai,2 , . . . , ai,n (1 ≤ ai,j ≤ n) indicating
+the i-th rank list.
+For the following q lines, the i-th line contains three integers id0i , li0 , and ri0 (0 ≤ id0i < k, 0 ≤ li0 , ri0 < n)
+indicating the encoded index of the rank list and the query range for the i-th query.
+• The real value of idi is equal to ((id0i + vi−1 ) mod k) + 1.
+• The real value of li is equal to ((li0 + vi−1 ) mod n) + 1.
+• The real value of ri is equal to ((ri0 + vi−1 ) mod n) + 1.
+Where vi−1 is the answer for the (i − 1)-th query. Specifically, we define v0 = 0. With the encoded queries,
+you’re forced to calculate the answer to each query before processing the next one. It’s guaranteed that
+1 ≤ idi ≤ k and 1 ≤ li ≤ ri ≤ n after decoding.
+It is also guaranteed that neither the sum of n × k nor the sum of q of all test cases will exceed 2 × 105 .
+
+Output
+For each test case output q lines. Each line contains a single integer representing the number of fuzzy
+pairs as the answer to the i-th query.
+
+Example
+standard input
+2
+5 2 2
+1 2 3 4 5
+5 4 3 2 1
+1 0 2
+1 2 1
+5 3 3
+1 2 3 4 5
+1 3 2 4 5
+1 2 3 5 4
+0 0 2
+0 2 3
+1 0 3
+
+standard output
+3
+10
+1
+1
+2
+
+Note
+For the first sample test case, the two decoded queries are 2 1 3 and 1 1 5.
+For the second sample test case, the three decoded queries are 1 1 3, 2 4 5, and 3 2 5.
+
+Page 2 of 2
+
+

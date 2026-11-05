@@ -1,0 +1,67 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+#define int long long
+#define pb push_back
+#define rep(i, a, b) for(int i = (a); i < (b); i++)
+#define repd(i, a, b) for(int i = (d); i >= (b); i--)
+#define all(x) (x).begin(), (x).end()
+#define rall(x) (x).rbegin(), (x).rend()
+#define hha(x) cout << #x << " = " << x << ' ';
+#define hhal(x) cout << #x << " = " << x << endl;
+#define print(v) cout << #v << " = " << ' '; for(auto x : v) cout << x << ' '; cout << endl;
+int f(int x)
+{
+    if(x == 0) return 1;
+    if(x % 3 == 0) return f(x / 3) + 1;
+    else return f(x - 1) + 1;
+}
+int comp(int l, int r)
+{
+    //hha(l); hhal(r);
+    l = max(l, 1LL);
+    int ret;
+    if(l > r) return 0;
+    if(l == r) return f(l);
+    else if(r % 3 == 2) 
+    {
+        ret = comp(l / 3, r / 3) + 3;
+    }
+    else 
+        ret = max(comp(l, r - 1), f(r));
+    // hha(l); hha(r);
+    // hhal(ret);
+    return ret;
+    
+}
+void test(int num, int n)
+{
+    while(num--)
+    {
+        int l = rand() % n + 1;
+        int r = rand() % n + l;
+        int mx = 0;
+        for(int i = l; i <= r; i++) mx = max(mx, f(i));
+        int ret = comp(l, r);
+        if(mx != ret)
+        {
+            hha(l); hhal(r); hha(mx);
+            hhal(ret);
+            exit(1);
+        }
+    }
+}
+void solve() {
+    int l, r; cin >> l >> r;
+    cout << comp(l, r) << "\n";
+    //exit(0);
+}
+
+signed main() {
+    ios_base::sync_with_stdio(0); cin.tie(0);
+    srand(time(NULL));
+    // test(1000, 1000);
+    int t; cin >> t; while(t--)
+    solve();
+    return 0;
+}

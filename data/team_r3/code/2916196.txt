@@ -1,0 +1,89 @@
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+
+#define int long long
+#define sz(a) (int)(a).size()
+#define pb push_back
+#define all(x) (x).begin(), (x).end()
+#define rall(x) x.rbegin(), x.rend()
+#define FOR(i, a, b) for(int i = (a); i < (b); i++)
+#define FORD(i, a, b) for(int i = (a); i >= (b); i++)
+#define ff first
+#define ss second 
+#define _ << ' ' <<
+#define hha(x) cout << #x << " = " << x << " "
+#define hhal(x) cout << #x << " = " << x << endl
+#define print(v) cout << #v << " = "; for(auto x : v) cout << x << " "; cout << endl;
+int fact[3005];
+const int mod = 998244353;
+void solve() {
+    int n; cin >> n;
+    vector<vector<int>> g(n + 1);
+    for(int i = 1; i < n; i++)
+    {
+        int u, v; cin >> u >> v;
+        g[u].push_back(v);
+        g[v].push_back(u);
+    }
+    vector<int> del(n + 1);
+    vector<int> leafs;
+    for(int i = 1; i <= n; i++) 
+    {
+        if(g[i].size() == 1) leafs.push_back(i);
+    }
+    auto rem = [&](int u)
+    {
+        del[u] = 1;
+        int v = g[u][0];
+        auto it = find(all(g[v]), u);
+        g[v].erase(it);
+        if(g[v].size() == 1) leafs.push_back(v);
+    };
+    vector<int> d(n + 1);
+    auto dfs = [&](auto &&self, int u, int p, int &sum) -> void
+    {
+        if(d[u] > 1) 
+        {
+            sum = (sum + fact[d[u]]) % mod;
+            sum = (sum - fact[d[u] - 1] + mod) % mod;
+        }
+        if(d[u] > 2) 
+        {
+            sum = (sum - fact[d[u] - 1] + mod) % mod;
+            sum = (sum + fact[d[u] - 2]) % mod;
+        }
+        for(int v : g[u])
+        {
+            if(v == p || del[v]) continue;
+            d[v] = d[u] + 1;
+            self(self, v, u, sum);
+        }
+    };
+    int tot = 1;
+    while(leafs.size())
+    {
+        int u = leafs.back();
+        //hha(u); print(leafs);
+        leafs.pop_back();
+        int sum = 0;
+        d[u] = 1;
+        dfs(dfs, u, u, sum);
+        tot = (tot + sum) % mod;
+        //hhal(sum);
+        rem(u);
+    }
+    cout << tot << "\n";
+}    
+
+signed main() {
+    ios_base::sync_with_stdio(0); cin.tie(0);
+    fact[0] = 1;
+    for(int i = 1; i < 3005; i++) fact[i] = fact[i - 1] * i % mod;
+    int t = 1;
+    cin >> t;
+    while(t--) {
+        solve();
+    }
+    return 0;
+}

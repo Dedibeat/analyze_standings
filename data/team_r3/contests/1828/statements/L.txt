@@ -1,0 +1,51 @@
+P ⊕Q=R
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+4 seconds
+1024 megabytes
+
+Alice wants to train herself to solve constructive problems. So her friend Kei, a super artificial intelligence,
+generates the following problem for Alice.
+Given an integer n, construct two permutations P = p1 , p2 , · · · , pn and Q = q1 , q2 , · · · , qn of
+0, 1, . . . , (n − 1), such that the sequence R = r1 , r2 , · · · , rn is still a permutation of 0, 1, . . . , (n − 1),
+where ri = pi ⊕ qi . Here x ⊕ y means the bitwise exclusive-or of x and y.
+Alice solves this problem with her powerful calculating ability and she decides to share this problem with
+you. Can you solve it?
+
+Input
+There are multiple test cases. The first line of the input contains an integer T indicating the number of
+test cases. For each test case:
+The first and only line contains one integer n (1 ≤ n ≤ 2 × 105 ) indicating the length of the permutation.
+It is guaranteed that the sum of n of all test cases will not exceed 2 × 106 .
+
+Output
+For each test case:
+If there exist two permutations satisfying the constraint, first output Yes in one line. Then output a
+second line containing n integers p1 , p2 , . . . , pn separated by a space. Finally output a third line containing
+n integers q1 , q2 , . . . , qn separated by a space. If there are multiple valid answers, you can output any of
+them.
+If there do not exist two permutations satisfying the constraint, just output No in one line.
+
+Example
+standard input
+2
+3
+4
+
+standard output
+No
+Yes
+0 2 1 3
+3 2 0 1
+
+Note
+For the second test case, R = {3, 0, 1, 2} is still a permutation of 0, 1, 2, 3.
+
+Page 1 of 1
+
+

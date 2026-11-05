@@ -1,0 +1,50 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define int long long
+#define pb push_back
+void solve()
+{
+
+}
+signed main()
+{
+    ios::sync_with_stdio(0); cin.tie(0);
+    int n, m; cin >> n >> m;
+    vector<vector<pair<int, int>>> g(n + 1);
+    for(int i = 1; i <= m; i ++) {
+        int u, v; cin >> u >> v;
+        g[u].pb({v, i});
+        g[v].pb({u, i});
+    }
+    vector<int> vis(n + 1, 0);
+    int cnt = 0;
+    set<int> st;
+    auto dfs = [&](auto &&self, int u) -> void{
+        vis[u] = 1;
+        cnt++;
+        for(auto &[v, ind] : g[u]) {
+            st.insert(ind);
+            if(vis[v] == 1) continue;
+            self(self, v);
+        }
+    };
+    vector<int> sz;
+    int ans = 0;
+    for(int i = 1; i <= n; i++) {
+        if(vis[i] == 1) continue;
+        cnt = 0;
+        st.clear();
+        dfs(dfs, i);
+        if(cnt * (cnt - 1) / 2 > st.size()) {
+            ans += cnt * (cnt - 1) / 2 - st.size();
+        }
+        sz.pb(cnt);
+    }
+    if(ans) {
+        cout << ans << '\n';
+    }
+    else {
+        sort(sz.begin(), sz.end());
+        cout << sz[0] * sz[1] << '\n';
+    }
+}

@@ -1,0 +1,58 @@
+Relay Jump
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+1024 megabytes
+
+There are n frogs numbered 1 through n, each initially located at an integer lattice point in the Cartesian
+plane. An external disturbance suddenly stimulates one of the frogs, triggering a chain reaction in which
+the frogs act according to the rules below.
+When frog i (1 ≤ i ≤ n) is stimulated, it can choose to either:
+• jump toward some other frog j (1 ≤ j ≤ n, j ̸= i) and instantly land at the reflection of its current
+position across the point currently occupied by frog j (if frog i coincides with frog j before the jump,
+then it lands at the coinciding point); immediately after this jump, frog j becomes the next and
+only frog to be stimulated;
+• or stay where it is, in which case all jumps end and no frog remains stimulated.
+A frog may be stimulated multiple times at different moments, while some frogs may never be stimulated.
+You observe that the first stimulated frog is numbered s, but there are too many jumps for you to
+capture the entire process. Fortunately, you recognize every frog, so you record both their initial positions
+P1 , P2 , . . . , Pn and their final positions Q1 , Q2 , . . . , Qn after all jumps have ended. You also notice that
+all initial positions are pairwise distinct, and the final positions are pairwise distinct as well.
+Let t be the index of the last stimulated frog, i.e., the frog that chooses to stay still when stimulated,
+after which no more jumps occur. Please find t.
+
+Input
+The first line contains two integers n (2 ≤ n ≤ 105 ) and s (1 ≤ s ≤ n), denoting the number of frogs and
+the index of the first stimulated frog, respectively.
+The i-th of the next n lines contains four integers pxi , pyi , qxi , and qyi (−109 ≤ pxi , pyi , qxi , qyi ≤ 109 ),
+where Pi = (pxi , pyi ) and Qi = (qxi , qyi ) represent the initial and final positions of frog i in the plane.
+It is guaranteed that all initial positions P1 , P2 , . . . , Pn are pairwise distinct. All final positions
+Q1 , Q2 , . . . , Qn are pairwise distinct as well, and correspond to some sequence of at most 2 × 105
+stimulations following the described rules.
+
+Output
+Output a single integer t, denoting the index of the frog that was last stimulated.
+
+Example
+standard input
+3 1
+6 3 2 3
+4 3 2 1
+3 4 1 6
+
+standard output
+1
+
+Note
+In the sample case, the corresponding sequence of stimulations is [1, 2, 3, 2, 1].
+
+Page 1 of 2
+
+Page 2 of 2
+
+

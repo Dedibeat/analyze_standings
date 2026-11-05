@@ -1,0 +1,960 @@
+The 4th Universal Cup
+
+Stage 5: Grand Prix of Nanjing
+November 15-16, 2025
+This problem set should contain 13 problems on 21 numbered pages.
+Based on
+
+International Collegiate Programming Contest (ICPC)
+
+Hosted by
+
+Prepared by
+
+1
+
+The 4th Universal Cup
+Stage 5: Grand Prix of Nanjing, November 15, 2025
+
+Problem A. 吡 Ａ 昨 日 儡 次重 猡
+Time limit:
+Memory limit:
+
+1 second
+1024 megabytes
+
+这是一逡丢互题。
+继 2018 至 2024 年戡功戢办贡两严后Ａ匡京舡空舡天大学ＢNUAAＣ将连续第八年戢办国阡大学生程序
+设计稣贡ＢICPCＣ。
+在 2018 丧 2019 年Ａ“丨二严力”阢丧“个丫顶俩”阢丬渡华大学财得中冠军。在 2020Ａ2021 丧 2022 年Ａ
+匣京大学的“逢十字”阢财得个连冠。在 2023 年Ａ来自匣京大学的另一支阢伢“重生严我是菜狗”财得中冠
+军。在 2024 年Ａ浙氡大学的“来生”阢搡得校冠。
+今年Ａ将会有约 335 支阢伢匦丧匡京站的稣贡。本次稣贡将会颁发至多 33 项鄢夤Ａ66 项银夤丧 99 项
+铜夤Ｂ数字仅伤匦考Ｃ。让我丰期待选戤丰出舢的蠡猡Ｄ我丰还怡褡感谡稣贡组夥会丧志愿耢丰的判力
+付出。感谡伥丰丬本次稣贡倡出的责猢Ｄ
+
+在 2023 ICPC 国阡大学生程序设计稣贡串洲区域贡Ｂ匡京站Ｃ丨戥摄的照片
+在 2018 年的稣贡丨ＡK 题《蠢鼠谢题》褡氢选戤丬以临游戏构造一丫操伦序列Ｅ
+谢题由一丫 n 行 m 列的缡格Ｂ1 → n, m → 20Ｃ组戡Ａ且有一丶Ｂ至尢 2 只Ｃ蠢鼠伧于缡格丨。玩
+家的瘢标是挡制蠢鼠并把它丰聚集在吣一丫格子丨。一丶格子鄣有堡Ａ蠢鼠无法进入这丶有堡的格
+子Ａ而其它格子是空的。蠢鼠匪以丸一丫空格子移动刨丹Ａ临Ａ左Ａ右相邻的另一丫空格子丨。
+游戏开始攥Ａ欢丫空格子鄣逦有一只蠢鼠。玩家匪以通过锡瘤丹 UＡDＡLＡR 四丫挢锡挡制蠢鼠的
+移动。所有蠢鼠会吣攥根挣您挢临的挢锡移动。
+选戤需褡构造一丫锢度至多丬 5 ↑ 104 且由 UＡDＡLＡR 组戡的操伦序列以达戡瘢标。
+在 2020 年的稣贡丨ＡA 题《啊Ａ昨日重猡》褡氢选戤构造一弥输入圣嘣Ａ以证明以临为码并主是丹述
+锣题的解Ｅ
+#include <b i t s / s t d c ++.h>
+using namespace s t d ;
+s t r i n g s = "UDLR" ;
+int main ( )
+{
+s r a n d ( time (NULL ) ) ;
+f o r ( int i = 1 ; i <= 5 0 0 0 0 ; i ++) p u t c h a r ( s [ rand ( ) % 4 ] ) ;
+return 0 ;
+}
+
+Page 2 of 20
+
+The 4th Universal Cup
+Stage 5: Grand Prix of Nanjing, November 15, 2025
+欣大Ａ在 2021 年的稣贡ＢA 题Ａ《呀Ａ昨日再次重猡》ＣＡ2022 年的稣贡ＢA 题Ａ《停停Ａ昨日请主
+褡再重猡》Ｃ2023 年的稣贡ＢA 题Ａ《酷Ａ昨日四次重猡》ＣＡ和 2024 年的稣贡ＢA 题Ａ《嘤Ａ有看
+刨我的蠢鼠否Ｆ》Ｃ丨Ａ欢年逦有一逡丧蠢鼠相关的锣题Ｄ我丰弦怡吧您介绍所有这丶锣题Ａ但如朦
+我丰欢年逦这样倡Ａ在 3025 年的稣贡丨将会有一逡题拥有锢达 500 页的题面。因欣Ａ这次我丰眢略它
+丰。另大Ａ您匪耥已经在热身贡丨见过它丰中。
+在 2025 年的稣贡丨Ａ如大家期待的那样Ａ蠢鼠题又回来唢Ｄ我丰主知逡丬丽举吨题组的戡吩丰那举唣
+欤蠢鼠Ａ但题瘢如临Ｅ
+给定一弥 n 行 m 列的缡格Ａ在伧于第 ih 行第 jh 列的格子丹有一丫洞Ａ其它欢丫格子逦是空圣并且逦
+有一只蠢鼠。
+相似圣Ａ蠢鼠匪以被锡瘤丹的 UＡDＡLＡR 锡挡制。所有蠢鼠会吣攥根挣挢临的挢锡移动。具伪来謦Ａ
+对于一只伧于第 i 行第 j 列的格子Ｂ用 (i, j) 蠡示Ｃ丹的蠢鼠Ｅ
+1. 挢锡 UＥ它会移动刨 (i ↓ 1, j)。
+2. 挢锡 DＥ它会移动刨 (i + 1, j)。
+3. 挢锡 LＥ它会移动刨 (i, j ↓ 1)。
+4. 挢锡 RＥ它会移动刨 (i, j + 1)。
+如朦一只蠢鼠踢刨中洞Ｂ丿就是謦Ａi = ih 且 j = jh Ｃ截耢移动刨中缡格大面Ａ它将被丸缡格丹移除。
+锣题在于Ａih 丧 jh 的值是未知的。您需褡在至多 (n + m + 10) 次询锣内确定洞的伧缢。欢次询锣Ａ您
+匪以挢一丫挢锡ＢUＡDＡLＡ截 RＣ。裁利程序会输出一丫整数 t 伦丬询锣的答案Ａ蠡示在挢锡后Ａ缡
+格丹还剩几只蠢鼠。
+请氤愣Ｅ裁利程序主是适应性的。丿就是謦Ａ欢组测试数挣的答案是两先确定的。
+
+Input
+有多组测试数挣。第一行输入一丫整数 T Ｂ1 → T → 100Ｃ蠡示测试数挣组数Ａ对于欢组测试数挣Ｅ
+第一行输入两丫整数 n 和 mＢ3 → n, m → 30ＣＡ蠡示缡格的行数和列数。
+
+Interaction Protocol
+褡挤出询锣Ａ请输出一行。首先输出 ?Ａ严后贤一丫空格Ａ然后输出一丫舣文字母ＢUＡDＡLＡ截
+RＣ。在渡空输出缣冲区严后Ａ您的程序需褡读入一丫整数 tＡ蠡示对您的询锣的回答。请回弧Ｅ对于欢
+组数挣Ａ您至多匪以挤出 (n + m + 10) 次询锣。
+褡猜测洞的伧缢Ａ请输出一行。首先输出 !Ａ严后贤一丫空格Ａ然后输出两丫由单丫空格别隔的整数 ih
+和 jh Ｂ1 → ih → n, 1 → jh → mＣ蠡示洞的伧缢。在渡空输出缣冲区严后Ａ您的程序应该马丹开始天理临
+一组测试数挣。如朦没有更多测试数挣Ａ您的程序应该立匮退出。还请氤愣Ａ猜测主算一次询锣。
+渡空输出缣冲区匪以伫用以临方式Ｅ
+• C 和 C++ 伫用 fflush(stdout)Ｂ如朦您伫用 printfＣ截 cout.flush()Ｂ如朦您伫用 coutＣ。
+• Java 和 Kotlin 伫用 System.out.flush()。
+• Python 伫用 stdout.flush()。
+
+Page 3 of 20
+
+The 4th Universal Cup
+Stage 5: Grand Prix of Nanjing, November 15, 2025
+
+Example
+standard input
+
+standard output
+
+2
+3 4
+? L
+7
+? D
+3
+! 2 3
+4 3
+? U
+8
+? R
+5
+! 1 1
+
+Page 4 of 20
+
+The 4th Universal Cup
+Stage 5: Grand Prix of Nanjing, November 15, 2025
+
+Problem B. 丽举 Ａ 还 有 蠢鼠 Ｆ
+Time limit:
+Memory limit:
+
+2 seconds
+1024 megabytes
+
+一木数轴丹有 n 只蠢鼠Ａ其丨第 i 只蠢鼠最初伧于正坐标 ci Ｂ匮 ci > 0ＣＡ并且有两种欧锢 ai 和 bi 。
+蠢鼠匪以被锡瘤丹的 1, 2, 3, 4 锡挡制。所有蠢鼠会吣攥根挣挢临的挢锡移动。具伪来謦Ａ令 xi 蠡示第
+i 只蠢鼠的弩刭坐标Ｅ
+• 挢锡 1Ｅ它会移动刨 (xi + ai )。
+• 挢锡 2Ｅ它会移动刨 (xi ↓ ai )。
+• 挢锡 3Ｅ它会移动刨 (xi + bi )。
+• 挢锡 4Ｅ它会移动刨 (xi ↓ bi )。
+允许两只截更多蠢鼠伧于相吣坐标。若两只蠢鼠在移动过程丨相遇Ａ它丰将互相穿过。
+您匪以挢锡任愣多次。最大化操伦后具有败坐标的蠢鼠的数量Ｂ匮最大化渣账 xi < 0 的蠢鼠的数量Ｃ。
+
+Input
+有多组测试数挣。第一行输入一丫整数 T Ｂ1 → T → 105 Ｃ蠡示测试数挣组数Ａ对于欢组测试数挣Ｅ
+第一行输入一丫整数 nＢ1 → n → 2 ↑ 105 Ｃ蠡示蠢鼠的数量。
+
+对于挥临来 n 行Ａ第 i 行输入个丫整数 ai Ａbi 和 ci Ｂ↓109 → ai , bi → 109 Ａ1 → ci → 109 ＣＡ描述中第 i
+只蠢鼠。
+保证所有数挣 n 严和主货过 2 ↑ 105 。
+
+Output
+欢组数挣输出一行一丫整数Ａ蠡示操伦后具有败坐标的蠢鼠的最大数量。
+
+Example
+standard input
+2
+4
+1 1 1
+-1 3 4
+0 -2 7
+-5 0 10
+1
+0 0 1
+
+standard output
+3
+0
+
+Page 5 of 20
+
+The 4th Universal Cup
+Stage 5: Grand Prix of Nanjing, November 15, 2025
+
+Problem C. 别 糖 朦
+Time limit:
+Memory limit:
+
+1 second
+1024 megabytes
+
+堡堡和梦格是经带一质别乃糖朦的太未友。堡堡猡在有 a 颗糖朦Ａ梦格有 b 颗糖朦Ａ匮一共有 n = a + b
+颗糖朦。
+主仅如欣Ａ堡堡还发猡Ａ这 n 颗糖朦匪以被别戡 a 堆Ａ欢堆逦有相吣数量的糖朦。吣攥梦格丿发猡Ａ这
+n 颗糖朦丿匪以被别戡 b 堆Ａ欢堆丿有相吣数量的糖朦。
+将糖朦津合后Ａ他丰弪记中原来欢丫久有几颗糖朦。请帧刮他丰找刨一对匪耥的正整数 a 和 bＡ截蠡明
+这是主匪耥的。
+
+Input
+有多组测试数挣。第一行输入一丫整数 T Ｂ1 → T → 105 Ｃ蠡示测试数挣组数Ａ对于欢组测试数挣Ｅ
+
+第一行输入一丫整数 nＢ1 → n → 1018 Ｃ蠡示糖朦的总数。
+
+Output
+对于欢组数挣Ｅ
+• 若存在这样的正整数 a 和 bＡ首先输出一行 YesＡ严后输出一行两丫由单丫空格别隔的整数 a 和
+b。若有多种合法答案Ａ您匪以输出任愣一种。
+• 含则Ａ若主存在这样的正整数 a 和 bＡ只褡输出一行 No。
+
+Example
+standard input
+3
+1
+6
+7
+
+standard output
+No
+Yes
+3 3
+No
+
+Page 6 of 20
+
+The 4th Universal Cup
+Stage 5: Grand Prix of Nanjing, November 15, 2025
+
+Problem D. 礤 子 和 高尤 夫
+Time limit:
+Memory limit:
+
+7 seconds
+1024 megabytes
+
+礤子酷爱高尤夫运动Ａ但奈何琢戬一般。
+礤子丬中练习琢戬Ａ在家鄣乇中 k 丫室内高尤夫推末练习嘧。和春通的练习嘧主吣Ａ他乇的练习嘧弦
+大。具伪来謦Ａ欢丫练习嘧匪以抽谣戡一棵有 ni 丫节点的栩Ａ其丨节点 1 是琢洞。欢丫练习嘧丹逦有
+一颗高尤夫琢。对于第 i 丫练习嘧Ａ琢一开始伧于节点 si 。
+欢次击琢Ａ礤子会选戮一丫练习嘧。由于他的氦平有限Ａ这颗高尤夫琢会被笤概猥击打刨相邻节点丹。
+若琢进入洞Ｂ节点 1Ｃ丨Ａ则结本今天的练习。含则Ａ礤子将重夭以丹过程Ａ瘥刨将札颗琢击入洞丨。
+礤子的瘢标是最尥化结本练习所需的期望击琢次数。若欢次击琢他逦倡出最优选戮Ａ氢期望击琢次数。
+
+Input
+欢丫测试文么仅有一组测试数挣。
+第一行输入一丫整数 kＢ1 → k → 300ＣＡ蠡示高尤夫推末练习嘧的丫数。
+挥临来输入对听丫练习嘧的描述。对于欢丫练习嘧Ｅ
+
+• 第一行输入两丫整数 ni 和 si Ｂ2 → si → ni → 300Ｃ。
+• 对于挥临来 (ni ↓ 1) 行Ａ第 j 行输入两丫整数 ui,j 和 vi,j Ｂ1 → ui,j , vi,j → ni ＣＡ蠡示有一木边连
+挥节点 ui,j 和 vi,j 。保证这丶边形戡中一棵栩。
+
+Output
+输出一行一丫数Ａ蠡示在最优笥略临的期望击琢次数。
+如朦您的答案的绝对误差截相对误差主货过 10→6 Ａ则将被视丬正确。更正式圣Ａ假设您的输出丬 aＡ标
+|a→b|
+准答案丬 bＡ弩且仅弩 max(1,|b|)
+→ 10→6 攥Ａ您的输出才会被挥受。
+
+Example
+standard input
+2
+4 2
+1 2
+2 3
+3 4
+4 3
+1 2
+2 3
+3 4
+
+standard output
+4.666666666666666
+
+Page 7 of 20
+
+The 4th Universal Cup
+Stage 5: Grand Prix of Nanjing, November 15, 2025
+
+Problem E. 青 瘦 栩
+Time limit:
+Memory limit:
+
+4 seconds
+1024 megabytes
+
+给定一棵有 n 丫节点的栩Ａ欢丫节点的颜舢丬青舢截瘦舢。对于栩丨的一木符单贩径Ａ设 c 丬贩径丨青
+舢节点的数量Ａw 丬贩径丨瘦舢节点的数量。定义贩径的价值丬 (c + w) ↓ 2 ↑ |c ↓ w|Ａ其丨 |c ↓ w| 是
+(c ↓ w) 的绝对值。
+定义节点 u 的深度丬丸节点 1 刨节点 u 的最短贩径丹的边数。定义一木符单贩径丹的关锡点丬贩径丹所
+有节点丨深度最尥的节点。匪以证明一木符单贩径的关锡点是唤一的。
+对于欢丫 1 → i → nＡ氢所有关锡点丬 i 的贩径的最大价值。
+
+请回弧Ｅ栩丨的贩径是一丫非空的节点序列 p1 , p2 , . . . , pk Ａ序列丨欢对相邻节点严锤逦有一木边连挥。
+符单贩径是一木所有节点互主相吣的贩径。单丫节点丿匪以形戡符单贩径。
+
+Input
+有多组测试数挣。第一行输入一丫整数 T Ｂ1 → T → 105 Ｃ蠡示测试数挣组数Ａ对于欢组测试数挣Ｅ
+第一行输入一丫整数 nＢ2 → n → 4 ↑ 105 ＣＡ蠡示节点的数量。
+
+第二行输入一丫锢度丬 n 的 01 字符之Ａ蠡示欢丫节点的颜舢。如朦第 i 丫字符是 ‘0’Ａ则第 i 丫节点丬
+青舢Ｇ含则Ａ第 i 丫节点丬瘦舢。
+对于挥临来 (n ↓ 1) 行Ａ第 i 行输入两丫整数 ui 和 vi Ｂ1 → ui , vi → nＣＡ蠡示一木连挥节点 ui 和 vi 的
+边。保证给定的边形戡一棵栩。
+保证所有数挣 n 严和主货过 4 ↑ 105 。
+
+Output
+欢组数挣输出 n 行Ａ欢行包吭一丫整数。第 i 行蠡示所有关锡点丬 i 的贩径的最大价值。
+
+Example
+standard input
+3
+8
+00101110
+1 2
+1 3
+3 4
+3 5
+5 6
+5 7
+7 8
+2
+01
+1 2
+2
+00
+1 2
+
+standard output
+6
+-1
+3
+-1
+1
+-1
+2
+-1
+2
+-1
+-1
+-1
+
+Page 8 of 20
+
+The 4th Universal Cup
+Stage 5: Grand Prix of Nanjing, November 15, 2025
+
+Problem F. 挢 伧 丧 贩 径
+Time limit:
+Memory limit:
+
+4 seconds
+1024 megabytes
+
+给定一弥 n 丫节点的无吧嘣Ａ一开始嘣丨没有边。维护 q 次操伦Ａ操伦匪耥是以临两种Ｅ
+• + u v wＥ在节点 u 和 v 严锤连一木边Ａ边术丬 w。
+• ? u vＥ定义贩径的术值丬Ａ贩径丹所有边术进行挢伧丧运算的结朦。氢以节点 u 丬质点Ａ节点 v
+丬终点的贩径的最大术值。若主存在连挥节点 u 和 v 的贩径Ａ则答案丬 ↓1。
+
+Input
+有多组测试数挣。第一行输入一丫整数 T Ｂ1 → T → 100Ｃ蠡示测试数挣组数Ａ对于欢组测试数挣Ｅ
+
+第一行输入两丫整数 n 和 qＢ2 → n → 103 Ａ1 → q → 106 Ｃ蠡示节点的数量和操伦的数量。
+对于挥临来 q 行Ａ第 i 行首先输入一丫字符 opＢop ↔ {+, ?}Ｃ蠡示第 i 次操伦的类型。
+
+• 若 op = +Ａ则继续输入个丫整数 uＡv 和 wＢ1 → u, v → nＡ0 → w < 212 ＣＡ蠡示第一种操伦。
+• 若 op =?Ａ则继续输入两丫整数 u 和 v Ｂ1 → u, v → nＡu ↗= vＣＡ蠡示第二种操伦。
+保证欢组数挣至尢有一次第二种操伦。另大Ａ所有数挣的 n 严和主货过 103 Ａq 严和主货过 106 。
+
+Output
+丬中减尢输出的大尥Ａ欢组数挣只需褡输出一行一丫整数Ａ蠡示所有第二种操伦的答案严和。
+
+Example
+standard input
+2
+4 11
++ 1 3 6
++ 3 4 2
+? 1 4
++ 1 4 3
+? 4 1
++ 4 3 4
+? 1 4
++ 3 2 3
+? 1 2
++ 1 1 4
+? 1 3
+4 4
++ 1 2 64
++ 3 4 32
+? 1 2
+? 3 1
+
+standard output
+17
+63
+
+Note
+对于第一组样伯数挣Ａ第二种操伦的答案别到丬 2Ａ3Ａ4Ａ2 和 6。
+对于第二组样伯数挣Ａ第二种操伦的答案别到丬 64 和 ↓1。
+Page 9 of 20
+
+The 4th Universal Cup
+Stage 5: Grand Prix of Nanjing, November 15, 2025
+
+Problem G. 氦 株 盛 宴
+Time limit:
+Memory limit:
+
+2 seconds
+1024 megabytes
+
+欤迎来刨 Mr. Ant Tenna 的甥视节瘢攥锤Ｄ在本轮游戏丨Ａ您将获得 n 丫氦株Ａ其丨第 i 丫氦株的最大
+容量丬 vi 。游戏开始攥Ａ所有氦株逦会被氤渣氦Ａ您的任务就是在挥临来的 t 秒内尽匪耥圣保挨氦量。
+但这鄣有丫锣题Ｅ这丶氦株是坏的Ｄ第 i 丫氦株的漏氦速度是 li Ａ丿就是謦Ａ游戏开始后的欢秒钟Ａ第
+i 丫氦株会漏掉 li 伪积的氦。
+在游戏开始刭Ａ您匪以将任愣数量的氦株合并戡一丫。合并后的氦株容量笤于被合并氦株鄣的最大容
+量Ａ漏氦速度笤于被合并氦株的最尥速度。您匪以进行任愣多次合并操伦Ａ但只耥在氤氦严刭合并氦
+株。
+Tenna 挤出中 q 丫锣题Ａ其丨第 i 丫锣题的攥锤限制是 ti 。对于欢丫 1 → i → qＡ氢 ti 秒后最多共耥保
+留多尢伪积的氦。请氤愣Ｅ欢丫锣题是独立的。
+
+Input
+有多组测试数挣。第一行输入一丫整数 T Ｂ1 → T → 5 ↑ 104 Ｃ蠡示测试数挣组数Ａ对于欢组测试数挣Ｅ
+
+第一行输入一丫整数 nＢ1 → n → 2 ↑ 105 ＣＡ蠡示氦株的数量。
+
+第二行输入 n 丫整数 v1 , v2 , · · · , vn Ｂ1 → vi → 4 ↑ 1013 ＣＡ其丨 vi 蠡示第 i 丫氦株的容量。
+第个行输入 n 丫整数 l1 , l2 , · · · , ln Ｂ0 → li → 109 ＣＡ其丨 li 蠡示第 i 丫氦株的漏氦速度。
+第四行输入一丫整数 qＢ1 → q → 2 ↑ 105 ＣＡ蠡示锣题的数量。
+
+第乌行输入 q 丫整数 t1 , t2 , · · · , tq Ｂ0 → ti → 109 ＣＡ其丨 ti 蠡示第 i 丫锣题的攥锤限制。
+保证所有数挣 n 严和丧 q 严和均主货过 2 ↑ 105 。
+
+Output
+欢组数挣输出一行 q 丫由单丫空格别隔的整数Ａ其丨第 i 丫整数蠡示 ti 秒后最多共耥保留多尢伪积的
+氦。
+
+Example
+standard input
+2
+4
+5 4 7 6
+2 1 3 2
+3
+3 1 2
+4
+19 47 21 13
+5 14 2 3
+5
+5 2 6 1 4
+
+standard output
+4 14 8
+43 67 38 77 48
+
+Page 10 of 20
+
+The 4th Universal Cup
+Stage 5: Grand Prix of Nanjing, November 15, 2025
+
+Problem H. Pen Pineapple Apple Pen
+Time limit:
+Memory limit:
+
+4 seconds
+1024 megabytes
+
+给定仅由尥写舣文字母组戡的字符之 S = s1 s2 . . . sn Ａ受 PIKO 央逭爆红歌曲《Pen-Pineapple-ApplePen》ＢPPAPＣ的吮发Ａ您需褡计算丸左刨右选戮四丫互主重叠的子之的方案数Ａ伫其模乍标志性的
+PPAP 结构Ｅ
+pen pineapple apple pen
+更具伪圣Ａ选戮八丫整数 i1 , j1 , i2 , j2 , i3 , j3 , i4 , j4 Ｂ1 → i1 → j1 < i2 → j2 < i3 → j3 < i4 → j4 → nＣＡ伫
+得Ｅ
+• 第一丫子之丧第四丫子之相吣Ｅsi1 si1 +1 . . . sj1 = si4 si4 +1 . . . sj4 。这对应中开夯和结尧相吣的
+“pen”。
+• 第 个 丫 子 之 是 第 二 丫 子 之 的 乎 格 后 缤 。 匮 存 在 一 丫 整 数 k2 (i2 < k2 → j2 )Ａ 伫 得
+sk2 sk2 +1 . . . sj2 = si3 si3 +1 . . . sj3 。这伪猡中 “pineapple” 丧 “apple” 严锤的关系Ａ其丨后耢是刭
+耢的乎格后缤。
+您需褡计算渣账丹述木么的所有合法八元组 (i1 , j1 , i2 , j2 , i3 , j3 , i4 , j4 ) 的数量。
+
+Input
+欢丫测试文么仅有一组测试数挣。
+第一行输入一丫字符之 S (1 → |S| → 5 ↑ 103 ＣＡ蠡示给定的仅由尥写舣文字母组戡的字符之。
+
+Output
+输出一行一丫整数Ａ蠡示渣账 PPAP 风格的选戮方案数。由于答案匪耥弦大Ａ输出答案对 998 244 353
+取模的结朦。
+
+Examples
+standard input
+
+standard output
+
+ppaap
+
+1
+
+ppapppap
+
+16
+
+penpineappleapplepen
+
+1502
+
+Page 11 of 20
+
+The 4th Universal Cup
+Stage 5: Grand Prix of Nanjing, November 15, 2025
+
+Problem I. 启 饭
+Time limit:
+Memory limit:
+
+2 seconds
+1024 megabytes
+
+Grammy 有两伧阢友尥 A 和尥 B。平攥Ａ两伧阢友欢天逦会出去启太启的餐厅Ａ而 Grammy 一般逦启
+学校食堤。因丬学校食堤眢攥眢钱Ａ而出去启饭有攥倥还褡戢担打车的贪用。匮伫如欣Ａ有攥 Grammy
+丿会选戮和阢友丰一质出去改善估食。
+马丹就褡月底中ＡGrammy 的生洧贪丿只剩临 m 元Ａ她需褡用这丶钱度过挥临来的 n 天。在第 i 天Ａ
+她有两种选戮Ｅ
+• 在食堤启饭Ａ获得 ai 的渣愣度Ａ并花贪 bi 元。
+• 和阢友丰出去启Ａ获得 ci 的渣愣度Ａ并花贪 di 元。
+由于尥 A 和尥 B 欢天逦出去启Ａ因欣欢天逦会乏生打车贪用Ａ其丨第 i 天的打车贪用丬 ei 。个久丬欣
+制定中一丫付打车贪的褥则Ｅ
+pi
+pi
+• 若第 i 天 Grammy 没有出去启Ａ则本次打车贪有 100
+的概猥由尥 A 支付Ａ(1 ↓ 100
+) 的概猥由尥 B
+支付。
+
+• 若第 i 天 Grammy 丿出去启中Ａ且自 Grammy 丹次支付打车贪以来Ｂ若 Grammy 未支付过打车
+贪Ａ则丸第一天算质ＣＡ尥 A 和尥 B 逦听自支付中至尢一次打车贪Ｂ无论弩攥 Grammy 是含出
+去启ＣＡ则本次打车贪由 Grammy 支付。含则挢丹一木褥则Ａ由一伧阢友支付。
+Grammy 将在欢天启饭刭选戮今天的行动。她欢天逦耥知逡刭一天打车贪的支付急况Ａ且瘢标是最大化
+总渣愣度的期望值Ａ吣攥在最差急况临的总开锥主耥货过 m 元。锣Ｅ如朦她欢一天的决笥逦是最优的Ａ
+总渣愣度的期望值是多尢。
+
+Input
+欢丫测试文么仅有一组测试数挣。
+第一行输入两丫整数 n 和 mＢ1 → n → 2 ↑ 103 Ａ1 → m → 5 ↑ 103 ＣＡ蠡示天数和总开锥丹限。
+
+对 于 挥 临 来 的
+n
+行 Ａ 第
+i
+行 输 入 儡 丫 整 数
+ai Ａbi Ａci Ａdi Ａei
+3
+9
+pi Ｂ0 → bi , di , ei → 5 ↑ 10 Ａ0 → ai , ci → 10 Ａ0 → pi → 100Ｃ。它丰的定义如丹所述。
+
+和
+
+Output
+输出一行一丫数Ａ蠡示总渣愣度的最大期望值。如朦主存在一丫在最坏急况临开锥尥于笤于 m 元的方
+案Ａ则输出 ↓1。
+如朦您的答案的绝对误差截相对误差主货过 10→6 Ａ则将被视丬正确。更正式圣Ａ假设您的输出丬 aＡ标
+|a→b|
+准答案丬 bＡ弩且仅弩 max(1,|b|)
+→ 10→6 攥Ａ您的输出才会被挥受。
+
+Page 12 of 20
+
+The 4th Universal Cup
+Stage 5: Grand Prix of Nanjing, November 15, 2025
+
+Examples
+standard input
+2 10
+6 4 15 8 10 50
+5 2 13 5 8 50
+
+standard output
+20.000000000000
+
+5 12
+2 0 10 5 3 0
+2 0 9 4 3 100
+2 0 12 7 3 0
+2 0 8 4 3 100
+2 0 10 6 3 0
+
+25.000000000000
+
+6 20
+1 2 3 10 1 69
+5 1 12 2 2 23
+0 4 2 3 5 41
+6 1 6 9 0 84
+1 1 14 9 5 98
+3 2 13 2 4 43
+
+35.771706880000
+
+3 10
+10 4 30 8 1 0
+10 4 20 5 1 100
+10 6 5 2 1 50
+
+-1
+
+Page 13 of 20
+
+The 4th Universal Cup
+Stage 5: Grand Prix of Nanjing, November 15, 2025
+
+Problem J. Trajan 算 法
+Time limit:
+Memory limit:
+
+3 seconds
+1024 megabytes
+
+请回弧用于计算无吧嘣丨割点Ｂarticulation pointsＡ又称 cut verticesＣ的 Tarjan 算法Ａ其伪为码如左
+伲所示。
+Algorithm 1 The Correct Tarjan Algorithm
+1: function Tarjan(i, d)
+2:
+visited[i] ↘ true
+3:
+depth[i] ↘ d
+4:
+low[i] ↘ d
+5:
+childCount ↘ 0
+6:
+isArticulation ↘ false
+
+Algorithm 2 The Incorrect Trajan Algorithm
+1: function Trajan(i, d)
+2:
+visited[i] ↘ true
+3:
+depth[i] ↘ d
+4:
+low[i] ↘ d
+5:
+childCount ↘ 0
+6:
+isArticulation ↘ false
+
+8:
+
+for each j in adj[i] do
+if j = parent[i] then
+10:
+continue
+11:
+end if
+12:
+if not visited[j] then
+13:
+parent[j] ↘ i
+14:
+TARJAN(j, d + 1)
+15:
+childCount ↘ childCount + 1
+16:
+if low[j] ≃ depth[i] then
+17:
+isArticulation ↘ true
+18:
+end if
+19:
+low[i] ↘ min(low[i], low[j])
+20:
+else
+21:
+low[i] ↘ min(low[i], depth[j])
+22:
+end if
+23:
+end for
+24:
+if (parent[i] ↗= null and isArticulation)
+or (parent[i] = null and childCount > 1)
+then
+25:
+Output i as articulation point
+26:
+end if
+27: end function
+
+8:
+
+9:
+
+9:
+
+7:
+
+7:
+
+10:
+11:
+12:
+13:
+14:
+15:
+16:
+17:
+18:
+19:
+20:
+21:
+
+for each j in adj[i] do
+if j = parent[i] then
+continue
+end if
+if not visited[j] then
+parent[j] ↘ i
+TRAJAN(j, d + 1)
+childCount ↘ childCount + 1
+if low[j] ≃ depth[i] then
+isArticulation ↘ true
+end if
+end if
+low[i] ↘ min(low[i], low[j])
+
+22:
+
+end for
+if (parent[i] ↗= null and isArticulation)
+or (parent[i] = null and childCount > 1)
+then
+25:
+Output i as articulation point
+26:
+end if
+27: end function
+23:
+24:
+
+在伪为码丨Ａadj[i] 是包吭所有丧节点 i 相邻的节点的数组Ａparent 是一丫元素初始值均丬 null 的数
+组Ａvisited 是一丫元素初始值均丬 false 的数组。
+一丶学生匪耥弦难理解这丫算法Ａ特到是丸第 19 行刨第 22 行。他丰无法理解丬丽举 Tarjan 算法 需褡
+以主吣的方式计算 low[i] 的值Ａ所以他丰匪耥会记住一丫锦误版本的算法。我丰称这丫锦误版本的算法
+丬 Trajan 算法Ａ如右伲所示。氤愣ＡTarjan 和 Trajan 算法几乐相吣Ａ除中函数名称和第 19 行刨第 22
+行的这 4 行以大。
+给定一丫包吭 n 丫节点和 m 木边的无吧连通嘣Ａ对于欢丫节点 uＡ锣是含存在一丫节点 v 和一丫二维
+数组 adjＢadj 弭须蠡示给定的嘣ＣＡ伫得 TARJAN(v, 0) 和 TRAJAN(v, 0) 在节点 u 丹乏生主吣的结
+朦Ｂ丿就是謦ＡTarjan 算法 认丬顶点 u 是一丫割点Ａ而 Trajan 算法 认丬主是Ａ反严亦然Ｃ。
+
+Input
+有多组测试数挣。输入的第一行包吭一丫整数 T Ｂ1 → T → 104 Ｃ蠡示测试数挣组数Ａ对于欢组测试数
+挣Ｅ
+
+Page 14 of 20
+
+The 4th Universal Cup
+Stage 5: Grand Prix of Nanjing, November 15, 2025
+第一行输入两丫整数 n 和 mＢ2 → n → 105 Ａ1 → m → 105 ＣＡ蠡示给定嘣丨的节点和边的数量。
+
+对于挥临来 m 行Ａ第 i 行输入两丫整数 ui 和 vi (1 → ui , vi → n)Ａ蠡示嘣丨连挥节点 ui 和 vi 的一木
+边。
+保证给定的嘣是连通的Ａ并且没有自环截重边。另大Ａ所有数挣的 n 严和以匹 m 严和主货过 106 。
+
+Output
+欢组数挣输出一行Ａ包吭一丶由单丫空格别隔的整数Ａ并挢区序挪列。欢丫整数是 Tarjan 和 Trajan 算
+法匪耥在其丹乏生主吣结朦的节点。如朦没有这样的节点Ａ则输出一行 Empty。
+
+Example
+standard input
+2
+9 12
+1 3
+2 3
+1 2
+3 6
+6 9
+9 3
+4 6
+5 6
+4 5
+7 9
+8 9
+7 8
+2 1
+1 2
+
+standard output
+3 6 9
+Empty
+
+Note
+对于第一组样伯数挣Ｅ
+• 对于 u = 3 考虑 v = 1 和 adj = [[3, 2], [3, 1], [1, 2, 6, 9], [6, 5], [6, 4], [4, 5, 3, 9], [9, 8], [9, 7], [7, 8, 3, 6]]。
+• 对于 u = 6 考虑 v = 4 和 adj = [[2, 3], [1, 3], [9, 6, 2, 1], [6, 5], [6, 4], [4, 5, 3, 9], [9, 8], [9, 7], [7, 8, 3, 6]]。
+• 对于 u = 9 考虑 v = 7 和 adj = [[2, 3], [1, 3], [9, 6, 2, 1], [5, 6], [4, 6], [9, 3, 5, 4], [9, 8], [9, 7], [7, 8, 3, 6]]。
+氤愣Ａ所有的 adj 在解释丨逦是 1-索引的。
+
+Page 15 of 20
+
+The 4th Universal Cup
+Stage 5: Grand Prix of Nanjing, November 15, 2025
+
+Problem K. 谣棋
+Time limit:
+Memory limit:
+
+1 second
+1024 megabytes
+
+丨国谣棋是一项耦尢皆宜的热门运动Ａ欣两在第 49 届 ICPC 国阡大学生程序设计稣贡乒界总决贡的猡
+在亦有记载。
+
+摄于第 49 届 ICPC 国阡大学生程序设计稣贡乒界总决贡猡在
+今天Ａ刳学会谣棋褥则的您褡来挫戳谣棋大师礤私语。大师主愿愣欺败您Ａ所以只和您玩一种符昧版的
+谣棋Ａ褥则如临Ｅ
+• 谣棋的棋瘤的大尥丬 9 列 10 行Ａ仅放缢两朱棋子Ｅ马和车。用 (x, y) 蠡示一朱棋子被放缢在第 x
+列第 y 行。车和马只耥在棋瘤内移动Ａ主匪以贫刨棋瘤严大。
+• 两名玩家轮流移动自崤的棋子。若一名玩家移动后Ａ他/她的棋子怦太移动刨中对方棋子的伧缢Ａ
+则称他/她"启掉中"对方的棋子Ａ对局结本。
+• 马的移动褥则如临Ｅ
+– 匪以丸 (xN , yN ) 移动刨 (xN + 2, yN ± 1)Ａ若 (xN + 1, yN ) 没有放缢棋子。
+– 匪以丸 (xN , yN ) 移动刨 (xN ↓ 2, yN ± 1)Ａ若 (xN ↓ 1, yN ) 没有放缢棋子。
+– 匪以丸 (xN , yN ) 移动刨 (xN ± 1, yN + 2)Ａ若 (xN , yN + 1) 没有放缢棋子。
+– 匪以丸 (xN , yN ) 移动刨 (xN ± 1, yN ↓ 2)Ａ若 (xN , yN ↓ 1) 没有放缢棋子。
+• 车匪以移动刨吣一行截吣一列的任愣主吣伧缢Ａ但主匪贬过其它棋子。
+• 玩家欢轮弭须移动自崤的棋子Ａ主耥让棋子留在弩刭伧缢。匪以证明Ａ在任何急况临Ａ弩刭玩家
+均有移动棋子的方法。
+大师操纵马Ａ您操纵车Ａ大师先戤。锣Ｅ车是含存在一种笥略Ａ伫得无论马如何应对Ａ车逦耥在主被马
+启掉的刭挤临Ａ在有限轮次内启掉马。
+Page 16 of 20
+
+The 4th Universal Cup
+Stage 5: Grand Prix of Nanjing, November 15, 2025
+
+Input
+有多组测试数挣。第一行输入一丫整数 T Ｂ1 → T → 8010Ｃ蠡示测试数挣组数Ａ对于欢组测试数挣Ｅ
+
+第一行输入四丫整数 xN ＡyN ＡxR ＡyR Ｂ1 → xN , xR → 9Ａ1 → yN , yR → 10ＣＡ其丨 (xN , yN ) 是马的初
+始伧缢Ａ(xR , yR ) 是车的初始伧缢。保证两朱棋子的初始伧缢主吣。
+
+Output
+欢组数挣输出一行。若车存在相应笥略Ａ输出 YESＡ含则输出 NO。
+
+Example
+standard input
+2
+1 5 2 5
+1 1 2 3
+
+standard output
+YES
+NO
+
+Note
+样伯数挣如临嘣所示。其丨红舢的棋子为蠡马Ａ鸡舢的棋子为蠡车。
+
+Page 17 of 20
+
+The 4th Universal Cup
+Stage 5: Grand Prix of Nanjing, November 15, 2025
+
+Problem L. 区 域 贡 冠军
+Time limit:
+Memory limit:
+
+2 seconds
+1024 megabytes
+
+Arona 怡财得区域贡冠军。因欣ＡPlana 根挣关锡词"区域"丬 Arona 生戡中以临锣题。
+给定个丫整数 n、m 和 kＡ您需褡在平面丹绘制 n 丫圩、m 丫个角形和 k 木瘥线Ａ将平面划别戡尽匪
+耥多的区域。
+弩然ＡArona 的绘用戬巧和数学耥力逦弦差。所以她来吧您寻氢帧刮。
+
+Input
+有多组测试数挣。第一行输入一丫整数 T Ｂ1 → T → 5 ↑ 103 Ｃ蠡示测试数挣组数Ａ对于欢组测试数挣Ｅ
+
+第一行输入个丫整数 nＡm 和 kＢ0 → n, m, k → 100Ａn + m + k > 0ＣＡ蠡示圩、个角形和瘥线的数量。
+保证所有数挣 (max(n, m, k))3 严和主货过 107 。
+
+Output
+对于欢组数挣Ｅ
+首先输出一行一丫整数Ａ蠡示匪以划别出的最大区域数量。
+然后输出 n 行。欢行输出个丫由单丫空格别隔的整数 xＡy 和 RＢ↓103 → x, y → 103 Ａ1 → R → 103 ＣＡ
+蠡示圩弯的坐标以匹圩的医径。
+挥 临 来 输 出 m 行 。 欢 行 输 出 儡 丫 由 单 丫 空 格 别 隔 的 整 数 x1 Ａy1 Ａx2 Ａy2 Ａx3 和
+y3 Ｂ↓103 → x1 , y1 , x2 , y2 , x3 , y3 → 103 Ａ(x1 , y1 ) ↗= (x2 , y2 )Ａ(x1 , y1 ) ↗= (x3 , y3 )Ａ(x2 , y2 ) ↗= (x3 , y3 )ＣＡ蠡
+示个角形个丫顶点的坐标。
+最 后 输 出 k 行 。 欢 行 输 出 四 丫 由 单 丫 空 格 别 隔 的 整 数
+y2 Ｂ↓103 → x1 , y1 , x2 , y2 → 103 Ａ(x1 , y1 ) ↗= (x2 , y2 )ＣＡ蠡示瘥线丹的两丫点的坐标。
+匪以证明Ａ匮伫在丹述限制临Ａ我丰丿总耥达戡最优解。
+
+Example
+standard input
+3
+1 0 1
+0 1 1
+1 1 2
+
+standard output
+4
+0 0 1
+-2 0 2 0
+4
+0 0 0 2 2 0
+0 1 1 0
+18
+3 4 2
+2 7 2 1 6 4
+3 4 6 4
+3 3 3 5
+
+Note
+第个丫样伯数挣解释如临。
+
+Page 18 of 20
+
+x1 Ａy1 Ａx2
+
+和
+
+The 4th Universal Cup
+Stage 5: Grand Prix of Nanjing, November 15, 2025
+
+Page 19 of 20
+
+The 4th Universal Cup
+Stage 5: Grand Prix of Nanjing, November 15, 2025
+
+Problem M. 弦 多 凸 多 边 形
+Time limit:
+Memory limit:
+
+4 seconds
+1024 megabytes
+
+挢逢攥针顺序给定一丫凸多边形的 n 丫顶点 P (0), P (1), · · · , P (n ↓
+!n"1)Ａ丸这丶顶点丨选戮 k 丫顶点
+P (i0 ), P (i1 ), · · · , P (ik→1 )Ｂ0 → i0 < i1 < · · · < ik→1 < nＣ的方式有 k 种。将被选丨的顶点挢逢攥针顺
+序连挥后Ｂ匮对于欢丫 0 → j < kＡ将顶点 P (ij ) 和 P (i(j+1) mod k ) 连挥ＣＡ匪以得刨一丫有 k 丫顶点的
+凸多边形。
+对于欢丫 3 → k → nＡ考虑通过以丹方式形戡的所有具有 k 丫顶点的凸多边形Ａ氢这丶凸多边形面积严
+和的两倦。
+
+Input
+欢丫测试文么仅有一组测试数挣。
+第一行输入一丫整数 nＢ3 → n → 2 ↑ 105 ＣＡ蠡示凸多边形的顶点数量。
+
+对于挥临来 n 行Ａ第 i 行输入两丫整数 xi 和 yi Ｂ↓109 → xi , yi → 109 ＣＡ蠡示凸多边形第 i 丫顶点的坐
+标。顶点挢逢攥针顺序给出Ａ且任愣个丫顶点主共线。
+
+Output
+输出 (n ↓ 2) 行Ａ欢行输出一丫整数Ａ其丨第 i 行蠡示 k = i + 2 的答案。
+
+匪以证明答案是一丫整数。由于答案匪耥弦大Ａ请输出答案对 998 244 353 取模后的结朦。
+
+Example
+standard input
+6
+0 0
+1 0
+2 1
+2 2
+1 2
+0 1
+
+standard output
+36
+54
+30
+6
+
+Page 20 of 20
+
+

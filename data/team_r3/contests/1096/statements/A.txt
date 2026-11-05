@@ -1,0 +1,65 @@
+The 1st Universal Cup
+Stage 1: Shenyang, January 28-29, 2023
+
+Problem A. Absolute Difference
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+512 megabytes
+
+Both Alice and Bob have a set of real numbers, and both sets are the union of some disjoint closed
+intervals. They will independently pick a real number uniformly at random from their own set, and you
+need to calculate the expected absolute difference between the two real numbers.
+S
+More formally, given a set of real numbers S = [l, r], picking a real number x from the set S uniformly
+at random means that P (x ∈ [l1 , r1 ]) = P (x ∈ [l2 , r2 ]) holds for any two intervals [l1 , r1 ], [l2 , r2 ] ⊆ S with
+the same length, i.e., r1 − l1 = r2 − l2 .
+
+Input
+The first line contains two integers n and m (1 ≤ n, m ≤ 105 ), the number of intervals that form Alice’s
+set and Bob’s set respectively.
+Each of the following n + m lines contains two integers l and r (−109 ≤ l ≤ r ≤ 109 ), describing a closed
+interval [l, r]. The first n intervals form Alice’s set and the next m intervals form Bob’s set. Note that an
+interval [l, r] with l = r is a degenerate interval that contains a single real number.
+It is guaranteed that the intervals that form someone’s set are pairwise disjoint.
+
+Output
+Output a single real number, indicating the expected absolute difference of the two real numbers picked
+by Alice and Bob separately.
+Your answer is acceptable if its absolute or relative error does not exceed 10−9 . Formally speaking, suppose
+|a−b|
+that your output is a and the jury’s answer is b, your output is accepted if and only if max(1,|b|)
+≤ 10−9 .
+
+Examples
+standard input
+1 1
+0 1
+0 1
+1 1
+0 1
+1 1
+
+standard output
+0.333333333333333
+
+0.5
+
+Note
+In the first sample case,
+Alice and Bob can pick any real number from [0, 1], and the expected
+R 1 R both
+1
+absolute difference is 0 0 |x − y| dx dy = 13 .
+In the second sample case, Alice can pick any
+R 1 real number from [0, 1] while Bob can only pick 1, and
+therefore the expected absolute difference is 0 |x − 1| dx = 12 .
+
+Page 1 of 16
+
+

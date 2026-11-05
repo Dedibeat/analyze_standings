@@ -1,0 +1,64 @@
+The 2022 ICPC Asia Xi’an Regional Contest
+Northwestern Polytechnical University, November 13, 2022
+
+Problem E. Find Maximum
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+512 megabytes
+
+We define a function f (x) over all non-negative integer x as follows:
+
+
+(x = 0)
+1
+x
+f (x) = f ( 3 ) + 1
+(x > 0 ∧ x mod 3 = 0)
+
+
+f (x − 1) + 1 (x > 0 ∧ x mod 3 6= 0)
+Calculate maxrx=l f (x).
+You need to answer T queries independently.
+
+Input
+The first line contains a single integer T (1 ≤ T ≤ 104 ).
+Each of the next T lines contains two integers l and r (1 ≤ l ≤ r ≤ 1018 ), representing a query.
+
+Output
+Output T lines. The i-th line contains a single integer, representing the answer to the i-th query.
+
+Example
+standard input
+10
+1 2
+1 3
+1 4
+1 5
+2 3
+2 4
+2 5
+3 4
+3 5
+4 5
+
+standard output
+3
+3
+4
+5
+3
+4
+5
+4
+5
+5
+
+Page 5 of 14
+
+

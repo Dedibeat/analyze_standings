@@ -1,0 +1,2565 @@
+[
+ {
+  "contest_id": 4113,
+  "title": "The 2026 ICPC Asia East Continent Online Contest (II)",
+  "board": "QOJ official",
+  "board_teams": 2636,
+  "upsolved": [],
+  "kind": "official",
+  "date": null,
+  "solved": [
+   "D",
+   "J",
+   "K",
+   "L"
+  ],
+  "wrong": {
+   "A": 3,
+   "D": 2
+  },
+  "penalty_min": [
+   482,
+   482
+  ],
+  "rank": [
+   352,
+   352
+  ],
+  "problems": [
+   {
+    "label": "A",
+    "name": "All Closed",
+    "board_solves": 115,
+    "difficulty_cf": 2769.3,
+    "ours": false,
+    "member": "Dedi [Didn’t solve during contest. Right start with an XOR basis, then a wrong idea (user, 2026-11-05).]",
+    "statement": true
+   },
+   {
+    "label": "B",
+    "name": "Bread",
+    "board_solves": 0,
+    "difficulty_cf": 3910.7,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "C",
+    "name": "Cut Tree",
+    "board_solves": 2,
+    "difficulty_cf": 3803.4,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "D",
+    "name": "Divide and Conquer",
+    "board_solves": 620,
+    "difficulty_cf": 2119.7,
+    "ours": true,
+    "member": "Dedi [Erdene and Tamir were stuck on it (user, 2026-11-05).]",
+    "statement": true
+   },
+   {
+    "label": "E",
+    "name": "Exponent",
+    "board_solves": 93,
+    "difficulty_cf": 2841.8,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "F",
+    "name": "Folding Game of Ohto Ai",
+    "board_solves": 16,
+    "difficulty_cf": 3417.0,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "G",
+    "name": "Ghost of Tsushima",
+    "board_solves": 0,
+    "difficulty_cf": 3982.2,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "H",
+    "name": "Hidden Track (Easy Version)",
+    "board_solves": 95,
+    "difficulty_cf": 2849.5,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "I",
+    "name": "Island",
+    "board_solves": 58,
+    "difficulty_cf": 3029.8,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "J",
+    "name": "Joker or Judger",
+    "board_solves": 2488,
+    "difficulty_cf": 827.4,
+    "ours": true,
+    "member": "Erdene",
+    "statement": true
+   },
+   {
+    "label": "K",
+    "name": "K-MEX",
+    "board_solves": 1027,
+    "difficulty_cf": 1907.8,
+    "ours": true,
+    "member": "Tamir + Dedi",
+    "statement": true
+   },
+   {
+    "label": "L",
+    "name": "Loop",
+    "board_solves": 2171,
+    "difficulty_cf": 1414.5,
+    "ours": true,
+    "member": "Dedi",
+    "statement": true
+   }
+  ],
+  "sheet_only": [
+   "A"
+  ],
+  "solved_not_in_sheet": [],
+  "tutorial": [
+   "Tutorials (zh-cn)"
+  ]
+ },
+ {
+  "contest_id": 1485,
+  "title": "The 2023 ICPC Asia East Continent Online Contest (I)",
+  "board": "tagged_official.json",
+  "board_teams": 2554,
+  "upsolved": [],
+  "kind": "virtual",
+  "exact": true,
+  "date": "2026-08-20",
+  "solved": [
+   "A",
+   "D",
+   "G",
+   "I",
+   "J",
+   "L"
+  ],
+  "wrong": {
+   "D": 3,
+   "G": 5,
+   "I": 1,
+   "L": 1
+  },
+  "solve_min": {
+   "A": 16,
+   "D": 64,
+   "G": 217,
+   "I": 160,
+   "J": 82,
+   "L": 19
+  },
+  "penalty_min": [
+   758,
+   758
+  ],
+  "rank": [
+   417,
+   417
+  ],
+  "problems": [
+   {
+    "label": "A",
+    "name": "Qualifiers Ranking Rules",
+    "board_solves": 2168,
+    "difficulty_cf": 1295.7,
+    "ours": true,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "B",
+    "name": "String",
+    "board_solves": 22,
+    "difficulty_cf": 3292.9,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "C",
+    "name": "Multiply Then Plus",
+    "board_solves": 5,
+    "difficulty_cf": 3672.0,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "D",
+    "name": "Transitivity",
+    "board_solves": 1607,
+    "difficulty_cf": 1660.4,
+    "ours": true,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "E",
+    "name": "Magical Pair",
+    "board_solves": 26,
+    "difficulty_cf": 3270.2,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "F",
+    "name": "Alice and Bob",
+    "board_solves": 101,
+    "difficulty_cf": 2822.1,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "G",
+    "name": "Spanning Tree",
+    "board_solves": 582,
+    "difficulty_cf": 2173.9,
+    "ours": true,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "H",
+    "name": "Range Periodicity Query",
+    "board_solves": 27,
+    "difficulty_cf": 3229.9,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "I",
+    "name": "Pa?sWorD",
+    "board_solves": 694,
+    "difficulty_cf": 2105.9,
+    "ours": true,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "J",
+    "name": "Minimum Manhattan Distance",
+    "board_solves": 1236,
+    "difficulty_cf": 1864.3,
+    "ours": true,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "K",
+    "name": "Minimum Euclidean Distance",
+    "board_solves": 309,
+    "difficulty_cf": 2425.9,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "L",
+    "name": "KaChang!",
+    "board_solves": 2337,
+    "difficulty_cf": 837.7,
+    "ours": true,
+    "member": null,
+    "statement": true
+   }
+  ],
+  "sheet_only": [],
+  "solved_not_in_sheet": [
+   "A",
+   "D",
+   "G",
+   "I",
+   "J",
+   "L"
+  ],
+  "tutorial": []
+ },
+ {
+  "contest_id": 1794,
+  "title": "The 2024 ICPC Asia East Continent Online Contest (I)",
+  "board": "tagged_official.json",
+  "board_teams": 2323,
+  "upsolved": [],
+  "kind": "virtual",
+  "exact": true,
+  "date": "2026-08-22",
+  "solved": [
+   "A",
+   "C",
+   "F",
+   "G",
+   "L",
+   "M"
+  ],
+  "wrong": {
+   "F": 1,
+   "G": 2,
+   "L": 4
+  },
+  "solve_min": {
+   "A": 32,
+   "C": 68,
+   "F": 53,
+   "G": 174,
+   "L": 240,
+   "M": 7
+  },
+  "penalty_min": [
+   714,
+   714
+  ],
+  "rank": [
+   96,
+   96
+  ],
+  "problems": [
+   {
+    "label": "A",
+    "name": "World Cup",
+    "board_solves": 1940,
+    "difficulty_cf": 1580.9,
+    "ours": true,
+    "member": "Tamir",
+    "statement": true
+   },
+   {
+    "label": "B",
+    "name": "Graph",
+    "board_solves": 23,
+    "difficulty_cf": 3272.1,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "C",
+    "name": "Permutation Counting 4",
+    "board_solves": 308,
+    "difficulty_cf": 2399.5,
+    "ours": true,
+    "member": "Dedi",
+    "statement": true
+   },
+   {
+    "label": "D",
+    "name": "Protection War",
+    "board_solves": 1,
+    "difficulty_cf": 3760.4,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "E",
+    "name": "Random Dungeon",
+    "board_solves": 9,
+    "difficulty_cf": 3472.8,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "F",
+    "name": "Make Max",
+    "board_solves": 1564,
+    "difficulty_cf": 1744.4,
+    "ours": true,
+    "member": "Tamir",
+    "statement": true
+   },
+   {
+    "label": "G",
+    "name": "The Median of the Median of the Median",
+    "board_solves": 497,
+    "difficulty_cf": 2246.8,
+    "ours": true,
+    "member": "Erdene",
+    "statement": true
+   },
+   {
+    "label": "H",
+    "name": "Rainbow Bracket Sequence",
+    "board_solves": 86,
+    "difficulty_cf": 2859.5,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "I",
+    "name": "Boxes",
+    "board_solves": 0,
+    "difficulty_cf": 3802.1,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "J",
+    "name": "Rivals",
+    "board_solves": 1,
+    "difficulty_cf": 3851.5,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "K",
+    "name": "AC Automation Chicken",
+    "board_solves": 1,
+    "difficulty_cf": 3910.5,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "L",
+    "name": "Bull Farm",
+    "board_solves": 125,
+    "difficulty_cf": 2743.8,
+    "ours": true,
+    "member": "Dedi + Tamir [Couldn’t find the bug and asked GPT for help.]",
+    "statement": true
+   },
+   {
+    "label": "M",
+    "name": "Find the Easiest Problem",
+    "board_solves": 2193,
+    "difficulty_cf": 1015.6,
+    "ours": true,
+    "member": "Dedi",
+    "statement": true
+   }
+  ],
+  "sheet_only": [],
+  "solved_not_in_sheet": [],
+  "tutorial": []
+ },
+ {
+  "contest_id": 2513,
+  "title": "The 2025 ICPC Asia East Continent Online Contest (I)",
+  "board": "tagged_official.json",
+  "board_teams": 2279,
+  "upsolved": [
+   "J"
+  ],
+  "kind": "virtual",
+  "exact": true,
+  "date": "2026-09-03",
+  "solved": [
+   "A",
+   "B",
+   "C",
+   "D",
+   "G",
+   "I",
+   "M"
+  ],
+  "wrong": {
+   "M": 2
+  },
+  "solve_min": {
+   "A": 79,
+   "B": 34,
+   "C": 168,
+   "D": 139,
+   "G": 22,
+   "I": 33,
+   "M": 110
+  },
+  "penalty_min": [
+   625,
+   625
+  ],
+  "rank": [
+   147,
+   147
+  ],
+  "problems": [
+   {
+    "label": "A",
+    "name": "Who Can Win",
+    "board_solves": 1594,
+    "difficulty_cf": 1678.6,
+    "ours": true,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "B",
+    "name": "Creating Chaos",
+    "board_solves": 1975,
+    "difficulty_cf": 1437.8,
+    "ours": true,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "C",
+    "name": "Canvas Painting",
+    "board_solves": 356,
+    "difficulty_cf": 2317.8,
+    "ours": true,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "D",
+    "name": "Min-Max Tree",
+    "board_solves": 462,
+    "difficulty_cf": 2204.3,
+    "ours": true,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "E",
+    "name": "tetrart",
+    "board_solves": 0,
+    "difficulty_cf": 3964.3,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "F",
+    "name": "Robot",
+    "board_solves": 61,
+    "difficulty_cf": 2959.3,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "G",
+    "name": "Sorting",
+    "board_solves": 2146,
+    "difficulty_cf": 946.4,
+    "ours": true,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "H",
+    "name": "Walk",
+    "board_solves": 18,
+    "difficulty_cf": 3294.2,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "I",
+    "name": "Knapsack Problem",
+    "board_solves": 1370,
+    "difficulty_cf": 1819.0,
+    "ours": true,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "J",
+    "name": "Moving on the Plane",
+    "board_solves": 127,
+    "difficulty_cf": 2694.4,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "K",
+    "name": "Counting",
+    "board_solves": 12,
+    "difficulty_cf": 3359.7,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "L",
+    "name": "cover",
+    "board_solves": 1,
+    "difficulty_cf": 3780.5,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "M",
+    "name": "Teleporter",
+    "board_solves": 694,
+    "difficulty_cf": 2066.5,
+    "ours": true,
+    "member": null,
+    "statement": true
+   }
+  ],
+  "sheet_only": [],
+  "solved_not_in_sheet": [
+   "A",
+   "B",
+   "C",
+   "D",
+   "G",
+   "I",
+   "M"
+  ],
+  "tutorial": []
+ },
+ {
+  "contest_id": 2524,
+  "title": "The 2025 ICPC Asia East Continent Online Contest (II)",
+  "board": "tagged_official.json",
+  "board_teams": 2575,
+  "upsolved": [],
+  "kind": "virtual",
+  "exact": true,
+  "date": "2026-09-09",
+  "solved": [
+   "C",
+   "D",
+   "E",
+   "H",
+   "J"
+  ],
+  "wrong": {
+   "C": 3,
+   "J": 2
+  },
+  "solve_min": {
+   "C": 99,
+   "D": 106,
+   "E": 187,
+   "H": 155,
+   "J": 243
+  },
+  "penalty_min": [
+   890,
+   890
+  ],
+  "rank": [
+   345,
+   345
+  ],
+  "problems": [
+   {
+    "label": "A",
+    "name": "Angry Birds",
+    "board_solves": 131,
+    "difficulty_cf": 2746.7,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "B",
+    "name": "Rectangular Wooden Block",
+    "board_solves": 24,
+    "difficulty_cf": 3326.2,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "C",
+    "name": "Jiaxun!",
+    "board_solves": 1396,
+    "difficulty_cf": 1735.4,
+    "ours": true,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "D",
+    "name": "Arcane Behemoths",
+    "board_solves": 1598,
+    "difficulty_cf": 1603.7,
+    "ours": true,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "E",
+    "name": "Zero",
+    "board_solves": 892,
+    "difficulty_cf": 1994.7,
+    "ours": true,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "F",
+    "name": "Square Permutation I",
+    "board_solves": 0,
+    "difficulty_cf": 3992.0,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "G",
+    "name": "Square Permutation II",
+    "board_solves": 10,
+    "difficulty_cf": 3578.7,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "H",
+    "name": "Tree Shuffling",
+    "board_solves": 611,
+    "difficulty_cf": 2136.8,
+    "ours": true,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "I",
+    "name": "DAG Query",
+    "board_solves": 417,
+    "difficulty_cf": 2282.5,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "J",
+    "name": "Reconstruct the tree",
+    "board_solves": 190,
+    "difficulty_cf": 2597.2,
+    "ours": true,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "K",
+    "name": "The Only Heart",
+    "board_solves": 148,
+    "difficulty_cf": 2685.2,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "L",
+    "name": "Xor Mirror",
+    "board_solves": 38,
+    "difficulty_cf": 3186.5,
+    "ours": false,
+    "member": null,
+    "statement": true
+   }
+  ],
+  "sheet_only": [],
+  "solved_not_in_sheet": [
+   "C",
+   "D",
+   "E",
+   "H",
+   "J"
+  ],
+  "tutorial": [
+   "Tutorials (zh-cn)"
+  ]
+ },
+ {
+  "contest_id": 1799,
+  "title": "The 2024 ICPC Asia East Continent Online Contest (II)",
+  "board": "tagged_official.json",
+  "board_teams": 2450,
+  "upsolved": [],
+  "kind": "virtual",
+  "exact": true,
+  "date": "2026-09-10",
+  "solved": [
+   "A",
+   "F",
+   "G",
+   "I",
+   "J",
+   "L"
+  ],
+  "wrong": {
+   "G": 1,
+   "L": 3
+  },
+  "solve_min": {
+   "A": 45,
+   "F": 11,
+   "G": 137,
+   "I": 26,
+   "J": 17,
+   "L": 86
+  },
+  "penalty_min": [
+   402,
+   402
+  ],
+  "rank": [
+   514,
+   514
+  ],
+  "problems": [
+   {
+    "label": "A",
+    "name": "Gambling on Choosing Regionals",
+    "board_solves": 1716,
+    "difficulty_cf": 1703.1,
+    "ours": true,
+    "member": "Erdene",
+    "statement": true
+   },
+   {
+    "label": "B",
+    "name": "Mountain Booking",
+    "board_solves": 6,
+    "difficulty_cf": 3660.3,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "C",
+    "name": "Prefix of Suffixes",
+    "board_solves": 103,
+    "difficulty_cf": 2829.5,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "D",
+    "name": "Query on Tree",
+    "board_solves": 1,
+    "difficulty_cf": 3727.0,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "E",
+    "name": "Escape",
+    "board_solves": 505,
+    "difficulty_cf": 2258.3,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "F",
+    "name": "Tourist",
+    "board_solves": 2361,
+    "difficulty_cf": 800.0,
+    "ours": true,
+    "member": "Erdene",
+    "statement": true
+   },
+   {
+    "label": "G",
+    "name": "Game",
+    "board_solves": 1060,
+    "difficulty_cf": 1956.8,
+    "ours": true,
+    "member": "Dedi",
+    "statement": true
+   },
+   {
+    "label": "H",
+    "name": "Points Selection",
+    "board_solves": 29,
+    "difficulty_cf": 3214.4,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "I",
+    "name": "Strange Binary",
+    "board_solves": 2130,
+    "difficulty_cf": 1432.1,
+    "ours": true,
+    "member": "Dedi",
+    "statement": true
+   },
+   {
+    "label": "J",
+    "name": "Stacking of Goods",
+    "board_solves": 1857,
+    "difficulty_cf": 1531.7,
+    "ours": true,
+    "member": "Dedi",
+    "statement": true
+   },
+   {
+    "label": "K",
+    "name": "Match",
+    "board_solves": 88,
+    "difficulty_cf": 2882.8,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "L",
+    "name": "502 Bad Gateway",
+    "board_solves": 953,
+    "difficulty_cf": 1971.5,
+    "ours": true,
+    "member": "Dedi",
+    "statement": true
+   }
+  ],
+  "sheet_only": [],
+  "solved_not_in_sheet": [],
+  "tutorial": [
+   "Tutorials (zh-cn)"
+  ]
+ },
+ {
+  "contest_id": 1051,
+  "title": "The 2022 ICPC Asia Xi'an Regional Contest",
+  "board": "tagged_official.json",
+  "board_teams": 522,
+  "upsolved": [],
+  "kind": "virtual",
+  "exact": true,
+  "date": "2026-10-01",
+  "solved": [
+   "C",
+   "E",
+   "F",
+   "G",
+   "J",
+   "L"
+  ],
+  "wrong": {
+   "E": 2
+  },
+  "solve_min": {
+   "C": 18,
+   "E": 123,
+   "F": 23,
+   "G": 48,
+   "J": 14,
+   "L": 91
+  },
+  "penalty_min": [
+   357,
+   357
+  ],
+  "rank": [
+   116,
+   116
+  ],
+  "problems": [
+   {
+    "label": "A",
+    "name": "Bridge",
+    "board_solves": 52,
+    "difficulty_cf": 2629.2,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "B",
+    "name": "Cells Coloring",
+    "board_solves": 102,
+    "difficulty_cf": 2425.0,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "C",
+    "name": "Clone Ranran",
+    "board_solves": 499,
+    "difficulty_cf": 1397.1,
+    "ours": true,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "D",
+    "name": "Contests",
+    "board_solves": 20,
+    "difficulty_cf": 2906.6,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "E",
+    "name": "Find Maximum",
+    "board_solves": 325,
+    "difficulty_cf": 2002.2,
+    "ours": true,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "F",
+    "name": "Hotel",
+    "board_solves": 514,
+    "difficulty_cf": 1204.9,
+    "ours": true,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "G",
+    "name": "Perfect Word",
+    "board_solves": 466,
+    "difficulty_cf": 1683.0,
+    "ours": true,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "H",
+    "name": "Power of Two",
+    "board_solves": 2,
+    "difficulty_cf": 3518.9,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "I",
+    "name": "Square Grid",
+    "board_solves": 1,
+    "difficulty_cf": 3587.9,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "J",
+    "name": "Strange Sum",
+    "board_solves": 514,
+    "difficulty_cf": 1034.9,
+    "ours": true,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "K",
+    "name": "Streets",
+    "board_solves": 2,
+    "difficulty_cf": 3364.2,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "L",
+    "name": "Tree",
+    "board_solves": 266,
+    "difficulty_cf": 2081.5,
+    "ours": true,
+    "member": null,
+    "statement": true
+   }
+  ],
+  "sheet_only": [],
+  "solved_not_in_sheet": [
+   "C",
+   "E",
+   "F",
+   "G",
+   "J",
+   "L"
+  ],
+  "tutorial": [
+   "Tutorials (zh-cn)"
+  ]
+ },
+ {
+  "contest_id": 1071,
+  "title": "The 2022 ICPC Asia Hangzhou Regional Contest",
+  "board": "tagged_official.json",
+  "board_teams": 643,
+  "upsolved": [],
+  "kind": "virtual",
+  "exact": true,
+  "date": "2026-10-02",
+  "solved": [
+   "A",
+   "C",
+   "D",
+   "F",
+   "G",
+   "I",
+   "K"
+  ],
+  "wrong": {
+   "A": 1,
+   "D": 1,
+   "G": 2,
+   "M": 1
+  },
+  "solve_min": {
+   "A": 100,
+   "C": 167,
+   "D": 18,
+   "F": 23,
+   "G": 173,
+   "I": 275,
+   "K": 50
+  },
+  "penalty_min": [
+   886,
+   886
+  ],
+  "rank": [
+   24,
+   24
+  ],
+  "problems": [
+   {
+    "label": "A",
+    "name": "Modulo Ruins the Legend",
+    "board_solves": 301,
+    "difficulty_cf": 2115.0,
+    "ours": true,
+    "member": "Dedi",
+    "statement": true
+   },
+   {
+    "label": "B",
+    "name": "Useful Algorithm",
+    "board_solves": 6,
+    "difficulty_cf": 3465.6,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "C",
+    "name": "No Bug No Game",
+    "board_solves": 299,
+    "difficulty_cf": 2130.3,
+    "ours": true,
+    "member": "Erdene",
+    "statement": true
+   },
+   {
+    "label": "D",
+    "name": "Money Game",
+    "board_solves": 626,
+    "difficulty_cf": 1373.3,
+    "ours": true,
+    "member": "Erdene",
+    "statement": true
+   },
+   {
+    "label": "E",
+    "name": "Oscar is All You Need",
+    "board_solves": 6,
+    "difficulty_cf": 3297.2,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "F",
+    "name": "Da Mi Lao Shi Ai Kan De",
+    "board_solves": 636,
+    "difficulty_cf": 1195.8,
+    "ours": true,
+    "member": "Dedi",
+    "statement": true
+   },
+   {
+    "label": "G",
+    "name": "Subgraph Isomorphism",
+    "board_solves": 78,
+    "difficulty_cf": 2582.4,
+    "ours": true,
+    "member": "Tamir + Dedi",
+    "statement": true
+   },
+   {
+    "label": "H",
+    "name": "RPG Pro League",
+    "board_solves": 1,
+    "difficulty_cf": 3653.0,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "I",
+    "name": "Guess Cycle Length",
+    "board_solves": 35,
+    "difficulty_cf": 2838.6,
+    "ours": true,
+    "member": "Erdene",
+    "statement": true
+   },
+   {
+    "label": "J",
+    "name": "Painting",
+    "board_solves": 0,
+    "difficulty_cf": 3715.6,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "K",
+    "name": "Master of Both",
+    "board_solves": 281,
+    "difficulty_cf": 2163.8,
+    "ours": true,
+    "member": "Dedi + Tamir",
+    "statement": true
+   },
+   {
+    "label": "L",
+    "name": "Levenshtein Distance",
+    "board_solves": 0,
+    "difficulty_cf": 3791.6,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "M",
+    "name": "Please Save Pigeland",
+    "board_solves": 34,
+    "difficulty_cf": 2811.4,
+    "ours": false,
+    "member": "Dedi [Didn’t solve during contest (user, 2026-11-05).]",
+    "statement": true
+   }
+  ],
+  "sheet_only": [
+   "M"
+  ],
+  "solved_not_in_sheet": [],
+  "tutorial": [
+   "Tutorials (en)"
+  ]
+ },
+ {
+  "contest_id": 1053,
+  "title": "The 2022 ICPC Asia Jinan Regional Contest",
+  "board": "tagged_official.json",
+  "board_teams": 568,
+  "upsolved": [],
+  "kind": "virtual",
+  "exact": true,
+  "date": "2026-10-08",
+  "solved": [
+   "A",
+   "D",
+   "E",
+   "K",
+   "M"
+  ],
+  "wrong": {
+   "A": 2,
+   "C": 1,
+   "E": 1
+  },
+  "solve_min": {
+   "A": 227,
+   "D": 205,
+   "E": 57,
+   "K": 11,
+   "M": 18
+  },
+  "penalty_min": [
+   578,
+   578
+  ],
+  "rank": [
+   98,
+   98
+  ],
+  "problems": [
+   {
+    "label": "A",
+    "name": "Tower",
+    "board_solves": 257,
+    "difficulty_cf": 2136.5,
+    "ours": true,
+    "member": "Tamir + Dedi",
+    "statement": true
+   },
+   {
+    "label": "B",
+    "name": "Torch",
+    "board_solves": 11,
+    "difficulty_cf": 3132.1,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "C",
+    "name": "DFS Order 2",
+    "board_solves": 68,
+    "difficulty_cf": 2563.7,
+    "ours": false,
+    "member": "Dedi [Didn’t solve during contest (user, 2026-11-05).]",
+    "statement": true
+   },
+   {
+    "label": "D",
+    "name": "Frozen Scoreboard",
+    "board_solves": 178,
+    "difficulty_cf": 2300.7,
+    "ours": true,
+    "member": "Tamir",
+    "statement": true
+   },
+   {
+    "label": "E",
+    "name": "Identical Parity",
+    "board_solves": 460,
+    "difficulty_cf": 1828.4,
+    "ours": true,
+    "member": "Dedi",
+    "statement": true
+   },
+   {
+    "label": "F",
+    "name": "Grid Points",
+    "board_solves": 0,
+    "difficulty_cf": 3720.7,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "G",
+    "name": "Quick Sort",
+    "board_solves": 37,
+    "difficulty_cf": 2711.7,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "H",
+    "name": "Set of Intervals",
+    "board_solves": 13,
+    "difficulty_cf": 3055.3,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "I",
+    "name": "Shortest Path",
+    "board_solves": 1,
+    "difficulty_cf": 3640.7,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "J",
+    "name": "Skills",
+    "board_solves": 6,
+    "difficulty_cf": 3210.3,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "K",
+    "name": "Stack Sort",
+    "board_solves": 563,
+    "difficulty_cf": 1183.2,
+    "ours": true,
+    "member": "Tamir",
+    "statement": true
+   },
+   {
+    "label": "L",
+    "name": "Tree Distance",
+    "board_solves": 3,
+    "difficulty_cf": 3284.7,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "M",
+    "name": "Best Carry Player",
+    "board_solves": 544,
+    "difficulty_cf": 1401.5,
+    "ours": true,
+    "member": "Dedi",
+    "statement": true
+   }
+  ],
+  "sheet_only": [
+   "C"
+  ],
+  "solved_not_in_sheet": [],
+  "tutorial": [
+   "Tutorials (zh-cn)"
+  ]
+ },
+ {
+  "contest_id": 4071,
+  "title": "The 2026 ICPC Asia East Continent Online Contest (I)",
+  "board": "QOJ official",
+  "board_teams": 2535,
+  "upsolved": [],
+  "kind": "official",
+  "date": null,
+  "solved": [
+   "A",
+   "C",
+   "D",
+   "F",
+   "L",
+   "M"
+  ],
+  "wrong": {
+   "A": 4,
+   "D": 1,
+   "N": 1
+  },
+  "penalty_min": [
+   877,
+   877
+  ],
+  "rank": [
+   544,
+   544
+  ],
+  "problems": [
+   {
+    "label": "A",
+    "name": "Recall",
+    "board_solves": 1019,
+    "difficulty_cf": 1881.3,
+    "ours": true,
+    "member": "Erdene [Dedi made the 4 wrong tries (wrong idea or too complicated to implement); Erdene took over and got AC first try.]",
+    "statement": true
+   },
+   {
+    "label": "B",
+    "name": "Mod",
+    "board_solves": 0,
+    "difficulty_cf": 3813.7,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "C",
+    "name": "Permutation Inversions",
+    "board_solves": 1587,
+    "difficulty_cf": 1629.2,
+    "ours": true,
+    "member": "Dedi",
+    "statement": true
+   },
+   {
+    "label": "D",
+    "name": "Sequence",
+    "board_solves": 704,
+    "difficulty_cf": 2048.8,
+    "ours": true,
+    "member": "Tamir",
+    "statement": true
+   },
+   {
+    "label": "E",
+    "name": "LCM Permutation",
+    "board_solves": 0,
+    "difficulty_cf": 3872.0,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "F",
+    "name": "50 Years of Excellence",
+    "board_solves": 2482,
+    "difficulty_cf": 800.0,
+    "ours": true,
+    "member": "Dedi or Erdene [Bonus problem; Dedi and Erdene solved F and M, not remembered which (user, 2026-11-05).]",
+    "statement": true
+   },
+   {
+    "label": "G",
+    "name": "Toll Gates on a Tight Schedule",
+    "board_solves": 135,
+    "difficulty_cf": 2666.8,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "H",
+    "name": "The First Problem",
+    "board_solves": 57,
+    "difficulty_cf": 2968.4,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "I",
+    "name": "A Lamp of Moon",
+    "board_solves": 1,
+    "difficulty_cf": 3813.4,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "J",
+    "name": "String",
+    "board_solves": 120,
+    "difficulty_cf": 2708.6,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "K",
+    "name": "Wolf Game",
+    "board_solves": 15,
+    "difficulty_cf": 3302.1,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "L",
+    "name": "Longest Common Prefix",
+    "board_solves": 1039,
+    "difficulty_cf": 1890.9,
+    "ours": true,
+    "member": "Dedi",
+    "statement": true
+   },
+   {
+    "label": "M",
+    "name": "Check In",
+    "board_solves": 2419,
+    "difficulty_cf": 960.3,
+    "ours": true,
+    "member": "Dedi or Erdene [Bonus problem; Dedi and Erdene solved F and M, not remembered which (user, 2026-11-05).]",
+    "statement": true
+   },
+   {
+    "label": "N",
+    "name": "Red Sequence",
+    "board_solves": 153,
+    "difficulty_cf": 2601.4,
+    "ours": false,
+    "member": null,
+    "statement": true
+   }
+  ],
+  "sheet_only": [],
+  "solved_not_in_sheet": [],
+  "tutorial": [
+   "Tutorials (en)"
+  ]
+ },
+ {
+  "contest_id": 1096,
+  "title": "The 2022 ICPC Asia Shenyang Regional Contest",
+  "board": "tagged_official.json",
+  "board_teams": 1004,
+  "upsolved": [],
+  "kind": "virtual",
+  "exact": true,
+  "date": "2026-10-09",
+  "solved": [
+   "C",
+   "D",
+   "F",
+   "L"
+  ],
+  "wrong": {
+   "C": 1,
+   "L": 1
+  },
+  "solve_min": {
+   "C": 24,
+   "D": 5,
+   "F": 215,
+   "L": 151
+  },
+  "penalty_min": [
+   435,
+   435
+  ],
+  "rank": [
+   193,
+   193
+  ],
+  "problems": [
+   {
+    "label": "A",
+    "name": "Absolute Difference",
+    "board_solves": 113,
+    "difficulty_cf": 2626.8,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "B",
+    "name": "Binary Substrings",
+    "board_solves": 6,
+    "difficulty_cf": 3567.0,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "C",
+    "name": "Clamped Sequence",
+    "board_solves": 829,
+    "difficulty_cf": 1513.2,
+    "ours": true,
+    "member": "Erdene",
+    "statement": true
+   },
+   {
+    "label": "D",
+    "name": "DRX vs. T1",
+    "board_solves": 907,
+    "difficulty_cf": 858.1,
+    "ours": true,
+    "member": "Tamir",
+    "statement": true
+   },
+   {
+    "label": "E",
+    "name": "Graph Completing",
+    "board_solves": 57,
+    "difficulty_cf": 2851.3,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "F",
+    "name": "Half Mixed",
+    "board_solves": 295,
+    "difficulty_cf": 2250.6,
+    "ours": true,
+    "member": "Erdene + Dedi",
+    "statement": true
+   },
+   {
+    "label": "G",
+    "name": "Meet in the Middle",
+    "board_solves": 11,
+    "difficulty_cf": 3372.1,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "H",
+    "name": "P-P-Palindrome",
+    "board_solves": 46,
+    "difficulty_cf": 2919.8,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "I",
+    "name": "Quartz Collection",
+    "board_solves": 81,
+    "difficulty_cf": 2765.5,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "J",
+    "name": "Referee Without Red",
+    "board_solves": 4,
+    "difficulty_cf": 3684.2,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "K",
+    "name": "Security at Museums",
+    "board_solves": 4,
+    "difficulty_cf": 3683.6,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "L",
+    "name": "Tavern Chess",
+    "board_solves": 552,
+    "difficulty_cf": 2033.2,
+    "ours": true,
+    "member": "Erdene",
+    "statement": true
+   },
+   {
+    "label": "M",
+    "name": "Vulpecula",
+    "board_solves": 1,
+    "difficulty_cf": 3843.0,
+    "ours": false,
+    "member": null,
+    "statement": true
+   }
+  ],
+  "sheet_only": [],
+  "solved_not_in_sheet": [],
+  "tutorial": [
+   "Tutorials (zh-cn)"
+  ]
+ },
+ {
+  "contest_id": 2693,
+  "title": "The 4th Universal Cup. Stage 9: Grand Prix of Jinan",
+  "board": "ucup_s4.json",
+  "board_teams": 413,
+  "upsolved": [],
+  "kind": "virtual",
+  "exact": true,
+  "date": "2026-10-11",
+  "solved": [
+   "C",
+   "F",
+   "K",
+   "L"
+  ],
+  "wrong": {
+   "F": 2
+  },
+  "solve_min": {
+   "C": 31,
+   "F": 215,
+   "K": 116,
+   "L": 82
+  },
+  "penalty_min": [
+   484,
+   484
+  ],
+  "rank": [
+   164,
+   164
+  ],
+  "problems": [
+   {
+    "label": "A",
+    "name": "Cipher",
+    "board_solves": 143,
+    "difficulty_cf": 2445.1,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "B",
+    "name": "Fortress",
+    "board_solves": 5,
+    "difficulty_cf": 3461.5,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "C",
+    "name": "Finding Keywords",
+    "board_solves": 401,
+    "difficulty_cf": 1022.6,
+    "ours": true,
+    "member": "Dedi",
+    "statement": true
+   },
+   {
+    "label": "D",
+    "name": "Lighthouse",
+    "board_solves": 3,
+    "difficulty_cf": 3553.5,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "E",
+    "name": "Tree and Subgraph Problem",
+    "board_solves": 123,
+    "difficulty_cf": 2522.3,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "F",
+    "name": "Grid Filling Game",
+    "board_solves": 200,
+    "difficulty_cf": 2320.3,
+    "ours": true,
+    "member": "Dedi",
+    "statement": true
+   },
+   {
+    "label": "G",
+    "name": "Make SYSU Great Again IV",
+    "board_solves": 3,
+    "difficulty_cf": 3551.1,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "H",
+    "name": "Hashing",
+    "board_solves": 47,
+    "difficulty_cf": 2902.1,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "I",
+    "name": "I Love CCPC",
+    "board_solves": 28,
+    "difficulty_cf": 3071.9,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "J",
+    "name": "Memory, Permutation, and Rooted Tree",
+    "board_solves": 9,
+    "difficulty_cf": 3343.4,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "K",
+    "name": "Card Game",
+    "board_solves": 344,
+    "difficulty_cf": 1940.4,
+    "ours": true,
+    "member": "Tamir",
+    "statement": true
+   },
+   {
+    "label": "L",
+    "name": "Activity Rehearsal",
+    "board_solves": 315,
+    "difficulty_cf": 2015.5,
+    "ours": true,
+    "member": "Erdene",
+    "statement": true
+   },
+   {
+    "label": "M",
+    "name": "MEX Problem",
+    "board_solves": 19,
+    "difficulty_cf": 3161.4,
+    "ours": false,
+    "member": null,
+    "statement": true
+   }
+  ],
+  "sheet_only": [],
+  "solved_not_in_sheet": [],
+  "tutorial": [
+   "Tutorials (zh-cn)"
+  ]
+ },
+ {
+  "contest_id": 2661,
+  "title": "The 4th Universal Cup. Stage 7: Grand Prix of Zhengzhou",
+  "board": "ucup_s4.json",
+  "board_teams": 418,
+  "upsolved": [
+   "J"
+  ],
+  "kind": "virtual",
+  "exact": true,
+  "date": "2026-10-16",
+  "solved": [
+   "B",
+   "G",
+   "M"
+  ],
+  "wrong": {
+   "B": 5,
+   "G": 5,
+   "J": 1,
+   "M": 2
+  },
+  "solve_min": {
+   "B": 220,
+   "G": 99,
+   "M": 32
+  },
+  "penalty_min": [
+   591,
+   591
+  ],
+  "rank": [
+   222,
+   222
+  ],
+  "problems": [
+   {
+    "label": "A",
+    "name": "Challenge Matrix Multiplication II",
+    "board_solves": 13,
+    "difficulty_cf": 3245.2,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "B",
+    "name": "Cutting Chocolate",
+    "board_solves": 304,
+    "difficulty_cf": 2006.9,
+    "ours": true,
+    "member": "Tamir",
+    "statement": true
+   },
+   {
+    "label": "C",
+    "name": "Basic Counting Practice Problems",
+    "board_solves": 15,
+    "difficulty_cf": 3203.7,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "D",
+    "name": "Diameter of a Tree",
+    "board_solves": 89,
+    "difficulty_cf": 2638.5,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "E",
+    "name": "Doo Doo Doo",
+    "board_solves": 8,
+    "difficulty_cf": 3353.3,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "F",
+    "name": "Challenge NPC II",
+    "board_solves": 2,
+    "difficulty_cf": 3594.6,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "G",
+    "name": "Plus Xor",
+    "board_solves": 284,
+    "difficulty_cf": 2046.5,
+    "ours": true,
+    "member": "Erdene",
+    "statement": true
+   },
+   {
+    "label": "H",
+    "name": "Random Shuffle",
+    "board_solves": 11,
+    "difficulty_cf": 3276.1,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "I",
+    "name": "Dumb Problem II",
+    "board_solves": 123,
+    "difficulty_cf": 2490.7,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "J",
+    "name": "Subrectangle Count",
+    "board_solves": 175,
+    "difficulty_cf": 2352.2,
+    "ours": false,
+    "member": "Dedi [Didn’t solve during contest. One char fix gets AC.]",
+    "statement": true
+   },
+   {
+    "label": "K",
+    "name": "Parentheses and Swapping",
+    "board_solves": 34,
+    "difficulty_cf": 3002.3,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "L",
+    "name": "Triangle Grid",
+    "board_solves": 1,
+    "difficulty_cf": 3668.7,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "M",
+    "name": "Replacement",
+    "board_solves": 379,
+    "difficulty_cf": 1444.0,
+    "ours": true,
+    "member": "Dedi",
+    "statement": true
+   }
+  ],
+  "sheet_only": [
+   "J"
+  ],
+  "solved_not_in_sheet": [],
+  "tutorial": [
+   "Tutorials (zh-cn)"
+  ]
+ },
+ {
+  "contest_id": 2575,
+  "title": "第十一届中国大学生程序设计竞赛 哈尔滨站（CCPC 2025 Harbin Site）",
+  "board": "petroz_2022_2026.json",
+  "board_teams": 760,
+  "upsolved": [],
+  "kind": "virtual",
+  "exact": true,
+  "date": "2026-10-23",
+  "solved": [
+   "A",
+   "G",
+   "J",
+   "K",
+   "L"
+  ],
+  "wrong": {
+   "J": 3,
+   "L": 3
+  },
+  "solve_min": {
+   "A": 34,
+   "G": 54,
+   "J": 260,
+   "K": 125,
+   "L": 114
+  },
+  "penalty_min": [
+   707,
+   707
+  ],
+  "rank": [
+   275,
+   275
+  ],
+  "problems": [
+   {
+    "label": "A",
+    "name": "Another GCD Problem",
+    "board_solves": 621,
+    "difficulty_cf": null,
+    "ours": true,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "B",
+    "name": "Ball And Movable Walls",
+    "board_solves": 199,
+    "difficulty_cf": null,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "C",
+    "name": "Covering Problems",
+    "board_solves": 6,
+    "difficulty_cf": null,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "D",
+    "name": "Director and Excitement",
+    "board_solves": 8,
+    "difficulty_cf": null,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "E",
+    "name": "Efficient Summation",
+    "board_solves": 0,
+    "difficulty_cf": null,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "F",
+    "name": "Fun With Bitwise OR",
+    "board_solves": 5,
+    "difficulty_cf": null,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "G",
+    "name": "Great Snowfall",
+    "board_solves": 590,
+    "difficulty_cf": null,
+    "ours": true,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "H",
+    "name": "How Many Rounds Are Expected?",
+    "board_solves": 28,
+    "difficulty_cf": null,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "I",
+    "name": "Infinite Hexagonal Grids",
+    "board_solves": 333,
+    "difficulty_cf": null,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "J",
+    "name": "Judge of Gensokyo",
+    "board_solves": 191,
+    "difficulty_cf": null,
+    "ours": true,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "K",
+    "name": "Knapsack And Greedy Algorithm",
+    "board_solves": 495,
+    "difficulty_cf": null,
+    "ours": true,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "L",
+    "name": "Let’s Avoid Obstacles",
+    "board_solves": 523,
+    "difficulty_cf": null,
+    "ours": true,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "M",
+    "name": "连通的正三角形",
+    "board_solves": 44,
+    "difficulty_cf": 1947.3,
+    "ours": false,
+    "member": null,
+    "statement": true
+   }
+  ],
+  "sheet_only": [],
+  "solved_not_in_sheet": [
+   "A",
+   "G",
+   "J",
+   "K",
+   "L"
+  ],
+  "tutorial": [
+   "Tutorials (zh-cn)"
+  ]
+ },
+ {
+  "contest_id": 4593,
+  "title": "The 5th Universal Cup. Stage 4: Grand Prix of Xi'an",
+  "board": "xcpcio /icpc/51st/xian",
+  "board_teams": 402,
+  "upsolved": [],
+  "kind": "virtual",
+  "exact": true,
+  "date": "2026-10-25",
+  "solved": [
+   "C",
+   "H",
+   "J",
+   "M"
+  ],
+  "wrong": {
+   "C": 1,
+   "J": 1
+  },
+  "solve_min": {
+   "C": 132,
+   "H": 168,
+   "J": 153,
+   "M": 43
+  },
+  "penalty_min": [
+   536,
+   536
+  ],
+  "rank": [
+   86,
+   86
+  ],
+  "problems": [
+   {
+    "label": "A",
+    "name": "And Revive The Melody",
+    "board_solves": 0,
+    "difficulty_cf": null,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "B",
+    "name": "Break The Speakers",
+    "board_solves": 1,
+    "difficulty_cf": null,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "C",
+    "name": "Cryptarithm",
+    "board_solves": 270,
+    "difficulty_cf": null,
+    "ours": true,
+    "member": "Dedi",
+    "statement": true
+   },
+   {
+    "label": "D",
+    "name": "Don't Fight The Music",
+    "board_solves": 4,
+    "difficulty_cf": null,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "E",
+    "name": "Ether Strike",
+    "board_solves": 0,
+    "difficulty_cf": null,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "F",
+    "name": "False Amber",
+    "board_solves": 2,
+    "difficulty_cf": null,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "G",
+    "name": "Gungnir Fracture",
+    "board_solves": 11,
+    "difficulty_cf": null,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "H",
+    "name": "Hydra",
+    "board_solves": 155,
+    "difficulty_cf": null,
+    "ours": true,
+    "member": "Erdene",
+    "statement": true
+   },
+   {
+    "label": "I",
+    "name": "Incyde",
+    "board_solves": 0,
+    "difficulty_cf": null,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "J",
+    "name": "Journey",
+    "board_solves": 302,
+    "difficulty_cf": null,
+    "ours": true,
+    "member": "Dedi [Tamir worked on it too (user, 2026-11-05).]",
+    "statement": true
+   },
+   {
+    "label": "K",
+    "name": "Kikai No Tsubasa",
+    "board_solves": 3,
+    "difficulty_cf": null,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "L",
+    "name": "Lucid Traveler",
+    "board_solves": 7,
+    "difficulty_cf": null,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "M",
+    "name": "Melodiniq",
+    "board_solves": 391,
+    "difficulty_cf": null,
+    "ours": true,
+    "member": "Erdene",
+    "statement": true
+   }
+  ],
+  "sheet_only": [],
+  "solved_not_in_sheet": [],
+  "tutorial": []
+ },
+ {
+  "contest_id": 4607,
+  "title": "The 5th Universal Cup. Stage 5: Grand Prix of Chengdu",
+  "board": "xcpcio /icpc/51st/chengdu",
+  "board_teams": 319,
+  "upsolved": [],
+  "kind": "virtual",
+  "exact": true,
+  "date": "2026-11-01",
+  "solved": [
+   "C",
+   "D",
+   "H",
+   "I",
+   "K",
+   "M"
+  ],
+  "wrong": {
+   "C": 4,
+   "D": 3,
+   "E": 4
+  },
+  "solve_min": {
+   "C": 117,
+   "D": 79,
+   "H": 286,
+   "I": 156,
+   "K": 93,
+   "M": 23
+  },
+  "penalty_min": [
+   894,
+   894
+  ],
+  "rank": [
+   35,
+   35
+  ],
+  "problems": [
+   {
+    "label": "A",
+    "name": "Average of Averages",
+    "board_solves": 11,
+    "difficulty_cf": null,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "B",
+    "name": "Bouncing Particles",
+    "board_solves": 1,
+    "difficulty_cf": null,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "C",
+    "name": "Counting Arrays",
+    "board_solves": 129,
+    "difficulty_cf": null,
+    "ours": true,
+    "member": "Dedi",
+    "statement": true
+   },
+   {
+    "label": "D",
+    "name": "Duel of Wrath",
+    "board_solves": 312,
+    "difficulty_cf": null,
+    "ours": true,
+    "member": "Erdene",
+    "statement": true
+   },
+   {
+    "label": "E",
+    "name": "Enclose the Point",
+    "board_solves": 31,
+    "difficulty_cf": null,
+    "ours": false,
+    "member": "Dedi [Didn’t solve during contest (user, 2026-11-05).]",
+    "statement": true
+   },
+   {
+    "label": "F",
+    "name": "First Word",
+    "board_solves": 0,
+    "difficulty_cf": null,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "G",
+    "name": "Graph Reconstruction",
+    "board_solves": 9,
+    "difficulty_cf": null,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "H",
+    "name": "Hidden Order",
+    "board_solves": 26,
+    "difficulty_cf": null,
+    "ours": true,
+    "member": "Erdene",
+    "statement": true
+   },
+   {
+    "label": "I",
+    "name": "Invisible Edges",
+    "board_solves": 131,
+    "difficulty_cf": null,
+    "ours": true,
+    "member": "Erdene",
+    "statement": true
+   },
+   {
+    "label": "J",
+    "name": "Joint Relocation",
+    "board_solves": 0,
+    "difficulty_cf": null,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "K",
+    "name": "Keep Your Distance",
+    "board_solves": 219,
+    "difficulty_cf": null,
+    "ours": true,
+    "member": "Tamir",
+    "statement": true
+   },
+   {
+    "label": "L",
+    "name": "Long Slides",
+    "board_solves": 0,
+    "difficulty_cf": null,
+    "ours": false,
+    "member": null,
+    "statement": true
+   },
+   {
+    "label": "M",
+    "name": "Minimum Records",
+    "board_solves": 283,
+    "difficulty_cf": null,
+    "ours": true,
+    "member": "Erdene",
+    "statement": true
+   }
+  ],
+  "sheet_only": [
+   "E"
+  ],
+  "solved_not_in_sheet": [],
+  "tutorial": [
+   "Tutorial (zh)"
+  ]
+ }
+]

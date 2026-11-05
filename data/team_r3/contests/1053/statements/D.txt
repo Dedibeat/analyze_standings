@@ -1,0 +1,163 @@
+2022 International Collegiate Programming Contest, Jinan Site
+Qilu University of Technology (Shandong Academy of Sciences), November 27, 2022
+
+Problem D. Frozen Scoreboard
+Input ﬁle:
+Output ﬁle:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+2 seconds
+512 megabytes
+
+There was an ICPC contest two thousand years ago in the Qin dynasty. There were m problems and n
+teams in the contest. We only know how many problems each team solved and how much total time they
+used from the historical records. These are called the ﬁnal results of the teams. We don’t know which
+problems they solved or their submission times.
+Recently, we seem to had a discovery. We found the frozen scoreboard of the teams. From the frozen
+scoreboard of a team, we know their submissions during the whole contest, but we don’t know the verdicts
+of the submissions in the last hour. And some people found that for some teams, their frozen scoreboards
+may contradict their ﬁnal results in the historical records.
+Given the ﬁnal results and the frozen scoreboards of the teams, please construct a ﬁnal scoreboard for
+each team that is consistent with both its ﬁnal result and its frozen scoreboard.
+From the submissions during the contest, we can calculate the ﬁnal scoreboard and the ﬁnal result as
+follows:
+For a ﬁxed team i, its ﬁnal scoreboard is an array of m elements where the j-th element shows some
+information about team i’s submissions on problem j.
+• If team i didn’t submit to problem j, the cell should be a single character “.” (without quotes).
+• If team i submitted x times to problem j and none of the submissions was accepted, the cell should
+contain − x.
+• Otherwise, consider all submissions from team i to problem j. Each submission has a submission
+time. Suppose the earliest accepted submission is the x-th one. Then the cell should contain + x/y
+where y (0 ≤ y ≤ 299) is the submission time of the x-th submission. y is an integer representing
+the submission time in minutes.
+Note that in the ﬁnal scoreboard, we don’t care about submissions after the ﬁrst accepted one. It is
+possible that two or more submissions happened in the same minute.
+The ﬁnal result of a team is computed from its ﬁnal scoreboard. For each team, we can calculate the
+number of problems it solved. This number is equal to the number of “+” in the team’s ﬁnal scoreboard.
+We can also calculate its total time. If team i solved problem j in the y-th minute after x − 1 unaccepted
+submissions (in other words, the j-th cell in the i-th row of the ﬁnal scoreboard is + x/y), problem j
+contributes 20(x − 1) + y time to team i. If team i didn’t solve problem j, problem j contributes 0 time
+to team i, no matter team i submitted to problem j or not. The total time of team i is the sum of
+contributions of each problem.
+The rules for the frozen scoreboard will be introduced in the input section. We will distinguish
+submissions in the ﬁnal hour and other submissions. A submission was in the ﬁnal hour if its submission
+time is between 240 and 299.
+
+Input
+The ﬁrst line contains two integers n, m (1 ≤ n ≤ 1000, 1 ≤ m ≤ 13), the number of teams in the contest,
+and the number of problems in the contest.
+Then there are n blocks describing the ﬁnal result and the frozen scoreboard of each team.
+The i-th block represents team i. In the i-th block, the ﬁrst line contains two integers
+ai , bi (0 ≤ ai ≤ m, 0 ≤ bi ≤ 105 ), the number of problems team i solved during the whole contest and
+Page 5 of 18
+
+2022 International Collegiate Programming Contest, Jinan Site
+Qilu University of Technology (Shandong Academy of Sciences), November 27, 2022
+the total time of team i for solving the ai problems. These two numbers represent the ﬁnal result of the
+contest. The next m lines describe the status of team i in the frozen scoreboard. For each 1 ≤ j ≤ m,
+• If the j-th line is + x/y (1 ≤ x ≤ 100, 0 ≤ y ≤ 239), team i solved problem j at time y and the
+accepted solution is their x-th submission on problem j.
+• If the j-th line is ? x y (1 ≤ x ≤ y ≤ 100), team i didn’t solve the problem j in the ﬁrst four hours.
+Team i submitted problem j for y times in which x submissions are in the last hour. Note that
+submissions made in the last hour after the accepted one will count in the frozen scoreboard, but
+not in the ﬁnal scoreboard.
+• If the j-th line is − x, team i didn’t solve the problem j in the ﬁrst four hours. Team i submitted
+problem j for x (1 ≤ x ≤ 100) times before the last hour and did not submit problem j in the last
+hour.
+• If the j-th line is a single character “.” (without quotes), team i didn’t submit problem j at all.
+
+Output
+For each team i, if its ﬁnal result contradicts its frozen scoreboard, output No in one line. Otherwise,
+output Yes in the ﬁrst line and then output m lines. The j-th line should contain
+• + x/y (1 ≤ x ≤ 100, 0 ≤ y ≤ 299), if the x-th submission from team i to problem j is accepted and
+is in the y-th minute of the contest. All submissions from team i to team j before the x-th one was
+not accepted. Please don’t output extra spaces before and after slash “/”.
+• − x (1 ≤ x ≤ 100), if team i submitted to problem j for x times and none of the submissions was
+accepted.
+• . if team i didn’t submit to problem j at all.
+Please note that in the input and the output, there is always a space following each ?, +,
+and −.
+
+Page 6 of 18
+
+2022 International Collegiate Programming Contest, Jinan Site
+Qilu University of Technology (Shandong Academy of Sciences), November 27, 2022
+
+Examples
+standard input
+
+standard output
+
+1 13
+7 951
++ 1/6
+? 3 4
++ 4/183
+- 2
++ 3/217
+.
+.
+.
++ 2/29
++ 1/91
+.
++ 1/22
+.
+
+Yes
++ 1/6
++ 2/263
++ 4/183
+- 2
++ 3/217
+.
+.
+.
++ 2/29
++ 1/91
+.
++ 1/22
+.
+
+6 2
+1 100
+.
+? 3 4
+2 100
++ 1/1
++ 1/2
+0 0
+- 5
+- 6
+2 480
+? 100 100
+? 100 100
+2 480
+? 99 100
+? 100 100
+1 2000
+? 100 100
+? 100 100
+
+No
+No
+Yes
+- 5
+- 6
+Yes
++ 1/240
++ 1/240
+No
+Yes
++ 87/280
+- 100
+
+Note
+Here is an example of the frozen scoreboard in the ﬁrst sample.
+
+Page 7 of 18
+
+

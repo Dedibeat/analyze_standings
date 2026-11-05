@@ -1,0 +1,791 @@
+The 3rd Universal Cup: Hangzhou
+Qingyu
+SUA 程序设计竞赛命题组
+Universal Cup
+
+2024 年 11 月 10 日
+
+Qingyu SUA 程序设计竞赛命题组 Universal Cup
+
+The 3rd Universal Cup: Hangzhou
+
+概况
+
+预期难度：
+Very Easy：A、K；
+Easy：E、F、H、M；
+Medium-Easy：B、G、I、J；
+Medium：D、L；
+Medium-Hard：C；
+Hard：无。
+
+Qingyu SUA 程序设计竞赛命题组 Universal Cup
+
+The 3rd Universal Cup: Hangzhou
+
+A. AUS
+
+题意
+给定三个字符串 S1 , S2 , S3 , 判断是否存在一种字符映射方式
+F 使得 F(S1 ) = F(S2 ) ̸= F(S3 )。
+P
+1 ≤ |S1 |, |S2 |, |S3 | ≤ 103 , ni=1 |S1 | + |S2 | + |S3 | ≤ 3 × 104 。
+首先处理掉两种 trivial 的情况，(1) 如果 |S1 | ̸= |S2 |，答案一定
+是 NO; (2) |S1 | = |S2 | ̸= |S3 |，答案一定是 YES，因为我们可以直
+接把所有字符都映射到 a。
+
+Qingyu SUA 程序设计竞赛命题组 Universal Cup
+
+The 3rd Universal Cup: Hangzhou
+
+A. AUS
+接下来我们只需要考虑三个串长度相等的情况，不妨设长度为
+n。对于每一个位置 i (1 ≤ i ≤ n)，注意到，如果 S1 [i] ̸= S2 [i]，那
+么映射函数中必须要有 f(S1 [i]) = f(S2 [i])。另一方面，如果所有
+这样的限制都满足，一定有 F(S1 ) = F(S2 )。
+我们不妨对字符之间在映射函数下的关系建一张无向图，对于所
+有 i (1 ≤ i ≤ n)，我们在 S1 [i] 和 S2 [i] 之间连一条边。这张图的
+每一个连通块就表示了这些字符在映射函数下要相等，那么如果
+对于所有的位置 i，S1 [i] 和 S3 [i] 都位于同一个连通块，就说明所
+有满足 F(S1 ) = F(S2 ) 的映射都会让 F(S1 ) = F(S3 )，此时答案
+就是 NO。反之，只需要让每个连通块映射成不同的字符就是一
+组可行解。
+单组数据的时间复杂度是 O(|S1 | + |S2 | + |S3 |)。
+
+Qingyu SUA 程序设计竞赛命题组 Universal Cup
+
+The 3rd Universal Cup: Hangzhou
+
+K. Kind of Bingo
+题意
+有一个 n × m 的网格以及一个长度为 n × m 的操作序列，
+每次操作标记一个格子，每个操作互不相同。按顺序进行操
+作，如果第 b 次操作后至少有一行都被标记了，且 b 尽量
+小，那么 b 就是 bingo integer。
+现在可以交换任意两个操作至多 k 次，最小化 b。
+1 ≤ n × m ≤ 105 ，0 ≤ k ≤ 109 。
+枚举最先被标记的是哪一行，设 i1 , i2 , · · · , im 是关于这行的
+所有操作的下标。如果不进行任何交换，则答案就是
+min(im )。
+现在可以进行至多 k 次交换，显然应该把最大的 k 个下标
+换到前面去，因此答案就是 min(im−k )。当然，答案至少为
+m。复杂度 O(nm)。
+Qingyu SUA 程序设计竞赛命题组 Universal Cup
+
+The 3rd Universal Cup: Hangzhou
+
+E. Elevator II
+题意
+有 n 个人正在等电梯，第 i 个人要从 li 层到 ri 层（li < ri ）。
+电梯同时只能运送一个人。
+电梯往上走一层消耗 1 的电量，往下走不消耗电量。电梯一
+开始在 f 层，求按怎样的顺序运送每个人，才能最小化总电
+量消耗。
+1 ≤ n ≤ 105 ，1 ≤ li , ri , f ≤ 109 。
+首先探求答案的下界。
+因为每个人都要往上走，所以运送每个人的电量（即
+n
+P
+(ri − li )）是必须消耗的。
+i=1
+
+另外，由于电梯肯定要到达 max(ri )。所以还要额外消耗从 f
+层到 max(ri ) 层这一段，没有乘客的区间的电量。
+Qingyu SUA 程序设计竞赛命题组 Universal Cup
+
+The 3rd Universal Cup: Hangzhou
+
+E. Elevator II
+
+接下来构造能取到该下界的答案。
+首先我们要到达 max(ri )，而且为了不浪费电量，我们要尽
+可能用乘客的区间覆盖这段路程。因此每次选择起点小于等
+于当前楼层，但终点大于当前楼层的乘客运送。如果不存在
+这样的乘客，说明接下来一段没有乘客区间覆盖，找到起点
+大于当前楼层且最小的乘客运送。这个过程可以使用单调指
+针 + 优先队列维护。
+到达 max(ri ) 之后，剩余乘客按终点从大到小排序运送，这
+样不消耗任何额外的电量。
+复杂度 O(n log n)。
+
+Qingyu SUA 程序设计竞赛命题组 Universal Cup
+
+The 3rd Universal Cup: Hangzhou
+
+H. Heavy-light Decomposition
+
+题意
+给定若干条链，问能否构造出一棵树使得这棵树某一种轻重
+链剖分的结果恰好是给定的链集合。
+首先只有一条链时，直接输出。
+下面是 IMPOSSIBLE 的情况：
+链的长度全部都相等。
+链的长度最小值和最大值相差 1 ，且有至少两条是最长链。
+
+Qingyu SUA 程序设计竞赛命题组 Universal Cup
+
+The 3rd Universal Cup: Hangzhou
+
+H. Heavy-light Decomposition
+
+证明：假设链的长度最大值为 l。
+对于第一种情况，考虑包含根 u1 的那条重链
+u1 → u2 → · · · → ul 。那么可以从 ul 倒过来交替递归地证明
+ui 的其它子树大小不会超过 l − i，进而证明 ui 不会有其它
+子树（因为重链长度都为 l）。
+对于第二种情况，如果包含根的重链长度为 l − 1，证明思路
+与第一种情况类似。那现在考虑包含根 u1 的那条重链
+u1 → u2 → · · · → ul ，同理，u2 到 ul 没有其它子树，u1 的
+其它子树都只能是长度为 l − 1 的链，不符合有至少两条长
+度 l 的重链的限制。
+
+Qingyu SUA 程序设计竞赛命题组 Universal Cup
+
+The 3rd Universal Cup: Hangzhou
+
+H. Heavy-light Decomposition
+
+非 IMPOSSIBLE 情况的构造方法：
+假如最长链只有一条，那么从根 root 出发引一条最长链，
+其余链全部以 root 为父亲
+最长链大于等于两条，这时最短链的长度 ≤ l − 2，选取一
+条最长链 u1 → u2 → · · · → ul ，最短链以 u2 为父亲，其它
+链以 u1 为父亲
+
+Qingyu SUA 程序设计竞赛命题组 Universal Cup
+
+The 3rd Universal Cup: Hangzhou
+
+M. Make It Divisible
+题意
+给定序列 ai 。称子数组 a[l : r] 是好的，若子数组里存在一个
+数可以整除子数组里的所有数。称整个序列是好的，若每个
+子数组都是好的。
+给定 k，求满足 1 ≤ x ≤ k，且使得序列 ai + x 是好的所有 x
+之和。
+1 ≤ n ≤ 5 × 104 ，1 ≤ ai ≤ 109 。
+好的子数组满足：子数组里的最小值可以整除子数组里所有
+数，即子数组的 gcd 等于子数组的最小值。
+考虑这样一棵树（笛卡尔树）：将子数组看成节点，子数组
+去掉最小值后会分成很多区间，这些区间就是下一层节点。
+整个序列就是根节点。
+由于所有值都加 x 不会改变元素之间的大小关系，因此无论
+怎样的 x，笛卡尔树的结构都不会改变。
+Qingyu SUA 程序设计竞赛命题组 Universal Cup
+
+The 3rd Universal Cup: Hangzhou
+
+M. Make It Divisible
+设子数组 a[l : r] 的最小值为 am + x。因为子数组的 gcd 等于
+gcd(|al − al+1 |, |al+1 − al+2 |, · · · , |ar−1 − ar |, am + x) = am + x，
+说明 am + x 必须是
+gcd(|al − al+1 |, |al+1 − al+2 |, · · · , |ar−1 − ar |) 的因数。
+但是对笛卡尔树的每个节点都求 gcd，再分解因数，复杂度
+√
+可能会达到 O(n ai )。
+因此我们只对最上层的节点（整个序列）做一次因数分解，
+再枚举每个 x，检查每个节点的整除性即可。如果每个节点
+用 rmq 求 gcd 以及最小值，复杂度
+√
+O(T ai + n(log n + log ai ) + nf)，其中 f = 1344 是 109 以内
+的数最多可能有几个因数。注意第二项不是 n log n log ai ，
+因为求 gcd 的复杂度会平摊到 rmq 的每一层。
+
+Qingyu SUA 程序设计竞赛命题组 Universal Cup
+
+The 3rd Universal Cup: Hangzhou
+
+F. Fuzzy Ranking
+
+题意
+有 k 个排名表 A1 , A2 , · · · , Ak ，定义 (i, j) 是好的当且仅当：
+在某个排名表中 i 的排名优于 j，或者：
+存在 k，使得在某个排名表中 i 的排名优于 k，且 (k, j) 是好
+的：
+
+多次询问，强制在线，询问 Ak [l · · · r] 有多少个 pair (i, j) 是
+好的。
+1 ≤ n, k, q ≤ 2 × 105 , n · k ≤ 2 × 105
+
+Qingyu SUA 程序设计竞赛命题组 Universal Cup
+
+The 3rd Universal Cup: Hangzhou
+
+F. Fuzzy Ranking
+
+相当于区间 Ak [l, r] 的点的导出子图的 SCC 大小的
+
+s
+2
+
+
+
+之和。
+
+注意到，每个 SCC 的断点一定形如 i，满足
+Sk
+j=1 Ak [1, i] = i。
+因此可以发现，一组询问一定包含若干个完整的 SCC，以及
+至多两个（左断点一个、右断点一个）不完整的 SCC。
+求出所有的断点后，使用前缀和处理询问即可，单独计算中
+间部分的贡献即可。
+
+Qingyu SUA 程序设计竞赛命题组 Universal Cup
+
+The 3rd Universal Cup: Hangzhou
+
+F. Fuzzy Ranking
+Fun fact：这个强制在线是最后时刻才加的。
+
+Qingyu SUA 程序设计竞赛命题组 Universal Cup
+
+The 3rd Universal Cup: Hangzhou
+
+B. Barkeley III
+
+题意
+给定一个长度为 n 的序列，支持区间按位与一个数，单点修
+改。询问时给定 l, r，求在区间 [l, r] 中去掉恰好一个数后按
+位与的最大值。
+1 ≤ n, q ≤ 106 。
+不难发现，如果某一个二进制位 i 恰有一个数为 0，那么选择这
+个数后能让答案变大 2i 。于是我们只需要找到一个最高的二进制
+位，使得恰有一个数在区间内这一位为 1，并且把这个数找到。
+
+Qingyu SUA 程序设计竞赛命题组 Universal Cup
+
+The 3rd Universal Cup: Hangzhou
+
+B. Barkeley III
+
+一个简单的想法是对于每一位在线段树上维护信息，但这样的复
+杂度会达到 O((n + q) log n log ai )，难以接受。
+注意到，如果只想知道哪些位在区间内有恰好一个 0，可以直接
+用一个压缩状态维护。具体来说，记 fu 表示线段树上 u 节点对
+应的区间里哪些位恰有一个 0，gu 表示区间按位与的结果，那么
+更新有：
+fu = (glson & frson ) | (grson & flson )
+接下来只需要考虑找到这一位对应的数，在线段树上二分即可，
+时间复杂度 O((n + q) log n)。
+
+Qingyu SUA 程序设计竞赛命题组 Universal Cup
+
+The 3rd Universal Cup: Hangzhou
+
+J. Japanese Bands
+
+题意
+有 n1 张红卡和 n2 张蓝卡，在每张卡片上写 1 到 m 中的一
+个数字，同时满足 k 个限制。第 i 个限制是一对整数
+(ai , bi )，表示能找到一对值分别为 ai 和 bi 的异色卡片。求
+方案数（每种颜色的卡片视为一个 multiset）。
+1 ≤ n1 , n2 ≤ 109 ，1 ≤ m ≤ 20，1 ≤ k ≤ m2 。
+
+Qingyu SUA 程序设计竞赛命题组 Universal Cup
+
+The 3rd Universal Cup: Hangzhou
+
+J. Japanese Bands
+设限制条件里共出现 M 种数，这 M 种数可以分成两类：一
+类在两种卡片里都要出现，一类恰出现在一种卡片里。
+设 m1 表示只出现在红卡上的数的二进制 mask，|m1 | 表示
+这个 mask 的大小。相似地，设 m2 表示只出现在蓝卡上的
+数的二进制 mask。那么剩下的 (M − |m1 | − |m2 |) 种数必须
+在两种卡片上都出现。而未在限制条件里出现的 (m − M)
+种数则可出现可不出现。因此答案为
+X
+
+X
+
+f1 (m1 , m2 ) × f2 (m1 , m2 )
+
+m1 m2 ∩m1 =∅
+
+其中
+
+f1 (m1 , m2 ) =
+
+f2 (m1 , m2 ) =
+
+n1 − 1 + (m − M)
+|m1 | + (M − |m1 | − |m2 |) − 1 + (m − M)
+n2 − 1 + (m − M)
+|m2 | + (M − |m1 | − |m2 |) − 1 + (m − M)
+
+Qingyu SUA 程序设计竞赛命题组 Universal Cup
+
+The 3rd Universal Cup: Hangzhou
+
+
+
+
+J. Japanese Bands
+化简一下，答案为
+P
+=
+
+P
+
+
+
+
+2 −1+m−M
+× nm−|m
+1 |−1
+
+P
+n1 −1+m−M
+
+n1 −1+m−M
+m−|m2 |−1
+
+m1 m2 ∩m1 =∅
+P n2 −1+m−M
+m−|m1 |−1
+m1
+m2 ∩m1 =∅
+
+因此可以用高维前缀和预处理
+举 m1 即可。
+
+P
+
+m2 ∩m1 =∅
+
+m−|m2 |−1
+
+
+
+n1 −1+m−M
+m−|m2 |−1 ，再枚
+
+另外 m1 里的每对元素不能出现在同一个限制条件里，m2
+同理。因为 m 只有 20，所以可以用一个 int 把和每个数有
+关的限制条件存下来，枚举 m1 和 m2 时通过位运算检验一
+下合法性即可。复杂度 O(m × 2m )。
+
+Qingyu SUA 程序设计竞赛命题组 Universal Cup
+
+The 3rd Universal Cup: Hangzhou
+
+I. Identify Chord
+
+题意
+给定一个长度为 n 的环，环上添加了一条你不知道具体位置
+的弦
+每次你可以询问两个点 u, v 并获得它们的最短路长度
+需要用最多 40 次询问获取隐藏的弦的具体位置
+n ≤ 109 。
+
+Qingyu SUA 程序设计竞赛命题组 Universal Cup
+
+The 3rd Universal Cup: Hangzhou
+
+I. Identify Chord
+先询问 u = 0, v = (n + 1)/2 ，如果答案为 n/2，则我们需要
+旋转 u, v 直到答案小于 n/2 为止。
+n+1
+偶数的旋转顺序是 (1, n+1
+2 + 1), (2, 2 + 2), · · ·
+
+奇数的旋转顺序是
+n+1
+n+1
+n+1
+(1, n+1
+2 ), (1, 2 + 1), (2, 2 + 1), (2, 2 + 2), · · ·
+现在 u 到 v 的最短路一定经过隐藏弦，并且假设由于这条
+隐藏弦，距离减小了 d 。询问 (u + 1, v) 和 (u − 1, v) 来确定
+u 到 v 的最短路是沿着往哪个方向。
+沿着这个方向二分，找到最大的 mid 使得 dis(mid, v) 满足
+减少的距离为 d ，这样 mid 是隐藏弦其中一个端点，通过
+减少的距离 d 可以 O(1) 次询问找到另外一个端点
+询问次数为 1 × log(n) + O(1)。
+
+Qingyu SUA 程序设计竞赛命题组 Universal Cup
+
+The 3rd Universal Cup: Hangzhou
+
+I. Identify Chord
+
+错误的随机方式：
+一直随机距离为 n2 的询问对 (u, v)，直到它们真正的距离小
+于 n2 为止，然后继续第二步及之后的步骤
+在 n 为奇数时，弦的长度为 2 时，单次随机有 12 的概率距
+离不变，那么有 2110 的概率多增加 10 步，这样会超出步数
+限制
+不太良好的交互习惯：
+不查看交互结束之后是否需要读入返回值
+
+Qingyu SUA 程序设计竞赛命题组 Universal Cup
+
+The 3rd Universal Cup: Hangzhou
+
+G. Gathering Mushrooms
+
+题意
+给定 n 个点 n 条边的有向图，每个点恰有一条出边，且每
+个点有个数字 ai 。
+问从每个点出发，记录经过的节点上出现的数字，最先出现
+k 次的数字是什么。
+1 ≤ n ≤ 2 × 105 , 1 ≤ k ≤ 109 。
+
+Qingyu SUA 程序设计竞赛命题组 Universal Cup
+
+The 3rd Universal Cup: Hangzhou
+
+G. Gathering Mushrooms
+一道偏重实现的题目。给定的图是一个有向的环套树。设第
+i 个点指向第 pi 个点，那么第 i 个点的答案要么和第 pi 个点
+相同，要么就是 ai 。所以我们要比较两者的步数谁比较小。
+考虑这样的实现方式：把环从任意地方断开，然后把环延长
+一倍。这样一个连通块就变成了一棵树，直接按树的 DFS
+序求答案即可。因为环延长了一倍，所以计算答案的时候相
+当于先在环上转了一圈，再进入其它节点，可以求出正确答
+案。
+DFS 的过程中可以用 vector 简单维护出每种数往树根方向
+走几步才能出现 k 次。如果走到树根才出现了 t 次，则答案
+再加上 ⌊ k−t
+c ⌋ × l + sk mod t ，其中 c 是这种数在环上出现了
+几次，l 是环长，si 是这种数在环上第 i 次出现时的步数。
+复杂度 O(n)。
+
+Qingyu SUA 程序设计竞赛命题组 Universal Cup
+
+The 3rd Universal Cup: Hangzhou
+
+D. Dividing Sequence
+
+题意
+给定长为 n 的序列 A，你需要把他分割成两个子序列 B 和
+C，使得 B 的字典序不大于 C，且 C 的字典序最小，输出最
+小的 C。
+P
+n ≤ 5 000, n ≤ 104 , |Σ| ≤ 105 。
+这里提供两个做法，第一种做法 O(n2 ) ，第二种做法是线性
+的。
+
+Qingyu SUA 程序设计竞赛命题组 Universal Cup
+
+The 3rd Universal Cup: Hangzhou
+
+D. Dividing Sequence
+做法一
+
+考虑逐位枚举答案的前缀，然后 dp
+fi 表示对原串长为 i 的前缀，序列 C 匹配了 ans，B 匹配了
+ans 的前缀，ans 的下一位最小是多少，ans 是你枚举的前缀。
+每一轮，拿出合法的 fi 里 fi 最小的值，拓展一位答案，然
+后更新所有合法的 fi 。
+一共 O(n) 轮，每轮状态数 O(n)，更新 O(1)，总复杂度
+O(n2 )。
+
+Qingyu SUA 程序设计竞赛命题组 Universal Cup
+
+The 3rd Universal Cup: Hangzhou
+
+D. Dividing Sequence
+做法二
+
+考虑对原串做 lyndon 分解出的 m 个串 S1 , S2 , . . . , Sm ，我们
+有 S1 ≥ S2 ≥ . . . , ≥ Sm 。
+i 从 1 开始，若 S2i−1 = S2i ，则将这两个串分别接在 B, C 的
+末尾，i + +
+若 S2i−1 ̸= S2i ，将 S2i−1 接到 C 之后，剩下的所有串按顺序
+接到 B 的末尾，此时的 C 就是答案。
+总复杂度 O(n)，暴力的 O(n2 ) lyndon 分解实现也可以通过。
+我们证明这样构造的结果是最优的。
+
+Qingyu SUA 程序设计竞赛命题组 Universal Cup
+
+The 3rd Universal Cup: Hangzhou
+
+D. Dividing Sequence
+做法二证明
+
+引理 0
+设 s 是 Lyndon 串。不能将 s 分为两个 ≤ s 的子序列，除非其中
+之一为 s。
+证明：
+设我们成功把 s 分解为 a 和 b 两个子序列，且 a 和 b 都严
+格小于 s。s 的长度至少为 2。
+不妨设 s 的首个字符分给了子序列 a。设 s 的首个字符为
+0,s = 0t,a = 0u。
+若 u 为空，b = t。又因为 s 是 Lyndon 串，t 为 s 的前缀或
+者 t > s。但是 b < s。所以 t 必须为 s 的前缀。所以 s 的所
+有字符为 0, 这与 s 是 Lyndon 串矛盾。所以 u 非空。
+
+Qingyu SUA 程序设计竞赛命题组 Universal Cup
+
+The 3rd Universal Cup: Hangzhou
+
+D. Dividing Sequence
+做法二证明
+
+继续证明：
+若 u 非空，此时，若 t > s, 则 b < t 且 u < t ，即 t 可分解
+为两个严格比它小的非空子序列。
+因为 s 是长度大于 1 的 Lyndon 串 0t，t 不能是 s 的前缀。
+所以只有唯一一种可能，即我们成功获得了 t，它长度比 s
+少 1，且可分解为两个严格比它小的非空子序列。由于 s 的
+长度是有限的，归纳的证明可得矛盾。
+于是引理 0 得证。
+
+Qingyu SUA 程序设计竞赛命题组 Universal Cup
+
+The 3rd Universal Cup: Hangzhou
+
+D. Dividing Sequence
+做法二证明
+
+引理 1
+设 s ≥ t 为两个 Lyndon 串。则任意 Lyndon 分解开头两个
+Lyndon 串为 s，t 的串 x 划分给满足题目要求的 b, c 的最优解中，
+x 开头的 s 必须全部归属 c。
+证明：
+由于存在一种 c 以 s 开头的合法解（前文给出的做法），所
+以最优解中，x 开头的 s 中归属 c 的部分必须 ≤ s。由于最
+优解中 b ≤ c，x 开头的 s 中属于 b 的部分同样 ≤ s。
+首先若 s > t ，我们考虑 s 分给 b, c 的部分，根据引理 0，
+我们无法做到 b, c 同时 < s，因此最优解即为 c = s。
+若 s = t，考虑我们将 s 划分给 b, c 的两部分，根据前面的
+分析，我们需要把 Lyndon 串 s 分为两个 ≤ s 的子序列，由
+引理 0，必有一个子序列为 s。
+Qingyu SUA 程序设计竞赛命题组 Universal Cup
+
+The 3rd Universal Cup: Hangzhou
+
+D. Dividing Sequence
+做法二证明
+
+继续证明：
+现在我们要证，当 s = t，x 开头的 s 全归属于 b，且 c 的开
+头也等于 s 的情况下，t 归属于 c。
+此时与前文分析类似地，根据引理 0，仍然是对于 t，我们
+无法分成两个 �s 的。
+如果分给 b 或者分给 c 的其中一边 > s，这时可以发现已经
+不优于我们给出做法的构造了。
+因此仍然是整个 t 分给 b 或者 c，如果分给 c 我们证明的东
+西就达成了，于是只需要考虑仍然分给 b 的情况。这时加了
+两个 s，于是按这个思路迭代下去，因为 Lyndon 分解不增，
+可以发现这样不优。
+
+Qingyu SUA 程序设计竞赛命题组 Universal Cup
+
+The 3rd Universal Cup: Hangzhou
+
+D. Dividing Sequence
+做法二证明
+
+引理 2
+设 s 为一个 Lyndon 串。则任意 Lyndon 分解前两个 Lyndon 串均
+为 s 的字符串 x 的答案中，开头的两个 s 必须分属 c 和 b。
+证明：
+根据引理 1，开头的第一个 s 归属于 c。
+考察第二个 s，根据引理 0，他也是不能被分成两个 �s 的。
+并且如果分出来一个＞ s 的，分给 b 会导致不合法（因为已
+经将一个 s 分给 c 了），分给 c 不优于我们的构造。所以只
+能将第二个 s 整个给 b 或者 c。
+如果给 s 整个分给 b，引理得证。如果整个给 c，我们可以
+迭代证明这样不优于我们的构造，具体过程略。
+根据引理 1,2 可得上文给出的构造是最优的解。
+Qingyu SUA 程序设计竞赛命题组 Universal Cup
+
+The 3rd Universal Cup: Hangzhou
+
+L. Let’s Go! New Adventure
+
+题意
+给定经验值序列 ai 和从 i − 1 级升到 i 级需要的经验 bi ，保
+证 bi ≤ bi+1 。
+将 ai 分段，每段的贡献为经验和能够升到的等级减 c，求最
+大贡献和。
+P P
+n, m, c ≤ 5 × 105 ， ai , bi ≤ 1012
+
+Qingyu SUA 程序设计竞赛命题组 Universal Cup
+
+The 3rd Universal Cup: Hangzhou
+
+L. Let’s Go! New Adventure
+TLDR（一句话省流题解）
+
+Qingyu SUA 程序设计竞赛命题组 Universal Cup
+
+The 3rd Universal Cup: Hangzhou
+
+L. Let’s Go! New Adventure
+
+考虑动态规划：
+dpj = max {dpi + w(i, j)}
+0≤i<j
+
+dp0 = 0
+贡献函数 w 为
+w(i, j) = w(Aj − Ai ) = max{k | Bk ≤ Aj − Ai } − c
+其中 Ai =
+
+i
+P
+j=1
+
+aj ，Bi =
+
+i
+P
+
+bj 。
+
+j=1
+
+Qingyu SUA 程序设计竞赛命题组 Universal Cup
+
+The 3rd Universal Cup: Hangzhou
+
+L. Let’s Go! New Adventure
+引理 0
+对于 i < j < k < l，有 w(i, l) + w(j, k) ≤ w(i, k) + w(j, l) + 1。
+证明：
+首先将 B 和 w 定义延展到非负实数域：
+Bext (x) = B⌊x⌋ + {x} × b⌊x⌋+1
+wext (x) = B−1
+ext (x) − c
+显然有 Bi = Bext (i), w(i) = ⌊wext (i)⌋。
+由于 Bext (x) 为不减凸函数，可得 B−1
+ext (x) 为不减凹函数。
+对于 x > y 以及 ∆ > 0 有：
+−1
+−1
+−1
+B−1
+ext (x + ∆) − Bext (x) ≤ Bext (y + ∆) − Bext (y)
+
+Qingyu SUA 程序设计竞赛命题组 Universal Cup
+
+The 3rd Universal Cup: Hangzhou
+
+L. Let’s Go! New Adventure
+继续证明：
+即
+wext (x + ∆) − wext (x) + wext (y) − wext (y + ∆) ≤ 0
+则
+w(i, l) − w(i, k) + w(j, k) − w(j, l)
+= ⌊wext (Al − Ai )⌋ − ⌊wext (Ak − Ai )⌋
++ ⌊wext (Ak − Aj )⌋ − ⌊wext (Al − Aj )⌋
+< wext (Al − Ai ) − (wext (Ak − Ai ) − 1)
++ wext (Ak − Aj ) − (wext (Al − Aj ) − 1)
+≤2
+由于 w 取值始终为整数，得证。
+Qingyu SUA 程序设计竞赛命题组 Universal Cup
+
+The 3rd Universal Cup: Hangzhou
+
+(1)
+
+L. Let’s Go! New Adventure
+根据引理可得对于 i < j < k < l，有
+(dpi +w(i, k))−(dpj +w(j, k))+1 ≥ (dpi +w(i, l))−(dpj +w(j, l))
+那么
+(dpi +w(i, k)) < (dpj +w(j, k)) → (dpi +w(i, l)) ≤ (dpj +w(j, l))
+即若当前位置 k 上后决策点 j 严格优于前决策点 i，则后继
+位置 l 上 j 不会劣于 i。
+得到决策单调性，但这里只保证后决策点严格优的位置一定
+在严格劣的位置之前，两决策点相等的位置可以任意不连续
+地出现。
+
+Qingyu SUA 程序设计竞赛命题组 Universal Cup
+
+The 3rd Universal Cup: Hangzhou
+
+L. Let’s Go! New Adventure
+
+考虑二分队列求解：DP 时记录目前为止每个决策点的最优
+区间，新插入的决策点会覆盖之前的一些区间。
+单点求值需要在 Bi 上二分，单次复杂度 O(log n)。
+如何求两决策点对应区间分界点？直接二分无法确定相等的
+情况属于哪一边。
+使用 wext 代替 w 求值，由于 wext 严格符合四边形不等式，
+可以正常二分。总复杂度 O(m + n log n log m)。
+或注意到后决策点第一次严格优的位置一定对应某次升级，
+且升级位置可以正常二分，求得分界点所对应的最小 Ai ，总
+复杂度 O(m + n log m)。
+
+Qingyu SUA 程序设计竞赛命题组 Universal Cup
+
+The 3rd Universal Cup: Hangzhou
+
+C. Catch the Star
+
+题意
+给定凸包 S 代表目标和另外 n 个凸包 Mi 代表障碍物，找到
+线段 (l, 0) 到 (r, 0) 之间（不包括端点）能完全无遮挡看到
+目标的点集有多长。空集输出 −1。
+保证目标、障碍物、给定线段互相没有交集，但障碍物内部
+互相之间可交。视线切障碍物时视为无遮挡。
+P
+n ≤ 104 , ki ≤ 105 , ki ≤ 106 。
+
+Qingyu SUA 程序设计竞赛命题组 Universal Cup
+
+The 3rd Universal Cup: Hangzhou
+
+C. Catch the Star
+首先在凸包上用循环二分找到每个障碍对目标的两条内切
+线。
+→和−
+−−s→，则由 −
+→，−
+−−→，
+假设切线分别为 −
+m−in−s−out
+m−out
+m−in−s−out
+m−in−m
+in
+out
+−
+−
+−
+−
+→
+s m 三个开半平面共同覆盖的区域内目标会被障碍物遮
+in
+
+out
+
+挡。注意特判 min 与 mout 为同一点的情况。
+用给定线段与三个半平面分别求交后再求交，得到的线段就
+是被该障碍物遮挡的部分。线段与半平面求交只需判断端点
+是否在半平面内，随后根据情况求直线交点即可。
+注意这里需要使用有理数；由于给定线段在 x 轴上求交点和
+求交时只需要计算 x 的值。
+最后将遮挡线段的端点排序，扫描线求合法线段长度。注意
+原线段与遮挡线段均为开区间。
+
+Qingyu SUA 程序设计竞赛命题组 Universal Cup
+
+The 3rd Universal Cup: Hangzhou
+
+C. Catch the Star
+
+Qingyu SUA 程序设计竞赛命题组 Universal Cup
+
+The 3rd Universal Cup: Hangzhou
+
+最后
+
+没听明白？没关系。
+访问 https://sua.ac/wiki/ ，有文字版题解与带注释的参考
+代码。
+
+Qingyu SUA 程序设计竞赛命题组 Universal Cup
+
+The 3rd Universal Cup: Hangzhou
+
+Thank you!
+
+Qingyu SUA 程序设计竞赛命题组 Universal Cup
+
+The 3rd Universal Cup: Hangzhou
+
+

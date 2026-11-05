@@ -1,0 +1,48 @@
+Replacement
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+1024 megabytes
+
+Given a binary string s of length n (01 string). You need to replace one character in s[2 . . . n − 1] with ⊕,
+so that the final value of the expression is as large as possible.
+⊕ represents the binary XOR operation. After the replacement, both sides of ⊕ are treated as binary
+numbers.
+
+Input
+A single test case contains multiple data sets.
+The first line of input is the number of data sets T (1 ≤ T ≤ 105 ), representing the number of data sets
+in this test case.
+For each data set, there is one line containing a binary string s (3 ≤ |s| ≤ 5 · 105 ).
+P
+It is guaranteed that in a single test case,
+|s| ≤ 5 · 105 .
+
+Output
+For each data set, output one line containing a binary string that represents the largest result in binary
+form (the number string cannot contain leading 0s except for the single digit 0).
+
+Example
+standard input
+5
+010
+0110
+1000
+10101
+01000
+
+standard output
+0
+10
+10
+100
+10
+
+Page 1 of 1
+
+

@@ -1,0 +1,73 @@
+J
+
+Joint Relocation
+
+Time limit: 4s
+
+VegiCat owns a company with n employees in k nonempty teams. The employees live
+along a straight road, represented by a number line. VegiCat wants to arrange two
+meeting points for them.
+VegiCat divides the teams into two sets, A and B, with each team in exactly one set.
+He chooses a meeting point for each set at any real coordinate. All employees on
+the same team must go to the same meeting point. Each team in set A goes
+to the meeting point for A, and each team in set B goes to the meeting point for B.
+Either set may be empty.
+Let SA list the home positions of all employees on teams in A, and deﬁne SB similarly
+for B. Each employee is counted separately, even when home positions repeat.
+For a list S = (x1 , x2 , . . . , xm ) of home positions, the minimum total distance for these employees to travel to
+one meeting point is
+m
+∑
+M (S) = min
+|xj − p|.
+p∈R
+
+j=1
+
+Deﬁne M (S) = 0 when S is empty. Help VegiCat minimize M (SA ) + M (SB ) over all ways to divide the teams
+into the two sets.
+
+Input
+The ﬁrst line contains an integer T (1 ≤ T ≤ 3 · 105 ), the number of test cases. The description of the test cases
+follows.
+The ﬁrst line of each test case contains two integers n and k (1 ≤ k ≤ n ≤ 3 · 105 ), denoting the number of
+employees and the number of teams, respectively.
+Each of the next k lines describes one team. The i-th line contains an integer mi (1 ≤ mi ≤ n), the number of
+employees on team i, followed by mi integers xi,1 , . . . , xi,mi (1 ≤ xi,j ≤ 107 ), their home positions. The sum of
+all mi in a test case is n.
+Home positions may repeat and may be given in any order.
+It is guaranteed that the sum of n over all test cases does not exceed 3 · 105 .
+
+Output
+For each test case, output an integer — the minimum possible total travel distance.
+
+Sample Input 1
+
+Sample Output 1
+
+2
+4 2
+2 1 3
+2 8 10
+8 3
+3 4 12 1
+2 3 2
+3 9 8 10
+
+4
+15
+
+Note
+In the ﬁrst test case, VegiCat sends team 1 to a meeting point at position 1 and team 2 to a meeting point at
+position 8. The employees in each team travel a total distance of 2, giving the answer 4.
+In the second test case, VegiCat chooses meeting points at 3 and 9. He sends teams 1 and 2 to the ﬁrst meeting
+point, and team 3 to the second. The employees in teams 1, 2, and 3 travel total distances of 12, 1, and 2,
+respectively, giving the answer 15.
+
+Problem J: Joint Relocation
+
+1
+
+This page is intentionally left blank.
+
+

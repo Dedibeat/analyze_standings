@@ -1,0 +1,67 @@
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+
+#define int long long
+#define sz(a) (int)(a).size()
+#define pb push_back
+#define all(x) x.begin(), x.end()
+#define rall(x) x.rbegin(), x.rend()
+#define FOR(i, a, b) for(int i = (a); i < (b); i++)
+#define FORD(i, a, b) fosr(int i = (a); i >= (b); i++)
+#define ff first
+#define ss second 
+#define _ << ' ' <<
+#define hha(x) cout << #x << " = " << x << " "
+#define hhal(x) cout << #x << " = " << x << endl
+#define print(v) cout << #v << " = "; for(auto x : v) cout << x << " "; cout << endl;
+
+const int mod = 998244353;
+
+int modpow(int a, int b) {
+    a %= mod;
+    int c = 1;
+    while(b) {
+        if(b & 1) c = c * a % mod;
+        a = a * a % mod;
+        b /= 2;
+    }
+    return c;
+}
+
+int modinv(int a) {
+    return modpow(a, mod - 2);
+}
+void solve() {
+    int x, y; cin >> x >> y;
+    int a, b, c; cin >> a >> b >> c;
+    c = (a + b);
+    a = a * modinv(c) % mod;
+    b = b * modinv(c) % mod;
+    //hha(a); hhal(b);
+    int ans = 0;
+    auto f = [&](auto &&self, int x, int y, int p = 1) -> void
+    {
+        //hha(x); hha(y); hhal(p);
+        if(y <= 0) 
+        {
+            ans = (ans + p) % mod;
+            return;
+        }
+        if(x <= 0) return;
+        self(self, x, y - x, p * a % mod);
+        self(self, x - y, y, p * b % mod);
+    };
+    f(f, x, y);
+    cout << ans << "\n";
+}   
+
+signed main() {
+    ios_base::sync_with_stdio(0); cin.tie(0);
+    int t = 1;
+    cin >> t;
+    while(t--) {
+        solve();
+    }
+    return 0;
+}

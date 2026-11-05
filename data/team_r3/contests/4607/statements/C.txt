@@ -1,0 +1,74 @@
+C
+
+Counting Arrays
+
+Time limit: 2s
+
+VegiCat gives you two integers n and m. Consider integer arrays a1 , a2 , . . . , an such
+that
+a1 = 0,
+
+0 ≤ ai+1 − ai ≤ 1
+
+(1 ≤ i < n).
+
+Let si = a1 +a2 +. . .+ai be the preﬁx sums of a. VegiCat also tells you the preﬁx sums
+at m positions; that is, you are given m constraints of the form spj = vj (1 ≤ j ≤ m).
+Count the number of arrays satisfying all constraints, modulo 998244353. If no array
+satisﬁes all the constraints, the answer is 0.
+
+Input
+The ﬁrst line contains an integer T (1 ≤ T ≤ 104 ), the number of test cases. The description of the test cases
+follows.
+Each test case is given as follows:
+The ﬁrst line contains two integers n and m (1 ≤ n ≤ 100, 0 ≤ m ≤ n), the length of the array and the number
+of preﬁx sum constraints, respectively.
+The j-th of the next m lines contains two integers pj and vj (1 ≤ pj ≤ n, 0 ≤ vj ≤ 109 ). This describes a
+constraint: the sum of the ﬁrst pj elements of the array must equal vj .
+The positions pj are given in strictly increasing order.
+
+Output
+For each test case, output an integer — the number of valid arrays modulo 998244353.
+
+Sample Input 1
+
+Sample Output 1
+
+6
+1 0
+3 1
+3 1
+3 1
+2 0
+4 1
+4 3
+5 2
+1 0
+5 4
+5 2
+2 0
+5 10
+
+1
+1
+2
+2
+2
+0
+
+Note
+Without any preﬁx constraints there are exactly 2n−1 such arrays, because each of the n − 1 adjacent diﬀerences
+may independently be 0 or 1.
+In the second test case, the only array with s3 = 1 is (0, 0, 1).
+In the third test case, s2 = 0 forces a2 = 0, after which a3 may be 0 or 1.
+In the fourth test case, the arrays are (0, 1, 1, 1) and (0, 0, 1, 2).
+In the ﬁfth test case, the arrays with s5 = 4 are (0, 0, 1, 1, 2) and (0, 1, 1, 1, 1).
+In the sixth test case, s2 = 0 forces a1 = a2 = 0, so s5 ≤ 6. The constraint s5 = 10 is impossible.
+
+Problem C: Counting Arrays
+
+1
+
+This page is intentionally left blank.
+
+

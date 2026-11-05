@@ -1,0 +1,59 @@
+Volunteer Simulator
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+1024 megabytes
+
+In an ICPC contest, there are multiple problems, and the contest lasts for a long duration. There are n
+accepted submissions in total, each representing a successful attempt by a team on a problem. When a
+team makes an accepted submission for a problem, we say that the team has solved that problem. Note
+that if a team submits multiple accepted solutions for the same problem, only the first such submission
+is considered as solving the problem for the first time.
+You need to determine for each submission whether a balloon should be awarded according to the following
+rules:
+• Before the scoreboard freeze (submission time < 240 minutes): when a team solves a problem for
+the first time, award a balloon corresponding to that problem.
+• After the scoreboard freeze (submission time ≥ 240 minutes): when a team solves a problem for
+the first time, award a balloon corresponding to that problem if and only if the team has received
+strictly fewer than 3 balloons in total so far.
+
+Input
+The first line of input contains n (1 ≤ n ≤ 5 000), denoting the number of accepted submissions.
+The next n lines describe the submissions in chronological order. Each submission contains three integers
+a (1 ≤ a ≤ 410), b (1 ≤ b ≤ 13), and c (0 ≤ c < 300), representing the team ID, the problem ID, and the
+submission time in minutes, respectively. It is guaranteed that the submission times are non-decreasing.
+
+Output
+For each submission, output the problem ID if a balloon corresponding to that problem should be awarded,
+or otherwise output 0.
+
+Example
+standard input
+8
+1 1 10
+1 2 20
+1 3 30
+1 4 250
+1 5 260
+1 6 270
+1 7 280
+2 1 290
+
+standard output
+1
+2
+3
+0
+0
+0
+0
+1
+
+Page 1 of 1
+
+

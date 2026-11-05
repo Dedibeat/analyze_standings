@@ -1,0 +1,58 @@
+Make Max
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+1024 megabytes
+
+You are given a sequence of n positive integers [a1 , . . . , an ]. You can apply the following operation to the
+sequence:
+• Select a subarray a[l . . . r] (1 ≤ l < r ≤ n) where not all elements are identical (i.e., there exist
+two integers l ≤ i < j ≤ r such that ai 6= aj ), and then change every element in this subarray to
+maxl≤i≤r ai .
+Determine the maximum number of such operations that can be performed.
+
+Input
+Each test contains multiple test cases. The first line contains the number of test cases t (1 ≤ t ≤ 1000).
+Description of the test cases follows.
+The first line of each test case contains an integer n (1 ≤ n ≤ 2 × 105 ).
+The second line of each test case contains n integers a1 , . . . , an (1 ≤ ai ≤ 109 ).
+The sum of n over all test cases does not exceed 4 × 105 .
+
+Output
+For each test case, print the maximum number of operations that can be performed.
+
+Example
+standard input
+4
+2
+1 2
+2
+2 2
+7
+1 1 1 2 2 2 2
+3
+1 2 3
+
+standard output
+1
+0
+3
+3
+
+Note
+In the first test case, an optimal sequence of operations is:
+1. Select a[1 . . . 2] and apply the operation, so that a becomes [2, 2].
+In the second test case, no operation can be performed.
+In the fourth test case, an optimal sequence of operations is:
+1. Select a[1 . . . 2] and apply the operation, so that a becomes [2, 2, 3].
+2. Select a[2 . . . 3] and apply the operation, so that a becomes [2, 3, 3].
+3. Select a[1 . . . 3] and apply the operation, so that a becomes [3, 3, 3].
+
+Page 1 of 1
+
+

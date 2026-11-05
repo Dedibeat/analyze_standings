@@ -1,0 +1,76 @@
+B
+
+Bouncing Particles
+
+Time limit: 2s
+
+This problem has an attachment. You can use it to simulate and visualize
+the movements of the particles.
+VegiCat observes particles on a grid with n rows and n columns. The lower-left cell
+has coordinates (1, 1). The horizontal coordinate increases from left to right, and
+the vertical coordinate increases from bottom to top. Each particle has a horizontal
+direction (left or right) and a vertical direction (up or down). At the beginning of
+each step, each particle adjusts its directions as follows:
+
+• Its horizontal direction is reversed if the next cell in that direction is outside the grid.
+• Its vertical direction is reversed if the next cell in that direction is outside the grid.
+After these adjustments, a particle at (x, y) produces two child particles:
+• One at (x − 1, y) if its horizontal direction is left, or at (x + 1, y) if it is right;
+• One at (x, y − 1) if its vertical direction is down, or at (x, y + 1) if it is up.
+Both child particles inherit the parent’s horizontal and vertical directions. The parent then disappears.
+Multiple particles may occupy the same cell at the same time, regardless of their directions. They do not
+interact or change each other’s directions.
+At time 0, there are four particles at (x0 , y0 ), with the following direction pairs:
+• Right and up;
+• Left and up;
+• Right and down;
+• Left and down.
+At each step, all particles simultaneously adjust their directions and then split as described above.
+You are given q queries. Each query gives integers A, B, C and a time t. For each query, ﬁnd the number of
+grid cells (x, y) that satisfy Ax + By + C = 0 and contain at least one particle at time t.
+
+Input
+The ﬁrst line contains an integer T (1 ≤ T ≤ 105 ), the number of test cases. The description of the test cases
+follows.
+The ﬁrst line of each test case contains four integers n, x0 , y0 , q (2 ≤ n ≤ 109 , 1 ≤ x0 , y0 ≤ n, 1 ≤ q ≤ 105 ). The
+grid has n rows and n columns. The initial cell is (x0 , y0 ), and there are q queries.
+Each of the next q lines contains four integers A, B, C and t (|A|, |B|, |C| ≤ 109 , 0 ≤ t ≤ 109 ). This describes a
+query for the line Ax + By + C = 0 at time t. It is guaranteed that A and B are not both 0 simultaneously.
+It is guaranteed that the sum of q over all test cases does not exceed 105 .
+
+Output
+For each query, output one integer on one line: the number of grid cells (x, y) that satisfy Ax + By + C = 0
+and contain at least one particle at time t.
+
+Sample Input 1
+
+Sample Output 1
+
+1
+6 5 5 4
+2 -1 -5 0
+1 -1 0 1
+11 45 14 2
+1 0 -5 3
+
+1
+0
+0
+3
+
+Problem B: Bouncing Particles
+
+1
+
+Note
+The ﬁgure below shows the particle evolution in the sample, as well as the queried straight lines, where the
+gray cells represent the cells containing integer points through which the straight line passes, and all splitting
+directions have undergone legality adjustments. Since the third query is too far away from the grid under
+consideration, the line of the third query is omitted here.
+Particles in the same cell with the same direction pair are drawn as a single symbol; multiplicities are omitted.
+
+2
+
+Problem B: Bouncing Particles
+
+

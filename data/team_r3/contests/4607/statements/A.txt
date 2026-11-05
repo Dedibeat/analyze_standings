@@ -1,0 +1,167 @@
+A
+
+Average of Averages
+
+Time limit: 1s
+
+The average of averages is not always the average.
+VegiCat has just learned about segment trees and wants to practice using them.
+For a positive integer n, he considers the sequence ai = i (1 ≤ i ≤ n). He decides to
+build a segment tree to answer range average queries on this sequence.
+In VegiCat’s segment tree, each node corresponds to an interval [l, r] and stores a
+value vl,r , which VegiCat intends to represent the average over that interval. The
+root corresponds to the entire interval [1, n].
+However, VegiCat mistakenly assumes that a parent interval’s average always equals
+the average of the values stored in its two child nodes. Therefore, he adds the values stored in the two child
+nodes and divides the sum by 2.
+VegiCat ﬁrst constructs the segment tree by calling Build(1, n). After the segment tree has been built, he
+answers a query for an interval [L, R] by calling Query(1, n, L, R). The two recursive procedures are given in
+Algorithm 1.
+Algorithm 1 Build and Query
+1: procedure Build(l, r)
+2:
+if l = r then
+3:
+vl,l ← al
+4:
+return
+5:
+end if⌊
+⌋
+l+r
+6:
+m←
+2
+7:
+Build(l, m)
+8:
+Build(m + 1, r)
+vl,m + vm+1,r
+9:
+vl,r ←
+2
+10: end procedure
+11: procedure Query(l, r, L, R)
+12:
+if L ≤ l and r ≤ R then
+13:
+return vl,r
+14:
+end if⌊
+⌋
+
+l+r
+2
+16:
+if R ≤ m then
+17:
+return Query(l, m, L, R)
+18:
+else if L > m then
+19:
+return Query(m + 1, r, L, R)
+20:
+end if
+21:
+x ← Query(l, m, L, R)
+22:
+y ← Query(m + 1, r, L, R)
+x+y
+23:
+return
+2
+24: end procedure
+15:
+
+m←
+
+Although VegiCat’s algorithm is incorrect in general, it returns the correct average for some intervals. Count
+the number of such intervals.
+
+Problem A: Average of Averages
+
+1
+
+For an interval [L, R], its true average is
+∑R
+
+i=L ai
+
+R−L+1
+
+.
+
+More precisely, count the number of pairs (L, R) satisfying 1 ≤ L ≤ R ≤ n such that
+∑R
+Query(1, n, L, R) =
+
+i=L ai
+
+R−L+1
+
+.
+
+All averages are computed as exact rational numbers, without rounding or truncation.
+
+Input
+The ﬁrst line contains an integer T (1 ≤ T ≤ 104 ), the number of test cases. The description of the test cases
+follows.
+Each of the next T lines contains one integer n (1 ≤ n ≤ 106 ), the length of the sequence.
+It is guaranteed that the sum of n over all test cases does not exceed 2 · 106 .
+
+Output
+For each test case, output an integer — the number of intervals [L, R] for which VegiCat’s query procedure
+returns exactly the true average.
+
+Sample Input 1
+
+Sample Output 1
+
+3
+1
+5
+14
+
+1
+10
+35
+
+Note
+For the second test case, n = 5, there are 10 valid intervals:
+[1, 1], [1, 2], [2, 2], [2, 3], [2, 5],
+[3, 3], [3, 4], [4, 4], [4, 5], [5, 5].
+For example, querying [2, 5] returns
+2+3
+4+5
+2 + 2
+
+2
+
+=
+
+7
+,
+2
+
+which equals the true average of 2, 3, 4, 5. Thus, [2, 5] is counted.
+In contrast, querying [1, 5] returns
+1+2
+2 +3
+
+2
+
++ 4+5
+27
+2
+=
+,
+2
+8
+
+while its true average is 3. Thus, [1, 5] is not counted.
+
+2
+
+Problem A: Average of Averages
+
+

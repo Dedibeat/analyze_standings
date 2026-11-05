@@ -1,0 +1,93 @@
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+
+#define pb push_back
+#define all(x) x.begin(), x.end()
+#define rall(x) x.rbegin(), x.rend()
+#define FOR(i, a, b) for(int i = (a); i < (b); i++)
+#define FORD(i, a, b) for(int i = (a); i >= (b); i++)
+#define ff first
+#define ss second 
+#define _ << ' ' <<
+#define hha(x) cout << #x << " = " << x << " "
+#define hhal(x) cout << #x << " = " << x << endl
+#define print(v) cout << #v << " = "; for(auto x : v) cout << x << " "; cout << endl;
+struct team {
+    vector<pair<int, int>> problems;
+    int score, penalty, pScore, pPenalty;
+    team() {
+        problems.assign(26, {0, 0});
+        score = penalty = pScore = pPenalty = 0;
+    }
+};
+struct submission {
+    string name;
+    char prob;
+    int time;
+    string ver;
+    submission() {
+        name = "";
+        prob = ' ';
+        time = 0;
+        ver = "";
+    }
+};
+void solve() {
+    ll n; cin >> n;
+    map<string, team> mp;
+    vector<submission> subs(n);
+    FOR(i, 0, n) cin >> subs[i].name >> subs[i].prob >> subs[i].time >> subs[i].ver;
+    sort(all(subs), [&](auto x, auto y) {
+        return x.time < y.time;
+    });
+    int maxScore = 0, penalty = 0;
+    for(auto &[name, prob, time, ver] : subs) {
+        
+        if(ver == "Accepted") {
+            if(mp[name].problems[prob - 'A'].ss == 0) {
+                mp[name].problems[prob - 'A'].ss = 1;
+                mp[name].pScore++;
+                mp[name].score++;
+                mp[name].penalty += time + mp[name].problems[prob - 'A'].first;
+                mp[name].pPenalty += time + mp[name].problems[prob - 'A'].first;
+                if(mp[name].score > maxScore) {
+                    maxScore = mp[name].score;
+                    penalty = mp[name].penalty;
+                }
+                if(mp[name].score == maxScore) {
+                    penalty = min(penalty, mp[name].penalty);
+                }
+            }
+        }
+        if(ver == "Rejected") {
+            if(mp[name].problems[prob - 'A'].ss == 0) {
+                mp[name].problems[prob - 'A'].ff += 20;
+            }
+        }
+        if(ver == "Unknown") {
+            if(mp[name].problems[prob - 'A'].ss == 0) {
+                mp[name].problems[prob - 'A'].ss = 1;
+                mp[name].pScore++;
+                mp[name].pPenalty += time + mp[name].problems[prob - 'A'].first;
+            }
+        }
+    }
+    vector<string> ans;
+    for(auto [name, sub] : mp) {
+        if(sub.pScore > maxScore || (sub.pScore == maxScore && sub.pPenalty <= penalty)) {
+            ans.pb(name);
+        }
+    }
+    sort(all(ans));
+    for(auto &x : ans) cout << x << ' '; cout << '\n';
+}
+
+int main() {
+    ios_base::sync_with_stdio(0); cin.tie(0);
+    int t = 1;
+    cin >> t;
+    while(t--) {
+        solve();
+    }
+}

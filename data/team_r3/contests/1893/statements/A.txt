@@ -1,0 +1,71 @@
+AUS
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+1024 megabytes
+
+Pigeland University will host the 2224 Animal Collegiate Programming Contest (ACPC 2224). Unlike
+previous years, where teams from the host institution were marked as unofficial, Pigeland will send official
+teams to compete in the contest with three workstations for each team. Nevertheless, Pig-head, the coach
+of Pigeland University, remains uncertain about his teams’ chances of securing gold medals. As a result,
+he decides to acquire the contest problems in advance from the AUS problem-setting group, using the
+excuse of needing to upload data to the online judge.
+To prevent cheating, AUS attempts to encrypt the problems using a special cipher. Specifically, problems
+are represented by strings consisting of lowercase English letters. AUS wants to design a cipher function
+f (x) that maps lowercase English letters to lowercase English letters. For a problem S = s1 s2 . . . sn , the
+encrypted version of the problem is another string given by F (S) = f (s1 )f (s2 ) . . . f (sn ). For example,
+when S = abcabc and f (a) = a, f (b) = k, f (c) = a, the encrypted version is F (S) = akaaka.
+As a member of AUS, your task is to design the cipher function f . The leader of AUS believes that the
+function is strong if and only if there exists at least one problem that can be encrypted into the same
+encrypted version as another, while not all problems produce the same encrypted output. To validate
+this, he will give you three problems S1 , S2 , and S3 , and you need to find a cipher function f such that
+F (S1 ) = F (S2 ) and F (S1 ) 6= F (S3 ). Since AUS has several experienced members, your task is simply to
+determine whether such a cipher function exists.
+
+Input
+There are multiple test cases. The first line contains an integer T (1 ≤ T ≤ 104 ) indicating the number
+of test cases. For each test case:
+The first line contains a string S1 (1 ≤ |S1 | ≤ 103 ) consisting of only lowercase English letters.
+The second line contains a string S2 (1 ≤ |S2 | ≤ 103 ) consisting of only lowercase English letters.
+The third line contains a string S3 (1 ≤ |S3 | ≤ 103 ) consisting of only lowercase English letters.
+It is guaranteed that the sum of |S1 | + |S2 | + |S3 | of all test cases does not exceed 3 × 104 .
+
+Output
+For each test case, if such cipher function exists, output YES in one line. Otherwise, output NO instead.
+
+Example
+standard input
+4
+abab
+cdcd
+abce
+abab
+cdcd
+abcd
+abab
+cdcd
+abc
+x
+yz
+def
+
+standard output
+YES
+NO
+YES
+NO
+
+Page 1 of 2
+
+Note
+For the first and third sample test cases, one valid cipher function can be f (a) = f (b) = f (c) = f (d) = a
+and f (e) = b.
+
+Page 2 of 2
+
+

@@ -1,0 +1,71 @@
+Activity Rehearsal
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+2 seconds
+1024 megabytes
+
+Little J is currently rehearsing for an activity. Now, n students are lined up in order, each holding a sign
+with a number on it. It is assumed that the number on the sign held by the i-th student from left to right
+is ai . The numbers on the signs are all distinct integers within the range of 1 to n.
+Now, a "comparison"activity rehearsal is to be conducted. This activity will take a total of n − 1 rounds.
+In each round, the two students at the far left will step forward, and then they will compare the numbers
+on their signs. The student with the larger number will be selected, while the student with the smaller
+number will return to the far right. Note that the selected student will not return to the lineup
+and will not participate in subsequent rounds.
+Little J wants to know who is selected in each round under different arrangements of numbers. He will
+perform m operations, each of which is one of the following two types:
+• Choose two positions x, y such that 1 ≤ x < y ≤ n, and then swap the signs held by the x-th and
+y-th students;
+• Given two parameters l, r such that 1 ≤ l ≤ r < n, simulate a "comparison"activity and calculate
+the sum of the numbers on the signs of the selected students between the l-th round and the r-th
+round. After the simulation, all students will return to their original positions.
+
+Input
+The first line of input contains two integers n, m (2 ≤ n ≤ 105 , 1 ≤ m ≤ 105 ), representing the number of
+students and the number of operations.
+The next line contains n integers a1 , a2 , . . . , an (1 ≤ ai ≤ n), representing the initial numbers on the signs
+held by each student. It is guaranteed that all ai are distinct.
+The following m lines each contain a character and two integers, representing an operation.
+• If the input format is C x y, it means to swap the signs held by the x-th and y-th students, with
+the guarantee that 1 ≤ x < y ≤ n;
+• If the input format is A l r, it means to simulate a "comparison"activity and calculate the sum of the
+selected numbers between the l-th round and the r-th round, with the guarantee that 1 ≤ l ≤ r < n.
+
+Output
+For each simulation operation, output a single integer on a new line, representing the answer.
+
+Example
+standard input
+5 6
+4 3 1 2 5
+A 3 4
+C 1 2
+A 3 4
+A 2 4
+C 3 5
+A 1 3
+
+standard output
+8
+8
+10
+12
+
+Page 1 of 2
+
+Note
+In the first simulation operation, the numbers held by the students in order are [4, 3, 1, 2, 5]. In the four
+rounds of comparison, the selected numbers are 4, 2, 5, 3, so the sum of the selected numbers between the
+3-rd round and the 4-th round is 5 + 3 = 8.
+In the last simulation operation, the numbers held by the students in order are [3, 4, 5, 2, 1]. In the four
+rounds of comparison, the selected numbers are 4, 5, 3, 2, so the sum of the selected numbers between the
+1-st round and the 3-rd round is 4 + 5 + 3 = 12.
+
+Page 2 of 2
+
+

@@ -1,0 +1,64 @@
+Swiss Stage
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+512 megabytes
+
+After five years, the League of Legends World Championship (Worlds) returns to South Korea. This
+pinnacle event of the LoL esports season is scheduled to take place from October to November in the
+Land of the Morning Calm.
+Worlds 2023 brings forth an exciting new format, featuring the Swiss Stage, along with new qualification
+paths for teams.
+
+The Swiss Stage of Worlds 2023
+(Credit: Riot Games)
+
+In the Swiss Stage of Worlds 2023, there are 5 rounds in total for the 16 participating teams. In each
+round, the teams will be paired based on each team’s win-loss record, where the teams with the same
+number of wins and losses will play each other. Rounds related to advancement and elimination, i.e.,
+rounds for the teams accumulating two wins or two losses, will adopt the best-of-three rule, where the
+team who first defeats the other team in two out of three games wins the round, and the other loses (If
+one team defeats the other team consecutively in the first game and the second game, there will be no
+need for the third game). Other rounds will adopt the best-of-one rule, where the team who defeats the
+other team in the only game wins the round, and the other loses. The teams accumulating three wins
+advance to the next stage, while those accumulating three losses bid farewell to the tournament.
+Now team HCG has x wins and y losses, and you, the coach of team HCG, would like to know the
+minimum number of additional games that team HCG needs to play to advance to the next stage.
+
+Input
+The only line contains two integers x and y (0 ≤ x, y ≤ 2), denoting the current number of wins and
+losses of team HCG.
+
+Output
+Output a single integer, denoting the minimum number of additional games that team HCG needs to play
+to advance to the next stage.
+
+Page 1 of 2
+
+Examples
+standard input
+
+standard output
+
+0 1
+
+4
+
+1 2
+
+4
+
+Note
+In the first sample case, team HCG can win two rounds with the best-of-one rule and one round with the
+best-of-three rule to advance, with at least 4 additional games.
+In the second sample case, team HCG must win two rounds with the best-of-three rule consecutively to
+advance, with at least 4 additional games.
+
+Page 2 of 2
+
+

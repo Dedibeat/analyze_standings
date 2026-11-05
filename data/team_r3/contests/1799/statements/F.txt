@@ -1,0 +1,45 @@
+Tourist
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+256 megabytes
+
+On the Codeforces platform, each user has a rating to measure his level. In addition, each user will also
+have a title based on his rating. Recently, because user Tourist’s rating exceeded 4000 points, Codeforces
+administrators decided to provide a new title, “Tourist”, to commemorate this feat.
+You also want to get this title, because it’s cool to be called a “Tourist”! But your current rating is only
+1500 points, which is not enough to get this honor. So, you let the GPT predict your rating changes in
+the next n contests. Specifically, suppose your rating is b points before the i-th contest, then after the
+i-th contest, the GPT predicts that your rating will become b + ci points. You want to know after which
+of those n contests you will get the title of “Tourist” for the first time, or there is no such contest.
+Note that the rating may become negative during this process, and the “Tourist” title will be awarded to
+users with a rating of at least 4000 points.
+
+Input
+The first line contains a single integer n (1 ≤ n ≤ 105 ), representing the number of contests in the future.
+The second line contains n integers c1 , c2 , . . . , cn (|ci | ≤ 109 ). Where ci indicates the change in rating after
+the i-th contest.
+
+Output
+Output a single integer representing the index of the contest after which you will get the title of “Tourist”
+for the first time. If such a contest does not exist, output ‘-1‘.
+
+Examples
+standard input
+5
+1000 1000 1000 -5000 1000
+5
+20 -100 10 -150 5
+
+standard output
+3
+-1
+
+Page 1 of 1
+
+

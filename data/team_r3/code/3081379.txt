@@ -1,0 +1,132 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+#define int long long
+#define pb push_back
+#define rep(i, a, b) for(int i = (a); i < (b); i++)
+#define repd(i, a, b) for(int i = (d); i >= (b); i--)
+#define all(x) (x).begin(), (x).end()
+#define rall(x) (x).rbegin(), (x).rend()
+#define hha(x) cout << #x << " = " << x << ' ';
+#define hhal(x) cout << #x << " = " << x << endl;
+#define print(v) cout << #v << " = " << ' '; for(auto x : v) cout << x << ' '; cout << endl;
+using stt = array<int, 4>; // sum, cnt, mn, g
+const int inf = 1e18;
+stt I = {0, 0, inf, 0};
+stt add(stt A, int c)
+{
+    A[0] += c * A[1];
+    if(A[2] == inf) A[2] = c;
+    else A[2] += c;
+    return A;
+}
+stt merge(stt A, stt B)
+{
+    if(A[2] == inf) return B;
+    if(B[2] == inf) return A;
+    stt C;
+    C[0] = A[0] + B[0];
+    C[1] = A[1] + B[1];
+    C[2] = min(A[2], B[2]);
+    C[3] = __gcd(A[3], B[3]);
+    C[3] = __gcd(C[3], max(A[2], B[2]) - min(A[2], B[2]));
+    return C;
+}
+void solve() {
+    int n, k; cin >> n >> k;
+    vector<int> isc(n + 1);
+    for(int i = 0, u; i < k; i++)
+    {
+        cin >> u;
+        isc[u] = true;
+    }
+    vector<stt> dp(n + 1, I), dpup(n + 1, I);
+    vector<vector<pair<int, int>>> g(n + 1);
+    for(int i = 1; i < n; i++)
+    {
+        int u, v, w; cin >> u >> v >> w;
+        g[u].push_back({w, v});
+        g[v].push_back({w, u});
+    }
+    auto dfs = [&](auto &&self, int u, int p) -> void
+    {
+        vector<pair<int, int>> ch;
+        for(auto [w, v] : g[u])
+        {
+            if(v == p) continue;
+            self(self, v, u);
+            ch.push_back({w, v});
+        }
+        int sz = ch.size();
+        stt tot = I;
+        for(auto [w, v]: ch)
+        {
+            tot = merge(tot, add(dp[v], w));
+        }
+        dp[u] = tot;
+        if(isc[u]) dp[u][1]++;
+    };
+    dfs(dfs, 1, 1);
+    for(int i = 1; i <= n; i++)
+    {
+        stt tot = dp[i];
+        int sum = tot[0];
+        int mn = tot[2];
+        int g = tot[3];
+        //hha(i); hha(sum); hha(tot[1]); hha(mn); hhal(g);
+    }
+    //cout << endl;
+    auto dfs_down = [&](auto &&self, int u, int p) -> void
+    {
+        vector<pair<int, int>> ch;
+        for(auto [w, v] : g[u])
+        {
+            if(v == p) continue;
+            ch.push_back({w, v});
+        }
+        int sz = ch.size();
+        vector<stt> pref(sz + 1), suf(sz + 1);
+        for(int i = 0; i < sz; i++)
+        {
+            auto [w, v] = ch[i];
+            pref[i + 1] = merge(pref[i], add(dp[v], w));
+        }
+        for(int i = sz - 1; i >= 0; i--)
+        {
+            auto [w, v] = ch[i];
+            suf[i] = merge(suf[i + 1], add(dp[v], w));
+        }
+
+        for(int i = 0; i < sz; i++)
+        {
+            auto [w, v] = ch[i];
+            stt tot = merge(pref[i], suf[i + 1]);
+            tot = merge(tot, dpup[u]);
+            dpup[v] = merge(dpup[v], add(tot, w));
+            if(isc[v])
+            {
+                dpup[v][1]++;
+            }
+        }
+        for(auto [w, v] : ch) self(self, v, u);
+    };
+    dfs_down(dfs_down, 1, 1);
+    int ans = 1e18;
+    for(int i = 1; i <= n; i++)
+    {
+        stt tot = merge(dp[i], dpup[i]);
+        int sum = tot[0];
+        int mn = tot[2];
+        int g = tot[3];
+        //hha(i); hha(sum); hha(mn); hhal(g);
+        g = __gcd((mn == inf ? 0 : mn), g);
+        ans = min(ans, sum / g);
+    }
+    cout << ans * 2 << "\n";
+}
+
+signed main() {
+    ios_base::sync_with_stdio(0); cin.tie(0);
+    solve();
+    return 0;
+}

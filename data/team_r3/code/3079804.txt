@@ -1,0 +1,100 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+#define int long long
+#define pb push_back
+#define rep(i, a, b) for(int i = (a); i < (b); i++)
+#define repd(i, a, b) for(int i = (d); i >= (b); i--)
+#define all(x) (x).begin(), (x).end()
+#define rall(x) (x).rbegin(), (x).rend()
+#define hha(x) cout << #x << " = " << x << ' ';
+#define hhal(x) cout << #x << " = " << x << endl;
+#define print(v) cout << #v << " = " << ' '; for(auto x : v) cout << x << ' '; cout << endl;
+int egcd(int a, int b, int &x, int &y)
+{
+    if(!b) 
+    {
+        x = 1; y = 0;
+        return a;
+    }
+    int x1, y1;
+    int g = egcd(b, a % b, x1, y1);
+    x = y1;
+    y = x1 - y1 * (a / b);
+    return g;
+}
+pair<int, int> brute(int S, int A, int B, int m)
+{
+    int mn = m - 1, s = 0, d = 0;
+    for(int i = 0; i < m; i++)
+    for(int j = 0; j < m; j++)
+    {
+        int tot = (S + A * i + B * j) % m;
+        if(tot < mn) mn = tot, d = i, s = j;
+    }
+    return {s, d};
+}
+pair<int, int> solve(int S, int A, int B, int m) {
+
+    int s = 0, d = 0;
+    //hha(A); hhal(B);
+    int g = egcd(A, B, d, s);
+    d = (d % m + m) % m;
+    s = (s % m + m) % m;
+    //hha(d); hha(s); hhal(g);
+    int invg = 0, tmp = 0;
+    int gg = egcd(g, m, invg, tmp);
+    invg = (invg % m + m) % m;
+    int mn = S % gg;
+    int R = (mn - S + m) % m;
+    int t = (R / gg) * invg % m;
+   // hhal(mn);
+   // hhal(t);
+    d = d * t % m;
+    s = s * t % m;
+    return {s, d};
+}
+void test(int num, int m)
+{
+    while(num--)
+    {
+        int S = rand() % m;
+        int A = rand() % m;
+        int B = rand() % m;
+        auto [s1, d1] = brute(S, A, B, m);
+        auto [s, d] = solve(S, A, B, m);
+        int mn1 = (S + A * d1 + B * s1) % m;
+        int mn = (S + A * d % m + B * s % m) % m;
+        assert(mn1 >= 0 && mn >= 0);
+        if(mn != mn1) 
+        {
+            hha(S); hha(A); hha(B); hhal(m);
+            hha(s); hhal(d);
+            hha(mn); hhal(mn1);
+            exit(1);
+        }
+    }
+}
+signed main() {
+    ios_base::sync_with_stdio(0); cin.tie(0);
+    // solve(34, 64, 24, 100);
+    // return 0;
+    // test(100, 100);
+    // for(int m = 1; m <= 1000; m++)
+    // {
+    //     test(1000, m);
+    // }
+    int n, m; cin >> n >> m;
+    vector<int> a(n);
+    for(auto &x : a) cin >> x;
+    int S = accumulate(all(a), 0LL) % m;
+    // hhal(S);
+    int A = (n * (n + 1) / 2) % m;
+    int B = n % m;
+    auto [s, d] = solve(S, A, B, m);
+    assert(A >= 0 && B >= 0);
+    //auto [s, d] = brute(S, A, B, m);
+    cout << (S + A * d % m + B * s % m) % m << "\n";
+    cout << s << " " << d << "\n";
+    return 0;
+}

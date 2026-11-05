@@ -1,0 +1,64 @@
+I Love CCPC
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+2 seconds
+1024 megabytes
+
+A string t of length k consisting of lowercase letters is called a CCPC (Character-Character-PalindromeCharacter) string if and only if it satisfies the following properties:
+• The length of t is at least 4, i.e., k ≥ 4;
+• The first character, the second character, and the last character of t are equal, i.e., t1 = t2 = tk ;
+• The remaining part of t is a palindrome, i.e., t3 t4 ...tk−1 is a palindrome.
+For example, ccpc, ppap, zzzz, and aabcddcba are all CCPC strings, while jinan, aaa, and oovoo are
+not.
+A substring of a string s can be represented using two indices 1 ≤ l ≤ r ≤ |s|, corresponding to the content
+sl sl+1 . . . sr . In this problem, two substrings are considered different if and only if the chosen indices l, r
+are not the same. Given a string s that contains only lowercase letters, first calculate the number of CCPC
+substrings. Then n operations will be applied, where each operation inserts a lowercase letter on the left
+or right side of s. You need to determine the number of CCPC substrings after each insertion.
+
+Input
+This problem contains multiple test cases. The first line of input contains an integer T (1 ≤ T ≤ 100),
+representing the number of test cases.
+For each test case:
+The first line contains a string s consisting only of lowercase letters (4 ≤ |s| ≤ 5 × 105 ), representing the
+initial content of the string.
+The next line contains an integer n (1 ≤ n ≤ 5 × 105 ), representing the number of operations.
+The following line contains n strings of length 2, c1 , c2 , . . . , cn , separated by spaces. Here, ci indicates
+the content of the i-th operation: the first character is L indicating an insertion on the left side, and R
+indicating an insertion on the right side, while the second character represents the lowercase letter to be
+inserted.
+It is guaranteed that the sum of |s| across all test cases and the sum of n do not exceed 5 × 105 .
+
+Output
+For each test case, output a line with n + 1 integers. The first integer represents the answer in the initial
+case, followed by n integers, where the i-th integer represents the answer after the first i operations.
+
+Example
+standard input
+2
+iloveccpc
+6
+Rj Ri Ln La Ln Ln
+cpcpccp
+9
+Lc Lc Rp Rc Lc Lc Rp Rp Rc
+
+standard output
+1 1 1 1 1 1 2
+0 2 3 3 4 5 7 8 8 9
+
+Page 1 of 2
+
+Note
+For the second test case, after all operations are completed, the content of the string s is
+cccccpcpccppcppc. The CCPC substrings include: s1...4 = cccc, s1...5 = ccccc, s2...5 = cccc,
+s3...10 = cccpcpcc, s4...7 = ccpc, s4...9 = ccpcpc, s9...13 = ccppc, s9...16 = ccppcppc, and s11...14 = ppcp.
+
+Page 2 of 2
+
+

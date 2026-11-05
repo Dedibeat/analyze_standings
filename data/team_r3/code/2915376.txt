@@ -1,0 +1,41 @@
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+
+#define int long long
+#define sz(a) (int)(a).size()
+#define pb push_back
+#define all(x) x.begin(), x.end()
+#define rall(x) x.rbegin(), x.rend()
+#define FOR(i, a, b) for(int i = (a); i < (b); i++)
+#define FORD(i, a, b) for(int i = (a); i >= (b); i++)
+#define ff first
+#define ss second 
+#define _ << ' ' <<
+#define hha(x) cout << #x << " = " << x << " "
+#define hhal(x) cout << #x << " = " << x << endl
+#define print(v) cout << #v << " = "; for(auto x : v) cout << x << " "; cout << endl;
+
+void solve() {
+    int s; cin >> s;
+    int f[8];
+    FOR(i, 1, 8) cin >> f[i];
+    int ans = s / 3;
+    ans = min(ans, f[1] + f[3] + f[5] + f[7]);
+    ans = min(ans, f[2] + f[3] + f[6] + f[7]);
+    ans = min(ans, f[4] + f[5] + f[6] + f[7]);
+    ans = min(ans, (s - f[1]) / 2);
+    ans = min(ans, (s - f[2]) / 2);
+    ans = min(ans, (s - f[4]) / 2);
+    cout << ans << '\n';
+}   
+
+signed main() {
+    ios_base::sync_with_stdio(0); cin.tie(0);
+    int t = 1;
+    cin >> t;
+    while(t--) {
+        solve();
+    }
+    return 0;
+}

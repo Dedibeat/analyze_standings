@@ -1,0 +1,47 @@
+The 2022 ICPC Asia Xi’an Regional Contest
+Northwestern Polytechnical University, November 13, 2022
+
+Problem L. Tree
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+2 seconds
+512 megabytes
+
+You are given a tree T with n nodes. The tree is rooted at 1. Define subtree(u) as the set of nodes in the
+subtree of u.
+Call a subset of nodes S good if and only if S satisfies at least one of the following contidions:
+• For all u, v ∈ S where u 6= v, either u ∈ subtree(v) or v ∈ subtree(u).
+• For all u, v ∈ S where u 6= v, both u ∈
+/ subtree(v) and v ∈
+/ subtree(u).
+You need to partition all nodes of T into several good subsets. Calculate the minimum number of subsets.
+
+Input
+The first line contains a single integer Q (1 ≤ Q ≤ 105 ), denoting the number of test cases.
+For each test case, the first line contains an integer n (1 ≤ n ≤ 106 ). The next line contains n − 1 integers
+p2 , p3 , . . . , pn (1 ≤ pi < i), indicating that there is an edge between pi and i for each i = 2, 3, . . . , n.
+It is guaranteed that the sum of n over all test cases is no more than 106 .
+
+Output
+For each test case, output a single integer representing the answer.
+
+Example
+standard input
+2
+7
+1 1 2 2 2 3
+5
+1 2 3 4
+
+standard output
+3
+1
+
+Page 14 of 14
+
+

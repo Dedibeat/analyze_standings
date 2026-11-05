@@ -1,0 +1,64 @@
+Magical Pair
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+512 megabytes
+
+For a prime number n, if a pair of positive integers (x, y) satisfies the congruence relation:
+xy ≡ y x
+
+(mod n).
+
+Then we consider (x, y) to be magical.
+We want to know how many ordered pairs of positive integers (x, y) are magical for a given prime number
+n, where 0 < x, y ≤ n2 − n. Since the answer could be large, we will output it modulo 998244353.
+
+Input
+The first line input a positive integer T (1 ≤ T ≤ 10), which represents the total number of test cases.
+Then for each test case, input a single line with a prime number n (2 ≤ n ≤ 1018 ), and it’s guaranteed
+that n − 1 is not a multiple of 998244353.
+
+Output
+Output T lines, each containing an integer representing the result modulo 998244353.
+
+Examples
+standard input
+
+standard output
+
+5
+5
+11
+67
+97
+101
+
+104
+1550
+479886
+1614336
+1649000
+
+6
+998244353
+998244853
+19260817
+1000000007
+1000000009
+350979772330483783
+
+284789646
+90061579
+971585925
+887008006
+527110672
+334479293
+
+Page 1 of 1
+
+

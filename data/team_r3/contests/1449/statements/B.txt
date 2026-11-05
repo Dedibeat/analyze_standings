@@ -1,0 +1,64 @@
+Turning Permutation
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+512 megabytes
+
+A permutation of length n is a sequence of n integers in which every integer from 1 to n appears exactly
+once. For a permutation p1 , p2 , . . . , pn of length n, let qi denote the position where i appears, i.e., pqi = i.
+If for every i = 2, 3, . . . , n − 1 we have (qi − qi−1 )(qi − qi+1 ) > 0, then the permutation p1 , p2 , . . . , pn is
+called a turning permutation.
+Now given n and k, you need to find the k-th lexicographically smallest turning permutation of length n,
+or report that the number of turning permutations of length n is less than k.
+To determine which of the two permutations of length n is lexicographically smaller, we compare their
+first elements. If they are equal, we compare the second, and so on. If we have two different permutations
+x and y of length n, then x is lexicographically smaller if xi < yi , where i is the first index at which the
+permutations x and y differ.
+
+Input
+The only line contains two integers n (3 ≤ n ≤ 50) and k (1 ≤ k ≤ 1018 ), denoting the length of the
+permutation and the ranking position of the desired turning permutation in the lexicographically sorted
+list of all the turning permutations of length n, respectively.
+
+Output
+If the number of turning permutations of length n is less than k, output −1 in one line. Otherwise, output
+the k-th lexicographically smallest turning permutation of length n in one line.
+
+Examples
+standard input
+
+standard output
+
+3 2
+
+2 1 3
+
+3 5
+
+-1
+
+4 6
+
+3 1 2 4
+
+4 11
+
+-1
+
+Note
+There are a total of 4 turning permutations of length 3, arranged in lexicographically ascending order:
+[1, 3, 2], [2, 1, 3], [2, 3, 1], [3, 1, 2]. Therefore, for the first sample case, the 2nd lexicographically smallest
+turning permutation is [2, 1, 3], and for the second sample case, the answer is −1.
+There are a total of 10 turning permutations of length 4, arranged in lexicographically ascending order:
+[1, 3, 2, 4], [1, 3, 4, 2], [2, 1, 4, 3], [2, 4, 1, 3], [2, 4, 3, 1], [3, 1, 2, 4], [3, 1, 4, 2], [3, 4, 1, 2], [4, 2, 1, 3], [4, 2, 3, 1].
+Therefore, for the third sample case, the 6th lexicographically smallest turning permutation is [3, 1, 2, 4],
+and for the fourth sample case, the answer is −1.
+
+Page 1 of 1
+
+

@@ -1,0 +1,50 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+#define int long long
+#define pb push_back
+#define rep(i, a, b) for(int i = (a); i < (b); i++)
+#define repd(i, a, b) for(int i = (a); i >= (b); i--)
+#define all(x) (x).begin(), (x).end()
+#define rall(x) (x).rbegin(), (x).rend()
+#define hha(x) cout << #x << " = " << x << ' ';
+#define hhal(x) cout << #x << " = " << x << endl;
+#define print(v) cout << #v << " = " << ' '; for(auto x : v) cout << x << ' '; cout << endl;
+
+const int inf = 1e18;
+
+void solve() {
+    int n, k; cin >> n >> k;
+    vector<vector<int>> dp(k + 1, vector<int> (2, -inf));
+    dp[0][0] = 0;
+    int sum = 0, sump = 0;
+    rep(i, 0, n) {
+        int p; cin >> p;
+        vector<int> w(p + 1); rep(i, 1, p + 1) cin >> w[i];
+        sump += p;
+        sum += w[p];
+        repd(j, k, 1) {
+            if(j - p >= 0) {
+                if(dp[j - p][0] != -inf) dp[j][0] = max(dp[j][0], dp[j - p][0] + w[p]);
+                if(dp[j - p][1] != -inf) dp[j][1] = max(dp[j][1], dp[j - p][1] + w[p]);
+            }
+            rep(c, 1, p) {
+                if(j - c >= 0 && dp[j - c][0] != -inf) {
+                    dp[j][1] = max(dp[j][1], dp[j - c][0] + w[c]);
+                }
+            }
+        }
+    }
+    if(sump <= k) {
+        cout << sum << '\n';
+        return;
+    }
+    cout << max(dp[k][0], dp[k][1]) << '\n';
+}
+
+signed main() {
+    ios_base::sync_with_stdio(0); cin.tie(0);
+    //int t; cin >> t; while(t--)
+    solve();
+    return 0;
+}

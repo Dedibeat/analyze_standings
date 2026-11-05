@@ -1,0 +1,64 @@
+Reconstruct the tree
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+256 megabytes
+
+You are given a remembered collection of diameter endpoint pairs that Little Grey wrote down when he
+owned a tree with N nodes. Now he forgot the tree itself. Your task is to reconstruct any tree on N
+labeled nodes whose set of unordered pairs of nodes at distance equal to the tree diameter is exactly the
+given collection — or report that his memory is inconsistent (i.e. no such tree exists).
+A diameter of a tree is the longest simple path in the tree; its length is the maximum distance between
+any two vertices. A pair (u, v) is a diameter endpoint pair if the distance between u and v equals the
+length of tree diameter. The given collection contains unordered pairs and may list them in any order.
+
+Input
+The first line contains a single integer T (1 ≤ T ≤ 2 · 105 ) — the number of test cases.
+Each test case begins with a line containing three integers N, M (2 ≤ N ≤ 2 · 105 , 1 ≤ M ≤ 2 · 105 ) —
+the number of nodes and the number of remembered unordered pairs.
+Then follow M lines, each containing two integers u and v (1 ≤ u, v ≤ N, u ̸= v), representing an
+unordered pair that Little Grey remembered as being at distance equal to the length of tree diameter.
+All M pairs in one test case are distinct.
+P
+P
+It is guaranteed that
+N ≤ 2 · 105 , M ≤ 2 · 105 where sums are over all test cases.
+
+Output
+For each test case, print:
+If there exists a tree on nodes 1 . . . N whose set of unordered node-pairs at distance equal to the tree
+diameter is exactly the given set, print a line YES and then N − 1 lines describing any such tree as edges
+(a, b) (one edge per line, nodes separated by a space; the tree should be connected and acyclic).
+If multiple valid trees exist, you may output any of them.
+Otherwise, print a single line NO.
+
+Example
+standard input
+3
+2 1
+1 2
+3 2
+1 2
+2 3
+4 3
+1 2
+2 3
+1 3
+
+standard output
+YES
+1 2
+NO
+YES
+4 1
+4 2
+4 3
+
+Page 1 of 1
+
+

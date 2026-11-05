@@ -1,0 +1,105 @@
+#include<bits/stdc++.h>
+using namespace std;
+using ll = long long;
+const int N = 2e6 + 5;
+const int LOG = 22;
+vector<int> g[N];
+int up[LOG][N];
+int depth[N], tin[N];
+struct LCA {
+    int timer = 0;
+    void addEdge(int u, int v) {
+        //cout << "ADD " << u << " " << v << endl;
+        g[u].push_back(v);
+        g[v].push_back(u);
+    }
+    void dfs(int v, int p) {
+        tin[v] = timer++;
+        up[0][v] = p;
+        for (int j = 1; j < LOG; j++) up[j][v] = up[j - 1][up[j - 1][v]];
+        for (int to : g[v]) if (to != p) {
+            depth[to] = depth[v] + 1;
+            dfs(to, v);
+        }
+    }
+    void build(int root = 0) {
+        depth[root] = 0;
+        dfs(root, root);
+    }
+    int lift(int v, int k) {
+        for (int j = 0; j < LOG; j++) if (k >> j & 1) v = up[j][v];
+        return v;
+    }
+    int lca(int a, int b) {
+        if (depth[a] < depth[b]) swap(a, b);
+        a = lift(a, depth[a] - depth[b]);
+        if (a == b) return a;
+        for (int j = LOG - 1; j >= 0; j--) if (up[j][a] != up[j][b]) {
+            a = up[j][a];
+            b = up[j][b];
+        }
+        return up[0][a];
+    }
+    int dist(int a, int b) {
+        int c = lca(a, b);
+        return depth[a] + depth[b] - 2 * depth[c];
+    }
+};
+const ll mod = 998244353;
+ll inv[N];
+int dsu[N];
+int sz[N];
+bool vis[N];
+int tp;
+void init(int n)
+{
+    inv[1] = 1;
+    for(int i = 2; i <= n; i++) 
+    {
+        inv[i] = mod - mod / i * inv[mod % i] % mod;
+    }
+    iota(dsu, dsu + 2 * n + 1, 0);
+    fill(sz, sz + n + 1, 1);
+    tp = n + 1;
+    //cout << "INIT" << endl;
+}
+int get(int u)
+{
+    if(dsu[u] == u) return u;
+    return dsu[u] = get(dsu[u]);
+}
+signed main()
+{
+    ios::sync_with_stdio(0); cin.tie(0);
+    //cout << "BEGIN" << endl;
+    int n; cin >> n;
+    init(n);
+    LCA lca;
+    int ans = 1;
+    for(int i = 1; i < n; i++)
+    {
+        int u, v; cin >> u >> v;
+        //cout << u << " " << v << endl;
+        u = get(u), v = get(v);
+        //cout << u << " " << v << endl;
+        lca.addEdge(u, tp);
+        lca.addEdge(v, tp);
+        //cout << "added\n";
+        ans = ans * inv[sz[u]] % mod;
+        ans = ans * inv[sz[v]] % mod;
+        sz[tp] = sz[u] + sz[v];
+        dsu[u] = tp;
+        dsu[v] = tp;
+        tp++;
+        
+    }
+    lca.build(tp - 1);
+    for(int i = 1; i < n; i++)
+    {
+        int u, v; cin >> u >> v;
+        int l = lca.lca(u, v);
+        if(vis[l]) ans = 0;
+        vis[l] = true;
+    }
+    cout << ans << "\n";
+}

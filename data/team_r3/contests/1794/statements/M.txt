@@ -1,0 +1,64 @@
+Find the Easiest Problem
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+1024 megabytes
+
+You are given all the submissions from an ICPC-style competition. For each submission, you know the team
+name, the problem ID, and whether the submission was accepted or rejected. Your task is to determine
+which problem was the easiest.
+You may not be familiar with the ICPC rules, so here’s a brief explanation:
+• Each team can make multiple submissions for a problem. A team is considered to have solved a
+problem if at least one of their submissions for that problem is accepted.
+• The number of teams that solved a problem is the number of distinct teams that have at least one
+accepted submission for that problem.
+We define the easiest problem in the competition as the one that has been solved by the most teams.
+If there are multiple problems with the same number of teams solving them, the problem with the
+lexicographically smallest ID is considered the easiest.
+Two teams are considered different if and only if their team names are different. Similarly, two problems
+are considered different if and only if their problem IDs are different.
+
+Input
+The first line contains an integer t (1 ≤ t ≤ 1000), the number of test cases.
+For each test case:
+The first line contains an integer n (1 ≤ n ≤ 105 ), the number of submissions.
+Each of the next n lines contains a team name, a problem ID, and the result of the submission.
+• The team name is a non-empty string consisting of at most 10 characters, which can include both
+uppercase and lowercase English letters.
+• The problem ID is a single uppercase English letter (’A’ to ’Z’).
+• The result of the submission is either accepted or rejected.
+It is guaranteed that there is at least one accepted submission in every test case.
+It is also guaranteed that the total number of submissions across all test cases does not exceed 105 .
+
+Output
+For each test case, output a single line with the problem ID of the easiest problem.
+
+Page 1 of 2
+
+Example
+standard input
+2
+5
+teamA A accepted
+teamB B rejected
+teamC A accepted
+teamB B accepted
+teamD C accepted
+4
+teamA A rejected
+teamB A accepted
+teamC B accepted
+teamC B accepted
+
+standard output
+A
+A
+
+Page 2 of 2
+
+

@@ -1,0 +1,76 @@
+Xor Mirror
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+2 seconds
+64 megabytes
+
+Long ago, in the land of Bitworld, there was a magic mirror. Whenever you looked into it, the index i of
+an array element would be reflected as i ⊕ k for some magic key k. The wizard who owned this mirror
+loved to play with sequences: sometimes he mirrored parts of the sequence using XOR, and sometimes he
+asked for weighted sums of intervals.
+Now the wizard gives you T sequences and a list of operations for each sequence. Your task is to process
+them and report the results of his queries.
+You are given an initial sequence A0 , A1 , . . . , AN −1 of length N . The value N is always a power of two
+and satisfies N ≤ 218 .
+There are two types of operations:
+• Operation type 1: given integers (l, r, k), for every i ∈ [l, r) set
+Bi = Ai⊕k ,
+then assign Ai = Bi for all i ∈ [l, r).
+• Operation type 2: given integers (l, r), output
+r−1
+X
+
+Ai .
+
+i=l
+
+Input
+The first line contains a single integer T (1 ≤ T ≤ 2 × 105 ) — the number of test cases.
+Each test case is given as:
+One line with two integers N (1 ≤ N ≤ 218 , N is a power of two) and Q (1 ≤ Q ≤ 2 × 105 ) — the length
+of the sequence and the number of operations.
+One line with N integers A0 , A1 , . . . , AN −1 (1 ≤ Ai ≤ 1048576) — the initial sequence.
+Each of the next Q lines describes one operation.
+All operations are given on a left-closed, right-open interval [l, r) with 0 ≤ l < r ≤ N . The formats are:
+1 l r k —– apply operation type 1 on the interval [l, r) with parameter k (0 ≤ k < N ).
+2 l r —– apply operation type 2 on the interval [l, r).
+P
+P
+It is guaranteed that
+N ≤ 218 ,
+Q ≤ 2 × 105 over all test cases.
+
+Output
+For each operation of type 2, output the result on a separate line.
+
+Page 1 of 2
+
+Example
+standard input
+1
+8 8
+7 3 8 1 4 6 4 1
+2 2 7
+2 5 7
+1 3 5 3
+1 5 6 2
+2 7 8
+2 3 7
+1 2 8 5
+2 5 8
+
+standard output
+23
+10
+1
+13
+22
+
+Page 2 of 2
+
+

@@ -1,0 +1,71 @@
+Hashing
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+2 seconds
+1024 megabytes
+
+To determine whether rooted trees are isomorphic (in this problem, you do not need prior knowledge
+of tree isomorphism), a common algorithm is to use tree hashing. With a suitable hash function, nonisomorphic rooted trees are likely to yield different hash values, but hash collisions are also difficult to
+avoid.
+There are various implementations of hash functions, but some hash function designs are not very correct.
+Little C has such a "not very correct"hash function, defined as follows: Let szx be the number of points
+contained in the subtree of x, and sonx be the set of all child nodes of x. For a rooted tree with r as the
+root, its hash value h(r) is defined as:
+h(r) = 1 +
+
+X
+
+h(v) × f (szv )
+
+v∈sonr
+
+where f represents any mapping from the set of positive integers to the set of positive integers, i.e.,
+f ∈ {φ : Z+ → Z+ }. In particular, the hash value for a rooted tree with only one node is 1.
+Next, Little C defines that for two rooted trees, if for all choices of f , it is impossible to compute different
+hash values, then the two trees are said to be indistinguishable; otherwise, if there exists a choice of f such
+that the two trees can compute different hash values, then the two trees are said to be distinguishable.
+Little C wants to use this hash function to generate as many rooted binary trees as possible, which are
+rooted trees where each node has at most two child nodes. Little C hopes you can calculate the maximum
+number of distinguishable rooted binary trees containing n nodes. Of course, the answer may be very
+large, so Little C has prepared a modulus p for you, and you need to take your result modulo p.
+
+Input
+This problem contains multiple test cases. The first line of input contains an integer T (1 ≤ T ≤ 10000),
+representing the number of test cases.
+For each test case, the input consists of a single line with two integers n, p (1 ≤ n ≤ 3000, 2 ≤ p ≤ 109 +9),
+representing the number of nodes in the rooted tree and the modulus provided by Little C.
+It is guaranteed that the total sum of n for all test cases does not exceed 10000.
+
+Output
+For each test case, output a single line with an integer, representing the result of the answer modulo p.
+
+Example
+standard input
+8
+1 1000000009
+5 1000000009
+10 1000000009
+15 1000000009
+100 1000000009
+150 1000000009
+1000 1000000009
+1500 1000000009
+
+standard output
+1
+6
+207
+10904
+478868953
+202933416
+152259136
+264735211
+
+Page 1 of 1
+
+

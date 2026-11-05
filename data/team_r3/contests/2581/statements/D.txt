@@ -1,0 +1,59 @@
+Fallleaves01 and Golf
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+4 seconds
+1024 megabytes
+
+Fallleaves01 has a deep passion for golf, but unfortunately, his skills are rather average.
+To improve his game, Fallleaves01 purchased k indoor golf putting trainers for practicing at home. Unlike
+ordinary trainers, the ones he bought are very large. Specifically, each trainer can be abstracted as a tree
+with ni vertices, where vertex 1 represents the hole. There is a golf ball on each trainer. For the i-th
+trainer, the ball is initially placed at vertex si .
+During each stroke, Fallleaves01 chooses one trainer to play. Due to his limited skill level, the golf ball
+will move uniformly at random to one of the adjacent nodes. If the ball reaches the hole (vertex 1), the
+practice session ends for the day. Otherwise, Fallleaves01 repeats the above process until any ball enters
+a hole.
+Fallleaves01’s goal is to minimize the expected number of strokes required to finish the practice session.
+Calculate the expected number of strokes, assuming he always makes the best choice for each stroke.
+
+Input
+There is only one test case in each test file.
+The first line contains an integer k (1 ≤ k ≤ 300), indicating the number of indoor golf putting trainers.
+Then, the descriptions for the trainers follow. For each trainer:
+• The first line contains two integers ni and si (2 ≤ si ≤ ni ≤ 300).
+• For the following (ni − 1) lines, the j-th line contains two integers ui,j and vi,j (1 ≤ ui,j , vi,j ≤ ni ),
+indicating that there is an edge connecting vertices ui,j and vi,j . It is guaranteed that these edges
+form a tree.
+
+Output
+Output one line containing one number, indicating the expected number of strokes under the optimal
+strategy.
+Your answer will be considered correct if its absolute or relative error does not exceed 10−6 . Formally
+speaking, suppose that your output is a and the jury’s answer is b, your output is accepted if and only if
+|a−b|
+−6
+max(1,|b|) ≤ 10 .
+
+Example
+standard input
+2
+4 2
+1 2
+2 3
+3 4
+4 3
+1 2
+2 3
+3 4
+
+standard output
+4.666666666666666
+
+Page 1 of 1
+
+

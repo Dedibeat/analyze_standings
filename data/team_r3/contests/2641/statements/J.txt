@@ -1,0 +1,62 @@
+The Echoes of Chronos
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+4 seconds
+1024 megabytes
+
+In the year 3142, deep within the rings of Titan, the last archive of pre-Collapse human memory is sealed
+inside the Chronos Vault. Its entrance is guarded by the Echo Dial, a quantum-entangled lock composed
+of n chronal rings arranged in a single filament. Each ring displays a phase value in the range 0 to m − 1,
+indicating its alignment with the cosmic rhythm. Initially, the i-th ring shows the value ai .
+The Echo Dial can only be adjusted through resonant tuning, governed by the following rules:
+• In a single operation, you may choose any phase value x ∈ [0, m) and simultaneously tune all rings
+currently displaying x either:
+– forward tuning: x → (x + 1) mod m, or
+– backward tuning: x → (x − 1) mod m.
+• This operation affects every ring in the entire dial that currently resonates at phase x, regardless of
+position.
+The Oracle of Echoes, the vault’s sentient guardian, issues q diagnostic trials. Each trial is given as a
+query (l, r, v) and asks for the minimum number of resonant tuning operations required to set all rings in
+positions l through r (inclusive) to phase v.
+All trials are hypothetical. The Echo Dial always starts from its original initial state for every query, and
+no trial alters the actual configuration of the dial. As the last Quantum Archivist, your duty is to answer
+all q queries efficiently.
+
+Input
+The first line contains three integers n, q (1 ≤ n, q ≤ 2 × 105 ), and m (1 ≤ m ≤ 109 ).
+The second line contains n integers a1 , a2 , . . . , an (0 ≤ ai < m), denoting the initial phase of each ring.
+Each of the next q lines contains three integers l, r (1 ≤ l ≤ r ≤ n) and v (0 ≤ v < m), describing a
+diagnostic trial.
+
+Output
+For each query, output a line containing an integer, denoting the minimum number of operations needed
+to set all rings in positions [l, r] to phase v, assuming the dial starts from its original state and remains
+unchanged between queries.
+
+Example
+standard input
+4 6 7
+2 0 2 5
+1 4 3
+2 4 6
+1 3 1
+1 3 5
+3 4 0
+3 3 2
+
+standard output
+5
+4
+2
+4
+4
+0
+
+Page 1 of 1
+
+

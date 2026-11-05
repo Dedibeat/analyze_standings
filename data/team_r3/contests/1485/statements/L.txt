@@ -1,0 +1,43 @@
+KaChang!
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+128 megabytes
+
+Setting the time limit for algorithm competition questions is a very skillful task. If you set the time limit
+too tight, many people will scold you for being too demanding on details. On the other hand, if you set
+the time limit too loosely and allow an algorithm with unexpected time complexity to pass, then many
+people will scold you too.
+When preparing problems, people usually set the time limit to at least twice the running time of the
+standard program, but sometimes contestants still feel that the time limit is too tight.
+Now you have the standard program for a problem and another n programs considered "should pass the
+problem". Given the running time of each program, please find the smallest integer k ≥ 2, so that when
+the time limit is set to k times the running time of the standard program, all the provided programs can
+pass. A program can pass if and only if its running time less or equal to the time limit.
+
+Input
+The first line contains two integers n, T (1 ≤ n, T ≤ 105 ), representing the number of provided programs
+(not include the standard program), and the running time of the standard program.
+The second line contains n integers t1 , t2 , . . . , tn (1 ≤ ti ≤ 109 ) , representing the running time of the
+provided programs.
+
+Output
+Output a single integer greater or equal to 2, representing the minimin k which could guarantee that all
+the provided programs can pass.
+
+Example
+standard input
+5 1000
+998 244 353 1111 2333
+
+standard output
+3
+
+Page 1 of 1
+
+

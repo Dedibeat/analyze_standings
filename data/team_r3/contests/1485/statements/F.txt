@@ -1,0 +1,61 @@
+Alice and Bob
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+3 seconds
+512 megabytes
+
+You are watching Alice and Bob playing a game.
+The game is played on an array of length n. Alice and Bob take turns in action, Alice goes first.
+In each turn, the current player can select two different numbers ai and aj in the array, and then change
+their values. Assume after changes the values of them are a0i and a0j , then an operation is legal if and
+only if ai + aj = a0i + a0j and |a0i − a0j | < |ai − aj |. Those who cannot perform legal operations lose.
+After playing a few games, You decided to help Alice, because Alice, who was always overloaded when
+faced with a bunch of numbers, always unable to think in front of the genius Bob.
+Before the start of each game, You will help Alice remove several numbers (could be 0) to reduce the
+burden on her brain, and you always leave exactly three numbers. And in order to give Alice a greater
+chance of winning, You will always leave Alice with a winning state, that is, there must be some kind of
+operating strategy that makes Alice must win no matter how Bob acts.
+Now the question is how many ways there are to remove the numbers.
+Two ways for removing numbers are considered different if and only if there exists an integer i (1 ≤ i ≤ n)
+such that ai is not removed in one way and is removed in the other way.
+
+Input
+The first line contains a single integer T , representing the number of test cases.
+Then follow the descriptions of each test case.
+The first line contains an integer n(3 ≤ n ≤ 5 × 105 ) , which represents the number of numbers at the
+beginning.
+The second line contains n integers a1 , a2 , a3 , . . . , an (0 ≤ ai ≤ 1018 ), representing the original n numbers.
+P
+It’s guaranteed that
+n ≤ 3 × 106 .
+
+Output
+For each test case, output one integer in one line, indicating the number of different ways to remove
+numbers that satisfy the condition.
+
+Example
+standard input
+3
+4
+2 0 2 3
+3
+2 2 3
+3
+0 2 3
+
+standard output
+3
+0
+1
+
+Note
+In the first test case, only removing a2 leaves a loser state.
+
+Page 1 of 1
+
+

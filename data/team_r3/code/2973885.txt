@@ -1,0 +1,109 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define int long long
+#define F first 
+#define S second 
+#define all(x) (x).begin(), (x).end()
+#define log(x) cout << #x << ": " << x << " ";
+#define logl(x) cout << #x << ": " << x << endl;
+#define print(v) cout << #v << ": "; \
+            for(auto x : v) cout << x << " "; \
+            cout << endl;
+template<typename T, typename U>
+ostream &operator<<(ostream &os, const pair<T, U> &p)
+{
+    return os << "(" << p.F << "," << p.S << ")";
+}
+
+void solve()
+{
+    int n, m, x, y; cin >> n >> m >> x >> y;
+    x--, y--;
+    vector<vector<bool>> g(n, vector<bool>(n));
+    while(m--)
+    {
+        int u, v; cin >> u >> v;
+        u--, v--;
+        g[u][v] = true;
+        g[v][u] = true;
+    }
+    auto DirOut = [&](vector<int> spec)
+    {
+        for(int u : spec)
+        {
+            fill(all(g[u]), 0);
+        }
+    };
+    auto Print = [&]()
+    {
+        for(int i = 0; i < n; i++)
+        for(int j = i + 1; j < n; j++)
+        {
+            if(g[i][j])
+            {
+                cout << i + 1 << " " << j + 1 << "\n";
+            }
+            else if(g[j][i])
+            {
+                cout << j + 1 << " " << i + 1 << "\n";
+            }
+        }
+    };
+    if(!g[x][y])
+    {
+        DirOut({x, y});
+        cout << "Yes\n";
+        Print();
+        return;
+    }
+    vector<int> d(n), vis(n), p(n), pd(n, 1e9);
+    auto dfs = [&](auto &&self, int u) -> void
+    {
+        vis[u] = true;
+        for(int v = 0; v < n; v++)
+        {
+            if(!g[u][v]) continue;
+            // log(u); logl(v);
+            if(!vis[v]) 
+            {
+                d[v] = d[u] + 1;
+                self(self, v);
+            }
+            else 
+            {
+                if(pd[u] > d[v])
+                {
+                    pd[u] = d[v];
+                    p[u] = v;
+                }
+            }
+        }
+    };
+    g[x][y] = false;
+    g[y][x] = false;
+    dfs(dfs, x);
+    if(!vis[y]) 
+    {
+        cout << "No\n";
+        return;
+    }
+    // print(d);
+    // print(pd);
+    // print(p);
+    vector<int> path;
+    for(int i = y; i != x; i = p[i]) path.push_back(i);
+    path.push_back(x);
+    reverse(all(path));
+    //print(path);
+    DirOut(path);
+    for(int i = 1; i < path.size(); i++) g[path[i - 1]][path[i]] = true;
+    g[y][x] = true;
+    cout << "Yes\n";
+    Print();
+}
+signed main()
+{
+    ios::sync_with_stdio(0); cin.tie(NULL);
+    int T; cin >> T; while(T--)
+    solve();
+}

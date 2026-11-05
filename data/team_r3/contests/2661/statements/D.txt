@@ -1,0 +1,82 @@
+Diameter of a Tree
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+1024 megabytes
+
+Given an unrooted tree with n nodes, you need to assign a distinct weight to each node, with weights
+forming a permutation of the numbers from 1 to n.
+For any assignment scheme, we consider all diameters of the tree (i.e., the longest simple path in the
+tree). Among these diameters, we select the one with the lexicographically largest weight sequence
+(arranging the weights of the nodes along the path in order and comparing lexicographically).
+Your goal is to minimize the lexicographic order of the weight sequence corresponding to this
+"lexicographically largest diameter"among all possible assignment schemes.
+
+Input
+A single test case contains multiple data groups.
+The first line of input is the number of data groups T (1 ≤ T ≤ 105 ), representing the number of data
+groups in this test case.
+For each data group, the first line contains an integer n (2 ≤ n ≤ 2 · 105 ) indicating the number of nodes.
+The next n − 1 lines each contain two integers u, v (1 ≤ u, v ≤ n), representing an edge of the tree.
+P
+It is guaranteed that across all data,
+n ≤ 2 · 105 .
+
+Output
+For each set of data, output a line of several integers representing the smallest possible lexicographical
+order of the diameter with the largest lexicographical order.
+
+Page 1 of 2
+
+Example
+standard input
+5
+5
+1 2
+1 3
+2 4
+2 5
+4
+1 2
+1 3
+1 4
+6
+1 2
+1 3
+2 4
+2 5
+3 6
+8
+1 2
+2 3
+1 4
+2 5
+3 6
+1 7
+7 8
+10
+1 2
+2 3
+2 4
+4 7
+4 8
+1 5
+5 6
+6 9
+1 10
+
+standard output
+3 4 5 1
+3 4 2
+3 4 5 6 1
+2 3 4 5 6 1
+3 4 5 6 7 8 1
+
+Page 2 of 2
+
+

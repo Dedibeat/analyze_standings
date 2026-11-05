@@ -1,0 +1,51 @@
+Problem
+Gungnir Fracture
+Time limit: 2 seconds
+Geopelia is collecting the fragments of Gungnir. Gungnir has 2n types of fragments, numbered 0, 1, · · · , 2n − 1.
+To restore it, for every 0 ≤ i < 2n , Geopelia needs exactly ai fragments marked i.
+To obtain these fragments, Geopelia may perform the following operation any number of times:
+• Choose two integers m and k satisfying 0 ≤ m < 2n and 0 ≤ k < 2n .
+• Obtain one fragment marked with each of 0 ⊕ k, 1 ⊕ k, · · · , m ⊕ k.
+Recall that ⊕ denotes the bitwise exclusive OR of two non-negative integers.
+Help Geopelia find the minimum number of operations required to restore Gungnir. Note that Geopelia cannot
+remove any fragment she has obtained.
+
+Input
+The first line of the input contains an integer T (1 ≤ T ≤ 104 ) indicating the number of test cases. For each test
+case:
+• The first line contains an integer n (0 ≤ n ≤ 19).
+• The second line contains 2n integers a0 , a1 , . . . , a2n −1 (0 ≤ ai ≤ 106 ), where ai is the required number of
+fragments marked i.
+It is guaranteed that the sum of 2n over all test cases does not exceed 219 .
+
+Output
+For each test case, output one integer representing the minimum number of operations.
+Sample Input 1
+
+Sample Output 1
+
+5
+0
+100000
+1
+114 514
+2
+1 1 1 1
+3
+0 13 0 0 0 7 2 1
+4
+1 2 2 1 3 3 3 3 1 0 0 0 0 0 0 0
+
+100000
+514
+1
+21
+3
+
+Problem : Gungnir Fracture
+
+1
+
+This page is intentionally left blank.
+
+

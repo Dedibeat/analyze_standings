@@ -1,0 +1,173 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define int long long
+#define F first 
+#define S second 
+#define all(x) (x).begin(), (x).end()
+#define log(x) cout << #x << ": " << x << " ";
+#define logl(x) cout << #x << ": " << x << endl;
+#define print(v) cout << #v << ": "; \
+            for(auto x : v) cout << x << " "; \
+            cout << endl;
+template<typename T, typename U>
+ostream &operator<<(ostream &os, const pair<T, U> &p)
+{
+    return os << "(" << p.F << "," << p.S << ")";
+}
+// Lazy segment tree. 0-indexed, inclusive ranges [l, r]. O(log n) per op.
+// To reuse for another operation, edit ONLY the marked block below:
+//   types V (node) / L (tag), the two identities, and merge/applyVal/compose.
+// Configured for: range-add update, range-sum query.
+//   range assign : L LID=LLONG_MIN; applyVal -> f*len; compose -> (f==LID?a:f)
+//   range add, range min : merge=min; applyVal -> a+f (ignore len); compose=a+f
+// Usage: SegTree st(n);  or  st.init(a);   st.update(l,r,v);   st.query(l,r);
+using node = pair<int, int>;
+struct SegTree {
+    // ---- customize for the operation -------------------------------------
+    using V = node;          // node value type
+    using L = int;          // lazy tag type
+    static constexpr V VID = {-1, 0};   // merge identity (returned for empty range)
+    static constexpr L LID = -1;   // "no pending update" tag
+    static V merge(V a, V b) 
+    { 
+        return {a.F & b.F, (a.S & b.F) | (a.F & b.S)}; 
+    }       // combine children
+    static V applyVal(V a, L f, int len)
+    { 
+         a.F &= f;
+         if(len == 1) a.S |= ~f;
+         else a.S &= f;
+         return a;
+    } // tag over len cells
+    static L compose(L a, L f) 
+    {
+        return a & f;
+    }      // apply f on top of a
+    // ----------------------------------------------------------------------
+    int n;
+    vector<V> t;
+    vector<L> lz;
+
+    SegTree(int n = 0) { init(n); }
+    void init(int n_) { n = max(1LL, n_); t.assign(4 * n, VID); lz.assign(4 * n, LID); }
+    void init(const vector<V>& a) { init((int)a.size()); build(a, 1, 0, n - 1); }
+
+    void apply(int x, L f, int len) {
+        t[x] = applyVal(t[x], f, len);
+        lz[x] = compose(lz[x], f);
+    }
+    void push(int x, int l, int r) {
+        if (lz[x] == LID) return;
+        int m = (l + r) / 2;
+        apply(2 * x, lz[x], m - l + 1);
+        apply(2 * x + 1, lz[x], r - m);
+        lz[x] = LID;
+    }
+    void build(const vector<V>& a, int x, int l, int r) {
+        if (l == r) { t[x] = a[l]; return; }
+        int m = (l + r) / 2;
+        build(a, 2 * x, l, m);
+        build(a, 2 * x + 1, m + 1, r);
+        t[x] = merge(t[2 * x], t[2 * x + 1]);
+    }
+    void update(int x, int l, int r, int ql, int qr, L f) {
+        if (qr < l || r < ql) return;
+        if (ql <= l && r <= qr) { apply(x, f, r - l + 1); return; }
+        push(x, l, r);
+        int m = (l + r) / 2;
+        update(2 * x, l, m, ql, qr, f);
+        update(2 * x + 1, m + 1, r, ql, qr, f);
+        t[x] = merge(t[2 * x], t[2 * x + 1]);
+    }
+    void update(int x, int l, int r, int p, L f) {
+        if (l == r) {
+            t[x] = {f, ~f};
+            return;
+        }
+        push(x, l, r);
+        int m = (l + r) / 2;
+        if (p <= m) update(2 * x, l, m, p, f);
+        else update(2 * x + 1, m + 1, r, p, f);
+        t[x] = merge(t[2 * x], t[2 * x + 1]);
+    }
+    int find(int x, int l, int r, int mask)
+    {
+        if(l == r) return l;
+        int m = (l + r) / 2;
+        if(t[x * 2].F & mask) return find(2 * x + 1, m + 1, r, mask);
+        else return find(2 * x, l, m, mask);
+    }
+    int search(int x, int l, int r, int ql, int qr, int mask)
+    {
+        if (qr < l || r < ql) return -1;
+        if (ql <= l && r <= qr) 
+        {
+            if(t[x].F & mask) return -1;
+            else return find(x, l, r, mask);
+        }
+        push(x, l, r);
+        int m = (l + r) / 2;
+        return max(search(2 * x, l, m, ql, qr, mask), 
+                    search(2 * x + 1, m + 1, r, ql, qr, mask));  
+    }
+    V query(int x, int l, int r, int ql, int qr) {
+        if (qr < l || r < ql) return VID;
+        if (ql <= l && r <= qr) return t[x];
+        push(x, l, r);
+        int m = (l + r) / 2;
+        return merge(query(2 * x, l, m, ql, qr), query(2 * x + 1, m + 1, r, ql, qr));
+    }
+    // public wrappers: call with just the range, no node/bounds by hand
+    void update(int p, L f) { update(1, 0, n - 1, p, f); }
+    void update(int l, int r, L f) { update(1, 0, n - 1, l, r, f); }
+    int search(int l, int r, int mask) { return search(1, 0, n - 1, l, r, mask); }
+    V query(int l, int r)          { return query(1, 0, n - 1, l, r); }
+};
+void solve()
+{
+    int n, q; cin >> n >> q;
+    SegTree tree(n);
+    vector<int> a(n);
+    for(int i = 0; i < n; i++)
+    {
+        cin >> a[i];
+        tree.update(i, i, a[i]);
+    }
+    while(q--)
+    {
+        int t; cin >> t;
+        if(t == 1) 
+        {
+            int l, r, f; cin >> l >> r >> f;
+            l--, r--;
+            tree.update(l, r, f);
+        }
+        else if(t == 2)
+        {
+            int pos, f; cin >> pos >> f;
+            pos--;
+            tree.update(pos, f);
+        }
+        else 
+        {
+            int l, r; cin >> l >> r;
+            l--, r--;
+            auto [f, s] = tree.query(l, r);
+            //log(f); log(s);
+            if(s == 0) cout << f << "\n";
+            else 
+            {
+                int hi = 63 - __builtin_clzll(s);
+                int i = tree.search(l, r, (1LL << hi));
+                //logl(i);
+                cout << (tree.query(l, i - 1).F & tree.query(i + 1, r).F) << "\n";
+            }
+        }
+    }
+}
+signed main()
+{
+    ios::sync_with_stdio(0); cin.tie(NULL);
+    //int T; cin >> T; while(T--)
+    solve();
+}

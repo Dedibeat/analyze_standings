@@ -1,0 +1,48 @@
+Creating Chaos
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+1024 megabytes
+
+As a Cappuccino Assassino, you despise order. You want everything in the world to be as chaotic as
+possible.
+In front of you are n cups of cappuccino, arranged in a line and numbered from 1 to n. You wish to drink
+k of them, so that the remaining cappuccinos are as disordered as possible.
+Suppose the positions of the remaining cappuccinos are a1 , a2 , . . . , an−k . The degree of order is defined
+n−k
+P n−k
+P
+as:
+gcd(|ai − aj |, n), where gcd represents the greatest common divisor.
+i=1 j=i+1
+
+You need to minimize this degree of order and output the sequence of cappuccinos you choose to drink.
+If there are multiple answers, you can output any one of them.
+
+Input
+Given two integers n, k (1 ≤ k ≤ n ≤ 1000), separated by a space.
+
+Output
+k integers, representing the indices of the cappuccinos that are drunk.
+
+Examples
+standard input
+
+standard output
+
+4 2
+
+1 2
+
+12 7
+
+1 3 5 6 8 10 12
+
+Page 1 of 1
+
+

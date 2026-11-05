@@ -1,0 +1,68 @@
+Japanese Bands
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+3 seconds
+1024 megabytes
+
+Grammy is designing a new trading card game (TCG) based on her favorite Japanese music media
+franchise, BanG Dream!. By her design, there are n1 character cards and n2 music cards in total. Now she
+needs to assign an integer between 1 and m (both inclusive) for each card, representing the magic power
+it contains.
+In every TCG game, there must be some certain combos that may cause extra damage. Grammy now
+is considering a special rule that relates to the value assigned to cards. Specifically, k pairs of integers
+(a1 , b1 ), (a2 , b2 ), · · · , (ak , bk ) are chosen, satisfying 1 ≤ ai , bi ≤ m. Grammy wants to make sure each of
+these value combos can be played in her game. Therefore, for each pair of integers (ai , bi ), the assignment
+must meet at least one of the two following constraints:
+• ai can be found on a character card and bi can be found on a music card.
+• ai can be found on a music card and bi can be found on a character card.
+Please help Grammy count the number of valid card-value assignments.
+Let C be the multi-set of the integers on the character card and M be the multi-set of the integers on the
+music card. We say two assignments are different if their Cs are different or their Ms are different.
+Recall that an integer can appear multiple times in a multi-set. We say two multi-sets X and Y are different
+if there exists an integer k such that the number of times k appears in X is not equal to that in Y.
+
+Input
+There are multiple test cases. The first line of the input contains an integer T (1 ≤ T ≤ 500) indicating
+the number of test cases. For each test case:
+The first line contains four integers n1 , n2 , m and k (1 ≤ n1 , n2 ≤ 109 , 1 ≤ m ≤ 20, 1 ≤ k ≤ m2 ).
+For the following k lines, the i-th line contains two integers ai and bi (1 ≤ ai , bi ≤ m).
+It’s guaranteed that there are at most 5 test cases satisfying m > 10.
+
+Output
+For each test case output one line containing one integer indicating the number of valid card-value
+assignments. As the answer may be large, output the answer modulo (109 + 7).
+
+Example
+standard input
+3
+2 3 3 3
+2 3
+1 1
+2 3
+2 2 2 1
+1 1
+1 1 10 2
+1 2
+1 3
+
+standard output
+6
+4
+0
+
+Page 1 of 2
+
+Note
+For the first sample test case, the valid pairs of (C, M) are ({1, 2}, {1, 1, 3}), ({1, 2}, {1, 2, 3}),
+({1, 2}, {1, 3, 3}), ({1, 3}, {1, 1, 2}), ({1, 3}, {1, 2, 2}) and ({1, 3}, {1, 2, 3}).
+For the second sample test case, the valid pairs of (C, M) are ({1, 1}, {1, 1}), ({1, 2}, {1, 1}), ({1, 1}, {1, 2})
+and ({1, 2}, {1, 2}).
+
+Page 2 of 2
+
+

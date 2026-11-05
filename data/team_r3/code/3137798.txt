@@ -1,0 +1,111 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+#define int long long
+#define pb push_back
+#define all(x) (x).begin(), (x).end()
+#define rall(x) (x).rbegin(), (x).rend()
+#define rep(i, a, b) for(int i = (a); i < (b); i++)
+#define repd(i, a, b) for(int i = (a); i >= (b); i--)
+#define hha(x) cout << #x << ' ' << x << ' ';
+#define hhal(x) cout << #x << ' ' << x << '\n';
+#define print(v) cout << #v << ' '; for(auto &x : v) cout << x << ' '; cout << '\n';
+
+const int INF = 2e18;
+
+void solve() {
+    int n, m; cin >> n >> m;
+    vector<int> a(n); for(auto &x : a) cin >> x;
+    vector<int> b(m); for(auto &x : b) cin >> x;
+    double draw = 0, alice = 0, bob = 0;
+    auto check = [&](vector<pair<int, int>> a) -> bool {
+        rep(i, 0, a.size()) {
+            if(a[i].first != 0) {
+                return false;
+            }
+        }
+        return true;
+    };
+    auto rec = [&](auto &&self, vector<pair<int, int>> a1, vector<pair<int, int>> b1, bool state, int depth) -> void {
+        if(check(a1) && check(b1)) {
+            draw += ((double)1 / depth);
+            return;
+        }
+        if(check(a1)) {
+            bob += ((double)1 / depth);
+            return;
+        }
+        if(check(b1)) {
+            alice += ((double)1 / depth);
+            return;
+        }
+        if(state == 0) {
+            int mn = INF, pos = 0;
+            rep(i, 0, a.size()) {
+                if(a1[i].second < mn && a1[i].first != 0) {
+                    mn = a1[i].second;
+                    pos = i;
+                }
+            }
+            int cnt = 0;
+            rep(i, 0, b.size()) if(b1[i].first != 0) cnt++;
+            rep(i, 0, b.size()) {
+                if(b1[i].first != 0) {
+                    vector<pair<int, int>> a2 = a1, b2 = b1;
+                    a2[pos].second++;
+                    a2[pos].first = max(a2[pos].first - b[i], 0ll);
+                    b2[i].first = max(b2[i].first - a[pos], 0ll);
+                    self(self, a2, b2, state ^ 1, depth * cnt);
+                }
+            }
+            return;
+        }
+        if(state == 1) {
+            int mn = INF, pos = 0;
+            rep(i, 0, b.size()) {
+                if(b1[i].second < mn && b1[i].first != 0) {
+                    mn = b1[i].second;
+                    pos = i;
+                }
+            }
+            int cnt = 0;
+            rep(i, 0, a.size()) if(a1[i].first != 0) cnt++;
+            rep(i, 0, a.size()) {
+                if(a1[i].first != 0) {
+                    vector<pair<int, int>> a2 = a1, b2 = b1;
+                    a2[i].first = max(a2[i].first - b[pos], 0ll);
+                    b2[pos].second++;
+                    b2[pos].first = max(b2[pos].first - a[i], 0ll);
+                    self(self, a2, b2, state ^ 1, depth * cnt);
+                }
+            }
+            return;
+        }
+    };
+    vector<pair<int, int>> a1(n), b1(m);
+    rep(i, 0, n) {
+        a1[i] = {a[i], 0ll};
+    }
+    rep(i, 0, m) {
+        b1[i] = {b[i], 0ll};
+    }
+    if(n > m) {
+        rec(rec, a1, b1, 0, 1);
+    }
+    else if(n < m) {
+        rec(rec, a1, b1, 1, 1);
+    }
+    else {
+        rec(rec, a1, b1, 0, 2);
+        rec(rec, a1, b1, 1, 2);
+    }
+    printf("%.10.lf\n", alice);
+    printf("%.10.lf\n", bob);
+    printf("%.10.lf\n", draw);
+
+}
+signed main() {
+    ios_base::sync_with_stdio(0); cin.tie(0);
+    //int t; cin >> t; while(t--);
+    solve();
+}

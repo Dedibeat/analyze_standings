@@ -1,0 +1,58 @@
+Jiaxun!
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+3 seconds
+256 megabytes
+
+There are three students training hard for ICPC. They are practicing on a problemset consisting of exactly
+S problems. Each problem belongs to exactly one of the following seven categories, describing which subset
+of students can solve it:
+• F1 : only student 1 can solve;
+• F2 : only student 2 can solve;
+• F3 : students 1 and 2 (but not 3) can solve;
+• F4 : only student 3 can solve;
+• F5 : students 1 and 3 (but not 2) can solve;
+• F6 : students 2 and 3 (but not 1) can solve;
+• F7 : students 1, 2 and 3 can all solve.
+It is guaranteed that
+F1 + F2 + F3 + F4 + F5 + F6 + F7 = S.
+You are going to assign each problem to exactly one student who can solve it. Your goal is to
+make the training as balanced as possible: maximize the minimum number of problems solved by any
+single student. Output this maximum possible value.
+
+Input
+The first line contains a single integer T (1 ≤ T ≤ 105 )— the number of test cases.
+For each test case, the first line contains a single integer S (0 ≤ S ≤ 7 × 108 ).
+The second line contains seven non-negative integers F1 , F2 , F3 , F4 , F5 , F6 , F7 (0 ≤ F1 , · · · , F7 ≤ 108 ).
+It is guaranteed that F1 + · · · + F7 = S.
+
+Output
+For each test case, print a single integer — the maximum possible value of the minimum solved-count
+among the three students after assigning all S problems.
+
+Example
+standard input
+4
+36
+14 4 3 2 9 0 4
+41
+4 8 4 4 3 14 4
+53
+3 0 12 6 14 11 7
+55
+11 10 11 10 2 8 3
+
+standard output
+11
+13
+17
+18
+
+Page 1 of 1
+
+

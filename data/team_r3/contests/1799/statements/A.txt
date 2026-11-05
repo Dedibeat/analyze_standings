@@ -1,0 +1,80 @@
+Gambling on Choosing Regionals
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+256 megabytes
+
+"Participate in large regionals if you want to win gold medals; participate in small regionals if you want
+to get the qualify to WF..."
+There will be n teams participating in the 2024 ICPC Regional Contests numbered from 1 to n. Each
+team can be described by a positive integer represents its comprehensive strength and a string represents
+the abbreviation of the university it belongs to. In this problem, we guarantee that the abbreviation of
+each university is unique and the comprehensive strengths of the teams are pairwise distinct. We also
+assume that the stronger team will always be ranked ahead of the weaker team in any contest.
+This year, k regional contests will be held. For the i-th regional contest, every university can select no
+more than ci teams to join the contest. Meanwhile, each team can select no more than 2 regional contests
+to participate in.
+Now, you are asked to calculate the smallest possible rank for each team in the worst case, if they choose
+the regionals optimally. Note that when a team registers, it does not know the registration strategy of other
+teams, even if they are from the same university (but the total number of teams in the same university
+for the i-th regional contest is still limited by the ci , and we always assume that the team currently under
+consideration has priority to register).
+Please refer to the samples to understand the problem better.
+
+Input
+The first line contains two integers n, k (1 ≤ n, k ≤ 105 ), representing the number of teams and the
+number of regional contests.
+The second line contains k integers c1 , · · · , ck (1 ≤ ck ≤ 109 ). Where ci indicates the limit on the number
+of teams from every university in the i-th regional contest.
+For the following n lines, the i-th line indicates the information of the team i. the i-th line contains an
+integer wi (1 ≤ wi ≤ 109 ) and a string Si (1 ≤ |Si | ≤ 10) consisting of uppercase letters, representing the
+comprehensive strength and the abbreviation of the corresponding university of the team i.
+
+Output
+Output n lines.
+For the i-th line, print a single integer representing the smallest possible rank for the team i in the worst
+case, if they choose the regionals optimally.
+
+Page 1 of 2
+
+Examples
+standard input
+
+standard output
+
+5 3
+1 2 3
+100 THU
+110 PKU
+95 PKU
+105 THU
+115 PKU
+
+2
+1
+2
+2
+1
+
+5 2
+2 3
+100 THU
+110 PKU
+95 PKU
+105 THU
+115 PKU
+
+4
+2
+4
+3
+1
+
+Page 2 of 2
+
+

@@ -1,0 +1,158 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+#define int long long
+#define ff first 
+#define ss second
+#define sz(a) (int)(a).size()
+#define pb push_back
+#define rep(i, a, b) for(int i = (a); i < (b); i++)
+#define repd(i, a, b) for(int i = (a); i >= (b); i--)
+#define all(x) (x).begin(), (x).end()
+#define rall(x) (x).rbegin(), (x).rend()
+#define hha(x) cout << #x << " = " << x << ' ';
+#define hhal(x) cout << #x << " = " << x << endl;
+#define print(v) cout << #v << " = " << ' '; for(auto x : v) cout << x << ' '; cout << endl;
+#define arr array<int, 3>
+#define _ << " " << 
+int n, m;
+
+
+void solve() {
+    vector<arr> a(m, {0, 0, 0});
+
+    int solved, penalty;
+    cin >> solved >> penalty;
+
+    for(int i = 0; i < m; i++) {
+        char type;
+        cin >> type;
+
+        if(type == '+') {
+            int x, y;
+            char c;
+            cin >> x >> c >> y;
+            a[i][0] = 0;
+            a[i][1] = x;
+            a[i][2] = y;
+        }
+        if(type == '?') {
+            int x, y;
+            cin >> x >> y;
+            a[i][0] = 1;
+            a[i][1] = y - x;
+            a[i][2] = x - 1;
+        }
+        if(type == '-') {
+            int x;
+            cin >> x;
+            a[i][0] = 2;
+            a[i][1] = x;
+        }
+        if(type == '.') {
+            a[i][0] = 3;
+        }
+    }
+
+    int cnt = 0, pen = 0, mu = 0;
+
+    for(auto [t, x, y] : a) {
+        if(t == 0) {
+            cnt++;
+            pen += (y + (x - 1) * 20);
+        }
+        if(t == 1) mu++;
+    }
+
+    if(solved < cnt) {
+        cout << "No\n";
+        return;
+    }
+
+    if(pen > penalty) {
+        cout << "No\n";
+        return;
+    }
+
+    if(solved > cnt + mu) {
+        cout << "No\n";
+        return;
+    }
+
+    
+    int frz = solved - cnt;
+    int ok = 59 * frz;
+    bool flag = 0;
+    for(int i = 0; i < (1 << m); i++) {
+
+        int cand = 0, js = 0, cur = pen;
+        
+        for(int j = 0; j < m; j++) {
+            if(i & (1 << j)) {
+                js++;
+                if(a[j][0] == 1) cand++;
+            }
+        }
+
+        if(cand != js || cand != frz) continue;
+        int add = 0;
+        for(int j = 0; j < m; j++) {
+            if(i & (1 << j)) {
+                cur += 240 + 20 * a[j][1];
+                add += a[j][2];
+            }
+        }
+
+        if(cur > penalty) continue;
+
+        int k = (penalty - cur) / 20;
+        add = min(k, add);
+        cur += add * 20;
+
+        if(cur + ok >= penalty) {
+            int need = penalty - cur;
+            for(int j = 0; j < m; j++) {
+                if(i & (1 << j)) {
+                    a[j][0] = 0;
+                    int q = min(add, a[j][2]);
+                    add -= q;
+                    a[j][1] = a[j][1] + 1 + q;
+
+                    int p = min(59LL, need);
+                    a[j][2] = 240 + p;
+                    need -= p;
+                }
+            }
+            flag = 1;
+            break;
+        }
+
+    }
+    if(!flag) {
+        cout << "No\n";
+        return;
+    }
+    cout << "Yes\n";
+    for(auto [t, x, y] : a) {
+        if(t == 0) {
+            cout << "+ " << x << "/" << y << "\n"; 
+        }
+        if(t == 1) {
+            cout << "- " << x + y + 1 << "\n";
+        }
+        if(t == 2) {
+            cout << "- " << x << "\n";
+        }
+        if(t == 3) {
+            cout << ".\n";
+        }
+    }
+}
+
+signed main() {
+    ios_base::sync_with_stdio(0); cin.tie(0);
+    srand(time(NULL));
+    cin >> n >> m; while(n--)
+    solve();
+    return 0;
+}

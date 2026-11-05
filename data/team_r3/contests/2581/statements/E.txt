@@ -1,0 +1,72 @@
+Cyan White Tree
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+2 seconds
+1024 megabytes
+
+Given a tree with n vertices, each vertex is colored either cyan or white. For a simple path in the tree,
+let c be the number of cyan vertices and w be the number of white vertices in the path. The value of the
+path is (c + w) − 2 × |c − w|, where |c − w| is the absolute value of (c − w).
+Define the depth of a vertex u to be the number of edges on the shortest path from vertex 1 to vertex u.
+Define the key vertex of a simple path to be the vertex with minimum depth among all vertices in the
+path. It can be proven that the key vertex for a simple path is unique.
+For each 1 ≤ i ≤ n, calculate the maximum value among all simple paths whose key vertex is i.
+Recall that a path in the tree is a nonempty sequence of vertices p1 , p2 , . . . , pk such that each pair of
+adjacent vertices in this sequence is connected by an edge. A simple path is a path where all vertices in
+it are distinct. A single vertex can also form a simple path.
+
+Input
+There are multiple test cases. The first line of the input contains an integer T (1 ≤ T ≤ 105 ) indicating
+the number of test cases. For each test case:
+The first line contains an integer n (2 ≤ n ≤ 4 × 105 ) indicating the number of vertices.
+The second line contains a 01-string of length n, indicating the color of each vertex. If the i-th character
+is ‘0’, the i-th vertex is colored cyan; otherwise, the i-th vertex is colored white.
+For the following (n − 1) lines, the i-th line contains two integers ui and vi (1 ≤ ui , vi ≤ n), indicating an
+edge connecting vertices ui and vi . It’s guaranteed that the given edges form a tree.
+It is guaranteed that the sum of n of all test cases does not exceed 4 × 105 .
+
+Output
+For each test case output n lines, each containing one integer. The i-th line is the maximum value among
+all simple paths whose key vertex is i.
+
+Example
+standard input
+3
+8
+00101110
+1 2
+1 3
+3 4
+3 5
+5 6
+5 7
+7 8
+2
+01
+1 2
+2
+00
+1 2
+
+standard output
+6
+-1
+3
+-1
+1
+-1
+2
+-1
+2
+-1
+-1
+-1
+
+Page 1 of 1
+
+

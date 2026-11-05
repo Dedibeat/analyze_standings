@@ -1,0 +1,62 @@
+Let $a$ be an array of length $n$. Define $\operatorname{mex}(a)$ as the smallest non-negative integer that does not appear in $a$. For example:
+
+
+$\operatorname{mex}([4, 0, 2, 1]) = 3$
+
+$\operatorname{mex}([-2, -4, 3]) = 0$
+
+
+Define a $k$-transformation as follows: for each index $i$ ($1 \leq i \leq n$), independently choose to either keep $a_i$ unchanged or replace it with $k - a_i$. After all choices are made, we obtain a new array $a'$.
+
+Define $k$-$\operatorname{mex}(a)$ as the maximum possible value of $\operatorname{mex}(a')$ among all arrays $a'$ that can be obtained from $a$ via a $k$-transformation.
+
+You must answer $q$ queries. Each query provides a non-negative integer $k$; compute $k$-$\operatorname{mex}(a)$ for each query.
+
+To reduce the output size, you are only required to output the bitwise XOR (exclusive-OR) of the answers over all $q$ queries.
+
+Input
+
+The first line contains a single integer $T$ ($1 \leq T \leq 10^3$) --- the number of test cases.
+
+For each test case:
+
+
+The first line contains a single positive integer $n$ ($1 \leq n \leq 5 \times 10^3$), denoting the length of the array.
+
+The second line contains $n$ integers $a_1, a_2, \dots, a_n$ ($0 \leq a_i \leq 10^9$), denoting the initial elements of array $a$.
+
+The next line contains a single positive integer $q$ ($1 \leq q \leq 5 \times 10^5$), denoting the number of queries.
+
+Each of the next $q$ lines contains a single non-negative integer $k$ ($0 \leq k \leq 10^9$), denoting you must compute $k$-$\operatorname{mex}(a)$ for this $k$.
+
+
+It is guaranteed that $\sum n \leq 5 \times 10^3$ and $\sum q \leq 5 \times 10^5$ across all test cases in one test file.
+
+Output
+
+For each test case, output a single integer, denoting the bitwise XOR (exclusive-OR) of the answers to all queries in that test case.
+
+Examples
+
+Input 1
+
+2
+3
+0 1 3
+3
+1
+2
+5
+9
+0 0 1 1 2 3 3 4 5
+7
+4
+5
+6
+7
+8
+9
+10Output 1
+
+3
+8

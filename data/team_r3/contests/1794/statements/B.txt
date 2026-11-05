@@ -1,0 +1,36 @@
+Graph
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+3 seconds
+1024 megabytes
+
+We call an undirected graph with n vertices “good” when for all 1 ≤ u, v ≤ n, there exists at least one
+path between u, v, i.e., u = x1 , x2 , . . . , xm = v such that gcd(u, v) = gcd(x1 , x2 , . . . , xm ).
+We call an undirected graph with n vertices “perfect” when it is “good” and the number of edges in the
+graph is minimal. That is to say, any other “good” graph with n vertices has no less number of edges than
+this graph.
+You need to count the number of “perfect” graphs with n vertices.
+Since the answer could be very large, you only need to find it modulo 998 244 353.
+
+Input
+The input contains only one single integer n (2 ≤ n ≤ 1011 ) — the number of vertices in the “perfect”
+graph you need to count.
+
+Output
+The output contains only one single integer, representing the answer modulo 998 244 353.
+
+Example
+standard input
+4
+
+standard output
+8
+
+Page 1 of 1
+
+

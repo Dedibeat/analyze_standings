@@ -1,0 +1,75 @@
+The 2022 ICPC Asia Hangzhou Regional Programming Contest
+Hangzhou Normal University, December, 04, 2022
+
+Problem F. Da Mi Lao Shi Ai Kan De
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1.5 seconds
+1024 megabytes
+
+Grammy has joined n + 1 QQ groups numbered 0 ∼ n. Teacher Rice is in the group 0.
+Every day, Grammy’s friends send messages to some groups in 1 ∼ n, and Grammy will select the messages
+which Teacher Rice likes and forward them to the group 0.
+Here we define a message as a string consisting of lowercase letters, and Teacher Rice likes a message if
+and only if the string “bie” is a substring of the message.
+Now, given the messages in groups 1 ∼ n, Grammy will search messages from group 1 to group n in order,
+checking the messages in the group one by one. For each message, pick out it if Teacher Rice likes it and
+it hasn’t appeared in group 0, and forward it to group 0. Here appear means the same message has been
+forwarded to group 0 before.
+Please output all the messages that Grammy will forward to group 0 in order. For each group, if Grammy
+can’t pick out any message, output “Time to play Genshin Impact, Teacher Rice!” in one line.
+
+Input
+The first line contains a single integer n (1 ≤ n ≤ 104 ), denoting the number of QQ groups. The following
+lines describe the messages in groups 1 to n.
+For the i-th group, the first line contains an integer mi (0 ≤ mi ≤ 104 ), denoting the number of messages
+in this group. The following mi lines each line contains a non-empty string si,j representing a message.
+P
+P
+It is guaranteed that
+mi ≤ 104 ,
+|si,j | ≤ 104 and all the messages only consist of lowercase letters.
+
+Output
+Output each message in a line, denoting all the messages that Grammy will forward to group 0 in order. For
+each group, if Grammy can’t pick out any message, output “Time to play Genshin Impact, Teacher
+Rice!” in one line.
+
+Example
+standard input
+6
+1
+biebie
+1
+adwlknafdoaihfawofd
+3
+ap
+ql
+biebie
+2
+pbpbpbpbpbpbpbpb
+bbbbbbbbbbie
+0
+3
+abie
+bbie
+cbie
+
+standard output
+biebie
+Time to play Genshin Impact, Teacher Rice!
+Time to play Genshin Impact, Teacher Rice!
+bbbbbbbbbbie
+Time to play Genshin Impact, Teacher Rice!
+abie
+bbie
+cbie
+
+Page 7 of 16
+
+

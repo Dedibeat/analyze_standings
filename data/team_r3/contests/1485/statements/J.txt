@@ -1,0 +1,51 @@
+Minimum Manhattan Distance
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+64 megabytes
+
+Recall that on a two-dimensional plane, the Manhattan distance between two points (x1 , y1 ) and (x2 , y2 )
+is |x1 − x2 | + |y1 − y2 |. If both coordinates of a point are all integers, then we call this point an integer
+point.
+Given two circles C1 , C2 on the two-dimensional plane, and guaranteed the x-coordinates of any point in
+C1 and any point in C2 are different, and the y-coordinates of any point in C1 and any point in C2 are
+different.
+Each circle is described by two integer points, and the segment connecting the two points represents a
+diameter of the circle.
+Now you need to pick a point (x0 , y0 ) inside or on the C2 such that minimize the expected value of the
+Manhattan distance from (x0 , y0 ) to a point inside C1 , if we choose this point with uniformly probability
+among all the points with a real number coordinate inside C1 .
+
+Input
+The first line contains a single integer t (1 ≤ t ≤ 105 ) , representing the number of test cases.
+Then follow the descriptions of each test case.
+The first line contains 4 integers x1,1 , y1,1 , x1,2 , y1,2 , representing the segment connecting (x1,1 , y1,1 ) and
+(x1,2 , y1,2 ) is a diameter of the circle C1 .
+The second line contains 4 integers x2,1 , y2,1 , x2,2 , y2,2 , representing the segment connecting (x2,1 , y2,1 ) and
+(x2,2 , y2,2 ) is a diameter of the circle C2 .
+All the coordinates input are integers in the range [−105 , 105 ] .
+
+Output
+For each test case, output a single line with a real number - the minimum expected Manhattan distance.
+Your answer will be considered correct if its absolute or relative error does not exceed 10−6 . That is, if
+|a−b|
+your answer is a, and the jury’s answer is b, then the solution will be accepted if max(1,|b|)
+≤ 10−6 .
+
+Example
+standard input
+1
+0 0 2 1
+4 5 5 2
+
+standard output
+4.2639320225
+
+Page 1 of 1
+
+

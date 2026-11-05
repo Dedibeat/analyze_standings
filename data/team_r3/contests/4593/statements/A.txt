@@ -1,0 +1,77 @@
+And Revive The Melody
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+2 seconds
+1024 megabytes
+
+Setsuna is studying music theory. There are n distinct pitches, numbered 1, 2, · · · , n. Setsuna wants to
+compose a melody P in which every pitch appears exactly once. We call a sub-melody Q compact if and
+only if there exist integers l ≤ r such that the set of pitches appearing in Q is exactly {l, l + 1, · · · , r}.
+To compose the harmony, Setsuna specifies some requirements using two strings a, b, each of length n:
+• For the sub-melody P [1, i] consisting of the first i pitches:
+– If ai = 1, this sub-melody must be compact.
+– If ai = 0, this sub-melody must not be compact.
+– If ai = ?, there is no restriction on this sub-melody.
+• For the sub-melody P [i, n] consisting of the last n + 1 − i pitches:
+– If bi = 1, this sub-melody must be compact.
+– If bi = 0, this sub-melody must not be compact.
+– If bi = ?, there is no restriction on this sub-melody.
+After solving Don’t Fight The Music, Setsuna wants to enumerate all melodies that satisfy the
+requirements. You need to help Setsuna find the number of such melodies so that she can check her
+result. Since the answer may be large, output it modulo 998244353.
+
+Input
+This problem contains multiple test cases.
+The first line contains a positive integer T (1 ≤ T ≤ 104 ), representing the number of test cases.
+For each test case:
+• The first line contains an integer n (2 ≤ n ≤ 2 × 105 ).
+• The next two lines each contain a string of length n, namely a and b.
+It is guaranteed that the sum of n over all test cases does not exceed 2 × 105 , and that the strings contain
+only the characters 1, 0, and ?.
+
+Output
+For each test case, output one line containing an integer representing the answer.
+
+Page 1 of 2
+
+Example
+standard input
+4
+2
+?1
+1?
+3
+???
+0??
+4
+??1?
+?0??
+5
+1??01
+10??1
+
+standard output
+2
+0
+8
+36
+
+Note
+For the third test case, all melodies that satisfy the requirements are listed below:
+• [2, 1, 3, 4]
+• [2, 3, 1, 4]
+• [2, 3, 4, 1]
+• [2, 4, 3, 1]
+• [3, 1, 2, 4]
+• [3, 2, 1, 4]
+• [3, 2, 4, 1]
+• [3, 4, 2, 1]
+
+Page 2 of 2
+
+

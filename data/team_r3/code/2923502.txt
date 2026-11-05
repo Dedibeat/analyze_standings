@@ -1,0 +1,45 @@
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+
+#define int long long
+#define sz(a) (int)(a).size()
+#define pb push_back
+#define all(x) x.begin(), x.end()
+#define rall(x) x.rbegin(), x.rend()
+#define FOR(i, a, b) for(int i = (a); i < (b); i++)
+#define FORD(i, a, b) for(int i = (a); i >= (b); i++)
+#define ff first
+#define ss second 
+#define _ << ' ' <<
+#define hha(x) cout << #x << " = " << x << " "
+#define hhal(x) cout << #x << " = " << x << endl
+#define print(v) cout << #v << " = "; for(auto x : v) cout << x << " "; cout << endl;
+
+void solve() {
+    int n; cin >> n;
+    vector<pair<int, int>> v(n);
+    int sum = 0;
+    for(auto &[w, c] : v) 
+    {
+        int v; cin >> w >> v >> c;
+        sum += v;
+    }
+    sort(all(v), [&](pair<int, int> L, pair<int, int> R)
+    {
+        return L.ff * R.ss > R.ff * L.ss;
+    });
+    int W = 0;
+    for(auto [w, c] : v)
+    {
+        sum -= W * c;
+        W += w;
+    }
+    cout << sum << "\n";
+}   
+
+signed main() {
+    ios_base::sync_with_stdio(0); cin.tie(0);
+    solve();
+    return 0;
+}

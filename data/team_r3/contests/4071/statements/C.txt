@@ -1,0 +1,71 @@
+Permutation Inversions
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+3 seconds
+1024 megabytes
+
+There is an unknown permutation p = (p1 , p2 , . . . , pn ) of the integers 1, 2, . . . , n. You are given m pieces
+of information about this permutation.
+Each piece of information consists of an interval [li , ri ] and a permutation qi,1 , qi,2 , . . . , qi,ri −li +1 of the
+indices in this interval. It states that
+pqi,1 < pqi,2 < · · · < pqi,ri −li +1 .
+Your task is to find a permutation that satisfies all the given information and has the minimum possible
+number of inversions. If no such permutation exists, output −1.
+If several optimal permutations exist, output any of them.
+The number of inversions of a permutation p is the number of pairs of indices (x, y) such that
+1 ≤ x < y ≤ n and px > py .
+
+Input
+The first line contains a single integer T (1 ≤ T ≤ 106 ) — the number of test cases.
+For each test case:
+- The first line contains two integers n (1 ≤ n ≤ 106 ) and m (1 ≤ m ≤ 106 ) — the size of the permutation
+and the number of constraints.
+- Each of the next m lines describes a constraint. The i-th constraint starts with two integers li and ri
+(1 ≤ li ≤ ri ≤ n), followed by ri − li + 1 integers qi,1 , qi,2 , . . . , qi,ri −li +1 , which form a permutation of the
+integers from li to ri .
+P
+P
+P
+6
+It is guaranteed that 1 ≤ n ≤ 106 , 1 ≤
+m ≤ 106 , and 1 ≤ m
+i=1 (ri − li + 1) ≤ 10 over all test cases.
+
+Output
+For each test case, print a single line:
+- If no satisfying permutation exists, print -1.
+- Otherwise, print n space-separated integers p1 , p2 , . . . , pn representing a valid permutation that minimizes
+the number of inversions.
+If there are multiple optimal permutations, print any of them.
+
+Page 1 of 2
+
+Example
+standard input
+4
+4 1
+2 4 3 2 4
+3 2
+1 3 1 2 3
+1 3 3 2 1
+5 2
+2 4 4 2 3
+2 4 4 2 3
+4 2
+2 2 2
+1 4 2 1 4 3
+
+standard output
+1 3 2 4
+-1
+1 3 4 2 5
+2 1 4 3
+
+Page 2 of 2
+
+

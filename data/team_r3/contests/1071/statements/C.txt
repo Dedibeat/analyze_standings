@@ -1,0 +1,58 @@
+The 2022 ICPC Asia Hangzhou Regional Programming Contest
+Hangzhou Normal University, December, 04, 2022
+
+Problem C. No Bug No Game
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+1024 megabytes
+
+Putata is preparing the RPG Pro League (RPL) held by the International Computer Playing Company
+(ICPC). In this RPG game, the player will wear n items at the same time. Each item can offer the player
+several points of power. There is a magic buff in the game, which can upgrade each item such that they
+can offer several points of bonus power.
+However, the buff is limited, it can only buff at most k points of power. Formally, assume the player is
+wearing nothing initially, and then will wear all the n items one by one. The game server will scan through
+all these n items one by one, according to the permutation that the player
+P wears them. When the server is
+scanning the i-th item, which can offer pi points of power, let sum = 1≤j<i pj denoting the total points
+of power scanned before:
+• If sum + pi ≤ k, the whole item will be upgraded. The buff will offer wi,pi points of bonus power.
+• If sum ≥ k, the item won’t be upgraded. The buff will offer nothing.
+• Otherwise, only a part of the item will be upgraded. The buff will offer wi,k−sum points of bonus
+power.
+Putata is clever, he soon realized that he can adjust the permutation to wear these n items to gain
+more points of bonus power! Unfortunately, Putata doesn’t know the optimal permutation, please write
+a program to help him.
+The behavior of the magic buff performed by the game server is a bug. The game code can work all thanks
+to bugs, so it is possible that wi,a > wi,b where a < b.
+
+Input
+The first line contains two integers n and k (1 ≤ n ≤ 3 000, 0 ≤ k ≤ 3 000), denoting the number of items
+and the limit k.
+Each of the following n lines starts with an integer pi (1 ≤ pi ≤ 10), denoting the base power of the i-th
+item, followed by pi integers wi,1 , wi,2 , . . . , wi,pi (1 ≤ wi,j ≤ 105 ).
+
+Output
+Output a single line containing an integer, denoting the maximum points of total bonus power that can
+be reached. The base power is not included in the answer.
+
+Example
+standard input
+4 5
+2 1 3
+2 1 1
+2 3 1
+2 1 3
+
+standard output
+9
+
+Page 4 of 16
+
+

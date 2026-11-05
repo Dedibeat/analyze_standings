@@ -1,0 +1,58 @@
+The 1st Universal Cup
+Stage 1: Shenyang, January 28-29, 2023
+
+Problem G. Meet in the Middle
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+5 seconds
+512 megabytes
+
+Byteland has n cities numbered from 1 to n, and n − 1 bidirectional roads and n − 1 bidirectional railways
+connecting them. For each pair of cities, one can always arrive one from another one through the roads
+only, and the same thing also holds for the railways.
+Alice and Bob are planning q long journeys in Byteland. In each journey, Alice starts from the a-th city
+and then visits some other cities through the roads only, while Bob starts from the b-th city and then visits
+some other cities through the railways only. Both of them will finally reach the same destination city
+without visiting any cities more than once. You need to find the maximum total length of their journey
+routes among all the selections of the destination city.
+
+Input
+The first line contains two integers n (2 ≤ n ≤ 105 ) and q (1 ≤ q ≤ 5 × 105 ), indicating the number of
+cities in Byteland and the number of journey plans.
+Each of the next n − 1 lines contains three integers u, v (1 ≤ u, v ≤ n) and w (1 ≤ w ≤ 109 ), indicating
+a road of length w connecting the u-th and v-th cities.
+Each of the next n − 1 lines contains three integers u, v (1 ≤ u, v ≤ n) and w (1 ≤ w ≤ 109 ), indicating
+a railway of length w connecting the u-th and v-th cities.
+Each of the next q lines contains two integers a and b (1 ≤ a, b ≤ n), indicating a journey where Alice
+starts from the a-th city and Bob starts from the b-th city.
+
+Output
+Output q lines, each of which contains a single integer, indicating the maximum total length of Alice’s
+and Bob’s journey routes among all the selections of the destination city.
+
+Example
+standard input
+3 4
+1 2 1
+2 3 2
+1 2 2
+2 3 1
+1 1
+1 2
+2 1
+2 2
+
+standard output
+6
+4
+5
+3
+
+Page 7 of 16
+
+

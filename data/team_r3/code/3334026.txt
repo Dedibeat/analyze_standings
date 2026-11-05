@@ -1,0 +1,45 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define int long long
+#define ff first 
+#define ss second 
+#define all(a) (a).begin(),(a).end()
+#define rall(a) (a).rbegin(),(a).rend()
+#define print(x) cout << #x << " = "; for(auto i : x) cout << i << " "; cout << "\n";
+#define hha(x) cout << #x << " = " << x << " ";
+#define hhal(x) cout << #x << " = " << x << "\n";
+
+
+void solve() {
+    int a, b, ha, hb; cin >> a >> b >> ha >> hb;
+    int b4 = b * 4;
+    if(b4 >= ha) {
+        cout << "NO\n";
+        return;
+    }
+    int k = (ha - b4 + b - 1) / b;
+    ha -= k * b;
+    hb -= k * a;
+    if(ha <= 0 && hb <= 0) {
+        if(hb + a <= 0) {
+            cout << "YES\n";
+        }
+        else {
+            cout << "NO\n";
+        }
+    }
+    else if(ha > 0 && hb <= 0) {
+        cout << "YES\n";
+    }
+    else {
+        cout << "NO\n";
+    }
+}
+
+
+signed main() {
+    ios_base::sync_with_stdio(0);cin.tie(0);
+    int t; cin >> t; while(t--)
+    solve();
+    return 0;
+}

@@ -1,0 +1,49 @@
+Plus Xor
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+2 seconds
+1024 megabytes
+
+Given integers a, b, c, you can perform one of the following operations each time:
+• a←a+b
+• a←a⊕b
+where ⊕ represents the binary XOR operation.
+You can perform any number of operations, and you want to know if you can ultimately make a equal to
+c.
+
+Input
+A single test case contains multiple data sets.
+The first line of the input is the number of data sets T (1 ≤ T ≤ 103 ), representing the number of data
+sets in this test case.
+For each data set, there is a line with three integers a, b, c (0 ≤ a, c ≤ 1018 , 1 ≤ b ≤ 1000).
+P 2
+It is guaranteed that in a single test case,
+b ≤ 106 .
+
+Output
+For each data set, if it is possible to ultimately make a equal to c, output "YES"; otherwise, output "NO".
+
+Example
+standard input
+5
+1 6 7
+7 5 13
+8 3 16
+7 6 17
+2 7 8
+
+standard output
+YES
+NO
+YES
+YES
+NO
+
+Page 1 of 1
+
+

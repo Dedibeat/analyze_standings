@@ -1,0 +1,906 @@
+The 2024 ICPC Asia Hangzhou Regional Contest
+
+2024/11/10
+
+Problem A. AUS
+Pigeland University will host the 2224 Animal Collegiate Programming Contest (ACPC 2224). Unlike
+previous years, where teams from the host institution were marked as unofficial, Pigeland will send official
+teams to compete in the contest with three workstations for each team. Nevertheless, Pig-head, the coach
+of Pigeland University, remains uncertain about his teams’ chances of securing gold medals. As a result,
+he decides to acquire the contest problems in advance from the AUS problem-setting group, using the
+excuse of needing to upload data to the online judge.
+To prevent cheating, AUS attempts to encrypt the problems using a special cipher. Specifically, problems
+are represented by strings consisting of lowercase English letters. AUS wants to design a cipher function
+f (x) that maps lowercase English letters to lowercase English letters. For a problem S = s1 s2 . . . sn , the
+encrypted version of the problem is another string given by F (S) = f (s1 )f (s2 ) . . . f (sn ). For example,
+when S = abcabc and f (a) = a, f (b) = k, f (c) = a, the encrypted version is F (S) = akaaka.
+As a member of AUS, your task is to design the cipher function f . The leader of AUS believes that the
+function is strong if and only if there exists at least one problem that can be encrypted into the same
+encrypted version as another, while not all problems produce the same encrypted output. To validate
+this, he will give you three problems S1 , S2 , and S3 , and you need to find a cipher function f such that
+F (S1 ) = F (S2 ) and F (S1 ) 6= F (S3 ). Since AUS has several experienced members, your task is simply to
+determine whether such a cipher function exists.
+
+Input
+There are multiple test cases. The first line contains an integer T (1 ≤ T ≤ 104 ) indicating the number
+of test cases. For each test case:
+The first line contains a string S1 (1 ≤ |S1 | ≤ 103 ) consisting of only lowercase English letters.
+The second line contains a string S2 (1 ≤ |S2 | ≤ 103 ) consisting of only lowercase English letters.
+The third line contains a string S3 (1 ≤ |S3 | ≤ 103 ) consisting of only lowercase English letters.
+It is guaranteed that the sum of |S1 | + |S2 | + |S3 | of all test cases does not exceed 3 × 104 .
+
+Output
+For each test case, if such cipher function exists, output YES in one line. Otherwise, output NO instead.
+
+Example
+standard input
+4
+abab
+cdcd
+abce
+abab
+cdcd
+abcd
+abab
+cdcd
+abc
+x
+yz
+def
+
+standard output
+YES
+NO
+YES
+NO
+
+Note
+For the first and third sample test cases, one valid cipher function can be f (a) = f (b) = f (c) = f (d) = a
+and f (e) = b.
+Page 1 of 19
+
+The 2024 ICPC Asia Hangzhou Regional Contest
+
+2024/11/10
+
+Problem B. Barkley III
+There are n little pigs in Pigeland. All of them are proficient in competitive programming, and the
+i-th of them has ai rating. If k pigs p1 , p2 , · · · , pk form a team, the rating of the team will be
+ap1 & ap2 & ap3 & · · · & apk , where & denotes the bitwise AND operation.
+There are some programming contests to take place. Pigeland can send exactly one team to participate
+in each contest. For the i-th competition, only the pigs numbered between li and ri (both inclusive) have
+time to participate. Unfortunately, due to a shortage of funds, exactly one pig numbered between li and
+ri has to be removed. Meanwhile, all other pigs in the interval will participate in the contest. Pig-head,
+the coach of Pigeland, needs to properly select pigs who will not participate so that the team’s rating is
+maximized.
+However, through training and participating in contests, the rating of pigs may be changed. As Pig-head’s
+best friend, your task is to maintain the pigs’ rating for the following q events belonging to three types.
+• 1 l r x: Pig-head changes the rating of each pig numbered between l and r (both inclusive) by
+executing the bitwise AND operation with x. More formally, for all l ≤ i ≤ r, ai becomes ai & x.
+• 2 s x: Pig-head changes the rating of the s-th pig to x.
+• 3 l r: Pig-head asks for the maximum rating when forming a team by selecting pigs numbered
+between l and r (both inclusive) and removing exactly one of them.
+
+Input
+There is only one test case in each test file.
+The first line contains two integers n and q (2 ≤ n ≤ 106 , 1 ≤ q ≤ 106 ) indicating the number of pigs and
+the number of events.
+The second line contains n integers a1 , a2 , · · · , an (0 ≤ ai < 263 ) where ai indicates the rating of the i-th
+pig.
+For the following q lines, the i-th line first contains an integer opi (opi ∈ {1, 2, 3}) indicating the type of
+the i-th event. If opi = 1, then three integers l, r, and x follow (1 ≤ l ≤ r ≤ n, 0 ≤ x < 263 ); If opi = 2,
+then two integers s and x follow (1 ≤ s ≤ n, 0 ≤ x < 263 ); If opi = 3, then two integers l and r follow
+(1 ≤ l < r ≤ n).
+
+Output
+For each event of the third type, output one line containing one integer indicating the maximum rating
+of the team.
+
+Example
+standard input
+5 9
+7 7 7 6 7
+3 1 5
+2 1 3
+3 1 5
+3 1 3
+1 1 2 3
+3 1 3
+2 2 8
+3 1 3
+3 1 2
+
+standard output
+7
+6
+7
+3
+3
+8
+
+Page 2 of 19
+
+The 2024 ICPC Asia Hangzhou Regional Contest
+
+2024/11/10
+
+Problem C. Catch the Star
+BaoBao bought a telescope to observe a star in the night sky. The star is represented as a convex polygon
+S. However, there are n convex polygonal moons Mi that could obstruct his view. BaoBao can place his
+telescope anywhere on the x-axis between points (l, 0) and (r, 0), but he cannot place it exactly at (l, 0)
+or (r, 0).
+Your task is to help BaoBao find the total length of the segments on the x-axis where he can position his
+telescope such that he has an unobstructed view of the star S, and whether he can find a position at all.
+An unobstructed view means that no line segment from the chosen point on the x-axis to any point inside
+or on S properly intersects any of the moons Mi . The line segment is allowed to touch the boundary of
+the moons but not cross through them.
+
+Input
+There are multiple test cases. The first line of the input contains an integer T (1 ≤ T ≤ 2.5 × 104 )
+indicating the number of test cases. For each test case:
+The first line contains three integers n, l, and r (1 ≤ n ≤ 104 , −109 ≤ l < r ≤ 109 ), denoting the number
+of moons and the range for telescope placement.
+The second line describes the star S and begins with an integer k0 (3 ≤ k0 ≤ 105 ), denoting the number
+of vertices of S, followed by 2 × k0 integers x0,1 , y0,1 , x0,2 , y0,2 , · · · , x0,k0 , y0,k0 (−109 ≤ x0,j , y0,j ≤ 109 ),
+where (x0,j , y0,j ) is the coordinate of the j-th vertex of S in counter-clockwise order.
+For the following n lines, the i-th line describe moon Mi . Each line begins with an integer ki (3 ≤ ki ≤ 105 ),
+denoting the number of vertices of Mi , followed by 2 × ki integers xi,1 , yi,1 , xi,2 , yi,2 , · · · , xi,ki , yi,ki
+(−109 ≤ xi,j , yi,j ≤ 109 ), where (xi,j , yi,j ) is the coordinate of the j-th vertex of Mi in counter-clockwise
+order.
+It is guaranteed that S and Mi are convex polygons. The star S, the moons Mi , and the segment from
+(l, 0) to (r, 0) do not touch or intersect with each other. However, different moons Mi can intersect with
+each other. No three consecutive vertices of the same polygon are collinear.
+n
+P
+It’s guaranteed that the sum of
+ki of all test cases does not exceed 106 . It is also guaranteed that the
+i=0
+P
+total number of polygons of all test cases (which is (n + 1)) does not exceed 5 × 104 .
+
+Output
+For each test case, output a single line containing the total length of valid segments on the x-axis, strictly
+between (l, 0) and (r, 0), where BaoBao can place his telescope to see S without obstruction. If there’s no
+valid point between (l, 0) and (r, 0), output −1 instead.
+Your answer would be considered correct if the relative or absolute error does not exceed 10−9 .
+
+Page 3 of 19
+
+The 2024 ICPC Asia Hangzhou Regional Contest
+
+2024/11/10
+
+Examples
+standard input
+2
+4 -8 8
+3 -7 7 -6 8 -7 8
+3 -9 -2 -7 3 -9 -1
+3 -2 3 0 2 -4 5
+3 5 1 5 3 4 2
+3 1 -1 2 -2 3 -1
+5 -8 8
+5 -14 -3 -10 -2 -9 2 -10 4 -12 5
+3 -16 0 -15 0 -15 1
+3 -15 6 -9 5 -15 7
+3 -10 5 -9 5 -10 6
+3 -7 3 -3 2 -8 4
+3 -6 -1 -6 -2 -5 -1
+
+standard output
+9.404761904761905
+6.000000000000000
+
+3
+1 -4 4
+3 -2 6 0 5 2 6
+3 -3 1 3 1 0 4
+3 -2 2
+3 -2 4 2 4 0 6
+3 -2 2 -1 2 -2 3
+3 1 2 2 2 2 3
+3 -2 -1 0 -3 2 -1
+1 1 2
+3 -8 0 -7 0 -8 1
+3 -5 0 -4 -1 -4 0
+
+-1.000000000000000
+0.000000000000000
+1.000000000000000
+
+1
+1 -744567334 955216804
+5
+-781518205 -852078097
+-781516900 -852078384
+-781516392 -852076569
+-781518329 -852076047
+-781519925 -852077600
+5
+-393011614 -131855702
+-393010699 -131856607
+-393008846 -131856475
+-393009388 -131854587
+-393010201 -131854694
+
+1699779738.691979192313738
+
+Note
+For the first sample, the first test case is illustrated below; the telescope can be located between (−7, 0)
+and (− 23 , 0), or ( 27 , 0) and ( 46
+7 , 0).
+
+Page 4 of 19
+
+The 2024 ICPC Asia Hangzhou Regional Contest
+
+2024/11/10
+
+The second test case is illustrated below; the telescope can be located between (−8, 0) and (−2, 0).
+
+Note that the input format in the third sample is for presentation purposes only, because we cannot print
+all the coordinates in one line without exceeding the width of the paper. Please refer to the other samples
+for more accurate input formatting.
+
+Page 5 of 19
+
+The 2024 ICPC Asia Hangzhou Regional Contest
+
+2024/11/10
+
+Problem D. Dividing Sequence
+Alice got a sequence A constructed by her neighbors. Since Alice doesn’t like long sequences, she decides
+to divide the sequence into two (possibly empty) sequences B and C and give them back to her neighbors.
+Her division should meet the following constraints:
+• B and C are both subsequences of sequence A.
+• Each element of A belongs to exactly one of the sequences B or C.
+• B ≤ C in lexicographical order.
+Here we define a sequence P = p1 , p2 , · · · , pu of length u to be lexicographically smaller than a sequence
+Q = q1 , q2 , · · · , qv of length v if one of the following constraints is true:
+• u < v and P is a prefix of Q.
+• There exists an integer 1 ≤ k ≤ min(u, v) such that pi = qi for all 1 ≤ i < k and pk < qk .
+As a fair girl, Alice hopes to divide fairly such that the lexicographical order of C is as small as possible.
+Please tell Alice the minimum possible C.
+
+Input
+There are multiple test cases. The first line of the input contains an integer T (1 ≤ T ≤ 104 ) indicating
+the number of test cases. For each test case:
+The first line contains an integer n (1 ≤ n ≤ 5 × 103 ) indicating the length of the sequence A.
+The second line contains n integers a1 , a2 , · · · , an (1 ≤ ai ≤ 105 ), where ai is the i-th element of sequence
+A.
+It is guaranteed that the sum of n of all test cases does not exceed 104 .
+
+Output
+For each test case output two lines. First output one line containing one integer m indicating the length
+of the optimal C. Then output a second line containing m integers c1 , c2 , · · · , cm separated by a space,
+where ci is the i-th element of the optimal C.
+
+Example
+standard input
+5
+5
+3 1 2 3 2
+3
+1 1 2
+3
+3 3 3
+5
+1 3 1 3 1
+5
+2 2 1 3 3
+
+standard output
+1
+3
+3
+1 1 2
+2
+3 3
+3
+1 3 1
+4
+2 1 3 3
+
+Page 6 of 19
+
+The 2024 ICPC Asia Hangzhou Regional Contest
+
+2024/11/10
+
+Problem E. Elevator II
+There is a building with 109 floors but only 1 elevator. Initially, the elevator is on the f -th floor.
+There are n people waiting for the elevator. The i-th person is currently on the li -th floor and wants to
+take the elevator to the ri -th floor (li < ri ). Because the elevator is so small, it can carry at most 1 person
+at a time.
+It costs 1 unit of electric energy to move the elevator 1 floor upwards. No energy is needed if the elevator
+moves downwards. That is to say, it costs max(y − x, 0) units of electric energy to move the elevator from
+the x-th floor to the y-th floor.
+Find the optimal order to take all people to their destinations so that the total electric energy cost is
+minimized.
+More formally, let a1 , a2 , · · · , an be a permutation of n where ai indicates that the i-th person to take the
+elevator is ai . The total electric energy cost can be calculated as
+n
+X
+(max(lai − ra(i−1) , 0) + rai − lai )
+i=1
+
+where a0 = 0, r0 = f for convenience.
+Recall that a sequence a1 , a2 , · · · , an of length n is a permutation of n if and only if each integer from 1
+to n (both inclusive) appears exactly once in the sequence.
+
+Input
+There are multiple test cases. The first line of the input contains an integer T (1 ≤ T ≤ 104 ) indicating
+the number of test cases. For each test case:
+The first line contains two integers n and f (1 ≤ n ≤ 105 , 1 ≤ f ≤ 109 ) indicating the number of people
+and the initial position of the elevator.
+For the following n lines, the i-th line contains two integers li and ri (1 ≤ li < ri ≤ 109 ) indicating that
+the i-th person wants to go from the li -th floor to the ri -th floor by elevator.
+It’s guaranteed that the sum of n of all test cases will not exceed 3 × 105 .
+
+Output
+For each test case, first output one line containing one integer indicating the minimum total electric
+energy, then output another line containing n integers a1 , a2 , · · · , an separated by a space indicating the
+optimal order to carry all people. Note that these n integers must form a permutation of n. If there are
+multiple optimal orders, you can print any of them.
+
+Example
+standard input
+2
+4 2
+3 6
+1 3
+2 7
+5 6
+2 5
+2 4
+6 8
+
+standard output
+11
+2 1 4 3
+5
+2 1
+
+Page 7 of 19
+
+The 2024 ICPC Asia Hangzhou Regional Contest
+
+2024/11/10
+
+Problem F. Fuzzy Ranking
+In Pigeland, there are n universities, numbered from 1 to n. Each year, several ranking organizations
+publish rankings of these universities. This year, there are k ranking lists, where each list is a permutation
+of integers from 1 to n, representing the universities. In each ranking, the closer a university is to the
+beginning of the permutation, the better its ranking is in this list.
+
+A true story in the 2024 ICPC World Final.
+Supigar, a year-4 student who wants to apply for PhD programs in Pigeland, has his own method to
+evaluate the n universities comprehensively. He considers that university x is superior to another university
+y if and only if:
+• x is ranked better than y in at least one list, or
+• x is ranked better than z (z 6= x, z 6= y) in at least one list, and z is superior to y.
+Clearly, under this definition, there might exist some pairs of universities x and y (x < y) such that x is
+superior to y while y is also superior to x. Supigar calls such pairs fuzzy.
+Supigar has q queries, where the i-th query can be represented by three integers idi , li and ri (li ≤ ri ). For
+each query, he will consider the idi -th rank list and all the universities between the li -th position and the
+ri -th position (both inclusive) in that list. He wants to know, among these universities, how many pairs
+of them are fuzzy. Note that the definition of fuzzy pairs requires considering the superior relationships
+among all k rank lists.
+
+Input
+There are multiple test cases. The first line of the input contains an integer T (1 ≤ T ≤ 2×105 ) indicating
+the number of test cases. For each test case:
+The first line contains three integers n, k, and q (1 ≤ n, k, q ≤ 2 × 105 , 1 ≤ n × k ≤ 2 × 105 ) indicating
+the number of universities, rank lists, and queries, respectively.
+For the following k lines, the i-th line contains n distinct integers ai,1 , ai,2 , . . . , ai,n (1 ≤ ai,j ≤ n) indicating
+the i-th rank list.
+For the following q lines, the i-th line contains three integers id0i , li0 , and ri0 (0 ≤ id0i < k, 0 ≤ li0 , ri0 < n)
+indicating the encoded index of the rank list and the query range for the i-th query.
+Page 8 of 19
+
+The 2024 ICPC Asia Hangzhou Regional Contest
+
+2024/11/10
+
+• The real value of idi is equal to ((id0i + vi−1 ) mod k) + 1.
+• The real value of li is equal to ((li0 + vi−1 ) mod n) + 1.
+• The real value of ri is equal to ((ri0 + vi−1 ) mod n) + 1.
+Where vi−1 is the answer for the (i − 1)-th query. Specifically, we define v0 = 0. With the encoded queries,
+you’re forced to calculate the answer to each query before processing the next one. It’s guaranteed that
+1 ≤ idi ≤ k and 1 ≤ li ≤ ri ≤ n after decoding.
+It is also guaranteed that neither the sum of n × k nor the sum of q of all test cases will exceed 2 × 105 .
+
+Output
+For each test case output q lines. Each line contains a single integer representing the number of fuzzy
+pairs as the answer to the i-th query.
+
+Example
+standard input
+2
+5 2 2
+1 2 3 4 5
+5 4 3 2 1
+1 0 2
+1 2 1
+5 3 3
+1 2 3 4 5
+1 3 2 4 5
+1 2 3 5 4
+0 0 2
+0 2 3
+1 0 3
+
+standard output
+3
+10
+1
+1
+2
+
+Note
+For the first sample test case, the two decoded queries are 2 1 3 and 1 1 5.
+For the second sample test case, the three decoded queries are 1 1 3, 2 4 5, and 3 2 5.
+
+Page 9 of 19
+
+The 2024 ICPC Asia Hangzhou Regional Contest
+
+2024/11/10
+
+Problem G. Gathering Mushrooms
+BaoBao is picking mushrooms in a forest. There are n locations in the forest, and in the i-th location
+there grows an infinite amount of mushrooms of type ti . Each location also has a wooden sign. The sign
+of the i-th location points to location ai (it is possible that ai = i).
+As it is very foggy in the forest, BaoBao decides to move between locations according to the signs just for
+safety. Starting from location s with an empty basket, each time BaoBao walks into a location c (including
+the starting location c = s, and regardless of whether he has visited location c before), he will pick one
+mushroom of type tc into his basket and move to location ac .
+Given an integer k, for each 1 ≤ s ≤ n, determine the first type of mushroom that appears at least k
+times in the basket.
+
+Input
+There are multiple test cases. The first line of the input contains an integer T (1 ≤ T ≤ 104 ) indicating
+the number of test cases. For each test case:
+The first line contains two integers n and k (1 ≤ n ≤ 2 × 105 , 1 ≤ k ≤ 109 ) indicating the number of
+locations and the required times of appearance of mushrooms.
+The second line contains n integers t1 , t2 , · · · , tn (1 ≤ ti ≤ n), where ti is the type of mushroom growing
+in location i.
+The third line contains n integers a1 , a2 , · · · , an (1 ≤ ai ≤ n), where ai is the location pointed to by the
+sign in location i.
+It’s guaranteed that the sum of n of all test cases will not exceed 2 × 105 .
+
+Output
+To decrease the size of output, for each test case, output one line containing one integer indicating
+n
+P
+(i × vi ), where vi is the answer for s = i.
+i=1
+
+Example
+standard input
+3
+5 3
+2 2 1 3 3
+2 5 1 2 4
+5 4
+2 2 1 3 3
+2 5 1 2 4
+3 10
+1 2 3
+1 3 2
+
+standard output
+41
+45
+14
+
+Note
+For the first sample test case, v1 = 2, v2 = 3, v3 = 2, v4 = 3, v5 = 3, so you should output
+1 × 2 + 2 × 3 + 3 × 2 + 4 × 3 + 5 × 3 = 41. Consider s = 3, the types of mushrooms BaoBao picks
+in order are {1, 2, 2, 3, 3, 2, · · · }, so mushrooms of type 2 is the very first type which appears at least 3
+times in the basket.
+
+Page 10 of 19
+
+The 2024 ICPC Asia Hangzhou Regional Contest
+
+2024/11/10
+
+Problem H. Heavy-light Decomposition
+Heavy-light Decomposition (HLD) is a useful technique applied to trees for efficiently querying chains of
+vertices. Let’s first review the definition of HLD in case you forget.
+You are given a rooted tree with n vertices, numbered from 1 to n. You need to classify each non-root
+vertex as either heavy or light. Each non-leaf vertex has exactly one child classified as heavy, and the
+remaining vertices as light.
+For any non-root vertex v, let u be its parent. Vertex v can be classified as heavy only if the size of its
+subtree is among the largest of all the children of u. More formally, denote the size of the subtree rooted
+at vertex v as sv , and let ch(u) represent the set of children of u. Then, v can be heavy only if sv ≥ sw
+for all w ∈ ch(u). Note that there might be several children of u satisfying this constraint; in this case,
+you should choose one of them to be heavy, and the others to be light.
+After that, all vertices of the tree can be decomposed into several non-overlapping heavy chains, where
+each vertex belongs to exactly one heavy chain. A heavy chain is a sequence of vertices x1 , x2 , . . . , xk
+satisfying all the following constraints.
+• x1 is either the root or a light vertex.
+• For all 2 ≤ i ≤ k, xi is xi−1 ’s child and is a heavy vertex.
+• xk is a leaf.
+
+An HLD example. Heavy chains are marked with solid red edges.
+For example, the above figure shows a valid HLD of the given tree with 12 vertices, where the heavy
+chains are [1, 2, 3, 4, 5], [9, 10, 11], [7, 8], [6], and [12].
+Pig100Ton is a very experienced competitive programming contestant in Pigeland. He wants to know
+whether it is possible to recover the original tree from the heavy chains after HLD. Specifically, he will
+give you the number of vertices n of the original tree and k heavy chains. The i-th chain is described by
+two integers li and ri , indicating a heavy chain li , li + 1, . . . , ri .
+Your task is to construct a tree satisfying the following constraints or to tell Pig100Ton it is impossible:
+• It is a rooted tree that contains n vertices numbered from 1 to n.
+• The k chains provided by Pig100Ton should form a valid HLD of the tree. A valid HLD refers to
+a valid way to classify each non-root vertex as either light or heavy, and then decompose the tree
+into several non-overlapping heavy chains.
+
+Input
+There are multiple test cases. The first line of the input contains an integer T (1 ≤ T ≤ 105 ) indicating
+the number of test cases. For each test case:
+Page 11 of 19
+
+The 2024 ICPC Asia Hangzhou Regional Contest
+
+2024/11/10
+
+The first line contains two integers n and k (1 ≤ n ≤ 105 , 1 ≤ k ≤ n), indicating the number of vertices
+of the tree and the number of heavy chains after its HLD.
+For the following k lines, the i-th line contains two integers li and ri (1 ≤ li ≤ ri ≤ n), indicating that
+the i-th heavy chain is li , li + 1, . . . , ri .
+It is guaranteed that each of the n vertices belongs to exactly one given heavy chain. It is also guaranteed
+that the sum of n of all test cases does not exceed 2 × 105 .
+
+Output
+For each test case:
+If it is possible to construct such a tree, output one line containing n integers p1 , p2 , · · · , pn separated by
+a space, where pi is the parent of vertex i. pi = 0 indicates that vertex i is the root. If there are multiple
+valid solutions, you may output any one of them.
+If it is not possible to construct such a tree, just output IMPOSSIBLE in one line.
+
+Example
+standard input
+3
+12 5
+1 5
+9 11
+7 8
+6 6
+12 12
+4 3
+1 1
+4 4
+2 3
+2 2
+1 1
+2 2
+
+standard output
+0 1 2 3 4 3 2 7 1 9 10 10
+2 0 2 2
+IMPOSSIBLE
+
+Note
+For the first test case, the sample output is the tree shown in the description.
+
+Page 12 of 19
+
+The 2024 ICPC Asia Hangzhou Regional Contest
+
+2024/11/10
+
+Problem I. Identify Chord
+This is an interactive problem.
+Grammy has an undirected cyclic graph of n (4 ≤ n ≤ 109 ) vertices numbered from 1 to n. An undirected
+cyclic graph is a graph of n vertices and n undirected edges that form one cycle. Specifically, there is a
+bidirectional edge between vertex i and vertex ((i mod n) + 1) for each 1 ≤ i ≤ n.
+Grammy thinks that this graph is too boring, so she secretly chooses a pair of non-adjacent vertices and
+connects an undirected edge (called a chord) between them, so that the graph now contains n vertices
+and (n + 1) edges.
+Your task is to guess the position of the chord by making no more than 40 queries. Each query consists
+of two vertices x and y, and Grammy will tell you the number of edges on the shortest path between the
+two vertices.
+Note that the interactor is non-adaptive, meaning that the position of the chord is pre-determined.
+
+Input
+There are multiple test cases. The first line of the input contains an integer T (1 ≤ T ≤ 103 ) indicating
+the number of test cases. For each test case:
+The first line contains an integer n (4 ≤ n ≤ 109 ) indicating the number of vertices.
+
+Interaction Protocol
+To ask a query, output one line. First output ? followed by a space, then output two vertices x and y
+(1 ≤ x, y ≤ n) separated by a space. After flushing your output, your program should read a single integer
+indicating the number of edges on the shortest path between the two vertices.
+To guess the position of the chord, output one line. First output ! followed by a space, then output two
+vertices u and v (1 ≤ u, v ≤ n) separated by a space, indicating that the chord connects vertices u and
+v. After flushing your output, your program should read a single integer r (r ∈ {1, −1}) indicating the
+correctness of your guess. If r = 1 then your guess is correct, and your program should continue processing
+the next test case, or exit immediately if there are no more test cases. Otherwise if r = −1 then your
+guess is incorrect, and your program should exit immediately to receive a Wrong Answer verdict. Note
+that your guess does not count as a query.
+To flush your output, you may use:
+• fflush(stdout) (if you use printf) or cout.flush() (if you use cout) in C and C++.
+• System.out.flush() in Java.
+• stdout.flush() in Python.
+
+Page 13 of 19
+
+The 2024 ICPC Asia Hangzhou Regional Contest
+
+2024/11/10
+
+Example
+standard input
+
+standard output
+
+2
+6
+? 1 5
+2
+? 2 4
+1
+! 4 2
+1
+4
+? 2 4
+2
+! 1 3
+1
+
+Note
+The graphs in the sample test cases are illustrated as follows:
+
+Page 14 of 19
+
+The 2024 ICPC Asia Hangzhou Regional Contest
+
+2024/11/10
+
+Problem J. Japanese Bands
+Grammy is designing a new trading card game (TCG) based on her favorite Japanese music media
+franchise, BanG Dream!. By her design, there are n1 character cards and n2 music cards in total. Now she
+needs to assign an integer between 1 and m (both inclusive) for each card, representing the magic power
+it contains.
+In every TCG game, there must be some certain combos that may cause extra damage. Grammy now
+is considering a special rule that relates to the value assigned to cards. Specifically, k pairs of integers
+(a1 , b1 ), (a2 , b2 ), · · · , (ak , bk ) are chosen, satisfying 1 ≤ ai , bi ≤ m. Grammy wants to make sure each of
+these value combos can be played in her game. Therefore, for each pair of integers (ai , bi ), the assignment
+must meet at least one of the two following constraints:
+• ai can be found on a character card and bi can be found on a music card.
+• ai can be found on a music card and bi can be found on a character card.
+Please help Grammy count the number of valid card-value assignments.
+Let C be the multi-set of the integers on the character card and M be the multi-set of the integers on the
+music card. We say two assignments are different if their Cs are different or their Ms are different.
+Recall that an integer can appear multiple times in a multi-set. We say two multi-sets X and Y are different
+if there exists an integer k such that the number of times k appears in X is not equal to that in Y.
+
+Input
+There are multiple test cases. The first line of the input contains an integer T (1 ≤ T ≤ 500) indicating
+the number of test cases. For each test case:
+The first line contains four integers n1 , n2 , m and k (1 ≤ n1 , n2 ≤ 109 , 1 ≤ m ≤ 20, 1 ≤ k ≤ m2 ).
+For the following k lines, the i-th line contains two integers ai and bi (1 ≤ ai , bi ≤ m).
+It’s guaranteed that there are at most 5 test cases satisfying m > 10.
+
+Output
+For each test case output one line containing one integer indicating the number of valid card-value
+assignments. As the answer may be large, output the answer modulo (109 + 7).
+
+Example
+standard input
+3
+2 3 3 3
+2 3
+1 1
+2 3
+2 2 2 1
+1 1
+1 1 10 2
+1 2
+1 3
+
+standard output
+6
+4
+0
+
+Note
+For the first sample test case, the valid pairs of (C, M) are ({1, 2}, {1, 1, 3}), ({1, 2}, {1, 2, 3}),
+({1, 2}, {1, 3, 3}), ({1, 3}, {1, 1, 2}), ({1, 3}, {1, 2, 2}) and ({1, 3}, {1, 2, 3}).
+For the second sample test case, the valid pairs of (C, M) are ({1, 1}, {1, 1}), ({1, 2}, {1, 1}), ({1, 1}, {1, 2})
+and ({1, 2}, {1, 2}).
+Page 15 of 19
+
+The 2024 ICPC Asia Hangzhou Regional Contest
+
+2024/11/10
+
+Problem K. Kind of Bingo
+There is a grid with n rows and m columns. The cells in the grid are numbered from 1 to n × m, where
+the cell on the i-th row and the j-th column is numbered as ((i − 1) × m + j).
+Given a permutation p1 , p2 , · · · , pn×m of n × m, we’re going to perform n × m operations according to
+the permutation. For the i-th operation, we’ll mark cell pi . If after the b-th operation, there is at least
+one row such that all the cells in that row are marked, and b is as small as possible, then we say b is the
+“bingo integer” of the permutation.
+You’re given the chance to modify the permutation at most k times (including zero times). Each time
+you can swap a pair of elements in the permutation. Calculate the smallest possible bingo integer after
+the modifications.
+Recall that a sequence p1 , p2 , · · · , pn×m of length n × m is a permutation of n × m if and only if each
+integer from 1 to n × m (both inclusive) appears exactly once in the sequence.
+
+Input
+There are multiple test cases. The first line of the input contains an integer T (1 ≤ T ≤ 104 ) indicating
+the number of test cases. For each test case:
+The first line contains three integers n, m and k (1 ≤ n, m ≤ 105 , 1 ≤ n × m ≤ 105 , 0 ≤ k ≤ 109 ),
+indicating the number of rows and columns of the grid and the number of modifications you can perform.
+The second line contains n × m distinct integers p1 , p2 , · · · , pn×m (1 ≤ pi ≤ n × m).
+It’s guaranteed that the sum of n × m of all test cases will not exceed 105 .
+
+Output
+For each test case output one line containing one integer indicating the smallest possible bingo integer
+after the modifications.
+
+Example
+standard input
+3
+3 5 2
+1 4 13 6 8 11 14 2 7 10 3 15 9 5 12
+2 3 0
+1 6 4 3 5 2
+2 3 1000000000
+1 2 3 4 5 6
+
+standard output
+7
+5
+3
+
+Note
+For the first sample test case, we can first swap 1 and 15, then swap 6 and 12 to get the sequence
+[15, 4, 13, 12, 8, 11, 14, 2, 7, 10, 3, 1, 9, 5, 6]. It’s easy to see that after the 7-th operation, all cells in the 3-rd
+row will be marked.
+For the second sample test case, it’s easy to see that after the 5-th operation, all cells in the 2-nd row will
+be marked.
+For the third sample test case, we don’t need to make any modifications. It’s easy to see that after the
+3-rd operation, all cells in the 1-st row will be marked.
+
+Page 16 of 19
+
+The 2024 ICPC Asia Hangzhou Regional Contest
+
+2024/11/10
+
+Problem L. Let’s Go! New Adventure
+In Pigeland, Pishin is a popular open-world action RPG where users can play multiple characters. Each
+character has an independent adventure rank, which increases as they earn experience points (EXP) while
+being played. Initially, every character starts with an adventure rank of level 0 and can progress up to a
+maximum level of m. To advance from level (i − 1) to level i (1 ≤ i ≤ m), the character is required to
+earn bi EXP. The higher the current rank, the more difficult it becomes to level up, meaning bi ≤ bi+1
+always holds for all i from 1 to m.
+Grammy plans to play Pishin for the next n days. As a rich girl, her Pishin account has an infinite number
+of characters. However, being a lazy girl, all characters in her account start with an adventure rank of
+level 0 at the beginning of the n days. Each day, Grammy will select exactly one character to play, but
+once she stops playing a character, she cannot resume playing that character on any future day. In other
+words, she can only continue playing the same character on consecutive days.
+On the i-th day, Grammy will earn ai EXP for the character she plays. This means that if she plays a
+character continuously from the l-th day to the r-th day (both inclusive), the character’s adventure rank
+will increase to level k, where k is the largest integer between 0 and m such that the total EXP earned
+k
+r
+P
+P
+ai ) is greater than or equal to the requirement of leveling up to k (which is
+bi ).
+(which is
+i=1
+
+i=l
+
+Being a greedy girl, Grammy wants to maximize the total sum of adventure ranks across all her characters
+after the n days. However, as a single-minded girl, she doesn’t want to play too many different characters.
+To balance this, she introduces a penalty factor of c. Her goal is to maximize the total sum of adventure
+ranks across all characters after the n days, minus c × d, where d is the number of different characters she
+plays. As Grammy’s best friend, your task is to compute the maximum value she can achieve under the
+optimal strategy for selecting characters.
+
+Input
+There are multiple test cases. The first line of the input contains an integer T (1 ≤ T ≤ 5×104 ) indicating
+the number of test cases. For each test case:
+The first line contains three integers n, m and c (1 ≤ n, m ≤ 5 × 105 , 0 ≤ c ≤ 5 × 105 ).
+n
+P
+The second line contains n integers a1 , a2 , · · · , an (0 ≤ ai ≤ 1012 , 0 ≤
+ai ≤ 1012 ).
+i=1
+
+The third line contains m integers b1 , b2 , · · · , bm (0 ≤ bi ≤ 1012 , bi ≤ bi+1 , 0 ≤
+
+m
+P
+
+bi ≤ 1012 ).
+
+i=1
+
+It is guaranteed that neither the sum of n nor the sum of m of all test cases will exceed 5 × 105 .
+
+Output
+For each test case, output one line containing one integer, indicating the maximum value.
+
+Example
+standard input
+2
+5 4 2
+1 0 3 1 2
+0 1 1 2
+4 5 1
+7 16 23 4
+1 3 6 20 20
+
+standard output
+3
+6
+
+Note
+For the first sample test case, one solution is to use the first three days to get a character with adventure
+Page 17 of 19
+
+The 2024 ICPC Asia Hangzhou Regional Contest
+
+2024/11/10
+
+rank 4 and the next two days to get another character with adventure rank 3. This gives us a value of
+(4 − 2) + (3 − 2) = 3.
+For the second sample test case, we can play a different character each day; this gives us adventure ranks
+2, 3, 3, and 2, respectively. So the value is (2 − 1) + (3 − 1) + (3 − 1) + (2 − 1) = 6.
+
+Page 18 of 19
+
+The 2024 ICPC Asia Hangzhou Regional Contest
+
+2024/11/10
+
+Problem M. Make It Divisible
+Given a sequence a1 , a2 , · · · , an of length n containing positive integers, we say an interval [l, r]
+(1 ≤ l ≤ r ≤ n) is a divisible interval if there exists an integer d such that l ≤ d ≤ r and for all
+l ≤ i ≤ r, ai is divisible by ad . We say the whole sequence is a divisible sequence if for all 1 ≤ l ≤ r ≤ n,
+[l, r] is a divisible interval.
+Given another sequence b1 , b2 , · · · , bn of length n and an integer k, find all integers x such that 1 ≤ x ≤ k
+and the sequence b1 + x, b2 + x, · · · , bn + x is a divisible sequence. As the number of such integers might
+be large, you just need to output the number and the sum of all such integers.
+
+Input
+There are multiple test cases. The first line of the input contains an integer T (1 ≤ T ≤ 500) indicating
+the number of test cases. For each test case:
+The first line contains two integers n and k (1 ≤ n ≤ 5 × 104 , 1 ≤ k ≤ 109 ).
+The second line contains n integers b1 , b2 , · · · , bn (1 ≤ bi ≤ 109 ).
+It’s guaranteed that the sum of n of all test cases does not exceed 5 × 104 .
+
+Output
+For each test case output one line containing two integers separated by a space, where the first integer is
+the number of valid x, and the second integer is the sum of all valid x.
+
+Example
+standard input
+3
+5 10
+7 79 1 7 1
+2 1000000000
+1 2
+1 100
+1000000000
+
+standard output
+3 8
+0 0
+100 5050
+
+Note
+For the first sample test case, x = 1, x = 2 and x = 5 are valid.
+For the third sample test case, all 1 ≤ x ≤ 100 are valid.
+
+Page 19 of 19
+
+

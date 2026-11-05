@@ -1,0 +1,133 @@
+{
+  "B_marginals": {
+    "input": "4 4 1\n1 1 0\n4\n1 1 1\n2 2 1\n3 3 1\n4 4 1\n",
+    "expected": "0",
+    "outputs": {
+      "3191526": "1",
+      "3191627": "1",
+      "3192234": "0",
+      "3192623": "0",
+      "3192772": "0",
+      "3192807": "0"
+    }
+  },
+  "B_zero_y": {
+    "input": "4 1 4\n1 0 1\n4\n1 1 1\n2 1 4\n3 1 2\n4 1 3\n",
+    "expected": "1",
+    "outputs": {
+      "3192234": "0",
+      "3192623": "196",
+      "3192772": "3",
+      "3192807": "1"
+    }
+  },
+  "J_high_carry": {
+    "input": "1\n2 2\n14 16\n0 1\n",
+    "expected": "1",
+    "outputs": {
+      "3192569": "1",
+      "3192839": "0",
+      "3196588": "1"
+    }
+  },
+  "J_high_bits": {
+    "input": "1\n2 2\n0 6\n0 1\n",
+    "expected": "0",
+    "outputs": {
+      "3192569": "1",
+      "3192839": "0",
+      "3196588": "0"
+    }
+  },
+  "G_decrease": {
+    "input": "1\n7 3 4\n",
+    "expected": "YES",
+    "outputs": {
+      "3191584": "NO",
+      "3191724": "NO",
+      "3191747": "NO",
+      "3191789": "NO",
+      "3191819": "NO",
+      "3191865": "YES"
+    }
+  },
+  "3191371": {
+    "exhaustive_binary_lengths": [
+      3,
+      9
+    ],
+    "cases": 1016,
+    "failures": 343,
+    "first_examples": [
+      {
+        "input": "01010",
+        "expected": "11",
+        "actual": "10"
+      },
+      {
+        "input": "01100",
+        "expected": "100",
+        "actual": "11"
+      },
+      {
+        "input": "10010",
+        "expected": "100",
+        "actual": "11"
+      },
+      {
+        "input": "001001",
+        "expected": "1001",
+        "actual": "11"
+      },
+      {
+        "input": "001011",
+        "expected": "1011",
+        "actual": "11"
+      }
+    ]
+  },
+  "3191395": {
+    "exhaustive_binary_lengths": [
+      3,
+      9
+    ],
+    "cases": 1016,
+    "failures": 423,
+    "first_examples": [
+      {
+        "input": "01100",
+        "expected": "100",
+        "actual": "11"
+      },
+      {
+        "input": "10001",
+        "expected": "101",
+        "actual": "11"
+      },
+      {
+        "input": "10010",
+        "expected": "100",
+        "actual": "11"
+      },
+      {
+        "input": "10101",
+        "expected": "100",
+        "actual": "11"
+      },
+      {
+        "input": "001001",
+        "expected": "1001",
+        "actual": "11"
+      }
+    ]
+  },
+  "3191415": {
+    "exhaustive_binary_lengths": [
+      3,
+      9
+    ],
+    "cases": 1016,
+    "failures": 0,
+    "first_examples": []
+  }
+}

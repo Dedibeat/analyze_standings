@@ -1,0 +1,74 @@
+Collision Damage
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+1024 megabytes
+
+In a 2D physics-based video game, two characters P and Q move across the battlefield. Each character
+is represented by a convex polygon that serves as its collision box. When the two collision boxes overlap,
+the game calculates the area of their intersection as the collision damage.
+However, due to unpredictable wind currents in the arena, character Q can be displaced by an arbitrary
+translation vector t = (tx , ty ), but it cannot rotate or flip. You need to calculate the expected collision
+damage when Q is uniformly and randomly placed such that it actually collides with P , i.e., their
+intersection has a positive area.
+More formally, define f (t) as the area of the intersection between the polygon representing character P
+and the polygon representing character Q after being translated along t. Let D ⊆ R2 be the set of all
+translation vectors t for
+RR which f (t) > 0. It can be shown that D has a positive area, denoted by |D|. You
+1
+need to calculate |D|
+f (t) dt.
+D
+
+Input
+The first line of the input contains an integer T (1 ≤ T ≤ 300), denoting the number of test cases. For
+each test case:
+• The first line contains two integers n and m (3 ≤ n, m ≤ 1 000), denoting the numbers of vertices
+of the two convex polygons, respectively.
+• Then n lines follow, each containing two integers x and y (−104 ≤ x, y ≤ 104 ), giving the vertex
+coordinates (x, y) of the polygon representing character P .
+• Then m lines follow, each containing two integers x and y (−104 ≤ x, y ≤ 104 ), giving the vertex
+coordinates (x, y) of the polygon representing character Q.
+• It is guaranteed that the vertices of a convex polygon are given in counter-clockwise order, and no
+three of them are collinear.
+It is guaranteed that both the sum of n and the sum of m over all test cases do not exceed 1 000.
+
+Output
+For each test case, output a line containing a real number, representing the expected collision damage.
+Your answer is acceptable if its absolute or relative error does not exceed 10−6 . Formally speaking, suppose
+|a−b|
+that your output is a and the jury’s answer is b, and your output is accepted if and only if max(1,|b|)
+≤ 10−6 .
+
+Page 1 of 2
+
+Example
+standard input
+2
+3 3
+0 0
+1 0
+0 1
+0 0
+1 0
+0 1
+3 3
+0 0
+1 0
+0 1
+0 1
+1 0
+1 1
+
+standard output
+0.083333333333
+0.125000000000
+
+Page 2 of 2
+
+

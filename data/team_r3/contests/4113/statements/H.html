@@ -1,0 +1,77 @@
+
+			<center>
+<img src="/images/problems/problem_20243_1.jpg" class="img-fluid" width="600" alt="problem_20243_1.jpg" />
+</center>
+
+<p><strong>This is an interactive problem.</strong></p>
+<p>Background. On August 9, Sensei attends the <em>Hidden Track. Blue Archive 3rd Anniversary Concert</em> at FEISHENG LIVEHOUSE in Shanghai with Seia on his shoulders. Unfortunately, having arrived late, they are stuck in a remote corner until Seia spots a mysterious pay-to-win passage to the second floor. She knows the only route through the crowd, but the riddle-loving Seia refuses to reveal it directly. Instead, Sensei must find the hidden track by following her query rules within the given time and query limits. Can you help him reach the second floor before the passage disappears?</p>
+<p>For each test case, the interactor hides a permutation $p=(p_1,p_2,\ldots,p_n)$ of $\{0,1,\ldots,n-1\}$. When $n\ge 2$, it is guaranteed that $p_1&lt; p_n$. You may think of it as a hidden path, where $p_i$ and $p_{i+1}$ are connected by an edge for every $1\le i&lt; n$. Your task is to find the hidden permutation using queries.</p>
+<p>Let $k=\lceil\log_2 n\rceil$. In each query, you choose two integers $m$ and $v$, where $0\le m&lt; 2^k$, and either $v=-1$ or $0\le v&lt; n$. The integer $m$ determines a set of vertices:
+$$
+B(m)=
+\left\{
+x\mid 0\le x &lt; n,\ 
+\operatorname{popcount}(x\mathbin{\&amp;}m)\text{ is odd}
+\right\}
+$$</p>
+<p>Here, $\mathbin{\&amp;}$ denotes the bitwise AND operation, and $\operatorname{popcount}(x)$ denotes the number of $1$-bits in the binary representation of $x$.</p>
+<p>The query set $S$ is constructed as follows.</p>
+<p>First, let $S=B(m)$.</p>
+<p>If $v=-1$, do nothing; otherwise, toggle whether $v$ belongs to $S$: remove $v$ if $v\in S$, and add $v$ otherwise.</p>
+<p>The interactor then counts the edges of the hidden path with <strong>exactly one endpoint</strong> in $S$. Let this number be:
+$$
+c(S)=
+\left|
+\left\{
+i\mid
+1\le i&lt; n,\ 
+\left|\{p_i,p_{i+1}\}\cap S\right|=1
+\right\}
+\right|
+$$</p>
+<p>The interactor returns $c(S)\bmod 3$.</p>
+<p>For each test case, you may make at most $nk$ queries, with $k=\lceil\log_2 n\rceil$ as defined above. You must reconstruct the hidden permutation $p$ within this query limit.</p>
+<p><strong>The interactor is non-adaptive:</strong> the hidden permutation for each test case is fixed before the interaction begins and does not change throughout the interaction.</p>
+<h3>Input</h3>
+<p>At the beginning of the interaction, you are given an integer $T$ ($1\le T\le 10^4$), denoting the number of test cases.</p>
+<p>For each test case, the interactor first gives you an integer $n$ ($1\le n\le 10^3$). After you output the answer for the current test case, the interaction proceeds to the next test case, if any.</p>
+<p>It is guaranteed that the sum of $n$ over all test cases in one test file does not exceed $10^4$.</p>
+<h3>Interaction</h3>
+<p>For each test case, you may perform the following two types of operations. The number of queries must not exceed $nk$, with $k=\lceil\log_2 n\rceil$ as defined above.</p>
+<p><strong>Query:</strong> Output a line of the form <code>? m v</code>, where $0 \le m &lt; 2^k$, and either $v=-1$ or $0 \le v&lt; n$. Here $m,v$ must be integers. Then read an integer $r\in\{0,1,2\}$, whose value is $c(S) \bmod 3$.</p>
+<p><strong>Answer:</strong> Output a line of the form <code>!</code> $q_1\ q_2\ \ldots\ q_n$, where $(q_1,q_2,\ldots,q_n)$ must be exactly equal to the hidden permutation $(p_1,p_2,\ldots,p_n)$.</p>
+<p>Only operations of the form <code>?</code> count toward the query limit. If the interactor returns $-1$ at any point, your program must terminate immediately. Continuing the interaction after receiving $-1$ may result in an arbitrary verdict.</p>
+<p>After printing a query or the answer, do not forget to output the end of the line and flush the output. Otherwise, you will get the verdict <em>Idleness Limit Exceeded</em>. To do this, use: <code>fflush(stdout)</code> or <code>cout.flush()</code> in C++; <code>System.out.flush()</code> in Java; <code>flush(output)</code> in Pascal; <code>stdout.flush()</code> in Python; see the documentation for other languages.</p>
+<h3>Examples</h3>
+<h4>Input 1</h4>
+<pre>2
+
+3
+1
+1
+0
+2
+
+1</pre><h4>Output 1</h4>
+<pre>? 1 -1
+? 1 0
+? 1 1
+? 1 2
+! 1 0 2
+
+! 0</pre><h3>Note</h3>
+<p>For the first test case, the hidden permutation is $p=(1,0,2)$.
+The path has two edges: $\{0,1\}$ and $\{0,2\}$.</p>
+<p>All four queries use $m=1$, so each query starts with $B(1)=\{1\}$:</p>
+<ul>
+<li><code>? 1 -1</code>: The set remains $S=\{1\}$. Only edge $\{0,1\}$ has exactly one endpoint in $S$, so the interactor returns $1$.</li>
+<li><code>? 1 0</code>: Add vertex $0$, giving $S=\{0,1\}$. Edge $\{0,1\}$ has both endpoints in $S$, while edge $\{0,2\}$ has exactly one. Thus, the interactor returns $1$.</li>
+<li><code>? 1 1</code>: Remove vertex $1$, giving $S=\varnothing$. Neither edge has an endpoint in $S$, so the interactor returns $0$.</li>
+<li><code>? 1 2</code>: Add vertex $2$, giving $S=\{1,2\}$. Both edges have exactly one endpoint in $S$, so the interactor returns $2$.</li>
+</ul>
+<p>The program then outputs <code>! 1 0 2</code>.
+Here, $k=2$, so at most $nk=6$ queries are allowed.
+The example uses only four queries.</p>
+<p>For the second test case, $n=1$, so the only possible permutation is $(0)$.
+The program outputs <code>! 0</code> without making any queries.</p>
+		

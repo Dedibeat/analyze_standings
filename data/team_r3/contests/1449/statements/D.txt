@@ -1,0 +1,55 @@
+Dark LaTeX vs. Light LaTeX
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+2 seconds
+512 megabytes
+
+In the not-so-distant future, LaTeX, the venerable typesetting system that had been a staple of academia
+and publishing for decades, found itself evolving into a couple of derivatives — “Dark LaTeX” and “Light
+LaTeX”. These derivatives primarily optimize the appearance from different angles to adapt to screenless
+display technology.
+For compatibility trial, the LaTeX lab has obtained two non-empty strings containing only lowercase
+English letters through analysis — the Dark LaTeX string S = s1 s2 · · · s|S| and the Light LaTeX string
+T = t1 t2 · · · t|T | , where |S| denotes the length of S, and |T | denotes the length of T . An integer
+quadruple (p, q, u, v) is considered transferrable if and only if 1 ≤ p ≤ q ≤ |S|, 1 ≤ u ≤ v ≤ |T |,
+and sp sp+1 · · · sq tu tu+1 · · · tv is a square string.
+Your task is to help the lab find out the number of transferrable quadruples.
+Recall that a square string is a string of even length in which the first half is identical to the second half.
+For example, “aaaa” and “abcabc” are square strings, while “aaa” and “abcabd” are not.
+
+Input
+The input consists of two lines, where the first line contains the Dark LaTeX string S, and the second
+line contains the Light LaTeX string T .
+It is guaranteed that both S and T consist only of lowercase English letters and their lengths do not
+exceed 5 000.
+
+Output
+Output an integer in one line, indicating the number of transferrable quadruples.
+
+Examples
+standard input
+
+standard output
+
+abab
+ab
+
+8
+
+abab
+abaaab
+
+29
+
+Note
+In the first sample case, the transferrable quadruples are (1, 1, 1, 1), (1, 2, 1, 2), (1, 3, 2, 2), (2, 2, 2, 2),
+(2, 4, 1, 1), (3, 3, 1, 1), (3, 4, 1, 2), (4, 4, 2, 2).
+
+Page 1 of 1
+
+

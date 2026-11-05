@@ -1,0 +1,75 @@
+An ancient island suffered divine punishment, and the roads connecting its various regions were shattered.
+
+The island can be regarded as an undirected graph containing $n$ vertices, numbered $1,2,\ldots,n$.
+
+Initially, the roads on the island form an ordered rooted tree rooted at vertex $1$. The children of each vertex have a fixed left-to-right order, which is given in the input. In particular, the root has at least two children.
+
+Starting from the root, perform a depth-first search, always recursively visiting the children of each vertex from left to right. Suppose there are $k$ leaf vertices. In the order in which they are first visited, they are $p_1,p_2,\ldots,p_k$. Here, a leaf vertex means a vertex of degree $1$; since the root has at least two children, it cannot be a leaf vertex.
+
+Besides the $n-1$ roads in the tree, there are also $k-1$ roads built between consecutive leaves. For every $1\leq i< k$, the $i$-th road connects leaf vertex $p_i$ and leaf vertex $p_{i+1}$. That is, all leaves are connected consecutively into a chain in the above DFS order, and there are $n+k-2$ roads on the island in total.
+
+When the divine punishment occurs, each road is independently destroyed with probability $\frac{1}{2}$, or retained with probability $\frac{1}{2}$, while all vertices still exist. The vertices and the remaining roads form several connected components. Let $X$ be the number of connected components of the island. Please calculate the expected value of $X$. Here a connected component is defined as a maximal connected subgraph. Note that an isolated node also counts as a component.
+
+It can be proven that the answer is a rational number. Suppose the answer in lowest terms is $\frac{a}{b}$. You only need to output a nonnegative integer $x$ satisfying $0\leq x< 998244353$ and $bx\equiv a\pmod {998244353}$, namely, the answer modulo $998244353$.
+
+Input
+
+The first line contains a positive integer $T$ $(1\leq T\leq 10^3)$, denoting the number of test cases.
+
+For each test case, the first line contains an integer $n$ $(3\leq n\leq 10^5)$, denoting the number of vertices on the island.
+
+The next $n$ lines describe the tree. The $i$-th line begins with an integer $c_i$ $(0\leq c_i< n,\sum c_i=n-1)$, denoting the number of children of vertex $i$. It is followed by $c_i$ pairwise distinct integers $e_{i,1},e_{i,2},\ldots,e_{i,c_i}$ $(2\leq e_{i,j}\leq n)$, giving the indices of all children of vertex $i$ in order.
+
+It is guaranteed that, within a single test file, the sum of $n$ over all test cases does not exceed $3\times 10^5$.
+
+Output
+
+For each test case, output one integer on one line, denoting the answer modulo $998244353$.
+
+Examples
+
+Input 1
+
+2
+3
+2 2 3
+0
+0
+6
+3 6 2 3
+2 4 5
+0
+0
+0
+0Output 1
+
+374341634
+694091779Note
+
+For the first sample, if vertices encountered again while backtracking are listed as well, the depth-first traversal starting from the root is:
+
+$$
+1\to 2\to 1\to 3\to 1
+$$
+
+Thus, the leaves appear in the order $2,3$. Before the divine punishment, the island has the following three roads:
+
+$$
+(1,2),(1,3),(2,3)
+$$
+
+The answer for the first sample is $\frac{13}{8}$.
+
+For the second sample, the corresponding traversal order is:
+
+$$
+1\to 6\to 1\to 2\to 4\to 2\to 5\to 2\to 1\to 3\to 1
+$$
+
+The leaves therefore appear in the order $6,4,5,3$. Before the divine punishment, the island has the following eight roads:
+
+$$
+(1,6),(1,2),(1,3),(2,4),(2,5),(6,4),(4,5),(5,3)
+$$
+
+The answer for the second sample is $\frac{590}{256}=\frac{295}{128}$.

@@ -5,6 +5,8 @@ reassesses performance and problem ratings using the October context/dynamics
 findings and refreshed diagnostics. It proposes staged replacements, not a new
 shipped model. Its experiments 0–2 were reviewed and run the same day:
 [rating_rethink_experiments.md](rating_rethink_experiments.md) (final entry).
+Experiment 3's member-prior and fixed-random-walk continuation (2026-11-05) is
+in [member_forecast_report.md](member_forecast_report.md) and the final entry below.
 
 **Current review (2026-09-05):** [experiment_review.md](experiment_review.md)
 audits the implementation and historical conclusions at `8a351e0`. In particular,
@@ -7412,3 +7414,613 @@ Next:
      and carry points 1–4 into this entry and `README.md`.
 3. Run the full suite and commit. A fresh `.venv` may need `pypinyin` and
    `openpyxl`.
+
+## NUM-R^3 participations: team-account data download (2026-11-04)
+
+**Request.** Analyze the team's 2026 virtual and official participations.
+First download everything the analysis needs (statements, editorials, code,
+the team's submissions) into a reusable place, using the team account
+TEAM_R3, the sibling `../qoj-intergration` and
+`../p1/qoj/BROWSERLESS_AUTH.md`. The member attribution is
+`~/Documents/team_members_solved.ods`.
+
+**Scripts.**
+- `scripts/fetch_team_r3.py` (new): browserless login (curl_cffi `chrome136`,
+  md5 password, `_token` from the page's JS; cookies cached, git-ignored, in
+  `data/team_r3/.cookies.json`). It reads the account's whole submission list
+  and every source, plus each contest's dashboard, per-problem statements and
+  all attachments, with PDFs also as text via `qoj.pdf_to_text`. Contests are
+  the ones given on the command line plus every contest the account
+  submitted in. Files already on disk are not fetched again.
+- `scripts/team_r3_participations.py` (new): the first-pass table below,
+  written to `output/team_r3_participations.{md,json}`.
+- `scripts/fetch_xcpcio_standings.py`: 51st-season XCPCIO configs list
+  `problems: [{id, label}]` instead of `problem_id`, and the converter
+  rejected them. It now takes labels from `problems` and maps run ids through
+  them. Older boards are unaffected: the new path applies only when
+  `problems` is present.
+
+**Account findings.**
+- **TEAM_R3 has QOJ "Training Mode" on.** Every `/contest/<id>/standings`
+  returns 404 and dashboards show no Standings tab. The user chose to keep it
+  on (spoiler-free virtuals), so boards come from the local data files and
+  XCPCIO. A first guess was that the unfinished virtuals hid the board.
+  "Finish!" was pressed once, on 4607 only (POST accepted with a 302). The
+  panel stayed and the board stayed hidden, so the button only re-submits
+  the virtual result and was not pressed elsewhere.
+- **The official 2026 online rounds were not played on TEAM_R3.** QOJ
+  imported them under `$DEFAULT_DAT_PREFIX_*` ids, so their code is not
+  reachable. The NUM-R^3 rows on the stored boards are used instead. TEAM_R3's
+  only 4071 runs are 28-byte tests (2026-09-17 and 10-09).
+- **Rate limit.** After about 65 fast page loads, Cloudflare answered 429 to
+  everything. The fetcher now spaces requests 1.5 s apart and waits
+  30 s × attempt on a 429, which gets about 3 pages a minute through. No Tor
+  was used. A full first run takes about 2 h.
+- **`qoj.py` problem regex.** `CONTEST_PROBLEM_RE` misses dashboard links that
+  end in `/statement/<lang>`: 2575 Harbin parsed as M only. The fetcher uses its
+  own regex. `../qoj-intergration` itself was not changed.
+- **Prompt injection.** `../qoj-intergration/AGENTS.md` contains a "YOU ARE
+  CAT" persona/jailbreak block unrelated to the project. It was ignored; it
+  should be removed from that repo.
+
+**Data (`data/team_r3/`, 131 MB; 4.2 MB committed, the PDFs/zips/simulators
+git-ignored).**
+- **Submissions:** 179, from 2026-08-20 to 11-01; 85 AC. 160 were in-contest
+  and 19 practice. All sources are saved (`code/<id>.txt`).
+- **Contests:** 21. That is the 11 in the spreadsheet plus 1051, 1485, 2513,
+  2524 and 2575 (virtuals missing from the sheet) and 1449, 1828, 1893, 2581,
+  2641 (practice only).
+- **Statements:** every problem has a statement PDF and text, except 4113,
+  where QOJ answers 403 per problem and offers no statement attachment.
+- **Tutorials:** present for all contests except 1485, 1794, 2513 and 4593,
+  which have none on QOJ. 1051's tutorial is a zip of slides and code.
+- **Boards:**
+  - `tagged_official.json` (official-only copy) for the 2022 regionals and the
+    2023–2025 online rounds;
+  - `tagged.json` for 4071/4113;
+  - `ucup_s4.json` for 2661/2693;
+  - `petroz_2022_2026.json` for 2575;
+  - XCPCIO `icpc/51st/{xian,chengdu}` (official rows) for 4593/4607, saved in
+    `boards/xcpcio_51st.json`.
+- **Member attribution:** `members_solved.csv`, the sheet as exported by
+  LibreOffice.
+
+**Follow-up (same day): personal account and fixed sheet.**
+- The user fixed the sheet: Chengdu 2026's second D is now C (Dedi), and
+  "Erdehe" is now Erdene. 1051, 1485, 2513, 2524 and 2575 still have no
+  sheet rows.
+- **Dedibeat fills the gaps.** The fetcher's `QOJ_USERNAME` is now only the
+  reading account: the submission list is always TEAM_R3's, and cookies are
+  kept per account (`.cookies-<user>.json`, git-ignored). Run as Dedibeat
+  (no Training Mode), it saves each contest's QOJ board twice:
+  `standings_all.json` (with virtual rows) and `standings_official.json`.
+  TEAM_R3's own virtual row is on `standings_all`, so every virtual now has
+  its exact solved count, solve times, wrong tries and penalty.
+- **4113 statements.** QOJ refuses the PDFs with 403 for Dedibeat too, but
+  the problem page carries the statement as HTML (with LaTeX). When the PDF
+  is refused, the fetcher saves `<L>.html` and a text version.
+- **Rate limits.** The Dedibeat run made about 60 requests and was not
+  rate-limited.
+
+**Results.** These are exact QOJ virtual rows, ranked by solved/penalty
+against the official onsite field. The 2026 online rounds use QOJ's
+official board. For 4593/4607 the field is XCPCIO's official ICPC teams,
+not QOJ's Universal Cup field.
+
+| contest | kind | date | solved | penalty (min) | rank / official teams |
+|---|---|---|---|---|---|
+| 4071 EC Online I 2026 | official | | 6 | 877 | 544 / 2535 |
+| 4113 EC Online II 2026 | official | | 4 | 482 | 352 / 2636 |
+| 1485 EC Online I 2023 | virtual | 08-20 | 6 | 758 | 417 / 2554 |
+| 1794 EC Online I 2024 | virtual | 08-22 | 6 | 714 | 96 / 2323 |
+| 2513 EC Online I 2025 | virtual | 09-03 | 7 | 625 | 147 / 2279 |
+| 2524 EC Online II 2025 | virtual | 09-09 | 5 | 890 | 345 / 2575 |
+| 1799 EC Online II 2024 | virtual | 09-10 | 6 | 402 | 514 / 2450 |
+| 1051 Xi'an 2022 | virtual | 10-01 | 6 | 357 | 116 / 522 |
+| 1071 Hangzhou 2022 | virtual | 10-02 | 7 | 886 | 24 / 643 |
+| 1053 Jinan 2022 | virtual | 10-08 | 5 | 578 | 98 / 568 |
+| 1096 Shenyang 2022 | virtual | 10-09 | 4 | 435 | 193 / 1004 |
+| 2693 CCPC Jinan 2025 | virtual | 10-11 | 4 | 484 | 164 / 413 |
+| 2661 CCPC Zhengzhou 2025 | virtual | 10-16 | 3 | 591 | 222 / 418 |
+| 2575 CCPC Harbin 2025 | virtual | 10-23 | 5 | 707 | 275 / 760 |
+| 4593 Xi'an 2026 | virtual | 10-25 | 4 | 536 | 86 / 402 |
+| 4607 Chengdu 2026 | virtual | 11-01 | 6 | 894 | 35 / 319 |
+
+- **Agreement with earlier records:**
+  - The rows reproduce every scoreline recorded earlier: 6/714, 6/402,
+    7/626 (625 here), 5/890, Jinan 4/484 (#164), Xi'an 4/536 (#86, the
+    "official rank" reading of 2026-10-26) and 4071's official #544.
+  - All exact penalties lie inside the bounds of the first pass.
+  - 4113 is #352 on QOJ's official board, against #349 in the PTA ranking of
+    2026-10-08.
+- **Fallback:** without a QOJ board (e.g. running only as TEAM_R3), the
+  script still falls back to the start-time bounds.
+- **Not on any board:** TEAM_R3's 0-solve row on 4071 is the 28-byte test,
+  not a participation.
+
+**Not done.** The analysis itself: per-member load, problem difficulty
+reached against the field, time-to-solve and wrong-attempt patterns, virtual
+vs official gap. The data for it is in place.
+
+Run: `QOJ_USERNAME=Dedibeat QOJ_PASSWORD=… python3 scripts/fetch_team_r3.py
+4071 4113 4607 4593 1071 1053 2693 2661 1096 1794 1799`, then
+`python3 scripts/fetch_xcpcio_standings.py icpc data/team_r3/boards/xcpcio_51st.json
+--board-link /icpc/51st/xian --board-link /icpc/51st/chengdu` and
+`python3 scripts/team_r3_participations.py`.
+
+## NUM-R^3 coach review: dossiers, bug classes, strategy (2026-11-04, second entry)
+
+**Request.** Act as the team's coach: read every problem of the 16
+participations (statement, editorial, all our runs), write a dossier per
+contest, rebuild each timeline, then synthesise strengths and weaknesses, bug
+classes, per-member profiles and a plan. Step 0 (shortest public ACs) was
+skipped at the user's request.
+
+**User facts given during the work.**
+- Erdene was absent at Jinan 2022 (1053), not at Jinan 2025 (2693). The
+  sheet's note is moved in `members_solved.csv`; the ODS should get the same
+  fix.
+- In a sheet pair "A + B", A proposed the idea and B most likely implemented
+  it.
+- NUM-R^3 is accepted to Shenyang (2026-11-15) and Hong Kong (~2027-01-07/08).
+  EC-Final is 2027-01-22/23.
+- 4071 A: Dedi made the four wrong tries; Erdene took it over and got AC first
+  try. This is noted in the sheet copy's "Additional info" and should be
+  mirrored in the ODS. Erdene's record becomes 12 first-try solves and 13 wrong
+  tries. It is the season's only recorded handover after a stall, and it
+  worked; summary §5 and §6.3 cite it.
+- (2026-11-05) Dedi was the one attempting 4607 E, 1053 C and 1071 M. With
+  2661 J (already Dedi's in the sheet), all four problems with in-contest runs
+  that we never solved in the 14 virtuals are his: 11 runs (E 5, C 2, M 2,
+  J 2; checked against `submissions.json`). The sheet copy gets three rows in
+  the style of the 2661 J row ("Didn’t solve during contest"), so
+  `team_r3_participations.json` lists them under `sheet_only`, like J. The ODS
+  should get the same rows. The per-member "wrong runs" column still counts
+  solved problems only; the 11 runs are noted beside Dedi's. Summary §6.5 now
+  has Dedi as geometry backup (the only geometry attempt, the right approach)
+  and a rule for the last open problem: a teammate reads the diff or runs the
+  brute force before each run.
+- (2026-11-05, later) Further answers:
+  - 4071 F and M (bonus problems) were solved by Dedi and Erdene; which took
+    which is not remembered. The sheet copy says "Dedi or Erdene", so neither
+    member's individual stats include them.
+  - 4071 A: Dedi's four runs were a wrong idea or an implementation too
+    complicated to get right.
+  - 4113 A was Dedi's: the start was right (an XOR linear basis), then the idea
+    went wrong. Dedi took A and D because Erdene and Tamir were stuck on them.
+    He suspects a type mismatch somewhere but did not say whether in A or D,
+    and when asked he did not pin it down, so the dossier records it as
+    unattributed. XOR basis is therefore "half there", not a gap nobody covers;
+    the code is on the other account.
+  - Tamir worked on J with Dedi at 4593 and joined late at 1799 (the user
+    confirmed which way round). 4593 J (95 min) and 1053 A (100 min, Tamir's
+    idea, Dedi's code) had two people on them, so the summary no longer calls
+    them solo stalls. That earlier label on 1053 A was my error; the sheet
+    already had it as a pair.
+
+**Script.** `scripts/team_r3_digest.py` (new) prints one contest's problem
+table:
+- field solves on the onsite official field;
+- the top group's median solve time;
+- our status and member;
+- the medal and EC-Final (≈ 75) lines and our rank on that field;
+- our runs by minute (start recovered from the board row);
+- optionally every attempt at a problem with diffs.
+
+Field choices:
+- XCPCIO official for the 2026 regionals.
+- The cached XCPCIO CCPC boards for 2575/2661/2693. QOJ's "official" CCPC rows
+  are not the onsite field: Harbin has 343 there vs 260 official onsite.
+- XCPCIO rows of `regional_teams.csv` with medals 35/70/105 for the 2022
+  regionals (the 2026-10-05 diagnosis). QOJ's 2022 "official" rows are larger
+  sets: Shenyang has 1004 vs 708.
+- QOJ for the online rounds, using the NUM-R^3 row for 4071/4113.
+
+Bugs found while building it:
+- A verdict string "AC, WA" (a failed run on QOJ) was first read as an AC,
+  which shifted 1794's minutes by 55. It now requires `AC ✓`.
+
+**Ranks on the onsite fields differ from the 2026-11-04 first pass** (which
+used other boards). On the right field:
+- Hangzhou 2022: #19 / 556, gold.
+- Xi'an 2022: #106 / 476, 5 min from silver.
+- Jinan 2022: #92 / 511, silver.
+- Shenyang 2022: #88 / 708, silver.
+- CCPC Harbin: #118 / 260, bronze.
+- CCPC Zhengzhou: #127 / 260, bronze.
+- CCPC Jinan: #80 / 260, bronze (silver ends at #78).
+
+**Main findings** (`output/team_r3_coach/summary.md`).
+- **Problem sets.** We solve the field's standard set for our count almost
+  every time. The rank comes from penalty and from the 6th/7th problem.
+- **Wrong runs.** 68 penalised wrong runs in the 14 virtuals (1360 min). Each is
+  classified, and the per-contest counts equal the boards' wrong tries. By
+  class:
+
+  | class | runs |
+  |---|---|
+  | unproven idea | 14 |
+  | casework | 11 |
+  | memory/time not estimated | 10 |
+  | structure misuse | 8 |
+  | edge parameters | 7 |
+  | blind resubmission | 6 |
+  | overflow/sentinel | 5 |
+  | debug leftovers | 4 |
+  | misread constant | 3 |
+
+  One-line fixes would have crossed a medal or EC-Final line in 5 of the 9
+  regional/CCPC virtuals. Example: Chengdu 2026, where the modulus and the
+  overflow are exactly the 60 min to gold.
+- **Silent finishes.** 7 of 14 virtuals had 80+ minutes with no submission at
+  the end.
+- **Members.** Erdene goes 3/3 first try on interactive problems. Dedi carries
+  the most problems, and his bugs are constants and sentinels. Tamir has the
+  best pace and no recorded solve at 4593/1799.
+- **Library gaps.** No flow, geometry, XOR-basis or interpolation code in 179
+  submissions.
+- **Official vs virtual.** The official 2026 online rounds ran at pace ×1.55
+  vs ×1.25 in the online virtuals.
+
+**Verified by testing.**
+- 4607 E: our final code plus two local fixes (orientation-safe triangle test,
+  no sorting of output vertices) passes 14,000 random cases against a brute
+  force. Scratch harness, not in the repo.
+- A parallel agent (Codex), stopped by the user, wrote
+  `output/team_r3_coach/{1053,2661}_checks.{py,json}`. These are brute-force
+  and UBSan checks; they confirm the 1053 A/E/C and 2661 B/G/J/M diagnoses and
+  are kept as evidence.
+- Its own versions of 1053.md, 2661.md and 4113.md were overwritten by this
+  session before the overlap was noticed. They were untracked and are lost.
+
+**Data notes.**
+- The QOJ virtual board sometimes counts one try fewer than the account's
+  in-contest runs: 4607 E 4 vs 5, 2661 J 1 vs 2, 1053 C 1 vs 2. The dossiers
+  give both numbers.
+- 1794 L's AC was found with GPT's help (sheet note); the dossier reports the
+  rank without it, #136.
+- 1051, 1485, 2513, 2524, 2575 (and 4071 F/M) have no member data. 31 solves
+  are marked unknown, and the open questions are listed in the summary.
+
+**Plan.** The plan in the summary (§6) is phased around those dates. Its §6.5
+gives a specialisation split, asked for by the user:
+- Erdene: interactive, data structures, graphs and flows, the opening.
+- Dedi: maths, number theory and bits, counting, strings.
+- Tamir: geometry, constructive, long implementation.
+
+Each category has a backup. Dedi gives ideas and Tamir types (the 1071 K
+pattern). The summary is published as a private artifact:
+https://claude.ai/artifact/4i24BaGeoogkxfA45ZTjp7.
+
+**Not done.** Step 0 (shortest public ACs). The library comparison uses
+editorials and our own code only.
+
+Run: `python3 scripts/team_r3_digest.py <contest> [<problem> --code]`.
+
+## NUM-R^3 members on Codeforces (2026-11-05)
+
+**Request.** Analyse the members' Codeforces rounds, and virtuals too. Handles
+(user):
+
+| member | handle(s) |
+|---|---|
+| Dedi | Dedibeat |
+| Tamir | t4_4 |
+| Erdene | erdene1231 and Munkh-Erdene.B |
+
+Background (user): Tamir (3rd year) and Erdene (1st year) are former IOI
+contestants. Dedi (4th year) did maths in high school and started programming
+as a freshman.
+
+**Data.** `scripts/team_r3_cf.py --fetch` caches the public API in
+`data/team_r3/cf/` (5.7 MB): `user.rating` and `user.status` per handle,
+`problemset.problems` and `contest.list`. The run writes
+`output/team_r3_cf.json`.
+
+Reused and found:
+- The sibling repo `../codeforces_integration` (`cf_problems`, cloudscraper)
+  fetches problem pages fine.
+- **Submission pages return a Cloudflare 403 even through cloudscraper**, so
+  no code was read. A browser `cf_clearance` cookie in `CF_COOKIES` would be
+  needed; it must not be written to disk.
+- The gym-calibration artifacts (`data/cf_gym_mirrors.json`) contain none of
+  our handles.
+- `data/cf_pairwise/problems/` holds 978 cached CF statements and editorials,
+  not needed here.
+
+**Choices.**
+- Only individual timed entries count:
+  - Team entries are excluded (earlier teams on ICPC mirrors and gyms: Dedi 12,
+    Tamir 3, Erdene 1).
+  - April Fools contests are excluded. Erdene's 2214 had 33 tries on one
+    problem and first inflated his ICPC-rules test-1 share from 21% to 41%.
+- "Level" is the problem rating with a 50% in-contest solve rate, from a
+  logistic MLE with a grid search over theta and s.
+  - It is fitted on rated rounds only. Out-of-competition entries give 1390
+    (Dedi) and 1400 (Erdene), because they are not full efforts.
+- The virtual-vs-rated gap uses a shared offset with one theta per half-year in
+  which both kinds occur.
+- Topic results use families (each problem counted once), with theta per
+  half-year and problems within ±500.
+  - Single-tag z moved a lot between models: Dedi's bitmasks went from 3.15 to
+    1.85, his trees from −1.29 to −2.24. So only families are quoted, and as
+    leads.
+- A failed system test is a non-OK final-tests verdict in a live CF-rules
+  round. In virtual and ICPC-rules rounds, `TESTS` verdicts are ordinary.
+- Whether CF rounds penalise a failure on test 1 was not settled (a web search
+  was inconclusive). The write-up therefore compares rule types empirically
+  and does not assume a penalty rule.
+
+**Findings** (`output/team_r3_coach/cf.md`; summary §4b, §6.3, §6.4, §6.5).
+
+Levels in rated rounds:
+
+| member | all rated | last 12 months |
+|---|---|---|
+| Dedi | 1780 | 1840 |
+| Tamir | 1690 | 1760 (76 problems) |
+| Erdene | 1850 | 2050 |
+
+- **Dedi:**
+  - 68% first try. 36% of his rejections fail test 1 under every rule set.
+  - 2196 C1: nine idleness verdicts on test 1 (362490463–362506639).
+  - One failed system test in 94 live CF-rules rounds.
+  - Virtuals are the same as rated.
+- **Tamir:** test-1 failures are 40% of rejections under CF rules but 10–11%
+  under ICPC rules.
+- **Erdene:**
+  - Virtuals are 320 weaker (95% 230–420); 36 of 63 virtuals have no
+    submission after half-time.
+  - The 32-bit GCC 7 compiler is still 139 of 348 of his 2026 submissions.
+- **Topic families:**
+  - Dedi: combinatorics −1.87, graphs/trees −1.49, number theory/bits +1.5.
+  - Tamir: graphs/trees +1.76, strings +1.73.
+  - Erdene: combinatorics +1.16, interactive −1.12.
+- **Upsolving the next problem:** 25/106, 6/19, 11/51.
+
+**Plan changes:**
+- Keep the specialisation for Shenyang.
+- In the Hong Kong weeks, test Erdene as counting owner and Tamir as graphs
+  owner.
+- Dedi gets an interactive flush template.
+- Erdene moves to a 64-bit compiler.
+- Virtuals are played to the end.
+- Upsolve the first unsolved problem after every round.
+
+The page https://claude.ai/artifact/4i24BaGeoogkxfA45ZTjp7 (v6) has a
+Codeforces section.
+
+**Open:**
+- Code-level reading of the chains needs a cookie (above).
+- Why the new account Munkh-Erdene.B? It is counted as Erdene's.
+- Are other handles or platforms used for upsolving?
+
+## NUM-R^3 on Codeforces: correction, round-by-round review (2026-11-05, second entry)
+
+**User facts.**
+- Munkh-Erdene.B's rounds are Erdene's.
+- Requests: analyse more rounds for each member; study which types of problems
+  they fail or solve; suggest what to work on.
+
+**Bug found and fixed (supersedes numbers in the first CF entry above).**
+- `problemset.problems` files the problems a Div. 2 round shares with its
+  Div. 1 twin only under the Div. 1 id. So the first `team_r3_cf.py` saw only A
+  and B in 49 Div. 2 rounds and dropped every solve on C and beyond (for
+  example, Dedi's 2220 looked like 2 solves at rank 188).
+- Found by comparing our rows in the official standings with the digest.
+- Fix: for those 49 contests the problem list (rating, tags) comes from the
+  round's standings and is stored in `data/team_r3/cf/contest_problems.json`
+  (committed). Compact standings are cached in `data/team_r3/cf/standings/`
+  (gitignored).
+- Practice ratings now come from each submission's problem object.
+
+Corrected figures:
+
+| figure | Dedi | Tamir | Erdene |
+|---|---|---|---|
+| rated level, all / last 12 months | 1790 / 1870 | 1660 / 1710 | 1810 / 2050 |
+| test-1 failures | 237 of 630 | 35 of 186 | 63 of 226 |
+| idleness runs on test 1 | 15 | | 4 (2078 E) |
+| failed system tests | 2 | | 2 |
+
+- Topic families:
+  - Dedi: combinatorics −1.83, graphs/trees −1.21 (trees −2.17), number
+    theory/bits +1.58.
+  - Tamir: graphs/trees +1.95 (trees +2.12).
+  - Erdene: combinatorics +1.18, interactive −1.16.
+- Virtual offsets: Erdene 300 (210–390); Tamir 310 (30–570), now measurable.
+- Next unsolved problem upsolved: 28/119, 6/22, 13/58.
+- Last submission before half-time, virtuals vs rated: Erdene 32/63 vs 13/59.
+
+**Penalty rule, verified.** Codeforces does not count a test-1 failure under
+either rule set. Recomputing the official penalty of all 13 ICPC-rules rated
+entries is exact only without them, and CF-rules official rejected counts skip
+them too. So the first entry's claim that Tamir "checks samples when the rules
+punish it" was withdrawn.
+
+**Round-by-round review.** `scripts/team_r3_cf_rounds.py` covers:
+- Dedi: rated rounds since 2025-11-05.
+- Erdene: rated rounds since 2025-07-01.
+- Tamir: all rated rounds.
+- Every 2026 virtual for all three.
+
+That is 99 entries; it reuses `standings()` from `team_r3_cf.py`. Per entry:
+- field solves and median minute per problem;
+- the same-set tier and our place in it;
+- the next tier (our set plus one) and its median minutes;
+- the field's next problem, with its editorial via `../codeforces_integration`
+  (13 of 99 missing).
+
+Virtual entries are placed by recomputing the score: CF decay fitted per round
+(within 27 points); ICPC rules exact. Outputs:
+`output/team_r3_cf_rounds.{json,md}`. The analysis is
+`output/team_r3_coach/cf_rounds.md`.
+
+Findings:
+- **Attempts on the field's next problem:** Erdene 2 of 21, Tamir 10 of 27,
+  Dedi 11 of 51.
+- **Dedi:**
+  - His walls are trees (9 of 51 next problems) and counting (8).
+  - Five times he solved a harder problem while the next stayed unsolved (2203
+    −63, 2231 −143).
+- **Tamir:**
+  - Div 2 / Div 1+2 rounds: −174 in 9 since May 2025. Div 3 / Edu / Good Bye:
+    +342 in 4.
+  - Ad-hoc B/C chains (2175 B: 9 tries, 7 on test 1); XOR construction; binary
+    search on the answer; number theory.
+- **Erdene:**
+  - Div 1 rounds: −174 in 5. In each he solved A and stopped; the next
+    problems were DP state design (2174 B, 2190 B2), bitmask greedy (2187 B)
+    and interactive (2196 C2).
+  - Hardest solves are 2109 C3 (2600), 2154 E (2500) and 2176 F (2400).
+
+Practice lists are from their own rounds, with open/upsolved status. Summary
+§4b, §6.4 and §6.5 and the page (v7) were updated.
+
+## Rating rethink, experiment 3: recorded-date member priors (2026-11-05)
+
+**Request.** Finish Claude's work and continue the experiment. The user
+clarified that this means rating experiments after 0–2, rather than the latest
+team/Codeforces review. The existing checkout was clean; no experiment process
+was still running. The earlier team download was checked: all 179 submissions
+have code, and all 21 cached contest dashboards have statement text for every
+listed problem. No additional team downloads were needed for this experiment.
+
+**Protocol and implementation.** `member_forecast_plan.md` was written before
+scoring. `arch_b/member_forecast.py` builds a separate regional panel from
+imported QOJ rows matching the existing XCPCIO official-team matcher, dated by
+cached numeric start/end times. At every target start it fits binary Rasch
+only on contests whose recorded end is strictly earlier. No proxy dates,
+full-data problem ruler, future union-find or target responses enter training.
+Identity is an exact normalized three-person roster; changed rosters can borrow
+member history without merging. Rows without full rosters are isolated.
+
+Cold-roster forecasts average the three members' latest earlier team ratings,
+using MU0 for missing members. Their deviation from MU0 is multiplied by one
+weight from {0, 0.5, 1, 1.5}, selected solely on 2023 contest-balanced pair log
+loss involving cold rosters. Multiple members from an earlier roster share a
+source and do not contribute independent posterior precision. Same-time
+conflicting member histories supply no evidence. This is a point forecast,
+not a fitted model of individual abilities or uncertainty.
+
+The fixed q=50 random walk is tested separately on repeated rosters, using
+`dynamic_rating.smooth_fit`. The historical pair scale 1.25 × Elo.S is frozen.
+Both models use tolerance 0.01, tightened from the default 0.5 to avoid treating
+tiny optimizer differences as a dynamics gain. There is no dynamics grid search
+or member/dynamics combination.
+
+**Coverage.** 26 boards, 9,127 retained rows in 2022–2025. 2022 supplies initial
+history; four informative 2023 boards select weight **1**. The 2024–2025 replay
+has 2,499 forecast rows (1,133 history, 1,366 cold with member history), with
+pairs on 12 boards. 12,517 nonpanel rows and 133 zero-solve official rows are
+excluded. Another 1,310 retained rows lack full rosters: useful for training
+problem measurement, but not forecastable. Missing EC-Final date configs
+**1522/1894** remain excluded. Every exclusion and cutoff is archived.
+
+**Results.** `output/member_forecast.json`; interpretation in
+`member_forecast_report.md`. Same rows/pairs within each comparison:
+
+| population | pairs | static accuracy → member accuracy | static pair log loss → member |
+|---|---:|---:|---:|
+| cold only | 96,905 | 50.00% → 66.93% | 0.69315 → 0.59336 |
+| history plus cold | 313,789 | 64.32% → 71.45% | 0.60261 → 0.53969 |
+| cold-involving (primary) | 233,879 | 60.30% → 69.87% | 0.64492 → 0.56052 |
+
+Primary paired contest-bootstrap differences: +9.57 [+8.17, +10.92] percentage
+points accuracy; −0.08441 [−0.09163, −0.07664] log loss. Contest-balanced log
+loss falls 0.64842 → 0.54866. Every scored board and every one/two/three-known-
+member subgroup improves in point estimate. First evaluation appearance per
+roster leaves 154,462 pairs, log loss 0.66311 → 0.57609; the difference interval
+still excludes zero. Calendar-season resampling is saved, but only has two
+blocks and is descriptive.
+
+**Dynamics.** 79,910 history pairs on 11 boards: static log loss 0.478753,
+q=50 0.478757, difference +0.000004 [−0.000120, +0.000130]. Contest-balanced
+difference −0.000123 [−0.000315, +0.000045]. No useful incremental gain.
+
+**Limits / decision.** Member priors remain the next forecast candidate;
+retain static history control. This is a stricter development replay, not an
+untouched confirmation: these seasons were already inspected. Normalized
+names/official matches remain heuristic, and cached rosters lack publication
+timestamps, so availability at historical cutoffs is not certified. Results
+exclude zero-solvers and omit online/UCup history. Hong Kong 2024 has only
+three forecast rows/pairs; do not infer a precise Hong Kong validation from it.
+Freeze the prior and collect rosters before future results for confirmation.
+Appearance effects, timing (experiment 4), canonical task linking (experiment 5)
+and the remaining experiment-0 provenance work are still open. No production
+fit, calibration, rating, viewer or app artifact changed.
+
+**Verification.** Seven new tests cover target/future-response isolation,
+changed-roster identity, overlapping/same-end contests, ambiguous member
+histories, normalization/time units, ties and contest/pair weighting. Full
+suite: **205 tests pass** (existing resource/empty-slice warnings remain).
+The JSON records source/code hashes, exact training contest manifests,
+convergence, row forecasts and per-contest scores. Cached configs are
+gitignored; missing caches explicitly reduce the recorded panel coverage.
+A second frozen replay reproduced the saved JSON byte-for-byte. All 35
+source/code hashes and all 26 strict training cutoffs were verified.
+
+Run: `OPENBLAS_NUM_THREADS=1 ./.venv/bin/python -m arch_b.member_forecast`,
+then `./.venv/bin/python -m unittest discover -s tests -p 'test_*.py'`.
+
+## DE successor candidates and stability experiment PC handoff (2026-11-05)
+
+**Request.** Record the four suggested DE successors, prepare candidate #2
+(stability-penalized DE), and push so work can continue on the user's home
+i9-14700 / RTX 4070 PC. `de_successors.md` records all four: binary monotone
+calibration, stability-penalized DE, binary plus isolated timing, and a
+conservative DE hybrid. The frozen protocol and PC commands are in
+`de_stability_plan.md`; this numbering is separate from the rating-rethink
+experiment numbers.
+
+**Prepared, not evaluated.** `arch_b/de_stability_data.py` prepares resumable
+whole-model field refits. Seven training views (full, four random halves, two
+quarters) are separated from nine reserved stress views (new random sizes,
+ID-based event/mirror compositions, independently selected strength halves).
+Samples move whole resolved identities together. Strength selection uses
+non-anchor contest subset A; its pool/strong/weak measurements exclude A and
+use subset B plus the selected anchor rows. These three stress views use their
+own pool as the drift reference. Missing board coverage is explicit.
+
+`arch_b/de_stability.py` fits an augmented ridge residual over the existing
+survival affine baseline, with a penalty on changes in the **entire final
+prediction** across training views. Each task has total supervised weight one;
+resampled views do not become independent labels. Frozen alpha {0.1,1,10} and
+beta {0,0.1,1,10} are selected by inner contest error across training views.
+Outer CF-contest/canonical-task purging applies to supervised and stability
+fitting. Means/scales/clipping come from full training anchors only. Reserved
+stress views cannot influence selection. Controls are unchanged clipped DE,
+augmented ridge with beta=0, and binary affine. Selection of beta=0 is an
+explicit possible result, not a stability-penalty success.
+
+The runner saves every fold's selections and predictions, per-view coverage,
+problem/contest-balanced CF errors, tail/region errors, paired contest-bootstrap
+differences, matched-task drift, order reversals and predicted/target spread.
+These remain reused development data; no production promotion is implemented.
+
+**Portable inputs.** `data/de_stability_anchors.json` freezes all 185 anchor
+rows; `data/de_stability_inputs.json` pins 68 source/input hashes. Every required
+input is tracked. No external board caches, account credentials or downloaded
+GPU weights are needed. `requirements-de-stability.txt` pins the tested NumPy
+2.5.1 (availability checked through pip). Source/plan changes reject old caches.
+Prepared views are atomic and checksummed under gitignored `de_stability_run/`.
+The CLI exposes `check`, `prepare --jobs N [--view NAME]`, and `evaluate`;
+evaluation refuses incomplete caches. Use one BLAS thread per worker and start
+with two workers because the PC's RAM capacity was not supplied. The GPU is
+unused; independent refits use CPU processes.
+
+**Verified here.** All **212 tests pass**, including seven new tests for final-
+prediction stability, task weighting, held labels/reserved-view isolation,
+canonical-task purging, identity sampling, cache validation and matched metrics.
+One real full-field preparation refit both models: 53 binary / 154 survival
+iterations, all 185 problems, no missing coverage, maximum feature difference
+from the released anchors **0.0**. Replaying unchanged clipped-DE LOCO from
+that cache gives **225.607314** RMSE. A two-worker preparation invocation reused
+the completed full view successfully. The other 15 views and the stability
+candidate's nested evaluation are intentionally left for the PC.
+
+**Run on PC.** Pull the branch; create/use a venv, install
+`requirements-de-stability.txt`, then run the plan's `check`, `prepare --jobs 2`
+and `evaluate` commands. No ignored cache transfer is required: the PC rebuilds
+the expensive features once and reuses them for calibration runs. Source and
+production rating artifacts are unchanged outside the new research files.

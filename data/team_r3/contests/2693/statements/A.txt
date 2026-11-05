@@ -1,0 +1,49 @@
+Cipher
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+2 seconds
+1024 megabytes
+
+Alice designed a cipher system: it encodes the plaintext as a 64-bit unsigned integer x, and randomly selects
+a 64-bit unsigned integer a as the public key, encrypting the plaintext to get ciphertext b = ax mod 264 .
+In particular, it is defined that 00 = 1.
+Now, Bob has intercepted n sets of encrypted information (ai , bi ) (i = 1, 2, · · · , n). To decrypt all the
+information, Bob needs to find the smallest integer xi (0 ≤ xi < 264 ) for each set of encrypted information
+such that ai xi ≡ bi (mod 264 ), or determine that the information has been corrupted (i.e., there is no xi
+that satisfies the condition). Please write a program to help Bob accomplish this task.
+
+Input
+The first line of input contains an integer n (1 ≤ n ≤ 105 ), representing the number of messages.
+The next n lines, the i-th line contains two integers ai and bi (0 ≤ ai , bi < 264 ), representing the public
+key and ciphertext of the i-th set of information, respectively.
+
+Output
+Output n lines, for the i-th line:
+• If there exists at least one xi that satisfies the conditions stated in the problem, output the smallest
+one;
+• Otherwise, output a line broken message.
+
+Example
+standard input
+5
+2 4
+3 27
+1000000007 998244353
+4 2
+1000000007 1000000009
+
+standard output
+2
+3
+994996658310742016
+broken message
+broken message
+
+Page 1 of 1
+
+

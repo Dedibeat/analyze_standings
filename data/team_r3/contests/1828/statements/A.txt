@@ -1,0 +1,144 @@
+Hey, Have You Seen My Kangaroo?
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+3 seconds
+128 megabytes
+
+Please note the UNUSUAL MEMORY LIMIT of this problem.
+After the great success in 2018, 2019, 2020, 2021, 2022, and 2023, the Nanjing University of Aeronautics
+and Astronautics (NUAA) will host the International Collegiate Programming Contest (ICPC) Nanjing
+regional for the seventh time in a row.
+Team Power of Two and team Three Hold Two won the champion title for Tsinghua University in
+2018 and 2019. In 2020, 2021, and 2022, team Inverted Cross from Peking University won the three-peat
+champion titles. In 2023, another team Reborn as a Vegetable Dog from Peking University won the
+title. They also won the 46th ICPC World Champion, reclaiming the trophy for the EC region after 13
+years!
+This year, around 335 teams are participating in the contest. At most 33 gold medals, 66 silver medals,
+and 99 bronze medals will be awarded (note that these numbers are for reference only). We are looking
+forward to seeing the participants’ outstanding performance! We also want to express our gratitude for
+the hard work done by all staff and volunteers for this contest. Thank you all for your great contribution
+to this contest!
+
+Photo taken in the 2023 ICPC Asia Nanjing Regional Contest
+In the 2018 contest, problem K, Kangaroo Puzzle, requires the contestants to construct an operation
+sequence for the game:
+The puzzle is a grid with n rows and m columns (1 ≤ n, m ≤ 20), and there are some (at least 2)
+kangaroos standing in the puzzle. The player’s goal is to control them to get together. There are some
+walls in some cells, and the kangaroos cannot enter the cells with walls. The other cells are empty.
+The kangaroos can move from an empty cell to an adjacent empty cell in four directions: up, down,
+left, and right.
+There is exactly one kangaroo in every empty cell in the beginning, and the player can control the
+kangaroos by pressing the buttons U, D, L, R on the keyboard. The kangaroos will move simultaneously
+according to the button you press.
+The contestant needs to construct an operating sequence of at most 5 × 104 steps consisting of U, D,
+L, R only to achieve the goal.
+Page 1 of 3
+
+In the 2020 contest, problem A, Ah, It’s Yesterday Once More, requires the contestants to construct
+an input map to hack the following code of the problem described before:
+#include <b i t s / s t d c ++.h>
+using namespace s t d ;
+s t r i n g s = "UDLR" ;
+int main ( )
+{
+s r a n d ( time (NULL ) ) ;
+f o r ( int i = 1 ; i <= 5 0 0 0 0 ; i ++) p u t c h a r ( s [ rand ( ) % 4 ] ) ;
+return 0 ;
+}
+
+Furthermore, in the 2021 contest (Problem A, Oops, It’s Yesterday Twice More), the 2022 contest
+(Problem A, Stop, Yesterday Please No More), and the 2023 contest (Problem A, Cool, It’s
+Yesterday Four Times More), every year we have a problem related to the kangaroos! We would
+like to introduce all these problems to you, but if we do so every year, we may have a 500-page statement
+for one single problem in the 3024 contest. Therefore, we omit them this time. Besides, you may already
+have seen them in the practice contest.
+Now, in the 2024 contest, as everyone expects, the kangaroo problem is back again! We don’t know why
+problem setters are so obsessed with kangaroos, but the problem is as follows:
+You are given a grid with n rows and m columns. There are some walls in some cells, and the kangaroos
+cannot enter the cells with walls. The other cells are empty and each contains a kangaroo. The kangaroos
+can move from an empty cell to an adjacent empty cell in four directions: up, down, left, and right.
+You can control the kangaroos by pressing the buttons U, D, L, R on the keyboard. The kangaroos will
+move simultaneously according to the button you press. Specifically, for any kangaroo located in the cell
+on the i-th row and the j-th column, indicated by (i, j):
+1. Button U: it will move to (i − 1, j) if i > 1 and (i − 1, j) is not a wall. Otherwise, it will stay in the
+same cell.
+2. Button D: it will move to (i + 1, j) if i < n and (i + 1, j) is not a wall. Otherwise, it will stay in the
+same cell.
+3. Button L: it will move to (i, j − 1) if j > 1 and (i, j − 1) is not a wall. Otherwise, it will stay in the
+same cell.
+4. Button R: it will move to (i, j + 1) if j < m and (i, j + 1) is not a wall. Otherwise, it will stay in
+the same cell.
+You are given an operating sequence s1 s2 . . . sk consisting only of characters ‘U’, ‘D’, ‘L’, and ‘R’. The
+operations are performed infinitely according to the sequence. Specifically, if 1 ≤ t ≤ k, the t-th operation
+is st ; Otherwise if t > k, the t-th operation is the same as the (t − k)-th operation. For each 1 ≤ i ≤ n × m,
+find the smallest integer vi such that after performing vi operations, at most i cells will contain kangaroos.
+
+Input
+There is only one test case in each test file.
+The first line contains three integers n, m, and k (1 ≤ n, m ≤ 2 × 105 , 1 ≤ n × m ≤ 2 × 105 , 1 ≤ k ≤ 200),
+indicating the number of rows and columns of the grid, and the length of the operating sequence.
+The second line contains a string s1 s2 · · · sk (si ∈ {‘U’, ‘D’, ‘L’, ‘R’}), indicating the operating sequence.
+For the following n lines, the i-th line contains a binary string ai,1 ai,2 · · · ai,m (ai,j ∈ {‘0’, ‘1’}). If ai,j = ‘1’
+then cell (i, j) is empty; Otherwise if ai,j = ‘0’ then cell (i, j) is blocked and cannot be entered. It is
+guaranteed that there is at least one empty cell in the grid.
+Page 2 of 3
+
+Output
+Output n×m lines, where the i-th line contains an integer vi , indicating the minimum number of operations
+needed so that at most i cells will contain kangaroos. If this is impossible, just output -1 on this line.
+
+Examples
+standard input
+
+standard output
+
+3 3 6
+ULDDRR
+010
+111
+010
+
+-1
+4
+2
+1
+0
+0
+0
+0
+0
+
+3 3 6
+ULDDRR
+010
+111
+011
+
+7
+4
+2
+1
+1
+0
+0
+0
+0
+
+1 5 1
+R
+11111
+
+4
+3
+2
+1
+0
+
+Page 3 of 3
+
+

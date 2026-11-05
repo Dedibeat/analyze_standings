@@ -1,0 +1,76 @@
+2022 International Collegiate Programming Contest, Jinan Site
+Qilu University of Technology (Shandong Academy of Sciences), November 27, 2022
+
+Problem C. DFS Order 2
+Input ﬁle:
+Output ﬁle:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1.5 seconds
+512 megabytes
+
+Prof. Pang has a rooted tree that is rooted at vertex 1 and has n nodes. These n nodes are numbered
+from 1 to n.
+Now he wants to start the depth-ﬁrst search at the root. He wonders for each node v, how many ways it
+can appear in the j-th position of depth-ﬁrst search order. The depth-ﬁrst search order is the order
+of nodes visited during the depth-ﬁrst search. A node appears in the j-th (1 ≤ j ≤ n) position in this
+order means it is visited after j − 1 other nodes. Because sons of a node can be iterated in arbitrary order,
+multiple possible depth-ﬁrst orders exist.
+Prof. Pang wants to know for each node v, how many diﬀerent depth-ﬁrst search orders such that v
+appears in the j-th position. For each v, j (1 ≤ v, j ≤ n), compute the answer. Because the answer can
+be very large, output it modulo 998244353.
+Following is a pseudo-code for the depth-ﬁrst search on a rooted tree. After calling main(), dfs_order is
+the depth-ﬁrst search order.
+Algorithm 1 An implementation of depth-ﬁrst search
+1: procedure dfs(vertex x)
+2:
+Append x to the end of dfs_order
+3:
+for each son y of x do
+4:
+dfs(y)
+5:
+end for
+6: end procedure
+7: procedure main()
+8:
+Let dfs_order be a global variable
+9:
+dfs_order ← empty list
+10:
+dfs(1)
+11: end procedure
+
+▷ Sons can be iterated in arbitrary order.
+
+Input
+The ﬁrst line contains one integer n (1 ≤ n ≤ 500), the number of vertices in the tree.
+Each of the next n − 1 lines describes an edge of the tree. Edge i is denoted by two integers ui and vi ,
+the labels of vertices it connects (1 ≤ ui , vi ≤ n, ui ̸= vi ).
+It is guaranteed that the given edges form a tree.
+
+Output
+For each vertex v from 1 to n, output one line containing n integers modulo 998244353. The j-th integer
+in the v-th line should be the number of diﬀerent depth-ﬁrst search orders such that v appears in the j-th
+position.
+
+Example
+standard input
+5
+1 2
+1 3
+3 4
+3 5
+
+standard output
+4 0 0 0 0
+0 2 0 0 2
+0 2 2 0 0
+0 0 1 2 1
+0 0 1 2 1
+Page 4 of 18
+
+

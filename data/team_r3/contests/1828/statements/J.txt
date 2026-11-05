@@ -1,0 +1,93 @@
+Social Media
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+1024 megabytes
+
+On a social media platform, users can leave comments under others’ posts to express their thoughts.
+However, these comments are not visible to everyone. Specifically, for user C to see user A’s comments
+under user B’s post, he/she has to be friends with both A and B at the same time. If a user leaves a
+comment under his/her own post, all his/her friends can see this comment.
+As an active user on this platform, you would like to see as many comments as possible. There are k
+users (not counting you) on the platform, numbered from 1 to k. There are also m comments on the
+platform, but you might not be able to see them all because you only have n friends. As you need to
+participate in the 2024 ICPC Asia Nanjing Regional Contest, you don’t have time to make too many new
+friends. What’s the maximum number of comments you can see if you make at most two new friends on
+the platform?
+
+Input
+There are multiple test cases. The first line of the input contains an integer T indicating the number of
+test cases. For each test case:
+The first line contains three integers n, m, and k (1 ≤ n ≤ k ≤ 2 × 105 , 1 ≤ m ≤ 2 × 105 ) indicating
+the number of your friends, the number of comments, and the number of users (not counting you) on the
+platform.
+The second line contains n distinct integers f1 , f2 , · · · , fn (1 ≤ fi ≤ k) indicating your friends on the
+platform.
+For the following m lines, the i-th line contains two integers ai and bi (1 ≤ ai , bi ≤ k) indicating a comment
+written by user ai under user bi ’s post.
+It’s guaranteed that neither the sum of k nor the sum of m of all test cases will exceed 2 × 105 .
+
+Output
+For each test case, output one line containing one integer, indicating the maximum number of comments
+you can see if you make at most two new friends on the platform.
+
+Page 1 of 2
+
+Example
+standard input
+5
+4 12 7
+5 7 3 6
+3 6
+2 2
+1 4
+2 4
+1 3
+7 6
+4 1
+5 4
+1 1
+1 1
+2 1
+3 7
+2 7 6
+2 4
+1 2
+3 2
+2 5
+5 4
+2 6
+4 6
+2 6
+1 1 2
+1
+1 2
+2 1 2
+1 2
+1 2
+2 1 100
+24 11
+11 24
+
+standard output
+9
+5
+1
+1
+1
+
+Note
+For the first sample test case, you can make friends with user 1 and 4.
+For the second sample test case, you can make friends with user 5 and 6.
+For the third sample test case, you can make friends with user 2.
+For the fourth and fifth sample test cases, you don’t need to make new friends because you can already
+see all comments.
+
+Page 2 of 2
+
+

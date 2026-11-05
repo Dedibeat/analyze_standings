@@ -1,0 +1,73 @@
+The 2022 ICPC Asia Xi’an Regional Contest
+Northwestern Polytechnical University, November 13, 2022
+
+Problem F. Hotel
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+512 megabytes
+
+You are doing volunteer work for a programming competition in an ancient hotel. Unfortunately, the hotel
+provides no phone signal or tap water since it can be dated back to the Qin Dynasty, and you have to
+assign the contestants to the hotel rooms manually instead of using the internet apps. Fortunately, the
+hotel has sufficient rooms, and you have taken a computer that lets you do some computation locally.
+There are n teams, each with exactly 3 contestants. There are 2 types of rooms in the hotel, the single
+room and double room, which can receive at most 1 and 2 contestants, respectively. To avoid embarrassing
+contestants, if two contestants are assigned to a double room, they must come from the same team and
+have the same gender.
+The cost of each room of the same type is the same, but different types may have different costs.
+Your program needs to calculate the minimum price the host has to pay. The teams are waiting in
+the registration hall now, and the competition finance officer relies on you to save costs and make a
+fortune by the residual value. Be quick, or the finance officer will sue you for violating his reputation!
+
+Input
+The first line of input contains three integers n, c1 and c2 (1 ≤ n, c1 , c2 ≤ 1 000), denoting the number of
+teams, the cost of a single room and a double room respectively.
+In the following n lines, each line contains a string S with exactly 3 uppercase English letters. The letters
+in a string denote the genders of the contestants in one team and will be represented by A to Z, respecting
+the diversity of human beings.
+
+Output
+The output should contain a single integer, denoting the minimum cost of hotel allocation for contestants.
+
+Examples
+standard input
+
+standard output
+
+3 1 3
+MMM
+MMM
+FFF
+
+9
+
+3 3 1
+ABC
+DEF
+GHI
+
+9
+
+10 438 438
+WWW
+SOU
+PUN
+ETC
+OME
+CFI
+NAL
+GOO
+DHO
+TEL
+
+12264
+
+Page 6 of 14
+
+

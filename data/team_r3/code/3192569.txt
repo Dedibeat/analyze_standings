@@ -1,0 +1,59 @@
+#include <bits/stdc++.h>
+using namespace std;
+ 
+#define int long long
+#define pb push_back
+#define all(x) (x).begin(), (x).end()
+#define rall(x) (x).rbegin(), (x).rend()
+#define rep(i, a, b) for(int i = (a); i < (b); i++)
+#define repd(i, a, b) for(int i = (a); i >= (b); i--)
+#define hha(x) cout << #x << ' ' << x << ' ';
+#define hhal(x) cout << #x << ' ' << x << '\n';
+#define print(v) cout << #v << ' '; for(auto &x : v) cout << x << ' '; cout << '\n';
+int comp(vector<int> &a, vector<int> &b, int l)
+{
+    int n = a.size(), m = b.size();
+    // print(a);
+    // print(b);
+    map<int, int> mp;
+    for(int i = 0; i + 1 < m; i++)
+    {
+        if((b[i] ^ b[i + 1]) == 1) mp[b[i]]++;
+    }
+    int ans = 0;
+    int x = (1LL << (l + 2)) - 2;
+    int y = (1LL << (l + 1)) - 2;
+    for(int j = 0; j + 1 < n; j++)
+    {
+        if((a[j] ^ a[j + 1]) == x)
+        {
+            ans += mp[a[j] ^ y];
+        }
+    }
+    return ans;
+}
+void solve() {
+    int n, m; cin >> n >> m;
+    vector<int> a(n), b(m);
+    for(auto &x : a) cin >> x;
+    for(auto &y : b) cin >> y;
+    vector<int> A(n), B(m);
+    for(int i = 0; i < n; i++) A[i] |= (a[i] & 1);
+    for(int i = 0; i < m; i++) B[i] |= (b[i] & 1);
+    int ans = 0;
+    for(int l = 0; l < 30; l++)
+    {
+        int mask = (1LL << (l + 1));
+        for(int i = 0; i < n; i++) A[i] |= (a[i] & mask);
+        for(int i = 0; i < m; i++) B[i] |= (b[i] & mask);
+        int ret = comp(A, B, l);
+        ans += ret;
+    }
+    cout << ans << "\n";
+}
+signed main() {
+    ios_base::sync_with_stdio(0); cin.tie(0);
+    int t; cin >> t; while(t--)
+    solve();
+}
+ 

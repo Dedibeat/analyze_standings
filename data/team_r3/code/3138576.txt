@@ -1,0 +1,86 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+#define int long long
+#define pb push_back
+#define all(x) (x).begin(), (x).end()
+#define rall(x) (x).rbegin(), (x).rend()
+#define rep(i, a, b) for(int i = (a); i < (b); i++)
+#define repd(i, a, b) for(int i = (a); i >= (b); i--)
+#define hha(x) cout << #x << ' ' << x << ' ';
+#define hhal(x) cout << #x << ' ' << x << '\n';
+#define print(v) cout << #v << ' '; for(auto &x : v) cout << x << ' '; cout << '\n';
+vector<int> construct(int n)
+{
+    int tot = n * (n + 1) / 2;
+    if(tot % 2 == 1) return {};
+    int tar = tot / 2 - n;
+    int cnt = 0, sum = 0;
+    vector<int> S;
+    for(int i = 0; i < n; i++)
+    {
+        cnt++;
+        int add = cnt * (cnt - 1) / 2;
+        if(sum + cnt * (cnt - 1) / 2 > tar)
+        {
+            sum += (cnt - 1) * (cnt - 2) / 2;
+            S.push_back(cnt - 1);
+            cnt = 1;
+        }
+    }
+    sum += cnt * (cnt - 1) / 2;
+    S.push_back(cnt);
+    int pure = 0;
+    for(auto x : S) pure += x * (x + 1) / 2;
+    // print(S);
+    // hhal(pure);
+    assert(pure * 2 == tot);
+    assert(accumulate(all(S), 0LL) == n);
+    vector<int> a(n);
+    int i = 0, col = 0;
+    for(int cnt : S)
+    {
+        while(cnt--)
+        {
+            a[i++] = col;
+        }
+        col ^= 1;
+    }
+    return a;
+}
+void solve() {
+    int n, m; cin >> n >> m;
+    //hha(n); hhal(m);
+    auto r = construct(n);
+    auto c = construct(m);
+    if(r.size())
+    {
+        cout << "Yes\n";
+        for(int i = 0; i < n; i++)
+        {
+            for(int j = 0; j < m; j++)
+            {
+                cout << r[i] << " ";
+            }
+            cout << "\n";
+        }
+    }
+    else if(c.size())
+    {
+        cout << "Yes\n";
+        for(int i = 0; i < n; i++)
+        {
+            for(int j = 0; j < m; j++)
+            {
+                cout << c[j] << " ";
+            }
+            cout << "\n";
+        }
+    }
+    else cout << "No\n";
+}
+signed main() {
+    ios_base::sync_with_stdio(0); cin.tie(0);
+    int t; cin >> t; while(t--)
+    solve();
+}

@@ -1,0 +1,123 @@
+Catch the Star
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+4 seconds
+1024 megabytes
+
+BaoBao bought a telescope to observe a star in the night sky. The star is represented as a convex polygon
+S. However, there are n convex polygonal moons Mi that could obstruct his view. BaoBao can place his
+telescope anywhere on the x-axis between points (l, 0) and (r, 0), but he cannot place it exactly at (l, 0)
+or (r, 0).
+Your task is to help BaoBao find the total length of the segments on the x-axis where he can position his
+telescope such that he has an unobstructed view of the star S, and whether he can find a position at all.
+An unobstructed view means that no line segment from the chosen point on the x-axis to any point inside
+or on S properly intersects any of the moons Mi . The line segment is allowed to touch the boundary of
+the moons but not cross through them.
+
+Input
+There are multiple test cases. The first line of the input contains an integer T (1 ≤ T ≤ 2.5 × 104 )
+indicating the number of test cases. For each test case:
+The first line contains three integers n, l, and r (1 ≤ n ≤ 104 , −109 ≤ l < r ≤ 109 ), denoting the number
+of moons and the range for telescope placement.
+The second line describes the star S and begins with an integer k0 (3 ≤ k0 ≤ 105 ), denoting the number
+of vertices of S, followed by 2 × k0 integers x0,1 , y0,1 , x0,2 , y0,2 , · · · , x0,k0 , y0,k0 (−109 ≤ x0,j , y0,j ≤ 109 ),
+where (x0,j , y0,j ) is the coordinate of the j-th vertex of S in counter-clockwise order.
+For the following n lines, the i-th line describe moon Mi . Each line begins with an integer ki (3 ≤ ki ≤ 105 ),
+denoting the number of vertices of Mi , followed by 2 × ki integers xi,1 , yi,1 , xi,2 , yi,2 , · · · , xi,ki , yi,ki
+(−109 ≤ xi,j , yi,j ≤ 109 ), where (xi,j , yi,j ) is the coordinate of the j-th vertex of Mi in counter-clockwise
+order.
+It is guaranteed that S and Mi are convex polygons. The star S, the moons Mi , and the segment from
+(l, 0) to (r, 0) do not touch or intersect with each other. However, different moons Mi can intersect with
+each other. No three consecutive vertices of the same polygon are collinear.
+n
+P
+It’s guaranteed that the sum of
+ki of all test cases does not exceed 106 . It is also guaranteed that the
+i=0
+P
+total number of polygons of all test cases (which is (n + 1)) does not exceed 5 × 104 .
+
+Output
+For each test case, output a single line containing the total length of valid segments on the x-axis, strictly
+between (l, 0) and (r, 0), where BaoBao can place his telescope to see S without obstruction. If there’s no
+valid point between (l, 0) and (r, 0), output −1 instead.
+Your answer would be considered correct if the relative or absolute error does not exceed 10−9 .
+
+Page 1 of 3
+
+Examples
+standard input
+2
+4 -8 8
+3 -7 7 -6 8 -7 8
+3 -9 -2 -7 3 -9 -1
+3 -2 3 0 2 -4 5
+3 5 1 5 3 4 2
+3 1 -1 2 -2 3 -1
+5 -8 8
+5 -14 -3 -10 -2 -9 2 -10 4 -12 5
+3 -16 0 -15 0 -15 1
+3 -15 6 -9 5 -15 7
+3 -10 5 -9 5 -10 6
+3 -7 3 -3 2 -8 4
+3 -6 -1 -6 -2 -5 -1
+
+standard output
+9.404761904761905
+6.000000000000000
+
+3
+1 -4 4
+3 -2 6 0 5 2 6
+3 -3 1 3 1 0 4
+3 -2 2
+3 -2 4 2 4 0 6
+3 -2 2 -1 2 -2 3
+3 1 2 2 2 2 3
+3 -2 -1 0 -3 2 -1
+1 1 2
+3 -8 0 -7 0 -8 1
+3 -5 0 -4 -1 -4 0
+
+-1.000000000000000
+0.000000000000000
+1.000000000000000
+
+1
+1 -744567334 955216804
+5
+-781518205 -852078097
+-781516900 -852078384
+-781516392 -852076569
+-781518329 -852076047
+-781519925 -852077600
+5
+-393011614 -131855702
+-393010699 -131856607
+-393008846 -131856475
+-393009388 -131854587
+-393010201 -131854694
+
+1699779738.691979192313738
+
+Note
+For the first sample, the first test case is illustrated below; the telescope can be located between (−7, 0)
+and (− 23 , 0), or ( 27 , 0) and ( 46
+7 , 0).
+
+Page 2 of 3
+
+The second test case is illustrated below; the telescope can be located between (−8, 0) and (−2, 0).
+
+Note that the input format in the third sample is for presentation purposes only, because we cannot print
+all the coordinates in one line without exceeding the width of the paper. Please refer to the other samples
+for more accurate input formatting.
+
+Page 3 of 3
+
+

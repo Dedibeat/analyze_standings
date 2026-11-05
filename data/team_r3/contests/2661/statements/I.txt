@@ -1,0 +1,56 @@
+Dumb Problem II
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1.5 seconds
+1024 megabytes
+
+For a permutation p of length n, we define f (p) to represent the position of the prefix maximum.
+Specifically, f (p) = {i|1 ≤ i ≤ n, s.t. ∀1 ≤ j < i, pi > pj }.
+Similarly, let g(p) represent the set of numbers of the prefix maximum, that is, g(p) = {pi |i ∈ f (p)}.
+Now there are k independently and uniformly randomly chosen permutations p1 , p2 , . . . , pk from all
+permutations of length n (can be repeated). Little A wants to know how many essentially different g(p)
+there are expected among these permutations. The goal is to find out how many essentially different sets
+are expected among g(p1 ), g(p2 ), . . . , g(pk )? The answer should be output modulo 998244353.
+
+Input
+A single line containing two integers n, k (1 ≤ n, k ≤ 5000).
+
+Output
+A single line containing an integer representing the result of the answer modulo 998244353.
+
+Examples
+standard input
+
+standard output
+
+1 1
+
+1
+
+3 2
+
+388206139
+
+3 4
+
+408232647
+
+112 646
+
+928854225
+
+Note
+For the first sample, the answer is 1.
+For the second sample, the answer is 31
+18 .
+For the third sample, the answer is 1711
+648 .
+
+Page 1 of 1
+
+

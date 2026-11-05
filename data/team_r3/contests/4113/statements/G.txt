@@ -1,0 +1,94 @@
+Background. Lately, Iochi Mari has had a small worry on her mind: as Antique Seraphim grows in popularity, her busy performance schedule leaves her little time to visit Schale. Meanwhile, Schale's Sensei misses her just as much. He therefore decides to rearrange her schedule, keeping the group's activities running smoothly while giving her some well-earned rest. Can you help poor Sensei count the schedules satisfying the conditions below?
+
+Consider $n$ vertices arranged in a cycle and $n$ distinct edges $e_1,e_2,\ldots,e_n$. For each $1\le i\le n$, edge $e_i$ connects vertex $i$ to vertex $i+1$, where vertex $n+1$ is identified with vertex $1$. Note that when $n=1$, $e_1$ is a self-loop; when $n=2$, $e_1$ and $e_2$ are two distinct parallel edges.
+
+Intervals. For any $l,r\in\{1,2,\ldots,n\}$, the interval $[l,r]$ is defined as follows:
+
+
+If $l< r$, it covers vertices $l,l+1,\ldots,r$ and edges $e_l,e_{l+1},\ldots,e_{r-1}$.
+
+If $l>r$, it covers vertices $l,l+1,\ldots,n,1,2,\ldots,r$ and edges $e_l,e_{l+1},\ldots,e_n,e_1,e_2,\ldots,e_{r-1}$.
+
+If $l=r$, it covers only vertex $l$ and no edges.
+
+
+For example, when $n=4$, the interval $[3,2]$ covers vertices $3,4,1,2$ and edges $e_3,e_4,e_1$.
+
+We say interval $A$ contains interval $B$ if every vertex and every edge covered by $B$ is also covered by $A$.
+
+Valid sets. A set $T$ of intervals is called valid if no interval in $T$ contains another interval in $T$. The empty set is also valid.
+
+Your task is to count valid sets under two different coverage limits. For a valid set $T$, define:
+$$
+\begin{aligned}
+f(T) &= \max_{\text{edge } e}
+\left|\{I\in T \mid I \text{ covers } e\}\right|,\\
+g(T) &= \max_{\text{vertex } v}
+\left|\{I\in T \mid I \text{ covers } v\}\right|.
+\end{aligned}
+$$
+For the empty set, define $f(\varnothing)=g(\varnothing)=0$.
+
+For each integer $k$ from $1$ to $n$, compute the following two counts separately:
+
+
+The number of valid sets $T$ satisfying $f(T)\le k$.
+
+The number of valid sets $T$ satisfying $g(T)\le k$.
+
+
+Output all counts modulo $998244353$.
+
+Input
+
+The first line contains a single positive integer $T$ $(1\leq T\leq 10^6)$, representing the number of test cases.
+
+Each test case consists of a single line containing one positive integer $n$ $(1\leq n\leq 10^6)$.
+
+It is guaranteed that the sum of $n$ over all test cases in a single test file does not exceed $10^6$.
+
+Output
+
+For each test case, print two lines of $n$ integers each.
+
+
+The $k$-th integer on the first line is the number of valid sets $T$ satisfying $f(T)\le k$.
+
+The $k$-th integer on the second line is the number of valid sets $T$ satisfying $g(T)\le k$.
+
+
+All answers must be printed modulo $998244353$.
+
+Examples
+
+Input 1
+
+3
+1
+2
+4Output 1
+
+2
+2
+7 7
+6 7
+77 112 117 117
+46 99 116 117Note
+
+For $n=1$, the only interval is $[1,1]$, which covers vertex $1$ and no edges. The two valid sets are $\varnothing$ and $\{[1,1]\}$. Both satisfy $f(T)\le 1$ and $g(T)\le 1$, so both answers are $2$.
+
+For $n=2$, the four intervals are $[1,1]$, $[2,2]$, $[1,2]$, and $[2,1]$. There are exactly $7$ valid sets:
+
+
+the empty set;
+
+the four sets consisting of a single interval;
+
+$\{[1,1],[2,2]\}$ and $\{[1,2],[2,1]\}$.
+
+
+Although $[1,2]$ and $[2,1]$ cover the same two vertices, they cover different edges: $[1,2]$ covers $e_1$, while $[2,1]$ covers $e_2$. Therefore, neither interval contains the other.
+
+In every valid set, each edge is covered by at most one interval. Thus, the first output line is 7 7.
+
+The set $\{[1,2],[2,1]\}$ covers each vertex twice. Every other valid set covers each vertex at most once. Thus, the second output line is 6 7.

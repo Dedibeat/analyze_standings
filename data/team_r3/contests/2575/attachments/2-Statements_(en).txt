@@ -1,0 +1,1176 @@
+The 50th Petrozavodsk Programming Camp, Winter 2026
+Day 4: Harbin Contest, Sunday, February 1, 2026
+
+Problem A. Another GCD Problem
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+1024 mebibytes
+
+Consider an infinite multiset s containing elements a1 , a2 , . . . , an , each in infinite quantity. Based
+on this, we define the function f (k) as follows. For each sub-multiset s→ of s with exactly k
+elements, calculate the sum of the elements in s→ . The value of f (k) is then the greatest common
+divisor (GCD) of all these sums. Formally,
+f (k) = gcd
+
+s→ ↑s
+|s→ |=k
+
+)︃
+
+[︃
+
+]︃
+
+x .
+
+x↓s→
+
+For example, for a = [3, 6], we have
+f (2) = gcd(3 + 3, 3 + 6, 6 + 6) = 3.
+Find the maximum value of f (k) and the smallest k that achieves this maximum value. In
+particular, if the maximum value does not exist, print “infinite”.
+
+Input
+The first line of input contains an integer t (1 → t → 4 · 105 ), the number of test cases. For each
+test case:
+The first line contains an integer n (1 → n → 105 ), representing the number of distinct numbers
+in S.
+The second line contains n integers a1 , a2 , . . . , an (1 → ai → 1018 ), representing the elements in S.
+The sum of n over all test cases is at most 4 · 105 .
+
+Output
+For each test case, if the maximum value of f (k) exists, output a line with two integers, representing
+the maximum value of f (k) and the smallest k that achieves this maximum value.
+Otherwise, output “infinite” (without quotes).
+
+Page 1 of 30
+
+The 50th Petrozavodsk Programming Camp, Winter 2026
+Day 4: Harbin Contest, Sunday, February 1, 2026
+
+Examples
+standard input
+
+standard output
+
+2
+2
+3 6
+2
+2 2
+
+3 1
+infinite
+
+2
+3
+1 4 7
+4
+4 16 28 34
+
+3 3
+6 3
+
+Note
+For the first test case in the first example, it can be observed that regardless of the value of k,
+f (k) = 3.
+For the second test case in the first example, we have f (k) = 2k, thus f will grow infinitely and
+the maximum value does not exist.
+
+Page 2 of 30
+
+The 50th Petrozavodsk Programming Camp, Winter 2026
+Day 4: Harbin Contest, Sunday, February 1, 2026
+
+Problem B. Ball And Movable Walls
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+2 seconds
+1024 mebibytes
+
+In a two-dimensional experimental field, there are four infinitely long straight lines acting as
+movable “walls”: the top and bottom are horizontal lines, while the left and right are vertical
+lines. We place a negligibly small ball between the four lines, and it starts moving in a uniform
+straight line. Whenever the ball touches one of the walls, it rebounds in the direction normal to
+that wall (that is, only the sign of the velocity in that direction changes), while the velocity in the
+other cardinal direction remains unchanged. All the while, the left and right vertical lines move
+away from each other, whereas the top and bottom horizontal lines move towards each other,
+eventually converging at some moment to trap the ball.
+Given the initial position and velocity of the ball, as well as the initial positions and velocities
+of the four lines, you need to determine the coordinates of the ball at the moment the top and
+bottom lines meet.
+
+Example: Initial Position
+
+Here is a formal description of the experiment.
+The initial position of the ball is denoted as (xbeg , ybeg ), and its initial velocity is denoted as (vx , vy ).
+The bottom horizontal line and the top horizontal line are initially located at y = y1 and y = y2 ,
+respectively. In time t, they move to y = y1 + vy1 t and y = y2 ↑ vy2 t.
+Page 3 of 30
+
+The 50th Petrozavodsk Programming Camp, Winter 2026
+Day 4: Harbin Contest, Sunday, February 1, 2026
+The left vertical line and the right vertical line are initially located at x = x1 and x = x2 ,
+respectively. In time t, they move to x = x1 ↑ vx1 t and x = x2 + vx2 t.
+
+It is guaranteed that the ball is initially strictly inside the rectangle formed by the four lines, that
+is, x1 < xbeg < x2 and y1 < ybeg < y2 .
+Each collision occurs when the ball is moving faster than the wall in the corresponding direction.
+We guarantee that by ensuring that the ball’s vertical velocity is always greater than the speeds
+of the two horizontal lines, that is, vy1 < |vy | and vy2 < |vy |.
+To ensure that the top and bottom lines will definitely meet, we guarantee that the speeds of the
+two horizontal lines are not both 0.
+The specific rules for collisions are as follows:
+1. The ball moves in a uniform straight line when not in contact with any line.
+2. When in contact with a horizontal line, only the vertical velocity is inverted (changing vy to
+↑vy ), while the horizontal velocity remains unchanged.
+3. When in contact with a vertical line, only the horizontal velocity is inverted (changing vx to
+↑vx ), while the vertical velocity remains unchanged.
+4. The determination of rebounds is independent of the translation speeds of the lines and only
+involves “inverting” the corresponding velocity components.
+
+Input
+The first line of input contains an integer t (1 → t → 100), the number of test cases. For each test
+case:
+The first line contains four integers: xbeg , ybeg , vx , and vy (↑20 → vx , vy → 20, vx ↓= 0, vy ↓= 0),
+representing the initial coordinates and velocity of the ball.
+The second line contains four integers: y1 , y2 , vy1 , and vy2 (0 → y1 < ybeg < y2 → 106 ,
+0 → vy1 , vy2 < |vy |, vy1 + vy2 ↓= 0), representing the initial positions and velocities of the horizontal lines.
+The third line contains four integers: x1 , x2 , vx1 , and vx2 (0 → x1 < xbeg < x2 → 106 ,
+0 → vx1 , vx2 → 20), representing the initial positions and velocities of the vertical lines.
+
+Output
+For each test case, output a line containing two space-separated real numbers x and y: the
+coordinates of the ball at the moment it stops.
+Each of your answers will be considered correct if its absolute or relative error is at most 10↔3 . In
+other words, if your answer is out and the true answer is ans, then your answer will be considered
+correct if
+|out ↑ ans|
+→ 10↔3 .
+max(1, |ans|)
+
+Page 4 of 30
+
+The 50th Petrozavodsk Programming Camp, Winter 2026
+Day 4: Harbin Contest, Sunday, February 1, 2026
+
+Examples
+standard input
+
+standard output
+
+1
+3 4 2 5
+0 10 3 2
+0 10 1 0
+
+7 6
+
+2
+631043 768016 20 20
+1 1000000 1 0
+631040 631050 1 0
+631044 768016 20 20
+1 1000000 1 0
+631041 631051 1 0
+
+-0.456742460182653 1000000.0
+0.543257 1000000.0
+
+Page 5 of 30
+
+The 50th Petrozavodsk Programming Camp, Winter 2026
+Day 4: Harbin Contest, Sunday, February 1, 2026
+
+Problem C. Covering Problems
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+6 seconds
+1024 mebibytes
+
+First, consider the Sequence Covering Problem. In this problem, three non-negative integer sequences of length n are given initially: a, b, and c. You can perform zero or more operations. In
+each operation, choose an interval [𝜔, r] at a cost of b𝜔 + cr , provided that the minimum value of
+a𝜔 , a𝜔+1 , . . . , ar is not 0. Then decrease all values a𝜔 , a𝜔+1 , . . . , ar by 1. The answer to the problem
+is the minimum possible cost to reduce all numbers in a to 0.
+Then we consider the Many Sequence Covering Problem. In this problem, two non-negative integer
+sequences of length n are given initially: d and e. You can perform zero or more operations. In
+each operation, choose i ↔ [1, n], and then either increase bi by 1 at a cost of di , or increase ci by 1
+at a cost of ei . After all operations are completed, solve the Sequence Covering Problem for the
+modified sequences b and c, denoting the answer as p and the total cost as q. The answer to the
+problem is the maximum possible value of p ↑ q, or “INF” if this value can be made arbitrarily
+large.
+But your goal is to solve the Many Many Sequence Covering Problem. In this problem, you are
+given five sequences of length n, which are a, b, c, d, and e. What’s more, the sequences can
+be only partially determined! For each i, if ai is non-negative, then it is the given value of ai ;
+otherwise, the true value of ai could be any integer in the range [0, ↑ai ]. The same is true for the
+sequences b, c, d, and e. You need to calculate the sum of answers corresponding to the Many
+Sequence Covering Problem for all possible cases. Since the answer may be INF, you need to
+separately provide the sum of all answers when they are not INF, as well as the count of cases
+where the answer is INF. Since the answers may be large, output the results modulo 998 244 353.
+
+Input
+The first line of the input contains an integer n (1 → n → 5000), the length of the sequences.
+
+Then follow five lines containing n integers each: a1 , . . . , an are given on the first of these lines,
+b1 , . . . , bn on the second, c1 , . . . , cn on the third, d1 , . . . , dn on the fourth, and e1 , . . . , en on the
+fifth of them (↑5000 → ai , bi , ci , di , ei → 5000).
+
+Output
+Output a single line containing two integers: the sum of all answers modulo 998 244 353 when the
+answer is not INF, and the count of cases where the answer is INF, also modulo 998 244 353.
+
+Page 6 of 30
+
+The 50th Petrozavodsk Programming Camp, Winter 2026
+Day 4: Harbin Contest, Sunday, February 1, 2026
+
+Examples
+standard input
+
+standard output
+
+2
+1 1
+1 2
+2 1
+-1 -1
+-1 -1
+
+8 12
+
+3
+-1 -2 2
+1 3 0
+-3 0 -2
+1 -3 0
+1 3 3
+
+408 228
+
+Page 7 of 30
+
+The 50th Petrozavodsk Programming Camp, Winter 2026
+Day 4: Harbin Contest, Sunday, February 1, 2026
+
+Problem D. Director and Excitement
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+5 seconds
+1024 mebibytes
+
+The Cook Chicken Potato Contest is one of the most renowned events in the culinary world.
+The competition venue provides k cooking stations, and before the start, the participants will be
+divided into k equally sized teams by the Contest Director, known as Small Q.
+To test the teamwork among participants and to add more excitement to the competition, Small
+Q wants to arrange the teams in such a way that the strength di!erences among participants
+in the same team are as large as possible. Let the strengths of the participants be denoted as
+a1 , a2 , . . . , an , and their respective team assignments as t1 , t2 , . . . , tn . Small Q defines the excitement level of the competition as:
+D = min
+
+1↗i<j↗n
+
+⌊︃
+
+|ai ↑ aj |, ti = tj
++↗,
+ti =
+↓ tj
+
+Now, there are n potential participants. The possible strength of the i-th participant is described
+by an interval [𝜔i , ri ], indicating that their actual strength during a certain competition could
+turn out to be any real number within that interval. The participants are sorted by strength in
+non-decreasing order, which means that, for all 1 → i < j → n, we have 𝜔i → 𝜔j and ri → rj .
+
+Small Q has q competition plans, where the i-th plan is to invite participants with indices between
+Li and Ri . You need to help Small Q determine whether he can arrange the teams in such a way
+that it would be possible for the excitement level of the competition to be at least Di .
+
+Input
+The first line of input contains an integer t (1 → t → 105 ), the number of test cases. For each test
+case:
+The first line contains two integers, n and k (1 → n → 5 · 105 , 1 → k → min(5, n)), representing the
+number of potential participants and the number of teams.
+The next n lines contain two integers, 𝜔i and ri (0 → 𝜔i → ri → 1012 ) for the i-th participant,
+indicating the possible strength they can exhibit. For all 1 → i < n, we have 𝜔i → 𝜔i+1 and
+ri → ri+1 .
+The next line contains an integer q (1 → q → 105 ), indicating the number of competition plans.
+
+The next q lines contain three integers: Li , Ri , and Di (1 → Li → Ri → n, (Ri ↑ Li + 1) is divisible
+by k, and 0 → Di → 1012 ), indicating that the i-th competition plan is to invite participants with
+indices from Li to Ri , and Small Q expects the excitement level to be at least Di .
+The sum of n over all test cases is at most 106 . The sum of q over all test cases is at most 105 .
+
+Output
+For each test case, output q lines. For the i-th output, print “YES” or “NO” to indicate whether
+Small Q’s expectation for the i-th plan can possibly be met.
+
+Page 8 of 30
+
+The 50th Petrozavodsk Programming Camp, Winter 2026
+Day 4: Harbin Contest, Sunday, February 1, 2026
+
+Example
+standard input
+2
+4 2
+1 1
+3 3
+4 4
+6 6
+3
+1 2 3
+3 4 2
+1 4 2
+5 1
+1 3
+2 3
+4 6
+7 10
+8 12
+6
+1 3 2
+1 3 3
+2 4 4
+2 4 5
+3 5 4
+3 5 5
+
+standard output
+YES
+YES
+YES
+YES
+NO
+YES
+NO
+YES
+NO
+
+Page 9 of 30
+
+The 50th Petrozavodsk Programming Camp, Winter 2026
+Day 4: Harbin Contest, Sunday, February 1, 2026
+
+Problem E. E!cient Summation
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+13 seconds
+1024 mebibytes
+
+Let us denote the prime factorization of an integer y as:
+
+y=
+
+k
+⌋︃
+
+p𝜀i i , where p1 < p2 < . . . < pk .
+
+i=1
+
+Now, given a sequence r of length m that does not contain duplicate elements, define f (y) as:
+f (y) =
+
+m
+⌋︃
+i=1
+
+p ri · 𝜀 ri .
+
+If ri > k, consider pri · 𝜀ri = 1.
+
+You are given q queries. Each query provides an integer x in the form of its prime factorization.
+Your task is to compute the value of
+n
+↘[︃
+x≃
+
+i=1
+
+f (i · x) mod 232 .
+
+To reduce the output size, print the XOR sum of all answers.
+
+Input
+The first line of input contains three integers: n, m, and q (1 → n → 7 · 108 , 1 → m → 25,
+1 → q → 5 · 105 ), representing the upper limit for queries, the length of the sequence r, and the
+number of queries, respectively.
+The second line contains m integers r1 , r2 , . . . , rm (1 → ri → 25, all ri are distinct).
+
+The next q lines describe queries. Each query is given on a single line which starts with an integer
+𝜔 indicating the number of terms in the prime factorization of x. It is followed by 2𝜔 integers
+p1 , 𝜀1 , p2 , 𝜀2 , . . . , p𝜔 , 𝜀𝜔 (pi are distinct primes in ascending order, 𝜀i ⇐ 1). This describes the
+value
+𝜔
+⌋︃
+x=
+p𝜀i i
+i=1
+
+such that 1 → x → n. Specifically, 𝜔 = 0 indicates that x = 1.
+
+Output
+Output a single line containing one integer: the XOR sum of all query answers.
+
+Page 10 of 30
+
+The 50th Petrozavodsk Programming Camp, Winter 2026
+Day 4: Harbin Contest, Sunday, February 1, 2026
+
+Example
+standard input
+10 2 5
+2 3
+0
+1 5 1
+1 2 1
+1 7 1
+2 2 1 3 1
+
+standard output
+31
+
+Page 11 of 30
+
+The 50th Petrozavodsk Programming Camp, Winter 2026
+Day 4: Harbin Contest, Sunday, February 1, 2026
+
+Problem F. Fun With Bitwise OR
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+1024 mebibytes
+
+You are given a sequence a1 , a2 , . . . , an of length n that contains only integers 1 and 2. You can
+perform the following operation zero or more times: choose a position i such that 1 → i < n,
+delete ai and ai+1 from the sequence, and insert the value ai | ai+1 in their place, where | denotes
+the bitwise OR. Note that, after each operation, the length of the sequence will decrease by 1.
+For example, if the sequence is a = [1, 2, 1] and you choose to perform the operation on i = 2, the
+sequence will change to a = [1, 3].
+Determine how many di!erent sequences can be produced after performing zero or more operations, and output the result modulo 109 + 7. Two sequences are considered di!erent if and only
+if their lengths di!er or if they have di!erent elements at any particular position.
+As n may be large, the sequence will be input in a compressed format where identical numbers
+are grouped together. It is guaranteed that the lengths of each segment of identical numbers are
+non-decreasing from front to back.
+
+Input
+The first line of input contains an integer t (1 → t → 106 ), the number of test cases. For each test
+case:
+The first line contains two integers, m and a1 (1 → m → 106 , 1 → a1 → 2) representing the number
+of segments in the sequence and the value of a1 .
+The second line contains m integers 𝜔1 , 𝜔2 , . . . , 𝜔m (1 → 𝜔1 → 𝜔2 → . . . → 𝜔m → 109 ), where 𝜔i
+represents the length of the i-th segment in the sequence.
+⌈︃
+Since the values in adjacent segments are di!erent, the sequence of length n = m
+i=1 𝜔i can be
+uniquely determined by a1 and 𝜔1 , 𝜔2 , . . . , 𝜔m .
+The sum of m over all test cases is at most 106 .
+
+Output
+For each test case, output an integer representing the answer modulo 109 + 7.
+
+Example
+standard input
+2
+3 1
+1 1 2
+8 2
+1 2 3 4 5 6 7 8
+
+standard output
+7
+2961300
+
+Note
+In the example, the first test case represents the sequence a = [1, 2, 1, 1]. The di!erent sequences
+that can appear after performing zero or more operations are: [1, 2, 1], [1, 2, 1, 1], [1, 3], [1, 3, 1],
+Page 12 of 30
+
+The 50th Petrozavodsk Programming Camp, Winter 2026
+Day 4: Harbin Contest, Sunday, February 1, 2026
+[3], [3, 1], [3, 1, 1].
+
+Page 13 of 30
+
+The 50th Petrozavodsk Programming Camp, Winter 2026
+Day 4: Harbin Contest, Sunday, February 1, 2026
+
+Problem G. Great Snowfall
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+3 seconds
+1024 mebibytes
+
+After a heavy snowfall, Little W needs to clean up his yard to make the uneven snow piles look
+at least a bit tidier. Little W’s yard can be viewed as an n ⇒ m grid, where the cell in the i-th
+row and j-th column is covered with snow of relative height hi,j , which can be positive, negative,
+or zero. Little W can perform the following operations to clear the snow piles:
+1. Choose 1 → i < n, 1 → j → m, and push the snow pile from the i-th row and the j-th
+column to the next row. This operation will decrease hi,j by 1 and increase hi+1,j by 1. This
+operation has no cost.
+2. Choose 1 → i → n, 1 → j < m, and push the snow pile from the i-th row and the j-th column
+to the next column. This operation will decrease hi,j by 1 and increase hi,j+1 by 1. This
+operation has no cost.
+3. Choose 1 → i → n, 1 → j → m, and add snow to the snow pile in the i-th row and the j-th
+column. This operation will increase hi,j by 1. This operation costs 1.
+4. Choose 1 → i → n, 1 → j → m, and remove snow from the snow pile in the i-th row and the
+j-th column. This operation will decrease hi,j by 1. This operation costs 1.
+Little W wants to perform zero or more operations to make all hi,j equal to 0, while minimizing
+the total cost. Can you help him calculate the minimum cost?
+
+Input
+The first line of input contains an integer t (1 → t → 106 ), the number of test cases. For each test
+case:
+The first line contains two integers, n and m (1 → n, m → 1000), the number of rows and columns
+in the yard.
+The next n lines describe the yard. The i-th of these lines contains m integers hi,1 , hi,2 , . . . , hi,m
+(↑109 → hi,j → 109 ), where the j-th integer represents the relative height of snow in the i-th row
+and the j-th column.
+The sum of n · m over all test cases does not exceed 106 .
+
+Output
+For each test case, output a single line with an integer: the minimum cost required for Little W
+to achieve his goal.
+
+Page 14 of 30
+
+The 50th Petrozavodsk Programming Camp, Winter 2026
+Day 4: Harbin Contest, Sunday, February 1, 2026
+
+Example
+standard input
+3
+1 1
+5
+1 2
+1 -1
+2 2
+-1 0
+1 1
+
+standard output
+5
+0
+3
+
+Page 15 of 30
+
+The 50th Petrozavodsk Programming Camp, Winter 2026
+Day 4: Harbin Contest, Sunday, February 1, 2026
+
+Problem H. How Many Rounds Are Expected?
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+2 seconds
+1024 mebibytes
+
+There
+are n sets, and the i-th set contains ai elements, with a total of 2m distinct elements
+⌈︃
+( ai = 2m), where each element belongs to a unique set.
+
+In each round of operations, we randomly match all elements into m pairs. For each matched
+pair, we randomly select one element, remove it from its original set, and place it into the set of
+the element it is matched with. The question is: what is the expected number of rounds until all
+elements belong to a single set?
+Output the answer modulo 998 244 353.
+
+Input
+The first line of input contains an integer t (1 → t → 100), the number of test cases. For each test
+case:
+The first line contains two integers n and m (1 → n → 2m → 400), representing the number of
+initial sets and the number of matches per round.
+⌈︃
+The second line contains n integers a1 , a2 , . . . , an (1 → ai → 2 · m,
+ai = 2 · m), where ai indicates
+that the i-th set has ai elements.
+The sum of n over all test cases is at most 800. The sum of m over all test cases is at most 400.
+
+Output
+For each test case, output a single line containing an integer: the answer modulo 998 244 353.
+Formally, the answer can be represented as a rational number p/q, and you have to print the value
+r such that p ⇑ q · r (mod 998 244 353).
+
+Page 16 of 30
+
+The 50th Petrozavodsk Programming Camp, Winter 2026
+Day 4: Harbin Contest, Sunday, February 1, 2026
+
+Examples
+standard input
+
+standard output
+
+4
+2 1
+1 1
+2 2
+2 2
+2 2
+1 3
+3 2
+1 1 2
+
+1
+3
+499122179
+499122180
+
+3
+6 5
+2 1 1 3 1 2
+10 100
+90 12 18 1 1 24 7 4 37 6
+10 200
+102 19 25 11 43 97 19 28 11 45
+
+347465837
+225202828
+437065763
+
+Note
+Explanation for the first example:
+• For the first test case: We represent the initial state as [1, 1], which has only 1 possible
+matching way, and regardless of which of the 2 elements is selected, after one operation, the
+state will be [2]. Therefore, the expected answer is 1.
+• For the second test case: We represent the initial state as [2, 2], which has 3 matching ways.
+Each matching way has 4 ways to select an element, resulting in a total of 12 di!erent
+operations. Among these, 4 operations result in the state [4] after the operation, while the
+remaining 8 operations result in the state [2, 2]. Thus, there is a 13 probability that after the
+operation, only one set remains, and in other cases, the state remains unchanged, leading to
+an expected value of 3.
+• For the third test case: We represent the initial state as [1, 3], which has 12 di!erent operations. Among these, 6 operations result in the state [4], while the other 6 result in the state
+[2, 2]. Therefore, the expected value is 1 + 12 · 3 = 52 , which is 499 122 179 modulo 998 244 353.
+• For the fourth test case: We represent the initial state as [1, 1, 2], which has 12 di!erent
+operations. Among these, 2 operations result in the state [4], while the other 10 result in
+the state [2, 2]. Therefore, the expected value is 1 + 56 · 3 = 72 , which is 499 122 180 modulo
+998 244 353.
+
+Page 17 of 30
+
+The 50th Petrozavodsk Programming Camp, Winter 2026
+Day 4: Harbin Contest, Sunday, February 1, 2026
+
+Problem I. Infinite Hexagonal Grids
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+2 seconds
+1024 mebibytes
+
+You are given two infinite hexagonal grids, where some grid cells are black and some grid cells are
+white. Two such grids are shown in the figure below (they correspond to the first example):
+
+We describe each grid cell in the grid using a three-dimensional coordinate (x, y, z) such that
+x, y, z ↔ Z and x + y + z = 0, as illustrated in the figure below:
+
+We can perform a flip operation: select a three-dimensional coordinate (x, y, z) such that x, y, z ↔ Z
+and x + y + z = 0, and then flip the colors of the grid cells surrounding that coordinate: black flips
+to white, and white flips to black. Specifically, we flip the colors of the grid cells (x, y ↑ 1, z + 1),
+(x + 1, y ↑ 1, z), (x + 1, y, z ↑ 1), (x, y + 1, z ↑ 1), (x ↑ 1, y + 1, z), and (x ↑ 1, y, z + 1). An example
+is shown in the figure below:
+
+Page 18 of 30
+
+The 50th Petrozavodsk Programming Camp, Winter 2026
+Day 4: Harbin Contest, Sunday, February 1, 2026
+The question is whether it is possible to perform several flip operations on the first hexagonal grid
+so that the color of each grid cell matches that of the second hexagonal grid.
+
+Input
+The first line of input contains an integer t (1 → t → 100), the number of test cases. For each test
+case:
+The first line contains two integers, n and m (1 → n, m → 105 ), representing the number of black
+grid cells on the two hexagonal grids.
+The next n lines contain the coordinates of distinct black cells on the first hexagonal grid, where
+the i-th line contains three integers: xi , yi , and zi (↑109 → xi , yi , zi → 109 , xi + yi + zi = 0).
+
+The following m lines contain the coordinates of distinct black cells on the second hexagonal grid,
+where the i-th line contains three integers: ui , vi , and wi (↑109 → ui , vi , wi → 109 , ui +vi +wi = 0).
+The sum of n over all test cases is at most 2·105 . The sum of m over all test cases is at most 2·105 .
+
+Output
+For each test case, output “YES” if it is possible to perform several flip operations on the first
+hexagonal grid so that the color of each grid cell matches that of the second hexagonal grid;
+otherwise, output “NO”.
+
+Page 19 of 30
+
+The 50th Petrozavodsk Programming Camp, Winter 2026
+Day 4: Harbin Contest, Sunday, February 1, 2026
+
+Examples
+standard input
+
+standard output
+
+1
+9 7
+0 2 -2
+-2 2 0
+0 1 -1
+2 0 -2
+-1 0 1
+2 -2 0
+0 -2 2
+0 0 0
+-2 1 1
+-1 1 0
+1 1 -2
+2 0 -2
+2 -1 -1
+0 -1 1
+0 -2 2
+1 -2 1
+
+YES
+
+2
+4 2
+-1 1 0
+-1 0 1
+0 -1 1
+1 0 -1
+0 1 -1
+1 -1 0
+4 3
+-1 1 0
+-1 0 1
+0 -1 1
+1 0 -1
+0 0 0
+0 1 -1
+1 -1 0
+
+YES
+NO
+
+Page 20 of 30
+
+The 50th Petrozavodsk Programming Camp, Winter 2026
+Day 4: Harbin Contest, Sunday, February 1, 2026
+
+Problem J. Judge of Gensokyo
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+4 seconds
+1024 mebibytes
+
+Image source: Bad Apple!! PV [Shadow Picture]
+Shiki is the judge of Gensokyo and often needs to take notes with pen and paper. Shiki has
+discovered that many English letters, such as ovw, form ligatures when written. For example,
+two consecutive vs written together look like a w; consecutive v and w also connect, for instance,
+wvvwvwv looks like a string of length 10 of vs.
+Shiki considers a string to be good if and only if it is completely symmetrical when written on
+paper. For example, wvowv is symmetrical because it has three sharp angles, one round shape,
+and three sharp angles when written; however, vowow is not symmetrical because it has two sharp
+angles on the left and three on the right.
+Now Shiki has given you a string s that she recorded, which consists only of the characters “ovw”.
+You need to find the longest substring of s such that the substring is good.
+
+Input
+The first line of input contains an integer t (1 → t → 2 · 106 ), the number of test cases. For each
+test case:
+The first line contains an integer n (1 → n → 107 ), representing the length of the string s.
+
+The second line contains a string s of length n, which consists only of the characters “ovw”.
+The sum of n over all test cases is at most 107 .
+
+Output
+For each test case, output a line containing the longest good substring of s.
+If there are multiple solutions, output any one of them.
+
+Page 21 of 30
+
+The 50th Petrozavodsk Programming Camp, Winter 2026
+Day 4: Harbin Contest, Sunday, February 1, 2026
+
+Example
+standard input
+3
+8
+wwwovvvv
+16
+wwwooooooooovwww
+11
+wwwovoovvvv
+
+standard output
+wwovvvv
+ooooooooo
+vvvv
+
+Page 22 of 30
+
+The 50th Petrozavodsk Programming Camp, Winter 2026
+Day 4: Harbin Contest, Sunday, February 1, 2026
+
+Problem K. Knapsack And Greedy Algorithm
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+1024 mebibytes
+
+The 01-knapsack problem is a classic combinatorial optimization problem in algorithmic competitions. Little W has learned a greedy algorithm to solve this problem. The 01-knapsack problem
+is defined as follows.
+Consider n items: their weights are positive integers w1 , w2 , . . . , wn , and their values are positive
+integers v1 , v2 , . . . , vn . We have a knapsack with capacity
+⌈︃nc. We need to find x1 , x2 , . . . , xn , each
+of them
+i=1 wi · xi → c and the sum of values
+⌈︃n either 0 or 1, such that the sum of weights
+vt = i=1 vi · xi is the maximum possible.
+Little W’s greedy algorithm works as follows.
+
+Sort the n items in descending order based on the value-to-weight ratio vi /wi ; when ratios are the
+same, sort by decreasing wi . Initialize a variable c0 to 0, and iterate i from 1 to n. If c0 + wi → c,
+set xi ⇓ 1 and c0 ⇓ c0 + wi ; otherwise, set xi ⇓ 0. After iterating, you will obtain the desired
+x1 , x2 , . . . , xn and vt .
+You certainly know that this algorithm is incorrect, but Little W does not believe it. Even when
+you provide Little W with some counterexamples, Little W still believes that this algorithm can
+yield the optimal vt for many di!erent values of c. Therefore, provided with a capacity limit clim ,
+you now wish to construct a list of weights w1 , w2 , . . . , wn and a list of values v1 , v2 , . . . , vn such
+that:
+1. For all c such that 2 → c → clim , Little W’s algorithm cannot achieve the optimal vt .
+2. Under condition 1, n is as small as possible.
+3. Under conditions 1 and 2, max(w1 , w2 , . . . , wn ) is as small as possible.
+4. Under conditions 1, 2, and 3, max(v1 , v2 , . . . , vn ) is as small as possible.
+Now you need to construct a set that satisfies the above conditions for the 01-knapsack to convince
+Little W. Can you do it? If there are multiple construction methods, you can output any one of
+them.
+
+Input
+The input consists of a single line containing an integer clim (2 → clim → 5000), the upper bound
+for c.
+
+Output
+The output should contain the following:
+The first line should contain an integer n (1 → n → 104 ), the number of items in the constructed
+01-knapsack.
+The second line should contain n integers w1 , w2 , . . . , wn (1 → wi → clim ), the weights of the items.
+The third line should contain n integers v1 , v2 , . . . , vn (1 → vi → 109 ), the values of the items.
+
+It can be proven that, given the problem and input conditions, a solution satisfying the above
+data ranges can always be found.
+Page 23 of 30
+
+The 50th Petrozavodsk Programming Camp, Winter 2026
+Day 4: Harbin Contest, Sunday, February 1, 2026
+
+Example
+standard input
+2
+
+standard output
+2
+1 2
+2 3
+
+Page 24 of 30
+
+The 50th Petrozavodsk Programming Camp, Winter 2026
+Day 4: Harbin Contest, Sunday, February 1, 2026
+
+Problem L. Let’s Avoid Obstacles
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+1024 mebibytes
+
+Consider an n⇒m grid with row numbers ranging from 1 to n and column numbers ranging from 1
+to m. Each column, except for the leftmost column 1 and the rightmost column m, can have at
+most one obstacle; the leftmost and rightmost columns are guaranteed to have no obstacles.
+You start from any cell in the leftmost column (you can choose the row), and your goal is to reach
+any cell in the rightmost column (you can choose the row). Suppose you are currently at row i
+and column j. You can choose one of the following three operations at each step:
+• Move right: from (i, j) to (i, j + 1);
+• Move up: from (i, j) to (i ↑ 1, j);
+• Move down: from (i, j) to (i + 1, j).
+You are not allowed to move left, and at any time, you cannot enter an obstacle cell or move
+outside the grid.
+There are k obstacles (numbered from i = 0 to k ↑ 1 after sorting by column number). For each
+obstacle, you must choose to “go around from above” or “go around from below”.
+If the i-th obstacle is at row ri and column ci :
+• If you choose “above”, your row number in column ci must always be less than ri ;
+• If you choose “below”, your row number in column ci must always be greater than ri .
+The choices for di!erent columns are independent, resulting in a total of 2k possible schemes.
+Your task: for each scheme, calculate the minimum number of steps from any row in the leftmost
+column to any row in the rightmost column while satisfying all the constraints of that scheme; if
+there is no feasible path under that scheme, output ↑1.
+
+Input
+
+The first line of input contains an integer t (1 → t → 50), the number of test cases. For each test
+case:
+The first line contains two integers, n and m (1 → n → 100, 2 → m → 100), the number of rows
+and columns in the grid.
+The second line contains an integer k (0 → k → min(m ↑ 2, 10)), the number of obstacles.
+
+The next k lines describe obstacles. The i-th of them contains two integers, ri and ci (1 → ri → n,
+1 < c1 < c2 < . . . < ck < m), indicating that there is an obstacle at row ri and column ci .
+The sum of n · m over all test cases is at most 5000. There is no such constraint on the sum of k
+over all test cases.
+
+Output
+For each test case, output a line containing 2k integers, representing the minimum number of steps
+for each scheme numbered from 0 to 2k ↑ 1. Adjacent numbers should be separated by a space.
+If a certain scheme has no solution, output ↑1.
+Scheme numbering explanation:
+
+Page 25 of 30
+
+The 50th Petrozavodsk Programming Camp, Winter 2026
+Day 4: Harbin Contest, Sunday, February 1, 2026
+• Each scheme can be viewed as a binary number of length k.
+• The binary digits, from the least significant bit to the most significant bit, correspond to
+the obstacles 0, 1, . . ., k ↑ 1.
+• A value 0 means going around the obstacle from above; a value 1 means going around from
+below.
+For example, if k = 3, there are 23 = 8 schemes corresponding to the following table:
+Binary Representation
+Scheme #
+Bypass Choice (for obstacles 0, 1, 2)
+(Least ⇔ Most Significant Bit)
+0
+000
+Above, Above, Above
+1
+100
+Below, Above, Above
+2
+010
+Above, Below, Above
+3
+110
+Below, Below, Above
+4
+001
+Above, Above, Below
+5
+101
+Below, Above, Below
+6
+011
+Above, Below, Below
+7
+111
+Below, Below, Below
+The program should output the minimum number of steps for each scheme in ascending order of
+scheme numbers.
+
+Example
+standard input
+3
+3 6
+2
+3 4
+2 5
+3 4
+1
+1 2
+3 6
+2
+3 2
+1 5
+
+standard output
+5 -1 -1 -1
+-1 3
+-1 -1 5 -1
+
+Page 26 of 30
+
+The 50th Petrozavodsk Programming Camp, Winter 2026
+Day 4: Harbin Contest, Sunday, February 1, 2026
+
+Problem M. Multiple Triangular Intersections
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+2 seconds
+1024 mebibytes
+
+In Town A, there are (n + 1)(n + 2)/2 intersections, which are connected by 3n paths, forming an
+equilateral triangle with a side length of n roads. The case for n = 3 is shown in the figure below:
+
+These 3n paths can be divided into three orientations: left diagonal, horizontal, and right diagonal,
+each containing n paths. The i-th path in each orientation consists of i roads.
+For example, when n = 3:
+• The left diagonal paths from the smallest to the largest number of roads are (6 ↖ 9),
+(3 ↖ 5 ↖ 8), (1 ↖ 2 ↖ 4 ↖ 7).
+• The horizontal paths from the smallest to the largest number of roads are (2 ↖ 3),
+(4 ↖ 5 ↖ 6), (7 ↖ 8 ↖ 9 ↖ 10).
+• The right diagonal paths from the smallest to the largest number of roads are (4 ↖ 8),
+(2 ↖ 5 ↖ 9), (1 ↖ 3 ↖ 6 ↖ 10).
+We call three distinct intersections (u, v, w) an equilateral triangle intersection of positive integer
+length 𝜔 if and only if we can satisfy the following after any permutation of the order of u, v, w:
+• Starting from u, reach v by passing through 𝜔 left diagonal roads.
+• Starting from v, reach w by passing through 𝜔 horizontal roads.
+• Starting from w, reach u by passing through 𝜔 right diagonal roads.
+Or:
+• Starting from u, reach v by passing through 𝜔 right diagonal roads.
+• Starting from v, reach w by passing through 𝜔 horizontal roads.
+• Starting from w, reach u by passing through 𝜔 left diagonal roads.
+
+Page 27 of 30
+
+The 50th Petrozavodsk Programming Camp, Winter 2026
+Day 4: Harbin Contest, Sunday, February 1, 2026
+For example, in the figure above, (2, 4, 5) and (2, 3, 5) are equilateral triangle intersections, while
+(2, 3, 4) is not.
+To address tra”c congestion, Town A has decided to make each road directed. After the direction
+is set, each road has a unique fixed direction, and the roads on each path have the same direction.
+The following figure shows one possible direction (corresponding to the third test case of the first
+example):
+
+We call three distinct intersections (u, v, w) a connected equilateral triangle intersection if and only
+if they form an equilateral triangle with sides of positive integer length 𝜔 in the graph, and they
+can reach each other through the 3𝜔 roads that make up the equilateral triangle. For example, in
+the figure above:
+• (2, 4, 5) is a connected equilateral triangle intersection because they are not only an equilateral triangle intersection but can also reach each other only through the roads (2 ⇔ 4,
+4 ⇔ 5, 5 ⇔ 2) that make up that equilateral triangle intersection.
+• (2, 3, 4) is not a connected equilateral triangle intersection because they are not an equilateral
+triangle intersection.
+• (2, 3, 5) is not a connected equilateral triangle intersection because they are an equilateral
+triangle intersection but cannot reach each other through the roads (5 ⇔ 3, 3 ⇔ 2, 2 ⇓ 5)
+that make up that equilateral triangle intersection.
+Now, given the directions of all directed paths, you are asked how many connected equilateral
+triangle intersections exist in this graph.
+
+Input
+The first line of input contains an integer t (1 → t → 105 ), the number of test cases. For each test
+case:
+The first line contains an integer n (1 → n → 105 ), the length of the equilateral triangle.
+
+The second line contains a binary string s1 of length n, indicating that if s1,i = 0, the direction
+of the left diagonal path consisting of i roads is from the upper right to the lower left, and the
+reverse if s1,i = 1.
+The third line contains a binary string s2 of length n, indicating that if s2,i = 0, the direction of
+the horizontal path consisting of i roads is from left to right, and the reverse if s2,i = 1.
+Page 28 of 30
+
+The 50th Petrozavodsk Programming Camp, Winter 2026
+Day 4: Harbin Contest, Sunday, February 1, 2026
+The fourth line contains a string s3 of length n, indicating that if s3,i = 0, the direction of the
+right diagonal path consisting of i roads is from the lower right to the upper left, and the reverse
+if s3,i = 1.
+The sum of n over all test cases is at most 105 .
+
+Output
+For each test case, output an integer indicating the number of connected equilateral triangle
+intersections.
+
+Examples
+standard input
+
+standard output
+
+3
+1
+0
+0
+0
+1
+0
+0
+1
+3
+010
+100
+001
+
+1
+0
+4
+
+1
+4
+0011
+1100
+0011
+
+6
+
+Note
+In the first example, the figure for the first test case is:
+
+The figure for the second test case is:
+
+Page 29 of 30
+
+The 50th Petrozavodsk Programming Camp, Winter 2026
+Day 4: Harbin Contest, Sunday, February 1, 2026
+
+The connected equilateral triangle intersections are:
+• (2, 4, 5);
+• (4, 7, 8);
+• (5, 6, 9);
+• (2, 7, 9).
+
+Page 30 of 30
+
+

@@ -1,0 +1,47 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+#define int long long
+#define ff first 
+#define ss second
+#define sz(a) (int)(a).size()
+#define pb push_back
+#define rep(i, a, b) for(int i = (a); i < (b); i++)
+#define repd(i, a, b) for(int i = (a); i >= (b); i--)
+#define all(x) (x).begin(), (x).end()
+#define rall(x) (x).rbegin(), (x).rend()
+#define hha(x) cout << #x << " = " << x << ' ';
+#define hhal(x) cout << #x << " = " << x << endl;
+#define print(v) cout << #v << " = " << ' '; for(auto x : v) cout << x << ' '; cout << endl;
+
+void solve() {
+    int n; cin >> n;
+    vector<int> a(n);
+    for(int &x : a) cin >> x;
+    sort(all(a), greater<>());
+    vector<int> sum(18);
+    for(int &x : a)
+    {
+        int p = 10;
+        for(int i = 0; i < 17; i++)
+        {
+            sum[i] += x % p;
+            p = p * 10;
+        }
+    }
+    int p = 10, ans = 0;
+    for(int i = 0; i < 17; i++)
+    {
+        ans += sum[i] / p;
+        p = p * 10;
+    }
+    cout << ans << "\n";
+}
+
+signed main() {
+    ios_base::sync_with_stdio(0); cin.tie(0);
+    srand(time(NULL));
+    int t; cin >> t; while(t--)
+    solve();
+    return 0;
+}

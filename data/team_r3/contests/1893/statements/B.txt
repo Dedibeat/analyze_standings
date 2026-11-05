@@ -1,0 +1,70 @@
+Barkley III
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+2 seconds
+1024 megabytes
+
+There are n little pigs in Pigeland. All of them are proficient in competitive programming, and the
+i-th of them has ai rating. If k pigs p1 , p2 , · · · , pk form a team, the rating of the team will be
+ap1 & ap2 & ap3 & · · · & apk , where & denotes the bitwise AND operation.
+There are some programming contests to take place. Pigeland can send exactly one team to participate
+in each contest. For the i-th competition, only the pigs numbered between li and ri (both inclusive) have
+time to participate. Unfortunately, due to a shortage of funds, exactly one pig numbered between li and
+ri has to be removed. Meanwhile, all other pigs in the interval will participate in the contest. Pig-head,
+the coach of Pigeland, needs to properly select pigs who will not participate so that the team’s rating is
+maximized.
+However, through training and participating in contests, the rating of pigs may be changed. As Pig-head’s
+best friend, your task is to maintain the pigs’ rating for the following q events belonging to three types.
+• 1 l r x: Pig-head changes the rating of each pig numbered between l and r (both inclusive) by
+executing the bitwise AND operation with x. More formally, for all l ≤ i ≤ r, ai becomes ai & x.
+• 2 s x: Pig-head changes the rating of the s-th pig to x.
+• 3 l r: Pig-head asks for the maximum rating when forming a team by selecting pigs numbered
+between l and r (both inclusive) and removing exactly one of them.
+
+Input
+There is only one test case in each test file.
+The first line contains two integers n and q (2 ≤ n ≤ 106 , 1 ≤ q ≤ 106 ) indicating the number of pigs and
+the number of events.
+The second line contains n integers a1 , a2 , · · · , an (0 ≤ ai < 263 ) where ai indicates the rating of the i-th
+pig.
+For the following q lines, the i-th line first contains an integer opi (opi ∈ {1, 2, 3}) indicating the type of
+the i-th event. If opi = 1, then three integers l, r, and x follow (1 ≤ l ≤ r ≤ n, 0 ≤ x < 263 ); If opi = 2,
+then two integers s and x follow (1 ≤ s ≤ n, 0 ≤ x < 263 ); If opi = 3, then two integers l and r follow
+(1 ≤ l < r ≤ n).
+
+Output
+For each event of the third type, output one line containing one integer indicating the maximum rating
+of the team.
+
+Page 1 of 2
+
+Example
+standard input
+5 9
+7 7 7 6 7
+3 1 5
+2 1 3
+3 1 5
+3 1 3
+1 1 2 3
+3 1 3
+2 2 8
+3 1 3
+3 1 2
+
+standard output
+7
+6
+7
+3
+3
+8
+
+Page 2 of 2
+
+

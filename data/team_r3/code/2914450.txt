@@ -1,0 +1,86 @@
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+
+#define int long long
+#define sz(a) (int)(a).size()
+#define pb push_back
+#define all(x) x.begin(), x.end()
+#define rall(x) x.rbegin(), x.rend()
+#define FOR(i, a, b) for(int i = (a); i < (b); i++)
+#define FORD(i, a, b) for(int i = (a); i >= (b); i++)
+#define ff first
+#define ss second 
+#define _ << ' ' <<
+#define hha(x) cout << #x << " = " << x << " "
+#define hhal(x) cout << #x << " = " << x << endl
+#define print(v) cout << #v << " = "; for(auto x : v) cout << x << " "; cout << endl;
+
+void solve() {
+    int s; cin >> s;
+    int f[8];
+    FOR(i, 1, 8) cin >> f[i];
+    int a = f[1], b = f[2], c = f[4];
+    if(min(a, b) + f[3] <= max(a, b)) {
+        if(a < b) a += f[3];
+        else b += f[3];
+    }
+    else {
+        f[3] -= abs(a - b);
+        a = b = max(a, b);
+        a += (f[3] + 1) / 2;
+        b += (f[3]) / 2;
+    }
+    if(min(c, b) + f[6] <= max(c, b)) {
+        if(c < b) c += f[6];
+        else b += f[6];
+    }
+    else {
+        f[6] -= abs(c - b);
+        c = b = max(c, b);
+        c += (f[6] + 1) / 2;
+        b += (f[6]) / 2;
+    }
+    if(min(c, a) + f[5] <= max(c, a)) {
+        if(c < a) c += f[5];
+        else a += f[5];
+    }
+    else {
+        f[5] -= abs(c - a);
+        c = a = max(c, a);
+        c += (f[5] + 1) / 2;
+        a += (f[5]) / 2;
+    }
+    if(a > b) swap(a, b);
+    if(a > c) swap(a, c);
+    if(b > c) swap(b, c);
+    if(a + f[7] <= b) {
+        a += f[7];
+    }
+    else {
+        f[7] -= b - a;
+        a = b;
+        if((c - a) * 2 >= f[7]) {
+            a += (f[7] / 2);
+            b += (f[7] + 1) / 2;
+        }
+        else {
+            f[7] -= (c - a) * 2;
+            a = b = c;
+            a += f[7] / 3;
+            b += f[7] / 3;
+            c += f[7] / 3;
+        }
+    }
+    cout << a << '\n';
+}   
+
+signed main() {
+    ios_base::sync_with_stdio(0); cin.tie(0);
+    int t = 1;
+    cin >> t;
+    while(t--) {
+        solve();
+    }
+    return 0;
+}

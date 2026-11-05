@@ -1,0 +1,47 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+#define int long long
+#define pb push_back
+#define all(x) (x).begin(), (x).end()
+#define rall(x) (x).rbegin(), (x).rend()
+#define rep(i, a, b) for(int i = (a); i < (b); i++)
+#define repd(i, a, b) for(int i = (a); i >= (b); i--)
+#define hha(x) cout << #x << ' ' << x << ' ';
+#define hhal(x) cout << #x << ' ' << x << '\n';
+#define print(v) cout << #v << ' '; for(auto &x : v) cout << x << ' '; cout << '\n';
+void solve() {
+    int m; cin >> m;
+    vector<int> b(m);
+    for(int &x : b) cin >> x;
+    //print(b);
+    int n; cin >> n;
+    while(n--)
+    {
+        int l; cin >> l;
+        vector<int> a(l); 
+        for(auto &x : a) cin >> x;
+        vector<int> dp(m + 1);
+        dp[0] = 1e9;
+        for(int x : a)
+        {
+            for(int i = 0; i < m; i++)
+            {
+                if(x == b[i]) 
+                {
+                    if(dp[i] > 0)
+                    {
+                        dp[i + 1]++;
+                        dp[i]--;
+                    }
+                }
+            }
+        }
+        cout << dp[m] << "\n";
+    }
+}
+signed main() {
+    ios_base::sync_with_stdio(0); cin.tie(0);
+    //int t; cin >> t; while(t--);
+    solve();
+}

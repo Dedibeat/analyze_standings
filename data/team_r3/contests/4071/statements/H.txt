@@ -1,0 +1,72 @@
+the-first-problem
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+1024 megabytes
+
+For a string A, let pref (A, i) denote the prefix of A of length i.
+For strings A, B, let occur(A, B) denote the number of occurrences of A in B.
+Define:
+len(A) len(B)
+
+score(A, B) =
+
+X X
+i=1
+
+occur(pref (A, i), pref (B, j))
+
+j=1
+
+That is, the sum over every prefix of A of its number of occurrences in every prefix of B.
+You are given a text string T .
+There are q queries, each given by ai pattern strings S1 , S2 , · · · , Sai and an integer bi .
+For each query, find the minimum x such that:
+ai
+X
+
+score(Sj , pref (T, x)) ≥ bi
+
+j=1
+
+If no such x exists, output −1.
+
+Input
+The first line contains the text string T (1 ≤ |T | ≤ 2 × 105 , where |T | denotes the length of T ).
+The second line contains a single integer q (1 ≤ q ≤ 2 × 105 ).
+For each query, the first line contains two integers ai , bi (1 ≤ ai ≤ 2 × 105 , 1 ≤ bi ≤ 1018 ). The following
+ai lines each contain a pattern string S1 , S2 , · · · , Sai in order.
+P
+P
+|S| ≤ 2 × 105 , where
+|S| is the total length of all pattern strings across all queries in one test case.
+All strings consist of lowercase English letters.
+
+Output
+Output q lines, the answer to each query in order.
+
+Example
+standard input
+abac
+3
+1 5
+aba
+2 10
+a
+ac
+1 1
+x
+
+standard output
+3
+4
+-1
+
+Page 1 of 1
+
+

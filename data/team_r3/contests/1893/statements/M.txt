@@ -1,0 +1,52 @@
+Make It Divisible
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+2 seconds
+1024 megabytes
+
+Given a sequence a1 , a2 , · · · , an of length n containing positive integers, we say an interval [l, r]
+(1 ≤ l ≤ r ≤ n) is a divisible interval if there exists an integer d such that l ≤ d ≤ r and for all
+l ≤ i ≤ r, ai is divisible by ad . We say the whole sequence is a divisible sequence if for all 1 ≤ l ≤ r ≤ n,
+[l, r] is a divisible interval.
+Given another sequence b1 , b2 , · · · , bn of length n and an integer k, find all integers x such that 1 ≤ x ≤ k
+and the sequence b1 + x, b2 + x, · · · , bn + x is a divisible sequence. As the number of such integers might
+be large, you just need to output the number and the sum of all such integers.
+
+Input
+There are multiple test cases. The first line of the input contains an integer T (1 ≤ T ≤ 500) indicating
+the number of test cases. For each test case:
+The first line contains two integers n and k (1 ≤ n ≤ 5 × 104 , 1 ≤ k ≤ 109 ).
+The second line contains n integers b1 , b2 , · · · , bn (1 ≤ bi ≤ 109 ).
+It’s guaranteed that the sum of n of all test cases does not exceed 5 × 104 .
+
+Output
+For each test case output one line containing two integers separated by a space, where the first integer is
+the number of valid x, and the second integer is the sum of all valid x.
+
+Example
+standard input
+3
+5 10
+7 79 1 7 1
+2 1000000000
+1 2
+1 100
+1000000000
+
+standard output
+3 8
+0 0
+100 5050
+
+Note
+For the first sample test case, x = 1, x = 2 and x = 5 are valid.
+For the third sample test case, all 1 ≤ x ≤ 100 are valid.
+
+Page 1 of 1
+
+

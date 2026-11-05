@@ -1,0 +1,60 @@
+Points Selection
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+3 seconds
+512 megabytes
+
+There are n points p1 , p2 , . . . , pn on the 2D plane. The i-th point pi is located at (xi , yi ) with weight wi .
+Consider a query with parameters (a, b, c), let P
+S(a, b) = {pi |xi ≤ a ∧ yi ≤ b}. The query denotes “Is it
+possible to select a subset T from S such that ( pi ∈T wi ) mod n = c? ” (T ⊆ S)
+Let query(a, b, c) = True/False be the answer to the query with parameters (a, b, c). You are required to
+answer all possible queries. Instead of printing O(n3 ) lines, you only need to compute the following value:
+n X
+n n−1
+X
+X
+ans = (
+a · b · c · [query(a, b, c) = True]) mod 264
+a=1 b=1 c=1
+
+Input
+The first line of the input contains a single integer n (2 ≤ n ≤ 5 × 105 ), denoting the number of points.
+In the next n lines, the i-th line contains three integers xi , yi and wi (1 ≤ xi , yi , wi ≤ n), describing the
+i-th point. Note that two points may share the same location.
+It is guaranteed that all the values of xi , yi and wi are chosen uniformly at random from integers in their
+corresponding ranges. The randomness condition does not apply to the sample test case, but your solution
+must pass the sample as well.
+
+Output
+Print a single line containing a single integer, denoting the value of ans.
+
+Examples
+standard input
+
+standard output
+
+3
+1 2 2
+2 3 1
+3 1 3
+
+75
+
+5
+1 1 4
+5 1 4
+2 3 3
+1 4 1
+2 5 2
+
+1935
+
+Page 1 of 1
+
+

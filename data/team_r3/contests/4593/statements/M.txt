@@ -1,0 +1,101 @@
+Melodiniq
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+1024 megabytes
+
+Uni and her teammates are unlocking a high-difficulty song through Linked VERSE. During the unlocking
+process, four players simultaneously play a song containing n notes.
+Each player starts with a Gauge of 2000. For every note, each player receives one of five judgements:
+• JUSTICE HEAVEN (H): This judgement does not decrease the player’s Gauge.
+• JUSTICE CRITICAL (C): This judgement does not decrease the player’s Gauge.
+• JUSTICE (J): This judgement decreases the player’s Gauge by 50.
+• ATTACK (A): This judgement decreases the player’s Gauge by 100.
+• MISS (M): This judgement decreases the player’s Gauge by 200.
+Meanwhile, each player has an independent combo counter. When a player receives a JUSTICE HEAVEN
+judgement, their own combo count increases by 1; receiving any other judgement resets only their own
+combo count. When a player’s combo count reaches 100, they increase the Gauge of each of the other
+three players by 30 and reset their own combo count.
+For each note, the corresponding judgements of all players are resolved simultaneously; that is, each
+player’s Gauge changes directly to the value obtained after all changes are applied at once. After the
+resolution, if a player’s Gauge is ≥ 2000, it is set to 2000.
+However, Uni notices that after the judgements for all notes have been resolved, if a player’s Gauge was
+≤ 0 at any point, their Gauge is forcibly set to 0 before the game ends. Can you help her find each
+player’s Gauge at the end of the game?
+
+Input
+This problem contains multiple test cases.
+The first line contains a positive integer T (1 ≤ T ≤ 104 ), representing the number of test cases.
+For each test case:
+• The first line contains an integer n (1 ≤ n ≤ 105 ).
+• Each of the next four lines contains a string s of length n, where the i-th character represents that
+player’s judgement on the i-th note.
+It is guaranteed that the sum of n over all test cases does not exceed 105 , and that every string contains
+only the five characters H, C, J, A, and M.
+
+Output
+For each test case, output four integers representing the final Gauge values of the four players, in input
+order.
+
+Page 1 of 3
+
+Example
+standard input
+3
+5
+CCCCC
+JJJJJ
+AAAAA
+MMMMM
+10
+HCJAMHCJAM
+CHCHCHCHCH
+JAMJAMJAMJ
+MAJHAMMACH
+103
+MMMMMMMMMMCCCCCCCCCC
+CCCCCCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCCCCCC
+CCC
+HHHHHHHHHHHHHHHHHHHH
+HHHHHHHHHHHHHHHHHHHH
+HHHHHHHHHHHHHHHHHHHH
+HHHHHHHHHHHHHHHHHHHH
+HHHHHHHHHHHHHHHHHHHH
+HHH
+CJCJCJCJHHHHHHHHHHHH
+HHHHHHHHHHHHHHHHHHHH
+HHHHHHHHHHHHHHHHHHHH
+HHHHHJJJCJCJCJCJCJCJ
+CJCJCJCJCJCJCJCJCJCJ
+CJC
+HHHHHHHHHHHHHHHHHHHH
+HHHHHHHHHHHHHHHHHHHH
+HHHHHHHHHHHHHHHAHHHH
+HHHHHHHHHHHHHHHHHHHH
+HHHHHHHHHHHHHHHHHHHH
+HHH
+
+standard output
+2000 1750 1500 1000
+1300 2000 900 1050
+0 2000 830 1930
+
+Note
+To ensure that the PDF is displayed correctly, several blank lines have been inserted into the last sample.
+You can download the original sample from Domjudge.
+
+Page 2 of 3
+
+Illustrator: Nagisa11
+
+Page 3 of 3
+
+

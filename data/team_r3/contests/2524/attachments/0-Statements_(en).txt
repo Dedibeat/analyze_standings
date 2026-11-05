@@ -1,0 +1,841 @@
+The 2025 ICPC Asia EC Regionals Online Contest (II)
+China, September, 14, 2025
+
+Problem A. Angry Birds
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+256 megabytes
+
+Aris is playing the classic game, Angry Birds!
+Because Aris has been playing for too long, Yuuka confiscated Aris’s game console and demanded that
+Aris complete today’s math homework before getting it back.
+However, Sensei did not assign any math homework to Aris today, so Yuuka had to come up with a
+problem for Aris to solve.
+Consider the game field of Angry Birds as a three-dimensional Euclidean space, and the bird as a sphere
+with radius R3 . Establish a spatial Cartesian coordinate system O − xyz, such that the trajectory of the
+bird’s center lies in the horizontal plane z = 0.
+It is known that the trajectory of the bird’s center is a closed polyline, consisting of n segments connected
+end to end. The connection points are n points: (x1 , y1 , 0), (x2 , y2 , 0), · · · , (xn , yn , 0). The i-th segment
+has endpoints (xi , yi , 0) and (xi mod n+1 , yi mod n+1 , 0). However, due to sensor errors, the actual n points
+may deviate from (xi , yi , 0) by a distance not exceeding R2 (the sensor deviation R2 is the same for all
+points). That is, the actual i-th point (x′i , yi′ , 0) can be anywhere within the circle (which is still contained
+in the plane z = 0) centered at (xi , yi , 0) with radius R2 .
+Let S be the set of all points that the entire bird may pass through, i.e., points in 3D space whose distance
+to the bird’s center trajectory is at most R3 . Yuuka requires Aris to compute the volume of the convex
+hull of S.
+Convex hull: The convex hull of a point set S is defined as the smallest set T such that for any two points
+in S, all points on the line segment between them are contained in T .
+
+Input
+The first line contains a positive integer T (1 ≤ T ≤ 103 ), indicating the number of test cases.
+For each test case, the first line contains three integers n, R2 , R3 (1 ≤ n ≤ 105 , 0 ≤ R2 , R3 ≤ 106 ),
+representing the number of connection points, the sensor error radius, and the bird radius, respectively.
+The next n lines each contain two integers xi , yi (|xi |, |yi | ≤ 106 ), representing the i-th connection point
+of the trajectory.
+It is guaranteed that the sum of n over all test cases in a single test point does not exceed 105 .
+
+Output
+For each test case, output a single floating-point number representing the answer. Your answer is
+considered correct if the relative or absolute error compared to the standard answer is at most 10−9 .
+|a−b|
+Let your answer be a and the standard answer be b. If max{b,1}
+≤ 10−9 , it is considered correct.
+
+Example
+standard input
+1
+5 1 1
+0 0
+3 1
+2 3
+2 2
+-1 3
+
+standard output
+77.622211120429589
+
+Page 1 of 19
+
+The 2025 ICPC Asia EC Regionals Online Contest (II)
+China, September, 14, 2025
+
+Note
+The convex hull of all points that the bird’s center may pass through:
+
+Page 2 of 19
+
+The 2025 ICPC Asia EC Regionals Online Contest (II)
+China, September, 14, 2025
+
+Problem B. Rectangular Wooden Block
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+256 megabytes
+
+Mr. Noya has a pet hamster that loves to gnaw on wood.
+One day, Mr. Noya brought home a rectangular wooden block with dimensions L × W × H, meaning it
+has a length of L units, a width of W units, and a height of H units, divided into L × W × H unit cubes.
+Using one vertex of the block as the origin, the length direction as the x-axis, the width direction as the
+y-axis, and the height direction as the z-axis, a spatial coordinate system O − xyz is established. The unit
+cube with x-coordinate in [i − 1, i), y-coordinate in [j − 1, j), and z-coordinate in [k − 1, k) is denoted as
+(i, j, k).
+Note: The block does not necessarily have length greater than width (i.e., it is not required that W ≤ L);
+the terms are just used to fix the directions.
+Mr. Noya does not want the wooden block to be completely gnawed away by his hamster, so he decides
+to reinforce it. Reinforcing the unit cube at (i, j, k) has a cost V (i, j, k). Additionally, there are three
+matrices A, B, C representing constraints from the three orthogonal views (front view, side view, and top
+view):
+• For matrix A = {aij }H×L , if aij = 0, then for all 1 ≤ p ≤ W , the cube at (j, p, i) must not be
+reinforced. If aij = 1, at least one of these cubes must be reinforced.
+• For matrix B = {bij }H×W , if bij = 0, then for all 1 ≤ q ≤ L, the cube at (q, j, i) must not be
+reinforced. If bij = 1, at least one of these cubes must be reinforced.
+• For matrix C = {cij }W ×L , if cij = 0, then for all 1 ≤ r ≤ H, the cube at (j, i, r) must not be
+reinforced. If cij = 1, any number (including zero) of these cubes may be reinforced.
+Note: Mr. Noya can reinforce each unit cube at most once.
+Note: For matrix C, a non-zero value does not require reinforcing at least one unit cube.
+Under the above conditions, Mr. Noya wants to minimize the total cost of reinforcing the wooden block.
+Can you help him?
+Note: You do not need to consider the issue of unit cubes being suspended in air.
+
+Input
+The first line contains a positive integer T (1 ≤ T ≤ 5 × 103 ), indicating the number of test cases.
+For each test case, the first line contains three positive integers L, W , H (1 ≤ L × W × H ≤ 103 ),
+representing the length, width, and height of the block.
+The next line contains L × W × H integers. The [(i − 1) × W + j − 1] × H + k-th integer is V (i, j, k)
+(−109 ≤ V (i, j, k) ≤ 109 ).
+Then follow H lines. The i-th line is a binary string of length L, denoted ai1 ai2 · · · aiL , representing the
+i-th row of matrix A.
+Then follow H lines. The i-th line is a binary string of length W , denoted bi1 bi2 · · · biW , representing the
+i-th row of matrix B.
+Then follow W lines. The i-th line is a binary string of length L, denoted ci1 ci2 · · · ciL , representing the
+i-th row of matrix C.
+It is guaranteed that the sum of L × W × H over all test cases in a single test point does not exceed
+5 × 103 .
+Page 3 of 19
+
+The 2025 ICPC Asia EC Regionals Online Contest (II)
+China, September, 14, 2025
+
+Output
+For each test case, the first line contains a string YES or NO indicating whether Mr. Noya’s conditions can
+be satisfied.
+If the conditions can be satisfied, then output on the second line an integer representing the minimum
+reinforcement cost of the cuboid; on the third line a nonnegative integer representing the number k
+of reinforced unit cubes; followed by k lines, each containing three positive integers representing the
+coordinates of each reinforced unit cube. Note that each unit cube can be reinforced at most once.
+If there are multiple valid solutions, outputting any one of them will be considered correct.
+
+Example
+standard input
+2
+3 2 2
+1 1 4 5 -1 4 -1 9 1 9 8 1
+011
+111
+11
+11
+111
+111
+1 2 2
+1 2 3 4
+0
+0
+01
+01
+1
+1
+
+standard output
+YES
+5
+6
+2 1 1
+2 2 1
+3 1 1
+1 1 2
+2 1 2
+3 2 2
+NO
+
+Page 4 of 19
+
+The 2025 ICPC Asia EC Regionals Online Contest (II)
+China, September, 14, 2025
+
+Problem C. Jiaxun!
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+3 seconds
+256 megabytes
+
+There are three students training hard for ICPC. They are practicing on a problemset consisting of exactly
+S problems. Each problem belongs to exactly one of the following seven categories, describing which subset
+of students can solve it:
+• F1 : only student 1 can solve;
+• F2 : only student 2 can solve;
+• F3 : students 1 and 2 (but not 3) can solve;
+• F4 : only student 3 can solve;
+• F5 : students 1 and 3 (but not 2) can solve;
+• F6 : students 2 and 3 (but not 1) can solve;
+• F7 : students 1, 2 and 3 can all solve.
+It is guaranteed that
+F1 + F2 + F3 + F4 + F5 + F6 + F7 = S.
+You are going to assign each problem to exactly one student who can solve it. Your goal is to
+make the training as balanced as possible: maximize the minimum number of problems solved by any
+single student. Output this maximum possible value.
+
+Input
+The first line contains a single integer T (1 ≤ T ≤ 105 )— the number of test cases.
+For each test case, the first line contains a single integer S (0 ≤ S ≤ 7 × 108 ).
+The second line contains seven non-negative integers F1 , F2 , F3 , F4 , F5 , F6 , F7 (0 ≤ F1 , · · · , F7 ≤ 108 ).
+It is guaranteed that F1 + · · · + F7 = S.
+
+Output
+For each test case, print a single integer — the maximum possible value of the minimum solved-count
+among the three students after assigning all S problems.
+
+Example
+standard input
+4
+36
+14 4 3 2 9 0 4
+41
+4 8 4 4 3 14 4
+53
+3 0 12 6 14 11 7
+55
+11 10 11 10 2 8 3
+
+standard output
+11
+13
+17
+18
+
+Page 5 of 19
+
+The 2025 ICPC Asia EC Regionals Online Contest (II)
+China, September, 14, 2025
+
+Problem D. Arcane Behemoths
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+256 megabytes
+
+You have N Arcane Behemoths, each with an attack value Ai .
+You may choose any non-empty subsequence of Behemoths and sell them one by one. Whenever you sell
+a Behemoth, each remaining unsold Behemoth in the subsequence increases its attack value by the attack
+value of the Behemoth you just sold.
+The value of a subsequence is the maximum attack value the last remaining Behemoth can achieve, if the
+other Behemoths in the subsequence are sold in an optimal order.
+Your task is to compute the sum of values over all non-empty subsequences of the sequence. Print the
+result modulo 998244353.
+
+Input
+The first line contains a single integer T (1 ≤ T ≤ 2 × 105 ) — the number of test cases.
+For each test case, the first line contains an integer N (1 ≤ N ≤ 2 × 105 ) — the number of Behemoths.
+The second line contains N integers A1 , A2 , . . . , AN (0 ≤ Ai < 998244353) — the initial attack values of
+the Behemoths.
+P
+It is guaranteed that
+N ≤ 2 × 105 over all test cases.
+
+Output
+For each test case, print a single integer — the sum of values over all non-empty subsequences modulo
+998244353.
+
+Example
+standard input
+3
+3
+1 2 3
+6
+1 1 4 5 1 4
+3
+998244350 998244351 998244352
+
+standard output
+27
+1266
+998244328
+
+Note
+Consider the subsequences of [1, 2, 3]:
+• [1] → only one Behemoth remains, value = 1.
+• [2] → value = 2.
+• [3] → value = 3.
+• [1, 2]: sell the larger Behemoth 2 first, leave 1 → final attack = 1 + 2 = 3.
+• [1, 3]: sell 3 first, leave 1 → final attack = 1 + 3 = 4.
+• [2, 3]: sell 3 first, leave 2 → final attack = 2 + 3 = 5.
+
+Page 6 of 19
+
+The 2025 ICPC Asia EC Regionals Online Contest (II)
+China, September, 14, 2025
+• [1, 2, 3]:
+– Step 1: sell 3 → remaining sequence [1 + 3, 2 + 3] = [4, 5].
+– Step 2: sell 2 (now 5) → add its attack to remaining 4, final attack = 4 + 5 = 9.
+– Thus, the value of this subsequence is 9.
+Finally, summing all values: 1 + 2 + 3 + 3 + 4 + 5 + 9 = 27.
+
+Page 7 of 19
+
+The 2025 ICPC Asia EC Regionals Online Contest (II)
+China, September, 14, 2025
+
+Problem E. Zero
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+256 megabytes
+
+An integer sequence a1 , a2 , · · · , an is called a zero sequence if and only if it satisfies the following conditions:
+• For i = 1, 2, · · · , n − 1, ai ̸= ai+1 .
+• The binary XOR sum of a1 , a2 , · · · , an is 0, i.e.,
+n
+M
+
+ai = 0
+
+i=1
+
+Given n and m, find the number of zero sequences of length n where each element is chosen from the set
+{0, 1, 2, · · · , 2m − 1}.
+
+Input
+The first line contains a positive integer T (1 ≤ T ≤ 104 ), indicating the number of test cases.
+For each test case, one line contains two integers n, m (1 ≤ n ≤ 109 , 0 ≤ m ≤ 109 ), representing the
+length of the sequence and the binary length of the sequence elements, respectively.
+
+Output
+For each test case, output one integer representing the answer modulo 998244353.
+
+Example
+standard input
+5
+1 3
+2 3
+3 3
+4 3
+5 3
+
+standard output
+1
+0
+49
+392
+2401
+
+Page 8 of 19
+
+The 2025 ICPC Asia EC Regionals Online Contest (II)
+China, September, 14, 2025
+
+Problem F. Square Permutation I
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+3 seconds
+1024 megabytes
+
+Give two permutations p and q of length n. It is guaranteed that n is an odd number. You must perform
+exactly one of the following operations for each position i ∈ [1, n]:
+1. Perform no operation at no cost.
+2. Spend a cost of xi to either modify pi to p2i or modify qi to qi2 .
+3. Spend a cost of yi to modify both pi to p2i and qi to qi2 .
+Please find the minimum cost required to make the median of array p equal to A and the median of array
+q equal to B. If it’s impossible, output −1.
+
+Input
+Each test contains multiple test cases. The first line contains the number of test cases t (1 ≤ t ≤ 104 ) .
+The description of the test cases follows.
+The first line of each test case contains three single integers n, A, B (1 ≤ n ≤ 105 , 1 ≤ A, B ≤ n2 ).
+The second line gives n positive integers, representing the permutation p.
+The third line gives n positive integers, representing the permutation q.
+The fourth line gives n positive integers, representing the array x .
+The fifth line gives n positive integers, representing the array y (1 ≤ xi ≤ yi ≤ 104 ).
+It is guaranteed that the sum of n over all test cases does not exceed 105 .
+
+Output
+For each test case, output −1 if it is impossible.
+Otherwise, output the minimum cost.
+All outputs must be printed on separate lines.
+
+Page 9 of 19
+
+The 2025 ICPC Asia EC Regionals Online Contest (II)
+China, September, 14, 2025
+
+Example
+standard input
+3
+7 6 7
+7 3 5 6 2 4 1
+1 6 3 4 2 7 5
+5 1 1 4 4 1 1
+6 4 6 6 6 1 1
+9 5 5
+1 2 3 4 5 6 7 8 9
+9 8 7 6 5 4 3 2 1
+1 2 3 4 5 6 7 8 9
+2 3 4 5 6 7 8 9 9
+3 2 3
+1 2 3
+2 3 1
+10000 1 1
+10000 1 1
+
+standard output
+7
+0
+10000
+
+Page 10 of 19
+
+The 2025 ICPC Asia EC Regionals Online Contest (II)
+China, September, 14, 2025
+
+Problem G. Square Permutation II
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+3 seconds
+1024 megabytes
+
+Give two permutations p and q of length n. It is guaranteed that n is an odd number. You must perform
+exactly one of the following operations for each position i ∈ [1, n]:
+1. Perform no operation at no cost.
+2. Spend a cost of x to either modify pi to p2i or modify qi to qi2 .
+3. Spend a cost of y to modify both pi to p2i and qi to qi2 .
+There are a total of m groups of queries in this problem. For each query, values of x , y , A and B are
+given.Please find the minimum cost required to make the median of array p equal to A and the median
+of array q equal to B. If it’s impossible, output −1.
+
+Input
+Each test contains multiple test cases. The first line contains the number of test cases t (1 ≤ t ≤ 104 ) .
+The description of the test cases follows.
+The first line of each test case contains two single integers n, m (1 ≤ n, m ≤ 105 ).
+The second line gives n positive integers, representing the permutation p.
+The third line gives n positive integers, representing the permutation q.
+The next m lines each contain four positive integers A, B, x, and y (1 ≤ A, B ≤ n2 , 1 ≤ x ≤ y ≤ 109 ).
+It is guaranteed that the sum of n and m over all test cases does not exceed 105 .
+
+Output
+For each set of data, output m lines. The i-th line contains an integer representing the answer to the i-th
+query.
+
+Example
+standard input
+1
+5 6
+1 3 2 5 4
+3 2 1 4 5
+4 9 1 4
+5 9 1 3
+5 16 3 3
+16 5 3 4
+5 5 2 3
+9 9 10 11
+
+standard output
+4
+6
+-1
+-1
+8
+42
+
+Page 11 of 19
+
+The 2025 ICPC Asia EC Regionals Online Contest (II)
+China, September, 14, 2025
+
+Problem H. Tree Shuffling
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+3 seconds
+256 megabytes
+
+Froggy has an unrooted tree T with n vertices, where each vertex has an initial weight. Initially, the
+weight of vertex i is i.
+Froggy can perform at most 1 operation sequentially as follows:
+• Select several distinct vertices x1 , x2 , · · · , xk , such that for i = 1, 2, · · · , k − 1, there exists an edge
+in tree T connecting vertex xi and vertex xi+1 .
+• From the set x1 , x2 , · · · , xk , choose an even number of vertices u1 , u2 , · · · , u2l (vertices can be chosen
+repeatedly). For i = 1, 2, · · · , l, sequentially swap the weights of vertex u2i−1 and vertex u2i .
+Let ai denote the weight of vertex i after all operations. How many distinct sequences a1 , a2 , · · · , an can
+Froggy obtain? Output the answer modulo 998244353.
+
+Input
+The first line contains a positive integer T (1 ≤ T ≤ 103 ), indicating the number of test cases.
+For each test case, the first line contains an integer n (1 ≤ n ≤ 3000), representing the number of vertices
+in the tree.
+The next n − 1 lines each contain two positive integers x, y (1 ≤ x, y ≤ n, x ̸= y), representing the two
+endpoints of an edge in tree T .
+It is guaranteed that the sum of n over all test cases in a single test point does not exceed 1.5 × 104 .
+
+Output
+For each test case, output one integer representing the answer modulo 998244353.
+
+Example
+standard input
+3
+5
+1 2
+1 3
+1 4
+1 5
+6
+1 2
+1 3
+1 4
+2 5
+2 6
+6
+1 2
+2 3
+2 4
+3 5
+4 6
+
+standard output
+23
+80
+155
+
+Page 12 of 19
+
+The 2025 ICPC Asia EC Regionals Online Contest (II)
+China, September, 14, 2025
+
+Problem I. DAG Query
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+3 seconds
+1024 megabytes
+
+This is an interactive problem.
+Given a directed acyclic graph (DAG) with n vertices and m edges, each edge has an associated weight.
+There may be multiple paths between any pair of vertices s and t. We define the weight of a path as the
+product of the weights of all edges along that path. Let f (s, t, c) denote the sum of the path weights of
+all distinct paths from s to t after multiplying the weight of every edge in the graph by c. Since the result
+can be extremely large, f (s, t, c) is taken modulo 998244353.
+Xiao M will inform you of the structure of the DAG in advance (excluding the edge weights).
+You may provide parameters s, t, and c; the interactor will return the value of f (s, t, c). You are allowed to
+make at most 999 such queries to obtain certain information about the graph. After several query cycles,
+the interactor will provide a parameter k, and you need to determine the value of f (1, n, k).
+
+Input
+The first line contains two positive integers n and m (1 ≤ n ≤ 1000, 1 ≤ m ≤ 5000), where n represents
+the number of vertices in the graph and m represents the number of edges.
+In the following m lines, each line contains two positive integers x and y (1 ≤ x, y ≤ 1000), indicating
+that there is a directed edge from vertex x to vertex y in the graph. It is guaranteed that the graph is a
+Directed Acyclic Graph (DAG).
+
+Interaction Protocol
+For each query, you need to output in the format ? s t c (1 ≤ s, t ≤ n, 0 ≤ c < 998244353) where s, t, c
+are all integers, and the interactor will return the answer of f (s, t, c).
+When you are confident that the information you have is sufficient to answer the query, output !, and
+the interactor will return a integer parameter k (0 ≤ k < 998244353), which means you are asked for the
+weight of f (1, n, k).
+You need to output the result of f (1, n, k).
+After printing a query or the answer, do not forget to output the end of the line and flush the output.
+Otherwise, you will get the verdict Idleness Limit Exceeded. To do this, use:
+fflush(stdout) or cout.flush() in C++; System.out.flush() in Java; flush(output) in Pascal;
+stdout.flush() in Python; see the documentation for other languages.
+
+Page 13 of 19
+
+The 2025 ICPC Asia EC Regionals Online Contest (II)
+China, September, 14, 2025
+
+Example
+standard input
+3 3
+1 2
+2 3
+1 3
+
+standard output
+? 1 2 1
+? 2 3 1
+? 1 3 1
+
+1
+!
+2
+31488
+12
+123
+
+Page 14 of 19
+
+The 2025 ICPC Asia EC Regionals Online Contest (II)
+China, September, 14, 2025
+
+Problem J. Reconstruct the tree
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+256 megabytes
+
+You are given a remembered collection of diameter endpoint pairs that Little Grey wrote down when he
+owned a tree with N nodes. Now he forgot the tree itself. Your task is to reconstruct any tree on N
+labeled nodes whose set of unordered pairs of nodes at distance equal to the tree diameter is exactly the
+given collection — or report that his memory is inconsistent (i.e. no such tree exists).
+A diameter of a tree is the longest simple path in the tree; its length is the maximum distance between
+any two vertices. A pair (u, v) is a diameter endpoint pair if the distance between u and v equals the
+length of tree diameter. The given collection contains unordered pairs and may list them in any order.
+
+Input
+The first line contains a single integer T (1 ≤ T ≤ 2 · 105 ) — the number of test cases.
+Each test case begins with a line containing three integers N, M (2 ≤ N ≤ 2 · 105 , 1 ≤ M ≤ 2 · 105 ) —
+the number of nodes and the number of remembered unordered pairs.
+Then follow M lines, each containing two integers u and v (1 ≤ u, v ≤ N, u ̸= v), representing an
+unordered pair that Little Grey remembered as being at distance equal to the length of tree diameter.
+All M pairs in one test case are distinct.
+P
+P
+It is guaranteed that
+N ≤ 2 · 105 , M ≤ 2 · 105 where sums are over all test cases.
+
+Output
+For each test case, print:
+If there exists a tree on nodes 1 . . . N whose set of unordered node-pairs at distance equal to the tree
+diameter is exactly the given set, print a line YES and then N − 1 lines describing any such tree as edges
+(a, b) (one edge per line, nodes separated by a space; the tree should be connected and acyclic).
+If multiple valid trees exist, you may output any of them.
+Otherwise, print a single line NO.
+
+Example
+standard input
+3
+2 1
+1 2
+3 2
+1 2
+2 3
+4 3
+1 2
+2 3
+1 3
+
+standard output
+YES
+1 2
+NO
+YES
+4 1
+4 2
+4 3
+
+Page 15 of 19
+
+The 2025 ICPC Asia EC Regionals Online Contest (II)
+China, September, 14, 2025
+
+Problem K. The Only Heart
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+3 seconds
+1024 megabytes
+
+Kikyou has carefully cultivated a tree. Now that the tree has grown lush with branches and leaves, Kikyou
+decides to prune it.
+The tree currently has n vertices. Kikyou plans to remove some vertices and their adjacent edges such
+that the remaining part is still connected. It is easy to see that the remaining part is still a tree.
+As a heavy cat, Kikyou wants the remaining tree to be wholehearted, meaning it has only one heart.
+Here, the heart of a tree is defined as a vertex such that when it is removed, the maximum size among
+the remaining connected components is minimized. If multiple vertices satisfy this condition, they are all
+considered hearts.
+Kikyou wants to know how many such remaining non-empty trees there are where the heart is unique.
+Output the answer modulo 998244353. Two remaining trees are considered different if and only if their
+vertex sets are different.
+
+Input
+The first line contains a positive integer T (1 ≤ T ≤ 103 ), indicating the number of test cases.
+For each test case, the first line contains an integer n (1 ≤ n ≤ 3000), representing the number of vertices
+in the tree.
+The next n − 1 lines each contain two positive integers x, y (1 ≤ x, y ≤ n, x ̸= y), representing the two
+endpoints of an edge in tree T .
+It is guaranteed that the sum of n over all test cases in a single test point does not exceed 1.5 × 104 .
+
+Output
+For each test case, output one integer representing the answer modulo 998244353.
+
+Example
+standard input
+3
+5
+1 2
+1 3
+3 4
+3 5
+6
+1 2
+1 3
+1 4
+2 5
+2 6
+6
+1 2
+2 3
+2 4
+3 5
+4 6
+
+standard output
+11
+18
+16
+
+Page 16 of 19
+
+The 2025 ICPC Asia EC Regionals Online Contest (II)
+China, September, 14, 2025
+
+Note
+For the first test case, a single remaining vertex must be the unique heart. Two remaining vertices must
+form two hearts. Other valid subsets with unique heart include: {1, 2, 3}, {1, 3, 4}, {1, 3, 5}, {3, 4, 5},
+{1, 3, 4, 5}, and {1, 2, 3, 4, 5}. The total number of valid subsets is 11.
+
+Page 17 of 19
+
+The 2025 ICPC Asia EC Regionals Online Contest (II)
+China, September, 14, 2025
+
+Problem L. Xor Mirror
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+2 seconds
+64 megabytes
+
+Long ago, in the land of Bitworld, there was a magic mirror. Whenever you looked into it, the index i of
+an array element would be reflected as i ⊕ k for some magic key k. The wizard who owned this mirror
+loved to play with sequences: sometimes he mirrored parts of the sequence using XOR, and sometimes he
+asked for weighted sums of intervals.
+Now the wizard gives you T sequences and a list of operations for each sequence. Your task is to process
+them and report the results of his queries.
+You are given an initial sequence A0 , A1 , . . . , AN −1 of length N . The value N is always a power of two
+and satisfies N ≤ 218 .
+There are two types of operations:
+• Operation type 1: given integers (l, r, k), for every i ∈ [l, r) set
+Bi = Ai⊕k ,
+then assign Ai = Bi for all i ∈ [l, r).
+• Operation type 2: given integers (l, r), output
+r−1
+X
+
+Ai .
+
+i=l
+
+Input
+The first line contains a single integer T (1 ≤ T ≤ 2 × 105 ) — the number of test cases.
+Each test case is given as:
+One line with two integers N (1 ≤ N ≤ 218 , N is a power of two) and Q (1 ≤ Q ≤ 2 × 105 ) — the length
+of the sequence and the number of operations.
+One line with N integers A0 , A1 , . . . , AN −1 (1 ≤ Ai ≤ 1048576) — the initial sequence.
+Each of the next Q lines describes one operation.
+All operations are given on a left-closed, right-open interval [l, r) with 0 ≤ l < r ≤ N . The formats are:
+1 l r k —– apply operation type 1 on the interval [l, r) with parameter k (0 ≤ k < N ).
+2 l r —– apply operation type 2 on the interval [l, r).
+P
+P
+It is guaranteed that
+N ≤ 218 ,
+Q ≤ 2 × 105 over all test cases.
+
+Output
+For each operation of type 2, output the result on a separate line.
+
+Page 18 of 19
+
+The 2025 ICPC Asia EC Regionals Online Contest (II)
+China, September, 14, 2025
+
+Example
+standard input
+1
+8 8
+7 3 8 1 4 6 4 1
+2 2 7
+2 5 7
+1 3 5 3
+1 5 6 2
+2 7 8
+2 3 7
+1 2 8 5
+2 5 8
+
+standard output
+23
+10
+1
+13
+22
+
+Page 19 of 19
+
+

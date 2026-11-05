@@ -1,0 +1,55 @@
+Moving on the Plane
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+2 seconds
+1024 megabytes
+
+There are N points on a plane. The initial coordinates of the i-th point are (xi , yi ).
+Then, there will be M rounds of walks. In each round, every point must move from its current position
+(x, y) to one of the following four adjacent positions: (x + 1, y), (x − 1, y), (x, y + 1), (x, y − 1).
+Two plans are considered different if and only if there exists at least one point whose walk path is different
+in these two plans.
+After exactly M rounds of walks, how many different plans are there such that the Manhattan distance
+between every pair of points does not exceed K?
+Output the answer modulo 998244353.
+
+Input
+The first line contains three integers: N , M , and K(1 ≤ N ≤ 50, 1 ≤ M ≤ 105 , 0 ≤ K ≤ 10).
+The i + 1-th line contains the coordinates of the i-th point: xi and yi (0 ≤ |xi |, |yi | ≤ 105 ).
+
+Output
+Only one line, the answer.
+
+Examples
+standard input
+
+standard output
+
+3 2 2
+2 2
+2 1
+1 1
+
+672
+
+3 3 1
+3 3
+0 2
+1 2
+
+2340
+
+2 3 0
+3 0
+2 1
+
+300
+
+Page 1 of 1
+
+

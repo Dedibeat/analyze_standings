@@ -1,0 +1,73 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+#define int long long
+#define pb push_back
+#define all(x) (x).begin(), (x).end()
+#define rall(x) (x).rbegin(), (x).rend()
+#define rep(i, a, b) for(int i = (a); i < (b); i++)
+#define repd(i, a, b) for(int i = (a); i >= (b); i--)
+#define hha(x) cout << #x << ' ' << x << ' ';
+#define hhal(x) cout << #x << ' ' << x << '\n';
+#define print(v) cout << #v << ' '; for(auto &x : v) cout << x << ' '; cout << '\n';
+string Xor(string s, string t)
+{
+    if(s.size() < t.size()) swap(s, t);
+    for(int i = 0; i < t.size(); i++)
+    {
+        int j = s.size() - t.size() + i;
+        if(t[i] != s[j]) s[j] = '1';
+        else s[j] = '0';
+    }
+    return s;
+}
+string Norm(string s)
+{
+    int i = 0;
+    while(i < s.size() - 1 && s[i] == '0')
+    {
+        i++;
+    }
+    return s.substr(i, s.size() - i);
+}
+void solve() {
+    string s; cin >> s;
+    int n = s.size();
+    string mx = "0";
+    {
+        string a = Norm(s.substr(0, 1));
+        string b = Norm(s.substr(2, n - 2));
+        string t = Norm(Xor(a, b));
+        if(mx.size() < t.size() || (mx.size() == t.size() && mx < t))
+            mx = t;
+    }
+    {
+        string a = Norm(s.substr(0, n - 2));
+        string b = Norm(s.substr(n - 1, 1));
+        string t = Norm(Xor(a, b));
+        if(mx.size() < t.size() || (mx.size() == t.size() && mx < t))
+            mx = t;
+    }
+    if(n >= 4)
+    {
+        string a = Norm(s.substr(0, 2));
+        string b = Norm(s.substr(3, n - 3));
+        string t = Norm(Xor(a, b));
+        if(mx.size() < t.size() || (mx.size() == t.size() && mx < t))
+            mx = t;
+    }
+    if(n >= 4)
+    {
+        string a = Norm(s.substr(0, n - 3));
+        string b = Norm(s.substr(n - 2, 2));
+        string t = Norm(Xor(a, b));
+        if(mx.size() < t.size() || (mx.size() == t.size() && mx < t))
+            mx = t;
+    }
+    cout << mx << "\n";
+}
+signed main() {
+    ios_base::sync_with_stdio(0); cin.tie(0);
+    int t; cin >> t; while(t--)
+    solve();
+}

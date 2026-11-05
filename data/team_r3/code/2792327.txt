@@ -1,0 +1,132 @@
+#include<bits/stdc++.h>
+using namespace std;
+using ll = long long;
+const int N = 2e6 + 5;
+vector<int> g[N];
+int parent[N], jump[N];
+int depth[N], tin[N];
+
+struct LCA {
+    int timer = 0;
+    void addEdge(int u, int v) {
+        //cout << "ADD " << u << " " << v << endl;
+        g[u].push_back(v);
+        g[v].push_back(u);
+    }
+    void dfs(int src, int par) {
+        vector<pair<int, int>> stk;
+        stk.push_back({src, par});
+        while(stk.size())
+        {
+            auto [v, p] = stk.back(); stk.pop_back();
+            tin[v] = timer++;
+            parent[v] = p;
+            depth[v] = depth[p] + 1;
+            if (v == src) depth[v] = 0, jump[v] = v;
+            else {
+                if (depth[p] - depth[jump[p]] == depth[jump[p]] - depth[jump[jump[p]]])
+                    jump[v] = jump[jump[p]];
+                else
+                    jump[v] = p;
+            }
+            for (int to : g[v]) if (to != p) {
+                stk.emplace_back(to, v);
+            }
+        }
+    }
+    void build(int root = 0) {
+        depth[root] = 0;
+        parent[root] = root;
+        jump[root] = root;
+        dfs(root, root);
+    }
+    int lift(int v, int d) {
+        while (depth[v] > d) {
+            if (depth[jump[v]] < d) v = parent[v];
+            else v = jump[v];
+        }
+        return v;
+    }
+    int lca(int a, int b) {
+        if (depth[a] > depth[b]) swap(a, b);
+        b = lift(b, depth[a]);
+        while (a != b) {
+            if (jump[a] == jump[b]) {
+                a = parent[a];
+                b = parent[b];
+            } else {
+                a = jump[a];
+                b = jump[b];
+            }
+        }
+        return a;
+    }
+    int dist(int a, int b) {
+        int c = lca(a, b);
+        return depth[a] + depth[b] - 2 * depth[c];
+    }
+};
+const ll mod = 998244353;
+ll inv(ll x)
+{
+    ll e = mod - 2;
+    ll ans = 1;
+    while(e)
+    {
+        if(e & 1) ans = ans * x % mod;
+        e >>= 1;
+        x = x * x % mod;
+    }
+    return ans;
+}
+int dsu[N];
+int sz[N];
+bool vis[N];
+int tp;
+void init(int n)
+{
+    iota(dsu, dsu + 2 * n + 1, 0);
+    fill(sz, sz + n + 1, 1);
+    tp = n + 1;
+    //cout << "INIT" << endl;
+}
+int get(int u)
+{
+    if(dsu[u] == u) return u;
+    return dsu[u] = get(dsu[u]);
+}
+signed main()
+{
+    ios::sync_with_stdio(0); cin.tie(0);
+    //cout << "BEGIN" << endl;
+    int n; cin >> n;
+    init(n);
+    LCA lca;
+    int ans = 1;
+    for(int i = 1; i < n; i++)
+    {
+        int u, v; cin >> u >> v;
+        //cout << u << " " << v << endl;
+        u = get(u), v = get(v);
+        //cout << u << " " << v << endl;
+        lca.addEdge(u, tp);
+        lca.addEdge(v, tp);
+        //cout << "added\n";
+        ans = ans * inv(sz[u]) % mod;
+        ans = ans * inv(sz[v]) % mod;
+        sz[tp] = sz[u] + sz[v];
+        dsu[u] = tp;
+        dsu[v] = tp;
+        tp++;
+        
+    }
+    lca.build(tp - 1);
+    for(int i = 1; i < n; i++)
+    {
+        int u, v; cin >> u >> v;
+        int l = lca.lca(u, v);
+        if(vis[l]) ans = 0;
+        vis[l] = true;
+    }
+    cout << ans << "\n";
+}

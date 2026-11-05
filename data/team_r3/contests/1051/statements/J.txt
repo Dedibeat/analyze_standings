@@ -1,0 +1,44 @@
+The 2022 ICPC Asia Xi’an Regional Contest
+Northwestern Polytechnical University, November 13, 2022
+
+Problem J. Strange Sum
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+512 megabytes
+
+Given a sequence a1 , a2 , . . . , an .
+You are going to select zero or more elements of a so that: if you select ai , then in any interval of length
+i (formally, in a[j, j + i − 1] for any 1 ≤ j ≤ n − i + 1) you can select at most 2 elements.
+Calculate the maximal sum of the elements you select.
+
+Input
+The first line contains an integer n (2 ≤ n ≤ 105 ).
+The second line contains n integers a1 , a2 , . . . , an (−109 ≤ ai ≤ 109 ).
+
+Output
+Output a single integer denoting the answer.
+
+Examples
+standard input
+
+standard output
+
+4
+1 4 3 2
+
+7
+
+3
+-10 -10 -10
+
+0
+
+Page 11 of 14
+
+

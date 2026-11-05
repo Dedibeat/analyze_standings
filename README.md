@@ -33,6 +33,22 @@ audit and runs its experiments 0–2.
   (`arch_b.field_transport`).
 - Nothing shipped changed.
 
+[Experiment 3](member_forecast_report.md) continues that work with recorded-date
+regional forecasts and exact-roster identity. Member history improves cold-roster
+pair accuracy from 60.3% to 69.9% on matched 2024–2025 development pairs; the fixed
+q=50 random walk provides no useful log-loss gain. Cutoff manifests, missing-data
+coverage and limitations are in the report and `output/member_forecast.json`.
+Reproduce with `./.venv/bin/python -m arch_b.member_forecast`. This is a
+retrospective roster replay, not fresh confirmation; shipped ratings are unchanged.
+
+[Four DE successor candidates](de_successors.md) are recorded. Candidate #2,
+[stability-penalized DE](de_stability_plan.md), is prepared for a home-PC run:
+install `requirements-de-stability.txt`, then use
+`python -m arch_b.de_stability check`, `prepare --jobs 2`, and `evaluate`.
+The plan gives complete commands. All inputs are tracked; CPU refits are
+resumable under `de_stability_run/`, and reserved stress views do not select
+settings. Only the full-view pipeline check has run here; results await the PC.
+
 The [2026-09-05 experiment review](experiment_review.md) records the audit that
 found held-out-label leakage, incorrect rank/AUC tie handling, incomplete
 uncertainty labels, and participation-key collisions. The concrete correctness
@@ -648,6 +664,78 @@ how many the team beat (`--solved N --penalty M` instead of `--team` scores a vi
 many anchors as ICPC regionals, the spring 2026 invitationals and provincials
 far fewer. Details in `details.md`.
 
+### NUM-R^3 participations: team-account data (2026-11-04)
+
+```bash
+QOJ_USERNAME=Dedibeat QOJ_PASSWORD=... python3 scripts/fetch_team_r3.py 4071 4113 ...  # cache in data/team_r3/
+python3 scripts/team_r3_participations.py      # output/team_r3_participations.{md,json}
+```
+
+`fetch_team_r3.py` logs in without a browser (`../p1/qoj/BROWSERLESS_AUTH.md`)
+and stores every TEAM_R3 submission with its source, plus each contest's
+dashboard, per-problem statements (the HTML problem page when QOJ refuses the
+PDF) and all attachments (statements, tutorials), PDFs also as text. It also
+saves the QOJ boards with and without unofficial rows. Files already on disk are
+reused. It waits out QOJ's Cloudflare 429 rate limit (about 3 pages a minute
+once triggered).
+
+Log in with a personal account: TEAM_R3 has QOJ Training Mode on, which hides
+every board. The submissions read are always TEAM_R3's.
+
+`team_r3_participations.py` lists the 14 virtuals and the 2 official 2026
+online rounds. For each it gives TEAM_R3's exact QOJ row (solved, penalty) and
+its rank against the official onsite field (`data/tagged_official.json`, the
+UCup/Petrozavodsk files, or XCPCIO in `data/team_r3/boards/`). Per problem it
+gives board solves, calibrated difficulty and the member who solved it
+(`data/team_r3/members_solved.csv`, from the team's spreadsheet). Details are
+in `details.md`.
+
+### NUM-R^3 coach review: problem dossiers, bug classes, plan (2026-11-04)
+
+```bash
+python3 scripts/team_r3_digest.py 4607            # problem table, medal/EC-Final lines, our runs by minute
+python3 scripts/team_r3_digest.py 4607 E --code   # every attempt at E, with diffs between attempts
+```
+
+`output/team_r3_coach/<contest>.md` has one dossier per contest (the 16
+participations): the idea and difficulty of every problem, our outcome and
+member, every wrong run read and diffed, a comparison with the editorial, and a
+timeline against the field. `output/team_r3_coach/summary.md` has the synthesis:
+topics, the 68 penalised wrong runs by bug class, per-member profiles, strategy,
+and a plan for Shenyang (2026-11-15), Hong Kong and EC-Final. The digest takes
+the onsite field from XCPCIO for the 2026 regionals, the CCPC stations and the
+2022 regionals, and from the QOJ board for the online rounds.
+`1053_checks.py` and `2661_checks.py` are brute-force and UBSan checks of our
+runs, kept as evidence. Details are in `details.md`.
+
+### NUM-R^3 members on Codeforces (2026-11-05)
+
+```bash
+python3 scripts/team_r3_cf.py            # analyse the cached API data (~6 s)
+python3 scripts/team_r3_cf.py --fetch    # refresh data/team_r3/cf/ from the public API first
+```
+
+Covers Dedibeat, t4_4, erdene1231 and Munkh-Erdene.B: rated rounds, virtuals
+and practice. It reports each member's level (the problem rating with a 50%
+in-contest solve rate), the virtual-vs-rated gap at matched dates, topic
+families against expectation, accuracy (first try, test-1 failures under CF
+and ICPC rules, failed system tests), silent finishes, upsolving, practice diet
+and compiler. Writes `output/team_r3_cf.json`; the write-up is
+`output/team_r3_coach/cf.md`. Submission code is not fetched (Cloudflare blocks
+submission pages). Details are in `details.md`.
+
+```bash
+python3 scripts/team_r3_cf_rounds.py     # round by round against the official standings (~100 entries)
+```
+
+Uses each round's full official standings (the anonymous `contest.standings` call)
+and, through `../codeforces_integration`, the editorial of the field's next problem.
+For each round it shows the same-set tier, the next tier and their median minutes.
+Virtual entries are placed by recomputing the score. Writes
+`output/team_r3_cf_rounds.{json,md}`; the analysis of what each member fails and
+solves, with practice lists, is `output/team_r3_coach/cf_rounds.md`. The caches
+`data/team_r3/cf/standings/` and `editorials/` are gitignored.
+
 ### Time-varying team ratings (research, 2026-10-04)
 
 ```bash
@@ -1040,6 +1128,10 @@ Module self-checks:
 - `scripts/cphof_cf_participants.py` — resumable, rate-limited builder for that
   artifact; raw source responses are cached under the gitignored
   `data/cphof_cache/`.
+- `data/team_r3/` — the TEAM_R3 account's submissions (`submissions.json`,
+  `code/`), its contests' dashboards, statements, tutorials and QOJ boards
+  (`contests/`; PDFs/zips are git-ignored), XCPCIO boards (`boards/`) and the
+  member attribution (`members_solved.csv`); built by `scripts/fetch_team_r3.py`.
 - `scripts/add_qoj_contest.py` — adds one QOJ contest's standings to
   `data/tagged.json` (`python3 scripts/add_qoj_contest.py 4071 --name "EC Online (I)"
   --region "Asia East Continent"`). QOJ shows contests only to logged-in users, so

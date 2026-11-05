@@ -1,0 +1,52 @@
+The 2022 ICPC Asia Hangzhou Regional Programming Contest
+Hangzhou Normal University, December, 04, 2022
+
+Problem D. Money Game
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+1024 megabytes
+
+Putata and Budada are organizing a game with n players. Each player has some deposit, which is a real
+number. Player i has ai deposits in the beginning. During each round of the game, the followings happen
+in order:
+• Player 1 gives player 2 half of player 1’s deposit.
+• Player 2 gives player 3 half of player 2’s deposit.
+• ...
+• Player n − 1 gives player n half of player n − 1’s deposit.
+• Player n gives player 1 half of player n’s deposit.
+The n players played this game for exactly 20221204 rounds. Putata wonders how much deposit each player
+has after the game. Please write a program to answer his question.
+
+Input
+The first line contains an integer n (2 ≤ n ≤ 105 ), denoting the number of players.
+The second line contains n integers a1 , a2 , . . . , an (1 ≤ ai ≤ 106 ), denoting the deposit player i has in the
+beginning.
+
+Output
+Output one line with n real numbers, denoting the deposit each player has after they played this game.
+Your answer will be considered correct if its absolute or relative error does not exceed 10−6 . Formally, let
+|a−b|
+your answer be a, and the jury’s answer be b. Your answer will be considered correct if max(1,|b|)
+≤ 10−6 .
+
+Example
+standard input
+2
+4 2
+
+standard output
+4.00 2.00
+
+Note
+During one round, the deposit they have changed as follows: [4, 2] → [2, 4] → [4, 2]. Their deposit does
+not change after this round, so the answer is the same as the input.
+
+Page 5 of 16
+
+

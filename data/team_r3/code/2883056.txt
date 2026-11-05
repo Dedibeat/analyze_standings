@@ -1,0 +1,108 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define int long long
+#define F first 
+#define S second 
+#define all(x) (x).begin(), (x).end()
+#define log(x) cout << #x << ": " << x << " ";
+#define logl(x) cout << #x << ": " << x << endl;
+#define print(v) cout << #v << ": "; \
+            for(auto x : v) cout << x << " "; \
+            cout << endl;
+template<typename T, typename U>
+ostream &operator<<(ostream &os, const pair<T, U> &p)
+{
+    return os << "(" << p.F << "," << p.S << ")";
+}
+const int mod = 998244353;
+using ll = long long;
+struct Binom {
+    vector<ll> fact{1}, inv{1}, invfact{1};
+    void extend(ll n) {
+        ll cur = fact.size() - 1;
+        if (cur >= n) return;
+        fact.resize(n + 1);
+        inv.resize(n + 1);
+        invfact.resize(n + 1);
+        for (ll i = cur + 1; i <= n; i++) {
+            fact[i] = fact[i - 1] * i % mod;
+            if (i == 1) inv[i] = 1;
+            else inv[i] = mod - mod / i * inv[mod % i] % mod;
+            invfact[i] = invfact[i - 1] * inv[i] % mod;
+        }
+    }
+    ll C(ll n, ll k) {
+        if (k < 0 || k > n) return 0;
+        extend(n);
+        return fact[n] * invfact[k] % mod * invfact[n - k] % mod;
+    }
+} binom;
+int F(int dif, int m)
+{
+    dif = abs(dif);
+    if(dif > m) return 0;
+    if((m - dif) % 2 == 1) return 0;
+    return binom.C(m, (m - dif) / 2);
+}
+const int maxM = 100005;
+int pref[maxM];
+int P(int i) 
+{
+    if(i < 0 || i >= maxM) return 0;
+    return pref[i];
+}
+int IntervalComb(int l, int r, int x)
+{
+    int ret = 0;
+    if(x < l) ret = (P(r - x) - P(l - x - 1) + mod) % mod;
+    else if(x > r) ret = (P(x - l) - P(x - r - 1) + mod) % mod;
+    else ret = (P(r - x) + P(x - l) - P(0) + mod) % mod;
+    //log(l); log(r); log(x); logl(ret);
+    return ret;
+}
+int S(const vector<int> &v, int L, int R)
+{
+    int prod = 1;
+    for(int x : v) prod = (prod * IntervalComb(L, R, x)) % mod;
+    //log(L); log(R); logl(prod);
+    return prod;
+}
+int solve1D(vector<int> v, int n, int m, int k)
+{
+    //print(v);
+    int mn = *min_element(all(v));
+    int mx = *max_element(all(v));
+    int ans = 0;
+    for(int L = mx - m - k; L <= mn + m; L++)
+    {
+        ans = (ans + S(v, L, L + k) - S(v, L + 1, L + k) + mod) % mod;
+    }
+    return ans;
+}
+void solve()
+{
+    int n, m, k; cin >> n >> m >> k;
+    pref[0] = F(0, m);
+    for(int i = 1; i < maxM; i++) pref[i] = (pref[i - 1] + F(i, m)) % mod;
+    // for(int i = 0; i <= m; i++)
+    // {
+    //     log(i); log(F(i, m)); logl(P(i));
+    // }
+    vector<int> X, Y;
+    for(int i = 0, x, y; i < n; i++)
+    {
+        cin >> x >> y;
+        X.push_back(x + y);
+        Y.push_back(x - y);
+    }
+    int ansx = solve1D(X, n, m, k);
+    int ansy = solve1D(Y, n, m, k);
+    //log(ansx); logl(ansy);
+    cout << ansx * ansy % mod << "\n";
+}
+signed main()
+{
+    ios::sync_with_stdio(0); cin.tie(NULL);
+    
+    solve();
+}

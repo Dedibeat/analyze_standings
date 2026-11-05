@@ -1,0 +1,83 @@
+The 1st Universal Cup
+Stage 1: Shenyang, January 28-29, 2023
+
+Problem J. Referee Without Red
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+3 seconds
+512 megabytes
+
+Night falls, neon flickers, and the crowd shouts. As the grand show in the Moon Theater begins, Calatonia,
+a city of assorted anthropomorphic animals, feels ready for a sleepless night. Over the years since its revival,
+the annual show has never failed to ignite animals’ passion for music, mainly due to the various genres it
+includes. So this time, it adds more attractive elements, such as dance!
+If you inquire of some creature in Calatonia about the best dance troupe, they are most likely to answer:
+Icy Cold Predators Crew (ICPC). Its performance will be a highlight of tonight’s show without doubt. And
+you may overhear how Referee — well, that’s his name — led the troupe to its peak. As the director, Referee
+starts every day by selecting background music and gets busy with choreographing in the afternoon. Before
+sleep, he tends to make dazzling costumes which are of little use in such a world actually. The routine is
+exhausting, but he somehow enjoys it.
+Referee considers himself a born perfectionist. That’s true when it comes to formation design. Offstage,
+he arranged the whole crew into a matrix of n rows and m columns, numbering rows 1, 2, . . . , n from front
+to back and columns 1, 2, . . . , m from left to right. The species of each dancer can be labeled as a positive
+integer not more than 3 × 106 , where there may be animals of identical species. Two arrangements are
+different if and only if there exists at least a position where the species of dancers in the two arrangements
+are different.
+Unsatisfied with the initial arrangement, Referee intends to reorder the crew without breaking its matrix
+formation. He thinks it’s a good idea to adjust by showing cards. Certainly not red cards — Referee,
+after all, does not serve as a referee. Instead, he prepared white cards with 1, 2, . . . , n written on them
+respectively and black cards with 1, 2, . . . , m, and commanded the crew to do as follows:
+• Once Referee shows the white card with k (1 ≤ k ≤ n), all dancers in the k-th row count off from
+1 to m from left to right. Those who count an even number immediately move to the right end of
+the row. Lastly, align to keep the matrix formation.
+• Once Referee shows the black card with k (1 ≤ k ≤ m), all dancers in the k-th column count off
+from 1 to n from front to back. Those who count an even number immediately move to the back
+end of the column. Lastly, align to keep the matrix formation.
+
+Figure: Referee shows the white card with 2
+
+Referee can show any card any number (possibly zero) of times he wants, and your task is to calculate the
+number of different arrangements he may obtain, modulo 998 244 353 since it could be extremely large.
+Page 10 of 16
+
+The 1st Universal Cup
+Stage 1: Shenyang, January 28-29, 2023
+
+Input
+The first line contains an integer T (1 ≤ T ≤ 105 ), denoting the number of test cases.
+For each test case:
+The first line contains two integers n and m (2 ≤ n, m ≤ 106 ), denoting the number of rows and columns
+respectively.
+Then n lines follow, the i-th of which contains m integers ai,1 , ai,2 , . . . , ai,m (1 ≤ ai,j ≤ 3 × 106 ), where
+ai,j denotes the species of the dancer in the i-th row and the j-th column initially.
+It is guaranteed that the sum of n × m over all test cases does not exceed 3 × 106 .
+
+Output
+For each test case, output a line containing a single integer, indicating the number of different arrangements
+modulo 998 244 353.
+
+Example
+standard input
+2
+4 4
+1 2 3 4
+3 4 1 2
+1 2 4 1
+4 3 3 2
+3 9
+1 8 1 1 8 1 1 8 1
+1 8 8 8 8 8 8 8 1
+1 1 1 8 8 8 1 1 1
+
+standard output
+96
+6336
+
+Page 11 of 16
+
+

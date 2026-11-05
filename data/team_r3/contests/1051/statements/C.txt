@@ -1,0 +1,50 @@
+The 2022 ICPC Asia Xi’an Regional Contest
+Northwestern Polytechnical University, November 13, 2022
+
+Problem C. Clone Ranran
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+512 megabytes
+
+Ranran needs to prepare a contest! A contest is made of c problems, and Ranran can do one of the
+following two things:
+• Clone himself in a minutes. That is, after a minutes, there will be one more Ranran.
+• Prepare a problem in b minutes. That is, after b minutes, there will be one more problem.
+Note that a cloned Ranran can also do the two things above. A Ranran cannot do the two things at the
+same time.
+Ranran wants to prepare the contest as fast as possible. But he is very lazy, so he asks you to find the
+minimum number of minutes to prepare the contest.
+You need to answer T queries independently.
+
+Input
+The first line contains an integer T (1 ≤ T ≤ 105 ).
+Each of the next T lines contains three integers a, b and c (1 ≤ a, b, c ≤ 109 ), representing a query.
+
+Output
+For each test case, output a line with a single integer representing the answer.
+
+Example
+standard input
+5
+1 1 1
+2 3 3
+9 9 9
+3 26 47
+1064 822 1048576
+
+standard output
+1
+7
+45
+44
+21860
+
+Page 3 of 14
+
+

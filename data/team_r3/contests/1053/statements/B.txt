@@ -1,0 +1,81 @@
+2022 International Collegiate Programming Contest, Jinan Site
+Qilu University of Technology (Shandong Academy of Sciences), November 27, 2022
+
+Problem B. Torch
+Input ﬁle:
+Output ﬁle:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+4 seconds
+512 megabytes
+
+Prof. Pang and Prof. Shou go to explore a cave together. Prof. Pang walks ahead of Prof. Shou.
+Each of them has a torch for illumination. The torches need fuel to burn. Prof. Pang’s torch can burn for
+a1 seconds once it has been reﬁlled, and it takes b1 seconds to refuel the torch after it burns out. Prof.
+Shou’s torch can burn for a2 seconds once it has been reﬁlled, and it takes b2 seconds to refuel the torch
+after it burns out. The person who is refueling the torch cannot walk simultaneously. For safety reasons,
+they cannot refuel the torch until the fuel runs out.
+Because Prof. Pang is too fat and the cave is too narrow, Prof. Shou cannot surpass Prof. Pang during
+the exploration, which means that Prof. Shou is at least 1 unit behind Prof. Pang.
+Each of them can walk forward a distance of 1 unit per second when his torch is burning. Every second,
+Prof. Pang moves ﬁrst, then Prof. Shou does. In order to get to their destination earlier, they will move
+as long as they can walk forward.
+Now Prof. Shou has n questions, and for the i-th question, he wants to know that at time qi , how many
+units of the distance he has moved forward from the starting point? Prof. Shou starts 1 unit behind Prof.
+Pang. The initial time is 0. Both Prof. Pang and Prof. Shou refueled the torch before the initial time.
+
+Input
+The ﬁrst line contains one integer T (1 ≤ T ≤ 105 ), the number of test cases.
+For each test case, the ﬁrst line contains 5 integers a1 , b1 , a2 , b2 , n (1 ≤ a1 , b1 , a2 , b2 , n ≤ 106 ) denoting the
+time Prof. Pang’s torch can burn, the time for Prof. Pang to refuel his torch, the time Prof. Shou’s torch
+can burn, the time for Prof. Shou to refuel his torch, and the number of Prof. Shou’s queries. Each of the
+next n lines describes a query. Query i is denoted by one integer qi (1 ≤ qi ≤ 1016 ).
+It is guaranteed that over all test cases, each of the following numbers is no more than 106 :
+• the sum of a1 ,
+• the sum of a2 ,
+• the sum of b1 ,
+• the sum of b2 ,
+• and the sum of n.
+
+Output
+For each query, print one line containing the answer – the number of units that Prof. Shou has walked
+forward from the starting point.
+
+Page 2 of 18
+
+2022 International Collegiate Programming Contest, Jinan Site
+Qilu University of Technology (Shandong Academy of Sciences), November 27, 2022
+
+Example
+standard input
+3
+2 3 2 4 2
+7
+8
+1 1 1 1 2
+3
+4
+9 7 10 3 5
+5
+10
+20
+30
+50
+
+standard output
+3
+4
+2
+2
+5
+9
+13
+18
+28
+
+Page 3 of 18
+
+

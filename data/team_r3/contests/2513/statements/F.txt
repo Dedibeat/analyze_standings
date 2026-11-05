@@ -1,0 +1,79 @@
+Robot
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+2 seconds
+1024 megabytes
+
+This is an interactive problem.
+A mischievous robot is navigating an infinitely large 2D grid. However, its movement is confined to the
+first quadrant, meaning its coordinates (x, y) must always satisfy x > 0 and y > 0. Initially, the robot is
+located at grid coordinates (sx , sy ). All grid cells are initially white.
+The game proceeds in discrete time steps, up to a maximum of T = 1000 steps. In each time step, the
+following sequence occurs:
+1. Your Move: You choose integer coordinates (xm , ym ) such that 1 ≤ xm ≤ T and 1 ≤ ym ≤ T . You
+then mark this cell black. A cell, once marked black, remains black for the rest of the game. You can mark
+any cell within the range, including the cell where the robot is currently located.
+2. Robot’s Move: The robot, currently at position (rx , ry ), observes the grid (including the cell you just
+marked black). It knows the locations of all currently black cells. It then moves to a new position (nx , ny ).
+The new position (nx , ny ) must be one of the 8 cells immediately adjacent (horizontally, vertically, or
+diagonally) to (rx , ry ). That is, |nx − rx | ≤ 1 and |ny − ry | ≤ 1, and (nx , ny ) 6= (rx , ry ). Additionally, the
+robot must stay within the first quadrant, so nx > 0 and ny > 0. The interactor (controlling the robot)
+will choose one valid move for the robot. The robot’s strategy is unknown to you.
+3. Outcome Check: After the robot moves to (nx , ny ), the system checks if the cell (nx , ny ) is black.
+• If (nx , ny ) is black, the robot explodes.
+• If (nx , ny ) is white, the game continues to the next time step, with the robot now at (nx , ny ).
+Your goal is to make the robot explode within T time steps.
+
+Input
+The first line of input contains two integers sx and sy (1 ≤ sx , sy ≤ 20), the initial coordinates of the
+robot.
+
+Interaction Protocol
+The interaction proceeds in turns for at most T turns. In each turn t (from t = 1 to T ):
+1. Your program must print one line containing two space-separated integers xm and ym , representing the
+coordinates of the cell you choose to mark black in this turn. Remember to flush the output stream.
+2. The interactor reads your chosen coordinates (xm , ym ).
+3. The interactor determines the robot’s next move to (nx , ny ) based on its current position and the set
+of all black cells (including the one just marked at (xm , ym )).
+4. The interactor checks if the cell (nx , ny ) is black.
+• If it is black (robot explodes), the interactor will print a single line containing ’0 0’ and terminate.
+Your program should then read these values and terminate successfully.
+• If it is white, the interactor will print a single line containing two space-separated integers nx and
+ny , the new coordinates of the robot. Your program should read these coordinates to know the
+robot’s current position for the next turn.
+
+Page 1 of 2
+
+If the robot has not exploded after you have made T moves, your program should terminate. Your solution
+will be judged as incorrect in this case (or if you exceed the turn limit or make an invalid move).
+To flush your output, you can use:
+• fflush(stdout) (if you use printf) or cout.flush() (if you use cout) in C and C++.
+• System.out.flush() in Java.
+• stdout.flush() in Python.
+Note: If your program does not terminate properly, it may be judged as a Presentation Error (PE).
+
+Example
+standard input
+
+standard output
+
+5 5
+6 1
+5 4
+4 1
+5 3
+6 2
+5 2
+4 2
+5 1
+5 2
+0 0
+
+Page 2 of 2
+
+

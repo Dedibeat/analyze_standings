@@ -1,0 +1,66 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+#define int long long
+#define pb push_back
+#define rep(i, a, b) for(int i = (a); i < (b); i++)
+#define repd(i, a, b) for(int i = (d); i >= (b); i--)
+#define all(x) (x).begin(), (x).end()
+#define rall(x) (x).rbegin(), (x).rend()
+#define hha(x) cout << #x << " = " << x << ' ';
+#define hhal(x) cout << #x << " = " << x << endl;
+#define print(v) cout << #v << " = " << ' '; for(auto x : v) cout << x << ' '; cout << endl;
+
+const int mod = 1e9;
+vector<int> pos(1e4 + 1);
+int ran()
+{
+    return (int)rand() * rand() % mod;
+}
+void solve() {
+    int cur = 0;
+    int curdist = 0;
+    int k = 3333;
+    int m = 0;
+    map<int, int> mp;
+    rep(i, 0, k) {
+        int step = ran();
+        step %= mod;
+        cout << "walk" << ' ' << step << endl;
+        cout.flush();
+        cin >> pos[cur];
+        m = max(m, pos[cur++]);
+    }
+    rep(i, 0, k) {
+        cout << "walk" << ' ' << 1 << endl;
+        curdist += 1;
+        cin >> pos[cur];
+        if(mp.find(pos[cur]) != mp.end()) {
+            int ans = (curdist - mp[pos[cur]]);
+            cout << "guess" << ' ' << ans << endl;
+            return;
+        }
+        mp[pos[cur]] = curdist;
+        m = max(m, pos[cur++]);
+    }
+    mp[pos[cur++]] = curdist;
+    rep(i, 0, k) {
+        cout << "walk" << ' ' << k << endl;
+        cin >> pos[cur];
+        curdist += k;
+        if(mp.find(pos[cur]) != mp.end()) {
+            int ans = (curdist - mp[pos[cur]]);
+            cout << "guess" << ' ' << ans << endl;
+            return;
+        }
+        mp[pos[cur++]] = curdist;
+    }
+    
+}
+
+signed main() {
+    ios_base::sync_with_stdio(0); cin.tie(0);
+    srand(time(NULL));
+    solve();
+    return 0;
+}

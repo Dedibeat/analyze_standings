@@ -1,0 +1,71 @@
+Random Dungeon
+Input file:
+Output file:
+Time limit:
+Memory limit:
+
+standard input
+standard output
+1 second
+1024 megabytes
+
+Mike is playing a video game called Random Dungeon.
+In this game, you will challenge a dungeon and get rewards based on your score every week.
+Mike has discovered that the dungeon has N variations, numbered from 1 to N . Mike will challenge the
+dungeon N times, and for each challenge, the game chooses a variation that has not appeared in previous
+challenges with equal probability.
+Mike will get a score of Ai challenging the dungeon variation i. He can choose to stop whenever he has
+completed a challenge, and his final score will be the score of the last challenge. At the end of the week,
+if his final score is x, he will be rewarded x coins. However, challenging the dungeon costs coins. Each
+challenge costs C coins.
+If Mike acts to maximize the expected profit (coins earned at the end of the week minus coins spent on
+challenge), find the expected profit.
+
+Input
+The first line contains two integers N and C (1 ≤ N ≤ 2 · 105 , 1 ≤ C ≤ 109 ).
+The second line contains N integers A1 , A2 , . . . , AN (1 ≤ Ai ≤ 109 ) — the score of Mike challenging
+dungeon variation i.
+
+Output
+Output the expected profit. Your answer will be considered correct if the absolute error or the relative
+error does not exceed 10−9 . That is, if the correct answer is x, and your answer is y, your answer will be
+|x−y|
+considered correct if max{1,|x|}
+≤ 10−9 .
+
+Examples
+standard input
+3 1
+1 2 3
+
+standard output
+1.1666666667
+
+3 3
+1 2 3
+
+-1.0000000000
+
+9 193138187
+782710197 539624191 631858791
+976609486 752268030 30225807
+279200011 467188665 630132600
+
+442999078.5373015873
+
+Note
+In the first example, the best strategy of Mike is: If the dungeon in the first challenge is
+variation 2 or 3, stop; otherwise, do a second challenge and stop. The expected profit is
+1
+1
+1
+2+3
+7
+3 · (2 − 1) + 3 · (3 − 1) + 3 ·
+2 − 2 = 6.
+In the second example, the best strategy of Mike is: do a single challenge and stop.
+The third example contains extra line breaks to fit into the table.
+
+Page 1 of 1
+
+
