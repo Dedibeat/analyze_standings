@@ -63,7 +63,7 @@ Fixed conventions:
 | graphs / trees | 8 | 2 | **21** | ×1.69 | 1485 G ×5, 1794 L ×4 (assisted), 2513 M ×2, 1071 G ×2 |
 | counting / combinatorial DP | 8 | 3 | **14** | **×1.92** | 4607 C ×4, 2661 B ×5, 4071 D |
 | flows / matching (Hall) | 1 | 0 | 3 | ×2.31 | 2524 C ×3 before the Hall bound |
-| geometry | **0** | — | — | — | 4607 E failed (3 bugs); 1485 K never attempted |
+| geometry | **0** | — | — | — | 4607 E failed (Dedi; 3 bugs); 1485 K never attempted |
 
 **Strengths (the evidence holds across contests):**
 - **Interactive and two-run communication problems:** 3 of 3 first try, two of them rare onsite
@@ -101,7 +101,9 @@ each assigned one primary class. The per-contest counts match the boards' wrong-
 | **debug leftovers and typos** | 4 | 80 | 1071 G: `cnt = 100` cap on the cycle walk; 1485 G: DSU `return dsu[u] = get(u)` ×2; 1096 L: `printf("%.10.lf")` |
 | **misread statement constant** | 3 | 60 | 4607 C: modulus 1e9+7 instead of 998244353 in three runs (counted ×2 here, once more under "idea"); 1485 L: k ≥ 2 ignored |
 
-Wrong runs on problems we never solved (no penalty, but a lost problem):
+Wrong runs on problems we never solved (no penalty, but a lost problem). The 14 virtuals have four
+such problems with 11 runs, and **all four were Dedi's** (2661 J from the sheet; 4607 E, 1053 C
+and 1071 M from the user, 2026-11-05):
 - 4607 E: 5 runs. Orientation-dependent point-in-triangle, `sort` inside the output routine, and a
   missing case. With two local fixes our code passes 14,000 random tests.
 - 2661 J: a test-time loop bound `l < 3` was left in; one character from AC (#127 → #86).
@@ -125,7 +127,10 @@ From the sheet (51 credited solves with idea/implementation roles; 31 solves hav
 |---|---|---|---|---|---|---|
 | **Tamir** | 9 | 6 | 7 | **×1.19** | idea ×3 (1053 A, 1071 G, 4113 K), implementation ×2 (1071 K, 1794 L) | greedy/observation, heavy implementation, constructive |
 | **Erdene** | 18 | 12 | 13 | ×1.48 | idea ×1 (1096 F); took over 4071 A | interactive, greedy, DP, data structures, easy-problem speed |
-| **Dedi** | 20 | 10 | 18 (+4 on 4071 A, handed over) | ×1.47 | idea ×2 (1071 K, 1794 L), implementation ×4 (1096 F, 1053 A, 1071 G, 4113 K) | math/number theory, constructive, counting, strings |
+| **Dedi** | 20 | 10 | 18 (+4 on 4071 A, handed over; +11 on 4 unsolved) | ×1.47 | idea ×2 (1071 K, 1794 L), implementation ×4 (1096 F, 1053 A, 1071 G, 4113 K) | math/number theory, constructive, counting, strings |
+
+The wrong-runs column counts problems the member solved. Runs on problems never solved in the
+virtuals: Dedi 11 (4607 E 5, 1053 C 2, 1071 M 2, 2661 J 2), Tamir 0, Erdene 0.
 
 - **Erdene** is the team's interactive and communication solver: 4607 H, 4607 I and 1071 I, all first
   try. Also fast on easy problems (4607 M 23') and structural data structures (2693 L at gold pace),
@@ -140,7 +145,14 @@ From the sheet (51 credited solves with idea/implementation roles; 31 solves hav
   - *Fails on* implementation details: the 4607 C modulus (×3), the 4593 C sentinel and 4593 J array
     size, 2693 F casework (×2), 2661 M comparison, the 2661 J leftover bound, and the 1799 L identical
     resubmit. In the official round, 4 wrong tries on 4071 A before Erdene solved it.
-  - *Overloaded:* 2 of 4 problems at 4593, both stalled; 4 of 6 at 1799; 3 of 4 at 4113.
+  - *Takes the last open problem, and it does not go in:* all four unsolved problems we attempted
+    in the virtuals were his: 4607 E (263–272'), 1053 C (213–236'), 1071 M (283–286'), 2661 J
+    (184–227'). E and J had the editorial's idea and failed on code: three glue bugs in E, one
+    leftover loop bound in J. C had an init/`% mod` slip and then lacked the knapsack-deletion trick
+    (TL). M's rerooting code was resubmitted unchanged and never debugged.
+  - *Overloaded:* 2 of 4 problems at 4593, both stalled; 4 of 6 at 1799; 3 of 4 at 4113; 4 of the
+    6 attempted at 1053 (with A's fix and C open at once in the last 35 minutes); at 4607, C and E,
+    9 of the 12 in-contest wrong runs.
 - **Tamir** has the best relative pace and the cleanest heavy implementation (1053 D first try,
   4607 K first try, 2693 K's constructive proof). He is the idea source in three pair solves,
   including 1071 G.
@@ -150,8 +162,8 @@ From the sheet (51 credited solves with idea/implementation roles; 31 solves hav
   1096 F; 4113 K. The best contest (1071) had all three members contributing in parallel.
 - **Gaps nobody covers:** geometry, flows/matching (Hall, Dinic, MCMF), XOR linear basis, Lagrange
   interpolation, discrete log / orders, knapsack-with-deletion and rerooting tricks. Our 179
-  submissions contain **no** flow, interpolation or XOR-basis code, and the only geometry is 4607 E's
-  in-contest attempt.
+  submissions contain **no** flow, interpolation or XOR-basis code, and the only geometry is Dedi's
+  in-contest attempt at 4607 E.
 
 ## 5. Strategy
 
@@ -184,7 +196,8 @@ From the sheet (51 credited solves with idea/implementation roles; 31 solves hav
 
 ### Pairing and implementation
 - Pair solves are fast (1071 K, G). Solo debugging under pressure produced the worst habits: blind
-  toggles (2661 G), judge-as-debugger traps (4607 E), identical resubmissions (1799 L, 1071 M).
+  toggles (2661 G, Erdene), judge-as-debugger traps (4607 E, Dedi), identical resubmissions
+  (1799 L and 1071 M, both Dedi).
 
 ### Verification before submitting
 - **14 runs were unproven ideas** that a 10-line brute force over tiny inputs refutes. Stress tests
@@ -361,7 +374,7 @@ The team is accepted to both regionals (user, 2026-11-04). The target is set by 
 | habit | evidence |
 |---|---|
 | Submitting an unproven greedy or assumption | 14 runs / 280 min: 2524 C ×3, 1053 A ×2, 4607 D ×2, 2661 B ×2, 1051 E, 1799 L, 1071 D, 2661 G, 4607 C |
-| Debugging by submission (toggles, traps, identical files) | 2661 G 3191747–3191819; 4607 E 3336557–3336649 (`for(;;)` and a non-returning `int ass()` as probes); 1799 L 2924396 and 1071 M 3081379 identical |
+| Debugging by submission (toggles, traps, identical files) | 2661 G 3191747–3191819 (Erdene); 4607 E 3336557–3336649 (Dedi; `for(;;)` and a non-returning `int ass()` as probes); 1799 L 2924396 and 1071 M 3081379 identical (Dedi) |
 | Writing the brute-force tester only after a WA | 4607 C, 4593 C/J, 2661 J, 1051 E, 1071 A, 2575 J all add `brute`/`test` in the run after the first failure |
 | Reflexive `#define int long long` and per-component containers | 1485 D (MLE in 128 MB), 4607 C (810 MB for a 200 MB table), 2575 J (MLE) |
 | Retyping standard structures in contest | DSU typo 1485 G; custom SCC closure 1794 L; max-heap default 2661 G |
@@ -383,7 +396,7 @@ code and reads those problems first, and a **backup**, who can take it when the 
 | math, number theory, bits / XOR basis, interpolation | **Dedi** | Tamir | 1794 C (68′ vs 126′), 1071 A, 1799 G/L, 2661 J idea |
 | counting / combinatorial DP, probability | **Dedi** | Erdene | 4607 C (right method), 1799 L, 2661 J; the missed 1053 C, 2661 I, 2513 J |
 | strings (trie, hashing, Manacher, Z/KMP) | **Dedi** | Tamir | 4071 L, 1071 K idea |
-| geometry (new) | **Tamir** | Erdene | needs exact, careful casework code; Tamir has the fewest implementation slips and best pace (1053 D, 4607 K first try) |
+| geometry (new) | **Tamir** | Dedi | needs exact, careful casework code; Tamir has the fewest implementation slips and best pace (1053 D, 4607 K first try). Dedi wrote the only geometry attempt (4607 E): the editorial's approach, lost to three glue bugs |
 | constructive / proof-heavy | **Tamir** | Dedi | 2693 K, 4607 K; constructive is the team's best-pace topic (×1.17) |
 | long implementation / simulation | **Tamir** | Erdene | 1053 D (3.5 KB, first try), 2693 K |
 | easy problems / opening | **Erdene** | everyone | 4607 M 23′, 4593 M; fastest on the first problem |
@@ -396,6 +409,11 @@ code and reads those problems first, and a **backup**, who can take it when the 
   4607 C, 4593 C/J).
 - **Every submission by Dedi gets the constants line of the checklist read aloud by a teammate**
   (modulus, bounds, INF, array sizes).
+- **The last open problem: Dedi's idea, a second reader before every run.** All four unsolved
+  problems we attempted in the virtuals were his (4607 E, 1053 C, 1071 M, 2661 J). Before each run on
+  the last problem, a teammate reads the diff or runs the brute force. A reader catches 2661 J's
+  `l < 3` and 1053 C's missing `% mod`; a 30-line brute force finds 4607 E's first bug in under a
+  second.
 - **Erdene keeps interactive problems for the last two hours** if one is open, and is the team's
   cold reader for graph/DS chains. His 4071 A takeover (first-try AC after Dedi's 4 WAs) is the
   model.
@@ -409,7 +427,8 @@ code and reads those problems first, and a **backup**, who can take it when the 
 - **Dedi:** the number theory/bits block (2693 A, 4113 A, 2524 I, 4113 E), the counting block
   (1053 C, 2661 I, 2693 E, 2513 J, 4607 A), and the library: modint/CRT, XOR basis, Lagrange,
   knapsack with deletion.
-- **Tamir:** the geometry block (4607 E, 1485 K, 2575 B, 2524 A) and the geometry library;
+- **Tamir:** the geometry block (4607 E: start from Dedi's in-contest code and the three bugs in
+  `4607.md`; 1485 K, 2575 B, 2524 A) and the geometry library;
   constructive re-solves; and the heavy re-solve 2661 B (his 169-minute chain).
 - **All three:** the observation block (2575 I, 4071 A, 4071 N) and the checklist drills. A
   specialist still has to be able to solve the easy and greedy problems in every category.
@@ -419,8 +438,6 @@ still apply to owners: an owner stuck on their own category hands it to the back
 
 ## 7. Open questions (answers would sharpen the per-member picture)
 - **Members for 1051, 1485, 2513, 2524 and 2575** (31 solves), and for 4071 F and M.
-- 4607 E (3336557–3336988): who wrote it?
-- 1053 C and 1071 M: who wrote them?
 - 4071 A (Dedi's 4 wrong, then Erdene AC) and 4113 A (3 wrong, member not recorded): wrong idea or
   implementation? Is that account's code recoverable anywhere?
 - **Tamir at 4593 and 1799:** what was he working on (no recorded solve)?

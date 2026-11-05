@@ -7384,6 +7384,17 @@ skipped at the user's request.
   mirrored in the ODS. Erdene's record becomes 12 first-try solves and 13 wrong
   tries. It is the season's only recorded handover after a stall, and it
   worked; summary §5 and §6.3 cite it.
+- (2026-11-05) Dedi was the one attempting 4607 E, 1053 C and 1071 M. With
+  2661 J (already Dedi's in the sheet), all four problems with in-contest runs
+  that we never solved in the 14 virtuals are his: 11 runs (E 5, C 2, M 2,
+  J 2; checked against `submissions.json`). The sheet copy gets three rows in
+  the style of the 2661 J row ("Didn’t solve during contest"), so
+  `team_r3_participations.json` lists them under `sheet_only`, like J. The ODS
+  should get the same rows. The per-member "wrong runs" column still counts
+  solved problems only; the 11 runs are noted beside Dedi's. Summary §6.5 now
+  has Dedi as geometry backup (the only geometry attempt, the right approach)
+  and a rule for the last open problem: a teammate reads the diff or runs the
+  brute force before each run.
 
 **Script.** `scripts/team_r3_digest.py` (new) prints one contest's problem
 table:
