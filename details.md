@@ -8350,5 +8350,6 @@ sample 4 (n=100) and Jinx or Jackpot sample 2 (k=30). The one exception is
 Orchard Fence sample 2, which was not checked: its points are collinear, and
 the paper version assumes general position. The document
 compiles with `pdflatex` (TeX Live 2023) with no warnings. A minimal TeX
-install also needs `cm-super`, because `\$` uses a TS1 font at 11pt. The PDF
-is not committed, matching `strat.tex`. No code or output changed.
+install also needs `cm-super`, because `\$` uses a TS1 font at 11pt. The
+compiled `prob_course_problems.pdf` is committed next to the source (on
+request; `strat.tex` has no committed PDF). No code or output changed.

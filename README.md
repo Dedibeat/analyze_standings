@@ -90,8 +90,9 @@ problems and four backups from the probability-tagged problems in
 `data/tagged.json`: discrete probability only, each with its core trick, a
 paper version and the answer. [prob_course_problems.tex](prob_course_problems.tex)
 writes all nine up in LaTeX, each as a clean problem statement followed by a
-full solution. Build it with `pdflatex prob_course_problems.tex` (run twice
-for the table of contents).
+full solution; the compiled [PDF](prob_course_problems.pdf) is committed.
+Rebuild it with `pdflatex prob_course_problems.tex` (run twice for the table
+of contents).
 
 The [2026-09-05 experiment review](experiment_review.md) records the audit that
 found held-out-label leakage, incorrect rank/AUC tie handling, incomplete
