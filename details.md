@@ -8461,3 +8461,8 @@ pages. Each problem keeps its own "Difficulty: about N (CF scale)" line. The
 contest ratings, anchors and the 1776K note now live only in the table of the
 fourth entry above. The `booktabs` package and the section labels, used only
 by the table, were removed with it.
+
+**Repo reference removed from the PDF (2026-11-06, sixth entry).** Orchard
+Fence's source line no longer says it is "listed under Mid-Atlantic USA in
+`data/tagged.json`"; it now gives only the real source, 2025 ICPC Southeast USA
+Regional, Division 1, Problem A. The PDF now names no repository files.
