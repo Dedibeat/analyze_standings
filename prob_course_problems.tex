@@ -1,0 +1,676 @@
+\documentclass[11pt]{article}
+
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{enumitem}
+\usepackage{microtype}
+\usepackage[dvipsnames]{xcolor}
+\usepackage[colorlinks=true,linkcolor=NavyBlue,citecolor=NavyBlue,urlcolor=NavyBlue]{hyperref}
+
+% ---- math shortcuts ----
+\newcommand{\E}{\mathbb{E}}
+\renewcommand{\Pr}{\mathbb{P}}
+\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\given}{\,\vert\,}
+\newcommand{\indic}[1]{\mathbf{1}\!\left[#1\right]}
+\newcommand{\Bern}{\operatorname{Bernoulli}}
+\newcommand{\Bin}{\operatorname{Bin}}
+
+\theoremstyle{definition}
+\newtheorem*{problem}{Problem}
+\newtheorem*{remark}{Remark}
+\newenvironment{solution}{\begin{proof}[Solution]}{\end{proof}}
+
+% source line under each problem title
+\newcommand{\source}[3]{\noindent{\small\textit{Source:} #1
+  (\href{#2}{QOJ}). \textit{Topics:} #3.}\par}
+
+\setlist[enumerate]{label=(\alph*),leftmargin=*}
+
+\title{\textbf{Discrete Probability Problems}\\[2pt]
+\large Nine problems from ICPC-style contests, with solutions}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\noindent
+These problems come from programming contests. Each statement keeps the
+probability core of the original and drops the programming layer (large
+inputs, modular output, data structures). Only discrete probability is
+used. Problems~1--5 are the main set, in course order; Problems~6--9 are
+backups. The selection is explained in \texttt{prob\_course\_candidates.md}.
+Every numerical answer below was checked by exact enumeration, and each model
+was checked against the original problem's official sample outputs.
+
+\medskip
+\noindent
+Notation: $H_m=\sum_{i=1}^m \frac1i$ and $H_m^{(2)}=\sum_{i=1}^m \frac1{i^2}$;
+$[z^N]\,f(z)$ is the coefficient of $z^N$ in $f(z)$.
+
+\tableofcontents
+\clearpage
+
+% =====================================================================
+\part*{Main problems}
+\addcontentsline{toc}{part}{Main problems}
+
+% ---------------------------------------------------------------------
+\section{Mingle}
+\source{NAQ 2025, Problem~G}{https://qoj.ac/contest/2554/problem/14443}
+  {indicator variables, linearity of expectation, Poisson limit}
+
+\begin{problem}
+Let $k\ge 1$ and $n\ge 2k+1$. There are $n$ players and $n$ rooms, both
+labelled by $\Z_n=\{0,1,\dots,n-1\}$. The rooms stand in a circle, so room
+$n-1$ is next to room $0$. Player $i$ walks into a room chosen uniformly at
+random from the $2k+1$ rooms $i-k,\dots,i+k$ (indices mod $n$), independently
+of the other players. A player who ends up alone in a room is a
+\emph{winner}. Let $W$ be the number of winners.
+\begin{enumerate}
+  \item Find $\E[W]$. Evaluate it for $n=3$, $k=1$.
+  \item Find $\lim_{k\to\infty}\E[W]/n$ and explain the limit with the Poisson
+        approximation to the binomial distribution.
+\end{enumerate}
+\end{problem}
+
+\begin{solution}
+(a) Count rooms, not players. A winner is alone in a room, and a room with
+exactly one player holds exactly one winner. Hence
+\[
+  W=\sum_{r\in\Z_n} X_r,\qquad X_r=\indic{\text{room $r$ holds exactly one player}}.
+\]
+Fix a room $r$. Player $i$ can enter room $r$ only if
+$r\in\{i-k,\dots,i+k\}$, that is, $i\in\{r-k,\dots,r+k\}$. These are $2k+1$
+distinct players because $n\ge 2k+1$. Each of them enters room $r$ with
+probability $\frac{1}{2k+1}$, independently of the others. So the number of
+players in room $r$ is $N_r\sim\Bin\bigl(2k+1,\frac1{2k+1}\bigr)$, and
+\[
+  \Pr(X_r=1)=\Pr(N_r=1)=(2k+1)\cdot\frac{1}{2k+1}\Bigl(1-\frac{1}{2k+1}\Bigr)^{2k}
+  =\Bigl(\frac{2k}{2k+1}\Bigr)^{2k}.
+\]
+The indicators $X_r$ are dependent, but linearity of expectation does not
+need independence:
+\[
+  \E[W]=n\Bigl(\frac{2k}{2k+1}\Bigr)^{2k}.
+\]
+For $n=3$, $k=1$ this is $3\cdot(2/3)^2=4/3$.
+
+(b) Put $M=2k+1$. Then $\E[W]/n=(1-1/M)^{M-1}\to e^{-1}$ as $k\to\infty$.
+The reason is that $N_r\sim\Bin(M,1/M)$ converges in distribution to a
+Poisson$(1)$ variable, and $\Pr(\text{Poisson}(1)=1)=e^{-1}$. So in a large
+game about $37\%$ of the rooms hold a winner.
+\end{solution}
+
+\begin{remark}
+The answer does not depend on $n$. If every player instead chooses among all
+$n$ rooms, the same argument gives the classical value $n(1-1/n)^{n-1}$.
+\end{remark}
+
+% ---------------------------------------------------------------------
+\section{Accidental Arithmetic}
+\source{NWERC 2025, Problem~A}{https://qoj.ac/contest/2603/problem/14855}
+  {linearity of expectation, symmetry, conditioning}
+
+\begin{problem}
+A positive integer $N$ has decimal digits $d_1d_2\cdots d_L$ ($d_1\ne 0$).
+You type the digits from left to right into a faulty calculator. Into each of
+the $L-1$ gaps between consecutive digits it inserts, independently, a ``$+$''
+with probability $\beta$, a ``$-$'' with probability $\gamma$, and nothing with
+probability $q=1-\beta-\gamma$, where $\beta+\gamma>0$. The resulting
+expression, such as $12-3+45$, is then evaluated; a term may begin with zeros,
+so $1+05=6$. Let $V$ be the value, and let $P_l$ be the number formed by the
+first $l$ digits (so $P_L=N$).
+\begin{enumerate}
+  \item Let $\beta=\gamma=\alpha$. Show that
+  \[
+    \E[V]=\sum_{l=1}^{L-1}2\alpha(1-2\alpha)^{l-1}P_l+(1-2\alpha)^{L-1}N,
+  \]
+  and evaluate it for $N=12345$, $\alpha=0.45$.
+  \item Now let $\beta,\gamma$ be arbitrary. Let $F$ be the first term of the
+  expression and $S$ the sum of all its terms, each taken with a plus sign.
+  Show that $\E[V]=(1-\mu)\E[F]+\mu\,\E[S]$ with
+  $\mu=\frac{\beta-\gamma}{\beta+\gamma}$, and compute $\E[F]$ and $\E[S]$.
+\end{enumerate}
+\end{problem}
+
+\begin{solution}
+Number the gaps $1,\dots,L-1$, gap $g$ lying between $d_g$ and $d_{g+1}$.
+Call a gap a \emph{sign gap} if it receives a sign, and let $A$ be the
+(random) set of sign gaps. The set $A$ cuts the digits into terms
+$F=T_0,T_1,\dots,T_s$, and
+\[
+  V=F+\sum_{t=1}^{s}\sigma_tT_t,
+\]
+where $\sigma_t\in\{+1,-1\}$ is the sign in front of $T_t$. Given $A$, the
+terms $T_t$ are fixed numbers, and the signs at the gaps in $A$ are independent,
+each equal to $+1$ with probability $\beta/(\beta+\gamma)$. So
+$\E[\sigma_t\given A]=\mu$ and
+\[
+  \E[V\given A]=F+\mu\sum_{t=1}^{s}T_t=(1-\mu)F+\mu S.
+\]
+Taking expectations gives $\E[V]=(1-\mu)\E[F]+\mu\E[S]$, which is the identity
+in (b).
+
+\emph{The first term.} Let $G$ be the first sign gap, with $G=L$ if there is
+none. Then $F=P_G$, $\Pr(G=l)=(1-q)q^{l-1}$ for $l<L$, and
+$\Pr(G=L)=q^{L-1}$. Hence
+\[
+  \E[F]=\sum_{l=1}^{L-1}(1-q)q^{l-1}P_l+q^{L-1}N.
+\]
+
+(a) If $\beta=\gamma=\alpha$ then $\mu=0$: every later term is equally likely
+to be added or subtracted, whatever its digits, so only the first term
+survives. With $1-q=2\alpha$ the formula above is the claimed one. For
+$N=12345$ and $\alpha=0.45$ we have $q=0.1$, and
+\begin{align*}
+  \E[V]&=0.9\cdot 1+0.09\cdot 12+0.009\cdot 123+0.0009\cdot 1234+0.0001\cdot 12345\\
+  &=0.9+1.08+1.107+1.1106+1.2345=5.4321.
+\end{align*}
+
+(b) It remains to find $\E[S]$; use linearity over digits. Digit $d_l$
+contributes $d_l\cdot 10^{J_l}$ to $S$, where $J_l$ is the number of digits
+after position $l$ in the same term. That is, $J_l$ counts the gaps
+$l,l+1,\dots$ that are empty before the first sign gap, capped at $L-l$. So
+$\Pr(J_l=j)=(1-q)q^j$ for $0\le j<L-l$ and $\Pr(J_l=L-l)=q^{L-l}$, and
+\[
+  \E[S]=\sum_{l=1}^{L}d_l\Bigl(\sum_{j=0}^{L-l-1}(1-q)(10q)^j+(10q)^{L-l}\Bigr).
+\]
+Check: if $q=0$, every gap holds a sign, so $\E[F]=d_1$, $\E[S]=\sum_l d_l$
+and $\E[V]=d_1+\mu\sum_{l\ge 2}d_l$, as it should be.
+\end{solution}
+
+% ---------------------------------------------------------------------
+\section{502 Bad Gateway}
+\source{ICPC Asia EC Online 2024 (II), Problem~L}{https://qoj.ac/contest/1799/problem/9381}
+  {geometric distribution, optimal stopping}
+
+\begin{problem}
+Fix an integer $T\ge 1$. A timer is set to a value drawn uniformly from
+$\{1,\dots,T\}$ and counts down by $1$ each second; you are done when it
+reaches $0$. At the end of every second at which the timer is still positive,
+you may \emph{reset} it: it is then set to a fresh uniform value from
+$\{1,\dots,T\}$, independent of the past. You always see the timer. You want
+to minimise the expected time until you are done.
+\begin{enumerate}
+  \item For $1\le c\le T$, consider the policy ``keep a drawn value if it is at
+  most $c$; otherwise wait one second and reset''. Show that its expected time
+  is
+  \[
+    g(c)=\frac{T}{c}+\frac{c-1}{2}.
+  \]
+  \item Show that some policy of this form is optimal.
+  \item Find the optimal $c$ and the minimal expected time. Evaluate it for
+  $T=3$, $10$ and $1000$, and find its asymptotics as $T\to\infty$.
+\end{enumerate}
+\end{problem}
+
+\begin{solution}
+(a) Each draw is kept with probability $c/T$, independently of the other
+draws, so the number of rejected draws is geometric with mean
+$\frac{1-c/T}{c/T}=\frac{T-c}{c}$. A rejected draw is larger than $c\ge 1$, so
+the timer is still positive after one second, and the draw costs exactly one
+second. The kept draw is uniform on $\{1,\dots,c\}$ and costs its value, with
+mean $\frac{c+1}{2}$. Hence
+\[
+  g(c)=\frac{T-c}{c}+\frac{c+1}{2}=\frac{T}{c}+\frac{c-1}{2}.
+\]
+
+(b) Let $V$ be the minimal expected time measured from the moment a fresh
+value is drawn; $V\le g(T)=\frac{T+1}{2}$ is finite. After a reset the future
+is a fresh copy of the whole problem, so the best you can do from a reset is
+$V$, whatever happened before.
+
+Suppose that at the end of some second the timer shows $s\ge 1$. If you never
+reset again, you need $s$ more seconds. If you reset after waiting $w\ge 0$
+more seconds, you need at least $w+V\ge V$, with equality for $w=0$. So the
+best you can do from this point is $\min(s,V)$: reset now if $s>V$, and never
+reset if $s\le V$.
+
+After a draw $u\ge 2$, the first decision point shows $s=u-1$. So it is
+optimal to keep $u$ exactly when $u\le V+1$. Once a value is kept, later
+decision points show smaller values, which are still at most $V$, so it stays
+kept. (A draw $u=1$ ends the game at once.) This is the threshold policy with
+$c=\min\bigl(T,\lfloor V+1\rfloor\bigr)$. Therefore $V=\min_{1\le c\le T}g(c)$.
+
+(c) For $1\le c<T$,
+\[
+  g(c+1)-g(c)=\frac12-\frac{T}{c(c+1)}.
+\]
+So $g$ decreases while $c(c+1)<2T$ and does not decrease afterwards. The
+optimal threshold is the least $c$ with $c(c+1)\ge 2T$, namely
+$c^*=\bigl\lceil(\sqrt{8T+1}-1)/2\bigr\rceil$; when $c^*(c^*+1)=2T$ the values
+$c^*$ and $c^*+1$ tie.
+\begin{itemize}
+  \item $T=3$: $c^*=2$ (tied with $3$), $V=\frac32+\frac12=2$.
+  \item $T=10$: $c^*=4$ (tied with $5$), $V=\frac{10}{4}+\frac32=4$.
+  \item $T=1000$: $44\cdot 45=1980<2000\le 45\cdot 46$, so $c^*=45$ and
+        $V=\frac{1000}{45}+22=\frac{398}{9}\approx 44.22$.
+\end{itemize}
+For large $T$, the function $x\mapsto T/x+x/2$ is minimised at $x=\sqrt{2T}$
+with value $\sqrt{2T}$, and rounding $x$ to an integer changes the value by
+$O(T^{-1/2})$. Hence $c^*=\sqrt{2T}+O(1)$ and
+$V=\sqrt{2T}-\frac12+O(T^{-1/2})$; for $T=1000$ this gives $44.22$. Never
+resetting would cost $\frac{T+1}{2}$, so resets are worth much more than the
+second each one wastes.
+\end{solution}
+
+% ---------------------------------------------------------------------
+\section{Uniform Chemistry}
+\source{SWERC 2022--2023, Problem~B}{https://qoj.ac/contest/1123/problem/5646}
+  {Markov chains, independent indicators, random permutations}
+
+\begin{problem}
+Fix integers $1\le a<n$ and put $m=n-a$. A particle starts at $a$. At each
+step, if it is at $x<n$, it jumps to a point chosen uniformly from
+$\{x+1,\dots,n\}$, independently of the past. Let $T$ be the number of steps
+until it reaches $n$.
+\begin{enumerate}
+  \item For $a<j<n$, let $I_j$ be the indicator that the particle visits $j$.
+  Show that $\Pr(I_j=1)=\frac{1}{n-j+1}$ and that $I_{a+1},\dots,I_{n-1}$ are
+  independent.
+  \item Find $\E[T]$ and $\Var(T)$.
+  \item Let $c(m,t)$ be the unsigned Stirling numbers of the first kind,
+  defined by $\sum_t c(m,t)z^t=z(z+1)\cdots(z+m-1)$; $c(m,t)$ is the number of
+  permutations of $m$ elements with exactly $t$ cycles. Show that
+  $\Pr(T=t)=c(m,t)/m!$.
+  \item Three researchers each run an independent copy of this process with
+  $a=1$ and $n=3$, one step per year. A researcher wins if nobody reaches $n$
+  strictly earlier, so ties all win. Find the probability that a given
+  researcher wins.
+\end{enumerate}
+\end{problem}
+
+\begin{solution}
+(a) Compute the joint law directly. Let
+$S=\{s_1<\dots<s_r\}\subseteq\{a+1,\dots,n-1\}$. The particle visits exactly
+the points of $S$ between $a$ and $n$ if and only if its path is
+$a\to s_1\to\dots\to s_r\to n$, which has probability
+\[
+  \frac{1}{n-a}\prod_{i=1}^{r}\frac{1}{n-s_i}.
+\]
+Now put $q_j=\frac{1}{n-j+1}$. The product
+$\prod_{j=a+1}^{n-1}(1-q_j)=\prod_{j=a+1}^{n-1}\frac{n-j}{n-j+1}$ telescopes to
+$\frac{1}{n-a}$, and $\frac{q_j}{1-q_j}=\frac{1}{n-j}$. Hence
+\[
+  \prod_{j\in S}q_j\prod_{j\notin S}(1-q_j)
+  =\prod_{j=a+1}^{n-1}(1-q_j)\cdot\prod_{j\in S}\frac{q_j}{1-q_j}
+  =\frac{1}{n-a}\prod_{j\in S}\frac{1}{n-j},
+\]
+which is the same probability. So $(I_{a+1},\dots,I_{n-1})$ has the law of
+independent $\Bern(q_j)$ variables, and both claims follow.
+
+There is also a direct argument for the marginal: the particle must enter
+$\{j,\dots,n\}$ at some step, and the jump that first enters this set lands
+uniformly on its $n-j+1$ points.
+
+(b) Each step lands on a new point and the last step lands on $n$, so
+$T=1+\sum_{j=a+1}^{n-1}I_j$. Substitute $i=n-j+1$, which runs over
+$2,\dots,m$:
+\[
+  T=1+\sum_{i=2}^{m}B_i,\qquad B_i\sim\Bern(1/i)\ \text{independent}.
+\]
+Hence $\E[T]=1+\sum_{i=2}^m\frac1i=H_m$ and, by independence,
+\[
+  \Var(T)=\sum_{i=2}^m\frac1i\Bigl(1-\frac1i\Bigr)=H_m-H_m^{(2)}
+\]
+(the term $i=1$ of $H_m-H_m^{(2)}$ is zero).
+
+(c) By independence,
+\[
+  \E\bigl[z^T\bigr]=z\prod_{i=2}^{m}\Bigl(1-\frac1i+\frac zi\Bigr)
+  =z\prod_{i=2}^{m}\frac{z+i-1}{i}=\frac{z(z+1)\cdots(z+m-1)}{m!}
+  =\sum_t\frac{c(m,t)}{m!}z^t.
+\]
+Comparing coefficients gives $\Pr(T=t)=c(m,t)/m!$. So $T$ has the law of the
+number of cycles of a uniformly random permutation of $m$ elements.
+
+(d) With $a=1$ and $n=3$, the first jump goes to $3$ with probability
+$\frac12$ (then $T=1$); otherwise it goes to $2$ and then to $3$ (then $T=2$).
+A given researcher wins if their $T=1$, or if their $T=2$ and both other
+researchers also have $T=2$:
+\[
+  \Pr(\text{win})=\frac12+\Bigl(\frac12\Bigr)^3=\frac58.
+\]
+In general, researcher $i$ wins with probability
+$\sum_t\Pr(T_i=t)\prod_{j\ne i}\Pr(T_j\ge t)$, and (c) gives each
+distribution.
+\end{solution}
+
+% ---------------------------------------------------------------------
+\section{Jinx or Jackpot}
+\source{NERC 2025, Problem~J}{https://qoj.ac/contest/2785/problem/15902}
+  {Bayes' rule, dynamic programming, value of information}
+
+\begin{problem}
+A slot machine pays even odds: if you bet $x$, you win $x$ with probability
+$p$ (a \emph{jackpot}) and lose $x$ with probability $1-p$ (a \emph{jinx}).
+Given $p$, the rounds are independent. You start with \$1000 and may play at
+most $k$ rounds. In each round you choose a bet $x$ with
+$0\le x\le{}$(current balance); a bet of $0$ is allowed, and you still see
+whether that round was a jackpot. You want to maximise the expected final
+balance.
+\begin{enumerate}
+  \item Show that the optimal expected final balance from balance $w$ is $w$
+  times a number that depends only on the outcomes seen so far, and that in
+  every round an optimal bet is either $0$ or the whole balance.
+  \item Suppose $p$ is known. Find an optimal strategy and the maximal expected
+  profit. Evaluate the profit for $p=0.61$, $k=5$.
+  \item Suppose $p$ is unknown: it is $0.7$ or $0.3$, each with prior
+  probability $\frac12$. Let $k=2$. Find an optimal strategy and the maximal
+  expected profit, and compare it with the best strategy that bets $0$ in the
+  first round.
+\end{enumerate}
+\end{problem}
+
+\begin{solution}
+(a) Let $h$ be the sequence of outcomes seen so far, and let $j$ be the number
+of rounds left. Given $h$, the next round is a jackpot with probability
+$\hat p(h)=\E[p\given h]$, the posterior mean of $p$ (law of total
+probability). Write $hW$ and $hL$ for $h$ followed by a jackpot or a jinx.
+Let $V_j(w,h)$ be the optimal expected final balance. We show by induction on
+$j$ that $V_j(w,h)=w\,v_j(h)$, where $v_0\equiv 1$ and
+\[
+  v_j(h)=\max\Bigl\{\hat p\,v_{j-1}(hW)+(1-\hat p)\,v_{j-1}(hL),\;
+  2\hat p\,v_{j-1}(hW)\Bigr\},\qquad \hat p=\hat p(h).
+\]
+For $j=0$ this is clear. For $j\ge 1$, a bet $x\in[0,w]$ is followed by
+balance $w+x$ after a jackpot and $w-x$ after a jinx, and the outcome is seen
+either way, so by induction
+\[
+  V_j(w,h)=\max_{0\le x\le w}\Bigl[\hat p\,(w+x)\,v_{j-1}(hW)
+  +(1-\hat p)\,(w-x)\,v_{j-1}(hL)\Bigr].
+\]
+The bracket is linear in $x$, so its maximum is attained at $x=0$ or $x=w$.
+These two choices give the two expressions in the formula for $v_j$.
+
+(b) If $p$ is known, then $\hat p=p$ in every round and
+$v_j=v_{j-1}\max(1,2p)$, so $v_k=\max(1,2p)^k$. If $p>\frac12$, go all-in
+every round; the expected profit is $1000\bigl((2p)^k-1\bigr)$. If
+$p\le\frac12$, never bet; the profit is $0$. For $p=0.61$ and $k=5$ the
+profit is $1000\,(1.22^5-1)=1000\cdot 1.7027081632\approx\$1702.71$.
+
+(c) Bayes' rule after one jackpot:
+\[
+  \Pr(p=0.7\given W)=\frac{\frac12\cdot 0.7}{\frac12\cdot 0.7+\frac12\cdot 0.3}=0.7,
+  \qquad \hat p(W)=0.7\cdot 0.7+0.3\cdot 0.3=0.58.
+\]
+Likewise $\Pr(p=0.7\given L)=0.3$ and $\hat p(L)=0.3\cdot 0.7+0.7\cdot
+0.3=0.42$. Before any round, $\hat p=0.5$.
+
+\emph{Round 2.} After a jackpot, $v_1(W)=\max(1,\,2\cdot 0.58)=1.16$: go
+all-in. After a jinx, $v_1(L)=\max(1,\,2\cdot 0.42)=1$: bet nothing.
+
+\emph{Round 1.} Betting $0$ gives $\frac12\cdot 1.16+\frac12\cdot 1=1.08$.
+Going all-in gives $2\cdot\frac12\cdot 1.16=1.16$. So the optimal strategy is
+to go all-in in round 1 and, after a jackpot, all-in again. The maximal
+expected profit is $1000\,(1.16-1)=\$160$. The best strategy that only watches
+round 1 earns $1000\,(1.08-1)=\$80$.
+
+Round 1 is a fair bet ($\hat p=\frac12$), yet staking everything on it is
+optimal. A jackpot both doubles the balance and makes the machine look better,
+so the balance is largest exactly when the next bet is most favourable.
+\end{solution}
+
+% =====================================================================
+\part*{Backup problems}
+\addcontentsline{toc}{part}{Backup problems}
+
+% ---------------------------------------------------------------------
+\section{Orchard Fence}
+\source{2025 ICPC Southeast USA Regional, Division~1, Problem~A; listed under
+Mid-Atlantic USA in \texttt{data/tagged.json}}{https://qoj.ac/contest/3502/problem/16814}
+  {linearity of expectation over edges, counting}
+
+\begin{problem}
+Let $z_1,\dots,z_n$ be $n\ge 3$ points in the plane in general position (no
+three on a line). A uniformly random subset $K$ of $k$ of them is kept, where
+$2\le k\le n$. Let $L$ be the perimeter of the convex hull of $K$; for $k=2$
+the hull is a segment, and its perimeter is twice its length.
+\begin{enumerate}
+  \item For an ordered pair $(i,j)$ with $i\ne j$, let $\ell_{ij}$ be the number
+  of the other $n-2$ points that lie strictly to the left of the directed line
+  from $z_i$ to $z_j$. Show that
+  \[
+    \E[L]=\frac{1}{\binom nk}\sum_{i\ne j}|z_iz_j|\binom{\ell_{ij}}{k-2}.
+  \]
+  \item Evaluate $\E[L]$ for the six vertices of a regular hexagon with side
+  $1$, for $k=3$ and for $k=4$.
+\end{enumerate}
+\end{problem}
+
+\begin{solution}
+(a) Traverse the hull boundary counterclockwise. Then
+\[
+  L=\sum_{i\ne j}|z_iz_j|\cdot\indic{z_i\to z_j\text{ is a counterclockwise hull edge of }K}.
+\]
+For $k\ge 3$ in general position, $z_i\to z_j$ is a counterclockwise hull edge
+exactly when $i,j\in K$ and every other point of $K$ lies strictly to the left
+of the line $z_i\to z_j$. The number of such $k$-subsets is
+$\binom{\ell_{ij}}{k-2}$: choose the other $k-2$ kept points among the
+$\ell_{ij}$ points on the left. For $k=2$ the formula counts the segment in
+both directions, since $\binom{\ell}{0}=1$, which matches the convention.
+Linearity of expectation gives the formula.
+
+(b) Label the vertices $0,\dots,5$ counterclockwise. There are three kinds of
+pairs:
+\begin{itemize}
+  \item 6 adjacent pairs, length $1$: $\ell=4$ in the counterclockwise
+  direction and $\ell=0$ in the other;
+  \item 6 pairs one vertex apart, length $\sqrt3$: $\ell=3$ and $\ell=1$;
+  \item 3 opposite pairs, length $2$: $\ell=2$ in both directions.
+\end{itemize}
+For $k=3$, the weights $\binom{\ell}{1}$ of the two directions add up to $4$
+for every pair, so
+\[
+  \E[L]=\frac{4\,(6\cdot 1+6\sqrt3+3\cdot 2)}{\binom63}=\frac{48+24\sqrt3}{20}
+  =\frac{12+6\sqrt3}{5}\approx 4.478.
+\]
+Check: a triangle's perimeter is the sum of its three sides, so $\E[L]$ is
+three times the mean distance of a random pair, $3\cdot(12+6\sqrt3)/15$.
+
+For $k=4$, the weights $\binom{\ell}{2}$ add up to $6+0$, $3+0$ and $1+1$ for
+the three kinds, so
+\[
+  \E[L]=\frac{6\cdot 1\cdot 6+6\sqrt3\cdot 3+3\cdot 2\cdot 2}{\binom64}
+  =\frac{48+18\sqrt3}{15}=\frac{16+6\sqrt3}{5}\approx 5.278.
+\]
+\end{solution}
+
+\begin{remark}
+In the original problem the kept points are tree trunks, disks of diameter
+$d$. The shortest fence around them has length $L+\pi d$, so the expected
+fence length is $\E[L]+\pi d$.
+\end{remark}
+
+% ---------------------------------------------------------------------
+\section{Chopsticks}
+\source{2025 ICPC Asia Taiwan Online Programming Contest, Problem~H}{https://qoj.ac/contest/2621/problem/15121}
+  {parity, indicators, generating functions}
+
+\begin{problem}
+A box holds chopsticks of $m$ types, $k_i$ of type $i$, and $s=\sum_i k_i$ in
+total. You draw $2n\le s$ of them uniformly at random without replacement and
+hand them out in $n$ pairs so that as many pairs as possible are of one type.
+Let $M$ be the number of mixed pairs, and let $X_i$ be the number of drawn
+chopsticks of type $i$.
+\begin{enumerate}
+  \item Show that $M=\frac12\,\#\{i:X_i\text{ odd}\}$, and hence
+  $\E[M]=\frac12\sum_i\Pr(X_i\text{ odd})$.
+  \item Show that $\Pr(X_i\text{ odd})=\frac12\bigl(1-\E[(-1)^{X_i}]\bigr)$ and
+  \[
+    \E\bigl[(-1)^{X_i}\bigr]=\frac{[z^{2n}]\,(1-z)^{k_i}(1+z)^{s-k_i}}{\binom{s}{2n}}.
+  \]
+  \item Find $\E[M]$ for $8$ red and $8$ blue chopsticks and $n=5$.
+  \item Suppose instead that the $2n$ chopsticks are drawn independently, each
+  of type $i$ with probability $p_i$. Find $\E[M]$.
+\end{enumerate}
+\end{problem}
+
+\begin{solution}
+(a) Type $i$ gives at most $\lfloor X_i/2\rfloor$ same-type pairs, and pairing
+within types achieves $\sum_i\lfloor X_i/2\rfloor$. The leftover chopsticks,
+one of each type with $X_i$ odd, are then paired arbitrarily. If $O$ is the
+number of odd $X_i$, the matched pairs number $\sum_i\lfloor X_i/2\rfloor=(2n-O)/2$,
+so $M=n-(2n-O)/2=O/2$. Linearity gives
+$\E[M]=\frac12\sum_i\Pr(X_i\text{ odd})$.
+
+(b) Since $(-1)^X=1-2\cdot\indic{X\text{ odd}}$, we get
+$\Pr(X\text{ odd})=\frac12\bigl(1-\E[(-1)^X]\bigr)$. The count $X_i$ is
+hypergeometric:
+$\Pr(X_i=x)=\binom{k_i}{x}\binom{s-k_i}{2n-x}\big/\binom{s}{2n}$. So
+\[
+  \binom{s}{2n}\E\bigl[(-1)^{X_i}\bigr]=\sum_x(-1)^x\binom{k_i}{x}\binom{s-k_i}{2n-x}
+  =[z^{2n}]\,(1-z)^{k_i}(1+z)^{s-k_i},
+\]
+because multiplying the two generating functions
+$(1-z)^{k_i}=\sum_x(-1)^x\binom{k_i}{x}z^x$ and
+$(1+z)^{s-k_i}=\sum_y\binom{s-k_i}{y}z^y$ collects exactly these products in
+the coefficient of $z^{2n}$.
+
+(c) Here $k=8$, $s=16$ and $2n=10$. Since $(1-z)^8(1+z)^8=(1-z^2)^8$,
+\[
+  [z^{10}]\,(1-z^2)^8=\binom85(-1)^5=-56,\qquad
+  \E\bigl[(-1)^{X_{\text{red}}}\bigr]=\frac{-56}{\binom{16}{10}}=\frac{-56}{8008}=-\frac{1}{143}.
+\]
+So $\Pr(X_{\text{red}}\text{ odd})=\frac12\bigl(1+\frac1{143}\bigr)=\frac{72}{143}$,
+and the same holds for blue. Hence $\E[M]=\frac12\cdot 2\cdot\frac{72}{143}
+=\frac{72}{143}\approx 0.503$. (With two colours, $M$ is simply the indicator
+that $X_{\text{red}}$ is odd.)
+
+(d) Now $X_i\sim\Bin(2n,p_i)$, so
+$\E[(-1)^{X_i}]=\sum_x\binom{2n}{x}(-p_i)^x(1-p_i)^{2n-x}=(1-2p_i)^{2n}$, and
+\[
+  \E[M]=\frac14\sum_i\Bigl(1-(1-2p_i)^{2n}\Bigr).
+\]
+\end{solution}
+
+% ---------------------------------------------------------------------
+\section{Crashing Competition Computer}
+\source{NWERC 2022, Problem~C}{https://qoj.ac/contest/1044/problem/5127}
+  {consecutive successes, recursions for expectations, convexity}
+
+\begin{problem}
+You must type a text of $c$ characters, one time unit per character. After
+each typed character, independently, the computer crashes with probability
+$p\in(0,1)$. A crash costs $r$ time units of recovery, after which you continue
+from the last save; the start of the text counts as saved. A save takes $t$
+time units and never crashes, and the text must be saved after its last
+character. Put $q=1-p$.
+\begin{enumerate}
+  \item Show that typing a block of $k$ characters that starts right after a
+  save and ends with a save takes expected time $h(k)+t$, where
+  \[
+    h(k)=\Bigl(\frac1p+r\Bigr)\bigl(q^{-k}-1\bigr).
+  \]
+  \item Show that, for a fixed number of saves, the expected total time is
+  smallest when the block lengths differ by at most one.
+  \item Find the minimal expected time for $c=3$, $p=\frac12$, $r=2$, $t=5$.
+\end{enumerate}
+\end{problem}
+
+\begin{solution}
+(a) Let $E_j$ be the expected time, starting from the save, until $j$
+characters of the block have been typed with no crash in between. Once $k-1$
+characters are typed, you type one more (one time unit). With probability $p$
+it crashes; you then pay $r$ and are back at the save, so you need $E_k$ more
+in expectation. Hence
+\[
+  E_k=E_{k-1}+1+p\,(r+E_k),\qquad\text{so}\qquad E_k=\frac{E_{k-1}+1+pr}{q},
+  \qquad E_0=0.
+\]
+Unrolling the recursion,
+\[
+  E_k=(1+pr)\sum_{i=1}^{k}q^{-i}=(1+pr)\,\frac{q^{-k}-1}{1-q}
+  =\Bigl(\frac1p+r\Bigr)\bigl(q^{-k}-1\bigr)=h(k),
+\]
+and the final save adds $t$.
+
+(b) First, a fixed plan of save positions is enough. A crash returns you to
+the state you were in right after the last save, so where to save next from a
+given save position can be decided once and for all. The plan is a sequence
+$0=y_0<y_1<\dots<y_B=c$ of save positions, with block lengths
+$k_b=y_b-y_{b-1}$. By (a) and linearity its expected time is
+$\sum_{b=1}^{B}h(k_b)+Bt$.
+
+The increments $\Delta(k)=h(k+1)-h(k)=\bigl(\frac1p+r\bigr)\frac pq\,q^{-k}$
+increase with $k$, so $h$ is convex. If two blocks have lengths $a\ge b+2$,
+replacing them by $a-1$ and $b+1$ changes the total by
+\[
+  \Delta(b)-\Delta(a-1)\le 0,
+\]
+because $b<a-1$. Repeating this until all lengths differ by at most one
+never increases the total. Writing $c=Bu+v$ with $0\le v<B$, the best plan
+with $B$ saves therefore costs $v\,h(u+1)+(B-v)\,h(u)+Bt$, and it remains to
+minimise over $B\in\{1,\dots,c\}$.
+
+(c) Here $\frac1p+r=4$ and $q^{-1}=2$, so $h(k)=4(2^k-1)$: $h(1)=4$,
+$h(2)=12$, $h(3)=28$.
+\begin{itemize}
+  \item One save (block $3$): $28+5=33$.
+  \item Two saves (blocks $2,1$): $12+4+2\cdot 5=26$.
+  \item Three saves (blocks $1,1,1$): $3\cdot(4+5)=27$.
+\end{itemize}
+The minimum is $26$: save once after the second (or the first) character, and
+again at the end.
+\end{solution}
+
+% ---------------------------------------------------------------------
+\section{Disbursement on Quarantine Policy}
+\source{ICPC Asia Taiwan 2024, Problem~D}{https://qoj.ac/contest/2622/problem/15129}
+  {linearity of expectation, complements, independence}
+
+\begin{problem}
+Passengers sit in a rectangular grid of seats, and each is infected
+independently with probability $\frac12$. An infected passenger is quarantined
+for $d_0$ days. A healthy passenger with at least one infected edge-neighbour
+(sharing a side) is quarantined for $d_1$ days. A healthy passenger with no
+infected edge-neighbour but at least one infected corner-neighbour (sharing
+only a corner) is quarantined for $d_2$ days. Everyone else is not
+quarantined.
+\begin{enumerate}
+  \item A seat has $e$ edge-neighbours and $c$ corner-neighbours. Find the
+  expected quarantine length of its passenger.
+  \item Find the expected total number of quarantine days for a $3\times 3$
+  grid with $d_0=4$, $d_1=2$, $d_2=1$.
+\end{enumerate}
+\end{problem}
+
+\begin{solution}
+(a) The events ``the passenger is infected'', ``no edge-neighbour is
+infected'' and ``no corner-neighbour is infected'' concern disjoint sets of
+seats, so they are independent, with probabilities $\frac12$, $2^{-e}$ and
+$2^{-c}$. Using complements,
+\begin{align*}
+  \Pr(\text{healthy, some edge-neighbour infected})&=\tfrac12\bigl(1-2^{-e}\bigr),\\
+  \Pr(\text{healthy, no edge-neighbour infected, some corner-neighbour infected})
+  &=\tfrac12\,2^{-e}\bigl(1-2^{-c}\bigr).
+\end{align*}
+So the expected quarantine length is
+\[
+  \frac{d_0}{2}+\frac{d_1}{2}\bigl(1-2^{-e}\bigr)+\frac{d_2}{2}\,2^{-e}\bigl(1-2^{-c}\bigr).
+\]
+
+(b) By linearity, add up the seats. With $d_0=4$, $d_1=2$, $d_2=1$:
+\begin{itemize}
+  \item 4 corner seats ($e=2$, $c=1$): $2+\frac34+\frac1{16}=\frac{45}{16}$;
+  \item 4 side seats ($e=3$, $c=2$): $2+\frac78+\frac3{64}=\frac{187}{64}$;
+  \item 1 centre seat ($e=4$, $c=4$): $2+\frac{15}{16}+\frac{15}{512}=\frac{1519}{512}$.
+\end{itemize}
+The expected total is
+\[
+  4\cdot\frac{45}{16}+4\cdot\frac{187}{64}+\frac{1519}{512}
+  =\frac{5760+5984+1519}{512}=\frac{13263}{512}\approx 25.90.
+\]
+\end{solution}
+
+\begin{remark}
+In the original problem some passengers are known to be infected or healthy.
+The same argument works with each seat's infection probability in
+$\{0,\frac12,1\}$; the probability that no edge-neighbour is infected becomes
+the product of $1-\Pr(\text{infected})$ over the edge-neighbours.
+\end{remark}
+
+\end{document}
