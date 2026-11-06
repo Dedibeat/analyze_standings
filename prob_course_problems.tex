@@ -2,7 +2,6 @@
 
 \usepackage[a4paper,margin=1in]{geometry}
 \usepackage{amsmath,amssymb,amsthm,mathtools}
-\usepackage{booktabs}
 \usepackage{microtype}
 \usepackage[dvipsnames]{xcolor}
 \usepackage[colorlinks=true,linkcolor=NavyBlue,citecolor=NavyBlue,urlcolor=NavyBlue]{hyperref}
@@ -31,62 +30,11 @@
 \begin{document}
 \maketitle
 
-\noindent
-These problems come from programming contests. Each one keeps the
-probability idea of the original and drops the programming layer (large
-inputs, modular output, data structures), using small concrete numbers
-instead. Only discrete probability is used. Each problem asks one question
-that rests on one key idea, and its solution names the idea first. A remark
-after each solution connects it to the general and contest versions; the
-remarks are not part of the problems. Problems~1--5 are the main set and
-Problems~6--9 are backups, each set in order of difficulty. The selection is
-explained in \texttt{prob\_course\_candidates.md}. Every answer was checked
-by computer in exact arithmetic.
-
-\medskip
-\noindent
-\textbf{Difficulty} is given on the Codeforces rating scale. ``Paper'' is an
-estimate, by judgment and accurate to about $\pm 200$, of the rating a
-Codeforces problem would have if its whole difficulty were the math step
-asked here, with tiny inputs and nothing to program. Each estimate is
-anchored on a rated Codeforces problem with the same idea, taken from
-\texttt{data/cf\_problemset.json}. A paper version with small numbers sits
-below its anchor, because the anchor also has to be coded for large inputs.
-``Contest'' is the rating of the original contest problem from this
-repository's shipped DE fit (\texttt{output/problem\_ratings\_calibrated.json});
-``---'' means the problem is not in that fit. It mostly measures the
-programming layer: Orchard Fence is the hardest contest problem here and the
-easiest paper problem.
-
-\begin{center}
-\begin{tabular}{rlccl}
-  \toprule
-  & Problem & Paper & Contest & Anchor (same idea) \\
-  \midrule
-  1 & \hyperref[sec:mingle]{Mingle} & 1300 & 2239 & 621C (1700) \\
-  2 & \hyperref[sec:accidental]{Accidental Arithmetic} & 1500 & 1877 & 696B (1700) \\
-  3 & \hyperref[sec:chemistry]{Uniform Chemistry} & 1600 & 1960\rlap{$^*$} & 280C (2200) \\
-  4 & \hyperref[sec:gateway]{502 Bad Gateway} & 1700 & 1972 & --- \\
-  5 & \hyperref[sec:jinx]{Jinx or Jackpot} & 1900 & 2438 & --- \\
-  \midrule
-  6 & \hyperref[sec:orchard]{Orchard Fence} & 1100 & 3067 & --- \\
-  7 & \hyperref[sec:quarantine]{Disbursement on Quarantine Policy} & 1400 & --- & 621C (1700) \\
-  8 & \hyperref[sec:crashing]{Crashing Competition Computer} & 1400 & 2269 & 1265E (2100) \\
-  9 & \hyperref[sec:chopsticks]{Chopsticks} & 1700 & --- & --- \\
-  \bottomrule
-\end{tabular}
-
-\smallskip
-{\small $^*$Its Codeforces mirror, 1776K, is officially rated 3200;
-\texttt{problem\_rating\_audit.md} judges about 2000.}
-\end{center}
-\clearpage
-
 % =====================================================================
 \part*{Main problems}
 
 % ---------------------------------------------------------------------
-\section{Mingle}\label{sec:mingle}
+\section{Mingle}
 \source{NAQ 2025, Problem~G}{https://qoj.ac/contest/2554/problem/14443}
   {indicator variables}{1300}
 
@@ -124,7 +72,7 @@ for this with $n\le 456$, modulo a prime.
 \end{remark}
 
 % ---------------------------------------------------------------------
-\section{Accidental Arithmetic}\label{sec:accidental}
+\section{Accidental Arithmetic}
 \source{NWERC 2025, Problem~A}{https://qoj.ac/contest/2603/problem/14855}
   {symmetry}{1500}
 
@@ -162,7 +110,7 @@ different probabilities, the later terms would no longer cancel.
 \end{remark}
 
 % ---------------------------------------------------------------------
-\section{Uniform Chemistry}\label{sec:chemistry}
+\section{Uniform Chemistry}
 \source{SWERC 2022--2023, Problem~B}{https://qoj.ac/contest/1123/problem/5646}
   {indicator variables}{1600}
 
@@ -203,7 +151,7 @@ racing to a new element) and asks for each one's chance to arrive first.
 \end{remark}
 
 % ---------------------------------------------------------------------
-\section{502 Bad Gateway}\label{sec:gateway}
+\section{502 Bad Gateway}
 \source{ICPC Asia EC Online 2024 (II), Problem~L}{https://qoj.ac/contest/1799/problem/9381}
   {geometric distribution}{1700}
 
@@ -245,7 +193,7 @@ worth resetting, it is worth resetting at once.
 \end{remark}
 
 % ---------------------------------------------------------------------
-\section{Jinx or Jackpot}\label{sec:jinx}
+\section{Jinx or Jackpot}
 \source{NERC 2025, Problem~J}{https://qoj.ac/contest/2785/problem/15902}
   {conditional probability}{1900}
 
@@ -295,7 +243,7 @@ $10^5$ candidate values of the win probability.
 \part*{Backup problems}
 
 % ---------------------------------------------------------------------
-\section{Orchard Fence}\label{sec:orchard}
+\section{Orchard Fence}
 \source{2025 ICPC Southeast USA Regional, Division~1, Problem~A; listed under
 Mid-Atlantic USA in \texttt{data/tagged.json}}{https://qoj.ac/contest/3502/problem/16814}
   {linearity of expectation}{1100}
@@ -329,7 +277,7 @@ $\ell_{ij}$ counts the points to the left.
 \end{remark}
 
 % ---------------------------------------------------------------------
-\section{Disbursement on Quarantine Policy}\label{sec:quarantine}
+\section{Disbursement on Quarantine Policy}
 \source{ICPC Asia Taiwan 2024, Problem~D}{https://qoj.ac/contest/2622/problem/15129}
   {complements}{1400}
 
@@ -371,7 +319,7 @@ each seat's infection probability in $\{0,\frac12,1\}$.
 \end{remark}
 
 % ---------------------------------------------------------------------
-\section{Crashing Competition Computer}\label{sec:crashing}
+\section{Crashing Competition Computer}
 \source{NWERC 2022, Problem~C}{https://qoj.ac/contest/1044/problem/5127}
   {recursion for expectations}{1400}
 
@@ -412,7 +360,7 @@ characters.
 \end{remark}
 
 % ---------------------------------------------------------------------
-\section{Chopsticks}\label{sec:chopsticks}
+\section{Chopsticks}
 \source{2025 ICPC Asia Taiwan Online Programming Contest, Problem~H}{https://qoj.ac/contest/2621/problem/15121}
   {parity}{1700}
 

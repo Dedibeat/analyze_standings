@@ -8452,3 +8452,12 @@ through 2×7 against the per-seat formula, then the formula for 2×50. 502
 Bad Gateway by checking all keep-sets for T ≤ 12. The hexagon and
 Chopsticks numbers were checked before. The document compiles with no
 warnings. The previous one-trick version is in commit 92beed3.
+
+**Front matter removed (2026-11-06, fifth entry).** On request, the PDF's
+opening block is gone from `prob_course_problems.tex`: the intro paragraph,
+the difficulty-scale explanation and the summary table with contest ratings
+and CF anchors. The title now leads straight into the problems. The PDF is 5
+pages. Each problem keeps its own "Difficulty: about N (CF scale)" line. The
+contest ratings, anchors and the 1776K note now live only in the table of the
+fourth entry above. The `booktabs` package and the section labels, used only
+by the table, were removed with it.
