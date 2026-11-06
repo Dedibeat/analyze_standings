@@ -8399,3 +8399,56 @@ enumeration for every 3 ≤ k ≤ n ≤ 9. All other numbers are unchanged from 
 second entry. The document compiles with no warnings, and the PDF was
 rebuilt. The multi-part version is in commits 08188b2 (tex) and d670beb
 (PDF).
+
+## Probability-course problems: easier concrete versions, CF-scale difficulty (2026-11-06, fourth entry)
+
+Asked to make the problems easier and cleaner but still tricky, then to rate
+them on the CF scale. [prob_course_problems.tex](prob_course_problems.tex) now
+uses small concrete numbers. Brute force is still hopeless or tedious, so the
+trick is still needed, but it makes each solution a few lines with a clean
+answer. The PDF is 6 pages.
+
+| # | Problem | Concrete question | Answer | Paper (CF est.) | Contest (DE) | Anchor |
+|---|---|---|---|---|---|---|
+| 1 | Mingle | 9 players, room in front or a neighbour | 4 | 1300 | 2239 | 621C (1700) |
+| 2 | Accidental Arithmetic | type 12345, ± at 0.45 each | 5.4321 | 1500 | 1877 | 696B (1700) |
+| 3 | Uniform Chemistry | frog on pads 0–6 | 49/20 | 1600 | 1960 | 280C (2200) |
+| 4 | 502 Bad Gateway | timer 1–10, keep or spend 1 s to reset | 4 | 1700 | 1972 | — |
+| 5 | Jinx or Jackpot | p ∈ {0.7, 0.3}, $1000, 2 rounds | $1160 | 1900 | 2438 | — |
+| 6 | Orchard Fence | random triangle on a unit hexagon | (12+6√3)/5 | 1100 | 3067 | — |
+| 7 | Quarantine | 2×50 train car, days 4/2/1 | 1167/4 | 1400 | — | 621C (1700) |
+| 8 | Crashing Computer | 3 chars, crash ½, no recovery cost, save 3 | 14 | 1400 | 2269 | 1265E (2100) |
+| 9 | Chopsticks | 4+4+4, draw 6 | 8/11 | 1700 | — | — |
+
+- **Paper rating** is a judgment estimate (about ±200), not a fit: the CF
+  rating a problem would have if its whole difficulty were this math step,
+  with tiny inputs and no code. Anchors are rated problems from
+  `data/cf_problemset.json` that rest on the same idea. 621C: linearity over
+  adjacent pairs with complements. 696B: a ½ symmetry. 280C: each node is hit
+  with probability 1/depth. 1265E: the restart-on-failure recursion. A paper
+  version sits below its anchor because the anchor must also be coded for
+  large inputs. 453A was considered for 502 and dropped (a different idea).
+- **Contest rating** is `difficulty_cf` from
+  `output/problem_ratings_calibrated.json`. Chopsticks and Quarantine (Taiwan
+  2025 H, 2024 D) are not in that file; only the uncalibrated Architecture A
+  file has them. Uniform Chemistry's CF mirror 1776K is officially 3200;
+  `problem_rating_audit.md` judges about 2000, and DE gives 1960.
+- **Order.** Each set runs from easiest to hardest by the paper rating, so the
+  frog (1600) now comes before 502 Bad Gateway (1700). The backups are
+  Orchard, Quarantine, Crashing, Chopsticks.
+- **Simplifications.** Accidental Arithmetic uses a swap-all-signs argument
+  instead of conditioning on the sign pattern. 502 Bad Gateway lets you reset
+  only when the timer is set, which the remark shows loses nothing; a keep-set
+  argument shows the best set is {1..c}. Jinx or Jackpot gets the round-2
+  win chance as P(WW)/P(W) instead of Bayes' formula. Orchard Fence is back
+  to the shortlist's hexagon triangle (linearity over the 15 pairs).
+  Crashing drops the recovery cost, so a block is "k heads in a row" (2, 6,
+  14). Hints remain on the frog and Jinx or Jackpot.
+
+Checks (scratch scripts, not kept): Mingle by enumeration of all 3^9
+outcomes. Frog by its exact distribution. Jinx by a DP over bet fractions.
+Crashing by a DP over all save positions. Quarantine by enumeration of 2×2
+through 2×7 against the per-seat formula, then the formula for 2×50. 502
+Bad Gateway by checking all keep-sets for T ≤ 12. The hexagon and
+Chopsticks numbers were checked before. The document compiles with no
+warnings. The previous one-trick version is in commit 92beed3.

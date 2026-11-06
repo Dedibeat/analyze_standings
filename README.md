@@ -89,8 +89,9 @@ A [probability-course shortlist](prob_course_candidates.md) picks five main
 problems and four backups from the probability-tagged problems in
 `data/tagged.json`: discrete probability only, each with its core trick, a
 paper version and the answer. [prob_course_problems.tex](prob_course_problems.tex)
-writes all nine up in LaTeX: each is one question resting on one key idea,
-followed by its solution and a remark with extensions. The compiled
+writes all nine up in LaTeX: each is one small concrete question resting on
+one key idea, followed by its solution and a remark with extensions, and each
+has an estimated difficulty on the Codeforces scale (1100–1900). The compiled
 [PDF](prob_course_problems.pdf) is committed.
 Rebuild it with `pdflatex prob_course_problems.tex` (run twice for the table
 of contents).

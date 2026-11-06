@@ -2,6 +2,7 @@
 
 \usepackage[a4paper,margin=1in]{geometry}
 \usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs}
 \usepackage{microtype}
 \usepackage[dvipsnames]{xcolor}
 \usepackage[colorlinks=true,linkcolor=NavyBlue,citecolor=NavyBlue,urlcolor=NavyBlue]{hyperref}
@@ -9,20 +10,16 @@
 % ---- math shortcuts ----
 \newcommand{\E}{\mathbb{E}}
 \renewcommand{\Pr}{\mathbb{P}}
-\newcommand{\Var}{\operatorname{Var}}
-\newcommand{\Z}{\mathbb{Z}}
-\newcommand{\given}{\,\vert\,}
 \newcommand{\indic}[1]{\mathbf{1}\!\left[#1\right]}
-\newcommand{\Bin}{\operatorname{Bin}}
 
 \theoremstyle{definition}
 \newtheorem*{problem}{Problem}
 \newtheorem*{remark}{Remark}
 \newenvironment{solution}{\begin{proof}[Solution]}{\end{proof}}
 
-% source line under each problem title
-\newcommand{\source}[3]{\noindent{\small\textit{Source:} #1
-  (\href{#2}{QOJ}). \textit{Topic:} #3.}\par}
+% source line under each problem title: source, url, topic, estimated CF rating
+\newcommand{\source}[4]{\noindent{\small\textit{Source:} #1
+  (\href{#2}{QOJ}). \textit{Topic:} #3. \textit{Difficulty:} about #4 (CF scale).}\par}
 % the one idea a solution rests on
 \newcommand{\keyidea}[1]{\textit{Key idea:} #1\par\smallskip}
 
@@ -35,332 +32,389 @@
 \maketitle
 
 \noindent
-These problems come from programming contests. Each statement keeps the
-probability core of the original and drops the programming layer (large
-inputs, modular output, data structures). Only discrete probability is used.
-Each problem asks one question that rests on one key idea; the solution names
-the idea first. The three problems whose idea is hardest to spot come with a
-hint. A remark after each solution collects extensions for
-discussion; they are not part of the problem. Problems~1--5 are the main set,
-in course order; Problems~6--9 are backups. The selection is explained in
-\texttt{prob\_course\_candidates.md}. Every numerical answer below was checked
-by exact enumeration, and each model was checked against the original
-problem's official sample outputs.
+These problems come from programming contests. Each one keeps the
+probability idea of the original and drops the programming layer (large
+inputs, modular output, data structures), using small concrete numbers
+instead. Only discrete probability is used. Each problem asks one question
+that rests on one key idea, and its solution names the idea first. A remark
+after each solution connects it to the general and contest versions; the
+remarks are not part of the problems. Problems~1--5 are the main set and
+Problems~6--9 are backups, each set in order of difficulty. The selection is
+explained in \texttt{prob\_course\_candidates.md}. Every answer was checked
+by computer in exact arithmetic.
 
-\tableofcontents
+\medskip
+\noindent
+\textbf{Difficulty} is given on the Codeforces rating scale. ``Paper'' is an
+estimate, by judgment and accurate to about $\pm 200$, of the rating a
+Codeforces problem would have if its whole difficulty were the math step
+asked here, with tiny inputs and nothing to program. Each estimate is
+anchored on a rated Codeforces problem with the same idea, taken from
+\texttt{data/cf\_problemset.json}. A paper version with small numbers sits
+below its anchor, because the anchor also has to be coded for large inputs.
+``Contest'' is the rating of the original contest problem from this
+repository's shipped DE fit (\texttt{output/problem\_ratings\_calibrated.json});
+``---'' means the problem is not in that fit. It mostly measures the
+programming layer: Orchard Fence is the hardest contest problem here and the
+easiest paper problem.
+
+\begin{center}
+\begin{tabular}{rlccl}
+  \toprule
+  & Problem & Paper & Contest & Anchor (same idea) \\
+  \midrule
+  1 & \hyperref[sec:mingle]{Mingle} & 1300 & 2239 & 621C (1700) \\
+  2 & \hyperref[sec:accidental]{Accidental Arithmetic} & 1500 & 1877 & 696B (1700) \\
+  3 & \hyperref[sec:chemistry]{Uniform Chemistry} & 1600 & 1960\rlap{$^*$} & 280C (2200) \\
+  4 & \hyperref[sec:gateway]{502 Bad Gateway} & 1700 & 1972 & --- \\
+  5 & \hyperref[sec:jinx]{Jinx or Jackpot} & 1900 & 2438 & --- \\
+  \midrule
+  6 & \hyperref[sec:orchard]{Orchard Fence} & 1100 & 3067 & --- \\
+  7 & \hyperref[sec:quarantine]{Disbursement on Quarantine Policy} & 1400 & --- & 621C (1700) \\
+  8 & \hyperref[sec:crashing]{Crashing Competition Computer} & 1400 & 2269 & 1265E (2100) \\
+  9 & \hyperref[sec:chopsticks]{Chopsticks} & 1700 & --- & --- \\
+  \bottomrule
+\end{tabular}
+
+\smallskip
+{\small $^*$Its Codeforces mirror, 1776K, is officially rated 3200;
+\texttt{problem\_rating\_audit.md} judges about 2000.}
+\end{center}
 \clearpage
 
 % =====================================================================
 \part*{Main problems}
-\addcontentsline{toc}{part}{Main problems}
 
 % ---------------------------------------------------------------------
-\section{Mingle}
+\section{Mingle}\label{sec:mingle}
 \source{NAQ 2025, Problem~G}{https://qoj.ac/contest/2554/problem/14443}
-  {indicator variables}
+  {indicator variables}{1300}
 
 \begin{problem}
-Let $k\ge 1$ and $n\ge 2k+1$. There are $n$ players and $n$ rooms, both
-labelled by $\Z_n=\{0,1,\dots,n-1\}$. The rooms stand in a circle, so room
-$n-1$ is next to room $0$. Player $i$ walks into a room chosen uniformly at
-random from the $2k+1$ rooms $i-k,\dots,i+k$ (indices mod $n$), independently
-of the other players. A player who ends up alone in a room is a
-\emph{winner}. Find the expected number of winners.
+Nine players stand in a circle, each facing one of nine rooms that are also
+arranged in a circle. When the music stops, each player runs into the room
+they face or one of its two neighbouring rooms, each with probability
+$\frac13$, independently of the others. A player who ends up alone in a room
+wins. Find the expected number of winners.
 \end{problem}
 
 \begin{solution}
 \keyidea{count rooms, not players.}
-A winner is alone in a room, and a room with exactly one player holds exactly
-one winner. So the number of winners is
+Every winner is alone in a room, and a room with exactly one player holds
+exactly one winner. So the number of winners is the number of rooms with
+exactly one player:
 \[
-  W=\sum_{r\in\Z_n} X_r,\qquad X_r=\indic{\text{room $r$ holds exactly one player}}.
+  W=\sum_{\text{rooms } r} X_r,\qquad X_r=\indic{\text{room $r$ holds exactly one player}}.
 \]
-Fix a room $r$. Player $i$ can enter room $r$ only if
-$r\in\{i-k,\dots,i+k\}$, that is, $i\in\{r-k,\dots,r+k\}$. These are $2k+1$
-distinct players because $n\ge 2k+1$. Each of them enters room $r$ with
-probability $\frac{1}{2k+1}$, independently of the others. So the number of
-players in room $r$ is $N_r\sim\Bin\bigl(2k+1,\frac1{2k+1}\bigr)$, and
+Each room can be reached by exactly three players: the one facing it and the
+two beside that player. Each of them enters it with probability $\frac13$,
+independently, so
 \[
-  \Pr(X_r=1)=\Pr(N_r=1)=(2k+1)\cdot\frac{1}{2k+1}\Bigl(1-\frac{1}{2k+1}\Bigr)^{2k}
-  =\Bigl(\frac{2k}{2k+1}\Bigr)^{2k}.
+  \Pr(X_r=1)=3\cdot\frac13\cdot\Bigl(\frac23\Bigr)^2=\frac49,
+  \qquad \E[W]=9\cdot\frac49=4.
 \]
-The indicators $X_r$ are dependent, but linearity of expectation does not
-need independence:
-\[
-  \E[W]=n\Bigl(\frac{2k}{2k+1}\Bigr)^{2k}.
-\]
-For example, $n=3$, $k=1$ gives $3\cdot(2/3)^2=4/3$.
+The $X_r$ are dependent, but linearity of expectation does not need
+independence.
 \end{solution}
 
 \begin{remark}
-With $M=2k+1$, $\E[W]/n=(1-1/M)^{M-1}\to e^{-1}$ as $k\to\infty$, because
-$\Bin(M,1/M)$ tends to Poisson$(1)$ and $\Pr(\text{Poisson}(1)=1)=e^{-1}$. If
-every player instead chooses among all $n$ rooms, the same argument gives the
-classical value $n(1-1/n)^{n-1}$.
+With $n$ players who each choose among $2k+1$ rooms, the same argument gives
+$n\bigl(\frac{2k}{2k+1}\bigr)^{2k}$, about $n/e$ for large $k$. The contest asks
+for this with $n\le 456$, modulo a prime.
 \end{remark}
 
 % ---------------------------------------------------------------------
-\section{Accidental Arithmetic}
+\section{Accidental Arithmetic}\label{sec:accidental}
 \source{NWERC 2025, Problem~A}{https://qoj.ac/contest/2603/problem/14855}
-  {symmetry, linearity of expectation}
+  {symmetry}{1500}
 
 \begin{problem}
-A positive integer $N$ has decimal digits $d_1d_2\cdots d_L$. You type the
-digits from left to right into a faulty calculator. Into each of the $L-1$
-gaps between consecutive digits it inserts, independently, a ``$+$'' with
-probability $\alpha$, a ``$-$'' with probability $\alpha$, and nothing with
-probability $1-2\alpha$, where $0<\alpha\le\frac12$. The resulting expression,
-such as $12-3+45$, is then evaluated; a term may begin with zeros, so
-$1+05=6$. Find the expected value of the result, and evaluate it for
-$N=12345$ and $\alpha=0.45$.
+You type $12345$ into a broken calculator. After each of the first four
+digits it inserts a ``$+$'' with probability $0.45$, a ``$-$'' with probability
+$0.45$, and nothing with probability $0.1$, independently. For example, it may
+produce $12-3+45$ or $1+2345$. Find the expected value of the resulting
+expression.
 \end{problem}
 
 \begin{solution}
-\keyidea{every term after the first is equally likely to be added or
-subtracted, whatever its digits, so only the first term counts.}
-Call a gap a \emph{sign gap} if it receives a sign, and let $A$ be the
-(random) set of sign gaps. The set $A$ cuts the digits into terms
-$F=T_0,T_1,\dots,T_s$, and the value is
-\[
-  V=F+\sum_{t=1}^{s}\sigma_tT_t,
-\]
-where $\sigma_t\in\{+1,-1\}$ is the sign in front of $T_t$. Given $A$, the
-terms are fixed numbers, and the signs are independent, each $\pm1$ with
-probability $\frac12$. So $\E[V\given A]=F$, and therefore $\E[V]=\E[F]$.
+\keyidea{swapping every ``$+$'' with ``$-$'' changes neither the probability of
+the expression nor its first term.}
+Write the value as $F+R$, where $F$ is the first term (the digits before the
+first sign) and $R$ is the signed sum of the other terms. Swapping every
+``$+$'' and ``$-$'' gives an expression with the same probability, because both
+signs have probability $0.45$. The swap keeps $F$ and turns $R$ into $-R$. So
+$R$ and $-R$ have the same distribution, $\E[R]=0$, and the answer is $\E[F]$.
 
-Let $P_l$ be the number formed by the first $l$ digits, and let $G$ be the
-first sign gap, counting gaps from the left, with $G=L$ if there is none.
-Then $F=P_G$, $\Pr(G=l)=2\alpha(1-2\alpha)^{l-1}$ for $l<L$, and
-$\Pr(G=L)=(1-2\alpha)^{L-1}$. Hence
-\[
-  \E[V]=\sum_{l=1}^{L-1}2\alpha(1-2\alpha)^{l-1}P_l+(1-2\alpha)^{L-1}N.
-\]
-For $N=12345$ and $\alpha=0.45$ we have $1-2\alpha=0.1$, and
+The first sign comes after digit $1$ with probability $0.9$, after digit $2$
+with probability $0.1\cdot 0.9$, and so on; with probability $0.1^4$ there is
+no sign at all. Hence
 \begin{align*}
-  \E[V]&=0.9\cdot 1+0.09\cdot 12+0.009\cdot 123+0.0009\cdot 1234+0.0001\cdot 12345\\
+  \E[F]&=0.9\cdot 1+0.09\cdot 12+0.009\cdot 123+0.0009\cdot 1234+0.0001\cdot 12345\\
   &=0.9+1.08+1.107+1.1106+1.2345=5.4321.\qedhere
 \end{align*}
 \end{solution}
 
 \begin{remark}
-If ``$+$'' and ``$-$'' have different probabilities $\beta$ and $\gamma$, the
-same conditioning gives $\E[V]=(1-\mu)\E[F]+\mu\E[S]$ with
-$\mu=\frac{\beta-\gamma}{\beta+\gamma}$, where $S$ is the sum of all terms taken
-with plus signs; $\E[S]$ follows by linearity over digits.
+For any number with prefixes $P_1,\dots,P_L=N$ and sign probability $\alpha$
+each, the answer is $\sum_{l<L}2\alpha(1-2\alpha)^{l-1}P_l+(1-2\alpha)^{L-1}N$.
+The contest allows $N$ with up to $1000$ digits. If ``$+$'' and ``$-$'' had
+different probabilities, the later terms would no longer cancel.
 \end{remark}
 
 % ---------------------------------------------------------------------
-\section{502 Bad Gateway}
-\source{ICPC Asia EC Online 2024 (II), Problem~L}{https://qoj.ac/contest/1799/problem/9381}
-  {geometric distribution}
-
-\begin{problem}
-Fix an integer $T\ge 1$. A timer is set to a value drawn uniformly from
-$\{1,\dots,T\}$ and counts down by $1$ each second; you are done when it
-reaches $0$. At the end of every second at which the timer is still positive,
-you may \emph{reset} it: it is then set to a fresh uniform value from
-$\{1,\dots,T\}$, independent of the past. You fix a threshold
-$c\in\{1,\dots,T\}$: whenever the timer is set to a value larger than $c$, you
-wait one second and reset; otherwise you let it run down. Find the expected
-time until you are done as a function of $c$, and its minimum over $c$ when
-$T=10$.
-\end{problem}
-
-\begin{solution}
-\keyidea{the number of resets is geometric.}
-Each draw is kept with probability $c/T$, independently of the other draws, so
-the number of rejected draws is geometric with mean
-$\frac{1-c/T}{c/T}=\frac{T-c}{c}$. A rejected draw is larger than $c\ge 1$, so
-the timer is still positive after one second, and the draw costs exactly one
-second. The kept draw is uniform on $\{1,\dots,c\}$ and costs its value, with
-mean $\frac{c+1}{2}$. Hence the expected time is
-\[
-  g(c)=\frac{T-c}{c}+\frac{c+1}{2}=\frac{T}{c}+\frac{c-1}{2}.
-\]
-Since $g(c+1)-g(c)=\frac12-\frac{T}{c(c+1)}$, the function $g$ decreases while
-$c(c+1)<2T$ and does not decrease afterwards. For $T=10$ we have
-$4\cdot 5=20=2T$, so $c=4$ and $c=5$ tie:
-\[
-  g(4)=\frac{10}{4}+\frac32=4=\frac{10}{5}+2=g(5).
-\]
-The minimal expected time is $4$, against $g(10)=5.5$ for never resetting.
-\end{solution}
-
-\begin{remark}
-No strategy beats the best threshold. Let $V$ be the optimal expected time
-from a fresh draw; after any reset the future is a fresh copy of the problem,
-so it costs $V$ again. With $s$ seconds showing, riding the timer out costs
-$s$ and resetting costs $V$, so it is optimal to reset exactly when $s>V$: a
-threshold rule. In general the best threshold is the least $c$ with
-$c(c+1)\ge 2T$, about $\sqrt{2T}$, and the minimum is
-$\sqrt{2T}-\frac12+O(T^{-1/2})$; for $T=1000$ it is $\frac{398}{9}$ at $c=45$.
-\end{remark}
-
-% ---------------------------------------------------------------------
-\section{Uniform Chemistry}
+\section{Uniform Chemistry}\label{sec:chemistry}
 \source{SWERC 2022--2023, Problem~B}{https://qoj.ac/contest/1123/problem/5646}
-  {indicator variables, Markov chains}
+  {indicator variables}{1600}
 
 \begin{problem}
-Fix integers $1\le a<n$. A particle starts at $a$. At each step, if it is at
-$x<n$, it jumps to a point chosen uniformly from $\{x+1,\dots,n\}$,
-independently of the past. Find the expected number of steps until it reaches
-$n$.
+A frog sits on pad $0$ of a row of pads numbered $0$ to $6$. Each jump takes it
+to a pad chosen uniformly at random among the pads ahead of it: from pad $x$,
+to one of $x+1,\dots,6$. Find the expected number of jumps until the frog
+reaches pad $6$.
 
-\textit{Hint:} for $a<j<n$, find the probability that the particle ever visits
+\textit{Hint:} for each pad $j$, find the probability that the frog lands on
 $j$.
 \end{problem}
 
 \begin{solution}
-\keyidea{the first jump into $\{j,\dots,n\}$ lands uniformly on that set.}
-Each step lands on a new point, and the last step lands on $n$. So the number
-of steps is
+\keyidea{the jump that first carries the frog to pad $j$ or beyond is equally
+likely to land on each of the pads $j,\dots,6$.}
+The number of jumps equals the number of pads the frog lands on. Fix a pad $j$
+from $1$ to $6$. Exactly one jump takes the frog from below $j$ to pad $j$ or
+beyond. Whichever pad $x<j$ that jump starts from, it lands uniformly on
+$x+1,\dots,6$; so, given that it reaches $j$ or beyond, it is equally likely
+to land on each of the $7-j$ pads $j,\dots,6$. Hence
 \[
-  T=1+\sum_{j=a+1}^{n-1}I_j,\qquad I_j=\indic{\text{the particle visits } j}.
+  \Pr(\text{the frog lands on } j)=\frac{1}{7-j}:
 \]
-Fix $a<j<n$. The particle starts below $j$ and ends at $n$, so exactly one of
-its jumps is the first to land in $\{j,\dots,n\}$, and it starts from some
-$x<j$. From a point $x<j$, a jump lands on $j$ with probability
-$\frac{1}{n-x}$ and lands in $\{j,\dots,n\}$ with probability
-$\frac{n-j+1}{n-x}$, which is $n-j+1$ times larger. Summing over the point
-$x<j$ the jump starts from,
+$1$ for pad $6$, $\frac12$ for pad $5$, \dots, $\frac16$ for pad $1$. By
+linearity, the expected number of jumps is
 \[
-  \Pr(I_j=1)=\sum_{x<j}\Pr(\text{visit }x)\,\frac{1}{n-x},\qquad
-  1=\sum_{x<j}\Pr(\text{visit }x)\,\frac{n-j+1}{n-x},
+  1+\frac12+\frac13+\frac14+\frac15+\frac16=\frac{49}{20}=2.45.\qedhere
 \]
-so $\Pr(I_j=1)=\frac{1}{n-j+1}$. By linearity,
-\[
-  \E[T]=1+\sum_{j=a+1}^{n-1}\frac{1}{n-j+1}=1+\frac12+\dots+\frac{1}{n-a}=H_{n-a},
-\]
-the harmonic number $H_m=\sum_{i=1}^m\frac1i$. Linearity does not need the
-$I_j$ to be independent.
 \end{solution}
 
 \begin{remark}
-The $I_j$ are in fact independent: the path $a\to s_1\to\dots\to s_r\to n$ has
-probability $\frac{1}{n-a}\prod_i\frac{1}{n-s_i}$, which factorises as a
-product of $\Pr(I_j=1)$ and $\Pr(I_j=0)$ terms. Hence, with $m=n-a$,
-$\Var(T)=H_m-\sum_{i\le m}\frac1{i^2}$, and
-$\E[z^T]=z(z+1)\cdots(z+m-1)/m!$, so $T$ is distributed like the number of
-cycles of a random permutation of $m$ elements. The contest problem asks
-which of several independent particles reaches $n$ first; for three
-particles with $a=1$, $n=3$, each wins (ties included) with probability
-$\frac58$.
+From pad $a$ to pad $n$ the answer is the harmonic number
+$1+\frac12+\dots+\frac1{n-a}$. The landing events are in fact independent, so
+the number of jumps is distributed like the number of cycles of a random
+permutation of $n-a$ elements. The contest has several frogs (researchers
+racing to a new element) and asks for each one's chance to arrive first.
 \end{remark}
 
 % ---------------------------------------------------------------------
-\section{Jinx or Jackpot}
-\source{NERC 2025, Problem~J}{https://qoj.ac/contest/2785/problem/15902}
-  {Bayes' rule, value of information}
+\section{502 Bad Gateway}\label{sec:gateway}
+\source{ICPC Asia EC Online 2024 (II), Problem~L}{https://qoj.ac/contest/1799/problem/9381}
+  {geometric distribution}{1700}
 
 \begin{problem}
-A slot machine pays even odds: if you bet $x$, you win $x$ with probability
-$p$ (a \emph{jackpot}) and lose $x$ with probability $1-p$ (a \emph{jinx}).
-You do not know $p$: it is $0.7$ or $0.3$, each with probability $\frac12$,
-and given $p$ the rounds are independent. You start with \$1000 and play two
-rounds. In each round you may bet any amount from $0$ up to your current
-balance; a bet of $0$ still shows you whether the round was a jackpot. Find a
-strategy that maximises the expected final balance, and the maximal expected
-profit.
-
-\textit{Hint:} start with round~2. Find the best bet there after a jackpot and
-after a jinx.
+A timer is set to a whole number of seconds chosen uniformly from $1$ to $10$,
+and counts down to $0$. Each time the timer is set, you see its value and
+choose: let it run down to $0$, or wait one second and then reset it to a
+fresh uniform value from $1$ to $10$. Find the smallest possible expected time
+until the timer reaches $0$.
 \end{problem}
 
 \begin{solution}
-\keyidea{the expected final balance is linear in the bet, so the best bet is
-either $0$ or everything.}
-First, Bayes' rule. After a jackpot,
+\keyidea{the number of resets is geometric.}
+After a reset you are exactly where you started, so a best strategy makes the
+same choice every time: it keeps the values in some set $K$ and resets on the
+others. Say $K$ has $c$ values. Each draw is kept with probability $c/10$, so
+the number of resets is geometric with mean $\frac{10-c}{c}$, and each reset
+costs one second. The kept value costs itself, and on average that is the mean
+of $K$. So the expected time is
 \[
-  \Pr(p=0.7\given W)=\frac{\frac12\cdot 0.7}{\frac12\cdot 0.7+\frac12\cdot 0.3}=0.7,
-  \qquad \hat p_W=0.7\cdot 0.7+0.3\cdot 0.3=0.58
+  \frac{10-c}{c}+\operatorname{mean}(K).
 \]
-is the probability that the next round is a jackpot. Likewise, after a jinx
-$\Pr(p=0.7\given L)=0.3$ and $\hat p_L=0.42$. Before any round the
-probability is $0.5$.
-
-\emph{Round 2.} With balance $w$ and jackpot probability $\hat p$, a bet $x$
-gives expected final balance $w+x(2\hat p-1)$, which is linear in $x$. After a
-jackpot $\hat p_W>\frac12$, so go all-in and expect $1.16\,w$. After a jinx
-$\hat p_L<\frac12$, so bet nothing and keep $w$.
-
-\emph{Round 1.} A bet $x$ from \$1000 gives expected final balance
+For a given $c$ this is smallest when $K=\{1,\dots,c\}$, with mean
+$\frac{c+1}{2}$. That leaves
 \[
-  \tfrac12(1000+x)\cdot 1.16+\tfrac12(1000-x)\cdot 1=1080+0.08\,x,
+  g(c)=\frac{10-c}{c}+\frac{c+1}{2}=\frac{10}{c}+\frac{c-1}{2}.
 \]
-again linear in $x$ and largest at $x=1000$. So go all-in in round 1 and,
-after a jackpot, all-in again. The expected final balance is \$1160, a profit
-of \$160; watching round 1 with a bet of $0$ earns only \$80.
-
-Round 1 is a fair bet, yet staking everything on it is optimal. A jackpot
-both doubles the balance and makes the machine look better, so the balance is
-largest exactly when the next bet is most favourable.
+For $c=1,2,\dots,10$ this is $10$, $5.5$, $4.33$, $4$, $4$, $4.17$, $4.43$,
+$4.75$, $5.11$, $5.5$. The minimum is $4$: keep the timer when it shows at most
+$4$ (or at most $5$). Never resetting costs $5.5$.
 \end{solution}
 
 \begin{remark}
-The same linearity works for any number of rounds and any prior over $p$: by
-induction the optimal value is the balance times a factor that depends only on
-the outcomes seen, and every bet is $0$ or all-in. If $p>\frac12$ is known,
-going all-in every round earns $1000\bigl((2p)^k-1\bigr)$, for example
-\$1702.71 for $p=0.61$ and $k=5$.
+For values from $1$ to $T$, the best $c$ is the least with $c(c+1)\ge 2T$,
+about $\sqrt{2T}$, and the minimum is about $\sqrt{2T}-\frac12$ instead of
+$\frac{T+1}{2}$. The contest asks for the exact fraction with $T\le 10^9$ and
+lets you reset at the end of any second, which does not help: if a value is
+worth resetting, it is worth resetting at once.
+\end{remark}
+
+% ---------------------------------------------------------------------
+\section{Jinx or Jackpot}\label{sec:jinx}
+\source{NERC 2025, Problem~J}{https://qoj.ac/contest/2785/problem/15902}
+  {conditional probability}{1900}
+
+\begin{problem}
+A slot machine is either good (each round is a win with probability $0.7$) or
+bad (probability $0.3$), equally likely, and you do not know which. In each
+round you bet any amount up to your balance: on a win you gain the amount bet,
+on a loss you lose it. Even a bet of $0$ shows you whether the round was a
+win. You start with \$1000 and play two rounds. What is the largest possible
+expected final balance?
+
+\textit{Hint:} decide round~2 first, after a win and after a loss.
+\end{problem}
+
+\begin{solution}
+\keyidea{the expected final balance is linear in each bet, so every bet should
+be $0$ or everything.}
+First, the chance of a win in round~2. Two wins have probability
+$\frac12(0.7^2+0.3^2)=0.29$, and a first-round win has probability $0.5$. So
+after a win the chance is $0.29/0.5=0.58$; likewise, after a loss it is
+$\frac12(0.3\cdot 0.7+0.7\cdot 0.3)/0.5=0.42$.
+
+\emph{Round 2.} With balance $w$ and win chance $q$, a bet $x$ gives expected
+balance $w+x(2q-1)$. After a win ($q=0.58$) go all-in and expect $1.16\,w$;
+after a loss ($q=0.42$) bet $0$ and keep $w$.
+
+\emph{Round 1.} A bet $x$ gives expected final balance
+\[
+  \tfrac12(1000+x)\cdot 1.16+\tfrac12(1000-x)\cdot 1=1080+0.08\,x,
+\]
+so bet everything. The largest expected final balance is \$1160: go all-in
+twice, ending with \$4000 with probability $0.29$. Betting $0$ in round~1
+gives only \$1080.
+
+Round~1 is a fair bet, yet staking everything on it is best: a win both
+doubles the money and makes the machine look good.
+\end{solution}
+
+\begin{remark}
+For any number of rounds and any prior, induction shows that the best
+expected result is the balance times a factor depending only on the outcomes
+seen, so every bet is $0$ or all-in. The contest has up to $30$ rounds and up to
+$10^5$ candidate values of the win probability.
 \end{remark}
 
 % =====================================================================
 \part*{Backup problems}
-\addcontentsline{toc}{part}{Backup problems}
 
 % ---------------------------------------------------------------------
-\section{Orchard Fence}
+\section{Orchard Fence}\label{sec:orchard}
 \source{2025 ICPC Southeast USA Regional, Division~1, Problem~A; listed under
 Mid-Atlantic USA in \texttt{data/tagged.json}}{https://qoj.ac/contest/3502/problem/16814}
-  {linearity of expectation, counting}
+  {linearity of expectation}{1100}
 
 \begin{problem}
-The $n$ vertices of a regular $n$-gon lie on a circle of radius $1$. Keep $k$
-of them, chosen uniformly at random, where $3\le k\le n$, and let $L$ be the
-perimeter of the convex polygon they form. Find $\E[L]$, and evaluate it for
-$n=6$, $k=4$.
-
-\textit{Hint:} when is the chord from vertex $i$ to vertex $i+s$ a side of the
-polygon?
+Three of the six vertices of a regular hexagon with side $1$ are chosen
+uniformly at random. Find the expected perimeter of the triangle they form.
 \end{problem}
 
 \begin{solution}
-\keyidea{write $L$ as a sum over chords and find the probability that each
-chord is a side.}
-Label the vertices $0,\dots,n-1$ counterclockwise. The sides of the kept
-polygon join cyclically consecutive kept vertices. For a vertex $i$ and
-$1\le s\le n-1$, the chord from $i$ to $i+s$ is a side, traversed
-counterclockwise, exactly when $i$ and $i+s$ are kept and none of the $s-1$
-vertices $i+1,\dots,i+s-1$ is kept. The other $k-2$ kept vertices then come
-from the remaining $n-1-s$, so this happens for $\binom{n-1-s}{k-2}$ of the
-$\binom nk$ subsets. The chord has length $2\sin\frac{\pi s}{n}$. By
-linearity,
+\keyidea{the perimeter is a sum over pairs of vertices, so add up pairs
+instead of triangles.}
+The perimeter is the total length of the three pairs among the chosen
+vertices. Each of the $15$ pairs of vertices lies in $4$ of the
+$\binom63=20$ triangles, so it is a side with probability $\frac15$. Six pairs
+are adjacent (length $1$), six are one vertex apart (length $\sqrt3$) and three
+are opposite (length $2$). By linearity,
 \[
-  \E[L]=\frac{n}{\binom nk}\sum_{s=1}^{n-1}2\sin\frac{\pi s}{n}\binom{n-1-s}{k-2},
-\]
-where $\binom{m}{k-2}=0$ for $m<k-2$. For $n=6$ and $k=4$ the terms
-$s=1,2,3$ are $1\cdot\binom42=6$, $\sqrt3\cdot\binom32=3\sqrt3$ and
-$2\cdot\binom22=2$, and the rest vanish, so
-\[
-  \E[L]=\frac{6}{15}\bigl(8+3\sqrt3\bigr)=\frac{16+6\sqrt3}{5}\approx 5.278.\qedhere
+  \E[\text{perimeter}]=\frac15\bigl(6\cdot 1+6\sqrt3+3\cdot 2\bigr)
+  =\frac{12+6\sqrt3}{5}\approx 4.478.\qedhere
 \]
 \end{solution}
 
 \begin{remark}
-For $n$ points in general position, not necessarily convex, the same argument
-works: $z_i\to z_j$ is a counterclockwise hull edge exactly when every other
-kept point lies to its left. This gives
-$\E[L]=\sum_{i\ne j}|z_iz_j|\binom{\ell_{ij}}{k-2}\big/\binom nk$, where
-$\ell_{ij}$ counts the points to the left of $z_i\to z_j$; this is the contest
-solution. In the original the trees are disks of diameter $d$, and the fence
-has length $L+\pi d$.
+The contest keeps $k$ of $n$ trees, which are disks of diameter $d$; the
+shortest fence is the perimeter of the convex hull of their centres plus
+$\pi d$. For $k>3$ the same idea works with directed pairs: $z_i\to z_j$ is a
+counterclockwise hull edge exactly when every other kept point lies to its
+left, which has probability $\binom{\ell_{ij}}{k-2}\big/\binom nk$, where
+$\ell_{ij}$ counts the points to the left.
 \end{remark}
 
 % ---------------------------------------------------------------------
-\section{Chopsticks}
+\section{Disbursement on Quarantine Policy}\label{sec:quarantine}
+\source{ICPC Asia Taiwan 2024, Problem~D}{https://qoj.ac/contest/2622/problem/15129}
+  {complements}{1400}
+
+\begin{problem}
+A train car has two rows of $50$ seats, all taken, and each passenger is
+infected independently with probability $\frac12$. An infected passenger is
+quarantined for $4$ days. A healthy passenger sitting next to an infected one
+(directly left, right or across) is quarantined for $2$ days. A healthy
+passenger with nobody infected next to them, but someone infected diagonally
+across, is quarantined for $1$ day. Find the expected total number of
+quarantine days.
+\end{problem}
+
+\begin{solution}
+\keyidea{linearity over seats; for one seat, use the complement ``nobody next
+to me is infected''.}
+Take a passenger with $e$ neighbours next to them and $c$ diagonal neighbours.
+The passenger, the neighbours next to them and the diagonal ones are disjoint
+groups, so the three events ``infected'', ``nobody next to them infected''
+and ``nobody diagonal infected'' are independent, with probabilities
+$\frac12$, $2^{-e}$ and $2^{-c}$. The expected quarantine length is
+\[
+  4\cdot\frac12+2\cdot\frac12\bigl(1-2^{-e}\bigr)+1\cdot\frac12\,2^{-e}\bigl(1-2^{-c}\bigr).
+\]
+The $4$ seats at the ends of the rows have $e=2$, $c=1$, giving
+$2+\frac34+\frac1{16}=\frac{45}{16}$. The other $96$ seats have $e=3$, $c=2$,
+giving $2+\frac78+\frac3{64}=\frac{187}{64}$. By linearity, the expected total
+is
+\[
+  4\cdot\frac{45}{16}+96\cdot\frac{187}{64}=\frac{45}{4}+\frac{561}{2}
+  =\frac{1167}{4}=291.75.\qedhere
+\]
+\end{solution}
+
+\begin{remark}
+The contest grid is up to $100\times 100$, the day counts are inputs, and some
+passengers are known to be infected or healthy; the same argument works with
+each seat's infection probability in $\{0,\frac12,1\}$.
+\end{remark}
+
+% ---------------------------------------------------------------------
+\section{Crashing Competition Computer}\label{sec:crashing}
+\source{NWERC 2022, Problem~C}{https://qoj.ac/contest/1044/problem/5127}
+  {recursion for expectations}{1400}
+
+\begin{problem}
+You must type $3$ characters, one second each. After each character, the
+computer crashes with probability $\frac12$, independently, and you lose
+everything typed since the last save (the start counts as saved); you then
+continue at once. Saving takes $3$ seconds and never crashes, and you must
+save after the last character. If you choose when to save as well as
+possible, what is the expected total time?
+\end{problem}
+
+\begin{solution}
+\keyidea{a crash puts you back exactly where you were after the last save,
+so typing $k$ characters between saves is like waiting for $k$ heads in a row.}
+Let $E_k$ be the expected time to type $k$ characters in a row, starting from
+a save. Once $k-1$ are typed, you type one more; with probability $\frac12$ it
+crashes and you need $E_k$ again. So
+\[
+  E_k=E_{k-1}+1+\tfrac12E_k,\qquad\text{that is,}\qquad E_k=2E_{k-1}+2,
+\]
+with $E_0=0$. This gives $E_1=2$, $E_2=6$ and $E_3=14$. Since a crash only
+returns you to the last save, a strategy is just a choice of where to save:
+\begin{itemize}
+  \item only at the end: $14+3=17$;
+  \item after character $1$, or after character $2$: $(2+3)+(6+3)=14$;
+  \item after characters $1$ and $2$: $3\cdot(2+3)=15$.
+\end{itemize}
+The smallest expected total time is $14$.
+\end{solution}
+
+\begin{remark}
+With crash probability $p$ and a recovery time $r$ after each crash, a block
+of $k$ characters takes $\bigl(\frac1p+r\bigr)\bigl((1-p)^{-k}-1\bigr)$ on
+average. This is convex in $k$, so equal blocks are best and only the number
+of saves remains to choose. That is the contest solution for up to $2000$
+characters.
+\end{remark}
+
+% ---------------------------------------------------------------------
+\section{Chopsticks}\label{sec:chopsticks}
 \source{2025 ICPC Asia Taiwan Online Programming Contest, Problem~H}{https://qoj.ac/contest/2621/problem/15121}
-  {parity, linearity of expectation}
+  {parity}{1700}
 
 \begin{problem}
 A box holds $12$ chopsticks: $4$ red, $4$ blue and $4$ green. You draw $6$ of
@@ -372,127 +426,30 @@ get a mixed pair.
 \begin{solution}
 \keyidea{the number of mixed pairs is half the number of colours drawn an odd
 number of times.}
-Let $X_c$ be the number of drawn chopsticks of colour $c$. Colour $c$ gives at
-most $\lfloor X_c/2\rfloor$ single-colour pairs, and pairing within colours
-achieves $\sum_c\lfloor X_c/2\rfloor$. The leftovers, one of each colour with
-$X_c$ odd, are then paired arbitrarily. If $O$ colours have an odd count, the
-single-colour pairs number $(6-O)/2$, so the number of mixed pairs is
-$M=3-(6-O)/2=O/2$. By linearity and symmetry,
+Pair up chopsticks of the same colour as far as possible. Each colour drawn an
+odd number of times leaves one chopstick over, and the leftovers, all of
+different colours, form the mixed pairs. So if $O$ colours have an odd count,
+there are $O/2$ mixed pairs. By linearity and symmetry,
 \[
-  \E[M]=\frac12\sum_c\Pr(X_c\text{ odd})=\frac32\,\Pr(X_{\text{red}}\text{ odd}).
+  \E[\text{mixed pairs}]=\frac12\sum_{\text{colours}}\Pr(\text{odd count})
+  =\frac32\,\Pr(\text{odd number of reds}).
 \]
-The red count is hypergeometric, so
+An odd number of reds means $1$ or $3$ reds, so
 \[
-  \Pr(X_{\text{red}}\text{ odd})
+  \Pr(\text{odd number of reds})
   =\frac{\binom41\binom85+\binom43\binom83}{\binom{12}{6}}
   =\frac{224+224}{924}=\frac{16}{33},
-  \qquad \E[M]=\frac32\cdot\frac{16}{33}=\frac{8}{11}\approx 0.727.\qedhere
 \]
+and the expected number of mixed pairs is $\frac32\cdot\frac{16}{33}=\frac{8}{11}$.
 \end{solution}
 
 \begin{remark}
-The same argument gives $\E[M]=\frac12\sum_i\Pr(X_i\text{ odd})$ in general,
-with $k_i$ chopsticks of type $i$, $s$ in total and $2n$ drawn. For large
-inputs, write
-$\Pr(X\text{ odd})$ as $\frac12\bigl(1-\E[(-1)^X]\bigr)$ and use
-\[
-  \tbinom{s}{2n}\,\E\bigl[(-1)^{X_i}\bigr]=[z^{2n}]\,(1-z)^{k_i}(1+z)^{s-k_i},
-\]
-where $[z^N]f$ is the coefficient of $z^N$ in $f$. For $8$ red and $8$ blue
-with $10$ drawn this is $[z^{10}](1-z^2)^8$ and gives
-$\E[M]=\frac{72}{143}$. If the $2n$ chopsticks are drawn independently, each of
-type $i$ with probability $p_i$, then
-$\E[M]=\frac14\sum_i\bigl(1-(1-2p_i)^{2n}\bigr)$.
-\end{remark}
-
-% ---------------------------------------------------------------------
-\section{Crashing Competition Computer}
-\source{NWERC 2022, Problem~C}{https://qoj.ac/contest/1044/problem/5127}
-  {recursions for expectations}
-
-\begin{problem}
-You must type a text of $3$ characters, one time unit per character. After
-each typed character, independently, the computer crashes with probability
-$\frac12$. A crash costs $2$ time units of recovery, after which you continue
-from the last save; the start of the text counts as saved. A save takes $5$
-time units and never crashes, and the text must be saved after its last
-character. Find the minimal expected time to finish.
-\end{problem}
-
-\begin{solution}
-\keyidea{after a crash you are back where you were right after the last save,
-so the expected time of a block satisfies a one-line recursion.}
-Because a crash returns you to the state right after the last save, a strategy
-amounts to choosing where to save. Write $p=\frac12$ for the crash probability,
-$q=1-p$ and $r=2$ for the recovery time. Let $E_k$ be the expected time,
-starting from a save, until $k$ characters have been typed with no crash in
-between. Once $k-1$ characters are typed, you type one more. With probability
-$p$ it crashes; you pay $r$ and need $E_k$ more in expectation. Hence
-\[
-  E_k=E_{k-1}+1+p\,(r+E_k),\qquad\text{so}\qquad E_k=\frac{E_{k-1}+1+pr}{q}=2(E_{k-1}+2),
-\]
-with $E_0=0$. This gives $E_1=4$, $E_2=12$ and $E_3=28$. Each block also ends
-with a save costing $5$. Compare the four ways to place saves:
-\begin{itemize}
-  \item only at the end (block $3$): $28+5=33$;
-  \item after character $1$ (blocks $1,2$): $(4+5)+(12+5)=26$;
-  \item after character $2$ (blocks $2,1$): $(12+5)+(4+5)=26$;
-  \item after characters $1$ and $2$ (blocks $1,1,1$): $3\cdot(4+5)=27$.
-\end{itemize}
-The minimal expected time is $26$.
-\end{solution}
-
-\begin{remark}
-In general $E_k=\bigl(\frac1p+r\bigr)\bigl(q^{-k}-1\bigr)$. This is convex in
-$k$, so for a fixed number of saves the best blocks have equal lengths (within
-one), and only the number of saves remains to choose. That is the contest
-solution for texts of up to $2000$ characters.
-\end{remark}
-
-% ---------------------------------------------------------------------
-\section{Disbursement on Quarantine Policy}
-\source{ICPC Asia Taiwan 2024, Problem~D}{https://qoj.ac/contest/2622/problem/15129}
-  {linearity of expectation, complements}
-
-\begin{problem}
-Nine passengers sit in a $3\times 3$ grid of seats, and each is infected
-independently with probability $\frac12$. An infected passenger is quarantined
-for $4$ days. A healthy passenger with at least one infected edge-neighbour
-(sharing a side) is quarantined for $2$ days. A healthy passenger with no
-infected edge-neighbour but at least one infected corner-neighbour (sharing
-only a corner) is quarantined for $1$ day. Everyone else is not quarantined.
-Find the expected total number of quarantine days.
-\end{problem}
-
-\begin{solution}
-\keyidea{linearity over seats, with each seat computed through the complement
-``no neighbour is infected''.}
-Take a seat with $e$ edge-neighbours and $c$ corner-neighbours. The events
-``the passenger is infected'', ``no edge-neighbour is infected'' and ``no
-corner-neighbour is infected'' concern disjoint sets of seats, so they are
-independent, with probabilities $\frac12$, $2^{-e}$ and $2^{-c}$. The expected
-quarantine length of this passenger is therefore
-\[
-  4\cdot\frac12+2\cdot\frac12\bigl(1-2^{-e}\bigr)+1\cdot\frac12\,2^{-e}\bigl(1-2^{-c}\bigr).
-\]
-The grid has three kinds of seats:
-\begin{itemize}
-  \item 4 corner seats ($e=2$, $c=1$): $2+\frac34+\frac1{16}=\frac{45}{16}$;
-  \item 4 side seats ($e=3$, $c=2$): $2+\frac78+\frac3{64}=\frac{187}{64}$;
-  \item 1 centre seat ($e=4$, $c=4$): $2+\frac{15}{16}+\frac{15}{512}=\frac{1519}{512}$.
-\end{itemize}
-By linearity, the expected total is
-\[
-  4\cdot\frac{45}{16}+4\cdot\frac{187}{64}+\frac{1519}{512}
-  =\frac{5760+5984+1519}{512}=\frac{13263}{512}\approx 25.90.\qedhere
-\]
-\end{solution}
-
-\begin{remark}
-In the original problem the grid is up to $100\times 100$, the day counts
-$d_0\ge d_1\ge d_2$ are inputs, and some passengers are known to be infected
-or healthy. The same argument works with each seat's infection probability in
-$\{0,\frac12,1\}$.
+The contest has up to $5\cdot 10^5$ types. Then one writes
+$\Pr(\text{odd})=\frac12\bigl(1-\E[(-1)^X]\bigr)$ and reads $\E[(-1)^X]$ off the
+coefficient of $z^{2n}$ in $(1-z)^{k}(1+z)^{s-k}$. With only two colours the
+trick is not needed, because the number of mixed pairs is just the indicator
+that the red count is odd; for $8$ red and $8$ blue with $10$ drawn the answer
+is $\frac{72}{143}$.
 \end{remark}
 
 \end{document}

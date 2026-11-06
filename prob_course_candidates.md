@@ -17,9 +17,9 @@ Solve counts are from the contest board in `data/tagged.json`.
 
 The full write-up, with clean statements and worked solutions for all nine
 picks, is [prob_course_problems.tex](prob_course_problems.tex). It cuts each
-problem to one question built on its trick, so some of its instances differ
-from the paper versions below (Chopsticks uses 4+4+4 chopsticks, Orchard Fence
-a regular n-gon).
+problem to one small concrete question built on its trick, so most of its
+numbers differ from the paper versions below, and it rates each problem on the
+Codeforces scale.
 
 ## Main five (course order, easiest first)
 
