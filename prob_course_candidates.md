@@ -15,6 +15,12 @@ Each entry gives the core trick, a paper version and its answer. Every answer
 below was checked by brute force against the problem's official samples.
 Solve counts are from the contest board in `data/tagged.json`.
 
+The full write-up, with clean statements and worked solutions for all nine
+picks, is [prob_course_problems.tex](prob_course_problems.tex). It cuts each
+problem to one question built on its trick, so some of its instances differ
+from the paper versions below (Chopsticks uses 4+4+4 chopsticks, Orchard Fence
+a regular n-gon).
+
 ## Main five (course order, easiest first)
 
 ### 1. Mingle
@@ -49,8 +55,8 @@ the expression.
 
 **Answer.** E = Σ_{l<L} 2α(1−2α)^(l−1)·P_l + (1−2α)^(L−1)·N, where P_l is the
 number formed by the first l digits. N = 12345, α = 0.45 gives 5.4321.
-Follow-up: with "+" at probability β and "−" at γ, the later terms come back
-with weight (β−γ).
+Follow-up: with "+" at probability β and "−" at γ, each later term comes back
+with weight (β−γ)/(β+γ), the mean of its sign.
 
 ### 3. 502 Bad Gateway
 EC Online 2024 (II) L · [QOJ](https://qoj.ac/contest/1799/problem/9381) ·
