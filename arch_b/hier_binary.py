@@ -187,10 +187,11 @@ def appearance_split(ds, split):
     return (np.random.default_rng([SEED, split]).random(inv.max() + 1) < FRAC)[inv]
 
 
-def team_scores(ds, held_row, theta, b, kind):
-    """Per-contest sums on held-out appearances (all / linked / cold cells, rows, pairs)."""
+def team_scores(ds, held_row, theta, b, kind, cell_mask=None):
+    """Per-contest sums on held-out appearances (all / linked / cold cells, rows, pairs).
+    ``cell_mask`` optionally restricts the scored cells (``skip_cells`` uses it)."""
     from . import survival
-    cells = held_row[ds.obs_row]
+    cells = held_row[ds.obs_row] if cell_mask is None else held_row[ds.obs_row] & cell_mask
     team, prob, y = ds.team_of_row[ds.obs_row][cells], ds.obs_prob[cells], ds.obs_y[cells].astype(float)
     row, c = ds.obs_row[cells], ds.contest_of_row[ds.obs_row][cells]
     gap = (theta[team] - b[prob]) / S

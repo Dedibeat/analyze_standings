@@ -85,6 +85,17 @@ It also reviews the worst CF anchors.
 Run `PYTHONUTF8=1 ./.venv/Scripts/python -m scripts.problem_rating_audit`
 (~3 min) → `output/problem_rating_audit.json`.
 
+The audit's follow-up, [skipped cells as missing data](skip_cells_report.md),
+fixes the sign-ins in rows that submitted ≤ 2 problems. Unsubmitted easier
+cells in those rows are treated as missing.
+- **Result:** it passes its four pre-registered criteria. Sign-in bias falls
+  from +387 to +148, full-field CF RMSE is 227.6 vs 229.5, held-out log loss on
+  untouched cells is better, and reserved-view drift is no worse on 8 of 9.
+- **The broader all-rows version fails on stability.**
+
+Research only. Run `python -m arch_b.skip_cells 8` (~4 min, needs the
+`hier_binary` cache).
+
 A [probability-course shortlist](prob_course_candidates.md) picks five main
 problems and four backups from the probability-tagged problems in
 `data/tagged.json`: discrete probability only, each with its core trick, a
