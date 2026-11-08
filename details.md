@@ -8459,3 +8459,77 @@ Per-problem solve counts were not reported to the user: the set is on QOJ
 --board` cannot use this board yet.
 
 Tests: `python -m unittest tests.test_iccpc_standings` (2 pass).
+
+## Changchun 2026 virtual: 7 solved / 683 at 3:15, two members (2026-11-08, second entry)
+
+**Report (user).** NUM-R^3 did the 12th CCPC Changchun set as a virtual. They
+left with 1:45 still to play (3:15 elapsed), at 7 solved / 683 min. Erdene was
+absent, so Dedi and Tamir played as a pair. The question: how good is this
+against the 2026 regional field? The set has now been played, so solve
+counts are reported. Scratch queries in this entry, not shipped.
+
+**Placement on the official board** (`iccpc_standings`; also cut at 195 min
+by submission time):
+- **Final board:** official **#29** of 301 (292 with a solve), percentile
+  0.099. That is **gold**, one place inside the line (#30, 7 / 775). The
+  neighbours are 北京建筑大学 #28 (7 / 681) and 浙江大学 #29 (7 / 714).
+- **At 3:15:** **#13**. The 8 onsite teams with 7 solved at 3:15 all
+  finished gold, at final ranks 5–28 (median 14.5). Seven of them added 1–2
+  problems after 3:15.
+- So the result lies between gold #29 (no more solves) and about #15 (the
+  usual last 1:45).
+
+**2023–2025 model** (`ccpc_icpc_medals`: CCPC percentile → the same team at
+a mainland ICPC regional of that season; 4,050 pairs; no Changchun station
+offset exists):
+
+| percentile | ICPC gold | silver+ | any medal | rank ≤ 75 |
+|---|---|---|---|---|
+| final #29 (0.099) | 47% (44–50) | 88% | 97% | 80% (78–82) |
+| 3:15 #13 (0.045) | 77% (74–80) | 95% | 99% | 93% |
+
+The binned raw shares agree (percentile 0.08–0.12: gold 49%, ≤ 75 84%;
+0.03–0.06: 74%, 92%).
+
+**2026, same season** (Changchun official teams linked to the 51st Chengdu
+(10-25) and Wuhan (11-01) boards by school + ≥ 2 shared members):
+- **Coverage.** 110 pairs, 105 teams. Xi'an was the same weekend as
+  Changchun, so no team played both. The Nanjing board (11-08) was still
+  frozen (1,605 FROZEN runs), so it was left out. Its cache was deleted so
+  that a later run fetches the final board.
+- **The nearest teams.** Changchun #29 浙大 (7 / 714) → Chengdu #26, gold.
+  #30 北交 (7 / 775) → Chengdu #24, gold.
+- **Changchun #13–45** (18 pairs): 10 gold, 4 silver, 4 bronze; 14 of 18 at
+  rank ≤ 75; median regional rank 30.5.
+- **Log-log fit** of regional rank on Changchun rank (r = 0.82, residual SD
+  0.57):
+  - #29 → typical regional rank 38, middle half 26–56. P(gold) 39%
+    (Chengdu, line 32) and 49% (Wuhan, line 37); P(≤ 75) 89%.
+  - #13 → rank 20 (14–29). P(gold) 81–87%; P(≤ 75) 99%.
+
+**Anchors** (`anchor_teams.anchors()`; board rows from the official
+`rank.json`; tiers are still predicted, because `regional_teams.csv` has no
+51st rows):
+- **Final board:** gold anchors 19 present, 4 beaten; EC-Final anchors 24
+  present, 20 beaten.
+- **At 3:15:** gold anchors 12 of 19 beaten; EC-Final anchors 24 of 24.
+- **Earlier virtuals:**
+  - CCPC Jinan 2025: gold anchors 2 of 15, EC-Final 8 of 16.
+  - Xi'an 2026: gold anchors 0 of 11, EC-Final 6 of 15.
+- So this is the team's first virtual at the gold line, not the EC-Final
+  line.
+
+**Reading it.**
+- **Measured result:** gold at a CCPC station. That equals a gold/silver
+  border at a 2026 ICPC regional, about rank 38 at Chengdu or Wuhan.
+- **EC-Final line:** ~80–90% at that level.
+- **Pace at 3:15:** inside regional gold.
+- **Caveats.**
+  - **Virtual vs onsite.** A virtual reads stronger than onsite form.
+    Online virtuals ran ~2× stronger in rank terms than the official rounds
+    (2026-10-08), and a virtual scoreline is worth up to ~100 CF points less
+    (2026-10-13).
+  - **Two members, stopped early.** These push the other way, but neither
+    effect was measured.
+  - **One set.** A single set is noisy: a residual SD of 0.57 in log rank
+    puts one regional anywhere between about #26 and #56.
