@@ -1028,13 +1028,15 @@ Details: `details.md` (2026-10-18 entry and its follow-up).
 ### 12th CCPC Changchun standings (2026-11-08)
 
 ```bash
-python3 scripts/srk_standings.py   # writes output/ccpc_12th_changchun_standings.csv
+python3 scripts/iccpc_standings.py   # writes output/ccpc_12th_changchun_standings.csv
 ```
 
-The Changchun station (2026-10-18) is not on XCPCIO. Its board comes from
-algoux's srk-collection (`rl.algoux.cn/ranklist/ccpc2026changchun`, sourced
-from the official `rank.iccpc.cn` board). 337 teams, 301 official, 13
-problems; medals 30 / 60 / 90 by official rank. The script takes any srk URL.
+The Changchun station (2026-10-18) is not on XCPCIO. The standings come from
+the official board, `rank.iccpc.cn/r/8a3a28e3-f6b3-4a58-b4ac-fa8039fb2c72`.
+That page loads its submissions and award settings as a public `rank.json`,
+and the script applies the board's own ranking and medal rules. 337 teams,
+301 official, 13 problems; medals to official #30 / #90 / #180. Any
+rank.iccpc.cn board id works.
 
 Details: `details.md` (2026-11-08 entry).
 

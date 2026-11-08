@@ -8403,34 +8403,44 @@ rebuilt. The multi-part version is in commits 08188b2 (tex) and d670beb
 ## 12th CCPC Changchun standings (2026-11-08)
 
 **Request.** Find the standings of the 2026 CCPC Changchun station (12th
-CCPC, onsite 10-17/18, hosted by 东北师范大学).
+CCPC, onsite 10-17/18, hosted by 东北师范大学), from the official board.
 
 **Where the board is.**
 - **Not on XCPCIO.** The contest index (`data/index/contest_list.json`)
   lists the 12th-season invitationals and the online qualification but no
   Changchun board. `ccpc/12th/changchun` and similar paths return 404.
 - **Official board:** `rank.iccpc.cn/r/8a3a28e3-f6b3-4a58-b4ac-fa8039fb2c72`.
-- **Used here:** algoux's srk-collection,
-  `official/ccpc/ccpc2026/ccpc2026changchun.srk.json` (PR #75, merged
-  10-18), which links back to the official board. It is also shown at
-  `rl.algoux.cn/ranklist/ccpc2026changchun`.
+  The page preloads `/upload/outrank_attach/<id>/rank.json`. That file holds
+  the teams, the problems, all 4,011 submissions and the award settings.
+- **Copy:** algoux's srk-collection,
+  `official/ccpc/ccpc2026/ccpc2026changchun.srk.json` (PR #75, merged 10-18;
+  also at `rl.algoux.cn/ranklist/ccpc2026changchun`). The first version of
+  this entry read that copy. The user asked for the official board, so the
+  script now reads `rank.json`. Both give the same CSV, field for field
+  (only the row order within ties can differ).
 - ccpc.io is a single-page app; reading its news API was not done.
 
-**Script** `scripts/srk_standings.py` → `output/ccpc_12th_changchun_standings.csv`
-(rank, official_rank, medal, team, school, members, coach, solved,
-penalty_minutes). It takes any srk URL.
-- **Penalty** is the srk total time cut to whole minutes, as the ranklist's
-  `rankingTimePrecision: min` says. With seconds, 7 adjacent pairs are out of
-  order; with minutes, none are. Equal (solved, penalty) share a rank.
-- **Medals** use the board's own counts: 30 / 60 / 90 (10/20/30% of 301
-  official teams). No tie crosses a medal line.
-- The sorter also names a `CCPC26` extension
-  (`problemRevealAcceptedThreshold` 50 / 0.2). Its meaning is not documented
-  in the file. The row order agrees with plain ICPC ranking on minutes, so it
-  does not change the standings.
+**Script** `scripts/iccpc_standings.py BOARD_ID` →
+`output/ccpc_12th_changchun_standings.csv` (rank, official_rank, medal, team,
+school, members, coach, solved, penalty_minutes). It follows the board's own
+JavaScript (`static/ojweb/csgoj/contest/rank_core.js`, `rank_tool.js`):
+- **Runs.** Ordered by time, then solution id. Compile errors (11) are
+  dropped. Runs after a team's first AC (4) on a problem are ignored.
+- **Penalty.** Seconds to the first AC, plus 20 min per earlier run. Order
+  is (solved, penalty seconds, team id). Ranks tie on whole minutes: 13
+  ranks are shared, by 41 teams, the zero-solve teams included.
+- **Teams.** `tkind` 2 is a star team: 36 teams, unranked. `tkind` 1 is a
+  girls' team (2).
+- **Medals.** `award_ratio` 30020010 means 10 / 20 / 30%.
+  `flg_award_base` 1 makes the base the official teams with any submission
+  (299 of 301). The lines are cumulative ceilings: ceil(29.9) = 30,
+  ceil(89.7) = 90, ceil(179.4) = 180. No tie crosses a line.
+- The board config also has a CCPC display rule
+  (`reveal_ac_abs` 50, `reveal_ac_pct` 20) that applies while the board is
+  frozen. It does not affect the final standings.
 
-**Board.** 337 teams: 301 official, 36 unofficial (e.g. 南京大学 掉进兔子洞
-#4, 吉林大学 #10, 云斗学院 #22).
+**Board.** 337 teams: 301 official, 36 star (e.g. 南京大学 掉进兔子洞 #4,
+吉林大学 #10, 云斗学院 #22).
 - **Top 3** (official): 浙江大学 至亮之焰+ 12 solved; 复旦大学 格温的收集者 11;
   复旦大学 帽子戏法 10. 东北师大's report gives 浙大 / 复旦 / 北大 as champion,
   runner-up and third, by school. 北京大学 抹茶小蛋糕 is overall #5, official #4,
@@ -8448,4 +8458,4 @@ Per-problem solve counts were not reported to the user: the set is on QOJ
 **Not done.** `regional_standings` reads XCPCIO only, so `anchor_teams.py
 --board` cannot use this board yet.
 
-Tests: `python -m unittest tests.test_srk_standings` (1 passes).
+Tests: `python -m unittest tests.test_iccpc_standings` (2 pass).
