@@ -1038,6 +1038,15 @@ Module self-checks:
 ./.venv/bin/python -m arch_b.survival    # survival-model convergence trace
 ```
 
+## Teaching material
+
+[Recent Codeforces Div. 2 A/B teaching notes](cf_div2_teaching.md) select five
+problems for a general audience, with complete proofs, teaching prompts,
+common traps, and a reproducible small-case checker. The bounded search covers
+the latest 20 finished Div. 2 / Educational / combined rounds as of 2026-11-09.
+Start with SauSaGe Bank for greedy and Prefix for DP; no divide-and-conquer
+recommendation was found in this sample.
+
 ## Layout
 
 - `data/tagged.json` — full input standings (148 contests); `data/ucup_s3.json`,
