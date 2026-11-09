@@ -281,9 +281,10 @@ fits. The hand panel is unchanged, so the published scores stay reproducible.
     problems are listed.
   - Shipped DE publishes ratings for 20 problems from boards with < 5 rows and
     45 from 5–9 rows.
-  - Its `difficulty_se` there (median 117, about 150–180 on 1119) understates
-    the uncertainty: 1119's five ratings (1836–2244) come from one team's solve
-    times.
+  - The file's only uncertainty-like field, `difficulty_se`, is the raw
+    survival fit's Laplace SE, not DE's: DE has no SE. It is small there
+    (median 117, about 150–180 on 1119), but 1119's five ratings (1836–2244)
+    come from one team's solve times.
   - The legacy Architecture A file `output/problem_ratings.json` also lists
     13 contests the fit does not have. Problems on 0–2-row boards there are
     shown as 4000, a placeholder, not a rating.
@@ -303,8 +304,10 @@ fits. The hand panel is unchanged, so the published scores stay reproducible.
    of those rounds.
 3. Report the CF RMSE with and without Uniform Chemistry from now on. Do not
    drop it silently: the selection is post hoc.
-4. Flag or withhold ratings from boards with < 10 non-zero rows in the shipped
-   file, or widen their `difficulty_se` (not done: it changes shipped output).
+4. ~~Flag ratings from boards with < 10 non-zero rows.~~ Done 2026-11-09. The
+   shipped file carries `board_rows` and `small_board` (65 problems, 10
+   boards); the ratings are unchanged. The viewer and the app copy do not show
+   the flag yet.
 
 Reproduce: `PYTHONUTF8=1 ./.venv/Scripts/python -m scripts.problem_rating_audit`,
 about 3 minutes. It prints the panel scores; the JSON records input hashes.

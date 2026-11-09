@@ -40,8 +40,9 @@
     "rounded to 0.1"
   ],
   "uncertainty": "unavailable",
+  "small_board": "board_rows < 10: rated from a handful of rows; treat difficulty_cf as unreliable (problem_rating_audit.md)",
   "inputs_sha256": {
-    "problem_ratings_survival.json": "00bf3361d3054d4885328e2a8f5ccfd1fda19a5a1214308a62cb969a4c6bb3b5",
-    "problem_ratings_b.json": "72953ecb76dd1577bf85d620aa49598b933c909ec432dad2c8c7a4911a09f0ce"
+    "problem_ratings_survival.json": "0919c24e7b726c5baa4d476732fdb9fb3d295b070c21c762696e660a33072986",
+    "problem_ratings_b.json": "41abe0809af8b50f909a6d6385b822f2d75e56f15d33231c68cea68d76b47f1c"
   }
 }

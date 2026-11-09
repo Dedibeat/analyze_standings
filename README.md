@@ -100,8 +100,8 @@ cells in those rows are treated as missing.
   - strong-board floors read high in the hierarchical fit (EC-Final 2021
     "DFS Order" 1676 vs ~1200 by hand);
   - no rating-order inversions;
-  - tiny NA boards (as few as 1–2 rows) get shipped ratings with too-small
-    standard errors.
+  - tiny NA boards have as few as 1–2 rows. Their shipped ratings are now
+    flagged with `small_board` (below).
 
 Research only. Run `python -m arch_b.skip_cells 8` (~4 min, needs the
 `hier_binary` cache).
@@ -366,7 +366,13 @@ affine. `arch_b.calibrate` writes
 `output/problem_ratings_calibrated.json` (`difficulty_cf` in [800, 4000]; **no
 uncertainty field** — the old gym-map SEs do not describe DE) and
 `output/problem_calibration.json` (settings, anchor feature ranges, input
-hashes). The viewer, virtual calculator and UCup-only export read problem
+hashes).
+- **Small-board flag** (since 2026-11-09): each record also carries
+  `board_rows`, the board's rows with at least one solve.
+- **`small_board`** is true when `board_rows` < 10:
+  - that is 65 problems on 10 small North American boards, some with a single
+    row;
+  - treat their `difficulty_cf` as unreliable. The viewer, virtual calculator and UCup-only export read problem
 ratings from that file (`calibrate.problem_cf`), so all consumers agree.
 
 DE needs per-problem features, so it cannot map a team ability. Team
