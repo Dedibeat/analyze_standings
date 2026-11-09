@@ -224,14 +224,87 @@ problem names or statements in the repo, so they could not be checked.
   (+3 vs DE's +118 bias). That is the opposite of the worry in
   `hier_binary_report.md`, though only for the 2025 rounds checked.
 
+## Follow-up checks (2026-11-09)
+
+These were done by hand from scratch scripts (not kept) on the full-data
+fits. The hand panel is unchanged, so the published scores stay reproducible.
+
+- **2025 EC Online II D "Arcane Behemoths" (2524 D): why the skip rules
+  overcorrect.**
+  - D is the board's easiest problem: 1,629 of 1,788 non-zero rows solved it.
+  - `skip_partial` treats 124 of its 159 failures as missing:
+    - 123 of those rows are official registrations (`$DEFAULT…` ids);
+    - 86 solved only C and never submitted D.
+  - These teams solved C late (median minute 164; for all C solvers, 90).
+    D's median solve time, 125, is later than C's, which fits the hand view
+    that the two are close (C 1700, D 1650).
+  - So the dropped cells are real failures by weak teams, not mirror
+    accounts. The rule needs only "more solves than the row's hardest solve",
+    and 1,629 > 1,423 qualifies.
+  - The official-rows-excluded variant is in `skip_cells_report.md`. It fixes
+    D (1458) but fails the sign-in criterion.
+- **Strong-board floors (hierarchical only).** Two near sign-ins on strong
+  boards read far harder in `base` than in DE. The failing rows are a strong
+  board's bottom one-solve teams, so no skip rule touches them:
+  - **EC-Final 2021 (1041):**
+    - A "DFS Order": min position = depth, max = n − subtree size + 1, about
+      CF 1200 by hand. Base 1676, DE 1252.
+    - I "Future Coder": count pairs with (a−1)(b−1) < 1, about 1350 by hand.
+      Base 1605, DE 1260.
+    - The failing rows, the bottom 1-solve official teams, get θ ≈ 1872. The
+      board's median θ is 2377: σ = 300 around the board level compresses the
+      bottom of a strong board.
+  - **THUPC 2022 Final (955) M:** 156 of 157 solved it, base 1768, DE 1000.
+    The one failure is an official team that solved only I (67 solves). The
+    statement is not in the repo.
+  - **Not systematic.** Over all boards, problems solved by more than 95% read
+    only +26 to +62 above DE in every tercile of board level. These are
+    single cases.
+- **Rating-order check.** No board has an inversion in base, `skip_partial`
+  or DE: no problem with at least 10% of the field (and 5 rows) more solves
+  is rated more than 100 harder.
+- **Rare solves by low-ranked rows.** Only four problems on boards of ≥ 100
+  rows were solved (1–3 times) only by rows outside the top quarter:
+  - 2026 EC Online I E "LCM Permutation". Its lone solver, `id:sg78276397`,
+    is an **unofficial** account. It solved F and M at minutes 13/19, E at 208
+    after 3 wrong tries, then C and A. That fits a strong mirror account
+    better than a leak; still unverifiable without the statement.
+  - NWERC 2023 B "Brickwork": rank 60/144, 8 wrong tries;
+  - Petrozavodsk W22 D2 K "Fake Plastic Trees 2": rank 53/134;
+  - Petrozavodsk W24 D4 C "Comedy’s Not Omnipotent" (2 solves, ranks 29 and 74 of 105).
+
+  None of these looks like a data error.
+- **Tiny North American boards (data limitation).** 17 boards have fewer than
+  30 non-zero rows. They are mostly NA regionals and the 2022–2025 NAQ, whose
+  QOJ copies hold 13–27 rows.
+  - Mid-Atlantic 2022 (1119) has 2 standings rows, and only its 5 solved
+    problems are listed.
+  - Shipped DE publishes ratings for 20 problems from boards with < 5 rows and
+    45 from 5–9 rows.
+  - Its `difficulty_se` there (median 117, about 150–180 on 1119) understates
+    the uncertainty: 1119's five ratings (1836–2244) come from one team's solve
+    times.
+  - The legacy Architecture A file `output/problem_ratings.json` also lists
+    13 contests the fit does not have. Problems on 0–2-row boards there are
+    shown as 4000, a placeholder, not a rating.
+- **Hand-panel correction (not applied).** 2025 EC Online I B "Creating
+  Chaos" (hand 1100; DE 1438, base 1317): its median solve minute is 83,
+  against 32 for that round's sign-in G. The contiguous-block insight is not
+  sign-in level, so about 1300 is a better hand rating.
+
+  The frozen panel keeps 1100, so the skip tests stay comparable.
+
 ## Next steps
 
-1. Evaluate a skipped-cell rule (as here, or limited to partial or mirror rows)
-   through the full `python -m arch_b.hier_binary` protocol before using it.
+1. ~~Evaluate a skipped-cell rule through the full protocol.~~ Done:
+   `skip_partial` passes (`skip_cells_report.md`); `skip_mirror` fails the
+   sign-in criterion. A margin-based rule would need fresh boards.
 2. Get the 2026 EC online statements to check "LCM Permutation" and the rest
    of those rounds.
 3. Report the CF RMSE with and without Uniform Chemistry from now on. Do not
    drop it silently: the selection is post hoc.
+4. Flag or withhold ratings from boards with < 10 non-zero rows in the shipped
+   file, or widen their `difficulty_se` (not done: it changes shipped output).
 
 Reproduce: `PYTHONUTF8=1 ./.venv/Scripts/python -m scripts.problem_rating_audit`,
 about 3 minutes. It prints the panel scores; the JSON records input hashes.

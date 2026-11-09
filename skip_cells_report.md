@@ -1,6 +1,6 @@
 # Skipped cells as missing data
 
-2026-11-08. Follow-up to `problem_rating_audit.md`. Code: `arch_b/skip_cells.py`;
+2026-11-08; second test (`skip_mirror`) 2026-11-09. Follow-up to `problem_rating_audit.md`. Code: `arch_b/skip_cells.py`;
 tests: `tests/test_skip_cells.py`. Research only.
 
 ## Pre-registered rules and pass criteria (written before any run)
@@ -47,7 +47,7 @@ untouched.
 | 1. worst other-group RMSE change | +38 (anchors) ✓ | +27 (EC online) ✓ |
 | 2. full-field CF RMSE − base | −0.9 [−6.1, +3.9] ✓ | −1.9 [−5.4, +0.9] ✓ |
 | 3. log loss − base, split 1 / 2 (×10⁻⁴) | −0.7 [−7.9, +6.7] / +6.7 [−0.7, +14.5] ✓ | −6.0 [−10.0, −2.2] / −3.6 [−7.2, 0.0] ✓ |
-| 4. reserved views with drift ≤ base | 3 of 9 ✗ | 8 of 9 ✓ |
+| 4. reserved views with drift ≤ base | 3 of 9 ✗ (2 of 8, see correction below) | 8 of 9 ✓ (7 of 8) |
 
 ## Results
 
@@ -132,6 +132,74 @@ Both rules still overcorrect 2025 EC Online II D (hand 1650; base 1472,
 - **The partial rule is a heuristic.** Rows with ≤ 2 submissions include
   genuinely weak teams that tried little. It does not fix every floor problem
   (2025 EC Online II D).
+
+## Second test: `skip_mirror` (2026-11-09, pre-registered before its run)
+
+**Why.** 2025 EC Online II D (`2524 D`) is the easiest problem on its board:
+1,629 of 1,788 non-zero rows solved it. `skip_partial` treats 124 of its 159
+failures as missing, which makes D read like a sign-in (1211 vs hand 1650).
+- 123 of those 124 rows are official registrations (QOJ team id
+  `$DEFAULT…`).
+- 86 of them solved only C and never submitted D.
+- They solved C late (median minute 164, against 90 for all C solvers), and
+  D's median solve time is 125, later than C's.
+
+So these are weak teams that read D and failed it, not mirror accounts. On the
+18 EC sign-ins, by contrast, the skipped rows are almost all unofficial `id:`
+accounts. Overall, 643 of the 2,717 `skip_partial` cells sit in official rows,
+and 123 of those are 2524 D.
+
+**Rule.** `skip_mirror` is `skip_partial`, but only in rows that are not
+official registrations (`official_of_row` false). It changes nothing on the 28
+boards with no official flag, which hold 1,242 rows.
+
+**Criteria.** The same four, against `base`. `skip_mirror` replaces
+`skip_partial` as the preferred rule only if both hold:
+- it passes all four;
+- its 2025 EC online hand RMSE is below `skip_partial`'s (142).
+
+The hand panel motivated this rule as well, so 2524 D is a consistency check,
+not evidence.
+
+### Result: `skip_mirror` fails criterion 1; `skip_partial` stays preferred
+
+The rerun reproduced `base` and `skip_partial` exactly.
+
+| Measure | base | `skip_partial` | `skip_mirror` |
+|---|---|---|---|
+| cells treated as missing | 0 | 2,717 (1,383 rows) | 2,074 (921 rows) |
+| 1. EC sign-in bias / RMSE | +387 / 448 | +148 / 225 ✓ | **+174 / 236 ✗** |
+| 1. 2025 EC online bias / RMSE | +3 / 115 | −21 / 142 | −9 / 115 |
+| 2025 EC Online II D (hand 1650) | 1472 | 1211 | 1458 |
+| all-72 hand RMSE | 296 | 225 | 224 |
+| 2. full-field CF RMSE − base | — | −1.9 [−5.4, +0.9] ✓ | −2.0 [−5.3, +0.6] ✓ |
+| 3. log loss − base, non-skipped, split 1 / 2 (×10⁻⁴) | — | −6.0 / −3.6 ✓ | −5.7 [−8.9, −2.5] / −3.4 [−6.8, −0.1] ✓ |
+| log loss − base, all cells (×10⁻⁴) | — | +17 / +21 | +13 / +17 |
+| 4. reserved views with drift ≤ base | — | 7 of 8 ✓ | 7 of 8 ✓ |
+| CF-rated teams RMSE (54) | 218 | 219 | 219 |
+
+- **Why it fails.** Official rows also skip sign-ins: 3 of 7 skipped rows on
+  Shenyang 2022 D (1096 D), and 2 of 13 on EC-Final 2022 M (1197 M). Keeping
+  them puts those two back at 1094 (hand 800) and 1373 (hand 1200).
+- **The tradeoff.** "Official" does not cleanly separate mirror accounts from
+  weak teams. The cases differ in a different way:
+  - on 2524 D the skipped problem is only slightly easier than the row's
+    hardest solve: 1,629 vs 1,423 solves;
+  - on a sign-in it is far easier.
+
+  A margin rule would target that difference. It is not tested: it would be
+  the third rule fitted to the same hand panel, and it needs fresh boards.
+- **Decision.** Under the pre-registered decision rule, `skip_partial` stays
+  preferred. 2524 D remains a known `skip_partial` error.
+
+**Correction to the first test's criterion 4.**
+- `strength_pool` is the drift reference for the `strong` and `weak` views,
+  so its own drift is 0 for every rule and it counts as a trivial "win".
+- The real counts over the 8 views with a drift are:
+  - `skip_partial` 7 of 8;
+  - `skip_all` 2 of 8.
+
+  The table above said 8 of 9 and 3 of 9. The verdicts do not change.
 
 Reproduce: `PYTHONUTF8=1 OPENBLAS_NUM_THREADS=1 ./.venv/Scripts/python -m arch_b.skip_cells 8`.
 It takes ~4 min with 8 workers and needs the `hier_binary all` view cache in

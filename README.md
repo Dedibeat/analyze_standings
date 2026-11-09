@@ -90,8 +90,18 @@ fixes the sign-ins in rows that submitted ≤ 2 problems. Unsubmitted easier
 cells in those rows are treated as missing.
 - **Result:** it passes its four pre-registered criteria. Sign-in bias falls
   from +387 to +148, full-field CF RMSE is 227.6 vs 229.5, held-out log loss on
-  untouched cells is better, and reserved-view drift is no worse on 8 of 9.
+  untouched cells is better, and reserved-view drift is no worse on 7 of 8.
 - **The broader all-rows version fails on stability.**
+- **A second test, `skip_mirror`,** also spares official registrations. It
+  fixes 2025 EC Online II D, where weak official teams really failed the
+  easiest problem (1211 → 1458, hand 1650). It fails the sign-in criterion,
+  though (+174), so `skip_partial` stays preferred.
+- **Other hand findings** are in the audit's follow-up section:
+  - strong-board floors read high in the hierarchical fit (EC-Final 2021
+    "DFS Order" 1676 vs ~1200 by hand);
+  - no rating-order inversions;
+  - tiny NA boards (as few as 1–2 rows) get shipped ratings with too-small
+    standard errors.
 
 Research only. Run `python -m arch_b.skip_cells 8` (~4 min, needs the
 `hier_binary` cache).

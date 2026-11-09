@@ -49,6 +49,14 @@ class SkipTest(unittest.TestCase):
         with mock.patch.object(sc, "PARTIAL_MAX", 0):
             self.assertFalse(sc.skipped(ds, every, "skip_partial").any())
 
+    def test_mirror_rule_spares_official_rows(self):
+        ds = board()
+        every = np.ones(len(CELLS), bool)
+        ds.official_of_row = np.zeros(6, bool)
+        self.assertEqual(marked(ds, sc.skipped(ds, every, "skip_mirror")), {(4, 0), (4, 1)})
+        ds.official_of_row[4] = True
+        self.assertFalse(sc.skipped(ds, every, "skip_mirror").any())
+
     def test_solve_counts_come_from_the_given_cells_only(self):
         ds = board()
         cells = ~np.isin(ds.obs_row, [0, 1, 3])   # P0 now 1 solve, P1 2, P2 2: nothing easier for row 4

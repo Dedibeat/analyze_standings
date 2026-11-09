@@ -10,7 +10,9 @@ Rules, frozen before any result of this module was seen:
 - ``base``: every cell counts (the selected hier_binary fit);
 - ``skip_all``: skipped cells are missing in every row (the audit's diagnostic);
 - ``skip_partial``: skipped cells are missing only in rows that submitted to at
-  most PARTIAL_MAX problems (partial participants such as mirror accounts).
+  most PARTIAL_MAX problems (partial participants such as mirror accounts);
+- ``skip_mirror`` (added 2026-11-09, after the first run): ``skip_partial`` but
+  only in rows that are not official registrations (``official_of_row``).
 
 The hier_binary setting (sigma 300, tau 800, sigma_b 600, tau_b 400) is held
 fixed; nothing is reselected. Skip status is always recomputed from the cells a
@@ -36,7 +38,7 @@ from arch_a import elo
 from . import hier_binary as hb
 
 CFG = (300, 800, 600, 400)
-RULES = ("base", "skip_all", "skip_partial")
+RULES = ("base", "skip_all", "skip_partial", "skip_mirror")
 PARTIAL_MAX = 2
 OUT = hb.ROOT / "output/skip_cells.json"
 
@@ -53,8 +55,10 @@ def skipped(ds, cells, rule):
     hardest = np.full(len(ds.team_of_row), np.inf)
     np.minimum.at(hardest, row[y], solved[prob[y]])
     skip = ~tried & (solved[prob] > hardest[row])
-    if rule == "skip_partial":
+    if rule in ("skip_partial", "skip_mirror"):
         skip &= np.bincount(row[tried], minlength=len(ds.team_of_row))[row] <= PARTIAL_MAX
+    if rule == "skip_mirror":
+        skip &= ~ds.official_of_row[row]
     out[idx[skip]] = True
     return out
 
@@ -84,7 +88,7 @@ def team_experiment(jobs):
                 out[f"{split}:{rule}"] = {k: {m: v.tolist() for m, v in s.items()} for k, s in sc.items()}
                 print(f"team split {split} {rule} done", flush=True)
         return out
-    raw = hb._cached("skip_team", compute)
+    raw = hb._cached("skip_team_" + "_".join(RULES), compute)
     out = {}
     for split in hb.REPORT_SPLITS:
         out[str(split)] = {}
@@ -140,7 +144,7 @@ def view_experiment(jobs):
                 out[view] = rec
                 print(f"view {view} done", flush=True)
         return out
-    new = hb._cached("skip_views", compute)
+    new = hb._cached("skip_views_" + "_".join(RULES), compute)
     views = {}
     for v, rec in cached.items():
         assert new[v]["kept_anchor_rows"] == rec["kept_anchor_rows"], v
