@@ -12,7 +12,14 @@ Rules, frozen before any result of this module was seen:
 - ``skip_partial``: skipped cells are missing only in rows that submitted to at
   most PARTIAL_MAX problems (partial participants such as mirror accounts);
 - ``skip_mirror`` (added 2026-11-09, after the first run): ``skip_partial`` but
-  only in rows that are not official registrations (``official_of_row``).
+  only in rows that are not official registrations (``official_of_row``);
+- ``skip_margin`` (added 2026-11-10, before its run): ``skip_partial`` but only
+  where the skipped problem is clearly easier than the row's hardest solve: the
+  board's failure odds on that solve are at least MARGIN times the skipped
+  problem's;
+- ``skip_early`` (added 2026-11-10, before its run): ``skip_partial`` but only on
+  problems whose median solve time is at most EARLY_MINUTES (sign-in problems
+  are solved early; an easiest problem that takes strong teams long is not one).
 
 The hier_binary setting (sigma 300, tau 800, sigma_b 600, tau_b 400) is held
 fixed; nothing is reselected. Skip status is always recomputed from the cells a
@@ -23,7 +30,7 @@ Primary team metric: held-out appearances scored on their non-skipped cells
 reported too. The recorded-date forward replay is not run: its panel
 (member_forecast.training_data) carries no attempt counts.
 
-    python -m arch_b.skip_cells [JOBS]   -> output/skip_cells.json
+    python -m arch_b.skip_cells [JOBS]   -> output/skip_cells.json, output/skip_cells_ratings.json
 """
 
 import gzip
@@ -38,8 +45,10 @@ from arch_a import elo
 from . import hier_binary as hb
 
 CFG = (300, 800, 600, 400)
-RULES = ("base", "skip_all", "skip_partial", "skip_mirror")
+RULES = ("base", "skip_all", "skip_partial", "skip_mirror", "skip_margin", "skip_early")
 PARTIAL_MAX = 2
+MARGIN = 4.0
+EARLY_MINUTES = 60.0
 OUT = hb.ROOT / "output/skip_cells.json"
 
 
@@ -55,10 +64,24 @@ def skipped(ds, cells, rule):
     hardest = np.full(len(ds.team_of_row), np.inf)
     np.minimum.at(hardest, row[y], solved[prob[y]])
     skip = ~tried & (solved[prob] > hardest[row])
-    if rule in ("skip_partial", "skip_mirror"):
+    if rule in ("skip_partial", "skip_mirror", "skip_margin", "skip_early"):
         skip &= np.bincount(row[tried], minlength=len(ds.team_of_row))[row] <= PARTIAL_MAX
     if rule == "skip_mirror":
         skip &= ~ds.official_of_row[row]
+    if rule == "skip_margin":   # failure odds: (field - solved) / solved, field = the problem's cells
+        field = np.bincount(prob, minlength=len(ds.problems))[prob]
+        skip &= (field - hardest[row]) * solved[prob] >= MARGIN * (field - solved[prob]) * hardest[row]
+    if rule == "skip_early":    # median solve time among the fitted solves; unknown times never skip
+        t = ds.obs_tau[idx].astype(float)
+        timed = y & np.isfinite(t)
+        order = np.lexsort((t[timed], prob[timed]))
+        p_sorted, t_sorted = prob[timed][order], t[timed][order]
+        first = np.searchsorted(p_sorted, np.arange(len(ds.problems)))
+        count = np.bincount(p_sorted, minlength=len(ds.problems))
+        median = np.full(len(ds.problems), np.inf)
+        has = count > 0
+        median[has] = (t_sorted[first[has] + (count[has] - 1) // 2] + t_sorted[first[has] + count[has] // 2]) / 2
+        skip &= median[prob] <= EARLY_MINUTES * 60
     out[idx[skip]] = True
     return out
 
@@ -162,7 +185,7 @@ def view_experiment(jobs):
 
 def full_data(jobs_unused=None):
     """Full-data fits: hand panel, EC solve-rate buckets, anchors, CF-rated teams."""
-    from scripts.problem_rating_audit import HAND, hand_scores
+    from scripts.problem_rating_audit import FRESH, HAND, hand_scores
     from .calibrate import problem_cf
     from .cf_prior import team_abilities
     hb._init()
@@ -189,6 +212,7 @@ def full_data(jobs_unused=None):
         out["external_cf_teams"][rule] = {"teams": len(err), "rmse": float(np.sqrt(np.mean(err ** 2))),
                                           "mean_error": float(err.mean())}
     out["hand_scores"] = hand_scores(pi, ratings)
+    out["fresh_scores"] = hand_scores(pi, ratings, FRESH)
     rate = ds.solved_count / np.maximum(ds.field_count, 1)
     bins = [(0, .005), (.005, .05), (.05, .3), (.3, .7), (.7, .95), (.95, 1.01)]
     ec = np.array([cid in _ec_contests() for cid, _, _, _ in ds.problems])
@@ -197,7 +221,15 @@ def full_data(jobs_unused=None):
                for lo, hi in bins} for rule in RULES}
     out["hand"] = [{"contest_id": c, "label": lab, "hand": h, "group": g,
                     **{n: round(float(r[pi[(c, lab)]]), 1) for n, r in ratings.items()}}
-                   for (c, lab), (h, g, _) in HAND.items()]
+                   for (c, lab), (h, g, _) in {**HAND, **FRESH}.items()]
+    # every problem under the preferred rule, next to base and shipped DE (research only)
+    (hb.ROOT / "output/skip_cells_ratings.json").write_text(json.dumps(
+        {"research_only": True, "config": list(CFG), "maps": out["maps"],
+         "problems": [{"contest_id": int(c), "problem_label": lab, "de_cf": round(float(de[p]), 1),
+                       "base_cf": round(float(ratings["base"][p]), 1),
+                       "skip_partial_cf": round(float(ratings["skip_partial"][p]), 1),
+                       "solved": int(ds.solved_count[p]), "field": int(ds.field_count[p])}
+                      for p, (c, lab, _, _) in enumerate(ds.problems)]}, indent=0) + "\n", encoding="utf-8")
     return out
 
 
@@ -209,6 +241,7 @@ def _ec_contests():
 
 def main(jobs):
     out = {"research_only": True, "config": list(CFG), "rules": list(RULES), "partial_max": PARTIAL_MAX,
+           "margin": MARGIN, "early_minutes": EARLY_MINUTES,
            "sha256": {**hb.sha256s(), **{p: hashlib.sha256((hb.ROOT / p).read_bytes()).hexdigest()
                                          for p in ("arch_b/skip_cells.py", "scripts/problem_rating_audit.py")}}}
     out["full_data"] = full_data()

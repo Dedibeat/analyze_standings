@@ -201,6 +201,94 @@ The rerun reproduced `base` and `skip_partial` exactly.
 
   The table above said 8 of 9 and 3 of 9. The verdicts do not change.
 
+## Third test: `skip_margin` on a fresh blind panel (2026-11-10, pre-registered before its run)
+
+**Why.** The second test left one idea open: on 2524 D the skipped problem is
+only slightly easier than the row's hardest solve, and on a sign-in it is far
+easier. The old hand panel has already shaped two rules, so this test adds a
+panel no rule has seen.
+
+**Rule.** `skip_margin` is `skip_partial`, but a skipped cell is missing only
+when the board's failure odds on the row's hardest solve are at least 4 times
+the skipped problem's failure odds (odds = failed / solved, among the cells
+being fitted). A factor of 4 is about 240 rating points on the board's own
+solve-rate scale. On 2524 D against C the ratio is 2.6, so those cells stay
+failures. The factor was chosen with that case in view, so 2524 D is again a
+consistency check, not evidence.
+
+**Fresh panel.** `FRESH` in `scripts/problem_rating_audit.py`: the two
+most-solved problems on each of the 16 EC boards that have statements and that
+the old panel does not touch (32 problems). They were rated from the statements
+alone, before any model rating or solve count for them was looked at.
+
+**Criteria.** `skip_margin` replaces `skip_partial` as the preferred rule only
+if both hold:
+- it passes the same four criteria against `base` (criterion 1 on the old
+  panel, criterion 4 over the 8 views that have a drift);
+- its RMSE on the fresh panel is below `skip_partial`'s.
+
+The fresh panel is also the first independent check of the sign-in finding
+itself: `base` and DE are scored on it too.
+
+## Fourth test: `skip_early` (2026-11-10, pre-registered before its run)
+
+**Why.** A scan of every problem that `skip_partial` lowers by 200 or more
+(34 problems) found a second over-correction besides 2524 D: Universal Cup
+"Ōokayama" L, "Long Sequence Inversion 2" (62 of 68 solved). By hand it is a
+counting problem of about CF 2300, the easiest problem of a hard set. Its six
+failures are all partial rows of strong accounts that submitted only harder
+problems, so `skip_partial` leaves it solved by everyone and its rating falls
+from 2269 to 1699 (DE 2494). In that list, solve times separate the cases:
+every true sign-in has a median solve time of at most 43 minutes, and the
+over-corrections are late (1872 L 100 minutes, 2524 D 125, Northern B 181).
+
+**Rule.** `skip_early` is `skip_partial`, but only on problems whose median
+solve time, among the solves being fitted, is at most 60 minutes. Problems
+with no solve times are never skipped. The 60 was chosen with those cases in
+view, so 2524 D and 1872 L are consistency checks, not evidence.
+
+**Criteria.** `skip_early` replaces `skip_partial` as the preferred rule only
+if both hold:
+- it passes the same four criteria against `base`;
+- its RMSE on the fresh panel is not above `skip_partial`'s by more than 5.
+
+## Results of the third and fourth tests (2026-11-10): both fail; `skip_partial` stays preferred
+
+The rerun reproduced `base`, `skip_partial` and `skip_mirror` exactly.
+
+| Measure | base | `skip_partial` | `skip_margin` | `skip_early` |
+|---|---|---|---|---|
+| cells treated as missing | 0 | 2,717 | 1,299 | 1,070 |
+| 1. EC sign-in bias / RMSE (old panel) | +387 / 448 | +148 / 225 ✓ | **+215 / 295 ✗** | **+152 / 226 ✗** (limit 150) |
+| fresh panel, all 32: bias / RMSE (DE +236 / 353) | +261 / 390 | +155 / 322 | +203 / 343 ✗ | +177 / 335 ✗ (+13 > 5) |
+| fresh panel, 16 most-solved | +328 / 410 | +155 / 293 | +241 / 344 | +186 / 314 |
+| 2. full-field CF RMSE − base | — | −1.9 [−5.4, +0.9] ✓ | −2.0 [−5.2, +0.4] ✓ | −1.9 [−5.4, +0.7] ✓ |
+| 3. log loss − base, non-skipped, split 1 / 2 (×10⁻⁴) | — | −6.0 / −3.6 ✓ | −4.7 / −4.3 ✓ | −5.3 / −5.2 ✓ |
+| log loss − base, all cells (×10⁻⁴) | — | +17 / +21 | +8 / +10 | +9 / +9 |
+| 4. reserved views with drift ≤ base (of 8) | — | 7 ✓ | **4 ✗** | 6 ✓ |
+| 2524 D (hand 1650) | 1472 | 1211 | 1449 | 1472 |
+
+- **The fresh blind panel confirms the sign-in finding.** On problems no rule
+  had seen, `base` is +328 on the 16 most-solved problems and `skip_partial`
+  +155; over all 32, `skip_partial` (322) beats `base` (390) and DE (353).
+- **`skip_margin` fails** criteria 1 and 4 and is worse on the fresh panel.
+- **`skip_early` fails narrowly:** sign-in bias +152 against a limit of 150,
+  and 13 worse than `skip_partial` on the fresh panel (allowance 5). It does
+  remove the known 2524 D over-correction and halves the all-cells log-loss
+  cost. Some real easy problems are solved late (Xi'an 2023 N, median minute
+  99), so the time gate gives part of the sign-in gain back.
+- **Known `skip_partial` errors now:** 2524 D and Universal Cup Ōokayama L
+  (1699; about 2300 by hand; base 2269).
+- **One fresh-panel hand rating is wrong:** Wuhan 2025 F (hand 2200) was solved
+  by 779 of 835 rows. The panel is blind and stays frozen; the item adds the
+  same error to every rule.
+- A remaining +150 on easy problems is partly not identifiable from standings:
+  CF anchors labelled 800–1200 read +253 (n = 7), and a problem solved by
+  everyone on a strong board lands about 700 below the board's weakest decile.
+
+Every problem's rating under `base`, `skip_partial` and DE is now written to
+`output/skip_cells_ratings.json`.
+
 Reproduce: `PYTHONUTF8=1 OPENBLAS_NUM_THREADS=1 ./.venv/Scripts/python -m arch_b.skip_cells 8`.
 It takes ~4 min with 8 workers and needs the `hier_binary all` view cache in
 `hier_binary_run/`. Output: `output/skip_cells.json`.

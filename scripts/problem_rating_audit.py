@@ -99,6 +99,45 @@ HAND = {
     (2692, "E"): (1400, "anchor", "Minkowski shape + prefix counts"),
 }
 
+# Fresh blind panel (2026-11-10): the two most-solved problems of the 16 EC boards
+# with statements that HAND does not touch. Rated from the statements alone, before
+# any model rating or solve count for these problems was looked at. The group is
+# the board's solve order (fresh_first = most solved), not the reviewer's view.
+FRESH = {
+    (1099, "H"): (800, "fresh_first", "k * ceil(l/b) * b"),
+    (1099, "K"): (1100, "fresh_second", "min, or min/2 when some a is in (min, 2min]"),
+    (1522, "B"): (1300, "fresh_first", "fewest digits, then smallest: DP from the back"),
+    (1522, "E"): (1800, "fresh_second", "case analysis on d"),
+    (1516, "M"): (1100, "fresh_first", "whole array, a prefix or a suffix"),
+    (1516, "J"): (1300, "fresh_second", "pair queries, then 2-3 checks"),
+    (1459, "J"): (1600, "fresh_first", "shortest path with a helper cycle"),
+    (1459, "I"): (1500, "fresh_second", "small DP over refresh times"),
+    (1784, "N"): (1200, "fresh_first", "outer loop, inner arithmetic series"),
+    (1784, "G"): (1400, "fresh_second", "(prod(2e+1)+1)/2"),
+    (1894, "I"): (1800, "fresh_first", "bipartite colouring, flip leaves"),
+    (1894, "A"): (2100, "fresh_second", "greedy with a heap"),
+    (1893, "K"): (1200, "fresh_first", "per row, (m-k)-th position"),
+    (1893, "A"): (1150, "fresh_second", "merge letters, find a separating position"),
+    (1885, "C"): (900, "fresh_first", "positions of the maximum"),
+    (1885, "K"): (1500, "fresh_second", "subsequence check with fixed ends"),
+    (1871, "J"): (1300, "fresh_first", "small case analysis"),
+    (1871, "M"): (1400, "fresh_second", "diagonal construction"),
+    (1828, "E"): (900, "fresh_first", "at most 6 shifts matter"),
+    (1828, "J"): (1400, "fresh_second", "single gains plus best edge"),
+    (1913, "C"): (1150, "fresh_first", "parity of l and 2l <= r"),
+    (1913, "I"): (1150, "fresh_second", "sort, multiply k-1 at a time, mind zeros"),
+    (3295, "B"): (2000, "fresh_first", "prefix conditions, counting DP"),
+    (3295, "J"): (2200, "fresh_second", "path cover with an order constraint"),
+    (2567, "G"): (1100, "fresh_first", "count multiples, pair them"),
+    (2567, "J"): (900, "fresh_second", "two sums per paper"),
+    (3169, "H"): (900, "fresh_first", "n-1 if two equal neighbours, else n-2"),
+    (3169, "K"): (1800, "fresh_second", "best rotation among the minima"),
+    (2908, "D"): (1450, "fresh_first", "3^n DP"),
+    (2908, "H"): (1700, "fresh_second", "game characterisation"),
+    (2609, "E"): (1500, "fresh_first", "invariants of the pair move"),
+    (2609, "F"): (2200, "fresh_second", "greedy reach per layer"),
+}
+
 
 def sha(p):
     return hashlib.sha256((ROOT / p).read_bytes()).hexdigest()
@@ -120,13 +159,13 @@ def fit_map(ds, keep, idx, cf):
     return np.clip(s * res["b"] + i, elo.LO, elo.HI), [float(s), float(i)]
 
 
-def hand_scores(key, ratings):
+def hand_scores(key, ratings, panel=HAND):
     out = {}
-    for g in sorted({v[1] for v in HAND.values()}) + ["all"]:
-        ks = [k for k, v in HAND.items() if g in ("all", v[1])]
+    for g in sorted({v[1] for v in panel.values()}) + ["all"]:
+        ks = [k for k, v in panel.items() if g in ("all", v[1])]
         out[g] = {"n": len(ks)}
         for name, r in ratings.items():
-            e = np.array([r[key[k]] - HAND[k][0] for k in ks])
+            e = np.array([r[key[k]] - panel[k][0] for k in ks])
             out[g][name] = {"bias": round(float(e.mean()), 1), "rmse": round(float(np.sqrt((e ** 2).mean())), 1)}
     return out
 
