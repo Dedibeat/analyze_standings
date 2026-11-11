@@ -10,7 +10,7 @@ on the 2024-2025 boards). Online rank = exp(mean log rank) over the rounds enter
 | 2022 hongkong | 115 | 12 | 21 | 51 | 30 | 17 / 24 | - | 6 (1) | - | - | - |
 | 2023 macau | 82 | 8 | 15 | 59 | 8 | 22 / 33 | 26 | 7 (1) | - | - | - |
 | 2024 hongkong | 149 | 15 | 14 | 107 | 28 | 31 / 49 | 40 | 118 (13) | 66.4 | 80.1 | 11 / 13 (teams: 14) |
-| 2025 hongkong | 126 | 13 | 15 | 110 | 1 | 33 / 58 | 66 | 97 (12) | 53.0 | 74.1 | 9 / 12 (teams: 13) |
+| 2025 hongkong | 126 | 13 | 14 | 111 | 1 | 33 / 58 | 66 | 97 (12) | 53.0 | 74.1 | 9 / 12 (teams: 13) |
 
 Mainland coin-flip online ranks (same shared slope): 2023 hangzhou 96.4, 2023 hefei 88.4, 2023 jinan 78.3, 2023 nanjing 91.2, 2023 shenyang 94.9, 2023 xian 86.5, 2024 chengdu 98.8, 2024 hangzhou 108.5, 2024 kunming 98.0, 2024 nanjing 96.9, 2024 shanghai 104.4, 2024 shenyang 81.6, 2025 chengdu 78.8, 2025 nanjing 89.1, 2025 shanghai 85.2, 2025 shenyang 133.9, 2025 wuhan 95.0, 2025 xian 127.2.
 
@@ -18,8 +18,8 @@ Mainland coin-flip online ranks (same shared slope): 2023 hangzhou 96.4, 2023 he
 
 | train → test | attendance AUC | schools exp. / act. | top-50 schools exp. / act. | gold line actual | simulated (80%) | same as train | abs log error sim. / same |
 |---|---|---|---|---|---|---|---|
-| 2024 → 2025 | 0.872 | 121.5 / 107 | 34.4 / 33 | 53.0 | 70.0 (52.4–101.6) | 66.4 | 0.278 / 0.226 |
-| 2025 → 2024 | 0.758 | 91.2 / 101 | 33.1 / 31 | 66.4 | 39.5 (25.0–62.6) | 53.0 | 0.52 / 0.226 |
+| 2024 → 2025 | 0.869 | 121.5 / 108 | 34.4 / 33 | 53.0 | 70.0 (52.4–101.6) | 66.4 | 0.278 / 0.226 |
+| 2025 → 2024 | 0.758 | 92.4 / 101 | 33.2 / 31 | 66.4 | 39.0 (28.0–65.0) | 53.0 | 0.533 / 0.226 |
 
 ## Gold models (train one season, test the other)
 

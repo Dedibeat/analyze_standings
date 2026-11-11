@@ -59,8 +59,8 @@
    "site": "hongkong",
    "official": 126,
    "golds": 13,
-   "local": 15,
-   "nonlocal_schools": 110,
+   "local": 14,
+   "nonlocal_schools": 111,
    "multi_team_schools": 1,
    "top50_schools": 33,
    "top100_schools": 58,
@@ -97,9 +97,9 @@
   {
    "train": "2024",
    "test": "2025",
-   "attendance_auc": 0.872,
+   "attendance_auc": 0.869,
    "schools_expected": 121.5,
-   "schools_actual": 107,
+   "schools_actual": 108,
    "top50_expected": 34.4,
    "top50_actual": 33,
    "coef": [
@@ -122,24 +122,24 @@
    "train": "2025",
    "test": "2024",
    "attendance_auc": 0.758,
-   "schools_expected": 91.2,
+   "schools_expected": 92.4,
    "schools_actual": 101,
-   "top50_expected": 33.1,
+   "top50_expected": 33.2,
    "top50_actual": 31,
    "coef": [
-    2.56,
-    1.94,
+    2.54,
+    1.91,
     1.19,
-    -0.9
+    -0.89
    ],
    "line_actual": 66.4,
-   "line_simulated": 39.5,
+   "line_simulated": 39.0,
    "line_simulated_80": [
-    25.0,
-    62.6
+    28.0,
+    65.0
    ],
    "line_same_as_train": 53.0,
-   "abs_log_error_simulated": 0.52,
+   "abs_log_error_simulated": 0.533,
    "abs_log_error_same_as_train": 0.226
   }
  ],

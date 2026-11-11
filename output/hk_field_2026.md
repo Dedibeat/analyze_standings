@@ -7,11 +7,11 @@
 | field | teams | non-local | linked | median online rank | linked within online #50 / #100 / #200 / #500 | 10% / 30% / 60% line (online rank) | expected gold / silver+ / medal (absolute model) |
 |---|---|---|---|---|---|---|---|
 | 2024 hongkong (official) | 149 | 135 | 118 | 753.0 | 7 / 13 / 22 / 42 | 66.4 / 416.7 / 964.5 | 12.6 / 37.6 / 76.2 |
-| 2025 hongkong (official) | 126 | 111 | 97 | 775.5 | 7 / 16 / 18 / 34 | 53.0 / 431.4 / 827.4 | 12.3 / 31.3 / 64.7 |
+| 2025 hongkong (official) | 126 | 112 | 97 | 775.5 | 7 / 16 / 18 / 34 | 53.0 / 431.4 / 827.4 | 12.3 / 31.3 / 64.7 |
 | 2026 registered so far | 144 | 137 | 123 | 963.4 | 3 / 5 / 12 / 27 | 197.6 / 657.7 / 1088.7 | 5.4 / 27.1 / 71.0 |
 | 2026 scenario: + 25 unregistered 2025 schools, top 95 by school rank | 95 | 95 | 85 | 646.0 | 5 / 9 / 16 / 34 | 80.0 / 382.2 / 750.5 | 8.7 / 29.0 / 58.4 |
 
-Returning non-local schools already registered: 58 of the 2024 field, 66 of the 2025 field.
+Returning non-local schools already registered: 58 of the 2024 field, 67 of the 2025 field.
 
 2024/2025 gold or silver schools not registered yet: 上海交通大学 (2024 #9 gold, 2025 #3 gold); 中国科学技术大学 (2024 #43 silver); 南京大学 (2024 #21 silver, 2025 #15 silver); 南京邮电大学 (2025 #27 silver); 南开大学 (2025 #16 silver); 哈尔滨工业大学 (2024 #3 gold, 2025 #4 gold); 复旦大学 (2025 #2 gold); 广东以色列理工学院 (2024 #42 silver); 暨南大学 (2025 #29 silver); 浙江理工大学 (2024 #33 silver, 2024 #27 silver); 清华大学 (2025 #17 silver); 湘潭大学 (2025 #26 silver); 西安电子科技大学 (2024 #22 silver, 2025 #124 -).
 

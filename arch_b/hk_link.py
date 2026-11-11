@@ -34,7 +34,7 @@ SITES = ("hongkong", "macau")
 COMPOUND_SURNAMES = set("欧阳 司马 上官 诸葛 东方 皇甫 尉迟 公孙 慕容 长孙 宇文 司徒 夏侯 令狐 端木 "
                         "独孤 南宫 西门 申屠 轩辕 闻人 赫连 澹台 万俟 呼延".split())
 LOCAL = re.compile(r"hong kong|macau|macao", re.I)
-NOT_LOCAL = re.compile(r"shenzhen|guangzhou|united international", re.I)  # mainland campuses
+NOT_LOCAL = re.compile(r"shenzhen|guangzhou|dongguan|united international|beijing normal", re.I)  # mainland campuses
 
 
 def canon_person(s):
