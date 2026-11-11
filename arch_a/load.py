@@ -100,17 +100,19 @@ def _roster_token(members, season=None):
 
 
 def row_solved_any(standing, problem_labels=None):
-    """True if this row solved a problem included in the fit.
+    """True if this row belongs in the fit: it solved a problem, listed or not.
 
     Some QOJ standings contain labels that are absent from the contest's parsed
-    problem list.  Those cells cannot be modeled without inventing problem
-    metadata, so they must not by themselves retain a row as a solved team.
+    problem list.  Those cells cannot be modeled, but a solve there still shows
+    the team took part, so the row stays as a non-solve of the listed problems.
+    Keeping only rows that solved a *listed* problem would select rows on the
+    outcome being fitted (CCPC Harbin 2025 lists only M: 44 of 654 teams solved
+    it, and the old rule kept exactly those 44).  A contest that lists no
+    problem at all has no cells, so its rows are dropped.
     """
-    problems = standing.get("problems") or {}
-    if problem_labels is None:
-        return any(p.get("solved") for p in problems.values())
-    return any(p.get("solved") for label, p in problems.items()
-               if label in problem_labels)
+    if problem_labels is not None and not problem_labels:
+        return False
+    return any(p.get("solved") for p in (standing.get("problems") or {}).values())
 
 
 class _UnionFind:
@@ -328,10 +330,10 @@ def load(path=DATA_PATH, uf=None, season_key=False, min_solve_hours=None):
     needs the UCup and tagged datasets to agree on who is who). When omitted, the
     union-find is built from this call's own rows.
 
-    Standing rows that solved no listed problem are dropped (``row_solved_any``):
-    labels absent from a contest's parsed problem list are not part of the fit.
-    A team's contest count ``N_t`` is therefore the number of contests where it
-    solved something in the modeled problem set. ``uf`` is still built over
+    Standing rows that solved nothing are dropped (``row_solved_any``). A row
+    that solved only labels absent from the contest's parsed problem list stays,
+    as a non-solve of every listed problem. A team's contest count ``N_t`` is
+    therefore the number of contests where it solved something. ``uf`` is still built over
     *all* rows, so identity links carried only by a zero-solve row are preserved.
 
     ``season_key`` separates recurring rosters by ICPC season (``season_of``), so a

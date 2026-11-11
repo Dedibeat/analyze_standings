@@ -26,7 +26,7 @@ GROUPS = {
     "E": ("conditional_fit_se", "solve_rate", "log_field_size"),
     "T": ("log_median_solve_seconds", "timing_missing"),
 }
-CONTROL_DET_RMSE = 229.0324113  # + 2026 EC online rounds (2026-10-04); was 229.4028153
+CONTROL_DET_RMSE = 229.0340136  # loader keeps unlisted-solve rows (2026-11-11); was 229.0324113
 
 
 def bundle_features(bundle):

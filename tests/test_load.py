@@ -45,35 +45,41 @@ class LoadTest(unittest.TestCase):
         self.assertEqual(ds.obs_y.tolist(), [True, False, False])
         self.assertEqual(ds.participation_of_row, [(1, 0)])
 
-    def test_unknown_problem_solve_does_not_retain_row(self):
+    def _partial(self, problems):
         contest = {
             "contest_id": 2,
             "contest_name": "Partial metadata",
             "year": 2026,
             "region": "",
-            "problems": [
-                {"problem_id": 1, "problem_label": "A", "problem_name": "A",
-                 "problem_solved_in_contest": 0},
+            "problems": problems,
+            "standings": [
+                {"rank": 1, "team_id": "team-2", "team_name": "team-2", "members": [],
+                 "total_solved": 1,
+                 "problems": {"B": {"solved": True, "time_seconds": 100, "wrong_attempts": 0}}},
+                {"rank": 2, "team_id": "team-3", "team_name": "team-3", "members": [],
+                 "total_solved": 0,
+                 "problems": {"A": {"solved": False, "wrong_attempts": 2}}},
             ],
-            "standings": [{
-                "rank": 1,
-                "team_id": "team-2",
-                "team_name": "team-2",
-                "members": [],
-                "total_solved": 1,
-                "problems": {
-                    "B": {"solved": True, "time_seconds": 100,
-                          "wrong_attempts": 0},
-                },
-            }],
         }
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "contest.json"
             path.write_text(json.dumps([contest]))
-            ds = load(str(path))
+            return load(str(path))
 
-        self.assertEqual(len(ds.team_of_row), 0)
+    def test_unlisted_solve_retains_row_as_failure_of_listed_problems(self):
+        # team-2 solved only the unlisted B: it took part, so it failed the listed A.
+        # Dropping it would keep only rows that solved A (selection on the outcome).
+        ds = self._partial([{"problem_id": 1, "problem_label": "A", "problem_name": "A",
+                             "problem_solved_in_contest": 0}])
+        self.assertEqual(ds.participation_of_row, [(2, 0)])   # the zero-solve row is still dropped
+        self.assertEqual(ds.obs_y.tolist(), [False])
+        self.assertEqual(ds.field_count.tolist(), [1])
         self.assertEqual(len(ds.problems), 1)
+
+    def test_contest_without_listed_problems_keeps_no_rows(self):
+        ds = self._partial([])
+        self.assertEqual(len(ds.team_of_row), 0)
+        self.assertEqual(len(ds.teams), 0)
 
 
 if __name__ == "__main__":
