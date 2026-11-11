@@ -62,8 +62,12 @@ ability and problem-set means, and one CF map for problems and teams.
   engines (log loss 0.237 vs binary 0.252 and survival 0.278; rank-pair
   accuracy 80.7% vs 79.4% / 80.0%). The recorded-date forward replay is level
   on history pairs and better with member priors (+0.35 pp).
-- **Open issues:** a heavily cut board's level floats up (+52 at a quarter),
-  and EC online rounds read ~140 easier than DE.
+- **Open issues:** EC online rounds read ~140 easier than DE (a tail effect;
+  the hand panel sides with this fit). Weak, weakly linked boards read about
+  300 too hard by hand in both models (below).
+- **Re-measured 2026-11-10:** the cut-board level float is +11 (SE 7) over 8
+  random quarter cuts, not +52. What is real is tail compression (floor +196,
+  hard tail −129). σ_b = 600 is an interior optimum, not a grid edge.
 
 Settings are chosen without CF labels. Run
 `PYTHONUTF8=1 OPENBLAS_NUM_THREADS=1 ./.venv/Scripts/python -m arch_b.hier_binary all 10`
@@ -103,8 +107,27 @@ cells in those rows are treated as missing.
   - tiny NA boards have as few as 1–2 rows. Their shipped ratings are now
     flagged with `small_board` (below).
 
-Research only. Run `python -m arch_b.skip_cells 8` (~4 min, needs the
-`hier_binary` cache).
+- **Third and fourth tests (2026-11-10):** `skip_margin` and `skip_early` both
+  fail their pre-registered criteria. A fresh blind panel of 32 easy EC
+  problems confirms the sign-in fix: `base` +328 on the 16 most-solved,
+  `skip_partial` +155.
+
+Research only. Run `python -m arch_b.skip_cells 8` (a few minutes, needs the
+`hier_binary` cache). Every problem's rating under the preferred rule is in
+`output/skip_cells_ratings.json`.
+
+**Stable DE, continued (2026-11-10).** Six ideas were tested on the
+hierarchical candidate and none replaces the current setting; the scripts are
+in [scripts/stable_de_explore](scripts/stable_de_explore/README.md) and the
+record is the last entry of `details.md`. Two findings matter beyond the
+candidate:
+- **A loader bug affects 8 shipped ratings (not fixed yet).** On contests with
+  incomplete problem lists, only rows that solved a listed problem are kept.
+  CCPC Harbin 2025 M is shipped at 1947; with the dropped rows counted as
+  failures it is about 2805.
+- **Weak, weakly linked boards read too hard by hand.** Latin America 2023,
+  13 problems rated blind: DE +486, hierarchical +349. A simulation rules out
+  the estimator; settling it needs CF ratings of some of those teams.
 
 A [probability-course shortlist](prob_course_candidates.md) picks five main
 problems and four backups from the probability-tagged problems in

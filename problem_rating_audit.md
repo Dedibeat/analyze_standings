@@ -295,6 +295,60 @@ fits. The hand panel is unchanged, so the published scores stay reproducible.
 
   The frozen panel keeps 1100, so the skip tests stay comparable.
 
+## Third pass (2026-11-10)
+
+Scripts: `scripts/stable_de_explore/` (its `README.md` lists them). The old
+72-problem panel is unchanged.
+
+- **Fresh blind panel (`FRESH`, 32 problems).** The two most-solved problems
+  of 16 EC boards the old panel does not touch, rated from the statements
+  before any model number or solve count was seen.
+  - 16 most-solved: DE +276, base +328, `skip_partial` +155.
+  - 16 second most-solved: DE +195, base +194, `skip_partial` +155.
+  - One hand rating is wrong: Wuhan 2025 F "Divide and Conquer" (2200 by
+    hand) was solved by 779 of 835 rows. The panel stays frozen.
+- **Latin America 2023 (2574), all 13 problems, rated blind.** 383 rows, of
+  which 12 link to other boards.
+
+  | | hand | solved | DE | base | `skip_partial` |
+  |---|---|---|---|---|---|
+  | D Deciphering WordWhiz | 1100 | 379 | 1229 | 1183 | 998 |
+  | B Blackboard Game | 2200 | 225 | 1927 | 1906 | 1792 |
+  | I Inversions | 1300 | 179 | 2018 | 2021 | 1910 |
+  | M Meeting Point | 1750 | 158 | 2075 | 2075 | 1965 |
+  | F Forward and Backward | 1500 | 100 | 2255 | 2245 | 2133 |
+  | C Candy Rush | 1900 | 26 | 2743 | 2608 | 2502 |
+  | G GPS on a Flat Earth | 2500 | 23 | 2788 | 2636 | 2524 |
+  | J Journey of the Robber | 2400 | 17 | 2880 | 2703 | 2592 |
+  | H Health in Hazard | 2300 | 13 | 2964 | 2760 | 2650 |
+  | K Keen on Order | 2500 | 7 | 3126 | 2884 | 2783 |
+  | L Latam++ | 2300 | 7 | 3126 | 2884 | 2783 |
+  | A Analyzing Contracts | 3100 | 2 | 3369 | 3093 | 2993 |
+  | E Elevated Profits | 2700 | 2 | 3368 | 3093 | 2993 |
+  | bias / RMSE | | | +486 / 578 | +349 / 459 | +236 / 385 |
+
+  - B is a hand error in the other direction: 59% of the board solved it, so
+    it is not a 2200 problem.
+  - "Inversions" is a closed formula (N·inv(S) plus pair counts), at most
+    CF 1500 by hand, yet 53% of the board failed it and the models put it at
+    1910–2021. On the 2025 Northern Eurasia Finals, a board the fit puts
+    lower (board mean 1474 against 1643), CF 1300–1400 problems are solved
+    by 85–93%.
+  - The same gap as Mid-Atlantic 2024 (+316 base, +469 DE). Its cause is
+    open; see the last entry of `details.md`.
+- **Universal Cup Ōokayama L "Long Sequence Inversion 2" (1872 L).** A digit
+  counting problem with a Fenwick tree, about CF 2300 by hand; 62 of 68
+  solved, median solve at minute 100. Base 2269, DE 2494, `skip_partial`
+  **1699**: its six failures are partial rows of strong accounts that
+  submitted only harder problems, so the rule leaves it solved by everyone.
+- **CCPC Harbin 2025 M (2575 M).** Rated as solved by 44 of 44 because of a
+  loader bug; really 44 of 654. Shipped DE 1947, base 1847; about 2805 with
+  the dropped rows kept.
+- **Floors with CF labels.** Anchors labelled CF 800–1200 read +253 in the
+  hierarchical fit (n = 7). A problem solved by everyone on a strong board
+  lands about 700 below the board's weakest decile whatever its true level
+  (APAC 2026 K, CF 1300: 1639).
+
 ## Next steps
 
 1. ~~Evaluate a skipped-cell rule through the full protocol.~~ Done:

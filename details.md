@@ -8562,8 +8562,8 @@ Run: `PYTHONUTF8=1 python -m arch_b.calibrate`.
 **Request.** Continue the stable DE experiment: propose ideas, test them, check
 ratings by hand against statements, and chase unusual ratings. Research only;
 nothing shipped changed. Write-up of the skip tests: `skip_cells_report.md`
-(third and fourth tests). The other experiments ran from scratch scripts (not
-kept); their numbers are recorded here only.
+(third and fourth tests). The other experiments are the scripts in
+`scripts/stable_de_explore/`; their numbers are recorded in this entry.
 
 **Ideas tested on the hierarchical candidate.**
 
@@ -8618,6 +8618,39 @@ before any model number was seen. It confirms the sign-in inflation: `base`
     linking accounts under-perform there. It needs outside data: CF handles of
     some Latin American or Mid-Atlantic teams.
 
-**Not done.** The full test suite was not rerun (only `tests.test_skip_cells`,
-9 tests). README is unchanged. The simulation and the Latin America panel are
-not in the repository as code.
+**Code and checks.**
+- The exploratory scripts are kept in `scripts/stable_de_explore/` (25 files;
+  its `README.md` maps each script to its finding). They were ported from the
+  session's scratch folder; six were rerun from the repository root and
+  reproduce the numbers above (`base_fit`, `map_curvature`, `floor_anchors`,
+  `loader_unlisted_rows`, `problem_failures`, `float_seeds`). The other 19
+  were not rerun after the port.
+- The Latin America blind ratings are the `latam` dictionary in
+  `scripts/stable_de_explore/latam_*.py`; the table is in
+  `problem_rating_audit.md`.
+- Full suite: **234 tests pass** (system Python 3.11); 2 are new
+  (`skip_margin`, `skip_early`).
+
+**Hand-off: where to continue.**
+1. **Loader bug (decision needed).** Keep rows that solved only unlisted
+   problems as failures of the listed ones, or drop the 4 selected boards'
+   problems (2575 M; 1482 E, J, K, L; 1115 B, G; 1121 L). Either way
+   `arch_a/load.py` changes, so `data/de_stability_inputs.json` hashes, the
+   `test_unknown_problem_solve_does_not_retain_row` test, the shipped fit and
+   the app copy must follow. Check first:
+   `python scripts/stable_de_explore/loader_unlisted_rows.py`.
+2. **Weak-board level (open question).** Get CF handles for 20–30 Latin
+   American or Mid-Atlantic teams and compare their CF ability with the
+   fitted team ratings (`cf_prior.team_abilities` does this for the 54 elite
+   teams). That decides between "hand scale 300 low" and "level 300 high".
+3. **Skip rule.** `skip_partial` is still the preferred rule and is still not
+   folded into `hier_binary`'s defaults. Two panels have now shaped rules; a
+   fifth rule needs a third, untouched panel.
+4. **Not worth repeating:** σ_b above 600, per-board ability spread, a timing
+   term at the floor, a curved CF map, the stability penalty.
+5. **Still waiting on data:** CF-rated 2026 regionals for a fresh confirmation
+   (none were in the data on 2026-11-10); the 2026 EC online statements.
+
+Run the scripts from the repository root, `base_fit.py` first:
+`PYTHONUTF8=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=. ./.venv/Scripts/python scripts/stable_de_explore/base_fit.py`.
+Their caches go to the gitignored `hier_binary_run/explore/`.

@@ -298,6 +298,31 @@ tolerance 0.01, as in experiment 3.
 3. **Add an onsite-bridge context term** if online-round difficulties should
    be onsite-equivalent.
 
+## Update 2026-11-10
+
+Follow-up tests on this candidate; nothing above was rerun or reselected.
+Scripts: `scripts/stable_de_explore/`. Full record: the last entry of
+`details.md`.
+
+- **Weakness 1 is smaller than stated.** Over 8 fresh random quarter cuts the
+  mean drift is +11 (SE 7); the +52 of `quarter_reserved` was one draw. The
+  real effect is tail compression: problems over 95% solved +196, under 2%
+  solved −129, the middle +12…+31.
+- **σ_b = 600 is not a grid-edge artefact.** σ_b of 800, 1000, 1200 and 1600
+  are worse on both selection stages (log loss 0.23958 … 0.24002 vs 0.23931;
+  relative drift 0.137 … 0.161 vs 0.136).
+- **μ_c is not always the board's level.** On boards where every team has
+  many other boards it acts as a regression coefficient (Aobayama 4562
+  against a median ability of 2672). Team and problem ratings there are
+  unaffected. Do not read or export μ as a board level, and note that a
+  one-off team on such a board would get that μ as its prior mean.
+- **No gain from:** a per-board ability spread, a timing term at the floor,
+  or a curved CF map (the affine map is calibrated conditional on the
+  prediction, within ±35 between 1400 and 3400).
+- **Open:** weak, weakly linked boards read about 300 too hard by hand
+  (Latin America 2023 +349, Mid-Atlantic 2024 +316). A simulation on the real
+  design rules out the estimator.
+
 ## Reproduce
 
 ```bash
