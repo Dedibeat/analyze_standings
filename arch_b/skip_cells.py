@@ -21,6 +21,9 @@ Rules, frozen before any result of this module was seen:
   problems whose median solve time is at most EARLY_MINUTES (sign-in problems
   are solved early; an easiest problem that takes strong teams long is not one).
 
+- ``row_prior`` (added 2026-11-11, before its run): the ``skip_partial`` cells
+  with ``hier_binary.fit(row_prior=True)``, a model change, not a data rule.
+
 The hier_binary setting (sigma 300, tau 800, sigma_b 600, tau_b 400) is held
 fixed; nothing is reselected. Skip status is always recomputed from the cells a
 fit may use (training appearances, or a stability view's active rows).
@@ -45,7 +48,7 @@ from arch_a import elo
 from . import hier_binary as hb
 
 CFG = (300, 800, 600, 400)
-RULES = ("base", "skip_all", "skip_partial", "skip_mirror", "skip_margin", "skip_early")
+RULES = ("base", "skip_all", "skip_partial", "skip_mirror", "skip_margin", "skip_early", "row_prior")
 PARTIAL_MAX = 2
 MARGIN = 4.0
 EARLY_MINUTES = 60.0
@@ -64,7 +67,7 @@ def skipped(ds, cells, rule):
     hardest = np.full(len(ds.team_of_row), np.inf)
     np.minimum.at(hardest, row[y], solved[prob[y]])
     skip = ~tried & (solved[prob] > hardest[row])
-    if rule in ("skip_partial", "skip_mirror", "skip_margin", "skip_early"):
+    if rule in ("skip_partial", "skip_mirror", "skip_margin", "skip_early", "row_prior"):
         skip &= np.bincount(row[tried], minlength=len(ds.team_of_row))[row] <= PARTIAL_MAX
     if rule == "skip_mirror":
         skip &= ~ds.official_of_row[row]
@@ -86,10 +89,10 @@ def skipped(ds, cells, rule):
     return out
 
 
-def _fit(ds, keep, rows=None):
+def _fit(ds, keep, rows=None, rule=None):
     team = ds.team_of_row[ds.obs_row]
     return hb.fit(ds, obs=(team[keep], ds.obs_prob[keep], ds.obs_y[keep].astype(float)), rows=rows,
-                  **dict(zip(("sigma", "tau", "sigma_b", "tau_b"), CFG)))
+                  row_prior=rule == "row_prior", **dict(zip(("sigma", "tau", "sigma_b", "tau_b"), CFG)))
 
 
 def _team_job(job):
@@ -97,7 +100,7 @@ def _team_job(job):
     ds = hb._G["ds"]
     held = hb.appearance_split(ds, split)
     train = ~held[ds.obs_row]
-    res = _fit(ds, train & ~skipped(ds, train, rule))
+    res = _fit(ds, train & ~skipped(ds, train, rule), rule=rule)
     board_skip = skipped(ds, np.ones(len(ds.obs_y), bool), "skip_all")
     return job, {"all": hb.team_scores(ds, held, res["theta"], res["b"], "binary"),
                  "non_skipped": hb.team_scores(ds, held, res["theta"], res["b"], "binary", ~board_skip)}
@@ -119,8 +122,23 @@ def team_experiment(jobs):
             sc = {r: hb._np(raw[f"{split}:{r}"][subset]) for r in RULES}
             out[str(split)][subset] = {"summary": {r: hb.summarize(v) for r, v in sc.items()},
                                        **{f"{r}_minus_base": hb.paired_bootstrap(sc[r], sc["base"])
-                                          for r in RULES[1:]}}
+                                          for r in RULES[1:]},
+                                       "row_prior_minus_skip_partial": hb.paired_bootstrap(
+                                           sc["row_prior"], sc["skip_partial"]),
+                                       "row_prior_minus_skip_partial_cold_log_loss": _cold_bootstrap(
+                                           sc["row_prior"], sc["skip_partial"])}
     return out
+
+
+def _cold_bootstrap(a, b):
+    """Contest-resampled difference a - b of the cold-cell log loss: [point, 2.5%, 97.5%]."""
+    used = np.flatnonzero(a["cold"][:, 2] > 0)
+    rng = np.random.default_rng(hb.SEED)
+
+    def diff(idx):
+        return a["cold"][idx, 0].sum() / a["cold"][idx, 2].sum() - b["cold"][idx, 0].sum() / b["cold"][idx, 2].sum()
+    draws = [diff(used[rng.integers(0, len(used), len(used))]) for _ in range(hb.BOOT)]
+    return [float(diff(used)), float(np.percentile(draws, 2.5)), float(np.percentile(draws, 97.5))]
 
 
 def _view_job(view):
@@ -148,7 +166,7 @@ def _view_job(view):
     kept_teams = np.unique(ds.team_of_row[rows])
     fits = {}
     for rule in RULES[1:]:
-        res = _fit(ds, cells & ~skipped(ds, cells, rule), rows=active)
+        res = _fit(ds, cells & ~skipped(ds, cells, rule), rows=active, rule=rule)
         fits[rule] = {"b": res["b"][idx].tolist(), "theta": res["theta"][kept_teams].tolist()}
     return view, {"kept_anchor_rows": rows.tolist(), "kept_teams": kept_teams.tolist(), "fits": fits}
 
@@ -180,6 +198,8 @@ def view_experiment(jobs):
         for r in RULES[1:]:
             card["scorecard"][v][r]["rmse_minus_base"] = contest_bootstrap(
                 rows, np.array([x[r] for x in rows]), np.array([x["base"] for x in rows]), n=hb.BOOT)
+        card["scorecard"][v]["row_prior"]["rmse_minus_skip_partial"] = contest_bootstrap(
+            rows, np.array([x["row_prior"] for x in rows]), np.array([x["skip_partial"] for x in rows]), n=hb.BOOT)
     return card
 
 
@@ -203,7 +223,7 @@ def full_data(jobs_unused=None):
     ratings, out = {"de": de}, {"skipped_cells": {}, "maps": {}, "external_cf_teams": {}}
     for rule in RULES:
         skip = skipped(ds, every, rule)
-        res = _fit(ds, ~skip)
+        res = _fit(ds, ~skip, rule=rule)
         s, i = np.polyfit(res["b"][idx], cf, 1)
         ratings[rule] = np.clip(s * res["b"] + i, elo.LO, elo.HI)
         out["skipped_cells"][rule] = {"cells": int(skip.sum()), "rows": int(len(np.unique(ds.obs_row[skip])))}

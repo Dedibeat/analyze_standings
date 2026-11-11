@@ -42,8 +42,14 @@ MU0 = 2000.0
 
 
 def fit(ds, obs=None, rows=None, sigma=300.0, tau=800.0, sigma_b=600.0, tau_b=400.0,
-        eps=1e-3, max_newton=60, cg_tol=1e-4, cg_max=500):
+        eps=1e-3, max_newton=60, cg_tol=1e-4, cg_max=500, row_prior=False):
     """MAP fit; returns dict(theta, b, mu, nu, nu0, newton, cg, max_step).
+
+    ``row_prior`` replaces the team prior by one term per standings row,
+    ``sum_r (theta_t - mu_c(r))^2 / (2 sigma^2 n_t)``. It is the same function
+    of theta, plus the variance of mu over the team's boards, so each mu
+    becomes the 1/n_t-weighted mean ability of its board's teams (a level)
+    instead of a regression coefficient (skip_cells_report.md, fifth test).
 
     ``obs`` = (obs_team, obs_prob, obs_y) restricts the likelihood cells.
     ``rows`` is a boolean mask of standings rows that define each team's
@@ -60,6 +66,7 @@ def fit(ds, obs=None, rows=None, sigma=300.0, tau=800.0, sigma_b=600.0, tau_b=40
     p_c = np.asarray(ds.contest_of_problem)
     has_mu, has_nu = tau > 0, tau_b > 0
     cut = np.cumsum([n_t, n_p, n_c, n_c])
+    d_c = np.bincount(r_c, r_w, n_c)   # row_prior: each board's weight on its own mean
 
     def w_mu(mu):          # W @ mu: each team's mean board level
         out = np.bincount(r_t, r_w * mu[r_c], n_t)
@@ -82,6 +89,8 @@ def fit(ds, obs=None, rows=None, sigma=300.0, tau=800.0, sigma_b=600.0, tau_b=40
         m, mb = prior_means(mu, nu)
         f = np.sum(np.logaddexp(0.0, g) - y * g)
         f += np.sum((th - m) ** 2) / (2 * sigma ** 2) + np.sum((b - mb) ** 2) / (2 * sigma_b ** 2)
+        if has_mu and row_prior:
+            f += (np.sum(r_w * mu[r_c] ** 2) - np.sum(m[n_rows > 0] ** 2)) / (2 * sigma ** 2)
         if has_mu:
             f += np.sum((mu - MU0) ** 2) / (2 * tau ** 2)
         if has_nu:
@@ -100,14 +109,16 @@ def fit(ds, obs=None, rows=None, sigma=300.0, tau=800.0, sigma_b=600.0, tau_b=40
         grad = np.concatenate([
             np.bincount(team, resid, n_t) / S + rt / sigma ** 2,
             -np.bincount(prob, resid, n_p) / S + rb / sigma_b ** 2,
-            (-wt(rt) / sigma ** 2 + (mu - MU0) / tau ** 2) if has_mu else np.zeros(n_c),
+            (-(wt(th) - d_c * mu if row_prior else wt(rt)) / sigma ** 2 + (mu - MU0) / tau ** 2)
+            if has_mu else np.zeros(n_c),
             (-np.bincount(p_c, rb, n_c) / sigma_b ** 2 + (nu - nu0) / tau_b ** 2) if has_nu else np.zeros(n_c),
             [-np.sum(nu - nu0) / tau_b ** 2 if has_nu else 0.0]])
         w = pr * (1 - pr) / S ** 2
         diag = np.concatenate([
             np.bincount(team, w, n_t) + 1 / sigma ** 2,
             np.bincount(prob, w, n_p) + 1 / sigma_b ** 2,
-            (np.bincount(r_c, r_w ** 2, n_c) / sigma ** 2 + 1 / tau ** 2) if has_mu else np.ones(n_c),
+            ((d_c if row_prior else np.bincount(r_c, r_w ** 2, n_c)) / sigma ** 2 + 1 / tau ** 2)
+            if has_mu else np.ones(n_c),
             (np.bincount(p_c, None, n_c) / sigma_b ** 2 + 1 / tau_b ** 2) if has_nu else np.ones(n_c),
             [n_c / tau_b ** 2 if has_nu else 1.0]])
 
@@ -119,7 +130,7 @@ def fit(ds, obs=None, rows=None, sigma=300.0, tau=800.0, sigma_b=600.0, tau_b=40
             return np.concatenate([
                 np.bincount(team, u, n_t) + dt / sigma ** 2,
                 -np.bincount(prob, u, n_p) + db / sigma_b ** 2,
-                (-wt(dt) / sigma ** 2 + vm / tau ** 2) if has_mu else vm,
+                (-(wt(vt) - d_c * vm if row_prior else wt(dt)) / sigma ** 2 + vm / tau ** 2) if has_mu else vm,
                 (-np.bincount(p_c, db, n_c) / sigma_b ** 2 + (vn - vn0) / tau_b ** 2) if has_nu else vn,
                 [-np.sum(vn - vn0) / tau_b ** 2 if has_nu else vn0]])
 
@@ -343,7 +354,7 @@ def team_experiment(jobs):
 
 # ------------------------------------------------------- forward forecasts --
 
-def forward_experiment(cfg):
+def forward_experiment(cfg, row_prior=False):
     """Recorded-date replay (member_forecast panel): flat binary vs this fit."""
     from types import SimpleNamespace
     from . import member_forecast as mf, model
@@ -360,7 +371,7 @@ def forward_experiment(cfg):
         ds = SimpleNamespace(**vars(ds), contests=list(range(len(earlier))),
                              contest_of_problem=np.repeat(np.arange(len(earlier)), sizes))
         th_flat, _, _ = model.fit(ds, verbose=False, eps=mf.EPS, max_iter=400)
-        th_hb = fit(ds, **dict(zip(("sigma", "tau", "sigma_b", "tau_b"), cfg)))["theta"]
+        th_hb = fit(ds, row_prior=row_prior, **dict(zip(("sigma", "tau", "sigma_b", "tau_b"), cfg)))["theta"]
         latest = {}
         for b in sorted(earlier, key=lambda b: b["end"]):
             for r in b["rows"]:

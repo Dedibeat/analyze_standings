@@ -286,9 +286,106 @@ The rerun reproduced `base`, `skip_partial` and `skip_mirror` exactly.
   CF anchors labelled 800–1200 read +253 (n = 7), and a problem solved by
   everyone on a strong board lands about 700 below the board's weakest decile.
 
+## Fifth test: `row_prior`, a model change for the release (2026-11-11, pre-registered before its run)
+
+**Why.** `arch_b.hier_release` refuses to rate a team seen on one board only
+when that board's mean μ is more than 600 from the median ability of the
+board's own teams. The first release run failed that check for 23 teams on 3
+boards. The cause is the known "μ is a regression coefficient" effect: the
+team prior is θ ~ N(mean of μ over the team's boards, σ²), so on boards full
+of many-board teams the individual μ are barely identified (Aobayama 4602
+against a median ability of 2684; Universal Cup "Grand Prix of China" 2856
+against 2165, with 21 one-board teams).
+
+**Rule.** `row_prior` keeps the `skip_partial` cells and the frozen setting,
+and changes the team prior to one term per standings row:
+
+```text
+current:    (θ_t − mean_r μ_c(r))² / (2σ²)
+row_prior:  Σ_r (θ_t − μ_c(r))² / (2σ² n_t)        n_t = the team's rows
+```
+
+The two are equal for a one-board team, and equal as functions of θ. They
+differ by the variance of μ over a team's boards, so `row_prior` makes each μ
+the 1/n_t-weighted mean ability of the board's teams: a level, and the right
+prior mean for a team seen only there.
+
+**Seen before this was written** (full data only): the largest one-board gap
+falls from 753 to 386; μ of Aobayama is 2621; problem ratings move by SD 16
+(max 91); nested LOCO on the anchors is 229.7 against 227.6 for
+`skip_partial`. No held-out team score and no stability view was seen.
+
+**Criteria.** `row_prior` becomes the release model only if all hold, each
+against `skip_partial`:
+1. **Full-field CF RMSE:** the difference interval (paired contest bootstrap)
+   is not entirely above 0.
+2. **Team prediction:** on held-out appearances (splits 1 and 2), non-skipped
+   cells, the log-loss difference interval is not entirely above 0 on either
+   split. Cold cells (teams with no training appearance) are the target and
+   are reported separately.
+3. **Stability:** drift vs the full view is no larger than `skip_partial`'s
+   on at least 5 of the 8 reserved views that have a drift.
+4. **Release check:** the largest one-board gap is at most 600.
+
+### Result: `row_prior` passes all four and is the release model
+
+Run on the data after the loader fix (below).
+
+| Criterion (vs `skip_partial`) | `skip_partial` | `row_prior` |
+|---|---|---|
+| 1. full-field CF RMSE (DE 225.6) | 227.6 | 229.7, +2.1 [−1.6, +5.6] ✓ |
+| 2. log loss, non-skipped cells, split 1 / 2 | 0.22293 / 0.21992 | +0.4 [−18.4, +19.6] / +5.1 [−7.7, +20.8] ×10⁻⁴ ✓ |
+| 2. cold cells only (reported) | 0.2868 / 0.2792 | −15.6 [−66.4, +35.3] / −2.9 [−35.0, +37.7] ×10⁻⁴ |
+| 3. reserved views with drift ≤ `skip_partial` (of 8) | — | 6 ✓ (not the strong and weak halves) |
+| 4. largest one-board gap (limit 600) | 753 ✗ | 386 ✓ |
+
+- **What it buys.**
+  - μ is a level: Aobayama 4602 → 2621 (median ability 2684), "Grand Prix
+    of China" 2856 → 2208 (2165).
+  - Team ratings on a cut board move less: RMS 104 → 87 at a quarter,
+    159 → 133 at an eighth, 56 → 34 on the strong half.
+  - The level float shrinks: mean error +51 → +42 at a quarter, +64 → +49 at
+    an eighth.
+  - CF-rated teams (54): RMSE 219 → 217.
+- **What it costs** (none of these was a criterion):
+  - linked-team log loss is worse by 8.3 [2.8, 13.9] / 9.1 [3.4, 14.9] ×10⁻⁴;
+  - linked rank-pair accuracy is −0.07 pp [−0.20, +0.04] / −0.16 pp
+    [−0.27, −0.03];
+  - the weak half reads lower: mean error −18 → −43 (RMSE 333.6 → 336.3);
+  - the hand panel's strong European and weak North American groups move 25
+    further out (−248 → −273, +307 → +330); all-72 RMSE 225 → 233. The fresh
+    panel is unchanged (322 → 320).
+- **Problem ratings barely move:** SD 16 against `skip_partial`, largest
+  change 91.
+- **Forward replay** (not a criterion; no skip rule, since its panel has no
+  attempt counts): with the row prior the hierarchical fit is +0.17 pp
+  [−0.01, +0.44] on history pairs and +0.33 pp [+0.21, +0.50] with member
+  priors, against +0.10 and +0.35 with the old prior.
+
+### Rerun on the fixed loader (2026-11-11)
+
+Every rule was rerun after `arch_a.load` began keeping rows that solved only
+unlisted problems (658 rows on 4 boards). The earlier verdicts hold:
+
+| Rule | cells | CF RMSE − base | log loss − base, split 1 / 2 (×10⁻⁴) | drift ≤ base (of 8) |
+|---|---|---|---|---|
+| `skip_partial` | 2,717 | −1.9 [−5.4, +0.9] | −3.6 [−7.6, +0.5] / −5.0 [−8.2, −1.9] | 7 |
+| `skip_all` | 19,201 | −0.9 [−6.1, +3.9] | −0.8 / +4.1 | 2 |
+| `skip_mirror` | 2,074 | −2.0 [−5.3, +0.6] | −4.5 / −5.3 | 7 |
+| `skip_margin` | 1,293 | −2.0 [−5.2, +0.4] | −3.5 / −4.7 | 4 |
+| `skip_early` | 1,070 | −1.9 [−5.4, +0.7] | −4.7 / −5.4 | 6 |
+
+The appearance splits are drawn over rows, so they are new splits: the
+per-split numbers differ from the tables above and are not comparable cell
+for cell. Hand-panel scores are unchanged to the point.
+
+**Known limit of the partial rule.** A row's submission count sees listed
+problems only. On Greater New York 2023 (4 of 12 problems listed) 9 rows that
+submitted to unlisted problems count as partial, which drops 10 cells.
+
 Every problem's rating under `base`, `skip_partial` and DE is now written to
 `output/skip_cells_ratings.json`.
 
 Reproduce: `PYTHONUTF8=1 OPENBLAS_NUM_THREADS=1 ./.venv/Scripts/python -m arch_b.skip_cells 8`.
-It takes ~4 min with 8 workers and needs the `hier_binary all` view cache in
+It takes ~4 min with 8 workers (7 min with 4 for all seven rules) and needs the `hier_binary all` view cache in
 `hier_binary_run/`. Output: `output/skip_cells.json`.

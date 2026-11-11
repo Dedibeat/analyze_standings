@@ -32,7 +32,7 @@ The others were run only from the original scratch folder.
 | `floor_anchors.py` | — | CF anchors labelled 800–1200 read +253; all-solved problems land ~700 below the board's weakest decile. |
 | `floor_timing.py`, `map_curvature.py` | cache | A timing term at the floor and curved CF maps: no LOCO gain. |
 | `board_mu_extremes.py` | — | μ reaches 4562 on all-linker boards; it is not the board level. |
-| `loader_unlisted_rows.py` | — | **Loader bug:** with rows that solved only unlisted problems kept, CCPC Harbin 2025 M goes 1847 → 2805. |
+| `loader_unlisted_rows.py` | — | **Loader bug:** with rows that solved only unlisted problems kept, CCPC Harbin 2025 M goes 1847 → 2805. The loader was fixed on 2026-11-11, so both of its runs now print the fixed numbers. |
 | `solved_vs_reported.py`, `wf_mirror_rows.py` | — | Fitted vs QOJ solve counts; the World Finals gap is mirror rows. |
 | `scan_unusual.py`, `skip_partial_movers.py` | ratings | Largest model disagreements; every problem `skip_partial` lowers by ≥ 200, with solve times. |
 | `problem_failures.py CID:LABEL ...` | — | Who failed a problem: submissions, official flag, team rating, other solves. |

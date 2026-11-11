@@ -323,15 +323,82 @@ Scripts: `scripts/stable_de_explore/`. Full record: the last entry of
   (Latin America 2023 +349, Mid-Atlantic 2024 +316). A simulation on the real
   design rules out the estimator.
 
+## Update 2026-11-11: release candidate
+
+The loader bug is fixed (`arch_a.load` keeps rows that solved only unlisted
+problems; see `details.md`), and the whole experiment was rerun on the fixed
+data, including the DE stability views it compares against.
+
+**The rerun changes nothing material.**
+- The same setting is selected (σ 300, τ 800, σ_b 600, τ_b 400; 36 of 72
+  admissible; relative drift 0.136).
+- Full fields: 229.5 vs DE 225.6, +3.9 [−8.1, +14.5]. Every view's RMSE is
+  within 0.6 of the tables above, and every drift within 2.
+- Held-out appearances are new random splits, so the levels differ: log loss
+  0.2397 / 0.2372 against binary 0.2550 / 0.2523 and survival 0.2812 / 0.2793;
+  rank-pair accuracy 80.6% / 81.2% against 79.2% / 79.8% and 79.9% / 80.3%.
+  The differences are the same size as before (hierarchical − binary log loss
+  −0.0153 [−0.0218, −0.0090] / −0.0151 [−0.0208, −0.0099]).
+- Forward replay and the 54 CF-rated teams: unchanged (71.80% vs 71.45%;
+  RMSE 218).
+
+**Release model.** `arch_b/hier_release.py` is the fit meant for shipping. It
+adds two things to the selected setting, each tested in
+`skip_cells_report.md`:
+1. **`skip_partial`:** cells a partial row never submitted to, on problems
+   easier than its hardest solve, are missing (2,717 cells). This removes the
+   sign-in inflation (+387 → +148 on the hand panel; +154 in the release
+   fit).
+2. **`row_prior`:** the team prior has one term per standings row, which
+   makes each board mean μ the level of the board's own teams. It fixes the
+   "μ is not always the board's level" defect above: 23 teams seen on one
+   board only had a prior mean more than 600 away from that board's teams.
+   Problem ratings move by SD 16.
+
+| Release fit | value |
+|---|---|
+| CF map (problems and teams) | CF = 0.911 b + 441 |
+| anchors, nested LOCO RMSE | 229.7 (DE 225.6; `skip_partial` alone 227.6) |
+| difference to shipped DE, 3,185 problems | mean −13, SD 105; 69 differ by more than 300 |
+| problems on the 800 floor / 4000 ceiling | 6 / 0 |
+| largest one-board prior gap | 386 (limit 600) |
+| teams rated | 36,210 |
+
+**Outputs** (`python -m arch_b.hier_release`, about 20 s):
+- `output/problem_ratings_hier.json`: the record format of the shipped
+  `problem_ratings_calibrated.json` (`difficulty_cf`, `board_rows`,
+  `small_board`), plus `field_count` and `skipped_cells`. It has no
+  `difficulty_se`.
+- `output/team_ratings_hier.json`: every resolved team's rating on the same
+  map, with its most frequent name and its number of appearances. A team with
+  one appearance is mostly its board's level.
+- `output/hier_release.json`: setting, map, anchor accuracy, checks and input
+  hashes.
+
+**Not switched.** The viewer, the calculator and the app still read shipped
+DE through `calibrate.problem_cf`. Before switching:
+- the 2026 regionals' CF ratings are still the only fresh confirmation, and
+  none are in the data yet;
+- DE has the better full-field point estimate (by 4.1);
+- known release errors: 2025 EC Online II D (1235; 1650 by hand) and
+  Universal Cup Ōokayama L (1676; about 2300), both `skip_partial`
+  over-corrections; strong-board floors (EC-Final 2021 A);
+- EC online rounds read about 140 easier than DE, unverified either way;
+- weak, weakly linked boards read about 300 too hard by hand in both models.
+  The CPHoF data cannot settle it: it has one roster-complete Latin American
+  team.
+
 ## Reproduce
 
 ```bash
 PYTHONUTF8=1 OPENBLAS_NUM_THREADS=1 ./.venv/Scripts/python -m arch_b.hier_binary all 10
-./.venv/Scripts/python -m unittest tests.test_hier_binary
+PYTHONUTF8=1 OPENBLAS_NUM_THREADS=1 ./.venv/Scripts/python -m arch_b.hier_release
+./.venv/Scripts/python -m unittest tests.test_hier_binary tests.test_hier_release
 ```
 
 The run uses CPU NumPy. With 10 workers the whole run takes about 75 minutes
-on an i7-14700KF: 86 selection fits, 252 stage-2 fits, 16 views × 4 models,
+on an i7-14700KF (about 50 minutes with 4 workers in the 2026-11-11 cloud
+session): 86 selection fits, 252 stage-2 fits, 16 views × 4 models,
 26 forward fits. Intermediate results are cached under the gitignored
 `hier_binary_run/`. The stability stage reads `output/de_stability_evaluation.json`
 for DE's predictions on the same views.

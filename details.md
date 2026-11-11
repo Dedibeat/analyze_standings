@@ -309,6 +309,8 @@ Run with the project venv:
   only omitted labels were retained as censored non-solves of `M`. The fit now
   keeps the 44 rows that actually solved `M`; viewers use the same filter for
   performance-row alignment. A regression test covers this case.
+  **Reversed on 2026-11-11** (last entry): keeping only rows that solved a
+  listed problem selects on the outcome, so those rows are retained again.
 
 - **No year in the team key (decision on the multi-season `tagged.json`).**
   The larger `data/tagged.json` spans 5 seasons (2022–2026, 146 unique contests). We
@@ -8583,7 +8585,8 @@ before any model number was seen. It confirms the sign-in inflation: `base`
 (Wuhan 2025 F, 2200 by hand, solved by 93%).
 
 **Bugs and unusual ratings chased.**
-- **Loader selection bug (affects shipped ratings; not fixed).** 14 contests
+- **Loader selection bug (affects shipped ratings; fixed 2026-11-11, next
+  entry).** 14 contests
   have incomplete problem lists. `row_solved_any` keeps only rows that solved
   a *listed* problem, which selects on the outcome.
   - CCPC Harbin 2025 (2575) lists only M: the fit sees M as 44 of 44 solved,
@@ -8654,3 +8657,151 @@ before any model number was seen. It confirms the sign-in inflation: `base`
 Run the scripts from the repository root, `base_fit.py` first:
 `PYTHONUTF8=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=. ./.venv/Scripts/python scripts/stable_de_explore/base_fit.py`.
 Their caches go to the gitignored `hier_binary_run/explore/`.
+
+## Loader fix, re-release, and a hierarchical release candidate (2026-11-11)
+
+**Request.** Continue the last experiment, refine the hierarchical binary fit
+for shipping, and fix the documented bugs. Reports: `hier_binary_report.md`
+("Update 2026-11-11") and `skip_cells_report.md` (fifth test). Code:
+`arch_a/load.py`, `arch_b/hier_binary.py` (`row_prior`), `arch_b/skip_cells.py`
+(rule `row_prior`), new `arch_b/hier_release.py`; tests `tests/test_load.py`,
+`tests/test_hier_binary.py` (8), new `tests/test_hier_release.py` (5).
+
+**Bug 1: loader selection (fixed; shipped ratings changed).**
+- **Decision taken:** of the two options in the hand-off, rows that solved
+  only unlisted problems are kept as failures of the listed ones. The other
+  option, dropping the 8 affected problems, would have discarded their
+  ratings. A row with a solve took part, so its listed cells are real
+  non-solves; this is the rule every complete board already follows.
+- **Check before the change:** on Greater New York 2023 (4 of 12 labels
+  listed), 10 of the 44 unlisted-only rows have submissions on listed
+  problems, and all 53 listed-solvers also solved unlisted ones. It is one
+  board, not two divisions.
+- **Code:** `row_solved_any` returns true for any solve, and false when the
+  contest lists no problem (Pacific Northwest 2022, contest 1120, has none).
+  All ten callers follow, so viewer rows still align. This reverses the
+  "do not retain rows using unknown problem labels" decision above.
+- **Data:** 78,201 → 78,859 rows; 658 rows return on 4 boards (2575: 610;
+  1482: 44; 1115: 3; 1121: 1); the 10 rows of 1120 stay out. (The loader
+  commit's message says 668, which counts those 10.)
+- **Shipped fit rerun** with the usual release steps (`run`, `run --survival`,
+  `calibrate`, `export_viewer`, `export_virtual_calc`, `export_ucup_only`,
+  `medals`, `export_medal_viewer`, `metric`, `calibration_experiment
+  --baseline-only`):
+
+  | Problem | before | after | rows before → after |
+  |---|---|---|---|
+  | CCPC Harbin 2025 M | 1947 | 2806 | 44 → 654 |
+  | Greater New York 2023 K / E / J / L | 1900 / 2859 / 2208 / 2186 | 2053 / 3001 / 2328 / 2293 | 53 → 97 |
+  | Pacific Northwest 2022 L | 2055 | 1888 | 1 → 2 |
+  | Rocky Mountain 2022 B / G | 2192 / 2088 | 2112 / 2053 | 3 → 6 |
+
+  - 8 problems move by more than 20, 32 by more than 5; the mean change is
+    +0.5. DE still selects alpha 1, lambda 1.
+  - `metric` 244.8 (raw LOCO 246.7), all guards pass. 65 problems stay flagged
+    `small_board`.
+  - `ucup_only_ratings.json` now carries `board_rows` and `small_board` (it is
+    a filtered copy and had not been regenerated since the flag was added).
+- **Test pins moved:** `test_calibration_experiment` raw 246.6688, gym
+  244.7710; `calibration_ablation.CONTROL_DET_RMSE` 229.0340136.
+  `test_medal_predict` (Shanghai 2482.1) did not move.
+- **DE stability inputs refrozen.** `data/de_stability_anchors.json` holds the
+  anchor features of the new fit (largest change 1.5), and
+  `data/de_stability_inputs.json` the new hashes; `calibrate.py` was already
+  stale there since 11-09. `de_stability prepare` and `evaluate` were rerun
+  (43 s with 4 workers): clipped-DE LOCO is 225.61 again, and every view is
+  within 0.25 RMSE of the PC run.
+- **Not updated:** the app copy `../my-react-app/data/problem_rating.json`
+  (another repository), and the research artifacts that record their own runs.
+
+**Bug 2: `hk_gold.is_local` (fixed).** `hk_link.NOT_LOCAL` now also matches
+"Beijing Normal-Hong Kong Baptist University" (Zhuhai) and "City University of
+Hong Kong (Dongguan)". The 2025 Hong Kong board has 111 non-local teams (was
+110) and 67 returning registered schools (was 66). `hk_gold` and
+`hk_field_2026` outputs are regenerated; the 2024 → 2025 fitted values move in
+the third digit.
+
+**Older bug notes checked.** The three "pre-existing bugs" of 2026-09-27
+(XCPCIO official flag, Xi'an 2023 board link, EC-Final 2022 named "ICPC") were
+already fixed on 10-04 and 10-05. The cross-round rename issue of the online
+rounds is a known limit, not touched.
+
+**Hierarchical experiment rerun on the fixed data** (`hier_binary all 4`,
+about 50 minutes here; `skip_cells 4`, 7 minutes).
+- The same setting is selected: σ 300, τ 800, σ_b 600, τ_b 400.
+- Full fields 229.5 vs DE 225.6 (+3.9 [−8.1, +14.5]); every view within 0.6
+  RMSE and 2 drift points of the 11-05 run.
+- The appearance splits are drawn over rows, so they are new splits: log loss
+  0.2397 / 0.2372 (binary 0.2550 / 0.2523, survival 0.2812 / 0.2793).
+- Every skip-rule verdict holds; `skip_partial` is still 2,717 cells.
+
+**Release candidate: `arch_b.hier_release`.**
+- **What it is:** the selected setting with `skip_partial`, mapped to CF by
+  one affine map for problems and teams (CF = 0.911 b + 441).
+- **Outputs:** `output/problem_ratings_hier.json` (shipped record format plus
+  `field_count`, `skipped_cells`; no `difficulty_se`),
+  `output/team_ratings_hier.json` (36,210 teams), `output/hier_release.json`.
+- **Not switched:** `calibrate.problem_cf` still serves DE to every consumer.
+- **A release check found a defect.** The module refuses to rate a team seen
+  on one board only when that board's μ is more than 600 from the median
+  ability of the board's teams. The first run failed for 23 teams: "Grand
+  Prix of China" (μ 2856, median 2165, 21 one-board teams), "Northern" and a
+  Petrozavodsk day. This is the "μ is a regression coefficient" effect noted
+  on 11-10, and it reaches real team ratings.
+- **Fix: `row_prior`** (`hier_binary.fit(row_prior=True)`). The team prior
+  becomes Σ_r (θ_t − μ_c(r))² / (2σ² n_t), one term per row. It is the same
+  function of θ; it adds the variance of μ over a team's boards, so each μ is
+  the 1/n_t-weighted mean ability of its board's teams.
+- **Pre-registered test** (criteria written in `skip_cells_report.md` before
+  any held-out or stability result; against `skip_partial`):
+
+  | Criterion | Result |
+  |---|---|
+  | full-field CF RMSE interval not above 0 | +2.1 [−1.6, +5.6] ✓ (229.7 vs 227.6) |
+  | log loss on non-skipped held cells, both splits | +0.4 [−18.4, +19.6] / +5.1 [−7.7, +20.8] ×10⁻⁴ ✓ |
+  | drift ≤ `skip_partial` on ≥ 5 of 8 reserved views | 6 ✓ |
+  | largest one-board gap ≤ 600 | 386 ✓ (was 753) |
+
+  - Gains: team ratings on a cut board move 15–40% less (RMS 104 → 87 at a
+    quarter); the level float shrinks (+51 → +42 at a quarter); Aobayama's μ
+    is 2621 instead of 4602.
+  - Costs, none a criterion: linked-team log loss +8.3 / +9.1 ×10⁻⁴
+    (intervals exclude 0); linked rank-pair accuracy −0.07 / −0.16 pp; the
+    weak half's mean error −18 → −43; hand all-72 RMSE 225 → 233.
+  - Forward replay with the row prior: +0.17 pp [−0.01, +0.44] on history
+    pairs, +0.33 pp [+0.21, +0.50] with member priors (was +0.10 / +0.35).
+  - Problem ratings move by SD 16 (largest 91).
+- **Release numbers:** nested LOCO 229.7 (DE 225.6); against shipped DE mean
+  −13, SD 105, 69 problems differ by more than 300; 6 problems on the 800
+  floor; CCPC Harbin 2025 M 2792.
+
+**Weak-board question (hand-off item 2): still open.** The CPHoF file has one
+roster-complete Latin American team, and its 56 North American member rows
+are World-Finals-level teams. It needs handles collected from outside.
+
+**Limits.**
+- The partial rule counts submissions on listed problems only: 9 rows (10
+  cells) on Greater New York 2023 are treated as partial although they
+  submitted to unlisted problems.
+- `row_prior` was designed after the release check failed, on the same
+  development data as everything else. Its linked-team cost is real, if
+  small.
+- `output/hier_binary.json` reports the selected fit without `skip_partial`
+  and `row_prior`; the release numbers are in `output/skip_cells.json`
+  (rule `row_prior`) and `output/hier_release.json`.
+- `skip_margin` now prints a NumPy warning: rows with no listed solve have no
+  hardest solve. Those rows are never skipped, so results are unaffected.
+
+**Hand-off.**
+1. **Switching the shipped ratings** is one decision away: point
+   `calibrate.problem_cf` (and the app copy) at `problem_ratings_hier.json`.
+   Wait for CF-rated 2026 regionals, or accept development evidence only.
+2. **Team ratings in the viewer and calculator** still come from survival and
+   flat binary on the gym-shape map. `team_ratings_hier.json` is not wired in.
+3. **Copy the re-released DE file to the app** (`../my-react-app`).
+4. Weak-board level and the 2026 statements: as on 11-10.
+
+Run:
+`PYTHONUTF8=1 OPENBLAS_NUM_THREADS=1 python -m arch_b.hier_release` (20 s).
+Full suite: **242 tests pass** (Python 3.13, NumPy 2.5.1; `pypinyin` is
+needed for the Hong Kong tests).

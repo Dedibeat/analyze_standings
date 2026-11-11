@@ -80,6 +80,22 @@ class FitTest(unittest.TestCase):
         np.testing.assert_allclose(res["theta"][only_board1], hb.MU0, atol=1e-6)
 
 
+    def test_row_prior_makes_board_means_levels(self):
+        ds, _, _ = simulate(seed=6, linked=12)
+        res = hb.fit(ds, sigma=300, tau=800, row_prior=True)
+        # each mu is the 1/n_t-weighted mean ability of its board's teams, shrunk toward 2000
+        n = np.bincount(ds.team_of_row)[ds.team_of_row]
+        num = np.bincount(ds.contest_of_row, res["theta"][ds.team_of_row] / n) / 300 ** 2 + hb.MU0 / 800 ** 2
+        den = np.bincount(ds.contest_of_row, 1 / n) / 300 ** 2 + 1 / 800 ** 2
+        np.testing.assert_allclose(res["mu"], num / den, atol=0.01)
+
+    def test_row_prior_changes_nothing_without_linking_teams(self):
+        ds, _, _ = simulate(seed=7, linked=0)
+        a, b = hb.fit(ds), hb.fit(ds, row_prior=True)
+        for k in ("theta", "b", "mu"):
+            np.testing.assert_allclose(a[k], b[k], atol=0.01)
+
+
 class SplitAndScoreTest(unittest.TestCase):
     def test_split_holds_out_whole_appearances(self):
         ds, _, _ = simulate(seed=4)

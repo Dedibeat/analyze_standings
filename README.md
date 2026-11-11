@@ -72,7 +72,29 @@ ability and problem-set means, and one CF map for problems and teams.
 Settings are chosen without CF labels. Run
 `PYTHONUTF8=1 OPENBLAS_NUM_THREADS=1 ./.venv/Scripts/python -m arch_b.hier_binary all 10`
 (~75 min); results go to `output/hier_binary.json` and
-`output/hier_binary_ratings.json`.
+`output/hier_binary_ratings.json`. The whole experiment was rerun on
+2026-11-11 after the loader fix (below): same setting, same numbers within
+0.6 RMSE.
+
+**Hierarchical release candidate (2026-11-11).** `arch_b.hier_release` is the
+fit meant for shipping: the selected setting, the `skip_partial` data rule,
+and a row-level team prior (`row_prior`) that makes each board mean the level
+of the board's own teams. It writes ratings in the shipped record format but
+**does not replace shipped DE**; the viewer, calculator and app are unchanged.
+- **Outputs:** `output/problem_ratings_hier.json` (3,185 problems),
+  `output/team_ratings_hier.json` (36,210 teams on the same CF map) and
+  `output/hier_release.json` (map, accuracy, checks, hashes).
+- **Accuracy:** nested LOCO 229.7 on the CF anchors (DE 225.6). Against
+  shipped DE the problems differ by mean −13, SD 105.
+- **Why the new prior:** the release refused to rate 23 one-board teams whose
+  board mean sat 600+ from the board's teams. `row_prior` passed four
+  criteria fixed before its run (`skip_cells_report.md`, fifth test). It costs
+  about 0.0009 log loss on linked teams and moves problem ratings by SD 16.
+- **Before switching:** a fresh confirmation on CF-rated 2026 regionals is
+  still missing, and the known errors are listed in
+  [the report](hier_binary_report.md).
+
+Run `python -m arch_b.hier_release` (about 20 s).
 
 A [hand audit of problem ratings](problem_rating_audit.md) compares 72
 problems, rated by reading their statements and solutions, with both models.
@@ -121,10 +143,11 @@ hierarchical candidate and none replaces the current setting; the scripts are
 in [scripts/stable_de_explore](scripts/stable_de_explore/README.md) and the
 record is the last entry of `details.md`. Two findings matter beyond the
 candidate:
-- **A loader bug affects 8 shipped ratings (not fixed yet).** On contests with
-  incomplete problem lists, only rows that solved a listed problem are kept.
-  CCPC Harbin 2025 M is shipped at 1947; with the dropped rows counted as
-  failures it is about 2805.
+- **A loader bug affected 8 shipped ratings (fixed 2026-11-11).** On contests
+  with incomplete problem lists, only rows that solved a listed problem were
+  kept. Rows that solved only unlisted problems now stay as failures of the
+  listed ones, and the shipped fit was rerun: CCPC Harbin 2025 M goes
+  1947 → 2806. 8 problems move by more than 20 and 32 by more than 5.
 - **Weak, weakly linked boards read too hard by hand.** Latin America 2023,
   13 problems rated blind: DE +486, hierarchical +349. A simulation rules out
   the estimator; settling it needs CF ratings of some of those teams.
@@ -248,9 +271,10 @@ estimated `difficulty` on a Codeforces-like [800, 4000] scale) and prints
 verification stats. Standing rows that solved no problems are dropped before the
 fit (see the zero-solve decision in `details.md`). QOJ omits unattempted problem
 labels; the loader treats those cells as censored non-solves rather than dropping
-them from the likelihood. If a standings row contains a label absent from that
-contest's parsed problem list, that unknown solve is ignored for row retention
-because its problem metadata is unavailable.
+them from the likelihood. If a standings row solved only labels absent from that
+contest's parsed problem list, the row is kept as a non-solve of every listed
+problem: the unlisted cells cannot be rated, but dropping the row would keep
+only teams that solved a listed problem.
 
 `run` fits the full `data/tagged.json` **anchored to the Universal Cup scale**:
 it first fits the UCup seasons (`ucup_s3` + `ucup_s4`) on their own, then uses

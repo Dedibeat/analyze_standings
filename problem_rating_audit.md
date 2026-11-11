@@ -343,7 +343,8 @@ Scripts: `scripts/stable_de_explore/` (its `README.md` lists them). The old
   submitted only harder problems, so the rule leaves it solved by everyone.
 - **CCPC Harbin 2025 M (2575 M).** Rated as solved by 44 of 44 because of a
   loader bug; really 44 of 654. Shipped DE 1947, base 1847; about 2805 with
-  the dropped rows kept.
+  the dropped rows kept. **Fixed 2026-11-11:** shipped DE is now 2806, the
+  hierarchical release 2792.
 - **Floors with CF labels.** Anchors labelled CF 800–1200 read +253 in the
   hierarchical fit (n = 7). A problem solved by everyone on a strong board
   lands about 700 below the board's weakest decile whatever its true level

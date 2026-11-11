@@ -1,0 +1,70 @@
+{
+  "release_candidate": true,
+  "replaces_shipped": false,
+  "model": "hierarchical binary Rasch (hier_binary_report.md)",
+  "config": {
+    "sigma": 300,
+    "tau": 800,
+    "sigma_b": 600,
+    "tau_b": 400,
+    "row_prior": true
+  },
+  "data_rule": {
+    "name": "skip_partial",
+    "partial_max": 2,
+    "skipped_cells": 2717,
+    "rows": 1383
+  },
+  "map": {
+    "slope": 0.911036018800043,
+    "intercept": 440.8236984070773,
+    "applies_to": "problem difficulty and team ability"
+  },
+  "anchor_accuracy": {
+    "anchors": 185,
+    "contests": 15,
+    "fit_rmse": 225.87923566100915,
+    "loco_rmse": 229.721569462005,
+    "loco_mean_error": 0.7990764045672837,
+    "shipped_de_loco_rmse": 225.6065007139847
+  },
+  "fit": {
+    "newton_steps": 12,
+    "max_last_step": 5.82620524282179e-06,
+    "nu0": 2263.3302375759895,
+    "rows": 78859,
+    "teams": 36210,
+    "contests": 262
+  },
+  "problems": {
+    "count": 3185,
+    "at_floor": 6,
+    "at_ceiling": 0,
+    "small_board": 65
+  },
+  "versus_shipped_de": {
+    "mean": -12.943233908948201,
+    "sd": 105.31333097879644,
+    "over_300": 69
+  },
+  "checks": {
+    "largest_one_board_prior_gap": 386.27531758898203,
+    "limit": 600.0
+  },
+  "display": [
+    800.0,
+    4000.0,
+    "rounded to 0.1; team ratings are not clipped"
+  ],
+  "uncertainty": "unavailable",
+  "small_board": "board_rows < 10: rated from a handful of rows",
+  "inputs_sha256": {
+    "arch_b/hier_release.py": "15a2e05c2dc0c514aa3fecc5e305b504ee32e63e1d36994f605ca8d65e972146",
+    "arch_b/hier_binary.py": "03265a109aebe6c01dbd54009950c3d1bd9be9472cc6fafcd432d0505afbec43",
+    "arch_b/skip_cells.py": "3a37274b1d7fd0eb183c45fae1bb2976a4b1f7b90839adf2be339da1641227a3",
+    "arch_a/load.py": "77e1c9c3ad3e24a8146bf17d0172cc6972c39c8cf099c024d211fbb613c6117d",
+    "arch_b/joint.py": "3eb5208515a55444661723b6218598ce609764acb9d38b14e98fcf05c6ccf106",
+    "data/de_stability_anchors.json": "8d4bc2bb63d47ce00773822604c96ead751fef8a202ef60f57475aaabcce5388",
+    "data/tagged.json": "b12775cdafc6fe040d43c48319b26f031be02aed82c678f42052be327e903b91"
+  }
+}
