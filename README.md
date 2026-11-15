@@ -42,12 +42,102 @@ Reproduce with `./.venv/bin/python -m arch_b.member_forecast`. This is a
 retrospective roster replay, not fresh confirmation; shipped ratings are unchanged.
 
 [Four DE successor candidates](de_successors.md) are recorded. Candidate #2,
-[stability-penalized DE](de_stability_plan.md), is prepared for a home-PC run:
-install `requirements-de-stability.txt`, then use
-`python -m arch_b.de_stability check`, `prepare --jobs 2`, and `evaluate`.
-The plan gives complete commands. All inputs are tracked; CPU refits are
-resumable under `de_stability_run/`, and reserved stress views do not select
-settings. Only the full-view pipeline check has run here; results await the PC.
+[stability-penalized DE](de_stability_plan.md), has been run. The penalty adds
+nothing: beta = 0 is picked in 8 of 15 folds, CF RMSE is no better than ridge
+without the penalty, and drift falls by at most 2.2%. Resampling without the penalty
+fixes DE's mean shift on small or weak fields, but on full fields it loses 12
+RMSE to DE (237.8 vs 225.6). DE stays shipped. The scorecard is in
+`output/de_stability_evaluation.json`. To rerun: install
+`requirements-de-stability.txt`, then `python -m arch_b.de_stability check`,
+`prepare --jobs N` and `evaluate`. On Windows, check the frozen inputs out with
+LF line endings first (see `details.md`).
+
+[Hierarchical binary ratings](hier_binary_report.md) are the current DE rival
+(research only; nothing shipped changed). It is binary Rasch with board-level
+ability and problem-set means, and one CF map for problems and teams.
+- **Full fields:** CF RMSE 229.5 vs DE's 225.6 (+3.9 [−8.1, +14.5]).
+- **Field composition:** the strong and weak halves of a board end 1 point
+  apart in mean error (DE: 224). On the weak half, 333 vs 451.
+- **Teams:** held-out appearances are predicted better than by both shipped
+  engines (log loss 0.237 vs binary 0.252 and survival 0.278; rank-pair
+  accuracy 80.7% vs 79.4% / 80.0%). The recorded-date forward replay is level
+  on history pairs and better with member priors (+0.35 pp).
+- **Open issues:** EC online rounds read ~140 easier than DE (a tail effect;
+  the hand panel sides with this fit). Weak, weakly linked boards read about
+  300 too hard by hand in both models (below).
+- **Re-measured 2026-11-10:** the cut-board level float is +11 (SE 7) over 8
+  random quarter cuts, not +52. What is real is tail compression (floor +196,
+  hard tail −129). σ_b = 600 is an interior optimum, not a grid edge.
+
+Settings are chosen without CF labels. Run
+`PYTHONUTF8=1 OPENBLAS_NUM_THREADS=1 ./.venv/Scripts/python -m arch_b.hier_binary all 10`
+(~75 min); results go to `output/hier_binary.json` and
+`output/hier_binary_ratings.json`.
+
+A [hand audit of problem ratings](problem_rating_audit.md) compares 72
+problems, rated by reading their statements and solutions, with both models.
+It also reviews the worst CF anchors.
+- **Middle:** between 5% and 95% solved, both models are sound.
+- **Sign-in problems:** inflated on EC mirror-merged boards (hierarchical
+  +387, DE +209). The cause is mirror accounts that never submitted to a
+  problem being counted as failing it.
+- **EC online:** the 2025 rounds side with the hierarchical fit (bias +3 vs
+  DE +118).
+- **Anchors:** one mislabeled anchor, Uniform Chemistry (CF 3200, about 2000
+  by hand), is 16% of the anchor squared error.
+
+Run `PYTHONUTF8=1 ./.venv/Scripts/python -m scripts.problem_rating_audit`
+(~3 min) → `output/problem_rating_audit.json`.
+
+The audit's follow-up, [skipped cells as missing data](skip_cells_report.md),
+fixes the sign-ins in rows that submitted ≤ 2 problems. Unsubmitted easier
+cells in those rows are treated as missing.
+- **Result:** it passes its four pre-registered criteria. Sign-in bias falls
+  from +387 to +148, full-field CF RMSE is 227.6 vs 229.5, held-out log loss on
+  untouched cells is better, and reserved-view drift is no worse on 7 of 8.
+- **The broader all-rows version fails on stability.**
+- **A second test, `skip_mirror`,** also spares official registrations. It
+  fixes 2025 EC Online II D, where weak official teams really failed the
+  easiest problem (1211 → 1458, hand 1650). It fails the sign-in criterion,
+  though (+174), so `skip_partial` stays preferred.
+- **Other hand findings** are in the audit's follow-up section:
+  - strong-board floors read high in the hierarchical fit (EC-Final 2021
+    "DFS Order" 1676 vs ~1200 by hand);
+  - no rating-order inversions;
+  - tiny NA boards have as few as 1–2 rows. Their shipped ratings are now
+    flagged with `small_board` (below).
+
+- **Third and fourth tests (2026-11-10):** `skip_margin` and `skip_early` both
+  fail their pre-registered criteria. A fresh blind panel of 32 easy EC
+  problems confirms the sign-in fix: `base` +328 on the 16 most-solved,
+  `skip_partial` +155.
+
+Research only. Run `python -m arch_b.skip_cells 8` (a few minutes, needs the
+`hier_binary` cache). Every problem's rating under the preferred rule is in
+`output/skip_cells_ratings.json`.
+
+**Stable DE, continued (2026-11-10).** Six ideas were tested on the
+hierarchical candidate and none replaces the current setting; the scripts are
+in [scripts/stable_de_explore](scripts/stable_de_explore/README.md) and the
+record is the last entry of `details.md`. Two findings matter beyond the
+candidate:
+- **A loader bug affects 8 shipped ratings (not fixed yet).** On contests with
+  incomplete problem lists, only rows that solved a listed problem are kept.
+  CCPC Harbin 2025 M is shipped at 1947; with the dropped rows counted as
+  failures it is about 2805.
+- **Weak, weakly linked boards read too hard by hand.** Latin America 2023,
+  13 problems rated blind: DE +486, hierarchical +349. A simulation rules out
+  the estimator; settling it needs CF ratings of some of those teams.
+
+A [probability-course shortlist](prob_course_candidates.md) picks five main
+problems and four backups from the probability-tagged problems in
+`data/tagged.json`: discrete probability only, each with its core trick, a
+paper version and the answer. [prob_course_problems.tex](prob_course_problems.tex)
+writes all nine up in LaTeX: each is one question resting on one key idea,
+followed by its solution and a remark with extensions. The compiled
+[PDF](prob_course_problems.pdf) is committed.
+Rebuild it with `pdflatex prob_course_problems.tex` (run twice for the table
+of contents).
 
 The [2026-09-05 experiment review](experiment_review.md) records the audit that
 found held-out-label leakage, incorrect rank/AUC tie handling, incomplete
@@ -299,7 +389,13 @@ affine. `arch_b.calibrate` writes
 `output/problem_ratings_calibrated.json` (`difficulty_cf` in [800, 4000]; **no
 uncertainty field** — the old gym-map SEs do not describe DE) and
 `output/problem_calibration.json` (settings, anchor feature ranges, input
-hashes). The viewer, virtual calculator and UCup-only export read problem
+hashes).
+- **Small-board flag** (since 2026-11-09): each record also carries
+  `board_rows`, the board's rows with at least one solve.
+- **`small_board`** is true when `board_rows` < 10:
+  - that is 65 problems on 10 small North American boards, some with a single
+    row;
+  - treat their `difficulty_cf` as unreliable. The viewer, virtual calculator and UCup-only export read problem
 ratings from that file (`calibrate.problem_cf`), so all consumers agree.
 
 DE needs per-problem features, so it cannot map a team ability. Team
@@ -944,6 +1040,40 @@ Details: `details.md` (2026-10-12, third entry).
     curve (345 in sample, 435–480 out of sample, so 400 stands).
 
 Details: `details.md` (2026-10-13, both entries).
+
+### CCPC sets ranked by problem difficulty (2026-10-18)
+
+```bash
+python3 scripts/ccpc_difficulty_rank.py   # writes output/ccpc_difficulty_rank.md
+```
+
+19 CCPC sets, hardest first: fewest problems rated ≤ 2400 CF, ties by a
+2400-rated team's expected solves. Ranks and verdicts only, so nothing is
+spoiled.
+
+- **Which sets.** 9 sets have full shipped ratings. 10 more stations are rated
+  from their onsite XCPCIO boards: the 2022–2023 stations, 10th Chongqing and
+  11th Harbin. Their onsite teams are linked to fitted teams by shared
+  members, and each problem is rated with those abilities held fixed, then
+  mapped onto the shipped scale. The fit and the shipped ratings are
+  unchanged.
+- **Comparison.** Each set is compared with the mainland ICPC regionals of
+  2023–2025 at bronze, silver and gold, in two ways:
+  - **Medal:** is the last medallist's performance higher? Yes at every tier
+    for almost every station. 11th Harbin is the same as a regional, and
+    10th Chongqing is the same at bronze and silver. The finals and the 2017
+    set have no onsite board.
+  - **Problems only:** does a team at that tier's regional line need more
+    rating to solve as much? The two finals, Guangzhou 2022, both Zhengzhou
+    sets and Jinan 2025 are harder at every tier.
+- **The easy sets** have easier problems at every tier: 10th Chongqing
+  (2024), 8th Weihai (2022), 11th Harbin (2025), 10th Harbin (2024) and
+  Qinhuangdao 2017.
+- **Check.** Held out of the fit, the onsite method reproduces the shipped
+  ratings of the six rated stations in set-level terms, with the same
+  order.
+
+Details: `details.md` (2026-10-18 entry and its follow-up).
 
 ### Interactive viewer
 

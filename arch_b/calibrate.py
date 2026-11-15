@@ -40,7 +40,8 @@ it is undefined for an arbitrary ability.
 
 Writes output/problem_ratings_calibrated.json (the survival records plus
 ``difficulty_cf``, clipped to [800, 4000]; no uncertainty field, since the old
-gym-map SEs do not describe DE and DE has none of its own) and
+gym-map SEs do not describe DE and DE has none of its own; ``board_rows``, the
+board's rows with a solve, and ``small_board``, true below SMALL_BOARD_ROWS) and
 output/problem_calibration.json (the DE settings, anchor feature ranges and
 input hashes). Consumers read problem ratings from that file via
 ``problem_cf``, never from their own refit.
@@ -64,6 +65,7 @@ OUT = os.path.join(os.path.dirname(__file__), os.pardir, "output")
 NBINS = 15    # quantile bins of the gym shape
 ALPHA = 0.75  # shape shrinkage toward its own linear approximation
 EXCLUDE_QOJ = {2692}  # gym contests that are also CF anchor contests
+SMALL_BOARD_ROWS = 10  # fewer rows with a solve than this -> small_board flag
 
 MODELS = [("arch A", "problem_ratings.json"),
           ("arch B binary", "problem_ratings_b.json"),
@@ -194,7 +196,7 @@ def main():
     # DE (de_release_audit.md): residual ridge on raw survival b with
     # binary-minus-survival, conditional SE, solve rate and log field size,
     # features clipped to the anchor range; alpha/lambda chosen on inner folds.
-    from .calibration_experiment import _full_rows, build_anchor_table
+    from .calibration_experiment import _full_rows, _raw_problem_features, build_anchor_table
     from .de_release_audit import DE, full_anchor_fit  # imports this module; keep it lazy
     paths = {m: os.path.join(OUT, f"problem_ratings_{m}.json") for m in ("survival", "b")}
     records, binary = (json.load(open(paths[m], encoding="utf-8")) for m in ("survival", "b"))
@@ -202,8 +204,11 @@ def main():
     pred, (alpha, lam) = full_anchor_fit(anchors, _full_rows(records, binary), "clip", DE)
     if not np.isfinite(pred).all():
         raise RuntimeError("non-finite DE prediction")
+    evidence = _raw_problem_features()
     for r, p in zip(records, pred):
         r["difficulty_cf"] = round(float(np.clip(p, elo.LO, elo.HI)), 1)
+        r["board_rows"] = evidence[(int(r["contest_id"]), r["problem_label"])][1]
+        r["small_board"] = r["board_rows"] < SMALL_BOARD_ROWS
     out = os.path.join(OUT, "problem_ratings_calibrated.json")
     with open(out, "w") as f:
         json.dump(records, f, indent=2, ensure_ascii=False)
@@ -216,6 +221,8 @@ def main():
                                      for f in DE},
             "display": [elo.LO, elo.HI, "rounded to 0.1"],
             "uncertainty": "unavailable",
+            "small_board": f"board_rows < {SMALL_BOARD_ROWS}: rated from a handful of rows; "
+                           "treat difficulty_cf as unreliable (problem_rating_audit.md)",
             "inputs_sha256": {os.path.basename(p): hashlib.sha256(open(p, "rb").read()).hexdigest()
                               for p in paths.values()}}
     with open(os.path.join(OUT, "problem_calibration.json"), "w") as f:

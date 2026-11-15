@@ -195,11 +195,11 @@ def even_odds_by_regional(pairs):
     return out
 
 
-def performance(cids):
+def performance(cids, fit=None):
     """perf(QOJ id, solved, penalty minutes): CF performance of that onsite result placed in the
     QOJ board, ranked within the event's own rows when the board also holds mirror rows
-    (``ev.event_field``)."""
-    _, theta, to_cf, row_lookup = ev.performance_fit()
+    (``ev.event_field``).  ``fit`` reuses an ``ev.performance_fit()`` result."""
+    _, theta, to_cf, row_lookup = fit or ev.performance_fit()
     raw = []
     for path in [TAGGED] + list(UCUP):
         with open(path, encoding="utf-8") as f:

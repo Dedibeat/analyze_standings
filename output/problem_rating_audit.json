@@ -1,0 +1,1213 @@
+{
+ "research_only": true,
+ "sha256": {
+  "arch_b/hier_binary.py": "c15b1aed165d2aba8ec333f674e332b6d152d26fc3cd8be6784a5dcbc87cd50f",
+  "data/tagged.json": "b12775cdafc6fe040d43c48319b26f031be02aed82c678f42052be327e903b91",
+  "data/de_stability_anchors.json": "3a604c6f42fefd8a9714154c241b14b428b6f1681798a5aa786369d6c73ef06e",
+  "data/cf_mirror_solves.json": "0a5961fb14fc28bbf3b08afbeddb72423b84e6f3dac35bcd21f09eb376df6fd8",
+  "output/hier_binary.json": "0145514091197903f58d260b692d6b8636997f5d3454b54070f116cc3a430df9"
+ },
+ "skipped_cells": {
+  "cells": 991268,
+  "skipped": 19201,
+  "rows": 12583
+ },
+ "maps": {
+  "hb": [
+   0.9069420134703605,
+   515.0620266043758
+  ],
+  "hb_skip_missing": [
+   0.8673118204824254,
+   618.2697857882247
+  ]
+ },
+ "in_sample_anchor_rmse": {
+  "de": 213.1,
+  "hb": 225.7,
+  "hb_skip_missing": 224.9
+ },
+ "hand_scores": {
+  "anchor": {
+   "n": 3,
+   "de": {
+    "bias": 13.4,
+    "rmse": 51.9
+   },
+   "hb": {
+    "bias": 105.4,
+    "rmse": 146.7
+   },
+   "hb_skip_missing": {
+    "bias": 134.6,
+    "rmse": 185.1
+   }
+  },
+  "ec_online": {
+   "n": 22,
+   "de": {
+    "bias": 117.5,
+    "rmse": 168.1
+   },
+   "hb": {
+    "bias": 3.0,
+    "rmse": 114.9
+   },
+   "hb_skip_missing": {
+    "bias": -31.0,
+    "rmse": 140.2
+   }
+  },
+  "ec_regional": {
+   "n": 13,
+   "de": {
+    "bias": 184.9,
+    "rmse": 222.8
+   },
+   "hb": {
+    "bias": 153.1,
+    "rmse": 176.7
+   },
+   "hb_skip_missing": {
+    "bias": 119.2,
+    "rmse": 201.0
+   }
+  },
+  "ec_signin": {
+   "n": 18,
+   "de": {
+    "bias": 209.3,
+    "rmse": 272.7
+   },
+   "hb": {
+    "bias": 387.2,
+    "rmse": 447.9
+   },
+   "hb_skip_missing": {
+    "bias": 70.6,
+    "rmse": 184.9
+   }
+  },
+  "strong_eu": {
+   "n": 5,
+   "de": {
+    "bias": -171.2,
+    "rmse": 207.3
+   },
+   "hb": {
+    "bias": -257.0,
+    "rmse": 289.7
+   },
+   "hb_skip_missing": {
+    "bias": -221.4,
+    "rmse": 248.8
+   }
+  },
+  "weak_na": {
+   "n": 11,
+   "de": {
+    "bias": 469.2,
+    "rmse": 536.0
+   },
+   "hb": {
+    "bias": 315.5,
+    "rmse": 369.3
+   },
+   "hb_skip_missing": {
+    "bias": 287.3,
+    "rmse": 336.5
+   }
+  },
+  "all": {
+   "n": 72,
+   "de": {
+    "bias": 182.0,
+    "rmse": 288.4
+   },
+   "hb": {
+    "bias": 160.1,
+    "rmse": 295.6
+   },
+   "hb_skip_missing": {
+    "bias": 63.8,
+    "rmse": 211.8
+   }
+  }
+ },
+ "hand": [
+  {
+   "contest_id": 1096,
+   "label": "D",
+   "hand": 800,
+   "group": "ec_signin",
+   "why": "count T vs D in 5 letters",
+   "de": 858.1,
+   "hb": 1202.9,
+   "hb_skip_missing": 911.1
+  },
+  {
+   "contest_id": 1440,
+   "label": "F",
+   "hand": 800,
+   "group": "ec_signin",
+   "why": "majority string",
+   "de": 1117.8,
+   "hb": 1431.0,
+   "hb_skip_missing": 1177.7
+  },
+  {
+   "contest_id": 1093,
+   "label": "I",
+   "hand": 800,
+   "group": "ec_signin",
+   "why": "n minus max letter count",
+   "de": 1086.8,
+   "hb": 1352.1,
+   "hb_skip_missing": 992.8
+  },
+  {
+   "contest_id": 1472,
+   "label": "D",
+   "hand": 900,
+   "group": "ec_signin",
+   "why": "range >= 10 gives 9, else brute force",
+   "de": 1281.0,
+   "hb": 1491.6,
+   "hb_skip_missing": 1067.9
+  },
+  {
+   "contest_id": 2562,
+   "label": "G",
+   "hand": 1100,
+   "group": "ec_signin",
+   "why": "sort, simulate both orders",
+   "de": 1205.7,
+   "hb": 1489.1,
+   "hb_skip_missing": 884.3
+  },
+  {
+   "contest_id": 1197,
+   "label": "M",
+   "hand": 1200,
+   "group": "ec_signin",
+   "why": "simple greedy on a cycle",
+   "de": 1327.0,
+   "hb": 1608.3,
+   "hb_skip_missing": 1218.4
+  },
+  {
+   "contest_id": 2581,
+   "label": "C",
+   "hand": 850,
+   "group": "ec_signin",
+   "why": "n even -> n/2, n/2; odd impossible",
+   "de": 1198.3,
+   "hb": 1433.4,
+   "hb_skip_missing": 925.9
+  },
+  {
+   "contest_id": 1865,
+   "label": "J",
+   "hand": 800,
+   "group": "ec_signin",
+   "why": "simulate an 8-team bracket",
+   "de": 1202.1,
+   "hb": 1382.0,
+   "hb_skip_missing": 1007.3
+  },
+  {
+   "contest_id": 1821,
+   "label": "L",
+   "hand": 900,
+   "group": "ec_signin",
+   "why": "construct 100 values",
+   "de": 1310.3,
+   "hb": 1478.8,
+   "hb_skip_missing": 949.1
+  },
+  {
+   "contest_id": 1449,
+   "label": "C",
+   "hand": 850,
+   "group": "ec_signin",
+   "why": "small case analysis",
+   "de": 1345.6,
+   "hb": 1501.1,
+   "hb_skip_missing": 1081.4
+  },
+  {
+   "contest_id": 2641,
+   "label": "I",
+   "hand": 900,
+   "group": "ec_signin",
+   "why": "balloon rules simulation",
+   "de": 1220.9,
+   "hb": 1369.7,
+   "hb_skip_missing": 847.7
+  },
+  {
+   "contest_id": 1071,
+   "label": "F",
+   "hand": 850,
+   "group": "ec_signin",
+   "why": "substring 'bie' with dedup",
+   "de": 1195.8,
+   "hb": 1342.6,
+   "hb_skip_missing": 1189.7
+  },
+  {
+   "contest_id": 1051,
+   "label": "J",
+   "hand": 1000,
+   "group": "ec_signin",
+   "why": "at most two elements can be chosen",
+   "de": 1034.9,
+   "hb": 1224.5,
+   "hb_skip_missing": 1067.4
+  },
+  {
+   "contest_id": 1053,
+   "label": "K",
+   "hand": 1200,
+   "group": "ec_signin",
+   "why": "count descents of the inverse",
+   "de": 1183.2,
+   "hb": 1342.9,
+   "hb_skip_missing": 974.4
+  },
+  {
+   "contest_id": 1485,
+   "label": "L",
+   "hand": 800,
+   "group": "ec_signin",
+   "why": "max(2, ceil) formula",
+   "de": 837.7,
+   "hb": 935.2,
+   "hb_skip_missing": 829.3
+  },
+  {
+   "contest_id": 1794,
+   "label": "M",
+   "hand": 800,
+   "group": "ec_signin",
+   "why": "count distinct solvers",
+   "de": 1015.6,
+   "hb": 1065.1,
+   "hb_skip_missing": 926.5
+  },
+  {
+   "contest_id": 1799,
+   "label": "F",
+   "hand": 800,
+   "group": "ec_signin",
+   "why": "simulate rating",
+   "de": 800.0,
+   "hb": 800.0,
+   "hb_skip_missing": 800.0
+  },
+  {
+   "contest_id": 2513,
+   "label": "G",
+   "hand": 1050,
+   "group": "ec_signin",
+   "why": "every adjacent comparator present",
+   "de": 946.4,
+   "hb": 919.0,
+   "hb_skip_missing": 820.5
+  },
+  {
+   "contest_id": 2513,
+   "label": "B",
+   "hand": 1100,
+   "group": "ec_online",
+   "why": "leave a contiguous block",
+   "de": 1437.8,
+   "hb": 1317.2,
+   "hb_skip_missing": 1262.6
+  },
+  {
+   "contest_id": 2513,
+   "label": "A",
+   "hand": 1600,
+   "group": "ec_online",
+   "why": "freeze best/worst case implementation",
+   "de": 1678.6,
+   "hb": 1610.2,
+   "hb_skip_missing": 1587.5
+  },
+  {
+   "contest_id": 2513,
+   "label": "I",
+   "hand": 1850,
+   "group": "ec_online",
+   "why": "Dijkstra on (bags, load)",
+   "de": 1819.0,
+   "hb": 1730.1,
+   "hb_skip_missing": 1710.3
+  },
+  {
+   "contest_id": 2513,
+   "label": "M",
+   "hand": 2050,
+   "group": "ec_online",
+   "why": "n layers of tree relaxation",
+   "de": 2066.5,
+   "hb": 2072.0,
+   "hb_skip_missing": 2046.2
+  },
+  {
+   "contest_id": 2513,
+   "label": "D",
+   "hand": 2150,
+   "group": "ec_online",
+   "why": "tree DP, +a/-a states",
+   "de": 2204.3,
+   "hb": 2221.9,
+   "hb_skip_missing": 2194.6
+  },
+  {
+   "contest_id": 2513,
+   "label": "C",
+   "hand": 2250,
+   "group": "ec_online",
+   "why": "greedy matching of intervals to gaps",
+   "de": 2317.8,
+   "hb": 2311.1,
+   "hb_skip_missing": 2290.4
+  },
+  {
+   "contest_id": 2513,
+   "label": "J",
+   "hand": 2500,
+   "group": "ec_online",
+   "why": "rotate, window inclusion-exclusion",
+   "de": 2694.4,
+   "hb": 2615.1,
+   "hb_skip_missing": 2585.5
+  },
+  {
+   "contest_id": 2513,
+   "label": "F",
+   "hand": 2900,
+   "group": "ec_online",
+   "why": "interactive trapping construction",
+   "de": 2959.3,
+   "hb": 2804.5,
+   "hb_skip_missing": 2789.8
+  },
+  {
+   "contest_id": 2513,
+   "label": "H",
+   "hand": 3100,
+   "group": "ec_online",
+   "why": "grid cut with rectangle penalties",
+   "de": 3294.2,
+   "hb": 3042.6,
+   "hb_skip_missing": 3015.4
+  },
+  {
+   "contest_id": 2513,
+   "label": "K",
+   "hand": 3200,
+   "group": "ec_online",
+   "why": "Lagrange inversion, many queries",
+   "de": 3359.7,
+   "hb": 3089.4,
+   "hb_skip_missing": 3072.5
+  },
+  {
+   "contest_id": 2513,
+   "label": "L",
+   "hand": 3400,
+   "group": "ec_online",
+   "why": "3 solvers; hard DS DP",
+   "de": 3780.5,
+   "hb": 3437.7,
+   "hb_skip_missing": 3439.4
+  },
+  {
+   "contest_id": 2524,
+   "label": "D",
+   "hand": 1650,
+   "group": "ec_online",
+   "why": "sort, power-of-two coefficients",
+   "de": 1603.7,
+   "hb": 1471.5,
+   "hb_skip_missing": 1213.0
+  },
+  {
+   "contest_id": 2524,
+   "label": "C",
+   "hand": 1700,
+   "group": "ec_online",
+   "why": "Hall-type bound for 3 students",
+   "de": 1735.4,
+   "hb": 1661.7,
+   "hb_skip_missing": 1646.2
+  },
+  {
+   "contest_id": 2524,
+   "label": "E",
+   "hand": 2000,
+   "group": "ec_online",
+   "why": "XOR-zero counting recurrence",
+   "de": 1994.7,
+   "hb": 1968.5,
+   "hb_skip_missing": 1939.1
+  },
+  {
+   "contest_id": 2524,
+   "label": "H",
+   "hand": 2100,
+   "group": "ec_online",
+   "why": "pairs (u,v) x derangements",
+   "de": 2136.8,
+   "hb": 2137.2,
+   "hb_skip_missing": 2108.5
+  },
+  {
+   "contest_id": 2524,
+   "label": "I",
+   "hand": 2100,
+   "group": "ec_online",
+   "why": "polynomial interpolation in c",
+   "de": 2282.5,
+   "hb": 2288.0,
+   "hb_skip_missing": 2265.5
+  },
+  {
+   "contest_id": 2524,
+   "label": "J",
+   "hand": 2500,
+   "group": "ec_online",
+   "why": "complete multipartite diameter pairs",
+   "de": 2597.2,
+   "hb": 2547.9,
+   "hb_skip_missing": 2514.2
+  },
+  {
+   "contest_id": 2524,
+   "label": "K",
+   "hand": 2700,
+   "group": "ec_online",
+   "why": "subtrees minus two-centroid ones",
+   "de": 2685.2,
+   "hb": 2624.2,
+   "hb_skip_missing": 2593.5
+  },
+  {
+   "contest_id": 2524,
+   "label": "A",
+   "hand": 2400,
+   "group": "ec_online",
+   "why": "hull + Steiner formula",
+   "de": 2746.7,
+   "hb": 2664.7,
+   "hb_skip_missing": 2643.7
+  },
+  {
+   "contest_id": 2524,
+   "label": "L",
+   "hand": 3100,
+   "group": "ec_online",
+   "why": "persistent tree for index XOR, 64 MB",
+   "de": 3186.5,
+   "hb": 2987.4,
+   "hb_skip_missing": 2961.4
+  },
+  {
+   "contest_id": 2524,
+   "label": "B",
+   "hand": 3200,
+   "group": "ec_online",
+   "why": "hard min-cut modelling",
+   "de": 3326.2,
+   "hb": 3087.3,
+   "hb_skip_missing": 3074.0
+  },
+  {
+   "contest_id": 2524,
+   "label": "G",
+   "hand": 3350,
+   "group": "ec_online",
+   "why": "10 solvers; flow on medians",
+   "de": 3578.7,
+   "hb": 3275.2,
+   "hb_skip_missing": 3265.0
+  },
+  {
+   "contest_id": 1435,
+   "label": "I",
+   "hand": 1400,
+   "group": "ec_regional",
+   "why": "sort conditions, check consistency",
+   "de": 1315.6,
+   "hb": 1430.4,
+   "hb_skip_missing": 1025.9
+  },
+  {
+   "contest_id": 1435,
+   "label": "F",
+   "hand": 1700,
+   "group": "ec_regional",
+   "why": "find a commuting adjacent pair",
+   "de": 2026.0,
+   "hb": 1978.8,
+   "hb_skip_missing": 1940.7
+  },
+  {
+   "contest_id": 1435,
+   "label": "C",
+   "hand": 1800,
+   "group": "ec_regional",
+   "why": "count k with (kP+1) xor (P-1) <= m",
+   "de": 2011.6,
+   "hb": 1990.2,
+   "hb_skip_missing": 1964.5
+  },
+  {
+   "contest_id": 1435,
+   "label": "G",
+   "hand": 1850,
+   "group": "ec_regional",
+   "why": "prefix knapsack + suffix top-k",
+   "de": 2053.4,
+   "hb": 2074.5,
+   "hb_skip_missing": 2072.4
+  },
+  {
+   "contest_id": 1435,
+   "label": "A",
+   "hand": 2050,
+   "group": "ec_regional",
+   "why": "BFS shapes, compare",
+   "de": 2276.0,
+   "hb": 2269.8,
+   "hb_skip_missing": 2253.0
+  },
+  {
+   "contest_id": 1435,
+   "label": "L",
+   "hand": 2150,
+   "group": "ec_regional",
+   "why": "greedy from the top floor",
+   "de": 2361.6,
+   "hb": 2354.7,
+   "hb_skip_missing": 2354.0
+  },
+  {
+   "contest_id": 1435,
+   "label": "M",
+   "hand": 2500,
+   "group": "ec_regional",
+   "why": "segment tree, monotone-stack merge",
+   "de": 2463.0,
+   "hb": 2482.0,
+   "hb_skip_missing": 2495.7
+  },
+  {
+   "contest_id": 1435,
+   "label": "D",
+   "hand": 2650,
+   "group": "ec_regional",
+   "why": "small-to-large slope merge",
+   "de": 2782.2,
+   "hb": 2778.1,
+   "hb_skip_missing": 2775.6
+  },
+  {
+   "contest_id": 1435,
+   "label": "K",
+   "hand": 2900,
+   "group": "ec_regional",
+   "why": "card-draw DP",
+   "de": 3037.5,
+   "hb": 2984.7,
+   "hb_skip_missing": 2970.0
+  },
+  {
+   "contest_id": 1435,
+   "label": "E",
+   "hand": 3000,
+   "group": "ec_regional",
+   "why": "min-cost flow on the dual",
+   "de": 3266.7,
+   "hb": 3172.8,
+   "hb_skip_missing": 3165.7
+  },
+  {
+   "contest_id": 1435,
+   "label": "H",
+   "hand": 3100,
+   "group": "ec_regional",
+   "why": "tiling construction",
+   "de": 3333.8,
+   "hb": 3232.6,
+   "hb_skip_missing": 3243.0
+  },
+  {
+   "contest_id": 1435,
+   "label": "J",
+   "hand": 3400,
+   "group": "ec_regional",
+   "why": "7 solvers; suffix structure",
+   "de": 3587.6,
+   "hb": 3469.1,
+   "hb_skip_missing": 3485.8
+  },
+  {
+   "contest_id": 1435,
+   "label": "B",
+   "hand": 3350,
+   "group": "ec_regional",
+   "why": "3 solvers; geometry search",
+   "de": 3739.1,
+   "hb": 3622.6,
+   "hb_skip_missing": 3653.2
+  },
+  {
+   "contest_id": 3504,
+   "label": "H",
+   "hand": 800,
+   "group": "weak_na",
+   "why": "four cases",
+   "de": 910.2,
+   "hb": 824.4,
+   "hb_skip_missing": 852.4
+  },
+  {
+   "contest_id": 3504,
+   "label": "A",
+   "hand": 850,
+   "group": "weak_na",
+   "why": "centre words",
+   "de": 1116.8,
+   "hb": 1105.9,
+   "hb_skip_missing": 1122.0
+  },
+  {
+   "contest_id": 3504,
+   "label": "B",
+   "hand": 1100,
+   "group": "weak_na",
+   "why": "case analysis",
+   "de": 1357.3,
+   "hb": 1305.9,
+   "hb_skip_missing": 1296.7
+  },
+  {
+   "contest_id": 3504,
+   "label": "D",
+   "hand": 1150,
+   "group": "weak_na",
+   "why": "greedy counting",
+   "de": 1492.2,
+   "hb": 1385.8,
+   "hb_skip_missing": 1390.9
+  },
+  {
+   "contest_id": 3504,
+   "label": "L",
+   "hand": 1500,
+   "group": "weak_na",
+   "why": "relative order mapping",
+   "de": 1990.9,
+   "hb": 1858.7,
+   "hb_skip_missing": 1836.0
+  },
+  {
+   "contest_id": 3504,
+   "label": "K",
+   "hand": 1600,
+   "group": "weak_na",
+   "why": "pick safe x",
+   "de": 2080.6,
+   "hb": 1915.5,
+   "hb_skip_missing": 1878.7
+  },
+  {
+   "contest_id": 3504,
+   "label": "E",
+   "hand": 1900,
+   "group": "weak_na",
+   "why": "connect three trees",
+   "de": 2127.1,
+   "hb": 1981.2,
+   "hb_skip_missing": 1949.7
+  },
+  {
+   "contest_id": 3504,
+   "label": "C",
+   "hand": 2000,
+   "group": "weak_na",
+   "why": "feasible initial-load interval",
+   "de": 2722.5,
+   "hb": 2485.7,
+   "hb_skip_missing": 2408.0
+  },
+  {
+   "contest_id": 3504,
+   "label": "M",
+   "hand": 2100,
+   "group": "weak_na",
+   "why": "maximal empty rectangles",
+   "de": 2750.3,
+   "hb": 2504.5,
+   "hb_skip_missing": 2421.6
+  },
+  {
+   "contest_id": 3504,
+   "label": "F",
+   "hand": 2100,
+   "group": "weak_na",
+   "why": "binary search k + hashing",
+   "de": 2657.8,
+   "hb": 2434.8,
+   "hb_skip_missing": 2372.0
+  },
+  {
+   "contest_id": 3504,
+   "label": "J",
+   "hand": 1850,
+   "group": "weak_na",
+   "why": "theorems given in the statement",
+   "de": 2905.3,
+   "hb": 2617.9,
+   "hb_skip_missing": 2581.8
+  },
+  {
+   "contest_id": 1964,
+   "label": "F",
+   "hand": 1900,
+   "group": "strong_eu",
+   "why": "greedy subsequence avoidance",
+   "de": 1706.6,
+   "hb": 1612.4,
+   "hb_skip_missing": 1670.3
+  },
+  {
+   "contest_id": 1964,
+   "label": "J",
+   "hand": 1900,
+   "group": "strong_eu",
+   "why": "characterise splits, n <= 100",
+   "de": 1701.8,
+   "hb": 1612.4,
+   "hb_skip_missing": 1670.3
+  },
+  {
+   "contest_id": 1964,
+   "label": "C",
+   "hand": 2100,
+   "group": "strong_eu",
+   "why": "greedy grouping by three",
+   "de": 1886.6,
+   "hb": 1785.8,
+   "hb_skip_missing": 1836.2
+  },
+  {
+   "contest_id": 1964,
+   "label": "A",
+   "hand": 2150,
+   "group": "strong_eu",
+   "why": "McGarvey-style construction",
+   "de": 2199.3,
+   "hb": 2148.6,
+   "hb_skip_missing": 2132.3
+  },
+  {
+   "contest_id": 1964,
+   "label": "B",
+   "hand": 2700,
+   "group": "strong_eu",
+   "why": "binomial decomposition construction",
+   "de": 2399.6,
+   "hb": 2305.7,
+   "hb_skip_missing": 2333.8
+  },
+  {
+   "contest_id": 1123,
+   "label": "B",
+   "hand": 2000,
+   "group": "anchor",
+   "why": "hitting-time DP, n <= 100",
+   "de": 1959.9,
+   "hb": 1970.2,
+   "hb_skip_missing": 1970.0
+  },
+  {
+   "contest_id": 3297,
+   "label": "A",
+   "hand": 800,
+   "group": "anchor",
+   "why": "missing number of 1..5",
+   "de": 800.0,
+   "hb": 1016.8,
+   "hb_skip_missing": 1079.6
+  },
+  {
+   "contest_id": 2692,
+   "label": "E",
+   "hand": 1400,
+   "group": "anchor",
+   "why": "Minkowski shape + prefix counts",
+   "de": 1480.4,
+   "hb": 1529.2,
+   "hb_skip_missing": 1554.1
+  }
+ ],
+ "anchors": {
+  "worst": [
+   {
+    "contest_id": 1123,
+    "label": "B",
+    "name": "Uniform Chemistry",
+    "cf_index": "K",
+    "cf": 3200.0,
+    "cf_solved": 222,
+    "onsite_solve_rate": 0.527,
+    "de": 1944.8,
+    "hb": 1965.5,
+    "order_shift": -6
+   },
+   {
+    "contest_id": 1964,
+    "label": "B",
+    "name": "Urban Planning",
+    "cf_index": "B",
+    "cf": 3100.0,
+    "cf_solved": 158,
+    "onsite_solve_rate": 0.7959,
+    "de": 2337.3,
+    "hb": 2291.3,
+    "order_shift": -4
+   },
+   {
+    "contest_id": 1886,
+    "label": "I",
+    "name": "Symmetric Boundary",
+    "cf_index": "I",
+    "cf": 2800.0,
+    "cf_solved": 92,
+    "onsite_solve_rate": 0.0,
+    "de": 3531.8,
+    "hb": 3576.3,
+    "order_shift": 0
+   },
+   {
+    "contest_id": 3297,
+    "label": "A",
+    "name": "The Bento Box Adventure",
+    "cf_index": "A",
+    "cf": 1300.0,
+    "cf_solved": 11798,
+    "onsite_solve_rate": 1.0,
+    "de": 633.6,
+    "hb": 1019.9,
+    "order_shift": 0
+   },
+   {
+    "contest_id": 2692,
+    "label": "E",
+    "name": "Expansion Plan 2",
+    "cf_index": "B",
+    "cf": 900.0,
+    "cf_solved": 15759,
+    "onsite_solve_rate": 0.8962,
+    "de": 1504.3,
+    "hb": 1551.2,
+    "order_shift": 0
+   },
+   {
+    "contest_id": 2527,
+    "label": "F",
+    "name": "Hold the Star",
+    "cf_index": "F",
+    "cf": 3500.0,
+    "cf_solved": 88,
+    "onsite_solve_rate": 0.1148,
+    "de": 2929.3,
+    "hb": 2931.8,
+    "order_shift": -1
+   },
+   {
+    "contest_id": 3747,
+    "label": "M",
+    "name": "Deformed Balance",
+    "cf_index": "M",
+    "cf": 2900.0,
+    "cf_solved": 65,
+    "onsite_solve_rate": 0.013,
+    "de": 3350.9,
+    "hb": 3398.4,
+    "order_shift": -2
+   },
+   {
+    "contest_id": 1991,
+    "label": "L",
+    "name": "Palindromic Parentheses",
+    "cf_index": "L",
+    "cf": 2500.0,
+    "cf_solved": 816,
+    "onsite_solve_rate": 0.506,
+    "de": 2068.3,
+    "hb": 2096.3,
+    "order_shift": -4
+   },
+   {
+    "contest_id": 1964,
+    "label": "J",
+    "name": "The Ultimate Wine Tasting Event",
+    "cf_index": "J",
+    "cf": 2000.0,
+    "cf_solved": 1716,
+    "onsite_solve_rate": 1.0,
+    "de": 1634.5,
+    "hb": 1593.7,
+    "order_shift": -1
+   },
+   {
+    "contest_id": 2527,
+    "label": "I",
+    "name": "Squares on Grid Lines",
+    "cf_index": "I",
+    "cf": 3100.0,
+    "cf_solved": 131,
+    "onsite_solve_rate": 0.2541,
+    "de": 2709.2,
+    "hb": 2736.1,
+    "order_shift": -2
+   },
+   {
+    "contest_id": 1062,
+    "label": "C",
+    "name": "Cactus Meets Torus",
+    "cf_index": "C",
+    "cf": 3500.0,
+    "cf_solved": 87,
+    "onsite_solve_rate": 0.0175,
+    "de": 3126.6,
+    "hb": 3116.9,
+    "order_shift": -2
+   },
+   {
+    "contest_id": 2692,
+    "label": "D",
+    "name": "Dungeon Equilibrium",
+    "cf_index": "A",
+    "cf": 800.0,
+    "cf_solved": 19328,
+    "onsite_solve_rate": 0.9891,
+    "de": 991.7,
+    "hb": 1173.0,
+    "order_shift": 0
+   },
+   {
+    "contest_id": 2785,
+    "label": "E",
+    "name": "Elevator Against Humanity",
+    "cf_index": "E",
+    "cf": 2900.0,
+    "cf_solved": 175,
+    "onsite_solve_rate": 0.0031,
+    "de": 3272.2,
+    "hb": 3229.8,
+    "order_shift": 2
+   },
+   {
+    "contest_id": 1992,
+    "label": "H",
+    "name": "Missing Separators",
+    "cf_index": "H",
+    "cf": 2200.0,
+    "cf_solved": 871,
+    "onsite_solve_rate": 0.1633,
+    "de": 2518.4,
+    "hb": 2567.8,
+    "order_shift": 0
+   },
+   {
+    "contest_id": 1123,
+    "label": "G",
+    "name": "Parmigiana With Seafood",
+    "cf_index": "M",
+    "cf": 3000.0,
+    "cf_solved": 546,
+    "onsite_solve_rate": 0.0946,
+    "de": 2666.3,
+    "hb": 2638.7,
+    "order_shift": 1
+   },
+   {
+    "contest_id": 1992,
+    "label": "F",
+    "name": "Grid Game 3-angle",
+    "cf_index": "F",
+    "cf": 3000.0,
+    "cf_solved": 194,
+    "onsite_solve_rate": 0.1122,
+    "de": 2639.7,
+    "hb": 2677.4,
+    "order_shift": -3
+   },
+   {
+    "contest_id": 2785,
+    "label": "I",
+    "name": "Irrigation Interlock",
+    "cf_index": "I",
+    "cf": 3500.0,
+    "cf_solved": 89,
+    "onsite_solve_rate": 0.0062,
+    "de": 3195.7,
+    "hb": 3139.7,
+    "order_shift": -2
+   },
+   {
+    "contest_id": 3747,
+    "label": "K",
+    "name": "Time Display Stickers",
+    "cf_index": "K",
+    "cf": 1300.0,
+    "cf_solved": 2504,
+    "onsite_solve_rate": 1.0,
+    "de": 1650.3,
+    "hb": 1641.3,
+    "order_shift": 0
+   },
+   {
+    "contest_id": 1062,
+    "label": "F",
+    "name": "Football",
+    "cf_index": "F",
+    "cf": 800.0,
+    "cf_solved": 5001,
+    "onsite_solve_rate": 0.9965,
+    "de": 1149.3,
+    "hb": 985.4,
+    "order_shift": -1
+   },
+   {
+    "contest_id": 1991,
+    "label": "J",
+    "name": "Count BFS Graph",
+    "cf_index": "J",
+    "cf": 2100.0,
+    "cf_solved": 1191,
+    "onsite_solve_rate": 0.2169,
+    "de": 2384.0,
+    "hb": 2445.8,
+    "order_shift": 2
+   }
+  ],
+  "largest_order_shift": [
+   {
+    "contest_id": 1123,
+    "label": "B",
+    "name": "Uniform Chemistry",
+    "cf_index": "K",
+    "cf": 3200.0,
+    "cf_solved": 222,
+    "onsite_solve_rate": 0.527,
+    "de": 1944.8,
+    "hb": 1965.5,
+    "order_shift": -6
+   },
+   {
+    "contest_id": 1991,
+    "label": "L",
+    "name": "Palindromic Parentheses",
+    "cf_index": "L",
+    "cf": 2500.0,
+    "cf_solved": 816,
+    "onsite_solve_rate": 0.506,
+    "de": 2068.3,
+    "hb": 2096.3,
+    "order_shift": -4
+   },
+   {
+    "contest_id": 1964,
+    "label": "B",
+    "name": "Urban Planning",
+    "cf_index": "B",
+    "cf": 3100.0,
+    "cf_solved": 158,
+    "onsite_solve_rate": 0.7959,
+    "de": 2337.3,
+    "hb": 2291.3,
+    "order_shift": -4
+   },
+   {
+    "contest_id": 1062,
+    "label": "H",
+    "name": "Hot and Cold",
+    "cf_index": "H",
+    "cf": 2600.0,
+    "cf_solved": 522,
+    "onsite_solve_rate": 0.1049,
+    "de": 2617.6,
+    "hb": 2651.3,
+    "order_shift": -3
+   },
+   {
+    "contest_id": 1123,
+    "label": "I",
+    "name": "Library game",
+    "cf_index": "C",
+    "cf": 2500.0,
+    "cf_solved": 1022,
+    "onsite_solve_rate": 0.1216,
+    "de": 2600.1,
+    "hb": 2564.3,
+    "order_shift": 3
+   },
+   {
+    "contest_id": 1992,
+    "label": "F",
+    "name": "Grid Game 3-angle",
+    "cf_index": "F",
+    "cf": 3000.0,
+    "cf_solved": 194,
+    "onsite_solve_rate": 0.1122,
+    "de": 2639.7,
+    "hb": 2677.4,
+    "order_shift": -3
+   },
+   {
+    "contest_id": 2527,
+    "label": "C",
+    "name": "Cactus Connectivity",
+    "cf_index": "C",
+    "cf": 2700.0,
+    "cf_solved": 349,
+    "onsite_solve_rate": 0.0984,
+    "de": 2964.8,
+    "hb": 2964.7,
+    "order_shift": 3
+   },
+   {
+    "contest_id": 3747,
+    "label": "A",
+    "name": "Compare Suffixes",
+    "cf_index": "A",
+    "cf": 3500.0,
+    "cf_solved": 158,
+    "onsite_solve_rate": 0.013,
+    "de": 3350.8,
+    "hb": 3398.4,
+    "order_shift": 3
+   }
+  ],
+  "loco_rmse": {
+   "all": {
+    "n": 185,
+    "de": 225.6,
+    "hb": 229.5
+   },
+   "without_uniform_chemistry": {
+    "n": 184,
+    "de": 206.4,
+    "hb": 211.3
+   }
+  }
+ }
+}

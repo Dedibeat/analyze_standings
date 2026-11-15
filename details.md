@@ -6915,6 +6915,189 @@ cut, the rank check on 143 rows, and NUM-R^3's cut risk (59 ahead, need 36
 of 64, 9 + 1 registered since 10-23, P(cut) rising with the pace and below
 1%).
 
+## CCPC sets ranked by problem difficulty (2026-10-18)
+
+**Request.** Rank the CCPC contests by problem difficulty (for example, by
+the number of problems rated ≤ 2400), show the ranking only, without stats
+or spoilers, and say whether each is harder than a regional at bronze,
+silver and gold. Script `scripts/ccpc_difficulty_rank.py`; report
+`output/ccpc_difficulty_rank.md` (ranks and verdicts only); tests
+`tests/test_ccpc_difficulty_rank.py` (4 pass).
+
+**Sets.** The 9 CCPC contests with a full problem list in the fit (shipped
+DE ratings, `output/problem_ratings_calibrated.json`):
+- 2024 stations Harbin 1817, Jinan 1843, Zhengzhou 1873; 2025 stations
+  Zhengzhou 2661, Jinan 2693, Chongqing 3387 (all UCup mirrors);
+- the 10th Final 2036 (UCup "Guangzhou", May 2025) and the 11th Final 3727
+  (UCup "Nanyang", April 2026); both editorials are titled CCPC Final;
+- the 2017 Qinhuangdao station 1807 (UCup S3, identified 2026-10-10).
+- **Missing:** 10th Chongqing (QOJ 1840, not in the data), 11th Harbin
+  (2575, one problem), all 8th–9th (2022–2023) stations, the 2026
+  invitationals and the 12th CCPC (Changchun is on 10-18). QOJ 3588
+  "Shenzhen" (UCup S4) has no editorial and no identification, so it is left
+  out. QOJ 1894 / 3295 ("China") are EC-Finals, not CCPC.
+
+**Rank.** Problems rated ≤ 2400 CF, fewer = harder. Ties go to the set where
+a 2400-rated team expects fewer solves (CF formula on the same ratings).
+- Ranking by the median problem instead swaps only ranks 2 and 3. Ranks 4
+  and 5 are nearly tied on the tie-break.
+
+**Two verdicts per tier**, against the 18 mainland ICPC regionals of
+2023–2025. "harder" / "easier" means above / below the middle half of the
+regionals' own values; otherwise "same".
+- **Medal.** The last bronze / silver / gold medallist's performance, placed
+  among the board's onsite rows (`contest_quality.performance`; silver added
+  here as rank gold + silver). Field and problems together.
+  - Regional medians: gold 2779, silver 2417, bronze 2040 (IQR 2736–2799,
+    2393–2428, 2018–2064).
+  - **All six stations are harder at every tier.** Every line is above the
+    regionals' upper quartile, and above at least 16 of the 18 regionals.
+    This agrees with the rating-free linked-team result of 2026-10-12: a
+    CCPC medal is about one notch harder at every tier.
+  - n/a for the two finals and 2017. They have no onsite XCPCIO board in the
+    pipeline, and the CCPC Final medal rule is not recorded here. The 2017
+    teams also appear in no other fitted contest.
+- **Problems.** At each tier's median regional line, the rating a team needs
+  on this set to expect the median regional set's solves, minus the line.
+  The problem side alone, no field.
+
+**Result** (rank 1 = hardest):
+
+| rank | contest | medal harder? B / S / G | problems harder? B / S / G |
+|---|---|---|---|
+| 1 | 11th CCPC Final (Apr 2026) | n/a | harder / harder / harder |
+| 2 | 10th CCPC Final (May 2025) | n/a | harder / harder / harder |
+| 3 | 11th Zhengzhou (2025) | harder ×3 | harder / harder / harder |
+| 4 | 11th Jinan (2025) | harder ×3 | harder / harder / harder |
+| 5 | 10th Zhengzhou (2024) | harder ×3 | harder / harder / harder |
+| 6 | 10th Jinan (2024) | harder ×3 | same / same / same |
+| 7 | 11th Chongqing (2025) | harder ×3 | easier / same / same |
+| 8 | 10th Harbin (2024) | harder ×3 | easier / easier / easier |
+| 9 | CCPC 2017 Qinhuangdao | n/a | easier / easier / easier |
+
+- **Reading it.** A CCPC medal is harder than a regional medal even where the
+  problems are not harder (Jinan 2024, Chongqing 2025, Harbin 2024). There,
+  the stronger field makes the medal harder.
+- **Caveats.**
+  - The CCPC ratings come from the mirrors. The 2026-10-12 problem-implied
+    check found them on the onsite scale (+23).
+  - The problem verdicts use DE ratings, which carry contest-type offsets
+    (2026-10-13): DE minus the binary fit is −26 per problem on CCPC
+    mirrors and +2 at regionals. Shifting the CCPC sets up by 28 changes
+    one verdict: Chongqing 2025 at bronze goes from a marginal "easier" to
+    "same". The medal verdicts use the joint fit, not DE.
+
+Run (~15 s once the boards are cached; on Windows set `PYTHONUTF8=1`):
+`python scripts/ccpc_difficulty_rank.py`. Tests:
+`python -m unittest tests.test_ccpc_difficulty_rank`.
+
+### 2022–2023 stations added, rated from the onsite boards (2026-10-18 follow-up)
+
+**Request.** Easy CCPC sets are needed. Add the 2022–2023 stations (8th–9th
+CCPC) to the ranking, without changing the existing ratings.
+
+**No QOJ fetch.** QOJ shows contest pages only when logged in.
+`QOJ_USERNAME` / `QOJ_PASSWORD` are not set, and the browser pane is not
+signed in. The onsite XCPCIO boards of all 16 CCPC stations of 2022–2025
+were already cached (used by `ccpc_icpc_medals` and `contest_quality`), so
+those are used instead. This also covers 10th Chongqing and 11th Harbin,
+which were missing before. So 10 stations are added (`ONSITE`); the table
+now has 19 sets.
+
+**Method** (`scripts/ccpc_difficulty_rank.py`):
+- **Abilities.** Each onsite team (official, ≥ 1 solve) is linked to a fitted
+  team by the fit's own identity rule: rosters sharing two members are one
+  team (`member_pairs`, `link`; ties dropped). Coverage: 91–96% on the 10 new
+  boards; ~100% on boards already in the fit. Xi'an 2023 lists no members,
+  so it is skipped.
+- **Problem ratings.** For each problem, the MAP difficulty with the linked
+  teams' abilities held fixed: the fit's Rasch model and its 2000 / 400 prior
+  (`fixed_difficulty`, bisection). It is then mapped to CF with the fit's
+  `to_cf`.
+- **Onto the shipped scale.** A linear map, shipped DE ≈ 229 + 0.898 × onsite,
+  is fitted on the boards that have both: the 17 reference regionals with
+  members plus the 6 rated stations. Problems solved by none or all linked
+  teams are left out. Over 239 problems, r = 0.982 and the residual SD is
+  109.
+- **Medal lines.** The last medallist's performance, ranked among the board's
+  linked onsite teams (`onsite_lines`). It is compared with the 17 regionals
+  measured the same way. The 9 sets of the first entry keep their
+  QOJ-placement verdicts.
+- `contest_quality.performance` gained `fit=` so the joint fit runs once.
+
+**Held-out check (scratch).** The joint fit was rerun without the six rated
+stations' cells (`model.fit(obs=…)`). The six were then rated from their
+onsite boards with those held-out abilities and an ICPC-only map
+(150 + 0.929 ×), and compared with the shipped ratings:
+- per problem: mean −20, SD 138; per set, mean offsets −70 … +5;
+- problems ≤ 2400: the same count for 5 of 6 (one off by 1);
+- a 2400-rated team's expected solves: within ±0.22;
+- the same difficulty order of the six.
+
+So the method reads slightly easy (~20) and ranks sets well.
+
+**Medal measure check.** On the 23 boards with both measures, onsite minus
+QOJ placement is +25 at gold (SD 29), +11 at silver (31) and +7 at bronze
+(31), with r 0.87 / 0.78 / 0.73. The largest gaps are Hefei 2023 (+129 …
++152) and Xi'an 2025 (+32 … +68), not investigated. Under the onsite measure,
+the existing stations stay "harder" except at bronze: 10th Harbin and 11th
+Zhengzhou become "same". Bronze verdicts near the edge depend on the measure.
+
+**Result** (rank 1 = hardest; * = rated from the onsite board):
+
+| rank | contest | medal harder? B / S / G | problems harder? B / S / G |
+|---|---|---|---|
+| 1 | 11th CCPC Final (Apr 2026) | n/a | harder / harder / harder |
+| 2 | 10th CCPC Final (May 2025) | n/a | harder / harder / harder |
+| 3 | 8th Guangzhou (2022) * | harder ×3 | harder / harder / harder |
+| 4 | 11th Zhengzhou (2025) | harder ×3 | harder / harder / harder |
+| 5 | 11th Jinan (2025) | harder ×3 | harder / harder / harder |
+| 6 | 10th Zhengzhou (2024) | harder ×3 | harder / harder / harder |
+| 7 | 8th Guilin (2022) * | harder ×3 | easier / same / same |
+| 8 | 8th Mianyang (2022) * | harder ×3 | easier / same / same |
+| 9 | 9th Guilin (2023) * | harder ×3 | harder / harder / same |
+| 10 | 9th Harbin (2023) * | harder ×3 | same / harder / harder |
+| 11 | 9th Shenzhen (2023) * | harder / harder / same | same / same / same |
+| 12 | 10th Jinan (2024) | harder ×3 | same / same / same |
+| 13 | 11th Chongqing (2025) | harder ×3 | easier / same / same |
+| 14 | 9th Qinhuangdao (2023) * | harder ×3 | easier / same / harder |
+| 15 | 10th Harbin (2024) | harder ×3 | easier / easier / easier |
+| 16 | 11th Harbin (2025) * | same / same / same | easier / easier / easier |
+| 17 | 8th Weihai (2022) * | harder ×3 | easier / easier / easier |
+| 18 | 10th Chongqing (2024) * | same / same / harder | easier / easier / easier |
+| 19 | CCPC 2017 Qinhuangdao | n/a | easier / easier / easier |
+
+- **Easy sets** (problems easier at every tier): 10th Chongqing, 8th Weihai,
+  11th Harbin, 10th Harbin and the 2017 set.
+  - 10th Chongqing and 8th Weihai are easier by far more than the method's
+    held-out error.
+  - 11th Harbin's "easier" at gold is within it.
+  - 11th Harbin and 10th Chongqing are also the only stations whose medals
+    are no harder than a regional's.
+- The 9 sets of the first entry keep their order and verdicts.
+- **Caveats.**
+  - Abilities are constant over time in the fit, so a 2022–2023 team is
+    rated partly on its later seasons. The 2022–2023 medal lines read above
+    the 2024–2025 ones, most at bronze, which may partly be this drift.
+    Measured the same way, the 9th CCPC lines are still above the 2023
+    regionals'.
+  - The onsite method reads ~20 easy (held-out check).
+
+**QOJ ids.** The only one confirmed is 9th Qinhuangdao = QOJ 1411 (UCup S2
+stage 9). It was found by web search, because QOJ pages need a login.
+- QOJ 1244 is the 8th CCPC Final (UCup S1 stage 17 "Guangzhou"), not the
+  Guangzhou station.
+- The Universal Cup site lists 9th Guilin, 9th Harbin and 9th Shenzhen as
+  UCup S2 stages 8, 10 and 25. Their QOJ ids are not mapped. No 2022
+  station was found as a UCup stage.
+- The candidates 1833, 1493, 1303, 1480, 1412, 1404, 1540 and 1596
+  (2026-10-10) remain unmapped. The report links QOJ's CCPC categories
+  (205; 2023: 275).
+
+Run: `python scripts/ccpc_difficulty_rank.py` (~1 min; on Windows set
+`PYTHONUTF8=1`). Tests: `python -m unittest tests.test_ccpc_difficulty_rank`
+(8 pass).
+
 ## Xi'an 2026 virtual: rank 86 (2026-10-26)
 
 **Report.** The user: NUM-R^3 placed 86th in a virtual of the 51st Xi'an
@@ -7843,6 +8026,637 @@ the expensive features once and reuses them for calibration runs. Source and
 production rating artifacts are unchanged outside the new research files.
 
 
+## Stability-penalized DE: run on the PC, no penalty gain (2026-11-05, second entry)
+
+**Request.** Resolve the merge conflict, pull master, and continue the stable
+DE experiment.
+
+**Merge.** A pull was stopped on a `details.md` conflict between the local
+CCPC difficulty entry (2026-10-18) and the remote Hong Kong 10-23 / 10-26
+follow-ups. Both are kept: the CCPC entry now sits after the Hong Kong
+follow-ups and before the Xi'an entry. The second pull (up to `59734ac`)
+merged cleanly. Full suite: **220 tests pass** (system Python 3.11).
+
+**Running on Windows.** The PC is Windows 10 with no WSL; the CPU is an
+i7-14700KF (28 threads), not the i9 the hand-off named, with 34 GB RAM.
+- `core.autocrlf=true` writes CRLF into the working tree, so 64 of the 68
+  frozen hashes failed `check`. The committed blobs match all 68. Fix:
+  delete the 68 files and check them out again with
+  `git -c core.autocrlf=false checkout HEAD -- <files>`. No source or
+  config changed. A later checkout that touches them brings CRLF back.
+- NumPy 2.5.1 has no Python 3.11 wheel, so `.venv` uses Python 3.12.2
+  (`py -3.12 -m venv .venv`; run `./.venv/Scripts/python`, with
+  `PYTHONUTF8=1`). The venv holds only NumPy; the full suite needs the
+  system Python.
+- Timing: full view 16 s; the other 15 views with `--jobs 8` 68 s; `evaluate`
+  10 s. Under 1 GB per worker.
+
+**Reproduction.** The full view matches the hand-off exactly: 53 binary /
+154 survival iterations, max feature difference 0.0, and clipped-DE LOCO
+**225.607** RMSE. All 16 views cover all 185 problems (none missing).
+
+**Selection.** The stable fit picked beta = 0.1 in 7 of 15 outer folds and
+beta = 0 in 8 (alpha 1 in 14 of 15). DE kept its usual (1, 1) in 14 folds.
+
+**CF RMSE, outer leave-one-contest-out** (185 problems, 15 contests; paired
+contest-bootstrap 95% intervals):
+
+| view | DE | binary affine | augmented (beta 0) | stable | stable − augmented | augmented − DE |
+|---|---:|---:|---:|---:|---|---|
+| full | 225.6 | 246.8 | 237.8 | 238.0 | +0.2 [−1.0, +1.5] | +12.2 [+0.8, +22.8] |
+| half (reserved) | 234.9 | 259.7 | 225.4 | 226.5 | +1.2 [+0.3, +2.2] | −9.5 [−19.1, +0.9] |
+| quarter (reserved) | 276.8 | 279.2 | 242.5 | 243.3 | +0.8 [+0.0, +2.1] | −34.2 [−44.2, −24.9] |
+| eighth (reserved) | 353.7 | 317.6 | 289.5 | 289.5 | −0.0 [−1.3, +1.6] | −64.2 [−77.4, −49.8] |
+| event only | 245.0 | 270.4 | 252.0 | 252.6 | +0.6 [−0.4, +1.7] | +7.0 [−6.8, +23.6] |
+| event small | 310.3 | 309.4 | 273.7 | 273.8 | +0.2 [−0.4, +0.8] | −36.7 [−56.7, −14.3] |
+| mirror balanced | 264.6 | 273.9 | 244.9 | 245.7 | +0.8 [−0.1, +1.9] | −19.7 [−31.5, −6.9] |
+| strong half | 369.4 | 386.9 | 327.8 | 327.5 | −0.3 [−1.7, +1.4] | −41.6 [−55.8, −26.9] |
+| weak half | 450.9 | 381.8 | 356.7 | 355.4 | −1.3 [−3.1, +0.3] | −94.2 [−113.6, −74.4] |
+
+**Drift RMS** (same problem vs the full view; strong/weak vs their own pool):
+
+| view | DE | binary affine | augmented | stable |
+|---|---:|---:|---:|---:|
+| half (reserved) | 94.7 | 72.6 | 96.1 | 94.7 |
+| quarter (reserved) | 185.9 | 138.4 | 177.4 | 174.9 |
+| eighth (reserved) | 298.3 | 217.2 | 268.3 | 264.8 |
+| event small | 207.2 | 148.6 | 185.0 | 182.3 |
+| strong half | 135.8 | 159.7 | 133.9 | 131.0 |
+| weak half | 231.9 | 156.7 | 196.3 | 194.1 |
+
+**Reading it.**
+- **No stability-penalty gain.** Against augmented ridge, the penalty
+  changes CF RMSE by −1.3 … +1.5. It is worse in 13 of 16 views, with the
+  interval excluding zero on 6 of them and never on the better side. Drift
+  RMS falls only 0.5–3.5 (0.6–2.2%). Order reversals are identical in every
+  view. The plan's rule applies: no stability-penalty gain is claimed.
+- **Resampling alone (beta 0) is not a successor either.**
+  - It beats DE on small and weak samples mainly by fixing DE's mean shift.
+    DE's mean error drops to −66 (reserved quarter), −142 (eighth) and −246
+    (weak half); augmented's is −4, −65 and −139.
+  - It does not cut the per-problem scatter. Median absolute drift is higher
+    than DE's in 10 of the 14 perturbed views (reserved half 68.9 vs 63.0,
+    reserved quarter 110.0 vs 102.8). It is lower only on quarter1, eighth
+    (about equal), mirror-balanced and the weak half.
+  - On the full field it loses 12.2 RMSE (interval excludes zero) and is
+    worse on 13 of 15 contests. The CF ≥ 2800 tail goes from 290 to 310,
+    and every region gets worse.
+  - On event-only boards it is no better than DE (+7.0, interval includes
+    zero).
+- The spread is not flattened: on the full field, augmented/stable predict
+  an SD of 723–725 vs a target SD of 698 (DE 664).
+- **Binary affine** is still the most field-stable: lowest drift RMS in 13
+  of the 14 perturbed views (all but the strong half) and the fewest order
+  reversals. But it is the least accurate on the full field (246.8). That
+  supports candidate #1 (binary plus a small monotone map) as the next test.
+
+**Caveats.**
+- By the frozen seeding rule, `quarter0` / `quarter1` are the first quarters
+  of the same shuffles as `half_a0` / `half_a1`, so they are nested in those
+  halves rather than drawn independently.
+- The reserved random views come from the same random-identity family as the
+  training views. Gains there are in-distribution, not transport evidence.
+  The event/mirror and strength views are the real stress tests.
+- Event/mirror labels are the ID heuristic. All 15 contests were already
+  inspected, so this is development data, not fresh confirmation.
+
+**Decision.** Candidate #2 is not a DE successor. Shipped DE, its ratings
+and the app are unchanged. The scorecard is in
+`output/de_stability_evaluation.json` / `.md`; the run cache stays in the
+gitignored `de_stability_run/`.
+
+Run on Windows (Git Bash, from the repo root):
+`export PYTHONUTF8=1 OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1`,
+then `./.venv/Scripts/python -m arch_b.de_stability check`, then
+`prepare --jobs 8`, then `evaluate`.
+
+## Hierarchical binary ratings: a DE rival (2026-11-05, third entry)
+
+**Request.** Find a reasonable candidate that rivals DE: stable ratings,
+better accuracy, and team ratings that predict better. Full write-up:
+`hier_binary_report.md`; code `arch_b/hier_binary.py`; tests
+`tests/test_hier_binary.py` (6); results `output/hier_binary.json` and
+`output/hier_binary_ratings.json` (every problem: hierarchical CF next to
+shipped DE). Research only; nothing shipped changed.
+
+**Idea.** DE's solve-rate coefficient is positive: at a fixed fitted
+difficulty, a problem more of its board solved gets a higher CF rating. That
+points at the flat N(2000, 400²) ability prior. It shrinks every team seen
+once toward 2000, so strong boards' abilities and difficulties are pulled
+down, and DE repairs this after the fact, which is why it moves with the
+field. The candidate fixes it in the fit:
+- a board-level ability mean μ_c (average board 2000);
+- a set-level difficulty mean ν_c (hyper-mean free);
+- one affine CF map for problems and teams. Binary abilities and difficulties
+  share a CF slope of ≈ 1.
+
+On top of the hierarchical difficulty, none of DE's features helps any more
+(nested LOCO stays at 231–233).
+
+**Optimizer.** Block-coordinate Newton stops up to 121 points short at eps 0.5
+along board-wide shifts, so the fit uses Newton steps solved by
+preconditioned conjugate gradients: ~11 steps, ~8 s. With the hierarchy off
+it reproduces `model.fit` within 4 points inside [800, 4000].
+
+**Selection, no CF labels.**
+1. Settings within 1% of the best held-out team log loss (split 0 of a 20%
+   whole-appearance hold-out).
+2. Among those, the least latent-difficulty drift across the DE stability
+   experiment's six training views.
+
+Selected: σ 300, τ 800, σ_b 600 (the grid's edge), τ_b 400; map
+CF = 0.907 b + 515.
+
+**Results.**
+
+| | DE / shipped | hierarchical |
+|---|---|---|
+| CF RMSE, full fields | 225.6 | 229.5 (+3.9 [−8.1, +14.5]) |
+| strong − weak half, mean error | 224 apart | 1 apart |
+| weak half / reserved eighth / small event field | 451 / 354 / 310 | 333 / 315 / 287 |
+| drift vs full, 9 reserved views | — | lower than DE in 8 |
+| held-out appearance log loss (splits 1 / 2) | binary 0.252 / 0.255, survival 0.278 / 0.282 | 0.237 / 0.242 |
+| linked rank-pair accuracy | binary 79.4 / 79.8%, survival 80.0 / 80.1% | 80.7 / 81.1% |
+| forward replay, all pairs with member priors | 71.45% | 71.80% (+0.35 pp [+0.19, +0.55]) |
+| 54 CF-rated teams, CF RMSE | survival 348 | 218 |
+
+- The held-out team metrics beat both engines with intervals excluding 0.
+  Forward history pairs are level (+0.09 pp [−0.11, +0.38]).
+- Order reversals within contests are about half of DE's in every view.
+
+**Weak spots.**
+- A board cut to a quarter or an eighth floats up (+52 / +65 mean error), and
+  its kept teams' ratings move with it (RMS 103 at a quarter, flat binary 63).
+  Neither looser hyperpriors nor a region layer fixed it; the region layer was
+  removed.
+- The strong half drifts more than DE's (175 vs 136).
+- The reserved half is +8.2 [−9.3, +27.2] behind DE.
+- EC online rounds read ~140 easier than DE, consistent with the known +102
+  online advantage being inherited through linking teams. Unverified either
+  way, since no CF anchor exists online.
+- The strong invitation fields read harder: UCup Finals +294, THUPC 2022 +283.
+
+**Honest record of the iterations.**
+1. The first version anchored ν at 2000 and split the scale's level; freed
+   and rerun.
+2. Selection by log loss alone picked σ_b 300, which failed the stability
+   criterion (reserved half +19.4 [+0.4, +42.1], strong half +34.7).
+3. The label-free stage 2 was designed after seeing that.
+
+All of this is development evidence on long-inspected data; a fresh
+confirmation set is the next step.
+
+Run (~75 min with 10 workers):
+`PYTHONUTF8=1 OPENBLAS_NUM_THREADS=1 ./.venv/Scripts/python -m arch_b.hier_binary all 10`.
+Cache: gitignored `hier_binary_run/`. Full suite: **226 tests pass** (system
+Python 3.11).
+
+## Problem ratings checked by hand (2026-11-05, fourth entry)
+
+**Request.** Debug problem ratings by hand, from statements, editorials and
+solutions. EC and UCup-EC boards first, then the CF anchors with the largest
+errors and the largest DE vs hierarchical gaps. Report:
+`problem_rating_audit.md`; script `scripts/problem_rating_audit.py` (~3 min);
+output `output/problem_rating_audit.json`. CF mirror solve counts were fetched
+from the CF API on 2026-11-05 into `data/cf_mirror_solves.json`. Research
+only; nothing shipped changed.
+
+**Hand panel.** 72 problems, rated on the CF scale (about ±200, ±100 for
+sign-ins), written after seeing the model numbers:
+- 18 EC sign-ins;
+- 2025 EC Online I+II (22);
+- 2023 Nanjing (13);
+- Mid-Atlantic 2024 (11, a weak field);
+- the EUC 2025 easy end (5, a strong field);
+- 3 CF anchors.
+
+| Group | DE bias / RMSE | hierarchical | hierarchical, skipped cells missing |
+|---|---|---|---|
+| EC sign-ins | +209 / 273 | +387 / 448 | +71 / 185 |
+| 2025 EC online | +118 / 168 | +3 / 115 | −31 / 140 |
+| 2023 Nanjing | +185 / 223 | +153 / 177 | +119 / 201 |
+| Mid-Atlantic 2024 | +469 / 536 | +315 / 369 | +287 / 337 |
+| EUC 2025 easy | −171 / 207 | −257 / 290 | −221 / 249 |
+| all 72 | +182 / 288 | +160 / 296 | +64 / 212 |
+
+**Findings.**
+- **The middle is sound.** Between 5% and 95% solved, the two models differ by
+  under 70 on EC boards and match the hand ratings within error. The
+  "EC online ~140 easier" gap is a tail effect: −347 below 0.5% solved, −23 at
+  30–70%.
+- **Sign-ins are inflated.** Zero-solve rows are dropped, so a sign-in's
+  "failures" are a few non-zero rows that never submitted to it:
+  - Shenyang 2022 D: 7 rows, 0 attempts;
+  - EC-Final 2022 M: 13 rows, 0 attempts;
+  - these are QOJ/UCup mirror accounts that tried one or two other problems
+    (one is `tarjen`).
+
+  Diagnostic: cells with no submission on a problem more of the board solved
+  than the row's hardest solve are treated as missing (19,201 cells, 1.9%;
+  12,583 rows).
+  - sign-in bias +387 → +71;
+  - anchor in-sample RMSE 225.7 → 224.9;
+  - but it overcorrects some easy problems (2025 EC Online II D 1213 vs hand
+    1650).
+
+  A diagnosis only; any rule must pass the full `hier_binary` protocol.
+- **EC online, hard tail.** DE goes far beyond the CF scale: 3600–4000 for 1–3
+  solves. The hand panel sides with the hierarchical fit here.
+- **Board flag.** 2026 EC Online (I) E "LCM Permutation" was solved only by the
+  rank-963 team (5 solves) at minute 207: either a guessable pattern or a
+  leak.
+- **CF anchors.**
+  - **Uniform Chemistry** (SWERC 2022 B / CF 1776K, CF 3200): about 2000 by
+    hand (a hitting-time DP). Onsite 78/157 solved it, the first at 14 min; on
+    the CF mirror only 222, fewer than a CF 3000 problem. It is 16% of both
+    models' squared error. LOCO without it: DE 206.4, hierarchical 211.3
+    (with it: 225.6 / 229.5).
+  - **Venue-order conflicts:** Urban Planning, Palindromic Parentheses, Grid
+    Game 3-angle.
+  - **Top-end labels out of line with CF's own solve counts:** Deformed
+    Balance CF 2900 with the fewest CF solvers on its board; Symmetric
+    Boundary CF 2800 vs 3500 for problems with the same solve counts.
+  - **Floor labels:** Bento Box 1300 vs 800 by hand.
+  - **EUC 2025 easy problems:** the CF labels are right by hand, and both
+    models are ~300 low (strong-board floor).
+- **Mid-range DE vs hierarchical gaps.**
+  - Weak NA fields: the hand ratings favour the hierarchical fit (Perfect
+    Squares, by hand ~1850: DE 2905, hierarchical 2618).
+  - Strong invitation boards (THUPC 2022, UCup Finals) read 230–365 harder in
+    the hierarchical fit. Not checkable: no statements in the repo.
+
+**Missing (not guessed):**
+- the 2026 EC online statements (QOJ needs a login; no editorial found online);
+- statements or problem names for the 2020–2021 EC boards and for
+  THUPC / UCup Finals / Petrozavodsk;
+- `output/problem_ratings.json` lacks names for the 2026 EC online rounds,
+  although `data/tagged.json` has them.
+
+**Next.**
+1. Test a narrow skipped-cell rule (partial or mirror rows only) in the full
+   `hier_binary` protocol.
+2. Get the 2026 EC online statements.
+3. Report the anchor RMSE with and without Uniform Chemistry.
+
+## Probability-course shortlist (2026-11-06)
+
+[prob_course_candidates.md](prob_course_candidates.md) picks problems for a
+probability course from the 41 probability/expectation-tagged problems in
+`data/tagged.json`. Only discrete probability counts, and the core trick must
+survive as a paper problem once the CP layer is stripped.
+
+- **Main five:** Mingle (NAQ 2025 G), Accidental Arithmetic (Northwestern
+  Europe 2025 A), 502 Bad Gateway (EC Online 2024 II L), Uniform Chemistry
+  (SWERC 2022 B), Jinx or Jackpot (NERC 2025 J).
+- **Backups:** Orchard Fence, Chopsticks, Crashing Competition Computer,
+  Disbursement on Quarantine Policy.
+
+Each entry has the trick, a paper version and its answer. The answers were
+brute-forced against the official samples with throwaway scratch scripts (not
+kept). No code or output changed.
+
+## Probability-course problems in LaTeX (2026-11-06, second entry)
+
+[prob_course_problems.tex](prob_course_problems.tex) writes up all nine picks
+from the shortlist above (main five, then the four backups). Each section has
+a source line (contest, QOJ link, topics), a clean problem statement with
+parts (a), (b), ..., and a full solution. The statements were rewritten from
+the original statements in `data/tagged.json`.
+
+Changes from the shortlist's paper versions:
+- **Every part has a worked derivation,** not just an answer. For example,
+  502 Bad Gateway proves that a threshold policy is optimal; Uniform Chemistry
+  proves that the visit indicators are independent by computing their joint
+  law; Jinx or Jackpot proves by induction that the value is linear in the
+  balance.
+- **Accidental Arithmetic (b)** solves the β ≠ γ case:
+  E[V] = (1−μ)E[F] + μE[S] with μ = (β−γ)/(β+γ), where F is the first term
+  and S the sum of all terms with plus signs. The shortlist said the later
+  terms come back "with weight (β−γ)"; that was wrong, and the shortlist now
+  says (β−γ)/(β+γ).
+- **Orchard Fence** states the general hull-edge formula as part (a) and adds
+  the hexagon with k=4, (16+6√3)/5. With k=3 the formula is not needed: a
+  triangle's perimeter is the sum of its sides.
+- **Chopsticks** gets E[(−1)^X] for the hypergeometric count from
+  [z^{2n}](1−z)^k(1+z)^{s−k}; for 8+8 chopsticks this is [z^10](1−z²)^8,
+  giving 72/143 by hand.
+- **Dropped:** the Mingle variance follow-up. It needs the joint law of pairs
+  of rooms at every distance, and the result is a long sum over distances,
+  too heavy for a course problem.
+
+Checks: a scratch script (not kept) verified every formula and number by
+exact enumeration with fractions, and checked each model against the original
+problem's official samples. Every sample matched, including Uniform Chemistry
+sample 4 (n=100) and Jinx or Jackpot sample 2 (k=30). The one exception is
+Orchard Fence sample 2, which was not checked: its points are collinear, and
+the paper version assumes general position. The document
+compiles with `pdflatex` (TeX Live 2023) with no warnings. A minimal TeX
+install also needs `cm-super`, because `\$` uses a TS1 font at 11pt. The
+compiled `prob_course_problems.pdf` is committed next to the source (on
+request; `strat.tex` has no committed PDF). No code or output changed.
+
+## Probability-course problems cut to one trick each (2026-11-06, third entry)
+
+The first LaTeX version asked too much of students: several problems stacked
+3–4 parts, each needing a different idea (Uniform Chemistry had an
+independence proof, a variance, a Stirling generating function and a race;
+502 Bad Gateway had an optimality proof and asymptotics; Chopsticks and
+Crashing Competition Computer each needed a second trick). On request,
+[prob_course_problems.tex](prob_course_problems.tex) now asks **one question
+per problem, resting on one key idea**. Each solution opens with a "Key idea"
+line. The dropped parts became a remark after the solution, for discussion
+only. The PDF went from 10 to 7 pages.
+
+| Problem | The one question | Key idea | Answer |
+|---|---|---|---|
+| Mingle | E[winners], general n, k | count rooms, not players | n(2k/(2k+1))^{2k} |
+| Accidental Arithmetic | E[value], ± equally likely; N=12345, α=0.45 | later terms cancel by symmetry | 5.4321 |
+| 502 Bad Gateway | E[time] for threshold c; best c for T=10 | resets are geometric | T/c+(c−1)/2; 4 |
+| Uniform Chemistry | E[steps] | first jump into {j..n} is uniform | H_{n−a} |
+| Jinx or Jackpot | best strategy, p∈{0.7,0.3}, 2 rounds | result is linear in the bet | $160 |
+| Orchard Fence | E[perimeter], regular n-gon; n=6, k=4 | sum over chords | (16+6√3)/5 |
+| Chopsticks | 4+4+4 chopsticks, draw 6 | mixed pairs = (odd colours)/2 | 8/11 |
+| Crashing Computer | c=3, p=½, r=2, t=5 | restart recursion for a block | 26 |
+| Quarantine | 3×3 grid, days 4/2/1 | linearity over seats, complements | 13263/512 |
+
+Other changes:
+- **Easier versions.** 502 Bad Gateway now fixes the threshold rule in the
+  statement; that thresholds are optimal moved to the remark. Jinx or Jackpot
+  is just the two-round case, solved directly without the induction. Uniform
+  Chemistry asks only for E[T]. Its solution proves Pr(visit j) = 1/(n−j+1)
+  by comparing, for each start x < j, landing on j with landing in {j..n}.
+- **Hints** on the three problems whose idea is hardest to spot: Uniform
+  Chemistry, Jinx or Jackpot and Orchard Fence.
+- **New instances.** Chopsticks uses 4 red, 4 blue and 4 green with 6 drawn,
+  because with two colours the parity trick is invisible: M is just the
+  indicator that the red count is odd. The 8+8 case (72/143) is in the remark.
+  Orchard Fence uses a regular n-gon, so "consecutive kept vertices" replaces
+  the general-position "points to the left" count. With the hexagon and k=3 a
+  student would just add triangle sides.
+
+Checks: the two new instances were verified by exact brute force in a scratch
+script (not kept). Chopsticks 4+4+4 gives 8/11. The n-gon formula matches
+enumeration for every 3 ≤ k ≤ n ≤ 9. All other numbers are unchanged from the
+second entry. The document compiles with no warnings, and the PDF was
+rebuilt. The multi-part version is in commits 08188b2 (tex) and d670beb
+(PDF).
+
+## Skipped cells as missing data: tested (2026-11-08)
+
+**Request.** Test a narrower version of the audit's skipped-cell rule through
+the `hier_binary` protocol. Report: `skip_cells_report.md`; code
+`arch_b/skip_cells.py`; tests `tests/test_skip_cells.py` (5); output
+`output/skip_cells.json`. `hier_binary.team_scores` gained an optional
+`cell_mask`; its default is unchanged. Research only; nothing shipped changed.
+
+**Rules and criteria**, frozen before the run:
+- `base`: the selected hier_binary fit;
+- `skip_all`: skipped cells (no submission, easier than the row's hardest
+  solve) are missing in every row;
+- `skip_partial`: the same, but only in rows that submitted ≤ 2 problems.
+
+Skip status is recomputed from the cells each fit may use. To pass, a rule
+needs:
+1. the hand-panel EC sign-in |bias| ≤ 150, with no other group's RMSE worse by
+   more than 50;
+2. a full-field CF RMSE interval vs base not entirely above 0;
+3. log loss on non-skipped held cells not worse on either split;
+4. drift ≤ base on at least 5 of the 9 reserved views.
+
+**Verdict: `skip_partial` passes all four; `skip_all` fails stability (3 of
+9).**
+
+| Measure | base | `skip_all` | `skip_partial` |
+|---|---|---|---|
+| cells treated as missing | 0 | 19,201 | 2,717 (1,383 rows) |
+| EC sign-in hand bias | +387 | +71 | +148 |
+| all-72 hand RMSE | 296 | 212 | 225 |
+| full-field CF RMSE (DE 225.6) | 229.5 | 228.5 | 227.6 (−1.9 [−5.4, +0.9]) |
+| log loss − base, non-skipped cells (×10⁻⁴) | — | −0.7 / +6.7 | −6.0 / −3.6 |
+| reserved views with drift ≤ base | — | 3 of 9 | 8 of 9 |
+
+- **Floor only.** EC problems solved by more than 95% move from +140 to −3 vs
+  DE. The middle is unchanged.
+- **Overcorrection left.** 2025 EC Online II D stays too easy (1211 vs hand
+  1650).
+- **Costs:**
+  - log loss on *all* held cells is worse (+17 / +21 ×10⁻⁴): the rule
+    predicts skipped zeros as likely solves;
+  - linked rank-pair accuracy −0.17 / −0.10 pp (not pre-registered);
+  - CF-rated-team RMSE is unchanged (219 vs 218).
+- **Limits:**
+  - the hand panel motivated the rule, so criterion 1 is a consistency check;
+  - this is development data;
+  - the forward replay was not run (no attempt counts in its panel).
+
+Run (~4 min with 8 workers; needs the `hier_binary all` cache):
+`PYTHONUTF8=1 OPENBLAS_NUM_THREADS=1 ./.venv/Scripts/python -m arch_b.skip_cells 8`.
+
+## Rating debugging by hand, second pass: 2524 D, strong floors, tiny boards (2026-11-09)
+
+**Request.** Keep debugging by hand: chase why 2025 EC Online II D stays
+too easy (`skip_partial` 1211 vs hand 1650), and pursue any other odd rating
+or bug. Write-ups: `skip_cells_report.md` (second test) and
+`problem_rating_audit.md` ("Follow-up checks"). Code:
+- `arch_b/skip_cells.py` gained rule `skip_mirror`;
+- its cache names now include the rule list.
+
+Tests: `tests/test_skip_cells.py` (6). Research only; nothing shipped changed.
+
+**2524 D cause.**
+- D is the most-solved problem on its board (1,629 of 1,788).
+  `skip_partial` dropped 124 of its 159 failures:
+  - 123 of those are official `$DEFAULT…` registrations;
+  - 86 solved only C, late (median minute 164).
+- These are real failures by weak teams. The rule fires because 1,629 is
+  greater than C's 1,423 solves. On the sign-ins, by contrast, nearly every
+  skipped row is an unofficial `id:` account.
+
+**`skip_mirror`** (pre-registered in the report; `skip_partial` on
+non-official rows only):
+- 2524 D comes back to 1458, and 2025 EC online hand RMSE is 115 (vs 142).
+- It **fails criterion 1**: sign-in bias is +174 (> 150). Official rows skip
+  sign-ins too: 1096 D 1094 vs hand 800; 1197 M 1373 vs 1200.
+- It passes the other three:
+  - CF −2.0 [−5.3, +0.6];
+  - log loss −5.7 / −3.4 ×10⁻⁴;
+  - drift 7 of 8.
+- **`skip_partial` stays preferred.** A margin rule (skipped problem much
+  easier than the row's hardest solve) is the untested idea. It needs fresh
+  boards: the hand panel has already shaped two rules.
+
+**Correction.**
+- `strength_pool` is the drift reference for `strong` and `weak`, so its
+  drift is always 0. Criterion 4 should count 8 views, not 9:
+  - `skip_partial` 7 of 8 (was "8 of 9");
+  - `skip_all` 2 of 8 (was "3 of 9").
+- The verdicts do not change.
+
+**Other findings.**
+- **Strong-board floors (hierarchical only).**
+  - EC-Final 2021 A "DFS Order" (hand ~1200): base 1676, DE 1252.
+  - EC-Final 2021 I "Future Coder" (~1350): base 1605, DE 1260.
+  - THUPC 2022 Final M (156/157 solved): base 1768, DE 1000.
+
+  The failing rows are a strong board's bottom one-solve teams, held at θ ≈
+  1872 by the σ = 300 board prior (the board median is 2377). Over all
+  boards, >95%-solved problems read only +26 … +62 above DE, so these are
+  single cases.
+- **No within-board rating inversions** in base, `skip_partial` or DE.
+- **"LCM Permutation"** (2026 EC Online I E): its lone solver is an
+  unofficial account. The solve sequence (sign-ins at 13 and 19, E at 208
+  after 3 wrong tries) fits a strong mirror account better than a leak.
+- **Tiny boards.** 17 boards have < 30 non-zero rows, mostly NA regionals
+  and the NAQ (13–27 rows on QOJ). Mid-Atlantic 2022 has 2 rows, with only its
+  5 solved problems listed.
+  - Shipped DE rates 20 problems from boards with < 5 rows and 45 from 5–9
+    rows.
+  - Its `difficulty_se`, the raw survival Laplace SE (DE has none), is small
+    there (median 117), although one row is no evidence.
+  - The legacy Arch A `problem_ratings.json` shows 4000 placeholders for
+    problems on 0–2-row boards.
+  - Flagging these in the shipped file is proposed, not done.
+- **Hand-panel note.** 2025 EC Online I B (hand 1100) is likely ~1300: its
+  median solve is minute 83 against 32 for the sign-in. The frozen panel is
+  unchanged.
+
+Run (~5 min with 8 workers; recomputes every rule):
+`PYTHONUTF8=1 OPENBLAS_NUM_THREADS=1 ./.venv/Scripts/python -m arch_b.skip_cells 8`.
+
+## Shipped ratings flag small boards (2026-11-09, second entry)
+
+**Request.** Flag the shipped ratings that come from tiny boards (previous
+entry).
+
+**Change.** `arch_b.calibrate` now adds two fields to every record of
+`output/problem_ratings_calibrated.json`:
+- `board_rows`: rows with at least one solve on the board, the same field
+  count DE's log-field-size feature uses (`_raw_problem_features`);
+- `small_board`: `board_rows < SMALL_BOARD_ROWS` (10).
+
+`output/problem_calibration.json` describes the flag.
+
+- **Flagged:** 65 problems on 10 boards: Mid-Atlantic 2022/2024, Mid-Central
+  2022/2023, Pacific Northwest 2022/2024, Rocky Mountain and North Central
+  2022. They have 1–8 rows each.
+- **Ratings unchanged:** on the rerun, all 3,185 records keep every old field
+  byte for byte.
+- **Meta input hashes refreshed:** the old `inputs_sha256` was stale. It was
+  recorded before c877cfd rewrote the survival and binary files (online-round
+  names only); the new hashes match the committed blobs.
+- **Correction to the previous entry:** `difficulty_se` is the raw survival
+  Laplace SE, not a DE standard error; DE has none.
+
+**Tests:** all 232 pass.
+
+**Not updated:**
+- the viewer (`export_viewer`) and the virtual calculator, which do not show
+  the flag;
+- `ucup_only_ratings.json`, which has no small boards;
+- the app copy, `../my-react-app/data/problem_rating.json` (another repo): it
+  lags the shipped file until it is copied again.
+
+Run: `PYTHONUTF8=1 python -m arch_b.calibrate`.
+
+## Stable DE, continued: six ideas tested, a loader bug found (2026-11-10)
+
+**Request.** Continue the stable DE experiment: propose ideas, test them, check
+ratings by hand against statements, and chase unusual ratings. Research only;
+nothing shipped changed. Write-up of the skip tests: `skip_cells_report.md`
+(third and fourth tests). The other experiments are the scripts in
+`scripts/stable_de_explore/`; their numbers are recorded in this entry.
+
+**Ideas tested on the hierarchical candidate.**
+
+| Idea | Result |
+|---|---|
+| σ_b beyond the grid edge (800–1600) | Worse on both selection stages (log loss 0.23931 → 0.23958 at 800; relative drift 0.136 → 0.137 → 0.161 at 1600). **600 is an interior optimum.** |
+| Cut-board level float, re-measured over 8 random quarter cuts | Mean drift **+11 (SE 7)**, not +52: the reserved view was one draw. What is real is tail compression: >95% solved +196, <2% solved −129. No prior strength (τ, τ_b, σ, σ_b) changes it. |
+| Per-board ability spread (empirical Bayes, 243–548) | Log loss −0.0001…−0.0002 (intervals include 0); strong-board floors unchanged (EC-Final 2021 A 1676 → 1695). Negative. |
+| Timing term at the floor | Nested LOCO 230–232 vs 229.5. Negative. |
+| Curved CF map | 229.2–230.7 vs 229.5; the affine map is calibrated conditional on the prediction (within ±35 between 1400 and 3400). Negative. |
+| `skip_margin`, `skip_early` | Both fail their pre-registered criteria; `skip_partial` stays preferred. |
+
+**Fresh blind hand panel** (`FRESH` in `scripts/problem_rating_audit.py`): the
+two most-solved problems of 16 EC boards the old panel does not touch, rated
+before any model number was seen. It confirms the sign-in inflation: `base`
++328 on the 16 most-solved, `skip_partial` +155. One hand rating is wrong
+(Wuhan 2025 F, 2200 by hand, solved by 93%).
+
+**Bugs and unusual ratings chased.**
+- **Loader selection bug (affects shipped ratings; not fixed).** 14 contests
+  have incomplete problem lists. `row_solved_any` keeps only rows that solved
+  a *listed* problem, which selects on the outcome.
+  - CCPC Harbin 2025 (2575) lists only M: the fit sees M as 44 of 44 solved,
+    but 44 of 654 teams solved it. Shipped DE 1947, hierarchical 1847; with
+    the 610 rows kept as failures of M it is **2805**.
+  - Also moved: Rocky Mountain 2022 G +265, B +82; Greater New York 2023 K
+    +178, L +29, J +19; Pacific Northwest 2022 L +92. Every other problem
+    moves by at most 6, and the anchor RMSE is unchanged (225.7 → 225.8).
+  - A fix changes `arch_a/load.py`, one of the frozen hashed inputs, and needs
+    a re-release. It is left for a decision.
+- **Board means are not board levels.** On boards where every team has many
+  other boards, μ_c is a regression coefficient: Aobayama 4562 and Ōokayama
+  4161 against median abilities of 2672 and 2522. Problem ratings there are
+  fine (−24, +3 vs DE), but μ must not be read or exported as the board level.
+- **World Finals boards:** fitted solves exceed QOJ's counts by 12–29%. These
+  are 13–48 mirror rows per board (the known context effect), not an error.
+- **Ōokayama L** (see `skip_cells_report.md`): a `skip_partial` over-correction.
+- **Weak, weakly linked boards read too hard (open).** Latin America 2023
+  (383 rows, 12 linking rows), 13 problems rated blind: DE **+486**, base
+  +349, `skip_partial` +236. This matches Mid-Atlantic 2024 (+469 / +316).
+  - Not the estimator: a parametric simulation on the real design recovers the
+    board within −13…+13 (Mid-Atlantic +25…+95, the top only with a 1.8×
+    wider ability spread).
+  - Not the hyperpriors (free τ, τ_b: +341) and not unofficial rows'
+    untouched problems (dropping them all: +238 vs +236).
+  - With every link cut the board reads +455, so the 12 linking rows pull it
+    down by about 100 and agree with the fitted level (expected 54.7 solves,
+    actual 51). Eight are unofficial QOJ accounts.
+  - CF labels cannot settle it: the weak anchor boards (μ 1430–1680) are
+    well linked and show no trend when held out (−128…+194).
+  - So either the hand scale is about 300 low on weak fields, or these
+    linking accounts under-perform there. It needs outside data: CF handles of
+    some Latin American or Mid-Atlantic teams.
+
+**Code and checks.**
+- The exploratory scripts are kept in `scripts/stable_de_explore/` (25 files;
+  its `README.md` maps each script to its finding). They were ported from the
+  session's scratch folder; six were rerun from the repository root and
+  reproduce the numbers above (`base_fit`, `map_curvature`, `floor_anchors`,
+  `loader_unlisted_rows`, `problem_failures`, `float_seeds`). The other 19
+  were not rerun after the port.
+- The Latin America blind ratings are the `latam` dictionary in
+  `scripts/stable_de_explore/latam_*.py`; the table is in
+  `problem_rating_audit.md`.
+- Full suite: **234 tests pass** (system Python 3.11); 2 are new
+  (`skip_margin`, `skip_early`).
+
+**Hand-off: where to continue.**
+1. **Loader bug (decision needed).** Keep rows that solved only unlisted
+   problems as failures of the listed ones, or drop the 4 selected boards'
+   problems (2575 M; 1482 E, J, K, L; 1115 B, G; 1121 L). Either way
+   `arch_a/load.py` changes, so `data/de_stability_inputs.json` hashes, the
+   `test_unknown_problem_solve_does_not_retain_row` test, the shipped fit and
+   the app copy must follow. Check first:
+   `python scripts/stable_de_explore/loader_unlisted_rows.py`.
+2. **Weak-board level (open question).** Get CF handles for 20–30 Latin
+   American or Mid-Atlantic teams and compare their CF ability with the
+   fitted team ratings (`cf_prior.team_abilities` does this for the 54 elite
+   teams). That decides between "hand scale 300 low" and "level 300 high".
+3. **Skip rule.** `skip_partial` is still the preferred rule and is still not
+   folded into `hier_binary`'s defaults. Two panels have now shaped rules; a
+   fifth rule needs a third, untouched panel.
+4. **Not worth repeating:** σ_b above 600, per-board ability spread, a timing
+   term at the floor, a curved CF map, the stability penalty.
+5. **Still waiting on data:** CF-rated 2026 regionals for a fresh confirmation
+   (none were in the data on 2026-11-10); the 2026 EC online statements.
+
+Run the scripts from the repository root, `base_fit.py` first:
+`PYTHONUTF8=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=. ./.venv/Scripts/python scripts/stable_de_explore/base_fit.py`.
+Their caches go to the gitignored `hier_binary_run/explore/`.
+
+
 ## Recent Codeforces A/B teaching selection (2026-11-09)
 
 **Request.** Find clean, tricky recent Div. 2 A/B material for greedy, DP or
@@ -7899,3 +8713,4 @@ against enumerated lexical minima, Hanoi sizes 1–7 against BFS shortest paths,
 Gray Code lengths 1–10, and the Apple Division counterexample. Mathematical
 proofs cover full constraints; finite checks are supporting evidence. No CSES
 submission, production model, rating, or dataset changed.
+
