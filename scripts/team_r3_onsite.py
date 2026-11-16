@@ -14,7 +14,7 @@ from collections import Counter
 
 from fetch_xcpcio_standings import DATA_URL, _fetch_json
 
-ECF_LINE = 75  # 2026 EC-Final rule estimate, plausible 70-80 (details.md 2026-10-01)
+ECF_LINE = 81  # 2026 EC-Final qualifying rank, 77-84 (ecfinal_cutoff_2026.py, details.md 2026-11-16)
 
 
 def main():

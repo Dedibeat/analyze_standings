@@ -23,13 +23,17 @@ Sources and limits:
 |---|---|---|---|
 | last gold | #40 | 7 / 1169 | ACDFHJL |
 | six solves | #44–#62 | | ACDHJL ×8, CDFHJL ×7, ACDFHL ×4 |
-| 2026 EC-Final estimate (~75, plausible 70–80; details.md 2026-10-01) | #75 | 5 / 569 | CDHJL |
+| 2026 EC-Final estimate (~81, range 77–84; re-estimated 2026-11-16 from the five finished sites, was ~75) | #81 | 5 / 604 | CDHJL |
 | **us** | **#87** | **5 / 647** | CDHJL |
 | last silver | #120 | 4 / 328 | CDHL |
 | last bronze | #240 | 3 / 222 | DHL |
 
-- **78 minutes outside the EC-Final estimate.** The real qualifying rank is known only after the
-  last mainland site (Nanchang, 12-19), so #87 is "probably just outside", not settled.
+- **Six ranks and 43 minutes outside the EC-Final estimate.** The estimate was re-made on
+  2026-11-16 (`scripts/ecfinal_cutoff_2026.py`, details.md): the seat rule replayed on the five
+  finished sites, plus what Shanghai and Nanchang should add, puts the last seat at rank ~81
+  (77–84). A seat at #87 needs those two sites to admit at most 10 new teams within their top 86;
+  the smallest such number in 2023–2025 is 18. So a direct seat from Shenyang is unlikely. The
+  real answer comes after Nanchang (12-19).
 - **Gold needed 7 problems** (32 of the 33 seven-solvers had ACDFHJL). Gold was never in reach;
   the 6th problem (A or F) was worth #58 at the latest minute.
 - **J made the medal silver.** With four problems we were 4 / 393 = #139, a bronze.
@@ -90,11 +94,11 @@ The 33 teams that finished with the same five problems:
    ("more careful but much slower", summary §5) and confirms that the virtual results were an upper
    bound: #87 of 401 is the 22nd percentile, the same as the Xi'an 2026 virtual (#86 / 402) and
    twice the Chengdu virtual (#35 / 319).
-3. **H is the 78 minutes.** H was the third-easiest problem (357 solves). Our first run on it came
+3. **H is the gap to the EC-Final estimate.** H was the third-easiest problem (357 solves). Our first run on it came
    at 138', when half of its eventual solvers already had it, and the AC at 168' was later than the
    bronze median (131'). Against our own tier that is 63 minutes late plus the 20-minute wrong run.
-   - H first try at 138' → 5 / 598 → #81.
-   - H clean at the silver median (105') → 5 / 565 → **#75**.
+   - H first try at 138' → 5 / 598 → **#81, the estimated last seat**.
+   - H clean at the silver median (105') → 5 / 565 → #75.
    - Why H was this late is not known (open questions). It was submitted 8 minutes after C's AC,
      which suggests it was waiting for the keyboard.
 4. **C and J were not slow by our tier's standard.** C at 130' is 18 minutes behind the silver
@@ -141,7 +145,7 @@ in the morning and bismuth potassium citrate in the evening. Tamir was bitten af
 - For Hong Kong: finish the course as prescribed, ask the doctor whether to carry an antihistamine,
   and pack repellent. This is a travel checklist item, not a coaching finding.
 
-## What changes for Hong Kong (HKU, 2027-01-09/10 by the notice; an EC-Final place needs about rank 32–37)
+## What changes for Hong Kong (HKU, 2027-01-09/10 by the notice; an EC-Final place needs about rank 21–25, re-estimated 2026-11-16; was 32–37)
 
 Keep: the opening (first AC at 11'), the pre-submit checklist (1 wrong run), a second reader on
 Dedi's last problem.
@@ -159,7 +163,7 @@ Dedi's last problem.
    played to the end, and a submission on the field's next problem in every round (already in
    summary §6.4; now his first item).
 5. **Speed on the easy-mid problems is the main training target**, ahead of new topics: it is
-   what separated #87 from #75 here. All virtuals on one computer, as onsite.
+   what separated #87 from the EC-Final line here. All virtuals on one computer, as onsite.
 6. **Topic weeks** (summary §6.1) stay, with two additions from this contest: DP state design
    and offline data-structure techniques for Erdene. Problem lists follow once the statements are
    in the repo.

@@ -41,7 +41,7 @@ Fixed conventions:
 | 1799 EC Online II 2024 | online virtual | 6 / 402 | #514 / 2450 (21%) | Tamir joined late |
 | **4071 EC Online I 2026** | **official** | 6 / 877 | **#544 / 2535 (21%)** | standard six at 2× the top-10% penalty |
 | **4113 EC Online II 2026** | **official** | 4 / 482 | **#352 / 2636 (13%)** | standard four, 93 min behind top 10% |
-| **Shenyang 2026** (added 2026-11-16, §8) | **official, onsite** | 5 / 647 | **#87 / 401** | **silver**, 78 min outside the EC-Final estimate |
+| **Shenyang 2026** (added 2026-11-16, §8) | **official, onsite** | 5 / 647 | **#87 / 401** | **silver**, 6 ranks outside the EC-Final estimate (#81) |
 
 - **The six ICPC regional virtuals:** 1 gold, 4 silver, 1 bronze. Inside the EC-Final line twice
   (1071, 4607). Three near misses: 4593 (one wrong run), 1096 (two wrong runs) and 1051 (one more
@@ -520,8 +520,9 @@ still apply to owners: an owner stuck on their own category hands it to the back
 ## 8. Shenyang 2026 onsite (added 2026-11-16; dossier: `shenyang_2026.md`)
 
 Sections 1–7 were written before Shenyang and are left as they were. The onsite result:
-**5 solved (C D H J L), 647 min, #87 / 401, silver**, 78 minutes outside the EC-Final estimate
-(#75 = 5 / 569). Members by Dedi's account: L, C, J Dedi; H Tamir; D Erdene.
+**5 solved (C D H J L), 647 min, #87 / 401, silver**, six ranks and 43 minutes outside the
+EC-Final estimate (#81 = 5 / 604; re-estimated on 2026-11-16 as ~81, range 77–84, was ~75).
+Hong Kong's ten places should reach about rank 21–25 (was 32–37). Members by Dedi's account: L, C, J Dedi; H Tamir; D Erdene.
 
 **How the plan above held up.**
 - **The §6.0 target was met, and it was set too low.** We solved the standard set with one
@@ -532,7 +533,7 @@ Sections 1–7 were written before Shenyang and are left as they were. The onsit
 - **Pace got worse onsite:** ×1.6 to ×2.2 the gold medians on D, C, H and J (virtuals ×1.3–1.9).
   "Virtual medals are an upper bound" (§5) held: the 22nd percentile, as in the Xi'an virtual.
 - **H (Tamir) is the gap.** The third-easiest problem was first submitted at 138' and accepted at
-  168' after one wrong run; the silver median was 105'. H clean at 105' is #75.
+  168' after one wrong run; the silver median was 105'. H first try at 138' is #81.
 - **§6.5, Erdene as data-structure owner:** J (an offline segment tree, by Dedi's account) is
   evidence against it. C (a DP) matches his Codeforces wall, DP state design (§4b).
 - **Dedi overloaded again** (3 of 5), and the 6th problem (A or F, both ~60 solves) had one person

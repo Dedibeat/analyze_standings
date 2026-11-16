@@ -820,6 +820,21 @@ the plan changes for Hong Kong; and the open questions. Statements, editorial
 and our code were not available. `summary.md` §8 has the short version. Details
 are in `details.md`.
 
+### EC-Final cutoffs from the finished 2026 regionals (2026-11-16)
+
+```bash
+python3 scripts/ecfinal_cutoff_2026.py [--team NUM-R^3]   # ~25 s; needs numpy, pypinyin, openpyxl
+```
+
+Replays the EC-Final seat rule on the five played 2026 sites and adds the two
+sites still to come from the 6th-site admits of 2023-2025: the last mainland
+seat falls at rank ~81 (77-84), up from the pre-season ~75. For Hong Kong it
+simulates the registered field (10-28 export) with a rank model fitted and
+backtested on the 2024/2025 boards and walks the medal ranks under the 2026
+rule: the 10th place falls at about rank 21-25 (was 32-37). The registered
+fields of Shanghai, Nanchang and the final Hong Kong list were not available.
+Details are in `details.md`.
+
 ### NUM-R^3 members on Codeforces (2026-11-05)
 
 ```bash

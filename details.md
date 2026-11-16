@@ -8977,3 +8977,106 @@ Nanchang.
 - The page https://claude.ai/artifact/4i24BaGeoogkxfA45ZTjp7 was not updated.
 
 Run: `python3 scripts/team_r3_onsite.py /icpc/51st/shenyang --at 5:598 --at 5:565 --at 4:394 --at 6:943`.
+
+
+## EC-Final cutoffs re-estimated from the finished 2026 regionals (2026-11-16, second entry)
+
+**Request.** Recompute the EC-Final cutoff estimate from the finished regionals, and estimate
+the cutoff in Hong Kong.
+
+**Script.** `scripts/ecfinal_cutoff_2026.py [--team NAME]` (new, ~25 s; needs numpy, pypinyin
+and openpyxl through `arch_b.hk_field_2026`).
+
+### Mainland: the last of the 230 seats falls at rank ~81 (77–84); it was ~75 (70–80)
+
+**Method.**
+- The round-robin rule of `ecfinal_cutoff.py` is replayed on the official rows of the five
+  played sites in `data/xcpcio_51st_regionals.json` (Xi'an, Chengdu, Wuhan, Nanjing, Shenyang).
+  Identity is (school, member name), not the bare name the old script uses.
+- Shanghai (12-05) and Nanchang (12-19) are added from history. For 2023–2025 the sites are put
+  in calendar order (XCPCIO start dates) and the 6th site's new admits within rank d are counted.
+  No season had a 7th site, so it gets rho × the 6th, rho = 0.5 / 0.7 / 0.9. The ratio between
+  consecutive sites at positions 4–6 was 0.50–1.12, mean 0.74.
+- The cutoff is the first tier d with admitted(d) + late(d) ≥ 230.
+
+**Numbers.** Teams admitted within rank d by the first five sites:
+
+| season | d = 70 | 75 | 80 | 85 | 90 | 6th site adds (d = 70 … 90) |
+|---|---|---|---|---|---|---|
+| 2023 | 186 | 197 | 206 | 220 | 234 | 14, 15, 18, 16, 16 |
+| 2024 | 187 | 199 | 214 | 225 | 233 | 12, 11, 12, 13, 14 |
+| 2025 | 179 | 189 | 200 | 212 | 228 | 9, 10, 11, 12, 11 |
+| 2026 | 185 | 196 | 209 | 218 | 231 | to come |
+
+- 2026 after five sites looks like the earlier seasons after five sites.
+- Cutoff by scenario (6th site as 2023 / 2024 / 2025 × rho): 77–79, 80–82, 81–83. Median 81.
+  With no further admits at all the five sites alone reach rank 90.
+- **Why it moved from ~75.** The pre-season projection needed 230 admits by rank 75. The five
+  played sites give 196 there, so the last two would have to add 34; history gives 15–29.
+
+**Xi'an has no member names** on XCPCIO (0 of 402 official rows). Members were taken from the
+same school + team name on another 2026 board (135 teams), else from a 2026 online roster (110).
+157 teams stay name-only, 25 of them in Xi'an's top 100, and count as teams of their own.
+- Among the roster-resolved teams whose name is on no other board, 4 of 28 in the top 100 share a
+  member with a team at another site. At that rate about 3–4 of the 25 are hidden duplicates.
+- Treating 25% of them as duplicates moves the cutoff by 0–2 ranks deeper (81 → 81–83), 50% by
+  1–4. That is why the range is given as 77–84 and not 77–83.
+
+**NUM-R^3 (Shenyang #87).** Shenyang has the most valid teams, so it is first in every tier.
+A seat needs fewer than 230 seats filled after tier 86: the last two sites may admit at most
+10 new teams within their top 86. The scenarios give 18–30, and the smallest 6th-site number
+alone in 2023–2025 is 12 at d = 85. So a direct seat from Shenyang is unlikely; I put it at a
+few percent and cannot do better without the registered fields.
+
+### Hong Kong: the 10th place falls at about rank 21–25; it was 32–37
+
+**Method.**
+- **Field.** The 10-28 registration export through `arch_b.hk_field_2026`: the top 95 non-local
+  round-1 teams by school rank, the 7 registered local teams, and 13 more local teams drawn from
+  the 2024/2025 local teams (the notice gives 20 local seats). 115 teams, medals to rank 69.
+- **Eligibility** from the mainland replay down to the cutoff: a team with a member on an
+  admitted team is skipped, and so is a school that already has 3 seats.
+- **Ranks.** logit(rank share of the field) fitted on the 2024/2025 Hong Kong boards. With a
+  mainland result that season: −4.865 − 0.739 x + 0.237 m (133 teams, residual SD 1.03), x the
+  online strength and m the mean logit rank share at the mainland sites. Without one:
+  −7.792 − 1.234 x (82 teams, SD 1.18). Teams with no online link draw from the 2024/2025
+  unlinked teams of the same kind. 4,000 draws; in each, the medal ranks are walked and the rank
+  of the 10th eligible team is recorded.
+
+**Backtest** (fit on one season, simulate the other with its real eligibility):
+
+| season | teams with a mainland seat | board (2026 rule replayed) | simulated median (10–90%) |
+|---|---|---|---|
+| 2024 | 18 of 149 | 37 | 34 (29–38) |
+| 2025 | 16 of 126 | 32 | 28 (24–32) |
+
+The simulation reads 3–4 ranks too shallow in both seasons.
+
+**2026.** 6 field teams hold a mainland seat and 26 more come from schools that already have 3.
+The 10th eligible medal team is at rank **21** (25–75% 19–23, 10–90% 18–25), with 11 teams
+skipped above it and 3.0 of the 10 places going to local teams. It does not move with the
+mainland cutoff (77 / 81 / 83 give 21). Adding the backtest's 3–4 ranks: **about 21–25**.
+- **Why it is shallower than 32–37.** That figure replayed the 2024/2025 boards, whose top was
+  full of teams with a mainland seat (16–18 in the field). This year the strong schools sent
+  second line-ups or did not register, so only 6 field teams hold a seat.
+- **NUM-R^3:** predicted Hong Kong rank median 47 (10–90% 15–88); it takes a place in 18% of the
+  draws. The 2026-10-08 figure was 19% for rank ≤ 32–37: the bar is higher, the field weaker.
+
+**Not known, reported rather than guessed.**
+- **The registered fields of Shanghai, Nanchang and the final Hong Kong list.** One request to
+  PTA (`uep.pintia.cn`) failed with a connection reset and the retry was blocked by this
+  session's permissions, so nothing was fetched. With those lists the late sites could be
+  replayed team by team instead of taken from history, and the Hong Kong field would be the real
+  one (rounds 1–2 closed on 10-30 and 11-14; the list used is from 10-28).
+- **Hong Kong teams that qualify later** at Shanghai or Nanchang are not removed, and schools at
+  2 seats may reach 3. Both make the Hong Kong cutoff deeper.
+- **Reward seats** (a school with one may hold 4): not known per school; the cap is 3 here.
+- Whether seats unused at Hong Kong return to the mainland is not stated in the rule as recorded.
+
+**Changed elsewhere.** `team_r3_onsite.py` now marks rank 81 as the EC-Final line (Shenyang:
+#81 = 5 / 604, so NUM-R^3 is six ranks and 43 minutes outside; H first try at 138' would have
+been exactly #81). The Shenyang dossier and summary §8 use the new numbers.
+`ecfinal_chance.py` still uses K = 70 / 75 / 80 and the Hong Kong depth of 32–37; it was not
+rerun. No test was added for the new script.
+
+Run: `python3 scripts/ecfinal_cutoff_2026.py`.
