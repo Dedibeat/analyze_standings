@@ -9080,3 +9080,54 @@ been exactly #81). The Shenyang dossier and summary §8 use the new numbers.
 rerun. No test was added for the new script.
 
 Run: `python3 scripts/ecfinal_cutoff_2026.py`.
+
+
+## Shenyang 2026: statements received, member correction, problem ideas (2026-11-16, third entry)
+
+**User facts (Dedi).**
+- Photos of the Chinese statements of A, C, D, F, H, J and L. H's second page (output format,
+  samples) and the pages of B, E, G, I, K and M were not sent. The photos are not committed.
+- **Correction: Tamir solved D, not Erdene.** Asked who solved H, Dedi confirmed Tamir. So the
+  members are Dedi L, C, J; Tamir D, H; **Erdene none**. This supersedes "Erdene solved D" in the
+  first entry of today and everything built on it there.
+
+**Problem ideas** (dossier, new "Problems" section). There is no editorial, so these are my own
+solutions:
+
+| problem | idea | checked against |
+|---|---|---|
+| L | no palindrome ≥ 2 ⇔ none of length 2 or 3; a stack | a direct palindrome test, 20,000 random op strings |
+| D | a + b − 1 ≤ n; p = [n−a+1..n] then 1..n−a with b−1 prefix minima; b = 1 forces p1 = 1 | every permutation for n ≤ 7, all (a, b, k) |
+| H | cell (x, y) is colour x if y ≥ π(x), else the nearest row below (else above) whose rook is at a column ≤ y; rooks are forced from the rightmost column leftwards | every permutation for n ≤ 7: shape rules and a full count of rook placements |
+| C | state (most recent, least recent); a direct access is a lazy +A, a cache access rewrites one row; O(n·m) | a full-state DP, 4,000 random cases |
+| J | anchored ⇔ comparable (submask/supermask) with every other value; popcount form; nearest incomparable by popcount-ordered OR/AND segment trees, then a Fenwick sweep | the lemma and popcount form against all m! orders, m ≤ 5 |
+| F | the answer is 1, 2 or 3 (blocks ⌊a/d⌋ mod 3); bipartite test of the d ≤ diff < 2d graph | all partitions for n ≤ 8 |
+| A | answer = Σ φ(n/g) over good g; the divisors of g are a prefix of D[1], D[1+s], …; one walk per prime | a direct count for n < 2500 and the 19-digit sample |
+
+- `output/team_r3_coach/shenyang_2026_checks.py` holds the reference solutions and the checks
+  (~10 s, all pass, all statement samples included).
+- **Not checked:** J's segment-tree part and F's DSU implementation at full size are described,
+  not written. H's output format is unknown, so only the colouring's properties are checked.
+- Mistake caught while working: nothing in the solutions, but my first reading of the member
+  correction was ambiguous (D ↔ H swap or both to Tamir), so it was asked, not assumed.
+
+**What the correction changes in the debrief.**
+- Load: Dedi 3, Tamir 2, Erdene 0 (it read 3 / 1 / 1).
+- D, first try on the problem only 17% of solvers got first try, is Tamir's.
+- H's lateness has a cause now: Tamir solved D (65') and then H (first run 138', AC 168'), so two
+  of the three easiest problems were queued on one member while Erdene's C and J gave no solve.
+- The opening pattern cost twice: no solve from Erdene's problems, and no Erdene on the easy
+  problems he opened at Chengdu (M at 23').
+- By category: C is DP state design (Erdene's Codeforces wall); J needs a bit lemma first (Dedi's
+  strength); A is number theory (Dedi's category, never read as far as is known); F is an
+  observation plus DSU.
+
+**Plan changes** (dossier and summary §8 rewritten): Erdene opens with the easy problems again;
+no two easy problems queued on one member; upsolve list by member (C and J Erdene, F Erdene +
+Tamir, A Dedi, H Tamir); Erdene's topic weeks gain DP state design and submask arguments. The
+other rules of the first entry stand.
+
+**Still missing:** the editorial, our onsite code, H's second page and six statements. Open
+questions are at the end of the dossier.
+
+Run: `python3 output/team_r3_coach/shenyang_2026_checks.py`.

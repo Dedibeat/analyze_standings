@@ -816,9 +816,11 @@ EC-Final lines, our runs with the rank after each AC, the solve sets by count,
 and per problem the first-try share and the median solve minute of each medal
 tier. `output/team_r3_coach/shenyang_2026.md` is the debrief of the first onsite
 contest: 5 solved, #87 / 401, silver; one wrong run but ×1.6–2.2 the gold pace;
-the plan changes for Hong Kong; and the open questions. Statements, editorial
-and our code were not available. `summary.md` §8 has the short version. Details
-are in `details.md`.
+the plan changes for Hong Kong; and the open questions. It has an idea for each
+of the seven problems whose statements we have (A, C, D, F, H, J, L); there is
+no editorial, so `output/team_r3_coach/shenyang_2026_checks.py` checks each idea
+against a brute force (`python3 output/team_r3_coach/shenyang_2026_checks.py`,
+~10 s). `summary.md` §8 has the short version. Details are in `details.md`.
 
 ### EC-Final cutoffs from the finished 2026 regionals (2026-11-16)
 
