@@ -44,13 +44,14 @@ from arch_b import hk_link as hk
 from arch_b import online_gold as og
 from arch_b import online_medals as om
 
-REGISTRATION = og.ROOT / "data" / "icpc_hk_macau_public_teams_20261028.xlsx"  # 10-28 export
+REGISTRATION = og.ROOT / "data" / "icpc_hk_macau_public_teams_20261116.xlsx"  # 11-16 export (final review)
 SNAPSHOTS = {  # export -> when taken (UTC): a CSV's last registration, an xlsx file name's stamp (UTC+8)
     "icpc_51_asia_hkmo_teams.csv": "2026-10-15T05:12",
     "icpc_hk_macau_regional_teams.csv": "2026-10-17T14:30",
     "icpc_hk_macau_public_teams_20261023.xlsx": "2026-10-23T14:45",
     "icpc_hk_macau_public_teams_20261026.xlsx": "2026-10-26T11:53",
     "icpc_hk_macau_public_teams_20261028.xlsx": "2026-10-28T05:50",
+    "icpc_hk_macau_public_teams_20261116.xlsx": "2026-11-16T06:18",
 }
 ROUND1_CLOSE = "2026-10-30T16:00"  # end of 10-30 in UTC+8 (the notice gives the date only)
 PACES = (1, 2, 3)

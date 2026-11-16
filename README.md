@@ -664,10 +664,11 @@ that have not registered yet added back, the gold line is #80–92, as strong
 schools keep sending weaker line-ups than in 2025; NUM-R^3's chances are unchanged. Results: `output/hk_field_2026.md`.
 `scripts/hk_shenyang_rank.py` puts every registrant's 2026 online, regional and
 CCPC results on the binary fit's CF-performance scale and reads them as Shenyang
-official ranks. NUM-R^3 (Shenyang official #87, board #94) is 23rd of the 130
-registrants with a 2026 result (Shenyang-equivalent #101 over all three
-appearances); on onsite results alone, 9 registrants are stronger. Results:
-`output/hk_shenyang_rank.md`.
+official ranks. On the 11-16 export (`data/icpc_hk_macau_public_teams_20261116.xlsx`,
+now the default: 122 teams, 110 Reviewed / 12 Pending, after round 2 closed) NUM-R^3
+(Shenyang official #87, board #94) is 24th of the 103 registrants with a 2026
+result (Shenyang-equivalent #101 over all three appearances); on onsite results
+alone, 11 registrants are stronger. Results: `output/hk_shenyang_rank.md`.
 
 ```bash
 python3 scripts/build_quota_evidence.py        # WF/host/invitational/provincial evidence + Shanghai lists

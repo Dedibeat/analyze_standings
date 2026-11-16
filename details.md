@@ -8959,3 +8959,63 @@ result, 79 of them from an onsite contest):
 
 Run: `python3 scripts/hk_shenyang_rank.py [--team NAME]` (~20 s; needs
 `openpyxl` and `pypinyin`).
+
+### 11-16 export: rechecked (2026-11-16, second entry)
+
+**Data.** `data/icpc_hk_macau_public_teams_20261116.xlsx` is the user's PTA
+export, stamped 14:18 UTC+8 (06:18 UTC). It is now the `hk_field_2026`
+default and the newest `SNAPSHOTS` entry. Round 1 (10-30) and round 2 (11-14)
+have both closed.
+- **122 teams:** 110 Reviewed, 12 Pending. NUM-R^3 is **Reviewed**.
+- Against 10-28: 52 teams are gone and 30 are new.
+- The new teams are mostly local, round-2 or late line-ups: 香港理工大学 ×3,
+  香港城市大学 ×2, 香港浸会大学 ×2, 澳门城市大学 ×2, 澳门科技大学, 杭州师范大学,
+  西安电子科技大学, 南开大学 and others.
+- The Pending teams include all 9 non-local teams that the module's round-1
+  cut would drop (school #215 and worse), plus 西南大学's second team,
+  重庆城市科技学院 and PolyU 冻柠走冰. The Pending status most likely marks the
+  waiting list. This is inferred from the overlap; it is not stated anywhere.
+- **The strong schools did not come.** 上海交通大学, 复旦大学, 哈尔滨工业大学,
+  中国人民大学 (the 10-28 line-up left), 南京大学, 中国科学技术大学 and others
+  with a 2024/2025 Hong Kong gold or silver are absent.
+
+**Field** (`output/hk_field_2026.md`):
+- 95 of 122 teams link to an online result.
+- Gold / silver+ / medal lines are online **#135 / #504 / #1005**, against
+  #53–66 gold in 2024/2025.
+- Expected golds from the absolute model: 5.6, against 12.3–12.6.
+- So this is a weaker top than in past years. The scenario rows (adding
+  unregistered 2025 schools) and the round-1 cut-risk section no longer apply,
+  because registration has closed.
+
+**NUM-R^3:**
+- **By online strength:** 26th of the 95 linked teams.
+- **Gold / silver / bronze:**
+  - field-relative model on the actual list: **8% / 36% / 42%** (silver or
+    better 44%);
+  - absolute model: 1% / 34% / 46%, unchanged.
+  - The field-relative model was preferred once the list closed (2026-10-15).
+- **By Shenyang-equivalent strength** (`output/hk_shenyang_rank.md`): **24th
+  of the 103 registrants with a 2026 result.** 23 are ahead; 3 of them are
+  local: HKUST ×2 and the new PolyU 冻柠走冰 (Chengdu #16, Pending).
+- On onsite results alone, 11 registrants are stronger.
+- The new teams ahead: 杭州师范大学 Rise from the Brink (online only, Shenyang
+  eq. #26), PolyU 冻柠走冰 (#38), 西安电子科技大学 (#117, now just behind).
+  Nobody who left was ahead.
+- With ~110 attending teams and 10% / 30% medal shares: gold reaches rank
+  ~11, silver ~33. 24th is mid-silver, ~13 places below gold.
+- Teams ahead that are rated only online: 8, the same as before.
+
+**No 2026 result:** 19 teams, among them HKU, CityU CityU 0.5, HKBU_Team,
+澳门城市大学 基米斗队 and 苏州大学.
+
+**Tests.** `tests/test_hk_field_2026.py` now pins the 11-16 export:
+- 122 / 95 teams;
+- 104 round-1 teams with 9 cut;
+- the extra team is 西南大学 梦到哪句写哪句万一对了呢;
+- the renamed line-up check moves to 南京工程学院 (round 1 #665 / round 2 #1077),
+  because 西南石油大学 left;
+- cut-risk counts: 6 + 3 registered and 1 + 0 withdrawn since 10-28;
+- 8 others needed.
+
+All 6 tests pass.
