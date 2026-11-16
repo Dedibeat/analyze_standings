@@ -8888,3 +8888,92 @@ Run:
 `python3 scripts/fetch_xcpcio_standings.py ccpc data/xcpcio_ccpc.json --min-year 2022`
 then, for each missing QOJ id,
 `python3 scripts/add_qoj_contest.py <id> --name "CCPC …" --region "China Collegiate" --year <y> --output data/qoj_ccpc.json`.
+
+
+## NUM-R^3 at Shenyang 2026: onsite debrief (2026-11-16)
+
+**Request.** Take the coach role. The team played the Shenyang 2026 regional onsite and
+finished 87th of the official rows.
+
+**User facts (Dedi, 2026-11-16).**
+- Dedi solved L, C and J; Tamir H; Erdene the fifth problem (remembered as D; the board
+  confirms the fifth is D).
+- The team's usual plan in virtuals: Erdene gets a hard problem early while Dedi and Tamir
+  clear the rest. Dedi credits it for the Chengdu virtual.
+- At Shenyang Erdene did not see the DP in C or the offline segment tree in J. Dedi took both
+  over. He asked Erdene to solve F with Tamir; Erdene had lost confidence and debugged J with
+  him instead.
+- Dedi had an allergic reaction to an insect bite in Shenyang: a hormonal injection, ebastine in
+  the morning, bismuth potassium citrate in the evening. Tamir was bitten after the contest.
+
+**Script.** `scripts/team_r3_onsite.py <board-link> [--team NAME] [--at SOLVED:MINUTES]` (new)
+reads a live XCPCIO board through `fetch_xcpcio_standings._fetch_json` and prints, for official
+teams only:
+- the medal and EC-Final (≈ 75) lines and our row;
+- our runs by minute with the rank after each AC;
+- the solve sets by solve count;
+- per problem: solved/tried, first-try share, the median solve minute of the gold, silver and
+  bronze teams, solves in the last hour, and ours;
+- with `--at`, the rank a score would have had.
+
+It exists because `team_r3_digest.py` needs a QOJ contest directory, and the run-level data
+(the minute of a wrong run, a resubmission after AC, a run on an unsolved problem) is not in
+`data/xcpcio_51st_regionals.json`.
+
+**Medal counts.** XCPCIO's `medal.official` holds counts per medal (Shenyang 40 / 80 / 120), not
+cumulative ranks: silver is #41–#120. My first scratch pass read them as cumulative and called
+#87 a bronze; the script sums them. This matches the 2026-11-04 digest (Chengdu "32 / 64 / 96",
+last silver #96).
+
+**Result.** 5 solved (C D H J L), 647 min, **#87 / 401, silver**.
+
+| line | rank | scoreline |
+|---|---|---|
+| last gold | #40 | 7 / 1169 |
+| six solves | #44–#62 | |
+| EC-Final estimate | #75 | 5 / 569 |
+| us | #87 | 5 / 647 |
+| last silver | #120 | 4 / 328 |
+
+Our runs: L 11.1 AC, D 64.7 AC, C 129.6 AC, H 138.1 WA, H 167.7 AC, H 168.4 AC (a second
+submission after the AC), J 253.9 AC, F 295.8 WA.
+
+**Findings** (`output/team_r3_coach/shenyang_2026.md`; summary §8).
+- **Accuracy.** One penalised wrong run. The 14 virtuals averaged 4.9; the 33 teams with the same
+  five problems made 4 (median). Dedi's three solves were all first try. D was first try where
+  only 17% of its solvers were.
+- **Speed.** ×1.6 to ×2.2 the gold medians on D, C, H and J, against ×1.3–1.9 in the virtuals.
+  #87 of 401 is the 22nd percentile, the same as the Xi'an 2026 virtual.
+- **H is the gap to the EC-Final estimate.** 357 solves; our first run at 138', AC at 168'; the
+  silver median is 105'. H first try at 138' gives #81; H clean at 105' gives #75.
+- **C and J were at our tier's pace** (C 18 minutes behind the silver median, J on it). After
+  C, D, H, L the same-set teams needed 89 minutes for J; we needed 86.
+- **J made the medal silver:** four problems would have been 4 / 393 = #139, a bronze.
+- **The 6th problem** (A 59 solves, F 60) was worth #58 even at the last minute. From 168' it had
+  one person; our only run on either was F at 295.8'.
+- **The opening pattern.** In the Chengdu virtual Erdene's solves were the two easiest problems
+  and the two interactive/communication ones, his best category. Shenyang's mid problems were a
+  DP (his Codeforces wall) and an offline data-structure problem. The summary's §6.5 choice of
+  Erdene as data-structure owner now has one result against it.
+- **The §6.0 target** (standard set, ≤ 2 wrong runs, a 5th problem late) was met and was too low:
+  rank 75 was 5 / 569 this year and 4 / 297 in 2025.
+
+**Plan changes for Hong Kong** (dossier, last section): mid problems by type with a 30/45-minute
+clock; the keyboard to the most-solved open problem with a complete solution; Tamir and Erdene
+pair on the field's next problem while Dedi closes; a fixed next job for Erdene after a miss;
+speed on easy-mid problems before new topics, with virtuals on one computer; DP state design and
+offline data-structure blocks for Erdene; an incentive-seat application if NUM has no seat after
+Nanchang.
+
+**Missing, reported rather than guessed.**
+- The statements, the editorial and our onsite code. The set was not on QOJ at the 2026-11-15
+  pull and QOJ credentials are not in this session, so the dossier has no per-problem ideas and
+  "DP" / "offline segment tree" are Dedi's words.
+- `members_solved.csv` was not changed: `team_r3_participations.py` reads a QOJ id from the
+  sheet's contest name and would fail on a Shenyang 2026 row. The attribution is in the dossier.
+- Open questions for the team (dossier): why H was late and what its wrong run was, why D took
+  65', when C and J changed hands, who ran F and whether A was read, whether virtuals use one
+  computer, and Tamir's and Erdene's accounts.
+- The page https://claude.ai/artifact/4i24BaGeoogkxfA45ZTjp7 was not updated.
+
+Run: `python3 scripts/team_r3_onsite.py /icpc/51st/shenyang --at 5:598 --at 5:565 --at 4:394 --at 6:943`.

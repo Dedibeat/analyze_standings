@@ -804,6 +804,22 @@ the onsite field from XCPCIO for the 2026 regionals, the CCPC stations and the
 `1053_checks.py` and `2661_checks.py` are brute-force and UBSan checks of our
 runs, kept as evidence. Details are in `details.md`.
 
+### NUM-R^3 onsite debrief: Shenyang 2026 (2026-11-16)
+
+```bash
+python3 scripts/team_r3_onsite.py /icpc/51st/shenyang              # lines, our runs by minute, field per problem
+python3 scripts/team_r3_onsite.py /icpc/51st/shenyang --at 5:565   # the rank a score would have had
+```
+
+Reads a live XCPCIO board (official teams only) and prints the medal and
+EC-Final lines, our runs with the rank after each AC, the solve sets by count,
+and per problem the first-try share and the median solve minute of each medal
+tier. `output/team_r3_coach/shenyang_2026.md` is the debrief of the first onsite
+contest: 5 solved, #87 / 401, silver; one wrong run but ×1.6–2.2 the gold pace;
+the plan changes for Hong Kong; and the open questions. Statements, editorial
+and our code were not available. `summary.md` §8 has the short version. Details
+are in `details.md`.
+
 ### NUM-R^3 members on Codeforces (2026-11-05)
 
 ```bash
