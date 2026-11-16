@@ -170,9 +170,10 @@ def _contests_from(ds, theta, cf_of, row_lookup, paths):
     contests = []
     for c in raw:
         cid = c["contest_id"]
+        labels = {p["problem_label"] for p in c["problems"]}
         teams = []
         for source_row, s in enumerate(c["standings"]):
-            if not row_solved_any(s):
+            if not row_solved_any(s, labels):
                 continue
             hit = row_lookup.get((cid, source_row))
             assert hit is not None, f"missing participation {source_row} in contest {cid}"

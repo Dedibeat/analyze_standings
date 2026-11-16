@@ -53,7 +53,8 @@ def _raw_problem_features():
             contests.setdefault(int(contest["contest_id"]), contest)
     result = {}
     for cid, contest in contests.items():
-        retained = [row for row in contest["standings"] if row_solved_any(row)]
+        labels = {p["problem_label"] for p in contest["problems"]}
+        retained = [row for row in contest["standings"] if row_solved_any(row, labels)]
         field = len(retained)
         for problem in contest["problems"]:
             label = problem["problem_label"]

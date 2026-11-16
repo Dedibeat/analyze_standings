@@ -56,7 +56,8 @@ def _read(paths):
 
 
 def _retained_rows(contest):
-    return [row for row in contest["standings"] if row_solved_any(row)]
+    labels = {p["problem_label"] for p in contest["problems"]}
+    return [row for row in contest["standings"] if row_solved_any(row, labels)]
 
 
 def _loco_details(z, cf, groups):

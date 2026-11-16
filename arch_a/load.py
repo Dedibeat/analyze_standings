@@ -99,17 +99,31 @@ def _roster_token(members, season=None):
     return None
 
 
-def row_solved_any(standing):
-    """True if this row solved any problem, listed or not.
+# Boards whose official ($DEFAULT) rows carry solve times in minutes, not seconds
+# (Rocky Mountain 2023: at most 295 there, against 3297..17302 in the other rows).
+MINUTE_BOARDS = {1483}
+
+
+def _solved(cell):
+    """A solve inside the contest window. QOJ lists a few solves from before the
+    start (negative time); they are not contest results."""
+    return bool(cell.get("solved")) and (cell.get("time_seconds") or 0) >= 0
+
+
+def row_solved_any(standing, problem_labels=None):
+    """True if this row belongs in the fit: it solved a problem, listed or not.
 
     Some QOJ standings contain labels that are absent from the contest's parsed
     problem list.  Those cells cannot be modeled, but a row that solved only
     such problems did take part, so it stays as a failure of the listed ones.
     Requiring a *listed* solve selected rows on the outcome: a board listing one
     problem kept exactly its solvers (CCPC Harbin 2025 M read 44 of 44 solved
-    instead of 44 of 654).
+    instead of 44 of 654). ``problem_labels`` is the board's listed labels; a
+    board that lists none has nothing to fit and keeps no row.
     """
-    return any(p.get("solved") for p in (standing.get("problems") or {}).values())
+    if problem_labels is not None and not problem_labels:
+        return False
+    return any(_solved(p) for p in (standing.get("problems") or {}).values())
 
 
 class _UnionFind:
@@ -331,7 +345,7 @@ def load(path=DATA_PATH, uf=None, season_key=False, min_solve_hours=None):
     absent from a contest's parsed problem list are not part of the fit, but a
     row that solved only such problems is kept as a failure of the listed ones.
     A team's contest count ``N_t`` is therefore the number of contests where it
-    solved something. ``uf`` is still built over
+    solved something. Solve times are in seconds (``MINUTE_BOARDS`` converted). ``uf`` is still built over
     *all* rows, so identity links carried only by a zero-solve row are preserved.
 
     ``season_key`` separates recurring rosters by ICPC season (``season_of``), so a
@@ -372,6 +386,7 @@ def load(path=DATA_PATH, uf=None, season_key=False, min_solve_hours=None):
         if cid not in contest_index:
             contest_index[cid] = len(contest_index)
         ci = contest_index[cid]
+        labels = {p["problem_label"] for p in c["problems"]}
         for p in c["problems"]:
             key = (ci, p["problem_label"])
             if key not in problem_index:
@@ -380,7 +395,7 @@ def load(path=DATA_PATH, uf=None, season_key=False, min_solve_hours=None):
                 contest_of_problem.append(ci)
                 raw_solved_count.append(p.get("problem_solved_in_contest"))
         for s in c["standings"]:
-            if not row_solved_any(s):
+            if not row_solved_any(s, labels):
                 continue  # zero-solve rows are dropped from the fit
             tk = _key(cid, s)
             if tk not in team_index:
@@ -410,7 +425,7 @@ def load(path=DATA_PATH, uf=None, season_key=False, min_solve_hours=None):
         block = np.array(sorted(cols.values()), dtype=np.int64)
         slot = {col: k for k, col in enumerate(block)}
         for source_row, s in enumerate(c["standings"]):
-            if not row_solved_any(s):
+            if not row_solved_any(s, cols):
                 continue  # zero-solve rows are dropped from the fit
             assert s.get("rank") is not None, f"missing rank in contest {cid}"
             ti = team_index[_key(cid, s)]
@@ -420,6 +435,7 @@ def load(path=DATA_PATH, uf=None, season_key=False, min_solve_hours=None):
             rank_of_row.append(int(s["rank"]))
             participation_of_row.append((cid, source_row))
             official_of_row.append(str(s.get("team_id") or "").startswith("$DEFAULT"))
+            unit = 60 if cid in MINUTE_BOARDS and official_of_row[-1] else 1
 
             y = np.zeros(len(block), dtype=bool)
             tau = np.full(len(block), np.nan, dtype=np.float32)
@@ -430,11 +446,11 @@ def load(path=DATA_PATH, uf=None, season_key=False, min_solve_hours=None):
                     continue  # standings problem not in problem list; skip defensively
                 k = slot[col]
                 wrong[k] = int(pdata.get("wrong_attempts", 0))
-                if pdata.get("solved"):
+                if _solved(pdata):
                     y[k] = True
                     t = pdata.get("time_seconds")
                     assert t is not None, f"solved cell without time in contest {cid}"
-                    tau[k] = t
+                    tau[k] = t * unit
             row_chunks.append(np.full(len(block), ri, dtype=np.int64))
             prob_chunks.append(block)
             y_chunks.append(y)

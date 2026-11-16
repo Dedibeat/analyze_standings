@@ -14,16 +14,16 @@
   "anchor_contests": 15,
   "anchor_feature_range": {
     "raw_b": [
-      1179.9,
-      2940.5
+      1181.0,
+      2941.6
     ],
     "binary_minus_survival": [
-      -707.2,
-      466.5999999999999
+      -708.5,
+      465.0999999999999
     ],
     "conditional_fit_se": [
       9.8,
-      168.9
+      168.8
     ],
     "solve_rate": [
       0.0,
@@ -42,7 +42,7 @@
   "uncertainty": "unavailable",
   "small_board": "board_rows < 10: rated from a handful of rows; treat difficulty_cf as unreliable (problem_rating_audit.md)",
   "inputs_sha256": {
-    "problem_ratings_survival.json": "2bba1fd3505ec092ec0664d1e9ca8b5226bdd569ef665d4abccb01c4f911defd",
-    "problem_ratings_b.json": "76db7d6f1b5e940bc06ec0cd276e0a56604670e96d70702a4bbbbc81d83509de"
+    "problem_ratings_survival.json": "016da8363cb2a798c5a43379c133cb8d9d78197364c6e154583f88f723b995cf",
+    "problem_ratings_b.json": "02ba1926b7c62a59668a3c48881323d5070820b575a48583b58585edc7767e9e"
   }
 }

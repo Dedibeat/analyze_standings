@@ -66,7 +66,7 @@ def panel():
             if mem and counts[mem] > 1:
                 drops["duplicate_full_roster"] += 1
                 continue
-            if not row_solved_any(r):
+            if not row_solved_any(r, labels):
                 drops["zero_solve"] += 1
                 continue
             if not mem:
