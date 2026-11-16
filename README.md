@@ -946,6 +946,24 @@ regionals and on 8 CCPC contests (2024–2025).
 
 Details: `details.md` (2026-10-10 entry).
 
+### EC-Final medal vs regional gold (2026-11-16)
+
+```bash
+python3 scripts/ecf_vs_regional_gold.py
+# writes output/ecf_vs_regional_gold.md; caches boards in data/xcpcio_boards/ (gitignored)
+```
+
+Uses no ratings. Official XCPCIO boards of the 48th–50th seasons (21 regionals,
+3 EC-Finals), standings recomputed from run.json. Teams that played both are
+linked by school plus ≥ 2 members (school plus team name where a board has no
+members). Regional gold → EC-Final medal 363/420 (86%); discordant
+appearances 57 (gold, no ECF medal) vs 387 (ECF medal, no gold). An own
+season Bradley–Terry fit on board orderings puts a regional's gold-cutoff
+teams at an expected EC-Final rank of 59–121 (bronze/silver; silver line 84).
+So a regional gold is harder than an EC-Final medal and close to EC-Final silver.
+
+Details: `details.md` (2026-11-16 EC-Final entry).
+
 ### CCPC medal vs ICPC EC regional medal (2026-10-12)
 
 ```bash

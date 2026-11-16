@@ -9065,3 +9065,58 @@ standings loader, official-event ranking) pass; app lint/build pass. App checks
 cover 5,556 sampled official performances and 1,040 virtual results over all
 260 contests. Conditional difficulty SEs exclude map and board-level error;
 research limitations in hier_time_report.md still apply.
+
+## EC-Final medal vs regional gold, without ratings (2026-11-16)
+
+**Question.** Which is harder: a medal at the EC-Final or a gold at an EC
+regional? A first answer from `output/medal_badges.json` (shipped ratings;
+only 48th and 49th EC-Finals) said EC-Final bronze ≈ 2416 CF vs regional gold
+≈ 2690. The user asked for a check that does not rely on the ratings.
+
+**Data.** `scripts/ecf_vs_regional_gold.py` downloads the official XCPCIO
+boards (config/team/run/organizations) of the 48th–50th seasons into
+`data/xcpcio_boards/` (gitignored, 17 MB): 21 regionals and the 3 EC-Finals,
+including the 50th EC-Final (2026-02-02), which is not in the QOJ data.
+Invitationals are excluded, as is any regional held after the season's
+EC-Final. Standings are recomputed from run.json (ICPC rule; compile errors
+free; official teams only; the board's own medal counts, cumulative
+gold/silver/bronze lines 28/84/168 at every EC-Final). Check: 557 of 559
+EC-Final rows matched to QOJ (48th/49th) have identical solved and penalty.
+
+**Linking.** School plus ≥ 2 shared members. The 48th Macau, 48th Xi'an and
+49th EC-Final boards have no members, so those use school plus the
+normalized team name. On the 50th season, which has members everywhere,
+name-only linking found 379 of the 403 member links, all 379 correct, and
+made no extra links. Regional teams found at the EC-Final: 252, 205 and 237 of 280.
+
+**Paired, model-free result** (each regional appearance of an EC-Final team):
+
+| season | gold → ECF medal | gold, no ECF medal | ECF medal, not gold there |
+|---|---|---|---|
+| 48th | 133/148 (90%) | 15 | 147 |
+| 49th | 104/136 (76%) | 32 | 116 |
+| 50th | 126/136 (93%) | 10 | 124 |
+| all | 363/420 (86%) | 57 | 387 |
+
+Sign test on the discordant pairs: p = 2.4e-61. Per team: 255 of 302
+teams with a gold that season medalled at the EC-Final, and 179 of 434 linked
+EC-Final medallists had no regional gold that season.
+
+**Own Bradley–Terry fit.** For each season, every pair of official teams with
+≥ 1 solve on a board is a game won by the better-ranked team. Teams linked to
+the EC-Final share one strength across boards. Fit by MM, with one virtual
+win and one virtual loss against a unit reference. Each regional's gold-cutoff
+cohort (official ranks cutoff±2) is placed in the EC-Final field by its
+expected rank. Results: 48th 73–106 (Macau 181), 49th 59–117, 50th 72–121.
+Of 21 regionals, 8 land in EC-Final silver, 12 in bronze, 1 (Macau 2023,
+an 8-gold field) outside the medals, and none in gold. The median is about
+rank 91, just below the silver line (84).
+
+**Conclusion.** It holds: a regional gold is clearly harder than an EC-Final
+medal (bronze line). It is roughly as hard as the EC-Final silver line,
+usually a little easier. The ratings' "≈ EC-Final silver" was slightly
+generous. Caveats: the EC-Final comes one to two months after the regionals,
+so teams may improve in between, which favours the EC-Final side a little. Teams
+that play two regionals count twice in the appearance table, but the per-team
+view agrees. The 49th season has the weakest link coverage (205/280,
+name-only) and the most "gold, no medal" cases.
