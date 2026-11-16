@@ -1,4 +1,7 @@
-"""Calibrate the relative difficulty scale to Codeforces-equivalent points.
+"""Legacy DE calibration and production problem-artifact lookup.
+
+Production ``problem_cf`` reads the hierarchical-with-time release. The CLI
+and calibration mathematics below retain the previous DE research baseline.
 
 Our difficulties live on a relative scale pinned at the arbitrary anchor MU0=2000
 (no member-CF ratings exist; see the anchoring decision in details.md), and the CF
@@ -167,19 +170,19 @@ def _report(name, our, cf, grp, shape):
 
 
 def problem_cf(problems):
-    """Shipped DE ``difficulty_cf`` per fitted appearance, keyed by (contest_id, label).
+    """Shipped hierarchical binary with time ``difficulty_cf`` per fitted appearance, keyed by (contest_id, label).
 
     ``problems`` is a fit's ``ds.problems``. The key is corroborated by
     problem_id (task id alone merges shared-task appearances such as Luxor); a
     missing or mismatched appearance means the artifact is from another fit.
     """
-    with open(os.path.join(OUT, "problem_ratings_calibrated.json"), encoding="utf-8") as f:
+    with open(os.path.join(OUT, "problem_ratings_hier.json"), encoding="utf-8") as f:
         shipped = {(r["contest_id"], r["problem_label"]): r for r in json.load(f)}
     out = {}
     for cid, label, pid, _name in problems:
         r = shipped[(int(cid), label)]
         if r["problem_id"] != pid:
-            raise RuntimeError(f"problem_ratings_calibrated.json is from another fit: {cid} {label}")
+            raise RuntimeError(f"problem_ratings_hier.json is from another fit: {cid} {label}")
         out[(int(cid), label)] = r["difficulty_cf"]
     return out
 

@@ -497,7 +497,7 @@ def release():
                 "difficulty_cf_se": round(float(slope * res["b_se"][p]), 1),
                 "board_rows": int(rows[p]), "small_board": bool(rows[p] < SMALL_BOARD_ROWS)}
                for p, (cid, label, pid, pname) in enumerate(ds.problems)]
-    meta = {"research_only": True, "method": "hierarchical binary Rasch with solve-time slices (hier_time_report.md)",
+    meta = {"research_only": False, "method": "hierarchical binary Rasch with solve-time slices (hier_time_report.md)",
             "setting": {**KW, "bins": setting[0], "time_weight": setting[1], "skip_partial": setting[2]},
             "thresholds": res["d"].tolist(), "map": {"slope": float(slope), "intercept": float(icept)},
             "map_scope": "problems and teams: a team rated R solves a problem rated R half the time",

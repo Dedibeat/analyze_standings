@@ -11,26 +11,18 @@ into the contest's real final standings to get a hypothetical rank, then the
 classic Elo rank-inversion primitive (``arch_a.elo.performance_rating``,
 already used for every real team's ``performance_elo`` in ``arch_b.medals``)
 converts that rank + the real field's fitted abilities into a performance
-rating. Team abilities and performances come from the joint **binary** fit
-(``performance_fit``), mapped to CF points through the gym-shaped two-leg map
-of ``arch_b.calibrate`` applied to that fit's difficulties. The binary fit's
-ability and difficulty axes both map to CF at slope ~1, while the survival fit
-compresses abilities, so its difficulty map understates strong teams and
-overstates weak ones (de_release_audit.md, "The ability scales differ").
+rating. Team abilities and performances come from the released hierarchical
+binary fit with solve-time slices (``performance_fit``), using its affine CF map.
 Real teams carry their *internal* ability (not CF-mapped) plus their
 solved/penalty, so the rank-insertion and Elo bisection can run against the
 same scale the fit was made on, and a dense ``to_cf`` lookup table lets the
-browser map the resulting rho to CF points itself (the shape+affine map cannot
-be re-fit client side, so it is sampled once here instead of re-derived in
-JS). Every real team also carries its own calibrated performance (from its
+browser map the resulting rho to CF points using the released affine map. Every real team also carries its own calibrated performance (from its
 actual rank, ``arch_a.fixedpoint._performance_ratings``) so the standings
 table shows CF-equivalent performance for real and virtual teams side by side.
 An official row of a board that also holds online mirror entries is ranked
 within its own event instead and carries ``"event": true`` (``event_field``);
 a virtual entry, like the mirror rows, is ranked on the whole board.
-The problems table is reference only and shows the shipped DE problem ratings
-(``arch_b.calibrate.problem_cf``), which are not on the scalar map used for
-performances.
+The problems table uses the same released model and CF scale.
 
 Writes output/virtual_calc.html: self-contained, no server, one page per
 contest picked from a dropdown (same grouping as ratings_viewer_b.html).
@@ -44,9 +36,8 @@ import numpy as np
 from arch_a import elo
 from arch_a.fixedpoint import _bisect_contest, _performance_ratings
 from arch_a.load import _max_solve_seconds, dedupe_contests, row_solved_any
-from . import model
-from .joint import PETROZ, TAGGED, UCUP, estimate_joint
-from .calibrate import _anchors, _gym_shape, problem_cf
+from .joint import PETROZ, TAGGED, UCUP
+from .calibrate import problem_cf
 from .run import MIN_SOLVE_HOURS
 
 # Contest sources offered in the picker: the tagged.json regionals, the
@@ -65,17 +56,6 @@ LOOKUP_STEP = 5.0  # CF-point granularity of the embedded to_cf sample table
 # a smaller event keeps the whole board, since a rank among a handful of rows
 # measures nothing (eq. perf pins its first and last place to the bounds).
 MIN_EVENT_FIELD = 30
-
-
-def _cf_map(records):
-    """The composed internal-scale -> CF-points map from arch_b.calibrate."""
-    shape = _gym_shape(records)
-    if shape is None:
-        shape = lambda t: np.asarray(t, float)  # noqa: E731
-    our, cf, _ = _anchors(records)
-    slope, intercept = np.polyfit(shape(our), cf, 1)
-    return lambda t: float(np.clip(slope * shape(np.array([t]))[0] + intercept,
-                                    elo.LO, elo.HI))
 
 
 def _performance_lookup(ds, rho, to_cf):
@@ -125,7 +105,7 @@ def _rank_official_within_event(theta, ds, rows_by_contest, rho):
 def performance_fit():
     """The fit team performance is measured on: ``(ds, theta, to_cf, row_lookup)``.
 
-    The joint binary fit and the CF map of its difficulties. ``row_lookup`` maps
+    The hierarchical binary-with-time fit and its released affine CF map. ``row_lookup`` maps
     each source participation to ``(team index, CF performance)``: the team's own
     calibrated performance in that contest, from its actual rank (same eq. perf
     primitive as export_viewer.py / medals.py). Keyed by the source participation
@@ -135,12 +115,8 @@ def performance_fit():
     board that also holds mirror rows is ranked within its own event
     (``event_field``); mirror rows, like a virtual entry, are ranked on the whole board.
     """
-    ds, theta, b, _, _uf = estimate_joint(
-        fit_fn=model.fit, min_solve_hours=MIN_SOLVE_HOURS, verbose=False)
-    records = [{"contest_id": int(cid), "problem_label": lab, "problem_name": name,
-                "difficulty": float(b[p])}
-               for p, (cid, lab, pid, name) in enumerate(ds.problems)]
-    to_cf = _cf_map(records)
+    from .shipped import shipped_fit, to_cf
+    ds, theta, b, _, _uf = shipped_fit()
     rows_by_contest = [np.where(ds.contest_of_row == ci)[0] for ci in range(len(ds.contests))]
     rho = _performance_ratings(theta, ds, rows_by_contest)
     rho = _rank_official_within_event(theta, ds, rows_by_contest, rho)

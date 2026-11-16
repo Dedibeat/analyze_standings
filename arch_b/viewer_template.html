@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ICPC problem &amp; team ratings (Architecture B &mdash; survival, CF-calibrated)</title>
+<title>ICPC problem &amp; team ratings (Architecture B &mdash; hierarchical binary with time, CF-calibrated)</title>
 <style>
   :root { --fg:#1b2330; --muted:#6b7785; --line:#e3e8ee; --accent:#2b6cb0; --bg:#f7f9fc; }
   * { box-sizing: border-box; }
@@ -47,8 +47,8 @@
 <body>
 <header>
   <h1>ICPC problem &amp; team ratings</h1>
-  <div class="sub">Architecture B &mdash; solve-time survival model, mapped to <b>Codeforces-equivalent points</b>.
-    Problem difficulty uses the DE calibration (no uncertainty estimate); team numbers use the gym-shape map. Click a column header to sort.</div>
+  <div class="sub">Architecture B &mdash; hierarchical binary model with solve-time slices, mapped to <b>Codeforces-equivalent points</b>.
+    Problem difficulty and team numbers use the same released affine map. Click a column header to sort.</div>
   <div class="controls">
     <select id="contest"></select>
     <span class="meta" id="meta"></span>
@@ -64,7 +64,7 @@
         <thead><tr>
           <th data-k="label">#</th>
           <th data-k="name" class="name">Name</th>
-          <th data-k="difficulty" class="num" title="Codeforces-calibrated difficulty (DE)">Difficulty</th>
+          <th data-k="difficulty" class="num" title="Codeforces-calibrated difficulty (hierarchical binary with time)">Difficulty</th>
           <th data-k="solved" class="num">Solved</th>
         </tr></thead>
         <tbody></tbody>

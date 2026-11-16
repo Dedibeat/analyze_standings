@@ -1,5 +1,5 @@
 {
- "research_only": true,
+ "research_only": false,
  "method": "hierarchical binary Rasch with solve-time slices (hier_time_report.md)",
  "setting": {
   "sigma": 300,
@@ -17,8 +17,8 @@
   0.6479028606422635
  ],
  "map": {
-  "slope": 0.8673982731907984,
-  "intercept": 605.0497914511092
+  "slope": 0.867398273190798,
+  "intercept": 605.0497914511084
  },
  "map_scope": "problems and teams: a team rated R solves a problem rated R half the time",
  "anchors": 184,

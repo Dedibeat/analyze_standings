@@ -1,3 +1,13 @@
+> **Production rating update (2026-11-16):** problem ratings, team performances,
+> medal bars and badges now use hierarchical binary with time (`time_skip`, five
+> slices, weight 0.25, `skip_partial`). The source artifacts are
+> `output/problem_ratings_hier.json` and `output/problem_calibration_hier.json`.
+> See `hier_time_report.md` for the 205.9 nested-LOCO RMSE and its limits.
+> Older DE/survival instructions below describe the previous production model.
+> Regenerate with `python -m arch_b.hier_time release`, then
+> `python -m arch_b.export_virtual_calc`, `python -m arch_b.export_viewer`,
+> `python -m arch_b.medals`, and `python -m arch_b.export_medal_viewer`.
+
 # analyze_standings
 
 Estimate ICPC-style **problem difficulties from contest standings** — there is no
