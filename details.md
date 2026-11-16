@@ -9120,3 +9120,43 @@ so teams may improve in between, which favours the EC-Final side a little. Teams
 that play two regionals count twice in the appearance table, but the per-team
 view agrees. The 49th season has the weakest link coverage (205/280,
 name-only) and the most "gold, no medal" cases.
+
+## EC-Final tiers vs regional tiers; 51st EC-Final medal lines (2026-11-16)
+
+**Request.** Estimate the difficulty of the 51st EC-Final (medal lines) and
+compare every EC-Final tier with every regional tier. Still no ratings:
+`scripts/ecf_tier_cross.py` reuses the XCPCIO boards, team links and the own
+season Bradley–Terry fit from `ecf_vs_regional_gold.py`. Report:
+`output/ecf_tier_cross.md`.
+
+**Same teams (48th–50th, regional appearances of EC-Final teams), row %:**
+
+| regional \ EC-Final | gold | silver | bronze | none | n |
+|---|---|---|---|---|---|
+| gold | 29% | 34% | 24% | 14% | 420 |
+| silver | 2% | 18% | 38% | 42% | 545 |
+| bronze | 1% | 6% | 28% | 65% | 182 |
+| none | 0% | 2% | 17% | 81% | 47 |
+
+The table is conditional on reaching the EC-Final, so the silver and bronze
+rows describe only the teams that qualified.
+
+**Own fit, both directions** (cutoff cohort = official ranks cutoff ± 2):
+- Regional lines in the EC-Final field: gold median 92 (59–181; 8 silver, 12
+  bronze, 1 none — Macau 2023), silver 207 (167–254), bronze 274. A regional
+  silver line is outside the EC-Final medals.
+- EC-Final lines at a regional: gold rank 15 (4.8% of the field; gold at
+  21/21), silver 37 (10.9%; gold at 8, silver at 13), bronze 88 (22.8%;
+  silver at 19, bronze at 2 — Nanjing and Shanghai 2025).
+- The two directions agree: EC-Final silver sits at or just above the regional
+  gold line, and EC-Final bronze sits in the middle of regional silver.
+
+**51st forecast.** Not held yet; medal counts assumed to stay 28/56/84 as in
+all three earlier finals (official field 280). Raw lines of the 48th/49th/50th
+finals: gold 6/6/7 solved, silver 5/4/5, bronze 5/3/3. The solve count tracks
+the problem set (the 48th was flat), so the steadier forecast is the regional
+equivalent: gold ≈ top 5% of a regional (rank ~15), silver ≈ the regional gold
+line (top ~11%), bronze ≈ top ~23%. Caveats: three seasons only; the 2026
+seat rule (230 mainland + 10 Hong Kong, ≤ 3 teams per school) is close to
+2025's, so the field should be similar, but this is not checked against 51st
+boards (no 51st EC-Final exists yet, so no links).

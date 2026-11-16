@@ -964,6 +964,20 @@ So a regional gold is harder than an EC-Final medal and close to EC-Final silver
 
 Details: `details.md` (2026-11-16 EC-Final entry).
 
+### EC-Final tiers vs regional tiers; 51st EC-Final lines (2026-11-16)
+
+```bash
+python3 scripts/ecf_tier_cross.py   # writes output/ecf_tier_cross.md
+```
+
+Same boards, links and own Bradley–Terry fit as the entry above, for every
+tier pairing. EC-Final gold ≈ regional rank 15 (top 5%, gold at all 21
+regionals); EC-Final silver ≈ regional rank 37 (top 11%, about the regional
+gold line: gold at 8 regionals, silver at 13); EC-Final bronze ≈ regional rank 88
+(top 23%, mid regional silver). A regional silver line lands outside the
+EC-Final medals (expected rank ≈ 207). 51st EC-Final forecast (not held yet,
+medal counts assumed 28/56/84): gold 6–7 solved, silver 4–5, bronze 3–5.
+
 ### CCPC medal vs ICPC EC regional medal (2026-10-12)
 
 ```bash
