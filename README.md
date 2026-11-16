@@ -1186,8 +1186,14 @@ this section. Run `python3 scripts/check_cses_teaching.py` for small-case checks
 
 ## Layout
 
-- `data/tagged.json` — full input standings (148 contests); `data/ucup_s3.json`,
+- `data/tagged.json` — full input standings (165 contests, 65,758 rows; the 2026
+  season adds the Xi'an/Chengdu/Wuhan/Nanjing/Shenyang regionals and the Universal
+  Cup S5 stages); `data/ucup_s3.json`,
   `data/ucup_s4.json` — the Universal Cup seasons used to anchor the scale.
+- `data/xcpcio_51st_regionals.json` — XCPCIO-hosted 51st-season East Asia boards
+  (Xi'an/Chengdu/Wuhan/Nanjing/Shenyang). Nanjing and Shenyang are the two 2026
+  regionals QOJ does not host, and they are the only two appended to `tagged.json`
+  (see the 2026-11-15 entry in `details.md`).
 - `data/icpc_2020_2021.json` — 14 older Asia East ICPC standings;
   `data/petroz_2022_2026.json` — 57 recent Petrozavodsk camp standings. Both are
   QOJ standings-only supplements consumed by Architecture B.
@@ -1246,9 +1252,12 @@ this section. Run `python3 scripts/check_cses_teaching.py` for small-case checks
   member attribution (`members_solved.csv`); built by `scripts/fetch_team_r3.py`.
 - `scripts/add_qoj_contest.py` — adds one QOJ contest's standings to
   `data/tagged.json` (`python3 scripts/add_qoj_contest.py 4071 --name "EC Online (I)"
-  --region "Asia East Continent"`). QOJ shows contests only to logged-in users, so
-  it needs `QOJ_USERNAME`/`QOJ_PASSWORD`. Then rerun the release steps (see the
-  2026-10-04 entry in `details.md`).
+  --region "Asia East Continent"`; `--refresh` replaces an entry already stored).
+  QOJ shows contests only to logged-in users and Cloudflare-gates non-browser
+  clients, so it logs in through the browserless flow (`curl_cffi`, md5 password,
+  `_token` from the page's JS) with `QOJ_USERNAME`/`QOJ_PASSWORD`, caching the
+  session in the git-ignored `data/.cookies-<user>.json`. Then rerun the release
+  steps (see the 2026-11-15 entry in `details.md`).
 - `scripts/fetch_qoj_supplemental.py` — standings-only QOJ category collector;
   `scripts/fetch_xcpcio_standings.py` — resumable converter for XCPCIO-hosted
   official boards. Their broader camp/provincial datasets were tested and

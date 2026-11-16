@@ -43,6 +43,8 @@ def _plain_text(value):
     if isinstance(value, str):
         return value
     if isinstance(value, dict):
+        if "texts" not in value and isinstance(value.get("name"), dict):
+            value = value["name"]  # team members ship as {"name": {texts, fallback_lang}}
         texts = value.get("texts", {})
         fallback = value.get("fallback_lang")
         return texts.get(fallback, "") or texts.get("zh-CN", "") or texts.get("en", "")
