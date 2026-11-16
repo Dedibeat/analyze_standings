@@ -323,6 +323,32 @@ Scripts: `scripts/stable_de_explore/`. Full record: the last entry of
   (Latin America 2023 +349, Mid-Atlantic 2024 +316). A simulation on the real
   design rules out the estimator.
 
+## Update 2026-11-16
+
+Full record: `hier_time_report.md`. The tables above are the 2026-11-05 run
+and were not regenerated; `output/hier_binary.json` keeps that run's hashes.
+
+- **The setting holds on newer data.** With 17 more contests and the loader
+  fixes, the frozen fit scores 229.1 on full fields (DE 225.3) and beats flat
+  binary by 0.0148 / 0.0145 held-out log loss on splits 1 / 2.
+- **Without the mislabeled anchor** (Uniform Chemistry, CF 3200, about 2000 by
+  hand; left out of maps and RMSE from now on): 211.5 against DE's 207.0
+  (+4.5 [−11.9, +17.9]) on 184 anchors.
+- **First fresh confirmation, team side.** On the five 2026 EC regionals,
+  added after the setting was frozen, rank-pair accuracy among linked teams is
+  82.23% against 81.36% for flat binary (+0.87 pp [+0.44, +1.29]) and 81.31%
+  for survival. Xi'an, where only 150 of 689 rows link, is the one board where
+  flat binary is ahead.
+- **No fresh CF board.** The newest ICPC mirror on Codeforces is still contest
+  2206, already an anchor. Next step 1 stays open on the problem side.
+- **Solve time is now used** ("Limits" above listed it as unused). Five time
+  slices at weight 0.25, with `skip_partial`, pass all four pre-registered
+  criteria and form the release candidate
+  (`output/problem_ratings_hier.json`): full fields 205.9 on the 184 anchors
+  (DE 207.0), sign-in bias +385 → −1, lower drift on all 8 reserved views.
+- **`fit` gained three optional arguments** (`cuts`, `cut_weight`, `start`)
+  and returns `x` and `b_se`. Its default path is unchanged.
+
 ## Reproduce
 
 ```bash

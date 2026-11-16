@@ -45,7 +45,7 @@ class LoadTest(unittest.TestCase):
         self.assertEqual(ds.obs_y.tolist(), [True, False, False])
         self.assertEqual(ds.participation_of_row, [(1, 0)])
 
-    def test_unknown_problem_solve_does_not_retain_row(self):
+    def test_unknown_problem_solve_retains_row_as_failure(self):
         contest = {
             "contest_id": 2,
             "contest_name": "Partial metadata",
@@ -72,8 +72,35 @@ class LoadTest(unittest.TestCase):
             path.write_text(json.dumps([contest]))
             ds = load(str(path))
 
-        self.assertEqual(len(ds.team_of_row), 0)
+        self.assertEqual(len(ds.team_of_row), 1)
         self.assertEqual(len(ds.problems), 1)
+        self.assertEqual(ds.obs_y.tolist(), [False])
+
+    def test_pre_start_solves_and_minute_rows(self):
+        problems = [{"problem_id": i, "problem_label": l, "problem_name": l, "problem_solved_in_contest": 0}
+                    for i, l in enumerate("AB")]
+
+        def row(team, cells):
+            return {"rank": 1, "team_id": team, "team_name": team, "members": [], "total_solved": 1,
+                    "problems": {l: {"solved": True, "time_seconds": t, "wrong_attempts": 0} for l, t in cells.items()}}
+        contests = [
+            {"contest_id": 1483, "contest_name": "minutes", "year": 2023, "region": "", "problems": problems,
+             "standings": [row("$DEFAULT_1", {"A": 4}), row("guest", {"A": 240})]},
+            {"contest_id": 7, "contest_name": "early", "year": 2026, "region": "", "problems": problems,
+             "standings": [row("before", {"A": -500}), row("mixed", {"A": -500, "B": 90})]},
+            {"contest_id": 8, "contest_name": "no list", "year": 2026, "region": "", "problems": [],
+             "standings": [row("x", {"A": 10})]},
+        ]
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "contest.json"
+            path.write_text(json.dumps(contests))
+            ds = load(str(path))
+
+        # official rows of a minute board are converted; a pre-start solve is no solve;
+        # a board that lists no problem keeps no row
+        self.assertEqual(ds.participation_of_row, [(1483, 0), (1483, 1), (7, 1)])
+        self.assertEqual(ds.obs_y.tolist(), [True, False, True, False, False, True])
+        self.assertEqual(ds.obs_tau[ds.obs_y].tolist(), [240.0, 240.0, 90.0])
 
 
 if __name__ == "__main__":

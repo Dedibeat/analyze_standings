@@ -99,18 +99,31 @@ def _roster_token(members, season=None):
     return None
 
 
+# Boards whose official ($DEFAULT) rows carry solve times in minutes, not seconds
+# (Rocky Mountain 2023: at most 295 there, against 3297..17302 in the other rows).
+MINUTE_BOARDS = {1483}
+
+
+def _solved(cell):
+    """A solve inside the contest window. QOJ lists a few solves from before the
+    start (negative time); they are not contest results."""
+    return bool(cell.get("solved")) and (cell.get("time_seconds") or 0) >= 0
+
+
 def row_solved_any(standing, problem_labels=None):
-    """True if this row solved a problem included in the fit.
+    """True if this row belongs in the fit: it solved a problem, listed or not.
 
     Some QOJ standings contain labels that are absent from the contest's parsed
-    problem list.  Those cells cannot be modeled without inventing problem
-    metadata, so they must not by themselves retain a row as a solved team.
+    problem list.  Those cells cannot be modeled, but a row that solved only
+    such problems did take part, so it stays as a failure of the listed ones.
+    Requiring a *listed* solve selected rows on the outcome: a board listing one
+    problem kept exactly its solvers (CCPC Harbin 2025 M read 44 of 44 solved
+    instead of 44 of 654). ``problem_labels`` is the board's listed labels; a
+    board that lists none has nothing to fit and keeps no row.
     """
-    problems = standing.get("problems") or {}
-    if problem_labels is None:
-        return any(p.get("solved") for p in problems.values())
-    return any(p.get("solved") for label, p in problems.items()
-               if label in problem_labels)
+    if problem_labels is not None and not problem_labels:
+        return False
+    return any(_solved(p) for p in (standing.get("problems") or {}).values())
 
 
 class _UnionFind:
@@ -328,10 +341,11 @@ def load(path=DATA_PATH, uf=None, season_key=False, min_solve_hours=None):
     needs the UCup and tagged datasets to agree on who is who). When omitted, the
     union-find is built from this call's own rows.
 
-    Standing rows that solved no listed problem are dropped (``row_solved_any``):
-    labels absent from a contest's parsed problem list are not part of the fit.
+    Standing rows that solved nothing are dropped (``row_solved_any``). Labels
+    absent from a contest's parsed problem list are not part of the fit, but a
+    row that solved only such problems is kept as a failure of the listed ones.
     A team's contest count ``N_t`` is therefore the number of contests where it
-    solved something in the modeled problem set. ``uf`` is still built over
+    solved something. Solve times are in seconds (``MINUTE_BOARDS`` converted). ``uf`` is still built over
     *all* rows, so identity links carried only by a zero-solve row are preserved.
 
     ``season_key`` separates recurring rosters by ICPC season (``season_of``), so a
@@ -421,6 +435,7 @@ def load(path=DATA_PATH, uf=None, season_key=False, min_solve_hours=None):
             rank_of_row.append(int(s["rank"]))
             participation_of_row.append((cid, source_row))
             official_of_row.append(str(s.get("team_id") or "").startswith("$DEFAULT"))
+            unit = 60 if cid in MINUTE_BOARDS and official_of_row[-1] else 1
 
             y = np.zeros(len(block), dtype=bool)
             tau = np.full(len(block), np.nan, dtype=np.float32)
@@ -431,11 +446,11 @@ def load(path=DATA_PATH, uf=None, season_key=False, min_solve_hours=None):
                     continue  # standings problem not in problem list; skip defensively
                 k = slot[col]
                 wrong[k] = int(pdata.get("wrong_attempts", 0))
-                if pdata.get("solved"):
+                if _solved(pdata):
                     y[k] = True
                     t = pdata.get("time_seconds")
                     assert t is not None, f"solved cell without time in contest {cid}"
-                    tau[k] = t
+                    tau[k] = t * unit
             row_chunks.append(np.full(len(block), ri, dtype=np.int64))
             prob_chunks.append(block)
             y_chunks.append(y)

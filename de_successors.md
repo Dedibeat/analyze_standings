@@ -37,6 +37,15 @@ invariance is not a requirement across genuinely different task conditions.
    appearances. The current rival; see
    [hier_binary_report.md](hier_binary_report.md).
 
+6. **Hierarchical binary with solve-time slices (added 2026-11-16, run).**
+   Candidate #3's timing idea inside candidate #5's fit: a solved cell also
+   says in which fifth of the window it was solved, at weight 0.25 next to the
+   binary likelihood, plus `skip_partial`. With the mislabeled anchor Uniform
+   Chemistry left out (184 anchors): full-field CF 205.9 vs DE 207.0
+   (−1.1 [−11.7, +9.0]) and #5's 211.5. Better than #5 on every cut field. It
+   passes all four pre-registered criteria. The release candidate; see
+   [hier_time_report.md](hier_time_report.md).
+
 Prefer a candidate that retains useful CF accuracy and materially improves
 field transport. The 185 problems in 15 contests are development evidence already
 used for many choices; a fresh confirmation field is still required.
