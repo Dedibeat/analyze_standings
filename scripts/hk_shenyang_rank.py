@@ -39,11 +39,12 @@ from arch_b.export_virtual_calc import performance_fit  # noqa: E402
 ONLINE = {"1": 4071, "2": 4113}
 XCPCIO = ROOT / "data" / "xcpcio_51st_regionals.json"
 QOJ_OF = {"xian": 4593, "chengdu": 4607, "wuhan": 4694}  # boards the fit has from QOJ, not XCPCIO
-CCPC = [(ROOT / "data" / "qoj_ccpc.json", 4582, "CCPC Changchun"),
-        (ROOT / "data" / "xcpcio_ccpc.json", -130494359200770, "CCPC Guizhou"),
+CHANGCHUN = ROOT / "output" / "ccpc_12th_changchun_standings.csv"  # official rank.iccpc.cn board, with members
+CCPC = [(ROOT / "data" / "xcpcio_ccpc.json", -130494359200770, "CCPC Guizhou"),
         (ROOT / "data" / "xcpcio_ccpc.json", -223919550453741, "CCPC Nanchang"),
         (ROOT / "data" / "xcpcio_ccpc.json", -195570550985916, "CCPC Qinhuangdao")]
 OUT = ROOT / "output" / "hk_shenyang_rank.md"
+VIRTUAL_DISCOUNT = 100  # a virtual scoreline reads up to ~100 CF stronger than onsite form (details.md, 2026-10-13)
 
 
 def same_lineup(school, members, team, row):
@@ -64,6 +65,8 @@ def official_ranked(rows):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--team", default="NUM-R^3")
+    ap.add_argument("--virtual", action="append", default=[], metavar="BOARD:RANK",
+                    help="a virtual result as an official-equivalent rank, e.g. Chengdu:35 or 'CCPC Changchun':29")
     args = ap.parse_args()
 
     _, _, _, lookup = performance_fit()
@@ -105,6 +108,10 @@ def main():
         rows = official_ranked(c["standings"]) if any(r.get("official") for r in c["standings"]) \
             else [(i, r, int(r["rank"])) for i, r in enumerate(c["standings"])]  # no official flags: board rank
         ccpc.append((name, [dict(r, official_rank=k) for _, r, k in rows]))
+    with open(CHANGCHUN, encoding="utf-8") as f:
+        ccpc.insert(0, ("CCPC Changchun", [
+            dict(team_name=r["team"], affiliation=r["school"], members=r["members"].split("|"),
+                 official_rank=int(r["official_rank"])) for r in csv.DictReader(f) if r["official"] == "1"]))
 
     def appearances(school, members, team, rnd_teams):
         out = []
@@ -153,6 +160,14 @@ def main():
     def sy_rank(p):
         return 1 + sum(1 for q in shenyang if q > p)
 
+    def virtual_perf(board, k):
+        """Between the official teams at ranks k-1 and k (regional), or the board's CCPC map."""
+        if board in regionals:
+            ps = [r["perf"] for r in regionals[board] if r["official_rank"] in (k - 1, k) and r["perf"] is not None]
+            return float(np.mean(ps))
+        a, b, _ = ccpc_maps[board][1]
+        return a + b * math.log(k)
+
     for r in reg:
         r["strength"] = float(np.mean([p for _, p, _ in r["apps"]])) if r["apps"] else None
         onsite = [p for c, p, _ in r["apps"] if not c.startswith("Online")]
@@ -185,6 +200,35 @@ def main():
         apps = "; ".join(f"{c} {p:.0f}" + (f" (#{n})" if n else "") for c, p, n in r["apps"])
         L.append(f"| {k} | {r['school']} | {r['team']} | {'yes' if r['local'] else ''} | {sy_rank(r['strength'])} | "
                  f"{r['strength']:.0f} | {'' if r['onsite'] is None else round(r['onsite'])} | {apps} |")
+    if args.virtual:
+        # Hong Kong medal chances: perf -> online strength x (linear fit over registrants with both online
+        # rounds), then the field-relative Hong Kong model on the registered field (arch_b.hk_field_2026).
+        both = [(np.mean([p for c, p, _ in r["apps"] if c.startswith("Online")]), r["x"]) for r in reg
+                if r["x"] is not None and sum(c.startswith("Online") for c, _, _ in r["apps"]) == 2]
+        slope, icpt = np.polyfit(*zip(*both), 1)
+        res = hf.run()
+        past = [r for r in hf.hk.link_hk(data, og.online_strengths(data["online_teams"]))
+                if r["season"] in hf.om.HK_SEASONS and r["x"] is not None]
+        w_rel, line = hf.fit(past, True), {n: -math.log(v) for n, v in res["lines_registered"].items()}
+        L += ["", "## Virtuals and the Hong Kong field", "",
+              f"Online-equivalent rank: x = {icpt:.3f} + {slope:.5f} perf (r = "
+              f"{np.corrcoef(*zip(*both))[0, 1]:.2f}, {len(both)} registrants). Gold / silver / bronze: "
+              "field-relative Hong Kong model on the registered field. "
+              f"'−{VIRTUAL_DISCOUNT}' reads the virtual {VIRTUAL_DISCOUNT} CF weaker.", "",
+              "| result | perf | Shenyang-eq. | Hong Kong position | online-eq. rank | gold / silver / bronze |",
+              "|---|---|---|---|---|---|"]
+        cases = [(f"{args.team} Shenyang onsite (#{next(k for c, _, k in me['apps'] if c == 'Shenyang')})",
+                  next(p for c, p, _ in me["apps"] if c == "Shenyang"))]
+        for v in args.virtual:
+            board, k = v.rsplit(":", 1)
+            p = virtual_perf(board, int(k))
+            cases += [(f"{board} virtual #{k}", p), (f"{board} virtual #{k} −{VIRTUAL_DISCOUNT}", p - VIRTUAL_DISCOUNT)]
+        for label, p in cases:
+            x = icpt + slope * p
+            pr = hf.predict(w_rel, x, line)
+            pos = 1 + sum(1 for r in ranked if r["strength"] > p and r["team"] != args.team)
+            L.append(f"| {label} | {p:.0f} | {sy_rank(p)} | {pos} of {len(ranked)} | {math.exp(-x):.0f} | "
+                     + " / ".join(f"{100 * pr[c]:.0f}%" for c in hf.om.CLASSES[:3]) + " |")
     none = [r for r in reg if r["strength"] is None]
     L += ["", f"## No 2026 result ({len(none)})", "", ", ".join(f"{r['school']} {r['team']}" for r in none)]
     OUT.write_text("\n".join(L) + "\n", encoding="utf-8")

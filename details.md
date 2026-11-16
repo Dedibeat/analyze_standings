@@ -9020,3 +9020,72 @@ have both closed.
 - 8 others needed.
 
 All 6 tests pass.
+
+## Chengdu and Changchun virtuals in the Hong Kong field (2026-11-16, third entry)
+
+**Request.** What do the Chengdu and Changchun virtuals translate to at Hong
+Kong?
+
+**Inputs.**
+- **Chengdu 2026 virtual** (11-01): 6 solved, 894 min, **#35 of 319
+  official**. Source: `output/team_r3_participations.md`.
+- **12th CCPC Changchun virtual** (2026-11-08 entry, on the unmerged branch
+  `claude/vigilant-bohr-gd202a`): **7 solved / 683 min at 3:15**. Two members
+  played (Erdene absent) and stopped early. That is official **#29 of 301**
+  (gold, one place inside the line) on the final board, and **#13** at the
+  3:15 cut.
+- That branch's `output/ccpc_12th_changchun_standings.csv` (the official
+  rank.iccpc.cn board, with members) is copied here unchanged.
+
+**Script changes** (`scripts/hk_shenyang_rank.py`):
+- **Changchun is now mapped from the official CSV**, not QOJ 4582, which has
+  members on only 51 rows.
+  - 192 line-ups pair with a 2026 regional: `perf = 3745 − 328·log(rank)`,
+    r −0.81.
+  - Registrants who played Changchun now count it. NUM-R^3 stays 24th of 103;
+    12 registrants (was 11) have a stronger onsite mean.
+- **`--virtual BOARD:RANK`** places a virtual result in the field:
+  - regional: the mean performance of the official teams at ranks k−1 and k;
+  - CCPC: the board's map.
+- **Each virtual is converted to:**
+  - a Shenyang-equivalent rank;
+  - a position among the registrants;
+  - an online-equivalent rank, from a linear fit of online strength x on
+    online performance over 85 registrants (r 0.99);
+  - gold / silver / bronze, from the field-relative Hong Kong model on the
+    registered 11-16 field (gold line online #135).
+- Each virtual is shown raw and 100 CF weaker. Earlier entries found a
+  virtual scoreline reads up to ~100 CF stronger than onsite form.
+
+**Result:**
+
+| result | perf | Shenyang-eq. | HK position (of 103) | online-eq. | gold / silver / bronze |
+|---|---|---|---|---|---|
+| Shenyang onsite (#87) | 2425 | 87 | 18 | #319 | 17% / 42% / 32% |
+| Chengdu virtual #35 | 2738 | 37 | 8 | #146 | 63% / 25% / 10% |
+| … −100 | 2638 | 49 | 12 | #187 | 46% / 35% / 16% |
+| Changchun virtual #29 (final board) | 2641 | 48 | 12 | #186 | 47% / 34% / 15% |
+| … −100 | 2541 | 59 | 13 | #239 | 31% / 41% / 22% |
+| Changchun at 3:15 (#13), pace only | 2904 | 24 | 5 | #96 | 84% / 10% / 5% |
+
+**How to read it:**
+- The two virtuals agree with each other. Both put the team around Shenyang
+  #37–59 and 8th–13th in the Hong Kong field. That is the gold/silver
+  border, against the onsite Shenyang reading of ~18th (strength alone) or
+  24th (mean of all appearances, including the weaker online round 1).
+- **The field is weak at the top.** With ~110 teams, gold reaches about
+  rank 11. So a virtual-level performance at Hong Kong is a near coin flip
+  for gold: ~30–60% after the discount.
+- **The Changchun #13 row is a pace extrapolation, not a result.** Two
+  members stopping early pull the real reading up, and the virtual effect
+  pulls it down. Neither effect has been measured.
+- **Gap between virtuals and onsite.** Onsite Shenyang read ~300 CF below
+  the Chengdu virtual. Whether that gap is form or the virtual effect decides
+  which row to trust.
+- **The −100 column is a ceiling, not a measured value.** Earlier entries
+  measured the virtual effect at up to ~100 CF.
+- The Hong Kong position compares one performance with registrants' mean
+  strengths, which mix online and onsite results.
+
+Run: `python3 scripts/hk_shenyang_rank.py --virtual Chengdu:35 --virtual
+'CCPC Changchun:29' --virtual 'CCPC Changchun:13'`.

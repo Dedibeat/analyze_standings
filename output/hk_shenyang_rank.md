@@ -1,6 +1,6 @@
 # NUM-R^3 in the 2026 Hong Kong field, by Shenyang rank
 
-Registration: `icpc_hk_macau_public_teams_20261116.xlsx` (122 teams); 103 have a 2026 result (68 onsite: regional or CCPC).
+Registration: `icpc_hk_macau_public_teams_20261116.xlsx` (122 teams); 103 have a 2026 result (73 onsite: regional or CCPC).
 
 Shenyang official board: 401 teams.
 
@@ -8,7 +8,7 @@ Shenyang official board: 401 teams.
 
 | board | pairs | a | b | r |
 |---|---|---|---|---|
-| CCPC Changchun | 0 | – | – | – |
+| CCPC Changchun | 192 | 3745.12 | -328.03 | -0.81 |
 | CCPC Guizhou | 68 | 2836.63 | -200.61 | -0.67 |
 | CCPC Nanchang | 80 | 2990.21 | -220.66 | -0.69 |
 | CCPC Qinhuangdao | 72 | 2893.58 | -216.17 | -0.75 |
@@ -19,7 +19,7 @@ Shenyang official board: 401 teams.
 - Online 2: perf 2442 (Shenyang-equivalent #82)
 - Shenyang: perf 2425, official #87 (Shenyang-equivalent #87)
 - **All appearances:** mean 2371, Shenyang-equivalent #101; **24th** of 103 registrants with a result (23 ahead, 3 of them local).
-- **Onsite only:** mean 2425, Shenyang-equivalent #87; 11 registrants with an onsite result are stronger.
+- **Onsite only:** mean 2425, Shenyang-equivalent #87; 12 registrants with an onsite result are stronger.
 
 ## Registrants by strength (mean of 2026 appearances)
 
@@ -31,20 +31,20 @@ Shenyang official board: 401 teams.
 | 4 | 香港科技大学（广州） | BPM 222.22 |  | 23 | 2917 | 2910 | Online 1 2888; Online 2 2952; Nanjing 2910 (#19) |
 | 5 | 杭州师范大学 | Rise from the Brink |  | 26 | 2873 |  | Online 1 3006; Online 2 2740 |
 | 6 | 中山大学 | SYSU_2333er |  | 27 | 2863 | 2896 | Online 1 2756; Online 2 2936; Shenyang 2896 (#24) |
-| 7 | 福州大学 | Evil Must Fail |  | 27 | 2846 |  | Online 1 3111; Online 2 2581 |
-| 8 | 杭州电子科技大学 | 2026杭电负1队 |  | 34 | 2771 |  | Online 1 2771 |
-| 9 | 南京航空航天大学 | 让我…把一切都忘掉吧 |  | 35 | 2756 |  | Online 1 2822; Online 2 2689 |
-| 10 | 香港理工大学 | 冻柠走冰 | yes | 38 | 2732 | 2976 | Online 2 2487; Chengdu 2976 (#16) |
-| 11 | 西北工业大学 | #N/A |  | 42 | 2702 | 2872 | Online 1 2808; Online 2 2427; Shenyang 2872 (#26) |
-| 12 | 天津大学 | 永远跟榜走 |  | 46 | 2656 |  | Online 1 2599; Online 2 2713 |
+| 7 | 南京航空航天大学 | 让我…把一切都忘掉吧 |  | 35 | 2756 |  | Online 1 2822; Online 2 2689 |
+| 8 | 香港理工大学 | 冻柠走冰 | yes | 38 | 2732 | 2976 | Online 2 2487; Chengdu 2976 (#16) |
+| 9 | 福州大学 | Evil Must Fail |  | 41 | 2710 | 2437 | Online 1 3111; Online 2 2581; CCPC Changchun 2437 (#54) |
+| 10 | 西北工业大学 | #N/A |  | 43 | 2681 | 2745 | Online 1 2808; Online 2 2427; Shenyang 2872 (#26); CCPC Changchun 2619 (#31) |
+| 11 | 天津大学 | 永远跟榜走 |  | 46 | 2656 |  | Online 1 2599; Online 2 2713 |
+| 12 | 杭州电子科技大学 | 2026杭电负1队 |  | 52 | 2607 | 2443 | Online 1 2771; CCPC Changchun 2443 (#53) |
 | 13 | 华东师范大学 | 你是我的天才女友 |  | 59 | 2538 | 2304 | Online 1 2751; Online 2 2794; Shenyang 2048 (#193); CCPC Nanchang 2561 (#7) |
 | 14 | 北京科技大学 | 终局 |  | 67 | 2487 | 2516 | Online 1 2472; Online 2 2472; Nanjing 2516 (#58) |
-| 15 | 西南交通大学 | donqless |  | 74 | 2464 | 2501 | Online 1 2611; Online 2 2241; Shenyang 2541 (#58); CCPC Nanchang 2461 (#11) |
-| 16 | 吉林大学 | 金色心电图 |  | 78 | 2450 | 2593 | Online 1 2468; Online 2 2289; Wuhan 2593 (#51) |
-| 17 | 北京航空航天大学 | 蒟蒻果冻 |  | 80 | 2445 | 2351 | Online 1 2510; Online 2 2475; Wuhan 2351 (#101) |
+| 15 | 吉林大学 | 金色心电图 |  | 79 | 2450 | 2521 | Online 1 2468; Online 2 2289; Wuhan 2593 (#51); CCPC Changchun 2449 (#52) |
+| 16 | 北京航空航天大学 | 蒟蒻果冻 |  | 80 | 2445 | 2351 | Online 1 2510; Online 2 2475; Wuhan 2351 (#101) |
+| 17 | 西南交通大学 | donqless |  | 87 | 2425 | 2425 | Online 1 2611; Online 2 2241; Shenyang 2541 (#58); CCPC Changchun 2273 (#89); CCPC Nanchang 2461 (#11) |
 | 18 | 中国科学院大学 | 啥 |  | 91 | 2416 |  | Online 1 2451; Online 2 2382 |
 | 19 | 东南大学 | 末班车通往何方 |  | 92 | 2414 | 2469 | Online 1 2445; Online 2 2327; Nanjing 2469 (#66) |
-| 20 | 西安交通大学 | 直到大地变成一颗酸橙 |  | 98 | 2392 | 2414 | Online 1 2208; Online 2 2555; Wuhan 2414 (#85) |
+| 20 | 西安交通大学 | 直到大地变成一颗酸橙 |  | 98 | 2393 | 2405 | Online 1 2208; Online 2 2555; Wuhan 2414 (#85); CCPC Changchun 2397 (#61) |
 | 21 | 南方科技大学 | SUSTech-Ok |  | 98 | 2390 | 2390 | Chengdu 2390 (#87) |
 | 22 | 华中科技大学 | 下次能报销吗 |  | 99 | 2388 |  | Online 1 2413; Online 2 2364 |
 | 23 | 香港科技大学 | 许愿是要付出代价的 | yes | 100 | 2385 | 2354 | Online 1 2597; Online 2 2203; Nanjing 2354 (#90) |
@@ -52,11 +52,11 @@ Shenyang official board: 401 teams.
 | 25 | 武汉工程大学 | 让我看看 |  | 107 | 2342 | 2199 | Online 1 2485; CCPC Guizhou 2199 (#24) |
 | 26 | 江南大学 | 禁忌「莱瓦汀」 |  | 107 | 2342 | 2052 | Online 1 2433; Online 2 2541; Nanjing 2052 (#161) |
 | 27 | 同济大学 | 一斩 |  | 108 | 2333 |  | Online 1 2579; Online 2 2087 |
-| 28 | 西安电子科技大学 | 憧憬成为ACM少女 |  | 117 | 2296 | 2592 | Online 1 1988; Online 2 2012; Chengdu 2548 (#54); CCPC Nanchang 2635 (#5) |
-| 29 | 哈尔滨工业大学（深圳） | 奶龙耄耋Doro合体 |  | 117 | 2296 |  | Online 1 2196; Online 2 2395 |
-| 30 | 华南理工大学 | 香草抹茶冰淇零 |  | 121 | 2277 |  | Online 1 2340; Online 2 2214 |
-| 31 | 山东大学（威海） | 进击的奶蛙 |  | 125 | 2261 | 2173 | Online 1 2201; Online 2 2410; Wuhan 2173 (#138) |
-| 32 | 香港中文大学 | 慶曆四年春 | yes | 130 | 2242 | 2242 | Xi'an 2242 (#138) |
+| 28 | 西安电子科技大学 | 憧憬成为ACM少女 |  | 121 | 2281 | 2468 | Online 1 1988; Online 2 2012; Chengdu 2548 (#54); CCPC Changchun 2222 (#104); CCPC Nanchang 2635 (#5) |
+| 29 | 华南理工大学 | 香草抹茶冰淇零 |  | 121 | 2277 |  | Online 1 2340; Online 2 2214 |
+| 30 | 山东大学（威海） | 进击的奶蛙 |  | 125 | 2261 | 2173 | Online 1 2201; Online 2 2410; Wuhan 2173 (#138) |
+| 31 | 香港中文大学 | 慶曆四年春 | yes | 130 | 2242 | 2242 | Xi'an 2242 (#138) |
+| 32 | 哈尔滨工业大学（深圳） | 奶龙耄耋Doro合体 |  | 131 | 2242 | 2134 | Online 1 2196; Online 2 2395; CCPC Changchun 2134 (#136) |
 | 33 | 南开大学 | horsenb |  | 137 | 2218 | 2086 | Online 1 2294; Online 2 2273; Wuhan 2086 (#162) |
 | 34 | 上海科技大学 | 打acm都是图领奖 |  | 138 | 2212 | 2391 | Online 1 2040; Online 2 2205; Wuhan 2391 (#93) |
 | 35 | 昆明理工大学 | 数论、概率论、线性代数滚出我的 ICPC |  | 140 | 2204 |  | Online 1 2042; Online 2 2366 |
@@ -67,21 +67,21 @@ Shenyang official board: 401 teams.
 | 40 | 暨南大学 | printf("队友呢救一下啊") |  | 152 | 2162 | 1986 | Online 1 2455; Online 2 2046; Chengdu 1986 (#183) |
 | 41 | 山西大学 | 黑马的最后一搏 |  | 154 | 2155 | 2045 | Online 1 2081; Online 2 2339; Shenyang 2045 (#195) |
 | 42 | 香港城市大学 | One Russian Is Enough | yes | 156 | 2150 |  | Online 1 2415; Online 2 1886 |
-| 43 | 上海大学 | NailongSlayer |  | 161 | 2132 | 2133 | Online 1 2269; Online 2 1993; Shenyang 2133 (#160) |
-| 44 | 电子科技大学 | UESTC_泰拉马桶 |  | 163 | 2125 | 2103 | Online 1 2137; Online 2 2135; Nanjing 2103 (#143) |
-| 45 | 江西财经大学 | 别开香槟开早了 |  | 167 | 2111 | 2013 | Online 1 2320; Online 2 2099; Shenyang 2026 (#203); CCPC Nanchang 2000 (#89) |
-| 46 | 东北大学秦皇岛分校 | 10e9+7 |  | 169 | 2107 | 2011 | Online 1 2392; Online 2 2013; Chengdu 1925 (#202); CCPC Qinhuangdao 2096 (#40) |
-| 47 | 嘉应学院 | HK GaGaXiang |  | 178 | 2084 | 2111 | Online 1 2070; Online 2 2070; Shenyang 2111 (#167) |
-| 48 | 香港理工大学 | M&M&M | yes | 178 | 2083 | 1921 | Online 1 2066; Online 2 2262; Xi'an 1921 (#259) |
-| 49 | 广东工业大学 | 循序渐进 |  | 179 | 2082 | 2269 | Online 1 1930; Online 2 2046; Xi'an 2269 (#128) |
-| 50 | 北京理工大学 | 贷款也要打XCPC |  | 183 | 2074 | 1937 | Online 1 2343; Online 2 1943; Xi'an 1937 (#253) |
-| 51 | 成都锦城学院 | x x xxx |  | 185 | 2066 | 2000 | Online 1 2183; Online 2 2082; Chengdu 1990 (#182); CCPC Nanchang 2010 (#85) |
-| 52 | 南京工程学院 | 请给我们1e9+7个名额 |  | 188 | 2060 |  | Online 1 2150; Online 2 1970 |
-| 53 | 西南财经大学 | swollen kskbl |  | 193 | 2050 | 2220 | Online 1 2005; Online 2 1926; Xi'an 2220 (#143) |
-| 54 | 江西农业大学 | 毕业老登求收留 |  | 199 | 2035 | 2035 | CCPC Qinhuangdao 2035 (#53) |
-| 55 | 烟台大学 | 全国硕士研究生统一招生考试已经过去 22 天 |  | 207 | 2020 | 2020 | CCPC Qinhuangdao 2020 (#57) |
-| 56 | 哈尔滨工程大学 | Ordinary good citizen |  | 223 | 1985 | 1889 | Online 1 1860; Online 2 2206; Nanjing 1889 (#220) |
-| 57 | 成都信息工程大学 | 竹叶雨 |  | 223 | 1985 |  | Online 1 2213; Online 2 1757 |
+| 43 | 电子科技大学 | UESTC_泰拉马桶 |  | 163 | 2125 | 2103 | Online 1 2137; Online 2 2135; Nanjing 2103 (#143) |
+| 44 | 江西财经大学 | 别开香槟开早了 |  | 167 | 2111 | 2013 | Online 1 2320; Online 2 2099; Shenyang 2026 (#203); CCPC Nanchang 2000 (#89) |
+| 45 | 东北大学秦皇岛分校 | 10e9+7 |  | 169 | 2107 | 2011 | Online 1 2392; Online 2 2013; Chengdu 1925 (#202); CCPC Qinhuangdao 2096 (#40) |
+| 46 | 香港理工大学 | M&M&M | yes | 178 | 2083 | 1921 | Online 1 2066; Online 2 2262; Xi'an 1921 (#259) |
+| 47 | 广东工业大学 | 循序渐进 |  | 179 | 2082 | 2269 | Online 1 1930; Online 2 2046; Xi'an 2269 (#128) |
+| 48 | 上海大学 | NailongSlayer |  | 181 | 2078 | 2025 | Online 1 2269; Online 2 1993; Shenyang 2133 (#160); CCPC Changchun 1916 (#264) |
+| 49 | 北京理工大学 | 贷款也要打XCPC |  | 183 | 2074 | 1937 | Online 1 2343; Online 2 1943; Xi'an 1937 (#253) |
+| 50 | 南京工程学院 | 请给我们1e9+7个名额 |  | 188 | 2060 |  | Online 1 2150; Online 2 1970 |
+| 51 | 西南财经大学 | swollen kskbl |  | 193 | 2050 | 2220 | Online 1 2005; Online 2 1926; Xi'an 2220 (#143) |
+| 52 | 嘉应学院 | HK GaGaXiang |  | 193 | 2048 | 2026 | Online 1 2070; Online 2 2070; Shenyang 2111 (#167); CCPC Changchun 1942 (#244) |
+| 53 | 江西农业大学 | 毕业老登求收留 |  | 199 | 2035 | 2035 | CCPC Qinhuangdao 2035 (#53) |
+| 54 | 成都锦城学院 | x x xxx |  | 200 | 2034 | 1968 | Online 1 2183; Online 2 2082; Chengdu 1990 (#182); CCPC Changchun 1905 (#273); CCPC Nanchang 2010 (#85) |
+| 55 | 成都信息工程大学 | 竹叶雨 |  | 202 | 2029 | 2117 | Online 1 2213; Online 2 1757; CCPC Changchun 2117 (#143) |
+| 56 | 烟台大学 | 全国硕士研究生统一招生考试已经过去 22 天 |  | 207 | 2020 | 2020 | CCPC Qinhuangdao 2020 (#57) |
+| 57 | 哈尔滨工程大学 | Ordinary good citizen |  | 223 | 1985 | 1889 | Online 1 1860; Online 2 2206; Nanjing 1889 (#220) |
 | 58 | 大连理工大学 | 中国奶龙大学0队 |  | 229 | 1972 | 1972 | Nanjing 1972 (#192) |
 | 59 | 南京邮电大学 | JMX函数 |  | 230 | 1968 | 1852 | Online 1 2079; Online 2 1974; Shenyang 1852 (#279) |
 | 60 | 深圳技术大学 | SZTU_写的不队 |  | 231 | 1968 | 1887 | Online 1 2027; Online 2 1989; Wuhan 1887 (#241) |
@@ -91,7 +91,7 @@ Shenyang official board: 401 teams.
 | 64 | 中国民航大学 | 大四写论文 |  | 240 | 1946 |  | Online 1 2078; Online 2 1814 |
 | 65 | 华南师范大学 | 你，去打xcpc了对吧，和我不认识的人一起 |  | 245 | 1935 | 1939 | Online 1 1862; Online 2 2005; CCPC Nanchang 1939 (#117) |
 | 66 | 福建师范大学 | Fujian Tour Group |  | 245 | 1934 | 1938 | Online 1 1758; Online 2 2101; Wuhan 2187 (#136); CCPC Guizhou 1881 (#117); CCPC Qinhuangdao 1745 (#203) |
-| 67 | 合肥工业大学宣城校区 | 最后留下的路标 |  | 248 | 1929 | 1570 | Online 1 2000; Online 2 2218; Shenyang 1570 (#361) |
+| 67 | 合肥工业大学宣城校区 | 最后留下的路标 |  | 249 | 1926 | 1742 | Online 1 2000; Online 2 2218; Shenyang 1570 (#361); CCPC Changchun 1915 (#265) |
 | 68 | 惠州学院 | 沧海一粟 |  | 250 | 1924 | 1876 | Online 1 1928; Online 2 1968; CCPC Guizhou 1876 (#120) |
 | 69 | 广东金融学院 | 燃烧精血也要AK |  | 251 | 1922 |  | Online 1 1746; Online 2 2099 |
 | 70 | 西南科技大学 | miaowmiaowmimi |  | 253 | 1917 | 1712 | Online 1 2465; Online 2 1986; Nanjing 1386 (#319); CCPC Guizhou 2012 (#61); CCPC Nanchang 1737 (#293) |
@@ -102,11 +102,11 @@ Shenyang official board: 401 teams.
 | 75 | 成都大学 | 抱走Sakura的小黄鸭 |  | 271 | 1873 | 1645 | Online 1 1900; Online 2 2074; Nanjing 1645 (#282) |
 | 76 | 大连海事大学 | Nailong Acquaint Fate |  | 278 | 1858 | 1724 | Online 1 1948; Online 2 1901; CCPC Nanchang 1724 (#310) |
 | 77 | 东莞理工学院 | 芙芙天下第一 |  | 279 | 1853 | 1992 | Online 1 1713; Online 2 1855; CCPC Nanchang 1992 (#92) |
-| 78 | 重庆邮电大学 | 憧憬成为acm高手 |  | 280 | 1851 | 1881 | Online 1 1884; Online 2 1789; Wuhan 1881 (#244) |
-| 79 | 浙江工商大学 | 404隐藏 |  | 282 | 1846 |  | Online 1 1664; Online 2 2029 |
-| 80 | 华中师范大学 | 是区不是凶 |  | 284 | 1839 | 1876 | Online 1 1919; Online 2 1685; Chengdu 1803 (#237); CCPC Qinhuangdao 1949 (#79) |
-| 81 | 东北师范大学 | WA to WF |  | 286 | 1833 | 1599 | Online 1 1999; Online 2 1902; Wuhan 1599 (#327) |
-| 82 | 南京师范大学 | Three Musketeers with Nine Suitcases |  | 287 | 1832 |  | Online 1 1506; Online 2 2157 |
+| 78 | 南京师范大学 | Three Musketeers with Nine Suitcases |  | 279 | 1853 | 1896 | Online 1 1506; Online 2 2157; CCPC Changchun 1896 (#281) |
+| 79 | 重庆邮电大学 | 憧憬成为acm高手 |  | 280 | 1851 | 1881 | Online 1 1884; Online 2 1789; Wuhan 1881 (#244) |
+| 80 | 浙江工商大学 | 404隐藏 |  | 282 | 1846 |  | Online 1 1664; Online 2 2029 |
+| 81 | 华中师范大学 | 是区不是凶 |  | 284 | 1839 | 1876 | Online 1 1919; Online 2 1685; Chengdu 1803 (#237); CCPC Qinhuangdao 1949 (#79) |
+| 82 | 东北师范大学 | WA to WF |  | 286 | 1833 | 1599 | Online 1 1999; Online 2 1902; Wuhan 1599 (#327) |
 | 83 | 湖南工业大学 | 队友说他会 |  | 289 | 1824 | 1824 | CCPC Nanchang 1824 (#197) |
 | 84 | 安徽师范大学 | 天天ac |  | 292 | 1816 |  | Online 1 1483; Online 2 2149 |
 | 85 | 山东理工大学 | CEren WAka |  | 295 | 1807 |  | Online 1 1939; Online 2 1675 |
@@ -128,6 +128,20 @@ Shenyang official board: 401 teams.
 | 101 | 香港中文大学 | 越南河粉、泰式青木瓜沙拉和 C++ | yes | 351 | 1610 | 1610 | Shenyang 1610 (#351) |
 | 102 | 天津工业大学 | 算法三剑客 |  | 352 | 1608 | 1538 | Online 1 1787; Online 2 1569; Nanjing 1324 (#322); CCPC Qinhuangdao 1753 (#196) |
 | 103 | 香港理工大学 | 传奇蒟蒻 | yes | 365 | 1555 |  | Online 2 1555 |
+
+## Virtuals and the Hong Kong field
+
+Online-equivalent rank: x = -11.856 + 0.00251 perf (r = 0.99, 85 registrants). Gold / silver / bronze: field-relative Hong Kong model on the registered field. '−100' reads the virtual 100 CF weaker.
+
+| result | perf | Shenyang-eq. | Hong Kong position | online-eq. rank | gold / silver / bronze |
+|---|---|---|---|---|---|
+| NUM-R^3 Shenyang onsite (#87) | 2425 | 87 | 18 of 103 | 319 | 17% / 42% / 32% |
+| Chengdu virtual #35 | 2738 | 37 | 8 of 103 | 146 | 63% / 25% / 10% |
+| Chengdu virtual #35 −100 | 2638 | 49 | 12 of 103 | 187 | 46% / 35% / 16% |
+| CCPC Changchun virtual #29 | 2641 | 48 | 12 of 103 | 186 | 47% / 34% / 15% |
+| CCPC Changchun virtual #29 −100 | 2541 | 59 | 13 of 103 | 239 | 31% / 41% / 22% |
+| CCPC Changchun virtual #13 | 2904 | 24 | 5 of 103 | 96 | 84% / 10% / 5% |
+| CCPC Changchun virtual #13 −100 | 2804 | 30 | 7 of 103 | 123 | 73% / 18% / 8% |
 
 ## No 2026 result (19)
 

@@ -668,7 +668,10 @@ official ranks. On the 11-16 export (`data/icpc_hk_macau_public_teams_20261116.x
 now the default: 122 teams, 110 Reviewed / 12 Pending, after round 2 closed) NUM-R^3
 (Shenyang official #87, board #94) is 24th of the 103 registrants with a 2026
 result (Shenyang-equivalent #101 over all three appearances); on onsite results
-alone, 11 registrants are stronger. Results: `output/hk_shenyang_rank.md`.
+alone, 12 registrants are stronger. `--virtual BOARD:RANK` places virtual results in
+the same field with Hong Kong medal chances: the Chengdu virtual (#35) reads as
+Shenyang #37 and 8th in Hong Kong (12th with a 100-CF virtual discount); the CCPC
+Changchun virtual (#29) reads as Shenyang #48 and 12th. Results: `output/hk_shenyang_rank.md`.
 
 ```bash
 python3 scripts/build_quota_evidence.py        # WF/host/invitational/provincial evidence + Shanghai lists
@@ -677,7 +680,7 @@ python3 -m arch_b.hk_link                       # Hong Kong/Macau teams linked t
 python3 -m arch_b.hk_gold                       # Hong Kong field history, gold backtest and 2026 forecast
 python3 -m arch_b.online_medals                 # gold / silver / bronze chances per 2026 site (incl. Hong Kong)
 python3 -m arch_b.hk_field_2026                 # 2026 Hong Kong registration list vs online results and past fields
-python3 scripts/hk_shenyang_rank.py             # Hong Kong registrants ranked by Shenyang-equivalent 2026 strength
+python3 scripts/hk_shenyang_rank.py --virtual Chengdu:35 --virtual 'CCPC Changchun:29'  # HK field by Shenyang-equivalent strength (+ virtuals)
 ```
 
 ```bash
