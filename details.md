@@ -8888,3 +8888,74 @@ Run:
 `python3 scripts/fetch_xcpcio_standings.py ccpc data/xcpcio_ccpc.json --min-year 2022`
 then, for each missing QOJ id,
 `python3 scripts/add_qoj_contest.py <id> --name "CCPC …" --region "China Collegiate" --year <y> --output data/qoj_ccpc.json`.
+
+
+## Hong Kong field ranked by Shenyang rank (2026-11-16)
+
+**Request.** Where does NUM-R^3 rank in Hong Kong, reading the field in
+Shenyang-rank terms? Use the 2026 online rounds, regionals and CCPC.
+
+**NUM-R^3 at Shenyang** (`icpc/51st/shenyang`, 11-15): board #94, **official
+#87 of 401**, 5 solved, 647 min.
+
+**Method** (`scripts/hk_shenyang_rank.py`, new):
+- Field: the 10-28 Hong Kong export (144 teams), the newest one in `data/`.
+- Each registrant is linked to its 2026 appearances:
+  - EC Online I/II rows (4071/4113): the `hk_field_2026` online link, then
+    the board row with the same team name and solve count;
+  - the five 51st regionals' official XCPCIO rows: same school and ≥ 2 shared
+    members, or the same team name where the board has no members (Xi'an);
+  - the 2026 CCPC boards: Changchun (QOJ 4582), Guizhou, Nanchang and
+    Qinhuangdao (XCPCIO; no affiliations, so these match on ≥ 2 members alone).
+- Online and regional rows take their CF performance from the binary joint
+  fit (`export_virtual_calc.performance_fit`). The QOJ-hosted regionals
+  (Xi'an/Chengdu/Wuhan) map an XCPCIO official row to a QOJ row by team name
+  and solve count.
+- CCPC boards are not in the fit. Each is mapped as `perf = a + b·log(rank)`,
+  fitted on its line-ups that have a 2026 regional performance:
+  - Guizhou: 68 pairs, r −0.67;
+  - Nanchang: 80 pairs, r −0.69;
+  - Qinhuangdao: 72 pairs, r −0.75;
+  - Changchun: 0 pairs (51/939 rows have members), so it is not used.
+- Strength is the mean of a team's appearances. Its Shenyang-equivalent rank
+  is 1 + the number of official Shenyang teams with a higher performance.
+
+**Result** (`output/hk_shenyang_rank.md`; 130 of 144 registrants have a 2026
+result, 79 of them from an onsite contest):
+
+| NUM-R^3 | perf | Shenyang-equivalent |
+|---|---|---|
+| Online I (#544 official) | 2245 | #129 |
+| Online II (#349) | 2442 | #82 |
+| Shenyang (#87 official) | 2425 | #87 |
+| mean of all three | 2371 | #101 |
+
+- **About 23rd in the Hong Kong field.** 22 registrants are ahead:
+  - 2 are local (HKUST 喵喵喵幼儿园, Shenyang #10; HKUST 许愿是要付出代价的);
+  - 8 are rated on online rounds only (e.g. PKU 飞带不长队, 福州大学, 杭电, 南航,
+    人大, 天大);
+  - the closest are 南方科技大学 SUSTech-Ok (Chengdu #87, eq. #98), 西安交通大学
+    (eq. #98), 华中科技大学 (#99) and HKUST's second team (#100).
+- **Onsite results only** (NUM-R^3 2425 = Shenyang #87): 9 registrants with
+  an onsite result are stronger.
+- Medal shares on the 2024/2025 boards: gold 10%, silver-or-better 30%. With
+  ~120 teams, gold reaches about rank 12 and silver about rank 36. 23rd is
+  mid-silver, consistent with the earlier Hong Kong forecasts.
+
+**Limitations / missing data:**
+- **The registration list is stale.** The newest export is 10-28. Round 1
+  closed 10-30 and round 2 on 11-14. 13 schools with a 2024/2025 Hong Kong
+  gold or silver had not registered by 10-28. Each strong late entrant moves
+  NUM-R^3 down a place. A fresh PTA export is needed to settle the final
+  field.
+- Online performance is not onsite form. Teams rated on online rounds only
+  are less certain, in both directions.
+- Xi'an rows match on school and team name only, so a renamed line-up is
+  missed there.
+- 14 registrants have no 2026 result (listed in the output), among them the
+  local HKU team.
+- Team strength is a plain mean: it has no shrinkage and no weighting by
+  contest type.
+
+Run: `python3 scripts/hk_shenyang_rank.py [--team NAME]` (~20 s; needs
+`openpyxl` and `pypinyin`).

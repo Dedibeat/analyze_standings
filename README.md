@@ -662,6 +662,12 @@ registration pace (`cut_risk`) puts that at ~0. The list is still weaker than
 the 2024/2025 fields (gold line online #198 vs #53–66). With the 2025 schools
 that have not registered yet added back, the gold line is #80–92, as strong
 schools keep sending weaker line-ups than in 2025; NUM-R^3's chances are unchanged. Results: `output/hk_field_2026.md`.
+`scripts/hk_shenyang_rank.py` puts every registrant's 2026 online, regional and
+CCPC results on the binary fit's CF-performance scale and reads them as Shenyang
+official ranks. NUM-R^3 (Shenyang official #87, board #94) is 23rd of the 130
+registrants with a 2026 result (Shenyang-equivalent #101 over all three
+appearances); on onsite results alone, 9 registrants are stronger. Results:
+`output/hk_shenyang_rank.md`.
 
 ```bash
 python3 scripts/build_quota_evidence.py        # WF/host/invitational/provincial evidence + Shanghai lists
@@ -670,6 +676,7 @@ python3 -m arch_b.hk_link                       # Hong Kong/Macau teams linked t
 python3 -m arch_b.hk_gold                       # Hong Kong field history, gold backtest and 2026 forecast
 python3 -m arch_b.online_medals                 # gold / silver / bronze chances per 2026 site (incl. Hong Kong)
 python3 -m arch_b.hk_field_2026                 # 2026 Hong Kong registration list vs online results and past fields
+python3 scripts/hk_shenyang_rank.py             # Hong Kong registrants ranked by Shenyang-equivalent 2026 strength
 ```
 
 ```bash
