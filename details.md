@@ -9000,8 +9000,9 @@ have both closed.
   local: HKUST ×2 and the new PolyU 冻柠走冰 (Chengdu #16, Pending).
 - On onsite results alone, 11 registrants are stronger.
 - The new teams ahead: 杭州师范大学 Rise from the Brink (online only, Shenyang
-  eq. #26), PolyU 冻柠走冰 (#38), 西安电子科技大学 (#117, now just behind).
-  Nobody who left was ahead.
+  eq. #26) and PolyU 冻柠走冰 (#38). 西安电子科技大学 (#117) is new too, but
+  behind NUM-R^3. One team that was ahead left: 中国人民大学 亻亻亻 (#42). Net:
+  one place down, from 23rd to 24th.
 - With ~110 attending teams and 10% / 30% medal shares: gold reaches rank
   ~11, silver ~33. 24th is mid-silver, ~13 places below gold.
 - Teams ahead that are rated only online: 8, the same as before.
