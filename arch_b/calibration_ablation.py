@@ -26,7 +26,7 @@ GROUPS = {
     "E": ("conditional_fit_se", "solve_rate", "log_field_size"),
     "T": ("log_median_solve_seconds", "timing_missing"),
 }
-CONTROL_DET_RMSE = 229.9701691633  # + 2026 regionals/UCup S5 (2026-11-15); was 229.0324113
+CONTROL_DET_RMSE = 229.9675529559  # loader keeps unlisted-solve rows (2026-11-16); was 229.9701691633
 
 
 def bundle_features(bundle):

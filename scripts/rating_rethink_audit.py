@@ -44,7 +44,7 @@ def main():
     for c in raw:
         labels = {p["problem_label"] for p in c["problems"]}
         for row in c["standings"]:
-            if not row_solved_any(row, labels):
+            if not row_solved_any(row):
                 dropped += 1
                 active_zero += any((p.get("wrong_attempts") or 0) > 0
                                    for label, p in (row.get("problems") or {}).items()

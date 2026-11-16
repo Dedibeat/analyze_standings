@@ -45,7 +45,7 @@ class LoadTest(unittest.TestCase):
         self.assertEqual(ds.obs_y.tolist(), [True, False, False])
         self.assertEqual(ds.participation_of_row, [(1, 0)])
 
-    def test_unknown_problem_solve_does_not_retain_row(self):
+    def test_unknown_problem_solve_retains_row_as_failure(self):
         contest = {
             "contest_id": 2,
             "contest_name": "Partial metadata",
@@ -72,8 +72,9 @@ class LoadTest(unittest.TestCase):
             path.write_text(json.dumps([contest]))
             ds = load(str(path))
 
-        self.assertEqual(len(ds.team_of_row), 0)
+        self.assertEqual(len(ds.team_of_row), 1)
         self.assertEqual(len(ds.problems), 1)
+        self.assertEqual(ds.obs_y.tolist(), [False])
 
 
 if __name__ == "__main__":
