@@ -292,3 +292,15 @@ Every problem's rating under `base`, `skip_partial` and DE is now written to
 Reproduce: `PYTHONUTF8=1 OPENBLAS_NUM_THREADS=1 ./.venv/Scripts/python -m arch_b.skip_cells 8`.
 It takes ~4 min with 8 workers and needs the `hier_binary all` view cache in
 `hier_binary_run/`. Output: `output/skip_cells.json`.
+
+## Update 2026-11-16: with solve times
+
+`hier_time_report.md` reruns `skip_partial` on the current data, alone and
+next to a solve-time term. Two labels documented as wrong (the anchor Uniform
+Chemistry, and Wuhan 2025 F in the fresh panel) are left out of maps and RMSE
+there.
+- Alone, `skip_partial` reads +146 on the EC sign-ins (+160 with the wrong
+  anchor still in the map; +148 on the 2026-11-08 data).
+- With the time term the sign-in bias is −1, and the two known
+  over-corrections are repaired: 2025 EC Online II D 1215 → 1584 (hand 1650)
+  and Ōokayama L 1701 → 2255 (about 2300).

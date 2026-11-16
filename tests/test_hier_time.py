@@ -1,3 +1,4 @@
+import json
 import unittest
 
 import numpy as np
@@ -70,9 +71,31 @@ class TimeFitTest(unittest.TestCase):
         self.assertAlmostEqual(slope, 1.0, delta=0.1)
         self.assertLess(np.sqrt(np.mean((res["b"] - true_b) ** 2)), np.sqrt(np.mean((base - true_b) ** 2)) + 10)
 
+    def test_wrong_label_is_left_out_of_the_map(self):
+        anchors = [{"contest_id": 1, "problem_label": l, "cf": c} for l, c in zip("ABC", (1000.0, 2000.0, 3000.0))]
+        anchors.append({"contest_id": 1123, "problem_label": "B", "cf": 3200.0})   # Uniform Chemistry
+        self.assertEqual(ht._used(anchors), [0, 1, 2])
+        np.testing.assert_allclose(ht._cf_map([0.0, 1.0, 2.0, 1.0], anchors), [1000.0, 1000.0])
+
     def test_names(self):
         self.assertEqual(ht.name(ht.BASE), "base")
         self.assertEqual(ht.name((5, 0.25, True)), "k5_w0.25_skip")
+
+
+class ReleaseFileTest(unittest.TestCase):
+    def test_release_matches_the_shipped_layout(self):
+        def read(name):
+            with open(f"output/{name}", encoding="utf-8") as f:
+                return json.load(f)
+        hier, shipped = read("problem_ratings_hier.json"), read("problem_ratings_calibrated.json")
+        meta, result = read("problem_calibration_hier.json"), read("hier_time.json")
+        keys = ("contest_id", "problem_label", "problem_id", "solved_count", "board_rows", "small_board")
+        self.assertEqual([[r[k] for k in keys] for r in hier], [[r[k] for k in keys] for r in shipped])
+        self.assertLessEqual(set(shipped[0]), set(hier[0]))
+        self.assertTrue(all(elo.LO <= r["difficulty_cf"] <= elo.HI and r["difficulty_cf_se"] > 0 for r in hier))
+        setting = result["settings"][result["release_candidate"]]
+        self.assertEqual([meta["setting"][k] for k in ("bins", "time_weight", "skip_partial")], setting)
+        self.assertTrue(result["criteria"][result["release_candidate"]]["passes"])
 
 
 if __name__ == "__main__":

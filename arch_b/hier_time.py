@@ -22,7 +22,7 @@ A setting is (bins, weight, skip); ``skip`` also treats skip_cells'
 
     python -m arch_b.hier_time select [JOBS]     # dose selection, no CF label
     python -m arch_b.hier_time evaluate [JOBS]   # -> output/hier_time.json
-    python -m arch_b.hier_time release           # -> output/problem_ratings_hier.json
+    python -m arch_b.hier_time release           # -> output/problem_ratings_hier.json (+ problem_calibration_hier.json)
 """
 
 import hashlib
@@ -43,9 +43,15 @@ BASE = (0, 0.0, False)
 GRID = [(k, w, False) for k in (3, 5, 10) for w in (0.05, 0.1, 0.25, 0.5, 1.0)]
 OUT = hb.ROOT / "output/hier_time.json"
 RELEASE = hb.ROOT / "output/problem_ratings_hier.json"
+RELEASE_META = hb.ROOT / "output/problem_calibration_hier.json"
 # Contests added on 2026-11-15, after the hier_binary setting was frozen (2026-11-05).
 ADDED = (-216770522111721, -162528714534630, 4126, 4207, 4538, 4565, 4566, 4569, 4576, 4593, 4605,
          4606, 4607, 4614, 4617, 4620, 4694)
+# Labels documented as wrong, left out of every CF map and RMSE here. Uniform Chemistry
+# (SWERC 2022 B) is CF 3200 and about 2000 by hand (problem_rating_audit.md); Wuhan 2025 F
+# was rated 2200 blind and 93% of its board solved it (skip_cells_report.md).
+WRONG_ANCHORS = {(1123, "B")}
+WRONG_HAND = {(2609, "F")}
 FRESH_BOARDS = {4593: "Xi'an 2026", 4607: "Chengdu 2026", 4694: "Wuhan 2026",
                 -216770522111721: "Nanjing 2026", -162528714534630: "Shenyang 2026"}
 
@@ -127,6 +133,17 @@ def _anchors():
 def _anchor_index(ds):
     pi = {(cid, lab): p for p, (cid, lab, _, _) in enumerate(ds.problems)}
     return np.array([pi[(a["contest_id"], a["problem_label"])] for a in _anchors()]), pi
+
+
+def _used(anchors):
+    """Positions of the anchors whose CF label is trusted."""
+    return [i for i, a in enumerate(anchors) if (a["contest_id"], a["problem_label"]) not in WRONG_ANCHORS]
+
+
+def _cf_map(b, anchors):
+    """Affine CF map from the trusted anchors; ``b`` is aligned with ``anchors``."""
+    use = _used(anchors)
+    return np.polyfit(np.asarray(b)[use], [anchors[i]["cf"] for i in use], 1)
 
 
 def _split_job(job):
@@ -243,11 +260,12 @@ def scorecard(views, names):
     from .de_stability import drift, metrics
     anchors = _anchors()
     cf = np.array([a["cf"] for a in anchors])
+    used = _used(anchors)
     preds = {v: [] for v in views}
     for c in sorted({a["cf_contest"] for a in anchors}):
-        held = [i for i, a in enumerate(anchors) if a["cf_contest"] == c]
+        held = [i for i in used if anchors[i]["cf_contest"] == c]
         keep = {r["row_id"] for r in _purged_train(anchors, [anchors[i] for i in held])}
-        train = [i for i, a in enumerate(anchors) if a["row_id"] in keep]
+        train = [i for i in used if anchors[i]["row_id"] in keep]
         maps = {m: np.polyfit(np.array(views["full"]["fits"][m]["b"])[train], cf[train], 1) for m in names}
         for v, rec in views.items():
             preds[v] += [{"row_id": anchors[i]["row_id"], "cf_contest": c, "cf": anchors[i]["cf"],
@@ -290,7 +308,7 @@ def full_data(settings):
     hb._init()
     ds, uf = hb._G["ds"], hb._G["uf"]
     idx, pi = _anchor_index(ds)
-    cf = np.array([a["cf"] for a in _anchors()])
+    fresh = {k: v for k, v in FRESH.items() if k not in WRONG_HAND}
     shipped = problem_cf(ds.problems)
     de = np.array([shipped[(int(c), lab)] for c, lab, _, _ in ds.problems])
     index = {tk: i for i, tk in enumerate(ds.teams)}
@@ -299,7 +317,7 @@ def full_data(settings):
     ratings, out = {"de": de}, {"maps": {}, "thresholds": {}, "missing_cells": {}, "external_cf_teams": {}}
     for label, setting in settings.items():
         res = fit(ds, setting)
-        s, i = np.polyfit(res["b"][idx], cf, 1)
+        s, i = _cf_map(res["b"][idx], _anchors())
         ratings[label] = np.clip(s * res["b"] + i, elo.LO, elo.HI)
         out["maps"][label] = [float(s), float(i)]
         out["thresholds"][label] = res["d"].tolist()
@@ -308,8 +326,8 @@ def full_data(settings):
         out["external_cf_teams"][label] = {"teams": len(err), "rmse": float(np.sqrt(np.mean(err ** 2))),
                                            "mean_error": float(err.mean())}
     out["hand_scores"] = hand_scores(pi, ratings)
-    out["fresh_scores"] = hand_scores(pi, ratings, FRESH)
-    both = {**HAND, **FRESH}
+    out["fresh_scores"] = hand_scores(pi, ratings, fresh)
+    both = {**HAND, **fresh}
     out["both_panels"] = {n: {"bias": float(np.mean([r[pi[k]] - both[k][0] for k in both])),
                               "rmse": float(np.sqrt(np.mean([(r[pi[k]] - both[k][0]) ** 2 for k in both])))}
                           for n, r in ratings.items()}
@@ -324,6 +342,7 @@ def full_data(settings):
                     **{n: round(float(r[pi[(c, lab)]]), 1) for n, r in ratings.items()}}
                    for (c, lab), (h, g, _) in both.items()]
     table = build_anchor_table()      # nested-LOCO DE on the current shipped fit, by anchor row
+    table = [table[i] for i in _used(table)]
     out["de_nested_loco"] = dict(zip((r["row_id"] for r in table), loco(table, "clip")[0].tolist()))
     (hb.ROOT / "output/hier_time_ratings.json").write_text(json.dumps(
         {"research_only": True, "settings": {m: list(s) for m, s in settings.items()}, "maps": out["maps"],
@@ -351,21 +370,34 @@ def forward_2026(settings):
     theta["survival"] = survival.fit(ds, obs=(t[cells], p[cells], y[cells], rho[cells]), verbose=False)[0]
     for label, setting in settings.items():
         theta[label] = fit(ds, setting, cells, rows=active)["theta"]
-    out = {"boards": {}, "pooled": {}}
-    total = {m: np.zeros(2) for m in theta}
+    out = {"boards": {}}
+    good, valid = {m: [] for m in theta}, []
     for cid, board in FRESH_BOARDS.items():
         r = np.flatnonzero((ds.contest_of_row == ds.contests.index(cid)) & seen[ds.team_of_row])
-        i, j = np.triu_indices(len(r), 1)
         rank = ds.rank_of_row[r]
-        keep = rank[i] != rank[j]
-        out["boards"][board] = {"linked_rows": len(r), "rows": int(np.sum(ds.contest_of_row == ds.contests.index(cid))),
-                                "pairs": int(keep.sum())}
+        valid.append(np.triu(rank[:, None] != rank[None, :], 1).astype(float))
+        out["boards"][board] = {"linked_rows": len(r), "pairs": int(valid[-1].sum()),
+                                "rows": int(np.sum(ds.contest_of_row == ds.contests.index(cid)))}
         for m, th in theta.items():
-            agree = (np.sign(rank[j] - rank[i]) * np.sign(th[ds.team_of_row[r]][i] - th[ds.team_of_row[r]][j]))[keep]
-            good = float(np.sum((agree > 0) + 0.5 * (agree == 0)))
-            out["boards"][board][m] = good / keep.sum()
-            total[m] += (good, keep.sum())
-    out["pooled"] = {m: float(v[0] / v[1]) for m, v in total.items()}
+            t = th[ds.team_of_row[r]]
+            agree = np.sign(rank[None, :] - rank[:, None]) * np.sign(t[:, None] - t[None, :])
+            good[m].append(valid[-1] * ((agree > 0) + 0.5 * (agree == 0)))
+            out["boards"][board][m] = float(good[m][-1].sum() / valid[-1].sum())
+
+    def pooled(m, w):      # pair accuracy with each linked row counted w times
+        return sum(x @ g @ x for x, g in zip(w, good[m])) / sum(x @ v @ x for x, v in zip(w, valid))
+    out["pooled"] = {m: float(pooled(m, [np.ones(len(v)) for v in valid])) for m in theta}
+    rng = np.random.default_rng(hb.SEED)
+    draws = {m: [] for m in theta}
+    for _ in range(hb.BOOT):   # resample linked rows within each board, the same draw for every model
+        w = [np.bincount(rng.integers(0, len(v), len(v)), minlength=len(v)).astype(float) for v in valid]
+        for m in theta:
+            draws[m].append(pooled(m, w))
+    out["difference"] = {}
+    for a, b in [("base", "binary"), ("base", "survival")] + [(m, "base") for m in settings if m != "base"]:
+        d = np.array(draws[a]) - np.array(draws[b])
+        out["difference"][f"{a}_minus_{b}"] = [out["pooled"][a] - out["pooled"][b],
+                                               float(np.percentile(d, 2.5)), float(np.percentile(d, 97.5))]
     return out
 
 
@@ -446,7 +478,8 @@ def evaluate(jobs):
 
 
 def release():
-    """Full-data fit of the release candidate: every problem on the CF scale, shipped-file schema."""
+    """Full-data fit of the release candidate, in the shipped files' layout: the records of
+    problem_ratings_calibrated.json (``difficulty_cf`` and all) plus a CF-scale standard error."""
     from .calibrate import SMALL_BOARD_ROWS
     result = json.loads(OUT.read_text(encoding="utf-8"))
     setting = tuple(result["settings"][result["release_candidate"]])
@@ -454,26 +487,28 @@ def release():
     ds = hb._G["ds"]
     res = fit(ds, setting)
     idx, _ = _anchor_index(ds)
-    cf = np.array([a["cf"] for a in _anchors()])
-    slope, icept = np.polyfit(res["b"][idx], cf, 1)
+    used = _used(_anchors())
+    slope, icept = _cf_map(res["b"][idx], _anchors())
     rows = np.bincount(ds.contest_of_row, minlength=len(ds.contests))[ds.contest_of_problem]
     records = [{"problem_id": pid, "problem_label": label, "problem_name": pname, "contest_id": int(cid),
-                "difficulty": round(float(res["b"][p]), 1),
+                "difficulty": round(float(res["b"][p]), 1), "difficulty_se": round(float(res["b_se"][p]), 1),
+                "solved_count": int(ds.solved_count[p]), "reported_solved_in_contest": int(ds.raw_solved_count[p]),
                 "difficulty_cf": round(float(np.clip(slope * res["b"][p] + icept, elo.LO, elo.HI)), 1),
                 "difficulty_cf_se": round(float(slope * res["b_se"][p]), 1),
-                "solved_count": int(ds.solved_count[p]), "reported_solved_in_contest": int(ds.raw_solved_count[p]),
                 "board_rows": int(rows[p]), "small_board": bool(rows[p] < SMALL_BOARD_ROWS)}
                for p, (cid, label, pid, pname) in enumerate(ds.problems)]
     meta = {"research_only": True, "method": "hierarchical binary Rasch with solve-time slices (hier_time_report.md)",
             "setting": {**KW, "bins": setting[0], "time_weight": setting[1], "skip_partial": setting[2]},
             "thresholds": res["d"].tolist(), "map": {"slope": float(slope), "intercept": float(icept)},
             "map_scope": "problems and teams: a team rated R solves a problem rated R half the time",
-            "anchors": len(cf), "display": [elo.LO, elo.HI, "rounded to 0.1"],
-            "difficulty_cf_se": "conditional on the fitted teams; it ignores map and board-level error",
+            "anchors": len(used), "anchor_contests": len({a["cf_contest"] for a in _anchors()}),
+            "anchors_left_out": sorted(map(list, WRONG_ANCHORS)),
+            "display": [elo.LO, elo.HI, "rounded to 0.1"],
+            "uncertainty": "difficulty_se / difficulty_cf_se: the teams held fixed; no map or board-level error",
             "small_board": f"board_rows < {SMALL_BOARD_ROWS}: rated from a handful of rows",
             "inputs_sha256": result["sha256"]}
-    RELEASE.write_text(json.dumps({"meta": meta, "problems": records}, ensure_ascii=False, indent=0) + "\n",
-                       encoding="utf-8")
+    RELEASE.write_text(json.dumps(records, ensure_ascii=False) + "\n", encoding="utf-8")
+    RELEASE_META.write_text(json.dumps(meta, indent=1) + "\n", encoding="utf-8")
     print(f"wrote {RELEASE}: {len(records)} problems, setting {name(setting)}, map {slope:.3f} b {icept:+.0f}")
 
 

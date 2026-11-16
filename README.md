@@ -121,13 +121,54 @@ hierarchical candidate and none replaces the current setting; the scripts are
 in [scripts/stable_de_explore](scripts/stable_de_explore/README.md) and the
 record is the last entry of `details.md`. Two findings matter beyond the
 candidate:
-- **A loader bug affects 8 shipped ratings (not fixed yet).** On contests with
-  incomplete problem lists, only rows that solved a listed problem are kept.
-  CCPC Harbin 2025 M is shipped at 1947; with the dropped rows counted as
-  failures it is about 2805.
+- **A loader bug affected 8 shipped ratings (fixed 2026-11-16, below).** On
+  contests with incomplete problem lists, only rows that solved a listed
+  problem were kept. CCPC Harbin 2025 M was shipped at 1947; with the dropped
+  rows counted as failures it is about 2805.
 - **Weak, weakly linked boards read too hard by hand.** Latin America 2023,
   13 problems rated blind: DE +486, hierarchical +349. A simulation rules out
   the estimator; settling it needs CF ratings of some of those teams.
+
+**Solve time in the hierarchical fit; a release candidate (2026-11-16).**
+[hier_time_report.md](hier_time_report.md). A solved cell now also says in
+which fifth of the contest window it was solved, on the binary scale and at
+weight 0.25 next to the binary likelihood. The dose was chosen without CF
+labels, and the criteria were fixed before the run. Two labels documented as
+wrong are left out of the CF maps and RMSE: the anchor Uniform Chemistry
+(CF 3200, about 2000 by hand) and one blind hand rating.
+- **Release candidate:** time slices plus `skip_partial`. It passes all four
+  criteria with the lowest hand-panel error. Its ratings are in
+  `output/problem_ratings_hier.json`, in the shipped file's layout. DE stays
+  shipped until someone decides to switch.
+- **Accuracy:** full-field CF RMSE 205.9 on 184 anchors (DE 207.0,
+  hierarchical binary 211.5). On cut fields it is better than hierarchical
+  binary everywhere (strong half 289 vs 360, weak half 288 vs 319), with
+  lower drift on all 8 reserved views.
+- **By hand:** EC sign-in bias +385 → −1; 72-problem panel RMSE 296 → 196
+  (DE 290); fresh blind panel 379 → 282. Problems a whole strong board solved
+  late move up to their CF labels.
+- **Teams:** rank-pair accuracy up 0.2–0.5 pp; held-out log loss on untouched
+  cells 0.2% worse.
+- **Fresh boards:** on the five 2026 EC regionals, added after the
+  hierarchical setting was frozen, the hierarchical fit ranks linked teams
+  better than flat binary (82.2% vs 81.4%), and the time term adds 0.4 pp.
+- **Cost:** within-contest order reversals under field cuts about double.
+
+**Loader bugs fixed and the shipped fit re-released (2026-11-16).** All in
+`arch_a/load.py`:
+- rows that solved only unlisted problems were dropped, which selects on the
+  outcome (CCPC Harbin 2025 M: shipped DE 1961 → 2811; Greater New York 2023
+  E, J, K, L +110 … +152);
+- Rocky Mountain 2023's official rows store solve times in minutes (shipped DE
+  on that board −236 … +167);
+- one Xi'an 2026 solve dated before the start counted as a result;
+- a board without a problem list would have kept empty rows.
+
+`arch_b.metric` reads 246.7 (246.3 before; inside its noise band).
+
+Run `PYTHONUTF8=1 OPENBLAS_NUM_THREADS=1 python -m arch_b.hier_time evaluate 4`
+(~25 min on 4 cores) → `output/hier_time.json`, then
+`python -m arch_b.hier_time release`.
 
 A [probability-course shortlist](prob_course_candidates.md) picks five main
 problems and four backups from the probability-tagged problems in
