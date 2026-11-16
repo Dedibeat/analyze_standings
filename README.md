@@ -1190,6 +1190,10 @@ this section. Run `python3 scripts/check_cses_teaching.py` for small-case checks
   season adds the Xi'an/Chengdu/Wuhan/Nanjing/Shenyang regionals and the Universal
   Cup S5 stages); `data/ucup_s3.json`,
   `data/ucup_s4.json` — the Universal Cup seasons used to anchor the scale.
+- `data/xcpcio_ccpc.json` / `data/qoj_ccpc.json` — the CCPC boards (7th–12th
+  seasons) for experiments: 35 XCPCIO contests (16,081 rows) plus the 10 QOJ
+  contests XCPCIO does not host (Changchun 2026, the women's/vocational
+  divisions, and three online rounds). Research only — never a fit input.
 - `data/xcpcio_51st_regionals.json` — XCPCIO-hosted 51st-season East Asia boards
   (Xi'an/Chengdu/Wuhan/Nanjing/Shenyang). Nanjing and Shenyang are the two 2026
   regionals QOJ does not host, and they are the only two appended to `tagged.json`

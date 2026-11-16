@@ -187,14 +187,17 @@ def main():
     parser.add_argument("--year", type=int, help="default: the year in the QOJ title")
     parser.add_argument("--refresh", action="store_true",
                         help="re-fetch a contest already in tagged.json and replace it")
+    parser.add_argument("--output", help="contest-array JSON to write instead of tagged.json "
+                                        "(e.g. a research-only collection)")
     args = parser.parse_args()
 
-    with open(TAGGED, encoding="utf-8") as f:
+    target = args.output or TAGGED
+    with open(target, encoding="utf-8") as f:
         contests = json.load(f)
     existing = next((i for i, c in enumerate(contests)
                      if c["contest_id"] == args.contest_id), None)
     if existing is not None and not args.refresh:
-        print(f"contest {args.contest_id} is already in tagged.json; nothing to do")
+        print(f"contest {args.contest_id} is already in {os.path.basename(target)}; nothing to do")
         return
 
     qoj = Qoj()
@@ -208,7 +211,7 @@ def main():
         contests[existing] = contest
         verb = (f"refreshed {len(old['standings'])} -> {len(contest['standings'])} rows, "
                 f"{len(old['problems'])} -> {len(contest['problems'])} problems;")
-    with open(TAGGED, "w", encoding="utf-8") as f:
+    with open(target, "w", encoding="utf-8") as f:
         json.dump(contests, f, ensure_ascii=False)
     print(f"{verb} {contest['contest_id']} {contest['contest_name']} {contest['year']}: "
           f"{len(contest['problems'])} problems, {len(contest['standings'])} rows, "
