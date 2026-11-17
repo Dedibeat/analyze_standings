@@ -9134,3 +9134,56 @@ every EC board.**
   has a gym reading. On the anchors the shipped map reads +48 … +77 in the
   1500–2900 band.
 - Neither the single-slope misfit nor the gym offset was turned into a rule.
+
+### Cause hunt (2026-11-17, second entry; stopped at the usage limit)
+
+**Request.** Find the cause of the gap and any bug. Research only; nothing
+shipped changed. Two bugs found, the main cause not settled.
+
+**Bug 1: the gym scrape is cut at 1,000 standings rows.**
+- `data/cf_gym_mirrors.json`: 14 of the 18 EC gyms end at rank 996–1000
+  (1053, 1071, 1093, 1096, 1435, 1440, 1449, 1472, 1516, 1821, 1828, 1865,
+  1871, 1893). Ghost rows fill the page, so the weakest entrants are missing.
+- Jinan 2022: no gym row has fewer than 3 solves (onsite, 17% do). That is why
+  A reads 92% solved and 1318.
+- The rows are selected on the outcome, so easy problems read far too low
+  there. For D the effect is small (about +20 by a rough count).
+- The four untruncated EC gyms (1099, 1459, 2567, 2641) still read
+  +228 … +299, and the European gyms are complete and read +300 … +450. The
+  truncation is not the main cause.
+- The scraper is not in the repo; the data needs a paged re-fetch.
+
+**Bug 2: team identity chains through shared members.**
+- `arch_a.load.member_identity` unions any two rosters that share two members,
+  in any season. Chains merge a school's whole lineage into one team.
+- 174 teams have two or more rows in one contest (1,062 rows). 143 teams hold
+  6 or more rosters, up to 18 (Shanghai University, Changchun University of
+  Science and Technology: up to 4 rows in one contest).
+- Effect on ratings: not measured yet (refit running, see below).
+
+**Checked and cleared.**
+- The gym excludes untimed practice rows (`PRACTICE` dropped at scrape time).
+- Jinan gym readings do not drift with time or account age: D is 1904 in the
+  first week, 1887 after a year, 1946 for teams with 30+ rated contests each,
+  2021 with 60+.
+- `hier_binary.fit`: gradient, Hessian product and priors read through; no
+  error found.
+- The offset is nearly the same on every gym board (+83 … +510, correlation
+  with board strength −0.25), so it is a global level, not a Jinan effect.
+- By onsite solve share the offset peaks in the middle: +194 below 5%, +349 at
+  30–50%, +418 at 50–70%, +215 above 90%. Model ≈ 0.845 × gym + 620.
+- On 2692, the one board with CF labels and a complete gym, shipped − gym is
+  +172.
+
+**Leading hypothesis, untested.** Problems discriminate about twice as sharply
+as the fixed Rasch slope (86 against 151 CF points per logit on D; the 2PL
+prototype found a median 2.14 on EC boards). Strong linked teams pin the top
+of a board, and the compressed spread then places the middle too close to the
+top. Shared abilities across seasons (and bug 2) push the same way.
+
+**Unfinished.** Two refit scripts were started and not read:
+`refit.py` (identity with pair links inside one season, and with none) and
+`refit2.py` (team prior σ 600 and 1500, per-season identity). Each prints the
+Jinan ratings, the gym offset, the anchor residuals and the fitted ability of
+World-Finals rosters against their CF ratings. They live in the session
+scratchpad and are not in the repo.
