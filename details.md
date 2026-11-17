@@ -9307,3 +9307,29 @@ in the venv for the 10 modules that import them.
 **Not done.** Dropping all cross-contest pair links (D 2305, the −54 of the
 previous entry) is a separate model change and was not tested in the
 protocol. The gym re-fetch is still open.
+
+## Without two-shared-member links: tested (2026-11-17, fourth entry)
+
+**Request.** Test dropping the two-shared-member identity links through the
+protocol. Script `scripts/identity_links.py` → `output/identity_links.json`.
+
+**Comparison, written before the run.** `shipped` (the identity just
+released) against `no_pair_links` (the same, without two-shared-member links;
+exact rosters, stable ids, trusted names and the WF link stay). Both fit the
+shipped setting on the same rows.
+- Team prediction: the same 20% of standing rows held out in both (row-level
+  draw, splits 1 and 2; `appearance_split` cannot be shared because it keys on
+  identity). Held-out cell log loss, paired contest bootstrap.
+- CF accuracy: nested-LOCO affine map on the 184 trusted anchors (full-data
+  fit, purged folds as in `scorecard`), paired contest bootstrap.
+- Both hand panels pooled (103 problems; development data).
+- Not measured: the stability views (their row samples are drawn per
+  identity), the 2026 replay.
+
+**Rule.** `no_pair_links` replaces `shipped` only if all hold:
+1. its nested-LOCO CF RMSE is lower;
+2. on both splits, its held-out log loss is not significantly worse (the
+   2.5% bound of the difference is ≤ 0);
+3. its pooled hand-panel RMSE is not worse by more than 10.
+Otherwise `shipped` stays and nothing is re-released. Reported, no rule:
+Jinan 2022 D, the CF 1900–2500 anchor bias, EC model − gym.
