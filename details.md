@@ -9265,3 +9265,45 @@ order, so it is intermittent. Fix: when the line search fails but the whole
 Newton step is below the tolerance, the fit has converged. Every fit that
 passed before takes the same path. `arch_b.metric` (246.7, all guards pass)
 ran before this fix and does not use `hier_binary`. The pass rule is unchanged.
+
+**Result: passes; re-released.**
+
+| | before (b3119a1 run) | after |
+|---|---|---|
+| dose selected / release candidate | `k5_w0.25` / `time_skip` | same |
+| `time_skip` criteria (hand, CF, teams, stability) | all pass, 8/8 views | all pass, 8/8 views |
+| nested-LOCO CF RMSE, `time_skip` (184 anchors) | 205.9 (vs DE [−11.7, +9.0]) | 205.7 ([−12.0, +8.8]) |
+| hand panels pooled, `time_skip` | 225.4 | 225.3 |
+| held-out log loss ratio / pair accuracy, splits 1, 2 | 1.0022, 1.0023 / +0.19, +0.49 pp | 1.0010, 1.0024 / +0.35, +0.40 pp |
+| CF-rated teams RMSE, `time_skip` | 217.0 | 218.9 |
+| `arch_b.metric` | 246.7, guards pass | 246.7, guards pass |
+
+- Shipped problem ratings: every one of 3,409 moves by at most 13 (median
+  1). Jinan 2022 D stays 2359.
+- Medal bars and cutoff performances move by at most 7. One cutoff ability
+  moves a lot, and it is the bug: Shenyang 2025's last silver (Xiamen
+  University, 没能成为人) was one identity with the school's stronger
+  随机增量 roster, chained through a member swapped in 2024; the two then
+  played side by side on 3295, 4071 and 4113. Ability 2123.5 → 1940.4; it now
+  has its own 6 rows (15 before).
+- Regenerated: `hier_time.json`, `hier_time_ratings.json`,
+  `problem_ratings_hier.json`, `problem_calibration_hier.json`,
+  `virtual_calc.html`, `ratings_viewer_b.html`, `medal_badges.json`,
+  `medal_viewer.html`. Not regenerated: the historical DE/survival files
+  (`problem_ratings_calibrated.json` and kin), the app copy in
+  `../my-react-app`.
+- Note: since the 2026-11-16 switch, `full_data`'s `de` column in
+  `both_panels`/`hand` reads `calibrate.problem_cf`, i.e. the shipped hier
+  file, not DE (it reads 225.4 here, 306.9 in the run before the switch).
+  `cf_full_fields.DE` is still nested-LOCO DE.
+
+**Tests.** 246 pass except 3 in `test_medal_predict`
+(Shanghai city mean 2490.8 pinned, reads 2606.8; ordering; pooling). They
+fail identically before this change: `medal_predict` reads only
+`medal_badges.json`, which the 2026-11-16 release regenerated without
+updating the pins. Left as found. `pypinyin` and `openpyxl` were installed
+in the venv for the 10 modules that import them.
+
+**Not done.** Dropping all cross-contest pair links (D 2305, the −54 of the
+previous entry) is a separate model change and was not tested in the
+protocol. The gym re-fetch is still open.

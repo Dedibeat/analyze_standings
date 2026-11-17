@@ -7,6 +7,10 @@
 > Regenerate with `python -m arch_b.hier_time release`, then
 > `python -m arch_b.export_virtual_calc`, `python -m arch_b.export_viewer`,
 > `python -m arch_b.medals`, and `python -m arch_b.export_medal_viewer`.
+> **Re-released 2026-11-17** after two fixes: team identity no longer merges
+> rosters that played the same contest (`arch_a.load.member_identity`), and a
+> converged `hier_binary.fit` is no longer refused by rounding in its line
+> search. Shipped ratings move by at most 13; nested-LOCO 205.7.
 
 # analyze_standings
 

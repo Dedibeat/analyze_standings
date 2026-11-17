@@ -11,14 +11,14 @@
   "skip_partial": true
  },
  "thresholds": [
-  4.467947989470773,
-  2.5266812221096773,
-  1.4232328189060584,
-  0.6479028606422635
+  4.4730694525921635,
+  2.530051766477208,
+  1.4253971806136938,
+  0.649040315136952
  ],
  "map": {
-  "slope": 0.867398273190798,
-  "intercept": 605.0497914511084
+  "slope": 0.8662627621109169,
+  "intercept": 609.5472452843414
  },
  "map_scope": "problems and teams: a team rated R solves a problem rated R half the time",
  "anchors": 184,
@@ -37,13 +37,13 @@
  "uncertainty": "difficulty_se / difficulty_cf_se: the teams held fixed; no map or board-level error",
  "small_board": "board_rows < 10: rated from a handful of rows",
  "inputs_sha256": {
-  "arch_b/hier_time.py": "2394190655c96f359420cf9c7e5ad7fa3029e14237779d7d322732b782f0f748",
-  "arch_b/hier_binary.py": "f6c38048f9d2ddebff18519d26fa57d73eb31e9520b676de38eef5846d24b038",
+  "arch_b/hier_time.py": "6f95e4ed846c125cb52f2a8a1b484c487bade0512f09d4d0c4680e5488f2c423",
+  "arch_b/hier_binary.py": "5a6a5c1112d90a8fcb84038d57e6d6df51004a6766a09867452b61450303dcce",
   "arch_b/skip_cells.py": "2576ecfbc40a3fceba2942f961eba4d3a3356cb808acc51a74cc262875da5d20",
-  "arch_a/load.py": "b845001c58243e2bb9ccb92b1d941462b6c30fd22666dcd7789fb179ecf99a2f",
+  "arch_a/load.py": "e14e61215524ec3f982d04e6c5623ae7c9e28fec5c80d5b178bcd5a3c38a75f7",
   "scripts/problem_rating_audit.py": "b653e07fa3c349a1e895a80220796f780f201c68c6d7a6ee66db189c1d544db0",
   "data/de_stability_anchors.json": "3a604c6f42fefd8a9714154c241b14b428b6f1681798a5aa786369d6c73ef06e",
   "data/tagged.json": "dabb8c74758680a94aa797f1b31ca8e0a162f54679243a082cdf23b955550142",
-  "output/problem_ratings_calibrated.json": "34d0d186b9a897185edfbf06a66cba15608617d2b24b47ac0f6be95ebdcc3688"
+  "output/problem_ratings_calibrated.json": "64085fad4575311abdbbc96201d67323c3f79632534ab8990f6877ae2f8c907a"
  }
 }
