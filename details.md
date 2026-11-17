@@ -9135,10 +9135,35 @@ every EC board.**
   1500–2900 band.
 - Neither the single-slope misfit nor the gym offset was turned into a rule.
 
-### Cause hunt (2026-11-17, second entry; stopped at the usage limit)
+### Cause hunt (2026-11-17, second entry)
 
 **Request.** Find the cause of the gap and any bug. Research only; nothing
-shipped changed. Two bugs found, the main cause not settled.
+shipped changed.
+
+**Answer.** D ships about 105 too high on the CF-label scale; the
+"450" against the gym was mostly the referee.
+
+| identity \ setting | time slices (shipped) | binary + `skip_partial` |
+|---|---|---|
+| shipped (pair links) | D **2359**, CF 1900–2500 bias +63, RMSE 198.9 | D 2310, bias +7, RMSE 205.5 |
+| no cross-roster pair links | D 2305, bias +61, RMSE 197.2 | D **2252**, bias +4, RMSE 203.9 |
+
+(bias = model − CF label on the anchors labelled 1900–2500; RMSE = in-sample
+anchor RMSE, not nested LOCO; EC model − gym: +314 / +298 / +297 / +283.)
+
+- **Identity chaining (bug 2): −54 on D.** Jinan-specific: the band bias
+  moves −2 and the EC gym offset −17.
+- **Solve-time slices: +49 on D**, and the same +56 on the whole 1900–2500
+  band against CF labels. This is the documented cost of the flatter map
+  ("moves the 1900–2500 band up 60", `hier_time_report.md`), not a D
+  quirk: D's shift is at the 89th percentile of all problems, the band shift
+  is general.
+- **Single Rasch slope: about −40 more** (D's free-slope 50% point 2304 vs
+  binary MLE 2341 on the same abilities). Not a bug; 2PL overfit before.
+- So D is about 2210–2250 on the scale where mid-band anchors are unbiased.
+  Hand ~1900 ± 150 and the gym 1915 remain below; the gym reads mid
+  problems 100–160 under their CF labels on 2692 (A, G, I), the one board
+  with both.
 
 **Bug 1: the gym scrape is cut at 1,000 standings rows.**
 - `data/cf_gym_mirrors.json`: 14 of the 18 EC gyms end at rank 996–1000
@@ -9159,7 +9184,14 @@ shipped changed. Two bugs found, the main cause not settled.
 - 174 teams have two or more rows in one contest (1,062 rows). 143 teams hold
   6 or more rosters, up to 18 (Shanghai University, Changchun University of
   Science and Technology: up to 4 rows in one contest).
-- Effect on ratings: not measured yet (refit running, see below).
+- Rows sharing a team inside one contest: 1,062 shipped, 415 with pair links
+  kept inside one ICPC season, 47 with no pair links.
+- Effects (table above): Jinan's board and D drop 44–58; anchor in-sample
+  RMSE 198.9 → 198.3 (season-scoped pairs) → 197.2 (none). World-Finals
+  rosters' fitted − CF ability: +67 / +66 / +50 (median, 54–55 rosters).
+- The 2026-07 season-key test (whole rosters split by season, CF LOCO worse)
+  is a different change; this one keeps exact rosters linked across seasons
+  and only drops the two-shared-member chain. Not run through nested LOCO.
 
 **Checked and cleared.**
 - The gym excludes untimed practice rows (`PRACTICE` dropped at scrape time).
@@ -9175,15 +9207,16 @@ shipped changed. Two bugs found, the main cause not settled.
 - On 2692, the one board with CF labels and a complete gym, shipped − gym is
   +172.
 
-**Leading hypothesis, untested.** Problems discriminate about twice as sharply
-as the fixed Rasch slope (86 against 151 CF points per logit on D; the 2PL
-prototype found a median 2.14 on EC boards). Strong linked teams pin the top
-of a board, and the compressed spread then places the middle too close to the
-top. Shared abilities across seasons (and bug 2) push the same way.
+**Ruled out by refits.**
+- Team-prior width: σ 600 / 1500 raise D (2378 / 2394), the gym offset
+  (+328 / +335) and the anchor RMSE (201.8 / 208.8).
+- Per-season identity (`season_key`): D 2292, gym offset +300, RMSE 197.6;
+  about the identity fix's effect, at more splits.
+- The ability axis is compressed at the top in every variant (World-Finals
+  rosters: fitted on CF slope 0.46–0.51, CF < 2600 reads +231, CF > 3200
+  reads −217), as found 2026-08-21; it does not explain the mid-band level.
 
-**Unfinished.** Two refit scripts were started and not read:
-`refit.py` (identity with pair links inside one season, and with none) and
-`refit2.py` (team prior σ 600 and 1500, per-season identity). Each prints the
-Jinan ratings, the gym offset, the anchor residuals and the fitted ability of
-World-Finals rosters against their CF ratings. They live in the session
-scratchpad and are not in the repo.
+**Not done.** No fix applied. The identity fix touches `arch_a/load.py` (a
+hashed input) and needs the `hier_time` protocol and a re-release. The gym
+needs a paged re-fetch before it is used as a level referee again. Scripts
+were in the session scratchpad and are not in the repo.
