@@ -9065,3 +9065,72 @@ standings loader, official-event ranking) pass; app lint/build pass. App checks
 cover 5,556 sampled official performances and 1,040 virtual results over all
 260 contests. Conditional difficulty SEs exclude map and board-level error;
 research limitations in hier_time_report.md still apply.
+
+
+## Jinan 2022 D "Frozen Scoreboard": is 2359 too high? (2026-11-17)
+
+**Request.** Tamir reported the shipped rating (2359) as too high: most silver
+and many bronze teams solved it. Check analytically and by hand. Research
+only; nothing shipped changed. No script was kept: the numbers come from
+`arch_b.shipped.shipped_fit()`, `data/tagged.json`,
+`data/cf_gym_mirrors.json` and `output/gym_difficulty.json`.
+
+**The board** (568 official QOJ rows, ranked among themselves; XCPCIO lists 511
+medal-eligible teams, so the bands are a few places off).
+
+| official rank | solved D | model predicted | tried D |
+|---|---|---|---|
+| 1–35 (gold) | 34 / 35 | 87% | 35 |
+| 36–105 (silver) | 63 / 70 | 64% | 68 |
+| 106–210 (bronze) | 61 / 105 | 39% | 85 |
+| 211–300 | 19 / 90 | 26% | 37 |
+| 301+ | 1 / 268 | 11% | 34 |
+
+- 178 of 568 solved it. Of the 390 that did not, 309 never submitted.
+- It is solved late: median minute 233, 78 of 178 solves in the last hour,
+  after A for 122 of the 144 teams with both.
+- 85 of 178 solvers were right first try; 69% of the teams that tried solved it.
+
+**On the model's own scale: about 55 too high.**
+- The rating sits at the ability of official rank ~105 (2363), where 95% solved
+  it. Half the teams solve it at rank 160–210 (2216–2304).
+- A logistic curve with a free slope puts the 50% point at 2304 (official
+  rows) and 2316 (all rows), with 86 CF points per logit against the model's
+  fixed 151.
+- The single slope under-predicts medal teams and over-predicts the lower
+  field. The rating that reproduces the medal teams alone is 2192; the teams
+  that tried, 2173–2192; the non-medal rows alone, 2535.
+- DE 2300, hierarchical binary 2311, shipped (with solve times) 2359.
+- A shows the same misfit (ranks 301–400: 1% solved, 37% predicted), so it is
+  the board, not a fault in D's cells.
+
+**Against real Codeforces ratings: about 450 too high, 310 of it common to
+every EC board.**
+- CF gym mirror 104076: 647 teams, 311 solved D. Fixed-ability reading
+  1915 ± 19. By the best member's CF rating: 1600–1800 36%, 1800–2000 56%,
+  2000–2200 65%, 2200–2400 85%; the 50% point is 1850.
+- Shipped minus gym, problems with 3–97% gym solves on boards of 100+ gym
+  teams: EC median +314 (115 problems, 18 regionals; per contest +223 … +510;
+  Jinan 2022 +311). All regions: +312 (475 problems).
+- EC regression: a gym reading of 1915 ships at 2291 on average. D's own
+  residual is +69 (0.5 SD), so D is not an outlier among its siblings.
+- Same board: A 2186 against gym 1318, E 1847 against 993, C 2586 against 2271.
+
+**By hand: about 1900 (±150) as an individual CF problem.**
+- Each `?` cell gives a contiguous penalty interval; enumerate the 2^13
+  subsets of `?` cells, test the total against the interval sum, then build
+  the output. The editorial is three lines.
+- The difficulty is the implementation: four input formats and the
+  construction of tries and minutes.
+- QOJ's own label is 4 of 10 (A 3, C 4, E 2, G 5): the same order as the model.
+- Tamir (CF level 1690–1760) solved it first try in the 2026-10-08 virtual.
+
+**Not settled.**
+- Whether the +310 is scale inflation or the real gap between an onsite
+  five-hour set and a gym entry. Gym entrants solve A 92% of the time against
+  45% onsite, and every gym row has a solve.
+- No EC regional carries official CF labels (the 184 anchors are Asia Pacific,
+  Europe and Northern Eurasia), and only one anchor contest (2692, 8 problems)
+  has a gym reading. On the anchors the shipped map reads +48 … +77 in the
+  1500–2900 band.
+- Neither the single-slope misfit nor the gym offset was turned into a rule.
