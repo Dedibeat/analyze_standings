@@ -9220,3 +9220,34 @@ anchor RMSE, not nested LOCO; EC model − gym: +314 / +298 / +297 / +283.)
 hashed input) and needs the `hier_time` protocol and a re-release. The gym
 needs a paged re-fetch before it is used as a level referee again. Scripts
 were in the session scratchpad and are not in the repo.
+
+## Identity fix: no team plays two rows of one contest (2026-11-17, third entry)
+
+**Request.** Fix the identity chaining and run it through the release
+protocol.
+
+**Fix** (`arch_a.load.member_identity`). The two-shared-member links are
+kept (the July near-miss rule) but applied last, in file order, and a link
+is refused when its two components already played a common contest.
+Test: `test_two_shared_members_never_merge_rows_of_one_contest` (fails on the
+old loader).
+
+**Checked before the formal run** (shipped setting, full data, in-sample):
+- rows sharing a team inside one contest 1,062 → 47 (19 teams; exact rosters
+  or stable ids, not pair links); teams 37,600 → 37,797; most rows per team
+  125 → 93;
+- problem ratings against the shipped file: mean −1.1, median |change| 1.0,
+  95th percentile 6, max 395;
+- anchor RMSE 198.9 → 198.8; CF 1900–2500 bias +63 → +62;
+- **Jinan D stays at 2359.** The −54 of the previous entry came from
+  dropping every pair link, which also cuts links between rosters that never
+  met. That is a model change, not this bug fix, and is not part of it.
+
+**Pass rule, written before the run.** Rerun `hier_time evaluate` (caches
+cleared) and `arch_b.metric`. The fix ships if all hold:
+1. `time_skip` still passes the four criteria and is still the release
+   candidate;
+2. its nested-LOCO CF RMSE (184 anchors) is within 5 of the previous 205.9;
+3. every `arch_b.metric` guard passes and the metric stays within its 5-point
+   band of 246.7.
+Otherwise the old loader is restored and nothing is re-released.

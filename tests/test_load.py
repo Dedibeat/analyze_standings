@@ -102,6 +102,28 @@ class LoadTest(unittest.TestCase):
         self.assertEqual(ds.obs_y.tolist(), [True, False, True, False, False, True])
         self.assertEqual(ds.obs_tau[ds.obs_y].tolist(), [240.0, 240.0, 90.0])
 
+    def test_two_shared_members_never_merge_rows_of_one_contest(self):
+        problems = [{"problem_id": 1, "problem_label": "A", "problem_name": "A", "problem_solved_in_contest": 1}]
+
+        def row(n, members):
+            return {"rank": n, "team_id": f"$DEFAULT_{n}", "team_name": f"t{n}", "members": members,
+                    "total_solved": 1, "problems": {"A": {"solved": True, "time_seconds": 60, "wrong_attempts": 0}}}
+        contests = [
+            # a substitute: two shared members, different contests -> one team
+            {"contest_id": 1, "contest_name": "one", "year": 2023, "region": "", "problems": problems,
+             "standings": [row(1, ["a", "b", "c"])]},
+            {"contest_id": 2, "contest_name": "two", "year": 2024, "region": "", "problems": problems,
+             "standings": [row(1, ["a", "b", "d"]), row(2, ["b", "d", "e"])]},
+        ]
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "contest.json"
+            path.write_text(json.dumps(contests))
+            ds = load(str(path))
+
+        # abc and abd link; bde shares b, d with abd but played contest 2 beside it
+        self.assertEqual(ds.team_of_row[0], ds.team_of_row[1])
+        self.assertNotEqual(ds.team_of_row[1], ds.team_of_row[2])
+
 
 if __name__ == "__main__":
     unittest.main()

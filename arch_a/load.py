@@ -180,12 +180,17 @@ def member_identity(raw, season_by_cid=None):
     (``_trusted_names``), its isolated ``dj:`` key is unioned to a ``tn:<name>``
     node so the name links its appearances across contests (like stable ids,
     names stay season-agnostic).
+
+    Rosters sharing two members are unioned last, in file order, and a link is
+    refused when its two components already played a common contest.
     """
     trusted = _trusted_names(raw)
     uf = _UnionFind()
-    pair_root = {}  # (member-pair, season) -> first roster token carrying it
+    pair_links = []     # (member-pair, season, roster token) in file order
+    contests_of = {}    # row identity node -> contests it played
     for c in raw:
-        season = None if season_by_cid is None else season_by_cid[c["contest_id"]]
+        cid = c["contest_id"]
+        season = None if season_by_cid is None else season_by_cid[cid]
         for s in c["standings"]:
             tid = s["team_id"]
             stable = None if tid.startswith("$DEFAULT") else "id:" + tid
@@ -195,20 +200,32 @@ def member_identity(raw, season_by_cid=None):
             if stable is None and roster is None:
                 nm = _norm_member(s.get("team_name") or "")
                 if nm in trusted:
-                    uf.union(f"dj:{c['contest_id']}::{tid}", "tn:" + nm)
+                    uf.union(f"dj:{cid}::{tid}", "tn:" + nm)
             if roster is not None:
                 uf.find(roster)
                 if stable is not None:
                     uf.union(stable, roster)
-                # Rosters sharing >=2 members are the same team whose third
-                # member was respelled or substituted: an exact-token identity
-                # would split them (measured: ~3.7k such near-miss pairs).
                 mem = sorted({_norm_member(m) for m in s["members"]})
-                for pair in combinations(mem, 2):
-                    key = (pair, season)
-                    first = pair_root.setdefault(key, roster)
-                    if first != roster:
-                        uf.union(first, roster)
+                pair_links.extend((pair, season, roster) for pair in combinations(mem, 2))
+            node = roster or stable or f"dj:{cid}::{tid}"
+            contests_of.setdefault(node, set()).add(cid)
+    # Rosters sharing >=2 members are the same team whose third member was
+    # respelled or substituted: an exact-token identity would split them
+    # (measured: ~3.7k such near-miss pairs). Unioned transitively, though,
+    # these links chain a school's successive rosters into one team that
+    # plays up to four rows of one contest. Two rows of one contest are
+    # never one team, so a link whose two sides share a contest is refused.
+    played = {}
+    for node, cids in contests_of.items():
+        played.setdefault(uf.find(node), set()).update(cids)
+    pair_root = {}  # (member-pair, season) -> first roster token carrying it
+    for pair, season, roster in pair_links:
+        first = pair_root.setdefault((pair, season), roster)
+        ra, rb = uf.find(first), uf.find(roster)
+        if ra == rb or played.get(ra, set()) & played.get(rb, set()):
+            continue
+        uf.union(ra, rb)
+        played[rb] = played.pop(ra, set()) | played.get(rb, set())
     # --- WF top-team linking ---
     # For each (university, season), find the best-ranked team that has a
     # roster, then link WF teams (which carry the same affiliation but no
