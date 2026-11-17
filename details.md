@@ -9251,3 +9251,17 @@ cleared) and `arch_b.metric`. The fix ships if all hold:
 3. every `arch_b.metric` guard passes and the metric stays within its 5-point
    band of 246.7.
 Otherwise the old loader is restored and nothing is re-released.
+
+**Amendment before the second run: a fitter bug.** The first run stopped in
+the selection grid: split 0, `k10_w0.25`, `hier_binary.fit` raised "line
+search failed" at Newton step 3. Reproduced with one BLAS thread per worker
+(passes with eight):
+- gradient norm 2.3e-8; Newton step 9.1e-5, below the 1e-3 tolerance;
+  predicted decrease 5e-12 on an objective of 237,016, below its rounding;
+- the line search halves to 1e-8 without a provable decrease and raises.
+
+It is a converged fit refused by rounding; thread count changes summation
+order, so it is intermittent. Fix: when the line search fails but the whole
+Newton step is below the tolerance, the fit has converged. Every fit that
+passed before takes the same path. `arch_b.metric` (246.7, all guards pass)
+ran before this fix and does not use `hier_binary`. The pass rule is unchanged.

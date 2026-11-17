@@ -159,7 +159,15 @@ def fit(ds, obs=None, rows=None, sigma=300.0, tau=800.0, sigma_b=600.0, tau_b=40
         while objective(x + t * d) > f0 + 1e-4 * t * slope:
             t *= 0.5
             if t < 1e-8:
+                break
+        if t < 1e-8:
+            # At the optimum the predicted decrease can fall below the rounding of the
+            # objective (~1e-12 on ~2e5), so no step passes. If the whole Newton step
+            # is already below the tolerance, the fit has converged.
+            if np.max(np.abs(d)) >= eps:
                 raise RuntimeError("line search failed")
+            step_max = float(np.max(np.abs(d)))
+            break
         x = x + t * d
         step_max = float(np.max(np.abs(t * d)))
         if step_max < eps:
