@@ -53,3 +53,13 @@ We reran the 2025 pilot with its original handle split, same pre-round inputs an
 | Separate slope per problem | 0.201600 | −0.003108 to −0.002227 | 55/56 |
 
 Allowing each problem its own slope reduced loss by 1.29% relative to the fitted pilot. The shared-slope control recovered about a quarter of the absolute improvement. These scores evaluate an entire solve curve. They do not establish that the 50% difficulty alone is a better scalar problem rating.
+
+## Modelling pre-round player strength
+
+We kept the per-problem slope model and changed its player input. The candidate starts at the official pre-round rating and adds two learned corrections. The first uses an exponentially weighted average of earlier rating changes (20% weight on the latest change, initialized at zero and skipping the first six appearances to avoid promotional bonuses). The second uses log experience relative to 30 prior cached rated contests. This lets two players at the same official rating receive different estimates based on their histories. Experience counts start with the rating cache in 2018.
+
+The two coefficients minimize solve log loss on 2024 training handles with the fitted 2024 problem curves held fixed. We freeze the coefficients before scoring 2025. Player histories update from rated contests whose scheduled end precedes the target start. The historical replay assumes earlier rating changes were available by then. In each 2025 round we refit problem intercepts and slopes separately for each player model using the same training field. Held-out handles contribute no solve labels to either fit. Their own earlier published rating history is available as a prediction input.
+
+Reproduce with `OPENBLAS_NUM_THREADS=1 .venv/bin/python scripts/cf_player_rating.py` after populating the standings and rating-change caches.
+
+In rating points, the fitted player estimate is approximately **official rating − 1.207 × recent mean rating change − 12.05 × ln(prior contests / 30)**. On exactly the previous 630,677 opportunities the baseline reproduced 0.201600 mean log loss. The player adjustment scored **0.201037**, a 0.28% relative reduction and an improvement in 44 of 56 rounds. The paired 95% interval for adjusted minus baseline loss, resampling rounds 10,000 times, was −0.000739 to −0.000392. This tests the combined adjustment; it does not isolate the contribution of either feature.
