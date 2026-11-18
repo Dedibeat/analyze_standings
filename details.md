@@ -9247,3 +9247,5 @@ The ICPC 2PL transfer improved the CF pilot on the same 630,677 held-out opportu
 A player-strength correction trained on 2024 rating histories reduced 2025 held-out solve log loss from 0.201600 to 0.201037 on the identical 630,677 opportunities, improving 44/56 rounds. Coefficients, timing assumptions and reproduction command are in the [player experiment](cf_standings_experiments.md#modelling-pre-round-player-strength).
 
 The [larger-history experiment](cf_standings_experiments.md#searching-the-larger-history-for-lower-solve-log-loss) improved every evaluated Div. 2 round. Local curve calibration plus discounted player solve residuals reduced held-out loss 0.201037 → 0.197900 in 2025 and 0.206862 → 0.202352 in the later 2026 cache. Training coefficients used 2024 training handles only.
+
+The [25-model history search](cf_25_experiments.md) selected 0.95 retention and 16 probability bands on 2025. It reduced loss from 0.19789978 to 0.19762614 in selection and from 0.20235232 to 0.20198121 on the later 2026 rounds (34/43 improved). The report includes every selection score.

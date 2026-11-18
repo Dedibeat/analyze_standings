@@ -916,6 +916,7 @@ The [standings experiments](cf_standings_experiments.md) test the participation 
 A follow-up on the same players reduced log loss from 0.204245 to 0.201600 by learning a separate solve-curve slope per problem.
 Modelling pre-round player strength from rating history reduced it further to 0.201037.
 Using past solve histories and flexible problem curves reached 0.197900 in 2025 and improved all 43 later rounds evaluated in 2026.
+A [25-model history search](cf_25_experiments.md) lowered the later-period loss further to 0.201981.
 
 ### Time-varying team ratings (research, 2026-10-04)
 

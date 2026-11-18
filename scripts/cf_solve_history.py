@@ -53,7 +53,7 @@ def learn(samples):
     return result.x
 
 
-def run():
+def run(sweep=None):
     prior, trend, records = Counter(), {}, {}
     pending, samples = [], []
     results = defaultdict(list)
@@ -69,6 +69,8 @@ def run():
                 prior[h] += 1
             if updates:
                 handles, stats = updates
+                if sweep is not None:
+                    sweep.update(handles, stats)
                 for h, row in zip(handles, stats):
                     records[h] = .85 * records.get(h, 0) + row
         filename = f"{c['id']}.json.gz"
@@ -98,6 +100,8 @@ def run():
                 if year >= 2024:
                     hist = np.array([records.get(h, (0, 0, 0, 0)) for h in handles])
                     f = predictors(hist[:, ::2] / (2 + hist[:, 1::2]), p)
+                    if sweep is not None:
+                        sweep.score(year, handles, train, smooth, y)
                     if year == 2024:
                         samples.append((smooth[train].ravel(), f[train].reshape(-1, 4), y[train].ravel()))
                     else:
@@ -111,6 +115,8 @@ def run():
                             loss.append((np.logaddexp(0, v) - y[~train]*v).sum())
                         results[year].append([y[~train].size, *loss])
         heappush(pending, (start+c['durationSeconds'], c['id'], rows, updates))
+    if sweep is not None:
+        sweep.report(results)
     for year, scores in results.items():
         n, base, smooth, full = np.array(scores).T
         diff = full-base
