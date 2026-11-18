@@ -9224,3 +9224,18 @@ Results are in `output/cf_ai_deflation.json`; the write-up is
   150–190 with our 63–113.
 - Pin down the exact new-account seeding rule.
 - Test the participation drop as a cause.
+
+## Codeforces blog topic shortlist (2026-11-18)
+
+- AI-era rating changes. Follow up the January–February 2025 break in
+  cf_ai_deflation.md by reweighting rounds to a common division, pre-round
+  rating and experience mix. Repeat with returning players and placebo dates
+  in earlier years. This tests sensitivity to participation changes. Standings
+  alone do not identify who used AI.
+- Problem difficulty. Ask which rating predicts an independent group's
+  timed solves best. Fit a standings-based rating on one field and evaluate
+  the same problems in a later independent field, if such data can be found.
+  Freeze all three ratings before evaluation. Compare against Codeforces and
+  CLIST on the same players and problems using log loss, calibration by
+  player rating, and paired uncertainty by contest. Verify CLIST coverage,
+  rating timestamps, and independent evaluation data before claiming a win.
