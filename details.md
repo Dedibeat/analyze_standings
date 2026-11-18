@@ -9241,3 +9241,5 @@ Results are in `output/cf_ai_deflation.json`; the write-up is
   rating timestamps, and independent evaluation data before claiming a win.
 
 The [standings follow-up](cf_standings_experiments.md) ran both first-stage experiments. Among 18,728 returning players in Div. 2, the standardized hard-gap observed/expected ratio rose .296 → .568 across February 2025. The 2024 placebo also rose (.147 → .283). In 56 rounds the difficulty pilot scored 0.20424 vs 0.21915 official mean log loss on held-out handles. A later timed field and dated CLIST ratings remain missing.
+
+The ICPC 2PL transfer improved the CF pilot on the same 630,677 held-out opportunities. A learned slope per problem reduced log loss from 0.204245 to 0.201600 and improved 55/56 rounds, versus 0.203582 for a shared round slope. See the [protocol and paired intervals](cf_standings_experiments.md#transfer-of-the-icpc-two-parameter-experiment).

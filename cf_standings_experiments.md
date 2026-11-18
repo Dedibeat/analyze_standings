@@ -39,3 +39,17 @@ python scripts/cf_difficulty_pilot.py
 ```
 
 The first command prints year, cohort and distinct handles followed by hard and easy results. Each group contains raw before, raw after, adjusted before and adjusted after.
+
+## Transfer of the ICPC two-parameter experiment
+
+The ICPC experiment in `arch_b/twopl.py` estimated both team abilities and problem response curves. Its per-problem slopes worsened held-out log loss. Here pre-round Codeforces ratings anchor the player axis directly. A fitted intercept sets the solve probability at 1500, and a positive slope determines how fast the log odds increase with rating. The implied problem difficulty is the player rating at which the predicted solve probability reaches 50%.
+
+We reran the 2025 pilot with its original handle split, same pre-round inputs and same half-solve pseudo-observation. We compared one learned slope per round with one per problem. Both use the ICPC log-slope prior SD of 0.5 around the Elo slope, with log multipliers bounded to [−2, 2]. Each fit sees only training handles. Intervals below resample the 56 rounds together with their paired predictions 10,000 times, preserving opportunity weighting. The test set has already been used for development. The intervals describe between-round variability within this benchmark.
+
+| Solve curve | Mean log loss | 95% interval for loss change vs fixed slope | Rounds improved vs fixed slope |
+|---|---:|---:|---:|
+| Fixed Elo slope, fitted difficulty | 0.204245 | reference | — |
+| Shared slope within round | 0.203582 | −0.000955 to −0.000412 | 43/56 |
+| Separate slope per problem | 0.201600 | −0.003108 to −0.002227 | 55/56 |
+
+Allowing each problem its own slope reduced loss by 1.29% relative to the fitted pilot. The shared-slope control recovered about a quarter of the absolute improvement. These scores evaluate an entire solve curve. They do not establish that the 50% difficulty alone is a better scalar problem rating.
