@@ -883,6 +883,36 @@ Virtual entries are placed by recomputing the score. Writes
 solves, with practice lists, is `output/team_r3_coach/cf_rounds.md`. The caches
 `data/team_r3/cf/standings/` and `editorials/` are gitignored.
 
+### Codeforces rating deflation and AI use (2026-11-18)
+
+```bash
+./.venv/bin/python scripts/cf_ai_deflation.py --fetch-rc   # rating changes of every contest since 2018 (~50 min, resumable)
+./.venv/bin/python scripts/cf_ai_deflation.py --fetch-st   # standings of rated rounds since 2021 (~45 min, resumable)
+./.venv/bin/python scripts/cf_ai_deflation.py --analyze    # tables on stdout, output/cf_ai_deflation.json (~1.5 min)
+```
+
+Public API only, no cookie. The downloads are kept for later use in
+`data/cf_ai/` (270 MB, gitignored):
+
+- `contest_list.json`;
+- `rc/<contest>.json.gz`: handle, rank, old and new rating;
+- `st/<contest>.json.gz`: problem ratings and each contestant's solve times;
+- `replay.npz`: the published rating formula replayed on every contest since
+  2019-06, the slow step of `--analyze`.
+
+The script rebuilds every account's internal rating history and measures:
+
+- the 12- and 22-month rating change of the same established players against
+  pre-AI windows;
+- change points of four monthly series;
+- the formula replay, and how much of each rating change it explains;
+- solves on problems far above a player's rating, against Codeforces' Elo
+  expectation.
+
+Findings: established players rated 1400+ lost about 37–113 points
+(January 2025 to November 2026, beyond pre-AI variation). The onset is
+January–February 2025. The write-up is [cf_ai_deflation.md](cf_ai_deflation.md).
+
 ### Time-varying team ratings (research, 2026-10-04)
 
 ```bash
@@ -1320,6 +1350,9 @@ this section. Run `python3 scripts/check_cses_teaching.py` for small-case checks
 - `cf_participant_ratings.md` — measured member→Codeforces coverage and the
   proposed historical-rating prior (the source layer is implemented; fit
   integration remains research).
+- `cf_ai_deflation.md` — Codeforces rating deflation and AI use: size, onset,
+  mechanism. Built by `scripts/cf_ai_deflation.py`, from the gitignored
+  `data/cf_ai/` cache, with results in `output/cf_ai_deflation.json`.
 - `external_data_sources.md` — internet-source audit covering CPHoF/Codeforces
   participant identities, ICPC Global/Contest API metadata, and AOJ/solved.ac
   difficulty signals, with measured overlap and a fit experiment order.
