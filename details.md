@@ -9239,3 +9239,5 @@ Results are in `output/cf_ai_deflation.json`; the write-up is
   CLIST on the same players and problems using log loss, calibration by
   player rating, and paired uncertainty by contest. Verify CLIST coverage,
   rating timestamps, and independent evaluation data before claiming a win.
+
+The [standings follow-up](cf_standings_experiments.md) ran both first-stage experiments. Among 18,728 returning players in Div. 2, the standardized hard-gap observed/expected ratio rose .296 → .568 across February 2025. The 2024 placebo also rose (.147 → .283). In 56 rounds the difficulty pilot scored 0.20424 vs 0.21915 official mean log loss on held-out handles. A later timed field and dated CLIST ratings remain missing.
