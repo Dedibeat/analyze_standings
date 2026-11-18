@@ -9245,3 +9245,5 @@ The [standings follow-up](cf_standings_experiments.md) ran both first-stage expe
 The ICPC 2PL transfer improved the CF pilot on the same 630,677 held-out opportunities. A learned slope per problem reduced log loss from 0.204245 to 0.201600 and improved 55/56 rounds, versus 0.203582 for a shared round slope. See the [protocol and paired intervals](cf_standings_experiments.md#transfer-of-the-icpc-two-parameter-experiment).
 
 A player-strength correction trained on 2024 rating histories reduced 2025 held-out solve log loss from 0.201600 to 0.201037 on the identical 630,677 opportunities, improving 44/56 rounds. Coefficients, timing assumptions and reproduction command are in the [player experiment](cf_standings_experiments.md#modelling-pre-round-player-strength).
+
+The [larger-history experiment](cf_standings_experiments.md#searching-the-larger-history-for-lower-solve-log-loss) improved every evaluated Div. 2 round. Local curve calibration plus discounted player solve residuals reduced held-out loss 0.201037 → 0.197900 in 2025 and 0.206862 → 0.202352 in the later 2026 cache. Training coefficients used 2024 training handles only.

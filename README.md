@@ -915,6 +915,7 @@ January–February 2025. The write-up is [cf_ai_deflation.md](cf_ai_deflation.md
 The [standings experiments](cf_standings_experiments.md) test the participation explanation and compare fitted problem ratings with official ratings on held-out handles.
 A follow-up on the same players reduced log loss from 0.204245 to 0.201600 by learning a separate solve-curve slope per problem.
 Modelling pre-round player strength from rating history reduced it further to 0.201037.
+Using past solve histories and flexible problem curves reached 0.197900 in 2025 and improved all 43 later rounds evaluated in 2026.
 
 ### Time-varying team ratings (research, 2026-10-04)
 

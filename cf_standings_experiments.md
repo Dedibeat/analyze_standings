@@ -63,3 +63,22 @@ The two coefficients minimize solve log loss on 2024 training handles with the f
 Reproduce with `OPENBLAS_NUM_THREADS=1 .venv/bin/python scripts/cf_player_rating.py` after populating the standings and rating-change caches.
 
 In rating points, the fitted player estimate is approximately **official rating − 1.207 × recent mean rating change − 12.05 × ln(prior contests / 30)**. On exactly the previous 630,677 opportunities the baseline reproduced 0.201600 mean log loss. The player adjustment scored **0.201037**, a 0.28% relative reduction and an improvement in 44 of 56 rounds. The paired 95% interval for adjusted minus baseline loss, resampling rounds 10,000 times, was −0.000739 to −0.000392. This tests the combined adjustment; it does not isolate the contribution of either feature.
+
+## Searching the larger history for lower solve log loss
+
+The target remains a solve by the contest deadline, scored on every rated problem opportunity for each eligible held-out player. The new experiment uses the Div. 2 standings from 2021 onward to initialize player histories, fits four history coefficients on 2024 training handles, then applies the same rule to 2025 and the available 2026 rounds. No same-round solves, rank, time or score from the target player enter their prediction. As in the pilot, the other 80% of the field supply target-problem calibration, so this is a retrospective estimate for a new player in a known field.
+
+We compare three models on identical cells:
+
+1. Reproduce the previous pre-round rating correction and per-problem logistic curve.
+2. Allow curvature. Near each player rating, smooth the training field's excess solves over the logistic prediction with an 85-point Gaussian kernel on a 50-point grid. Apply a regularized log-odds correction with an information penalty of 5 and a maximum absolute correction of 1.5. A large field can reveal deviations that a sparse field cannot resolve.
+3. Add the player's prior solve history. Track excess solves separately on problems with predicted solve probability above or below 50%. Discount each previous eligible appearance by 0.85 and shrink by adding 2 to accumulated Bernoulli information. Fit how strongly each history predicts an easier or harder target on 2024 training handles. A player with no matching history falls back to the curved fit. Older outcomes from a held-out player's own completed rounds are available at prediction time. Historical problem curves always use training handles.
+
+Hyperparameters above were set before reading 2025 or 2026 results from this experiment. The rating-trend coefficients are frozen from the previous experiment. The historical replay uses round end times as the availability cutoff. Run `OPENBLAS_NUM_THREADS=1 .venv/bin/python scripts/cf_solve_history.py`.
+
+| Period | Rounds | Opportunities | Previous best | Flexible curve only | Curve and player solve history | Rounds beating previous best |
+|---|---:|---:|---:|---:|---:|---:|
+| 2025 benchmark | 56 | 630,677 | 0.201037 | 0.199860 | **0.197900** | 56/56 |
+| 2026 through the November cache | 43 | 427,752 | 0.206862 | 0.205397 | **0.202352** | 43/43 |
+
+The full model reduced opportunity-weighted log loss by 1.56% in 2025 and 2.18% in 2026. Paired 95% bootstrap intervals for full minus previous loss, resampling entire rounds, were [−0.003489, −0.002800] and [−0.004975, −0.004031]. In each period the player-history step contributed more absolute gain than changing curve shape. The baseline's 2025 loss matches the prior run. Each year's comparison uses its own field; the difference between years is not a measured model effect.
