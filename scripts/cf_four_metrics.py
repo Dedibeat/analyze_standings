@@ -11,8 +11,9 @@ from cf_solve_history import run
 
 
 class TimingSearch(Search):
-    def __init__(self):
+    def __init__(self, first_feature_year=2024):
         super().__init__()
+        self.first_feature_year = first_feature_year
         self.past = {}
         self.pending = []
         self.features = defaultdict(list)
@@ -25,8 +26,8 @@ class TimingSearch(Search):
             for h, row in zip(previous, stats):
                 old = self.past.get(h)
                 self.past[h] = (row if old is None else .90*old[0]+row, end)
-        if year >= 2024:
-            keep = train if year == 2024 else np.ones_like(train)
+        if year >= self.first_feature_year:
+            keep = train if year <= 2024 else np.ones_like(train)
             predictors = []
             for h in np.asarray(handles)[keep]:
                 entry = self.past.get(h)

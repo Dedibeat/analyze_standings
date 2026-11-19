@@ -53,7 +53,7 @@ def learn(samples):
     return result.x
 
 
-def run(sweep=None, timing=None):
+def run(sweep=None, timing=None, fold=0, first_feature_year=2024, last_year=None):
     prior, trend, records = Counter(), {}, {}
     pending, samples = [], []
     results = defaultdict(list)
@@ -61,6 +61,8 @@ def run(sweep=None, timing=None):
     for c in sorted(contests(), key=lambda c: (c['startTimeSeconds'], c['id'])):
         start = c['startTimeSeconds']
         year = datetime.fromtimestamp(start, timezone.utc).year
+        if last_year is not None and year > last_year:
+            break
         while pending and pending[0][0] < start:
             _, _, rows, updates = heappop(pending)
             for h, _, a, b in rows:
@@ -86,7 +88,8 @@ def run(sweep=None, timing=None):
             if players and any(rated):
                 handles, ratings, times = zip(*players)
                 y = (np.array(times) >= 0)[:, rated]
-                train = np.array([hashlib.sha256(h.encode()).digest()[0] >= 51 for h in handles])
+                bucket = np.array([hashlib.sha256(h.encode()).digest()[0] for h in handles])
+                train = (bucket < 51*fold) | (bucket >= 51*(fold+1))
                 x = SCALE * (np.array(ratings)-1500)
                 x -= np.array([1.20679056*SCALE*trend.get(h, 0) +
                                .06933997*np.log(prior[h]/30) for h in handles])
@@ -99,11 +102,11 @@ def run(sweep=None, timing=None):
                 for group in (p >= .5, p < .5):
                     stats.extend([((y-p)*group).sum(axis=1), (p*(1-p)*group).sum(axis=1)])
                 updates = handles, np.column_stack(stats)
+                if sweep is not None and year >= first_feature_year:
+                    sweep.score(year, handles, train, smooth, y)
                 if year >= 2024:
                     hist = np.array([records.get(h, (0, 0, 0, 0)) for h in handles])
                     f = predictors(hist[:, ::2] / (2 + hist[:, 1::2]), p)
-                    if sweep is not None:
-                        sweep.score(year, handles, train, smooth, y)
                     if year == 2024:
                         samples.append((smooth[train].ravel(), f[train].reshape(-1, 4), y[train].ravel()))
                     else:
