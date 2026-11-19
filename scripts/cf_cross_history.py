@@ -161,8 +161,10 @@ def extract():
                             item[:,j,1] = np.log1p(sums[:,1])
                     digest = np.array([hashlib.sha256(hn[j].encode()).digest()[0]
                                        for j in np.flatnonzero(vet)], dtype='B')
-                    np.savez(CROSS/f'{cid}.npz', player=f.astype('f'), item=item, digest=digest,
+                    tmp = CROSS/f'{cid}.tmp.npz'
+                    np.savez(tmp, player=f.astype('f'), item=item, digest=digest, pid=s,
                              old=old[ix[vet]], solved=solve[vet])
+                    tmp.replace(CROSS/f'{cid}.npz')
                 extra = sid,summary,err,info,tag_map
         heappush(pending,(start+c['durationSeconds'],cid,fmt(c['name']),ids[known],
                           perf[known],(new-old)[known],new[known],extra))

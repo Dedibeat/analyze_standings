@@ -10,6 +10,7 @@ from scipy.special import expit
 from cf_boost_data import CACHE, NAMES
 from cf_boost_search import (FEATURES, OUTPUT, atomic_json, configuration, difference, get_predictions,
                              panel, select, summary, transform)
+from cf_factor_search import FACTORS, events, prediction, replay
 from cf_field_search import FIELD, field_raw, predictions
 from cf_four_metrics import aggregate, round_scores
 from cf_rolling_boost import ROLLING, Rolling
@@ -48,7 +49,11 @@ def components(year,fold,records):
     raw = rolling.predict(r['recipe'])
     recent = [transform(z,v,y,t,r['strength'],r['calibration'])
               for (_,z,y,t),v in zip(rolling.rows,raw,strict=True)]
-    return reference, [fixed,field,recent]
+    del rolling, raw
+    r = records['factor']
+    factor_rounds = replay(events(year,fold),r['dims'],r['retention'],r['penalty'])
+    factor = [z for z,_ in prediction(factor_rounds,r['strength'],r['method'])]
+    return reference, [fixed,field,recent,factor]
 
 
 def blend(reference, models, weights):
@@ -64,7 +69,7 @@ def confidence(base,fit):
 
 def freeze(path):
     sources = {k:json.loads((d/'best.json').read_text()) for k,d in
-               [('fixed',OUTPUT),('field',FIELD),('rolling',ROLLING)]}
+               [('fixed',OUTPUT),('field',FIELD),('rolling',ROLLING),('factor',FACTORS)]}
     reference,models = components(2025,0,sources)
     base = round_scores(reference)
     incumbent = summary(base)
@@ -72,11 +77,11 @@ def freeze(path):
     trials = []
     idx = np.random.default_rng(17).integers(len(base),size=(1000,len(base)))
     base_boot = aggregate(base[idx].sum(axis=1))
-    for a,b,c in product(range(5),repeat=3):
-        if a+b+c != 4:
+    for parts in product(range(5),repeat=len(models)):
+        if sum(parts) != 4:
             continue
         for strength in (.65,1.):
-            weights = (strength*np.array([a,b,c])/4).tolist()
+            weights = (strength*np.array(parts)/4).tolist()
             fit = round_scores(blend(reference,models,weights))
             metrics = summary(fit)
             rec = dict(weights=weights,metrics=metrics.tolist())

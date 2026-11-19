@@ -67,11 +67,12 @@ class Rolling:
                 self.archive.append((cid,x[keep].reshape(-1,x.shape[-1]),
                                      z[keep].ravel(),outcome[keep].ravel()))
 
-    def predict(self, recipe, chunks=4):
+    def predict(self, recipe, chunks=4, drop=(), lookback=3):
         raw = []
         columns = np.arange(len(FEATURE_NAMES))
         if recipe['features']=='cross':
             columns = np.array([0,1,2,3,6,7,8,9,10,*range(len(NAMES),len(FEATURE_NAMES))])
+        columns = np.array([j for j in columns if FEATURE_NAMES[j] not in drop])
         for ix in np.array_split(np.arange(len(self.rows)),chunks):
             cutoff = self.contests[self.ids[ix[0]]]['startTimeSeconds']
             xs,ys,zs,ws = [],[],[],[]
@@ -79,7 +80,7 @@ class Rolling:
                 c = self.contests[cid]
                 end = c['startTimeSeconds'] + c['durationSeconds']
                 age = (cutoff-end)/YEAR_DAYS
-                if 0 < age <= 3:
+                if 0 < age <= lookback:
                     xs.append(x[:,columns])
                     ys.append(y)
                     zs.append(z)
@@ -99,13 +100,13 @@ class Rolling:
         return raw
 
 
-def search(until):
+def search(until, max_trials=10000):
     ROLLING.mkdir(parents=True,exist_ok=True)
     dev = Rolling(2025)
     baseline = summary(round_scores([(z[~t],y[~t]) for _,z,y,t in dev.rows]))
     path = ROLLING/'best.json'
     best = json.loads(path.read_text()) if path.exists() else None
-    for i in range(10000):
+    for i in range(max_trials):
         if time.time()>=until:
             break
         output = ROLLING/f'trial-{i:04}.json'
@@ -128,4 +129,6 @@ def search(until):
 if __name__=='__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--until',type=float,required=True)
-    search(parser.parse_args().until)
+    parser.add_argument('--max-trials', type=int, default=10000)
+    args = parser.parse_args()
+    search(args.until, args.max_trials)

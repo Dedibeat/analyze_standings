@@ -26,6 +26,7 @@ Use the CF standings and rating-change cache described in the README and the rep
 .venv/bin/python scripts/cf_boost_data.py --from-year 2022
 .venv/bin/python scripts/cf_cross_history.py
 .venv/bin/python scripts/cf_field_search.py
+.venv/bin/python scripts/cf_factor_search.py
 .venv/bin/python scripts/cf_boost_search.py --until "$fixed_search_deadline"
 .venv/bin/python scripts/cf_rolling_boost.py --until "$rolling_search_deadline"
 .venv/bin/python scripts/cf_confirm_models.py final --freeze
@@ -33,3 +34,7 @@ Use the CF standings and rating-change cache described in the README and the rep
 ```
 
 For a disjoint replication partition, build both panel variants with the same `--fold` (1 through 4), and pass that fold to confirmation. The 2025 and 2026 field-calibration labels come only from the corresponding training handles. As in the earlier benchmark, later field rankings and solve times are never used as current-player features. The all-division rank-performance estimate uses a 99-quantile approximation to the earlier contest rating field.
+
+Before reading any latent-factor results, we added a fourth family to the ensemble grid. This expands it from 15 to 35 possible quarter-step mixtures at each overall strength and includes every original three-model mixture at zero factor weight. The factor model learns multidimensional player profiles from earlier solve patterns. It estimates each current task's factor loadings using the training field and delays each player's history update until the round ends. Dimensions, history retention and ridge strength are selected only on 2025. This tests whether a standings-derived player profile contributes beyond rating, speed and earlier rank.
+
+The rolling winner's training-data, timing, rank and task-specialization ablations reuse the first locked recipe and 2025 opportunities. For the final calibration audit, recombine the five disjoint evaluation folds within each contest and problem before computing macro AUC. Check sensitivity to 10, 20 and 40 reliability bins. A diagnostic estimates the expected finite-sample ECE under independent perfectly calibrated Bernoulli draws using a normal approximation per bin; repeated contestants and correlated tasks make this a reference calculation. Also report loss and Brier for earlier-defined 1000–1599 players on tasks at least 600 points harder and tasks at or below their rating.
