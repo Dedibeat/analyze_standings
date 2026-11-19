@@ -26,8 +26,9 @@ def config(index):
                 features=features, seed=111+index//len(options))
 
 
-def load_year(year, fold=0):
+def load_year(year, fold=0, crossfit=False):
     root = CACHE if fold == 0 else CACHE.with_name(f'{CACHE.name}_fold{fold}')
+    curve_cache = root.with_name(root.name + "_crossfit")
     if year < 2024:
         root = root.with_name(root.name+'_long')
     ids = json.loads((root/f'{year}.json').read_text())
@@ -37,6 +38,13 @@ def load_year(year, fold=0):
             known = (extra['digest']<51*fold) | (extra['digest']>=51*(fold+1))
             keep = known if year <= 2024 else np.ones_like(known)
             x, z, y, train = (base[k] for k in ('x','z','y','train'))
+            if crossfit:
+                with np.load(curve_cache/f'{cid}.npz') as independent:
+                    np.testing.assert_array_equal(z[~train],independent['z'][~train])
+                    z = independent['z']
+                    x[:,:,0] = z
+                    x[:,:,1] = independent['local']
+                    x[:,:,2] = independent['difficulty']
             np.testing.assert_array_equal(extra['old'][keep], x[:,0,NAMES.index('pre_rating')])
             np.testing.assert_array_equal(extra['solved'][keep],y)
             if year > 2024:
@@ -50,14 +58,14 @@ def load_year(year, fold=0):
 
 
 class Rolling:
-    def __init__(self, year, fold=0):
+    def __init__(self, year, fold=0, crossfit=False):
         self.year = year
         self.contests = {c['id']:c for c in contests()}
         self.archive = []
         self.ids = []
         self.rows = []
         for y in range(year-3,year+1):
-            ids,rows = load_year(y, fold)
+            ids,rows = load_year(y, fold, crossfit)
             if y==year:
                 self.ids,self.rows=ids,rows
             for cid,(x,z,outcome,train) in zip(ids,rows,strict=True):
@@ -100,16 +108,17 @@ class Rolling:
         return raw
 
 
-def search(until, max_trials=10000):
-    ROLLING.mkdir(parents=True,exist_ok=True)
-    dev = Rolling(2025)
+def search(until, max_trials=10000, crossfit=False):
+    destination = ROLLING.with_name("rolling_crossfit") if crossfit else ROLLING
+    destination.mkdir(parents=True,exist_ok=True)
+    dev = Rolling(2025, crossfit=crossfit)
     baseline = summary(round_scores([(z[~t],y[~t]) for _,z,y,t in dev.rows]))
-    path = ROLLING/'best.json'
+    path = destination/'best.json'
     best = json.loads(path.read_text()) if path.exists() else None
     for i in range(max_trials):
         if time.time()>=until:
             break
-        output = ROLLING/f'trial-{i:04}.json'
+        output = destination/f'trial-{i:04}.json'
         if output.exists():
             continue
         recipe = config(i)
@@ -130,5 +139,6 @@ if __name__=='__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--until',type=float,required=True)
     parser.add_argument('--max-trials', type=int, default=10000)
+    parser.add_argument('--crossfit', action='store_true')
     args = parser.parse_args()
-    search(args.until, args.max_trials)
+    search(args.until, args.max_trials, args.crossfit)

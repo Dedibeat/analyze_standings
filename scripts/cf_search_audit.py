@@ -65,7 +65,8 @@ def check(lock, key, folds):
 
 
 def archive(output):
-    sources={'fixed':CACHE/'search','field':CACHE/'field','rolling':CACHE/'rolling','factor':CACHE/'factors'}
+    sources={'fixed':CACHE/'search','field':CACHE/'field','rolling':CACHE/'rolling','factor':CACHE/'factors',
+             'rolling_crossfit':CACHE/'rolling_crossfit'}
     data={'metric_order':['log loss','Brier','20-bin ECE','within-problem macro AUC'],
           'period_order':['2025 full','first half of rounds','second half of rounds'],'families':{}}
     for name,path in sources.items():
@@ -79,8 +80,9 @@ if __name__=='__main__':
     parser.add_argument('lock')
     parser.add_argument('--folds',type=int,nargs='+',default=list(range(5)))
     parser.add_argument('--archive',action='store_true')
+    parser.add_argument('--keys',nargs='+',default=['balanced','loss'])
     args=parser.parse_args()
-    result={key:check(args.lock,key,args.folds) for key in ('balanced','loss')}
+    result={key:check(args.lock,key,args.folds) for key in args.keys}
     out=CONFIRM/args.lock
     atomic_json(out/('audit-'+'-'.join(map(str,args.folds))+'.json'), result)
     if args.archive:
