@@ -9255,3 +9255,6 @@ The [multi-metric search](cf_metric_search.md) exhausted a six-family, 15,625-co
 The [timing-history experiments](cf_four_metrics.md) improved all four metric point estimates in selection, but later-period calibration error went up. Solve-speed history was informative for ranking and loss. Weighting the correction by estimated solve probability did not change the winner.
 
 An extended [five-hour CF search](cf_five_hour_search.md) is testing cross-contest trees, per-problem field corrections and chronological refits. The protocol retains the four metrics and the original held-out population.
+
+
+The five-hour all-metric search has completed. Five disjoint held-out handle partitions pool 2.16M predictions across the 2026 rounds. The loss-selected model improves all four point metrics over the incumbent. Its calibration-error interval includes zero, while loss, Brier and AUC intervals favor the new model. See [experiment design and full results](cf_five_hour_search.md).

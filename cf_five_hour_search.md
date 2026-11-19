@@ -55,3 +55,28 @@ We also scored the official pre-round player rating against the published CF pro
 | 2026 calibrated official Elo | 0.215705 | 0.064558 | 0.010985 | 0.850979 |
 
 Reproduce with `OPENBLAS_NUM_THREADS=1 .venv/bin/python scripts/cf_official_metrics.py`. The 2025 raw loss agrees with the previous difficulty pilot.
+
+## Five-hour results
+
+The five-hour wall-clock allocation ended at 09:03:54 UTC. The final benchmark pools five disjoint SHA-256 handle partitions on the same 43 2026 rounds, totaling 2,155,061 predictions. Each person belongs to one test partition. For each partition, current problem calibration uses the other contestants, while the prediction model is selected once from 2025 and remains frozen.
+
+| 2026 pooled across five held-out partitions | Reference | Balanced selection | Loss selection |
+|---|---:|---:|---:|
+| Log loss ↓ | 0.202548 | 0.201463 | **0.200593** |
+| Brier ↓ | 0.061666 | 0.061364 | **0.061165** |
+| 20-bin ECE ↓ | **0.000786** | 0.000833 | 0.000771 |
+| Within-problem macro AUC ↑ | 0.862956 | 0.866714 | **0.870790** |
+
+The balanced selection improves loss, Brier and AUC but increases ECE by 0.000047. Its paired round-bootstrap interval for ECE difference was [−0.000171, +0.000204]. The loss selection improves all four point estimates. Its intervals for loss, Brier, ECE and AUC differences were respectively [−0.002131, −0.000563], [−0.0005626, −0.00025797], [−0.0002413, +0.0002044] and [+0.004350, +0.009112]. It is a strict four-metric win on point estimates and 43/43 rounds for log loss. The ECE interval includes zero.
+
+The loss selection uses 25% tree model, 75% rolling model and no separate per-problem field model. The balanced selection uses 25% tree, 25% field and 50% rolling. The standalone inner-fold rolling model, using an entirely new learner that consumes only training-player examples per fold, scores 0.197271 log loss, 0.060537 Brier, 0.000699 ECE and 0.888580 AUC on the pooled development partition. In fold zero, the unchanged reference is 0.201862, 0.061372, 0.001075 and 0.870012. Its point estimates improve all four, and its paired intervals exclude zero favorably for loss, Brier and ECE, but not AUC. This is the cleanest model-level four-metric result, while its AUC evidence is less certain.
+
+The five pooled fold results are stored individually in the confirmation cache. On the full-field holdout, the all-division feature panel changed eligibility slightly, so its separate 2026 result covers 438,408 rather than 427,752 predictions. Do not compare these counts across protocols as if the tested populations matched.
+
+The official comparator's 2025 raw log loss was reproduced at 0.219154. The all-division four-metric candidates are roughly 9% lower in log loss, 9% lower in Brier, sharply better by within-problem AUC and far better calibrated after taking advantage of other current-round contestants. This benchmark rates a problem using observed solves in that same contest. It is not a pre-contest forecast of a new problem.
+
+**Calibration sampling floor.** Pooling all five folds reduces ECE from roughly 0.0015 per fold to under 0.0008. The independent Bernoulli normal approximation for 20 bins is about 0.00060. The observed ECE differences of the final ensemble are smaller than their paired uncertainty. Finer bin counts, held-out contestants in the same task, and bootstrap resampling by round all give different views of this small calibration residual. The strict point-estimate criterion is met, but a repeat contest sample is needed to establish the ECE gain.
+
+**Historical subject signals.** On the primary rolling recipe, dropping the all-division player history worsened 2025 log loss from 0.194685 to 0.196033 and Brier from 0.059799 to 0.060106. Dropping speed slightly improved ECE from 0.001210 to 0.001175 while worsening loss and Brier. Removing rank performance or the problem-specialization block changed log loss only marginally.
+
+The complete trial journal, fold predictions and model checkpoints remain in the ignored `data/cf_ai/boost_v1/` cache. `output/cf_five_hour_trials.json.gz` is the compressed metric journal. Its script is `scripts/cf_search_audit.py --lock final --archive`.

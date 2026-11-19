@@ -1549,3 +1549,6 @@ estimates are higher, but the paired differences are inconclusive at this
 sample size. Gemini 3.6 was more A/B-order consistent: 82.6% vs 78.3% at 200
 and 84.6% vs 57.7% at 300. Details and raw ignored outputs are in
 `details.md` and `gemini_gap_run/`.
+
+
+The [five-hour Codeforces standings search](cf_five_hour_search.md) tested rolling player histories, solve speed, earlier ranks, problem tags and boosted models against log loss, Brier score, calibration error and within-problem AUC.
