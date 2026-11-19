@@ -42,3 +42,16 @@ The rolling winner's training-data, timing, rank and task-specialization ablatio
 **Cross-fitted curve experiment.** The ordinary training field contributes to fitting its own task curves, whereas each evaluated player is held out. To test that asymmetry, recompute the three current problem-curve features for every training player using the other three quarters of the already designated training field. Keep each outer held-out player's original features unchanged. Refit the rolling tree learner on those inner-fold features and use its independent training-field predictions for calibration. This is a separate matched search; the previously specified four-family ensemble and its first checkpoint are unchanged.
 
 The standalone inner-fold rolling model will be frozen using the same ordinary 2025 winner rule and reported separately from both ensemble finalists. Its 2026 forecasts and disjoint-cohort replications do not select a new recipe. A scorecard reports every locked challenger rather than keeping only models that happened to pass calibration.
+
+## Official-rating reference on matched rows
+
+We also scored the official pre-round player rating against the published CF problem rating. A second comparator fits a global intercept and slope on 2,705,424 opportunities from 2024 training handles. The fitted logit is 0.44381 + 1.17363 times the usual Elo logit. This improves probabilities while preserving the within-problem player ordering. The official problem label can reflect the original evaluation field.
+
+| Period and comparator | Log loss | Brier | ECE | Within-problem AUC |
+|---|---:|---:|---:|---:|
+| 2025 raw official Elo | 0.219154 | 0.067096 | 0.032443 | 0.859925 |
+| 2025 calibrated official Elo | 0.211750 | 0.063778 | 0.008938 | 0.859925 |
+| 2026 raw official Elo | 0.225695 | 0.068632 | 0.037395 | 0.850979 |
+| 2026 calibrated official Elo | 0.215705 | 0.064558 | 0.010985 | 0.850979 |
+
+Reproduce with `OPENBLAS_NUM_THREADS=1 .venv/bin/python scripts/cf_official_metrics.py`. The 2025 raw loss agrees with the previous difficulty pilot.
