@@ -918,6 +918,7 @@ Modelling pre-round player strength from rating history reduced it further to 0.
 Using past solve histories and flexible problem curves reached 0.197900 in 2025 and improved all 43 later rounds evaluated in 2026.
 A [25-model history search](cf_25_experiments.md) lowered the later-period loss further to 0.201981.
 The [multi-metric follow-up](cf_metric_search.md) reached 0.201862 on the later period and reports Brier score, calibration error, and within-problem AUC.
+The [timing-history comparison](cf_four_metrics.md) tests whether solve speed improves all four measures.
 
 ### Time-varying team ratings (research, 2026-10-04)
 

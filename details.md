@@ -9251,3 +9251,5 @@ The [larger-history experiment](cf_standings_experiments.md#searching-the-larger
 The [25-model history search](cf_25_experiments.md) selected 0.95 retention and 16 probability bands on 2025. It reduced loss from 0.19789978 to 0.19762614 in selection and from 0.20235232 to 0.20198121 on the later 2026 rounds (34/43 improved). The report includes every selection score.
 
 The [multi-metric search](cf_metric_search.md) exhausted a six-family, 15,625-combination grid at a minimum gain of 0.00001. Recent history and calibration lowered later-period loss from 0.20198121 to 0.20186242 and improved Brier and calibration error. Within-problem AUC slipped by 0.000088.
+
+The [timing-history experiments](cf_four_metrics.md) improved all four metric point estimates in selection, but later-period calibration error went up. Solve-speed history was informative for ranking and loss. Weighting the correction by estimated solve probability did not change the winner.

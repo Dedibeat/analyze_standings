@@ -35,7 +35,7 @@ class Search:
         hist = np.array([self.history.get(h, empty) for h in np.asarray(handles)[keep]])
         self.cells[year].append((logits[keep], solved[keep], hist, expit(logits[train]).mean(axis=0)))
 
-    def report(self, reference):
+    def fit(self):
         # Recover the original 16 independent regularized Newton updates.
         info = np.tile(100*np.eye(2), (16, 1, 1))
         grad = np.zeros((16, 2))
@@ -49,29 +49,32 @@ class Search:
                     v = q*(1-q)*f*features[:, b, None]
                     info[:, a, b] += np.bincount(band.ravel(), v.ravel(), minlength=16)
         coef = np.linalg.solve(info, grad[..., None])[..., 0]
+        gradient = None
+        for incumbent, y, x in self.design(2024, coef):
+            if gradient is None:
+                hessian = [100*np.eye(f.shape[-1]) for f in x]
+                gradient = [np.zeros(f.shape[-1]) for f in x]
+            q = expit(incumbent.ravel())
+            for j, f in enumerate(x):
+                gradient[j] += f.T @ (y.ravel()-q)
+                hessian[j] += f.T @ ((q*(1-q))[:, None]*f)
+        return coef, [np.linalg.solve(h, g) for h, g in zip(hessian, gradient)]
+
+    def design(self, year, coef):
+        for z, y, hist, difficulty in self.cells[year]:
+            p, base, features, band = baseline(z, hist)
+            incumbent = base + (features[:, None, :]*coef[band]).sum(axis=2)
+            yield incumbent, y, corrections(p, incumbent, features, hist, difficulty)
+
+    def report(self, reference):
+        coef, weights = self.fit()
         year_data = {}
-        for year in sorted(self.cells):
+        for year in (2025, 2026):
             blocks = []
-            gradient = None
-            for z, y, hist, difficulty in self.cells[year]:
-                p, base, features, band = baseline(z, hist)
-                incumbent = base + (features[:, None, :]*coef[band]).sum(axis=2)
-                x = corrections(p, incumbent, features, hist, difficulty)
-                if year == 2024:
-                    if gradient is None:
-                        hessian = [100*np.eye(f.shape[-1]) for f in x]
-                        gradient = [np.zeros(f.shape[-1]) for f in x]
-                    q = expit(incumbent.ravel())
-                    for j, f in enumerate(x):
-                        gradient[j] += f.T @ (y.ravel()-q)
-                        hessian[j] += f.T @ ((q*(1-q))[:, None]*f)
-                else:
-                    shifts = np.column_stack([f @ w for f, w in zip(x, weights)])
-                    blocks.append((incumbent, y, shifts))
-            if year == 2024:
-                weights = [np.linalg.solve(h, g) for h, g in zip(hessian, gradient)]
-            else:
-                year_data[year] = blocks
+            for incumbent, y, x in self.design(year, coef):
+                shifts = np.column_stack([f @ w for f, w in zip(x, weights)])
+                blocks.append((incumbent, y, shifts))
+            year_data[year] = blocks
         selected = search(year_data[2025])
         for year, blocks in year_data.items():
             metrics(blocks, selected, year)

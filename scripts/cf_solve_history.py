@@ -53,7 +53,7 @@ def learn(samples):
     return result.x
 
 
-def run(sweep=None):
+def run(sweep=None, timing=None):
     prior, trend, records = Counter(), {}, {}
     pending, samples = [], []
     results = defaultdict(list)
@@ -93,6 +93,8 @@ def run(sweep=None):
                 z = slope_predictions(x[train], y[train], x, False)
                 smooth = local_curve(x, y, train, z)
                 p = expit(smooth)
+                if timing is not None:
+                    timing(c, year, handles, train, np.asarray(times)[:, rated], p)
                 stats = []
                 for group in (p >= .5, p < .5):
                     stats.extend([((y-p)*group).sum(axis=1), (p*(1-p)*group).sum(axis=1)])
