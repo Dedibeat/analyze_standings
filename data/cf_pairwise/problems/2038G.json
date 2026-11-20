@@ -1,0 +1,36 @@
+{
+  "contest_id": 2038,
+  "index": "G",
+  "name": "Guess One Character",
+  "rating": 1900,
+  "tags": [
+    "constructive algorithms",
+    "implementation",
+    "interactive"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2038G",
+  "url": "https://codeforces.com/problemset/problem/2038/G",
+  "contest_start_time": "2024-11-18T10:35:00+00:00",
+  "statement": {
+    "title": "G. Guess One Character",
+    "time_limit": "2 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "This is an interactive problem. You have to use flush operation right after printing each line. For example, in C++ you should use the function fflush(stdout) or cout.flush(), in Java or Kotlin — System.out.flush(), and in Python — sys.stdout.flush().\n\nThe jury has a string $s$ consisting of characters 0 and/or 1. The length of this string is $n$.\n\nYou can ask the following queries:\n\n $1$ $t$ — \"how many times does $t$ appear in $s$ as a contiguous substring?\" Here, $t$ should be a string consisting of characters 0 and/or 1; its length should be at least $1$ and at most $n$. For example, if the string $s$ is 111011 and the string $t$ is 11, the response to the query is $3$.\n\nYou have to guess at least one character in the string $s$ by asking no more than $3$ queries. Note that giving the answer does not count as a query.\n\nIn every test and in every test case, the string $s$ is fixed beforehand.",
+    "input_spec": null,
+    "output_spec": null,
+    "note": "In the example, there are $3$ test cases: 101, 11 and 10. Note that everything after the // sign is a comment that explains which line means what in the interaction. The jury program won't print these comments in the actual problem, and you shouldn't print them. The empty lines are also added for your convenience, the jury program won't print them, and your solution should not print any empty lines.",
+    "samples": [
+      {
+        "input": "\n3     // 3 test cases\n3     // the length of the string is 3\n\n1     // 101 occurs once\n\n1     // guessed correctly\n2     // the length of the string is 2\n\n0     // 00 occurs zero times\n\n0     // 0 occurs zero times\n\n1     // guessed correctly\n2     // the length of the string is 2\n\n1     // 1 occurs once\n\n0     // 01 occurs zero times\n\n1     // guessed correctly",
+        "output": "\n\n\n1 101 // how many times 101 occurs\n\n0 2 0 // guess: s[2] is 0\n\n\n1 00  // how many times 00 occurs\n\n1 0   // how many times 0 occurs\n\n0 1 1 // guess: s[1] is 1\n\n\n1 1   // how many times 1 occurs\n\n1 01  // how many times 01 occurs\n\n0 2 0 // guess: s[2] is 0"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "missing"
+  },
+  "editorial": null
+}

@@ -1,0 +1,41 @@
+{
+  "contest_id": 2077,
+  "index": "F",
+  "name": "AND x OR",
+  "rating": 3300,
+  "tags": [
+    "bitmasks",
+    "constructive algorithms",
+    "dp"
+  ],
+  "points": 2500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2077F",
+  "url": "https://codeforces.com/problemset/problem/2077/F",
+  "contest_start_time": "2025-03-10T14:45:00+00:00",
+  "statement": {
+    "title": "F. AND x OR",
+    "time_limit": "5 seconds",
+    "memory_limit": "1024 megabytes",
+    "legend": "Suppose you have two arrays $c$ and $d$, each of length $k$. The pair $(c, d)$ is called good if $c$ can be changed to $d$ by performing the following operation any number of times.\n\n Select two distinct indices $i$ and $j$ ($1 \\leq i, j \\leq k$, $i \\neq j$) and a nonnegative integer $x$ ($0 \\leq x  \\lt  2^{30}$). Then, apply the following transformations:\n\n $c_i := c_i \\mathbin{\\&} x$, where $\\&$ denotes the bitwise AND operation.\n\n $c_j := c_j \\mathbin{|} x$, where $|$ denotes the bitwise OR operation.\n\nYou are given two arrays $a$ and $b$, both of length $n$, containing nonnegative integers not exceeding $m$.\n\nYou can perform two types of moves on these arrays any number of times:\n\n Select an index $i$ ($1 \\leq i \\leq n$) and set $a_i := a_i + 1$.\n\n Select an index $i$ ($1 \\leq i \\leq n$) and set $b_i := b_i + 1$.\n\nNote that the elements of $a$ and $b$ may exceed $m$ at some point while performing the moves.\n\nFind the minimum number of moves required to make the pair $(a, b)$ good.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 10^4$). The description of the test cases follows.\n\nThe first line of each test case contains two integers $n$ and $m$ ($1 \\leq n, m \\leq 2 \\cdot 10^6$) — the length of arrays $a$ and $b$, and the maximum possible value in these arrays, respectively.\n\nThe second line contains $n$ integers $a_1, a_2, \\ldots, a_n$ ($0 \\leq a_i \\leq m$) — denoting the array $a$.\n\nThe third line contains $n$ integers $b_1, b_2, \\ldots, b_n$ ($0 \\leq b_i \\leq m$) — denoting the array $b$.\n\nAdditionally, it is guaranteed that the sum of all values of $n$ and the sum of all values of $m$ across all test cases do not exceed $2 \\cdot 10^6$.",
+    "output_spec": "For each test case, output a single integer — the minimum number of moves required to make the pair $(a, b)$ good.",
+    "note": "In the first case, we already have $a = b$.\n\nIn the second case, we can perform move $2$ on index $i = 2$ twice. The array $b$ becomes $[8, 8, 32]$. We can see that $(a, b)$ is now good.\n\nIn the third case, we can perform move $2$ on index $i = 1$, then perform move $1$ on index $i = 2$. It can be proven that you cannot make the pair $(a, b)$ good in fewer than $2$ moves.",
+    "samples": [
+      {
+        "input": "5\n4 3\n0 1 2 3\n0 1 2 3\n3 32\n8 9 32\n8 6 32\n5 64\n5 7 16 32 64\n4 8 16 32 64\n4 11\n9 1 4 3\n8 11 6 2\n5 10\n7 9 5 4 2\n3 10 6 5 9",
+        "output": "\n0\n2\n2\n0\n1"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 140505,
+    "url": "https://codeforces.com/blog/entry/140505",
+    "tutorial": "2077F - AND x OR\n\nHint 1\n\nCharacterize the property of a good pair of arrays.\n\nHint 2\n\nThink about the last operation that turns a good pair of arrays into the same array.\n\nSolution\n\n$(a, b)$ is a good pair only if at least one of these two conditions hold\n\n$a = b$\n\nThere exist two distinct indices $i$, $j$ such that $b_i$ is a submask of $b_j$.\n\nProof\n\nIf $a \\neq b$, then you need to do at least one operation to $a$. In the last operation, if you choose $i$, $j$, $x$, then $a_i$ is a submask of $x$ and $x$ is a submask of $a_j$. So in the final array, there must be at least one pair of submask and supermask.\n\nNext, we will show that this is sufficient. For every index $k$ other than $i$ and $j$, you can do this.\n\nPerform operation with $k$, $i$, $0$\n\nPerform operation with $i$, $k$, $b_k$\n\nThen\n\nPerform operation with $i$, $j$, $0$\n\nPerform operation with $j$, $i$, $0$\n\nPerform operation with $j$, $i$, $b_i$\n\nPerform operation with $i$, $j$, $b_j$\n\nWe need to check the two cases.\n\nIn the first case, the minimum cost will be $\\sum_{i=1}^n |a_i - b_i|$.\n\nIn the second case, we want the minimum cost to create a submask-supermask pair in $b$.\n\nSolution 1\n\nFor explanation simplicity, consider the graph $G$ with $2m$ vertices, representing the numbers from $1$ to $2m$. In this graph, there's an unweighted edge from vertex $i$ to vertex $i+1$, and from vertex $i$ to all submask vertices. Color all vertices in which its value appears in $b$. The answer is the shortest path between all pairs of distinct colored vertices.\n\nThe implementation itself (see below) uses dynamic programming consisting of three phases. The dynamic programming tracks the first and second closest vertex to each vertex, because the first closest vertex would be itself.\n\nPropagate each colored vertices up (from $i$ to $i+1$).\n\nPropagate to the submasks (from $i$ to its submasks).\n\nPropagate down (from $i$ to $i-1$).\n\nTime complexity: $\\mathcal{O}(n \\log n + m \\log m)$ per test case. The $\\log n$ factor is from the implementation which checks for duplicates in $b$ by sorting.\n\nSubmission: 310298215\n\nSolution 2\n\nSubmission: 310317931",
+    "solution_code": []
+  }
+}

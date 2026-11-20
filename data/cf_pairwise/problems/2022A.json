@@ -1,0 +1,44 @@
+{
+  "contest_id": 2022,
+  "index": "A",
+  "name": "Bus to Pénjamo",
+  "rating": 800,
+  "tags": [
+    "constructive algorithms",
+    "greedy",
+    "implementation",
+    "math"
+  ],
+  "points": 750.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2022A",
+  "url": "https://codeforces.com/problemset/problem/2022/A",
+  "contest_start_time": "2024-10-13T19:35:00+00:00",
+  "statement": {
+    "title": "A. Bus to Pénjamo",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "Ya vamos llegando a Péeeenjamoo ♫♫♫\n\nThere are $n$ families travelling to Pénjamo to witness Mexico's largest-ever \"walking a chicken on a leash\" marathon. The $i$-th family has $a_i$ family members. All families will travel using a single bus consisting of $r$ rows with $2$ seats each.\n\nA person is considered happy if:\n\n Another family member is seated in the same row as them, or\n\n They are sitting alone in their row (with an empty seat next to them).\n\nDetermine the maximum number of happy people in an optimal seating arrangement. Note that everyone must be seated in the bus.\n\nIt is guaranteed that all family members will fit on the bus. Formally, it is guaranteed that $\\displaystyle\\sum_{i=1}^{n}a_i \\le 2r$.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 1000$). The description of the test cases follows.\n\nThe first line of each test case contains two integers $n$ and $r$ ($1 \\le n \\le 100$; $1 \\le r \\le 500$) — the number of families and the number of rows in the bus.\n\nThe second line contains $n$ integers $a_1, a_2, \\ldots, a_n$ ($1 \\le a_i \\le 10$) — the number of family members in each family.",
+    "output_spec": "For each test case, output the maximum number of happy people in an optimal seating arrangement.",
+    "note": "In the first test case, the two members of the first family can sit together in the first row, while the two members of the second family can sit together in the second row. The remaining member of the second family can sit in the third row along with a member of the third family. This seating arrangement is shown below, where the $4$ happy people are colored green.\n\n$\\color{green}{1}$$\\color{green}{1}$\n\n$\\color{green}{2}$$\\color{green}{2}$\n\n$2$$3$\n\nIn the second test case, a possible seating arrangement with $6$ happy people is shown below.\n\n$\\color{green}{3}$$\\color{green}{3}$\n\n$\\color{green}{1}$$\\color{green}{1}$\n\n$\\color{green}{2}$$\\color{green}{2}$\n\nIn the third test case, a possible seating arrangement with $6$ happy people is shown below.\n\n$\\color{green}{4}$$\\color{green}{4}$\n\n$\\color{green}{}$$\\color{green}{2}$\n\n$\\color{green}{3}$$\\color{green}{3}$\n\n$\\color{green}{1}$$\\color{green}{}$\n\n$\\color{green}{}$$\\color{green}{}$",
+    "samples": [
+      {
+        "input": "4\n3 3\n2 3 1\n3 3\n2 2 2\n4 5\n1 1 2 2\n4 5\n3 1 1 3",
+        "output": "\n4\n6\n6\n6"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 135095,
+    "url": "https://codeforces.com/blog/entry/135095",
+    "tutorial": "2022A - Bus to Pénjamo\n\nStep 1\n\nThe key to maximizing happiness is to seat family members together as much as possible. If two members of the same family sit in the same row, both will be happy, and we only use two seats. However, if they are seated separately, only one person is happy, but two seats are still used. Therefore, we prioritize seating family pairs together first.\n\nStep 2\n\nOnce all possible pairs are seated, there may still be some family members left to seat. If a family has an odd number of members, one person will be left without a pair. Ideally, we want to seat this person alone in a row to make them happy. However, if there are no remaining rows to seat them alone, we’ll have to seat them with someone from another family. This means the other person might no longer be happy since they are no longer seated alone.\n\nStep 3\n\nThe easiest way to handle part 2 is to check the number of remaining rows and people. If the number of remaining rows is greater than or equal to the number of unpaired people, all unpaired people can sit alone and remain happy. Otherwise, some people will have to share a row, and their happiness will be affected. In that case, the number of happy people will be $2 \\times$ remaining rows $-$ remaining people.\n\nCode:\n\nKey Takeaway\n\nWrite down key observations and mix them to solve the problem",
+    "solution_code": [
+      "#include <bits/stdc++.h>\nusing namespace std;\n \nint main() {\n\tint t;\n\tcin>>t;\n\twhile(t--)\n\t{\n\t\tint n,r;\n\t\tcin>>n>>r;\n\t\tvector<int>arr(n);\n\t\tint leftalone=0;\n\t\tint happy=0;\n\t\tfor(int k=0;k<n;k++)\n\t\t{\n\t\t\tcin>>arr[k];\n\t\t\thappy+=(arr[k]/2)*2;\n\t\t\tr-=arr[k]/2;\n\t\t\tleftalone+=arr[k]%2;\n\t\t}\n\t\tif(leftalone>r)\n\t\t\thappy+=r*2-leftalone;\n\t\telse\n\t\t \thappy+=leftalone;\n\t\tcout<<happy<<endl;\n\t}\n}"
+    ]
+  }
+}

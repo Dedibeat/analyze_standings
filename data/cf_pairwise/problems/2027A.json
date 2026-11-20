@@ -1,0 +1,43 @@
+{
+  "contest_id": 2027,
+  "index": "A",
+  "name": "Rectangle Arrangement",
+  "rating": 800,
+  "tags": [
+    "geometry",
+    "implementation",
+    "math"
+  ],
+  "points": 500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2027A",
+  "url": "https://codeforces.com/problemset/problem/2027/A",
+  "contest_start_time": "2024-10-26T14:35:00+00:00",
+  "statement": {
+    "title": "A. Rectangle Arrangement",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "You are coloring an infinite square grid, in which all cells are initially white. To do this, you are given $n$ stamps. Each stamp is a rectangle of width $w_i$ and height $h_i$.\n\nYou will use each stamp exactly once to color a rectangle of the same size as the stamp on the grid in black. You cannot rotate the stamp, and for each cell, the stamp must either cover it fully or not cover it at all. You can use the stamp at any position on the grid, even if some or all of the cells covered by the stamping area are already black.\n\nWhat is the minimum sum of the perimeters of the connected regions of black squares you can obtain after all the stamps have been used?",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 500$). The description of the test cases follows.\n\nThe first line of each test case contains a single integer $n$ ($1 \\le n \\le 100$).\n\nThe $i$-th of the next $n$ lines contains two integers $w_i$ and $h_i$ ($1 \\le w_i, h_i \\le 100$).",
+    "output_spec": "For each test case, output a single integer — the minimum sum of the perimeters of the connected regions of black squares you can obtain after all the stamps have been used.",
+    "note": "In the first test case, the stamps can be used as shown on the left. Each stamp is highlighted in its own color for clarity.\n\nAfter all these stamps are used, there is one black region (as shown on the right), and its perimeter is $20$. It can be shown that there is no way of using the stamps that yields a lower total perimeter.\n\nIn the second test case, the second and third stamps can be used entirely inside the first one, so the minimum perimeter is equal to $8$.",
+    "samples": [
+      {
+        "input": "5\n5\n1 5\n2 4\n3 3\n4 2\n5 1\n3\n2 2\n1 1\n1 2\n1\n3 2\n3\n100 100\n100 100\n100 100\n4\n1 4\n2 3\n1 5\n3 2",
+        "output": "\n20\n8\n10\n400\n16"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 135558,
+    "url": "https://codeforces.com/blog/entry/135558",
+    "tutorial": "We must minimize the perimeter, and an obvious way to attempt this is to maximize the overlap. To achieve this, we can place each stamp such that the lower left corner of each stamp is at the same position, like shown in the sample explanation.\n\nNow, we can observe that the perimeter of this shape is determined solely by the maximum height and width of any stamp, and these values cannot be reduced further. Therefore, the answer is $2 \\cdot \\bigl( \\max(a_i) + \\max(b_i) \\bigr)$.\n\nFurthermore, it's true that any arrangement of stamps which are fully enclosed in an outer rectangular area of $\\max(a_i)$ by $\\max(b_i)$ will yield the same perimeter.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n\nusing namespace std;\n\nint main() {\n    cin.tie(0)->sync_with_stdio(0);\n    int t;\n    cin >> t;\n    while (t--) {\n        int n;\n        cin >> n;\n        int maxw = 0, maxh = 0;\n        for (int i=0; i<n; i++) {\n            int w, h;\n            cin >> w >> h;\n            maxw = max(maxw, w);\n            maxh = max(maxh, h);\n        }\n        cout << 2 * (maxw + maxh) << \"\\n\";\n    }\n    return 0;\n}"
+    ]
+  }
+}

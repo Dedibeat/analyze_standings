@@ -1,0 +1,45 @@
+{
+  "contest_id": 2092,
+  "index": "B",
+  "name": "Lady Bug",
+  "rating": 1000,
+  "tags": [
+    "brute force",
+    "constructive algorithms",
+    "implementation",
+    "math"
+  ],
+  "points": 750.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2092B",
+  "url": "https://codeforces.com/problemset/problem/2092/B",
+  "contest_start_time": "2025-03-29T14:35:00+00:00",
+  "statement": {
+    "title": "B. Lady Bug",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "As soon as Dasha Purova crossed the border of France, the villain Markaron kidnapped her and placed her in a prison under his large castle. Fortunately, the wonderful Lady Bug, upon hearing the news about Dasha, immediately ran to save her in Markaron's castle. However, to get there, she needs to crack a complex password.\n\nThe password consists of two bit strings $a$ and $b$, each of which has a length of $n$. In one operation, Lady Bug can choose any index $2 \\le i \\le n$ and perform one of the following actions:\n\n swap($a_i$, $b_{i-1}$) (swap the values of $a_i$ and $b_{i-1}$), or\n\n swap($b_i$, $a_{i-1}$) (swap the values of $b_i$ and $a_{i-1}$).\n\nLady Bug can perform any number of operations. The password is considered cracked if she can ensure that the first string consists only of zeros. Help her understand whether or not she will be able to save the unfortunate Dasha.",
+    "input_spec": "Each test consists of several test cases. The first line of the input data contains one integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases. The description of the test cases follows.\n\nThe first line of each test case contains one integer $n$ ($2 \\leq n \\leq 2 \\cdot 10^5$) — the length of the bit strings of the password.\n\nThe next two lines contain the bit strings of length $n$, $a$ and $b$, which represent the password. Each of the strings contains only the characters 0 and '1'.\n\nIt is guaranteed that the sum of $n$ across all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, output \"YES\" if Lady Bug can crack the password after any number of operations; otherwise, output \"NO\".\n\nYou can output each letter in any case (lowercase or uppercase). For example, the strings \"yEs\", \"yes\", \"Yes\", and \"YES\" will be accepted as a positive answer.",
+    "note": "In the first test case, the string $a$ immediately consists only of zeros.\n\nIn the second test case, a possible sequence of operations is:\n\nswap$(a_2, \\ b_{1})$\n\n$\\mathtt{0{\\color{red}{1}}0001}$\n\n$\\mathtt{{\\color{red}{0}}10111}$\n\nswap$(b_5, \\ a_{4})$\n\n$\\mathtt{000{\\color{red}{0}}01}$\n\n$\\mathtt{1101{\\color{red}{1}}1}$\n\nswap$(a_4, \\ b_{3})$\n\n$\\mathtt{000{\\color{red}{1}}01}$\n\n$\\mathtt{11{\\color{red}{0}}101}$\n\nswap$(a_5, \\ b_{4})$\n\n$\\mathtt{00000{\\color{red}{1}}}$\n\n$\\mathtt{1111{\\color{red}{0}}1}$",
+    "samples": [
+      {
+        "input": "4\n3\n000\n000\n6\n010001\n010111\n5\n10000\n01010\n2\n11\n00",
+        "output": "\nYES\nYES\nNO\nYES"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 141023,
+    "url": "https://codeforces.com/blog/entry/141023",
+    "tutorial": "2092B - Lady Bug\n\nAuthor: sergeev.PRO\n\nHint 1\n\nNote that you can split strings $a$ and $b$ into two \"zig-zags\": $a_0, b_1, a_2, b_3, \\dots$ and $b_0, a_1, b_2, a_3, \\dots$\n\nHint 2\n\nWhat are the necessary and sufficient conditions for each of these zig-zags?\n\nSolution\n\nNote that you can split strings $a$ and $b$ into two \"zig-zags\": $a_0, b_1, a_2, b_3, \\dots$ and $b_0, a_1, b_2, a_3, \\dots$.\n\nFor each of these zig-zags, you can achieve any sequence of 0s and 1s, provided that their quantities within the zig-zag are preserved. Therefore, the answer is Yes if and only if the number of 0 is at least $\\lceil \\frac{n}{2} \\rceil$ in the first zig-zag and at least $\\lfloor \\frac{n}{2} \\rfloor$ in the second one.\n\nCode (C++)\n\nCode (Python)\n\nRate the problem\n\n Amazing problem:\n\n Good problem:\n\n Average problem:\n\n Bad problem:\n\n Didn't solve:",
+    "solution_code": [
+      "#include <iostream>\n \nusing namespace std;\n \nvoid solve() {\n    int n; cin >> n;\n    string a, b; cin >> a >> b;\n    int cnt1 = 0, cnt2 = 0;\n    for (int i = 0; i < n; ++i) {\n        if (i & 1) {\n            cnt2 += a[i] == '0';\n            cnt1 += b[i] == '0';\n        } else {\n            cnt1 += a[i] == '0';\n            cnt2 += b[i] == '0';\n        }\n    }\n    cout << (cnt1 >= (n + 1) / 2 && cnt2 >= n / 2 ? \"Yes\" : \"No\") << '\\n';\n}\n \nsigned main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(nullptr);\n    cout.tie(nullptr);\n    int t; cin >> t;\n    while (t--) solve();\n}",
+      "t = int(input())\n \nfor test in range(t):\n    n = int(input())\n    a = input()\n    b = input()\n    cnt1, cnt2 = 0, 0\n    for i in range(n):\n        if i % 2:\n            cnt2 += (a[i] == '0')\n            cnt1 += (b[i] == '0')\n        else:\n            cnt1 += (a[i] == '0')\n            cnt2 += (b[i] == '0')\n \n    if cnt1 >= (n + 1) // 2 and cnt2 >= n // 2:\n        print(\"Yes\")\n    else:\n        print(\"No\")"
+    ]
+  }
+}

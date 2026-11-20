@@ -1,0 +1,42 @@
+{
+  "contest_id": 2090,
+  "index": "A",
+  "name": "Treasure Hunt",
+  "rating": 800,
+  "tags": [
+    "implementation",
+    "math"
+  ],
+  "points": 500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2090A",
+  "url": "https://codeforces.com/problemset/problem/2090/A",
+  "contest_start_time": "2025-03-23T05:35:00+00:00",
+  "statement": {
+    "title": "A. Treasure Hunt",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "Little B and his friend Little K found a treasure map, and now they just need to dig up the treasure, which is buried at a depth of $a.5$ meters.\n\nThey take turns digging. On the first day, Little B digs; on the second day, Little K. After each day, they switch. Little B digs exactly $x$ meters of soil each day, while Little K digs $y$ meters. They became curious about who will dig up the treasure first, meaning during whose day the total dug depth will exceed $a.5$.\n\nBut they are too busy digging, so help them and tell who will dig up the treasure!",
+    "input_spec": "The first line contains an integer $t$ ($1 \\le t \\le 1000$) — the number of test cases. The description of the test cases follows.\n\nIn a single line of each test case, three integers $x, y, a$ are given ($1 \\leq x, y, a \\leq 10^9$).",
+    "output_spec": "For each test case, output \"NO\" if Little B digs it up first; otherwise, output \"YES\". You can output the answer in any case.",
+    "note": "In the first test case, on the first day they will dig $1$ meter; on the second day $1 + 2 = 3$ meters in total; on the third day $1 + 2 + 1 = 4$ meters; and on the fourth day they will dig $6$ meters. Thus, the treasure will be dug up first by Little K.\n\nIn the second test case, on the first day they will dig $2$ meters; on the second day $2 + 1 = 3$ meters in total; on the third day $2 + 1 + 2 = 5$ meters, meaning it was dug up first by Little B.",
+    "samples": [
+      {
+        "input": "3\n1 2 4\n2 1 4\n2 2 1",
+        "output": "\nYES\nNO\nNO"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 141053,
+    "url": "https://codeforces.com/blog/entry/141053",
+    "tutorial": "2090A - Treasure Hunt\n Idea: _Lucien\n\nSolution\n\nLet's calculate how many operations we need. The number of pairs of operations is $\\left\\lfloor\\frac{a}{x + y}\\right\\rfloor$. Additionally, we add $+1$ if $(a \\bmod (x + y)) \\ge x$, because in this case, the first player will be able to make one more move. Note that the first part is always even, which means the answer depends only on whether $(a \\bmod (x + y)) \\ge x$, and in this case, the answer is YES.\n\nCode",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n\nusing namespace std;\n\nvoid solve() {\n    int x, y, a;\n    cin >> x >> y >> a;\n    if (a % (x + y) < x) {\n        cout << \"NO\\n\";\n    } else {\n        cout << \"YES\\n\";\n    }\n}\n\nint main() {\n    ios_base::sync_with_stdio(0);\n    cin.tie(0);\n\n    int t;\n    cin >> t;\n    while (t--)\n        solve();\n}"
+    ]
+  }
+}

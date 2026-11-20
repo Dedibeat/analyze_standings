@@ -1,0 +1,43 @@
+{
+  "contest_id": 2030,
+  "index": "D",
+  "name": "QED's Favorite Permutation",
+  "rating": 1700,
+  "tags": [
+    "data structures",
+    "implementation",
+    "sortings"
+  ],
+  "points": 1500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2030D",
+  "url": "https://codeforces.com/problemset/problem/2030/D",
+  "contest_start_time": "2024-10-19T14:05:00+00:00",
+  "statement": {
+    "title": "D. QED's Favorite Permutation",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "QED is given a permutation$^{\\text{∗}}$ $p$ of length $n$. He also has a string $s$ of length $n$ containing only characters $\\texttt{L}$ and $\\texttt{R}$. QED only likes permutations that are sorted in non-decreasing order. To sort $p$, he can select any of the following operations and perform them any number of times:\n\n Choose an index $i$ such that $s_i = \\texttt{L}$. Then, swap $p_i$ and $p_{i-1}$. It is guaranteed that $s_1 \\neq \\texttt{L}$.\n\n Choose an index $i$ such that $s_i = \\texttt{R}$. Then, swap $p_i$ and $p_{i+1}$. It is guaranteed that $s_n \\neq \\texttt{R}$.\n\nHe is also given $q$ queries. In each query, he selects an index $i$ and changes $s_i$ from $\\texttt{L}$ to $\\texttt{R}$ (or from $\\texttt{R}$ to $\\texttt{L}$). Note that the changes are persistent.\n\nAfter each query, he asks you if it is possible to sort $p$ in non-decreasing order by performing the aforementioned operations any number of times. Note that before answering each query, the permutation $p$ is reset to its original form.\n\n$^{\\text{∗}}$A permutation of length $n$ is an array consisting of $n$ distinct integers from $1$ to $n$ in arbitrary order. For example, $[2,3,1,5,4]$ is a permutation, but $[1,2,2]$ is not a permutation ($2$ appears twice in the array), and $[1,3,4]$ is also not a permutation ($n=3$ but there is $4$ in the array).",
+    "input_spec": "The first line contains $t$ ($1 \\leq t \\leq 10^4$) — the number of test cases.\n\nThe first line of each test case contains two integers $n$ and $q$ ($3 \\leq n \\leq 2 \\cdot 10^5$, $1 \\leq q \\leq 2 \\cdot 10^5$) – the length of the permutation and the number of queries.\n\nThe following line contains $n$ integers $p_1, p_2, \\ldots, p_n$ ($1 \\leq p_i \\leq n$, $p$ is a permutation).\n\nThe following line contains $n$ characters $s_1s_2 \\ldots s_n$. It is guaranteed that $s_i$ is either $\\texttt{L}$ or $\\texttt{R}$, $s_1 = \\texttt{R}$, and $s_n = \\texttt{L}$.\n\nThe following $q$ lines contain an integer $i$ ($2 \\leq i \\leq n-1$), denoting that $s_i$ is changed from $\\texttt{L}$ to $\\texttt{R}$ (or from $\\texttt{R}$ to $\\texttt{L}$).\n\nIt is guaranteed that the sum of $n$ and $q$ over all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each query, output \"YES\" (without quotes) if it is possible, and \"NO\" (without quotes) otherwise.\n\nYou can output \"YES\" and \"NO\" in any case (for example, strings \"yES\", \"yes\" and \"Yes\" will be recognized as a positive response).",
+    "note": "In the first testcase, $s = \\texttt{RRRLL}$ after the first query. QED may sort $p$ using the following operations:\n\n Initially, $p = [1,4,2,5,3]$.\n\n Select $i = 2$ and swap $p_2$ with $p_{3}$. Now, $p = [1,2,4,5,3]$.\n\n Select $i = 5$ and swap $p_5$ with $p_{4}$. Now, $p = [1,2,4,3,5]$.\n\n Select $i = 4$ and swap $p_4$ with $p_{3}$. Now, $p = [1,2,3,4,5]$, which is in non-decreasing order.\n\nIt can be shown that it is impossible to sort the array after all three updates of the first testcase.",
+    "samples": [
+      {
+        "input": "3\n5 3\n1 4 2 5 3\nRLRLL\n2\n4\n3\n8 5\n1 5 2 4 8 3 6 7\nRRLLRRRL\n4\n3\n5\n3\n4\n6 2\n1 2 3 4 5 6\nRLRLRL\n4\n5",
+        "output": "\nYES\nYES\nNO\nNO\nYES\nNO\nNO\nNO\nYES\nYES"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 135218,
+    "url": "https://codeforces.com/blog/entry/135218",
+    "tutorial": "2030D - QED's Favorite Permutation\n\nProblem Credits: Proof_by_QED, cry\n Analysis: cry\n\nSolution\n\nObservation: Through a series of swaps, we can swap an element from position $i$ to position $j$ (WLOG, assume $i \\lt j$) if there is no such $k$ such that $i \\leq k \\lt j$ such that $s_k = \\texttt{L}$ and $s_{k+1} = \\texttt{R}$.\n\nLet's mark all indices $i$ such that $s_i = \\texttt{L}$ and $s_{i+1} = \\texttt{R}$ as bad. If $pos_i$ represents the position of $i$ in $p$, then we must make sure it is possible to swap from $\\min(i, pos_i)$ to $\\max(i, pos_i)$. As you can see, we can model these conditions as intervals. We must make sure there are no bad indices included in any intervals.\n\nWe need to gather indices $i$ such that $i$ is included in at least one interval. This can be done with difference array. Let $d_i$ denote the number of intervals that include $i$. If $d_i \\gt 0$, then we need to make sure $i$ is not a bad index.\n\nWe can keep all bad indices in a set. Notice that when we update $i$, we can only potentially toggle indices $i$ and $i-1$ from good to bad (or vice versa). For example, if $s_i = \\texttt{L}$, $s_i = \\texttt{R}$, $d_i \\gt 0$ and index $i$ is not in the bad set, then we will insert it. After each query, if the bad set is empty, then the answer is \"YES\".\n\nCode (C++)",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n\nusing namespace std;\n\nint main() {\n    int t;\n    cin >> t;\n    while(t--) {\n        int n,q;\n        cin >> n >> q;\n        vector<int> perm(n);\n        for(int i = 0; i < n; i++) cin >> perm[i];\n        for(int i = 0; i < n; i++) perm[i]--;\n        vector<int> invperm(n);\n        for(int i = 0; i < n; i++) invperm[perm[i]]=i;\n        vector<int> diffArr(n);\n        for(int i = 0; i < n; i++) {\n            diffArr[min(i, invperm[i])]++;\n            diffArr[max(i, invperm[i])]--;\n        }\n        for(int i = 1; i < n; i++) diffArr[i]+=diffArr[i-1];\n        string s;\n        cin >> s;\n        set<int> problems;\n        for(int i = 0; i < n-1; i++) {\n            if(s[i]=='L'&&s[i+1]=='R'&&diffArr[i]!=0) {\n                problems.insert(i);\n            } \n        }\n        while(q--) {\n            int x;\n            cin >> x;\n            x--;\n            if(s[x]=='L') {\n                s[x]='R';\n            } else {\n                s[x]='L';\n            }\n            if(s[x-1]=='L'&&s[x]=='R'&&diffArr[x-1]!=0) {\n                problems.insert(x-1);\n            } else {\n                problems.erase(x-1);\n            }\n            if(s[x]=='L'&&s[x+1]=='R'&&diffArr[x]!=0) {\n                problems.insert(x);\n            } else {\n                problems.erase(x);\n            }\n            if(problems.size()) {\n                cout << \"NO\" << endl;\n            } else {\n                cout << \"YES\" << endl;\n            }\n        }\n    }\n}"
+    ]
+  }
+}

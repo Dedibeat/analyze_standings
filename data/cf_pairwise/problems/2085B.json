@@ -1,0 +1,42 @@
+{
+  "contest_id": 2085,
+  "index": "B",
+  "name": "Serval and Final MEX",
+  "rating": 1200,
+  "tags": [
+    "constructive algorithms",
+    "implementation"
+  ],
+  "points": 1250.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2085B",
+  "url": "https://codeforces.com/problemset/problem/2085/B",
+  "contest_start_time": "2025-03-22T14:35:00+00:00",
+  "statement": {
+    "title": "B. Serval and Final MEX",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "You are given an array $a$ consisting of $n\\ge 4$ non-negative integers.\n\nYou need to perform the following operation on $a$ until its length becomes $1$:\n\n Select two indices $l$ and $r$ ($1\\le {\\color{red}{ l  \\lt  r }} \\le |a|$), and replace the subarray $[a_l,a_{l+1},\\ldots,a_r]$ with a single integer $\\operatorname{mex}([a_l,a_{l+1},\\ldots,a_r])$, where $\\operatorname{mex}(b)$ denotes the minimum excluded (MEX)$^{\\text{∗}}$ of the integers in $b$. In other words, let $x=\\operatorname{mex}([a_l,a_{l+1},\\ldots,a_r])$, the array $a$ will become $[a_1,a_2,\\ldots,a_{l-1},x,a_{r+1},a_{r+2},\\ldots,a_{|a|}]$. Note that the length of $a$ decreases by $(r-l)$ after this operation.\n\nServal wants the final element in $a$ to be $0$. Help him!\n\nMore formally, you have to find a sequence of operations, such that after performing these operations in order, the length of $a$ becomes $1$, and the final element in $a$ is $0$.\n\nIt can be shown that at least one valid operation sequence exists under the constraints of the problem, and the length of any valid operation sequence does not exceed $n$.\n\nNote that you do not need to minimize the number of operations.\n\n$^{\\text{∗}}$The minimum excluded (MEX) of a collection of integers $b_1, b_2, \\ldots, b_k$ is defined as the smallest non-negative integer $x$ which does not occur in the collection $b$.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 1000$). The description of the test cases follows.\n\nThe first line of each test case contains a single integer $n$ ($4\\le n\\le 5000$) — the length of the array $a$.\n\nThe second line contains $n$ integers $a_1, a_2, \\ldots, a_n$ ($0\\le a_i\\le n$) — the elements of the array $a$.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $5000$.",
+    "output_spec": "For each test case, output a single integer $k$ ($0\\le k\\le n$) in the first line of output — the length of the operation sequence.\n\nThen, output $k$ lines, the $i$-th line containing two integers $l_i$ and $r_i$ ($1\\le l_i \\lt r_i\\le |a|$) — the two indices you choose in the $i$-th operation, where $|a|$ denotes the length of the array before this operation.\n\nIf there are multiple answers, you may print any of them.",
+    "note": "In the first test case, since $\\operatorname{mex}([1,2,3,4])=0$, after the only operation, the array becomes $[0]$.\n\nIn the second test case, the array $a$ changes as follows: $$ [\\underline{0,1},0,0,1]\\to [\\underline{2,0},0,1]\\to [\\underline{1,0},1]\\to [\\underline{2,1}]\\to [0]. $$\n\nIn the third test case, the array $a$ changes as follows: $$ [0,0,0,0,\\underline{0,0}]\\to [0,0,\\underline{0,0},1]\\to [\\underline{0,0},1,1]\\to [\\underline{1,1,1}]\\to [0]. $$",
+    "samples": [
+      {
+        "input": "6\n4\n1 2 3 4\n5\n0 1 0 0 1\n6\n0 0 0 0 0 0\n6\n5 4 3 2 1 0\n4\n0 0 1 1\n4\n1 0 0 0",
+        "output": "\n1\n1 4\n4\n1 2\n1 2\n1 2\n1 2\n4\n5 6\n3 4\n1 2\n1 3\n3\n4 5\n4 5\n1 4\n2\n1 2\n1 3\n2\n2 4\n1 2"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 140933,
+    "url": "https://codeforces.com/blog/entry/140933",
+    "tutorial": "2085B - Serval and Final MEX\n\nHint 1\n\nBefore the last operation, what should the array be to obtain $0$?\n\nHint 2\n\nHow to make all the elements in the array non-zero?\n\nSolution\n\nNote that before the last operation, all the integers in the array should be positive. Thus, we aim to turn the zeroes in $a$ into non-zeroes. To achieve this, we split the given array $a$ into two halves and perform the operations on the halves that contain zeroes. After that, there will be no zeroes in either of the two halves. The final $0$ can be obtained by performing the last operation on the entire array.\n $ [{\\color{red}{\\underline{1, 0, 1, 1}}}, {\\color{blue}{2, 0, 8, 5}}] \\to [{\\color{red}{2}}, {\\color{blue}{\\underline{2, 0, 8, 5}}}] \\to [\\underline{{\\color{red}{2}}, {\\color{blue}{1}}}] \\to [0] $\n\nAnother Hint\n\nIn fact, the final element can be $0$ after the operations for any array of length $4$. Can you solve the problem under the constraint of $n=4$?\n\nAnother Solution\n\nWhen $n \\gt 4$, you can perform the operation on any subarray of length $(n-3)$. After the operation, the array $a$ will contain only $4$ integers, which can be solved by brute force.\n\nCode (Python)",
+    "solution_code": [
+      "getint = lambda: int(input())\ngetints = lambda: map(int, input().split())\n\ndef solve():\n\tn = getint()\n\ta = list(getints())\n\top = []\n\tmid, r = n // 2, n\n\tif 0 in a[mid:]:\n\t\top.append([mid + 1, n])\n\t\tr -= n - mid - 1\n\tif 0 in a[:mid]:\n\t\top.append([1, mid])\n\t\tr -= mid - 1\n\top.append([1, r])\n\tprint(len(op))\n\tfor o in op:\n\t\tprint(*o)\n\nt = getint()\nfor _ in range(t):\n\tsolve()"
+    ]
+  }
+}

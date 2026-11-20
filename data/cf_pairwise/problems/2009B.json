@@ -1,0 +1,42 @@
+{
+  "contest_id": 2009,
+  "index": "B",
+  "name": "osu!mania",
+  "rating": 800,
+  "tags": [
+    "brute force",
+    "implementation"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2009B",
+  "url": "https://codeforces.com/problemset/problem/2009/B",
+  "contest_start_time": "2024-09-03T14:35:00+00:00",
+  "statement": {
+    "title": "B. osu!mania",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "You are playing your favorite rhythm game, osu!mania. The layout of your beatmap consists of $n$ rows and $4$ columns. Because notes at the bottom are closer, you will process the bottommost row first and the topmost row last. Each row will contain exactly one note, represented as a '#'.\n\nFor each note $1, 2, \\dots, n$, in the order of processing, output the column in which the note appears.",
+    "input_spec": "The first line contains $t$ ($1 \\leq t \\leq 100$) — the number of test cases.\n\nFor each test case, the first line contains $n$ ($1 \\leq n \\leq 500$) — the number of rows of the beatmap.\n\nThe following $n$ lines contain $4$ characters. The $i$-th line represents the $i$-th row of the beatmap from the top. It is guaranteed that the characters are either '.' or '#', and exactly one of the characters is '#'.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $500$.",
+    "output_spec": "For each test case, output $n$ integers on a new line, the column that the $i$-th note appears in for all $i$ from $1$ to $n$.",
+    "note": null,
+    "samples": [
+      {
+        "input": "3\n4\n#...\n.#..\n..#.\n...#\n2\n.#..\n.#..\n1\n...#",
+        "output": "\n4 3 2 1 \n2 2 \n4 "
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 133296,
+    "url": "https://codeforces.com/blog/entry/133296",
+    "tutorial": "2009B - osu!mania\n\nProblem Credits: cry\n Analysis: cry\n\nSolution\n\nImplement the statement. Iterate from $n-1$ to $0$ and use the .find() method in std::string in C++ (or .index() in python) to find the '#' character.\n\nCode (Python) (chromate00)",
+    "solution_code": [
+      "import sys\ninput=lambda:sys.stdin.readline().rstrip()\n\nfor i in range(int(input())):\n    n=int(input())\n    print(*reversed([input().index(\"#\")+1 for i in range(n)]))"
+    ]
+  }
+}

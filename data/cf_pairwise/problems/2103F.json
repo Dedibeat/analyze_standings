@@ -1,0 +1,45 @@
+{
+  "contest_id": 2103,
+  "index": "F",
+  "name": "Maximize Nor",
+  "rating": 2600,
+  "tags": [
+    "bitmasks",
+    "data structures",
+    "dp",
+    "implementation",
+    "sortings"
+  ],
+  "points": 3000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2103F",
+  "url": "https://codeforces.com/problemset/problem/2103/F",
+  "contest_start_time": "2025-04-21T14:35:00+00:00",
+  "statement": {
+    "title": "F. Maximize Nor",
+    "time_limit": "4 seconds",
+    "memory_limit": "1024 megabytes",
+    "legend": "The bitwise nor$^{\\text{∗}}$ of an array of $k$-bit integers $b_1, b_2, \\ldots, b_m$ can be computed by calculating the bitwise nor cumulatively from left to right. More formally, $\\operatorname{nor}(b_1, b_2, \\ldots, b_m) = \\operatorname{nor}(\\operatorname{nor}(b_1, b_2, \\ldots, b_{m - 1}), b_m)$ for $m\\ge 2$, and $\\operatorname{nor}(b_1) = b_1$.\n\nYou are given an array of $k$-bit integers $a_1, a_2, \\ldots, a_n$. For each index $i$ ($1\\le i\\le n$), find the maximum bitwise nor among all subarrays$^{\\text{†}}$ of $a$ containing index $i$. In other words, for each index $i$, find the maximum value of $\\operatorname{nor}(a_l, a_{l+1}, \\ldots, a_r)$ among all $1 \\le l \\le i \\le r \\le n$.\n\n$^{\\text{∗}}$ The logical nor of two boolean values is $1$ if both values are $0$, and $0$ otherwise. The bitwise nor of two $k$-bit integers is calculated by performing the logical nor operation on each pair of the corresponding bits.\n\nFor example, let us compute $\\operatorname{nor}(2, 6)$ when they are represented as $4$-bit numbers. In binary, $2$=$0010_2$ and $6=0110_2$. Therefore, $\\operatorname{nor}(2,6) = 1001_2 = 9$ as by performing the logical nor operations from left to right, we have:\n\n $\\operatorname{nor}(0,0) = 1$\n\n $\\operatorname{nor}(0,1) = 0$\n\n $\\operatorname{nor}(1,0) = 0$\n\n $\\operatorname{nor}(1,1) = 0$\n\nNote that if $2$ and $6$ were represented as $3$-bit integers instead, then $\\operatorname{nor}(2,6) = 1$.\n\n$^{\\text{†}}$An array $x$ is a subarray of an array $y$ if $x$ can be obtained from $y$ by the deletion of several (possibly, zero or all) elements from the beginning and several (possibly, zero or all) elements from the end.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 10^4$). The description of the test cases follows.\n\nThe first line of each test case contains two integers $n$ and $k$ ($1 \\le n \\le 10^5$, $1 \\le k \\le 17$) — the number of elements in the array and the number of bits of the array elements.\n\nThe second line of each test case contains $n$ integers $a_1, a_2, \\ldots, a_n$ ($0 \\le a_i \\le 2^k - 1$) — the elements of array $a$.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $10^5$.",
+    "output_spec": "For each test case, output $n$ integers, the $i$-th of which is the maximum bitwise nor among all subarrays of $a$ containing index $i$.",
+    "note": "In the first test case, subarrays that have index $1$ are $[1]$ and $[1, 3]$. The values of their bitwise nor are $1$ and $0$ respectively. Hence, the answer for index $1$ is $1$. Subarrays that have index $2$ are $[3]$ and $[1, 3]$. The values of their bitwise nor are $3$ and $0$ respectively. Hence, the answer for index $2$ is $3$.\n\nIn the second test case:\n\n For $i = 1$, the subarray with maximum bitwise nor is $[a_1, a_2, a_3, a_4, a_5] = [1, 7, 4, 6, 2]$, $\\operatorname{nor}(1, 7, 4, 6, 2) = 5$\n\n For $i = 2$, the subarray with maximum bitwise nor is $[a_2] = [7]$, $\\operatorname{nor}(7) = 7$\n\n For $i = 3$, the subarray with maximum bitwise nor is $[a_1, a_2, a_3, a_4, a_5] = [1, 7, 4, 6, 2]$, $\\operatorname{nor}(1, 7, 4, 6, 2) = 5$\n\n For $i = 4$, the subarray with maximum bitwise nor is $[a_4] = [6]$, $\\operatorname{nor}(6) = 6$\n\n For $i = 5$, the subarray with maximum bitwise nor is $[a_1, a_2, a_3, a_4, a_5] = [1, 7, 4, 6, 2]$, $\\operatorname{nor}(1, 7, 4, 6, 2) = 5$",
+    "samples": [
+      {
+        "input": "2\n2 2\n1 3\n5 3\n1 7 4 6 2",
+        "output": "\n1 3\n5 7 5 6 5"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 142149,
+    "url": "https://codeforces.com/blog/entry/142149",
+    "tutorial": "2103F - Maximize Nor\n\nAuthor: NemanjaSo2005\n\nHint 1\n\nIf problem had queries of form \"What is nor of some interval [$l$, $r$]\", how would you answer them?\n\nHint 2\n\nYou can look at all the bits separately and answer for each.\n\nHint 3\n\nFor each bit, we only care about the position of the last $1$ on it before $r$. Let that position be $x$. If $x \\gt l$, then if $x$ and $r$ are of the same parity, the bit will be $0$; otherwise, it will be $1$.\n\nIf $x=l$, the bit will be $1$ if $l$ and $r$ are the same parity and otherwise $0$.\n\nIf $x \\lt l$, the bit will be $1$ if $l$ and $r$ are different parity and otherwise $0$.\n\nHint 4\n\nFrom the previous hint we conclude that for a fixed $r$, the values of interval [$l$, $r$] repeat when you increase $l$ by $2$, except at positions near where last $1$ is for some bit.\n\nHint 5\n\nThat means there will be only $O(k)$ different values of nor of an interval ending at some $r$.\n\nSolution\n\nRead the hints.\n\nWe can go from beginning to the end of the array and keep all the possible nor values of intervals ending at $r$ in some vector. For each value we will also remember the highest position $l$ for which we can obtain such value. When we find all those intervals for some $r$, we use segment tree to set answer to all positions in this interval to max of current answer and nor of our interval. Time complexity is $O(nk^2 + nk log n)$ and memory complexity is $O(n)$.\n\nImplementation\n\nBonus\n\nNor and Nand are well known for being able to mimic any bitwise operation if applied enough times. Make a circuit to add three $1$-bit numbers (those are zero and one) using $9$ NAND gates.",
+    "solution_code": [
+      "#include<bits/stdc++.h>\n#define ll long long\nusing namespace std;\nconst int maxn=2e5+5;\nint N,M,arr[maxn],pref[maxn][25],logg,st[4*maxn],stk;\nint nor(int a,int b){\n   return M^(a|b);\n}\nint getlog(int x){\n   int ans=-1;\n   while(x){\n      ans+=1;\n      x/=2;\n   }\n   return ans;\n}\nint internor(int l,int r){\n   if(l<=0 or l>r)\n      return 0;\n   if(l==r)\n      return arr[r];\n   int ans=0;\n   for(int j=0;j<=logg;j++){\n      int bit=(1<<j);\n      if(pref[r][j]<l)\n         if((r-l+1)%2==1)\n            bit=0;\n      if(pref[r][j]==l)\n         if((r-l+1)%2==0)\n            bit=0;\n      if(pref[r][j]>l)\n         if((r-pref[r][j]+1)%2==1)\n            bit=0;\n      ans+=bit;\n   }\n   return ans;\n}\nvoid update(int lb,int rb,int x,int pos=1,int l=1,int r=stk){\n   lb=max(1,lb);\n   rb=min(N,rb);\n   if(rb<lb)\n      return;\n   if(l==lb and r==rb){\n      st[pos]=max(st[pos],x);\n      return;\n   }\n   int mid=(l+r)/2;\n   if(rb<=mid)\n      return update(lb,rb,x,pos*2,l,mid);\n   if(lb>mid)\n      return update(lb,rb,x,pos*2+1,mid+1,r);\n   update(lb,mid,x,pos*2,l,mid);\n   update(mid+1,rb,x,pos*2+1,mid+1,r);\n   return;\n}\nint get(int pos){\n   pos+=stk-1;\n   int v=0;\n   while(pos){\n      v=max(v,st[pos]);\n      pos/=2;\n   }\n   return v;\n}\nvoid solve(){\n   int K;\n   cin>>N>>K;\n   stk=1;\n   while(stk<N)\n      stk<<=1;\n   M=(1<<K)-1;\n   for(int i=1;i<=N;i++)\n      cin>>arr[i];\n\n   logg=getlog(M+1)-1;\n   for(int i=1;i<=N;i++){\n      for(int j=0;j<=logg;j++)\n         if(arr[i]&(1<<j))\n            pref[i][j]=i;\n         else\n            pref[i][j]=pref[i-1][j];\n   }\n   for(int i=1;i<=N;i++){\n      for(int j=0;j<=logg;j++){\n         int p=pref[i][j];\n         for(int add=-2;add<=2;add++)\n            update(p+add,i,internor(p+add,i));\n      }\n      update(1,i,internor(1,i));\n   }\n   for(int i=1;i<=N;i++)\n      cout<<get(i)<<\" \\n\"[i==N];\n}\nvoid reset(){\n   for(int i=0;i<=N+2;i++){\n      arr[i]=0;\n      for(int j=0;j<=logg+2;j++)\n         pref[i][j]=0;\n   }\n   logg=0;\n   for(int i=0;i<=stk+stk;i++)\n      st[i]=0;\n}\nint main(){\n   int T=1;\n   cin>>T;\n   while(T--){\n      solve();\n      reset();\n   }\n   return 0;\n}"
+    ]
+  }
+}

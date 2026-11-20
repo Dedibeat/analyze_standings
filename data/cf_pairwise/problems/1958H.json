@@ -1,0 +1,42 @@
+{
+  "contest_id": 1958,
+  "index": "H",
+  "name": "Composite Spells",
+  "rating": 2600,
+  "tags": [
+    "*special",
+    "dp"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1958H",
+  "url": "https://codeforces.com/problemset/problem/1958/H",
+  "contest_start_time": "2024-05-13T14:35:00+00:00",
+  "statement": {
+    "title": "H. Composite Spells",
+    "time_limit": "4 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Monocarp plays a fantasy RPG. His character is a mage, so he casts spells. There are two types of spells he knows — basic spells and composite spells.\n\nThere are $n$ basic spells in Monocarp's spell book, numbered from $1$ to $n$. Each basic spell simply changes the health of the target: either decreases it or increases it. The $i$-th basic spell changes the target's health value by $b_i$ (increases by $b_i$ if $b_i$ is non-negative, or decreases by $|b_i|$ if $b_i$ is negative). If the target's health value goes to $0$ or below, it dies, and all next spells cast at it do nothing.\n\nThere are also $m$ composite spells in the spell book, numbered from $n+1$ to $n+m$. Each composite spell is a sequence of other spells, cast in specific order. A composite spell can consist both of basic spells and composite spells; the $i$-th spell consists of $s_i$ other spells, and each of those spells has index strictly less than $i$ (so there is no situation that composite spells infinitely cast each other). So, actually, each composite spell can be considered a finite sequence of basic spells, although its length might be huge. Note that the same spell can appear in a composite spell multiple times.\n\nMonocarp has decided to cast the $(n+m)$-th spell from his spell book. The target of this spell is a monster with an initial health value of $hp$. Monocarp wants to know whether the monster will be killed or not, and if it will be killed, which basic spell will kill it.",
+    "input_spec": "The first line contains one integer $t$ ($1 \\le t \\le 1000$) — the number of test cases.\n\nEach test case is given as follows:\n\n the first line contains two integers $n$ and $hp$ ($1 \\le n \\le 5000$; $1 \\le hp \\le 10^{9}$) — the number of basic spells and the initial health value of the monster;\n\n the second line contains $n$ integers $b_1, b_2, \\dots, b_n$ ($-10^9 \\le b_i \\le 10^9$) — the descriptions of basic spells;\n\n the third line contains one integer $m$ ($1 \\le m \\le 5000$) — the number of composite spells;\n\n then $m$ lines follow, the $i$-th of these lines describes the $(n+i)$-th spell: it begins with an integer $s_{n+i}$ ($1 \\le s_{n+i} \\le 5000$) denoting the length of the spell (the number of spells it consists of); then a sequence of integers from $1$ to $(n+i-1)$ follows, denoting the sequence of spells.\n\nAdditional constraints on the input:\n\n the sum of $n$ over all test cases does not exceed $5000$;\n\n the sum of $m$ over all test cases does not exceed $5000$;\n\n the total length of all composite spells over all test cases does not exceed $5000$.",
+    "output_spec": "For each test case, print one integer:\n\n if the monster dies, print the index of the basic spell that kills the monster;\n\n otherwise, print $-1$.",
+    "note": null,
+    "samples": [
+      {
+        "input": "4\n4 9\n1 -2 3 -4\n3\n3 1 4 3\n4 1 2 1 2\n6 6 5 6 5 6 5\n4 9\n1 -2 3 -4\n3\n3 1 4 3\n4 1 2 1 2\n7 6 5 6 5 6 6 5\n3 31\n-10 -20 30\n1\n6 1 2 3 1 2 3\n6 20\n-1 -5 -9 -7 -1 -1\n4\n3 6 5 2\n4 3 3 7 6\n6 4 8 4 4 6 7\n3 6 5 7",
+        "output": "\n4\n4\n-1\n-1"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 129483,
+    "url": "https://codeforces.com/blog/entry/129483",
+    "tutorial": "First of all, the total health value might be very large. It may grow exponentially, so we can't use basic integer types to handle the health values. Thankfully, Kotlin has a BigInteger class which allows us to deal with arbitrarily large number addition/subtraction in $O(S)$, where $S$ is the size of the greater number. Using induction on the total length of the composite spells, we can show that the length of each number is $O(\\sum s_i)$. So, we need a solution that makes $O(n + m + \\sum s_i)$ operations with big integers.\n\nSuppose we calculate the total change of health for every composite spell with dynamic programming (let it be $delta_i$ for the $i$-th spell). If we try iterating on components of the spell we cast, we will know our health value after using each component. However, we might miss the moment when the health of the monster went to $0$ or lower in the middle of a component.\n\nWe need a way to know if a spell puts the monster into non-positive health in the middle of casting. Let's consider the minimum value the monster's health becomes during casting the spell. Obviously, if it is positive, then the monster survives the spell, otherwise it dies.\n\nTo quickly calculate the minimum health value, let's introduce another dynamic programming: let $minDelta_i$ be the minimum change of health while the $i$-th spell is cast. Using the values of $delta_i$, we can calculate it recursively as follows: let the $i$-th spell consist of components $c_1, c_2, \\dots, c_k$. The minimum health is achieved when we have finished casting the first several parts of the spell and are in the middle of casting the next part. So, the value of $minDelta_i$ can be calculated as $\\min \\limits_{j=1}^{k} \\sum \\limits_{v=1}^{j-1} delta_{c_v} + minDelta_{c_j}$, and we can compute it in $O(k)$ additions/subtractions/comparisons of big integers.\n\nOkay, now we know the value of $delta_i$ and $minDelta_i$ for each spell. For each composite spell we cast, we are now able to understand whether it will put the monster's health to $0$ or lower in the middle of casting. So, to find the basic spell that kills the monster, we can use recursion.\n\nLet $rec(remHP, idCompSpell)$ be a recursive function that computes the answer if the current health of the monster is $remHP$, and we cast the spell $idCompSpell$. We can iterate on the first component of the spell that will bring the monster to non-positive health, and make a recursive call with the health value of the monster right before this component is cast, and the id of this component. Each call decreases the value of $idCompSpell$ at least by $1$, so we will call this function at most once for each composite spell, so all calls will work in $O(\\sum s_i)$.\n\nSo, the complexity of our solution is $O(\\sum s_i \\cdot (n + m + \\sum s_i))$.",
+    "solution_code": [
+      "import java.math.BigInteger\n\nfun main() = repeat(readLine()!!.toInt()) {\n  val (n, hp) = readLine()!!.split(\" \").let { (n, hp) -> n.toInt() to BigInteger(hp) } \n  val s = readLine()!!.split(\" \").map { BigInteger(it) }\n  val m = readLine()!!.toInt()\n  val c = Array(m) { readLine()!!.split(\" \").drop(1).map { it.toInt() - 1 } }\n  val delta = Array(m) { BigInteger.ZERO }\n  val minDelta = Array(m) { BigInteger.ZERO }\n  for (i in 0 until m) {\n    var curHP = BigInteger.ZERO\n    for (id in c[i]) {\n      if (id < n) {\n        curHP += s[id]\n        minDelta[i] = minOf(minDelta[i], curHP)\n      } else {\n        minDelta[i] = minOf(minDelta[i], curHP + minDelta[id - n])\n        curHP += delta[id - n]\n      }\n    }\n    delta[i] = curHP\n  }\n  \n  fun rec(remHP : BigInteger, idCompSpell : Int) : Int {\n    var curHP = remHP\n    for (id in c[idCompSpell]) {\n      if (id < n) {\n        curHP += s[id]\n        if (curHP <= BigInteger.ZERO)\n          return id + 1\n      } else {\n        if (curHP + minDelta[id - n] <= BigInteger.ZERO)\n          return rec(curHP, id - n)\n        curHP += delta[id - n]\n      }\n    }\n    return -1\n  }\n  \n  println(rec(hp, m - 1))\n}"
+    ]
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "contest_id": 2053,
+  "index": "I1",
+  "name": "Affectionate Arrays (Easy Version)",
+  "rating": 2800,
+  "tags": [
+    "data structures",
+    "dp",
+    "greedy"
+  ],
+  "points": 3000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2053I1",
+  "url": "https://codeforces.com/problemset/problem/2053/I1",
+  "contest_start_time": "2024-12-28T14:35:00+00:00",
+  "statement": {
+    "title": "I1. Affectionate Arrays (Easy Version)",
+    "time_limit": "3 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "You are the beginning of the letter, the development of a poem, and the end of a fairy tale.\n\n— ilem, Pinky Promise\n\nThis is the easy version of the problem. The difference between the versions is that in this version, you need to compute the minimum length of the arrays. You can hack only if you solved all versions of this problem.\n\nIris treasures an integer array $a_1, a_2, \\ldots, a_n$. She knows this array has an interesting property: the maximum absolute value of all elements is less than or equal to the sum of all elements, that is, $\\max(\\lvert a_i\\rvert) \\leq \\sum a_i$.\n\nIris defines the boredom of an array as its maximum subarray$^{\\text{∗}}$ sum.\n\nIris's birthday is coming, and Victor is going to send her another array $b_1, b_2, \\ldots, b_m$ as a gift. For some seemingly obvious reasons, he decides the array $b_1, b_2, \\ldots, b_m$ should have the following properties.\n\n $a_1, a_2, \\ldots, a_n$ should be a subsequence$^{\\text{†}}$ of $b_1, b_2, \\ldots, b_m$.\n\n The two arrays have the same sum. That is, $\\sum\\limits_{i=1}^n a_i = \\sum\\limits_{i=1}^m b_i$.\n\n The boredom of $b_1, b_2, \\ldots, b_m$ is the smallest possible.\n\n Among the arrays with the smallest boredom, the length of the array $b$ (i.e., $m$) is the smallest possible. And in this case, Iris will understand his regard as soon as possible!\n\nEven constrained as above, there are still too many possible gifts. So Victor asks you to compute the value of $\\boldsymbol{m}$ of any array $b_1, b_2, \\ldots, b_m$ satisfying all the conditions above. He promises you: if you help him successfully, he will share a bit of Iris's birthday cake with you.\n\nNote: since the input is large, you may need to optimize it for this problem.\n\nFor example, in C++, it is enough to use the following lines at the start of the main() function:\n\nint main() {    std::ios::sync_with_stdio(false);    std::cin.tie(nullptr); std::cout.tie(nullptr);}\n\n$^{\\text{∗}}$An array $c$ is a subarray of an array $d$ if $c$ can be obtained from $d$ by the deletion of several (possibly, zero or all) elements from the beginning and several (possibly, zero or all) elements from the end.\n\n$^{\\text{†}}$A sequence $c$ is a subsequence of a sequence $d$ if $c$ can be obtained from $d$ by the deletion of several (possibly, zero or all) element from arbitrary positions.",
+    "input_spec": "Each test contains multiple test cases. The first line of input contains an integer $t$ ($1 \\leq t \\leq 10^5$) — the number of test cases. The description of test cases follows.\n\nThe first line of each test case contains a single integer $n$ ($1 \\leq n \\leq 3\\cdot 10^6$) — the length of the array $a_1, a_2, \\ldots, a_n$.\n\nThe second line of each test case contains $n$ integers $a_1, a_2, \\ldots, a_n$ ($-10^9 \\leq a_i \\leq 10^9$) — the initial array. It is guaranteed that $\\max(\\lvert a_i\\rvert) \\leq \\sum a_i$.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $3\\cdot 10^6$.",
+    "output_spec": "For each test case, output a single line containing an integer: the length $m$ of a valid array $b$.",
+    "note": "In the first test case, $a=[1, 2, 3, 4]$. The only array $b$ which satisfies all the properties above is $[1, 2, 3, 4]$, so we should output $4$.\n\nIn the second test case, $a=[2, -3, 2, 2]$. The possible arrays $b$ are $[1, 2, -3, 2, -1, 2]$ and $[2, 1, -3, 2, -1, 2]$, so we should output $6$.",
+    "samples": [
+      {
+        "input": "4\n4\n1 2 3 4\n4\n2 -3 2 2\n10\n2 -7 6 3 -1 4 2 -5 8 -4\n20\n4 -2 4 3 -2 1 5 2 3 6 -5 -1 -4 -2 -3 5 -3 1 -4 1",
+        "output": "\n4\n6\n14\n25"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 136455,
+    "url": "https://codeforces.com/blog/entry/136455",
+    "tutorial": "2053I1 - Affectionate Arrays (Easy Version)\n\nHint 1\n\nWhat is the minimized LIS?\n\nHint 2\n\nHow do you prove that it is an achievable lower bound?\n\nHint 3\n\nGo for a brute DP first.\n\nSolution\n\nWe claim that the minimized LIS is $\\sum a_i$. Let $p$ be $\\sum a_i$.\n\nSince it is required that $\\operatorname{LIS}(b) = p$ while $\\sum b_i = p$, we point out that it is equivalent to each of the prefix sums of the sequence being between $[0, p]$.\n\nSufficiency: $\\forall X \\in [0, p], Y \\in [0, p]$, $X - Y \\leq p$. Also, we can pick $X = p, Y = 0$, so it can only be $= p$.\n\nNecessity: disproof. If a prefix sum is $ \\lt 0$, then choose the whole array except for this prefix; if a prefix sum is $ \\gt p$, then choose this prefix. Both derive a contradiction of the LIS being greater than $p$.\n\nConsider dp. Let $f_{i,j}$ denote, after considering the first $i$ numbers, the minimum extra sequence length (i.e. the actual length minus $i$), when the current prefix sum is $j$. The initial states are $f_{0,j} = [j \\neq 0]$. The transfer is simple too:\n $f_{i,j} = \\min\\limits_{0 \\leq k + a_i \\leq p} (f_{i-1,k} + [k + a_i \\neq j])$\nIt is possible to optimize the transfer to $\\mathcal O(np)$, since for each $j$, the contribution from at most one $k$ is special ($+0$). We can calculate the prefix and suffix $\\min$ for $f_{i-1}$ and it will be fast to get the dp array in the new row. Then, let's focus on optimizing it to $\\mathcal O(n)$.\n\nWe call the set of $0 \\leq k \\leq p$ satisfying $0 \\leq k + a_i \\leq p$ as the legal interval of $i$ (denoted as $L_i$).\n\nIt is concluded that the range of $f_{i, 0\\dots p}$ is at most $1$, and this can be proven by considering the transfer to each of the $j$ with the $k \\in L_i$ which has the least $f_{i-1, k}$. Let $v_i = \\min_{0 \\leq j \\leq p}(f_{i, j})$. We also have: for those $j$ with $f_{i,j} = v_i$, they form a consecutive segment in the integer field. Let the segment be covering $[l_i, r_i]$.\n\nInductive proof. The essence of the transfer is that it shifts all the DP values $= v_{i-1}$ by $a_i$ unit length, and all the other numbers will be updated to $v_{i-1} + 1$. Then truncates the $j \\in ((-\\inf, 0) \\cup (p, +\\inf))$ part. The consecutive segment remains consecutive. Specially, if $[l_{i-1}, r_{i-1}] \\cap L_i = \\varnothing$, then $\\min_{k \\in L_i}(f_{i-1, k}) = v_{i-1} + 1$, hence we need to set $v_i = v_{i-1} + 1$, and $l_i, r_i$ as the range of $j = k + a_i$ in which $k \\in L_i$. Otherwise, $v_i = v_{i-1}$, and $l_i, r_i$ can be calculated by shifting $l_{i-1}, r_{i-1}$ by $a_i$ unit length.\n\nIn fact, we only need to maintain three variables $l, r, v$ to represent the current consecutive segment and the current value field. Therefore, this problem can be easily solved in $\\mathcal O(n)$.\n\nCode (C++)\n\nRate the Problem\n\nAmazing problem:\n\nGood problem:\n\nAverage problem:\n\nBad problem:\n\nDidn't solve:",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n \nnamespace FastIO {\n\ttemplate <typename T> inline T read() { T x = 0, w = 0; char ch = getchar(); while (ch < '0' || ch > '9') w |= (ch == '-'), ch = getchar(); while ('0' <= ch && ch <= '9') x = x * 10 + (ch ^ '0'), ch = getchar(); return w ? -x : x; }\n\ttemplate <typename T> inline void write(T x) { if (!x) return; write<T>(x / 10), putchar((x % 10) ^ '0'); }\n\ttemplate <typename T> inline void print(T x) { if (x > 0) write<T>(x); else if (x < 0) putchar('-'), write<T>(-x); else putchar('0'); }\n\ttemplate <typename T> inline void print(T x, char en) { print<T>(x), putchar(en); }\n}; using namespace FastIO;\n \n#define MAXN 3000001\nint a[MAXN];\nvoid solve() {\n\tint N = read<int>(); long long p = 0, l = 0, r = 0, v = 0;\n\tfor (int i = 1; i <= N; ++i) p += (a[i] = read<int>());\n\tfor (int i = 1; i <= N; ++i) if (a[i] >= 0) {\n\t\tl += a[i], r = std::min(r + a[i], p);\n\t\tif (l > r) ++v, l = a[i], r = p;\n\t} else {\n\t\ta[i] = -a[i];\n\t\tr -= a[i], l = std::max(l - a[i], 0ll);\n\t\tif (l > r) ++v, l = 0, r = p - a[i];\n\t}\n\tprint<int>(v + N + (int)(r != p), '\\n');\n}\nint main() { int T = read<int>(); while (T--) solve(); return 0; }"
+    ]
+  }
+}

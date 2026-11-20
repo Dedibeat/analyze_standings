@@ -1,0 +1,43 @@
+{
+  "contest_id": 2072,
+  "index": "D",
+  "name": "For Wizards, the Exam Is Easy, but I Couldn't Handle It",
+  "rating": 1300,
+  "tags": [
+    "brute force",
+    "greedy",
+    "implementation"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2072D",
+  "url": "https://codeforces.com/problemset/problem/2072/D",
+  "contest_start_time": "2025-02-25T14:35:00+00:00",
+  "statement": {
+    "title": "D. For Wizards, the Exam Is Easy, but I Couldn't Handle It",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Akito got tired of being a simple locksmith at a bank, so he decided to enroll in the Magical Academy and become the best wizard in the world! However, to enroll, he needed to solve a single problem on the exam, which the ambitious hero could not manage.\n\nIn the problem, he was given an array $a$ of length $n$. He needed to minimize the number of inversions$^{\\text{∗}}$ in the array after applying the spell exactly once. The spell was simple; to apply it, Akito had to choose two numbers $l$ and $r$ such that $1 \\le l \\le r \\le n$ and perform a cyclic shift of the subarray from $l$ to $r$ one position to the left.\n\nMore formally, Akito selects the subarray $[l, r]$ and modifies the array as follows:\n\n From the original array $[a_1, a_2, \\ldots, a_{l - 1}, \\mathbf{ a_l }, \\mathbf{ a_{l + 1} } , \\mathbf{ \\ldots }, \\mathbf{ a_{r - 1} }, \\mathbf{ a_r }, a_{r + 1}, \\ldots, a_{n - 1}, a_n]$, he obtains the array $[a_1, a_2, \\ldots, a_{l - 1}, \\mathbf{ a_{l + 1} }, \\mathbf{ a_{l + 2} }, \\mathbf{ \\ldots }, \\mathbf{ a_{r - 1} }, \\mathbf{ a_{r} }, \\mathbf{ a_{l} }, a_{r + 1}, \\ldots, a_{n - 1}, a_{n}]$.\n\nAkito is eager to start his studies, but he still hasn't passed the exam. Help him enroll and solve the problem!\n\n$^{\\text{∗}}$An inversion in an array $b$ of length $m$ is defined as a pair of indices $(i, j)$ such that $1 \\le i  \\lt  j \\le m$ and $b_i  \\gt  b_j$. For example, in the array $b = [3, 1, 4, 1, 5]$, the inversions are the pairs of indices $(1, 2)$, $(1, 4)$, $(3, 4)$.",
+    "input_spec": "The first line of input contains a number $t$ ($1 \\le t \\le 10^4$) — the number of test cases.\n\nIn the first line of each test case, there is a number $n$ ($1 \\le n \\le 2000$) — the length of the array $a$.\n\nIn the second line of each test case, there are $n$ numbers $a_i$ ($1 \\le a_i \\le 2000$) — the elements of the array $a$.\n\nIt is guaranteed that the sum of $n^2$ across all test cases does not exceed $4 \\cdot 10^6$.",
+    "output_spec": "For each test case, output two numbers $l$ and $r$ ($1 \\le l \\le r \\le n$) — the boundaries of the subarray that should be chosen so that after applying the spell, the number of inversions in the array is minimized.\n\nIf there are multiple suitable pairs of boundaries, you may output any of them.",
+    "note": "In the first example, the array $[1, 4, 3, 2, 5, 3, 3]$ will turn into the array $[1, 3, 2, 5, 3, 3, 4]$. The inversions in it are $(2, 3)$, $(4, 5)$, $(4, 6)$ and $(4, 7)$. It can be shown that it is not possible to achieve fewer than $4$ inversions.\n\nIn the second example, the array $[1, 4, 3, 2, 5, 3]$ will turn into $[1, 3, 2, 4, 5, 3]$. The inversions in it are $(2, 3)$, $(4, 6)$, and $(5, 6)$. The pair $l = 2$ and $r = 6$ also works, then the array will turn into $[1, 3, 2, 5, 3, 4]$, which also has $3$ inversions — $(2, 3)$, $(4, 5)$, and $(4, 6)$. It can be shown that it is not possible to achieve fewer than $3$ inversions.\n\nIn the fourth example, choosing $l = 4$ and $r = 6$ transforms the array into $[1, 1, 1, 1, 1, 5, 5, 6, 7, 8]$. It is sorted, and therefore, there are no inversions.\n\nIn the last example, the array is initially sorted, so any operation on a segment of length at least $2$ will only increase the number of inversions.",
+    "samples": [
+      {
+        "input": "9\n7\n1 4 3 2 5 3 3\n6\n1 4 3 2 5 3\n8\n7 6 5 8 4 3 2 1\n10\n1 1 1 5 1 1 5 6 7 8\n2\n1337 69\n4\n2 1 2 1\n3\n998 244 353\n3\n1 2 1\n9\n1 1 2 3 5 8 13 21 34",
+        "output": "\n2 7\n2 4\n1 8\n4 6\n1 2\n1 4\n1 3\n2 3\n5 5"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 140039,
+    "url": "https://codeforces.com/blog/entry/140039",
+    "tutorial": "In fact, a cyclic shift of the subarray $[l, r]$ to the left by $1$ is the same as removing the element $a_l$ from the array and then inserting it after the $r$-th element. This means that we can move the number $a_i$ to any position $j \\ge i$.\n\nLet's see how the number of inversions in the array changes with the operation on the segment $[l, r]$. Inversions with indices from $[1, l - 1]$ and $[r + 1, n]$ will remain in the array, and any pair that forms an inversion will stay in the same relative order as in the original array.\n\nThus, we are interested in the inversions with indices from the segment $[l, r]$. Since only the position of the number $a_l$ changes, we can remove inversions of the form $(l, i)$, where $l  \\lt  i \\le r$ (let's call these first-type inversions), and add inversions of the form $(i, l)$, where $l  \\lt  i \\le r$ (let's call these second-type inversions). The number of first-type inversions is equal to the number of $i$ such that $l  \\lt  i \\le r$ and $a_l  \\gt  a_i$, let's denote this count as $c_1$. Similarly, the number of second-type inversions is equal to the number of $i$ such that $l  \\lt  i \\le r$ and $a_l  \\lt  a_i$, let's denote this count as $c_2$. Then the new number of inversions in the array will change by $c_2 - c_1$.\n\nIt remains to find a subarray of $a$ with the minimal difference $c_2 - c_1$, which can be done using prefix sums for the count of each $a_i$ from $1$ to $2000$ or by simply iterating over the left boundary and traversing the suffix (see the author's solution).\n\nAsymptotic complexity: $\\mathcal{O}(n^2)$.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n\nusing namespace std;\n\nvoid solve() {\n  int n;\n  cin >> n;\n  vector<int> a(n);\n  for (int i = 0; i < n; ++i) {\n    cin >> a[i];\n  }\n\n  int best_diff = 0, L = 0, R = 0;\n  for (int i = 0; i < n; ++i) {\n    int cnt_greater = 0, cnt_less = 0;\n    for (int j = i + 1; j < n; ++j) {\n      cnt_greater += a[j] > a[i];\n      cnt_less += a[j] < a[i];\n\n      if (best_diff > cnt_greater - cnt_less) {\n        best_diff = cnt_greater - cnt_less;\n        L = i, R = j;\n      }\n    }\n  }\n\n  cout << L + 1 << ' ' << R + 1 << '\\n';\n}\n\nint main() {\n  int tt = 1;\n  cin >> tt;\n  while (tt --> 0) {\n    solve();\n  }\n  return 0;\n}"
+    ]
+  }
+}

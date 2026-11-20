@@ -1,0 +1,45 @@
+{
+  "contest_id": 2035,
+  "index": "E",
+  "name": "Monster",
+  "rating": 2300,
+  "tags": [
+    "binary search",
+    "brute force",
+    "constructive algorithms",
+    "greedy",
+    "implementation",
+    "math",
+    "ternary search"
+  ],
+  "points": 2000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2035E",
+  "url": "https://codeforces.com/problemset/problem/2035/E",
+  "contest_start_time": "2024-10-27T14:35:00+00:00",
+  "statement": {
+    "title": "E. Monster",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Man, this Genshin boss is so hard. Good thing they have a top-up of $6$ coins for only $ \\$4.99$. I should be careful and spend no more than I need to, lest my mom catches me...\n\nYou are fighting a monster with $z$ health using a weapon with $d$ damage. Initially, $d=0$. You can perform the following operations.\n\n Increase $d$ — the damage of your weapon by $1$, costing $x$ coins.\n\n Attack the monster, dealing $d$ damage and costing $y$ coins.\n\nYou cannot perform the first operation for more than $k$ times in a row.\n\nFind the minimum number of coins needed to defeat the monster by dealing at least $z$ damage.",
+    "input_spec": "The first line contains a single integer $t$ ($1\\le t\\le 100$) — the number of test cases.\n\nThe only line of each test case contains 4 integers $x$, $y$, $z$, and $k$ ($1\\leq x, y, z, k\\leq 10^8$) — the first operation's cost, the second operation's cost, the monster's health, and the limitation on the first operation.",
+    "output_spec": "For each test case, output the minimum number of coins needed to defeat the monster.",
+    "note": "In the first test case, $x = 2$, $y = 3$, $z = 5$, and $k = 5$. Here's a strategy that achieves the lowest possible cost of $12$ coins:\n\n Increase damage by $1$, costing $2$ coins.\n\n Increase damage by $1$, costing $2$ coins.\n\n Increase damage by $1$, costing $2$ coins.\n\n Attack the monster, dealing $3$ damage, costing $3$ coins.\n\n Attack the monster, dealing $3$ damage, costing $3$ coins.\n\nYou deal a total of $3 + 3 = 6$ damage, defeating the monster who has $5$ health. The total number of coins you use is $2 + 2 + 2 + 3 + 3 = 12$ coins.\n\nIn the second test case, $x = 10$, $y = 20$, $z = 40$, and $k = 5$. Here's a strategy that achieves the lowest possible cost of $190$ coins:\n\n Increase damage by $5$, costing $5\\cdot x$ = $50$ coins.\n\n Attack the monster once, dealing $5$ damage, costing $20$ coins.\n\n Increase damage by $2$, costing $2\\cdot x$ = $20$ coins.\n\n Attack the monster $5$ times, dealing $5\\cdot 7 = 35$ damage, costing $5\\cdot y$ = $100$ coins.\n\nYou deal a total of $5 + 35 = 40$ damage, defeating the monster who has exactly $40$ health. The total number of coins you use is $50 + 20 + 20 + 100 = 190$ coins.",
+    "samples": [
+      {
+        "input": "4\n2 3 5 5\n10 20 40 5\n1 60 100 10\n60 1 100 10",
+        "output": "\n12\n190\n280\n160"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 135609,
+    "url": "https://codeforces.com/blog/entry/135609",
+    "tutorial": "Let $\\text{damage}(a, b)$ represent the maximum number of damage by performing the first operation $a$ times and the second operation $b$ times. Since we should always increase damage if possible, the optimal strategy will be the following: increase damage by $k$, deal damage, increase damage by $k$, deal damage, and so on, until we run out of the first or second operation. Let's treat each group of increase by $k$ and one damage as one block. Specifically, we will have $c = \\min(\\lfloor \\frac{a}{k} \\rfloor, b)$ blocks. Afterwards, we will increase damage by $a\\bmod k$ times (making our weapon's damage $a$) and use our remaining $b - c$ attacks.\n\nHence, $\\text{damage}(a, b) = k\\cdot \\frac{c\\cdot (c + 1)}{2} + a\\cdot (b - c)$ where $c = \\min(\\lfloor \\frac{a}{k} \\rfloor, b)$. The cost of this is $\\text{cost}(a, b) = a\\cdot x + b\\cdot y$.\n\nFor a fixed $a$, since $\\text{damage}(a, b)$ is non-decreasing, we can binary search the smallest $b = \\text{opt_b}(a)$ where $\\text{damage}(a, b)\\geq z$.\n\nSimilarly, for a fixed $b$, we can binary search the smallest $a = \\text{opt_a}(b)$ where $\\text{damage}(a, b)\\geq z$.\n\nNow, the issue is that we can't evaluate all $z$ possible values of $a$ or $b$. However, we can prove that for $(a, b)$ where all operations are useful (when we end with an attack), $\\text{damage}(a, b)  \\gt  \\frac{a\\cdot b}{2}$: first, the lower bound of $\\text{damage}(a, b)$ must be when $k = 1$ (when we're limited the most). Since we end with an attack, $a\\leq b$ so $c = \\min(a, b) = a$. Now, $\\text{damage}(a, b) = \\frac{a\\cdot (a + 1)}{2} + a\\cdot(b - a)  \\gt  \\frac{a^2}{2} + a\\cdot b - a^2 = a\\cdot b - \\frac{a^2}{2}  \\gt  \\frac{a\\cdot b}{2}$.\n\nSince we want $\\text{damage}(a, b)\\geq z$, we have $\\text{damage}(a, b)  \\gt  \\frac{a\\cdot b}{2}\\geq z$ which gives us $a\\cdot b\\geq z\\cdot 2$. This implies that $\\min(a, b)\\leq \\sqrt{2\\cdot z}$. Thus, it suffices to check all fixed $a$ where $a\\leq \\sqrt{2\\cdot z}$ and all fixed $b$ where $b\\leq \\sqrt{2\\cdot z}$. Alternatively, we can binary search the smallest $x$ where $x\\geq \\text{opt_b}(x)$ and check all $a\\leq x$ and $b\\leq \\text{opt_b}(x)$.\n\nOur final solution runs in $O(\\sqrt z\\log z)$ time.",
+    "solution_code": []
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "contest_id": 2065,
+  "index": "B",
+  "name": "Skibidus and Ohio",
+  "rating": 800,
+  "tags": [
+    "strings"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2065B",
+  "url": "https://codeforces.com/problemset/problem/2065/B",
+  "contest_start_time": "2025-02-09T14:35:00+00:00",
+  "statement": {
+    "title": "B. Skibidus and Ohio",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "Skibidus is given a string $s$ that consists of lowercase Latin letters. If $s$ contains more than $1$ letter, he can:\n\n Choose an index $i$ ($1 \\leq i \\leq |s| - 1$, $|s|$ denotes the current length of $s$) such that $s_i = s_{i+1}$. Replace $s_i$ with any lowercase Latin letter of his choice. Remove $s_{i+1}$ from the string.\n\nSkibidus must determine the minimum possible length he can achieve through any number of operations.",
+    "input_spec": "The first line contains an integer $t$ ($1 \\leq t \\leq 100$) — the number of test cases.\n\nThe only line of each test case contains a string $s$ ($1 \\leq |s| \\leq 100$). It is guaranteed $s$ only contains lowercase Latin letters.",
+    "output_spec": "For each test case, output an integer on the new line, the minimum achievable length of $s$.",
+    "note": "In the first test case, Skibidus can:\n\n Perform an operation on $i = 2$. He replaces $s_2$ with b and removes $s_3$ from the string. Then, $s$ becomes bb.\n\n Perform an operation on $i = 1$. He replaces $s_1$ with b and removes $s_2$ from the string. Then, $s$ becomes b.\n\n Because $s$ only contains $1$ letter, Skibidus cannot perform any more operations.\n\nTherefore, the answer is $1$ for the first test case.\n\nIn the second test case, he cannot perform an operation on any index. Therefore, the answer is still the length of the initial string, $8$.",
+    "samples": [
+      {
+        "input": "4\nbaa\nskibidus\ncc\nohio",
+        "output": "\n1\n8\n1\n4"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "missing"
+  },
+  "editorial": {
+    "blog_id": 139327,
+    "url": "https://codeforces.com/blog/entry/139327",
+    "tutorial": null,
+    "solution_code": []
+  }
+}

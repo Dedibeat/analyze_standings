@@ -1,0 +1,73 @@
+{
+  "contest_id": 1969,
+  "index": "F",
+  "name": "Card Pairing",
+  "rating": 3000,
+  "tags": [
+    "dp",
+    "greedy",
+    "hashing",
+    "implementation"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1969F",
+  "url": "https://codeforces.com/problemset/problem/1969/F",
+  "contest_start_time": "2024-04-29T14:35:00+00:00",
+  "statement": {
+    "title": "F. Card Pairing",
+    "time_limit": "2 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "There is a deck of $n$ cards, each card has one of $k$ types. You are given the sequence $a_1, a_2, \\dots, a_n$ denoting the types of cards in the deck from top to bottom. Both $n$ and $k$ are even numbers.\n\nYou play a game with these cards. First, you draw $k$ topmost cards from the deck. Then, the following happens each turn of the game:\n\n you choose exactly two cards from your hand and play them. If these cards have the same type, you earn a coin;\n\n then, if the deck is not empty, you draw exactly two top cards from it;\n\n then, if both your hand and your deck are empty, the game ends. Otherwise, the new turn begins.\n\nYou have to calculate the maximum number of coins you can earn during the game.",
+    "input_spec": "The first line of the input contains two integers $n$ and $k$ ($2 \\le k \\le n \\le 1000$, both $n$ and $k$ are even).\n\nThe second line of the input contains $n$ integers $a_1, a_2, \\dots, a_n$ ($1 \\le a_i \\le k$).",
+    "output_spec": "Print one integer — the maximum number of coins you can earn.",
+    "note": null,
+    "samples": [
+      {
+        "input": "4 2\n1 2 1 2",
+        "output": "\n0"
+      },
+      {
+        "input": "8 2\n2 1 2 2 1 2 1 2",
+        "output": "\n1"
+      },
+      {
+        "input": "4 4\n1 2 1 2",
+        "output": "\n2"
+      },
+      {
+        "input": "6 4\n3 2 3 1 2 1",
+        "output": "\n3"
+      },
+      {
+        "input": "6 4\n3 2 3 3 2 1",
+        "output": "\n2"
+      },
+      {
+        "input": "18 6\n5 6 1 1 6 5 4 1 5 1 1 6 2 6 2 2 6 3",
+        "output": "\n6"
+      },
+      {
+        "input": "8 4\n1 2 3 4 4 3 1 2",
+        "output": "\n2"
+      },
+      {
+        "input": "8 4\n1 2 3 4 4 3 3 2",
+        "output": "\n3"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 129022,
+    "url": "https://codeforces.com/blog/entry/129022",
+    "tutorial": "It's pretty obvious that every time we have a pair of equal cards in hand, we should play one of these pairs. If you're interested in a formal proof, please read the paragraph in italic, otherwise skip it.\n\nFormal proof: suppose we have a pair of cards of type $x$, but we play a card of type $y$ and a card of type $z$ in the optimal solution, where $z \\ne x$ and $z \\ne y$. Let's show that playing a pair of cards of type $x$ can also be optimal. If $y = x$, then let's find the next moment when we play a card of type $x$. By swapping that card with a card of type $z$, we \"fix\" the current pair and possibly \"break\" the pair from which we took the card of type $x$, so our number of coins won't go down.\n\nIf $y \\ne x$, almost the same proof can be used: find the first two cards of type $x$ we play after that moment. Either they are played at the same moment, then we can swap the pairs we used at the current moment and at that moment. Or they are played at different moments $t_1$ and $t_2$; by swapping these two cards with cards of type $y$ and $z$, we \"fix\" the pair we played at the current moment, we might \"break\" the pair played at the moment $t_2$, but we cannot \"break\" the pair played at the moment $t_1$, since the cards played at that moment are different.\n\nWhenever we have a pair of equal cards, we will always play it at some moment and earn a coin, and it does not matter in which order we play different pairs. So we have to make a meaningful choice about which cards we play only when all $k$ cards in our hand are different.\n\nIn the ideal situation, if there are $c_i$ cards of type $i$, we want to earn $\\lfloor\\frac{c_i}{2}\\rfloor$ coins by playing these cards. But whenever we play only one card of type $i$ and there is an odd number of cards of type $i$ left (both in hand and in deck), we \"lose\" a coin, because the number of pairs we can make decreases by $1$. Let's calculate the answer as the maximum possible number of pairs we can form (equal to $\\sum\\limits_{i=1}^{k} \\lfloor\\frac{c_i}{2}\\rfloor$), minus the minimum number of coins we \"lose\" in such a way.\n\nSince we play a pair when we have at least one pair, we can \"lose\" coins only when all cards in our hand are different. So, let's try to use a dynamic programming of the form: $dp_i$ is the minimum number of coins we could lose when we have drawn $i$ first cards from the deck, and all cards in our hand are different.\n\nLet's analyze the transitions of this dynamic programming. When transitioning out of $dp_i$, we can iterate on the pair of cards we play (since we consider the situation when all cards in our hand are different, we can play any pair of different cards); for each of these two cards, check if we \"lose\" a coin by playing them, and try to find the next moment when all $k$ cards in our hand will be different (or update the answer if there is no such moment).\n\nHowever, when implemented naively, it is too slow (might take up to $O(n^5)$). We can use the following optimizations to improve it:\n\n XOR Hashing: this is one of my favorite techniques. Let's assign each card type a random $64$-bit number (let it be $h_i$ for type $i$). Then, let $p_i$ be the XOR of the numbers assigned to the first $i$ cards in the deck. Suppose we are considering transitions from $dp_i$; we try to play cards of type $x$ and $y$; when will be the next moment when we have all $k$ types of cards? If this moment is $j$, then we need to take an odd number of cards of type $x$ and $y$ from moment $i$ to moment $j$, and an even number of cards for all other types. So, we can see that $p_j = p_i \\oplus h_x \\oplus h_y$, and this allows us to locate the next moment when we have $k$ different cards more easily, in $O(n)$ or even $O(\\log n)$.\n\n Reducing the number of transitions: we have up to $O(k^2)$ pairs of cards we can play from each state, but only $O(n)$ different states we can go into, and no two transitions lead to the same state. Let's try to make only $O(n)$ transitions from each state. When considering a state, we can split all $k$ cards into two types: the ones that make us lose a coin when we play them (group $1$), and all the others (group $2$). First, let's try to play two cards from the group $2$; if we find a combination of them such that, after playing it, we never have $k$ different cards in our hand — we don't need any other transitions from this state, because this transition updates the answer directly without any increases. Otherwise, perform all transitions with pairs of cards from group $2$, and try to play a pair of cards from different groups. If we find a combination that updates the answer directly, we again can stop considering transitions, the next transitions we use won't be more optimal. And then we do the same with transitions where we use a pair of cards of group $1$. This way, we will consider at most $n+1$ transitions from each state.\n\nCombining these two optimizations results in a solution in $O(n^3)$ or $O(n^2 \\log n)$, but there are other optimizations you can try.",
+    "solution_code": [
+      "#include<bits/stdc++.h>\n\nusing namespace std;\n\nmt19937_64 rnd(12341234);\n\nint n, k;\nvector<int> deck;\nvector<int> dp;\nvector<vector<bool>> odd;\nvector<bool> full_odd;\nvector<long long> val;\nvector<long long> hs;      \n\nbool bad(const vector<bool>& v)\n{\n    for(int i = 0; i < k; i++)\n        if(!v[i])\n            return false;\n    return true;\n}\n\nvector<bool> inv(const vector<bool>& v)\n{\n    vector<bool> res(k);\n    for(int i = 0; i < k; i++)\n        res[i] = !v[i];\n    return res;\n}\n\nvector<bool> get_suffix(int l)\n{\n    vector<bool> v(k);                     \n    for(int i = l; i < n; i++) v[deck[i]] = !v[deck[i]];\n    return v;\n}\n\nint get_next(long long cur, int x)\n{\n    for(int i = x; i <= n; i += 2)\n        if(hs[i] == cur)\n            return i;\n    return -1;\n}                \n\nint main()\n{\n    cin >> n >> k;\n    deck.resize(n);\n    for(int i = 0; i < n; i++) cin >> deck[i];\n    for(int i = 0; i < n; i++) --deck[i];\n    val.resize(k);\n    for(int i = 0; i < k; i++)\n        while(val[i] == 0)\n            val[i] = rnd();\n\n    int max_score = 0;\n    dp.resize(n + 1);\n    full_odd.resize(k);\n    odd.resize(n + 1, vector<bool>(k));\n    hs.resize(n + 1);\n    long long cur_hash = 0;\n    for(int i = 0; i < n; i++)\n    {\n        cur_hash ^= val[deck[i]];\n        if(full_odd[deck[i]]) max_score++;\n        full_odd[deck[i]] = !full_odd[deck[i]];\n        odd[i + 1] = full_odd;\n        hs[i + 1] = cur_hash;\n    }   \n\n    for(int i = k; i <= n; i++)\n        dp[i] = 1e9;                          \n    long long start = 0ll;\n    for(int i = 0; i < k; i++) start ^= val[i];\n    int pos = get_next(start, k);\n    if(pos == -1)\n    {\n        cout << max_score << endl;  \n    }\n    else\n    {\n        dp[pos] = 0;\n        int ans = 1e9;\n        for(int p = k; p <= n; p += 2)\n        {\n            if(dp[p] > 1e8) continue;   \n            vector<bool> suff = get_suffix(p);\n            vector<int> o, e;\n            for(int j = 0; j < k; j++)\n                if(suff[j])\n                    e.push_back(j);\n                else\n                    o.push_back(j);\n            int es = e.size();\n            int os = o.size();\n            bool flag = true;\n            for(int i = 0; i < os && flag; i++)\n                for(int j = 0; j < i && flag; j++)\n                {\n                    int x = o[i];\n                    int y = o[j];\n                    int add = 0;         \n                    long long h = hs[p] ^ val[x] ^ val[y];\n                    int pos = get_next(h, p);\n                    if(pos == -1)                  \n                    {\n                        flag = false;\n                        ans = min(ans, dp[p] + add);\n                    }\n                    else\n                        dp[pos] = min(dp[pos], dp[p] + add);\n                }\n\n            for(int i = 0; i < os && flag; i++)\n                for(int j = 0; j < es && flag; j++)\n                {\n                    int x = o[i];\n                    int y = e[j];\n                    int add = 1;         \n                    long long h = hs[p] ^ val[x] ^ val[y];\n                    int pos = get_next(h, p);    \n                    if(pos == -1)\n                    {\n                        flag = false;\n                        ans = min(ans, dp[p] + add);\n                    }\n                    else\n                        dp[pos] = min(dp[pos], dp[p] + add);\n                }\n\n            for(int i = 0; i < es && flag; i++)\n                for(int j = 0; j < i && flag; j++)\n                {\n                    int x = e[i];\n                    int y = e[j];\n                    int add = 2;                             \n                    long long h = hs[p] ^ val[x] ^ val[y];\n                    int pos = get_next(h, p);\n                    if(pos == -1)\n                    {\n                        flag = false;\n                        ans = min(ans, dp[p] + add);\n                    }\n                    else\n                        dp[pos] = min(dp[pos], dp[p] + add);\n                }\n        }\n        cout << max_score - ans << endl;\n    }       \n}",
+      "    for(int i = 0 ; i < n;i++){\n        if(i + 1 <= k){\n            // the element on the left side is atmost only K element\n            pq.push(vpi[i].second);\n            sumLeft += vpi[i].second;\n\n            // add the missing case i+1==k\n            if (i+1==k){\n                ans = max(ans,suffixSum[i+1]-sumLeft);\n            }\n\n        }else{\n            sumLeft += vpi[i].second; // insert the new element\n            pq.push(vpi[i].second);\n            sumLeft -= pq.top(); // delete the biggest element\n            pq.pop();\n            int sumRight = suffixSum[i+1];\n \n            ans = max(ans,sumRight-sumLeft);\n        }\n    }"
+    ]
+  }
+}

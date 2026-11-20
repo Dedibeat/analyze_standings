@@ -1,0 +1,42 @@
+{
+  "contest_id": 2085,
+  "index": "F2",
+  "name": "Serval and Colorful Array (Hard Version)",
+  "rating": 2900,
+  "tags": [
+    "data structures",
+    "greedy"
+  ],
+  "points": 1000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2085F2",
+  "url": "https://codeforces.com/problemset/problem/2085/F2",
+  "contest_start_time": "2025-03-22T14:35:00+00:00",
+  "statement": {
+    "title": "F2. Serval and Colorful Array (Hard Version)",
+    "time_limit": "2 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "This is the hard version of the problem. The difference between the versions is that in this version, $n\\le 4\\cdot 10^5$. You can hack only if you solved all versions of this problem.\n\nServal has a magic number $k$ ($k\\ge 2$). We call an array $r$ colorful if and only if:\n\n The length of $r$ is $k$, and\n\n Each integer between $1$ and $k$ appears exactly once in $r$.\n\nYou are given an array $a$ consisting of $n$ integers between $1$ and $k$. It is guaranteed that each integer between $1$ and $k$ appears in $a$ at least once. You can perform the following operation on $a$:\n\n Choose an index $i$ ($1\\le i  \\lt  n$), then swap $a_i$ and $a_{i+1}$.\n\nFind the minimum number of operations needed to make at least one subarray$^{\\text{∗}}$ of $a$ colorful. It can be shown that this is always possible under the constraints of the problem.\n\n$^{\\text{∗}}$An array $b$ is a subarray of an array $a$ if $b$ can be obtained from $a$ by the deletion of several (possibly, zero or all) elements from the beginning and several (possibly, zero or all) elements from the end.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 1000$). The description of the test cases follows.\n\nThe first line of each test case contains two integers $n$ and $k$ ($2\\leq k\\leq n\\leq 4\\cdot 10^5$) — the length of the array $a$ and Serval's magic number.\n\nThe second line contains $n$ integers $a_1, a_2, \\ldots, a_n$ ($1\\leq a_i\\leq k$) — the elements of the array $a$. It is guaranteed that each integer between $1$ and $k$ appears in $a$ at least once.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $4\\cdot 10^5$.",
+    "output_spec": "For each test case, output a single integer — the minimum number of operations needed to make at least one subarray of $a$ colorful.",
+    "note": "In the first test case, since the subarrays $[a_1, a_2] = [1, 2]$ and $[a_2, a_3] = [2, 1]$ are already colorful, we do not need to perform any operations. Thus, the answer is $0$.\n\nIn the second test case, we can swap $a_1$ and $a_2$ to obtain $[1, \\underline{2, 1, 3}, 1, 1, 2]$, which has a colorful subarray $[a_2, a_3, a_4] = [2, 1, 3]$. And the given array initially does not have any colorful subarrays, so the answer is $1$.",
+    "samples": [
+      {
+        "input": "6\n3 2\n1 2 1\n7 3\n2 1 1 3 1 1 2\n6 3\n1 1 2 2 2 3\n6 3\n1 2 2 2 2 3\n10 5\n5 1 3 1 1 2 2 4 1 3\n9 4\n1 2 3 3 3 3 3 2 4",
+        "output": "\n0\n1\n2\n3\n4\n5"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 140933,
+    "url": "https://codeforces.com/blog/entry/140933",
+    "tutorial": "2085F2 - Serval and Colorful Array (Hard Version)\n\nHint 1\n\nIs it possible to simplify the constraints?\n\nHint 2\n\nIs it possible to remove the constraint that exactly $k\\over 2$ elements should be chosen from both sides of the enumerated position?\n\nSolution\n\nOptimizing the solution of F1 using (possibly, heavy) data structures results in a $O(n\\log n)$ solution.\n\nHere we introduce a linear approach for F2 came up by Error_Yuan. In fact, the following proposition holds.\n\nProposition. The answer obtained is still correct without the constraint that exactly $k\\over 2$ elements should be chosen from both sides of the enumerated position.\n\nWithout the constraint, when enumerating the position $p$, we can directly choose the smaller one between $l_i$ and $r_i$ for each $1\\leq i\\leq k$.\n\nProof. On the one hand, notice that the distance sum will not be smaller when $p$ is not the middle position among the chosen elements. On the other hand, consider the colorful subarray that produces the optimal answer, and mark the elements in it first. When $p$ enumerates to the middle position of the marked elements before swapping, the minimal distance sum without the constraint is no greater than that under the constraint. Therefore, all the considered candidates are no less than the real answer, and the real answer can be reached, completing the proof. $\\square$\n\nIn implementation, we consider the contribution to each position $p$ for each integer $1\\leq i\\leq k$. For a certain $i$, it can be shown that the delta of the contribution will be one of $-1$, $0$, or $+1$ when $p$ moves to an adjacent position. The delta of the contribution remains unchanged for most positions, and only changes either at the position where $i$ placed, or at the midpoint between two adjacent $i$. By pre-calculating the changes of contribution deltas over all the $i$ and performing the prefix sum on the array twice, we can obtain the distance sums, resulting in an $O(n)$ solution.\n\nCode (C++)",
+    "solution_code": [
+      "#include <cstdio>\n#include <algorithm>\n\nusing namespace std;\n\nconst int N = 4e5 + 5;\nconst long long oo = 1e18;\n\nint n, k;\nint a[N];\nint last[N], dd[N];\nlong long s, d, ans;\n\nvoid solve() {\n\tscanf(\"%d%d\", &n, &k);\n\tfor (int i = 1; i <= n; i++)\n\t\tlast[i] = dd[i] = 0;\n\ts = 0;\n\tfor (int i = 1; i <= n; i++) {\n\t\tscanf(\"%d\", &a[i]);\n\t\tif (!last[a[i]])\n\t\t\ts += i - 1;\n\t\telse {\n\t\t\tint pre = last[a[i]];\n\t\t\tint mid = (pre + i) / 2;\n\t\t\tif ((pre + i) & 1) {\n\t\t\t\tdd[mid]--;\n\t\t\t\tdd[mid + 1]--;\n\t\t\t} else\n\t\t\t\tdd[mid] -= 2;\n\t\t}\n\t\tdd[i] += 2;\n\t\tlast[a[i]] = i;\n\t}\n\tans = oo;\n\td = -k;\n\tfor (int i = 1; i <= n; i++) {\n\t\tans = min(ans, s);\n\t\td += dd[i];\n\t\ts += d;\n\t}\n\tfor (int i = 1; i <= k; i++)\n\t\tans -= abs(i - (k + 1) / 2);\n\tprintf(\"%lld\\n\", ans);\n}\n\nint main() {\n\tint T;\n\tscanf(\"%d\", &T);\n\twhile (T--)\n\t\tsolve();\n\treturn 0;\n}"
+    ]
+  }
+}

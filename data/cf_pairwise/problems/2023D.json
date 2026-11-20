@@ -1,0 +1,55 @@
+{
+  "contest_id": 2023,
+  "index": "D",
+  "name": "Many Games",
+  "rating": 2900,
+  "tags": [
+    "brute force",
+    "dp",
+    "greedy",
+    "math",
+    "probabilities"
+  ],
+  "points": 2250.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2023D",
+  "url": "https://codeforces.com/problemset/problem/2023/D",
+  "contest_start_time": "2024-10-20T09:05:00+00:00",
+  "statement": {
+    "title": "D. Many Games",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Recently, you received a rare ticket to the only casino in the world where you can actually earn something, and you want to take full advantage of this opportunity.\n\nThe conditions in this casino are as follows:\n\n There are a total of $n$ games in the casino.\n\n You can play each game at most once.\n\n Each game is characterized by two parameters: $p_i$ ($1 \\le p_i \\le 100$) and $w_i$ — the probability of winning the game in percentage and the winnings for a win.\n\n If you lose in any game you decide to play, you will receive nothing at all (even for the games you won).\n\nYou need to choose a set of games in advance that you will play in such a way as to maximize the expected value of your winnings.\n\nIn this case, if you choose to play the games with indices $i_1  \\lt  i_2  \\lt  \\ldots  \\lt  i_k$, you will win in all of them with a probability of $\\prod\\limits_{j=1}^k \\frac{p_{i_j}}{100}$, and in that case, your winnings will be equal to $\\sum\\limits_{j=1}^k w_{i_j}$.\n\nThat is, the expected value of your winnings will be $\\left(\\prod\\limits_{j=1}^k \\frac{p_{i_j}}{100}\\right) \\cdot \\left(\\sum\\limits_{j=1}^k w_{i_j}\\right)$.\n\nTo avoid going bankrupt, the casino owners have limited the expected value of winnings for each individual game. Thus, for all $i$ ($1 \\le i \\le n$), it holds that $w_i \\cdot p_i \\le 2 \\cdot 10^5$.\n\nYour task is to find the maximum expected value of winnings that can be obtained by choosing some set of games in the casino.",
+    "input_spec": "The first line contains a single integer $n$ ($1 \\le n \\le 2 \\cdot 10^5$) — the number of games offered to play.\n\nThe $i$-th of the following $n$ lines contains two integers $p_i$ and $w_i$ ($1 \\leq p_i \\leq 100$, $1 \\leq w_i, p_i \\cdot w_i \\leq 2 \\cdot 10^5$) — the probability of winning and the size of the winnings in the $i$-th game.",
+    "output_spec": "Output a single number — the maximum expected value of winnings in the casino that can be obtained by choosing some subset of games.\n\nYour answer will be accepted if the relative or absolute error does not exceed $10^{-6}$. Formally, if $a$ is your answer and $b$ is the jury's answer, it will be accepted if $\\frac{|a-b|}{\\max(b, 1)} \\le 10^{-6}$.",
+    "note": "In the first example, you can choose the first and third games. In this case, the expected value of winnings will be $\\left(\\frac{p_1}{100}\\cdot \\frac{p_3}{100}\\right) \\cdot (w_1 + w_3) = \\left(\\frac{80}{100}\\cdot \\frac{50}{100}\\right) \\cdot (80 + 200) = 112$.\n\nIn the second example, you can choose the first and second games. In this case, the expected value of winnings will be $\\left(\\frac{p_1}{100}\\cdot \\frac{p_2}{100}\\right) \\cdot (w_1 + w_2) = \\left(\\frac{100}{100}\\cdot \\frac{100}{100}\\right) \\cdot (1 + 1) = 2$.\n\nIn the third example, you can choose only the second game. In this case, the expected value of winnings will be $\\frac{p_2}{100} \\cdot w_2 = \\frac{2}{100} \\cdot 1000 = 20$.",
+    "samples": [
+      {
+        "input": "3\n80 80\n70 100\n50 200",
+        "output": "\n112.00000000"
+      },
+      {
+        "input": "2\n100 1\n100 1",
+        "output": "\n2.00000000"
+      },
+      {
+        "input": "4\n1 100\n2 1000\n2 100\n3 1",
+        "output": "\n20.00000000"
+      },
+      {
+        "input": "5\n34 804\n78 209\n99 191\n61 439\n90 79",
+        "output": "\n395.20423800"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 135341,
+    "url": "https://codeforces.com/blog/entry/135341",
+    "tutorial": "Claim 1: Suppose we took at least one item with $ p_i  \\lt  100 $. Then it is claimed that the sum $ w_i $ over all taken elements is $ \\le 200\\,000 \\cdot \\frac{100}{99} = C $. To prove this, let's assume the opposite and try to remove any element with $ p_i  \\lt  100 $ from the taken set, denoting $ q_i = \\frac{p_i}{100} $.\n\nThe answer was $ (W + w_i) \\cdot Q \\cdot q_i $, but it became $ W \\cdot Q $. The answer increased if $ w_i \\cdot Q \\cdot q_i  \\lt  W \\cdot Q \\cdot (1 - q_i) $, that is, $ w_i \\cdot q_i  \\lt  W \\cdot (1 - q_i) $, which is true if $ w_i \\cdot pi  \\lt  W \\cdot (100 - p_i) $. This is true since $ w_i \\cdot p_i \\le 200,000 $, while $ W \\cdot (100 - p_i)  \\gt  200\\,000 $.\n\nLet's isolate all items with $ p_i == 100 $. If their sum is $  \\gt  C $, then we know the answer; otherwise, for each weight sum, we will find the maximum probability with which such weight can be obtained using a dynamic programming approach similar to the knapsack problem.\n\nTo do this quickly, we will reduce the number of considered items. For each $ p $, answer will contain some prefix of elements with that $ p $, sorted in descending order by $ w_i $. If in the optimal answer there are $ c_p $ elements with $ p_i == p $, then $ c_p \\cdot q^{c_p}  \\gt  (c_p - 1) \\cdot q^{c_p - 1} $; otherwise, the smallest element can definitely be removed. Rewriting the inequality gives us $ c_p \\cdot q  \\gt  c_p - 1 $, which means $ c_p  \\lt  \\frac{1}{1-q} $. Thus, among the elements with a given $ p $, it is sufficient to keep for consideration the top $ \\frac{100}{100-p} $ best items, or about $ 450 $ (i.e., $ 99 \\cdot \\ln{99} $) items across all $ p $.\n\nIn the end, it is enough to go through the dynamic programming and find the cell with the highest answer.\n\nThe total running time is $ C \\cdot 99 \\cdot \\ln{99} $.",
+    "solution_code": []
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "contest_id": 2036,
+  "index": "B",
+  "name": "Startup",
+  "rating": 800,
+  "tags": [
+    "greedy",
+    "sortings"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2036B",
+  "url": "https://codeforces.com/problemset/problem/2036/B",
+  "contest_start_time": "2024-11-02T14:35:00+00:00",
+  "statement": {
+    "title": "B. Startup",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Arseniy came up with another business plan — to sell soda from a vending machine! For this, he purchased a machine with $n$ shelves, as well as $k$ bottles, where the $i$-th bottle is characterized by the brand index $b_i$ and the cost $c_i$.\n\nYou can place any number of bottles on each shelf, but all bottles on the same shelf must be of the same brand.\n\nArseniy knows that all the bottles he puts on the shelves of the machine will be sold. Therefore, he asked you to calculate the maximum amount he can earn.",
+    "input_spec": "The first line contains one integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases.\n\nThe first line of each test case contains two integers $n$ and $k$ ($1 \\le n, k \\le 2 \\cdot 10^5$), where $n$ is the number of shelves in the machine, and $k$ is the number of bottles available to Arseniy.\n\nThe next $k$ lines contain two integers $b_i$ and $c_i$ ($1 \\le b_i \\le k, 1 \\le c_i \\le 1000$) — the brand and cost of the $i$-th bottle.\n\nIt is also guaranteed that the sum of $n$ across all test cases does not exceed $2 \\cdot 10^5$ and that the sum of $k$ across all test cases also does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, output one integer — the maximum amount that Arseniy can earn.",
+    "note": "In the first test case, Arseniy has $3$ shelves in the vending machine. He can place, for example, two bottles of the brand $2$ on the first shelf and a bottle of the brand $1$ on the second shelf. Then the total cost of the bottles would be $6 + 7 + 15 = 28$.\n\nIn the second test case, he has only one shelf. It is not difficult to show that the optimal option is to place a bottle of the brand $1$ on it. Then the total cost will be $15$.\n\nIn the third test case, he has as many as $6$ shelves, so he can place all available bottles with a total cost of $7 + 5 = 12$.",
+    "samples": [
+      {
+        "input": "4\n3 3\n2 6\n2 7\n1 15\n1 3\n2 6\n2 7\n1 15\n6 2\n1 7\n2 5\n190000 1\n1 1000",
+        "output": "\n28\n15\n12\n1000"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 135849,
+    "url": "https://codeforces.com/blog/entry/135849",
+    "tutorial": "2036B - Startup\n\nIdea: Seny\n\nTutorial\n\nLet's create an array brand_cost of length $k$ and fill it so that brand_cost[i] stores the cost of all bottles of brand $i+1$. Then sort the array by non-growing and calculate the sum of its first min(n, k) elements, which will be the answer to the problem.\n\nComplexity: $O(k \\cdot \\log k)$\n\nSolution (Seny)",
+    "solution_code": [
+      "#include <bits/stdc++.h>\nusing namespace std;\n \nvoid solve() {\n  int n, k;\n  cin >> n >> k;\n  vector<int> brand_cost(k, 0);\n  for (int i = 0; i < k; i++) {\n    int b, c;\n    cin >> b >> c;\n    brand_cost[b - 1] += c;\n  }\n  sort(brand_cost.rbegin(), brand_cost.rend());\n  long long ans = 0;\n  for (int i = 0; i < min(n, k); i++) {\n    ans += brand_cost[i];\n  }\n  cout << ans << '\\n';\n}\n \nint main() {\n  int t;\n  cin >> t;\n  while (t--) {\n    solve();\n  }\n  return 0;\n}"
+    ]
+  }
+}

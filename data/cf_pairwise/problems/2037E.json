@@ -1,0 +1,42 @@
+{
+  "contest_id": 2037,
+  "index": "E",
+  "name": "Kachina's Favorite Binary String",
+  "rating": 1600,
+  "tags": [
+    "dp",
+    "greedy",
+    "interactive",
+    "two pointers"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2037E",
+  "url": "https://codeforces.com/problemset/problem/2037/E",
+  "contest_start_time": "2024-11-17T14:35:00+00:00",
+  "statement": {
+    "title": "E. Kachina's Favorite Binary String",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "This is an interactive problem.\n\nKachina challenges you to guess her favorite binary string$^{\\text{∗}}$ $s$ of length $n$. She defines $f(l, r)$ as the number of subsequences$^{\\text{†}}$ of $\\texttt{01}$ in $s_l s_{l+1} \\ldots s_r$. Two subsequences are considered different if they are formed by deleting characters from different positions in the original string, even if the resulting subsequences consist of the same characters.\n\nTo determine $s$, you can ask her some questions. In each question, you can choose two indices $l$ and $r$ ($1 \\leq l  \\lt  r \\leq n$) and ask her for the value of $f(l, r)$.\n\nDetermine and output $s$ after asking Kachina no more than $n$ questions. However, it may be the case that $s$ is impossible to be determined. In this case, you would need to report $\\texttt{IMPOSSIBLE}$ instead.\n\nFormally, $s$ is impossible to be determined if after asking $n$ questions, there are always multiple possible strings for $s$, regardless of what questions are asked. Note that if you report $\\texttt{IMPOSSIBLE}$ when there exists a sequence of at most $n$ queries that will uniquely determine the binary string, you will get the Wrong Answer verdict.\n\n$^{\\text{∗}}$A binary string only contains characters $\\texttt{0}$ and $\\texttt{1}$.\n\n$^{\\text{†}}$A sequence $a$ is a subsequence of a sequence $b$ if $a$ can be obtained from $b$ by the deletion of several (possibly, zero or all) elements. For example, subsequences of $\\mathtt{1011101}$ are $\\mathtt{0}$, $\\mathtt{1}$, $\\mathtt{11111}$, $\\mathtt{0111}$, but not $\\mathtt{000}$ nor $\\mathtt{11100}$.",
+    "input_spec": "The first line of input contains a single integer $t$ ($1 \\leq t \\leq 10^3$) — the number of test cases.\n\nThe first line of each test case contains a single integer $n$ ($2 \\leq n \\leq 10^4$) — the length of $s$.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $10^4$.",
+    "output_spec": null,
+    "note": "In the first test case:\n\nIn the first query, you ask Kachina for the value of $f(1, 5)$, and she responds with $4$ in the input stream.\n\nIn the second query, you ask Kachina for the value of $f(2, 4)$. Because there are no subsequences of $\\texttt{01}$ in the string $\\texttt{100}$, she responds with $0$ in the input stream.\n\nAfter asking $4$ questions, you report $\\texttt{01001}$ as $s$, and it is correct.\n\nIn the second test case:\n\nIn the first query, you ask Kachina for the value of $f(1, 2)$, and she responds with $0$ in the input stream. Notice that this is the only distinct question you can ask.\n\nHowever, notice that the strings $00$ and $11$ both have an answer of $0$, and it is impossible to differentiate between the two. Therefore, we report IMPOSSIBLE.\n\nPlease note that this example only serves to demonstrate the interaction format. It is not guaranteed the queries provided are optimal or uniquely determine the answer. However, it can be shown there exists a sequence of at most $5$ queries that does uniquely determine sample test case $1$.",
+    "samples": [
+      {
+        "input": "\n2\n5\n\n4\n\n0\n\n1\n\n2\n\n2\n\n0",
+        "output": "\n? 1 5\n\n? 2 4\n\n? 4 5\n\n? 3 5\n\n! 01001\n\n? 1 2\n\n! IMPOSSIBLE"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 136334,
+    "url": "https://codeforces.com/blog/entry/136334",
+    "tutorial": "2037E — Kachina's Favorite Binary String\n\nVideo",
+    "solution_code": []
+  }
+}

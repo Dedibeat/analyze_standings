@@ -1,0 +1,48 @@
+{
+  "contest_id": 2104,
+  "index": "E",
+  "name": "Unpleasant Strings",
+  "rating": 1700,
+  "tags": [
+    "binary search",
+    "dp",
+    "greedy",
+    "strings"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2104E",
+  "url": "https://codeforces.com/problemset/problem/2104/E",
+  "contest_start_time": "2025-04-28T14:35:00+00:00",
+  "statement": {
+    "title": "E. Unpleasant Strings",
+    "time_limit": "2 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "Let's call a letter allowed if it is a lowercase letter and is one of the first $k$ letters of the Latin alphabet.\n\nYou are given a string $s$ of length $n$, consisting only of allowed letters.\n\nLet's call a string $t$ pleasant if $t$ is a subsequence of $s$.\n\nYou are given $q$ strings $t_1, t_2, \\dots, t_q$. All of them consist only of allowed letters. For each string $t_i$, calculate the minimum number of allowed letters you need to append to it on the right so that it stops being pleasant.\n\nA sequence $t$ is a subsequence of a sequence $s$ if $t$ can be obtained from $s$ by the deletion of several (possibly, zero or all) element from arbitrary positions.",
+    "input_spec": "The first line contains two integers $n$ and $k$ ($1 \\le n \\le 10^6$; $1 \\le k \\le 26$) — the length of the string $s$ and the number of allowed letters.\n\nThe second line contains the string $s$, consisting of $n$ lowercase Latin letters. Each character of the string is one of the first $k$ letters of the Latin alphabet.\n\nThe third line contains one integer $q$ ($1 \\le q \\le 2 \\cdot 10^5$) — the number of queries.\n\nThe next $q$ lines contain queries: one query per line. The $i$-th line contains the string $t_i$, consisting only of allowed letters.\n\nAdditional constraint on input: the total length of all $t_i$ does not exceed $10^6$.",
+    "output_spec": "For each query, output one integer — the minimum number of allowed letters that need to be appended to the string on the right so that it stops being pleasant.",
+    "note": "In the first example:\n\n The string cc is already unpleasant, so nothing needs to be appended to it;\n\n bcb is pleasant, so at least one letter needs to be appended to the right: bcba will not work, but bcbb and bcbc are unpleasant.\n\n To b, at least two letters need to be appended, since ba, bb, and bc are pleasant. For example, we can obtain an unpleasant string bbb.",
+    "samples": [
+      {
+        "input": "7 3\nabacaba\n3\ncc\nbcb\nb",
+        "output": "\n0\n1\n2"
+      },
+      {
+        "input": "5 1\naaaaa\n6\na\naa\naaa\naaaa\naaaaa\naaaaaa",
+        "output": "\n5\n4\n3\n2\n1\n0"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 142472,
+    "url": "https://codeforces.com/blog/entry/142472",
+    "tutorial": "For a start, let's think about how to check, is $t$ a subsequence of $s$. There is a greedy solution to that: let's match $t_0$ with the leftmost character in $s$ that is equal to it. Then match $t_1$ with the next leftmost character in $s$ that goes after the first one, and so on. If we matched all characters in $t$, then $t$ is a subsequence of $s$.\n\nOne of the common ways to write the algorithm above is to count array $\\mathrm{nxt}[n][k]$ where $\\mathrm{nxt}[i][c]$ is the position of the next occurrence of character $c$ starting from position $i$. Array $\\mathrm{nxt}$ can be calculated in linear time, since $\\mathrm{nxt}[i]$ differs from $\\mathrm{nxt}[i + 1]$ in only one position.\n\nThen we can check the string $t$ in $\\mathcal{O}(|t|)$ time, just jumping from current position $p$ (in $s$) to $\\mathrm{nxt}[p][t_i]$ until either $t$ ends or $\\mathrm{nxt}$ \"doesn't exist\" (we can set such $\\mathrm{nxt}$ equal to $n$ (remember, zero indexation)).\n\nSo, how to add the minimum numbers of characters to string $t_i$ to make it unpleasant? It's equivalent to making the minimum number of extra jumps in $\\mathrm{nxt}$ array to reach $\\mathrm{nxt}[p][c] = n$. Suppose, we applied the algorithm above on $t_i$ and finished at position $p$. Now, we are choosing which character to add. It's the same as choosing which $\\mathrm{nxt}[p + 1][c]$ to choose as the next jump.\n\nIt's not hard to prove that it's optimal to choose $\\mathrm{nxt}[p + 1][c]$ with the maximum value (since it won't increase the answer). After that, we jump to $p' = \\mathrm{nxt}[p + 1][c]$ and the procedure repeats. When $p$ becomes bigger or equal to $n$, we've reached the goal.\n\nIn other words, the answer depends only on the \"starting\" position $p$. So, we can calculate all of them as a dp array $d[n]$, where $d[i]$ is the minimum number of jumps needed. Then $d[i]$ is equal to $1 + d[\\max{(\\mathrm{nxt}[i + 1][c])}]$ ($i + 1$ here is to exclude the situation where we match the same character in $s$ with several characters from $t$).\n\nIn total, we precalculate arrays $\\mathrm{nxt}$ and $d$. Then for each $t_i$ we match it in $O(|t_i|)$ and print the value of $d[p]$. The total complexity is $\\mathcal{O}(nk + \\sum{|t_i|})$.",
+    "solution_code": [
+      "#include<bits/stdc++.h>\n \nusing namespace std;\n \n#define fore(i, l, r) for(int i = int(l); i < int(r); i++)\n#define sz(a) int((a).size())\n \n#define x first\n#define y second\n \ntypedef long long li;\ntypedef long double ld;\ntypedef pair<int, int> pt;\n \ntemplate<class A, class B> ostream& operator <<(ostream& out, const pair<A, B> &p) {\n    return out << \"(\" << p.x << \", \" << p.y << \")\";\n}\ntemplate<class A> ostream& operator <<(ostream& out, const vector<A> &v) {\n    fore(i, 0, sz(v)) {\n        if(i) out << \" \";\n        out << v[i];\n    }\n    return out;\n}\n \nconst int INF = int(1e9);\nconst li INF64 = li(1e18);\nconst ld EPS = 1e-9;\n \nint n, k;\nstring s;\n \ninline bool read() {\n    if(!(cin >> n >> k))\n        return false;\n    cin >> s;\n    return true;\n}\n \ninline void solve() {\n    vector<int> d(n + 1, 0);\n    vector<vector<int>> nxt(n + 2, vector<int>(k, n));\n    for (int i = n - 1; i >= 0; i--) {\n        nxt[i] = nxt[i + 1];\n        int mx = *max_element(nxt[i].begin(), nxt[i].end());\n        d[i] = 1 + d[mx];\n        nxt[i][s[i] - 'a'] = i;\n    }\n \n    int q; cin >> q;\n    while (q--) {\n        string t; cin >> t;\n        int pos = -1;\n        for (char c : t)\n            pos = nxt[pos + 1][c - 'a'];\n        cout << d[pos] << \"\\n\";\n    }\n}\n \nint main() {\n#ifdef _DEBUG\n    freopen(\"input.txt\", \"r\", stdin);\n    int tt = clock();\n#endif\n    ios_base::sync_with_stdio(false);\n    cin.tie(0), cout.tie(0);\n    cout << fixed << setprecision(15);\n    \n    if(read()) {\n        solve();\n        \n#ifdef _DEBUG\n        cerr << \"TIME = \" << clock() - tt << endl;\n        tt = clock();\n#endif\n    }\n    return 0;\n}"
+    ]
+  }
+}

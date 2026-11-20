@@ -1,0 +1,55 @@
+{
+  "contest_id": 2025,
+  "index": "D",
+  "name": "Attribute Checks",
+  "rating": 1800,
+  "tags": [
+    "brute force",
+    "data structures",
+    "dp",
+    "implementation",
+    "math",
+    "two pointers"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2025D",
+  "url": "https://codeforces.com/problemset/problem/2025/D",
+  "contest_start_time": "2024-10-14T14:35:00+00:00",
+  "statement": {
+    "title": "D. Attribute Checks",
+    "time_limit": "2.5 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "Imagine a game where you play as a character that has two attributes: \"Strength\" and \"Intelligence\", that are at zero level initially.\n\nDuring the game, you'll acquire $m$ attribute points that allow you to increase your attribute levels — one point will increase one of the attributes by one level. But sometimes, you'll encounter a so-called \"Attribute Checks\": if your corresponding attribute is high enough, you'll pass it; otherwise, you'll fail it.\n\nSpending some time, you finally prepared a list which contains records of all points you got and all checks you've met. And now you're wondering: what is the maximum number of attribute checks you can pass in a single run if you'd spend points wisely?\n\nNote that you can't change the order of records.",
+    "input_spec": "The first line contains two integers $n$ and $m$ ($1 \\le m \\le 5000$; $m  \\lt  n \\le 2 \\cdot 10^6$) — the number of records in the list and the total number of points you'll get during the game.\n\nThe second line contains $n$ integers $r_1, r_2, \\dots, r_n$ ($-m \\le r_i \\le m$), where $r_i$ encodes the $i$-th record:\n\n If $r_i = 0$, then the $i$-th record is an acquiring one attribute point. You can spend to level up either Strength or Intelligence;\n\n If $r_i  \\gt  0$, then it's an Intelligence check: if your Intelligence level is greater than or equal to $|r_i|$, you pass.\n\n If $r_i  \\lt  0$, then it's a Strength check: if your Strength level is greater than or equal to $|r_i|$, you pass.\n\nAdditional constraint on the input: the sequence $r_1, r_2, \\dots, r_n$ contains exactly $m$ elements equal to $0$.",
+    "output_spec": "Print one integer — the maximum number of checks you can pass.",
+    "note": "In the first test, it's optimal to spend each point in Strength, so you'll fail $2$ Intelligence checks but pass $3$ Strength checks.\n\nIn the second test, you'll fail both checks, since the first point you get comes after the checks.\n\nIn the third test, one of the optimal strategies is:\n\n spend the first point on Intelligence;\n\n spend the second point on Strength;\n\n spend the third point on Strength;\n\n As a result, you'll pass $2$ Intelligence checks $r_3$ and $r_9$ and $2$ Strength checks $r_7$ and $r_8$.",
+    "samples": [
+      {
+        "input": "10 5\n0 1 0 2 0 -3 0 -4 0 -5",
+        "output": "\n3"
+      },
+      {
+        "input": "3 1\n1 -1 0",
+        "output": "\n0"
+      },
+      {
+        "input": "9 3\n0 0 1 0 2 -3 -2 -2 1",
+        "output": "\n4"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 135173,
+    "url": "https://codeforces.com/blog/entry/135173",
+    "tutorial": "For the start, let's introduce a slow but correct solution. Let $d[i][I]$ be the answer to the task if we processed first $i$ records and the current Intelligence level is $I$. If we know Intelligence level $I$, then we also know the current Strength level $S = P - I$, where $P$ is just a total number of points in first $i$ records.\n\nSince we want to use dp, let's discuss transitions:\n\n If the last record $r_i = 0$, then it was a point, and there are only two options:\n\n we either raised Intelligence, so the last state was $d[i - 1][I - 1]$;\n\n or raised Strength, coming from state $d[i - 1][I]$.\n\n In other words, we can calculate $d[i][I] = \\max(d[i - 1][I - 1], d[i - 1][I])$.\n\n If the last record $r_i  \\gt  0$, then it's an Intelligence check, and it doesn't affect the state, only its answer. For all $I \\ge r_i$, $d[i][I] = d[i - 1][I] + 1$; otherwise, it's $d[i][I] = d[i - 1][I]$.\n\n If $r_i  \\lt  0$, then it's a Strength check and affects the values in a similar way. For all $I \\le P + r_i$, $d[i][I] = d[i - 1][I] + 1$; otherwise, it's also $d[i][I] = d[i - 1][I]$.\n\nOK, we've got a solution with $O(nm)$ time and memory, but we can speed it up. Note that the first case appears only $O(m)$ times, while the second and third cases are just range additions. So, if we can do addition in $O(1)$, then processing the first case in linear time is enough to achieve $O(m^2 + n)$ complexity.\n\nHow to process range additions in $O(1)$ time? Let's use some difference array $a$ to do it lazily. Instead of adding some value $v$ to the segment $[l, r]$, we'll only add value $v$ to $a[l]$ and $-v$ to $a[r + 1]$. And when we meet $r_i = 0$, we'll \"push\" all accumulated operations all at once.\n\nThe total value you need to add to some position $i$ is $\\sum_{j=0}^{i}{a[i]}$. So, we can calculate all of them in $O(m)$ just going from left to right, maintaining the prefix sum.\n\nThe last question is reducing the space complexity. As usual, you can store only the last two layers: for the current layer $i$ and previous layer $i - 1$. But actually, you can store only one layer and update it in-place.\n\nLet's store only one last layer of dp as $d[I]$. Attribute checks don't change array $d$ at all. In case $r_i = 0$, you, firstly, push all data from $a$ to $d$, and then you need to recalc values in $d$. But since the formula is $d[I] = \\max(d[I], d[I - 1])$, you can just iterate over $I$ in descending order and everything works!\n\nIn total, we have a solution with $O(m^2 + n)$ time and $O(m)$ space complexity.",
+    "solution_code": [
+      "#include<bits/stdc++.h>\n \nusing namespace std;\n \n#define fore(i, l, r) for(int i = int(l); i < int(r); i++)\n#define sz(a) int((a).size())\n \ntypedef long long li;\n \nconst int INF = int(1e9);\nconst li INF64 = li(1e18);\n \nint n, m;\nvector<int> rs;\n \nbool read() {\n\tif(!(cin >> n >> m))\n\t\treturn false;\n\trs.resize(n);\n\tfore (i, 0, n)\n\t\tcin >> rs[i];\n\treturn true;\n}\n \nstruct LazySum {\n\tvector<int> ps;\n\tLazySum(int n) : ps(n, 0) {}\n\t\n\t//[l, r]\n\tvoid add(int l, int r, int val) {\n\t\tif (l > r) return;\n\t\tps[l] += val;\n\t\tps[r + 1] -= val;\n\t}\n\tvoid pushToAndClear(vector<int> &d) {\n\t\tint sum = 0;\n\t\tfore (i, 0, sz(ps)) {\n\t\t\tsum += ps[i];\n\t\t\tps[i] = 0;\n\t\t\tif (i < sz(d))\n\t\t\t\td[i] += sum;\n\t\t}\n\t}\n};\n \nvoid solve() {\n\tLazySum ls(m + 2);\n\tvector<int> d(m + 1, -INF);\n\td[0] = 0;\n \n\tint cntP = 0;\n\tfor (int r : rs) {\n\t\tif (r == 0) {\n\t\t\tls.pushToAndClear(d);\n\t\t\tfor (int i = m; i > 0; i--)\n\t\t\t\td[i] = max(d[i], d[i - 1]);\n\t\t\tcntP++;\n\t\t\tcontinue;\n\t\t}\n\t\tif (r > 0)\n\t\t\tls.add(r, m, 1);\n\t\telse\n\t\t\tls.add(0, cntP + r, 1);\n\t}\n\tls.pushToAndClear(d);\n\tcout << *max_element(d.begin(), d.end()) << endl;\n}\n \nint main() {\n#ifdef _DEBUG\n\tfreopen(\"input.txt\", \"r\", stdin);\n\tint tt = clock();\n#endif\n\tios_base::sync_with_stdio(false);\n\tcin.tie(0), cout.tie(0);\n\tcout << fixed << setprecision(15);\n\t\n\tif(read()) {\n\t\tsolve();\n\t\t\n#ifdef _DEBUG\n\t\tcerr << \"TIME = \" << clock() - tt << endl;\n\t\ttt = clock();\n#endif\n\t}\n\treturn 0;\n}",
+      "n, m = map(int, input().split())\nrs = map(int, input().split())\n\nd = [-int(1e9)] * (m + 1)\nd[0] = 0\nadd = [0] * (m + 2)\ndef addSegment(l, r):\n    if l <= r:\n        add[l] += 1\n        add[r + 1] -= 1\n\ndef pushAll():\n    sum = 0\n    for i in range(m + 1):\n        sum += add[i]\n        d[i] += sum\n    for i in range(m + 2):\n        add[i] = 0\n\ncntPoints = 0\nfor r in rs:\n    if r == 0:\n        pushAll()\n        for i in range(m, 0, -1):\n            d[i] = max(d[i], d[i - 1])\n        cntPoints += 1\n    else:\n        lf, rg = 0, 0\n        if (r > 0):\n            lf = min(r, m + 1)\n            rg = m\n        else:\n            lf = 0\n            rg = max(-1, cntPoints + r)\n        addSegment(lf, rg)\npushAll()\nprint(max(d))"
+    ]
+  }
+}

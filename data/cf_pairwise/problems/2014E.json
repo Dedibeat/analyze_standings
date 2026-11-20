@@ -1,0 +1,41 @@
+{
+  "contest_id": 2014,
+  "index": "E",
+  "name": "Rendez-vous de Marian et Robin",
+  "rating": 1800,
+  "tags": [
+    "dfs and similar",
+    "graphs",
+    "shortest paths"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2014E",
+  "url": "https://codeforces.com/problemset/problem/2014/E",
+  "contest_start_time": "2024-09-21T14:45:00+00:00",
+  "statement": {
+    "title": "E. Rendez-vous de Marian et Robin",
+    "time_limit": "5 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "In the humble act of meeting, joy doth unfold like a flower in bloom.\n\nAbsence makes the heart grow fonder. Marian sold her last ware at the Market at the same time Robin finished training at the Major Oak. They couldn't wait to meet, so they both start without delay.\n\nThe travel network is represented as $n$ vertices numbered from $1$ to $n$ and $m$ edges. The $i$-th edge connects vertices $u_i$ and $v_i$, and takes $w_i$ seconds to travel (all $w_i$ are even). Marian starts at vertex $1$ (Market) and Robin starts at vertex $n$ (Major Oak).\n\nIn addition, $h$ of the $n$ vertices each has a single horse available. Both Marian and Robin are capable riders, and could mount horses in no time (i.e. in $0$ seconds). Travel times are halved when riding. Once mounted, a horse lasts the remainder of the travel. Meeting must take place on a vertex (i.e. not on an edge). Either could choose to wait on any vertex.\n\nOutput the earliest time Robin and Marian can meet. If vertices $1$ and $n$ are disconnected, output $-1$ as the meeting is cancelled.",
+    "input_spec": "The first line of the input contains a single integer $t$ ($1\\leq t \\leq 10^4$) — the number of test cases.\n\nThe first line of each test case consists of three integers $n$, $m$, $h$ ($2 \\le n \\le 2 \\cdot 10^5, \\;1 \\le m \\le 2 \\cdot 10^5, \\; 1 \\le h \\le n$) — the number of vertices, the number of edges and the number of vertices that have a single horse.\n\nThe second line of each test case contains $h$ distinct integers $a_1, a_2, \\ldots, a_h$ ($1 \\le a_i \\le n$) — the vertices that have a single horse available.\n\nThen follow $m$ lines of each test case, each with three integers $u_i$, $v_i$, $w_i$ ($1\\le u_i,v_i \\le n, \\; 2\\le w_i \\le 10^6$) — meaning that there is an edge between vertices $u_i$ and $v_i$ with travel cost $w_i$ seconds without a horse.\n\nThere are no self loops or multiple edges. By good fortune, all $w_i$ are even integers.\n\nIt is guaranteed that the sums of both $n$ and $m$ over all test cases do not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, output a single integer, the earliest time Robin and Marian can meet. If it is impossible for them to meet, output $-1$.",
+    "note": "In the first test case, Marian rides from vertex $1$ to vertex $2$, Robin waits.\n\nIn the second test case, vertices $1$ and $3$ are not connected.\n\nIn the third test case, both Marian and Robin travel to vertex $2$ to meet.\n\nIn the fourth test case, Marian travels to vertex $2$ without a horse, mounts the horse at vertex $2$ and rides to vertex $3$ to meet Robin.\n\nIn the fifth test case, Marian travels to vertex $2$ without a horse, mounts the horse at vertex $2$ and rides back to vertex $1$ and then to vertex $3$. Robin waits.",
+    "samples": [
+      {
+        "input": "6\n2 1 1\n1\n1 2 10\n3 1 2\n2 3\n1 2 10\n3 3 1\n2\n1 2 4\n1 3 10\n2 3 6\n4 3 2\n2 3\n1 2 10\n2 3 18\n3 4 16\n3 2 1\n2\n1 2 4\n1 3 16\n7 7 1\n3\n1 5 2\n2 6 12\n1 2 12\n6 4 8\n7 3 4\n6 3 4\n7 6 4",
+        "output": "\n5\n-1\n6\n19\n14\n12"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 134210,
+    "url": "https://codeforces.com/blog/entry/134210",
+    "tutorial": "2014E - Rendez-vous de Marian et Robin\n\nHint 1\n\nIn addition, h of the n vertices each has a single horse available.\n\nJust forget this condition exists, and assume each place contains unlimited horses.\n\nHint 1\n\nNow for each place try to find the minimum time, if we reach there using a horse, and without a horse.\n\nHint 3\n\nTry to solve above problem using a modified version of Dijkstra's algorithm\n\nHint 3\n\nAt last fix a meeting point, and take maximum of minimum time each person takes to reach there with or without horse.\n\nMy submission — 282288329\n\nVideo Editorial",
+    "solution_code": []
+  }
+}

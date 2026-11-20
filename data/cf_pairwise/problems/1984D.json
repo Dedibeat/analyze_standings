@@ -1,0 +1,46 @@
+{
+  "contest_id": 1984,
+  "index": "D",
+  "name": "''a'' String Problem",
+  "rating": 2000,
+  "tags": [
+    "brute force",
+    "hashing",
+    "implementation",
+    "math",
+    "string suffix structures",
+    "strings"
+  ],
+  "points": 2500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1984D",
+  "url": "https://codeforces.com/problemset/problem/1984/D",
+  "contest_start_time": "2024-06-09T14:35:00+00:00",
+  "statement": {
+    "title": "D. \"a\" String Problem",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "You are given a string $s$ consisting of lowercase Latin characters. Count the number of nonempty strings $t \\neq$ \"$\\texttt{a}$\" such that it is possible to partition$^{\\dagger}$ $s$ into some substrings satisfying the following conditions:\n\n each substring either equals $t$ or \"$\\texttt{a}$\", and\n\n at least one substring equals $t$.\n\n$^{\\dagger}$ A partition of a string $s$ is an ordered sequence of some $k$ strings $t_1, t_2, \\ldots, t_k$ (called substrings) such that $t_1 + t_2 + \\ldots + t_k = s$, where $+$ represents the concatenation operation.",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\leq t \\leq 10^4$) — the number of test cases.\n\nThe only line of each test case contains a string $s$ consisting of lowercase Latin characters ($2 \\leq |s| \\leq 2 \\cdot 10^5$).\n\nThe sum of $|s|$ over all test cases does not exceed $3 \\cdot 10^5$.",
+    "output_spec": "For each test case, output a single integer — the number of nonempty strings $t \\neq$ \"$\\texttt{a}$\" that satisfy all constraints.",
+    "note": "In the first test case, $t$ can be \"$\\texttt{aa}$\", \"$\\texttt{aaa}$\", \"$\\texttt{aaaa}$\", or the full string.\n\nIn the second test case, $t$ can be \"$\\texttt{b}$\", \"$\\texttt{bab}$\", \"$\\texttt{ba}$\", or the full string.\n\nIn the third test case, the only such $t$ is the full string.",
+    "samples": [
+      {
+        "input": "8\naaaaa\nbaba\ncabacb\naaabaaa\nbitset\nab\nabbaaaabbb\nyearnineteeneightyfour",
+        "output": "\n4\n4\n1\n16\n1\n2\n3\n1"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 130252,
+    "url": "https://codeforces.com/blog/entry/130252",
+    "tutorial": "1984D - ''a'' String Problem\n\nProblem Credits: le0n\nAnalysis: null_awe\n\nHint 1\n\nWhat does $t$ have to include?\n\nSolution\n\nSpecial case: the string consists of only \"$\\texttt{a}$\", then answer is $n - 1$.\n\nOtherwise, $t$ has to contain a character that is not \"$\\texttt{a}$\". Let's consider one approach of counting. Let's force all $t$ to start with the first non-a character, and see how many work.\n\nTo see if one of these strings $t$ will work, we can start with $i = 0$. As long as $i$ does not point to the end of the string, we can find the next non-a character in $s$, and then see if the next $|t|$ characters in $s$ matches $t$. The last check mentioned can be done through hashing or using the Z-function. If it doesn't, this value of $t$ doesn't work. Otherwise, we update $i$ to the new current position and continue checking.\n\nNow, if we find a string $t$ that does work, we need to count its contribution to the answer. We can just add $1$, but obviously not all working $t$ will start with a non-a character. Instead, we can find the minimum unused \"$\\texttt{a}$\"s before all of the substrings equal to $t$ (call this $m$), and the current $t$ will be able to extend out up to $m$ \"$\\texttt{a}$\"s at the beginning of the string. Thus, the contribution is $m + 1$ to the answer.\n\nHow fast is this? Because we are checking at most one string $t$ of each length, and the check itself can be made to take $O(\\frac{n}{|t|})$, we have a total time complexity of $O(n\\log{n})$ due to harmonic sums.\n\nCode (C++)",
+    "solution_code": [
+      "#include <iostream>\n#include <vector>\n#include <climits>\n#include <set>\nusing namespace std;\n \n#define ll long long\n \nvector<int> z_function(string s) {\n  int n = s.size();\n  vector<int> z(n);\n  int l = 0, r = 0;\n  for(int i = 1; i < n; ++i) {\n    if (i < r) z[i] = min(r - i, z[i - l]);\n    while (i + z[i] < n && s[z[i]] == s[i + z[i]]) ++z[i];\n    if (i + z[i] > r) l = i, r = i + z[i];\n  }\n  return z;\n}\n \nvoid solve() {\n  int n; // cin >> n;\n  string s; cin >> s;\n  n = s.length();\n  vector<int> nona(n, n);\n  for (int i = n - 1; i >= 0; --i) {\n    if (s[i] != 'a') nona[i] = i;\n    else if (i + 1 < n) nona[i] = nona[i + 1];\n  }\n  if (nona[0] == n) {\n    cout << n - 1 << '\\n';\n    return;\n  }\n  string s2 = \"\";\n  int i1 = nona[0];\n  for (int i = i1; i < n; ++i) s2 += s[i];\n  vector<int> z = z_function(s2);\n  ll ans = 0;\n  for (int len = 1; i1 + len <= n; ++len) {\n    int cur = i1 + len;\n    int mn = i1;\n    bool works = true;\n    while (cur < n) {\n      if (nona[cur] == n) break;\n      int bt = nona[cur] - cur;\n      mn = min(mn, bt);\n      cur += bt;\n      if (z[cur - i1] < len) {\n        works = false;\n        break;\n      }\n      cur += len;\n    }\n    if (works) ans += mn + 1;\n  }\n  cout << ans << '\\n';\n}\n \nint main() {\n  int t; cin >> t;\n  for (int i = 0; i < t; ++i) solve();\n  return 0;\n}"
+    ]
+  }
+}

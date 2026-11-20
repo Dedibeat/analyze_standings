@@ -1,0 +1,47 @@
+{
+  "contest_id": 2062,
+  "index": "E1",
+  "name": "The Game (Easy Version)",
+  "rating": 2000,
+  "tags": [
+    "data structures",
+    "dfs and similar",
+    "games",
+    "graphs",
+    "greedy",
+    "trees"
+  ],
+  "points": 1500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2062E1",
+  "url": "https://codeforces.com/problemset/problem/2062/E1",
+  "contest_start_time": "2025-01-26T14:35:00+00:00",
+  "statement": {
+    "title": "E1. The Game (Easy Version)",
+    "time_limit": "4 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "This is the easy version of the problem. The difference between the versions is that in this version, you only need to find one of the possible nodes Cirno may choose. You can hack only if you solved all versions of this problem.\n\nCirno and Daiyousei are playing a game with a tree$^{\\text{∗}}$ of $n$ nodes, rooted at node $1$. The value of the $i$-th node is $w_i$. They take turns to play the game; Cirno goes first.\n\nIn each turn, assuming the opponent chooses $j$ in the last turn, the player can choose any remaining node $i$ satisfying $w_i \\gt w_j$ and delete the subtree$^{\\text{†}}$ of node $i$. In particular, Cirno can choose any node and delete its subtree in the first turn.\n\nThe first player who can not operate wins, and they all hope to win. Find one of the possible nodes Cirno may choose so that she wins if both of them play optimally.\n\n$^{\\text{∗}}$A tree is a connected graph without cycles.\n\n$^{\\text{†}}$Node $u$ is considered in the subtree of node $i$ if any path from $1$ to $u$ must go through $i$.",
+    "input_spec": "The first line of input contains a single integer $t$ ($1 \\leq t \\leq 10^5$) — the number of input test cases.\n\nThe first line of each test case contains one integer $n$ ($1 \\le n \\le 4\\cdot 10^5$) — the number of nodes in the tree.\n\nThe second line contains $n$ integers $w_1,w_2,\\ldots,w_n$ ($1 \\le w_i \\le n$) — the value of each node.\n\nThe next $n-1$ lines contain the edges of the tree. The $i$-th line contains two integers $u_i,v_i$ ($1\\le u_i,v_i \\le n$, $u_i \\neq v_i$) — an edge connecting $u_i$ and $v_i$. It is guaranteed that the given edges form a tree.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $4\\cdot 10^5$.",
+    "output_spec": "For each test case, print one line.\n\nIf Cirno wins the game, print any possible node she may choose in the first turn.\n\nOtherwise, print \"0\" (without quotes).",
+    "note": "In the first test case:\n\n If Cirno chooses $1$ or $3$ in the first turn, Daiyousei cannot make a move, so Daiyousei wins.\n\n If Cirno chooses $2$ or $4$ in the first turn, Daiyousei can only choose $3$, but after it Cirno cannot make a move, so Cirno wins.\n\nTherefore, all possible nodes Cirno may choose are $2$ and $4$.\n\nIn the second test case, regardless of which node Cirno chooses, Daiyousei cannot make a move, so Daiyousei wins.\n\nIn the third and fourth test case, the only possible node Cirno may choose in the first turn is $2$.\n\nIn the fifth test case, all possible nodes Cirno may choose in the first turn are $3,4,6,7$ and $10$.",
+    "samples": [
+      {
+        "input": "5\n4\n2 2 4 3\n1 2\n1 3\n2 4\n5\n1 2 3 4 5\n1 2\n2 3\n3 4\n4 5\n3\n1 2 3\n1 2\n1 3\n5\n3 1 3 4 5\n1 2\n2 3\n3 4\n4 5\n10\n1 2 3 2 4 3 3 4 4 3\n1 4\n4 6\n7 4\n6 9\n6 5\n7 8\n1 2\n2 3\n2 10",
+        "output": "\n2\n0\n2\n2\n10"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 138866,
+    "url": "https://codeforces.com/blog/entry/138866",
+    "tutorial": "In the first round, the node $u$ chosen by Cirno must satisfy: there exists a node $v$ outside the subtree of $u$ such that $w_v  \\gt  w_u$. If no such node exists, then Cirno will lose.\n\nAmong these nodes, Cirno can choose the node with the largest $w_u$. After this, Daiyousei can only select nodes that do not satisfy the above condition, and subsequently, Cirno will inevitably have no nodes left to operate on.\n\nTo determine whether there exists a node $v$ outside the subtree of $u$ such that $w_v  \\gt  w_u$, we record the timestamp $dfn_u$ when each node is first visited during the DFS traversal of the tree, as well as the timestamp $low_u$ when the traversal of its subtree is completed. Since the timestamps outside the subtree form two intervals, namely $[1, dfn_u)$ and $(low_u, n]$, we need to check whether $\\max(\\max\\limits_{dfn_v\\in [1,dfn_u)}w_v,\\max\\limits_{dfn_v\\in (low_u,n]}w_v) \\gt w_u$ holds. This can be achieved by maintaining the maximum values in the prefix and suffix.\n\nAdditionally, we can enumerate the nodes in descending order of $w_i$ and maintain their lowest common ancestor (LCA). If the LCA of all $v$ satisfying $w_v  \\gt  w_u$ is not a descendant of $u$, then there must exist a node $v$ outside the subtree of $u$ that satisfies $w_v  \\gt  w_u$.\n\nWe can also enumerate the nodes in descending order of $w_i$ and maintain their minimum and maximum $dfn_i$, namely $mn,mx$. According to the conclusion above, we can check whether $mn \\lt dfn_u$ or $mx \\gt low_u$ holds. If either condition holds, then there must exist a node $v$ outside the subtree of $u$ that satisfies $w_v  \\gt  w_u$.",
+    "solution_code": [
+      "#include \"bits/stdc++.h\"\nusing namespace std;\nconst int N=1e6+5;\nvector<int> e[N];\nint w[N],dfn[N],nfd[N],pre[N],suf[N],low[N];\nbool ed[N];\nint id;\nvoid dfs(int u)\n{\n\tif (ed[u]) return;\n\ted[u]=1;\n\tdfn[u]=++id;\n\tnfd[id]=u;\n\tfor (int v:e[u]) dfs(v);\n\ted[u]=0;\n\tlow[u]=id;\n}\nint main()\n{\n\tios::sync_with_stdio(0); cin.tie(0);\n\tcout<<fixed<<setprecision(15);\n\tint T; cin>>T;\n\twhile (T--)\n\t{\n\t\tint n,m,i,j;\n\t\tcin>>n;\n\t\tfor (i=1; i<=n; i++)\n\t\t{\n\t\t\te[i].clear();\n\t\t\tid=0;\n\t\t}\n\t\tfor (i=1; i<=n; i++) cin>>w[i];\n\t\tfor (i=1; i<n; i++)\n\t\t{\n\t\t\tint u,v;\n\t\t\tcin>>u>>v;\n\t\t\te[u].push_back(v);\n\t\t\te[v].push_back(u);\n\t\t}\n\t\tdfs(1);\n\t\tfor (i=1; i<=n; i++) pre[i]=max(pre[i-1],w[nfd[i]]);\n\t\tsuf[n+1]=0;\n\t\tfor (i=n; i; i--) suf[i]=max(suf[i+1],w[nfd[i]]);\n\t\tint mx=0;\n\t\tfor (i=1; i<=n; i++) if (max(pre[dfn[i]-1],suf[low[i]+1])>w[i]&&w[i]>w[mx]) mx=i;\n\t\tcout<<mx<<'\\n';\n\t}\n}",
+      "for _ in range(int(input())):\n\tn = int(input())\n\tw=[int(x) for x in input().split()]\n\twb=[[] for i in range(n)]\n\tfor i in range(n):\n\t\tw[i]-=1\n\t\twb[w[i]].append(i)\n\te=[[] for i in range(n)]\n\tfor i in range(n-1):\n\t\tu,v=map(int,input().split())\n\t\te[u-1].append(v-1)\n\t\te[v-1].append(u-1)\n\tstk=[0]\n\tf,dfn=[-1]*n,[0]*n\n\tnfd=[]\n\twhile stk:\n\t\tu=stk.pop()\n\t\tdfn[u]=len(nfd)\n\t\tnfd.append(u)\n\t\tfor v in e[u]:\n\t\t\tif v!=f[u]:\n\t\t\t\tf[v]=u\n\t\t\t\tstk.append(v)\n\tsz=[1]*n\n\tnfd.reverse()\n\tfor u in nfd:\n\t\tif u==0:\n\t\t\tcontinue\n\t\tsz[f[u]]+=sz[u]\n\twb.reverse()\n\tmx=-1;mn=n+1\n\tfor v in wb:\n\t\tfor u in v:\n\t\t\tif mn<dfn[u] or mx>dfn[u]+sz[u]-1:\n\t\t\t\tprint(u+1)\n\t\t\t\tbreak\n\t\telse:\n\t\t\tfor u in v:\n\t\t\t\tmn=min(mn,dfn[u])\n\t\t\t\tmx=max(mx,dfn[u])\n\t\t\tcontinue\n\t\tbreak\n\telse:\n\t\tprint(0)"
+    ]
+  }
+}

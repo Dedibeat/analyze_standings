@@ -1,0 +1,41 @@
+{
+  "contest_id": 2060,
+  "index": "D",
+  "name": "Subtract Min Sort",
+  "rating": 1100,
+  "tags": [
+    "greedy"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2060D",
+  "url": "https://codeforces.com/problemset/problem/2060/D",
+  "contest_start_time": "2025-01-19T14:35:00+00:00",
+  "statement": {
+    "title": "D. Subtract Min Sort",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "You are given a sequence $a$ consisting of $n$ positive integers.\n\nYou can perform the following operation any number of times.\n\n Select an index $i$ ($1 \\le i  \\lt  n$), and subtract $\\min(a_i,a_{i+1})$ from both $a_i$ and $a_{i+1}$.\n\nDetermine if it is possible to make the sequence non-decreasing by using the operation any number of times.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 10^4$). The description of the test cases follows.\n\nThe first line of each test case contains a single integer $n$ ($2 \\le n \\le 2 \\cdot 10^5$).\n\nThe second line of each test case contains $a_1,a_2,\\ldots,a_n$ ($1 \\le a_i \\le 10^9$).\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "If it is possible to make the sequence non-decreasing, print \"YES\" on a new line. Otherwise, print \"NO\" on a new line.\n\nYou can output the answer in any case. For example, the strings \"yEs\", \"yes\", and \"Yes\" will also be recognized as positive responses.",
+    "note": "In the first test case, the array is already sorted.\n\nIn the second test case, we can show that it is impossible.\n\nIn the third test case, after performing an operation on $i=1$, the array becomes $[0,1,2,3]$, which is now in nondecreasing order.",
+    "samples": [
+      {
+        "input": "5\n5\n1 2 3 4 5\n4\n4 3 2 1\n4\n4 5 2 3\n8\n4 5 4 5 4 5 4 5\n9\n9 9 8 2 4 4 3 5 3",
+        "output": "\nYES\nNO\nYES\nYES\nNO"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 138342,
+    "url": "https://codeforces.com/blog/entry/138342",
+    "tutorial": "2060D - Сортировка вычитанием минимума\n\nProblem Credits: Proof_by_QED\n Analysis: Proof_by_QED\n\nSolution\n\nFor clarity, let's denote $op_i$ as an operation performed on $a_i$ and $a_{i+1}$.\n\nClaim: if it is possible, then the sequence of operations $op_1,op_2,\\ldots,op_{n-1}$ will sort the array.\n\nProof: Let $b$ be any sequence of operations that will sort the array. Let's transform the sequence $b$ such that it becomes $[op_1,op_2,\\ldots,op_{n-1}]$.\n\nFirst, let's note that an $op_i$ does nothing if $a_i=0$ or $a_{i+1}=0$. Additionally, after $op_i$, at least one of ${a_i,a_{i+1}}$ will become zero. Thus, we can remove all duplicates in $b$ without altering the result.\n\nNow, let $x$ be the largest number such that $op_x$ is in $b$. Since at least one of $a_x,a_{x+1}$ will be zero, operations must be performed such that each of $a_1,a_2,\\ldots,a_{x-1}$ are zero. Let $S$ be the set of indices with $i \\lt x$ such that $op_i$ is not in $b$. Note that we can simply append each operation in $S$ at the end of $b$ without altering the result, since all elements before $a_x$ are already zero.\n\nOur sequence of operations now contain a permutation of $op_1,op_2,\\ldots,op_x$, and we have ensured that all of $a_1,a_2,\\ldots,a_x=0$. Since the sequence is now sorted, we can in fact continue performing $op_{x+1},op_{x+2},\\ldots,op_{n-1}$ in this order. Notice that this sequence of operations will keep our array sorted, as $op_y$ will make $a_y=0$ (since $a_y \\lt a{y+1}$).\n\nLet's show that we can rearrange our operations such that $1$ comes first. There are two cases: either $op_1$ comes before $op_2$, or $op_2$ comes before $op_1$. In the first case, notice that no operation done before $op_1$ will impact either the value of $a_1$ or $a_2$, so rearranging such that $op_1$ comes first does not impact the final results. In the second case, notice that after $op_2$ is done, we must have $a_1=a_2$, as otherwise $op_1$ will not simultaneously make $a_1=a_2=0$. This implies that right before $op_2$ is performed, we must have $a_1+a_3=a_2$. Then, rearranging the operations such that $op_1$ comes first will not impact the final result.\n\nUsing the same line of reasoning, we can make $op_2$ the second operation, then $op_3$, and so on. To solve the problem, we can simply simulate the operations in this order, and then check if the array is sorted at the end.\n\nTime Complexity : $O(n)$\n\nCode (C++)\n\nRate The Problem!\n\n Heat\n\n Mid\n\n Horrendous\n\n Didn't Solve",
+    "solution_code": [
+      "#include <bits/stdc++.h>\nusing namespace std;\nusing ll = long long;\nusing vll = vector <ll>;\nusing ii = pair <ll, ll>;\nusing vii = vector <ii>;\n\nvoid tc () {\n    ll n;\n    cin >> n;\n    vll ve(n);\n    for (ll &i : ve) cin >> i;\n    ll j = 0;\n    for (ll i = 1; i < n; i++) {\n        if (ve[i-1] > ve[i]) j = i;\n    }\n    if (j == 0) { // all done\n        cout << \"YES\\n\";\n        return;\n    }\n    auto fop = [&](ll i) {\n        ll minN = min(ve[i], ve[i+1]);\n        ve[i] -= minN;\n        ve[i+1] -= minN;\n    };\n    for (ll i = 0; i < j; i++) {\n        fop(i);\n    }\n    cout << (is_sorted(ve.begin(), ve.end()) ? \"YES\" : \"NO\") << '\\n';\n}\n\nint main () {\n    cin.tie(nullptr) -> sync_with_stdio(false);\n    ll T; cin >> T; while (T--) { tc(); }\n    return 0;\n}"
+    ]
+  }
+}

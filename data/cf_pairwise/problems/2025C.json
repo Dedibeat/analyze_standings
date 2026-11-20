@@ -1,0 +1,46 @@
+{
+  "contest_id": 2025,
+  "index": "C",
+  "name": "New Game",
+  "rating": 1300,
+  "tags": [
+    "binary search",
+    "brute force",
+    "greedy",
+    "implementation",
+    "sortings",
+    "two pointers"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2025C",
+  "url": "https://codeforces.com/problemset/problem/2025/C",
+  "contest_start_time": "2024-10-14T14:35:00+00:00",
+  "statement": {
+    "title": "C. New Game",
+    "time_limit": "2 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "There's a new game Monocarp wants to play. The game uses a deck of $n$ cards, where the $i$-th card has exactly one integer $a_i$ written on it.\n\nAt the beginning of the game, on the first turn, Monocarp can take any card from the deck. During each subsequent turn, Monocarp can take exactly one card that has either the same number as on the card taken on the previous turn or a number that is one greater than the number on the card taken on the previous turn.\n\nIn other words, if on the previous turn Monocarp took a card with the number $x$, then on the current turn he can take either a card with the number $x$ or a card with the number $x + 1$. Monocarp can take any card which meets that condition, regardless of its position in the deck.\n\nAfter Monocarp takes a card on the current turn, it is removed from the deck.\n\nAccording to the rules of the game, the number of distinct numbers written on the cards that Monocarp has taken must not exceed $k$.\n\nIf, after a turn, Monocarp cannot take a card without violating the described rules, the game ends.\n\nYour task is to determine the maximum number of cards that Monocarp can take from the deck during the game, given that on the first turn he can take any card from the deck.",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases.\n\nThe first line of each test case contains two integers $n$ and $k$ ($1 \\le k \\le n \\le 200\\,000$) — the number of cards in the deck and the maximum number of distinct numbers that can be written on the cards that Monocarp takes.\n\nThe second line contains a sequence of integers $a_1, a_2, \\dots, a_n$ ($1 \\le a_i \\le 10^{9}$), where $a_i$ is the number written on the $i$-th card.\n\nAdditional constraint of the input: the sum of $n$ over all test cases doesn't exceed $200\\,000$.",
+    "output_spec": "For each test case, print the maximum number of cards that Monocarp can take from the deck during the game, given that on the first turn he can take any card from the deck.",
+    "note": "In the first example, Monocarp needs to take any of the cards with the number $3$. On the next two turns, he needs to take the two remaining cards with the number $3$. On the next three turns, he needs to take three cards with the number $4$. After that, Monocarp will not be able to take any more cards from the deck, and he will have $6$ cards.",
+    "samples": [
+      {
+        "input": "4\n10 2\n5 2 4 3 4 3 4 5 3 2\n5 1\n10 11 10 11 10\n9 3\n4 5 4 4 6 5 4 4 6\n3 2\n1 3 1",
+        "output": "\n6\n3\n9\n2"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 135173,
+    "url": "https://codeforces.com/blog/entry/135173",
+    "tutorial": "Let's fix the value of the first selected card $x$. Then it is optimal to take the cards as follows: take all cards with the number $x$, then all cards with the number $x + 1$, ..., all cards with the number $x + k - 1$. If any of the intermediate numbers are not present in the deck, we stop immediately.\n\nLet's sort the array $a$. Then the answer can be found as follows. Start at some position $i$ and move to the right from it as long as the following conditions are met: the difference between the next number and the current one does not exceed $1$ (otherwise, some number between them occurs $0$ times) and the difference between the next number and $a_i$ is strictly less than $k$ (otherwise, we will take more than $k$ different numbers).\n\nIt is easy to notice that as $i$ increases, the position we reach through this process also increases. Therefore, we can use two pointers to solve the problem. We will maintain a pointer to this position and update the answer at each $i$ with the distance between $i$ and the pointer.\n\nOverall complexity: $O(n \\log n)$ for each test case.",
+    "solution_code": [
+      "for _ in range(int(input())):\n\tn, k = map(int, input().split())\n\ta = list(map(int, input().split()))\n\ta.sort()\n\tans = 0\n\tj = 0\n\tfor i in range(n):\n\t\tj = max(i, j)\n\t\twhile j + 1 < n and a[j + 1] - a[j] <= 1 and a[j + 1] - a[i] < k:\n\t\t\tj += 1\n\t\tans = max(ans, j - i + 1)\n\tprint(ans)"
+    ]
+  }
+}

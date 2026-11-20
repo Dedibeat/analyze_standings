@@ -1,0 +1,44 @@
+{
+  "contest_id": 1984,
+  "index": "C1",
+  "name": "Magnitude (Easy Version)",
+  "rating": 1300,
+  "tags": [
+    "dp",
+    "greedy",
+    "math"
+  ],
+  "points": 750.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1984C1",
+  "url": "https://codeforces.com/problemset/problem/1984/C1",
+  "contest_start_time": "2024-06-09T14:35:00+00:00",
+  "statement": {
+    "title": "C1. Magnitude (Easy Version)",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "The two versions of the problem are different. You may want to read both versions. You can make hacks only if both versions are solved.\n\nYou are given an array $a$ of length $n$. Start with $c = 0$. Then, for each $i$ from $1$ to $n$ (in increasing order) do exactly one of the following:\n\n Option $1$: set $c$ to $c + a_i$.\n\n Option $2$: set $c$ to $|c + a_i|$, where $|x|$ is the absolute value of $x$.\n\nLet the maximum final value of $c$ after the procedure described above be equal to $k$. Find $k$.",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\leq t \\leq 10^4$) — the number of test cases.\n\nThe first line of each test case contains a single integer $n$ ($2 \\leq n \\leq 2 \\cdot 10^5$).\n\nThe second line of each case contains $n$ integers $a_1$, $a_2$, $a_3$, $\\ldots$, $a_n$ ($-10^9 \\leq a_i \\leq 10^9$).\n\nThe sum of $n$ over all test cases does not exceed $3 \\cdot 10^5$.",
+    "output_spec": "For each test case, output a single integer — the value of $k$.",
+    "note": "In the first test case, if we set $c$ to its absolute value every time we add to it, we end up with $6$. It can be shown that this is the maximum result.\n\nIn the second test case, taking the absolute value will never change anything, so we can just sum the array without doing anything to get $24$.\n\nIn the third test case, it is optimal to wait until the end to set $c$ to its absolute value, resulting in an answer of $6$.",
+    "samples": [
+      {
+        "input": "5\n4\n10 -9 -3 4\n8\n1 4 3 4 1 4 3 4\n3\n-1 -2 -3\n4\n-1000000000 1000000000 1000000000 1000000000\n4\n1 9 8 4",
+        "output": "\n6\n24\n6\n4000000000\n22"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 130252,
+    "url": "https://codeforces.com/blog/entry/130252",
+    "tutorial": "1984C1 - Magnitude (Easy Version) and 1984C2 - Magnitude (Hard Version)\n\nProblem Credits: buffering\nAnalysis: null_awe\n\nHint 1\n\nHow many times do we need to pick option $2$?\n\nHint 2\n\nWe only need to pick it once. How can we calculate the final value for every position we can pick?\n\nSolution (Easy Version)\n\nWe only need to pick option $2$ once. Why? Assume we picked option $2$ more than once, and consider the last two times it was picked. Both of these must occur when $c + a_i$ is negative, otherwise there is no reason to pick option $2$ over option $1$. Thus, if we chose option $1$ the first of these times instead of option $2$, that would cause the value of $c$ before the second operation to decrease. Because it was negative, this increases the magnitude, and thus it was more optimal to choose option $1$ for the first operation.\n\nBecause we only need to use option $2$ once, we can brute force where we use that operation and compute the final value of $c$ with prefix sums.\n\nSolution (Hard Version)\n\nRead the solution to the easy version first.\n\nLet's think a bit more. Where do we actually end up using option $2$? We only use option $2$ when our prefix sum up to this point is minimum in the whole array.\n\nNow, focus on each individual \"important\" use of option $2$ (where it actually makes a difference from option $1$), Let's say it is done at index $i$. Let's consider indices before. Since the operation at index $i$ is the only important option $2$, any option $2$'s we use before must not have been different from option $1$ (meaning that the value of $c + a_j$ has to be non-negative). Thus, we have the choice of using option $2$ or option $1$ at any index $j \\lt i$ where the prefix sum is non-negative. Let's say there exists $x$ unique values of $j$.\n\nNow, let's consider indices after. Since index $i$ is at a minimum prefix sum, that guarantees that all indices after will never have a lower value of $c$ than what $c$ is after doing the operation at index $i$. Thus, since we use option 2 at index $i$, we can use any of the two options moving forward. Thus, any index $j \\gt i$ has two choices on which option to pick. Let's say there exists $y$ unique values of $j$.\n\nThe contribution of index $i$ to the answer is then $2^{x + y}$.\n\nSpecial case: the prefix sum never becomes negative. What is the answer then?\n\nCode (C++)\n\nEasy Version\n\nHard Version",
+    "solution_code": [
+      "#include <iostream>\n#include <vector>\n#include <climits>\nusing namespace std;\n \n#define ll long long\n \nvoid solve() {\n  int n; cin >> n;\n  vector<int> arr(n); for (int i = 0; i < n; ++i) cin >> arr[i];\n  ll sum = 0, mn = 0;\n  for (int i = 0; i < n; ++i) sum += arr[i], mn = min(mn, sum);\n  cout << sum - 2 * mn << '\\n';\n}\n \nint main() {\n  ios_base::sync_with_stdio(false); cin.tie(NULL);\n  int t; cin >> t;\n  for (int i = 0; i < t; ++i) solve();\n  return 0;\n}",
+      "#include <iostream>\n#include <vector>\n#include <climits>\nusing namespace std;\n \n#define ll long long\n \nconst ll MAX_N = 400001;\nconst ll MOD = 998244353;\n \nvector<ll> p2(MAX_N);\n \nvoid solve() {\n  int n; cin >> n;\n  vector<int> arr(n); for (int i = 0; i < n; ++i) cin >> arr[i];\n  ll sum = 0, mn = 0, ans = 0, abses = 0;\n  for (int i = 0; i < n; ++i) sum += arr[i], mn = min(mn, sum);\n  if (mn == 0) {\n      cout << p2[n] << '\\n';\n      return;\n  }\n  sum = 0;\n  for (int i = 0; i < n; ++i) {\n    sum += arr[i];\n    if (sum == mn) {\n      ans = (ans + p2[n - i - 1 + abses]) % MOD;\n    }\n    if (sum >= 0) ++abses;\n  }\n  cout << ans << '\\n';\n}\n \nint main() {\n  ios_base::sync_with_stdio(false); cin.tie(NULL);\n  p2[0] = 1;\n  for (int i = 1; i < MAX_N; ++i) p2[i] = 2 * p2[i - 1] % MOD;\n  int t; cin >> t;\n  for (int i = 0; i < t; ++i) solve();\n  return 0;\n}"
+    ]
+  }
+}

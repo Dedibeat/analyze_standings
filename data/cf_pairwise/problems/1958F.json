@@ -1,0 +1,54 @@
+{
+  "contest_id": 1958,
+  "index": "F",
+  "name": "Narrow Paths",
+  "rating": 2000,
+  "tags": [
+    "*special",
+    "combinatorics"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1958F",
+  "url": "https://codeforces.com/problemset/problem/1958/F",
+  "contest_start_time": "2024-05-13T14:35:00+00:00",
+  "statement": {
+    "title": "F. Narrow Paths",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Monocarp is wandering through a matrix consisting of $2$ rows and $n$ columns. Let's denote the cell in the $i$-th row and $j$-th column as $(i, j)$. Monocarp starts at cell $(1, 1)$ and wants to reach cell $(2, n)$.\n\nIn one move, Monocarp can move in one of two directions:\n\n right — from cell $(i, j)$ to cell $(i, j + 1)$;\n\n down — from cell $(i, j)$ to cell $(i + 1, j)$.\n\nMonocarp can't go outside the matrix.\n\nPolycarp wants to prevent Monocarp from freely wandering through the matrix. To do this, he wants to choose exactly $k$ different cells in the matrix and block them. He cannot choose cells $(1, 1)$ and $(2, n)$.\n\nFor each $i$ from $0$ to $n$, Polycarp wants to know how many ways he can block exactly $k$ cells, so that Monocarp has exactly $i$ different paths from $(1, 1)$ to $(2, n)$. Two paths are considered different if there exists a cell that Monocarp visits in one path but not in the other.\n\nAs the number of ways can be quite large, output it modulo $10^9 + 7$.",
+    "input_spec": "The only line contains two integers $n$ and $k$ ($2 \\le n \\le 2 \\cdot 10^5$; $2 \\le k \\le 2 \\cdot n - 2$) — the number of columns in the matrix and the number of cells Polycarp wants to block.",
+    "output_spec": "Output $n + 1$ integers: for each $i$ from $0$ to $n$, the number of ways to block exactly $k$ cells, so that Monocarp has exactly $i$ different paths from $(1, 1)$ to $(2, n)$. Output all answers modulo $10^9 + 7$.",
+    "note": null,
+    "samples": [
+      {
+        "input": "2 2",
+        "output": "\n1 0 0"
+      },
+      {
+        "input": "10 2",
+        "output": "\n45 24 21 18 15 12 9 6 3 0 0"
+      },
+      {
+        "input": "10 5",
+        "output": "\n7812 420 210 90 30 6 0 0 0 0 0"
+      },
+      {
+        "input": "22 10",
+        "output": "\n467563090 1847560 1016158 534820 267410 125840 55055 22022 7865 2420 605 110 11 0 0 0 0 0 0 0 0 0 0"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 129483,
+    "url": "https://codeforces.com/blog/entry/129483",
+    "tutorial": "If there are no blocked cells, then there are a total of $n$ different paths. Initially, Monocarp goes to the right, then descends in some column and goes all the way to the right. That is, the chosen column determines the path.\n\nNow with blocked cells. Why might a path be inaccessible? Either Monocarp cannot go further to the right, or one of the cells in the column is blocked, or it cannot reach the end to the right. From this, the following conclusion can be drawn. In the first row, only the leftmost blocked cell is important, and in the second row, only the rightmost one is important.\n\nIf in the first row the leftmost blocked cell is at position $x$, and the rightmost in the second row is at position $y$, then Monocarp has access to $x - y + 1$ paths. We will deal with the case when there are no blocked cells in one of the rows later.\n\nIt can be noticed that the difference can be non-positive, but this simply means that there are $0$ paths. In practice, this case can be eliminated by calculating all the positive answers and subtracting them from the total number of ways to choose $k$ blocked cells out of $2n - 2$ options.\n\nLet's say we have fixed $x - y = d$. Then the two fixed cells can be at positions $(d + 1, 1), (d + 2, 2), \\dots, (n, n - d)$. In the case of $(d + 1, 1)$, the remaining $k - 2$ cells can be chosen from among $n - (d + 1)$ to the right of the first cell and among $0$ to the left of the second cell, totaling $n - (d + 1)$. In the case of $(d + 1, 1)$, this is $n - (d + 2)$ and $1$, again totaling $n - (d + 1)$. That is, with a fixed difference, we always have the same number of ways to choose the remaining $k - 2$ cells — $\\binom{n - d - 1}{k - 2}$. And we know that the positions for the two cells can be chosen in $n - d$ ways. That is, the contribution to the answer for $d - 1$ is $\\binom{n - d - 1}{k - 2} \\cdot (n - d)$.\n\nWe still need to deal with the ways in which one of the rows has no blocked cells. Let's assume this is the case for the second row. Then the number of paths is still determined by the position of the leftmost blocked cell in the first row. Let's iterate over it and count the ways to arrange the remaining $k - 1$ cells. There are $\\binom{n - i - 1}{k - 1}$ ways for the cell at position $i$.\n\nIf there are no blocked cells in the second row, then the answer is exactly the same. We iterate over the position of the rightmost cell and arrange the rest. It turns out to be symmetrical to the first method, so the formula is the same. We just calculate it once and multiply by $2$.\n\nYou can pre-calculate factorials to compute the binomial coefficient in $O(n + \\log \\textit{MOD})$.\n\nOverall complexity: $O(n + \\log \\textit{MOD})$.",
+    "solution_code": [
+      "private const val MOD =  1000000007\n\n@JvmInline\n@Suppress(\"NOTHING_TO_INLINE\")\nprivate value class ModInt(val x: Int) {\n    inline operator fun plus(other: ModInt) = ModInt((x + other.x).let { if (it >= MOD) it - MOD else it })\n    inline operator fun minus(other: ModInt) = ModInt((x - other.x).let { if (it < 0) it + MOD else it })\n    inline operator fun times(other: ModInt) = ModInt((x.toLong() * other.x % MOD).toInt())\n    fun power(p_: Int): ModInt {\n        var a = this\n        var res = ModInt(1)\n        var p = p_\n        while (p != 0) {\n            if ((p and 1) == 1) res *= a\n            a *= a\n            p = p shr 1\n        }\n        return res\n    }\n\n    inline operator fun div(other: ModInt) = this * other.inv()\n    inline fun inv() = power(MOD - 2)\n\n    companion object {\n        inline fun from(x: Int) = ModInt((x % MOD + MOD) % MOD)\n        inline fun from(x: Long) = ModInt(((x % MOD).toInt() + MOD) % MOD)\n    }\n}\n\n@JvmInline\nprivate value class ModIntArray(val storage:IntArray) {\n    operator fun get(index: Int) = ModInt(storage[index])\n    operator fun set(index: Int, value: ModInt) { storage[index] = value.x }\n    val size get() = storage.size\n}\nprivate inline fun ModIntArray(n: Int, init: (Int) -> ModInt) = ModIntArray(IntArray(n) { init(it).x })\n\nprivate const val COMB_MAX = 400_010\n\nprivate val fs = ModIntArray(COMB_MAX) { ModInt(1) }.apply {\n    for (i in 1 until size) {\n        set(i, get(i - 1) * ModInt.from(i))\n    }\n}\nprivate val ifs = ModIntArray(COMB_MAX) { fs[it].inv() }\n\nprivate fun cnk(n: Int, k: Int) = if (n >= k) fs[n] * ifs[k] * ifs[n - k] else ModInt(0)\n\nfun main() {\n    val (n, k) = readInts()\n    val ans = ModIntArray(n + 1) { ModInt(0) }\n\n    for (diff in -n..n) {\n        val ways = maxOf(0, diff - 1)\n        val ll = maxOf(1, diff)\n        val rr = minOf(n, n - 1 + diff)\n        ans[ways] += ModInt(maxOf(0, rr - ll)) * cnk(n - diff - 1, k - 2)\n    }\n    for (i in 1 until n) {\n        ans[i] += cnk(n - i - 1, k - 1)\n    }\n    for (j in 0 until n - 1) {\n        ans[n - j - 1] += cnk(j, k - 1)\n    }\n    println(ans.storage.joinToString(\" \"))\n}\n\nprivate fun readInt() = readln().toInt()\nprivate fun readLongs() = readStrings().map { it.toLong() }\nprivate fun readStrings() = readln().split(\" \")\nprivate fun readInts() = readStrings().map { it.toInt() }"
+    ]
+  }
+}

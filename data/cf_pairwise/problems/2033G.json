@@ -1,0 +1,49 @@
+{
+  "contest_id": 2033,
+  "index": "G",
+  "name": "Sakurako and Chefir",
+  "rating": 2200,
+  "tags": [
+    "data structures",
+    "dfs and similar",
+    "dp",
+    "greedy",
+    "trees"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2033G",
+  "url": "https://codeforces.com/problemset/problem/2033/G",
+  "contest_start_time": "2024-10-24T14:35:00+00:00",
+  "statement": {
+    "title": "G. Sakurako and Chefir",
+    "time_limit": "4 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Given a tree with $n$ vertices rooted at vertex $1$. While walking through it with her cat Chefir, Sakurako got distracted, and Chefir ran away.\n\nTo help Sakurako, Kosuke recorded his $q$ guesses. In the $i$-th guess, he assumes that Chefir got lost at vertex $v_i$ and had $k_i$ stamina.\n\nAlso, for each guess, Kosuke assumes that Chefir could move along the edges an arbitrary number of times:\n\n from vertex $a$ to vertex $b$, if $a$ is an ancestor$^{\\text{∗}}$ of $b$, the stamina will not change;\n\n from vertex $a$ to vertex $b$, if $a$ is not an ancestor of $b$, then Chefir's stamina decreases by $1$.\n\nIf Chefir's stamina is $0$, he cannot make a move of the second type.\n\nFor each assumption, your task is to find the distance to the farthest vertex that Chefir could reach from vertex $v_i$, having $k_i$ stamina.\n\n$^{\\text{∗}}$Vertex $a$ is an ancestor of vertex $b$ if the shortest path from $b$ to the root passes through $a$.",
+    "input_spec": "The first line contains a single integer $t$ ($1\\le t\\le 10^4$) — the number of test cases.\n\nEach test case is described as follows:\n\n The first line contains a single integer $n$ ($2 \\le n \\le 2 \\cdot 10^5$) — the number of vertices in the tree.\n\n The next $n-1$ lines contain the edges of the tree. It is guaranteed that the given edges form a tree.\n\n The next line consists of a single integer $q$ $(1\\le q\\le 2 \\cdot 10^5)$, which denotes the number of guesses made by Kosuke.\n\n The next $q$ lines describe the guesses made by Kosuke, with two integers $v_i$, $k_i$ $(1\\le v_i \\le n, 0 \\le k_i\\le n)$.\n\nIt is guaranteed that the sum of $n$ and the sum of $q$ across all test cases does not exceed $2\\cdot 10^5$.",
+    "output_spec": "For each test case and for each guess, output the maximum distance to the farthest vertex that Chefir could reach from the starting point $v_i$ having $k_i$ stamina.",
+    "note": "In the first example:\n\n In the first query, you can go from vertex $5$ to vertex $3$ (after which your stamina will decrease by $1$ and become $0$), and then you can go to vertex $4$;\n\n In the second query, from vertex $3$ with $1$ stamina, you can only reach vertices $2$, $3$, $4$, and $5$;\n\n In the third query, from vertex $2$ with $0$ stamina, you can only reach vertices $2$, $3$, $4$, and $5$;",
+    "samples": [
+      {
+        "input": "3\n5\n1 2\n2 3\n3 4\n3 5\n3\n5 1\n3 1\n2 0\n9\n8 1\n1 7\n1 4\n7 3\n4 9\n3 2\n1 5\n3 6\n7\n6 0\n2 3\n6 2\n8 2\n2 4\n9 2\n6 3\n6\n2 1\n2 5\n2 4\n5 6\n4 3\n3\n3 1\n1 3\n6 5",
+        "output": "\n2 1 2 \n0 5 2 4 5 5 5 \n1 3 4 "
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 135520,
+    "url": "https://codeforces.com/blog/entry/135520",
+    "tutorial": "In each query, Chefir can ascend from vertex $v$ by no more than $k$. To maximize the distance, we need to first ascend $x$ times ($0 \\le x \\le k$), and then descend to the deepest vertex.\n\nFor each vertex $u$, we will find $maxd[v].x$ — the distance to the farthest descendant of vertex $u$. We will also need $maxd[v].y$ — the distance to the farthest descendant of vertex $u$ from a different subtree of vertex $v$, which will allow us to avoid counting any edges twice when searching for the answer.\n\nNow we can construct binary lifts. The lift by $2^i$ from vertex $u$ will store information about all vertices from $u$ to the $(2^i)$-th ancestor, excluding vertex $u$ itself.\n\nThe value of the lift from vertex $u$ by $1$ (i.e., to its ancestor $p$) will be calculated as follows: if $maxd[v].x + 1  \\lt  maxd[p].x$, then the value is equal to $maxd[p].x - h(p)$, and $maxd[p].y - h(p)$ otherwise. Here, $h(p)$ is the distance from vertex $p$ to the root. The subsequent lifts will be computed as the maximums of the corresponding values. The constructed maximums will not account for cases where any edge was traversed twice.\n\nThus, by ascending from vertex $v$ by $k$, we will be able to find the best value of the form $\\text{max_depth} - h(u)$, and by adding $h(v)$ to it, we will obtain the distance to the desired vertex.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n \n//#define int long long\n#define pb emplace_back\n#define mp make_pair\n#define x first\n#define y second\n#define all(a) a.begin(), a.end()\n#define rall(a) a.rbegin(), a.rend()\n \ntypedef long double ld;\ntypedef long long ll;\n \nusing namespace std;\n \nmt19937 rnd(time(nullptr));\n \nconst int inf = 1e9;\nconst int M = 1e9 + 7;\nconst ld pi = atan2(0, -1);\nconst ld eps = 1e-6;\n \nvoid precalc(int v, int p, vector<vector<int>> &sl, vector<pair<int, int>> &maxd, vector<int> &h){\n    maxd[v] = {0, 0};\n    if (v != p) h[v] = h[p] + 1;\n    for(int u: sl[v]){\n        if (u == p) continue;\n        precalc(u, v, sl, maxd, h);\n        if (maxd[v].y < maxd[u].x + 1) {\n            maxd[v].y = maxd[u].x + 1;\n        }\n        if (maxd[v].y > maxd[v].x) {\n            swap(maxd[v].x, maxd[v].y);\n        }\n    }\n}\n \nvoid calc_binups(int v, int p, vector<vector<int>> &sl, vector<vector<pair<int, int>>> &binup, vector<pair<int, int>> &maxd, vector<int> &h){\n    binup[v][0] = {maxd[p].x, p};\n    if (maxd[p].x == maxd[v].x + 1) {\n        binup[v][0].x = maxd[p].y;\n    }\n    binup[v][0].x -= h[p];\n    for(int i = 1; i < 20; ++i){\n        binup[v][i].y = binup[binup[v][i - 1].y][i - 1].y;\n        binup[v][i].x = max(binup[v][i - 1].x, binup[binup[v][i - 1].y][i - 1].x);\n    }\n \n    for(int u: sl[v]){\n        if (u == p) continue;\n        calc_binups(u, v, sl, binup, maxd, h);\n    }\n}\n \nint get_ans(int v, int k, vector<vector<pair<int, int>>> &binup, vector<pair<int, int>> &maxd, vector<int> &h){\n    k = min(k, h[v]);\n    int res = maxd[v].x - h[v];\n    int ini = h[v];\n    for(int i = 19; i >= 0; --i){\n        if ((1 << i) <= k) {\n            res = max(res, binup[v][i].x);\n            v = binup[v][i].y;\n            k -= (1 << i);\n        }\n    }\n    return res + ini;\n}\n \nvoid solve(int tc){\n    int n;\n    cin >> n;\n    vector<vector<int>> sl(n);\n    for(int i = 1; i < n; ++i){\n        int u, v;\n        cin >> u >> v;\n        sl[--u].emplace_back(--v);\n        sl[v].emplace_back(u);\n    }\n    vector<pair<int, int>> maxd(n);\n    vector<int> h(n);\n    precalc(0, 0, sl, maxd, h);\n    vector<vector<pair<int, int>>> binup(n, vector<pair<int, int>>(20));\n    calc_binups(0, 0, sl, binup, maxd, h);\n    int q;\n    cin >> q;\n    for(int _ = 0; _ < q; ++_){\n        int v, k;\n        cin >> v >> k;\n        cout << get_ans(v - 1, k, binup, maxd, h) << \" \";\n    }\n}\n \nbool multi = true;\n \nsigned main() {\n    int t = 1;\n    if (multi)cin >> t;\n    for (int i = 1; i <= t; ++i) {\n        solve(i);\n        cout << \"\\n\";\n    }\n    return 0;\n}",
+      "if (fib[i % 3] == 0)\n    cnt++;\nif (fib[i % 3] == 1 && fib[(i + 2) % 3] == 0) {\n    cout << 1LL * i * n % MOD * inv(cnt) % MOD << \"\\n\";\n    return;\n}",
+      "if (fib[i % 3] == 0)\n    cout << 1LL * i * n % MOD << \"\\n\";\n    return;\n}",
+      "Alternative Solution for G using Segment Tree and answering queries offline ",
+      "#include <bits/stdc++.h>\n\nusing namespace std;\n\nvoid solve() {\n    int n; cin >> n;\n    vector<int> a(n);\n\n    for (int &x : a) cin >> x;\n\n    if (n == 2) {\n        cout << (a[0] == a[1]) << \"\\n\";\n        return;\n    }\n\n    auto get = [&](int l, int r) -> void {\n        int cnt1 = 0, cnt2 = 0;\n        cnt1 += (a[l] == a[l+1]);\n        cnt1 += (a[r] == a[r-1]);\n\n        cnt2 += (a[r] == a[l+1]);\n        cnt2 += (a[l] == a[r-1]);\n\n        if (cnt2 < cnt1) {\n            swap(a[l], a[r]);\n        }\n    };\n\n    int l = 0, r = n - 1;\n    while (l < r) {\n        get(l, r);\n        l++, r--;\n    }\n\n    int ans = 0;\n\n    for (int i = 1; i < n; i++) {\n        ans += a[i] == a[i-1];\n    }\n\n    cout << ans << \"\\n\";\n}\n\nint main() {\n    int t; cin >> t;\n    while (t--) solve();\n}"
+    ]
+  }
+}

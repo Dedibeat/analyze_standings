@@ -1,0 +1,56 @@
+{
+  "contest_id": 2042,
+  "index": "E",
+  "name": "Vertex Pairs",
+  "rating": 2900,
+  "tags": [
+    "binary search",
+    "brute force",
+    "data structures",
+    "dfs and similar",
+    "divide and conquer",
+    "greedy",
+    "implementation",
+    "trees"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2042E",
+  "url": "https://codeforces.com/problemset/problem/2042/E",
+  "contest_start_time": "2024-12-02T14:35:00+00:00",
+  "statement": {
+    "title": "E. Vertex Pairs",
+    "time_limit": "3 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "You are given a tree consisting of $2n$ vertices. Recall that a tree is a connected undirected graph with no cycles. Each vertex has an integer from $1$ to $n$ written on it. Each value from $1$ to $n$ is written on exactly two different vertices. Each vertex also has a cost —vertex $i$ costs $2^i$.\n\nYou need to choose a subset of vertices of the tree such that:\n\n the subset is connected; that is, from each vertex in the subset, you can reach every other vertex in the subset by passing only through the vertices in the subset;\n\n each value from $1$ to $n$ is written on at least one vertex in the subset.\n\nAmong all such subsets, you need to find the one with the smallest total cost of the vertices in it. Note that you are not required to minimize the number of vertices in the subset.",
+    "input_spec": "The first line contains a single integer $n$ ($1 \\le n \\le 2 \\cdot 10^5$).\n\nThe second line contains $2n$ integers $a_1, a_2, \\dots, a_{2n}$ ($1 \\le a_i \\le n$). Each value from $1$ to $n$ appears exactly twice.\n\nEach of the next $2n-1$ lines contains two integers $v$ and $u$ ($1 \\le v, u \\le 2n$) — the edges of the tree. These edges form a valid tree.",
+    "output_spec": "In the first line, print a single integer $k$ — the number of vertices in the subset.\n\nIn the second line, print $k$ distinct integers from $1$ to $2n$ — the indices of the vertices in the chosen subset. The vertices can be printed in an arbitrary order.",
+    "note": "The images show the answers to the first two examples. The numbers in parentheses are the values written on the vertices.\n\nIn the first example, there are valid subsets such as: $[2, 4, 5]$ (with a cost of $2^2 + 2^4 + 2^5 = 52$), $[2, 4, 5, 6]$ (with a cost of $116$), $[1, 6, 3]$ (with a cost of $74$), $[2, 6, 3]$ (with a cost of $76$), and many others.\n\nIn the second example, the cost of the subset $[4, 6, 3, 1]$ is $90$.",
+    "samples": [
+      {
+        "input": "3\n1 1 3 2 3 2\n4 2\n1 6\n6 2\n6 3\n2 5",
+        "output": "\n3\n2 4 5 "
+      },
+      {
+        "input": "3\n2 3 1 3 2 1\n6 4\n2 4\n5 2\n3 6\n3 1",
+        "output": "\n4\n1 3 4 6 "
+      },
+      {
+        "input": "6\n5 2 3 4 6 4 2 5 6 1 1 3\n10 8\n2 10\n12 7\n4 10\n5 9\n6 2\n1 9\n3 4\n12 6\n11 5\n4 5",
+        "output": "\n6\n2 3 4 5 8 10 "
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 136886,
+    "url": "https://codeforces.com/blog/entry/136886",
+    "tutorial": "Note that the cost function of a subset actually states the following: you are asked to choose the minimum lexicographic subset if the vertices are ordered in descending order. This can be shown by looking at the binary representations of the subset costs.\n\nIntuitively, we want to implement the following process. Iterate over the vertices in descending order and check whether we have to take the current vertex in the subset, or we can skip it. If we can, we skip it; otherwise, we take it.\n\nHow to write this checking function? I think that it is easier to do this if we root the tree by a vertex that will definitely be in the answer. Finding such a vertex is easy — out of two vertices with the value $1$, at least one will definitely be in the answer. Iterate over it and take the best answer from the two options. We can compare the answers by their by binary representations.\n\nIn the rooted tree, where the root is always taken, it is easier to check connectivity. If a vertex is taken in the subset, then its parent must also be taken. Otherwise, the subset will definitely be disconnected.\n\nA vertex must be taken in the subset if there is a value such that both vertices with this value are in its subtree. However, sometimes it happens that one of the two vertices with some value has already been prohibited from being taken. In this case, for this value, we need to check that only the non-prohibited vertex is in the subtree.\n\nLet's maintain the state of each vertex:\n\n the vertex must be taken in the subset;\n\n the vertex must not be taken in the subset;\n\n it has not been determined whether to take the vertex or not.\n\nInitially, we know that for each value, we must take the vertices that are on both paths from the vertices with this value to the root. So, on the path from their LCA (lowest common ancestor) to the root. If at least one such vertex is not taken, then that value will not appear in the subset.\n\nA vertex can be skipped if its state is not determined. When we decide not to take a vertex, the following happens. The vertices in its subtree must also not be taken. And if for some vertex it is marked that it must not be taken in the subset, then another vertex with the same value must now be taken.\n\nWe will write two auxiliary functions.\n\nThe first function marks the state as \"must take\". So, it takes a vertex $v$ and jumps over the parents of vertex $v$ until it either reaches the root or an already marked vertex. In total, this function will make $O(n)$ iterations, as with each successful iteration of the loop, another vertex gets marked.\n\nThe second function marks the state as \"must not take\". That is, it takes a vertex $v$ and traverses the subtree of vertex $v$, marking all descendants as \"must not take\". I chose to implement this function using a breadth-first search. Again, we can stop the traversal when we see that a vertex is already marked as \"must not take\". In total, there will also be $O(n)$ iterations. When we mark a vertex, we call the first function from another vertex with its value.\n\nOverall complexity: $O(n \\log n)$ (where everything except LCA works in $O(n)$).",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n \n#define forn(i, n) for (int i = 0; i < int(n); i++)\n \nusing namespace std;\n \nvector<vector<int>> g;\n \nstruct LCA {\n\tvector<vector<pair<int, int>>> st;\n\tvector<int> pw;\n \n\tvoid build(vector<pair<int, int>> a) {\n\t\tint n = a.size();\n\t\tint lg = 32 - __builtin_clz(n);\n\t\tst.resize(lg, vector<pair<int, int>>(n));\n\t\tst[0] = a;\n\t\tfor (int j = 1; j < lg; ++j) {\n\t\t\tfor (int i = 0; i < n; ++i) {\n\t\t\t\tst[j][i] = st[j - 1][i];\n\t\t\t\tif (i + (1 << (j - 1)) < n)\n\t\t\t\t\tst[j][i] = min(st[j][i], st[j - 1][i + (1 << (j - 1))]);\n\t\t\t}\n\t\t}\n\t\tpw.resize(n + 1);\n\t\tfor (int i = 2; i <= n; ++i)\n\t\t\tpw[i] = pw[i / 2] + 1;\n\t}\n \n\tvector<int> d, fst, par;\n\tvector<pair<int, int>> ord;\n \n\tint lca(int v, int u) {\n\t\tint l = fst[v], r = fst[u];\n\t\tif (l > r) swap(l, r);\n\t\t++r;\n\t\tint len = pw[r - l];\n\t\tassert(len < int(st.size()));\n\t\treturn min(st[len][l], st[len][r - (1 << len)]).second;\n\t}\n \n\tvoid init(int v, int p = -1) {\n\t\tif (fst[v] == -1) fst[v] = ord.size();\n\t\tord.push_back({ d[v], v });\n\t\tfor (int u : g[v]) if (u != p) {\n\t\t\tpar[u] = v;\n\t\t\td[u] = d[v] + 1;\n\t\t\tinit(u, v);\n\t\t\tord.push_back({ d[v], v });\n\t\t}\n\t}\n \n\tLCA(int r = 0) {\n\t\tint n = g.size();\n\t\td.resize(n);\n\t\tfst.assign(n, -1);\n\t\tpar.assign(n, -1);\n\t\tord.clear();\n\t\tinit(r);\n \n\t\tbuild(ord);\n\t}\n};\n\nint main() {\n\tcin.tie(0);\n\tios::sync_with_stdio(false);\n\tint n;\n\tcin >> n;\n\tvector<int> a(2 * n);\n\tforn(i, 2 * n){\n\t\tcin >> a[i];\n\t\t--a[i];\n\t}\n\tg.resize(2 * n);\n\tforn(i, 2 * n - 1){\n\t\tint v, u;\n\t\tcin >> v >> u;\n\t\t--v, --u;\n\t\tg[v].push_back(u);\n\t\tg[u].push_back(v);\n\t}\n\tvector<int> l(n, -1), r(n, -1);\n\tforn(i, 2 * n){\n\t\tif (l[a[i]] == -1) l[a[i]] = i;\n\t\telse r[a[i]] = i;\n\t}\n\tvector<char> res(2 * n, 1);\n\tforn(rt, 2 * n) if (a[rt] == 0){\n\t\tLCA d(rt);\n\t\tvector<int> state(2 * n, 0);\n\t\t\n\t\tauto mark = [&](int v){\n\t\t\twhile (v != -1 && state[v] != 1){\n                state[v] = 1;\n\t\t\t\tv = d.par[v];\n\t\t\t}\n\t\t};\n\t\tauto markdel = [&](int v){\n\t\t\tqueue<int> q;\n\t\t\tq.push(v);\n\t\t\tstate[v] = -1;\n\t\t\twhile (!q.empty()){\n\t\t\t\tint v = q.front();\n\t\t\t\tq.pop();\n\t\t\t\tmark(l[a[v]] ^ r[a[v]] ^ v);\n\t\t\t\tfor (int u : g[v]) if (u != d.par[v] && state[u] == 0){\n\t\t\t\t\tstate[u] = -1;\n\t\t\t\t\tq.push(u);\n\t\t\t\t}\n\t\t\t}\n\t\t};\n\t\t\n\t\tforn(i, n) mark(d.lca(l[i], r[i]));\n\t\tfor (int i = 2 * n - 1; i >= 0; --i) if (state[i] == 0)\n\t\t\tmarkdel(i);\n\t\tvector<char> cur(2 * n, 0);\n        for (int i = 0; i < 2 * n; ++i) if (state[i] == 1)\n            cur[i] = 1;\n        reverse(cur.begin(), cur.end());\n\t\tres = min(res, cur);\n\t}\n\treverse(res.begin(), res.end());\n\tcout << count(res.begin(), res.end(), 1) << '\\n';\n\tforn(i, 2 * n) if (res[i])\n\t\tcout << i + 1 << \" \";\n\tcout << '\\n';\n\treturn 0;\n}"
+    ]
+  }
+}

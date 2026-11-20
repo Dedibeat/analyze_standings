@@ -1,0 +1,46 @@
+{
+  "contest_id": 2106,
+  "index": "G1",
+  "name": "Baudelaire (easy version)",
+  "rating": 2200,
+  "tags": [
+    "binary search",
+    "constructive algorithms",
+    "divide and conquer",
+    "greedy",
+    "interactive",
+    "trees"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2106G1",
+  "url": "https://codeforces.com/problemset/problem/2106/G1",
+  "contest_start_time": "2025-04-24T14:35:00+00:00",
+  "statement": {
+    "title": "G1. Baudelaire (easy version)",
+    "time_limit": "3 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "This is the easy version of the problem. The only difference between the two versions is that in this version, it is guaranteed that every node is adjacent to node $1$.\n\nThis problem is interactive.\n\nBaudelaire is very rich, so he bought a tree of size $n$ that is rooted at some arbitrary node. Additionally, every node has a value of $1$ or $-1$. In this version, every node is adjacent to node $1$. However, please note that node $1$ is not necessarily the root.\n\nCow the Nerd saw the tree and fell in love with it. However, computer science doesn't pay him enough, so he can't afford to buy it. Baudelaire decided to play a game with Cow the Nerd, and if he won, he would gift him the tree.\n\nCow the Nerd does not know which node is the root, and he doesn't know the values of the nodes either. However, he can ask Baudelaire queries of two types:\n\n $1$ $k$ $u_1$ $u_2$ $...$ $u_k$: Let $f(u)$ be the sum of the values of all nodes in the path from the root of the tree to node $u$. Cow the Nerd may choose an integer $k$ $(1 \\le k \\le n)$ and $k$ nodes $u_1, u_2, ..., u_k$, and he will receive the value $f(u_1) + f(u_2) + ... + f(u_k)$.\n\n $2$ $u$: Baudelaire will toggle the value of node $u$. Specifically, if the value of $u$ is $1$ it will become $-1$, and vice versa.\n\nCow the Nerd wins if he guesses the value of every node correctly (the values of the final tree, after performing the queries) within $n + 200$ total queries. Can you help him win?",
+    "input_spec": "The first line of the input contains a single integer $t$ $(1 \\le t \\le 100)$, the number of test cases.\n\nThe first line of each test case contains a single integer $n$ $(2 \\le n \\le 10^3)$, the size of the tree.\n\nEach of the next $n-1$ lines contains two integers $u$ and $v$ $(1 \\le u, v \\le n, u \\neq v)$, denoting an edge between nodes $u$ and $v$ in the tree. In this version, it is guaranteed that either $u = 1$ or $v = 1$.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $10^3$ and that each graph provided is a valid tree.",
+    "output_spec": null,
+    "note": "In the example, the root of the tree is node $2$, and the values of the nodes are $[-1, 1, -1, 1]$. Therefore, $f(1) = 0, f(2) = 1, f(3) = -1, f(4) = 1$.\n\nFirst, we query about the sum $f(1) + f(2) + f(3)$, so we receive the value $0$. Then, we toggle the value of node $2$, and the values are: $[-1, -1, -1, 1]$. Therefore, $f(1) = -2, f(2) = -1, f(3) = -3, f(4) = -1$, and $f(1) + f(2) + f(3) = -6$.\n\nFinally, we figure out that the values of the nodes are $[-1, -1, -1, 1]$, so we answer that.\n\nNote that this is just an explanation of how the queries work, and it is not supposed to use any specific strategy to solve the problem.",
+    "samples": [
+      {
+        "input": "\n1\n4\n1 2\n3 1\n1 4\n\n0\n\n\n-6",
+        "output": "\n\n\n\n\n\n? 1 3 1 2 3\n\n? 2 2\n? 1 3 1 2 3\n\n! -1 -1 -1 1"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 142254,
+    "url": "https://codeforces.com/blog/entry/142254",
+    "tutorial": "Problem G1 — BAUDELAIRE (Easy Version)\n\n(Author & Analysis: SpyrosAliv)\n\nSolution\n\nFor some node $u$, let $v_u$ be its value and $s_u$ be the sum of the values of all nodes on the simple path from the root of the tree to node $u$ ($s_u$ will also be referenced as \"the sum of node $u$\" for the purposes of this solution). Also, let $p_u$ be the parent of node $u$ (if $u$ is not the root).\n\nSuppose that we know which node is the root of the tree. Then, we can make $n$ queries to find $s_1, s_2, ..., s_n$, which is sufficient to figure out $v_1, v_2, ..., v_n$: it holds that $s_u = s_{p_u} + v_u$, therefore $v_u = s_u - s_{p_u}$.\n\nThen, we have $200$ queries left to find the actual root of the tree. Consider some node $u$, and all of its neighbor nodes $c_1, c_2, ..., c_k$.\n\nObservation 1: Toggling the value of node $u$ will change the sum of every adjacent node to $u$ that is not the parent.\n\nObservation 2: We can find the parent of node $u$ within $3\\log k$ queries. Consider doing binary search to find which node does not change its sum when toggling the value of $u$. In order to check if the prefix $c_1, c_2, ..., c_m$ includes the parent of $u$, we do the following: query for $s1 = s_{c_1} + s_{c_2} + ... + s_{c_m}$, toggle the value of $u$, and query for $s2 = s_{c_1}' + s_{c_2}' + ... + s_{c_m}'$ again. Let $D = |s1 - s2|$. From Observation 1, if every node among $c_1, c_2, ..., c_m$ changed its value, then $D = 2m$, so we know that the parent does not belong in that prefix. Otherwise, there is a node that did not change its sum, so we can continue our binary search on that prefix. This takes $3$ queries performed $\\log k$ times. Note that if we never find the parent, it must mean that $u$ is the root of the tree.\n\nSince the tree is a star, if we find the parent of node $1$, we will find the root. If there does not exist a parent, then $1$ is the root. The problem has been solved in $n + 3 \\log(n)$ queries, which comfortably fits the query limit.\n\nThere are a lot of other (better) solutions for this version (for example, this solution), but this solution helps best for coming up with the idea for G2.\n\nImplementation\n\nRate the Problem\n\n Amazing\n\n Good\n\n Average\n\n Bad\n\n Didn't Solve",
+    "solution_code": [
+      "#include <bits/stdc++.h>\nusing i64 = long long;\n \nvoid solve() {\n    int n;\n    std::cin >> n;\n    std::vector<int> a(n+1), son(n-1);\n    for (int i = 1; i < n; ++i) {\n        int u, v;\n        std::cin >> u >> v;\n        son[i-1] = i + 1;\n    }\n    int Q = 0;\n    auto ask = [&](int op, const std::vector<int> &v) {\n        if (++Q > n + 200) {\n            assert(false);\n        }\n        std::cout << \"? \" << op;\n        if (op == 1) {\n            std::cout << ' ' << v.size();\n            for (auto u: v) std::cout << ' ' << u;\n            std::cout << std::endl;\n            int res = 0;\n            std::cin >> res;\n            return res;\n        } else {\n            std::cout << ' ' << v[0] << std::endl;\n            return 0;\n        }\n    };\n    int rt = 0;\n    int bef = ask(1, son);\n    ask(2, std::vector<int>{1});\n    int af = ask(1, son);\n    if (std::abs(bef - af) == 2 * son.size()) {\n        rt = 1;\n    } else {\n        int l = 0, r = son.size() - 1;\n        while (l < r) {\n            int mid = l + (r - l) / 2;\n            std::vector<int> query(son.begin() + l, son.begin() + mid + 1);\n            int bef = ask(1, query);\n            ask(2, std::vector<int>{1});\n            int af = ask(1, query);\n            if (std::abs(bef - af) != 2 * (mid - l + 1)) {\n                r = mid;\n            } else {\n                l = mid + 1;\n            }\n        }\n        rt = son[l];\n    }\n    for (int i = 1; i <= n; ++i) {\n        a[i] = ask(1, std::vector<int>{i});\n    }\n    for (int i = 2; i <= n; ++i) {\n        if (rt != i) {\n            a[i] -= a[1];\n        }\n    }\n    if (rt > 1) a[1] -= a[rt];\n    std::cout << '!';\n    for (int i = 1; i <= n; ++i) {\n        std::cout << ' ' << a[i];\n    }\n    std::cout << std::endl;\n}\n \nint main() {\n    std::cin.tie(nullptr)->sync_with_stdio(false);\n    int T = 1;\n    std::cin >> T;\n    while (T--) solve();\n    return 0;\n}"
+    ]
+  }
+}

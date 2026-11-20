@@ -1,0 +1,44 @@
+{
+  "contest_id": 2036,
+  "index": "E",
+  "name": "Reverse the Rivers",
+  "rating": 1600,
+  "tags": [
+    "binary search",
+    "constructive algorithms",
+    "data structures",
+    "greedy"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2036E",
+  "url": "https://codeforces.com/problemset/problem/2036/E",
+  "contest_start_time": "2024-11-02T14:35:00+00:00",
+  "statement": {
+    "title": "E. Reverse the Rivers",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "A conspiracy of ancient sages, who decided to redirect rivers for their own convenience, has put the world on the brink. But before implementing their grand plan, they decided to carefully think through their strategy — that's what sages do.\n\nThere are $n$ countries, each with exactly $k$ regions. For the $j$-th region of the $i$-th country, they calculated the value $a_{i,j}$, which reflects the amount of water in it.\n\nThe sages intend to create channels between the $j$-th region of the $i$-th country and the $j$-th region of the $(i + 1)$-th country for all $1 \\leq i \\leq (n - 1)$ and for all $1 \\leq j \\leq k$.\n\nSince all $n$ countries are on a large slope, water flows towards the country with the highest number. According to the sages' predictions, after the channel system is created, the new value of the $j$-th region of the $i$-th country will be $b_{i,j} = a_{1,j} | a_{2,j} | ... | a_{i,j}$, where $|$ denotes the bitwise \"OR\" operation.\n\nAfter the redistribution of water, the sages aim to choose the most suitable country for living, so they will send you $q$ queries for consideration.\n\nEach query will contain $m$ requirements.\n\nEach requirement contains three parameters: the region number $r$, the sign $o$ (either \"$ \\lt $\" or \"$ \\gt $\"), and the value $c$. If $o$ = \"$ \\lt $\", then in the $r$-th region of the country you choose, the new value must be strictly less than the limit $c$, and if $o$ = \"$ \\gt $\", it must be strictly greater.\n\nIn other words, the chosen country $i$ must satisfy all $m$ requirements. If in the current requirement $o$ = \"$ \\lt $\", then it must hold that $b_{i,r}  \\lt  c$, and if $o$ = \"$ \\gt $\", then $b_{i,r}  \\gt  c$.\n\nIn response to each query, you should output a single integer — the number of the suitable country. If there are multiple such countries, output the smallest one. If no such country exists, output $-1$.",
+    "input_spec": "The first line contains three integers $n$, $k$, and $q$ ($1 \\leq n, k, q \\leq 10^5$) — the number of countries, regions, and queries, respectively.\n\nNext, there are $n$ lines, where the $i$-th line contains $k$ integers $a_{i,1}, a_{i,2}, \\dots, a_{i,k}$ ($1 \\leq a_{i,j} \\leq 10^9$), where $a_{i,j}$ is the value of the $j$-th region of the $i$-th country.\n\nThen, $q$ queries are described.\n\nThe first line of each query contains a single integer $m$ ($1 \\leq m \\leq 10^5$) — the number of requirements.\n\nThen follow $m$ lines, each containing an integer $r$, a character $o$, and an integer $c$ ($1 \\leq r \\leq k$, $0 \\leq c \\leq 2 \\cdot 10^9$), where $r$ and $c$ are the region number and the value, and $o$ is either \"$ \\lt $\" or \"$ \\gt $\" — the sign.\n\nIt is guaranteed that $n \\cdot k$ does not exceed $10^5$ and that the sum of $m$ across all queries also does not exceed $10^5$.",
+    "output_spec": "For each query, output a single integer on a new line — the smallest number of the suitable country, or $-1$ if no such country exists.",
+    "note": "In the example, the initial values of the regions are as follows:\n\n$1$$3$$5$$9$\n\n$4$$6$$5$$3$\n\n$2$$1$$2$$7$\n\nAfter creating the channels, the new values will look like this:\n\n$1$$3$$5$$9$\n\n$1 | 4$$3 | 6$$5 | 5$$9 | 3$\n\n$1 | 4 | 2$$3 | 6 | 1$$5 | 5 | 2$$9 | 3 | 7$\n $\\downarrow$\n$1$$3$$5$$9$\n\n$5$$7$$5$$11$\n\n$7$$7$$7$$15$\n\nIn the first query, it is necessary to output the minimum country number (i.e., row) where, after the redistribution of water in the first region (i.e., column), the new value will be greater than four and less than six, and in the second region it will be less than eight. Only the country with number $2$ meets these requirements.\n\nIn the second query, there are no countries that meet the specified requirements.\n\nIn the third query, only the country with number $3$ is suitable.\n\nIn the fourth query, all three countries meet the conditions, so the answer is the smallest number $1$.",
+    "samples": [
+      {
+        "input": "3 4 4\n1 3 5 9\n4 6 5 3\n2 1 2 7\n3\n1 > 4\n2 < 8\n1 < 6\n2\n1 < 8\n2 > 8\n1\n3 > 5\n2\n4 > 8\n1 < 8",
+        "output": "\n2\n-1\n3\n1"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 135849,
+    "url": "https://codeforces.com/blog/entry/135849",
+    "tutorial": "2036E - Reverse the Rivers\n\nIdea: m3tr0\n\nHint\n\nFor any non-negative integers, $a \\leq a | b$, where $|$ is the bitwise “or” operation.\n\nTutorial\n\nAfter computing the values of $b_{i,j}$ for all countries and regions, we can notice that for a fixed region $j$, the values of $b_{i,j}$ increase as the index $i$ increases. This is because the bitwise “or” operation cannot decrease a number, but only increase or leave it unchanged. Hence, we can use binary search to quickly find the country that matches the given conditions.\n\nFor each query and for each requirement, if $o$ = “<”, we search for the first country where $b_{i,r} \\geq c$ (this will be the first country that does not satisfy the condition). If sign $o$ = “>”, we look for the first country where $b_{i,r} \\leq c$. In both cases, we can use standard binary search to find the index. If the checks leave at least one country that satisfies all the requirements, we choose the country with the lowest number.\n\nComplexity: counting values $O(n\\cdot k)$, processing each query using binary search $O(m \\log n)$, total $O(n \\cdot k + q \\cdot m \\cdot \\log n)$.\n\nSolution (m3tr0)",
+    "solution_code": [
+      "#include <cstdio>\ntypedef long long l;\n\nl ** arr;\n\nint main() {\n\tl n, k, q; scanf(\"%lld %lld %lld\", &n, &k, &q);\n\t\n\tarr = new l*[n];\n\tfor (l i = 0; i < n; i++) arr[i] = new l[k];\n\tfor (l i = 0; i < n; i++) for (l j = 0; j < k; j++) scanf(\"%lld\", &arr[i][j]);\n\t\n\tfor (l i = 1; i < n; i++) for (l j = 0; j < k; j++) arr[i][j] |= arr[i - 1][j];\n\t\n\twhile (q--) {\n\t\tl m; scanf(\"%lld\", &m);\n\t\tl left_pos = 0, right_pos = n - 1;\n\t\twhile (m--) {\n\t\t\tl r, c; char o; scanf(\"%lld %c %lld\", &r, &o, &c); r--;\n\t\t\tif (o == '<') {\n\t\t\t\tl le = -1, ri = n, mid;\n\t\t\t\twhile (le + 1 != ri) {\n\t\t\t\t\tmid = (le + ri) / 2;\n\t\t\t\t\tif (arr[mid][r] < c) le = mid;\n\t\t\t\t\telse ri = mid;\n\t\t\t\t}\n\t\t\t\tif (le < right_pos) right_pos = le;\n\t\t\t} else {\n\t\t\t\tl le = -1, ri = n, mid;\n\t\t\t\twhile (le + 1 != ri) {\n\t\t\t\t\tmid = (le + ri) / 2;\n\t\t\t\t\tif (arr[mid][r] <= c) le = mid;\n\t\t\t\t\telse ri = mid;\n\t\t\t\t}\n\t\t\t\tif (ri > left_pos) left_pos = ri;\n\t\t\t}\n\t\t}\n\t\tif (left_pos <= right_pos) printf(\"%lld\\n\", left_pos + 1);\n\t\telse printf(\"-1\\n\");\n\t}\n}"
+    ]
+  }
+}

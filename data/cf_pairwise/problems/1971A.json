@@ -1,0 +1,42 @@
+{
+  "contest_id": 1971,
+  "index": "A",
+  "name": "My First Sorting Problem",
+  "rating": 800,
+  "tags": [
+    "implementation",
+    "sortings"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1971A",
+  "url": "https://codeforces.com/problemset/problem/1971/A",
+  "contest_start_time": "2024-05-10T14:35:00+00:00",
+  "statement": {
+    "title": "A. My First Sorting Problem",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "You are given two integers $x$ and $y$.\n\nOutput two integers: the minimum of $x$ and $y$, followed by the maximum of $x$ and $y$.",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\leq t \\leq 100$) — the number of test cases.\n\nThe only line of each test case contains two space-separated integers $x$ and $y$ ($0 \\leq x, y \\leq 9$).",
+    "output_spec": "For each test case, output two integers: the minimum of $x$ and $y$, followed by the maximum of $x$ and $y$.",
+    "note": null,
+    "samples": [
+      {
+        "input": "10\n1 9\n8 4\n1 4\n3 4\n2 0\n2 4\n6 9\n3 3\n0 0\n9 9",
+        "output": "\n1 9\n4 8\n1 4\n3 4\n0 2\n2 4\n6 9\n3 3\n0 0\n9 9"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "missing"
+  },
+  "editorial": {
+    "blog_id": 129364,
+    "url": "https://codeforces.com/blog/entry/129364",
+    "tutorial": "You can use, for example, an if-statement or some inbuilt $\\texttt{min}$ and $\\texttt{max}$ function available in most languages (like Python or C++).",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n \nusing namespace std;\n \nconst int MAX = 200'007;\nconst int MOD = 1'000'000'007;\n \nvoid solve() {\n\tint x, y;\n\tcin >> x >> y;\n\tcout << min(x, y) << ' ' << max(x, y) << '\\n';\t\n}\n \nint main() {\n\tint tt; cin >> tt; for (int i = 1; i <= tt; i++) {solve();}\n\t// solve();\n}"
+    ]
+  }
+}

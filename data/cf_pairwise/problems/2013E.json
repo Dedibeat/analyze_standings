@@ -1,0 +1,45 @@
+{
+  "contest_id": 2013,
+  "index": "E",
+  "name": "Prefix GCD",
+  "rating": 2200,
+  "tags": [
+    "brute force",
+    "dp",
+    "greedy",
+    "math",
+    "number theory"
+  ],
+  "points": 2500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2013E",
+  "url": "https://codeforces.com/problemset/problem/2013/E",
+  "contest_start_time": "2024-09-20T14:35:00+00:00",
+  "statement": {
+    "title": "E. Prefix GCD",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Since Mansur is tired of making legends, there will be no legends for this task.\n\nYou are given an array of positive integer numbers $a_1, a_2, \\ldots, a_n$. The elements of the array can be rearranged in any order. You need to find the smallest possible value of the expression $$\\gcd(a_1) + \\gcd(a_1, a_2) + \\ldots + \\gcd(a_1, a_2, \\ldots, a_n),$$ where $\\gcd(a_1, a_2, \\ldots, a_n)$ denotes the greatest common divisor (GCD) of $a_1, a_2, \\ldots, a_n$.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 10^4$). The description of the test cases follows.\n\nThe first line of each test case contains a single number $n$ ($1 \\le n \\le 10^5$) — the size of the array.\n\nThe second line of each test case contains $n$ numbers $a_1, a_2, \\ldots, a_n$ ($1 \\le a_i \\le 10^5$) — the initial array.\n\nThe sum of $n$ over all test cases does not exceed $10^5$.\n\nThe sum of $\\max(a_1, a_2, \\ldots, a_n)$ over all test cases does not exceed $10^5$.",
+    "output_spec": "For each test case, output a single number on a separate line — the answer to the problem.",
+    "note": "In the first test case, the elements can be rearranged as follows: $[2, 4, 2]$. Then the answer will be $\\gcd(2) + \\gcd(2, 4) + \\gcd(2, 4, 2) = 2 + 2 + 2 = 6$.\n\nIn the third test case, the elements can be rearranged as follows: $[6, 10, 15]$. Then the answer will be $\\gcd(6) + \\gcd(6, 10) + \\gcd(6, 10, 15) = 6 + 2 + 1 = 9$.",
+    "samples": [
+      {
+        "input": "5\n3\n4 2 2\n2\n6 3\n3\n10 15 6\n5\n6 42 12 52 20\n4\n42 154 231 66",
+        "output": "\n6\n6\n9\n14\n51"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "missing"
+  },
+  "editorial": {
+    "blog_id": 134298,
+    "url": "https://codeforces.com/blog/entry/134298",
+    "tutorial": null,
+    "solution_code": [
+      "#include <bits/stdc++.h>\n\nusing namespace std;\ntypedef long long ll;\ntypedef unsigned long long ull;\n\n#define forn(i,j,k) for(ll i=(j); i<=(k); i++)\n#define rofn(i,j,k) for(ll i=(j); i>=(k); i--)\n\nint main() {\n    ll t;\n    cin >> t;\n\n    ll n;\n    while(t--) {\n        cin >> n;\n        vector<ll> a(n+1);\n        ll mn = 1e15, mx=-1;\n        forn(i, 1, n) {\n            cin >> a[i];\n            mn = min(mn, a[i]);\n            mx = max(mx, a[i]);\n        }\n        \n        ll low = mn, high = mx;\n        ll alpha, beta;\n        while(low+1 < high) {\n            alpha = (low + high) / 2;\n            ll tmp = 0;\n            bool valid = true;\n            rofn(i, n, 1) {\n                tmp += a[i];\n                if(tmp > (n-i+1)*alpha) {\n                    valid = false;\n                    break;\n                }\n            }\n            if(valid) high = alpha;\n            else low = alpha;\n        }\n        alpha = high;\n\n        low = mn; high = mx;\n        while(low+1 < high) {\n            beta = (low + high) / 2;\n            ll tmp = 0;\n            bool valid = true;\n            forn(i, 1, n) {\n                tmp += a[i];\n                if(tmp < i*beta) {\n                    valid = false;\n                    break;\n                }\n            }\n            \n            if(valid) low = beta;\n            else high = beta;\n        }\n        beta = low;\n\n        cout << alpha - beta << endl;\n    }\n}"
+    ]
+  }
+}

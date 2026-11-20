@@ -1,0 +1,45 @@
+{
+  "contest_id": 2074,
+  "index": "C",
+  "name": "XOR and Triangle",
+  "rating": 1100,
+  "tags": [
+    "bitmasks",
+    "brute force",
+    "geometry",
+    "greedy",
+    "probabilities"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2074C",
+  "url": "https://codeforces.com/problemset/problem/2074/C",
+  "contest_start_time": "2025-03-11T14:35:00+00:00",
+  "statement": {
+    "title": "C. XOR and Triangle",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "This time, the pink soldiers have given you an integer $x$ ($x \\ge 2$).\n\nPlease determine if there exists a positive integer $y$ that satisfies the following conditions.\n\n $y$ is strictly less than $x$.\n\n There exists a non-degenerate triangle$^{\\text{∗}}$ with side lengths $x$, $y$, $x \\oplus y$. Here, $\\oplus$ denotes the bitwise XOR operation.\n\nAdditionally, if there exists such an integer $y$, output any.\n\n$^{\\text{∗}}$A triangle with side lengths $a$, $b$, $c$ is non-degenerate when $a+b  \\gt  c$, $a+c  \\gt  b$, $b+c  \\gt  a$.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 2000$). The description of the test cases follows.\n\nThe only line of each test case contains a single integer $x$ ($2 \\le x \\le 10^9$).",
+    "output_spec": "For each test case, print one integer on a separate line. The integer you must output is as follows:\n\n If there exists an integer $y$ satisfying the conditions, output the value of $y$ ($1 \\le y  \\lt  x$);\n\n Otherwise, output $-1$.\n\nIf there exist multiple integers that satisfy the conditions, you may output any.",
+    "note": "In the first test case, there exists a non-degenerate triangle with side lengths $3$, $5$, and $3 \\oplus 5 = 6$. Therefore, $y=3$ is a valid answer.\n\nIn the second test case, $1$ is the only possible candidate for $y$, but it cannot make a non-degenerate triangle. Therefore, the answer is $-1$.",
+    "samples": [
+      {
+        "input": "7\n5\n2\n6\n3\n69\n4\n420",
+        "output": "\n3\n-1\n5\n-1\n66\n-1\n320"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 140540,
+    "url": "https://codeforces.com/blog/entry/140540",
+    "tutorial": "Let us interpret the triangle inequality in terms of bitmasking. Then, we get the following. (One is omitted as it is implied in the constraints.)\n\n $x+y \\gt x \\oplus y$, $(x \\oplus y)+2(x \\,\\&\\, y) \\gt  x \\oplus y$, $x\\,\\&\\,y \\gt 0$;\n\n $y+(x \\oplus y) \\gt x$, $y+(x + y) - 2(x\\,\\&\\,y) \\gt  x$, $y  \\gt  x\\,\\&\\,y$.\n\nIn other words, $y$ satisfies the following conditions.\n\n $y$ contains at least one bit turned on in $x$;\n\n $y$ contains at least one bit not turned on in $x$.\n\nThe smallest values of $y$ that satisfy this have exactly two bits turned on; one in $x$ and one not in it. Therefore, if one such value exists, then a smallest one can be found in $\\mathcal{O}(\\log ^2 x)$ time by simply bruteforcing all integers with two bits turned on. If any one of them is less than $x$, then it satisfies all conditions.\n\nThe problem has been solved in $\\mathcal{O}(\\log ^2 x)$ per test case. While there exist ways to solve it in $\\mathcal{O}(\\log x)$ per test case, they were not required.",
+    "solution_code": [
+      "t = int(input())\nfor _ in range(t):\n    x = int(input())\n    ans = -1\n    for i in range(30):\n        for j in range(30):\n            y = (1 << i) | (1 << j)\n            if y < x and x + y > (x ^ y) and y + (x ^ y) > x:\n                ans = y\n    print(ans)"
+    ]
+  }
+}

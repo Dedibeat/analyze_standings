@@ -1,0 +1,43 @@
+{
+  "contest_id": 2090,
+  "index": "B",
+  "name": "Pushing Balls",
+  "rating": 1000,
+  "tags": [
+    "brute force",
+    "dp",
+    "implementation"
+  ],
+  "points": 1000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2090B",
+  "url": "https://codeforces.com/problemset/problem/2090/B",
+  "contest_start_time": "2025-03-23T05:35:00+00:00",
+  "statement": {
+    "title": "B. Pushing Balls",
+    "time_limit": "1 second",
+    "memory_limit": "512 megabytes",
+    "legend": "Ecrade has an $n \\times m$ grid, originally empty, and he has pushed several (possibly, zero) balls in it.\n\nEach time, he can push one ball into the grid either from the leftmost edge of a particular row or the topmost edge of a particular column of the grid.\n\nWhen a ball moves towards a position:\n\n If there is no ball originally at that position, the incoming ball will stop and occupy the position.\n\n If there is already a ball at that position, the incoming ball will stop and occupy the position, while the original ball will continue moving to the next position in the same direction.\n\nNote that if a row or column is full (i.e., all positions in that row or column have balls), he cannot push a ball into that row or column.\n\nGiven the final state of whether there is a ball at each position of the grid, you need to determine whether it is possible for Ecrade to push the balls to reach the final state.",
+    "input_spec": "The first line contains an integer $t$ ($1 \\le t \\le 10\\,000$) — the number of test cases. The description of the test cases follows.\n\nThe first line of each test case contains two integers $n$ and $m$ ($1 \\le n, m \\le 50$).\n\nThis is followed by $n$ lines, each containing exactly $m$ characters and consisting only of $0$ and $1$, describing the final state of the grid. There is a ball at one position of the grid if and only if the corresponding position of the given input is $1$.\n\nIt is guaranteed that the sum of $n\\cdot m$ over all test cases does not exceed $10\\,000$.",
+    "output_spec": "For each test case, output \"Yes\" (without quotes) if it is possible for Ecrade to push the balls to reach the final state, and \"No\" (without quotes) otherwise.\n\nYou can output \"Yes\" and \"No\" in any case (for example, strings \"YES\", \"yEs\" and \"yes\" will be recognized as a positive response).",
+    "note": "For simplicity, if Ecrade pushes a ball from the leftmost edge of the $i$-th row, we call the operation $\\text{ROW}\\ i$; if he pushes a ball from the topmost edge of the $i$-th column, we call the operation $\\text{COL}\\ i$.\n\nFor intuitive understanding, a non-zero number $x$ in the matrix given below represents the $x$-th ball that is pushed in.\n\nIn the first test case, a possible series of operations:\n\n$\\begin{pmatrix}0&0&0\\\\0&0&0\\\\0&0&0\\end{pmatrix}\\xrightarrow{\\text{ROW}\\ 3}\\xrightarrow{\\text{ROW}\\ 3} \\begin{pmatrix}0&0&0\\\\0&0&0\\\\2&1&0\\end{pmatrix}\\xrightarrow{\\text{COL}\\ 3}\\xrightarrow{\\text{COL}\\ 3} \\begin{pmatrix}0&0&4\\\\0&0&3\\\\2&1&0\\end{pmatrix}$\n\nIn the second test case, a possible series of operations:\n\n$\\begin{pmatrix}0&0&0\\\\0&0&0\\\\0&0&0\\end{pmatrix}\\xrightarrow{\\text{ROW}\\ 2}\\xrightarrow{\\text{ROW}\\ 2}\\xrightarrow{\\text{ROW}\\ 2} \\begin{pmatrix}0&0&0\\\\3&2&1\\\\0&0&0\\end{pmatrix}\\xrightarrow{\\text{COL}\\ 2}\\xrightarrow{\\text{COL}\\ 2} \\begin{pmatrix}0&5&0\\\\3&4&1\\\\0&2&0\\end{pmatrix}$\n\nIn the third test case, a possible series of operations:\n\n$\\begin{pmatrix}0&0&0\\\\0&0&0\\\\0&0&0\\end{pmatrix}\\xrightarrow{\\text{ROW}\\ 1}\\xrightarrow{\\text{ROW}\\ 2}\\xrightarrow{\\text{ROW}\\ 3} \\begin{pmatrix}1&0&0\\\\2&0&0\\\\3&0&0\\end{pmatrix}\\xrightarrow{\\text{COL}\\ 3}\\xrightarrow{\\text{COL}\\ 3}\\xrightarrow{\\text{COL}\\ 3} \\begin{pmatrix}1&0&6\\\\2&0&5\\\\3&0&4\\end{pmatrix}\\xrightarrow{\\text{ROW}\\ 1}\\xrightarrow{\\text{ROW}\\ 2}\\xrightarrow{\\text{ROW}\\ 3} \\begin{pmatrix}7&1&6\\\\8&2&5\\\\9&3&4\\end{pmatrix}$",
+    "samples": [
+      {
+        "input": "5\n3 3\n001\n001\n110\n3 3\n010\n111\n010\n3 3\n111\n111\n111\n3 3\n000\n000\n000\n3 3\n000\n000\n001",
+        "output": "\nYES\nYES\nYES\nYES\nNO"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 141053,
+    "url": "https://codeforces.com/blog/entry/141053",
+    "tutorial": "2090B - Pushing Balls\n Idea: Ecrade_\n\nSolution\n\nWe can transform the problem into: select a row / column and replace the leftmost / topmost $0$ with $1$. Then the solution is clear: if, for each $1$ in the grid, there does not exist any $0$ on its top, or does not exist any $0$ on its left, then the answer is YES; otherwise NO.\n\nBut how to prove that if the condition is satisfied, we can always construct a valid series of ball-pushing operations? We can consider the problem in reverse order: given the final state, if, for an $1$ in the grid, there does not exist any $0$ on its top, or does not exist any $0$ on its left, then we can turn it into $0$, and our goal is to turn all $1$ s into $0$ s. We can always reach the goal if we choose $1$ s in descending order of $i+j$, where $(i,j)$ is their coordinates in the grid.\n\nCode",
+    "solution_code": [
+      "#include<bits/stdc++.h>\nusing namespace std;\ntypedef long long ll;\nll t,n,m,a[59][59],vis[59][59];\nchar s[59];\ninline ll read(){\n\tll s = 0,w = 1;\n\tchar ch = getchar();\n\twhile (ch > '9' || ch < '0'){ if (ch == '-') w = -1; ch = getchar();}\n\twhile (ch <= '9' && ch >= '0') s = (s << 1) + (s << 3) + (ch ^ 48),ch = getchar();\n\treturn s * w;\n}\nint main(){\n\tt = read();\n\twhile (t --){\n\t\tn = read(),m = read();\n\t\tfor (ll i = 1;i <= n;i += 1){\n\t\t\tscanf(\"%s\",s + 1);\n\t\t\tfor (ll j = 1;j <= m;j += 1){\n\t\t\t\ta[i][j] = s[j] - '0';\n\t\t\t\tvis[i][j] = 0;\n\t\t\t}\n\t\t}\n\t\tfor (ll i = 1;i <= n;i += 1){\n\t\t\tfor (ll j = 1;j <= m;j += 1){\n\t\t\t\tif (!a[i][j]) break;\n\t\t\t\tvis[i][j] = 1;\n\t\t\t}\n\t\t}\n\t\tfor (ll j = 1;j <= m;j += 1){\n\t\t\tfor (ll i = 1;i <= n;i += 1){\n\t\t\t\tif (!a[i][j]) break;\n\t\t\t\tvis[i][j] = 1;\n\t\t\t}\n\t\t}\n\t\tbool fl = 1;\n\t\tfor (ll i = 1;i <= n && fl;i += 1){\n\t\t\tfor (ll j = 1;j <= m;j += 1){\n\t\t\t\tif (a[i][j] && !vis[i][j]){\n\t\t\t\t\tfl = 0;\n\t\t\t\t\tbreak;\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t\tputs(fl ? \"YES\" : \"NO\");\n\t}\n\treturn 0;\n}"
+    ]
+  }
+}

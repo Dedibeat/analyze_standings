@@ -1,0 +1,44 @@
+{
+  "contest_id": 1978,
+  "index": "D",
+  "name": "Elections",
+  "rating": 1600,
+  "tags": [
+    "data structures",
+    "greedy",
+    "implementation",
+    "math"
+  ],
+  "points": 1500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1978D",
+  "url": "https://codeforces.com/problemset/problem/1978/D",
+  "contest_start_time": "2024-06-16T09:05:00+00:00",
+  "statement": {
+    "title": "D. Elections",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Elections are taking place in Berland. There are $n$ candidates participating in the elections, numbered from $1$ to $n$. The $i$-th candidate has $a_i$ fans who will vote for him. Additionally, there are $c$ people who are undecided about their favorite candidate, let's call them undecided. Undecided people will vote for the candidate with the lowest number.\n\nThe candidate who receives the maximum number of votes wins the elections, and if multiple candidates receive the same maximum number of votes, the candidate with the lowest number among them wins.\n\nYou found these elections too boring and predictable, so you decided to exclude some candidates from them. If you do not allow candidate number $i$ to participate in the elections, all $a_i$ of his fans will become undecided, and will vote for the candidate with the lowest number.\n\nYou are curious to find, for each $i$ from $1$ to $n$, the minimum number of candidates that need to be excluded from the elections for candidate number $i$ to win the elections.",
+    "input_spec": "Each test consists of multiple test cases. The first line contains a single integer $t$ ($1 \\leq t \\leq 2 \\cdot 10^4$) — the number of test cases. The description of the test cases follows.\n\nThe first line of each test case contains two integers $n$ and $c$ ($1 \\le n \\le 2 \\cdot 10^5$, $0 \\le c \\le 10^9$) — the number of candidates in the elections and the number of undecided people.\n\nThe second line of each test case contains $n$ integers $a_1, a_2, \\ldots, a_n$ ($0 \\le a_i \\le 10^9$) — the number of fans for each candidate.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, output $n$ integers, the $i$-th of which should be equal to the minimum number of candidates that need to be excluded from the elections for candidate number $i$ to win.",
+    "note": "In the first test case:\n\n If all candidates are allowed, candidate number $1$ will receive $3$ votes ($1$ undecided person will vote for him), candidate number $2$ will receive $0$ votes, and candidate number $3$ will receive $3$ votes. Therefore, candidate number $1$ wins (he received the same number of votes as candidate $3$, but his number is lower), so the answer for him is $0$.\n\n If candidate number $1$ is not allowed, his $2$ fans will become undecided. Then candidate number $2$ will receive $3$ votes ($3$ undecided people will vote for him) and candidate number $3$ will receive $3$ votes. Therefore, candidate number $2$ wins (he received the same number of votes as candidate $3$, but his number is lower), so the answer for him is $1$.\n\n If candidates with numbers $1$ and $2$ are not allowed, candidate number $3$ wins, so the answer for him is $2$.\n\nIn the second test case, candidate number $1$ will win if candidate number $2$ is not allowed to participate.",
+    "samples": [
+      {
+        "input": "5\n3 1\n2 0 3\n2 3\n0 10\n5 3\n5 4 3 2 1\n4 5\n3 10 7 1\n6 0\n2 2 2 3 3 3",
+        "output": "\n0 1 2\n1 0\n0 1 2 3 4\n1 0 2 3\n1 1 2 0 4 5"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 130527,
+    "url": "https://codeforces.com/blog/entry/130527",
+    "tutorial": "Notice that if candidate $i$ does not win initially (when no one is removed), then for their victory, we must definitely remove all candidates with numbers less than $i$. Because if someone remains unremoved with a number less than $i$, then the votes for candidate $i$ will not increase, and the maximum number of votes for someone else will not decrease.\n\nLet's find the winner of the election initially, for them the answer is $0$, for all other candidates we need to remove all people with numbers less than $i$.\n\nBut sometimes these removals alone may not be enough, so we need to additionally remove several candidates so that their fans' votes go to us.\n\nNotice that then it is enough to remove only one candidate with the maximum $a_i$, then we will definitely win, so the answer for candidate $i$ is either $0$, or $i$, or $i + 1$.\n\nSo we end up with a solution which works in $O(n)$.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n\nusing namespace std;\nusing ll = long long;\n\nvoid solve() {\n    int n, c;\n    cin >> n >> c;\n\n    vector<int> a(n);\n    for (int i = 0; i < n; ++i) {\n        cin >> a[i];\n    }\n\n    if (n == 1) {\n        cout << \"0\\n\";\n        return;\n    }\n\n    int mx = *max_element(a.begin() + 1, a.end());\n    int mxc = max(a[0] + c, mx);\n    int winner = mxc == a[0] + c ? 0 : find(a.begin() + 1, a.end(), mx) - a.begin();\n    ll sum = c;\n    for (int i = 0; i < n; sum += a[i], ++i) {\n        int answer;\n        if (i == winner) {\n            answer = 0;\n        } else if (sum + a[i] >= mx) {\n            answer = i;\n        } else {\n            answer = i + 1;\n        }\n        cout << answer << \" \\n\"[i == n - 1];\n    }\n}\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n\n    int test = 1;\n    cin >> test;\n    \n    while (test--) {\n        solve();\n    }\n\n    return 0;\n}"
+    ]
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "contest_id": 2086,
+  "index": "D",
+  "name": "Even String",
+  "rating": 1700,
+  "tags": [
+    "brute force",
+    "combinatorics",
+    "dp",
+    "math",
+    "strings"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2086D",
+  "url": "https://codeforces.com/problemset/problem/2086/D",
+  "contest_start_time": "2025-04-03T14:35:00+00:00",
+  "statement": {
+    "title": "D. Even String",
+    "time_limit": "2 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "You would like to construct a string $s$, consisting of lowercase Latin letters, such that the following condition holds:\n\n For every pair of indices $i$ and $j$ such that $s_{i} = s_{j}$, the difference of these indices is even, that is, $|i - j| \\bmod 2 = 0$.\n\nConstructing any string is too easy, so you will be given an array $c$ of $26$ numbers — the required number of occurrences of each individual letter in the string $s$. So, for every $i \\in [1, 26]$, the $i$-th letter of the Latin alphabet should occur exactly $c_i$ times.\n\nYour task is to count the number of distinct strings $s$ that satisfy all these conditions. Since the answer can be huge, output it modulo $998\\,244\\,353$.",
+    "input_spec": "Each test consists of several test cases. The first line contains a single integer $t$ ($1 \\le t \\le 10^{4}$)— the number of test cases. The description of test cases follows.\n\nEach test case contains $26$ integers $c_{i}$ ($0 \\le c_{i} \\le 5 \\cdot 10^{5}$)— the elements of the array $c$.\n\nAdditional constraints on the input data:\n\n The sum of $c_{i}$ for every test case is positive;\n\n The sum of $c_{i}$ over all test cases does not exceed $5 \\cdot 10^{5}$.",
+    "output_spec": "For each test case, print one integer — the number of suitable strings $s$, taken modulo $998\\,244\\,353$.",
+    "note": "In the first test case, there are $4$ suitable strings: \"abak\", \"akab\", \"baka\" and \"kaba\".",
+    "samples": [
+      {
+        "input": "5\n2 1 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\n3 1 1 0 0 0 0 0 0 0 0 0 0 0 0 1 0 1 0 0 0 0 0 0 1 0\n0 0 0 0 0 0 0 0 0 0 0 0 1 0 3 0 0 0 0 0 0 0 0 0 0 0\n1 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 233527 233827",
+        "output": "\n4\n960\n0\n1\n789493841"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 141425,
+    "url": "https://codeforces.com/blog/entry/141425",
+    "tutorial": "From the statement, it follows that all identical letters in $s$ must be positioned either at even indices or at odd indices simultaneously.\n\nLet's examine how the ways to construct the string $s$ are formed:\n\n A subset of letters that we take for the odd positions (the remaining letters will be at the even positions);\n\n The number of ways to create a string with a fixed subset of letters at the odd positions.\n\nLet $S$ denote the sum of the array $c$. We also denote $odd = \\lceil\\frac{S}{2}\\rceil$ as the number of odd positions, and $even = \\lfloor\\frac{S}{2}\\rfloor$ as the number of even positions.\n\nFor now, let's ignore the second point and calculate how many ways there are to distribute the letters such that we can create at least one suitable string $s$. That is, we need to count the number of ways to choose a set of letters that will occupy the odd positions. This resembles a modification of the classical knapsack problem, which can be solved using dynamic programming. Let $\\text{dp}[i]$ denote the number of ways to take a subset of letters such that the number of letters taken equals $i$. The base case of the dynamic programming is $\\text{dp}[i] = 0$, and the entire dynamic can be computed using two nested loops:\n\ndp[0] = 1;for (int i = 0; i < 26; i++){    if (c[i] == 0){        continue;    }    for (int j = s; j >= 0; j--){        if (j + c[i] <= s){            dp[j + c[i]] = (dp[j + c[i]] + dp[j]) % MOD;        }    }}\n\nThe number we're interested in will be in $\\text{dp}[odd]$.\n\nNow we need to understand what to do with point $2$. Notice that if we have fixed a subset of letters $X$ at the odd positions, then the number of ways to create the string is equal to the product of the multinomial coefficients:\n\n$$ \\frac{odd!}{\\prod_{i \\in X} c_{i}!} \\cdot \\frac{even!}{\\prod_{i \\notin X} c_{i}!}$$\n\nNotice that this product is a constant, meaning it does not depend on the specific subset $X$:\n\n$$ \\frac{odd! \\cdot even!}{\\prod_{i = 0}^{26} c_{i}!} $$\n\nThus, the answer to the entire problem is simply the product:\n\n$$ \\frac{odd! \\cdot even!}{\\prod_{i = 0}^{26} c_{i}!} \\cdot \\text{dp}[odd] $$\n\nThe total complexity complexity is $O(S \\cdot 26)$.",
+    "solution_code": [
+      "#include<bits/stdc++.h>\nusing namespace std;\n#define int long long\n \nconst int MOD = 998'244'353;\n \nint bpow(int x, int p){\n\tint res = 1;\n\twhile(p){\n\t\tif (p % 2){\n\t\t\tres = (res * x) % MOD;\n\t\t}\n\t\tp >>= 1;\n\t\tx = (x * x) % MOD;\n\t}\n\treturn res;\n}\n \nint fact(int x){\n\tint res = 1;\n\tfor (int i = 1; i <= x; i++){\n\t\tres = (res * i) % MOD;\n\t}\n\treturn res;\n}\n \nvoid solve(){\n\tvector<int> c(26);\n\tfor (int i = 0; i < 26; i++){\n\t\tcin >> c[i];\n\t}\n \n\tint s = accumulate(c.begin(), c.end(), 0ll);\n\t\n\tvector<int> dp(s + 1);\n\tdp[0] = 1;\n \n\tfor (int i = 0; i < 26; i++){\n\t\tif (c[i] == 0){\n\t\t\tcontinue;\n\t\t}\n\t\tfor (int j = s; j >= 0; j--){\n\t\t\tif (j + c[i] <= s){\n\t\t\t\tdp[j + c[i]] = (dp[j + c[i]] + dp[j]) % MOD;\n\t\t\t}\n\t\t}\n\t}\n \n\tint ans = dp[s / 2] * fact(s / 2) % MOD * fact((s + 1) / 2) % MOD;\n\tfor (int i = 0; i < 26; i++){\n\t\tans = (ans * bpow(fact(c[i]), MOD - 2)) % MOD;\n\t}\n \n\tcout << ans << '\\n';\n}\n \nsigned main(){\n    ios_base::sync_with_stdio(false);\n    cin.tie(0);\n    cout.tie(0);\n \n    int t;\n    cin >> t;\n    while(t--){\n        solve();\n    }\n}"
+    ]
+  }
+}

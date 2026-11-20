@@ -1,0 +1,41 @@
+{
+  "contest_id": 2104,
+  "index": "A",
+  "name": "Three Decks",
+  "rating": 800,
+  "tags": [
+    "math"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2104A",
+  "url": "https://codeforces.com/problemset/problem/2104/A",
+  "contest_start_time": "2025-04-28T14:35:00+00:00",
+  "statement": {
+    "title": "A. Three Decks",
+    "time_limit": "2 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "Monocarp placed three decks of cards in a row on the table. The first deck consists of $a$ cards, the second deck consists of $b$ cards, and the third deck consists of $c$ cards, with the condition $a  \\lt  b  \\lt  c$.\n\nMonocarp wants to take some number of cards (at least one, but no more than $c$) from the third deck and distribute them between the first two decks so that each of the taken cards ends up in either the first or the second deck. It is possible that all the cards taken from the third deck will go into the same deck.\n\nYour task is to determine whether Monocarp can make the number of cards in all three decks equal using the described operation.",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases.\n\nThe only line of each test case contains three integers $a, b$, and $c$ ($1 \\le a, b, c \\le 10^8$) — the number of cards in the first, second, and third decks, respectively.\n\nAdditional constraint on the input: $a  \\lt  b  \\lt  c$.",
+    "output_spec": "For each test case, output \"YES\" (without quotes) if Monocarp can make the number of cards in all three decks equal using the described operation. Otherwise, output \"NO\" (without quotes).",
+    "note": "In the first test case, Monocarp has to take $4$ cards from the third deck, put $3$ cards in the first deck, and $1$ card in the second deck. Thus, there will be $6$ cards in all three decks.\n\nIn the second test case, it is impossible to make the number of cards in all three decks equal.\n\nIn the third test case, Monocarp has to take $2$ cards from the third deck and put both in the first deck. Thus, there will be $5$ cards in all three decks.\n\nIn the fourth test case, it is also impossible to make the number of cards in all three decks equal.",
+    "samples": [
+      {
+        "input": "4\n3 5 10\n12 20 30\n3 5 7\n1 5 6",
+        "output": "\nYES\nNO\nYES\nNO"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 142472,
+    "url": "https://codeforces.com/blog/entry/142472",
+    "tutorial": "Let us assume that we have managed to make the number of cards equal. Then each deck contains $x$ cards. Since the total number of cards from the hasn't changed, there were $3x$ cards in total.\n\nThis means that if $a + b + c$ is not divisible by $3$, the answer is definitely \"NO\".\n\nOtherwise, we know that $3x = a + b + c$, which means $x = \\frac{a + b + c}{3}$. If the first or the second deck already has more cards than $x$, the answer is also \"NO\". Otherwise, we can move $x - a$ cards to the first deck and $x - b$ cards to the second deck. Since $b  \\gt  a$, it's enough to check if $b \\le x$.\n\nOverall complexity: $O(1)$ per test case.",
+    "solution_code": [
+      "for _ in range(int(input())):\n    a, b, c = map(int, input().split())\n    if (a + b + c) % 3 != 0:\n        print(\"NO\")\n        continue\n    x = (a + b + c) // 3\n    print(\"YES\" if b <= x else \"NO\")"
+    ]
+  }
+}

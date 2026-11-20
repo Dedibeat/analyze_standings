@@ -1,0 +1,47 @@
+{
+  "contest_id": 2072,
+  "index": "F",
+  "name": "Goodbye, Banker Life",
+  "rating": 1700,
+  "tags": [
+    "2-sat",
+    "bitmasks",
+    "combinatorics",
+    "constructive algorithms",
+    "fft",
+    "math",
+    "number theory"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2072F",
+  "url": "https://codeforces.com/problemset/problem/2072/F",
+  "contest_start_time": "2025-02-25T14:35:00+00:00",
+  "statement": {
+    "title": "F. Goodbye, Banker Life",
+    "time_limit": "3 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Monsters are approaching the city, and to protect it, Akito must create a protective field around the city. As everyone knows, protective fields come in various levels. Akito has chosen the field of level $n$. To construct the field, a special phrase is required, which is the $n$-th row of the Great Magical Triangle, represented as a two-dimensional array. We will call this array $T$.\n\nThe triangle is defined as follows:\n\n In the $i$-th row, there are $i$ integers.\n\n The single integer in the first row is $k$.\n\n Let the $j$-th element of the $i$-th row be denoted as $T_{i,j}$. Then $$T_{i,j} = \\begin{cases} T_{i-1,j-1} \\oplus T_{i-1,j}, &\\textrm{if } 1  \\lt  j  \\lt  i \\\\ T_{i-1,j}, &\\textrm{if } j = 1 \\\\ T_{i-1,j-1}, &\\textrm{if } j = i \\end{cases}$$\n\n where $a \\oplus b$ is the bitwise exclusive \"OR\"(XOR) of the integers $a$ and $b$.\nHelp Akito find the integers in the $n$-th row of the infinite triangle before the monsters reach the city.",
+    "input_spec": "The first line contains the integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases.\n\nIn the only line of each test case, there are two integers $n$ and $k$ ($1 \\le n \\le 10^6,\\ 1 \\le k  \\lt  2^{31}$) — the row index that Akito needs and the integer in the first row of the Great Magical Triangle, respectively.\n\nIt is guaranteed that the sum of $n$ across all test cases does not exceed $10^6$.",
+    "output_spec": "For each test case, output $n$ integers — the elements of the $n$-th row of the Great Magical Triangle.",
+    "note": "In the first example, the first row of the Great Magical Triangle is $[5]$ by definition.\n\nIn the second example, $T_{2,1} = T_{1,1} = 10$ and $T_{2,2} = T_{1, 1} = 10$.",
+    "samples": [
+      {
+        "input": "5\n1 5\n2 10\n3 16\n9 1\n1 52",
+        "output": "\n5\n10 10\n16 0 16\n1 0 0 0 0 0 0 0 1\n52"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 140039,
+    "url": "https://codeforces.com/blog/entry/140039",
+    "tutorial": "Since the value of the $i$-th bit in $a \\oplus b$ depends only on the $i$-th bits of the numbers $a$ and $b$, we can solve the problem separately for each bit.\n\nLet $a_i$ be the $i$-th bit of the number $a$. If $k_i = 0$, then the triangle for the $i$-th bit will consist only of $0$s. If $k_i = 1$, then since $\\oplus$ is the bitwise addition modulo $2$, we simply obtain Pascal's Triangle, where all values are taken modulo $2$.\n\nNow the problem has reduced to finding $\\binom{n}{r} \\mod 2$. $\\binom{n}{r} = \\frac{n!}{r! \\cdot (n - r)!}$, which means the parity of $\\binom{n}{r}$ depends on the power of $2$ in $n!$, $r!$, and $(n - r)!$. Let $c_n$ be the power of $2$ in $n!$. $\\binom{n}{r}$ will be odd if and only if $c_n = c_r + c_{n - r}$. It remains to learn how to find the power of $2$ in $n!$. We have $c_0 = c_1 = 0$, and $c_n = c_{n - 1} + f(n)$, where $f(n)$ is the maximum $m$ such that $2^m | n$.\n\nAsymptotic complexity: $\\mathcal{O}(N \\log N)$ for preprocessing and $\\mathcal{O}(n)$. Here, $N$ denotes the maximum possible $n$.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n\nusing namespace std;\n\nconstexpr int64_t kMaxN = 1e6 + 69;\nvector<int64_t> c(kMaxN);\n\nvoid precalc() {\n  c[0] = c[1] = 0;\n  for (int i = 2; i < kMaxN; ++i) {\n    c[i] = c[i - 1];\n    int x = i;\n    while (x % 2 == 0) {\n      x /= 2, c[i]++;\n    }\n  }\n}\n\nvoid solve() {\n  int n, k;\n  cin >> n >> k;\n\n  --n;\n  for (int i = 0; i <= n; ++i) {\n    cout << k * (c[n] == c[i] + c[n - i]) << \" \\n\"[i == n];\n  }\n}\n\nint main() {\n  ios::sync_with_stdio(0);\n  cin.tie(0);\n\n  precalc();\n\n  int tt = 1;\n  cin >> tt;\n  while (tt --> 0) {\n    solve();\n  }\n  return 0;\n}"
+    ]
+  }
+}

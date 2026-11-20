@@ -1,0 +1,43 @@
+{
+  "contest_id": 1984,
+  "index": "E",
+  "name": "Shuffle",
+  "rating": 2400,
+  "tags": [
+    "dp",
+    "greedy",
+    "trees"
+  ],
+  "points": 3000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1984E",
+  "url": "https://codeforces.com/problemset/problem/1984/E",
+  "contest_start_time": "2024-06-09T14:35:00+00:00",
+  "statement": {
+    "title": "E. Shuffle",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Two hungry red pandas, Oscar and Lura, have a tree $T$ with $n$ nodes. They are willing to perform the following shuffle procedure on the whole tree $T$ exactly once. With this shuffle procedure, they will create a new tree out of the nodes of the old tree.\n\n Choose any node $V$ from the original tree $T$. Create a new tree $T_2$, with $V$ as the root.\n\n Remove $V$ from $T$, such that the original tree is split into one or more subtrees (or zero subtrees, if $V$ is the only node in $T$).\n\n Shuffle each subtree with the same procedure (again choosing any node as the root), then connect all shuffled subtrees' roots back to $V$ to finish constructing $T_2$.\n\nAfter this, Oscar and Lura are left with a new tree $T_2$. They can only eat leaves and are very hungry, so please find the maximum number of leaves over all trees that can be created in exactly one shuffle.\n\nNote that leaves are all nodes with degree $1$. Thus, the root may be considered as a leaf if it has only one child.",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\leq t \\leq 10^4$) — the number of test cases.\n\nThe first line of every test case contains a single integer $n$ ($2 \\leq n \\leq 2 \\cdot 10^5$) — the number of nodes within the original tree $T$.\n\nThe next $n - 1$ lines each contain two integers $u$ and $v$ ($1 \\leq u, v \\leq n$) — an edge within the original tree $T$. The given edges form a tree.\n\nThe sum of $n$ over all test cases does not exceed $3 \\cdot 10^5$.",
+    "output_spec": "For each test case, output a single integer — the maximum number of leaves achievable with exactly one shuffle procedure on the whole tree.",
+    "note": "In the first test case, it can be shown that the maximum number of leaves is $4$. To accomplish this, we can start our shuffle with selecting node $3$ as the new root.\n   Next, we are left only with one subtree, in which we can select node $2$ to be the new root of that subtree.    This will force all $3$ remaining nodes to be leaves, and once we connect them back to our new root, the shuffled subtree looks like this:    We connect the shuffled subtree back to our new root of our new tree. Our final tree has four leaves (including the root), and looks like this:\nIn our second test case, we have a line of five nodes. It can be shown that the maximum number of leaves after one shuffle is $3$. We can start off with node $2$, which forces node $1$ to become a leaf. Then, if we select node $4$ on the right side, we will also have nodes $3$ and $5$ as leaves.\n\nThe third test case is a star graph with six nodes. The number of leaves cannot increase, thus our answer will be $5$ (if we start the shuffling with the original root node).",
+    "samples": [
+      {
+        "input": "4\n5\n1 2\n1 3\n2 4\n2 5\n5\n1 2\n2 3\n3 4\n4 5\n6\n1 2\n1 3\n1 4\n1 5\n1 6\n10\n9 3\n8 1\n10 6\n8 5\n7 8\n4 6\n1 3\n10 1\n2 7",
+        "output": "\n4\n3\n5\n6"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 130252,
+    "url": "https://codeforces.com/blog/entry/130252",
+    "tutorial": "1984E - Shuffle\n\nProblem Credits: null_awe, thanks to wavelets for helping with brainstorming\nAnalysis: null_awe\n\nSolution\n\nExcluding the root, the maximum number of leaves we have is the maximum independent set (MIS) of the rest of the tree. Why? First of all, after rooting tree $T_2$, no two adjacent nodes can both be leaves. This is because, no matter which one you choose to add to $T_2$ first, it must be the ancestor of the other one. Thus, the first chosen node will not be a leaf. Furthermore, any chosen MIS of nodes can all become leaves. This is because we can essentially choose to add all of the nodes not in the MIS first to the tree, leaving all of the remaining nodes to be childless nodes, making them all leaves.\n\nTo find the answer, we want to find the maximum MIS of all subtrees that are missing one leaf. The answer will be one greater than this maximum MIS due to the root of $T_2$ being also a leaf.\n\nThere are multiple dynamic programming approaches to compute this efficiently, including rerooting and performing dynamic programming on tree edges.\n\nTime complexity: $O(n)$ or $O(n \\log{n})$, depending on implementation.\n\nCode (C++)",
+    "solution_code": [
+      "#include <iostream>\n#include <vector>\n#include <map>\nusing namespace std;\n \n#define pii pair<int, int>\n \nint n;\nvector<vector<int>> adj;\nvector<pii> edges;\nmap<pii, int> mp;\n \nvector<vector<int>> dp;\nvector<vector<int>> from;\nvector<int> miss;\n \nvoid dfs(int e) {\n  if (dp[0][e] >= 0 || dp[1][e] >= 0) return;\n  int p = edges[e].first, v = edges[e].second;\n  dp[0][e] = 0, dp[1][e] = 1;\n  if (miss[v] < 0) {\n    for (int u : adj[v]) {\n      if (u == p) continue;\n      int ne = mp[{v, u}];\n      dfs(ne);\n      from[0][v] += max(dp[1][ne], dp[0][ne]);\n      from[1][v] += dp[0][ne];\n    }\n    miss[v] = p;\n  }\n  if (miss[v] != p && miss[v] != n) {\n    int ne = mp[{v, miss[v]}];\n    dfs(ne);\n    from[0][v] += max(dp[1][ne], dp[0][ne]);\n    from[1][v] += dp[0][ne];\n    miss[v] = n;\n  }\n  if (miss[v] == n) {\n    int nne = mp[{v, p}];\n    dp[0][e] += from[0][v] - max(dp[1][nne], dp[0][nne]);\n    dp[1][e] += from[1][v] - dp[0][nne];\n  } else if (miss[v] == p) {\n    dp[0][e] += from[0][v];\n    dp[1][e] += from[1][v];\n  }\n}\n \nvoid solve() {\n  cin >> n;\n  adj.clear(), edges.clear();\n  adj.resize(n), edges.resize(2 * n - 2);\n  for (int i = 0; i < n - 1; ++i) {\n    int a, b; cin >> a >> b; --a, --b;\n    adj[a].push_back(b);\n    adj[b].push_back(a);\n    edges[2 * i] = {a, b};\n    edges[2 * i + 1] = {b, a};\n    mp[{a, b}] = 2 * i;\n    mp[{b, a}] = 2 * i + 1;\n  }\n  from = vector<vector<int>>(2, vector<int>(n));\n  miss = vector<int>(n, -1);\n  dp = vector<vector<int>>(2, vector<int>(2 * n - 2, -1));\n  for (int i = 0; i < 2 * n - 2; ++i) dfs(i);\n  int ans = 0;\n  for (int i = 0; i < n; ++i) {\n    if (adj[i].size() != 1) continue;\n    int e = mp[{i, adj[i][0]}];\n    ans = max(ans, 1 + max(dp[0][e], dp[1][e]));\n  }\n  cout << ans << '\\n';\n}\n \nint main() {\n  ios_base::sync_with_stdio(false); cin.tie(NULL);\n  int t; cin >> t;\n  for (int i = 0; i < t; ++i) solve();\n  return 0;\n}"
+    ]
+  }
+}

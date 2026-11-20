@@ -1,0 +1,43 @@
+{
+  "contest_id": 2086,
+  "index": "B",
+  "name": "Large Array and Segments",
+  "rating": 1100,
+  "tags": [
+    "binary search",
+    "brute force",
+    "greedy"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2086B",
+  "url": "https://codeforces.com/problemset/problem/2086/B",
+  "contest_start_time": "2025-04-03T14:35:00+00:00",
+  "statement": {
+    "title": "B. Large Array and Segments",
+    "time_limit": "2 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "There is an array $a$ consisting of $n$ positive integers, and a positive integer $k$. An array $b$ is created from array $a$ according to the following rules:\n\n $b$ contains $n \\cdot k$ numbers;\n\n the first $n$ numbers of array $b$ are the same as the numbers of array $a$, that is, $b_{i} = a_{i}$ for $i \\le n$;\n\n for any $i  \\gt  n$, it holds that $b_{i} = b_{i - n}$.\n\nFor example, if $a = [2, 3, 1, 4]$ and $k = 3$, then $b = [2, 3, 1, 4, 2, 3, 1, 4, 2, 3, 1, 4]$.\n\nGiven a number $x$, it is required to count the number of such positions $l$ ($1 \\le l \\le n \\cdot k$), for which there exists a position $r \\ge l$, such that the sum of the elements of array $b$ on the segment $[l, r]$ is at least $x$ (in other words, $b_{l} + b_{l+1} + \\dots + b_{r} \\ge x$).",
+    "input_spec": "Each test consists of several test cases. The first line contains one integer $t$ ($1 \\le t \\le 10^{4}$) — the number of test cases. The description of the test cases follows.\n\nThe first line of each test case contains three integers $n$, $k$, $x$ ($1 \\le n, k \\le 10^{5}$; $1 \\le x \\le 10^{18}$).\n\nThe second line of each test case contains $n$ integers $a_{i}$ ($1 \\le a_{i} \\le 10^{8}$).\n\nAdditional constraints on the input:\n\n the sum of $n$ across all test cases does not exceed $2 \\cdot 10^{5}$;\n\n the sum of $k$ across all test cases does not exceed $2 \\cdot 10^{5}$.",
+    "output_spec": "For each test case, output one integer — the number of suitable positions $l$ in the array $b$.",
+    "note": "In the first test case, the array $b$ looks like this:\n\n$$[3, 4, 2, 1, 5, 3, 4, 2, 1, 5, 3, 4, 2, 1, 5]$$\n\nThere are $12$ positions $l$ for which there exists a suitable position $r$. Here are some (not all) of them:\n\n $l = 1$, for which there is a position $r = 6$, the sum over the segment $[1, 6]$ equals $18$;\n\n $l = 2$, for which there is a position $r = 5$, the sum over the segment $[2, 5]$ equals $12$;\n\n $l = 6$, for which there is a position $r = 9$, the sum over the segment $[6, 9]$ equals $10$.",
+    "samples": [
+      {
+        "input": "7\n5 3 10\n3 4 2 1 5\n15 97623 1300111\n105 95 108 111 118 101 95 118 97 108 111 114 97 110 116\n1 100000 1234567891011\n1\n1 1 1\n1\n1 1 1\n2\n2 1 2\n1 1\n2 1 5\n2 1",
+        "output": "\n12\n1452188\n0\n1\n1\n1\n0"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 141425,
+    "url": "https://codeforces.com/blog/entry/141425",
+    "tutorial": "In this problem, the array $b$ is obtained by copying the array $a$ exactly $k$ times.\n\nNotice that all elements of the array $a$ are positive; therefore, the elements of the array $b$ are also positive. From this, we can conclude that the optimal $r$ for any $l$ that maximizes the sum over the segment [$l, r$] is always equal to $n \\cdot k$. It also follows that the maximum sum for $l$ is less than the maximum sum for $l - 1$. The condition of monotonicity holds, so we can perform a binary search to find the first such $l$ for which the maximum sum is $ \\lt  x$.\n\nHow do we write a check for such a binary search? Given a position $m$, we need to calculate the maximum sum for it. To do this, we find how many \"full arrays $a$\" fit into the suffix $[m, n \\cdot k]$: there are $\\lfloor \\frac{n \\cdot k - m + 1}{n} \\rfloor$ of them. In addition to this, there are $suff = (n \\cdot k - m + 1) \\bmod n$ elements from the suffix of the array $a$ on this segment, so the total sum of the elements of the array $b$ over the segment [$m, n \\cdot k$] can be found using the formula:\n\n$$ \\lfloor \\frac{n \\cdot k - m + 1}{n} \\rfloor \\cdot \\sum_{i=1}^{n} a_{i} + \\sum_{i = n - suff + 1}^{n} a_{i}$$\n\nAt this point, we can write a solution that works in $O(n \\cdot (\\log n + \\log k))$. If we pre-calculate all suffix sums for the array $a$, then the formula above can be calculated in $O(1)$, so the solution can be optimized to $O(n + \\log k)$.\n\nThere are also other solutions with $O(n + k)$ complexity that also get Accepted.",
+    "solution_code": [
+      "#include<bits/stdc++.h>\nusing namespace std;\n#define int long long\n\nvoid solve(){\n    int n, k, x;\n    cin >> n >> k >> x;\n    vector<int> a(n);\n    for (int i = 0; i < n; i++){\n        cin >> a[i];\n    }\n\n    if (accumulate(a.begin(), a.end(), 0ll) * k < x){\n        cout << 0 << '\\n';\n        return;\n    }\n\n    int l = 1, r = n * k;\n    while(l <= r){\n        int m = l + (r - l) / 2;\n        int cnt_a = (n * k - m + 1) / n;\n        int suff = (n * k - m + 1) % n;\n        int sum = cnt_a * accumulate(a.begin(), a.end(), 0ll);\n        for (int i = n - suff; i < n; i++){\n            sum += a[i];\n        }\n        if (sum < x){\n            r = m - 1;\n        }\n        else{\n            l = m + 1;\n        }\n    }\n\n    cout << r << '\\n';\n}\n \nsigned main()\n{\n\tios_base::sync_with_stdio(false);\n\tcin.tie(0);\n\tcout.tie(0);\n\t\n\tint t;\n\tcin >> t;\n\twhile(t--){\n\t    solve();\n\t}\n}"
+    ]
+  }
+}

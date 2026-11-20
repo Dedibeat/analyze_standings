@@ -1,0 +1,45 @@
+{
+  "contest_id": 2068,
+  "index": "H",
+  "name": "Statues",
+  "rating": 2700,
+  "tags": [
+    "constructive algorithms",
+    "greedy",
+    "math"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2068H",
+  "url": "https://codeforces.com/problemset/problem/2068/H",
+  "contest_start_time": "2025-03-02T10:35:00+00:00",
+  "statement": {
+    "title": "H. Statues",
+    "time_limit": "2 seconds",
+    "memory_limit": "1024 megabytes",
+    "legend": "The mayor of a city wants to place $n$ statues at intersections around the city. The intersections in the city are at all points $(x, y)$ with integer coordinates. Distances between intersections are measured using Manhattan distance, defined as follows: $$ \\text{distance}((x_1, y_1), (x_2, y_2)) = |x_1 - x_2| + |y_1 - y_2|. $$\n\nThe city council has provided the following requirements for the placement of the statues:\n\n The first statue is placed at $(0, 0)$;\n\n The $n$-th statue is placed at $(a, b)$;\n\n For $i = 1, \\dots, n-1$, the distance between the $i$-th statue and the $(i+1)$-th statue is $d_i$.\n\nIt is allowed to place multiple statues at the same intersection.\n\nHelp the mayor find a valid arrangement of the $n$ statues, or determine that it does not exist.",
+    "input_spec": "The first line contains an integer $n$ ($3 \\le n \\le 50$) — the number of statues.\n\nThe second line contains two integers $a$ and $b$ ($0 \\le a, b \\le 10^9$) — the coordinates of the intersection where the $n$-th statue must be placed.\n\nThe third line contains $n-1$ integers $d_1, \\dots, d_{n-1}$ ($0 \\le d_i \\le 10^9$) — the distance between the $i$-th statue and the $(i+1)$-th statue.",
+    "output_spec": "Print $\\texttt{YES}$ if there is a valid arrangement of the $n$ statues. Otherwise, print $\\texttt{NO}$.\n\nIf there is a valid arrangement, print a valid arrangement in the following $n$ lines. The $i$-th of these lines must contain two integers $x_i$ and $y_i$ — the coordinates of the intersection where the $i$-th statue is placed. You can print any valid arrangement if multiple exist.",
+    "note": "In the first sample, there is no valid arrangement of the 3 statues.\n\nIn the second sample, the sample output is shown in the following picture. Note that this is not the only valid arrangement of the 4 statues.",
+    "samples": [
+      {
+        "input": "3\n5 8\n9 0",
+        "output": "\nNO"
+      },
+      {
+        "input": "4\n10 6\n7 8 5",
+        "output": "\nYES\n0 0\n6 -1\n11 2\n10 6"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 140239,
+    "url": "https://codeforces.com/blog/entry/140239",
+    "tutorial": "Let $d_0 = a + b$ be the distance between the first and the $n$-th statue. We are going to prove that a valid arrangement exists if and only if the following two conditions are satisfied:\n\n $d_0 + d_1 + \\dots + d_{n-1}$ is even;\n\n $d_i \\leq d_0 + \\dots + d_{i-1} + d_{i+1} + \\dots + d_{n-1}$ for all $0 \\leq i \\leq n-1$.\n\nTo start, let us prove that the two conditions above are necessary. Suppose there is a valid arrangement $s_1 = (x_1, y_1), \\, s_2 = (x_2, y_2), \\, \\dots, \\, s_n = (x_n, y_n)$. Then $$ d_0 + d_1 + \\dots + d_{n-1} = \\left( |x_n - x_1| + |y_n - y_1| \\right) + \\left( |x_1 - x_2| + |y_1 - y_2| \\right) + \\dots + \\left( |x_{n-1} - x_n| + |y_{n-1} - y_n| \\right); $$ when considered mod $2$, the absolute values can be omitted and all terms cancel out, so the result is even (condition 1). For every $0 \\leq i \\leq n-1$, the triangle inequality ensures that the distance $d_i$ between $s_i$ and $s_{i+1}$ (where $s_0$ is considered to be the same as $s_n$) is not greater than the sum of all other distances (condition 2).\n\nConversely, we now show by induction on $n$ that conditions 1 and 2 are sufficient to construct a valid arrangement. Our proof will effectively yield an $O(n)$ algorithm to construct a valid arrangement.\n\nIf $n=2$, condition 2 tells us that $d_0 \\leq d_1$ and $d_1 \\leq d_0$, so $d_0 = d_1$. Then the arrangement $s_0 = (0, 0), s_1 = (a, b)$ is valid.\n\nSuppose now that $n \\geq 3$. Our aim is to determine a placement $s_{n-1} = (a', b')$ for the $(n-1)$-th statue such that:\n\n $\\text{distance}(s_{n-1}, \\, s_n) = d_{n-1}$;\n\n if we define $\\hat{d_0} = \\text{distance}(s_1, \\, s_{n-1})$, then the distances $\\hat{d_0}, d_1, \\dots, d_{n-2}$ satisfy conditions 1 and 2.\n\n If we manage to achieve this, then we can inductively arrange the statues $1, \\dots, n-1$. (Note that the coordinates $a'$ or $b'$ can be negative, but this is not a problem when applying the induction hypothesis, as our solution does not require $a$ and $b$ to be nonnegative.)\nFor any choice of $s_{n-1}$, note that $d_0 + \\hat{d_0} + d_{n-1}$ is necessarily even, because $d_0, \\hat{d_0}, d_{n-1}$ are the distances between the three points $s_1, s_{n-1}, s_n$. Therefore, $$ \\hat{d_0} + d_1 + \\dots + d_{n-2} \\equiv d_0 + d_1 + \\dots + d_{n-1} \\equiv 0 \\pmod 2, $$ so condition 1 is satisfied by $\\hat{d_0}, d_1, \\dots, d_{n-2}$. The harder part is to ensure condition 2.\n\nAs $s_{n-1}$ varies among all integer points with $\\text{distance}(s_{n-1}, \\, s_n) = d_{n-1}$, the distance $\\hat{d_0}$ takes all values between $| d_0 - d_{n-1} |$ and $d_0 + d_{n-1}$ having the same parity as $d_0 + d_{n-1}$. The possible locations of $s_{n-1}$ are shown in red in the picture below.\n\nWe are going to show that the value $\\hat{d_0} = \\min( d_0 + d_{n-1}, \\, d_1 + \\dots + d_{n-2} )$ belongs to the admissible range $\\left\\{| d_0 - d_{n-1} |, \\, \\dots, \\, d_0 + d_{n-1} \\right\\}$, has the correct parity, and makes the sequence $\\hat{d_0}, \\, d_1, \\, \\dots, \\, d_{n-2}$ satisfy condition 2.\n\nCase 1: $\\hat{d_0} = d_0 + d_{n-1} \\leq d_1 + \\dots + d_{n-2}$. Obviously, $d_0 + d_{n-1}$ belongs to the admissible range and has the correct parity. The sequence $\\hat{d_0}, \\, d_1, \\, \\dots, \\, d_{n-2}$ satisfies condition 2 for $i = 0$ because $\\hat{d_0} \\leq d_1 + \\dots + d_{n-2}$. For $i \\geq 1$, we need to check that $$ d_i \\leq \\hat{d_0} + d_1 + \\dots + d_{i-1} + d_{i+1} + \\dots + d_{n-2} = (d_0 + d_{n-1}) + d_1 + \\dots + d_{i-1} + d_{i+1} + \\dots + d_{n-2}, $$ and this is ensured by condition 2 for the original sequence $d_0, \\, \\dots, \\, d_{n-1}$.\n\nCase 2: $\\hat{d_0} = d_1 + \\dots + d_{n-2} \\leq d_0 + d_{n-1}$. For $\\hat{d_0}$ to belong to the admissible range, we need to check that $d_1 + \\dots + d_{n-2} \\geq | d_0 - d_{n-1} |$. This is ensured by condition 2 for the original sequence $d_0, \\, \\dots, \\, d_{n-1}$ for $i=0$ and $i=n-1$. Condition 1 for the original sequence ensures that $d_1 + \\dots + d_{n-2}$ has the same parity as $d_0 + d_{n-1}$.\n\nWe now check condition 2 for the sequence $\\hat{d_0}, \\, d_1, \\, \\dots, \\, d_{n-2}$. For $i=0$, we are done because $\\hat{d_0} = d_1 + \\dots + d_{n-2}$. For $i \\geq 1$, condition 2 is satisfied because $d_i \\leq \\hat{d_0}$.",
+    "solution_code": []
+  }
+}

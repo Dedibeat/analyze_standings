@@ -1,0 +1,49 @@
+{
+  "contest_id": 2044,
+  "index": "F",
+  "name": "Easy Demon Problem",
+  "rating": 1900,
+  "tags": [
+    "binary search",
+    "brute force",
+    "data structures",
+    "math",
+    "number theory"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2044F",
+  "url": "https://codeforces.com/problemset/problem/2044/F",
+  "contest_start_time": "2024-12-15T14:35:00+00:00",
+  "statement": {
+    "title": "F. Easy Demon Problem",
+    "time_limit": "4 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "For an arbitrary grid, Robot defines its beauty to be the sum of elements in the grid.\n\nRobot gives you an array $a$ of length $n$ and an array $b$ of length $m$. You construct a $n$ by $m$ grid $M$ such that $M_{i,j}=a_i\\cdot b_j$ for all $1 \\leq i \\leq n$ and $1 \\leq j \\leq m$.\n\nThen, Robot gives you $q$ queries, each consisting of a single integer $x$. For each query, determine whether or not it is possible to perform the following operation exactly once so that $M$ has a beauty of $x$:\n\n Choose integers $r$ and $c$ such that $1 \\leq r \\leq n$ and $1 \\leq c \\leq m$\n\n Set $M_{i,j}$ to be $0$ for all ordered pairs $(i,j)$ such that $i=r$, $j=c$, or both.\n\nNote that queries are not persistent, meaning that you do not actually set any elements to $0$ in the process — you are only required to output if it is possible to find $r$ and $c$ such that if the above operation is performed, the beauty of the grid will be $x$. Also, note that you must perform the operation for each query, even if the beauty of the original grid is already $x$.",
+    "input_spec": "The first line contains three integers $n$, $m$, and $q$ ($1 \\leq n,m \\leq 2\\cdot 10^5, 1 \\leq q \\leq 5\\cdot 10^4$) — the length of $a$, the length of $b$, and the number of queries respectively.\n\nThe second line contains $n$ integers $a_1, a_2, \\ldots, a_n$ ($0 \\leq |a_i| \\leq n$).\n\nThe third line contains $m$ integers $b_1, b_2, \\ldots, b_m$ ($0 \\leq |b_i| \\leq m$).\n\nThe following $q$ lines each contain a single integer $x$ ($1 \\leq |x| \\leq 2\\cdot 10^5$), the beauty of the grid you wish to achieve by setting all elements in a row and a column to $0$.",
+    "output_spec": "For each testcase, output \"YES\" (without quotes) if there is a way to perform the aforementioned operation such that the beauty is $x$, and \"NO\" (without quotes) otherwise.\n\nYou can output \"YES\" and \"NO\" in any case (for example, strings \"yES\", \"yes\" and \"Yes\" will be recognized as a positive response).",
+    "note": "In the second example, the grid is\n\n 0 -2 5 0 -3\n\n0 4 -10 0 6\n\n0 -6 15 0 -9\n\n0 0 0 0 0\n\n0 0 0 0 0\n\nBy performing the operation with $r=4$ and $c=2$, we create the following grid:\n\n0 0 5 0 -3\n\n0 0 -10 0 6\n\n0 0 15 0 -9\n\n0 0 0 0 0\n\n0 0 0 0 0\n\nwhich has beauty $4$. Thus, we output YES.\n\nIn the second query, selecting $r=3$ and $c=5$ creates a grid with beauty $-3$.\n\nIn the third query, selecting $r=3$ and $c=3$ creates a grid with beauty $5$.",
+    "samples": [
+      {
+        "input": "3 3 6\n-2 3 -3\n-2 2 -1\n-1\n1\n-2\n2\n-3\n3",
+        "output": "\nNO\nYES\nNO\nNO\nYES\nNO"
+      },
+      {
+        "input": "5 5 6\n1 -2 3 0 0\n0 -2 5 0 -3\n4\n-3\n5\n2\n-1\n2",
+        "output": "\nYES\nYES\nYES\nYES\nNO\nYES"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 137306,
+    "url": "https://codeforces.com/blog/entry/137306",
+    "tutorial": "2044F - Easy Demon Problem\n\nProblem Credits: chromate00, Proof_by_QED\n Analysis: DivinePunishment\n\nAre you a python user and failing test 12?\n\nThis is an anti-hash test for python sets and dictionaries. Before you call us evil, we saved you from getting hacked in open hack phase. Beware!\n\nSolution\n\nLet's denote the beauty of the matrix as $B$, and denote $\\text{SumA}$ as the sum of all the elements in the array $a$, and $\\text{SumB}$ as the sum of all the elements in the array $b$.\n\nBefore applying an operation, the beauty of the matrix can be expressed as:\n\n$B = b_1 \\cdot a_1 + b_1 \\cdot a_2 + b_1 \\cdot a_3 + b_2 \\cdot a_1 + b_2 \\cdot a_2 + \\ldots$\n\nAfter factoring, this simplifies to:\n\n$ B = b_1 \\cdot (a_1 + a_2 + a_3 + \\ldots) + b_2 \\cdot (a_1 + a_2 + a_3 + \\ldots) + \\ldots $\n\nFurther factoring gives:\n\n$ B = (a_1 + a_2 + a_3 + a_4 + \\ldots) \\cdot (b_1 + b_2 + b_3 + \\ldots) $\n\nThis can be written as:\n\n$ B = \\text{SumA} \\cdot \\text{SumB}$\n\nNow, consider the effect of an operation on a column $C$. The beauty decreases by $A_c \\cdot \\text{SumB}$. Similarly, when an operation is done on a row $R$, the beauty decreases by $B_r \\cdot \\text{SumA}$.\n\nAn important observation is that the element at position $(r, c)$ is counted twice, so we must account for this in the formula.\n\nAfter considering this, let the beauty after the operations be denoted as $X$. Using the observations above:\n\n$X = B - (b_i \\cdot \\text{SumA} + a_j \\cdot \\text{SumB} - a_j \\cdot b_i)$\n\nSimplifying further:\n\n$X = \\text{SumA} \\cdot \\text{SumB} - b_i \\cdot \\text{SumA} - a_j \\cdot \\text{SumB} + a_j \\cdot b_i$\n\nFactoring terms, we obtain:\n\n$X = \\text{SumA} \\cdot (\\text{SumB} - b_i) - a_j \\cdot (\\text{SumB} - b_i)$\n\nFinally:\n\n$X = (\\text{SumB} - b_i) \\cdot (\\text{SumA} - a_j)$\n\nAt this stage, it is sufficient to iterate over the divisors of $X$. For each ordered pair of divisors whose product is $X$, we check whether the required values of $\\text{SumB} - b_i$ and $\\text{SumA} - a_j$ can be achieved.\n\nThis can be implemented using a simple map or boolean vector for faster computation, although such optimization is not required for this problem.\n\nCode (C++)",
+    "solution_code": [
+      "#include <bits/stdc++.h>\nusing namespace std;\n#define FOR(i,a,b) for (int i = (a); i < (b); ++i)\n#define F0R(i,a) FOR(i,0,a)\n#define int long long\n#define vt vector\n#define endl \"\\n\"\n\nconst int N = 4e5 + 5;\nbool apos[N], aneg[N], bpos[N], bneg[N], posspos[N], possneg[N];\n\nsigned main() {\n    ios_base::sync_with_stdio(false); \n    cin.tie(0);\n    int n,m,q;\n    cin >> n >> m >> q;\n    vector<int> a(n), b(m);\n    int asum = 0, bsum = 0;\n    F0R(i, n) {\n        cin >> a[i];\n        asum += a[i];\n    }\n    F0R(i, m) {\n        cin >> b[i];\n        bsum += b[i];\n    }\n    F0R(i, n) {\n        if(abs(asum-a[i]) < N) {\n            if(asum-a[i]<0) aneg[a[i]-asum]=true;   \n            else apos[asum-a[i]]=true;\n        } \n    }\n    F0R(i, m) {\n        if(abs(bsum-b[i]) < N) {\n            if(bsum-b[i]<0) bneg[b[i]-bsum]=true;   \n            else bpos[bsum-b[i]]=true;\n        } \n    }\n    FOR(i, 1, N) {\n        FOR(j, 1, N) {\n            if(i * j > N) break;\n            if(apos[i]&&bpos[j]) posspos[i*j]=true;\n            if(apos[i]&&bneg[j]) possneg[i*j]=true;\n            if(aneg[i]&&bpos[j]) possneg[i*j]=true;\n            if(aneg[i]&&bneg[j]) posspos[i*j]=true;\n        }\n    }\n    while(q--) {\n        int x;\n        cin >> x;\n        if(x>0) {\n            if(posspos[x]) {\n                cout << \"YES\" << endl;\n            } else {\n                cout << \"NO\" << endl;\n            }\n        } else {\n            if(possneg[-x]) {\n                cout << \"YES\" << endl;\n            } else {\n                cout << \"NO\" << endl;\n            }\n        }\n    }\n    return 0;\n}"
+    ]
+  }
+}

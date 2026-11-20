@@ -1,0 +1,44 @@
+{
+  "contest_id": 2042,
+  "index": "D",
+  "name": "Recommendations",
+  "rating": 1900,
+  "tags": [
+    "data structures",
+    "implementation",
+    "sortings",
+    "two pointers"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2042D",
+  "url": "https://codeforces.com/problemset/problem/2042/D",
+  "contest_start_time": "2024-12-02T14:35:00+00:00",
+  "statement": {
+    "title": "D. Recommendations",
+    "time_limit": "2 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "Suppose you are working in some audio streaming service. The service has $n$ active users and $10^9$ tracks users can listen to. Users can like tracks and, based on likes, the service should recommend them new tracks.\n\nTracks are numbered from $1$ to $10^9$. It turned out that tracks the $i$-th user likes form a segment $[l_i, r_i]$.\n\nLet's say that the user $j$ is a predictor for user $i$ ($j \\neq i$) if user $j$ likes all tracks the $i$-th user likes (and, possibly, some other tracks too).\n\nAlso, let's say that a track is strongly recommended for user $i$ if the track is not liked by the $i$-th user yet, but it is liked by every predictor for the $i$-th user.\n\nCalculate the number of strongly recommended tracks for each user $i$. If a user doesn't have any predictors, then print $0$ for that user.",
+    "input_spec": "The first line contains one integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases. Next, $t$ cases follow.\n\nThe first line of each test case contains one integer $n$ ($1 \\le n \\le 2 \\cdot 10^5$) — the number of users.\n\nThe next $n$ lines contain two integers $l_i$ and $r_i$ per line ($1 \\le l_i \\le r_i \\le 10^9$) — the segment of tracks the $i$-th user likes.\n\nAdditional constraint on the input: the sum of $n$ over all test cases doesn't exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, print $n$ integers, where the $i$-th integer is the number of strongly recommended tracks for the $i$-th user (or $0$, if that user doesn't have any predictors).",
+    "note": "In the first test case:\n\n the first user has no predictors;\n\n the second user has no predictors;\n\n the third user has two predictors: users $1$ and $2$; only track $3$ is liked by both of them and not liked by the third user.\n\nIn the second test case, the second user is a predictor for the first user. Therefore, all tracks, except $42$, are strongly recommended for the first user.\n\nIn the third test case, the first user has two predictors: users $2$ and $3$, but there is no track that is liked by them and not liked by the first user himself.",
+    "samples": [
+      {
+        "input": "4\n3\n3 8\n2 5\n4 5\n2\n42 42\n1 1000000000\n3\n42 42\n1 1000000000\n42 42\n6\n1 10\n3 10\n3 7\n5 7\n4 4\n1 2",
+        "output": "\n0\n0\n1\n999999999\n0\n0\n0\n0\n0\n2\n3\n2\n4\n8"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 136886,
+    "url": "https://codeforces.com/blog/entry/136886",
+    "tutorial": "Firstly, if several segments are equal, then the answer for all of them is zero. Now let's move to the problem where all segments are distinct.\n\nUser $j$ is a predictor for user $i$ iff $l_j \\le l_i \\le r_i \\le r_j$. Also, a track is strongly recommended if it is in all predictor segments, i. e. the track belongs to the intersection $[L, R]$ of all predictors. Since the segment $[l_i, r_i]$ also belongs to $[L, R]$, then the tracks we need to find form two intervals $[L, l_i)$ and $(r_i, R]$.\n\nLet's focus on finding interval $(r_i, R]$. Since the right border of the intersection is the minimum among right borders, then our task is to find the minimum among $r_j$-s such that $r_j \\ge r_i$ while $l_j \\le l_i$.\n\nLet's do it in the following way: let's sort all segments by $l_i$ in increasing order; in case of equal $l_i$-s, sort them by $r_i$ in decreasing order. If we process segments in the given order, then by the moment we process the $i$-th segment, all its predictors will be already processed.\n\nLet's keep $r_i$-s of all processed segments so far in an \"ordered set\" $S$ (std::set, for example). Suppose we process segment $i$. Since the right borders of all predictors are already in $S$ and their $r_j \\ge r_i$, then finding the minimum among them is equivalent to just taking $R = S.\\mathrm{lower\\_bound}(r_i)$. Then we can add $R - r_i$ to the answer for the $i$-th segment.\n\nIn order to calculate intervals $[L, l_i)$ we can just reflect all segments and solve the same problem.\n\nThe complexity of the solution is $O(n \\log{n})$.",
+    "solution_code": [
+      "#include<bits/stdc++.h>\nusing namespace std;\n\n#define fore(i, l, r) for(int i = int(l); i < int(r); i++)\n#define sz(a) int((a).size())\n\nstruct Seg {\n\tint l, r;\n\n\tbool operator< (const Seg &oth) const {\n\t\tif (l != oth.l)\n\t\t\treturn l < oth.l;\n\t\treturn r < oth.r;\n\t};\n};\n\nvoid solve() {\n\tint n;\n\tcin >> n;\n\tvector<Seg> seg(n);\n\tfor (int i = 0; i < n; i++)\n\t\tcin >> seg[i].l >> seg[i].r;\n\t\n\tvector<int> ans(n, 0);\n\tfor (int k = 0; k < 2; k++) {\n\t\tvector<int> ord(n);\n\t\tiota(ord.begin(), ord.end(), 0);\n\n\t\tsort(ord.begin(), ord.end(), [&seg](int i, int j){\n\t\t\tif (seg[i].l != seg[j].l)\n\t\t\t\treturn seg[i].l < seg[j].l;\n\t\t\treturn seg[i].r > seg[j].r;\n\t\t});\n\n\t\tset<int> bounds;\n\t\tfor (int i : ord) {\n\t\t\tauto it = bounds.lower_bound(seg[i].r);\n\t\t\tif (it != bounds.end())\n\t\t\t\tans[i] += *it - seg[i].r;\n\t\t\tbounds.insert(seg[i].r);\n\t\t}\n\n\t\tfor (auto &s : seg) {\n\t\t\ts.l = -s.l;\n\t\t\ts.r = -s.r;\n\t\t\tswap(s.l, s.r);\n\t\t}\n\t}\n\n\tmap<Seg, int> cnt;\n\tfor (auto s: seg)\n\t\tcnt[s]++;\n\tfor (int i = 0; i < n; i++)\n\t\tif (cnt[seg[i]] > 1)\n\t\t\tans[i] = 0;\n\t\n\tfor (int a : ans)\n\t\tcout << a << '\\n';\n}\n\nint main() {\n\tios_base::sync_with_stdio(false);\n\tcin.tie(0);\n\t\n\tint t; cin >> t;\n\twhile (t--)\n\t\tsolve();\n\treturn 0;\n}"
+    ]
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "contest_id": 1975,
+  "index": "C",
+  "name": "Chamo and Mocha's Array",
+  "rating": 1200,
+  "tags": [
+    "binary search",
+    "brute force",
+    "greedy"
+  ],
+  "points": 1000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1975C",
+  "url": "https://codeforces.com/problemset/problem/1975/C",
+  "contest_start_time": "2024-05-25T14:35:00+00:00",
+  "statement": {
+    "title": "C. Chamo and Mocha's Array",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Mocha likes arrays, so before her departure, Chamo gave her an array $a$ consisting of $n$ positive integers as a gift.\n\nMocha doesn't like arrays containing different numbers, so Mocha decides to use magic to change the array. Mocha can perform the following three-step operation some (possibly, zero) times:\n\n Choose indices $l$ and $r$ ($1 \\leq l  \\lt  r \\leq n$)\n\n Let $x$ be the median$^\\dagger$ of the subarray $[a_l, a_{l+1},\\ldots, a_r]$\n\n Set all values $a_l, a_{l+1},\\ldots, a_r$ to $x$\n\nSuppose $a=[1,2,3,4,5]$ initially:\n\n If Mocha chooses $(l,r)=(3,4)$ in the first operation, then $x=3$, the array will be changed into $a=[1,2,3,3,5]$.\n\n If Mocha chooses $(l,r)=(1,3)$ in the first operation, then $x=2$, the array will be changed into $a=[2,2,2,4,5]$.\n\nMocha will perform the operation until the array contains only the same number. Mocha wants to know what is the maximum possible value of this number.\n\n$^\\dagger$ The median in an array $b$ of length $m$ is an element that occupies position number $\\lfloor \\frac{m+1}{2} \\rfloor$ after we sort the elements in non-decreasing order. For example, the median of $[3,1,4,1,5]$ is $3$ and the median of $[5,25,20,24]$ is $20$.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1\\leq t\\leq 500$). The description of the test cases follows.\n\nThe first line of each test case contains a single integer $n$ ($2\\leq n\\leq 10^5$) — the length of the array $a$.\n\nThe second line of each test case contains $n$ integers $a_1,a_2,\\ldots,a_n$ ($1\\leq a_i \\leq 10^9$) — the elements of the array $a$.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $10^5$.",
+    "output_spec": "For each test case, output the maximum value of the number.",
+    "note": "In the first test case, $a=[1,2]$. Mocha can only choose the interval $(l,r)=(1,2)$. The array will be changed to $a=[1,1]$. Therefore, the answer is $1$.\n\nIn the second test case, Mocha can perform the following operations:\n\n Choose the interval $(l,r)=(4,5)$, then $a=[1,2,3,4,4]$.\n\n Choose the interval $(l,r)=(3,5)$, then $a=[1,2,4,4,4]$.\n\n Choose the interval $(l,r)=(1,5)$, then $a=[4,4,4,4,4]$.\n\nThe array contains only the same number, which is $4$. It can be proven that the maximum value of the final number cannot be greater than $4$.",
+    "samples": [
+      {
+        "input": "2\n2\n1 2\n5\n1 2 3 4 5",
+        "output": "\n1\n4"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 129801,
+    "url": "https://codeforces.com/blog/entry/129801",
+    "tutorial": "1975C - Chamo and Mocha's Array\n\nIdea: Bazoka13 Solution: Bazoka13 Prepared by: Bazoka13\n\nHint 1\n\nIf a subarray of length at least $2$ contains only the same elements, we can change all elements of the array to that element by operations.\n\nHint 2\n\nSuppose the answer is $x$, we can perform no more than one operation on the original array $a$ so that there is a subarray of length at least $2$ that contains only $x$.\n\nHint 3\n\nIf we can make all elements of a subarray become $x$ in one operation, then there must be a subarray of length $3$ with a median of $y$ ($y\\geq x$).\n\nSolution\n\nRead the hints.\n\nIf $n=2$, the answer is the minimum element.\n\nIf $n\\geq 3$, we iterate over all subarrays of length $3$, and the answer is the maximum value of the median of all subarrays of length $3$.\n\nCode",
+    "solution_code": [
+      "#include<bits/stdc++.h>\nusing namespace std;\nconst int N = 1e5+10;\nint a[N];\nint main(){\n    int n,t;\n    cin>>t;\n    while(t--){\n        cin>>n;\n        for(int i=1;i<=n;i++) \n            cin>>a[i];\n        if(n==2)cout<<min(a[1],a[2])<<\"\\n\";\n        else{\n            int ans = min(a[1],a[2]);\n            for(int i=1;i<=n-2;i++){\n                vector<int> tmp;\n                for(int k=0;k<=2;k++)\n                    tmp.push_back(a[i+k]);\n                sort(tmp.begin(),tmp.end());\n                ans = max(ans,tmp[1]);\n            }\n            cout<<ans<<\"\\n\";\n        }\n    }\n}"
+    ]
+  }
+}

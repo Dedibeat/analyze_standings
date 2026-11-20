@@ -1,0 +1,46 @@
+{
+  "contest_id": 1975,
+  "index": "D",
+  "name": "Paint the Tree",
+  "rating": 1700,
+  "tags": [
+    "brute force",
+    "dfs and similar",
+    "dp",
+    "greedy",
+    "shortest paths",
+    "trees"
+  ],
+  "points": 1500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1975D",
+  "url": "https://codeforces.com/problemset/problem/1975/D",
+  "contest_start_time": "2024-05-25T14:35:00+00:00",
+  "statement": {
+    "title": "D. Paint the Tree",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "378QAQ has a tree with $n$ vertices. Initially, all vertices are white.\n\nThere are two chess pieces called $P_A$ and $P_B$ on the tree. $P_A$ and $P_B$ are initially located on vertices $a$ and $b$ respectively. In one step, 378QAQ will do the following in order:\n\n Move $P_A$ to a neighboring vertex. If the target vertex is white, this vertex will be painted red.\n\n Move $P_B$ to a neighboring vertex. If the target vertex is colored in red, this vertex will be painted blue.\n\nInitially, the vertex $a$ is painted red. If $a=b$, the vertex $a$ is painted blue instead. Note that both the chess pieces must be moved in each step. Two pieces can be on the same vertex at any given time.\n\n378QAQ wants to know the minimum number of steps to paint all vertices blue.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1\\leq t\\leq 10^4$). The description of the test cases follows.\n\nThe first line of each test case contains one integer $n$ ($1\\leq n\\leq 2\\cdot 10^5$).\n\nThe second line of each test case contains two integers $a$ and $b$ ($1\\leq a,b\\leq n$).\n\nThen $n - 1$ lines follow, each line contains two integers $x_i$ and $y_i$ ($1 \\le x_i,y_i \\le n$), indicating an edge between vertices $x_i$ and $y_i$. It is guaranteed that these edges form a tree.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $2\\cdot 10^5$.",
+    "output_spec": "For each test case, output the minimum number of steps to paint all vertices blue.",
+    "note": "In the first test case, 378QAQ can paint all vertices blue in the following order:\n\n Initially, $P_A$ is located on the vertex $1$, and $P_B$ is located on the vertex $2$. The vertex $1$ is painted red and the vertex $2$ is white.\n\n 378QAQ moves $P_A$ to the vertex $2$ and paints it red. Then 378QAQ moves $P_B$ to the vertex $1$ and paints it blue.\n\n 378QAQ moves $P_A$ to the vertex $1$. Then 378QAQ moves $P_B$ to the vertex $2$ and paints it blue.",
+    "samples": [
+      {
+        "input": "3\n2\n1 2\n1 2\n5\n1 2\n1 2\n1 3\n1 4\n1 5\n8\n5 4\n7 1\n1 5\n1 8\n8 3\n7 2\n8 6\n3 4",
+        "output": "\n2\n8\n13"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 129801,
+    "url": "https://codeforces.com/blog/entry/129801",
+    "tutorial": "1975D - Paint the Tree\n\nIdea: SanweiTreap Solution: Gellyfish Prepared by: Bazoka13\n\nHint 1\n\nIf two pieces overlap at the beginning, can you solve the problem?\n\nHint 2\n\nConsider the first time a vertex is painted blue. After this event occurs, what happens next?\n\nSolution\n\nRead the hints.\n\nIn subsequent movements after the first time a vertex is painted blue, we can ignore the process of painting vertices red and then painting them blue.\n\nWe call the first vertex painted blue $r$. Then it is not difficult to find that $P_A$ arrived at this vertex earlier than $P_B$. Considering all subsequent movements of $P_B$, $P_A$ can restore these movements one by one after reaching $r$, then $P_B$ will pass through all vertices have been painted red.\n\nIf we know which vertex is $r$, this will be a classic problem, assuming the distance between the farthest vertex on the tree from $r$ and $r$ is $d$, then the answer is $2(n-1)-d$. Then we consider the strategies of $P_A$ and $P_B$ at this time. The two must be close to each other, and then until the first vertex is painted blue. If another vertex is $r$, although the value of $d$ may increase, every time the value of $d$ increases by $1$, the time when $P_A$ and $P_B$ meet will also increase by at least $1$, so the answer will not decrease.\n\nCode",
+    "solution_code": [
+      "#include<bits/stdc++.h>\nusing namespace std;\n#define ll long long\nconst int N = 2e5+10;\nvector<int> g[N];\nint dep[N],f[N],mx,n,a,b;\nvoid dfs(int x,int fa){\n    dep[x]=dep[fa]+1;\n    mx = max(mx,dep[x]);\n    f[x]=fa;\n    for(auto i:g[x]){\n        if(i==fa)continue;\n        dfs(i,x);\n    }\n}\nvector<int> move(int x,int y){\n    if (dep[x] > dep[y]) swap(x, y);\n    vector<int> track,ano;\n    int tmp = dep[y] - dep[x], ans = 0;\n    track.push_back(y);\n    while(tmp--){\n        y = f[y];\n        track.push_back(y);\n    }\n    if (y == x) return track;\n    ano.push_back(x);\n    while (f[x] != f[y]) {\n        x = f[x];\n        y = f[y];\n        ano.push_back(x);\n        track.push_back(y);\n    }\n    track.push_back(f[y]);\n    reverse(ano.begin(),ano.end());\n    for(auto i:ano)track.push_back(i);\n    return track;\n}\nint main(){\n    int t;\n    cin>>t;\n    dep[0]=-1;\n    while(t--){\n        mx = -1;\n        cin>>n;\n        for(int i=1;i<=n;i++)g[i].clear();\n        cin>>a>>b;\n        for(int i=1;i<n;i++){\n            int u,v;\n            cin>>u>>v;\n            g[u].push_back(v);\n            g[v].push_back(u);\n        }\n        if(a==b){\n            dfs(a,0);\n            cout<<2*(n-1)-mx<<\"\\n\";\n            continue;\n        }\n        dfs(1,0);\n        auto tr = move(a,b);\n        int m = tr.size();\n        if(tr[0]!=a)reverse(tr.begin(),tr.end());\n        int x = tr[(m-1)/2];\n        mx = -1;\n        dfs(x,0);\n        cout<<2*(n-1)-mx+(m-1-(m-1)/2)<<\"\\n\";\n    }\n}"
+    ]
+  }
+}

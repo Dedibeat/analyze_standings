@@ -1,0 +1,41 @@
+{
+  "contest_id": 1958,
+  "index": "C",
+  "name": "Firewood",
+  "rating": 1500,
+  "tags": [
+    "*special"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1958C",
+  "url": "https://codeforces.com/problemset/problem/1958/C",
+  "contest_start_time": "2024-05-13T14:35:00+00:00",
+  "statement": {
+    "title": "C. Firewood",
+    "time_limit": "2 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "It's pretty cold in Berland (yes, even in May). So Monocarp has to light his fireplace.\n\nMonocarp has a big log of wood, which weighs $2^n$ grams. Monocarp has watched the weather forecast and decided that he has to burn $k$ grams of wood in the fireplace today, and the remaining $2^n-k$ grams of wood will be used tomorrow.\n\nIn one minute, Monocarp can use his saw to split one of his logs in half. Initially he has only one log, but of course, after splitting a log, he gets two new logs. If the weight of the log is $x$, then each of the resulting logs has weight equal to $\\frac{x}{2}$. Monocarp can't split logs of weight $1$ gram.\n\nMonocarp has to cut his log in such a way that some of the resulting logs weigh exactly $k$ grams in total (and since the total weight of wood doesn't change, the remaining logs will have a total weight equal to exactly $2^n-k$). Help him to calculate the minimum number of minutes he has to spend cutting the logs.",
+    "input_spec": "The first line contains one integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases.\n\nEach test case consists of one line containing two integers $n$ and $k$ ($1 \\le n \\le 60$; $1 \\le k \\le 2^n-1$).",
+    "output_spec": "For each test case, print one integer — the minimum number of minutes Monocarp has to spend splitting the wood.",
+    "note": "In the first test case, Monocarp has to cut his log exactly once. Then he will have two logs weighing $2$ grams each.\n\nIn the second test case, Monocarp has to cut his log of $4$ grams once, then cut one of the resulting logs. He will have one log of weight $2$ and two logs of weight $1$, so he can use two logs to get exactly $3$ grams.",
+    "samples": [
+      {
+        "input": "4\n2 2\n2 1\n10 3\n50 36679020707840",
+        "output": "\n1\n2\n10\n16"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 129483,
+    "url": "https://codeforces.com/blog/entry/129483",
+    "tutorial": "Suppose $k$ is not divisible by $2^m$ ($m$ is an arbitrary positive integer). Then we should have at least one log with weight not divisible by $2^m$, since if all logs are divisible by $2^m$, we cannot get the sum of log weights which is not divisible by $2^m$.\n\nSo, let $d$ be the maximum integer such that $k$ is divisible by $2^d$. After we split the logs, there should be at least one log having weight $2^d$ or less. So, we need to do at least $n - d$ actions.\n\nAnd we can show that $n - d$ actions are always sufficient. Split the smallest log every time, so you get logs of size $2^{n-1}, 2^{n-2}, 2^{n-3}, \\dots, 2^{d+1}, 2^d, 2^d$. We can always choose a subset of logs with total weight equal to $k$, if $k$ is divisible by $2^d$ and less than $n$. For example, we can make this subset if for every bit set to $1$ in $k$, we take the corresponding log.",
+    "solution_code": [
+      "fun main() {\n    repeat(readInt()) {\n        val (n, k) = readLongs()\n        println(n - k.countTrailingZeroBits())\n    }\n}\n\nprivate fun readInt() = readln().toInt()\nprivate fun readLongs() = readStrings().map { it.toLong() }\nprivate fun readStrings() = readln().split(\" \")\nprivate fun readInts() = readStrings().map { it.toInt() }"
+    ]
+  }
+}

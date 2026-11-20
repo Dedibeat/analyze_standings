@@ -1,0 +1,44 @@
+{
+  "contest_id": 2036,
+  "index": "F",
+  "name": "XORificator 3000",
+  "rating": 1900,
+  "tags": [
+    "bitmasks",
+    "dp",
+    "number theory",
+    "two pointers"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2036F",
+  "url": "https://codeforces.com/problemset/problem/2036/F",
+  "contest_start_time": "2024-11-02T14:35:00+00:00",
+  "statement": {
+    "title": "F. XORificator 3000",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "Alice has been giving gifts to Bob for many years, and she knows that what he enjoys the most is performing bitwise XOR of interesting integers. Bob considers a positive integer $x$ to be interesting if it satisfies $x \\not\\equiv k (\\bmod 2^i)$. Therefore, this year for his birthday, she gifted him a super-powerful \"XORificator 3000\", the latest model.\n\nBob was very pleased with the gift, as it allowed him to instantly compute the XOR of all interesting integers in any range from $l$ to $r$, inclusive. After all, what else does a person need for happiness? Unfortunately, the device was so powerful that at one point it performed XOR with itself and disappeared. Bob was very upset, and to cheer him up, Alice asked you to write your version of the \"XORificator\".",
+    "input_spec": "The first line of input contains a single integer $t$ $(1 \\leq t \\leq 10^4)$ — the number of XOR queries on the segment. The following $t$ lines contain the queries, each consisting of the integers $l$, $r$, $i$, $k$ $(1 \\leq l \\leq r \\leq 10^{18}$, $0 \\leq i \\leq 30$, $0 \\leq k  \\lt  2^i)$.",
+    "output_spec": "For each query, output a single integer — the XOR of all integers $x$ in the range $[l, r]$ such that $x \\not\\equiv k \\mod 2^i$.",
+    "note": "In the first query, the interesting integers in the range $[1, 3]$ are $1$ and $3$, so the answer will be $1 \\oplus 3 = 2$.",
+    "samples": [
+      {
+        "input": "6\n1 3 1 0\n2 28 3 7\n15 43 1 0\n57 2007 1 0\n1010 1993 2 2\n1 1000000000 30 1543",
+        "output": "\n2\n2\n13\n0\n4\n1000000519"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 135849,
+    "url": "https://codeforces.com/blog/entry/135849",
+    "tutorial": "2036F - XORificator 3000\n\nIdea: eugenechka.boyko.2_0-0\n\nHint 1\n\nNote the base of the module\n\nHint 2\n\nCan we quickly compute XOR on the segment $[l, r]$?\n\nTutorial\n\nWe also recommend the beautiful tutorial by ne_justlm!\n\nLet us introduce the notation $\\DeclareMathOperator{\\XOR}{XOR}\\XOR(l, r) = l \\oplus (l+1) \\oplus \\dots \\oplus r$ .\n\nThe first thing that comes to mind when reading the condition is that we can compute XOR of all numbers on the segment $(0, x)$ for $O(1)$ by the following formula:\n $ \\XOR(0, x) = \\begin{cases} x & \\text{if } x \\equiv 0 \\pmod{4} \\\\ 1 & \\text{if } x \\equiv 1 \\pmod{4} \\\\ x + 1 & \\text{if } x \\equiv 2 \\pmod{4} \\\\ 0 & \\text{if } x \\equiv 3 \\pmod{4} \\end{cases} $\nThen $\\XOR(l, r)$ can be found as $\\XOR(0, r) \\oplus \\XOR(0, l-1)$.\n\nNow note that for the answer we only need to learn for $O(1)$ to find XOR of all uninteresting on the segment: then we can do XOR with the whole segment and get XOR of all interesting numbers already.\n\nThe base of the modulus, equal to the degree of two, is not chosen by chance: we only need to “compress” $l$ and $r$ by $2^i$ times in such a way that the resulting range contains all uninteresting numbers shifted $i$ bits to the right. Then computing $\\XOR(l', r')$ we get exactly the desired XOR of uninteresting numbers, also shifted $i$ bits to the right. Then, to find these remaining lower $i$ bits, we just need to find the number of uninteresting numbers on the segment $[l, r]$. If it is odd, these $i$ bits will be equal to $k$, since they are all equal to $k \\mod 2^i$, and so have the same $i$ minor bits equal to $k$ proper, and so their XOR an odd number of times will also be equal to $k$.\n\nOtherwise, the lower $i$ bits of the answer will be $0$, since we have done XOR an even number of times. The number of uninteresting numbers on the segment can be calculated in a similar way to $\\XOR(l, r)$, namely find their number on the segments $[0, r]$ and $[0, l-1]$ and subtract the latter from the former. The number of numbers equal to $k$ modulo $m$ and not exceeding $r$ is calculated as $\\left\\lfloor \\frac{r - k}{m} \\right\\rfloor$.\n\nTime complexity of the solution: $O(\\mathit{\\log r})$.\n\nSolution (eugenechka.boyko.2_0-0)",
+    "solution_code": [
+      "#include <iostream>\nusing namespace std;\n#define int uint64_t\n#define SPEEDY std::ios_base::sync_with_stdio(0); std::cin.tie(0); std::cout.tie(0);\n \nint xor_0_n(int n) {\n    int rem = n % 4;\n    if (rem == 0) {\n        return n;\n    }\n    if (rem == 1) {\n        return 1;\n    }\n    if (rem == 2) {\n        return n + 1;\n    }\n    return 0;\n}\n \nint xor_range(int l, int r) {\n    return xor_0_n(r) ^ xor_0_n(l - 1);\n}\n \nint32_t main() {\n    int t;\n    cin >> t;\n    while (t--) {\n        int l, r, i, k;\n        cin >> l >> r >> i >> k;\n        int highBits = xor_range((l - k + (1 << i) - 1) >> i, (r - k) >> i) << i;\n        int lowBits = k * (((r - k) / (1 << i) - (l - k - 1) / (1 << i)) & 1);\n        cout << (xor_range(l, r) ^ highBits ^ lowBits) << '\\n';\n    }\n    return 0;\n}"
+    ]
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "contest_id": 2025,
+  "index": "B",
+  "name": "Binomial Coefficients, Kind Of",
+  "rating": 1100,
+  "tags": [
+    "combinatorics",
+    "dp",
+    "math"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2025B",
+  "url": "https://codeforces.com/problemset/problem/2025/B",
+  "contest_start_time": "2024-10-14T14:35:00+00:00",
+  "statement": {
+    "title": "B. Binomial Coefficients, Kind Of",
+    "time_limit": "2 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "Recently, akshiM met a task that needed binomial coefficients to solve. He wrote a code he usually does that looked like this:\n\n    for (int n = 0; n < N; n++) { // loop over n from 0 to N-1 (inclusive)        C[n][0] = 1;        C[n][n] = 1;        for (int k = 1; k < n; k++) // loop over k from 1 to n-1 (inclusive)            C[n][k] = C[n][k - 1] + C[n - 1][k - 1];    }\n\nUnfortunately, he made an error, since the right formula is the following:\n\n            C[n][k] = C[n - 1][k] + C[n - 1][k - 1]\n\nBut his team member keblidA is interested in values that were produced using the wrong formula. Please help him to calculate these coefficients for $t$ various pairs $(n_i, k_i)$. Note that they should be calculated according to the first (wrong) formula.\n\nSince values $C[n_i][k_i]$ may be too large, print them modulo $10^9 + 7$.",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\le t \\le 10^5$) — the number of pairs. Next, $t$ pairs are written in two lines.\n\nThe second line contains $t$ integers $n_1, n_2, \\dots, n_t$ ($2 \\le n_i \\le 10^5$).\n\nThe third line contains $t$ integers $k_1, k_2, \\dots, k_t$ ($1 \\le k_i  \\lt  n_i$).",
+    "output_spec": "Print $t$ integers $C[n_i][k_i]$ modulo $10^9 + 7$.",
+    "note": null,
+    "samples": [
+      {
+        "input": "7\n2 5 5 100000 100000 100000 100000\n1 2 3 1 33333 66666 99999",
+        "output": "\n2\n4\n8\n2\n326186014\n984426998\n303861760"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 135173,
+    "url": "https://codeforces.com/blog/entry/135173",
+    "tutorial": "In order to solve the task, just try to generate values and find a pattern. The pattern is easy: $C[n][k] = 2^k$ for all $k \\in [0, n)$.\n\nThe last step is to calculate $C[n][k]$ fast enough. For example, we can precalculate all powers of two in some array $p$ as $p[k] = 2 \\cdot p[k - 1] \\bmod (10^9 + 7)$ for all $k  \\lt  10^5$ and print the necessary values when asked.\n\nProof:\n\n$$C[n][k] = C[n][k - 1] + C[n - 1][k - 1] = $$ $$ = C[n][k - 2] + 2 \\cdot C[n - 1][k - 2] + C[n - 2][k - 2] = $$ $$ = C[n][k - 3] + 3 \\cdot C[n - 1][k - 3] + 3 \\cdot C[n - 2][k - 3] + C[n - 3][k - 3] = $$ $$ = \\sum_{i = 0}^{j}{\\binom{j}{i} \\cdot C[n - i][k - j]} = \\sum_{i = 0}^{k}{\\binom{k}{i} \\cdot C[n - i][0]} = \\sum_{i = 0}^{k}{\\binom{k}{i}} = 2^k$$",
+    "solution_code": [
+      "#include<bits/stdc++.h>\n\nusing namespace std;\n\nconst int MOD = int(1e9) + 7;\n\nint main() {\n\tint t; cin >> t;\n\tvector<int> ks(t);\n\tfor (int _ = 0; _ < 2; _++)\n\t\tfor (int i = 0; i < t; i++)\n\t\t\tcin >> ks[i];\n\t\n\tvector<int> ans(1 + *max_element(ks.begin(), ks.end()), 1);\n\tfor (int i = 1; i < (int)ans.size(); i++)\n\t\tans[i] = (2LL * ans[i - 1]) % MOD;\n\t\n\tfor (int k : ks)\n\t\tcout << ans[k] << '\\n';\n\treturn 0;\n}"
+    ]
+  }
+}

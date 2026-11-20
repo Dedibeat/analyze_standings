@@ -1,11 +1,25 @@
 # data/: inputs and their roles
 
 Paths are relative to `data/`. Never hand-edit a file that a script builds; rerun
-the builder. Downloads go to gitignored caches here. `.gitignore` lists them:
-`cf_ai/`, `cphof_cache/`, `ec_online_cache/`, `gym_checkpoints/`,
-`cf_pairwise/problems/`, and the team_r3 PDFs/zips. 28 files in `ec_online_cache/`
-were committed before that folder was ignored. They stay tracked on purpose,
-because refetching is slow and the sources can change.
+the builder.
+
+**Caches.** Downloads that are expensive or impossible to refetch are committed:
+- raw CF API data in `cf_ai/`;
+- `ec_online_cache/`;
+- `cf_pairwise/problems/`;
+- the `team_r3` PDFs, zips and CF pages.
+
+The paid `*_run/` folders at the root are committed too. `.gitattributes` keeps
+these caches byte-for-byte on Windows.
+
+Ignored:
+- cookies (`.cookies*`);
+- derived caches (`cf_ai/boost_v1*`, `cross_history_v1/`, `replay.npz`), which
+  scripts rebuild;
+- `cphof_cache/` and `gym_checkpoints/`, which are not on this machine.
+
+Before committing a new download, scan it for secrets: the repository is
+public.
 
 ## Fit inputs (read by `arch_b.joint`)
 
@@ -54,8 +68,9 @@ because refetching is slow and the sources can change.
   contest dashboards and statements, XCPCIO boards, `members_solved.csv` and `cf/`.
   Built by `scripts/fetch_team_r3.py`.
 - `cf_pairwise/`: snapshot and summary of the pairwise Gemini experiment.
-- `cf_ai/` (gitignored, about 10 GB): Codeforces data for `scripts/cf_*`.
-  - Raw API downloads: `rc/` (rating changes), `st/` (standings) and
+- `cf_ai/` (about 10 GB): Codeforces data for `scripts/cf_*`.
+  - Raw API downloads, committed: `rc/` (rating changes), `st/` (standings) and
     `contest_list.json`, about 240 MB.
-  - Derived feature caches: `boost_v1*`, `cross_history_v1/` and `replay.npz`,
-    about 9.5 GB, rebuildable from the raw downloads by the `cf_*` scripts.
+  - Derived feature caches, gitignored: `boost_v1*`, `cross_history_v1/` and
+    `replay.npz`, about 9.5 GB, rebuildable from the raw downloads by the `cf_*`
+    scripts.

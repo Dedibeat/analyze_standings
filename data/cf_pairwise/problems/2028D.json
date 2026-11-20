@@ -1,0 +1,47 @@
+{
+  "contest_id": 2028,
+  "index": "D",
+  "name": "Alice's Adventures in Cards",
+  "rating": 2000,
+  "tags": [
+    "constructive algorithms",
+    "data structures",
+    "dp",
+    "graphs",
+    "greedy",
+    "implementation",
+    "ternary search"
+  ],
+  "points": 1750.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2028D",
+  "url": "https://codeforces.com/problemset/problem/2028/D",
+  "contest_start_time": "2024-11-10T15:35:00+00:00",
+  "statement": {
+    "title": "D. Alice's Adventures in Cards",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Alice is playing cards with the Queen of Hearts, King of Hearts, and Jack of Hearts. There are $n$ different types of cards in their card game. Alice currently has a card of type $1$ and needs a card of type $n$ to escape Wonderland. The other players have one of each kind of card.\n\nIn this card game, Alice can trade cards with the three other players. Each player has different preferences for the $n$ types of cards, which can be described by permutations$^{\\text{∗}}$ $q$, $k$, and $j$ for the Queen, King, and Jack, respectively.\n\nA player values card $a$ more than card $b$ if for their permutation $p$, $p_a  \\gt  p_b$. Then, this player is willing to trade card $b$ to Alice in exchange for card $a$. Alice's preferences are straightforward: she values card $a$ more than card $b$ if $a  \\gt  b$, and she will also only trade according to these preferences.\n\nDetermine if Alice can trade up from card $1$ to card $n$ subject to these preferences, and if it is possible, give a possible set of trades to do it.\n\n$^{\\text{∗}}$A permutation of length $n$ is an array consisting of $n$ distinct integers from $1$ to $n$ in arbitrary order. For example, $[2,3,1,5,4]$ is a permutation, but $[1,2,2]$ is not a permutation ($2$ appears twice in the array), and $[1,3,4]$ is also not a permutation ($n=3$ but there is $4$ in the array).",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 10^4$). The description of the test cases follows.\n\nThe first line of each test case contains an integer $n$ ($2\\le n\\le 2\\cdot 10^5$) — the number of card types.\n\nThe next three lines contain the preferences of the Queen, King, and Jack respectively. Each of these lines contains $n$ integers $p_1, p_2, \\ldots, p_n$ ($1\\le p_i\\le n$) — a permutation corresponding to the player's preferences.\n\nThe sum of $n$ over all test cases does not exceed $2\\cdot 10^5$.",
+    "output_spec": "For each test case, on the first line output a single string \"YES\" or \"NO\" (without the quotes) denoting whether Alice can trade up to card $n$.\n\nIf the first line was \"YES\", then on the next line output $k$ — the number of trades Alice will make. On the next $k$ lines output space separated a character $c\\in \\{\\texttt{q}, \\texttt{k}, \\texttt{j}\\}$ and integer $x$, denoting that Alice trades with player $c$ to get card $x$. It must be the case that on the $k$'th line, $x = n$. If there are multiple solutions, print any of them.\n\nYou can output this answer in any case (upper or lower). For example, the strings \"yEs\", \"yes\", \"Yes\", and \"YES\" will be recognized as positive responses. The same goes for the character $c$ denoting the player in the trade ($\\texttt{Q}, \\texttt{K}, \\texttt{J}$ will all be accepted alongside their lowercase variants).",
+    "note": "In the first testcase, Alice can trade with the King to get card $2$. She can then trade with the Queen to get card $3$.\n\nIn the second testcase, even though Alice can trade with the Queen to get card $3$, with the King to get card $2$, and then with the Jack to get card $4$, this is not a valid solution since it doesn't respect Alice's preferences. We can show that there is no way for Alice to get to card $4$.",
+    "samples": [
+      {
+        "input": "2\n3\n1 3 2\n2 1 3\n1 2 3\n4\n2 3 1 4\n1 2 3 4\n1 4 2 3",
+        "output": "\nYES\n2\nk 2\nq 3\nNO"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 136096,
+    "url": "https://codeforces.com/blog/entry/136096",
+    "tutorial": "We will use DP to answer the following question for each $a$ from $n$ down to $1$: is it possible to trade up from card $a$ to card $n$?\n\nTo answer this question efficiently, we need to determine for each of the three players whether there exists some $b  \\gt  a$ such that $p(b)  \\lt  p(a)$ and it is possible to trade up from card $b$ to card $n$. We can do this efficiently by keeping track for each player the minimum value $x = p(b)$ over all $b$ that can reach $n$: then, for a given $a$ we can check for each player if $p(a)$ exceeds $x$. If it does for some player, we can then update the values $x$ for each of the three players. Alongside these minimum values $x$ we can keep track of the $b$ achieving them to be able to reconstruct a solution.\n\nThis takes time $O(n)$ since each iteration takes time $O(1)$.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\nusing namespace std;\n \nusing ll = long long;\nusing ld = long double;\nusing pii = pair<int, int>;\nusing vi = vector<int>;\n#define rep(i, a, b) for(int i = a; i < (b); ++i)\n#define all(x) (x).begin(), (x).end()\n#define sz(x) (int)(x).size()\n#define smx(a, b) a = max(a, b)\n#define smn(a, b) a = min(a, b)\n#define pb push_back\n#define endl '\\n'\n \nconst ll MOD = 1e9 + 7;\nconst ld EPS = 1e-9;\n \nmt19937 rng(time(0));\n \nint main() {\n\tcin.tie(0)->sync_with_stdio(0);\n \n\tint t; cin >> t;\n\tstd::string s = \"qkj\";\n\twhile (t--) {\n\t\tint n; cin >> n;\n\t\tvector p(3, vector<int>(n + 1));\n\t\trep(i,0,3) rep(j,1,n + 1) cin >> p[i][j];\n\t\tvector<pair<char, int>> sol(n + 1, {'\\0', -1});\n\t\tarray<int, 3> mins = {n, n, n}; // minimizing index\n\t\tfor (int i = n - 1; i >= 1; i--) {\n\t\t\tint win = -1;\n\t\t\trep(j,0,3) if (p[j][i] > p[j][mins[j]]) win = j;\n\t\t\tif (win == -1) continue;\n\t\t\tsol[i] = {s[win], mins[win]};\n\t\t\trep(j,0,3) if (p[j][i] < p[j][mins[j]]) mins[j] = i;\n\t\t}\n\t\tif (sol[1].second == -1) {\n\t\t\tcout << \"NO\\n\";\n\t\t\tcontinue;\n\t\t}\n\t\tcout << \"YES\\n\";\n\t\tvector<pair<char, int>> ans = {sol[1]};\n\t\twhile (ans.back().second >= 0) {\n\t\t\tans.push_back(sol[ans.back().second]);\n\t\t}\n\t\tans.pop_back();\n\t\tcout << sz(ans) << \"\\n\";\n\t\tfor (auto && [c, i] : ans) {\n\t\t\tcout << c << \" \" << i << \"\\n\";\n\t\t}\n\t}\n}"
+    ]
+  }
+}

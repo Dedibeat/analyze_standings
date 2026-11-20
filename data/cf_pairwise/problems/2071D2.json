@@ -1,0 +1,47 @@
+{
+  "contest_id": 2071,
+  "index": "D2",
+  "name": "Infinite Sequence (Hard Version)",
+  "rating": 2500,
+  "tags": [
+    "bitmasks",
+    "brute force",
+    "constructive algorithms",
+    "data structures",
+    "dp",
+    "implementation",
+    "math"
+  ],
+  "points": 1250.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2071D2",
+  "url": "https://codeforces.com/problemset/problem/2071/D2",
+  "contest_start_time": "2025-02-28T14:35:00+00:00",
+  "statement": {
+    "title": "D2. Infinite Sequence (Hard Version)",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "This is the hard version of the problem. The difference between the versions is that in this version, $l\\le r$. You can hack only if you solved all versions of this problem.\n\nYou are given a positive integer $n$ and the first $n$ terms of an infinite binary sequence $a$, which is defined as follows:\n\n For $m \\gt n$, $a_m = a_1 \\oplus a_2 \\oplus \\ldots \\oplus a_{\\lfloor \\frac{m}{2} \\rfloor}$$^{\\text{∗}}$.\n\nYour task is to compute the sum of elements in a given range $[l, r]$: $a_l + a_{l + 1} + \\ldots + a_r$.\n\n$^{\\text{∗}}$$\\oplus$ denotes the bitwise XOR operation.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 10^4$). The description of the test cases follows.\n\nThe first line of each test case contains three integers $n$, $l$, and $r$ ($1 \\le n \\le 2 \\cdot 10^5$, $1 \\le l \\leq r \\le 10^{18}$).\n\nThe second line contains $n$ integers $a_1, a_2, \\ldots, a_n$ ($\\color{red}{a_i \\in \\{0, 1\\}}$) — the first $n$ terms of the sequence $a$.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, output a single integer — the sum of elements in the given range.",
+    "note": "In the first test case, the sequence $a$ is equal to $$[\\underline{\\color{red}{1}}, 1, 1, 0, 0, 1, 1, 1, 1, 1, \\ldots]$$ where $l = 1$, and $r = 1$. The sum of elements in the range $[1, 1]$ is equal to $$a_1 = 1.$$\n\nIn the second test case, the sequence $a$ is equal to $$[\\color{red}{1}, \\color{red}{0}, \\underline{1, 1, 1, 0, 0, 1, 1, 0}, \\ldots]$$ where $l = 3$, and $r = 10$. The sum of elements in the range $[3, 10]$ is equal to $$a_3 + a_4 + \\ldots + a_{10} = 1 + 1 + 1 + 0 + 0 + 1 + 1 + 0 = 5.$$",
+    "samples": [
+      {
+        "input": "9\n1 1 1\n1\n2 3 10\n1 0\n3 5 25\n1 1 1\n1 234 567\n0\n5 1111 10000000000\n1 0 1 0 1\n1 1000000000000000000 1000000000000000000\n1\n10 41 87\n0 1 1 1 1 1 1 1 0 0\n12 65 69\n1 0 0 0 0 1 0 1 0 1 1 0\n13 46 54\n0 1 0 1 1 1 1 1 1 0 1 1 1",
+        "output": "\n1\n5\n14\n0\n6666665925\n0\n32\n3\n2"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 140115,
+    "url": "https://codeforces.com/blog/entry/140115",
+    "tutorial": "2071D2 - Infinite Sequence (Hard Version)\n\nHints\n\nHint 1\n\nGeneralize the recursive method for evaluating an index to handle the computation of the prefix sum.\n\nSolution\n\nFirst, check the editorial of D1.\n\nD&C Approach\n\nTo upgrade the solution, we define a recursive function:\n $ \\text{sum}(m) = \\left( \\displaystyle\\sum_{\\substack{i \\leq m \\\\ i \\text{ even}}} a_i,\\; \\displaystyle\\sum_{\\substack{i \\leq m \\\\ i \\text{ odd}}} a_i \\right). $\nWe precompute the even and odd prefix sums for $m \\le 2n$. For $m \\gt 2n$, the term $a_m$ follows:\n $ {} $ $ a_m = \\begin{cases} p & \\text{if } \\lfloor \\frac{m}{2} \\rfloor \\text{ is odd}, \\\\ p \\oplus a_{\\lfloor \\frac{m}{2} \\rfloor} & \\text{if } \\lfloor \\frac{m}{2} \\rfloor \\text{ is even}. \\end{cases} $\nFor simplicity, assume $m \\equiv 1 \\pmod{4}$ (if not, keep incrementing $m$ and adjusting its contribution separately).\n\nDefine\n $ e = \\displaystyle\\sum_{\\substack{n  \\lt  i \\leq \\lfloor \\frac{m}{2} \\rfloor \\\\ i \\text{ even}}} a_i = a_{n+1} + a_{n+3} + \\dots + a_{\\lfloor \\frac{m}{2} \\rfloor} $\nThis sum can be expressed as:\n $e = \\text{sum}(\\lfloor \\frac{m}{2} \\rfloor)_{\\text{even}} - prefix_{\\text{even}}(n). $\nThe pairs we're interested in computing are (keep in mind that $n$ is odd):\n $ {} $ $ a_{2n} = a_{2n + 1} = p $ $ a_{2n + 2} = a_{2n + 3} = p \\oplus a_{n + 1} $ $ a_{2n + 4} = a_{2n + 5} = p $ $ a_{2n + 6} = a_{2n + 7} = p \\oplus a_{n + 3} $ $ \\vdots $ $ a_{m - 3} = a_{m - 2} = p $ $ a_{m - 1} = a_{m} = p \\oplus a_{\\lfloor \\frac{m}{2} \\rfloor} $\nNotice that the sums of the above even and odd indices are equal, and depend on $p$:\n $ {} $ $ both = \\begin{cases} e & \\text{if } p = 0, \\\\ (\\lfloor \\frac{m}{2} \\rfloor - n + 1) - e & \\text{if } p = 1. \\end{cases} $\nThus, the final sums are:\n $ \\text{sum}(m)_{\\text{even}} = prefix_{\\text{even}}(2n - 1) + both $ $ \\text{sum}(m)_{\\text{odd}} = prefix_{\\text{odd}}(2n - 1) + both $\nAs a result, we can compute $\\text{sum}(m)$ recursively by halving $m$ until $m \\le 2n$, benefitting the precomputed even and odd prefix sums at each step.\n\nThe overall time complexity is: $O(n+\\log(m))$.\n\nCode\n\nRate the Problem\n\nAmazing problem:\n\nGood problem:\n\nAverage problem:\n\nBad problem:\n\nDidn't solve:",
+    "solution_code": [
+      "#include<bits/stdc++.h>\nusing namespace std;\nvoid solve() {\n    int n;\n    int64_t l, r;\n    cin >> n >> l >> r;\n    vector<int> a(n + 1);\n    for (int i = 1; i <= n; i++) {\n        cin >> a[i];\n    }\n    vector<int> pref(n + 1);\n    for (int i = 1; i <= n; i++) {\n        pref[i] = pref[i - 1] + a[i];\n    }\n    if (n % 2 == 0) {\n        n++;\n        int cur = pref[n / 2] & 1;\n        a.push_back(cur);\n        pref.push_back(pref.back() + cur);\n    }\n    for (int i = n + 1; i <= n * 2; i++) {\n        a.push_back(pref[i / 2] & 1);\n        pref.push_back(pref[i - 1] + a[i]);\n    }\n    vector<int> even(n * 2 + 1);\n    for (int i = 1; i <= n * 2; i++) {\n        even[i] = even[i - 1] + (i & 1 ? 0 : a[i]);\n    }\n    int p = pref[n] & 1;\n    auto get = [&](int64_t x) {\n        int ret = 0;\n        while (true) {\n            if (x <= n * 2) {\n                ret ^= a[x];\n                break;\n            }\n            ret ^= p;\n            if ((x / 2 - n) % 2 == 0) {\n                break;\n            }\n            x /= 2;\n        }\n        return ret;\n    };\n    auto sum = [&](auto&& self, int64_t m) -> pair<int64_t, int64_t> {// {sum even, sum odd}\n        if (m <= n * 2) {\n            return {even[m], pref[m] - even[m]};\n        }\n        int64_t eve = even[n * 2 - 1], odd = pref[n * 2 - 1] - eve;\n        if (m % 2 == 0) {\n            m += 1, odd -= get(m);\n        }\n        if (m / 2 % 2) {\n            m += 1, eve -= get(m);\n            m += 1, odd -= get(m);\n        }\n        auto [e, _] = self(self, m / 2);\n        e -= even[n];\n        int64_t c = m / 2 - n + 1, both = (p ? c - e : e);\n        eve += both, odd += both;\n        return {eve, odd};\n    };\n    int64_t ans = 0;\n    auto [re, ro] = sum(sum, r);\n    ans += re + ro;\n    auto [le, lo] = sum(sum, l - 1);\n    ans -= le + lo;\n    cout << ans << \"\\n\";\n}\nint main() {\n    ios::sync_with_stdio(0), cin.tie(0);\n    int tt = 1;\n    cin >> tt;\n    while (tt--) {\n        solve();\n    }\n}"
+    ]
+  }
+}

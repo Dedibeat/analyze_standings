@@ -1,0 +1,42 @@
+{
+  "contest_id": 1985,
+  "index": "D",
+  "name": "Manhattan Circle",
+  "rating": 900,
+  "tags": [
+    "implementation",
+    "math"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1985D",
+  "url": "https://codeforces.com/problemset/problem/1985/D",
+  "contest_start_time": "2024-06-11T14:35:00+00:00",
+  "statement": {
+    "title": "D. Manhattan Circle",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Given a $n$ by $m$ grid consisting of '.' and '#' characters, there exists a whole manhattan circle on the grid. The top left corner of the grid has coordinates $(1,1)$, and the bottom right corner has coordinates $(n, m)$.\n\nPoint ($a, b$) belongs to the manhattan circle centered at ($h, k$) if $|h - a| + |k - b|  \\lt  r$, where $r$ is a positive constant.\n\nOn the grid, the set of points that are part of the manhattan circle is marked as '#'. Find the coordinates of the center of the circle.",
+    "input_spec": "The first line contains $t$ ($1 \\leq t \\leq 1000$)  — the number of test cases.\n\nThe first line of each test case contains $n$ and $m$ ($1 \\leq n \\cdot m \\leq 2 \\cdot 10^5$) — the height and width of the grid, respectively.\n\nThe next $n$ lines contains $m$ characters '.' or '#'. If the character is '#', then the point is part of the manhattan circle.\n\nIt is guaranteed the sum of $n \\cdot m$ over all test cases does not exceed $2 \\cdot 10^5$, and there is a whole manhattan circle on the grid.",
+    "output_spec": "For each test case, output the two integers, the coordinates of the center of the circle.",
+    "note": null,
+    "samples": [
+      {
+        "input": "6\n5 5\n.....\n.....\n..#..\n.....\n.....\n5 5\n..#..\n.###.\n#####\n.###.\n..#..\n5 6\n......\n......\n.#....\n###...\n.#....\n1 1\n#\n5 6\n...#..\n..###.\n.#####\n..###.\n...#..\n2 10\n..........\n...#......",
+        "output": "\n3 3\n3 3\n4 2\n1 1\n3 4\n2 4"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 129620,
+    "url": "https://codeforces.com/blog/entry/129620",
+    "tutorial": "1985D - Manhattan Circle\n\nProblem Credits: cry\n Analysis: cry\n\nSolution\n\nNote that the manhattan circle is always in a diamond shape, symmetric from the center. Let's take notice of some special characteristics that can help us. One way is to find the top and bottom points of the circle. Note that these points will have columns at the center of the circle, so here we can acquire the value of $k$. To find $h$, since the circle is symmetric, it is just the middle of the rows of the top and bottom points.\n\nNote that we never needed to find the value of $r$.\n\nCode (C++)",
+    "solution_code": [
+      "#include <bits/stdc++.h>\nusing namespace std;\nconst int INF = 1e9;\n\nint main(){\n\tint t; cin >> t;\n\twhile(t--){\n\t\tint n, m; cin >> n >> m;\n\t\tvector<vector<char>> g(n, vector<char>(m));\n\t\tfor(int i = 0; i < n; i++){\n\t\t\tfor(int j = 0; j < m; j++){\n\t\t\t\tcin >> g[i][j];\n\t\t\t}\n\t\t}\n\t\tpair<int, int> top = {INF, INF}, bottom = {-INF, -INF};\n\t\tfor(int i = 0; i < n; i++){\n\t\t\tfor(int j = 0; j < m; j++){\n\t\t\t\tif(g[i][j] == '#'){\n\t\t\t\t\ttop = min(top, {i, j});\n\t\t\t\t\tbottom = max(bottom, {i, j});\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t\tassert(top.second == bottom.second);\n\t\tcout << (top.first + bottom.first) / 2 + 1 << \" \" << top.second + 1 << endl;\n\t}\n}"
+    ]
+  }
+}

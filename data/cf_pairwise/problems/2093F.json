@@ -1,0 +1,43 @@
+{
+  "contest_id": 2093,
+  "index": "F",
+  "name": "Hackers and Neural Networks",
+  "rating": 1800,
+  "tags": [
+    "bitmasks",
+    "brute force",
+    "greedy"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2093F",
+  "url": "https://codeforces.com/problemset/problem/2093/F",
+  "contest_start_time": "2025-04-08T14:35:00+00:00",
+  "statement": {
+    "title": "F. Hackers and Neural Networks",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Hackers are once again trying to create entertaining phrases using the output of neural networks. This time, they want to obtain an array of strings $a$ of length $n$.\n\nInitially, they have an array $c$ of length $n$, filled with blanks, which are denoted by the symbol $*$. Thus, if $n=4$, then initially $c=[*,*,*,*]$.\n\nThe hackers have access to $m$ neural networks, each of which has its own version of the answer to their request – an array of strings $b_i$ of length $n$.\n\nThe hackers are trying to obtain the array $a$ from the array $c$ using the following operations:\n\n Choose a neural network $i$, which will perform the next operation on the array $c$: it will select a random blank, for example, at position $j$, and replace $c_j$ with $b_{i, j}$.\nFor example, if the first neural network is chosen and $c = [*, \\text{«like»}, *]$, and $b_1 = [\\text{«I»}, \\text{«love»}, \\text{«apples»}]$, then after the operation with the first neural network, $c$ may become either $[\\text{«I»}, \\text{«like»}, *]$ or $[*, \\text{«like»}, \\text{«apples»}]$.\n\n Choose position $j$ and replace $c_j$ with a blank.\n\nUnfortunately, because of the way hackers access neural networks, they will only be able to see the modified array $c$ after all operations are completed, so they will have to specify the entire sequence of operations in advance.\n\nHowever, the random behavior of the neural networks may lead to the situation where the desired array is never obtained, or obtaining it requires an excessive number of operations.\n\nTherefore, the hackers are counting on your help in choosing a sequence of operations that will guarantee the acquisition of array $a$ in the minimum number of operations.\n\nMore formally, if there exists a sequence of operations that can guarantee obtaining array $a$ from array $c$, then among all such sequences, find the one with the minimum number of operations, and output the number of operations in it.\n\nIf there is no sequence of operations that transforms array $c$ into array $a$, then output $-1$.",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\le t \\le 1000$) — the number of test cases.\n\nThe first line of each test case contains two integers $n$ and $m$ ($1 \\le n, m \\le 500$) — the length of the original array $a$ and the number of neural networks, respectively.\n\nThe second line of each test case contains the array $a$, consisting of $n$ strings $a_i$ ($1 \\le |a_i| \\le 10$), separated by spaces.\n\nThe next $m$ lines of each test case contain the arrays $b_i$ — one in each line, consisting of $n$ strings $b_{i, j}$ ($1 \\le |b_{i,j}| \\le 10$), separated by spaces.\n\nIt is guaranteed that the sum of $|a_i|$ and $|b_{i, j}|$ across all test cases does not exceed $2 \\cdot 10^5$, and that the sum of $n \\cdot m$ across all test cases also does not exceed $2 \\cdot 10^5$.\n\nIt is guaranteed that the input strings consist only of characters from the Latin alphabet in both lowercase and uppercase.\n\nNote that the length of each individual input string does not exceed $10$.",
+    "output_spec": "Output $t$ numbers — one number for each test case, each on a separate line.\n\nIf there exists a sequence of operations that guarantees obtaining array $a$ from the $i$-th test case, then the $i$-th number is the number of operations in the minimum such sequence.\n\nOtherwise, for the $i$-th number, output $-1$.",
+    "note": null,
+    "samples": [
+      {
+        "input": "\n4\n3 3\nI love apples\nHe likes apples\nI love cats\nThey love dogs\n3 2\nIcy wake up\nwake Icy up\nwake up Icy\n4 3\nc o D E\nc o D s\nc O l S\nc o m E\n4 5\na s k A\nd s D t\nO R i A\na X b Y\nb a k A\nu s k J",
+        "output": "\n5\n-1\n6\n8"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 141434,
+    "url": "https://codeforces.com/blog/entry/141434",
+    "tutorial": "Let's call the operation of the first type a miss if after it $c_i \\neq a_i$.\n\nLet $x = \\max_{i = 1 \\dots m}( \\sum_{j=1}^{n} b_{i,j} = a_j)$. Notice that in any case we will have at least $n - x$ misses. Why?\n\nSince the positions are chosen randomly, and we need to guarantee obtaining the array $a$, we must assume the worst case: if there is a possibility to choose a position $j$ such that $a_j \\neq b_{i, j}$, then this will happen. Accordingly, if one neural network has $y$ positions that match the array $a$, it will first choose $n-y$ non-matching positions. Therefore, to minimize the number of misses before the first correct word, we need to select the neural network with the maximum number of positions matching the array $a$ — that is, the neural network on which $x$ from the definition above is achieved.\n\nConsequently, whatever we do, we will end up with $n-x$ extra words that need to be removed. This means we have at least $n + (n - x)$ operations. It is impossible to obtain the desired string in fewer than $n - x$ additional operations — after we have removed $n-x$ extra words, we need to fill them in. Thus, the theoretical minimum number of operations is $n + 2 \\cdot (n - x)$. We will present an algorithm that achieves this and is therefore optimal.\n\nLet's take the neural network where $x$ is achieved; after $n$ operations, we will have $x$ matching words and $n - x$ non-matching ones. These can be swapped using the second operation: suppose we have a non-matching word at the $i$-th position, then we will place a blank there and refer to the neural network where this word is correct — since there is only one blank, the neural network will guarantee to place exactly the word we need. We will do this for all words. This will take us $n - x$ operations of the second type and another $n - x$ operations of the first type — thus we have just reached our minimal estimate.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n \nusing namespace std;\n \nvoid solve() {\n    int n, m;\n    cin >> n >> m;\n    vector<string> a(n);\n    for (auto &i: a) {\n        cin >> i;\n    }\n    vector<vector<string>> b(m, vector<string>(n));\n    for (auto &ar: b) {\n        for (auto &s: ar) {\n            cin >> s;\n        }\n    }\n    vector<bool> exists(n);\n    int x = 0;\n    for (int i = 0; i < m; i++) {\n        int cnt = 0;\n        for (int j = 0; j < n; j++) {\n            if (a[j] == b[i][j]) {\n                cnt++;\n                exists[j] = true;\n            }\n        }\n        x = max(x, cnt);\n    }\n    if (all_of(exists.begin(), exists.end(), identity())) {\n        cout << n + 2 * (n - x) << \"\\n\";\n    } else {\n        cout << \"-1\\n\";\n    }\n}\n \nint main() {\n    int t;\n    cin >> t;\n    while (t--) {\n        solve();\n    }\n    return 0;\n}"
+    ]
+  }
+}

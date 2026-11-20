@@ -1,0 +1,43 @@
+{
+  "contest_id": 2077,
+  "index": "D",
+  "name": "Maximum Polygon",
+  "rating": 3100,
+  "tags": [
+    "brute force",
+    "data structures",
+    "greedy",
+    "implementation",
+    "math"
+  ],
+  "points": 2250.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2077D",
+  "url": "https://codeforces.com/problemset/problem/2077/D",
+  "contest_start_time": "2025-03-10T14:45:00+00:00",
+  "statement": {
+    "title": "D. Maximum Polygon",
+    "time_limit": "3 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Given an array $a$ of length $n$, determine the lexicographically largest$^{\\text{∗}}$ subsequence$^{\\text{†}}$ $s$ of $a$ such that $s$ can be the side lengths of a polygon.\n\nRecall that $s$ can be the side lengths of a polygon if and only if $|s| \\geq 3$ and\n\n$$ 2 \\cdot \\max(s_1, s_2, \\ldots, s_{|s|})  \\lt  s_1 + s_2 + \\ldots + s_{|s|}. $$\n\nIf no such subsequence $s$ exists, print $-1$.\n\n$^{\\text{∗}}$A sequence $x$ is lexicographically smaller than a sequence $y$ if and only if one of the following holds:\n\n $x$ is a prefix of $y$, but $x \\ne y$;\n\n in the first position where $x$ and $y$ differ, the sequence $x$ has a smaller element than the corresponding element in $y$.\n\n$^{\\text{†}}$A sequence $x$ is a subsequence of a sequence $y$ if $x$ can be obtained from $y$ by deleting several (possibly zero or all) elements.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 10^4$). The description of the test cases follows.\n\nThe first line of each test case contains a single integer $n$ ($3 \\leq n \\leq 2 \\cdot 10^5$) — the length of the array $a$.\n\nThe second line contains $n$ integers $a_1, a_2, \\ldots, a_n$ ($1 \\leq a_i \\leq 10^9$) — the array $a$.\n\nIt is guaranteed that the total sum of all values of $n$ across all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, output the answer in the following format:\n\nIf the answer exists, output the following.\n\nIn the first line, output the integer $k$ ($1 \\leq k \\leq n$) — the length of the subsequence $s$.\n\nIn the second line, output $k$ integers $s_1, s_2, \\ldots, s_k$ ($1 \\leq s_i \\leq 10^9$, $s$ is a subsequence of $a$) — the subsequence $s$. Note that the desired output is the value, not the index.\n\nOtherwise, output a single line with the integer $-1$.",
+    "note": "In the first test case, there are no subsequences that can be the side lengths of a polygon.\n\nIn the second test case, there are $2$ subsequences that can be the side lengths of a polygon: $1, 4, 2, 3$ and $4, 2, 3$. The latter is the lexicographically larger subsequence.",
+    "samples": [
+      {
+        "input": "5\n3\n3 1 2\n4\n1 4 2 3\n6\n1 6 4 5 3 2\n6\n43 12 99 53 22 4\n7\n9 764 54 73 22 23 1",
+        "output": "-1\n3\n4 2 3 \n4\n6 5 3 2 \n5\n43 99 53 22 4 \n4\n54 73 23 1 "
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 140505,
+    "url": "https://codeforces.com/blog/entry/140505",
+    "tutorial": "2077D - Maximum Polygon\n\nHint 1\n\nFind a way to get the answer if you fixed the largest value or the first value of the subsequence.\n\nHint 2\n\nSufficiently long (which is not that long) arrays will definitely be polygon side lengths.\n\nSolution\n\nSuppose we consider some integer $x$, and we try to find the lexicographically largest subsequence (say $s$) such that the maximum element of $s$ is $x$.\n\nWe can do it greedily.\n\nFor the subsequence $s$ to be valid, we need to ensure that the sum of the elements of $s$ is greater than $2x$.\n\nSo, our greedy strategy is like we have an empty vector $s$, and we iterate over the array $a$ from left to right, and for each element $a_i$, we do the following:\n\nIf $s$ is not empty and $a_i$ is greater than the last element of $s$, we will check whether we can make the total sum of $s$ greater than $2x$, if we remove the last element of $s$. Now what can be the maximum possible sum of $s$? We can just append all the elements of $a$ which are less than or equal to $x$, and are present to the right of $a_i$ to $s$.\n\nAppend $a_i$ to $s$.\n\nThus, we see that the subsequence $s$ is the lexicographically largest subsequence such that the maximum element of $s$ is $x$.\n\nNow, we have $O(n)$ candidates for the maximum element of $s$. We cannot find the best subsequence for each candidate, as it will be too slow.\n\nHere comes the key observation.\n\nNow, what can be the maximum possible size of a sorted vector $v$ such that there does not exist any subsequence of $v$ which can form the sides of a valid polygon?\n\nWe should have $v_i \\gt \\sum_{j=1}^{i-1} v_j$.\n\nNow, to get the maximum possible size of $v$, we should have $v_1 = 1$ and $v_i = 2^{i - 2}$ for $i \\geq 2$.\n\nThus, the maximum possible size of $v$ can be $p = \\log_2(10^9) + 2$.\n\nOur claim is that in the lexicographically largest subsequence $s$, the maximum element should be one of the largest $p + 1$ elements of $a$.\n\nSuppose we do not have the maximum element of $s$ in the largest $p + 1$ elements of $a$. Let's consider the multiset of the largest $p + 1$ elements of $a$. As we saw above, there should be a subsequence (say $t$) of this multiset which forms the sides of a valid polygon. Now if we insert the elements of $t$ in $s$, we will get a subsequence $s'$ such that $s'$ is valid and $s'$ is lexicographically larger than $s$.\n\nThus, we cannot have a subsequence $s$ such that $s$ is the largest possible subsequence and the maximum element of $s$ is not in the largest $p + 1$ elements of $a$.\n\nTime complexity: $\\mathcal{O}(n \\log \\max(a))$ per test case.\n\nSubmission: 310298095",
+    "solution_code": []
+  }
+}

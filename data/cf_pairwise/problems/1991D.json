@@ -1,0 +1,44 @@
+{
+  "contest_id": 1991,
+  "index": "D",
+  "name": "Prime XOR Coloring",
+  "rating": 1900,
+  "tags": [
+    "bitmasks",
+    "constructive algorithms",
+    "graphs",
+    "greedy",
+    "math",
+    "number theory"
+  ],
+  "points": 1500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1991D",
+  "url": "https://codeforces.com/problemset/problem/1991/D",
+  "contest_start_time": "2024-07-28T14:35:00+00:00",
+  "statement": {
+    "title": "D. Prime XOR Coloring",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "You are given an undirected graph with $n$ vertices, numbered from $1$ to $n$. There is an edge between vertices $u$ and $v$ if and only if $u \\oplus v$ is a prime number, where $\\oplus$ denotes the bitwise XOR operator.\n\nColor all vertices of the graph using the minimum number of colors, such that no two vertices directly connected by an edge have the same color.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 500$). The description of test cases follows.\n\nThe only line contains a single integer $n$ ($1 \\le n \\le 2 \\cdot 10^5$) — the number of vertices in the graph.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, output two lines.\n\nThe first line should contain a single integer $k$ ($1 \\le k \\le n$) — the minimum number of colors required.\n\nThe second line should contain $n$ integers $c_1, c_2, \\ldots, c_n$ ($1 \\le c_i \\le k$) — the color of each vertex.\n\nIf there are multiple solutions, output any of them.",
+    "note": "In the first test case, the minimum number of colors is $1$, because there is only one vertex.\n\nIn the second test case, the minimum number of colors is $2$, because there is an edge connecting $1$ and $2$ ($1 \\oplus 2 = 3$, which is a prime number).\n\nIn the third test case, the minimum number of colors is still $2$, because $2$ and $3$ can be colored the same since there is no edge between $2$ and $3$ ($2 \\oplus 3 = 1$, which is not a prime number).\n\nIn the fourth test case, it can be shown that the minimum number of colors is $3$.\n\nIn the fifth test case, it can be shown that the minimum number of colors is $3$.\n\nIn the sixth test case, it can be shown that the minimum number of colors is $4$.",
+    "samples": [
+      {
+        "input": "6\n1\n2\n3\n4\n5\n6",
+        "output": "\n1\n1\n2\n1 2\n2\n1 2 2\n3\n1 2 2 3\n3\n1 2 2 3 3\n4\n1 2 2 3 3 4"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 132021,
+    "url": "https://codeforces.com/blog/entry/132021",
+    "tutorial": "1991D - Prime XOR Coloring\n\nHint 1\n\nThe answer is always <= 4.\n\nHint 2\n\nIf $u$ and $v$ both have same remainder when divided by 4, then $u \\oplus v$ is a multiple of $4$.\n\nVideo editorial\n\nBonus: How to write checker for D?\n\nXOR Convolution",
+    "solution_code": []
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "contest_id": 2031,
+  "index": "D",
+  "name": "Penchick and Desert Rabbit",
+  "rating": 1700,
+  "tags": [
+    "binary search",
+    "data structures",
+    "dfs and similar",
+    "dp",
+    "dsu",
+    "greedy",
+    "implementation",
+    "two pointers"
+  ],
+  "points": 2000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2031D",
+  "url": "https://codeforces.com/problemset/problem/2031/D",
+  "contest_start_time": "2024-11-15T12:35:00+00:00",
+  "statement": {
+    "title": "D. Penchick and Desert Rabbit",
+    "time_limit": "3 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Dedicated to pushing himself to his limits, Penchick challenged himself to survive the midday sun in the Arabian Desert!\n\nWhile trekking along a linear oasis, Penchick spots a desert rabbit preparing to jump along a line of palm trees. There are $n$ trees, each with a height denoted by $a_i$.\n\nThe rabbit can jump from the $i$-th tree to the $j$-th tree if exactly one of the following conditions is true:\n\n $j  \\lt  i$ and $a_j  \\gt  a_i$: the rabbit can jump backward to a taller tree.\n\n $j  \\gt  i$ and $a_j  \\lt  a_i$: the rabbit can jump forward to a shorter tree.\n\nFor each $i$ from $1$ to $n$, determine the maximum height among all trees that the rabbit can reach if it starts from the $i$-th tree.",
+    "input_spec": "The first line contains the number of test cases $t$ ($1 \\le t \\le 5 \\cdot 10^5$). The description of the test cases follows.\n\nThe first line of each test case contains a single integer $n$ ($1 \\leq n \\leq 5 \\cdot 10^5$) — the number of trees.\n\nThe second line of each test case contains $n$ integers $a_1, a_2, \\ldots, a_n$ ($1 \\le a_i \\le n$) — the height of the trees.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $5 \\cdot 10^5$.",
+    "output_spec": "For each test case, output $n$ integers. The $i$-th integer should contain the maximum height among all trees that the rabbit can reach if it starts from the $i$-th tree.",
+    "note": "In the first test case, the initial heights of trees are $a = [2, 3, 1, 4]$.\n\n If the rabbit starts from the first tree, it can jump to the third tree as $3  \\gt  1$ and $1  \\lt  2$. Then, the rabbit can jump to the second tree as $2  \\lt  3$ and $3  \\gt  1$. It can be proved that the rabbit cannot reach the fourth tree; hence, the maximum height of the tree that the rabbit can reach is $a_2 = 3$.\n\n If the rabbit starts from the fourth tree, it does not need to jump anywhere as it is already at the highest tree.\n\nIn the second test case, the rabbit can jump to the first tree regardless of which tree it starts from.\n\nIn the fifth test case, if the rabbit starts from the fifth tree, it can jump to the fourth tree. Then the rabbit can jump to the seventh tree and finally reach the sixth tree. Therefore, the maximum height of the tree that the rabbit can reach is $8$.",
+    "samples": [
+      {
+        "input": "5\n4\n2 3 1 4\n5\n5 4 3 2 1\n4\n2 1 1 3\n4\n1 1 3 1\n8\n2 4 1 6 3 8 5 7",
+        "output": "\n3 3 3 4 \n5 5 5 5 5 \n2 2 2 3 \n1 1 3 3 \n8 8 8 8 8 8 8 8 "
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 136260,
+    "url": "https://codeforces.com/blog/entry/136260",
+    "tutorial": "2031D - Penchick and Desert Rabbit\n\nIdea: Saudi\n Preparation: HappyPacMan\n\nHint 1\n\nSuppose that you have found the maximum height reachable from tree $i+1$. How do you find the maximum height reachable from tree $i$?\n\nHint 2\n\nLet $p$ be the highest height among trees indexed from $1$ to $i$, and $s$ be the lowest height among trees indexed from $i+1$ to $n$. When can tree $i$ be reachable from tree $i+1$?\n\nSolution\n\nFirst, observe that a rabbit at tree $n$ can reach the highest tree; if the tree has index $i \\lt n$, then the rabbit can jump from tree $n$ to $i$. Let $ans_k$ denote the tallest height reachable from tree $k$, then $ans_n=\\max(a_1,a_2,\\ldots a_n)$.\n\nWe iteratively look at trees $n-1$ to $1$. Suppose we have found the tallest height $ans_{i+1}$ reachable from tree $i+1$. Note that from tree $i$ we can reach the tallest tree with index between $1$ and $i$, and from tree $i+1$ we can reach the shortest tree with index between $i+1$ and $n$. Let $a_x=p_i=\\max(a_1,a_2,\\ldots a_i)$ and $a_y=s_i=\\min(a_{i+1},a_{i+1},\\ldots a_n)$.\n\nThen if $p_i \\gt s_i$ then tree $i+1$ is reachable from tree $i$ by the sequence $i\\leftrightarrow x\\leftrightarrow y\\leftrightarrow i+1$. Thus, any tree reachable from tree $i$ is reachable from tree $i+1$, and vice versa; thus, $ans_i=ans_{i+1}.$\n\nOn the other hand, if $p_i\\le s_i$, then for any $r\\le i$ and $s\\ge i+1$, we have $r \\lt s$ and $a_r\\le p_i\\le s_i\\le a_s$. Thus, no tree between index $i+1$ and $n$ inclusive is reachable from any tree from $1$ and $i$ inclusive. Similar to the first paragraph, we have $ans_i=\\max(a_1,a_2,\\ldots a_i)=p_i$.\n\nTime complexity: $O(n)$\n\nImplementation: (by ACGN) 291677082\n\nFeedback\n\nGood problem:\n\nOkay problem:\n\nBad problem:\n\nDid not attempt:",
+    "solution_code": []
+  }
+}

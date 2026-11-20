@@ -1,0 +1,45 @@
+{
+  "contest_id": 2089,
+  "index": "B1",
+  "name": "Canteen (Easy Version)",
+  "rating": 1900,
+  "tags": [
+    "binary search",
+    "data structures",
+    "flows",
+    "greedy",
+    "two pointers"
+  ],
+  "points": 1000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2089B1",
+  "url": "https://codeforces.com/problemset/problem/2089/B1",
+  "contest_start_time": "2025-03-23T05:35:00+00:00",
+  "statement": {
+    "title": "B1. Canteen (Easy Version)",
+    "time_limit": "2 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "This is the easy version of the problem. The difference between the versions is that in this version, $k=0$. You can hack only if you solved all versions of this problem.\n\nEcrade has two sequences $a_0, a_1, \\ldots, a_{n - 1}$ and $b_0, b_1, \\ldots, b_{n - 1}$ consisting of integers. It is guaranteed that the sum of all elements in $a$ does not exceed the sum of all elements in $b$.\n\nInitially, Ecrade can make exactly $k$ changes to the sequence $a$. It is guaranteed that $k$ does not exceed the sum of $a$. In each change:\n\n Choose an integer $i$ ($0 \\le i  \\lt  n$) such that $a_i  \\gt  0$, and perform $a_i := a_i - 1$.\n\nThen Ecrade will perform the following three operations sequentially on $a$ and $b$, which constitutes one round of operations:\n\n For each $0 \\le i  \\lt  n$: $t := \\min(a_i, b_i), a_i := a_i - t, b_i := b_i - t$;\n\n For each $0 \\le i  \\lt  n$: $c_i := a_{(i - 1) \\bmod n}$;\n\n For each $0 \\le i  \\lt  n$: $a_i := c_i$;\n\nEcrade wants to know the minimum number of rounds required for all elements in $a$ to become equal to $0$ after exactly $k$ changes to $a$.\n\nHowever, this seems a bit complicated, so please help him!",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 2\\cdot 10^4$). The description of the test cases follows.\n\nThe first line of each test case contains two integers $n$, $k$ ($1 \\le n \\le 2 \\cdot 10^5$, $k = 0$).\n\nThe second line of each test case contains $n$ integers $a_0, a_1, \\ldots, a_{n - 1}$ ($1 \\le a_i \\le 10^9$).\n\nThe third line of each test case contains $n$ integers $b_0, b_1, \\ldots, b_{n - 1}$ ($1 \\le b_i \\le 10^9$).\n\nIt is guaranteed that the sum of $n$ across all test cases does not exceed $2\\cdot 10^5$. It is also guaranteed that in each test case the sum of $a$ does not exceed the sum of $b$, and that $k$ does not exceed the sum of $a$.",
+    "output_spec": "For each test case, output the minimum number of rounds required for all elements in $a$ to become equal to $0$ after exactly $k$ changes to $a$.",
+    "note": "In this version, Ecrade cannot make changes to $a$.\n\nIn the first test case:\n\n After the first round, $a=[0,0,0],b=[4,0,0]$.\n\nIn the second test case:\n\n After the first round, $a=[3,0,0,1],b=[3,1,0,0]$;\n\n After the second round, $a=[1,0,0,0],b=[0,1,0,0]$;\n\n After the third round, $a=[0,1,0,0],b=[0,1,0,0]$;\n\n After the fourth round, $a=[0,0,0,0],b=[0,0,0,0]$.",
+    "samples": [
+      {
+        "input": "4\n3 0\n1 1 4\n5 1 4\n4 0\n1 2 3 4\n4 3 2 1\n4 0\n2 1 1 2\n1 2 2 1\n8 0\n1 2 3 4 5 6 7 8\n8 7 6 5 4 3 2 1",
+        "output": "\n1\n4\n4\n8"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 141053,
+    "url": "https://codeforces.com/blog/entry/141053",
+    "tutorial": "2089B1 - Canteen (Easy Version)\n Idea: Ecrade_\n\nSolution\n\nFor each $ a_i $, calculate the minimum number of cyclic right shifts required to reduce it to zero, denoted as $ d_i $. The answer is the maximum $ d_i $ across all $ i $.\n\nFor cyclic problems, we can consider breaking the cycle into a chain (i.e., let $ a_{i+n} = a_i $, $ b_{i+n} = b_i $).\n\nConsider constructing a parenthesis sequence $ s $ by concatenating $ a_0 $ left parentheses, $ b_0 $ right parentheses, $ a_1 $ left parentheses, $ b_1 $ right parentheses, ... ,$ a_{2n-1} $ left parentheses and $ b_{2n-1} $ right parentheses. The operation in the original problem corresponds to the process of matching parentheses in $ s $:\n\n\"Set the smaller of $(a_i, b_i)$ to zero and the larger to their difference\" $\\Rightarrow$ \"Match the parentheses corresponding to $(a_i, b_i)$\".\n\n\"Cyclically right-shift $ a $\" $\\Rightarrow$ \"Unmatched left parentheses continue to find matching right parentheses\".\n\nThe first time $ a_i $ is reduced to zero depends on which $ b_j $ ’s right parenthesis matches the leftmost parenthesis corresponding to $ a_i $.\n\nWe can use prefix sums to find matchings of the parenthesis: Let $ c_i = \\sum\\limits_{j=0}^i (a_j - b_j) $. Define $ p_i $ as the smallest index satisfying $ p_i \\gt i $ and $ c_{p_i} \\leq c_i $, then $ d_i = p_i - i $. We can compute all $ p_i $ with a monotonic stack.\n\nIt should be pointed out that matching parentheses is just an intuitive way of understanding the solution. You can, of course, also draw the above conclusion by direct observation.\n\nThe time complexity is $ O(\\sum n) $.\n\nCode",
+    "solution_code": [
+      "#include<bits/stdc++.h>\nusing namespace std;\ntypedef long long ll;\nll t,n,k,a[400009],stk[400009];\ninline ll read(){\n\tll s = 0,w = 1;\n\tchar ch = getchar();\n\twhile (ch > '9' || ch < '0'){ if (ch == '-') w = -1; ch = getchar();}\n\twhile (ch <= '9' && ch >= '0') s = (s << 1) + (s << 3) + (ch ^ 48),ch = getchar();\n\treturn s * w;\n}\nint main(){\n\tt = read();\n\twhile (t --){\n\t\tn = read(),k = read();\n\t\tfor (ll i = 1;i <= n;i += 1) a[i] = read();\n\t\tfor (ll i = 1;i <= n;i += 1) a[i] = a[i + n] = a[i] - read();\n\t\tfor (ll i = 1;i <= 2 * n;i += 1) a[i] += a[i - 1];\n\t\tll tp = 0,ans = 0;\n\t\tfor (ll i = 2 * n;i >= 1;i -= 1){\n\t\t\twhile (tp && a[stk[tp]] > a[i]) tp -= 1;\n\t\t\tif (i <= n) ans = max(ans,stk[tp] - i);\n\t\t\tstk[++ tp] = i;\n\t\t}\n\t\tprintf(\"%lld\\n\",ans);\n\t}\n\treturn 0;\n}"
+    ]
+  }
+}

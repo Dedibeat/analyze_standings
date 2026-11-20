@@ -1,0 +1,44 @@
+{
+  "contest_id": 1981,
+  "index": "E",
+  "name": "Turtle and Intersected Segments",
+  "rating": 2600,
+  "tags": [
+    "data structures",
+    "dsu",
+    "graphs",
+    "greedy"
+  ],
+  "points": 2500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1981E",
+  "url": "https://codeforces.com/problemset/problem/1981/E",
+  "contest_start_time": "2024-05-31T10:05:00+00:00",
+  "statement": {
+    "title": "E. Turtle and Intersected Segments",
+    "time_limit": "5 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "Turtle just received $n$ segments and a sequence $a_1, a_2, \\ldots, a_n$. The $i$-th segment is $[l_i, r_i]$.\n\nTurtle will create an undirected graph $G$. If segment $i$ and segment $j$ intersect, then Turtle will add an undirected edge between $i$ and $j$ with a weight of $|a_i - a_j|$, for every $i \\ne j$.\n\nTurtle wants you to calculate the sum of the weights of the edges of the minimum spanning tree of the graph $G$, or report that the graph $G$ has no spanning tree.\n\nWe say two segments $[l_1, r_1]$ and $[l_2, r_2]$ intersect if and only if $\\max(l_1, l_2) \\le \\min(r_1, r_2)$.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 10^5$). The description of the test cases follows.\n\nThe first line of each test case contains a single integer $n$ ($2 \\le n \\le 5 \\cdot 10^5$) — the number of segments.\n\nThe $i$-th of the following $n$ lines contains three integers $l_i, r_i, a_i$ ($1 \\le l_i \\le r_i \\le 10^9, 1 \\le a_i \\le 10^9$) — the $i$-th segment and the $i$-th element of the sequence.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $5 \\cdot 10^5$.",
+    "output_spec": "For each test case, output a single integer — the sum of the weights of the edges of the minimum spanning tree of the graph $G$. If the graph $G$ has no spanning tree, output $-1$.",
+    "note": "In the first test case, the graph $G$ is as follows:\n\nOne of the minimum spanning trees of $G$ is as follows:\n\nThe sum of the weights of the edges of the minimum spanning tree is $9$.\n\nIn the second test case, the graph $G$ is as follows:\n\n$G$ is already a tree, and the sum of the weights of the tree is $13$.\n\nIn the third test case, the graph $G$ is as follows:\n\nIn the fourth test case, the graph $G$ is as follows:\n\nIt's easy to see that $G$ is not connected, so $G$ has no spanning tree.",
+    "samples": [
+      {
+        "input": "4\n5\n1 7 3\n2 4 6\n3 5 5\n6 7 9\n3 4 4\n5\n2 7 3\n1 3 6\n4 5 5\n6 7 9\n1 1 4\n4\n1 4 3\n1 2 1\n3 4 5\n1 4 4\n3\n1 3 1\n2 3 3\n4 5 8",
+        "output": "\n9\n13\n4\n-1"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 129848,
+    "url": "https://codeforces.com/blog/entry/129848",
+    "tutorial": "We observe that for three segments $(l_1, r_1, a_1), (l_2, r_2, a_2), (l_3, r_3, a_3)$ where each pair of segments intersects (assume $a_1 \\le a_2 \\le a_3$), we only need to keep the edges between $(1, 2)$ and $(2, 3)$, because $a_3 - a_1 = a_2 - a_1 + a_3 - a_2$ and for every cycle in a graph, the edge with the maximum weight will not appear in the minimum spanning tree.\n\nTherefore, consider the following scanline process: each segment is added at $l$ and removed at $r$. When adding a segment, find its predecessor and successor in the order sorted by $a$ and connect edges accordingly. Essentially, we maintain all the segments that exist at each moment as a chain sorted by $a$.\n\nIt is easy to see that after the scanline process, the number of edges is reduced to $O(n)$. Then we can directly compute the minimum spanning tree.\n\nTime complexity: $O(n \\log n)$ per test case.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n#define pb emplace_back\n#define fst first\n#define scd second\n#define mkp make_pair\n#define mems(a, x) memset((a), (x), sizeof(a))\n\nusing namespace std;\ntypedef long long ll;\ntypedef double db;\ntypedef unsigned long long ull;\ntypedef long double ldb;\ntypedef pair<int, int> pii;\n\nconst int maxn = 1000100;\n\nint n, lsh[maxn], tot, fa[maxn];\npii b[maxn];\n\nstruct node {\n\tint l, r, x;\n} a[maxn];\n\nstruct edg {\n\tint u, v, d;\n\tedg(int a = 0, int b = 0, int c = 0) : u(a), v(b), d(c) {}\n} E[maxn];\n\nint find(int x) {\n\treturn fa[x] == x ? x : fa[x] = find(fa[x]);\n}\n\ninline bool merge(int x, int y) {\n\tx = find(x);\n\ty = find(y);\n\tif (x != y) {\n\t\tfa[x] = y;\n\t\treturn 1;\n\t} else {\n\t\treturn 0;\n\t}\n}\n\nvoid solve() {\n\ttot = 0;\n\tcin >> n;\n\tfor (int i = 1; i <= n; ++i) {\n\t\tcin >> a[i].l >> a[i].r >> a[i].x;\n\t\tlsh[++tot] = a[i].l;\n\t\tlsh[++tot] = (++a[i].r);\n\t}\n\tint m = 0;\n\tsort(lsh + 1, lsh + tot + 1);\n\ttot = unique(lsh + 1, lsh + tot + 1) - lsh - 1;\n\tfor (int i = 1; i <= n; ++i) {\n\t\ta[i].l = lower_bound(lsh + 1, lsh + tot + 1, a[i].l) - lsh;\n\t\ta[i].r = lower_bound(lsh + 1, lsh + tot + 1, a[i].r) - lsh;\n\t\tb[++m] = mkp(a[i].l, i);\n\t\tb[++m] = mkp(a[i].r, -i);\n\t}\n\tset<pii> S;\n\tsort(b + 1, b + m + 1);\n\tint tt = 0;\n\tfor (int i = 1; i <= m; ++i) {\n\t\tint j = b[i].scd;\n\t\tif (j > 0) {\n\t\t\tauto it = S.insert(mkp(a[j].x, j)).fst;\n\t\t\tif (it != S.begin()) {\n\t\t\t\tint k = prev(it)->scd;\n\t\t\t\tE[++tt] = edg(j, k, abs(a[j].x - a[k].x));\n\t\t\t}\n\t\t\tif (next(it) != S.end()) {\n\t\t\t\tint k = next(it)->scd;\n\t\t\t\tE[++tt] = edg(j, k, abs(a[j].x - a[k].x));\n\t\t\t}\n\t\t} else {\n\t\t\tj = -j;\n\t\t\tS.erase(mkp(a[j].x, j));\n\t\t}\n\t}\n\tfor (int i = 1; i <= n; ++i) {\n\t\tfa[i] = i;\n\t}\n\tsort(E + 1, E + tt + 1, [&](const edg &a, const edg &b) {\n\t\treturn a.d < b.d;\n\t});\n\tll ans = 0, cnt = 0;\n\tfor (int i = 1; i <= tt; ++i) {\n\t\tif (merge(E[i].u, E[i].v)) {\n\t\t\t++cnt;\n\t\t\tans += E[i].d;\n\t\t}\n\t}\n\tcout << (cnt == n - 1 ? ans : -1) << '\\n';\n}\n\nint main() {\n\tios::sync_with_stdio(0);\n\tcin.tie(0);\n\tcout.tie(0);\n\tint T = 1;\n\tcin >> T;\n\twhile (T--) {\n\t\tsolve();\n\t}\n\treturn 0;\n}"
+    ]
+  }
+}

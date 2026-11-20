@@ -1,0 +1,41 @@
+{
+  "contest_id": 1999,
+  "index": "B",
+  "name": "Card Game",
+  "rating": 1000,
+  "tags": [
+    "brute force",
+    "constructive algorithms",
+    "implementation"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1999B",
+  "url": "https://codeforces.com/problemset/problem/1999/B",
+  "contest_start_time": "2024-08-06T14:35:00+00:00",
+  "statement": {
+    "title": "B. Card Game",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Suneet and Slavic play a card game. The rules of the game are as follows:\n\n Each card has an integer value between $1$ and $10$.\n\n Each player receives $2$ cards which are face-down (so a player doesn't know their cards).\n\n The game is turn-based and consists exactly of two turns. In a round, both players pick a random unflipped card and flip it. The player who flipped a card with a strictly greater number wins the round. In case of equality, no one wins the round.\n\n A player wins a game if he wins the most number of rounds (i.e. strictly greater than the other player). In case of equality, no one wins the game.\n\nSince Suneet and Slavic aren't best friends, you need to calculate the number of ways the game could happen that Suneet would end up as the winner.\n\nFor a better understanding, please check the notes section.",
+    "input_spec": "The first line contains an integer $t$ ($1 \\leq t \\leq 10^4$) — the number of test cases.\n\nThe first and only line of each test case contains $4$ integers $a_1$, $a_2$, $b_1$, $b_2$ ($1 \\leq a_1, a_2, b_1, b_2 \\leq 10$) where $a_1$ and $a_2$ represent the cards Suneet has, and $b_1$ and $b_2$ represent the cards Slavic has, respectively.",
+    "output_spec": "For each test case, output a single integer — the number of games Suneet would win considering all possible games.",
+    "note": "Consider the first test case when Slavic starts with the cards that have the values $2$ and $6$, and Suneet starts with cards that have the values $3$ and $8$. The game could happen in $4$ different ways:\n\n Suneet flips $3$ and Slavic flips $2$. Suneet wins the first round. Then, Suneet flips $8$ and Slavic flips $6$. Suneet wins the second round as well. Since Suneet won $2$ rounds, he wins the game.\n\n Suneet flips $3$ and Slavic flips $6$. Slavic wins the first round. Then, Suneet flips $8$ and Slavic flips $2$. Suneet wins the second round. Nobody wins since both players won an equal amount of rounds.\n\n Suneet flips $8$ and Slavic flips $6$. Suneet wins the first round. Then, Suneet flips $3$ and Slavic flips $2$. Suneet wins the second round as well. Since Suneet won $2$ rounds, he wins the game.\n\n Suneet flips $8$ and Slavic flips $2$. Suneet wins the first round. Then, Suneet flips $3$ and Slavic flips $6$. Slavic wins the round. Nobody wins since both players won an equal amount of rounds.",
+    "samples": [
+      {
+        "input": "5\n3 8 2 6\n1 1 1 1\n10 10 2 2\n1 1 10 10\n3 8 7 2",
+        "output": "\n2\n0\n4\n0\n2"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 132383,
+    "url": "https://codeforces.com/blog/entry/132383",
+    "tutorial": "1999B — Card Game\n\nVideo",
+    "solution_code": []
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "contest_id": 1985,
+  "index": "G",
+  "name": "D-Function",
+  "rating": 1600,
+  "tags": [
+    "combinatorics",
+    "math",
+    "number theory"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1985G",
+  "url": "https://codeforces.com/problemset/problem/1985/G",
+  "contest_start_time": "2024-06-11T14:35:00+00:00",
+  "statement": {
+    "title": "G. D-Function",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Let $D(n)$ represent the sum of digits of $n$. For how many integers $n$ where $10^{l} \\leq n  \\lt  10^{r}$ satisfy $D(k \\cdot n) = k \\cdot D(n)$? Output the answer modulo $10^9+7$.",
+    "input_spec": "The first line contains an integer $t$ ($1 \\leq t \\leq 10^4$) – the number of test cases.\n\nEach test case contains three integers $l$, $r$, and $k$ ($0 \\leq l  \\lt  r \\leq 10^9$, $1 \\leq k \\leq 10^9$).",
+    "output_spec": "For each test case, output an integer, the answer, modulo $10^9 + 7$.",
+    "note": "For the first test case, the only values of $n$ that satisfy the condition are $1$ and $2$.\n\nFor the second test case, the only values of $n$ that satisfy the condition are $1$, $10$, and $11$.\n\nFor the third test case, all values of $n$ between $10$ inclusive and $100$ exclusive satisfy the condition.",
+    "samples": [
+      {
+        "input": "6\n0 1 4\n0 2 7\n1 2 1\n1 2 3\n582 74663 3\n0 3 1",
+        "output": "\n2\n3\n90\n12\n974995667\n999"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 129620,
+    "url": "https://codeforces.com/blog/entry/129620",
+    "tutorial": "1985G - D-Function\n\nProblem Credits: cry\n Analysis: cry\n\nSolution\n\nTo satisfy $D(k \\cdot n) = k \\cdot D(n)$, each digit $d$ in $n$ must become $k \\cdot d$ after multiplying $n$ by $k$. In other words, none of $n$'s digits can carry over to the next digit upon multiplication. From this, we can deduce that each digit in $n$ must be less than or equal to $\\lfloor \\frac{9}{k} \\rfloor$. Only thing left is to count all such numbers in the range of $10^l$ inclusive and $10^r$ exclusive.\n\nEvery number below ${10}^r$ has $r$ or less digits. For numbers with less than $r$ digits, let's pad the beginning with zeroes until it becomes a $r$ digit number (for example, if $r = 5$, then $69$ becomes $00069$). This allows us to consider numbers with less than $r$ digits the same way as numbers with exactly $r$ digits. For each digit, we have $\\lfloor \\frac{9}{k} \\rfloor + 1$ choices (including zero), and there are $r$ digits, so the total number of numbers that satisfies the constraint below ${10}^r$ is $(\\lfloor \\frac{9}{k} \\rfloor + 1)^r$.\n\nTo get the count of numbers in range, it suffices to subtract all valid numbers less than $10^l$. Therefore, the answer is $(\\lfloor \\frac{9}{k} \\rfloor + 1)^r - (\\lfloor \\frac{9}{k} \\rfloor + 1)^l$. To exponentiate fast, we can use modular exponentiation.\n\nCode (Python)",
+    "solution_code": [
+      "MOD = int(1e9+7)\nt = int(input())\nfor _ in range(t):\n    l, r, k = map(int, input().split())\n    print((pow(9 // k + 1, r, MOD) - pow(9 // k + 1, l, MOD) + MOD) % MOD)"
+    ]
+  }
+}

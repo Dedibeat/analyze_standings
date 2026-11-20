@@ -1,0 +1,43 @@
+{
+  "contest_id": 1968,
+  "index": "A",
+  "name": "Maximize?",
+  "rating": 800,
+  "tags": [
+    "brute force",
+    "math",
+    "number theory"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1968A",
+  "url": "https://codeforces.com/problemset/problem/1968/A",
+  "contest_start_time": "2024-05-02T14:45:00+00:00",
+  "statement": {
+    "title": "A. Maximize?",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "You are given an integer $x$. Your task is to find any integer $y$ $(1\\le y \\lt x)$ such that $\\gcd(x,y)+y$ is maximum possible.\n\nNote that if there is more than one $y$ which satisfies the statement, you are allowed to find any.\n\n$\\gcd(a,b)$ is the Greatest Common Divisor of $a$ and $b$. For example, $\\gcd(6,4)=2$.",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\le t \\le 1000$) — the number of test cases.\n\nEach of the following $t$ lines contains a single integer $x$ ($2 \\le x \\le 1000$).",
+    "output_spec": "For each test case, output any $y$ ($1 \\le y  \\lt  x$), which satisfies the statement.",
+    "note": null,
+    "samples": [
+      {
+        "input": "7\n10\n7\n21\n100\n2\n1000\n6",
+        "output": "\n5\n6\n18\n98\n1\n750\n3"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 129096,
+    "url": "https://codeforces.com/blog/entry/129096",
+    "tutorial": "The core idea is to find the upper bound of $\\gcd(x,y)+y$.\n\nLet us look closer at the formula $\\gcd(x,y)+y$. It is a well-known fact that $\\gcd(a,b)=\\gcd(a-b,b)$ for $a\\geq b$. Applying it to our formula, we get $\\gcd(x-y,y)+y$.\n\nUsing the fact that $\\gcd(x-y,y)\\le x-y$, we get $\\gcd(x-y,y)+y\\le x-y+y=x$. Hence, $\\gcd(x,y)+y\\le x$ for $1\\le y \\lt x$.\n\nFor $y=x-1$, we have $\\gcd(x,x-1)+x-1=1+x-1=x$, which is the maximal possible value.\n\nNote that the constraints allow finding the optimal $y$ in $O(x)$, while the above solution works in $O(1)$.",
+    "solution_code": [
+      "#include<iostream>\nusing namespace std;\nint main(){\n\tint t;\n\tcin>>t;\n\twhile(t--){\n\t\tint x;\n\t\tcin>>x;\n\t\tcout<<x-1<<\"\\n\";\n\t}\n}"
+    ]
+  }
+}

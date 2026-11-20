@@ -1,0 +1,52 @@
+{
+  "contest_id": 1954,
+  "index": "D",
+  "name": "Colored Balls",
+  "rating": 1800,
+  "tags": [
+    "combinatorics",
+    "dp",
+    "math",
+    "sortings"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1954D",
+  "url": "https://codeforces.com/problemset/problem/1954/D",
+  "contest_start_time": "2024-04-12T14:35:00+00:00",
+  "statement": {
+    "title": "D. Colored Balls",
+    "time_limit": "2 seconds",
+    "memory_limit": "1024 megabytes",
+    "legend": "There are balls of $n$ different colors; the number of balls of the $i$-th color is $a_i$.\n\nThe balls can be combined into groups. Each group should contain at most $2$ balls, and no more than $1$ ball of each color.\n\nConsider all $2^n$ sets of colors. For a set of colors, let's denote its value as the minimum number of groups the balls of those colors can be distributed into. For example, if there are three colors with $3$, $1$ and $7$ balls respectively, they can be combined into $7$ groups (and not less than $7$), so the value of that set of colors is $7$.\n\nYour task is to calculate the sum of values over all $2^n$ possible sets of colors. Since the answer may be too large, print it modulo $998\\,244\\,353$.",
+    "input_spec": "The first line contains a single integer $n$ ($1 \\le n \\le 5000$) — the number of colors.\n\nThe second line contains $n$ integers $a_1, a_2, \\dots, a_n$ ($1 \\le a_i \\le 5000$) — the number of balls of the $i$-th color.\n\nAdditional constraint on input: the total number of balls doesn't exceed $5000$.",
+    "output_spec": "Print a single integer — the sum of values of all $2^n$ sets of colors, taken modulo $998\\,244\\,353$.",
+    "note": "Consider the first example. There are $8$ sets of colors:\n\n for the empty set, its value is $0$;\n\n for the set $\\{1\\}$, its value is $1$;\n\n for the set $\\{2\\}$, its value is $1$;\n\n for the set $\\{3\\}$, its value is $2$;\n\n for the set $\\{1,2\\}$, its value is $1$;\n\n for the set $\\{1,3\\}$, its value is $2$;\n\n for the set $\\{2,3\\}$, its value is $2$;\n\n for the set $\\{1,2,3\\}$, its value is $2$.\n\nSo, the sum of values over all $2^n$ sets of colors is $11$.",
+    "samples": [
+      {
+        "input": "3\n1 1 2",
+        "output": "\n11"
+      },
+      {
+        "input": "1\n5",
+        "output": "\n5"
+      },
+      {
+        "input": "4\n1 3 3 7",
+        "output": "\n76"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 128421,
+    "url": "https://codeforces.com/blog/entry/128421",
+    "tutorial": "For a fixed set of colors, this is a standard problem with the following solution: let's denote the total number of balls as $s$, then the value of the set is $\\left\\lceil\\frac{s}{2}\\right\\rceil$; but there is an exception in the case when there is a color with more than $\\frac{s}{2}$ balls, then the value is the number of balls of this color.\n\nSo the answer depends only on whether there is a color that has more balls than all the others combined.\n\nUsing the aforementioned fact, we can come up with the following solution: let's iterate over the total number of balls in the set (denote it as $j$) and increase the answer by $\\left\\lceil\\frac{j}{2}\\right\\rceil$ for each subset of colors with exactly $j$ balls in it. The number of subsets with the fixed number of balls can be calculated using simple knapsack dynamic programming.\n\nIt remains to consider the subsets of colors with a \"dominant\" color, because we added the wrong value to the answer for them. Let the \"dominant\" color be $i$ and the total number of balls in all other colors be $j$ ($j  \\lt  a_i$). The answer should be increased by $a_i - \\left\\lceil\\frac{a_i + j}{2}\\right\\rceil$ (the correct value of this set is $a_i$, but we have already added the wrong value in the answer — $\\left\\lceil\\frac{a_i + j}{2}\\right\\rceil$, so we should compensate it) for each subset of colors with exactly $j$ balls in it (we can use the same dp as in previous case). Note that if you consider only $j  \\lt  a_i$, you don't have to deal with the possibility that the \"dominant\" color could already be included in the subset.\n\nThis solution works in $O(nS)$ time, where $S$ is the total number of balls.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n \nusing namespace std;\n \nconst int MOD = 998244353;\n \nint add(int x, int y) {\n  x += y;\n  if (x >= MOD) x -= MOD;\n  return x;\n} \n \nint mul(int x, int y) {\n  return x * 1LL * y % MOD;\n}\n \nint main() {\n  int n;\n  cin >> n;\n  vector<int> a(n);\n  for (int i = 0; i < n; ++i) cin >> a[i];\n  int s = accumulate(a.begin(), a.end(), 0);\n  vector<int> dp(s + 1);\n  dp[0] = 1;\n  for (int i = 0; i < n; ++i)\n    for (int j = s - a[i]; j >= 0; --j) \n      dp[j + a[i]] = add(dp[j + a[i]], dp[j]);\n  int ans = 0;\n  for (int j = 0; j <= s; ++j) \n    ans = add(ans, mul((j + 1) / 2, dp[j]));\n  for (int i = 0; i < n; ++i)\n    for (int j = 0; j < a[i]; ++j) \n      ans = add(ans, mul(a[i] - (a[i] + j + 1) / 2, dp[j]));\n  cout << ans << '\\n';\n}"
+    ]
+  }
+}

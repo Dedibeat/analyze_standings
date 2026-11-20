@@ -1,0 +1,43 @@
+{
+  "contest_id": 1957,
+  "index": "E",
+  "name": "Carousel of Combinations",
+  "rating": 2400,
+  "tags": [
+    "brute force",
+    "combinatorics",
+    "dp",
+    "math",
+    "number theory"
+  ],
+  "points": 2250.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1957E",
+  "url": "https://codeforces.com/problemset/problem/1957/E",
+  "contest_start_time": "2024-04-21T14:35:00+00:00",
+  "statement": {
+    "title": "E. Carousel of Combinations",
+    "time_limit": "2.5 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "You are given an integer $n$. The function $C(i,k)$ represents the number of distinct ways you can select $k$ distinct numbers from the set {$1, 2, \\ldots, i$} and arrange them in a circle$^\\dagger$.\n\nFind the value of $$ \\sum\\limits_{i=1}^n \\sum\\limits_{j=1}^i \\left( C(i,j) \\bmod j \\right). $$ Here, the operation $x \\bmod y$ denotes the remainder from dividing $x$ by $y$.\n\nSince this value can be very large, find it modulo $10^9+7$.\n\n$^\\dagger$ In a circular arrangement, sequences are considered identical if one can be rotated to match the other. For instance, $[1, 2, 3]$ and $[2, 3, 1]$ are equivalent in a circle.",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\leq t \\leq 10^5$) — the number of test cases.\n\nThe only line of each test case contains a single integer $n$ ($1 \\le n \\le 10^6$).",
+    "output_spec": "For each test case, output a single integer on a new line — the value of the expression to be calculated modulo $10^9+7$.",
+    "note": "In the first test case, $C(1,1) \\bmod 1 = 0$.\n\nIn the second test case:\n\n $C(1,1)=1$ (the arrangements are: $[1]$);\n\n $C(2,1)=2$ (the arrangements are: $[1]$, $[2]$);\n\n $C(2,2)=1$ (the arrangements are: $[1, 2]$);\n\n $C(3,1)=3$ (the arrangements are: $[1]$, $[2]$, $[3]$);\n\n $C(3,2)=3$ (the arrangements are: $[1, 2]$, $[2, 3]$, $[3, 1]$);\n\n $C(3,3)=2$ (the arrangements are: $[1, 2, 3]$, $[1, 3, 2]$).\n\n In total, $\\left(C(1,1) \\bmod 1\\right) + \\left(C(2,1) \\bmod 1\\right) + \\left(C(2,2) \\bmod 2\\right) + \\left(C(3,1) \\bmod 1\\right) + \\left(C(3,2) \\bmod 2\\right) + \\left(C(3,3) \\bmod 3\\right) = 4$.",
+    "samples": [
+      {
+        "input": "4\n1\n3\n6\n314159",
+        "output": "\n0\n4\n24\n78926217"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "missing"
+  },
+  "editorial": {
+    "blog_id": 128716,
+    "url": "https://codeforces.com/blog/entry/128716",
+    "tutorial": null,
+    "solution_code": []
+  }
+}

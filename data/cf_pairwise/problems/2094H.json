@@ -1,0 +1,44 @@
+{
+  "contest_id": 2094,
+  "index": "H",
+  "name": "La Vaca Saturno Saturnita",
+  "rating": 1900,
+  "tags": [
+    "binary search",
+    "brute force",
+    "math",
+    "number theory"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2094H",
+  "url": "https://codeforces.com/problemset/problem/2094/H",
+  "contest_start_time": "2025-04-13T15:35:00+00:00",
+  "statement": {
+    "title": "H. La Vaca Saturno Saturnita",
+    "time_limit": "4 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Saturnita's mood depends on an array $a$ of length $n$, which only he knows the meaning of, and a function $f(k, a, l, r)$, which only he knows how to compute. Shown below is the pseudocode for his function $f(k, a, l, r)$.\n\nfunction f(k, a, l, r):   ans := 0   for i from l to r (inclusive):      while k is divisible by a[i]:         k := k/a[i]      ans := ans + k   return ans\n\nYou are given $q$ queries, each containing integers $k$, $l$, and $r$. For each query, please output $f(k,a,l,r)$.",
+    "input_spec": "The first line contains an integer $t$ ($1 \\leq t \\leq 10^4$) — the number of test cases.\n\nThe first line of each test case contains two integers $n$ and $q$ ($1 \\leq n \\leq 10^5, 1 \\leq q \\leq 5\\cdot 10^4$).\n\nThe following line contains $n$ integers $a_1,a_2,\\ldots,a_n$ ($2 \\leq a_i \\leq 10^5$).\n\nThe following $q$ lines each contain three integers $k$, $l$, and $r$ ($1 \\leq k \\leq 10^5, 1 \\leq l \\leq r \\leq n$).\n\nIt is guaranteed that the sum of $n$ does not exceed $10^5$ over all test cases, and the sum of $q$ does not exceed $5\\cdot 10^4$ over all test cases.",
+    "output_spec": "For each query, output the answer on a new line.",
+    "note": null,
+    "samples": [
+      {
+        "input": "2\n5 3\n2 3 5 7 11\n2 1 5\n2 2 4\n2310 1 5\n4 3\n18 12 8 9\n216 1 2\n48 2 4\n82944 1 4",
+        "output": "\n5\n6\n1629\n13\n12\n520"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 141796,
+    "url": "https://codeforces.com/blog/entry/141796",
+    "tutorial": "2094H - La Vaca Saturno Saturnita\n\nProblem Credits: cry\n\nHint 1\n\nWhat must the value of $a[i]$ be in order for $k$ to change?\n\nAnswer\n\n$a[i]$ must be a divisor of $k$.\n\nHint 2\n\nCan we use this to bound the number of times $k$ changes?\n\nAnswer\n\nFor each divisor $d$ of $k$, $k$ can only change once, because after the first iteration with $a[i] = d$, $k$ is no longer divisible by $d$. Thus, the number of times $k$ changes is bounded by the number of divisors of $k$.\n\nSolution\n\nConsider a particular query. We make the following two observations: first, the value of $k$ only changes if $a[i]$ is a divisor of $k$, and second, if there exists $a[i_1] = a[i_2]$ with $l\\leq i_1 \\lt i_2 \\leq r$, then the value of $k$ will not change at $i=i_2$ (because after the iteration $i=i_1$, we have that $k$ is no longer divisible by $a[i_2]$).\n\nThis allows us to bound the number of times $k$ changes by $d(k)$, where $d(k)$ is the number of divisors of $k$. Note that the divisors of $d(k)$ can be found in $O(\\sqrt{k})$ time by checking if $a$ divides $k$ for every $a$ from $2$ to $\\sqrt{k}$, and if so, $a$ and $\\frac{k}{a}$ are both divisors of $k$. Furthermore, at the scale constrained by the problem bounds, $d(k)$ is around $O(\\sqrt[3]{k})$, so we only have to update $k$ at most $O(\\sqrt[3]{k})$ times.\n\nNow, we would like to find the first time each divisor of $k$ appears in $a[l], \\dots, a[r]$. This can be done by storing the array $a$ in a map, where each value is mapped to a vector of indices where that values appears. Then for a given divisor of $k$, we can use lower_bound() (or generally, binary search) to find the smallest index at or after $l$ where this divisor appears, and we can check if it is no greater than $r$.\n\nNow, we have a list of indices at which $k$ might change. So, suppose that $k$ changes to $k'$ at index $i_1$, and then changes to $k' '$ at index $i_2$ (and these are adjacent changes). Then we know that we have a value of $k'$ from $i=i_1$ to $i_2-1$, so we can add $k' \\cdot (i_2 - i_1)$ to $ans$. We can then do this for all changes. This allows us to solve the problem in $O(n\\log{n})$ preprocessing time and $O(\\sqrt{k} + d(k)\\log{n})$ time per query.\n\nThere are a few ways to optimize the runtime further, if your implementation is too slow. We can use a vector (of vectors) instead of a map, since $A = \\max a_i = 10^5$ is reasonably small. Note that instantiating a vector of this size in every test case is too slow, so you may have to instantiate it globally and clear the vectors that were used after each test case.\n\nAnother optimization is to preprocess divisors instead of computing them on the spot. We can compute and store the divisors of all integers $2\\leq a_i\\leq 10^5$ in $O(A\\log A)$ time in a vector of vectors where $divisor[a_i]$ contains all divisors of $a_i$ as follows: for all $2\\leq i\\leq A$, we push $i$ into $divisors[j]$ for all multiples $j$ of $i$. (The runtime follows from the fact that there are $\\lfloor\\frac{A}{i}\\rfloor$ multiples of $i$ which are at most $A$, so across all $i$, we have at most $\\frac{A}{1} + \\frac{A}{2} + \\cdots + \\frac{A}{A} = A(\\frac{1}{1} + \\cdots + \\frac{1}{A}) = AH(A) = O(A\\log A)$ computations). This allows us to remove the $\\sqrt{k}$ term in the runtime of each query.\n\nCode\n\nRate The Problem!\n\n Good Problem\n\n Okay Problem\n\n Bad Problem\n\n Didn't Solve",
+    "solution_code": [
+      "#include <bits/stdc++.h>\nusing namespace std;\n#define int long long\n\nvoid solve() {\n    map<int, vector<int>> pos;\n    map<int, int> ptr;\n    int n, q; cin >> n >> q;\n    int arr[n+1];\n    for (int i = 1; i <= n; i++) {\n        cin >> arr[i];\n        pos[arr[i]].push_back(i);\n        ptr[arr[i]] = 0;\n    }\n    vector<tuple<int, int, int, int>> qr(q);\n    int c = 0;\n    for (auto &[l, r, v, i]: qr) {\n        cin >> v >> l >> r;\n        i = c++;\n    }\n    vector<int> anss(q);\n    sort(qr.begin(), qr.end());\n    int prevL = 1;\n    for (auto [l, r, v, idd]: qr) {\n        for (int j = prevL; j < l; j++) {\n            ptr[arr[j]]++;\n        }\n        prevL = l;\n        vector<pair<int, int>> facts;\n        for (int i = 1; i * i <= v; i++) {\n            if (v % i == 0) {\n                int fact1 = v / i;\n                if (!(pos[fact1].size() == 0 || ptr[fact1] >= pos[fact1].size() || pos[fact1][ptr[fact1]] > r || fact1 == 1)) {\n                    facts.push_back({pos[fact1][ptr[fact1]], fact1});\n                }\n                int fact2 = i;\n                if (fact2 == fact1) continue;\n                if (!(pos[fact2].size() == 0 || ptr[fact2] >= pos[fact2].size() || pos[fact2][ptr[fact2]] > r || fact2 == 1)) {\n                    facts.push_back({pos[fact2][ptr[fact2]], fact2});\n                }\n            }\n        }\n        sort(facts.begin(), facts.end());\n        int pr = l;\n        int ans = 0;\n        for (auto [idx, val]: facts) {\n            int rr = idx - pr;\n            ans += v * rr;\n            while (v % val == 0) v /= val;\n            pr = idx;\n        }\n        if (facts.empty()) ans = v * (r - l + 1);\n        else ans += (r - pr + 1) * v;\n        anss[idd] = ans;\n    }\n    for (int i = 0; i < q; i++) cout << anss[i] << \"\\n\";\n}\n\nsigned main() {\n    ios_base::sync_with_stdio(0);\n    cin.tie(0);\n    int t; cin >> t;\n    while (t--) solve();\n    return 0;\n}"
+    ]
+  }
+}

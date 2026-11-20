@@ -1,0 +1,46 @@
+{
+  "contest_id": 1982,
+  "index": "C",
+  "name": "Boring Day",
+  "rating": 1200,
+  "tags": [
+    "binary search",
+    "data structures",
+    "dp",
+    "greedy",
+    "two pointers"
+  ],
+  "points": 1000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1982C",
+  "url": "https://codeforces.com/problemset/problem/1982/C",
+  "contest_start_time": "2024-06-25T14:35:00+00:00",
+  "statement": {
+    "title": "C. Boring Day",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "On another boring day, Egor got bored and decided to do something. But since he has no friends, he came up with a game to play.\n\nEgor has a deck of $n$ cards, the $i$-th card from the top has a number $a_i$ written on it. Egor wants to play a certain number of rounds until the cards run out. In each round, he takes a non-zero number of cards from the top of the deck and finishes the round. If the sum of the numbers on the cards collected during the round is between $l$ and $r$, inclusive, the round is won; otherwise, it is lost.\n\nEgor knows by heart the order of the cards. Help Egor determine the maximum number of rounds he can win in such a game. Note that Egor is not required to win rounds consecutively.",
+    "input_spec": "Each test consists of several test cases. The first line contains an integer $t$ ($1 \\le t \\le 10^{4}$) — the number of test cases. This is followed by a description of the test cases.\n\nThe first line of each test case contains three integers $n$, $l$, and $r$ ($1 \\le n \\le 10^{5}$, $1 \\le l \\le r \\le 10^9$).\n\nThe second line of each test case contains $n$ integers $a_1, a_2, \\ldots, a_n$ ($1 \\le a_i \\le 10^9$) — the numbers on the cards from top to bottom.\n\nIt is guaranteed that the sum of $n$ for all test cases does not exceed $2 \\cdot 10^{5}$.",
+    "output_spec": "For each test case, output a single number — the maximum number of rounds Egor can win.",
+    "note": "In the first test case, Egor can win $3$ rounds:\n\n In the first round, take the top $2$ cards with values $2$ and $1$ and win, as their sum is $3$. After this, the deck will look like this: $[11, 3, 7]$.\n\n In the second round, take the top card and lose, as its value $11$ is greater than $r = 10$. After this, the deck will look like this: $[3, 7]$.\n\n In the third round, take the top card with value $3$ and win. After this, the deck will look like this: $[7]$.\n\n After this, in the fourth round, Egor only has to take the last card in the deck with value $7$ and win again.\n\nIn the second test case, Egor cannot win any rounds, no matter how hard he tries.\n\nIn the third test case, you can take one card in each round, then the first and third rounds will be losing, and the second round will be winning.\n\nIn the fourth test case, you can take two cards in each round and always win.",
+    "samples": [
+      {
+        "input": "8\n5 3 10\n2 1 11 3 7\n10 1 5\n17 8 12 11 7 11 21 13 10 8\n3 4 5\n3 4 2\n8 12 25\n10 7 5 13 8 9 12 7\n2 3 3\n5 2\n9 7 9\n2 10 5 1 3 7 6 2 3\n1 8 10\n9\n5 5 6\n1 4 2 6 4",
+        "output": "\n3\n0\n1\n4\n0\n3\n1\n2"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 130839,
+    "url": "https://codeforces.com/blog/entry/130839",
+    "tutorial": "Solution 1:\n\nLet $dp[i]$ — the maximum number of rounds won by Egor for the first $i$ elements (top cards). It is possible to come up with a solution in $O(n^{2})$ right now. For each state of the dynamic programming $i$, you can either skip the next card (not take it in any winning segment), or iterate over the length of the segment that will start with the next card. If you calculate prefix sums and compute the sum over a segment in $O(1)$, the solution works exactly in $O(n^{2})$.\n\nLet's try to optimize the transitions in such a dynamic.\n\nFirst, it can be noticed that all $a_{i}$ are positive, which means that the sum of the segment $(a, b)$ will be less than $(a, b + 1)$. This means that the first suitable segment (with a sum $\\ge l$) can be found using binary search or two pointers.\n\nSecondly, if the segment has a suitable sum (from $l$ to $r$), it does not make sense to increase its length, as this can only worsen the answer.\n\nThus, for each state of the dynamic programming, there are only $O(1)$ transitions, so the entire problem can be solved in $O(n)$ or $O(n\\log n)$.\n\nSolution 2:\n\nLet's try to solve the problem greedily. Let's look for a segment $(a, b)$ in the prefix such that the sum of all its elements is not less than $l$ and not greater than $r$, and among all such segments, we will take the segment with the minimum $b$. After that, we will consider that the array starts from the $(b + 1)$-th element and continue to search for the next segment in the same way.\n\nHow to find $(a, b)$? Let's start by finding the minimum prefix $k$ (which is also the segment $(1, k)$) such that the sum of the elements in it is $\\ge l$. If this sum is also not greater than $r$, then this prefix is the segment we need $(a, b)$. Otherwise, we know that the sum of the elements in any subsegment of this prefix that does not contain the last element $a_{k}$ is less than $l$, so we can try to find a subsegment that ends at $k$, for this, we can iterate over the left boundary from $1$ to $k$. At the same time, the sum of the elements in the iterated segment will decrease and it may happen again that at some point it becomes $ \\lt  l$, in this case, we already know that we will not find the required segment with the right boundary $k$, so it needs to be increased (again until the sum becomes $\\ge l$). By repeating these actions, we will either find the required segment $(a, b)$, or the right boundary will become equal to $n$. The algorithm is nothing but \"two pointers\", we keep two boundaries $l$ and $r$ and move them only to the right, so in total, this all works in $O(n)$.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n \nusing namespace std;\n \nconst int inf = 1000000007;\n \nvoid solve(){\n\tint n, l, r;\n\tcin >> n >> l >> r;\n\tvector<int> a(n);\n\tfor (int i = 0; i < n; i++){\n\t\tcin >> a[i];\n\t}\n \n\tvector<long long> pref(n + 1);\n\tfor (int i = 0; i < n; i++){\n\t\tpref[i + 1] = pref[i] + a[i];\n\t}\n \n\tvector<int> dp(n + 1);\n\tint s = 0;\n\tint j = -1;\n\tfor (int i = 0; i < n; i++){\n\t\tdp[i + 1] = max(dp[i + 1], dp[i]);\n\t\tif (j < i){\n\t\t\tj = i;\n\t\t\ts = 0;\n\t\t}\n\t\twhile(j < n && s < l){\n\t\t\ts += a[j++];\n\t\t}\n\t\tif (s >= l && s <= r){\n\t\t\tdp[j] = max(dp[j], dp[i] + 1);\n\t\t}\n\t\ts -= a[i];\n\t}\n \n\tcout << dp[n] << '\\n';\n}\n \nint main()\n{\n#ifdef FELIX\n\tauto _clock_start = chrono::high_resolution_clock::now();\n#endif\n\tios_base::sync_with_stdio(false);\n\tcin.tie(0);\n\tcout.tie(0);\n\tint tests = 1;\n\tcin >> tests;\n\tfor (int test = 0; test < tests; test++){\n\t\tsolve();\n\t}\n#ifdef FELIX\n\tcerr << \"Executed in \" << chrono::duration_cast<chrono::milliseconds>(\n\t\tchrono::high_resolution_clock::now()\n\t\t\t- _clock_start).count() << \"ms.\" << endl;\n#endif\n\treturn 0;\n}",
+      "t = int(input())\nfor T in range(t):\n\tn, l, r = map(int, input().split())\n\ta = [int(x) for x in input().split()]\n\tans = 0\n\tcur = 0\n\tL, R = 0, 0\n\twhile L < n:\n\t\twhile R < n and cur < l:\n\t\t\tcur += a[R]\n\t\t\tR += 1\n\t\tif l <= cur and cur <= r:\n\t\t\tans += 1\n\t\t\tL = R\n\t\t\tcur = 0\n\t\telse:\n\t\t\tcur -= a[L]\n\t\t\tL += 1\n\tprint(ans)"
+    ]
+  }
+}

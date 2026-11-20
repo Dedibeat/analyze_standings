@@ -1,0 +1,64 @@
+{
+  "contest_id": 1954,
+  "index": "F",
+  "name": "Unique Strings",
+  "rating": 3100,
+  "tags": [
+    "combinatorics",
+    "dp",
+    "math"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1954F",
+  "url": "https://codeforces.com/problemset/problem/1954/F",
+  "contest_start_time": "2024-04-12T14:35:00+00:00",
+  "statement": {
+    "title": "F. Unique Strings",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Let's say that two strings $a$ and $b$ are equal if you can get the string $b$ by cyclically shifting string $a$. For example, the strings 0100110 and 1100100 are equal, while 1010 and 1100 are not.\n\nYou are given a binary string $s$ of length $n$. Its first $c$ characters are 1-s, and its last $n - c$ characters are 0-s.\n\nIn one operation, you can replace one 0 with 1.\n\nCalculate the number of unique strings you can get using no more than $k$ operations. Since the answer may be too large, print it modulo $10^9 + 7$.",
+    "input_spec": "The first and only line contains three integers $n$, $c$ and $k$ ($1 \\le n \\le 3000$; $1 \\le c \\le n$; $0 \\le k \\le n - c$) — the length of string $s$, the length of prefix of 1-s and the maximum number of operations.",
+    "output_spec": "Print the single integer — the number of unique strings you can achieve performing no more than $k$ operations, modulo $10^9 + 7$.",
+    "note": "In the first test case, the only possible string is 1.\n\nIn the second test case, the possible strings are: 100, 110, and 111. String 101 is equal to 110, so we don't count it.\n\nIn the third test case, the possible strings are: 10000, 11000, 10100. String 10010 is equal to 10100, and 10001 is equal to 11000.",
+    "samples": [
+      {
+        "input": "1 1 0",
+        "output": "\n1"
+      },
+      {
+        "input": "3 1 2",
+        "output": "\n3"
+      },
+      {
+        "input": "5 1 1",
+        "output": "\n3"
+      },
+      {
+        "input": "6 2 2",
+        "output": "\n7"
+      },
+      {
+        "input": "24 3 11",
+        "output": "\n498062"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 128421,
+    "url": "https://codeforces.com/blog/entry/128421",
+    "tutorial": "What's common in all strings we can get: each string has no more than $c + k$ ones and at least $c$ consecutive ones.\n\nSo let's loosen up our constraints a little and just calculate the number of strings with no more than $c + k$ ones and at least $c$ consecutive ones, i. e. this block of ones can be anywhere, can even start at the end and continue at the beginning. Let's name such strings as good strings.\n\nNote that the number of unique good strings is exactly equal to the answer of the initial task, since we can shift each good string and make it start from the block of ones.\n\nHow to calculate the number of good strings? Using Burnside's lemma! Since the group of transformations is just a group of cyclic shifts, we can calculate the answer as following $$\\mathrm{ans} = \\frac{1}{n} \\sum_{i=1}^{n}{\\mathrm{FixedPoints}(i)}$$ where $\\mathrm{FixedPoints(i)}$ is the number of fixed points, or the number of strings that won't change after a cyclical shift by $i$ characters.\n\nNote that if the string doesn't change while shifting by $i$ characters, then it means that $s[p] = s[(p + i) \\mod |s|]$ for all $p$. Further investigation reveals that all characters will be split into exactly $g = \\gcd(i, n)$ groups and each group will contain exactly $\\frac{n}{g}$ equal characters.\n\nIt means that if $\\gcd(i, n) = \\gcd(j, n)$ then $\\mathrm{FixedPoints}(i) = \\mathrm{FixedPoints}(j)$ since in both cases we'll get exactly the same group division. So, we can rewrite the answer as following: $$\\mathrm{ans} = \\frac{1}{n} \\sum_{g | n}{cnt[g] \\cdot \\mathrm{FixedPoints}(g)}$$ where $cnt[g]$ is the number of cyclic shifts $i$ with $\\gcd(i, n) = g$ and can be easily counted.\n\nSo, it's time to calculate $\\mathrm{FixedPoints}(g)$ for some divisor $g$ of $n$. It's not hard to see that if $s[p] = s[(p + g) \\mod |s|]$ then the first $g$ characters of $s$ will uniquely define the whole string $s$. So it's enough to work with only a prefix of length $g$, remembering that each character will be copied $\\frac{n}{g}$ times.\n\nRemember that a good string is a string with at most $c + k$ ones, and since each character will be copied $\\frac{n}{g}$ times, we can place at most $on = \\frac{(c + k) g}{n}$ ones in our prefix (or at least $zr = g - on$ zeroes).\n\nAlso, since a good string has $c$ consecutive ones, our prefix should also have $c$ consecutive ones, including the case where the ones go \"cyclically\" starting at the end of the prefix. In case if $c \\ge g$ then the whole prefix should consist of ones, and it's either possible (if $c + k = n$) or impossible (if $c + k  \\lt  n$).\n\nIn case $c  \\lt  g$ we need to calculate the number of good prefixes that can be described as \"the cyclic strings of length $g$ that has no more than $on$ ones and contains $c$ consecutive ones\". Instead of good prefixes, let's calculate bad prefixes and subtract them from all possible prefixes.\n\nAll prefixes are just strings with at most $on$ ones and there are $all = \\sum\\limits_{i=0}^{on}{\\binom{g}{i}}$ such strings.\n\nBad prefixes are cyclic strings with at most $on$ ones, where all blocks of ones have length less than $c$. In order to calculate bad prefixes, let's precalc the following dp: $d[z][l]$ is the number of strings of length $l$ with $z$ zeroes where all blocks of ones have length less than $c$ and the last character of the string is $0$.\n\nWhy did we use the number of zeroes in the state, and why did we add the last zero in $d[z][l]$? Because it will help us to calculate dp fast. $d[0][0] = 1$. Now, if we have value $d[z][l]$, we can add a block of $i$ ones ($0 \\le i  \\lt  c$) and zero to the end of the string and update the value in $d[z + 1][l + i + 1]$. Note that we are updating a segment of row $z + 1$ from $l + 1$ to $l + c$ with value $d[z][l]$ — we can do it in $O(1)$. So, we can precalc the whole dp in $O(n^2)$ time.\n\nNow, it's time to calculate the number of bad strings: if we iterate over the length of the prefix of ones, length of the suffix of ones and the number of zeroes in between, we'll get $$bad = \\sum_{p=0}^{c - 1}\\sum_{s = 0}^{c - p - 1}\\sum_{z = zr - 1}^{g - p - s - 1}{d[z][g - p - s - 1]}$$ where $p$ is the number of ones on prefix, $s$ is the number of ones on suffix, and $z$ is the number of zeroes in the \"middle part\". Since each bad string will look like \"($p$ ones)–0–(middle part ending at 0)–($s$ ones)\", you can place in the middle part at least $zr - 1$ zeroes and at most $g - p - 1 - s$ zeroes.\n\nIf we play a little with the sum, we can simplify it in the following way: $$bad = \\sum_{p = 0}^{c - 1}\\sum_{z = \\max(0, zr - 1)}^{g - p - 1}{\\mathrm{sumD}(z, g - c, g - p - 1)}$$ where $\\mathrm{sumD}(z, g - c, g - p - 1)$ is the sum of dp on the row $z$ from $g - c$ to $g - p - 1$, and you can take it in $O(1)$ if you precalc prefix sums of dp.\n\nGood prefixes are just $all - bad$ and since $bad$ can be calculated in $O(g^2)$, the total complexity of $\\mathrm{FixedPoints}(g)$ is $O(g^2)$.\n\nThe resulting complexity is $O(n^2) + \\sum\\limits_{g|n}{O(g^2)}$ that looks like just $O(n^2)$.",
+    "solution_code": [
+      "#include<bits/stdc++.h>\n \nusing namespace std;\n \n#define fore(i, l, r) for(int i = int(l); i < int(r); i++)\n#define sz(a) int((a).size())\n \ntypedef long long li;\ntypedef pair<int, int> pt;\n \ntemplate<class A, class B> ostream& operator <<(ostream& out, const pair<A, B> &p) {\n    return out << \"(\" << p.x << \", \" << p.y << \")\";\n}\ntemplate<class A> ostream& operator <<(ostream& out, const vector<A> &v) {\n    fore(i, 0, sz(v)) {\n        if(i) out << \" \";\n        out << v[i];\n    }\n    return out;\n}\n \nconst int MOD = int(1e9) + 7;\nint add(int a, int b) {\n    a += b;\n    while (a >= MOD)\n        a -= MOD;\n    while (a < 0)\n        a += MOD;\n    return a;\n}\nvoid upd(int &ans, int val) {\n    ans = add(ans, val);\n}\nint mul(int a, int b) {\n    return int(a * 1ll * b % MOD);\n}\nint binPow(int a, int k) {\n    int ans = 1;\n    while (k > 0) {\n        if (k & 1)\n            ans = mul(ans, a);\n        a = mul(a, a);\n        k >>= 1;\n    }\n    return ans;\n}\n \nconst int N = 3055;\nint f[N], invf[N];\n \nvoid precalcFact() {\n    f[0] = invf[0] = 1;\n    fore (i, 1, N) {\n        f[i] = mul(f[i - 1], i);\n        invf[i] = binPow(f[i], MOD - 2);\n    }\n}\nint C(int n, int k) {\n    if (k < 0 || k > n)\n        return 0;\n    return mul(f[n], mul(invf[k], invf[n - k]));\n}\n \nint n, c, k;\n \ninline bool read() {\n    if(!(cin >> n >> c >> k))\n        return false;\n    return true;\n}\n \nint d[N][N], sum[N][N];\n \n// d[z][l] - number of strings of length l, with z zeroes and blocks of 1-s shorter than mx\nvoid precalcShort(int mx) {\n    memset(d, 0, sizeof d);\n    d[0][0] = 1;\n    fore (z, 0, n) {\n        fore (l, 0, n) {\n            if (d[z][l] == 0)\n                continue;\n            upd(d[z + 1][l + 1], +d[z][l]);\n            upd(d[z + 1][min(n, l + mx) + 1], -d[z][l]);\n        }\n        fore (l, 0, n + 1)\n            upd(d[z + 1][l + 1], d[z + 1][l]);\n    }\n        \n    memset(sum, 0, sizeof sum);\n    fore (z, 0, n + 1) fore (l, 0, n + 1)\n        sum[z][l + 1] = add(sum[z][l], d[z][l]);\n    \n}\n \n//[lf, rg)\nint getSum(int z, int lf, int rg) {\n    if (z < 0 || z > n || lf >= rg)\n        return 0;\n    return add(sum[z][rg], -sum[z][lf]);\n}\n \n// cnt[g] is a number of x <= n with gcd(x, n) = g\nvector<int> precalcCnt(int n) {\n    vector<int> cnt(n + 1, 0);\n    fore (x, 1, n + 1)\n        cnt[gcd(x, n)]++;\n    return cnt;\n}\n \nint calcFixedPoints(int g) {\n    if (c >= g)\n        return c + k >= n;\n    \n    int cntOnes = (c + k) / (n / g);\n    int cntZeros = g - cntOnes;\n    \n    int all = 0;\n    fore (ones, 0, cntOnes + 1)\n        upd(all, C(g, ones));\n    \n    int bad = 0;\n    fore (pref, 0, c) {\n        int minZeros = max(0, cntZeros - 1);\n        int minMid = g - c;\n        int sufLen = g - pref - 1;\n        fore (z, minZeros, sufLen + 1)\n            upd(bad, getSum(z, minMid, sufLen + 1));\n    }\n    return add(all, -bad);\n}\n \ninline void solve() {\n    precalcFact();\n    precalcShort(c);\n    auto cnt = precalcCnt(n);\n    \n    int ans = 0;\n    fore (g, 1, n + 1) {\n        if (n % g != 0)\n            continue;\n        \n        int cntFP = calcFixedPoints(g);\n//      cerr << \"g = \" << g << \" += \" << cnt[g] << \" * \" << cntFP << endl;\n        upd(ans, mul(cnt[g], cntFP));\n    }\n    \n//  cerr << \"ans/n = \" << ans << \" \" << n << endl;\n    cout << mul(ans, binPow(n, MOD - 2)) << endl;\n}\n \nint main() {\n#ifdef _DEBUG\n    freopen(\"input.txt\", \"r\", stdin);\n    int tt = clock();\n#endif\n    ios_base::sync_with_stdio(false);\n    cin.tie(0), cout.tie(0);\n    cout << fixed << setprecision(15);\n    \n    if(read()) {\n        solve();\n        \n#ifdef _DEBUG\n        cerr << \"TIME = \" << clock() - tt << endl;\n        tt = clock();\n#endif\n    }\n    return 0;\n}",
+      "ndp[sum] = dp[sum] + dp[sum - a[i]]",
+      "ndp[sum] = dp[sum - a[i]]",
+      "ndp[sum] += dp[sum]",
+      "A | A | A | A | A | A | A | B | B | B | B\nB | B | B | C | C | C | C | C | C | C | _",
+      "partitions = # of groups of monsters surrounded by dead monsters / borders"
+    ]
+  }
+}

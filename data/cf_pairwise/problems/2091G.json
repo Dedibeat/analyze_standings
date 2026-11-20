@@ -1,0 +1,58 @@
+{
+  "contest_id": 2091,
+  "index": "G",
+  "name": "Gleb and Boating",
+  "rating": 2300,
+  "tags": [
+    "brute force",
+    "constructive algorithms",
+    "data structures",
+    "dp",
+    "graphs",
+    "greedy",
+    "math",
+    "number theory",
+    "shortest paths"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2091G",
+  "url": "https://codeforces.com/problemset/problem/2091/G",
+  "contest_start_time": "2025-03-25T14:35:00+00:00",
+  "statement": {
+    "title": "G. Gleb and Boating",
+    "time_limit": "3 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Programmer Gleb frequently visits the IT Campus \"NEIMARK\" to participate in programming training sessions.\n\nNot only is Gleb a programmer, but he is also a renowned rower, so he covers part of his journey from home to the campus by kayaking along a river. Assume that Gleb starts at point $0$ and must reach point $s$ (i.e., travel $s$ meters along a straight line). To make the challenge tougher, Gleb has decided not to go outside the segment $[0, s]$. The dimensions of the kayak can be neglected.\n\nGleb is a strong programmer! Initially, his power is $k$. Gleb's power directly affects the movement of his kayak. If his current power is $x$, then with one paddle stroke the kayak moves $x$ meters in the current direction. Gleb can turn around and continue moving in the opposite direction, but such a maneuver is quite challenging, and after each turn, his power decreases by $1$. The power can never become $0$ — if his current power is $1$, then even after turning it remains $1$. Moreover, Gleb cannot make two turns in a row — after each turn, he must move at least once before making another turn. Similarly, Gleb cannot make a turn immediately after the start — he must first perform a paddle stroke.\n\nGleb wants to reach point $s$ from point $0$ without leaving the segment $[0, s]$ and while preserving as much power as possible. Help him — given the value $s$ and his initial power $k$, determine the maximum possible power he can have upon reaching point $s$.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\leq t \\leq 100$). The description of the test cases follows.\n\nA single line of each test case contains two integers $s$ and $k$ ($1 \\leq s \\leq 10^9$, $1 \\leq k \\leq 1000$, $k \\leq s$).\n\nIt is guaranteed that the sum of $k$ over all test cases does not exceed $2000$.",
+    "output_spec": "For each test case, output the maximum possible power Gleb can have at the end of his journey.",
+    "note": "One of the variants of Gleb's movement in the first example:",
+    "samples": [
+      {
+        "input": "8\n9 6\n10 7\n24 2\n123456 777\n6 4\n99 6\n10 4\n99 4",
+        "output": "\n4\n1\n2\n775\n1\n4\n2\n2"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 141047,
+    "url": "https://codeforces.com/blog/entry/141047",
+    "tutorial": "Let's consider a simple solution — we will iterate through Gleb's current strength $t$, from $k$ to $1$, and check which positions can be reached using that strength value. For each fixed $t$, the set of positions can be obtained by any search method, for example, breadth-first search. Next, let's assume that Gleb has turned around and we will start a search from all reached positions with strength $t-1$ and in the opposite direction. For one strength value, such a search works in the worst case in $O(s)$, so the overall complexity of the algorithm will be $O(s \\cdot k)$ (which, of course, will take too long) and will require $O(s)$ memory.\n\nNow we need to speed up this solution. First, we need to solve the problem for very large values of $s$. It is not difficult to prove that if $k \\geq 3$, then for $s  \\gt  k^2$, the answer to the problem will be $k$ or $k-2$. Indeed, let's assume that Gleb with strength $k$ has reached the maximum possible position on the segment. Next, he turns around, takes one step back (with strength $k-1$). Let's find the position where Gleb will end up if he turns around and moves to the right with strength $k-2$ until he crosses the boundary $s$ (including the assumption that he can swim beyond $s$). Let this position be $s + r$, where $0 \\leq r  \\lt  k - 2$. Then, Gleb would need to take another $r$ steps to the left with strength $k-1$ before the second turn; in this case, he will end up exactly at point $s$ with strength $k-2$. For this maneuver, he will need a distance of at most $k + (r+1) \\cdot (k-1)  \\lt  k + (k-1)^2  \\lt  k^2$.\n\nThus, for $s \\geq k^2$, we can obtain either the answer $k$ (which can be checked by simple division) or the answer $k-2$ (we print it if the answer $k$ is not possible). It is also easy to see that this statement remains true when starting from any point from $0$ to $s$.\n\nNext, we will assume that $s \\leq k^2$. Let the answer to the problem be $ans$. Then, if in the algorithm described above we stop the iteration upon reaching point $s$ for some $t$, the total running time will be $O(s \\cdot (k - ans))$. Considering the above, we can assert that $ans \\geq \\sqrt{s} - 3$ (due to the even number of turns, the answer $\\sqrt{s} - 2$ may not be suitable). Then the running time of the algorithm does not exceed $$T = (k - \\sqrt{s}) \\cdot s$$\n\nWe can rewrite this value as follows: $$(k - \\sqrt{s}) \\cdot s = (k - \\sqrt{s}) \\cdot (\\sqrt{s})^2 = \\frac{(2 \\cdot k - 2 \\cdot \\sqrt{s}) \\cdot \\sqrt{s} \\cdot \\sqrt{s}}{2}$$\n\nNext, we note that the sum of the factors in the numerator equals $2 \\cdot k$, meaning that the maximum value is achieved when they are equal (see, for example, Karamata's inequality). We obtain that: $$T \\leq \\frac{1}{2} \\cdot \\left(\\frac{2 \\cdot k}{3}\\right)^3 = \\frac{4 \\cdot k^3}{27}$$\n\nwhich is already fast enough to pass all tests.\n\nIn practice, even in the worst case, the specified algorithm requires even fewer operations and comfortably fits within the time limits.",
+    "solution_code": [
+      "#include <iostream>\n#include <vector>\n\nusing namespace std;\n\nint s, k, p;\nvector<bool> was1, was2;\n\nvoid bfs() {\n    vector<int> v;\n    for (int i = 0; i < s; i++) {\n        if (was1[i])\n            v.push_back(i);\n    }\n\n    int q = 0;\n    while (q < v.size()) {\n        int x = v[q++];\n        int y = x + p * k;\n        if (y >= 0 && y <= s && !was1[y]) {\n            was1[y] = 1;\n            v.push_back(y);\n        }\n    }\n}\n\nvoid solve() {\n    cin >> s >> k;\n    if (s % k == 0) {\n        cout << k << endl;\n        return;\n    }\n    if (s > k * k) {\n        cout << max(1, k - 2) << endl;\n        return;\n    }\n\n    was1.resize(s + 1);\n    was2.resize(s + 1);\n    for (int i = 0; i <= s; i++) {\n        was1[i] = was2[i] = 0;\n    }\n\n    p = 1;\n    was1[k] = 1;\n    while (1) {\n        bfs();\n        if (was1[s]) {\n            cout << k << endl;\n            return;\n        }\n        k = max(k - 1, 1);\n        p *= -1;\n        for (int i = 0; i <= s; i++) {\n            was2[i] = 0;\n        }\n        for (int i = 0; i < s; i++) {\n            if (was1[i]) {\n                if (i + p * k >= 0 && i + p * k <= s) {\n                    was2[i + p * k] = 1;\n                }\n            }\n        }\n        swap(was1, was2);\n    }\n\n\n}\n\nint main() {\n    int t;\n    cin >> t;\n    while (t--) {\n        solve();\n    }\n}",
+      "ll n,m,k;\n\ncin>>n>>m>>k;\n\nll total=(n*m-k)/n;\n\nll kena=m-total;\n\ncout<<(ll)ceil((float)kena/(float)(total+1))<<endl;",
+      "ios::sync_with_stdio(false);\n\ncin.tie(0);\n\nint t=1;\n\ncin>>t;\n\nwhile (t--)\n\n{\n\n    solve();\n}",
+      "#include <stdio.h>\nint main()\n{\n    int t;\n    scanf(\"%d\", &t);\n    int n, m, k, groups, num;\n    while (t--)\n    {\n        scanf(\"%d%d%d\", &n, &m, &k);\n        n = (k - 1) / n + 1;        // max num per row (ceil)\n        groups = m - n + 1;         // m = (group - 1) + n;\n        num = (n - 1) / groups + 1; // num per group (ceil)\n        printf(\"%d\\n\", num);\n    }\n}",
+      "void solve(){\n    int n , m , k;\n    cin >> n >> m >> k;\n    int ans = m / (( n * m - k) / n + 1);\n    cout << ans <<endl;\n}",
+      "const int mod = 998244353;\nvoid solve(){\n    int n,m,d;cin>>n>>m>>d;\n    string s[n];\n    for(int i=0;i<n;i++){\n        cin>>s[i];\n    }\n    vector<vector<int>>dp(n,vector<int>(m,0));\n    for(int i=0;i<m;i++){\n        if(s[n-1][i] == 'X'){\n            //add 1 from i-d to i+d\n            dp[n-1][max(i-d,0ll)]+=1;\n            dp[n-1][max(i-d,0ll)]%=mod;\n            if(i+d+1 <= m-1){\n                dp[n-1][i+d+1]-=1;\n                dp[n-1][i+d+1] = (dp[n-1][i+d+1] + mod)%mod;\n            }\n            \n        }\n    }\n    vector<int>preSum(m,0);\n    for(int i=0;i<m;i++){\n        if(i) dp[n-1][i]+=dp[n-1][i-1];\n        dp[n-1][i]%=mod;\n    }\n    for(int j=0;j<m;j++){\n        if(s[n-1][j] != 'X'){\n            dp[n-1][j] = 0;\n        }\n    }\n    for(int i=0;i<m;i++){\n        preSum[i] = dp[n-1][i];\n        if(i) preSum[i]+=preSum[i-1];\n        preSum[i]%=mod;\n    }\n    for(int i=n-2;i>=0;i--){\n        //first we calculate no of ways to come from i+1th row to ith row\n        // int temp[m]={0};\n        vector<int>temp(m,0);\n        for(int j=0;j<m;j++){\n            if(s[i][j]!='X') continue;\n            //we can come to this j from [i-1][j-sqrtl(d*d -1)] to [i-1][j+sqrtl(d*d-1)]\n            int x = sqrt(d*d - 1);\n            int lb = max(0ll,j-x);\n            int ub = min(m-1,j+x);\n            temp[j] = preSum[ub] - (lb==0?0:preSum[lb-1]);\n            temp[j] = (temp[j] + mod)%mod;\n        }\n        for(int j=0;j<m;j++){\n            if(s[i][j] == 'X'){//from cur row \n                //add 1 from i-d to i+d\n                dp[i][max(j-d,0ll)]+=temp[j];\n                dp[i][max(j-d,0ll)]%=mod;\n                if(j+d+1 <= m-1){\n                    dp[i][j+d+1]-=temp[j];\n                    dp[i][j+d+1] = (dp[i][j+d+1] + mod)%mod;\n                }\n            }\n        }\n        for(int j=0;j<m;j++){\n            if(j) dp[i][j]+=dp[i][j-1];\n            dp[i][j]%=mod;\n        }\n        for(int j=0;j<m;j++){\n            if(s[i][j] != 'X'){\n                dp[i][j] = 0;\n            }\n        }\n        for(int j=0;j<m;j++){\n            preSum[j] = dp[i][j];\n            if(j) preSum[j]+=preSum[j-1];\n            preSum[j]%=mod;\n        }\n    }\n    cout<<preSum[m-1]%mod<<endl;\n}",
+      "#In The Name Of Allah\n\n\n\n\n\nn=10**7\nprime = [True for i in range(n+1)]\np = 2\nwhile (p * p <= n):\n\n    # If prime[p] is not\n    # changed, then it is a prime\n    if (prime[p] == True):\n\n        # Update all multiples of p\n        for i in range(p * p, n+1, p):\n            prime[i] = False\n    p += 1\nprime[1]=False\n\n\nt= int(input())\nfor z in range(t):\n  n=int(input())\n  ans=0\n  for i in range(1,n):\n    j=1\n    while i*j<=n:\n      if prime[j]:\n        ans+=1\n        #print(i,j)\n      j+=1\n  print(ans)",
+      " for (ui i = 0; i < n; ++i) {\n\t\t\ta[i] = ((2 * i) % n) + 1;\n\t\t}",
+      "for (int i = n; i > 0; i--) {\n\t\tstd::cout << i << ' ';\n\t}",
+      "void solve () {\n    int n,m,k; cin >> n >> m >> k; \n\n    int x = (k + n - 1) / n;  // ceil (k / n); \n    cout << m / (m - x  + 1) << \"\\n\";  \n}"
+    ]
+  }
+}

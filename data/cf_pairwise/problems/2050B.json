@@ -1,0 +1,43 @@
+{
+  "contest_id": 2050,
+  "index": "B",
+  "name": "Transfusion",
+  "rating": 1100,
+  "tags": [
+    "brute force",
+    "greedy",
+    "math"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2050B",
+  "url": "https://codeforces.com/problemset/problem/2050/B",
+  "contest_start_time": "2024-12-05T14:35:00+00:00",
+  "statement": {
+    "title": "B. Transfusion",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "You are given an array $a$ of length $n$. In one operation, you can pick an index $i$ from $2$ to $n-1$ inclusive, and do one of the following actions:\n\n Decrease $a_{i-1}$ by $1$, then increase $a_{i+1}$ by $1$.\n\n Decrease $a_{i+1}$ by $1$, then increase $a_{i-1}$ by $1$.\n\nAfter each operation, all the values must be non-negative. Can you make all the elements equal after any number of operations?",
+    "input_spec": "First line of input consists of one integer $t$ ($1 \\le t \\le 10^4$)  — the number of test cases.\n\nFirst line of each test case consists of one integer $n$ ($3 \\le n \\le 2\\cdot 10^5$).\n\nSecond line of each test case consists of $n$ integers $a_i$ ($1 \\le a_i \\le 10^9$).\n\nIt is guaranteed that the sum of $n$ of all test cases doesn't exceed $2\\cdot 10^5$.",
+    "output_spec": "For each test case, print \"YES\" without quotation marks if it is possible to make all the elements equal after any number of operations; otherwise, print \"NO\" without quotation marks.\n\nYou can print answers in any register: \"yes\", \"YeS\", \"nO\"  — will also be considered correct.",
+    "note": null,
+    "samples": [
+      {
+        "input": "8\n3\n3 2 1\n3\n1 1 3\n4\n1 2 5 4\n4\n1 6 6 1\n5\n6 2 1 4 2\n4\n1 4 2 1\n5\n3 1 2 1 3\n3\n2 4 2",
+        "output": "\nYES\nNO\nYES\nNO\nYES\nNO\nNO\nNO"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 137018,
+    "url": "https://codeforces.com/blog/entry/137018",
+    "tutorial": "The main idea of this problem is that these operations only change elements on the positions with the same parity. So, we can solve for elements on odd and even positions independently.\n\nLet's make two arrays $od$ and $ev$  — the first one will consist of all the elements on the odd positions, and the second one will consist of all the elements on the even positions. Now we can rewrite given operations as: pick any array $od$ or $ev$, after that pick any two adjacent elements and subtract $1$ from one of these elements and add $1$ to another. In order to make all the elements in array $od$ equal, the sum of all elements in $od$ must be divisible by $|od|$, and also the sum of all the elements in $ev$ must be divisible by $|ev|$, where $|a|$ is the length of array $a$. And also to make all the elements of the initial array equal, $\\frac{sum(od)}{|od|} = \\frac{sum(ev)}{|ev|}$ must be satisfied. If all these conditions are satisfied, the answer is \"YES\", otherwise \"NO\".",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n\nusing namespace std;\n\nvoid solve() {\n    int n; cin >> n;\n    vector<int> a(n);\n    for (int &x : a) cin >> x;\n    \n    long long ods = 0, evs = 0;\n    for (int i = 0; i < n; i++) {\n        if (i & 1) ods += a[i];\n        else evs += a[i];\n    }\n    int odc = n / 2, evc = n / 2;\n    if (n & 1) evc++;\n\n    if (ods % odc != 0 || evs % evc != 0 || ods / odc != evs / evc) {\n        cout << \"NO\";\n        return;\n    }\n    cout << \"YES\";\n}\n\nint main() {\n    int TESTS; cin >> TESTS;\n    while (TESTS --> 0) {\n        solve();\n        cout << '\\n';\n    }\n    return 0;\n}"
+    ]
+  }
+}

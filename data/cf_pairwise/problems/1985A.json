@@ -1,0 +1,42 @@
+{
+  "contest_id": 1985,
+  "index": "A",
+  "name": "Creating Words",
+  "rating": 800,
+  "tags": [
+    "implementation",
+    "strings"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1985A",
+  "url": "https://codeforces.com/problemset/problem/1985/A",
+  "contest_start_time": "2024-06-11T14:35:00+00:00",
+  "statement": {
+    "title": "A. Creating Words",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "Matthew is given two strings $a$ and $b$, both of length $3$. He thinks it's particularly funny to create two new words by swapping the first character of $a$ with the first character of $b$. He wants you to output $a$ and $b$ after the swap.\n\nNote that the new words may not necessarily be different.",
+    "input_spec": "The first line contains $t$ ($1 \\leq t \\leq 100$)  — the number of test cases.\n\nThe first and only line of each test case contains two space-separated strings, $a$ and $b$, both of length $3$. The strings only contain lowercase Latin letters.",
+    "output_spec": "For each test case, after the swap, output $a$ and $b$, separated by a space.",
+    "note": null,
+    "samples": [
+      {
+        "input": "6\nbit set\ncat dog\nhot dog\nuwu owo\ncat cat\nzzz zzz",
+        "output": "\nsit bet\ndat cog\ndot hog\nowu uwo\ncat cat\nzzz zzz"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 129620,
+    "url": "https://codeforces.com/blog/entry/129620",
+    "tutorial": "1985A - Creating Words\n\nProblem Credits: cry\n Analysis: cry\n\nSolution\n\nTo swap the first character of the strings, you can use the built-in method std::swap in C++, or for each string, separate the first character from the rest of the string and concatenate it with the other string.\n\nCode (C++)",
+    "solution_code": [
+      "#include <bits/stdc++.h>\nusing namespace std;\n\nint main(){\n\tint t; cin >> t;\n\twhile(t--){\n\t\tstring a, b; cin >> a >> b;\n\t\tswap(a[0], b[0]);\n\t\tcout << a << \" \" << b << endl;\n\t}\n}"
+    ]
+  }
+}

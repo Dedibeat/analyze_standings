@@ -1,0 +1,43 @@
+{
+  "contest_id": 1997,
+  "index": "C",
+  "name": "Even Positions",
+  "rating": 1100,
+  "tags": [
+    "constructive algorithms",
+    "data structures",
+    "greedy"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1997C",
+  "url": "https://codeforces.com/problemset/problem/1997/C",
+  "contest_start_time": "2024-07-30T14:35:00+00:00",
+  "statement": {
+    "title": "C. Even Positions",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Monocarp had a regular bracket sequence $s$ of length $n$ ($n$ is even). He even came up with his own way to calculate its cost.\n\nHe knows that in a regular bracket sequence (RBS), each opening bracket is paired up with the corresponding closing bracket. So he decided to calculate the cost of RBS as the sum of distances between pairs of corresponding bracket pairs.\n\nFor example, let's look at RBS (())(). It has three pairs of brackets:\n\n (__)__: the distance between brackets at position $1$ and at $4$ is $4 - 1 = 3$;\n\n _()___: the distance is $3 - 2 = 1$;\n\n ____(): the distance is $6 - 5 = 1$.\n\n So the cost of (())() is $3 + 1 + 1 = 5$.\nUnfortunately, due to data corruption, Monocarp lost all characters on odd positions $s_1, s_3, \\dots, s_{n-1}$. Only characters on even positions ($s_2, s_4, \\dots, s_{n}$) remain. For example, (())() turned to _(_)_).\n\nMonocarp wants to restore his RBS by placing brackets on the odd positions. But since the restored RBS may not be unique, he wants to choose one with minimum cost. It's too hard to do for Monocarp alone, so can you help him?\n\nReminder: A regular bracket sequence is a string consisting of only brackets, such that this sequence, when inserted 1-s and +-s, gives a valid mathematical expression. For example, (), (()) or (()())() are RBS, while ), ()( or ())(() are not.",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\le t \\le 5000$) — the number of test cases. Next $t$ cases follow.\n\nThe first line of each test case contains a single integer $n$ ($2 \\le n \\le 2 \\cdot 10^5$; $n$ is even) — the length of string $s$.\n\nThe second line of each test case contains a string $s$ of length $n$, where all characters on the odd positions are '_' and all characters on the even positions are either '(' or ')'.\n\nAdditional constraints:\n\n $s$ can be restored to at least one regular bracket sequence;\n\n the total sum of $n$ over all test cases doesn't exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, print one integer — the minimum cost of the regular bracket sequence that can be obtained from $s$ by replacing '_'-s with brackets.",
+    "note": "In the first test case, it's optimal to make $s$ equal to (())(). The cost of $s$ will be equal to $3 + 1 + 1 = 5$.\n\nIn the second test case, the only option is to make $s$ equal to () with cost $1$.\n\nIn the third test case, the only possible RBS is ()()()() with cost $1 + 1 + 1 + 1 = 4$.\n\nIn the fourth test case, it's optimal to make $s$ equal to (())(()) with cost $3 + 1 + 3 + 1 = 8$.",
+    "samples": [
+      {
+        "input": "4\n6\n_(_)_)\n2\n_)\n8\n_)_)_)_)\n8\n_(_)_(_)",
+        "output": "\n5\n1\n4\n8"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 132154,
+    "url": "https://codeforces.com/blog/entry/132154",
+    "tutorial": "Let's define a balance of a bracket sequence as the $\\texttt{number_of_opening_brackets} - \\texttt{number_of_closing_brackets}$.\n\nIt's a well-known fact that for RBS the balance of all its prefixes must be greater than or equal to zero and the balance of the whole string must be exactly zero. So, if we want to restore RBS from $s$ we shouldn't break that rule.\n\nNext, let's define $S_{o}$ as the sum of positions of the opening brackets in RBS and $S_{c}$ as the sum of positions of the closing brackets in RBS.\n\nIt turns out that the cost defined in the statement is just $S_c - S_o$. Moreover, you can see that $S_c - S_o = 2 S_c - \\frac{n (n + 1)}{2}$. It means that in order to minimize the cost, we should minimize $S_c$, or we should try to place closing brackets on the smaller positions.\n\nThe most interesting part is that it's enough to come up with the right strategy. Let's iterate from left to right, maintaining the current balance and place the closing brackets whenever we can:\n\n if the current balance is $0$ we can't place a closing bracket, since it will make the balance negative, so we place an opening bracket;\n\n if the current balance is bigger than $0$ we place a closing bracket.\n\nSince we need to calculate the cost of the RBS, we can replace the balance counter with a stack containing positions of opening brackets that don't have a pair yet. Each time we meet an opening bracket, we'll push its position to the top of the stack, and each time we meet a closing bracket, we'll take one bracket from the top of the stack. The current balance is just the size of the stack.\n\nHere is a sketch of the proof, why the strategy above is correct.\n\nFirstly, the strategy creates RBS, because after processing a prefix of even length the current balance will be equal to either $0$ or $2$, while after an odd length prefix it will be always $1$. At the start, the balance is $0$ and we make it $1$, then it either becomes $0$ or $2$, and in both cases we return it to $1$ and so on. Since the last character is always a closing bracket, the total balance will return to $0$.\n\nSecondly, to prove that the strategy minimizes the cost, we can use a standard technique of proof by contradiction: suppose there is a better answer, look at the first position of the difference: it will be ) in our string and ( in the answer. Then just find the next ) in the answer and swap them. The answer will stay RBS, while $S_c$ will decrease — contradiction.",
+    "solution_code": [
+      "import java.util.LinkedList\n \nfun main() {\n    repeat(readln().toInt()) {\n        val n = readln().toInt()\n        val s = readln()\n \n        var ans = 0L\n        val bracketPositions = LinkedList<Int>()\n        for (i in s.indices) {\n            var c = s[i]\n            if (c == '_') {\n                c = if (bracketPositions.isEmpty()) '(' else ')'\n            }\n            if (c == ')') {\n                ans += i - bracketPositions.pollLast()\n            }\n            else\n                bracketPositions.addLast(i)\n        }\n        println(ans)\n    }\n}"
+    ]
+  }
+}

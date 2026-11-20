@@ -1,0 +1,46 @@
+{
+  "contest_id": 2089,
+  "index": "B2",
+  "name": "Canteen (Hard Version)",
+  "rating": 2300,
+  "tags": [
+    "binary search",
+    "data structures",
+    "dp",
+    "flows",
+    "greedy",
+    "two pointers"
+  ],
+  "points": 500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2089B2",
+  "url": "https://codeforces.com/problemset/problem/2089/B2",
+  "contest_start_time": "2025-03-23T05:35:00+00:00",
+  "statement": {
+    "title": "B2. Canteen (Hard Version)",
+    "time_limit": "2 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "This is the hard version of the problem. The difference between the versions is that in this version, there are no additional limits on $k$. You can hack only if you solved all versions of this problem.\n\nEcrade has two sequences $a_0, a_1, \\ldots, a_{n - 1}$ and $b_0, b_1, \\ldots, b_{n - 1}$ consisting of integers. It is guaranteed that the sum of all elements in $a$ does not exceed the sum of all elements in $b$.\n\nInitially, Ecrade can make exactly $k$ changes to the sequence $a$. It is guaranteed that $k$ does not exceed the sum of $a$. In each change:\n\n Choose an integer $i$ ($0 \\le i  \\lt  n$) such that $a_i  \\gt  0$, and perform $a_i := a_i - 1$.\n\nThen Ecrade will perform the following three operations sequentially on $a$ and $b$, which constitutes one round of operations:\n\n For each $0 \\le i  \\lt  n$: $t := \\min(a_i, b_i), a_i := a_i - t, b_i := b_i - t$;\n\n For each $0 \\le i  \\lt  n$: $c_i := a_{(i - 1) \\bmod n}$;\n\n For each $0 \\le i  \\lt  n$: $a_i := c_i$;\n\nEcrade wants to know the minimum number of rounds required for all elements in $a$ to become equal to $0$ after exactly $k$ changes to $a$.\n\nHowever, this seems a bit complicated, so please help him!",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 2\\cdot 10^4$). The description of the test cases follows.\n\nThe first line of each test case contains two integers $n$, $k$ ($1\\le n\\le 2\\cdot 10^5$, $0\\le k\\le 2\\cdot 10^{14}$).\n\nThe second line of each test case contains $n$ integers $a_0, a_1, \\ldots, a_{n - 1}$ ($1 \\le a_i \\le 10^9$).\n\nThe third line of each test case contains $n$ integers $b_0, b_1, \\ldots, b_{n - 1}$ ($1 \\le b_i \\le 10^9$).\n\nIt is guaranteed that the sum of $n$ across all test cases does not exceed $2\\cdot 10^5$. It is also guaranteed that in each test case the sum of $a$ does not exceed the sum of $b$, and that $k$ does not exceed the sum of $a$.",
+    "output_spec": "For each test case, output the minimum number of rounds required for all elements in $a$ to become equal to $0$ after exactly $k$ changes to $a$.",
+    "note": "In the fifth test case, all elements in $a$ become $0$ after exactly $6$ changes.\n\nIn the sixth test case, Ecrade can do exactly one change to $a_3$, then $a$ will become $[1,2,2,4]$.\n\n After the first round, $a=[3,0,0,0],b=[3,1,0,0]$;\n\n After the second round, $a=[0,0,0,0],b=[0,1,0,0]$.\n\nIn the seventh test case, Ecrade can do exactly one change to $a_4$, then $a$ will become $[2,1,1,1]$.\n\n After the first round, $a=[0,1,0,0],b=[0,1,1,0]$;\n\n After the second round, $a=[0,0,0,0],b=[0,0,1,0]$.",
+    "samples": [
+      {
+        "input": "8\n3 0\n1 1 4\n5 1 4\n4 0\n1 2 3 4\n4 3 2 1\n4 0\n2 1 1 2\n1 2 2 1\n8 0\n1 2 3 4 5 6 7 8\n8 7 6 5 4 3 2 1\n3 6\n1 1 4\n5 1 4\n4 1\n1 2 3 4\n4 3 2 1\n4 1\n2 1 1 2\n1 2 2 1\n4 2\n2 1 1 2\n1 2 2 1",
+        "output": "\n1\n4\n4\n8\n0\n2\n2\n1"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 141053,
+    "url": "https://codeforces.com/blog/entry/141053",
+    "tutorial": "2089B2 - Canteen (Hard Version)\n Idea: Ecrade_\n\nSolution\n\nWe can use binary search on the answer $ x $, and calculate the minimum number of changes needed to make $a$ zero within $ x $ rounds.\n\nHowever, direct computation on the cyclic chain of $ 2n $ elements is troublesome (due to overlapping contributions). Instead, we can cyclically shift $ a $ and $ b $ such that $ c_{n-1} = \\min\\limits_{i=0}^{n-1} c_i$, which ensures that no $ a_{n-1} \\gt 0 $ will be cyclically shifted to $a_0$, enabling us to only consider the first $n$ elements of the chain.\n\nFor the adjusted $ a $ and $ b $, we can greedily process $ i $ from $ n - x - 1 $ to $ -1 $: If $ \\min\\limits_{j=i+1}^{i+x}c_j \\gt c_i $, then we should apply $ \\min\\limits_{j=i+1}^{i+x}c_j - c_i $ changes to $ a_{i+1} $ (assume that $c_{-1}=0$). We can also use a monotonic stack to maintain the whole process.\n\nNote that if $\\sum\\limits_{i=0}^{n-1} a_i=k$, we should output $0$.\n\nThe time complexity is $ O(\\sum n\\log k) $.\n\nBonus: Find an $O(\\sum n)$ solution.\n\nCode",
+    "solution_code": [
+      "#include<bits/stdc++.h>\nusing namespace std;\ntypedef long long ll;\nll t,n,k,pos,a[400009],stk[400009];\ninline ll read(){\n\tll s = 0,w = 1;\n\tchar ch = getchar();\n\twhile (ch > '9' || ch < '0'){ if (ch == '-') w = -1; ch = getchar();}\n\twhile (ch <= '9' && ch >= '0') s = (s << 1) + (s << 3) + (ch ^ 48),ch = getchar();\n\treturn s * w;\n}\nbool judge(ll x){\n\tll l = 1,r = 0,res = 0;\n\tfor (ll i = pos;i >= pos - n;i -= 1){\n\t\tif (l <= r && stk[l] - i > x) l += 1;\n\t\tif (pos - i >= x) res += max(0ll,a[stk[l]] - a[i]);\n\t\tif (res > k) return 0;\n\t\twhile (l <= r && a[stk[r]] > a[i]) r -= 1;\n\t\tstk[++ r] = i;\n\t}\n\treturn 1;\n}\nint main(){\n\tt = read();\n\twhile (t --){\n\t\tn = read(),k = read();\n\t\tll suma = 0;\n\t\tfor (ll i = 1;i <= n;i += 1) a[i] = read(),suma += a[i];\n\t\tfor (ll i = 1;i <= n;i += 1) a[i] -= read(),a[i + n] = a[i];\n\t\tif (suma == k){puts(\"0\"); continue;}\n\t\tfor (ll i = 1;i <= 2 * n;i += 1) a[i] += a[i - 1];\n\t\tpos = n;\n\t\tfor (ll i = n + 1;i <= 2 * n;i += 1) if (a[i] < a[pos]) pos = i;\n\t\tll l = 1,r = n,ans = n;\n\t\twhile (l <= r){\n\t\t\tll mid = (l + r) >> 1;\n\t\t\tif (judge(mid)) ans = mid,r = mid - 1;\n\t\t\telse l = mid + 1;\n\t\t}\n\t\tprintf(\"%lld\\n\",ans);\n\t}\n\treturn 0;\n}"
+    ]
+  }
+}

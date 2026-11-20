@@ -1,0 +1,42 @@
+{
+  "contest_id": 2051,
+  "index": "B",
+  "name": "Journey",
+  "rating": 800,
+  "tags": [
+    "binary search",
+    "math"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2051B",
+  "url": "https://codeforces.com/problemset/problem/2051/B",
+  "contest_start_time": "2024-12-22T14:35:00+00:00",
+  "statement": {
+    "title": "B. Journey",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "Monocarp decided to embark on a long hiking journey.\n\nHe decided that on the first day he would walk $a$ kilometers, on the second day he would walk $b$ kilometers, on the third day he would walk $c$ kilometers, on the fourth day, just like on the first, he would walk $a$ kilometers, on the fifth day, just like on the second, he would walk $b$ kilometers, on the sixth day, just like on the third, he would walk $c$ kilometers, and so on.\n\nMonocarp will complete his journey on the day when he has walked at least $n$ kilometers in total. Your task is to determine the day on which Monocarp will complete his journey.",
+    "input_spec": "The first line contains one integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases.\n\nEach test case consists of one line containing four integers $n$, $a$, $b$, $c$ ($1 \\le n \\le 10^9$; $1 \\le a, b, c \\le 10^6$).",
+    "output_spec": "For each test case, output one integer — the day on which Monocarp will have walked at least $n$ kilometers in total and will complete his journey.",
+    "note": "In the first example, over the first four days, Monocarp will cover $1 + 5 + 3 + 1 = 10$ kilometers. On the fifth day, he will cover another $5$ kilometers, meaning that in total over five days he will have covered $10 + 5 = 15$ kilometers. Since $n = 12$, Monocarp will complete his journey on the fifth day.\n\nIn the second example, Monocarp will cover $6$ kilometers on the first day. Since $n = 6$, Monocarp will complete his journey on the very first day.\n\nIn the third example, Monocarp will cover $3 + 4 + 1 + 3 + 4 + 1 = 16$ kilometers over the first six days. Since $n = 16$, Monocarp will complete his journey on the sixth day.",
+    "samples": [
+      {
+        "input": "4\n12 1 5 3\n6 6 7 4\n16 3 4 1\n1000000000 1 1 1",
+        "output": "\n5\n1\n6\n1000000000"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 137623,
+    "url": "https://codeforces.com/blog/entry/137623",
+    "tutorial": "Processing every day separately is too slow. Instead, we will use the fact that every three days, the number of kilometers Monocarp walks repeats, and process days in \"triples\".\n\nDuring every three days, Monocarp walks exactly $(a+b+c)$ kilometers, so we can do the following: while $n \\ge a + b + c$, subtract $(a+b+c)$ from $n$ and increase the answer by $3$; and finally, process the remaining days, since there will be at most $3$ of them.\n\nHowever, this works in $O(n)$ per test case, so it is still too slow. We need to improve the part when we subtract $a+b+c$ from $n$ until $n$ becomes less than this sum. Does this sound familiar?\n\nThe number of times we need to subtract $(a+b+c)$ from $n$ is exactly $\\lfloor \\frac{n}{a+b+c} \\rfloor$, and the number we get after that is $n \\bmod (a+b+c)$ by definition of integer division and remainder. This allows us to process all \"triples\" in $O(1)$, instead of running a loop in $O(n)$.\n\nThe solution we get works in $O(1)$ per test case.",
+    "solution_code": [
+      "t = int(input())\nfor i in range(t):\n    n, a, b, c = map(int, input().split())\n    sum = a + b + c\n    d = n // sum * 3\n    if n % sum == 0:\n        print(d)\n    elif n % sum <= a:\n        print(d + 1)\n    elif n % sum <= a + b:\n        print(d + 2)\n    else:\n        print(d + 3)"
+    ]
+  }
+}

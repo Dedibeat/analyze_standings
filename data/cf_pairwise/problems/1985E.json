@@ -1,0 +1,43 @@
+{
+  "contest_id": 1985,
+  "index": "E",
+  "name": "Secret Box",
+  "rating": 1200,
+  "tags": [
+    "brute force",
+    "combinatorics",
+    "math"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1985E",
+  "url": "https://codeforces.com/problemset/problem/1985/E",
+  "contest_start_time": "2024-06-11T14:35:00+00:00",
+  "statement": {
+    "title": "E. Secret Box",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "Ntarsis has a box $B$ with side lengths $x$, $y$, and $z$. It lies in the 3D coordinate plane, extending from $(0,0,0)$ to $(x,y,z)$.\n\nNtarsis has a secret box $S$. He wants to choose its dimensions such that all side lengths are positive integers, and the volume of $S$ is $k$. He can place $S$ somewhere within $B$ such that:\n\n $S$ is parallel to all axes.\n\n every corner of $S$ lies on an integer coordinate.\n\n$S$ is magical, so when placed at an integer location inside $B$, it will not fall to the ground.\n\nAmong all possible ways to choose the dimensions of $S$, determine the maximum number of distinct locations he can choose to place his secret box $S$ inside $B$. Ntarsis does not rotate $S$ once its side lengths are selected.",
+    "input_spec": "The first line consists of an integer $t$, the number of test cases ($1 \\leq t \\leq 2000$). The description of the test cases follows.\n\nThe first and only line of each test case contains four integers $x, y, z$ and $k$ ($1 \\leq x, y, z \\leq 2000$, $1 \\leq k \\leq x \\cdot y \\cdot z$).\n\nIt is guaranteed the sum of all $x$, sum of all $y$, and sum of all $z$ do not exceed $2000$ over all test cases.\n\nNote that $k$ may not fit in a standard 32-bit integer data type.",
+    "output_spec": "For each test case, output the answer as an integer on a new line. If there is no way to select the dimensions of $S$ so it fits in $B$, output $0$.",
+    "note": "For the first test case, it is optimal to choose $S$ with side lengths $2$, $2$, and $2$, which has a volume of $2 \\cdot 2 \\cdot 2 = 8$. It can be shown there are $8$ ways to put $S$ inside $B$.\n\nThe coordinate with the least $x$, $y$, and $z$ values for each possible arrangement of $S$ are:\n\n $(0, 0, 0)$\n\n $(1, 0, 0)$\n\n $(0, 1, 0)$\n\n $(0, 0, 1)$\n\n $(1, 0, 1)$\n\n $(1, 1, 0)$\n\n $(0, 1, 1)$\n\n $(1, 1, 1)$\n\nThe arrangement of $S$ with a coordinate of $(0, 0, 0)$ is depicted below:\n\nFor the second test case, $S$ with side lengths $2$, $3$, and $3$ are optimal.",
+    "samples": [
+      {
+        "input": "7\n3 3 3 8\n3 3 3 18\n5 1 1 1\n2 2 2 7\n3 4 2 12\n4 3 1 6\n1800 1800 1800 4913000000",
+        "output": "\n8\n2\n5\n0\n4\n4\n1030301"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 129620,
+    "url": "https://codeforces.com/blog/entry/129620",
+    "tutorial": "1985E - Secret Box\n\nProblem Credits: cry\n Analysis: cry\n\nSolution\n\nSince the side lengths of $S$ has to multiply to $k$, all three side lengths of $S$ has to be divisors of $k$. Let's denote the side lengths of $S$ along the $x$, $y$, and $z$ axes as $a$, $b$, and $c$ respectively. For $S$ to fit in $B$ , $a \\leq x$, $b \\leq y$, and $c \\leq z$ must hold. Because of the low constraints, we can afford to loop through all possible values of $a$ and $b$, and deduce that $c=\\frac{k}{a \\cdot b}$ (make sure $c \\leq z$ and $c$ is an integer). To get the amount of ways we can place $S$, we can just multiply the amount of shifting space along each axes, and that just comes down to $(x−a+1) \\cdot (y−b+1) \\cdot (z−c+1)$. The answer is the maximum among all possible values of $a$, $b$, and $c$ .\n\nThe time complexity is $\\mathcal{O}(n^2)$ where $n$ is at most $2000$.\n\nCode (C++)",
+    "solution_code": [
+      "#include <iostream>\nusing namespace std;\nusing ll = long long;\n\nint main(){\n\tint t; cin >> t;\n\twhile(t--){\n\t\tll x, y, z, k; cin >> x >> y >> z >> k;\n\t\tll ans = 0;\n\t\tfor(int a = 1; a <= x; a++){\n\t\t\tfor(int b = 1; b <= y; b++){\n\t\t\t\tif(k % (a * b)) continue;\n\t\t\t\tll c = k / (a * b);\n\t\t\t\tif(c > z) continue;\n\t\t\t\tll ways = (ll)(x - a + 1) * (y - b + 1) * (z - c + 1);\n\t\t\t\tans = max(ans, ways);\n\t\t\t}\n\t\t}\n\t\tcout << ans << \"\\n\";\n\t}\n}"
+    ]
+  }
+}

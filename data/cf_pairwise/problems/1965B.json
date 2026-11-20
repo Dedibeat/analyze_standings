@@ -1,0 +1,44 @@
+{
+  "contest_id": 1965,
+  "index": "B",
+  "name": "Missing Subsequence Sum",
+  "rating": 1800,
+  "tags": [
+    "bitmasks",
+    "constructive algorithms",
+    "greedy",
+    "number theory"
+  ],
+  "points": 1250.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1965B",
+  "url": "https://codeforces.com/problemset/problem/1965/B",
+  "contest_start_time": "2024-04-27T14:35:00+00:00",
+  "statement": {
+    "title": "B. Missing Subsequence Sum",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "You are given two integers $n$ and $k$. Find a sequence $a$ of non-negative integers of size at most $25$ such that the following conditions hold.\n\n There is no subsequence of $a$ with a sum of $k$.\n\n For all $1 \\le v \\le n$ where $v \\ne k$, there is a subsequence of $a$ with a sum of $v$.\n\nA sequence $b$ is a subsequence of $a$ if $b$ can be obtained from $a$ by the deletion of several (possibly, zero or all) elements, without changing the order of the remaining elements. For example, $[5, 2, 3]$ is a subsequence of $[1, 5, 7, 8, 2, 4, 3]$.\n\nIt can be shown that under the given constraints, a solution always exists.",
+    "input_spec": "The first line of the input contains a single integer $t$ ($1 \\le t \\le 1000$) — the number of test cases. The description of the test cases follows.\n\nEach test case consists of a single line containing two integers $n$ and $k$ ($2 \\le n \\le 10^6$, $1 \\le k \\le n$) — the parameters described above.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $10^7$.",
+    "output_spec": "The first line of output for each test case should contain a single integer $m$ ($1 \\le m \\le 25$) — the size of your chosen sequence.\n\nThe second line of output for each test case should contain $m$ integers $a_i$ ($0 \\le a_i \\le 10^9$) — the elements of your chosen sequence.\n\nIf there are multiple solutions, print any.",
+    "note": "In the first example, we just need a subsequence that adds up to $1$, but not one that adds up to $2$. So the array $a=[1]$ suffices.\n\nIn the second example, all elements are greater than $k=1$, so no subsequence adds up to $1$. Every other integer between $1$ and $n$ is present in the array, so there is a subsequence of size $1$ adding up to each of those numbers.",
+    "samples": [
+      {
+        "input": "5\n2 2\n6 1\n8 8\n9 3\n10 7",
+        "output": "\n1\n1\n5\n2 3 4 5 6\n7\n1 1 1 1 1 1 1\n4\n7 1 4 1\n4\n1 2 8 3"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 128914,
+    "url": "https://codeforces.com/blog/entry/128914",
+    "tutorial": "Notice that for a fixed $k$, a solution for $n=c$ is also a solution for all $n  \\lt  c$. So we can ignore the value of $n$ and just assume it's always $10^6$.\n\nIf we didn't have the restriction that no subsequence can add up to $k$, the most natural solution would be $[1, 2, 4, 8, \\cdots 2^{19}]$. Every value from $1$ to $10^6$ appears as the sum of the subsequence given by its binary representation. We will use a modified version of this array to solve the problem.\n\nLet $i$ be the largest integer such that $2^i \\le k$. We will use this array (of size $22$):\n\n$a=[k-2^i, k+1, k+1+2^i, 1, 2, 4, ... 2^{i-1}, 2^{i+1}, ... 2^{19}]$\n\nTo prove that no subsequence of $a$ adds up to $k$, consider the list of all elements in the array that are at most $k$, since these are the only ones that could be present in a subsequence adding to $k$. These are\n\n$k-2^i, 1, 2, 4, ... 2^{i-1}$\n\nSince these add up to $k-1$, no subsequence can add up to $k$.\n\nTo prove that for all $1 \\le v \\le n$ where $v \\ne k$, there is a subsequence adding up to $v$, we consider several cases:\n\n If $v  \\lt  2^i$, we can simply use the binary representation of $v$.\n\n If $2^i \\le v  \\lt  k$, we can first take all of the elements that are at most $k$ as part of our subsequence. We then need to remove elements with a sum equal to $k-1-v$. Because $2^i \\le v  \\lt  k  \\lt  2^{i+1}$, $k-1-v$ is less than $2^i$, so we can simply remove its binary representation.\n\n If $v  \\gt  k$, we can take $k+1$ along with the binary representation of $v-k-1$. The one edge case is when the $2^i$ bit is set in $v-k-1$. In this case, we replace $k+1$ with $k+1+2^i$.\n\nSo in all cases, we can form a subsequence adding up to $v$.\n\nComplexity: $O(\\log n)$",
+    "solution_code": [
+      "t = int(input())\n\nfor tc in range(t):\n    n, k = map(int, input().split())\n\n    i = 0\n    while (1 << (i + 1)) <= k:\n        i = i + 1\n\n    ans = [k - (1 << i), k + 1, k + 1 + (1 << i)]\n\n    for j in range(20):\n        if j != i:\n            ans.append(1 << j);\n\n    print(len(ans))\n    print(*ans)"
+    ]
+  }
+}

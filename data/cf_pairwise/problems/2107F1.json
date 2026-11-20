@@ -1,0 +1,44 @@
+{
+  "contest_id": 2107,
+  "index": "F1",
+  "name": "Cycling (Easy Version)",
+  "rating": 2300,
+  "tags": [
+    "binary search",
+    "brute force",
+    "dp",
+    "greedy"
+  ],
+  "points": 2250.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2107F1",
+  "url": "https://codeforces.com/problemset/problem/2107/F1",
+  "contest_start_time": "2025-05-05T14:35:00+00:00",
+  "statement": {
+    "title": "F1. Cycling (Easy Version)",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "This is the easy version of the problem. The difference between the versions is that in this version, $1\\le n\\le 5\\cdot 10^3$ and you don't need to output the answer for each prefix. You can hack only if you solved all versions of this problem.\n\nLeo works as a programmer in the city center, and his lover teaches at a high school in the suburbs. Every weekend, Leo would ride his bike to the suburbs to spend a nice weekend with his lover.\n\nThere are $n$ cyclists riding in front of Leo on this road right now. They are numbered $1$, $2$, $\\ldots$, $n$ from front to back. Initially, Leo is behind the $n$-th cyclist. The $i$-th cyclist has an agility value $a_i$.\n\nLeo wants to get ahead of the $1$-st cyclist. Leo can take the following actions as many times as he wants:\n\n Assuming that the first person in front of Leo is cyclist $i$, he can go in front of cyclist $i$ for a cost of $a_i$. This puts him behind cyclist $i - 1$.\n\n Using his super powers, swap $a_i$ and $a_j$ ($1\\le i  \\lt  j\\le n$) for a cost of $(j - i)$.\n\nLeo wants to know the minimum cost to get in front of the $1$-st cyclist. Here you only need to print the answer for the whole array, i.e. $[a_1, a_2, \\ldots, a_n]$.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 10^3$). The description of the test cases follows.\n\nThe first line of each test case contains a positive integer $n$ ($1 \\leq n \\leq 5\\cdot 10^3$), representing the number of the cyclists.\n\nThe second line of each test case contains $n$ integers $a_1, \\ldots, a_n$ ($1 \\leq a_i \\leq 10^9$).\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $5\\cdot 10^3$.",
+    "output_spec": "For each test case, print one integer representing the minimum cost for Leo to go from behind the $n$-th cyclist to in front of the $1$-st cyclist.",
+    "note": "In the first test case, one possible way to move from the position behind the $n$-th cyclist to the position in front of the $1$-st cyclist is:\n\n Leo swaps $a_2$ $(i=2)$ and $a_3$ $(j=3)$, then the array becomes $[1,4,2]$; it costs $j-i=3-2=1$.\n\n Leo is behind the $3$-rd cyclist and moves behind the $2$-nd cyclist; it costs $a_3=2$.\n\n Leo swaps $a_1$ $(i=1)$ and $a_2$ $(j=2)$, then the array becomes $[4,1,2]$; it costs $j-i=2-1=1$.\n\n Leo is behind the $2$-nd cyclist and moves behind the $1$-st cyclist; it costs $a_2=1$.\n\n Leo swaps $a_1$ $(i=1)$ and $a_2$ $(j=2)$, then the array becomes $[1,4,2]$; it costs $j-i=2-1=1$.\n\n Leo moves ahead of the $1$-st cyclist; it costs $a_1=1$.\n\nSo the total cost is $1+2+1+1+1+1=7$. It can be proved that $7$ is the minimum cost.\n\nIn the second test case, to move ahead of the $1$-st cyclist from the position behind the $n$-th cyclist, Leo should not swap anyone's agility value. The total cost is $1+1+1+1=4$.",
+    "samples": [
+      {
+        "input": "4\n3\n1 2 4\n4\n1 1 1 1\n2\n1 2\n4\n4 1 3 2",
+        "output": "\n7\n4\n3\n8"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 142642,
+    "url": "https://codeforces.com/blog/entry/142642",
+    "tutorial": "2107F1 - Cycling (Easy Version)\n\nSolution\n\nLet us try to figure out the optimal strategy. We want to use small values for the \"overtake\" operation, and we will use \"swap\" operations to make the overtakes less costly.\n\nSuppose $p = $ first position of minima element. We should over take cyclists $1, 2, \\ldots, p$ for the cost of $a_p$, swapping $p$ till first. This is because all $a_i (1 \\le i \\lt p)$ is $\\ge a_p + 1$, and so the swap + overtake can't be worse. And obviously, if we are using $a_q (q \\gt p)$, it is less costly in terms of swaps to use $p$ since the overtake cost cannot be worse.\n\nNow, we might use the value $a_p$ for overtakes in the suffix as well, i.e. there exists some $q \\ge p$ such that we overtake cyclists $1, 2, \\ldots, q$ using $a_p$. This reduces the problem to the subproblem $a[q + 1, n]$, and thus we can use Dynamic Programming! But why are the problems independent in $a[q + 1, n]$ and the rest of the array? Suppose that we took some $a_i (i \\le q)$ to be used for swaps in the suffix $a[q + 1, n]$, but we could then instead set up the swaps such that first $p$ reaches $q$, and then $p$ is taken for these suffix swaps. This won't add any additional swaps, and may only reduce the cost.\n\nLet $dp_i$ be the answer for the suffix $a[i, n]$. Then, we compute $p = $ position of minima in $a[i, n]$, iterate on partition index $j$ such that we will take $p$ to $j$ using it for swaps $1, 2 \\ldots, j$, value computed as $dp_{j + 1} + a_p \\cdot (j - i) + S$, where $S$ denotes the total swaps made ($S = 2 \\cdot (j - p) + (p - i - 1)$).\n\nThis solves the problem in $O(n^2)$.\n\nCode",
+    "solution_code": [
+      "#include <bits/stdc++.h>\nusing namespace std;\n\nint main(){\n    int t; cin >> t;\n    while (t--){\n        int n; cin >> n;\n        \n        vector <int> a(n + 1);\n        for (int i = 1; i <= n; i++){\n            cin >> a[i];\n        }\n        \n        vector <long long> dp(n + 1, 1e18);\n        dp[n] = 0;\n        \n        for (int i = n - 1; i >= 0; i--){\n            int p = i + 1;\n            for (int j = i + 1; j <= n; j++) if (a[j] < a[p]){\n                p = j;\n            }\n            \n            for (int j = p; j <= n; j++){\n                dp[i] = min(dp[i], dp[j] + 2 * (j - p) + 1LL * (j - i) * a[p] + (p - i - 1));\n            }\n        }\n        \n        cout << dp[0] << \"\\n\";\n    }\n    return 0;\n}"
+    ]
+  }
+}

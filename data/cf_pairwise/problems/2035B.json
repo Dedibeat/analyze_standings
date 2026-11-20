@@ -1,0 +1,42 @@
+{
+  "contest_id": 2035,
+  "index": "B",
+  "name": "Everyone Loves Tres",
+  "rating": 900,
+  "tags": [
+    "constructive algorithms",
+    "greedy",
+    "math",
+    "number theory"
+  ],
+  "points": 500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2035B",
+  "url": "https://codeforces.com/problemset/problem/2035/B",
+  "contest_start_time": "2024-10-27T14:35:00+00:00",
+  "statement": {
+    "title": "B. Everyone Loves Tres",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "There are 3 heroes and 3 villains, so 6 people in total.\n\nGiven a positive integer $n$. Find the smallest integer whose decimal representation has length $n$ and consists only of $3$s and $6$s such that it is divisible by both $33$ and $66$. If no such integer exists, print $-1$.",
+    "input_spec": "The first line contains a single integer $t$ ($1\\le t\\le 500$) — the number of test cases.\n\nThe only line of each test case contains a single integer $n$ ($1\\le n\\le 500$) — the length of the decimal representation.",
+    "output_spec": "For each test case, output the smallest required integer if such an integer exists and $-1$ otherwise.",
+    "note": "For $n=1$, no such integer exists as neither $3$ nor $6$ is divisible by $33$.\n\nFor $n=2$, $66$ consists only of $6$s and it is divisible by both $33$ and $66$.\n\nFor $n=3$, no such integer exists. Only $363$ is divisible by $33$, but it is not divisible by $66$.\n\nFor $n=4$, $3366$ and $6666$ are divisible by both $33$ and $66$, and $3366$ is the smallest.",
+    "samples": [
+      {
+        "input": "6\n1\n2\n3\n4\n5\n7",
+        "output": "\n-1\n66\n-1\n3366\n36366\n3336366"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 135609,
+    "url": "https://codeforces.com/blog/entry/135609",
+    "tutorial": "If we had the lexicographically smallest number for some $n$, we could extend it to the lexicographically smallest number for $n+2$ by prepending $33$ to it. This is due to the lexicographic condition that values minimize some digits over all the digits behind them. In other words, $3666xx$ is always better than $6333xx$.\n\nWe can observe that $66$ is the lexicographically smallest number for $n = 2$, $n = 1$ and $n = 3$ are impossible, and $36366$ is the lexicographically smallest number for $n = 5$.\n\nSo our final answer is $n-2$ $3$'s followed by $66$ if $n$ is even, $-1$ if $n = 1$ or $n = 3$, or $n-5$ $3$'s followed by $36366$ if $n$ is odd and greater than or equal to $5$.\n\nFor instance, for $n = 8$, the answer is $33333366$, and for $n = 9$, the answer is $333336366$.",
+    "solution_code": []
+  }
+}

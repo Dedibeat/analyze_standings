@@ -1,0 +1,43 @@
+{
+  "contest_id": 1970,
+  "index": "G2",
+  "name": "Min-Fund Prison (Medium)",
+  "rating": 2200,
+  "tags": [
+    "brute force",
+    "dfs and similar",
+    "dp",
+    "graphs",
+    "trees"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1970G2",
+  "url": "https://codeforces.com/problemset/problem/1970/G2",
+  "contest_start_time": "2024-05-04T07:05:00+00:00",
+  "statement": {
+    "title": "G2. Min-Fund Prison (Medium)",
+    "time_limit": "1.5 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "In the medium version, $2 \\leq \\sum n \\leq 300$ and $1 \\leq \\sum m \\leq 300$\n\nAfter a worker's strike organized by the Dementors asking for equal rights, the prison of Azkaban has suffered some damage. After settling the spirits, the Ministry of Magic is looking to renovate the prison to ensure that the Dementors are kept in check. The prison consists of $n$ prison cells and $m$ bi-directional corridors. The $i^{th}$ corridor is from cells $u_i$ to $v_i$. A subset of these cells $S$ is called a complex if any cell in $S$ is reachable from any other cell in $S$. Formally, a subset of cells $S$ is a complex if $x$ and $y$ are reachable from each other for all $x, y \\in S$, using only cells from $S$ on the way. The funding required for a complex $S$ consisting of $k$ cells is defined as $k^2$.\n\nAs part of your Intro to Magical Interior Design course at Hogwarts, you have been tasked with designing the prison. The Ministry of Magic has asked that you divide the prison into $2$ complexes with $\\textbf{exactly one corridor}$ connecting them, so that the Dementors can't organize union meetings. For this purpose, you are allowed to build bi-directional corridors. The funding required to build a corridor between any $2$ cells is $c$.\n\nDue to budget cuts and the ongoing fight against the Death Eaters, you must find the $\\textbf{minimum total funding}$ required to divide the prison as per the Ministry's requirements or $-1$ if no division is possible.\n\nNote: The total funding is the sum of the funding required for the $2$ complexes and the corridors built. If after the division, the two complexes have $x$ and $y$ cells respectively and you have built a total of $a$ corridors, the total funding will be $x^2 + y^2 + c \\times a$. Note that $x+y=n$.",
+    "input_spec": "The first line contains one integer $t$ ($1 \\leq t \\leq 300$) — the number of test cases. Then $t$ test cases follow.\n\nThe first line of each test case consists of three integers $n, m$ and $c$ ($2 \\leq n \\leq 300$, $1 \\leq m \\leq 300$, $1 \\leq c \\leq 10^9$)\n\n$m$ lines follow, each consisting of 2 integers — $u_i, v_i$ indicating a corridor is present between cells $u_i$ and $v_i$ ($1 \\leq u_i, v_i \\leq n$, $u_i \\neq v_i$)\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $300$.\n\nIt is guaranteed that the sum of $m$ over all test cases does not exceed $300$.\n\nIt is guaranteed that there exists at most one corridor between any two cells.",
+    "output_spec": "Print the $\\textbf{minimum funding}$ required to divide the prison as per the Ministry's requirements or $-1$ if no division is possible.",
+    "note": "In the first test case of the sample input, there is no way to divide the prison according to the Ministry's requirements.\n\nIn the second test case, consider the corridor between cells $1$ and $5$ as the connection between the $2$ complexes consisting of $\\{2, 3, 5, 6\\}$ and $\\{1, 4\\}$ cells respectively. There are no new corridors built. The total funding is $4^2 + 2^2 = 20$. You can verify this is the minimum funding required.\n\nIn the third test case, build a corridor between $2$ and $4$. Consider the corridor between cells $1$ and $5$ as the connection between the $2$ complexes consisting of $\\{3, 5, 6\\}$ and $\\{1, 2, 4\\}$ cells respectively. The total funding is $3^2 + 3^2 + 7 \\times 1 = 25$. You can verify this is the minimum funding required.\n\nIn the fourth test case, build a corridor between $2$ and $4$ and between $5$ and $7$. Consider the corridor between cells $5$ and $7$ as the connection between the $2$ complexes consisting of $\\{1, 2, 4, 7\\}$ and $\\{3, 5, 6\\}$ cells respectively. The total funding is $4^2 + 3^2 + 4 \\times 2 = 33$. You can verify this is the minimum funding required.\n\nNote for all test cases that there may be multiple ways to get the same funding but there is no other division which will have a more optimal minimum funding.",
+    "samples": [
+      {
+        "input": "\n4\n4 6 5\n4 3\n2 3\n2 4\n1 2\n4 1\n3 1\n6 6 2\n1 4\n2 5\n3 6\n1 5\n3 5\n6 5\n6 5 7\n1 4\n2 5\n3 6\n3 5\n6 5\n7 5 4\n1 4\n3 6\n3 5\n6 5\n2 7",
+        "output": "\n-1\n20\n25\n33"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 129149,
+    "url": "https://codeforces.com/blog/entry/129149",
+    "tutorial": "The graph is no longer a tree in this problem, but we can try to generalize the solution for the first subtask.\n\nFirst of all, suppose the graph is connected. Similar to the first subtask, there will always be at least one existing corridor connecting the two complexes, so we do not need to build new corridors. Moreover, there will be exactly one existing corridor connecting the two complexes if and only if said corridor is a bridge in the graph, and the two complexes are the two connected components that appear after removing this bridge. We can modify the depth-first search algorithm that finds bridges in the graph to also compute the component sizes, and therefore we can solve our problem for connected graphs.\n\nNow, what to do if the graph is not connected? There are two cases:\n\n At least one connected component will be split between the two complexes. In this case exactly one component must be split in this way, and the split must be done using a bridge in this component similar to the connected graph solution. For every other connected component it must go either completely to the first complex or completely to the second complex. We need to build additional corridors to connect components within the complexes, and the number of additional corridors is equal to the number of connected components in the graph minus one.\n\n No connected component will be split between the two complexes. In this case we need to build additional corridors both to connect components within the complexes, but also to connect the complexes to each other. The number of additional corridors is still equal to the number of connected components in the graph minus one.\n\nSince the number of additional corridors is constant, we still need to minimize the sum of squares of the sizes of the complexes. We now need to solve a knapsack problem to find out the possible sizes of the first complex. To account for the fact that at most one component may be split using a bridge, we can add a boolean flag to the knapsack dynamic programming state that tracks whether we have already split a component.\n\nThe running time of this solution is $O(n^2)$.",
+    "solution_code": []
+  }
+}

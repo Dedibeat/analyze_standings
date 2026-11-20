@@ -1,0 +1,41 @@
+{
+  "contest_id": 1998,
+  "index": "A",
+  "name": "Find K Distinct Points with Fixed Center",
+  "rating": 800,
+  "tags": [
+    "constructive algorithms",
+    "implementation",
+    "math"
+  ],
+  "points": 500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1998A",
+  "url": "https://codeforces.com/problemset/problem/1998/A",
+  "contest_start_time": "2024-08-10T14:35:00+00:00",
+  "statement": {
+    "title": "A. Find K Distinct Points with Fixed Center",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "I couldn't think of a good title for this problem, so I decided to learn from LeetCode.\n\n— Sun Tzu, The Art of War\n\nYou are given three integers $x_c$, $y_c$, and $k$ ($-100 \\leq x_c, y_c \\leq 100$, $1 \\leq k \\leq 1000$).\n\nYou need to find $k$ distinct points ($x_1, y_1$), ($x_2, y_2$), $\\ldots$, ($x_k, y_k$), having integer coordinates, on the 2D coordinate plane such that:\n\n their center$^{\\text{∗}}$ is ($x_c, y_c$)\n\n $-10^9 \\leq x_i, y_i \\leq 10^9$ for all $i$ from $1$ to $k$\n\nIt can be proven that at least one set of $k$ distinct points always exists that satisfies these conditions.\n\n$^{\\text{∗}}$The center of $k$ points ($x_1, y_1$), ($x_2, y_2$), $\\ldots$, ($x_k, y_k$) is $\\left( \\frac{x_1 + x_2 + \\ldots + x_k}{k}, \\frac{y_1 + y_2 + \\ldots + y_k}{k} \\right)$.",
+    "input_spec": "The first line contains $t$ ($1 \\leq t \\leq 100$) — the number of test cases.\n\nEach test case contains three integers $x_c$, $y_c$, and $k$ ($-100 \\leq x_c, y_c \\leq 100$, $1 \\leq k \\leq 1000$) — the coordinates of the center and the number of distinct points you must output.\n\nIt is guaranteed that the sum of $k$ over all test cases does not exceed $1000$.",
+    "output_spec": "For each test case, output $k$ lines, the $i$-th line containing two space separated integers, $x_i$ and $y_i$, ($-10^9 \\leq x_i, y_i \\leq 10^9$) — denoting the position of the $i$-th point.\n\nIf there are multiple answers, print any of them. It can be shown that a solution always exists under the given constraints.",
+    "note": "For the first test case, $\\left( \\frac{10}{1}, \\frac{10}{1} \\right) = (10, 10)$.\n\nFor the second test case, $\\left( \\frac{-1 + 5 - 4}{3}, \\frac{-1 -1 + 2}{3} \\right) = (0, 0)$.",
+    "samples": [
+      {
+        "input": "4\n10 10 1\n0 0 3\n-5 -8 8\n4 -5 3",
+        "output": "\n10 10\n-1 -1\n5 -1\n-4 2\n-6 -7\n-5 -7\n-4 -7\n-4 -8\n-4 -9\n-5 -9\n-6 -9\n-6 -8\n1000 -1000\n-996 995\n8 -10"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 132512,
+    "url": "https://codeforces.com/blog/entry/132512",
+    "tutorial": "1998A - Найти K различных точек с фиксированным центром\n\nIdea\n\nChose $A_1 = (K*X_C,K*Y_C)$.\nThe remaining points such that sum of x coordinates and y coordinates is 0.\n\nMy submission — 275541733\n\nVideo editorial",
+    "solution_code": []
+  }
+}

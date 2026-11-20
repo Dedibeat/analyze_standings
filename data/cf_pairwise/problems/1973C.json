@@ -1,0 +1,43 @@
+{
+  "contest_id": 1973,
+  "index": "C",
+  "name": "Cat, Fox and Double Maximum",
+  "rating": 1700,
+  "tags": [
+    "constructive algorithms",
+    "greedy",
+    "implementation",
+    "math",
+    "sortings"
+  ],
+  "points": 1500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1973C",
+  "url": "https://codeforces.com/problemset/problem/1973/C",
+  "contest_start_time": "2024-05-17T14:35:00+00:00",
+  "statement": {
+    "title": "C. Cat, Fox and Double Maximum",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Fox loves permutations! She came up with the following problem and asked Cat to solve it:\n\nYou are given an even positive integer $n$ and a permutation$^\\dagger$ $p$ of length $n$.\n\nThe score of another permutation $q$ of length $n$ is the number of local maximums in the array $a$ of length $n$, where $a_i = p_i + q_i$ for all $i$ ($1 \\le i \\le n$). In other words, the score of $q$ is the number of $i$ such that $1  \\lt  i  \\lt  n$ (note the strict inequalities), $a_{i-1}  \\lt  a_i$, and $a_i  \\gt  a_{i+1}$ (once again, note the strict inequalities).\n\nFind the permutation $q$ that achieves the maximum score for given $n$ and $p$. If there exist multiple such permutations, you can pick any of them.\n\n$^\\dagger$ A permutation of length $n$ is an array consisting of $n$ distinct integers from $1$ to $n$ in arbitrary order. For example, $[2,3,1,5,4]$ is a permutation, but $[1,2,2]$ is not a permutation ($2$ appears twice in the array), and $[1,3,4]$ is also not a permutation ($n=3$ but there is $4$ in the array).",
+    "input_spec": "The first line of input contains an integer $t$ ($1 \\leq t \\leq 10^4$) — the number of test cases in the input you will have to solve.\n\nThe first line of each test case contains one even integer $n$ ($4 \\leq n \\leq 10^5$, $n$ is even) — the length of the permutation $p$.\n\nThe second line of each test case contains the $n$ integers $p_1, p_2, \\ldots, p_n$ ($1 \\leq p_i \\leq n$). It is guaranteed that $p$ is a permutation of length $n$.\n\nIt is guaranteed that the sum of $n$ across all test cases doesn't exceed $10^5$.",
+    "output_spec": "For each test case, output one line containing any permutation of length $n$ (the array $q$), such that $q$ maximizes the score under the given constraints.",
+    "note": "In the first example, $a = [3, 6, 4, 7]$. The array has just one local maximum (on the second position), so the score of the chosen permutation $q$ is $1$. It can be proven that this score is optimal under the constraints.\n\nIn the last example, the resulting array $a = [6, 6, 12, 7, 14, 7, 14, 6]$ has $3$ local maximums — on the third, fifth and seventh positions.",
+    "samples": [
+      {
+        "input": "4\n4\n1 2 3 4\n4\n4 3 1 2\n6\n6 5 1 4 2 3\n8\n1 2 4 5 7 6 8 3",
+        "output": "\n2 4 1 3\n3 1 4 2\n2 5 1 4 3 6\n5 4 8 2 7 1 6 3"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 129556,
+    "url": "https://codeforces.com/blog/entry/129556",
+    "tutorial": "Problem C: idea by prvocislo, prepared by prvocislo\n\nHint 1:\n\n$n$ is even. What is the obvious upper bound on the number of the local maximums?\n\nHint 2:\n\nRight, it is ${n \\over 2} - 1$. We can actually achieve this value for any permutation.\n\nHint 3:\n\nConsider $p_1 = n$. Can you find $q$ such that all other odd positions will be local maximums?\n\nSolution:\n\nWe can easily prove that the sequence can have at most ${n \\over 2} - 1$ local maximums, because the corner elements can't be the local maximums and no two consecutive elements can be local maximums. Let's see how we can achieve this upper bound.\n\nLet's consider the case when $n$ is at odd position in the original array first. We will construct a permutation $q$ such that the resulting array $a$ will have local maximums at all the odd positions except the first one. We can do this by placing the numbers ${n \\over 2} + 1, {n \\over 2} + 2, \\ldots n$ at the odd indexes in $q$, giving the bigger numbers to the indexes with smaller $p_i$, and placing the numbers $1, 2, \\ldots, {n \\over 2}$ at the even indexes in $p$, giving the smaller numbers to the indexes with bigger $p_i$. Then since $n$ belongs to an odd index, the $a_i$ for each odd $i$ will be at least $n + 1$ while the $a_i$ for each even $i$ will be at most $n$. So every element of $a$ at odd position, except for the corner, will be a local maximum. This means we will have ${n \\over 2} - 1$ local maximums, which is optimal, as we noitced above.\n\nWe can get the solution for the case when $n$ is at even position analogously. For example, by reversing the permutation $p$, calculating the right permutation $q$, reversing them again and printing this $q$ as the answer.\n\nTime complexity: $O(n \\log n)$ because of sorting. Actually, since you are sorting a permutation, you can do it in just $O(n)$ but it's not necessary.\n\nImplementation in C++: 261999352",
+    "solution_code": []
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "contest_id": 1942,
+  "index": "D",
+  "name": "Learning to Paint",
+  "rating": 2100,
+  "tags": [
+    "binary search",
+    "data structures",
+    "dfs and similar",
+    "dp",
+    "greedy",
+    "implementation",
+    "sortings"
+  ],
+  "points": 2250.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1942D",
+  "url": "https://codeforces.com/problemset/problem/1942/D",
+  "contest_start_time": "2024-03-30T14:35:00+00:00",
+  "statement": {
+    "title": "D. Learning to Paint",
+    "time_limit": "4.5 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "Pristine Beat - Touhou\n\n⠀\n\nElsie is learning how to paint. She has a canvas of $n$ cells numbered from $1$ to $n$ and can paint any (potentially empty) subset of cells.\n\nElsie has a 2D array $a$ which she will use to evaluate paintings. Let the maximal contiguous intervals of painted cells in a painting be $[l_1,r_1],[l_2,r_2],\\ldots,[l_x,r_x]$. The beauty of the painting is the sum of $a_{l_i,r_i}$ over all $1 \\le i \\le x$. In the image above, the maximal contiguous intervals of painted cells are $[2,4],[6,6],[8,9]$ and the beauty of the painting is $a_{2,4}+a_{6,6}+a_{8,9}$.\n\nThere are $2^n$ ways to paint the strip. Help Elsie find the $k$ largest possible values of the beauty of a painting she can obtain, among all these ways. Note that these $k$ values do not necessarily have to be distinct. It is guaranteed that there are at least $k$ different ways to paint the canvas.",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\leq t \\leq 10^3$) — the number of test cases.\n\nThe first line of each test case contains $2$ integers $n$ and $k$ ($1 \\leq n \\leq 10^3$, $1 \\leq k \\leq \\min(2^n, 5 \\cdot 10^3)$) — the number of cells and the number of largest values of the beauty of a painting you must find.\n\nThe next $n$ lines of each test case describe $a$ where the $i$-th of which contains $n-i+1$ integers $a_{i,i},a_{i,i+1},\\ldots,a_{i,n}$ ($-10^6 \\leq a_{i,j} \\leq 10^6$).\n\nIt is guaranteed the sum of $n$ over all test cases does not exceed $10^3$ and the sum of $k$ over all test cases does not exceed $5 \\cdot 10^3$.",
+    "output_spec": "For each test case, output $k$ integers in one line: the $i$-th of them must represent the $i$-th largest value of the beauty of a painting Elsie can obtain.",
+    "note": "In the first test case, Elsie can either paint the only cell or not paint it. If she paints the only cell, the beauty of the painting is $-5$. If she chooses not to paint it, the beauty of the painting is $0$. Thus, the largest beauty she can obtain is $0$ and the second largest beauty she can obtain is $-5$.\n\nBelow is an illustration of the third test case.",
+    "samples": [
+      {
+        "input": "4\n1 2\n-5\n2 4\n2 -3\n-1\n3 8\n2 4 3\n1 3\n5\n6 20\n0 -6 -3 0 -6 -2\n-7 -5 -2 -3 -4\n7 0 -9 -4\n2 -1 1\n1 -2\n-6",
+        "output": "\n0 -5 \n2 0 -1 -3 \n7 5 4 3 3 2 1 0 \n8 8 7 7 5 5 2 2 1 1 1 1 1 1 0 0 0 0 0 -1 "
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 126942,
+    "url": "https://codeforces.com/blog/entry/126942",
+    "tutorial": "1942D - Learning to Paint\n\nProblem Credits: sum\nAnalysis: sum\n\nHint 1\n\nWe can solve this with dynamic programming. Let $\\texttt{dp}[i]$ store a list of all $\\min(k, 2^i)$ highest beauties of a painting in non-increasing order if you only paint cells $1,2,\\ldots ,i$.\n\nHint 2\n\nTransitioning boils down to finding the $k$ largest elements from $n$ non-increasing lists. Try to do this in $\\mathcal{O}((n + k) \\log n)$ time.\n\nSolution\n\nLet $\\texttt{dp}[i]$ store a list of all $\\min(k, 2^i)$ highest beauties of a painting in non-increasing order if you only paint cells $1,2,\\ldots ,i$.\n\nLet's define merging two lists as creating a new list that stores the $k$ highest values from the two lists.\n\nFirst, let's look at a slow method of transitioning. We iterate over the left endpoint $l$ such that $l \\ldots i$ is a maximal painted interval. At each $l$, we merge $\\texttt{dp}[l - 2]$, with $a_{l,i}$ added to each value, into $\\texttt{dp}[i]$. We also merge $\\texttt{dp}[i - 1]$ into $\\texttt{dp}[i]$ to handle the case in which we do not paint cell $i$. If implemented well, transitioning takes $\\mathcal{O}(nk)$ time leading to an $\\mathcal{O}(n^2k)$ solution which is too slow.\n\nWe can speed this up. This merging process boils down to finding the $k$ largest elements from $n$ non-increasing lists in $\\mathcal{O}((n + k) \\log n)$ time. We can use a priority queue that stores ($\\texttt{element}, \\texttt{index}$) for each list. We can do the following $k$ times: add the top of the priority queue to our answer, advance its index, and update the priority queue accordingly. This allows us to transition in $\\mathcal{O}((n + k) \\log n)$ time which leads to an $\\mathcal{O}((n^2 + nk) \\log n)$ solution.\n\nBonus: find an $\\mathcal{O}(n^2 + k)$ solution.\n\nCode (C++)",
+    "solution_code": [
+      "#include <bits/stdc++.h>\nusing namespace std;\n \nvoid solve(){\n    int n, k;\n    cin >> n >> k;\n \n    int A[n + 1][n + 1];\n \n    for (int i = 1; i <= n; i++)\n        for (int j = i; j <= n; j++)\n            cin >> A[i][j];\n    \n    // dp[i] = Answer if we consider 1...i\n    vector<int> dp[n + 1];\n    dp[0] = {0};\n \n    for (int i = 1; i <= n; i++){\n        priority_queue<array<int, 3>> pq;\n \n        // Don't create an interval\n        pq.push({dp[i - 1][0], i - 1, 0});\n \n        // Create interval j+2...i (transition from j)\n        for (int j = i - 2; j >= -1; j--){\n            pq.push({(j < 0 ? 0 : dp[j][0]) + A[j + 2][i], j, 0});\n        }\n \n        while (pq.size() and dp[i].size() < k){\n            auto [val, j, num] = pq.top(); pq.pop();\n            dp[i].push_back(val);\n            \n            if (j < 0 or num + 1 >= dp[j].size())\n                continue;\n            \n            // Don't create interval\n            if (j == i - 1)\n                pq.push({dp[i - 1][num + 1], i - 1, num + 1});\n            \n            // Create interval j+2...i (transition from j)\n            else \n                pq.push({dp[j][num + 1] + A[j + 2][i], j, num + 1});\n        }\n    }\n    for (int i : dp[n])\n        cout << i << \" \";\n    cout << \"\\n\";\n}\n \nint main(){\n    ios_base::sync_with_stdio(0); cin.tie(0); \n    int tc; \n    cin >> tc;\n \n    while (tc--) \n        solve();\n}"
+    ]
+  }
+}

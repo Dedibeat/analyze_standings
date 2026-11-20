@@ -1,0 +1,45 @@
+{
+  "contest_id": 2008,
+  "index": "G",
+  "name": "Sakurako's Task",
+  "rating": 1800,
+  "tags": [
+    "binary search",
+    "greedy",
+    "math",
+    "number theory"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2008G",
+  "url": "https://codeforces.com/problemset/problem/2008/G",
+  "contest_start_time": "2024-09-01T14:35:00+00:00",
+  "statement": {
+    "title": "G. Sakurako's Task",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Sakurako has prepared a task for you:\n\nShe gives you an array of $n$ integers and allows you to choose $i$ and $j$ such that $i \\neq j$ and $a_i \\ge a_j$, and then assign $a_i = a_i - a_j$ or $a_i = a_i + a_j$. You can perform this operation any number of times for any $i$ and $j$, as long as they satisfy the conditions.\n\nSakurako asks you what is the maximum possible value of $mex_k$$^{\\text{∗}}$ of the array after any number of operations.\n\n$^{\\text{∗}}$$mex_k$ is the $k$-th non-negative integer that is absent in the array. For example, $mex_1(\\{1,2,3 \\})=0$, since $0$ is the first element that is not in the array, and $mex_2(\\{0,2,4 \\})=3$, since $3$ is the second element that is not in the array.",
+    "input_spec": "The first line contains a single integer $t$ ($1\\le t\\le 10^4$)  — the number of test cases.\n\nThe first line of each test case contains two integers $n$ and $k$ ($1\\le n\\le 2\\cdot 10^5,1\\le k\\le 10^9$)  — the number of elements in the array and the value $k$ for $mex_k$.\n\nThe second line of each test case contains $n$ integers $a_1, a_2, \\dots,a_n$ ($1\\le a_i\\le 10^9$)  — the elements of the array.\n\nIt is guaranteed that the sum of $n$ across all test cases does not exceed $2\\cdot 10^5$.",
+    "output_spec": "For each test case, output the maximum $mex_k$ that can be achieved through the operations.",
+    "note": null,
+    "samples": [
+      {
+        "input": "6\n1 3\n3\n2 10\n1 1\n3 1\n1 2 3\n3 2\n1 2 4\n4 5\n2 2 2 16\n4 5\n2 2 2 3",
+        "output": "\n2\n11\n3\n4\n8\n8"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 133509,
+    "url": "https://codeforces.com/blog/entry/133509",
+    "tutorial": "Let's look at case when $n=1$. We cannot change the value of the element, so we will not change the array.\n\nIf $n \\gt 1$, let's call $g=gcd(a_1,a_2,\\dots,a_n)$. Using operations in the statement, we can get only numbers 0 and that have $g$ as a divisor. So, the best array for this task will be $a_i=(i-1)\\cdot g$.\n\nNow, we can find where the $mex_k$ should be in linear time. Firstly, if it is before the first one, then the answer is $k$, otherwise, we can assign $k=k-a_1$. Then let's look at the second element. If $a_1+k \\lt a_2$, then answer should be $a_1+k$ and otherwise we can assign $k=k-a_2+a_1-1$. In other words, when we look if our $k$ can be in range from $a_i$ to $a_{i+1}$, we know that number of elements that were not in the array and less than $a_i$ equal to $k+a_i$. Then, when we find such $i$, we can output the answer.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n\nusing namespace std;\n\nint main(){\n    int t;\n    cin>>t;\n    while(t--)\n    {\n        int n,k;\n        cin>>n>>k;\n        long long a[n+1],g=0,mx=0;\n        for(int i=0;i<n;i++)\n        {\n            cin>>a[i];\n            g=__gcd(g,a[i]);\n            mx=max(mx,a[i]);\n        }\n        if(g==0)\n        {\n            cout<<k<<endl;\n            continue;\n        }\n        sort(a,a+n);\n        int q=-g;\n        if(n!=1)\n        {\n            for(int i=0;i<n;i++)\n            {\n                q+=g;\n                a[i]=q;\n            }\n        }\n        a[n]=1e16;\n        long long lst=-1;\n        for(int i=0;i<=n;i++)\n        {\n            if(k<=a[i]-lst-1)\n            {\n                break;\n            }\n            k-=max(a[i]-lst-1,0ll);\n            lst=a[i];\n        }\n        cout<<lst+k<<endl;\n    }\n}",
+      "import math\n\nt = int(input())\nfor _ in range(t):\n    n, k = map(int, input().split())\n    a = list(map(int, input().split()))\n    g = 0\n    mx = 0\n    for i in range(n):\n        g = math.gcd(g, a[i])\n        mx = max(mx, a[i])\n    if g == 0:\n        print(k)\n        continue\n    a.sort()\n    q = -g\n    if n != 1:\n        for i in range(n):\n            q += g\n            a[i] = q\n    a.append(10**16)\n    lst = -1\n    for i in range(n + 1):\n        if k <= a[i] - lst - 1:\n            break\n        k -= max(a[i] - lst - 1, 0)\n        lst = a[i]\n    print(lst + k)"
+    ]
+  }
+}

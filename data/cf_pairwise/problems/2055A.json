@@ -1,0 +1,44 @@
+{
+  "contest_id": 2055,
+  "index": "A",
+  "name": "Two Frogs",
+  "rating": 800,
+  "tags": [
+    "constructive algorithms",
+    "games",
+    "greedy",
+    "math"
+  ],
+  "points": 500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2055A",
+  "url": "https://codeforces.com/problemset/problem/2055/A",
+  "contest_start_time": "2025-01-12T14:35:00+00:00",
+  "statement": {
+    "title": "A. Two Frogs",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "Roaming through the alligator-infested Everglades, Florida Man encounters a most peculiar showdown.\n\nThere are $n$ lilypads arranged in a row, numbered from $1$ to $n$ from left to right. Alice and Bob are frogs initially positioned on distinct lilypads, $a$ and $b$, respectively. They take turns jumping, starting with Alice.\n\nDuring a frog's turn, it can jump either one space to the left or one space to the right, as long as the destination lilypad exists. For example, on Alice's first turn, she can jump to either lilypad $a-1$ or $a+1$, provided these lilypads are within bounds. It is important to note that each frog must jump during its turn and cannot remain on the same lilypad.\n\nHowever, there are some restrictions:\n\n The two frogs cannot occupy the same lilypad. This means that Alice cannot jump to a lilypad that Bob is currently occupying, and vice versa.\n\n If a frog cannot make a valid jump on its turn, it loses the game. As a result, the other frog wins.\n\nDetermine whether Alice can guarantee a win, assuming that both players play optimally. It can be proven that the game will end after a finite number of moves if both players play optimally.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 500$). The description of the test cases follows.\n\nThe first and only line of each test case contains three integers $n$, $a$, and $b$ ($2 \\leq n \\leq 100$, $1 \\leq a, b \\leq n$, $a\\neq b$) — the number of lilypads, and the starting positions of Alice and Bob, respectively.\n\nNote that there are no constraints on the sum of $n$ over all test cases.",
+    "output_spec": "For each test case, print a single line containing either \"YES\" or \"NO\", representing whether or not Alice has a winning strategy.\n\nYou can output the answer in any case (upper or lower). For example, the strings \"yEs\", \"yes\", \"Yes\", and \"YES\" will be recognized as positive responses.",
+    "note": "In the first test case, Alice has no legal moves. Therefore, Alice loses on the first turn.\n\nIn the second test case, Alice can only move to lilypad $2$. Then, Bob has no legal moves. Therefore, Alice has a winning strategy in this case.\n\nIn the third test case, Alice can only move to lilypad $1$. Then, Bob can move to lilypad $2$. Alice is no longer able to move and loses, giving Bob the win. It can be shown that Bob can always win regardless of Alice's moves; hence, Alice does not have a winning strategy.",
+    "samples": [
+      {
+        "input": "5\n2 1 2\n3 3 1\n4 2 3\n5 2 4\n7 6 2",
+        "output": "\nNO\nYES\nNO\nYES\nYES"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 138343,
+    "url": "https://codeforces.com/blog/entry/138343",
+    "tutorial": "2055A - Two Frogs\n\nHint 1\n\nLook at the distance between the frogs.\n\nSolution\n\nNotice that regardless of how the players move, the difference between the numbers of the lilypads the two players are standing on always alternates even and odd, depending on the starting configuration. Then, the key observation is that exactly one player has the following winning strategy:\n\nWalk towards the other player, and do not stop until they are forced onto lilypad $1$ or $n$.\n\nFor instance, if Alice and Bob start on lilypads with the same parity, Bob cannot stop Alice from advancing towards him. This is because at the start of Alice's turn, she will always be able to move towards Bob due to their distance being even and therefore at least $2$, implying that there is a free lilypad for her to jump to. This eventually forces Bob into one of the lilypads $1, n$, causing him to lose.\n\nIn the case that they start on lilypads with different parity, analogous logic shows that Bob wins. Therefore, for each case, we only need to check the parity of the lilypads for a constant time solution.\n\nImplementation",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n\nusing namespace std;\n\nint main()\n{\n    ios_base::sync_with_stdio(false);\n    cin.tie(0);\n\n    int T; cin >> T;\n    while (T--) {\n        int N, A, B; cin >> N >> A >> B;\n        if ((A ^ B) & 1) cout << \"NO\\n\";\n        else cout << \"YES\\n\";\n    }\n    cout.flush();\n    return 0;\n}"
+    ]
+  }
+}

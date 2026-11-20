@@ -1,0 +1,45 @@
+{
+  "contest_id": 1994,
+  "index": "G",
+  "name": "Minecraft",
+  "rating": 2600,
+  "tags": [
+    "bitmasks",
+    "brute force",
+    "dp",
+    "graphs",
+    "math"
+  ],
+  "points": 2750.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1994G",
+  "url": "https://codeforces.com/problemset/problem/1994/G",
+  "contest_start_time": "2024-07-18T14:35:00+00:00",
+  "statement": {
+    "title": "G. Minecraft",
+    "time_limit": "2 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "After winning another Bed Wars game, Masha and Olya wanted to relax and decided to play a new game. Masha gives Olya an array $a$ of length $n$ and a number $s$. Now Olya's task is to find a non-negative number $x$ such that $\\displaystyle\\sum_{i=1}^{n} a_i \\oplus x = s$. But she is very tired after a tight round, so please help her with this.\n\nBut this task seemed too simple to them, so they decided to make the numbers larger (up to $2^k$) and provide you with their binary representation.",
+    "input_spec": "Each test consists of several test cases. The first line contains a single integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases. Then follows the description of the test cases.\n\nThe first line of each test case contains two integers $n$ and $k$ ($1 \\le n, k, n \\cdot k \\le 2 \\cdot 10^6$) — the length of the array $a$ and the length of the binary representation of all numbers.\n\nThe second line contains a string of length $k$, consisting of zeros and ones — the binary representation of the number $s$, starting from the most significant bits.\n\nThe next $n$ lines also contain strings of length $k$, consisting of zeros and ones, the $i$-th of these strings contains the binary representation of the number $a_i$, starting from the most significant bits.\n\nIt is guaranteed that the sum of the values $n \\cdot k$ for all test cases does not exceed $2 \\cdot 10^6$.",
+    "output_spec": "For each test case, output a string of length $k$ on a separate line, consisting of zeros or ones — the binary representation of any suitable number $x$ ($x \\ge 0$), starting from the most significant bits, or $-1$ if such $x$ does not exist.",
+    "note": "In the first test case, $s = 11, a = [14, 6, 12, 15]$, if $x = 14$, then $\\displaystyle\\sum_{i=1}^{n} a_i \\oplus x = (14 \\oplus 14) + (6 \\oplus 14) + (12 \\oplus 14) + (15 \\oplus 14) = 0 + 8 + 2 + 1 = 11 = s$.\n\nIn the second test case, $s = 41, a = [191, 158]$, if $x = 154$, then $\\displaystyle\\sum_{i=1}^{n} a_i \\oplus x = (191 \\oplus 154) + (158 \\oplus 154) = 37 + 4 = 41 = s$.",
+    "samples": [
+      {
+        "input": "4\n4 5\n01011\n01110\n00110\n01100\n01111\n2 8\n00101001\n10111111\n10011110\n5 4\n0101\n0010\n0000\n0000\n0010\n0011\n6 5\n00011\n10110\n11001\n01010\n11100\n10011\n10000",
+        "output": "\n01110\n10011010\n0010\n-1"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 131666,
+    "url": "https://codeforces.com/blog/entry/131666",
+    "tutorial": "We will do recursion. Let's go from the lower bits to the significant bits.\n\n$rec(i, sum)$ means that the first $i$ bits are selected, the sum of them divided by $2^i$ equals $sum$, and the first $i$ bits match the ones we need. Let $cnt_i$ — the number of ones in the numbers in the $i$-th bit. Then we can go from state $(i, sum)$ to $(i + 1, \\lfloor \\frac{sum + cnt_i}{2} \\rfloor)$ and $(i + 1, \\lfloor \\frac{sum + n - cnt_i}{2} \\rfloor)$ if the lowest bit matches the $i$-th bit in $s$. There are at most $nk$ states in such a recursion (proof below). Thus, if we do the memoization, the solution will run $O(nk)$.\n\nProof:\n\n$sum$ is always at most $n$. At the beginning of the recursion, $sum = 0$, so the inequality is satisfied. When we go to the next step $\\frac{sum + cnt_i}{2}$, $\\frac{sum + n - cnt_i}{2} \\leq \\frac{n + n}{2} = n$, which was required to prove.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n\nusing namespace std;\n\nint n, k;\nvector<vector<bool>> memo;\nstring res;\nvector<int> cnt;\nstring s;\n\nbool rec(int i, int cur) {\n    if (i == k) {\n        if (cur == 0) {\n            return true;\n        }\n        return false;\n    }\n    if (memo[i][cur]) return false;\n    memo[i][cur] = true;\n    for (int c = 0; c < 2; ++c) {\n        int q = cur;\n        if (c == 0) q += cnt[i];\n        else q += n - cnt[i];\n        if ((q & 1) == s[i] - '0') {\n            if (rec(i + 1, q / 2)) {\n                res += char(c + '0');\n                return true;\n            }\n        }\n    }\n    return false;\n}\n\nint main() {\n    cin.tie(nullptr)->sync_with_stdio(false);\n\n    int tests;\n    cin >> tests;\n    while (tests--) {\n        cin >> n >> k;\n        cin >> s;\n        reverse(s.begin(), s.end());\n        cnt = vector<int>(k);\n        for (int i = 0; i < n; ++i) {\n            string t;\n            cin >> t;\n            reverse(t.begin(), t.end());\n            for (int j = 0; j < k; ++j) cnt[j] += t[j] - '0';\n        }\n        memo = vector<vector<bool>>(k, vector<bool>(n, false));\n        res = \"\";\n        rec(0, 0);\n        if (res.empty()) cout << \"-1\\n\";\n        else cout << res << '\\n';\n    }\n}"
+    ]
+  }
+}

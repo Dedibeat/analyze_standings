@@ -1,0 +1,43 @@
+{
+  "contest_id": 2000,
+  "index": "D",
+  "name": "Right Left Wrong",
+  "rating": 1200,
+  "tags": [
+    "greedy",
+    "implementation",
+    "two pointers"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2000D",
+  "url": "https://codeforces.com/problemset/problem/2000/D",
+  "contest_start_time": "2024-08-13T14:40:00+00:00",
+  "statement": {
+    "title": "D. Right Left Wrong",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Vlad found a strip of $n$ cells, numbered from left to right from $1$ to $n$. In the $i$-th cell, there is a positive integer $a_i$ and a letter $s_i$, where all $s_i$ are either 'L' or 'R'.\n\nVlad invites you to try to score the maximum possible points by performing any (possibly zero) number of operations.\n\nIn one operation, you can choose two indices $l$ and $r$ ($1 \\le l  \\lt  r \\le n$) such that $s_l$ = 'L' and $s_r$ = 'R' and do the following:\n\n add $a_l + a_{l + 1} + \\dots + a_{r - 1} + a_r$ points to the current score;\n\n replace $s_i$ with '.' for all $l \\le i \\le r$, meaning you can no longer choose these indices.\n\nFor example, consider the following strip:\n\n$3$$5$$1$$4$$3$$2$\n\nLRLLLR\n\nYou can first choose $l = 1$, $r = 2$ and add $3 + 5 = 8$ to your score.\n\n$3$$5$$1$$4$$3$$2$\n\n..LLLR\n\nThen choose $l = 3$, $r = 6$ and add $1 + 4 + 3 + 2 = 10$ to your score.\n\n$3$$5$$1$$4$$3$$2$\n\n......\n\nAs a result, it is impossible to perform another operation, and the final score is $18$.\n\nWhat is the maximum score that can be achieved?",
+    "input_spec": "The first line contains one integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases.\n\nThe first line of each test case contains one integer $n$ ($2 \\le n \\le 2 \\cdot 10^5$) — the length of the strip.\n\nThe second line of each test case contains $n$ integers $a_1, a_2, \\dots, a_n$ ($1 \\le a_i \\le 10^5$) — the numbers written on the strip.\n\nThe third line of each test case contains a string $s$ of $n$ characters 'L' and 'R'.\n\nIt is guaranteed that the sum of the values of $n$ across all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, output one integer — the maximum possible number of points that can be scored.",
+    "note": null,
+    "samples": [
+      {
+        "input": "4\n6\n3 5 1 4 3 2\nLRLLLR\n2\n2 8\nLR\n2\n3 9\nRL\n5\n1 2 3 4 5\nLRLRR",
+        "output": "\n18\n10\n0\n22"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 132689,
+    "url": "https://codeforces.com/blog/entry/132689",
+    "tutorial": "Note that since all characters of the selected segment of the string $s$ are erased after applying the operation, the segments we choose cannot overlap. However, they can be nested if we first choose an inner segment and then an outer one.\n\nSince all numbers in the array are positive, it is always beneficial to take the largest possible segment in the answer, that is, from the first 'L' to the last 'R'. By choosing this segment, we can only select segments within it. We will continue to choose such segments within the last selected one as long as possible. To quickly find the sums of the segments, we will calculate the prefix sums of the array $a$.",
+    "solution_code": [
+      "def solve():\n    n = int(input())\n    a = [0]\n    for x in input().split():\n        x = int(x)\n        a.append(a[-1] + x)\n    s = input()\n    ans = 0\n    l = 0\n    r = n - 1\n    while r > l:\n        while l < n and s[l] == 'R':\n            l += 1\n        while r >= 0 and s[r] == 'L':\n            r -= 1\n        if l < r:\n            ans += a[r + 1] - a[l]\n            l += 1\n            r -= 1\n    print(ans)\n \nt = int(input())\nfor _ in range(t):\n    solve()"
+    ]
+  }
+}

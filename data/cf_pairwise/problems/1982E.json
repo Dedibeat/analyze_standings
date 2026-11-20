@@ -1,0 +1,47 @@
+{
+  "contest_id": 1982,
+  "index": "E",
+  "name": "Number of k-good subarrays",
+  "rating": 2300,
+  "tags": [
+    "bitmasks",
+    "brute force",
+    "combinatorics",
+    "divide and conquer",
+    "dp",
+    "math",
+    "meet-in-the-middle"
+  ],
+  "points": 2500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1982E",
+  "url": "https://codeforces.com/problemset/problem/1982/E",
+  "contest_start_time": "2024-06-25T14:35:00+00:00",
+  "statement": {
+    "title": "E. Number of k-good subarrays",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Let $bit(x)$ denote the number of ones in the binary representation of a non-negative integer $x$.\n\nA subarray of an array is called $k$-good if it consists only of numbers with no more than $k$ ones in their binary representation, i.e., a subarray $(l, r)$ of array $a$ is good if for any $i$ such that $l \\le i \\le r$ condition $bit(a_{i}) \\le k$ is satisfied.\n\nYou are given an array $a$ of length $n$, consisting of consecutive non-negative integers starting from $0$, i.e., $a_{i} = i$ for $0 \\le i \\le n - 1$ (in $0$-based indexing). You need to count the number of $k$-good subarrays in this array.\n\nAs the answer can be very large, output it modulo $10^{9} + 7$.",
+    "input_spec": "Each test consists of multiple test cases. The first line contains an integer $t$ ($1 \\le t \\le 10^{4}$) — the number of test cases. The following lines describe the test cases.\n\nThe single line of each test case contains two integers $n$, $k$ ($1 \\le n \\le 10^{18}, 1 \\le k \\le 60$).",
+    "output_spec": "For each test case, output a single integer — the number of $k$-good subarrays modulo $10^{9} + 7$.",
+    "note": "For the first test case $a = [0, 1, 2, 3, 4, 5]$, $k = 1$.\n\nTo find the answer, let's write all the numbers in binary representation:\n\n$$a = [\\color{green}{000}, \\color{green}{001}, \\color{green}{010}, \\color{red}{011}, \\color{green}{100}, \\color{red}{101}]$$\n\nFrom this, it can be seen that the numbers $3$ and $5$ have $2 \\ge (k = 1)$ ones in their binary representation, so the answer should include all subarrays that do not contain either $3$ or $5$, which are the subarrays (in $0$-based indexing): ($0$, $0$), ($0$, $1$), ($0$, $2$), ($1$, $1$), ($1$, $2$), ($2$, $2$), ($4$, $4$).",
+    "samples": [
+      {
+        "input": "10\n6 1\n16 2\n1 1\n3 1\n31 3\n14 1\n1337 5\n100000 20\n795569939321040850 56\n576460752303423268 59",
+        "output": "\n7\n35\n1\n6\n155\n8\n7323\n49965\n741136395\n66679884"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 130839,
+    "url": "https://codeforces.com/blog/entry/130839",
+    "tutorial": "Let $f(n, k)$ be a function to solve the problem, which will return three values $(l, r, ans)$ such that:\n\n $l$ — for the first $l$ numbers (i.e. from $0$ to $l - 1$) $bit(x) \\le k$ holds, while $bit(l)  \\gt  k$ or $l \\ge n$;\n\n $r$ — for the last $r$ numbers (i.e. from $n - r$ to $n - 1$) $bit(x) \\le k$ holds, while $bit(n - r - 1)  \\gt  k$ or $n - r - 1  \\lt  0$;\n\n $ans$ — the answer for the pair $(n, k)$.\n\nLet's use the \"divide and conquer\" approach. Divide the segment from $0$ to $n$ into two segments:\n\n from $0$ to $2^{m} - 1$, where $m$ is the maximum such that $2^{m}  \\lt  n$;\n\n from $2^{m}$ to $n - 1$.\n\nIt can be noticed that instead of calculating the function on the segment from $2^{k}$ to $n - 1$, it is possible to calculate it from $0$ to $n - 1 - 2^{m}$, but with a smaller $k$.\n\nMore formally, $f(n, k)$ can be recalculated through $f(2^{m}, k)$ and $f(n - 2^{m}, k - 1)$.\n\nBased on the pair of triples $(l_{1}, r_{1}, ans_{1})$, which is obtained after calculating $f(2^{m}, k)$ and $(l_{2}, r_{2}, ans_{2})$, which is obtained after calculating $f(n - 2^{m}, k - 1)$, it is quite trivial to recalculate the triple for $f(n, k)$ using the formula in $O(1)$.\n\nHowever, the solution still works in $O(n)$ time, as we will have a complete binary tree of recursive calls.\n\nTo fix this, it is only necessary to precalculate all $f(2^{m}, k)$ for each possible $k$ and $m$. For $f(2^{m}, k)$, it can be noticed that it is recalculated through $f(2^{m - 1}, k)$ and $f(2^{m - 1}, k - 1)$, so all values can be calculated using dynamic programming.\n\nAfter this, in the recursive function, we always calculate $f(2^{m}, k)$ in $O(1)$, and for the next call, the first argument is halved, so now everything works in $O(\\log n)$ for one test case.\n\nIn total, the solution is in $O(\\log n)$ for the test case.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n \nusing namespace std;\n \nconst int MOD = 1000000007;\n \nmap<pair<long long, int>, tuple<int, long long, long long>> mem;\n \ntuple<int, long long, long long> calc(long long n, int k){\n\tif (k < 0){\n\t\treturn tuple{0, 0ll, 0ll};\n\t}\n\tif (n == 1){\n\t\treturn tuple{1, 1ll, 1ll};\n\t}\n\tint bit = 63 - __builtin_clzll(n);\n\tlong long mid = (1ll << bit);\n\tif (mid == n){\n\t\tmid >>= 1;\n\t\tif (mem.count({n, k})){\n\t\t\treturn mem[{n, k}];\n\t\t}\n\t}\n\tauto [f1, s1, e1] = calc(mid, k);\n\tauto [f2, s2, e2] = calc(n - mid, k - 1);\n \n\tint sub1 = (e1 % MOD) * ((e1 + 1) % MOD) % MOD * 500000004 % MOD;\n\tf1 = (f1 * 1ll - sub1 + MOD) % MOD;\n\tint sub2 = (s2 % MOD) * ((s2 + 1) % MOD) % MOD * 500000004 % MOD;\n\tf2 = (f2 * 1ll - sub2 + MOD) % MOD;\n \n\tlong long p = (e1 + s2) % MOD;\n\tint f_cur = (f1 * 1ll + f2 + (p * 1ll * ((p + 1) % MOD) % MOD * 500000004 % MOD)) % MOD;\n\tlong long s_cur = s1;\n\tlong long e_cur = e2;\n\tif (s1 == e1 && s1 != 0){\n\t\ts_cur = (s1 + s2);\n\t}\n\tif (s2 == e2 && s2 != 0){\n\t\te_cur = (e1 + e2);\n\t}\n\tif ((mid << 1) == n){\n\t\tmem[{n, k}] = tuple{f_cur, s_cur, e_cur};\n\t}\n\treturn tuple{f_cur, s_cur, e_cur};\n};\n \nvoid solve(){\n\tlong long n;\n\tint k;\n\tcin >> n >> k;\n\tcout << get<0>(calc(n, k)) << '\\n';\n}\n \nint main()\n{\n#ifdef FELIX\n\tauto _clock_start = chrono::high_resolution_clock::now();\n#endif\n\tios_base::sync_with_stdio(false);\n\tcin.tie(0);\n\tcout.tie(0);\n \n\tint tests = 1;\n\tcin >> tests;\n\tfor (int test = 0; test < tests; test++){\n\t\tsolve();\n\t}\n \n#ifdef FELIX\n\tcerr << \"Executed in \" << chrono::duration_cast<chrono::milliseconds>(\n\t\tchrono::high_resolution_clock::now()\n\t\t\t- _clock_start).count() << \"ms.\" << endl;\n#endif\n\treturn 0;\n}"
+    ]
+  }
+}

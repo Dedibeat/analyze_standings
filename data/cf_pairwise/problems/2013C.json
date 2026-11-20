@@ -1,0 +1,43 @@
+{
+  "contest_id": 2013,
+  "index": "C",
+  "name": "Password Cracking",
+  "rating": 1400,
+  "tags": [
+    "constructive algorithms",
+    "interactive",
+    "strings"
+  ],
+  "points": 1250.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2013C",
+  "url": "https://codeforces.com/problemset/problem/2013/C",
+  "contest_start_time": "2024-09-20T14:35:00+00:00",
+  "statement": {
+    "title": "C. Password Cracking",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Dimash learned that Mansur wrote something very unpleasant about him to a friend, so he decided to find out his password at all costs and discover what exactly he wrote.\n\nBelieving in the strength of his password, Mansur stated that his password — is a binary string of length $n$. He is also ready to answer Dimash's questions of the following type:\n\nDimash says a binary string $t$, and Mansur replies whether it is true that $t$ is a substring of his password.\n\nHelp Dimash find out the password in no more than $2n$ operations; otherwise, Mansur will understand the trick and stop communicating with him.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 100$). The description of the test cases follows.",
+    "output_spec": null,
+    "note": "In the first example, the string $010$ is given. Therefore, the answers to the queries are as follows:\n\n\"? 00\" $00$ is not a substring of $010$, so the answer is $0$.\n\n\"? 000\" $000$ is not a substring, so the answer is $0$.\n\n\"? 010\" $010$ is a substring, so the answer is $1$.\n\nIn the second example, the string is $1100$, in the third $0110$, and in the fourth $10$.",
+    "samples": [
+      {
+        "input": "\n4\n3\n\n0\n\n0\n\n1\n\n4\n\n4\n\n2",
+        "output": "\n\n\n? 00\n\n? 000\n\n? 010\n\n! 010\n\n! 1100\n\n! 0110\n\n! 10"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "missing"
+  },
+  "editorial": {
+    "blog_id": 134298,
+    "url": "https://codeforces.com/blog/entry/134298",
+    "tutorial": null,
+    "solution_code": [
+      "#include <bits/stdc++.h>\n\nusing namespace std;\ntypedef long long ll;\ntypedef unsigned long long ull;\n\n#define forn(i,j,k) for(ll i=(j); i<=(k); i++)\n#define rofn(i,j,k) for(ll i=(j); i>=(k); i--)\n\nint main() {\n    ll t;\n    cin >> t;\n\n    ll n;\n    while(t--) {\n        cin >> n;\n        vector<ll> a(n+1);\n        ll mn = 1e15, mx=-1;\n        forn(i, 1, n) {\n            cin >> a[i];\n            mn = min(mn, a[i]);\n            mx = max(mx, a[i]);\n        }\n        \n        ll low = mn, high = mx;\n        ll alpha, beta;\n        while(low+1 < high) {\n            alpha = (low + high) / 2;\n            ll tmp = 0;\n            bool valid = true;\n            rofn(i, n, 1) {\n                tmp += a[i];\n                if(tmp > (n-i+1)*alpha) {\n                    valid = false;\n                    break;\n                }\n            }\n            if(valid) high = alpha;\n            else low = alpha;\n        }\n        alpha = high;\n\n        low = mn; high = mx;\n        while(low+1 < high) {\n            beta = (low + high) / 2;\n            ll tmp = 0;\n            bool valid = true;\n            forn(i, 1, n) {\n                tmp += a[i];\n                if(tmp < i*beta) {\n                    valid = false;\n                    break;\n                }\n            }\n            \n            if(valid) low = beta;\n            else high = beta;\n        }\n        beta = low;\n\n        cout << alpha - beta << endl;\n    }\n}"
+    ]
+  }
+}

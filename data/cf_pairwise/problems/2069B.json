@@ -1,0 +1,42 @@
+{
+  "contest_id": 2069,
+  "index": "B",
+  "name": "Set of Strangers",
+  "rating": 1200,
+  "tags": [
+    "greedy",
+    "matrices"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2069B",
+  "url": "https://codeforces.com/problemset/problem/2069/B",
+  "contest_start_time": "2025-02-18T14:35:00+00:00",
+  "statement": {
+    "title": "B. Set of Strangers",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "You are given a table of $n$ rows and $m$ columns. Initially, the cell at the $i$-th row and the $j$-th column has color $a_{i, j}$.\n\nLet's say that two cells are strangers if they don't share a side. Strangers are allowed to touch with corners.\n\nLet's say that the set of cells is a set of strangers if all pairs of cells in the set are strangers. Sets with no more than one cell are sets of strangers by definition.\n\nIn one step, you can choose any set of strangers such that all cells in it have the same color and paint all of them in some other color. You can choose the resulting color.\n\nWhat is the minimum number of steps you need to make the whole table the same color?",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases. Next, $t$ cases follow.\n\nThe first line of each test case contains two integers $n$ and $m$ ($1 \\le n \\le m \\le 700$) — the number of rows and columns in the table.\n\nThe next $n$ lines contain the colors of cells in the corresponding row $a_{i, 1}, \\dots, a_{i, m}$ ($1 \\le a_{i, j} \\le nm$).\n\nIt's guaranteed that the total sum of $nm$ doesn't exceed $5 \\cdot 10^5$ over all test cases.",
+    "output_spec": "For each test case, print one integer — the minimum number of steps to paint all cells of the table the same color.",
+    "note": "In the first test case, the table is painted in one color from the start.\n\nIn the second test case, you can, for example, choose all cells with color $1$ and paint them in $3$. Then choose all cells with color $2$ and also paint them in $3$.\n\nIn the third test case, you can choose all cells with color $5$ and paint them in color $4$.",
+    "samples": [
+      {
+        "input": "4\n1 1\n1\n3 3\n1 2 1\n2 3 2\n1 3 1\n1 6\n5 4 5 4 4 5\n3 4\n1 4 2 2\n1 4 3 5\n6 6 3 5",
+        "output": "\n0\n2\n1\n10"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 139774,
+    "url": "https://codeforces.com/blog/entry/139774",
+    "tutorial": "Let's fix some color and look at all cells of that color. We can decide either to leave this color as the resulting one and then we can ignore all these cells. Or we should get rid of this color, and it would cost at least one operation.\n\nIf all cells are pairwise strangers, then one operation is enough to recolor all of them in the desired color. Otherwise, we need at least two operations. It turns out that two operations are enough: each connected component of the same color can be painted in two steps if we color the table like a chessboard and choose \"black\" cells at the first step and \"white\" cells at the second step. Since components don't touch each other, we can choose subsets from different components independently. In total, we can get rid of any color in two steps.\n\nAs a result, for each color, let's calculate the number of steps we need to get rid of it as $v_c$. It's equal to $1$ if it's present in the table, plus $1$ if there are two neighbors of that color. The answer then equals to $\\sum_{c=1}^{nm}{v_c}$ minus the color we decided to leave untouched. Or, optimally, $\\sum_{c=1}^{nm}{v_c} - \\max_{c=1}^{nm}{v_c}$",
+    "solution_code": [
+      "for _ in range(int(input())):\n    n, m = map(int, input().split())\n    a = [list(map(int, input().split())) for i in range(n)]\n    hasColor = [0] * (n * m)\n    hasBad = [0] * (n * m)\n    for i in range(n):\n        for j in range(m):\n            hasColor[a[i][j] - 1] = 1\n            if i + 1 < n and a[i][j] == a[i + 1][j]:\n                hasBad[a[i][j] - 1] = 1\n            if j + 1 < m and a[i][j] == a[i][j + 1]:\n                hasBad[a[i][j] - 1] = 1\n    print(sum(hasColor) + sum(hasBad) - 1 - max(hasBad))"
+    ]
+  }
+}

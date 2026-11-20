@@ -1,0 +1,42 @@
+{
+  "contest_id": 2097,
+  "index": "A",
+  "name": "Sports Betting",
+  "rating": 1400,
+  "tags": [
+    "2-sat",
+    "brute force",
+    "math",
+    "sortings"
+  ],
+  "points": 500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2097A",
+  "url": "https://codeforces.com/problemset/problem/2097/A",
+  "contest_start_time": "2025-04-26T08:35:00+00:00",
+  "statement": {
+    "title": "A. Sports Betting",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "The boarding process for various flights can occur in different ways: either by bus or through a telescopic jet bridge. Every day, exactly one flight is made from St. Petersburg to Minsk, and Vadim decided to demonstrate to the students that he always knows in advance how the boarding will take place.\n\nVadim made a bet with $n$ students, and with the $i$-th student, he made a bet on day $a_i$. Vadim wins the bet if he correctly predicts the boarding process on both day $a_i+1$ and day $a_i+2$.\n\nAlthough Vadim does not know in advance how the boarding will occur, he really wants to win the bet at least with one student and convince him of his predictive abilities. Check if there exists a strategy for Vadim that allows him to guarantee success.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 10^4$). The description of the test cases follows.\n\nThe first line of each test case contains a single integer $n$ ($1 \\le n \\le 10^5$) — the number of students Vadim made bets with.\n\nThe second line of each test case contains $n$ integers $a_1, \\ldots, a_n$ ($1 \\le a_i \\le 10^9$) — the days on which Vadim made bets with the students.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $10^5$.",
+    "output_spec": "For each test case, output \"Yes\" (without quotes) if Vadim can guarantee convincing at least one student, and \"No\" otherwise.\n\nYou can output the answer in any case (upper or lower). For example, the strings \"yEs\", \"yes\", \"Yes\", and \"YES\" will be recognized as positive responses.",
+    "note": "In the first test case, Vadim needs to make at least one correct prediction about the boarding process on the second and third days. There are a total of $4$ possible boarding scenarios for these days, so Vadim can give all $4$ students different predictions and guarantee that at least one of them will be correct.\n\nIn the second test case, Vadim only made bets with three students and cannot guarantee that he will provide at least one of them with a correct prediction.",
+    "samples": [
+      {
+        "input": "5\n4\n1 1 1 1\n3\n2 2 2\n5\n2 4 3 2 4\n8\n6 3 1 1 5 1 2 6\n1\n1000000000",
+        "output": "\nYes\nNo\nYes\nNo\nNo"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 142316,
+    "url": "https://codeforces.com/blog/entry/142316",
+    "tutorial": "Let's sort the array $a$ in non-decreasing order: $a_1 \\le a_2 \\le \\ldots \\le a_n$. Suppose Vadim argues with the students in turn. We can formalize the problem as follows: since there are only two possible seating arrangements each day, we can encode them with the digits $0$ and $1$. Each of Vadim's predictions can be represented by a pair of numbers $(c_i, d_i)$—the seating arrangement for days $a_i+1$ and $a_i+2$, respectively.\n\nVadim will be able to win in the following cases:\n\n If there exists a quadruple of students $a_i = a_{i+1} = a_{i+2} = a_{i+3}$, meaning those students he will argue with on the same day. In this case, he can provide all possible $4$ predictions for days $a_i+1$ and $a_i+2$ and will guarantee at least one correct prediction.\n\n If there exists a pair of indices $i  \\lt  j$ such that $a_i = a_{i+1}  \\lt  a_j = a_{j+1}$ and for each $x \\in \\{ a_i+1, a_i+2, \\ldots, a_j-1 \\}$ there exists a $k$ such that $a_k = x$.\n\n Suppose on day $x$ and day $y$ ($x  \\lt  y$) Vadim argues with at least two students, and on days $x+1,\\ldots,y-1$ with at least one student.\n\n On day $x$, Vadim makes predictions $(0,1)$ and $(1,1)$.\n\n On each of the days $x+1,\\ldots,y-1$, Vadim makes predictions $(0,1)$.\n\n On day $y$, Vadim makes predictions $(0,0)$ and $(0,1)$.\n\nTo prove the correctness of Vadim's strategy, consider the string $s_{x+1} \\ldots s_{y+1} s_{y+2}$—the seating arrangements from day $x$ to day $y$. If $s_{x+1} \\neq 0$ or $s_{y+1} \\neq 1$, then Vadim can definitively convince at least one student on day $x$ or day $y$. Otherwise, if $s_{x+1}=0$ and $s_{y+1}=1$, then there exists a day $z$ ($x \\le z  \\lt  y$) such that $s_{z+1}=0$ and $s_{z+2}=1$, which means Vadim can convince a student on day $z$.\n\nIt can be shown that in all other cases, Vadim loses. To demonstrate this, we need to fix an arbitrary strategy of Vadim's and try to find a counterexample to his strategy. The general plan for the proof is as follows:\n\n If $a_i + 2 \\le a_i$, then the segments of students $[1, i]$ and $[i+1, n]$ can be considered independently. Let's consider a block of students with whom Vadim argues without breaks.\n\n If $a_1  \\lt  a_2$ or $a_{n-1}  \\lt  a_n$, then the first or, respectively, the last student can be easily discarded without affecting the other students.\n\n Otherwise, we have $a_1 = a_2 \\le \\ldots \\le a_{n-1} = a_n$, which is the only case where Vadim has no winning strategy according to the previous point, when $n \\le 3$.",
+    "solution_code": []
+  }
+}

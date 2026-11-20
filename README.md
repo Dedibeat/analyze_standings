@@ -45,7 +45,7 @@ The release commands are in [docs/STATUS.md](docs/STATUS.md#regenerate-the-shipp
 | `autoresearch/` | Logs of the July 2026 auto-research campaigns on the metric (see `docs/design/program.md`) |
 | `requirements.txt` | Pinned dependencies of the venv; sibling checkouts it needs are listed inside |
 | `requirements-de-stability.txt` | Pinned NumPy for the frozen DE stability experiment |
-| `*_run/` (gitignored) | Local experiment caches (pairwise, LLM, TabFM, DE stability) |
+| `*_run/` | Paid experiment outputs, committed: Gemini pairwise/LLM runs and the BigQuery TabFM responses. `de_stability_run/` and `hier_binary_run/` are local, derived and gitignored |
 
 Sibling repositories:
 - `../my-react-app`: the public app that receives the exported viewers and ratings.

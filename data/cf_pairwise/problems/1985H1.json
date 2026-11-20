@@ -1,0 +1,46 @@
+{
+  "contest_id": 1985,
+  "index": "H1",
+  "name": "Maximize the Largest Component (Easy Version)",
+  "rating": 1700,
+  "tags": [
+    "brute force",
+    "data structures",
+    "dfs and similar",
+    "dsu",
+    "graphs",
+    "implementation"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1985H1",
+  "url": "https://codeforces.com/problemset/problem/1985/H1",
+  "contest_start_time": "2024-06-11T14:35:00+00:00",
+  "statement": {
+    "title": "H1. Maximize the Largest Component (Easy Version)",
+    "time_limit": "2 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "Easy and hard versions are actually different problems, so read statements of both problems completely and carefully. The only difference between the two versions is the operation.\n\nAlex has a grid with $n$ rows and $m$ columns consisting of '.' and '#' characters. A set of '#' cells forms a connected component if from any cell in this set, it is possible to reach any other cell in this set by only moving to another cell in the set that shares a common side. The size of a connected component is the number of cells in the set.\n\nIn one operation, Alex selects any row $r$ ($1 \\le r \\le n$) or any column $c$ ($1 \\le c \\le m$), then sets every cell in row $r$ or column $c$ to be '#'. Help Alex find the maximum possible size of the largest connected component of '#' cells that he can achieve after performing the operation at most once.",
+    "input_spec": "The first line of the input contains a single integer $t$ ($1 \\leq t \\leq 10^4$) — the number of test cases.\n\nThe first line of each test case contains two integers $n$ and $m$ ($1 \\le n \\cdot m \\le 10^6$) — the number of rows and columns of the grid.\n\nThe next $n$ lines each contain $m$ characters. Each character is either '.' or '#'.\n\nIt is guaranteed that the sum of $n \\cdot m$ over all test cases does not exceed $10^6$.",
+    "output_spec": "For each test case, output a single integer — the maximum possible size of a connected component of '#' cells that Alex can achieve.",
+    "note": "In the second test case, it is optimal for Alex to set all cells in column $2$ to be '#'. Doing so will lead to the largest connected component of '#' having a size of $6$.\n\nIn the third test case, it is optimal for Alex to set all cells in row $2$ to be '#'. Doing so will lead to the largest connected component of '#' having a size of $9$.\n\nIn the fourth test case, it is optimal for Alex to set all cells in row $4$ to be '#'. Doing so will lead to the largest connected component of '#' having a size of $11$.",
+    "samples": [
+      {
+        "input": "6\n1 1\n.\n4 2\n..\n#.\n#.\n.#\n3 5\n.#.#.\n..#..\n.#.#.\n5 5\n#...#\n....#\n#...#\n.....\n...##\n6 6\n.#..#.\n#..#..\n.#...#\n#.#.#.\n.#.##.\n###..#\n6 8\n..#....#\n.####.#.\n###.#..#\n.##.#.##\n.#.##.##\n#..##.#.",
+        "output": "\n1\n6\n9\n11\n15\n30"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 129620,
+    "url": "https://codeforces.com/blog/entry/129620",
+    "tutorial": "1985H1 - Maximize the Largest Component (Easy Version)\n\nProblem Credits: sum\n Analysis: sum\n\nSolution\n\nLet's first solve the problem if we can only select and fill rows. Columns can be handled in the exact same way.\n\nFor each row $r$, we need to find the size of the component formed by filling row $r$ (i.e. the size of the component containing row $r$ if we set all cells in row $r$ to be $\\texttt{#}$).\n\nThe size of the component containing row $r$ if we set all cells in row $r$ to be $\\texttt{#}$ will be the sum of:\n\nThe number of $\\texttt{.}$ in row $r$ since these cells will be set to $\\texttt{#}$. Let $F_r$ denote this value for some row $r$.\n\nThe sum of sizes of components containing a cell in either row $r-1$, $r$, or $r+1$ (i.e. components that are touching row $r$). This is since these components will be part of the component containing row $r$. Let $R_r$ denote this value for some row $r$.\n\nThe challenge is computing the second term quickly. For some component, let $s$ be the size of the component and let $r_{min}$ and $r_{max}$ denote the minimum and maximum row of a cell in the component. This means that the component will contain cells with rows $r_{min},r_{min+1},...,r_{max}$. Note that we can find these values with a dfs. Since the component will contribute $s$ to rows in $[r_{min}-1,r_{min},\\ldots r_{max}+1]$, we add $s$ to $R_{r_{min}-1},R_{r_{min}},\\ldots,R_{r_{max}+1}$. This can be done naively or with prefix sums.\n\nWe find the maximum $F_r+R_r$ and then handle columns in the same way. This solution runs in $\\mathcal{O}(nm)$ time.\n\nCode (C++)",
+    "solution_code": [
+      "#include <bits/stdc++.h>\nusing namespace std;\n\nint n, m, minR, maxR, minC, maxC, sz, ans; vector<int> R, C, freeR, freeC; \nvector<vector<bool>> vis; vector<vector<char>> A;\n\nvoid dfs(int i, int j){\n    if (i <= 0 or i > n or j <= 0 or j > m or vis[i][j] or A[i][j] == '.')\n        return;\n    \n    vis[i][j] = true;\n\n    sz++;\n    minR = min(minR, i);\n    maxR = max(maxR, i);\n    minC = min(minC, j);\n    maxC = max(maxC, j);\n\n    dfs(i - 1, j);\n    dfs(i + 1, j);\n    dfs(i, j - 1);\n    dfs(i, j + 1);\n}\n\nvoid solve(){\n    cin >> n >> m;\n\n    R.assign(n + 5, 0);\n    C.assign(m + 5, 0);\n    freeR.assign(n + 5, 0);\n    freeC.assign(m + 5, 0);\n    vis.assign(n + 5, vector<bool>(m + 5, false));\n    A.assign(n + 5, vector<char>(m + 5, ' '));\n\n    for (int i = 1; i <= n; i++){\n        for (int j = 1; j <= m; j++){\n            cin >> A[i][j];\n\n            if (A[i][j] == '.'){\n                freeR[i]++;\n                freeC[j]++;\n            }\n        }\n    }\n    \n    for (int i = 1; i <= n; i++){\n        for (int j = 1; j <= m; j++){\n            if (vis[i][j] or A[i][j] == '.')\n                continue;\n\n            // Reset\n            sz = 0;\n            minR = 1e9;\n            maxR = -1e9;\n            minC = 1e9;\n            maxC = -1e9;\n\n            dfs(i, j);\n\n            // Expand by 1 since adjacent cells also connect\n            minR = max(minR - 1, 1);\n            maxR = min(maxR + 1, n);\n            minC = max(minC - 1, 1);\n            maxC = min(maxC + 1, m);\n            \n            // Update prefix sums\n            R[minR] += sz;\n            R[maxR + 1] -= sz;\n\n            C[minC] += sz;\n            C[maxC + 1] -= sz;\n        }\n    }\n\n    ans = 0;\n\n    for (int i = 1; i <= n; i++){\n        R[i] += R[i - 1];\n        ans = max(ans, freeR[i] + R[i]);\n    }\n    for (int i = 1; i <= m; i++){\n        C[i] += C[i - 1];\n        ans = max(ans, freeC[i] + C[i]);\n    }\n\n    cout << ans << \"\\n\";\n}\n\nint main(){\n    ios_base::sync_with_stdio(0); cin.tie(0);\n    int tc;\n    cin >> tc;\n\n    while (tc--)\n        solve();\n}"
+    ]
+  }
+}

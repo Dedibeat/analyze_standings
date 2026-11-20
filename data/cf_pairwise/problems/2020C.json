@@ -1,0 +1,46 @@
+{
+  "contest_id": 2020,
+  "index": "C",
+  "name": "Bitwise Balancing",
+  "rating": 1400,
+  "tags": [
+    "bitmasks",
+    "hashing",
+    "implementation",
+    "math",
+    "schedules",
+    "ternary search"
+  ],
+  "points": 1250.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2020C",
+  "url": "https://codeforces.com/problemset/problem/2020/C",
+  "contest_start_time": "2024-09-29T15:35:00+00:00",
+  "statement": {
+    "title": "C. Bitwise Balancing",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "You are given three non-negative integers $b$, $c$, and $d$.\n\nPlease find a non-negative integer $a \\in [0, 2^{61}]$ such that $(a\\, |\\, b)-(a\\, \\&\\, c)=d$, where $|$ and $\\&$ denote the bitwise OR operation and the bitwise AND operation, respectively.\n\nIf such an $a$ exists, print its value. If there is no solution, print a single integer $-1$. If there are multiple solutions, print any of them.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 10^5$). The description of the test cases follows.\n\nThe only line of each test case contains three positive integers $b$, $c$, and $d$ ($0 \\le b, c, d \\le 10^{18}$).",
+    "output_spec": "For each test case, output the value of $a$, or $-1$ if there is no solution. Please note that $a$ must be non-negative and cannot exceed $2^{61}$.",
+    "note": "In the first test case, $(0\\,|\\,2)-(0\\,\\&\\,2)=2-0=2$. So, $a = 0$ is a correct answer.\n\nIn the second test case, no value of $a$ satisfies the equation.\n\nIn the third test case, $(12\\,|\\,10)-(12\\,\\&\\,2)=14-0=14$. So, $a = 12$ is a correct answer.",
+    "samples": [
+      {
+        "input": "3\n2 2 2\n4 2 6\n10 2 14",
+        "output": "\n0\n-1\n12"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 134516,
+    "url": "https://codeforces.com/blog/entry/134516",
+    "tutorial": "C. Bitwise Balancing\n\nBy P.V.Sekhar\n\nHint 1\n\nTry to find some independent operations/combinations.\n\nHint 2\n\nThe expression is independent for each digit in binary representation\n\nSolution\n\nThe first observation is that the expression $a$|$b$ - $a$&$c = d$ is bitwise independent. That is, the combination of a tuple of bits of $a, b, and\\ c$ corresponding to the same power of 2 will only affect the bit value of $d$ at that power of 2 only.\n\nThis is because:\n\nWe are performing subtraction, so extra carry won't be generated to the next power of 2.\n\nAny tuple of bits of $a$, $b$, and $c$ corresponding to the same power of 2 won't result in -1 for that power of 2. As that would require $a|b$ to be zero and $a$&$c$ to be one. The former condition requires the bit of $a$ to be zero, while the latter requires it to be one, which is contradicting.\n\nNow, let us consider all 8 cases of bits of a, b, c and the corresponding bit value of d in the following table:\n\nSo, clearly, for different bits of $b, c,$ and $d$, we can find the value of the corresponding bit in $a$, provided it is not the case when bit values of $b, c,$ and $d$ are 1,0,0 or 0,1,1, which are not possible; so, in that case, the answer is -1.\n\nCode",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n#define ll long long\nusing namespace std;\n \nvoid solve() {\n    ll a = 0, b, c, d, pos = 1, bit_b, bit_c, bit_d, mask = 1;\n    cin >> b >> c >> d;\n    for (ll i = 0; i < 62; i++) {\n        if (b&mask) bit_b = 1;\n        else bit_b = 0;\n        if (c&mask) bit_c = 1;\n        else bit_c = 0;\n        if (d&mask) bit_d = 1;\n        else bit_d = 0;\n        if ((bit_b && (!bit_c) && (!bit_d)) || ((!bit_b) && bit_c && bit_d)) {\n            pos = 0;\n            break;\n        }\n        if (bit_b && bit_c) {\n            a += (1ll-bit_d)*mask;\n        } else {\n            a += bit_d*mask;\n        }\n        mask<<=1;\n    }\n    if (pos) {\n        cout << a << \"\\n\";\n    } else {\n        cout << -1 << \"\\n\";\n    }\n}\n \nint main() {\n    ll t;\n    cin >> t;\n    while (t--) {\n        solve();\n    }\n}"
+    ]
+  }
+}

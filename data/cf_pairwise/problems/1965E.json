@@ -1,0 +1,46 @@
+{
+  "contest_id": 1965,
+  "index": "E",
+  "name": "Connected Cubes",
+  "rating": 3100,
+  "tags": [
+    "constructive algorithms",
+    "games"
+  ],
+  "points": 2500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1965E",
+  "url": "https://codeforces.com/problemset/problem/1965/E",
+  "contest_start_time": "2024-04-27T14:35:00+00:00",
+  "statement": {
+    "title": "E. Connected Cubes",
+    "time_limit": "4 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "There are $n \\cdot m$ unit cubes currently in positions $(1, 1, 1)$ through $(n, m, 1)$. Each of these cubes is one of $k$ colors. You want to add additional cubes at any integer coordinates such that the subset of cubes of each color is connected, where two cubes are considered connected if they share a face.\n\nIn other words, for every pair of cubes of the same color $c$, it should be possible to travel from one to the other, moving only through cubes of color $c$ that share a face.\n\nThe existing cubes are currently in the corner of a room. There are colorless cubes completely filling the planes $x = 0$, $y = 0$, and $z = 0$, preventing you from placing additional cubes there or at any negative coordinates.\n\nFind a solution that uses at most $4 \\cdot 10^5$ additional cubes (not including the cubes that are currently present), or determine that there is no solution. It can be shown that under the given constraints, if there is a solution, there is one using at most $4 \\cdot 10^5$ additional cubes.",
+    "input_spec": "The first line of the input contains three integers $n$, $m$, and $k$ ($2 \\le n, m, k \\le 50$) — the number of rows and columns of cubes, and the number of colors, respectively.\n\nThe $i$-th of the next $n$ lines contains $m$ integers. The $j$-th of these is $a_{ij}$ ($1 \\le a_{ij} \\le k$) — the color of the cube at position $(i, j, 1)$. For every color from $1$ to $k$, it is guaranteed that there is at least one cube in the input of that color.",
+    "output_spec": "If there is no solution, print a single integer $-1$.\n\nOtherwise, the first line of output should contain a single integer $p$ ($0 \\le p \\le 4 \\cdot 10^5$) — the number of additional cubes you will add.\n\nThe next $p$ lines should contain four integers $x$, $y$, $z$ and $c$ ($1 \\le x, y, z \\le 10^6$, $1 \\le c \\le k$) — indicating that you are adding a cube with color $c$ at position $(x, y, z)$.\n\nNo two cubes in the output should have the same coordinates, and no cube in the output should have the same coordinates as any cube in the input.\n\nIf there are multiple solutions, print any.",
+    "note": "The image in the statement corresponds to the first example case, with $\\text{red} = 1$, $\\text{blue} = 2$, $\\text{green} = 3$.",
+    "samples": [
+      {
+        "input": "3 4 3\n3 2 3 1\n1 1 1 1\n1 3 3 2",
+        "output": "\n13\n1 1 2 3\n1 3 2 3\n2 1 2 3\n2 2 2 3\n2 3 2 3\n3 3 2 3\n1 2 2 2\n1 2 3 2\n1 3 3 2\n1 4 3 2\n2 4 3 2\n3 4 3 2\n3 4 2 2"
+      },
+      {
+        "input": "2 2 2\n2 1\n1 2",
+        "output": "\n9\n1 3 1 1\n2 3 1 1\n3 1 1 1\n3 2 1 1\n3 3 1 1\n1 1 2 2\n1 2 2 2\n2 1 2 2\n2 2 2 2"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 128914,
+    "url": "https://codeforces.com/blog/entry/128914",
+    "tutorial": "We can show that a solution always exists. This example with $n=3$, $m=5$, $k=4$ will demonstrate the construction we will use:\n\nFirst, extend each of the even columns up by $n+k-1$ spaces, keeping all cubes in a given vertical column the same color:\n\nThen, for the odd columns, do something similar, except we use the bottom $n-1$ rows to \"bend\" them around so the tops point out to the right:\n\nAfter that, extend each of these new \"bent\" rows (each of which corresponds to an input cube in an odd column) to the right by $k$:\n\nNow, each initial cube in the $n$ by $m$ grid corresponds to one of these extended rows or columns, each of which is a connected group. Fill in the remaining columns between the even columns with $k$ rows each. The $i$-th of these should be color $i$.\n\nNow do the same for the odd columns:\n\nAt this point, each cell of a given color is connected to at least one of the rows/columns we added in the last two steps. Now, we want to connect all of those by color. Start by adding these $k$ rows:\n\nFollowed by these $k-1$ rows:\n\nOnce again, at this point, each cube of a given color is connected to one of the rows of that color we added in the last two steps. So the last remaining step is to connect them:\n\nNow, all cubes of each color are connected.\n\nThis construction uses exactly $(n+k)^2m - (k-1)^2(m-1) - nm$ additional cubes. Since $n, m, k \\le 50$, this is at most $379,851$, which fits within the bounds of the problem.\n\nComplexity: $O((n+k)^2 m)$",
+    "solution_code": [
+      "n, m, k = map(int, input().split())\na = []\n\nfor i in range(n):\n    a.append(list(map(int, input().split())))\n\nans = []\n\nfor x in range(n):\n    for y in range(m):\n        for z in range(1, n + 1):\n            if y % 2 == 1:\n                ans.append([x, y, z, a[x][y]])\n            else:\n                ans.append([x, y, z, a[min(x, n - z)][y]])\n        for z in range(n + 1, n + k + 1):\n            if y % 2 == 1:\n                ans.append([x, y, z, a[x][y]])\n            else:\n                ans.append([x, y, z, z - n])\n\nfor x in range(n, n + k):\n    for y in range(m):\n        for z in range(1, n + 1):\n            if y % 2 == 1:\n                ans.append([x, y, z, x - n + 1])\n            else:\n                ans.append([x, y, z, a[n - z][y]])\n        ans.append([x, y, n + 1, x - n + 1])\n\nfor y in range(m):\n    for z in range(n + 2, n + k + 1):\n        ans.append([n, y, z, z - n])\n\nfor x in range(n + 1, n + k):\n    for z in range(n + 2, n + k + 1):\n        ans.append([x, 0, z, max(x - n + 1, z - n)])\n\nprint(len(ans))\n\nfor cube in ans:\n    print(cube[0] + 1, cube[1] + 1, cube[2] + 1, cube[3])"
+    ]
+  }
+}

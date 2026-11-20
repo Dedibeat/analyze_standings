@@ -1,0 +1,41 @@
+{
+  "contest_id": 2031,
+  "index": "C",
+  "name": "Penchick and BBQ Buns",
+  "rating": 1300,
+  "tags": [
+    "constructive algorithms",
+    "math",
+    "number theory"
+  ],
+  "points": 1500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2031C",
+  "url": "https://codeforces.com/problemset/problem/2031/C",
+  "contest_start_time": "2024-11-15T12:35:00+00:00",
+  "statement": {
+    "title": "C. Penchick and BBQ Buns",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Penchick loves two things: square numbers and Hong Kong-style BBQ buns! For his birthday, Kohane wants to combine them with a gift: $n$ BBQ buns arranged from left to right. There are $10^6$ available fillings of BBQ buns, numbered from $1$ to $10^6$. To ensure that Penchick would love this gift, Kohane has a few goals:\n\n No filling is used exactly once; that is, each filling must either not appear at all or appear at least twice.\n\n For any two buns $i$ and $j$ that have the same filling, the distance between them, which is $|i-j|$, must be a perfect square$^{\\text{∗}}$.\n\nHelp Kohane find a valid way to choose the filling of the buns, or determine if it is impossible to satisfy her goals! If there are multiple solutions, print any of them.\n\n$^{\\text{∗}}$A positive integer $x$ is a perfect square if there exists a positive integer $y$ such that $x = y^2$. For example, $49$ and $1$ are perfect squares because $49 = 7^2$ and $1 = 1^2$ respectively. On the other hand, $5$ is not a perfect square as no integer squared equals $5$",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 2\\cdot 10^5$). The description of the test cases follows.\n\nThe only line of each test case contains a single integer $n$ ($1\\le n\\le 2\\cdot 10^5$) — the number of BBQ buns.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, if no valid choice of fillings exists, output $-1$. Otherwise, output $n$ integers, where the $i$-th integer represents the filling of the $i$-th BBQ bun. If there are multiple solutions, print any of them.",
+    "note": "In the first test case, the choice of fillings \"1 1 1\" is not allowed because buns $1$ and $3$ have the same filling, but are distance $2$ apart, which is not a perfect square. The choice of fillings \"1 1 2\" is also not allowed as filling $2$ is only used once.\n\nIn the second test case, the solution is valid because no filling is used exactly once, and any two buns with the same filling are spaced at a distance equal to a perfect square. For example, buns $1$ and $10$ both have filling $1$ and are spaced at a distance of $9=3^2$. Similarly, buns $5$ and $9$ both have filling $10$ and are spaced at a distance of $4=2^2$.",
+    "samples": [
+      {
+        "input": "2\n3\n12",
+        "output": "\n-1\n1 2 3 6 10 2 7 6 10 1 7 3"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 136260,
+    "url": "https://codeforces.com/blog/entry/136260",
+    "tutorial": "2031C - Penchick and BBQ Buns\n\nIdea & preparation: ACGN\n\nHint 1\n\nSolve the problem for $n=2$ and for even $n$ in general.\n\nHint 2\n\nFor odd $n$, there exists a color that appears at least thrice. What does this mean?\n\nSolution\n\nNote that $1$ is a square number; thus, for even $n$, the construction $1~1~2~2~3~3\\ldots\\frac{n}{2}~\\frac{n}{2}$ works.\n\nFor odd $n$, note that there exists a color that appears at least thrice, say at positions $x\\lt y \\lt z$. Then $y-x$, $z-y$ and $z-x$ are all square numbers. Note that $z-x=(z-y)+(y-x)$, which has the smallest solution being $z-x=5^2=25$, and ${z-y,y-x}={9,16}$. Therefore, there is no solution if $n\\le 25$.\n\nWe devise a solution for $n=27$. By the above, we have the following posts filled in:\n\n$1\\text{ (8 blanks) }1\\text{ (15 blanks) }1~\\underline{ }$\n\nWe can use the same color for positions $11$ and $27$, to obtain the following:\n\n$1\\text{ (8 blanks) }1~2\\text{ (14 blanks) }1~2$\n\nThe remaining even-length blanks can be filled in similar to above. The result is as follows and can be hard-coded:\n\n$\\mathtt{1~3~3~4~4~5~5~6~6~1~2~7~7~8~8~9~9~10~10~11~11~12~12~13~13~1~2}$\n\nThen, for odd $n\\ge 27$, add $\\frac{n-27}{2}$ pairs with distance $1$ to complete the construction.\n\nNote that there are different ways to construct this starting array for $n=27$ as well.\n\nTime complexity: $O(n)$\n\nImplementation: (by ACGN) 291676952\n\nFeedback\n\nGood problem:\n\nOkay problem:\n\nBad problem:\n\nDid not attempt:",
+    "solution_code": []
+  }
+}

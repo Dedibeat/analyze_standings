@@ -1,0 +1,49 @@
+{
+  "contest_id": 1976,
+  "index": "F",
+  "name": "Remove Bridges",
+  "rating": 2800,
+  "tags": [
+    "data structures",
+    "dfs and similar",
+    "dp",
+    "greedy",
+    "sortings",
+    "trees"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1976F",
+  "url": "https://codeforces.com/problemset/problem/1976/F",
+  "contest_start_time": "2024-05-30T14:35:00+00:00",
+  "statement": {
+    "title": "F. Remove Bridges",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "You are given a rooted tree, consisting of $n$ vertices, numbered from $1$ to $n$. Vertex $1$ is the root. Additionally, the root only has one child.\n\nYou are asked to add exactly $k$ edges to the tree (possibly, multiple edges and/or edges already existing in the tree).\n\nRecall that a bridge is such an edge that, after you remove it, the number of connected components in the graph increases. So, initially, all edges of the tree are bridges.\n\nAfter $k$ edges are added, some original edges of the tree are still bridges and some are not anymore. You want to satisfy two conditions:\n\n for every bridge, all tree edges in the subtree of the lower vertex of that bridge should also be bridges;\n\n the number of bridges is as small as possible.\n\nSolve the task for all values of $k$ from $1$ to $n - 1$ and output the smallest number of bridges.",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\le t \\le 10^4$) — the number of testcases.\n\nThe first line of each testcase contains a single integer $n$ ($2 \\le n \\le 3 \\cdot 10^5$) — the number of vertices of the tree.\n\nEach of the next $n - 1$ lines contain two integers $v$ and $u$ ($1 \\le v, u \\le n$) — the description of the edges of the tree. It's guaranteed that the given edges form a valid tree.\n\nAdditional constraint on the input: the root (vertex $1$) has exactly one child.\n\nThe sum of $n$ over all testcases doesn't exceed $3 \\cdot 10^5$.",
+    "output_spec": "For each testcase, print $n - 1$ integers. For each $k$ from $1$ to $n - 1$ print the smallest number of bridges that can be left after you add $k$ edges to the tree.",
+    "note": null,
+    "samples": [
+      {
+        "input": "4\n2\n1 2\n12\n4 10\n5 12\n12 11\n3 6\n9 6\n1 6\n12 7\n11 6\n2 11\n10 9\n10 8\n8\n1 2\n2 3\n2 4\n3 5\n3 6\n4 7\n4 8\n5\n1 2\n2 3\n3 4\n4 5",
+        "output": "\n0 \n7 3 1 0 0 0 0 0 0 0 0 \n4 1 0 0 0 0 0 \n0 0 0 0 "
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 129992,
+    "url": "https://codeforces.com/blog/entry/129992",
+    "tutorial": "What does an extra edge change in the configuration of the bridges? Well, all tree edges on the path between the two vertices that an extra edge connects, stop being bridges.\n\nSo, the task can be restated as follows: choose $k$ pairs of distinct vertices such that:\n\n a root is present in at least one pair;\n\n the number of edges in the union of the paths between the vertices of all pairs is as large as possible;\n\n there is no vertex covered by at least one path such that an edge to its parent is not a part of any path.\n\nThe next idea is quite intuitive. It only makes sense to choose a root or the leaves of the tree into the pairs. If any pair has a non-leaf vertex, you can safely prolong the path until any of the leaves in its subtree, and the union of the paths will not become smaller.\n\nNow for the tricky idea. Instead of choosing $k$ pairs of root/leaves, you can actually just take a root and $2k - 1$ leaves, and there will always be a way to split them into pairs to satisfy all conditions.\n\nLet's show that. Traverse the tree with a DFS and record the order you visit the leaves. Pair up a root with the middle leaf in that order. Then pair up leaves $1$ and $2k-1$, $2$ and $2k-2$ and so on. This way, the path for every pair includes a vertex on the path of the first pair (the one that includes the root). Thus, the union of the paths is the same as the union of all vertical paths from the leaves to the root. That obviously satisfies the condition on the connectedness of the bridges.\n\nNotice how that union of the paths is also the largest possible on that set of leaves. Every path between the leaves can be viewed at as two vertical paths from each leaf. The longest vertical path from each leaf is the one going to the root. And we have exactly the union of these vertical paths as our solution.\n\nThus, the task actually becomes as follows: choose $2k - 1$ leaves in such a way that the union of their paths to the root is as large as possible.\n\nThat can actually be done greedily. Take a leaf with the longest path to the root. Then keep taking leaves that add as many new edges into the union as possible.\n\nThat idea can be implemented as follows. For every vertex, calculate the longest path that starts in it and ends in some leaf. Can be done with a single DFS. Maintain a set of all vertices sorted by their longest paths. On each step, take a vertex with the largest value and remove all vertices on that path (any path of the maximum length if there are multiple) from the set.\n\nOverall complexity: $O(n \\log n)$ per testcase.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n \n#define forn(i, n) for (int i = 0; i < int(n); i++)\n \nusing namespace std;\n \nvector<int> h;\nvector<vector<int>> g;\n \nvoid dfs(int v, int p = -1){\n\tfor (int u : g[v]) if (u != p){\n\t\tdfs(u, v);\n\t\th[v] = max(h[v], h[u] + 1);\n\t}\n}\n \nint main() {\n\tcin.tie(0);\n\tios::sync_with_stdio(false);\n\tint t;\n\tcin >> t;\n\twhile (t--){\n\t\tint n;\n\t\tcin >> n;\n\t\tg.assign(n, {});\n\t\tforn(i, n - 1){\n\t\t\tint v, u;\n\t\t\tcin >> v >> u;\n\t\t\t--v, --u;\n\t\t\tg[v].push_back(u);\n\t\t\tg[u].push_back(v);\n\t\t}\n\t\th.assign(n, 0);\n\t\tdfs(0);\n\t\tset<pair<int, int>> cur;\n\t\tforn(i, n) cur.insert({h[i], i});\n\t\tvector<int> ans;\n\t\tint tmp = n;\n\t\twhile (!cur.empty()){\n\t\t\tint v = cur.rbegin()->second;\n\t\t\twhile (v != -1){\n\t\t\t\t--tmp;\n\t\t\t\tcur.erase({h[v], v});\n\t\t\t\tint pv = -1;\n\t\t\t\tfor (int u : g[v]) if (h[u] == h[v] - 1){\n\t\t\t\t\tpv = u;\n\t\t\t\t\tbreak;\n\t\t\t\t}\n\t\t\t\tv = pv;\n\t\t\t}\n\t\t\tans.push_back(tmp);\n\t\t}\n\t\tfor (int i = 0; i < int(ans.size()); i += 2){\n\t\t\tcout << ans[i] << ' ';\n\t\t}\n\t\tfor (int i = (int(ans.size()) + 1) / 2; i < n - 1; ++i){\n\t\t\tcout << 0 << ' ';\n\t\t}\n\t\tcout << '\\n';\n\t}\n\treturn 0;\n}",
+      "1 0\n1 1\n2 2",
+      "#include<iostream>\n#include<cstring>\nusing namespace std;\ntypedef long long ll;\nll bucket[200100];\nint main()\n{\n    int z;\n    cin >> z;\n    while(z--){\n\t\tstring s;\n\t\tcin >> s;\n\t\tll n = s.size(), ans = 0, potential = 0;\n\t\tmemset(bucket, 0, sizeof(ll) * (n/2 + 5));\n\t\tfor(ll i=0; i<n; i++) {\n\t\t\tpotential += (s[i] == '(' ? 1: -1);\n\t\t\tans += bucket[potential];\n\t\t\tbucket[potential] ++;\n\t\t\tif(potential & 1ll) bucket[potential/2] = 0;\n\t\t}\n\t\tcout << ans << '\\n';\n    }\n \treturn 0;\n}",
+      "ll n,m;cin>>n>>m;\n\nvll ps(n+m+1);ai(ps,n+m+1);\n\nvll ts(n+m+1);ai(ts,n+m+1);\n\nsll prog,test;\n\nll ans=0;\nvll vecans;\n\nfor(int i=1;i<n+m+1;i++){\n    if(ps[i]>ts[i]){\n        if(prog.size()==n){\n            test.insert(i);\n            ans+=ts[i];\n        }else{\n            prog.insert(i);\n            ans+=ps[i];\n        }\n    }else{\n        if(test.size()==m){\n            prog.insert(i);\n            ans+=ps[i];\n        }else{\n            test.insert(i);\n            ans+=ts[i];\n        }\n    }\n}\nvecans.pb(ans);\n// cout<<ans<<\"\\n\";\n\nfor(int i=1;i<n+m+1;i++){\n    if(prog.find(i)!=prog.end()){\n        ans-=ps[i];\n        prog.erase(i);\n    }else{\n        ans-=ts[i];\n        test.erase(i);\n    }\n\n    if(ps[i-1]>ts[i-1]){\n        prog.insert(i-1);\n        ans+=ps[i-1];\n    }else{\n        test.insert(i-1);\n        ans+=ts[i-1];\n    }\n\n    if(prog.size()==n){\n        vecans.pb(ans);\n    }else{\n        if(prog.size()>n){\n            auto it=*prog.rbegin();\n            ans-=ps[it];\n            ans+=ts[it];\n            prog.erase(it);\n            test.insert(it);\n        }else {\n            auto it=*test.rbegin();\n            ans-=ts[it];\n            ans+=ps[it];\n            test.erase(it);\n            prog.insert(it);\n        }\n        vecans.pb(ans);\n    }\n}\n\nprintvec(vecans);"
+    ]
+  }
+}

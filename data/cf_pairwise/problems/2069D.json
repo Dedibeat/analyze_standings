@@ -1,0 +1,45 @@
+{
+  "contest_id": 2069,
+  "index": "D",
+  "name": "Palindrome Shuffle",
+  "rating": 1800,
+  "tags": [
+    "binary search",
+    "greedy",
+    "hashing",
+    "strings",
+    "two pointers"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2069D",
+  "url": "https://codeforces.com/problemset/problem/2069/D",
+  "contest_start_time": "2025-02-18T14:35:00+00:00",
+  "statement": {
+    "title": "D. Palindrome Shuffle",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "You are given a string $s$ consisting of lowercase Latin letters.\n\nYou can perform the following operation with the string $s$: choose a contiguous substring (possibly empty) of $s$ and shuffle it (reorder the characters in the substring as you wish).\n\nRecall that a palindrome is a string that reads the same way from the first character to the last and from the last character to the first. For example, the strings a, bab, acca, bcabcbacb are palindromes, but the strings ab, abbbaa, cccb are not.\n\nYour task is to determine the minimum possible length of the substring on which the aforementioned operation must be performed in order to convert the given string $s$ into a palindrome.",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases.\n\nThe only line of each test case contains a string $s$ ($2 \\le |s| \\le 2 \\cdot 10^5$), consisting of lowercase Latin letters.\n\nAdditional constraints on the input:\n\n the string $s$ has an even length;\n\n the string $s$ can always be converted to a palindrome;\n\n the sum of lengths of $s$ over all test cases doesn't exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, print a single integer — the minimum possible length of the substring on which the aforementioned operation must be performed in order to convert the given string $s$ into a palindrome.",
+    "note": "In the first example, you can perform the operation as follows: baba $\\rightarrow$ baab.\n\nIn the second example, the string is already a palindrome, so we can shuffle an empty substring.\n\nIn the third example, you can perform the operation as follows: ddaa $\\rightarrow$ adda.\n\nIn the fourth example, you can perform the operation as follows: acbacddacbca $\\rightarrow$ acbcaddacbca.",
+    "samples": [
+      {
+        "input": "4\nbaba\ncc\nddaa\nacbacddacbca",
+        "output": "\n2\n0\n3\n2"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 139774,
+    "url": "https://codeforces.com/blog/entry/139774",
+    "tutorial": "I will describe a solution in $O(n \\log n)$. It is possible to solve the problem in $O(n)$ with careful implementation of two pointers method, but $O(n \\log n)$ is more intuitive and easier to understand, in my opinion.\n\nFirst, while the first character of the string is equal to the last character of the string, let's get rid of both of them — it's pretty obvious we shouldn't touch them.\n\nAfter that, we get a string for which the first character is not equal to the last character. At least one of them should be changed — so, the substring we need to shuffle is either a prefix or a suffix of the string. Suppose the string we shuffle is a prefix (if we need to shuffle a suffix, we'll check it by reversing the string and trying to shuffle a prefix of the reversed string).\n\nSuppose that, by shuffling a prefix of length $m$, we get the answer. Then, by shuffling a prefix of length $m+1$, we will also be able to make the string a palindrome. It means that the shortest possible length of the prefix we need to shuffle can be found with binary search.\n\nIn our binary search, we need to check whether we can make the string a palindrome by shuffling the prefix of certain length. Let's check it in $O(n)$ by verifying the following two conditions:\n\n for every pair $(s_i, s_{n-i+1})$ such that $s_i \\ne s_{n-i+1}$, at least one of the characters should be changed, so it should belong to the prefix;\n\n for every character $c$ from a to z, let's calculate the number of pairs where this character should fill both positions (i. e. the number of pairs $(s_i, s_{n-i+1})$ where at least one of the characters is equal to $c$ and is not affected by our shuffle). This number of pairs should not exceed the number of pairs of character $c$ in the whole string, otherwise we won't have enough occurrences of $c$ to fill all these pairs of positions.\n\nIt's obvious that these two conditions are necessary, but we can prove that they are sufficient: if both of them hold, we have enough characters to fill all pairs of positions where we need a fixed character, and all the remaining pairs of positions can be filled by any remaining pairs of characters (the input is guaranteed to have an even number of every character, so it's always possible to split all characters into pairs).\n\nSo, we need to check if some substring is a possible answer $O(\\log n)$ times, and every such check can be done in $O(n)$. Thus, our solution works in $O(n \\log n)$.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n \nusing namespace std;\n\nint main() {\n  int t;\n  cin >> t;\n  while (t--) {\n    string s;\n    cin >> s;\n    int n = s.size();\n    int i = 0;\n    while (i < n / 2 && s[i] == s[n - i - 1]) ++i;\n    n -= 2 * i;\n    s = s.substr(i, n);\n    int ans = n;\n    for (int z = 0; z < 2; ++z) {\n      int l = 0, r = n;\n      while (l <= r) {\n        int m = (l + r) / 2;\n        vector<int> cnt(26);\n        for (int i = 0; i < m; ++i)\n          cnt[s[i] - 'a']++;\n        bool ok = true;\n        for (int i = 0; i < min(n / 2, n - m); ++i) {\n          char c = s[n - i - 1];\n          if (i < m) {\n            ok &= cnt[c - 'a'] > 0;\n            cnt[c - 'a']--;\n          } else {\n            ok &= (c == s[i]);\n          }\n        }\n        for (auto x : cnt)\n          ok &= (x % 2 == 0);\n        if (ok) {\n          r = m - 1;\n        } else {\n          l = m + 1;\n        }\n      }\n      ans = min(ans, r + 1); \n      reverse(s.begin(), s.end());\n    }\n    cout << ans << '\\n';\n  }\n}"
+    ]
+  }
+}

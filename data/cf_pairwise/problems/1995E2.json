@@ -1,0 +1,42 @@
+{
+  "contest_id": 1995,
+  "index": "E2",
+  "name": "Let Me Teach You a Lesson (Hard Version)",
+  "rating": 2900,
+  "tags": [
+    "data structures",
+    "dp",
+    "matrices",
+    "two pointers"
+  ],
+  "points": 1500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1995E2",
+  "url": "https://codeforces.com/problemset/problem/1995/E2",
+  "contest_start_time": "2024-07-23T14:35:00+00:00",
+  "statement": {
+    "title": "E2. Let Me Teach You a Lesson (Hard Version)",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "This is the hard version of a problem. The only difference between an easy and a hard version is the constraints on $t$ and $n$. You can make hacks only if both versions of the problem are solved.\n\nArthur is giving a lesson to his famous $2 n$ knights. Like any other students, they're sitting at the desks in pairs, but out of habit in a circle. The knight $2 i - 1$ is sitting at the desk with the knight $2 i$.\n\nEach knight has intelligence, which can be measured by an integer. Let's denote the intelligence of the $i$-th knight as $a_i$. Arthur wants the maximal difference in total intelligence over all pairs of desks to be as small as possible. More formally, he wants to minimize $\\max\\limits_{1 \\le i \\le n} (a_{2 i - 1} + a_{2 i}) - \\min\\limits_{1 \\le i \\le n} (a_{2 i - 1} + a_{2 i})$.\n\nHowever, the Code of Chivalry only allows swapping the opposite knights in the circle, i.e., Arthur can simultaneously perform $a_i := a_{i + n}$, $a_{i + n} := a_i$ for any $1 \\le i \\le n$. Arthur can make any number of such swaps. What is the best result he can achieve?",
+    "input_spec": "Each test consists of several test cases. The first line contains a single integer $t$ ($1 \\le t \\le 10\\,000$) — the number of test cases. It is followed by descriptions of the test cases.\n\nThe first line of each test case contains a single integer $n$ ($1 \\le n \\le 100\\,000$) — the number of desks.\n\nThe second line consists of $2n$ integers $a_1, a_2, \\ldots, a_{2 n}$ ($1 \\le a_i \\le 10^9$) — the intelligence values of the knights.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $100\\,000$.",
+    "output_spec": "For each test case, output a single line containing one integer — the minimal difference Arthur can achieve.",
+    "note": "In the first test case, Arthur can swap the second and the fourth knights. Then the total intelligence at both desks will be $10$.\n\nIn the third test case, Arthur can make $0$ operations, which will result in the total intelligence of $11$ at each of the desks.\n\nIn the fourth test case, Arthur can swap knights with indices $2$ and $5$ and achieve the difference of $2$. It can be proven that he cannot improve his result any further.",
+    "samples": [
+      {
+        "input": "5\n2\n6 6 4 4\n1\n10 17\n3\n1 10 1 10 1 10\n3\n3 3 4 5 5 4\n5\n1 2 3 4 5 6 7 8 9 10",
+        "output": "\n0\n0\n0\n2\n4"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 131851,
+    "url": "https://codeforces.com/blog/entry/131851",
+    "tutorial": "1995E2 - Let Me Teach You a Lesson (Hard Version)\n\nHint 0\n\nRead the first two hints to E1.\n\nHint 1\n\nThere are $4 n$ possible desks in total. One of them will be the minimal desk and another one will be the maximal. What is the common-used technique for such problems?\n\nAnswer to Hint 1\n\nSort them and then use two pointers.\n\nHint 2\n\nThe data structure you need is very famous.\n\nSolution\n\n(Read the hints.) Assign a boolean matrix $2 \\times 2$ to each of the desks. Rows correspond to the first knight at the desk (two rows for each of the events \"the knight was swapped\" / \"the knight was not swapped\"), columns correspond to the second one. The value in the intersection is true if under current restrictions (minimum and maximum) both events can happen, i.e. the result on the desk is between minimum and maximum.\n\nWhat is a (boolean) multiplication of matrices from $d_l$ to $d_r$?\n\nAnswer\n\nThe matrix where the rows correspond to the knight $2 d_l - 1$ and the columns correspond to the knight $2 d_r$.\n\nTo determine whether it's possible to swap the knights under current restrictions you can just multiply all the matrices and check if there are ones on the main diagonal. Now using two pointers and a segment tree on these matrices you can solve the problem (basically, when you leave some option for a desk in the sorted array of options, you change one of the values of this matrix from $1$ to $0$, and vice versa).\n\nCode\n\n272212685",
+    "solution_code": []
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "contest_id": 1988,
+  "index": "E",
+  "name": "Range Minimum Sum",
+  "rating": 2300,
+  "tags": [
+    "binary search",
+    "brute force",
+    "data structures",
+    "divide and conquer",
+    "implementation"
+  ],
+  "points": 2500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1988E",
+  "url": "https://codeforces.com/problemset/problem/1988/E",
+  "contest_start_time": "2024-07-15T14:35:00+00:00",
+  "statement": {
+    "title": "E. Range Minimum Sum",
+    "time_limit": "4 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "For an array $[a_1,a_2,\\ldots,a_n]$ of length $n$, define $f(a)$ as the sum of the minimum element over all subsegments. That is, $$f(a)=\\sum_{l=1}^n\\sum_{r=l}^n \\min_{l\\le i\\le r}a_i.$$\n\nA permutation is a sequence of integers from $1$ to $n$ of length $n$ containing each number exactly once. You are given a permutation $[a_1,a_2,\\ldots,a_n]$. For each $i$, solve the following problem independently:\n\n Erase $a_i$ from $a$, concatenating the remaining parts, resulting in $b = [a_1,a_2,\\ldots,a_{i-1},\\;a_{i+1},\\ldots,a_{n}]$.\n\n Calculate $f(b)$.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 10^5$). Description of the test cases follows.\n\nThe first line of each test case contains an integer $n$ ($1\\le n\\le 5\\cdot 10^5$).\n\nThe second line of each test case contains $n$ distinct integers $a_1,\\ldots,a_n$ ($1\\le a_i\\le n$).\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $10^6$.",
+    "output_spec": "For each test case, print one line containing $n$ integers. The $i$-th integer should be the answer when erasing $a_i$.",
+    "note": "In the second test case, $a=[3,1,2]$.\n\n When removing $a_1$, $b=[1,2]$. $f(b)=1+2+\\min\\{1,2\\}=4$.\n\n When removing $a_2$, $b=[3,2]$. $f(b)=3+2+\\min\\{3,2\\}=7$.\n\n When removing $a_3$, $b=[3,1]$. $f(b)=3+1+\\min\\{3,1\\}=5$.",
+    "samples": [
+      {
+        "input": "4\n1\n1\n3\n3 1 2\n5\n4 2 1 5 3\n8\n8 1 4 6 7 3 5 2",
+        "output": "\n0 \n4 7 5 \n19 21 27 17 19 \n79 100 72 68 67 80 73 80 "
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 131581,
+    "url": "https://codeforces.com/blog/entry/131581",
+    "tutorial": "1988E — Range Minimum Sum",
+    "solution_code": []
+  }
+}

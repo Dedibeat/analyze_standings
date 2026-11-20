@@ -1,0 +1,41 @@
+{
+  "contest_id": 1970,
+  "index": "A2",
+  "name": "Balanced Unshuffle (Medium)",
+  "rating": 2400,
+  "tags": [
+    "brute force",
+    "constructive algorithms",
+    "trees"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1970A2",
+  "url": "https://codeforces.com/problemset/problem/1970/A2",
+  "contest_start_time": "2024-05-04T07:05:00+00:00",
+  "statement": {
+    "title": "A2. Balanced Unshuffle (Medium)",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "The differences with the easy version of this problem are highlighted in bold.\n\nA parentheses sequence is a string consisting of characters \"(\" and \")\", for example \"(()((\".\n\nA balanced parentheses sequence is a parentheses sequence which can become a valid mathematical expression after inserting numbers and operations into it, for example \"(()(()))\".\n\nThe balance of a parentheses sequence is defined as the number of opening parentheses \"(\" minus the number of closing parentheses \")\". For example, the balance of the sequence \"(()((\" is 3.\n\nA balanced parentheses sequence can also be defined as a parentheses sequence with balance 0 such that each of its prefixes has a non-negative balance.\n\nWe define the balanced shuffle operation that takes a parentheses sequence and returns a parentheses sequence as follows: first, for every character of the input sequence, we compute the balance of the prefix of the sequence before that character and write those down in a table together with the positions of the characters in the input sequence, for example:\n\nPrefix balance01212321\n\nPosition12345678\n\nCharacter(()(()))\n\nThen, we sort the columns of this table in increasing order of prefix balance, breaking ties in decreasing order of position. In the above example, we get:\n\nPrefix balance01112223\n\nPosition18427536\n\nCharacter()(()())\n\nThe last row of this table forms another parentheses sequence, in this case \"()(()())\". This sequence is called the result of applying the balanced shuffle operation to the input sequence, or in short just the balanced shuffle of the input sequence.\n\nSurprisingly, it turns out that the balanced shuffle of any balanced parentheses sequence is always another balanced parentheses sequence (we will omit the proof for brevity). Even more surprisingly, the balanced shuffles of two different balanced parentheses sequences are always different, therefore the balanced shuffle operation is a bijection on the set of balanced parentheses sequences of any given length (we will omit this proof, too).\n\nYou are given a balanced parentheses sequence. Find its preimage: the balanced parentheses sequence the balanced shuffle of which is equal to the given sequence.",
+    "input_spec": "The only line of input contains a string $s$ consisting only of characters \"(\" and \")\". This string is guaranteed to be a non-empty balanced parentheses sequence with its length not exceeding $1\\,000$.",
+    "output_spec": "Print the balanced parentheses sequence $t$ such that the balanced shuffle of $t$ is equal to $s$. It is guaranteed that the answer always exists and is unique.",
+    "note": null,
+    "samples": [
+      {
+        "input": "\n()(()())",
+        "output": "\n(()(()))"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 129149,
+    "url": "https://codeforces.com/blog/entry/129149",
+    "tutorial": "In a balanced parentheses sequence each opening parenthesis corresponds (would form a pair enclosing a subexpression in a mathematical expression) to exactly one closing parenthesis and vice versa. In such a pair the balance before the opening parenthesis is always 1 less than the balance before the closing parenthesis.\n\nAfter sorting, the parentheses with equal prefix balance go together. Let us consider them in groups of equal prefix balance. The first group, with prefix balance 0, will contain only opening parentheses. The second group, with prefix balance 1, will contain the closing parentheses corresponding to the opening parentheses from the first group, and potentially some more opening parentheses. The third group, with prefix balance 2, will contain the closing parentheses corresponding to the opening parentheses from the second group, and potentially some more opening parentheses, and so on. Moreover, each group except the first one will always start with a closing parenthesis (since we break ties in decreasing order of position).\n\nThis observation allows to split the input string into the groups of equal prefix balance: the first group is everything before the first closing parenthesis. The second group is everything after that and before the $k+1$-th closing parenthesis, where $k$ is the number of opening parentheses in the first group, and so on.\n\nHaving done that, we can also construct the original sequence group-by-group. After processing a certain number of groups we will have a string that is a parentheses sequence but not a balanced parentheses sequence yet: some opening parentheses in it will be marked as unmatched (for example, we can use opening square brackets instead of parentheses to denote those). When processing the next group, we put each closing parenthesis and all opening parentheses that follow it after the corresponding unmatched opening parenthesis.\n\nHere is how this process works on the sample testcase:\n\n After the first group, our string is [.\n\n After the second group, our string is ([[).\n\n After the third group, our string is (()([)).\n\n After the fourth group, our string is (()(())) and we have correctly recovered the original sequence.\n\nThe straightforward implementation of this algorithm runs in $O(n^2)$, fast enough for the constraints of this subtask.\n\nThe transformation described in this problem is called a sweep map in the literature, and searching the Internet using that term will lead to a much deeper dive on the subject if desired.",
+    "solution_code": []
+  }
+}

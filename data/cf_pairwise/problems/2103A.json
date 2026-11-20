@@ -1,0 +1,45 @@
+{
+  "contest_id": 2103,
+  "index": "A",
+  "name": "Common Multiple",
+  "rating": 800,
+  "tags": [
+    "brute force",
+    "greedy",
+    "implementation",
+    "math"
+  ],
+  "points": 500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2103A",
+  "url": "https://codeforces.com/problemset/problem/2103/A",
+  "contest_start_time": "2025-04-21T14:35:00+00:00",
+  "statement": {
+    "title": "A. Common Multiple",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "You are given an array of integers $a_1, a_2, \\ldots, a_n$. An array $x_1, x_2, \\ldots, x_m$ is beautiful if there exists an array $y_1, y_2, \\ldots, y_m$ such that the elements of $y$ are distinct (in other words, $y_i\\neq y_j$ for all $1 \\le i  \\lt  j \\le m$), and the product of $x_i$ and $y_i$ is the same for all $1 \\le i \\le m$ (in other words, $x_i\\cdot y_i = x_j\\cdot y_j$ for all $1 \\le i  \\lt  j \\le m$).\n\nYour task is to determine the maximum size of a subsequence$^{\\text{∗}}$ of array $a$ that is beautiful.\n\n$^{\\text{∗}}$A sequence $b$ is a subsequence of a sequence $a$ if $b$ can be obtained from $a$ by the deletion of several (possibly, zero or all) element from arbitrary positions.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 500$). The description of the test cases follows.\n\nThe first line of each test case contains a single integer $n$ ($1 \\le n \\le 100$) — the length of the array $a$.\n\nThe second line of each test case contains $n$ integers $a_1, a_2, \\ldots, a_n$ ($1 \\le a_i \\le n$) — the elements of array $a$.\n\nNote that there are no constraints on the sum of $n$ over all test cases.",
+    "output_spec": "For each test case, output the maximum size of a subsequence of array $a$ that is beautiful.",
+    "note": "In the first test case, the entire array $a = [1, 2, 3]$ is already beautiful. A possible array $y$ is $[6, 3, 2]$, which is valid since the elements of $y$ are distinct, and $1\\cdot 6 = 2\\cdot 3 = 3\\cdot 2$.\n\nIn the second test case, the subsequence $[3, 1, 4, 5]$ is beautiful. A possible array $y$ is $[20, 60, 15, 12]$. It can be proven that the entire array $a = [3, 1, 4, 1, 5]$ is not beautiful, so the maximum size of a subsequence of array $a$ that is beautiful is $4$.",
+    "samples": [
+      {
+        "input": "3\n3\n1 2 3\n5\n3 1 4 1 5\n1\n1",
+        "output": "\n3\n4\n1"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 142149,
+    "url": "https://codeforces.com/blog/entry/142149",
+    "tutorial": "2103A - Common Multiple\n\nAuthor: NemanjaSo2005\n\nHint 0\n\nWe need to solve the same problem $t$ times. We will make use of loops to do so. From now we will focus on solving a problem for one test case, but remember that all of the following will be in a loop.\n\nHint 1\n\nSo the array $x$ is beautiful if there exists an array of distinct elements $y$ such that $x_i \\cdot y_i$ is the same for all $1 \\le i \\le n$. We will try to make the condition into something more understandable. Suppose that the common product is some constant $C$. How can you express each $y_i$ in terms of $C$ and $x_i$?\n\nHint 2\n\nIt can be expressed as $y_i = \\frac{C}{x_i}$. If all $y_i = \\frac{C}{x_i}$ must be all different, what does that force upon the array $x$ for it to be beautiful?\n\nHint 3\n\nLet $i$ and $j$ be indices of two arbitrary elements of $x$. Then for array $x$ to be beautiful the following needs to hold:\n\n$y_i \\neq y_j$\n\n$\\frac{C}{x_i} \\neq \\frac{C}{x_j}$, divide both sides by $C$\n\n$\\frac{1}{x_i} \\neq \\frac{1}{x_j}$, as neither $x_i$ nor $x_j$ are $0$, multiply by $x_i \\cdot x_j$\n\n$x_j \\neq x_i$\n\nTherefore, all values of $x_i$ must be distinct. But is it enough just that all values of $x$ are distinct?\n\nIt is, and here is how to easily construct the integer array $y$ that satisfies the constraints. Let $P$ be the product of all elements of $x$. Then make $y_i = \\frac{P}{x_i}$ for all $1 \\le i \\le n$. As all values of $x$ are distinct and nonzero, it is guaranteed that all values of $y$ will also be distinct.\n\nHint 4\n\nThe solution is the number of distinct values in $a$. How can we count that?\n\nHint 5\n\nWe can only count the first appearance of each value. So the problem is now how to check if the appearance of value at some position $i$ is indeed the first appearance of $a_i$.\n\nSolution\n\nRead the hints.\n\nThe answer to the problem is the number of distinct elements in the array. There are many ways to find it; we will present one of the easiest.\n\nWe will count only the first appearances of every value.\n\nThat means that if array is for example [ $1$, $3$, $1$, $5$, $3$, $1$], we will only count $1$ at position $1$, $3$ at position $2$ and $5$ at position $4$. We will not count values $1$ at positions $3$ and $6$, nor the value $3$ at position $5$, as they are not the first appearance of those values.\n\nWe will iterate through every element in $x$ and for an element $x_i$, check if there exists some $x_j$ $(j \\lt i)$ such that $x_i = x_j$. If we can't find such $j$, then that means it's the first appearance of $x_i$.\n\nWe can do it by having one loop iterate over $i$, and it will have a variable that says whether it is the first appearance, originally set to true. Then we will iterate in another loop over all indices $1 \\le j \\lt i$ and if at any point $a_i = a_j$, we will set the value of the variable to false. Then we increase the count of different values if the variable is still true.\n\nMemory complexity is $O(n)$. Time complexity is $O(n^2)$ per testcase giving us a total time complexity of $O(tn^2)$.\n\nImplementation (c++)\n\nImplementation (python)\n\nBonus\n\nCome up with more ways to count the number of different elements in the array.",
+    "solution_code": [
+      "#include<bits/stdc++.h>\n#define ll long long\nusing namespace std;\nconst int maxn=105;\nint n,arr[maxn];\nint main(){\n   int T;\n   cin>>T;\n   while(T--){\n      cin>>n;\n      for(int i=1;i<=n;i++)\n         cin>>arr[i];\n      int ans=0;\n      for(int i=1;i<=n;i++){\n         int add=1;\n         for(int j=1;j<i;j++)\n            if(arr[j]==arr[i])\n               add=0;\n         ans+=add;\n      }\n      cout<<ans<<\"\\n\";\n   }\n   return 0;\n}",
+      "t = int(input())\nfor i in range(t):\n    n = int(input())\n    a = input().split(\" \")\n    count = 0\n    for i in range(0, n):\n        add = 1\n        for j in range(0, i):\n            if a[i]==a[j]:\n                add = 0\n        count += add\n    print(count)"
+    ]
+  }
+}

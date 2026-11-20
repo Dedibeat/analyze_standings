@@ -1,0 +1,45 @@
+{
+  "contest_id": 2034,
+  "index": "E",
+  "name": "Permutations Harmony",
+  "rating": 2200,
+  "tags": [
+    "combinatorics",
+    "constructive algorithms",
+    "greedy",
+    "hashing",
+    "math"
+  ],
+  "points": 2000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2034E",
+  "url": "https://codeforces.com/problemset/problem/2034/E",
+  "contest_start_time": "2024-11-30T14:35:00+00:00",
+  "statement": {
+    "title": "E. Permutations Harmony",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Rayan wants to present a gift to Reyhaneh to win her heart. However, Reyhaneh is particular and will only accept a k-harmonic set of permutations.\n\nWe define a k-harmonic set of permutations as a set of $k$ pairwise distinct permutations $p_1, p_2, \\ldots, p_k$ of size $n$ such that for every pair of indices $i$ and $j$ (where $1 \\leq i, j \\leq n$), the following condition holds:\n\n$$ p_1[i] + p_2[i] + \\ldots + p_k[i] = p_1[j] + p_2[j] + \\ldots + p_k[j] $$\n\nYour task is to help Rayan by either providing a valid k-harmonic set of permutations for given values of $n$ and $k$ or by determining that such a set does not exist.\n\nWe call a sequence of length $n$ a permutation if it contains every integer from $1$ to $n$ exactly once.",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\leq t \\leq 1000$), the number of test cases.\n\nEach test case consists of two integers $n$ and $k$ ($1 \\leq n, k \\leq 10^5$). The sum of $n \\cdot k$ over all test cases does not exceed $5 \\cdot 10^5$.",
+    "output_spec": "For each test case, if a k-harmonic set of permutations exists, print YES on the first line. Then, print $k$ lines, each containing a distinct permutation of the integers from $1$ to $n$.\n\nIf no such set exists, print NO on the first line.\n\nYou can output \"YES\" and \"NO\" in any case (for example, strings \"yEs\", \"yes\", and \"Yes\" will be recognized as a positive response).\n\nIf multiple answers are possible, you can output any of them.",
+    "note": "In example 1, we have $p_1 = [1, 2, 3]$, $p_2 = [2, 3, 1]$, and $p_3 = [3, 1, 2]$. It's easy to see that $p_1[1] + p_2[1] + p_3[1] = p_1[2] + p_2[2] + p_3[2] = p_1[3] + p_2[3] + p_3[3] = 6$.\n\nIn example 2, we have $p_1 = [1, 2, 3, 4]$ and $p_2 = [4, 3, 2, 1]$. It's easy to see that $p_1[1] + p_2[1] = p_1[2] + p_2[2] = p_1[3] + p_2[3] = p_1[4] + p_2[4] = 5$.\n\nIn example 3, as there are five distinct elements in $p_1$, it's obvious that the answer is \"No\".",
+    "samples": [
+      {
+        "input": "4\n3 3\n4 2\n5 1\n3 2",
+        "output": "\nYES\n1 2 3\n2 3 1\n3 1 2\nYES\n1 2 3 4\n4 3 2 1\nNO\nYES\n1 2 3\n3 2 1"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 136579,
+    "url": "https://codeforces.com/blog/entry/136579",
+    "tutorial": "2034E - Permutations Harmony\n\nIdea: AmirrzwM and MohammadParsaElahimanesh — Preparation: MohammadParsaElahimanesh\n\nSolution\n\nStep 1: There are $n$ positions that must be equal, and their sum is $\\frac{n \\cdot (n+1) \\cdot k}{2}$. Hence, each position must be $\\frac{(n+1) \\cdot k}{2}$. Additionally, there must be $k$ distinct permutations, so $k \\leq n!$.\n\nStep 2: For even $k$, we can group $n!$ permutations into $\\frac{n!}{2}$ double handles, where each group corresponds to a solution for $k = 2$. Then, pick $\\frac{k}{2}$ handles. The match for permutation $a_1, a_2, \\ldots, a_n$ is $(n+1)-a_1, (n+1)-a_2, \\ldots, (n+1)-a_n$.\n\nStep 3: For $k = 1$, $n$ must be $1$. Symmetrically, $k$ cannot be $n! - 1$. Solutions for other odd $k$ will now be provided.\n\nStep 4: To construct an answer for $k = 3$ and $n = 2x + 1$, consider the following derived using a greedy approach:\n\n $p_1$  $p_2$  $p_3$  $p_4$  $p_5$  $ \\ldots $  $p_{2x-1} $  $ p_{2x} $  $ p_{2x+1} $\n\n 1  2  3  4  5  $ \\ldots $  $ 2x-1 $  $ 2x $  $ 2x+1 $\n\n $ x+1 $  $ 2x+1 $  $ x $  $ 2x $  $ x-1 $  $ \\ldots $  2  $ x+2 $  1\n\n $ 2x+1 $  $ x $  $ 2x $  $ x-1 $  $ 2x-1 $  $ \\ldots $  $ x+2 $  1  $ x+1 $\n\nStep 5: Now, combine the solution for even $k$ and the $k = 3$ solution by selecting the 3 permutations and $\\frac{k-3}{2}$ other handles.\n\nImplementation",
+    "solution_code": [
+      "// In the name of God\n#include <bits/stdc++.h>\nusing namespace std;\n \nint main() {\n    ios_base::sync_with_stdio(false), cin.tie(0);\n    int t;\n    cin >> t;\n    int f[8] = {1,1,2,6,24,120,720,5040};\n    while(t--) {\n        int n, k;\n        cin >> n >> k;\n        if(min(n, k) == 1) {\n            if(n*k == 1) {\n                cout << \"Yes\\n1\\n\";\n            } else cout << \"No\\n\";\n        } else if(n < 8 and (f[n] < k or f[n] == k+1)) {\n            cout << \"No\\n\";\n        } else if(n % 2 == 0 and k % 2 == 1) {\n            cout << \"No\\n\";\n        } else {\n            vector<vector<int>> base, all;\n            vector<int> per(n);\n            for(int i = 0; i < n; i++) per[i] = i+1;\n            if(k % 2) {\n                vector<int> p1(n), p2(n);\n                for(int i = 0; i < n; i += 2) p1[i] = (n+1)/2-i/2, p2[i] = n-i/2;\n                for(int i = 1; i < n; i += 2) p1[i] = n-i/2, p2[i] = n/2-i/2;\n                all = base = {per, p1, p2};\n                k -= 3;\n            }\n            do {\n                if(k == 0)\n                    break;\n                vector<int> mirror(n);\n                for(int i = 0; i < n; i++)\n                    mirror[i] = n+1-per[i];\n                if(per < mirror) {\n                    bool used = false;\n                    for(auto &p: base) used |= (p == per), used |= (p == mirror);\n                    if(not used) {\n                        k -= 2;\n                        all.push_back(per);\n                        all.push_back(mirror);\n                    }\n                }\n            } while (next_permutation(per.begin(), per.end()));\n            cout << \"Yes\\n\";\n            for(auto p: all) {\n                for(int i = 0; i < n; i++)\n                    cout << p[i] << (i+1==n?'\\n':' ');\n            }\n        }\n    }\n \n    return 0;\n}\n \n// Thanks God"
+    ]
+  }
+}

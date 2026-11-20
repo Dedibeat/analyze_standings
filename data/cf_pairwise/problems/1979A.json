@@ -1,0 +1,43 @@
+{
+  "contest_id": 1979,
+  "index": "A",
+  "name": "Guess the Maximum",
+  "rating": 800,
+  "tags": [
+    "brute force",
+    "greedy",
+    "implementation"
+  ],
+  "points": 500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1979A",
+  "url": "https://codeforces.com/problemset/problem/1979/A",
+  "contest_start_time": "2024-06-06T14:35:00+00:00",
+  "statement": {
+    "title": "A. Guess the Maximum",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "Alice and Bob came up with a rather strange game. They have an array of integers $a_1, a_2,\\ldots, a_n$. Alice chooses a certain integer $k$ and tells it to Bob, then the following happens:\n\n Bob chooses two integers $i$ and $j$ ($1 \\le i  \\lt  j \\le n$), and then finds the maximum among the integers $a_i, a_{i + 1},\\ldots, a_j$;\n\n If the obtained maximum is strictly greater than $k$, Alice wins, otherwise Bob wins.\n\nHelp Alice find the maximum $k$ at which she is guaranteed to win.",
+    "input_spec": "Each test consists of multiple test cases. The first line contains a single integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases. The description of the test cases follows.\n\nThe first line of each test case contains a single integer $n$ ($2 \\le n \\le 5 \\cdot 10^4$) — the number of elements in the array.\n\nThe second line of each test case contains $n$ integers $a_1, a_2,\\ldots, a_n$ ($1 \\le a_i \\le 10^9$) — the elements of the array.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $5 \\cdot 10^4$.",
+    "output_spec": "For each test case, output one integer — the maximum integer $k$ at which Alice is guaranteed to win.",
+    "note": "In the first test case, all possible subsegments that Bob can choose look as follows: $[2, 4], [2, 4, 1], [2, 4, 1, 7], [4, 1], [4, 1, 7], [1, 7]$. The maximums on the subsegments are respectively equal to $4, 4, 7, 4, 7, 7$. It can be shown that $3$ is the largest integer such that any of the maximums will be strictly greater than it.\n\nIn the third test case, the only segment that Bob can choose is $[1, 1]$. So the answer is $0$.",
+    "samples": [
+      {
+        "input": "6\n4\n2 4 1 7\n5\n1 2 3 4 5\n2\n1 1\n3\n37 8 16\n5\n10 10 10 10 9\n10\n3 12 9 5 2 3 2 9 8 2",
+        "output": "\n3\n1\n0\n15\n9\n2"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 130213,
+    "url": "https://codeforces.com/blog/entry/130213",
+    "tutorial": "1979A - Guess the Maximum\n\nSolution\n\nLet $m$ be the maximum among the numbers $a_i, a_{i + 1},\\ldots, a_j$. Notice that there always exists such $k$ that $i \\le k \\lt j$ and $a_k = m$ or $a_{k + 1} = m$. Therefore, we can assume that Bob always chooses the pair of numbers $p$ and $p + 1$ ($1 \\le p \\lt n$) as $i$ and $j$.\n\nTherefore you need to consider the maximums in pairs of adjacent elements and take the minimum among them. Let $min$ be the found minimum, then it is obvious that the answer is equal to $min - 1$.\n\nCode",
+    "solution_code": [
+      "#include <iostream>\nusing namespace std;\n\nint main() {\n    int t;\n    cin >> t;\n    while (t--) {\n        int n;\n        cin >> n;\n        int a[n];\n        for (int& i : a) {\n            cin >> i;\n        }\n        int mini = max(a[0], a[1]);\n        for (int i = 1; i < n - 1; i++) {\n            mini = min(mini, max(a[i], a[i + 1]));\n        }\n        cout << mini - 1 << \"\\n\";\n    }\n}"
+    ]
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "contest_id": 1967,
+  "index": "C",
+  "name": "Fenwick Tree",
+  "rating": 2300,
+  "tags": [
+    "bitmasks",
+    "brute force",
+    "combinatorics",
+    "data structures",
+    "dp",
+    "math",
+    "trees"
+  ],
+  "points": 1250.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1967C",
+  "url": "https://codeforces.com/problemset/problem/1967/C",
+  "contest_start_time": "2024-04-30T14:35:00+00:00",
+  "statement": {
+    "title": "C. Fenwick Tree",
+    "time_limit": "3 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Let $\\operatorname{lowbit}(x)$ denote the value of the lowest binary bit of $x$, e.g. $\\operatorname{lowbit}(12)=4$, $\\operatorname{lowbit}(8)=8$.\n\nFor an array $a$ of length $n$, if an array $s$ of length $n$ satisfies $s_k=\\left(\\sum\\limits_{i=k-\\operatorname{lowbit}(k)+1}^{k}a_i\\right)\\bmod 998\\,244\\,353$ for all $k$, then $s$ is called the Fenwick Tree of $a$. Let's denote it as $s=f(a)$.\n\nFor a positive integer $k$ and an array $a$, $f^k(a)$ is defined as follows:\n\n$$ f^k(a)= \\begin{cases} f(a)&\\textrm{if }k=1\\\\ f(f^{k-1}(a))&\\textrm{otherwise.}\\\\ \\end{cases} $$\n\nYou are given an array $b$ of length $n$ and a positive integer $k$. Find an array $a$ that satisfies $0\\le a_i  \\lt  998\\,244\\,353$ and $f^k(a)=b$. It can be proved that an answer always exists. If there are multiple possible answers, you may print any of them.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1\\le t\\le 10^4$). The description of the test cases follows.\n\nThe first line of each test case contains two positive integers $n$ ($1 \\leq n \\leq 2\\cdot 10^5$) and $k$ ($1\\le k\\le 10^9$), representing the length of the array and the number of times the function $f$ is performed.\n\nThe second line of each test case contains an array $b_1, b_2, \\ldots, b_n$ ($0\\le b_i  \\lt  998\\,244\\,353$).\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $2\\cdot 10^5$.",
+    "output_spec": "For each test case, print a single line, containing a valid array $a$ of length $n$.",
+    "note": "In the first test case, it can be seen that $f^1([1,1,1,1,1,1,1,1])=[1,2,1,4,1,2,1,8]$.\n\nIn the second test case, it can be seen that $f^2([1,2,3,4,5,6])=f^1([1,3,3,10,5,11])=[1,4,3,17,5,16]$.",
+    "samples": [
+      {
+        "input": "2\n8 1\n1 2 1 4 1 2 1 8\n6 2\n1 4 3 17 5 16",
+        "output": "\n1 1 1 1 1 1 1 1\n1 2 3 4 5 6"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 129027,
+    "url": "https://codeforces.com/blog/entry/129027",
+    "tutorial": "It's well-known that Fenwick Tree is the data structure shown in the image below, and the sum of each subtree is stored at each vertex (i.e. $c=f(a)$ and $c_u=\\sum\\limits_{v\\textrm{ in subtree of }u}a_v$).\n\nDenote the depth of a vertex $u$ as $\\operatorname{dep}(u)$. Assume that $b=f^k(a)$. Consider a vertex $u$ and one of its ancestors $v$. Let $\\Delta d=\\operatorname{dep}(u)-\\operatorname{dep}(v)$. It can be easily proved (by using the stars and bars method or generating functions) that the coefficient of $a_u$ in $b_v$ is $\\binom{\\Delta d+k-1}{\\Delta d}$.\n\nObviously, $a_u=b_u$ is satisfied for each leaf $u$. Enumerate each vertex $u$ whose $a$ value is already known (just in the increasing order is fine), and all its ancestors $v$, remove the $\\textrm{coefficient}\\cdot a_u$ part from $b_v$, and we can calculate the $a$ value of each vertex.\n\nTime complexity is $\\mathcal O(n\\log n)$ because the height of a Fenwick Tree is $\\mathcal O(\\log n)$.",
+    "solution_code": [
+      "//By: OIer rui_er\n#include <bits/stdc++.h>\n#define rep(x, y, z) for(int x = (y); x <= (z); ++x)\n#define per(x, y, z) for(int x = (y); x >= (z); --x)\n#define debug(format...) fprintf(stderr, format)\n#define fileIO(s) do {freopen(s\".in\", \"r\", stdin); freopen(s\".out\", \"w\", stdout);} while(false)\n#define endl '\\n'\nusing namespace std;\ntypedef long long ll;\n \nmt19937 rnd(std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count());\nint randint(int L, int R) {\n    uniform_int_distribution<int> dist(L, R);\n    return dist(rnd);\n}\n \ntemplate<typename T> void chkmin(T& x, T y) {if(x > y) x = y;}\ntemplate<typename T> void chkmax(T& x, T y) {if(x < y) x = y;}\n \ntemplate<int mod>\ninline unsigned int down(unsigned int x) {\n\treturn x >= mod ? x - mod : x;\n}\n \ntemplate<int mod>\nstruct Modint {\n\tunsigned int x;\n\tModint() = default;\n\tModint(unsigned int x) : x(x) {}\n\tfriend istream& operator>>(istream& in, Modint& a) {return in >> a.x;}\n\tfriend ostream& operator<<(ostream& out, Modint a) {return out << a.x;}\n\tfriend Modint operator+(Modint a, Modint b) {return down<mod>(a.x + b.x);}\n\tfriend Modint operator-(Modint a, Modint b) {return down<mod>(a.x - b.x + mod);}\n\tfriend Modint operator*(Modint a, Modint b) {return 1ULL * a.x * b.x % mod;}\n\tfriend Modint operator/(Modint a, Modint b) {return a * ~b;}\n\tfriend Modint operator^(Modint a, int b) {Modint ans = 1; for(; b; b >>= 1, a *= a) if(b & 1) ans *= a; return ans;}\n\tfriend Modint operator~(Modint a) {return a ^ (mod - 2);}\n\tfriend Modint operator-(Modint a) {return down<mod>(mod - a.x);}\n\tfriend Modint& operator+=(Modint& a, Modint b) {return a = a + b;}\n\tfriend Modint& operator-=(Modint& a, Modint b) {return a = a - b;}\n\tfriend Modint& operator*=(Modint& a, Modint b) {return a = a * b;}\n\tfriend Modint& operator/=(Modint& a, Modint b) {return a = a / b;}\n\tfriend Modint& operator^=(Modint& a, int b) {return a = a ^ b;}\n\tfriend Modint& operator++(Modint& a) {return a += 1;}\n\tfriend Modint operator++(Modint& a, int) {Modint x = a; a += 1; return x;}\n\tfriend Modint& operator--(Modint& a) {return a -= 1;}\n\tfriend Modint operator--(Modint& a, int) {Modint x = a; a -= 1; return x;}\n\tfriend bool operator==(Modint a, Modint b) {return a.x == b.x;}\n\tfriend bool operator!=(Modint a, Modint b) {return !(a == b);}\n};\n \nconst int N = 1e6 + 100, mod = 998244353;\ntypedef Modint<mod> mint;\n \nint T, n, k;\nmint a[N], inv[N];\n \ninline int lowbit(int x) {return x & -x;}\n \nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(0); cout.tie(0);\n    inv[0] = inv[1] = 1;\n    rep(i, 2, N - 1) inv[i] = (mod - mod / i) * inv[mod % i];\n    for(cin >> T; T; --T) {\n        cin >> n >> k;\n        rep(i, 1, n) cin >> a[i];\n        rep(i, 1, n) {\n            mint mul = 1;\n            for(int u = i + lowbit(i), d = 1; u <= n; u += lowbit(u), ++d) {\n                mul *= (d + k - 1) * inv[d];\n                a[u] -= mul * a[i];\n            }\n        }\n        rep(i, 1, n) cout << a[i] << \" \\n\"[i == n];\n    }\n    return 0;\n}"
+    ]
+  }
+}

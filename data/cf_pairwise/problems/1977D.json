@@ -1,0 +1,44 @@
+{
+  "contest_id": 1977,
+  "index": "D",
+  "name": "XORificator",
+  "rating": 2300,
+  "tags": [
+    "bitmasks",
+    "brute force",
+    "greedy",
+    "hashing"
+  ],
+  "points": 2000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1977D",
+  "url": "https://codeforces.com/problemset/problem/1977/D",
+  "contest_start_time": "2024-05-26T14:35:00+00:00",
+  "statement": {
+    "title": "D. XORificator",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "You are given a binary (consisting only of 0s and 1s) $n \\times m$ matrix. You are also given a XORificator, using which you can invert all the values in a chosen row (i.e. replace 0 with 1 and 1 with 0).\n\nA column in the matrix is considered special if it contains exactly one 1. Your task is to find the maximum number of columns that can be made special at the same time, and the set of rows the XORificator should be used on to achieve that.",
+    "input_spec": "Each test contains multiple test cases. The first line of input contains a single integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases. The description of the test cases follows.\n\nThe first line of each test case contains two integers $n$ and $m$ ($1 \\leq n, m \\leq 3 \\cdot 10^5$, $n \\cdot m \\leq 3 \\cdot 10^5$).\n\nEach of the following $n$ lines of the test case contains a binary string of length $m$.\n\nIt is guaranteed that the sum of $n \\cdot m$ over all test cases does not exceed $3 \\cdot 10^5$.",
+    "output_spec": "For each test case, output two lines.\n\nIn the first line, output the maximum number of special columns that is possible to get simultaneously.\n\nIn the second line, output a binary string of length $n$, where the $i$-th character is 0, if you don't use the XORificator on the $i$-th row, and 1, if you use the XORificator on the $i$-th row.\n\nIf there are multiple valid XORificator configurations that achieve the optimal answer, you can output any of them.",
+    "note": "In the first test case, you can use the XORificator on the second row to make the columns $2$, $3$, and $4$ special.\n\nIn the second test case, the only column is already special, so you don't need to use the XORificator.",
+    "samples": [
+      {
+        "input": "5\n3 4\n1010\n0110\n0100\n1 1\n1\n1 1\n0\n2 5\n00101\n10110\n3 3\n101\n111\n000",
+        "output": "\n3\n010\n1\n0\n1\n1\n3\n00\n2\n010"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 129858,
+    "url": "https://codeforces.com/blog/entry/129858",
+    "tutorial": "Problem 1977D - XORificator was created and prepared by alexchist.\n\n1977D - XORificator\n\nHint\n\nTry to fix the specialty of column $i$ and the presence of a one in cell $i, j$.\n\nTutorial\n\nLet's assume that the value in the $i$-th row and $j$-th column is strictly one and it is the only one in the column.\n\nThen the entire table is uniquely determined, as well as the XORificator. For each possible state of the XORificator that constructs the required table,\n\nLet's maintain a counter. Then the state that maximizes the number of columns with exactly one 1 has the maximum counter.\n\nTo efficiently maintain the counter, it is necessary to maintain the hash of the XORificator and quickly recalculate it when moving to the next row.\n\nThe answer can be easily reconstructed by traversing the table again and counting the hash. If the desired hash is obtained, simply output the state of the XORificator.\n\nThe final time complexity is $O(nm \\log{(nm)})$ or $O(nm)$ if a hash map is used.\n\nFor hashing, it is convenient to use Zobrist hashing.\n\nAuthor's code\n\nFeedback\n\nGood problem\n\nAverage problem\n\nBad problem",
+    "solution_code": [
+      "#include \"bits/stdc++.h\"\n \nusing namespace std;\n \nmt19937_64 rnd(chrono::steady_clock::now().time_since_epoch().count());\n \nvoid solve() {\n    int n, m;\n    cin >> n >> m;\n    vector<vector<bool>> table(n, vector<bool>(m));\n    for (int i = 0; i < n; ++i) {\n        for (int j = 0; j < m; ++j) {\n            char c;\n            cin >> c;\n            table[i][j] = c - '0';\n        }\n    }\n    vector<long long> rands(n), rands2(n);\n    for (int i = 0; i < n; ++i) {\n        rands[i] = rnd();\n        rands2[i] = rnd();\n    }\n    map<pair<long long, long long>, int> ans;\n    int res = 0;\n    pair<int, int> ind_ans = {0, 0};\n    for (int j = 0; j < m; ++j) {\n        long long summ = 0, summ2 = 0;\n        for (int i = 0; i < n; ++i) {\n            if (table[i][j]) {\n                summ ^= rands[i];\n                summ2 ^= rands2[i];\n            }\n        }\n        for (int i = 0; i < n; ++i) {\n            summ ^= rands[i];\n            summ2 ^= rands2[i];\n            ans[{summ, summ2}]++;\n            if (res < ans[{summ, summ2}]) {\n                res = ans[{summ, summ2}];\n                ind_ans = {j, i};\n            }\n            summ ^= rands[i];\n            summ2 ^= rands2[i];\n        }\n    }\n    cout << res << \"\\n\";\n    string inds(n, '0');\n    for (int i = 0; i < n; ++i) {\n        if (table[i][ind_ans.first]) {\n            if (i != ind_ans.second) {\n                inds[i] = '1';\n            }\n        } else if (ind_ans.second == i) {\n            inds[i] = '1';\n        }\n    }\n    cout << inds << \"\\n\";\n}\n \nsigned main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    int tt = 1;\n    cin >> tt;\n    while (tt--) {\n        solve();\n    }\n}"
+    ]
+  }
+}

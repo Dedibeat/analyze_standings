@@ -1,0 +1,56 @@
+{
+  "contest_id": 2037,
+  "index": "G",
+  "name": "Natlan Exploring",
+  "rating": 2000,
+  "tags": [
+    "bitmasks",
+    "combinatorics",
+    "data structures",
+    "dp",
+    "math",
+    "number theory"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2037G",
+  "url": "https://codeforces.com/problemset/problem/2037/G",
+  "contest_start_time": "2024-11-17T14:35:00+00:00",
+  "statement": {
+    "title": "G. Natlan Exploring",
+    "time_limit": "4 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "You are exploring the stunning region of Natlan! This region consists of $n$ cities, and each city is rated with an attractiveness $a_i$. A directed edge exists from City $i$ to City $j$ if and only if $i  \\lt  j$ and $\\gcd(a_i,a_j)\\neq 1$, where $\\gcd(x, y)$ denotes the greatest common divisor (GCD) of integers $x$ and $y$.\n\nStarting from City $1$, your task is to determine the total number of distinct paths you can take to reach City $n$, modulo $998\\,244\\,353$. Two paths are different if and only if the set of cities visited is different.",
+    "input_spec": "The first line contains an integer $n$ ($2 \\leq n \\leq 2 \\cdot 10^5$) — the number of cities.\n\nThe second line contains $n$ integers $a_1, a_2, \\ldots, a_n$ ($2 \\leq a_i \\leq 10^6$) — the attractiveness of each city.",
+    "output_spec": "Output the total number of distinct paths you can take to reach City $n$, modulo $998\\,244\\,353$.",
+    "note": "In the first example, the five paths are the following:\n\n City $1\\rightarrow$ City $5$\n\n City $1\\rightarrow$ City $2\\rightarrow$ City $5$\n\n City $1\\rightarrow$ City $2\\rightarrow$ City $3\\rightarrow$ City $5$\n\n City $1\\rightarrow$ City $2\\rightarrow$ City $4\\rightarrow$ City $5$\n\n City $1\\rightarrow$ City $4\\rightarrow$ City $5$\n\nIn the second example, the two paths are the following:\n\n City $1\\rightarrow$ City $3\\rightarrow$ City $5$\n\n City $1\\rightarrow$ City $2\\rightarrow$ City $3\\rightarrow$ City $5$",
+    "samples": [
+      {
+        "input": "5\n2 6 3 4 6",
+        "output": "\n5"
+      },
+      {
+        "input": "5\n4 196 2662 2197 121",
+        "output": "\n2"
+      },
+      {
+        "input": "7\n3 6 8 9 11 12 20",
+        "output": "\n7"
+      },
+      {
+        "input": "2\n2 3",
+        "output": "\n0"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 136334,
+    "url": "https://codeforces.com/blog/entry/136334",
+    "tutorial": "2037G — Natlan Exploring\n\nVideo",
+    "solution_code": []
+  }
+}

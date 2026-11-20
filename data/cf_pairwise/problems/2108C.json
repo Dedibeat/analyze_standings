@@ -1,0 +1,48 @@
+{
+  "contest_id": 2108,
+  "index": "C",
+  "name": "Neo's Escape",
+  "rating": 1500,
+  "tags": [
+    "binary search",
+    "brute force",
+    "data structures",
+    "dp",
+    "dsu",
+    "graphs",
+    "greedy",
+    "implementation"
+  ],
+  "points": 1500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2108C",
+  "url": "https://codeforces.com/problemset/problem/2108/C",
+  "contest_start_time": "2025-05-01T14:35:00+00:00",
+  "statement": {
+    "title": "C. Neo's Escape",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Neo wants to escape from the Matrix. In front of him are $n$ buttons arranged in a row. Each button has a weight given by an integer: $a_1, a_2, \\ldots, a_n$.\n\nNeo is immobilized, but he can create and move clones. This means he can perform an unlimited number of actions of the following two types in any order:\n\n Create a clone in front of a specific button.\n\n Move an existing clone one position to the left or right.\n\nAs soon as a clone is in front of another button that has not yet been pressed—regardless of whether he was created or moved — he immediately presses it. If the button has already been pressed, a clone does nothing — buttons can only be pressed once.\n\nFor Neo to escape, he needs to press all the buttons in such an order that the sequence of their weights is non-increasing — that is, if $b_1, b_2, \\ldots, b_n$ are the weights of the buttons in the order they are pressed, then it must hold that $b_1 \\geq b_2 \\geq \\cdots \\geq b_n$.\n\nYour task is to determine the minimum number of clones that Neo needs to create in order to press all the buttons in a valid order.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 10^4$). The description of the test cases follows.\n\nThe first line of each test case contains one integer $n$ ($1 \\leq n \\leq 2 \\cdot 10^5$) — the number of buttons.\n\nThe second line of each test case contains $n$ integers $a_1, a_2, \\ldots, a_n$ ($1 \\leq a_i \\leq 10^9$) — the weights of the buttons.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, output one integer — the minimum number of clones that need to be created to press all the buttons in a valid order.",
+    "note": "In the first test case, Neo can act as follows:\n\n Create a clone in front of the fifth button (with weight $5$).\n\n Create a clone in front of the first button (with weight $4$).\n\n Move the second clone from the first button to the second (with weight $3$).\n\n Move the second clone from the second button to the third (with weight $2$).\n\n Move the first clone from the fifth button to the fourth (with weight $1$).\n\n Thus, the sequence of button presses will be $5 \\rightarrow 4 \\rightarrow 3 \\rightarrow 2 \\rightarrow 1$, which meets the requirement. It can be shown that the number of clones created is the smallest possible.\nIn the second test case, Neo can act as follows:\n\n Create a clone in front of the second button (with weight $1$).\n\n Move the clone from the second button to the third (with weight $1$).\n\n Move the clone from the third button to the second (already pressed).\n\n Move the clone from the second button to the first (with weight $1$).\n\n Thus, the sequence of button presses will be $1 \\rightarrow 1 \\rightarrow 1$.",
+    "samples": [
+      {
+        "input": "4\n5\n4 3 2 1 5\n3\n1 1 1\n6\n7 8 1 5 9 2\n10\n1 7 9 7 1 10 2 10 10 7",
+        "output": "\n2\n1\n2\n3"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 142512,
+    "url": "https://codeforces.com/blog/entry/142512",
+    "tutorial": "2108C - Neo's Escape\n\nAuthor: suprend\n\nSolution\n\nNote that consecutive buttons with the same weight do not affect the result, so we will keep only one of them in such sequences.\n\nIn the resulting array, we find peaks (local maxima — elements that are strictly greater than both of their neighbors). The number of such peaks is the answer, because:\n\n— Each peak is separated from others by smaller elements. Therefore, the only way to reach a peak is by creating a clone there.\n\n— If a button was visited, we can return to it.\n\n— Any element other than a peak can be reached from a larger neighbor, since we have already visited it. Thus, creating clones in all other elements is not necessary.\n\nComplexity: $\\text{O}(n)$\n\nCode",
+    "solution_code": [
+      "#include <iostream>\n#include <vector>\n \nusing namespace std;\n \nint main() {\n    int tt = 1;\n    cin >> tt;\n    while(tt--){\n        int n; cin >> n;\n        vector<int> a;\n        a.push_back(-1e9);\n        for (int i = 0; i < n; i++){\n            int x; cin >> x;\n            if (a.back() == x);\n            else a.push_back(x);\n        }\n        a.push_back(-1e9);\n        \n        int ans = 0;\n        for (int i = 1; i < a.size() - 1; i++) \n            if (a[i - 1] < a[i] && a[i] > a[i + 1]) ans++;\n \n        cout << ans << endl;\n    }\n}"
+    ]
+  }
+}

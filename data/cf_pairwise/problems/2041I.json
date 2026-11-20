@@ -1,0 +1,44 @@
+{
+  "contest_id": 2041,
+  "index": "I",
+  "name": "Auto Complete",
+  "rating": 2300,
+  "tags": [
+    "binary search",
+    "data structures",
+    "hashing",
+    "implementation",
+    "sortings",
+    "strings",
+    "trees"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2041I",
+  "url": "https://codeforces.com/problemset/problem/2041/I",
+  "contest_start_time": "2024-11-24T07:05:00+00:00",
+  "statement": {
+    "title": "I. Auto Complete",
+    "time_limit": "4 seconds",
+    "memory_limit": "1024 megabytes",
+    "legend": "You are designing a snazzy new text editor, and you want to add a nifty auto-complete feature to help users save time. Here is how it will work: if a user types \"App\", your editor will magically suggest the word \"Application\"! Even better, users can personalize the words that auto-complete in your editor.\n\nYour editor will support 4 kinds of operations (Let's say the current text in your editor is $t$):\n\n Add an auto complete pattern $p_i$.\n\n Delete an auto complete pattern $p_i$.\n\n Append a string $s$ to the end of $t$.\n\n Delete $c$ characters from the end of $t$. Note that if $c$ is larger then the length of $t$, delete all the characters from $t$.\n\nAfter each action, your editor should suggest an auto-complete candidate $i$ that matches the following criteria:\n\n The string $p_i$ has a prefix equal to $t$.\n\n If there are multiple $p_i$, pick the longest one.\n\n If there are still multiple $p_i$, pick the one with the smallest lexicographic order.\n\n If there are still multiple $p_i$, pick the one with the smallest ID.\n\n To simplify the question, for each action, print the suggested auto complete pattern ID. If there's no match, print -1.\nFor example, let us say we have three candidates: \"alice\", \"bob\", and \"charlie\", with ID 1, 2, and 3. At first, there is nothing on the screen, so \"charlie\" (3) should be suggested because it is the longest. Then, let us say the user types \"b\". You should suggest \"bob\" (2) because it is the only one that starts with \"b\". Finally, let us say the user type \"body\". You should print -1 because there is no matched pattern.",
+    "input_spec": "The first line contains an integer $n$, followed by $n$ lines, with each line containing an action.\n\nThere are four types of actions:\n\n $i$ $p_i$\n\n $i$\n\n $s$\n\n $c$\n\n The add actions are followed by an integer $i$ and a pattern $p_i$, which means the user wants to add a pattern with ID $i$. The delete actions are followed by an integer $i$, which means the user wants to delete $p_i$ from the pattern set. The append actions are followed by a string $s$, which means the user appends $s$ to the end of $t$. The backspace actions are followed by an integer $c$, which means the user deletes $c$ characters from the end of $t$. All the parameters are splitted by a single space character.\n\n $1 \\leq n \\leq 10^6$\n\n The total number of characters in all $p_i$ and $s$ does not exceed $2\\times 10^6$.\n\n $1 \\leq c \\leq 2\\times 10^6$\n\n The strings $p_i$ and $s$ may contain any printable characters, excluding all space characters (ASCII number in the range from $33$ to $126$).\n\n The ID $i$ for each add operation is unique.\n\n The ID $i$ for each delete is guaranteed to be valid.\n\n Each ID $i$ satisfies $0\\le i \\le n$.",
+    "output_spec": "The program should output $n$ lines. For each action, output an integer $i$, which means that after the action, $p_i$ is the suggested auto complete candidate. If there is no $p_i$ that matches the requirement, output -1.",
+    "note": null,
+    "samples": [
+      {
+        "input": "\n6\nadd 1 pattern1_alice\nadd 2 pattern2_bob\nadd 3 pattern3_charlie\nappend pattern\nappend 2_bobabc\nbackspace 3",
+        "output": "\n1\n1\n3\n3\n-1\n2"
+      },
+      {
+        "input": "\n6\nappend pattern\nadd 1 pattern1_alice____\nadd 2 pattern2_bob______\nadd 3 pattern3_charlie__\ndelete 1\ndelete 2",
+        "output": "\n-1\n1\n1\n1\n2\n3"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "missing"
+  },
+  "editorial": null
+}

@@ -1,0 +1,47 @@
+{
+  "contest_id": 2108,
+  "index": "E",
+  "name": "Spruce Dispute",
+  "rating": 2600,
+  "tags": [
+    "constructive algorithms",
+    "dfs and similar",
+    "graphs",
+    "greedy",
+    "implementation",
+    "shortest paths",
+    "trees"
+  ],
+  "points": 2750.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2108E",
+  "url": "https://codeforces.com/problemset/problem/2108/E",
+  "contest_start_time": "2025-05-01T14:35:00+00:00",
+  "statement": {
+    "title": "E. Spruce Dispute",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "It's already a hot April outside, and Polycarp decided that this is the perfect time to finally take down the spruce tree he set up several years ago. As he spent several hours walking around it, gathering his strength, he noticed something curious: the spruce is actually a tree$^{\\text{∗}}$ — and not just any tree, but one consisting of an odd number of vertices $n$. Moreover, on $n-1$ of the vertices hang Christmas ornaments, painted in exactly $\\frac{n-1}{2}$ distinct colors, with exactly two ornaments painted in each color. The remaining vertex, as tradition dictates, holds the tree's topper.\n\nAt last, after several days of mental preparation, Polycarp began dismantling the spruce. First, he removed the topper and had already started taking apart some branches when suddenly a natural question struck him: how can he remove one of the tree's edges and rearrange the ornaments in such a way that the sum of the lengths of the simple paths between ornaments of the same color is as large as possible?\n\nIn this problem, removing an edge from the tree is defined as follows: choose a pair of adjacent vertices $a$ and $b$ ($a  \\lt  b$), then remove vertex $b$ from the tree and reattach all of $b$'s adjacent vertices (except for $a$) directly to $a$.\n\nPolycarp cannot continue dismantling his spruce until he gets an answer to this question. However, checking all possible options would take him several more years. Knowing your experience in competitive programming, he turned to you for help. But can you solve this dispute?\n\n$^{\\text{∗}}$A tree is a connected graph without cycles.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 10^4$). The description of the test cases follows.\n\nThe first line of each test case contains an odd number $n$ ($3 \\le n  \\lt  2 \\cdot 10^5$) — the number of vertices in the tree.\n\nThe following $n-1$ lines describe the tree, given by pairs of adjacent vertices $u$, $v$ ($1 \\le u, v \\le n, u \\neq v$).\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, you need to output two lines.\n\nIn the first line, output the pair of vertices $u$, $v$, the edge between which Polycarp is going to remove.\n\nIn the next line, output the array $c$ of $n$ numbers from $0$ to $\\frac{n-1}{2}$, where $c[i]$ — the positive color number assigned to vertex $i$. Note that $c[\\text{max}(u, v)]= 0$, since this vertex has been removed.",
+    "note": "Consider the first test case.\n\nRemove the edge connecting vertices $1$ and $2$. After this, vertex $2$ will be removed from the tree, and vertices $3$ and $4$ will be connected to vertex $1$.\n\nColor vertices $3$ and $4$ with the first color, and vertices $1$ and $5$ with the second. The sum of the lengths of simple paths between ornaments of the same color is equal to $2 + 2 = 4$. It can be shown that this value is the largest possible.\n\nIn the second and third examples, the maximum sum of path lengths will be $3$ and $9$, respectively.",
+    "samples": [
+      {
+        "input": "3\n5\n1 2\n2 3\n2 4\n4 5\n5\n1 2\n1 3\n1 4\n1 5\n7\n1 5\n5 4\n4 3\n3 2\n2 6\n6 7",
+        "output": "\n1 2\n2 0 1 1 2\n1 5\n1 1 2 2 0\n4 3\n1 3 3 0 2 2 1"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 142512,
+    "url": "https://codeforces.com/blog/entry/142512",
+    "tutorial": "2108E - Spruce Dispute\n\nAuthor: eugenechka.boyko.2_0-0\n\nSolution\n\nLet’s assume we have already removed one of the edges from the original tree. Then, we are left with a tree containing an even number of vertices, namely $n - 1$.\nNote that the maximum possible sum of distances between same-colored balls in this tree will be achieved if, for every edge, all vertices in its smaller subtree are of different colors. In that case, the edge will contribute the maximum possible number of times to the answer — specifically, $\\min(a, b)$, where $a$ and $b$ are the sizes of the subtrees connected by this edge (since, obviously, no more paths can pass through this edge).\nGreat — now let’s root our tree at its centroid, which is a vertex that splits the tree into subtrees whose sizes do not exceed half of the total size. It can be proven that such a vertex always exists in any tree (and if there are two such vertices, we can pick either).\nNow, let’s divide all vertices into groups based on which child subtree of the centroid they belong to, adding the centroid itself to the smallest group. Notice that the sizes of all groups still do not exceed $\\frac{n - 1}{2}$. Therefore, we can pair up the vertices in such a way that each pair contains vertices from different groups. This can be done greedily using a heap in $O(n \\log n)$, or by running DFS from the centroid and coloring vertices modulo $\\frac{n - 1}{2}$ (clearly, with this method, no group will have two vertices of the same color), which has complexity $O(n)$.\nThus, we are left to determine which edge we should remove so that the total sum of the minimal subtree sizes across all edges in the original tree decreases as little as possible. Note that, since initially the tree has an odd number of vertices, its centroid is uniquely defined and will not change no matter which edge we remove. At the same time, since all paths pass through the centroid, the total sum of their lengths can be rewritten as the sum of distances to the centroid.\nNow, let’s make two observations:\n\nIt is more beneficial to remove a leaf than any other type of vertex.\n\nAmong all leaves, it is best to remove the one closest to the centroid.\n\nThe second observation follows directly from the first and the earlier remark, so we only need to justify the first one. But this is fairly obvious: when we remove an edge, besides subtracting the depth of its nearest vertex, we also decrease the depths of all vertices in its subtree by one. Therefore, it will always be better to remove deeper edges rather than shallower ones.\nAs a result, after finding the centroid in $O(n)$, we get an overall complexity of $O(n \\log n)$ (if we use a heap) or $O(n)$.\n\nCode",
+    "solution_code": [
+      "#include <cstdio>\n#include <vector>\n\n#define S 200005\n\nusing namespace std;\ntypedef long long l;\n\nl coloring[S], centroid, best, best_dist, n, color;\nvector<vector<l>> g;\n\nl search_centroid(l u, l from) {\n  l sum = 0;\n  bool f = true;\n  for (l v : g[u]) if (v != from) {\n    l t = search_centroid(v, u);\n    if (t > n / 2) f = false;\n    sum += t;\n  }\n  \n  if (f && n - 1 - sum <= n / 2) centroid = u;\n  return sum + 1;\n}\n\nvoid make_coloring(l u, l from, l dist) {\n  coloring[u] = (color++) % (n / 2) + 1;\n  if (g[u].size() == 1 && dist < best_dist) {\n    best_dist = dist;\n    best = u;\n  }\n  for (l v : g[u]) if (v != from)\n    make_coloring(v, u, dist + 1);\n}\n\nvoid solve() {\n  centroid = -1, best_dist = S, color = 0;\n  scanf(\"%lld\", &n);\n  g.assign(n, vector<l>());\n  for (l i = 0; i < n - 1; ++i) {\n    l u, v; scanf(\"%lld %lld\", &u, &v); --u, --v;\n    g[u].push_back(v); g[v].push_back(u);\n  }\n  \n  search_centroid(1543 % n, -1);\n  make_coloring(centroid, -1, 0);\n  \n  l bbest = max(best, g[best][0]);\n  coloring[centroid] = coloring[bbest];\n  coloring[bbest] = 0;\n  \n  printf(\"%lld %lld\\n\", best + 1, g[best][0] + 1);\n  for (l i = 0; i < n; ++i) {\n    if (i) printf(\" \");\n    printf(\"%lld\", coloring[i]);\n  }\n  printf(\"\\n\");\n}\n\nint main() {\n  l tc; scanf(\"%lld\", &tc);\n  while (tc--) solve();\n}"
+    ]
+  }
+}

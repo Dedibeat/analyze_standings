@@ -1,0 +1,46 @@
+{
+  "contest_id": 1976,
+  "index": "D",
+  "name": "Invertible Bracket Sequences",
+  "rating": 2000,
+  "tags": [
+    "binary search",
+    "combinatorics",
+    "data structures",
+    "divide and conquer",
+    "implementation",
+    "two pointers"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1976D",
+  "url": "https://codeforces.com/problemset/problem/1976/D",
+  "contest_start_time": "2024-05-30T14:35:00+00:00",
+  "statement": {
+    "title": "D. Invertible Bracket Sequences",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "A regular bracket sequence is a bracket sequence that can be transformed into a correct arithmetic expression by inserting characters '1' and '+' between the original characters of the sequence. For example:\n\n bracket sequences \"()()\" and \"(())\" are regular (the resulting expressions are: \"(1)+(1)\" and \"((1+1)+1)\");\n\n bracket sequences \")(\", \"(\" and \")\" are not.\n\nLet's define the inverse of the bracket sequence as follows: replace all brackets '(' with ')', and vice versa (all brackets ')' with '('). For example, strings \"()((\" and \")())\" are inverses of each other.\n\nYou are given a regular bracket sequence $s$. Calculate the number of pairs of integers $(l,r)$ ($1 \\le l \\le r \\le |s|$) such that if you replace the substring of $s$ from the $l$-th character to the $r$-th character (inclusive) with its inverse, $s$ will still be a regular bracket sequence.",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases.\n\nThe only line of each test case contains a non-empty regular bracket sequence; it consists only of characters '(' and/or ')'.\n\nAdditional constraint on the input: the total length of the regular bracket sequences over all test cases doesn't exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, print a single integer — the number of pairs $(l,r)$ meeting the conditions from the statement.",
+    "note": "In the first example, there is only one pair:\n\n $(2, 3)$: (()) $\\rightarrow$ ()().\n\nIn the second example, there are no pairs.\n\nIn the third example, there are three pairs:\n\n $(2, 3)$: ()()() $\\rightarrow$ (())();\n\n $(4, 5)$: ()()() $\\rightarrow$ ()(());\n\n $(2, 5)$: ()()() $\\rightarrow$ (()());",
+    "samples": [
+      {
+        "input": "4\n(())\n()\n()()()\n(()())(())",
+        "output": "\n1\n0\n3\n13"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 129992,
+    "url": "https://codeforces.com/blog/entry/129992",
+    "tutorial": "Let's define $bal_i$ as the number of characters '(' minus the number of characters ')' if we consider a prefix of length $i$.\n\nThe bracket sequence is regular if both of the following conditions holds:\n\n there is no index $i$ such that $bal_i  \\lt  0$;\n\n $bal_n = 0$, where $n$ is the length of the sequence.\n\nUsing that fact, we can say that the substring $[l, r]$ is \"good\" if both of the following conditions holds:\n\n $bal_{l-1} \\ge bal_i - bal_{l-1}$ should hold for all $i$ in $[l, r]$, otherwise that would lead to the negative balance after inverting the substring;\n\n $bal_{l-1} = bal_r$, otherwise that would lead to $bal_n \\ne 0$ after inverting substring.\n\nThere are many solutions that are based on these two facts. Let's consider one of them.\n\nLet's iterate over the right bound of the substring (denote it as $r$). According to the second condition, $bal_{l-1} = bal_r$, therefore, we can maintain a map that stores the number of positions for each balance value. But, unfortunately, not all such left borders form a good substring because of the first condition. Luckily, it is easy to fix, if the current balance $bal_r$ and there is balance $x$ in the map such that $x  \\lt  bal_r - x$, we can remove all its occurrences from the map (i. e. remove the key $x$ from the map). This fix works because the current position lies between the left border (which we store in the map) and the potential right border, and the current balance is too high (which violates the first condition).\n\nSo, we get a solution that works in $O(n\\log{n})$.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n \nusing namespace std;\n \nint main() {\n  int t;\n  cin >> t;\n  while (t--) {\n    string s;\n    cin >> s;\n    map<int, int> cnt;\n    int b = 0;\n    ++cnt[b];\n    long long ans = 0;\n    for (auto& c : s) {\n      b += (c == '(' ? +1 : -1);\n      ans += cnt[b];\n      ++cnt[b];\n      while (cnt.begin()->first * 2 < b)\n        cnt.erase(cnt.begin());\n    }\n    cout << ans << '\\n';\n  }\n}"
+    ]
+  }
+}

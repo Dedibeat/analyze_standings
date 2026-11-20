@@ -1,0 +1,42 @@
+{
+  "contest_id": 2093,
+  "index": "D",
+  "name": "Skibidi Table",
+  "rating": 1400,
+  "tags": [
+    "bitmasks",
+    "implementation"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2093D",
+  "url": "https://codeforces.com/problemset/problem/2093/D",
+  "contest_start_time": "2025-04-08T14:35:00+00:00",
+  "statement": {
+    "title": "D. Skibidi Table",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Vadim loves filling square tables with integers. But today he came up with a way to do it for fun! Let's take, for example, a table of size $2 \\times 2$, with rows numbered from top to bottom and columns numbered from left to right. We place $1$ in the top left cell, $2$ in the bottom right, $3$ in the bottom left, and $4$ in the top right. That's all he needs for fun!\n\nFortunately for Vadim, he has a table of size $2^n \\times 2^n$. He plans to fill it with integers from $1$ to $2^{2n}$ in ascending order. To fill such a large table, Vadim will divide it into $4$ equal square tables, filling the top left one first, then the bottom right one, followed by the bottom left one, and finally the top right one. Each smaller table will be divided into even smaller ones as he fills them until he reaches tables of size $2 \\times 2$, which he will fill in the order described above.\n\nNow Vadim is eager to start filling the table, but he has $q$ questions of two types:\n\n what number will be in the cell at the $x$-th row and $y$-th column;\n\n in which cell coordinates will the number $d$ be located.\n\n Help answer Vadim's questions.",
+    "input_spec": "Each test consists of several sets of input data. The first line contains a single integer $t$ $(1 \\leq t \\leq 10)$  — the number of sets of input data. The following lines describe the input data sets.\n\nIn the first line of each data set, there is an integer $n$, describing the size of the table $(1 \\le n \\le 30)$.\n\nIn the second line of each data set, there is an integer $q$  — the number of questions $(1 \\le q \\le 20\\,000)$.\n\nIn the following $q$ lines of each data set, the questions are described in the following formats:\n\n -> x y  — What number will be in the cell $(1 \\le x, y \\le 2^n)$;\n\n <- d  — In which cell coordinates will the number $(1 \\le d \\le 2^{2n})$ be located.\n\nIt is guaranteed that the sum of $q$ over all test cases does not exceed $20\\,000$.",
+    "output_spec": "Output the answers to each question on a separate line.",
+    "note": "This is how the filled table from the first example looks:",
+    "samples": [
+      {
+        "input": "2\n2\n5\n-> 4 3\n<- 15\n<- 4\n-> 3 1\n-> 1 3\n1\n8\n-> 1 1\n-> 1 2\n-> 2 1\n-> 2 2\n<- 1\n<- 2\n<- 3\n<- 4",
+        "output": "\n7\n2 3\n1 2\n9\n13\n1\n4\n3\n2\n1 1\n2 2\n2 1\n1 2"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 141434,
+    "url": "https://codeforces.com/blog/entry/141434",
+    "tutorial": "Note that there are $4$ possible positions of the cell and the values within it:\n\n $x,y \\le 2^{n-1} \\Leftrightarrow d \\le 2^{2n-2}$;\n\n $x,y  \\gt  2^{n-1} \\Leftrightarrow 2^{2n-2}  \\lt  d \\le 2 \\cdot 2^{2n-2}$;\n\n $x  \\gt  2^{n-1}, y \\le 2^{n-1} \\Leftrightarrow 2 \\cdot 2^{2n-2}  \\lt  d \\le 3 \\cdot 2^{2n-2}$;\n\n $x \\le 2^{n-1}, y  \\gt  2^{n-1} \\Leftrightarrow 3 \\cdot 2^{2n-2}  \\lt  d \\le 4 \\cdot 2^{2n-2}$.\n\n Since all square tables of size $2^{n-1} \\times 2^{n-1}$ are filled recursively, it is possible to find the corresponding value for the coordinate or the corresponding coordinate for the value depending on the query, add the required value to the answer, subtract the necessary value from the query, and transition from $n$ to $n-1$. This process can continue to reduce $n$ to one to handle the table manually, or to zero to immediately add to the answer $x = 1, y = 1, d = 1$.\nThis can be implemented either with a recursive function, or by subtracting the necessary powers of two, or by integer division of the coordinates by $2$ and the value by $4$, or by analyzing the bits in the binary representation of $x-1, y-1$, and $d-1$, or through a kind of binary search. Each of these solutions answers one query in $O(n)$.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n \nusing namespace std;\n \nint main() {\n    int t;\n    cin >> t;\n    \n    while (t--) {\n        int n, q;\n        cin >> n >> q;\n        \n        while (q--) {\n            string type;\n            cin >> type;\n            \n            if (type == \"->\") {\n                int x, y;\n                cin >> x >> y;\n                x--, y--;\n                \n                long long num = 0;\n                for (int i = n - 1; i >= 0; --i) {\n                    int cur = 1 << i;\n                    if (!(x & cur) && !(y & cur))\n                        num ^= 0ll << (2 * i);\n                    if ((x & cur) && (y & cur))\n                        num ^= 1ll << (2 * i);\n                    if ((x & cur) && !(y & cur))\n                        num ^= 2ll << (2 * i);\n                    if (!(x & cur) && (y & cur))\n                        num ^= 3ll << (2 * i);\n                }\n                cout << num + 1 << '\\n';\n            }\n            else {\n                long long num;\n                cin >> num;\n                num--;\n                \n                int x = 0, y = 0;\n                for (int i = n - 1; i >= 0; --i) {\n                    long long cur = 3ll << (2 * i);\n                    if ((num & cur) >> (2 * i) == 0)\n                        x ^= 0 << i, y ^= 0 << i;\n                    if ((num & cur) >> (2 * i) == 1)\n                        x ^= 1 << i, y ^= 1 << i;\n                    if ((num & cur) >> (2 * i) == 2)\n                        x ^= 1 << i, y ^= 0 << i;\n                    if ((num & cur) >> (2 * i) == 3)\n                        x ^= 0 << i, y ^= 1 << i;\n                }\n                cout << x + 1 << ' ' << y + 1 << '\\n';\n            }\n        }\n    }\n    \n    return 0;\n}"
+    ]
+  }
+}

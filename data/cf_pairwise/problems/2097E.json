@@ -1,0 +1,42 @@
+{
+  "contest_id": 2097,
+  "index": "E",
+  "name": "Clearing the Snowdrift",
+  "rating": 3100,
+  "tags": [
+    "data structures",
+    "dfs and similar",
+    "dp",
+    "greedy"
+  ],
+  "points": 3000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2097E",
+  "url": "https://codeforces.com/problemset/problem/2097/E",
+  "contest_start_time": "2025-04-26T08:35:00+00:00",
+  "statement": {
+    "title": "E. Clearing the Snowdrift",
+    "time_limit": "2 seconds",
+    "memory_limit": "1024 megabytes",
+    "legend": "Boy Vasya loves to travel very much. In particular, flying in airplanes brings him extraordinary pleasure. He was about to fly to another city, but the runway was heavily covered with snow and needed to be cleared.\n\nThe runway can be represented as $n$ consecutive sections numbered from $1$ to $n$. The snowstorm was quite strong, but it has already stopped, so Vasya managed to calculate that the $i$-th section is covered with $a_i$ meters of snow. For such situations, the airport has a snowplow that works in a rather unusual way. In one minute, the snowplow can do the following:\n\n Choose a consecutive segment of length no more than $d$ and remove one meter of snow from the most snow-covered sections.\nFormally, one can choose $1 \\le l \\le r \\le n$ ($r - l + 1 \\le d$). After that, $c = \\max \\{ a_l, a_{l + 1}, \\ldots , a_r \\}$ is calculated, and if $c  \\gt  0$, then for all $i \\colon l \\le i \\le r$ such that $a_i = c$, the value of $a_i$ is decreased by one.\n\nVasya has been preparing for the flight for a long time and wants to understand how much time he has left to wait until all sections are completely cleared of snow. In other words, it is required to calculate the minimum number of minutes that the snowplow will need to achieve $a_i = 0$ for all $i$ from $1$ to $n$.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 2 \\cdot 10^5$). The description of the test cases follows.\n\nThe first line of each test case contains two integers $n$ and $d$ ($1 \\le n \\le 5 \\cdot 10^5, 1 \\le d \\le n$) — the number of sections on the runway and the maximum length of the segment that the snowplow can choose.\n\nThe second line of each test case contains $n$ integers $a_1, a_2, \\ldots, a_n$ ($1 \\le a_i \\le 10^9$), where $a_i$ is the number of meters of snow on the $i$-th section.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $5 \\cdot 10^5$.",
+    "output_spec": "For each test case, output a single integer — the minimum number of minutes required for the snowplow to achieve $a_i = 0$ for all $i$ from $1$ to $n$.",
+    "note": "In the first test case, there is an optimal sequence of operations. First, select the segment $[2, 3]$ four times. After three operations, $a_2$ will turn into $2$, and the array $a$ will look like $[1, 2, 2, 1, 2]$. After the fourth operation, the array $a$ will become $[1, 1, 1, 1, 2]$. Next, the array can be transformed into zeros by selecting the segments $[1, 2]$, $[3, 3]$, $[5, 5]$, and $[4, 5]$ (in that exact order).\n\nIn the second test case, $d = 1$, which means that each section is cleared independently of the others, and the answer is equal to the sum of all $a_i$.",
+    "samples": [
+      {
+        "input": "2\n5 2\n1 5 2 1 2\n3 1\n1000000000 1000000000 1000000000",
+        "output": "\n8\n3000000000"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 142316,
+    "url": "https://codeforces.com/blog/entry/142316",
+    "tutorial": "We will assign to each operation the maximum $a_i$ on the segment of that operation. Consider some order of operations that zeroes out the entire array. If there are two adjacent operations in which the maximum on the segment of the earlier operation is smaller, then we can swap these two operations without changing anything (we leave this simple case analysis as an exercise for the reader). Thus, from any sequence, we can obtain a sequence of operations of the same length where the assigned maximums on the segments of the operations do not increase during the process.\n\nNow let $C$ denote the maximum element in the array. Then one of the optimal sequences of operations will first decrease by one all numbers equal to $C$, then all numbers equal to $C - 1$, and so on. How can we calculate the minimum number of operations needed to decrease all numbers equal to the current maximum in the array by one? We will look at the positions of these maximums (let's denote this set of positions as $S$); they need to be covered by the minimum number of segments of length no more than $d$. This is a standard problem that can be solved using a greedy algorithm:\n\n Take the leftmost uncovered point $x \\in S$, place a segment $[x, \\min(x + d - 1, n)]$,\n\n Remove all points from $S \\cap [x, \\min(x + d - 1, n)]$,\n\n Repeat until $S$ is empty.\n\nNow we can solve the problem in $O(n \\cdot C)$, but that is slow. Let's denote the sorted set of numbers in the array as $x_1  \\lt  x_2 \\ldots  \\lt  x_k$. We will also introduce $x_0 = 0$. While we are decreasing the maximums from $x_i$ to $x_{i-1}$, the set $S$ does not change, meaning the greedy process is the same and always selects the same number of segments. Thus, it is sufficient to run the greedy process once. We obtain a solution in $O(n^2)$.\n\nNow let's optimize this solution. We only need to find the number of segments in the greedy process for the sets $S_j = \\{i : a_i \\geq x_j\\}, 0 \\leq j \\leq k$. Let's simulate this process simultaneously from left to right. Consider $a_1$. Let $a_1 = x_i$. Then for all sets numbered from $0$ to $i$, a segment of length $d$ starts at this element. Let's remember this and say that these sets will return to consideration when we reach the processing of $a_{d+1}$, because up to that point the elements are covered by the segment. We will continue doing this. We take all sets with numbers less than or equal to $j$ (where the current element of the array is equal to $x_j$), for which the segments have already ended, update the answer, and say that these sets will finish their segment after $d$ processed elements in the scanline. These are some operations with sets that can be maintained in a segment tree, which essentially stores the indices of the sets included in the segment tree, meaning only the paths to the leaves corresponding to the numbers of these sets are stored (somewhat similar to an implicit segment tree). The asymptotic complexity of the solution is $O(n \\cdot \\log(n))$. Similar operations can be maintained in a Cartesian tree, but that would lead to a larger constant and $O(n \\cdot \\log^2(n))$, which should not pass the time limits. For more details, you can read the author's solution.\n\nThere is also a solution using link-cut trees, which is simpler to understand but requires knowledge of this structure, so it was not intended as the author's solution.",
+    "solution_code": []
+  }
+}

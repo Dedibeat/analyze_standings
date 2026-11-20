@@ -1,0 +1,46 @@
+{
+  "contest_id": 2066,
+  "index": "E",
+  "name": "Tropical Season",
+  "rating": 3300,
+  "tags": [
+    "binary search",
+    "data structures",
+    "greedy",
+    "implementation"
+  ],
+  "points": 2000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2066E",
+  "url": "https://codeforces.com/problemset/problem/2066/E",
+  "contest_start_time": "2025-02-11T14:35:00+00:00",
+  "statement": {
+    "title": "E. Tropical Season",
+    "time_limit": "4 seconds",
+    "memory_limit": "1024 megabytes",
+    "legend": "You have $n$ barrels of infinite capacity. The $i$-th barrel initially contains $a_i$ kilograms of water. In this problem, we assume that all barrels weigh the same.\n\nYou know that exactly one of the barrels has a small amount of tropical poison distributed on its surface, with a total weight of $0.179$ kilograms. However, you do not know which barrel contains the poison. Your task is to identify this poisonous barrel.\n\nAll the barrels are on scales. Unfortunately, the scales do not show the exact weight of each barrel. Instead, for each pair of barrels, they show the result of a comparison between the weights of those barrels. Thus, for any two barrels, you can determine whether their weights are equal, and if not, which barrel is heavier. The poison and water are included in the weight of the barrel.\n\nThe scales are always turned on, and the information from them can be used an unlimited number of times.\n\nYou also have the ability to pour water. You can pour water from any barrel into any other barrel in any amounts.\n\nHowever, to pour water, you must physically handle the barrel from which you are pouring, so if that happens to be the poisonous barrel, you will die. This outcome must be avoided.\n\nHowever, you can pour water into the poisonous barrel without touching it.\n\nIn other words, you can choose the numbers $i, j, x$ ($i \\neq j, 1 \\leq i, j \\leq n, 0  \\lt  x \\leq a_i$, the barrel numbered $i$ is not poisonous) and execute $a_i := a_i - x$, $a_j := a_j + x$. Where $x$ is not necessarily an integer.\n\nIs it possible to guarantee the identification of which barrel contains the poison and remain alive using pouring and the information from the scales? You know that the poison is located on exactly one of the barrels.\n\nAdditionally, we ask you to process $q$ queries. In each query, either one of the existing barrels is removed, or an additional barrel with a certain amount of water is added. After each query, you need to answer whether it is possible to guarantee the identification of the poisonous barrel, given that there is exactly one.",
+    "input_spec": "The first line contains two integers $n$ and $q$ ($1 \\le n, q \\le 2 \\cdot 10^5$).\n\nThe second line contains $n$ integers $a_1, a_2, \\ldots, a_n$ ($1 \\le a_i \\le 10^6$) — the volumes of water in the existing barrels.\n\nThe next $q$ lines contain queries, one per line. Each query is either of the form + x or - x, which means, respectively, adding and removing a barrel with $x$ kilograms of water. It is guaranteed that when the query - x is made, one of the existing barrels has a volume of $x$, and that there is always at least one barrel remaining throughout the queries. In all queries, $1 \\leq x \\leq 10^6$.",
+    "output_spec": "Output $q+1$ lines, the answer to the problem before all queries, and after each query. If it is possible to identify the poisonous barrel, output \"Yes\"; otherwise, output \"No\". You can output the answer in any case (upper or lower). For example, the strings \"yEs\", \"yes\", \"Yes\", and \"YES\" will be recognized as positive responses.",
+    "note": "In the first test, before any queries, the weights of the barrels are $[2, 2, 4, 11]$. You can compare the values of the first and second barrels. If the result is not equal, you can definitively conclude that the barrel with the greater weight is poisonous. If the result is equal, both barrels are non-poisonous. Then you can pour all the contents of the first barrel into the second. After that, both the second and third barrels will contain $4$ kilograms of water. Now let's compare the values of the second and third barrels. If the result is not equal, the barrel with the greater weight is poisonous. Otherwise, both barrels are non-poisonous. The only barrel that could be poisonous is barrel 4. Thus, with this strategy, we can safely determine the poisonous barrel.",
+    "samples": [
+      {
+        "input": "4 7\n2 2 4 11\n- 2\n+ 4\n+ 30\n+ 40\n- 4\n+ 2\n+ 2",
+        "output": "\nYes\nNo\nYes\nNo\nYes\nNo\nNo\nYes"
+      },
+      {
+        "input": "6 7\n5000 1000 400 400 100 99\n+ 1\n- 5000\n- 1\n- 400\n- 400\n- 100\n- 99",
+        "output": "\nNo\nYes\nYes\nYes\nNo\nNo\nNo\nYes"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 139415,
+    "url": "https://codeforces.com/blog/entry/139415",
+    "tutorial": "If all values $a_1, a_2, \\ldots, a_n$ are distinct, we immediately lose (except for $n=1$).\n\nSuppose initially there are two barrels of equal weight $a_i = a_j$. Then we look at what the scales indicate for the pair $(i, j)$. If it shows \"greater\" or \"less\" — we understand that the poisonous barrel is respectively $i$ or $j$ and we win immediately. If it shows \"equal,\" then both barrels are definitely not poisonous. We will keep only the barrels whose mass $(a_i)$ appears exactly once, and from all the other barrels, we can pour all the water into one of the barrels, and let the mass of this water be $L$.\n\nWe have $L$ water available to pour into a safe barrel, and in the remaining barrels $b_1  \\lt  b_2  \\lt  \\ldots  \\lt  b_k$ there is water.\n\nIf $L$ water is currently available, we can either:\n\n Check any barrel that has $\\leq L$ water. By pouring water from the safe barrel into it until the weights are equal, we then check the scales. If they show equality, we know for sure that this barrel is safe; otherwise, we know it is poisonous.\n\n Take any two barrels with a difference of no more than $L$: $b_j - b_i \\leq L$, add water to the $i$-th barrel to equalize the weights, and also compare the barrels $(i,j)$ by checking both.\n\nWe have no other methods; if with the current $L$ both of these methods are inapplicable, but there are more than one unverified barrels left — we lose.\n\nIf we consider that the first method is applied \"automatically\" as long as possible, it means that at any moment we possess some prefix of barrels $b_1  \\lt  b_2  \\lt  ...  \\lt  b_i  \\lt  [...]  \\lt  b_{i+1}  \\lt  ...  \\lt  b_k$, since if we have checked barrel $b_j  \\gt  b_i$, we can also check $b_i$.\n\nTherefore, we need to determine whether it is true that if we have $L+b_1+b_2+\\ldots+b_i$ of free water, we can perform some action to check one of the barrels $b_{i+1} \\ldots b_k$ for all $i$ from $0$ to $k-2$. If this holds, we can iteratively determine everything; if not, at some point we will hit a wall and will not be able to determine anything about the barrels $b_{i+1} \\ldots b_k$. The upper limit is $k-2$, not $k-1$, because if we check all barrels except one, the remaining unverified barrel will be deemed poisonous by the process of elimination.\n\nLet's say that $i$ is a special index if $b_{i+1}  \\gt  b_1+b_2+\\ldots+b_i$. Note that we can check the condition from the previous paragraph not for all $i$, but only for special $i$, and this will be equivalent. Since from a non-special index, we can always check barrel $i+1$.\n\nHowever, there are also no more than $\\log_2(b_k)$ special indices, since with each special index, the prefix sum of the array $b$ increases at least twofold.\n\nTherefore, our further plan for solving the problem is as follows: after each query, we find all special indices and explicitly check each of them, finding $\\min (b_{j+1}-b_j)$ on the suffix and comparing it with $L+b_1+\\ldots+b_i$. We will learn to find and check a special index in $O(\\log(a_n))$ and obtain a solution in $O(q \\cdot \\log^2(a_n))$.\n\nWe can use a set to support \"unique\" weights of barrels and the amount of available water at the very beginning.\n\nThen, adding/removing unique barrels can be implemented using a large segment tree of size $\\max(a_i)=10^6$.\n\nThus, finding the next \"special\" index and checking it can be implemented by descending/querying in this segment tree.",
+    "solution_code": []
+  }
+}

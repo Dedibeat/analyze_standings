@@ -1,0 +1,44 @@
+{
+  "contest_id": 2061,
+  "index": "E",
+  "name": "Kevin and And",
+  "rating": 2000,
+  "tags": [
+    "bitmasks",
+    "brute force",
+    "dp",
+    "greedy",
+    "math",
+    "sortings"
+  ],
+  "points": 2000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2061E",
+  "url": "https://codeforces.com/problemset/problem/2061/E",
+  "contest_start_time": "2025-01-20T14:35:00+00:00",
+  "statement": {
+    "title": "E. Kevin and And",
+    "time_limit": "2 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "Kevin has an integer sequence $a$ of length $n$. At the same time, Kevin has $m$ types of magic, where the $i$-th type of magic can be represented by an integer $b_i$.\n\nKevin can perform at most $k$ (possibly zero) magic operations. In each operation, Kevin can do the following:\n\n Choose two indices $i$ ($1\\leq i\\leq n$) and $j$ ($1\\leq j\\leq m$), and then update $a_i$ to $a_i\\ \\&\\ b_j$. Here, $\\&$ denotes the bitwise AND operation.\n\nFind the minimum possible sum of all numbers in the sequence $a$ after performing at most $k$ operations.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 10^4$). The description of the test cases follows.\n\nThe first line of each test case contains three integers $n, m, k$ ($1\\leq n \\leq 10^5$, $1\\leq m \\leq 10$, $0\\leq k\\leq nm$) — the length of $a$, the number of types of magic, and the maximum number of operations.\n\nThe second line contains $n$ integers $a_1, a_2, \\ldots, a_n$ ($0\\leq a_i  \\lt  2^{30}$).\n\nThe third line contains $m$ integers $b_1, b_2, \\ldots, b_m$ ($0\\leq b_i  \\lt  2^{30}$).\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $10^5$.",
+    "output_spec": "For each test case, output one integer — the minimum possible sum of all numbers in the sequence $a$ after performing at most $k$ operations.",
+    "note": "In the first test case, one possible way could be:\n\n Update $a_1$ to $a_1\\ \\&\\ b_1$. The sequence will become $[5]$.\n\n Update $a_1$ to $a_1\\ \\&\\ b_3$. The sequence will become $[1]$.\n\nIn the second test case, one possible way could be:\n\n Update $a_1$ to $a_1\\ \\&\\ b_3$. The sequence will become $[1, 6]$.\n\n Update $a_2$ to $a_2\\ \\&\\ b_3$. The sequence will become $[1, 2]$.",
+    "samples": [
+      {
+        "input": "5\n1 3 2\n7\n5 6 3\n2 3 2\n5 6\n5 6 3\n10 2 5\n3 1 4 1 5 9 2 6 5 3\n7 8\n5 1 0\n1073741823 1073741823 1073741823 1073741823 1073741823\n1073741823\n1 1 0\n0\n0",
+        "output": "\n1\n3\n11\n5368709115\n0"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 138620,
+    "url": "https://codeforces.com/blog/entry/138620",
+    "tutorial": "For a fixed $p$, let $f(S)$ represent the number obtained after applying the operations in set $S$ to $p$. Define $g(i)$ as the minimum value of $f(S)$ for all subsets $S$ with $|S| = i$, i.e., $g(i) = \\min_{|S| = i} f(S)$.\n\n—\n\nLemma: The function $g$ is convex, that is for all $i$ ($1 \\leq i  \\lt  m$), the inequality $2g(i) \\leq g(i-1) + g(i+1)$ holds.\n\nProof: Let $f(S)$ be the value corresponding to the minimum of $g(i-1)$, and let $f(T)$ correspond to the minimum of $g(i+1)$. Suppose the $w$-th bit is the highest bit where $f(S)$ and $f(T)$ differ.\n\nWe can always find an operation $y \\in T \\setminus S$ that turns the $w$-th bit in $g(i-1)$ into $0$. In this case, we have: $$g(i - 1) - f(S \\cup \\{y\\}) \\geq 2^w.$$\n\nMoreover, since the highest bit where $f(S \\cup {y})$ and $g(i+1)$ differ is no greater than $w-1$, we have: $$f(S \\cup \\{y\\}) - g(i + 1) \\leq 2^w.$$\n\nCombining these inequalities gives: $$2 g(i) \\leq 2 f(S \\cup \\{y\\}) \\leq g(i - 1) + g(i + 1),$$ proving the convexity of $g$.\n\n—\n\nFor each number $a_i$, we can use brute force to compute the minimum value obtained after applying $j$ operations, denoted as $num(i, j)$. From the lemma, we know that the difference $num(i, k) - num(i, k - 1)$ is non-increasing.\n\nThus, when performing operations on this number, the reductions in value are:\n\n$$num(i, 0) - num(i, 1), num(i, 1) - num(i, 2), \\dots, num(i, m - 1) - num(i, m).$$\n\nYou need to perform $k$ operations in total. To minimize the result, you can choose the $k$ largest reductions from all possible operations. This can be done by sorting all operations by their cost or by using std::nth_element.\n\nTime complexity: $O(n2^m + nm)$。",
+    "solution_code": []
+  }
+}

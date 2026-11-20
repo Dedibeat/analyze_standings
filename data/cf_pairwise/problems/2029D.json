@@ -1,0 +1,47 @@
+{
+  "contest_id": 2029,
+  "index": "D",
+  "name": "Cool Graph",
+  "rating": 1900,
+  "tags": [
+    "constructive algorithms",
+    "data structures",
+    "dfs and similar",
+    "dsu",
+    "graphs",
+    "greedy",
+    "trees"
+  ],
+  "points": 2250.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2029D",
+  "url": "https://codeforces.com/problemset/problem/2029/D",
+  "contest_start_time": "2024-11-09T14:35:00+00:00",
+  "statement": {
+    "title": "D. Cool Graph",
+    "time_limit": "3 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "You are given an undirected graph with $n$ vertices and $m$ edges.\n\nYou can perform the following operation at most $2\\cdot \\max(n,m)$ times:\n\n Choose three distinct vertices $a$, $b$, and $c$, then for each of the edges $(a,b)$, $(b,c)$, and $(c,a)$, do the following:\n\n If the edge does not exist, add it. On the contrary, if it exists, remove it.\n\nA graph is called cool if and only if one of the following holds:\n\n The graph has no edges, or\n\n The graph is a tree.\n\nYou have to make the graph cool by performing the above operations. Note that you can use at most $2\\cdot \\max(n,m)$ operations.\n\nIt can be shown that there always exists at least one solution.",
+    "input_spec": "Each test contains multiple test cases. The first line of input contains a single integer $t$ ($1\\le t\\le 10^4$) — the number of test cases. The description of test cases follows.\n\nThe first line of each test case contains two integers $n$ and $m$ ($3\\le n\\le 10^5$, $0\\le m\\le \\min\\left(\\frac{n(n-1)}{2},2\\cdot 10^5\\right)$) — the number of vertices and the number of edges.\n\nThen $m$ lines follow, the $i$-th line contains two integers $u_i$ and $v_i$ ($1\\le u_i,v_i\\le n$) — the two nodes that the $i$-th edge connects.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $10^5$, and the sum of $m$ over all test cases does not exceed $2\\cdot 10^5$.\n\nIt is guaranteed that there are no self-loops or multiple-edges in the given graph.",
+    "output_spec": "For each test case, in the first line output an integer $k$ ($0\\le k\\le 2\\cdot \\max(n, m)$) — the number of operations.\n\nThen output $k$ lines, the $i$-th line containing three distinct integers $a$, $b$, and $c$ ($1\\le a,b,c\\le n$) — the three integers you choose in the $i$-th operation.\n\nIf there are multiple solutions, you can output any of them.",
+    "note": "In the first test case, the graph is already cool because there are no edges.\n\nIn the second test case, after performing the only operation, the graph becomes a tree, so it is cool.\n\nIn the third test case, the graph is already cool because it is a tree.\n\nIn the fourth test case, after performing the only operation, the graph has no edges, so it is cool.\n\nIn the fifth test case:\n\nOperationGraph before the operationGraph after the operation\n\n$1$\n\n$2$\n\n$3$\n\nNote that after the first operation, the graph has already become cool, and there are two extra operations. As the graph is still cool after the two extra operations, this is a valid answer.",
+    "samples": [
+      {
+        "input": "5\n3 0\n3 1\n1 2\n3 2\n1 2\n2 3\n3 3\n1 2\n2 3\n3 1\n6 6\n1 2\n1 6\n4 5\n3 4\n4 6\n3 6",
+        "output": "\n0\n1\n1 2 3\n0\n1\n1 2 3\n3\n1 3 6\n2 4 5\n3 4 6"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 133516,
+    "url": "https://codeforces.com/blog/entry/133516",
+    "tutorial": "2029D - Cool Graph\n\nAuthor: Error_Yuan\nFirst Blood: ksun48 at 00:13:24\n\nThere are many different approaches to this problem. Only the easiest one (at least I think so) is shared here.\n\nHint 1\n\nTry to make the graph into a forest first.\n\nHint 2\n\n($deg_i\\le 1$ for every $i$) $\\Longrightarrow$ (The graph is a forest).\n\nSolution\n\nLet $d_i$ be the degree of vertex $i$.\n\nFirst, we keep doing the following until it is impossible:\n\nChoose a vertex $u$ with $d_u\\ge 2$, then find any two vertices $v,w$ adjacent to $u$. Perform the operation on $(u,v,w)$.\n\nSince each operation decreases the number of edges by at least $1$, at most $m$ operations will be performed. After these operations, $d_i\\le 1$ holds for every $i$. Thus, the resulting graph consists only of components with size $\\le 2$.\n\nIf there are no edges, the graph is already cool, and we don't need to do any more operations.\n\nOtherwise, let's pick an arbitrary edge $(u,v)$ as the base of the final tree, and then merge everything else to it.\n\nFor a component with size $=1$ (i.e. it is a single vertex $w$), perform the operation on $(u, v, w)$, and set $(u, v) \\gets (u, w)$.\n\nFor a component with size $=2$ (i.e. it is an edge connecting $a$ and $b$), perform the operation on $(u, a, b)$.\n\nIt is clear that the graph is transformed into a tree now.\n\nThe total number of operations won't exceed $n+m\\le 2\\cdot \\max(n,m)$.\n\nIn the author's solution, we used some data structures to maintain the edges, thus, the time complexity is $\\mathcal{O}(n+m\\log m)$ per test case.\n\nCode (C++)\n\nRate the Problem\n\nAmazing problem:\n\nGood problem:\n\nAverage problem:\n\nBad problem:\n\nDidn't solve:",
+    "solution_code": [
+      "#include <bits/stdc++.h>\nusing namespace std;\n#ifdef DEBUG\n#include \"debug.hpp\"\n#else\n#define debug(...) (void)0\n#endif\n\nusing i64 = int64_t;\nconstexpr bool test = false;\n\nint main() {\n  cin.tie(nullptr)->sync_with_stdio(false);\n  int t;\n  cin >> t;\n  for (int ti = 0; ti < t; ti += 1) {\n    int n, m;\n    cin >> n >> m;\n    vector<set<int>> adj(n + 1);\n    for (int i = 0, u, v; i < m; i += 1) {\n      cin >> u >> v;\n      adj[u].insert(v);\n      adj[v].insert(u);\n    }\n    vector<tuple<int, int, int>> ans;\n    for (int i = 1; i <= n; i += 1) {\n      while (adj[i].size() >= 2) {\n        int u = *adj[i].begin();\n        adj[i].erase(adj[i].begin());\n        int v = *adj[i].begin();\n        adj[i].erase(adj[i].begin());\n        adj[u].erase(i);\n        adj[v].erase(i);\n        ans.emplace_back(i, u, v);\n        if (adj[u].contains(v)) {\n          adj[u].erase(v);\n          adj[v].erase(u);\n        } else {\n          adj[u].insert(v);\n          adj[v].insert(u);\n        }\n      }\n    }\n    vector<int> s;\n    vector<pair<int, int>> p;\n    for (int i = 1; i <= n; i += 1) {\n      if (adj[i].size() == 0) {\n        s.push_back(i);\n      } else if (*adj[i].begin() > i) {\n        p.emplace_back(i, *adj[i].begin());\n      }\n    }\n    if (not p.empty()) {\n      auto [x, y] = p.back();\n      p.pop_back();\n      for (int u : s) {\n        ans.emplace_back(x, y, u);\n        tie(x, y) = pair(x, u);\n      }\n      for (auto [u, v] : p) {\n        ans.emplace_back(y, u, v);\n      }\n    }\n    println(\"{}\", ans.size());\n    for (auto [x, y, z] : ans) println(\"{} {} {}\", x, y, z);\n  }\n}"
+    ]
+  }
+}

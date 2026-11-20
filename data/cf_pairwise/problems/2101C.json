@@ -1,0 +1,46 @@
+{
+  "contest_id": 2101,
+  "index": "C",
+  "name": "23 Kingdom",
+  "rating": 2200,
+  "tags": [
+    "binary search",
+    "brute force",
+    "data structures",
+    "greedy",
+    "ternary search",
+    "two pointers"
+  ],
+  "points": 2000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2101C",
+  "url": "https://codeforces.com/problemset/problem/2101/C",
+  "contest_start_time": "2025-05-11T14:35:00+00:00",
+  "statement": {
+    "title": "C. 23 Kingdom",
+    "time_limit": "4 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "The distance of a value $x$ in an array $c$, denoted as $d_x(c)$, is defined as the largest gap between any two occurrences of $x$ in $c$.\n\nFormally, $d_x(c) = \\max(j - i)$ over all pairs $i  \\lt  j$ where $c_i = c_j = x$. If $x$ appears only once or not at all in $c$, then $d_x(c) = 0$.\n\nThe beauty of an array is the sum of the distances of each distinct value in the array. Formally, the beauty of an array $c$ is equal to $\\sum\\limits_{1\\le x\\le n} d_x(c)$.\n\nGiven an array $a$ of length $n$, an array $b$ is nice if it also has length $n$ and its elements satisfy $1\\le b_i\\le a_i$ for all $1\\le i\\le n$. Your task is to find the maximum possible beauty of any nice array.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 10^4$). The description of the test cases follows.\n\nThe first line of each test case contains a single integer $n$ ($1\\le n\\le 2\\cdot10^5$) — the length of array $a$.\n\nThe second line of each test case contains $n$ integers $a_1,a_2,\\ldots,a_n$ ($1\\le a_i\\le n$) — the elements of array $a$.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $2\\cdot10^5$.",
+    "output_spec": "For each test case, output a single integer representing the maximum possible beauty among all nice arrays.",
+    "note": "In the first test case, if $b = [1, 2, 1, 2]$, then $d_1(b) = 3 - 1 = 2$ and $d_2(b) = 4 - 2 = 2$, resulting in a beauty of $2 + 2 = 4$. It can be proven that there are no nice arrays with a beauty greater than $4$.\n\nIn the second test case, both $b = [1, 1]$ and $b = [2, 2]$ are valid solutions with a beauty of $1$.\n\nIn the third test case, if $b = [1, 2, 1, 4, 1, 2, 1, 1, 1, 2]$ with $d_1(b) = 9 - 1 = 8$, $d_2(b) = 10 - 2 = 8$, and $d_4(b) = 0$, resulting in a beauty of $16$.",
+    "samples": [
+      {
+        "input": "4\n4\n1 2 1 2\n2\n2 2\n10\n1 2 1 5 1 2 2 1 1 2\n8\n1 5 2 8 4 1 4 2",
+        "output": "\n4\n1\n16\n16"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 142788,
+    "url": "https://codeforces.com/blog/entry/142788",
+    "tutorial": "2101C - 23 Kingdom\n\nHints\n\nHint 1\n\nDoes it matter if there are $2$ occurance of a number or $200$?\n\nHint 2\n\nWhat greedy approaches can you think of?\n\nHint 3\n\nAre they fast enough?\n\nSolution\n\nThe first observation is that we only care about the first and last occurrences of each number in the final array, as anything in between doesn't change the maximum distance. Instead of counting the distances directly, the main idea of this problem is to break them down into pieces. For example, the distance of a pair $(i, j)$ such that $1\\le i \\lt j\\le n$ and $a_i = a_j$ and also these indices are the farthest possible, instead of adding up $j-i$, we count one for each index in between $i$ and $j$. In Another word, for each index $i$, we count how many begins are in or before $i$, and how many ends are after $i$, adding up these values for each index gives us the sum of distances.\n\nFor each prefix and suffix of our array, we count the maximum number of different begins that we can get greedily. It can be proven that if we try to match each $a_i$ with the biggest unmatched number left, we'll end up getting the maximum number of different matches possible. Doing so can be calculated in many different ways, one using sets is shown in the implementation below.\n\nAfter that, for each $1\\le i \\lt n$, we have a bound for the number of pairs that these indices can be in between of, as we calculated the maximum distinct matches possible for both sides (one prefix and one suffix). It can be proven that there exists an array $b$ meeting the problem conditions such that the bound for each index is held, and therefore summing up all values gives us the final answer.\n\nCode (C++)\n\nBonus\n\nWe thought every greedy approach for this problem is wrong, and the intended solution used to be a $O(n^3)$ DP, but later realized we were wrong!\n\nCan you think of a rational DP idea that despite the time limit can solve this question?",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n\n#define int long long\n\n// #pragma GCC target(\"avx2,bmi,bmi2,lzcnt,popcnt\")\n// #pragma GCC optimize(\"O3\")\n// #pragma GCC optimize(\"unroll-loops\")\n\n\n#define F first \n#define S second\n#define mp make_pair\n#define pb push_back\n#define all(x) x.begin(), x.end()\n#define kill(x) cout << x << \"\\n\", exit(0);\n#define pii pair<int, int>\n#define pll pair<long long, long long>\n#define endl \"\\n\"\n \n \n \nusing namespace std;\ntypedef long long ll;\n// typedef __int128_t lll;\ntypedef long double ld;\n\n\nconst int MAXN = (int)1e6 + 7;\nconst int MOD = (int)1e9 + 7;\nconst ll INF = (ll)1e18 + 7;\n\nint n, m, k, tmp, t, tmp2, tmp3, tmp4, u, v, w, p, q, ans, flag;\nint arr[MAXN], f[MAXN][2];\nset<int> st;\n\n\nvoid solve() {\n    cin >> n;\n\n    for (int i=1; i<=n; i++) cin >> arr[i];\n\n    for (int j=0; j<2; j++) {\n        st.clear();\n        for (int i=1; i<=n; i++) st.insert(i);\n\n        for (int i=(j? n : 1); (j?i>1 : i<n); (j? i-- : i++)) {\n            auto it = st.upper_bound(arr[i]);\n\n            if (it != st.begin()) it--, st.erase(*it);\n\n            f[i][j] = n-st.size();\n        }\n    }\n    \n    ans = 0;\n    for (int i=1; i<n; i++) ans += min(f[i][0], f[i+1][1]);\n\n    cout << ans << endl;\n}\n\nint32_t main() {\n    #ifdef LOCAL\n    freopen(\"inp.in\", \"r\", stdin);\n    freopen(\"res.out\", \"w\", stdout);\n    #else\n    ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);\n    #endif\n\n    cin >> t;\n\n    while (t--) solve();\n\n\n    return 0;\n}"
+    ]
+  }
+}

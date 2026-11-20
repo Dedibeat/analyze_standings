@@ -1,0 +1,51 @@
+{
+  "contest_id": 1978,
+  "index": "F",
+  "name": "Large Graph",
+  "rating": 2400,
+  "tags": [
+    "data structures",
+    "dfs and similar",
+    "dsu",
+    "graphs",
+    "number theory",
+    "two pointers"
+  ],
+  "points": 2500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1978F",
+  "url": "https://codeforces.com/problemset/problem/1978/F",
+  "contest_start_time": "2024-06-16T09:05:00+00:00",
+  "statement": {
+    "title": "F. Large Graph",
+    "time_limit": "4 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "Given an array $a$ of length $n$. Let's construct a square matrix $b$ of size $n \\times n$, in which the $i$-th row contains the array $a$ cyclically shifted to the right by $(i - 1)$. For example, for the array $a = [3, 4, 5]$, the obtained matrix is\n\n$$b = \\begin{bmatrix} 3 & 4 & 5 \\\\ 5 & 3 & 4 \\\\ 4 & 5 & 3 \\end{bmatrix}$$\n\nLet's construct the following graph:\n\n The graph contains $n^2$ vertices, each of which corresponds to one of the elements of the matrix. Let's denote the vertex corresponding to the element $b_{i, j}$ as $(i, j)$.\n\n We will draw an edge between vertices $(i_1, j_1)$ and $(i_2, j_2)$ if $|i_1 - i_2| + |j_1 - j_2| \\le k$ and $\\gcd(b_{i_1, j_1}, b_{i_2, j_2})  \\gt  1$, where $\\gcd(x, y)$ denotes the greatest common divisor of integers $x$ and $y$.\n\nYour task is to calculate the number of connected components$^{\\dagger}$ in the obtained graph.\n\n$^{\\dagger}$A connected component of a graph is a set of vertices in which any vertex is reachable from any other via edges, and adding any other vertex to the set violates this rule.",
+    "input_spec": "Each test consists of multiple test cases. The first line contains a single integer $t$ ($1 \\leq t \\leq 10^5$) — the number of test cases. The description of the test cases follows.\n\nThe first line of each test case contains two integers $n$ and $k$ ($2 \\le n \\le 10^6$, $2 \\le k \\le 2 \\cdot 10^6$) — the length of the array and the parameter $k$.\n\nThe second line of each test case contains $n$ integers $a_1, a_2, \\ldots, a_n$ ($1 \\le a_i \\le 10^6$) — the elements of the array $a$.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $10^6$.",
+    "output_spec": "For each test case, output a single integer — the number of connected components in the obtained graph.",
+    "note": "In the first test case, the matrix $b$ is given in the statement. The first connected component contains the vertices $(1, 1)$, $(2, 2)$, and $(3, 3)$. The second connected component contains the vertices $(1, 2)$, $(2, 3)$, and $(3, 1)$. The third connected component contains the vertices $(1, 3)$, $(2, 1)$, and $(3, 2)$. Thus, the graph has $3$ connected components.\n\nIn the second test case, the following matrix is obtained:\n\n$$b = \\begin{bmatrix} 3 & 4 & 9 \\\\ 9 & 3 & 4 \\\\ 4 & 9 & 3 \\end{bmatrix}$$\n\nThe first connected component contains all vertices corresponding to elements with values $3$ and $9$. The second connected component contains all vertices corresponding to elements with the value $4$.\n\nIn the fourth test case, all vertices are in one connected component.",
+    "samples": [
+      {
+        "input": "6\n3 3\n3 4 5\n3 3\n3 4 9\n3 2\n3 4 9\n2 2\n2 8\n5 3\n8 27 5 4 3\n4 10\n2 2 2 2",
+        "output": "\n3\n2\n3\n1\n4\n1"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 130527,
+    "url": "https://codeforces.com/blog/entry/130527",
+    "tutorial": "Notice that since we have cyclic shifts to the right and k > 1, the diagonals parallel to the main one will be in the same connected component, except for the case with ones. Diagonals consisting of ones will be counted separately and forgotten.\n\nAfter that, we can solve the problem for the one-dimensional case, where each element is a representative of its diagonal. By definition, if the GCD of some pair of elements is greater than $1$, then this means that they are both divisible by some prime number. Let's find all the elements of the array-diagonals that are divisible by each prime number. Let the indices of the current prime number be $c_1, c_2, \\ldots, c_t$. We will draw edges between $c_i$ and $c_{i + 1}$ if $c_{i + 1} - c_{i} \\leqslant k$. It is claimed that the connected components in such a graph will coincide with the connected components if we draw edges between all valid pairs. Indeed, if there is an edge between two elements in the complete graph, this means that the distance between them is not greater than $k$, and we can reach them in the new graph either by one edge or through elements that are divisible by the same prime number.\n\nUsing the sieve of Eratosthenes, we can quickly factorize all numbers into prime divisors, after which the number of connected components in the graph can be calculated using DSU or DFS. The time complexity of this solution is $O(n \\log \\log n)$.",
+    "solution_code": [
+      "#include <iostream>\n#include <vector>\n#include <map>\n#include <set>\n#include <queue>\n#include <algorithm>\n#include <string>\n#include <cmath>\n#include <cstdio>\n#include <iomanip>\n#include <fstream>\n#include <cassert>\n#include <cstring>\n#include <unordered_set>\n#include <unordered_map>\n#include <numeric>\n#include <ctime>\n \nusing namespace std;\n \nusing ll = long long;\n \nconst int MAXA = 1e6;\n \nint n, k;\nvector<int> a;\nvector<int> primes_x[MAXA + 1];\nunordered_map<int, int> last_ind_p;\nvector<bool> is_prime(MAXA + 1, true);\nvector<int> primes;\n \nvoid read() {\n\tcin >> n >> k;\n\ta.assign(n, 0);\n\tfor (int& elem : a) {\n\t\tcin >> elem;\n\t}\n}\n \nvector<int> p, sz, p_rs;\n \nint col(int A) {\n\treturn (A == p[A] ? A : p[A] = col(p[A]));\n}\n \nvoid unique(int A, int B) {\n\tA = col(A); B = col(B);\n\tif (A == B) return;\n\tif (sz[A] < sz[B]) {\n\t\tswap(A, B);\n\t}\n\tp[B] = A;\n\tsz[A] += sz[B];\n}\n \nvoid solve() {\n    last_ind_p.clear();\n\tvector<int> aa;\n\tfor (int i = 1; i < n; i++) {\n\t\taa.push_back(a[i]);\n\t}\n\tfor (int i = 0; i < n; i++) {\n\t\taa.push_back(a[i]);\n\t}\n\ta = aa;\n\tint n2 = n;\n\tn = a.size();\n\tp.assign(n, -1);\n\tp_rs.assign(n, -1);\n\tsz.assign(n, -1);\n\tfor (int i = 0; i < n; i++) {\n\t\tp[i] = i;\n\t\tsz[i] = 1;\n\t}\n \n\tfor (int i = 0; i < n2; i++) {\n\t\tp_rs[i] = i + 1;\n\t\tp_rs[2 * n2 - 2 - i] = i + 1;\n\t}\n\tvector<int> a2 = a;\n\tsort(a2.begin(), a2.end());\n\ta2.resize(unique(a2.begin(), a2.end()) - a2.begin());\n    unordered_set<int> to_clean;\n\tfor (int elem : a2) {\n\t\tint cur_elem = elem;\n\t\tfor (ll p : primes) {\n\t\t\tif (p * p > elem) break;\n\t\t\tif (elem % p == 0) {\n\t\t\t\tprimes_x[cur_elem].push_back(p);\n                if (primes_x[cur_elem].size() == 1) {\n                    to_clean.insert(cur_elem);\n                }\n\t\t\t}\n\t\t\twhile (elem % p == 0) {\n\t\t\t\telem /= p;\n\t\t\t}\n\t\t}\n\t\tif (elem > 1) {\n\t\t\tprimes_x[cur_elem].push_back(elem);\n            if (primes_x[cur_elem].size() == 1) {\n                to_clean.insert(cur_elem);\n            }\n\t\t}\n\t}\n \n\tfor (int i = 0; i < n; i++) {\n\t\tfor (int cur_p : primes_x[a[i]]) {\n\t\t\tif (last_ind_p.count(cur_p) && i - last_ind_p[cur_p] <= k) {\n\t\t\t\tunique(last_ind_p[cur_p], i);\n\t\t\t}\n\t\t\tlast_ind_p[cur_p] = i;\n\t\t}\n\t}\n    for (int i : to_clean)\n        primes_x[i].clear();\n}\n \nvoid write() {\n\tll ans = 0;\n\tfor (int i = 0; i < n; i++) {\n\t\tif (p[i] == i) {\n\t\t\tif (a[i] > 1) {\n\t\t\t\tans += 1;\n\t\t\t}\n\t\t\telse {\n\t\t\t\tans += p_rs[i];\n\t\t\t}\n\t\t}\n\t}\n\tcout << ans << endl;\n}\n \nint main() {\n    for (ll i = 2; i <= MAXA; i++) {\n        if (is_prime[i]) {\n            primes.push_back(i);\n            for (ll j = i * i; j <= MAXA; j += i) {\n                is_prime[j] = false;\n            }\n        }\n    }\n\tios_base::sync_with_stdio(false); cin.tie(0);\n    int t;\n    cin >> t;\n    while (t--) {\n        read();\n        solve();\n        write();\n    }\n}",
+      "[10, 9, 8, 7, 6, 5, 4, 3, 2, 1] = 50\n[6, 7, 8, 9, 10, 1, 2, 3, 4, 5] = 50",
+      "Y Y Y Y Y Y N N N N N",
+      "namespace solution {\n    int hasMultipleTests = 1;\n    int n;\n    i64 k;\n    \n    void Preprocess() {\n        \n    }\n \n    void Input(int testcase) {\n        cin >> n >> k;\n    }\n \n    void Solve(int testcase) {\n        if (k % 2) {cout << \"No\\n\"; return;}\n        vector<int> a(n);\n        for (int i=0; i<n; i++) a[i] = i + 1;\n        for (int i=0; i<n/2; i++) {\n            int maximumReach = n - 1 - i;\n            if (k / 2 < maximumReach - i) {\n                maximumReach = i + k / 2;\n                k = 0;\n                swap(a[i], a[maximumReach]);\n            }\n            else {\n                swap(a[i], a[maximumReach]);\n                k -= 2 * (maximumReach - i);\n            }\n        }\n        if (k) {cout << \"No\\n\"; return;}\n        cout << \"Yes\\n\";\n        write1d(a);\n    }\n}",
+      "namespace solution {\n    int hasMultipleTests = 1;\n    i64 n, k;\n    \n    void Preprocess() {\n        \n    }\n\n    void Input(int testcase) {\n        cin >> n >> k;\n    }\n\n    void Solve(int testcase) {\n        if (k % 2) {cout << \"No\\n\"; return;}\n        vector<i64> a(n);\n        for (i64 i=0; i<n; i++) a[i] = i + 1;\n        for (i64 i=0; i<n/2; i++) {\n            i64 maximumReach = min(n - 1 - i, i + k / 2);\n            swap(a[i], a[maximumReach]);\n            k -= (maximumReach - i) * 2;\n        }\n        if (k) {cout << \"No\\n\"; return;}\n        cout << \"Yes\\n\";\n        write1d(a);\n    }\n}",
+      "- **Can be solve B using binary search whats wrong in this** \n- #include <bits/stdc++.h>\nusing namespace std;\nusing ll= unsigned long long int;\nll kvalue(ll n,ll a,ll b){\n   ll ans=n*a;\n   ll l=1;\n   ll r=min(n,b);\n   while(l<=r){\n      ll mid=(l+r)/2;\n      ll sum=b*(b+1)/2;\n      sum-=(b-mid)*(b-mid+1)/2;\n      sum+=(n-mid)*a;\n      if(sum>=ans){ans=max(ans,sum);l=mid+1;}\n      else r=mid-1;\n   }\n   return ans;\n}\nint main()\n{   int t;\n    cin>>t;\n    while(t--){\n          ll n,a,b;\n          cin>>n>>a>>b;\n          cout<<kvalue(n,a,b)<<endl;\n        }\n      return 0;\n}"
+    ]
+  }
+}

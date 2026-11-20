@@ -1,0 +1,46 @@
+{
+  "contest_id": 2053,
+  "index": "E",
+  "name": "Resourceful Caterpillar Sequence",
+  "rating": 1900,
+  "tags": [
+    "dfs and similar",
+    "dp",
+    "games",
+    "graphs",
+    "greedy",
+    "trees"
+  ],
+  "points": 2000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2053E",
+  "url": "https://codeforces.com/problemset/problem/2053/E",
+  "contest_start_time": "2024-12-28T14:35:00+00:00",
+  "statement": {
+    "title": "E. Resourceful Caterpillar Sequence",
+    "time_limit": "2 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "Endless Repeating 7 Days\n\n— r-906, Panopticon\n\nThere is a tree consisting of $n$ vertices. Let a caterpillar be denoted by an integer pair $(p, q)$ ($1 \\leq p, q \\leq n$, $p \\neq q$): its head is at vertex $p$, its tail is at vertex $q$, and it dominates all the vertices on the simple path from $p$ to $q$ (including $p$ and $q$). The caterpillar sequence of $(p, q)$ is defined as the sequence consisting only of the vertices on the simple path, sorted in the ascending order of the distance to $p$.\n\nNora and Aron are taking turns moving the caterpillar, with Nora going first. Both players will be using his or her own optimal strategy:\n\n They will play to make himself or herself win;\n\n However, if it is impossible, they will play to prevent the other person from winning (thus, the game will end in a tie).\n\nIn Nora's turn, she must choose a vertex $u$ adjacent to vertex $p$, which is not dominated by the caterpillar, and move all the vertices in it by one edge towards vertex $u$$^{\\text{∗}}$. In Aron's turn, he must choose a vertex $v$ adjacent to vertex $q$, which is not dominated by the caterpillar, and move all the vertices in it by one edge towards vertex $v$. Note that the moves allowed to the two players are different.\n\nWhenever $p$ is a leaf$^{\\text{†}}$, Nora wins$^{\\text{‡}}$. Whenever $q$ is a leaf, Aron wins. If either initially both $p$ and $q$ are leaves, or after $10^{100}$ turns the game has not ended, the result is a tie.\n\nPlease count the number of integer pairs $(p, q)$ with $1 \\leq p, q \\leq n$ and $p \\neq q$ such that, if the caterpillar is initially $(p, q)$, Aron wins the game.\n\n$^{\\text{∗}}$In other words: Let the current caterpillar sequence be $c_1, c_2, \\ldots, c_k$, then after the move, the new caterpillar sequence becomes $d(u, c_1), d(u, c_2), \\ldots, d(u, c_k)$. Here, $d(x, y)$ is the next vertex on the simple path from $y$ to $x$.\n\n$^{\\text{†}}$In a tree, a vertex is called a leaf if and only if its degree is $1$.\n\n$^{\\text{‡}}$Therefore, Nora never fails to choose a vertex $u$ when the game has not ended. The same goes for Aron.",
+    "input_spec": "Each test consists of multiple test cases. The first line contains a single integer $t$ ($1 \\leq t \\leq 2\\cdot 10^4$) — the number of test cases. The description of the test cases follows.\n\nThe first line of each test case contains a single integer $n$ ($2 \\leq n \\leq 2\\cdot 10^5$) — the number of vertices in the tree.\n\nThe following $n - 1$ lines each contain two integers $u$ and $v$ ($1 \\leq u, v \\leq n$), denoting an edge between vertices $u$ and $v$. It is guaranteed that the given edges form a tree.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $4\\cdot 10^5$.",
+    "output_spec": "For each test case, output a single line containing an integer: the number of integer pairs $(p, q)$ which make Aron win.",
+    "note": "In the first test case, all possible caterpillars are $(1, 2)$ and $(2, 1)$, resulting in a tie at the beginning, since both $p$ and $q$ are leaves.\n\nIn the second test case, the caterpillars that allow Aron to win are the following: $(1, 3)$, $(1, 4)$, $(1, 5)$, $(2, 3)$, $(2, 4)$, $(2, 5)$. Let's look at some specific caterpillars.\n\n For the caterpillar $(1, 5)$: vertex $p = 1$ is not a leaf, but vertex $q = 5$ is, so Aron wins at the beginning.\n\n For the caterpillar $(2, 1)$: vertex $p = 2$ is not a leaf, neither is vertex $q = 1$. In Nora's first move, she can choose to move the caterpillar towards vertex $5$, therefore the caterpillar becomes $(5, 2)$, and vertex $p = 5$ is a leaf, so Nora will win.",
+    "samples": [
+      {
+        "input": "5\n2\n1 2\n5\n1 2\n1 3\n2 4\n2 5\n12\n1 6\n11 2\n4 8\n12 3\n2 7\n6 12\n8 1\n2 3\n5 12\n9 2\n10 3\n10\n1 2\n2 3\n3 4\n4 5\n5 6\n4 7\n6 8\n4 9\n4 10\n25\n1 16\n11 22\n6 14\n3 1\n20 14\n23 17\n25 19\n10 11\n3 18\n10 6\n2 21\n4 5\n11 12\n4 9\n9 13\n8 6\n6 1\n3 7\n8 19\n10 24\n15 13\n1 2\n3 4\n17 8",
+        "output": "\n0\n6\n40\n27\n171"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 136455,
+    "url": "https://codeforces.com/blog/entry/136455",
+    "tutorial": "2053E - Resourceful Caterpillar Sequence\n\nHint 1\n\nSuppose somebody wins. In which round does he or she win?\n\nHint 2\n\nA player can always undo what his opponent did in the previous turn.\n\nHint 3\n\nCan you find the necessary and sufficient condition for $(p, q)$ to be a caterpillar that makes Aron win?\n\nSolution\n\nDenote Nora's first move as round $1$, Aron's first move as round $2$, and so on. Suppose a player does not have a winning strategy in the $k$-th round, but he or she has a winning strategy in the $(k + 2)$-th round — it can be shown impossible because the other player can always withdraw the last move of another player so that the status is the same as it was before the $k$-th round.\n\nTherefore: if a player wins in the $k$-th round, we claim that $k \\leq 2$.\n\nGiven $p, q$, let's determine who will eventually win the game.\n\nIf both $p$ and $q$ are leaves, the result is a tie.\n\nIf $p$ is a leaf while $q$ is not, Nora wins.\n\nIf $q$ is a leaf while $p$ is not, Aron wins.\n\nIf neither $p$ nor $q$ is a leaf:\n\nCan $k = 1$? Nora wins if and only if $p$ is adjacent to a leaf.\n\nCan $k = 2$? Aron wins if and only if $p$ is not adjacent to a leaf, and $f(p, q)$ is adjacent to a leaf.\n\nOtherwise, the result is a tie.\n\nThe counting part can also be solved easily in $\\mathcal O(n)$. Denote $c$ as the number of leaves. The initial answer would be $c \\cdot (n - c)$, considering the third case. For the fourth case, we can enumerate $m = f(p, q)$, which is adjacent to at least one leaf. Given $m$, $q$ must be a non-leaf neighbor of $m$, and let the number of different $q$ be $k$. For each of the potential $p$, which is a non-leaf node whose neighbors are all non-leaf nodes too, it is computed exactly $k - 1$ times for all the $k$ candidates of $q$ (since $m$ must be on the simple path from $p$ to $q$), so the extra contributions are easy to calculate. (If you do not think that much, you can use some simple DP, which I will not elaborate here.)\n\nCode (C++)\n\nRate the Problem\n\nAmazing problem:\n\nGood problem:\n\nAverage problem:\n\nBad problem:\n\nDidn't solve:",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n\n#define MAXN 200001\nstd::vector<int> g[MAXN];\ninline int deg(int u) { return g[u].size(); }\n\nint d[MAXN];\nvoid solve() {\n\tint n; std::cin >> n; long long ans = 0;\n\tfor (int i = 1, u, v; i < n; ++i) {\n\t\tstd::cin >> u >> v;\n\t\tg[u].push_back(v), g[v].push_back(u);\n\t}\n\tint c1 = 0, c2 = 0;\n\tfor (int i = 1; i <= n; ++i) c1 += (deg(i) == 1);\n\tans += 1ll * c1 * (n - c1);\n\tfor (int i = 1; i <= n; ++i) if (deg(i) > 1) {\n\t\tfor (int v : g[i]) d[i] += (deg(v) > 1);\n\t\tc2 += (d[i] == deg(i));\n\t}\n\tfor (int m = 1; m <= n; ++m) if (deg(m) > 1 && d[m] != deg(m)) \n\t\tans += 1ll * c2 * (d[m] - 1);\n\tstd::cout << ans << '\\n';\n\tfor (int i = 1; i <= n; ++i) \n\t\t(std::vector<int>()).swap(g[i]), d[i] = 0;\n}\n\nint main() {\n\tstd::ios::sync_with_stdio(false);\n\tstd::cin.tie(nullptr), std::cout.tie(nullptr);\n\tint t; std::cin >> t; while (t--) solve(); return 0;\n}"
+    ]
+  }
+}

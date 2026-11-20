@@ -1,0 +1,45 @@
+{
+  "contest_id": 2071,
+  "index": "D1",
+  "name": "Infinite Sequence (Easy Version)",
+  "rating": 1800,
+  "tags": [
+    "bitmasks",
+    "brute force",
+    "dp",
+    "implementation",
+    "math"
+  ],
+  "points": 1750.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2071D1",
+  "url": "https://codeforces.com/problemset/problem/2071/D1",
+  "contest_start_time": "2025-02-28T14:35:00+00:00",
+  "statement": {
+    "title": "D1. Infinite Sequence (Easy Version)",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "This is the easy version of the problem. The difference between the versions is that in this version, $l=r$. You can hack only if you solved all versions of this problem.\n\nYou are given a positive integer $n$ and the first $n$ terms of an infinite binary sequence $a$, which is defined as follows:\n\n For $m \\gt n$, $a_m = a_1 \\oplus a_2 \\oplus \\ldots \\oplus a_{\\lfloor \\frac{m}{2} \\rfloor}$$^{\\text{∗}}$.\n\nYour task is to compute the sum of elements in a given range $[l, r]$: $a_l + a_{l + 1} + \\ldots + a_r$.\n\n$^{\\text{∗}}$$\\oplus$ denotes the bitwise XOR operation.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 10^4$). The description of the test cases follows.\n\nThe first line of each test case contains three integers $n$, $l$, and $r$ ($1 \\le n \\le 2 \\cdot 10^5$, $1 \\le l=r\\le 10^{18}$).\n\nThe second line contains $n$ integers $a_1, a_2, \\ldots, a_n$ ($\\color{red}{a_i \\in \\{0, 1\\}}$) — the first $n$ terms of the sequence $a$.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, output a single integer — the sum of elements in the given range.",
+    "note": "In the first test case, the sequence $a$ is equal to $$[\\underline{\\color{red}{1}}, 1, 1, 0, 0, 1, 1, 1, 1, 1, \\ldots]$$ where $l = 1$, and $r = 1$. The sum of elements in the range $[1, 1]$ is equal to $$a_1 = 1.$$\n\nIn the second test case, the sequence $a$ is equal to $$[\\color{red}{1}, \\color{red}{0}, \\underline{1}, 1, 1, 0, 0, 1, 1, 0, \\ldots]$$ where $l = 3$, and $r = 3$. The sum of elements in the range $[3, 3]$ is equal to $$a_3 = 1.$$",
+    "samples": [
+      {
+        "input": "9\n1 1 1\n1\n2 3 3\n1 0\n3 5 5\n1 1 1\n1 234 234\n0\n5 1111 1111\n1 0 1 0 1\n1 1000000000000000000 1000000000000000000\n1\n10 87 87\n0 1 1 1 1 1 1 1 0 0\n12 69 69\n1 0 0 0 0 1 0 1 0 1 1 0\n13 46 46\n0 1 0 1 1 1 1 1 1 0 1 1 1",
+        "output": "\n1\n1\n0\n0\n1\n0\n1\n0\n0"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 140115,
+    "url": "https://codeforces.com/blog/entry/140115",
+    "tutorial": "2071D1 - Infinite Sequence (Easy Version)\n\nHints\n\nHint 1\n\nTry to determine the connection between $a_{2m}$ and $a_{2m+1}$ for indices where $2m \\gt n$.\n\nHint 2\n\nTry to express $a_{2m}$ as the XOR of a short prefix of terms plus at most one extra term.\n\nSolution\n\nFor convenience, assume $n$ is odd (if not, increment $n$ and handle the edge case separately). Start by precomputing the first $2n$ terms $a_1, a_2, \\ldots, a_{2n}$. For queries with indices less than or equal to $2n$, directly return the precomputed value. For $2m \\gt n$, observe the following relationship\n $ a_{2m} = a_1 \\oplus a_2 \\oplus \\ldots \\oplus a_m = a_{2m + 1}. $\nDefine $p = a_1 \\oplus a_2 \\oplus \\ldots \\oplus a_n$. Notice that when $m \\gt n$, we can decompose the XOR sum as:\n $ {} $ $ a_{2m} = a_1 \\oplus a_2 \\oplus \\ldots \\oplus a_m = a_1 \\oplus a_2 \\oplus \\ldots \\oplus a_n \\oplus (a_{n + 1} \\oplus a_{n + 2}) \\oplus (a_{n + 3} \\oplus a_{n + 4}) \\oplus \\ldots \\oplus a_m $ $ a_{2m} = p \\oplus (a_{n + 1} \\oplus a_{n + 2}) \\oplus (a_{n + 3} \\oplus a_{n + 4}) \\oplus \\ldots \\oplus a_m $\nSince $n$ is odd, the pairs $(a_{n + 1} \\oplus a_{n + 2}), (a_{n + 3} \\oplus a_{n + 4}), \\ldots$ cancel out. This simplifies the formula to:\n $ {} $ $ a_{2m} = a_{2m + 1} = \\begin{cases} p & \\text{if } m \\text{ is odd}, \\\\ p \\oplus a_m & \\text{if } m \\text{ is even}. \\end{cases} $\nAs a result, we can compute $a_m$ recursively by halving $m$ until $m \\le 2n$, applying the parity rule at each step.\n\nThe overall time complexity is: $O(n+\\log(m))$.\n\nCode\n\nRate the Problem\n\nAmazing problem:\n\nGood problem:\n\nAverage problem:\n\nBad problem:\n\nDidn't solve:",
+    "solution_code": [
+      "#include<bits/stdc++.h>\nusing namespace std;\nvoid solve() {\n    int n;\n    int64_t l, r;\n    cin >> n >> l >> r;\n    vector<int> a(n + 1);\n    for (int i = 1; i <= n; i++) {\n        cin >> a[i];\n    }\n    vector<int> pref(n + 1);\n    for (int i = 1; i <= n; i++) {\n        pref[i] = pref[i - 1] + a[i];\n    }\n    if (n % 2 == 0) {\n        n++;\n        int cur = pref[n / 2] & 1;\n        a.push_back(cur);\n        pref.push_back(pref.back() + cur);\n    }\n    for (int i = n + 1; i <= n * 2; i++) {\n        a.push_back(pref[i / 2] & 1);\n        pref.push_back(pref[i - 1] + a[i]);\n    }\n    int p = pref[n] & 1;\n    auto get = [&](int64_t x) {\n        int ret = 0;\n        while (true) {\n            if (x <= n * 2) {\n                ret ^= a[x];\n                break;\n            }\n            ret ^= p;\n            if ((x / 2 - n) % 2 == 0) {\n                break;\n            }\n            x /= 2;\n        }\n        return ret;\n    };\n    cout << get(l) << \"\\n\";\n}\nint main() {\n    ios::sync_with_stdio(0), cin.tie(0);\n    int tt = 1;\n    cin >> tt;\n    while (tt--) {\n        solve();\n    }\n}"
+    ]
+  }
+}

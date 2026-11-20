@@ -1,0 +1,43 @@
+{
+  "contest_id": 1985,
+  "index": "B",
+  "name": "Maximum Multiple Sum",
+  "rating": 800,
+  "tags": [
+    "brute force",
+    "math",
+    "number theory"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1985B",
+  "url": "https://codeforces.com/problemset/problem/1985/B",
+  "contest_start_time": "2024-06-11T14:35:00+00:00",
+  "statement": {
+    "title": "B. Maximum Multiple Sum",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "Given an integer $n$, find an integer $x$ such that:\n\n $2 \\leq x \\leq n$.\n\n The sum of multiples of $x$ that are less than or equal to $n$ is maximized. Formally, $x + 2x + 3x + \\dots + kx$ where $kx \\leq n$ is maximized over all possible values of $x$.",
+    "input_spec": "The first line contains $t$ ($1 \\leq t \\leq 100$) — the number of test cases.\n\nEach test case contains a single integer $n$ ($2 \\leq n \\leq 100$).",
+    "output_spec": "For each test case, output an integer, the optimal value of $x$. It can be shown there is only one unique answer.",
+    "note": "For $n = 3$, the possible values of $x$ are $2$ and $3$. The sum of all multiples of $2$ less than or equal to $n$ is just $2$, and the sum of all multiples of $3$ less than or equal to $n$ is $3$. Therefore, $3$ is the optimal value of $x$.\n\nFor $n = 15$, the optimal value of $x$ is $2$. The sum of all multiples of $2$ less than or equal to $n$ is $2 + 4 + 6 + 8 + 10 + 12 + 14 = 56$, which can be proven to be the maximal over all other possible values of $x$.",
+    "samples": [
+      {
+        "input": "2\n3\n15",
+        "output": "\n3\n2"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 129620,
+    "url": "https://codeforces.com/blog/entry/129620",
+    "tutorial": "1985B - Maximum Multiple Sum\n\nProblem Credits: cry\n Analysis: cry\n\nSolution\n\nTo maximize the number of multiples of $x$ less than $n$, it optimal to choose a small $x$, in this case, $2$. The only exception is $n = 3$, where it is optimal to choose $3$ instead, since both $2$ and $3$ have only one multiple less than $3$.\n\nCode (C++)",
+    "solution_code": [
+      "#include <bits/stdc++.h>\nusing namespace std;\n\nint main(){\n\tint t; cin >> t;\n\twhile(t--){\n\t\tint n; cin >> n;\n\t\tcout << (n == 3 ? 3 : 2) << endl;\n \t}\n}"
+    ]
+  }
+}

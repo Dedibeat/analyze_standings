@@ -1,0 +1,42 @@
+{
+  "contest_id": 2085,
+  "index": "A",
+  "name": "Serval and String Theory",
+  "rating": 900,
+  "tags": [
+    "constructive algorithms",
+    "implementation"
+  ],
+  "points": 500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2085A",
+  "url": "https://codeforces.com/problemset/problem/2085/A",
+  "contest_start_time": "2025-03-22T14:35:00+00:00",
+  "statement": {
+    "title": "A. Serval and String Theory",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "A string $r$ consisting only of lowercase Latin letters is called universal if and only if $r$ is lexicographically smaller$^{\\text{∗}}$ than the reversal$^{\\text{†}}$ of $r$.\n\nYou are given a string $s$ consisting of $n$ lowercase Latin letters. You are required to make $s$ universal. To achieve this, you can perform the following operation on $s$ at most $k$ times:\n\n Choose two indices $i$ and $j$ ($1\\le i,j\\le n$), then swap $s_i$ and $s_j$. Note that if $i=j$, you do nothing.\n\nDetermine whether you can make $s$ universal by performing the above operation at most $k$ times.\n\n$^{\\text{∗}}$A string $a$ is lexicographically smaller than a string $b$ of the same length, if and only if the following holds:\n\n in the first position where $a$ and $b$ differ, the string $a$ has a letter that appears earlier in the alphabet than the corresponding letter in $b$.\n\n$^{\\text{†}}$The reversal of a string $r$ is the string obtained by writing $r$ from right to left. For example, the reversal of the string $\\texttt{abcad}$ is $\\texttt{dacba}$.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 500$). The description of the test cases follows.\n\nThe first line of each test case contains two integers $n$ and $k$ ($1\\le n\\le 100$, $0\\le k\\le 10^4$) — the length of the string $s$, and the maximum number of operations you can perform.\n\nThe second line contains a string $s$ consisting of $n$ lowercase Latin letters.",
+    "output_spec": "For each test case, print \"YES\" if it is possible to make $s$ universal by performing the operation at most $k$ times. Otherwise, print \"NO\".\n\nYou can output the answer in any case (upper or lower). For example, the strings \"yEs\", \"yes\", \"Yes\", and \"YES\" will be recognized as positive responses.",
+    "note": "In the first test case, $s$ will keep the same after any operations. However, the reversal of $\\texttt{a}$ is still $\\texttt{a}$, so it is impossible to make $s$ universal.\n\nIn the second test case, the string $\\texttt{rev}$ is lexicographically smaller than $\\texttt{ver}$. Thus, $s$ is already universal.\n\nIn the fifth test case, you can perform the operations as follows:\n\n Swap $s_4$ and $s_7$. After this operation, $s$ becomes $\\texttt{uniserval}$;\n\n Swap $s_1$ and $s_3$. After this operation, $s$ becomes $\\texttt{inuserval}$.\n\nAnd the string $\\texttt{inuserval}$ is universal.",
+    "samples": [
+      {
+        "input": "8\n1 10000\na\n3 3\nrev\n6 0\nstring\n6 0\ntheory\n9 2\nuniversal\n19 0\ncodeforcesecrofedoc\n19 1\ncodeforcesecrofedoc\n3 1\nzzz",
+        "output": "\nNO\nYES\nNO\nYES\nYES\nNO\nYES\nNO"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 140933,
+    "url": "https://codeforces.com/blog/entry/140933",
+    "tutorial": "2085A - Serval and String Theory\n\nHint 1\n\nWhen $s$ is lexicographically equal to or greater than the reversal of $s$, is it possible to make $s$ universal by performing the operations?\n\nHint 2\n\nIf possible, what is the minimum number of the operations required to make $s$ universal?\n\nSolution\n\nCase 1. If $s$ contains only one kind of letter, the answer will be NO.\n\nCase 2. If $s$ is universal already, no operation is needed, and the answer will be YES.\n\nOtherwise, $s$ falls into the following Case 3.\n\nCase 3.1. When $s$ is not a palindrome, one can make $s$ universal in one operation by swapping the first pair of different letters of $s$ and its reversal.\n $ \\left.\\begin{aligned} s ={}& \\texttt{s}{\\color{red}{\\underline{\\texttt{t}}}}\\texttt{rings} \\\\ \\text{reversal of } s ={}& \\texttt{s}{\\color{red}{\\underline{\\texttt{g}}}}\\texttt{nirts} \\end{aligned}\\;\\right\\} \\xrightarrow{\\text{swap}} \\boxed{\\texttt{sgrints}} $\nCase 3.2. When $s$ is a palindrome, swapping any two distinct letters will make $s$ no longer a palindrome. Note that the reversal of $s$ after the swap can be obtained by swapping the letters in the symmetric positions of the original $s$. Since either $s$ or its reversal is universal, the original $s$ can be made universal in one operation.\n $ s = \\texttt{l}{\\color{red}{\\underline{\\texttt{e}}}}{\\color{blue}{\\underline{\\texttt{v}}}}\\texttt{el} \\xrightarrow{\\text{swap}} \\left\\{\\;\\begin{aligned} s' ={}& \\texttt{l}{\\color{blue}{\\underline{\\texttt{v}}}}{\\color{red}{\\underline{\\texttt{e}}}}\\texttt{el} \\\\ \\text{reversal of } s' ={}& \\texttt{le}{\\color{red}{\\underline{\\texttt{e}}}}{\\color{blue}{\\underline{\\texttt{v}}}}\\texttt{l} \\end{aligned}\\;\\right\\} \\;\\boxed{\\texttt{leevl}} $\nThus, for Case 3, the answer will be NO if no operation can be performed; otherwise, the answer will be YES.\n\nCode (Python)",
+    "solution_code": [
+      "getint = lambda: int(input())\ngetints = lambda: map(int, input().split())\n\ndef solve():\n\tn, k = getints()\n\ts = input().strip()\n\tif s < s[::-1] or (k >= 1 and min(s) != max(s)):\n\t\tprint('YES')\n\telse:\n\t\tprint('NO')\n\nt = getint()\nfor _ in range(t):\n\tsolve()"
+    ]
+  }
+}

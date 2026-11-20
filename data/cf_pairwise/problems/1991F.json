@@ -1,0 +1,43 @@
+{
+  "contest_id": 1991,
+  "index": "F",
+  "name": "Triangle Formation",
+  "rating": 2200,
+  "tags": [
+    "brute force",
+    "greedy",
+    "implementation",
+    "math",
+    "sortings"
+  ],
+  "points": 2500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1991F",
+  "url": "https://codeforces.com/problemset/problem/1991/F",
+  "contest_start_time": "2024-07-28T14:35:00+00:00",
+  "statement": {
+    "title": "F. Triangle Formation",
+    "time_limit": "5 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "You are given $n$ sticks, numbered from $1$ to $n$. The length of the $i$-th stick is $a_i$.\n\nYou need to answer $q$ queries. In each query, you are given two integers $l$ and $r$ ($1 \\le l  \\lt  r \\le n$, $r - l + 1 \\ge 6$). Determine whether it is possible to choose $6$ distinct sticks from the sticks numbered $l$ to $r$, to form $2$ non-degenerate triangles$^{\\text{∗}}$.\n\n$^{\\text{∗}}$A triangle with side lengths $a$, $b$, and $c$ is called non-degenerate if:\n\n $a  \\lt  b + c$,\n\n $b  \\lt  a + c$, and\n\n $c  \\lt  a + b$.",
+    "input_spec": "The first line contains two integers $n$ and $q$ ($6 \\le n \\le 10^5$, $1 \\le q \\le 10^5$) — the number of sticks and the number of queries respectively.\n\nThe second line contains $n$ integers $a_1, a_2, \\ldots, a_n$ ($1 \\le a_i \\le 10^9$) — $a_i$ denotes the length of the $i$-th stick.\n\nEach of the following $q$ lines contains two integers $l$ and $r$ ($1 \\le l  \\lt  r \\le n$, $r - l + 1 \\ge 6$) — the parameters of each query.",
+    "output_spec": "For each query, output \"YES\" (without quotes) if it is possible to form $2$ triangles, and \"NO\" (without quotes) otherwise.\n\nYou can output the answer in any case (upper or lower). For example, the strings \"yEs\", \"yes\", \"Yes\", and \"YES\" will be recognized as positive responses.",
+    "note": "In the first query, the lengths of the sticks are $[5, 2, 2, 10, 4, 10]$. Two sets of sticks $[2, 4, 5]$ and $[2, 10, 10]$ can be selected to form $2$ non-degenerate triangles.\n\nIn the second query, the lengths of the sticks are $[2, 2, 10, 4, 10, 6]$. It can be shown that it is impossible to form $2$ non-degenerate triangles.\n\nIn the third query, the lengths of the sticks are $[2, 2, 10, 4, 10, 6, 1]$. Two sets of sticks $[1, 2, 2]$ and $[4, 10, 10]$ can be selected to form $2$ non-degenerate triangles.\n\nIn the fourth query, the lengths of the sticks are $[4, 10, 6, 1, 5, 3]$. It can be shown that it is impossible to form $2$ non-degenerate triangles.\n\nIn the fifth query, the lengths of the sticks are $[10, 4, 10, 6, 1, 5, 3]$. Two sets of sticks $[1, 10, 10]$ and $[3, 4, 5]$ can be selected to form $2$ non-degenerate triangles.",
+    "samples": [
+      {
+        "input": "10 5\n5 2 2 10 4 10 6 1 5 3\n1 6\n2 7\n2 8\n5 10\n4 10",
+        "output": "\nYES\nNO\nYES\nNO\nYES"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 132021,
+    "url": "https://codeforces.com/blog/entry/132021",
+    "tutorial": "1991F - Triangle Formation\n\nHint\n\nThe answer is always YES, if $R-L \\gt C$ for some $C$\n\nVideo editorial\n\nDaily Chat QnA",
+    "solution_code": []
+  }
+}

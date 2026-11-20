@@ -1,0 +1,43 @@
+{
+  "contest_id": 2030,
+  "index": "C",
+  "name": "A TRUE Battle",
+  "rating": 1100,
+  "tags": [
+    "brute force",
+    "games",
+    "greedy"
+  ],
+  "points": 1000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2030C",
+  "url": "https://codeforces.com/problemset/problem/2030/C",
+  "contest_start_time": "2024-10-19T14:05:00+00:00",
+  "statement": {
+    "title": "C. A TRUE Battle",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Alice and Bob are playing a game. There is a list of $n$ booleans, each of which is either true or false, given as a binary string $^{\\text{∗}}$ of length $n$ (where $\\texttt{1}$ represents true, and $\\texttt{0}$ represents false). Initially, there are no operators between the booleans.\n\nAlice and Bob will take alternate turns placing and or or between the booleans, with Alice going first. Thus, the game will consist of $n-1$ turns since there are $n$ booleans. Alice aims for the final statement to evaluate to true, while Bob aims for it to evaluate to false. Given the list of boolean values, determine whether Alice will win if both players play optimally.\n\nTo evaluate the final expression, repeatedly perform the following steps until the statement consists of a single true or false:\n\n If the statement contains an and operator, choose any one and replace the subexpression surrounding it with its evaluation.\n\n Otherwise, the statement contains an or operator. Choose any one and replace the subexpression surrounding the or with its evaluation.\n\n For example, the expression true or false and false is evaluated as true or (false and false) $=$ true or false $=$ true. It can be shown that the result of any compound statement is unique.\n\n$^{\\text{∗}}$A binary string is a string that only consists of characters $\\texttt{0}$ and $\\texttt{1}$",
+    "input_spec": "The first line contains $t$ ($1 \\leq t \\leq 10^4$) — the number of test cases.\n\nThe first line of each test case contains an integer $n$ ($2 \\leq n \\leq 2 \\cdot 10^5$) — the length of the string.\n\nThe second line contains a binary string of length $n$, consisting of characters $\\texttt{0}$ and $\\texttt{1}$ — the list of boolean values.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each testcase, output \"YES\" (without quotes) if Alice wins, and \"NO\" (without quotes) otherwise.\n\nYou can output \"YES\" and \"NO\" in any case (for example, strings \"yES\", \"yes\" and \"Yes\" will be recognized as a positive response).",
+    "note": "In the first testcase, Alice can place and between the two booleans. The game ends as there are no other places to place operators, and Alice wins because true and true is true.\n\nIn the second testcase, Alice can place or between the middle true and the left false. Bob can place and between the middle true and the right false. The statement false or true and false is false.\n\nNote that these examples may not be the best strategies for either Alice or Bob.",
+    "samples": [
+      {
+        "input": "5\n2\n11\n3\n010\n12\n101111111100\n10\n0111111011\n8\n01000010",
+        "output": "\nYES\nNO\nYES\nYES\nNO"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 135218,
+    "url": "https://codeforces.com/blog/entry/135218",
+    "tutorial": "2030C - A TRUE Battle\n\nProblem Credits: Proof_by_QED\n Analysis: Proof_by_QED\n\nSolution\n\nLet's understand what Alice wants to do. She wants to separate a statement that evaluates to true between two or's. This guarantees her victory since or is evaluated after all and's.\n\nFirst, if the first or last boolean is true, then Alice instantly wins by placing or between the first and second, or second to last and last booleans.\n\nOtherwise, if there are two true's consecutively, Alice can also win. Alice may place or before the first of the two on her first move. If Bob does not put his operator between the two true's, then Alice will put an or between the two true's on her next move and win. Otherwise, Bob does place his operator between the two true's. However, no matter what Bob placed, the two true's will always evaluate to true, so on her second move Alice can just place an or on the other side of the two true's to win.\n\nWe claim these are the only two cases where Alice wins. This is because otherwise, there does not contain two true's consecutively. Now, whenever Alice places an or adjacent to a true, Bob will respond by placing and after the true, which will invalidate this clause to be false.\n\nCode (C++)",
+    "solution_code": [
+      "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    int t;\n    cin >> t;\n    while(t--) {\n        int n;\n        cin >> n;\n        string s;\n        cin >> s;\n        vector<int> v(n);\n        for(int i = 0; i < n; i++) {\n            if(s[i]=='1') v[i]=1;\n        }\n        bool win = false;\n        if(v[0]||v[n-1]) win=true;\n        for(int i = 1; i < n; i++) {\n            if(v[i]&&v[i-1]) win=true;\n        }\n        if(win) cout << \"YES\" << endl;\n        else cout << \"NO\" << endl;\n    }\n}"
+    ]
+  }
+}

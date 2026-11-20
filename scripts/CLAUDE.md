@@ -78,5 +78,7 @@ gives the exact command and outputs. Credentials come from the environment
 
 - `check_cf_teaching.py`, `check_cses_teaching.py`: small-case checks for the
   teaching notes.
-- `sync_pairwise_artifacts.sh`: copy and verify the gitignored pairwise artifacts
-  (hashes paths, so keep `pairwise_*_run/` at the root).
+- `sync_pairwise_artifacts.sh`: rsync and verify the pairwise artifacts. Since
+  2026-11-20 they are in git, so only `verify` still matters. Its 2026-08-06
+  snapshot predates the phase 3 results and the problem enrichment, so it reports
+  2 mismatches.

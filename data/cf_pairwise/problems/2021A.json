@@ -1,0 +1,42 @@
+{
+  "contest_id": 2021,
+  "index": "A",
+  "name": "Meaning Mean",
+  "rating": 800,
+  "tags": [
+    "data structures",
+    "greedy",
+    "math",
+    "sortings"
+  ],
+  "points": 500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2021A",
+  "url": "https://codeforces.com/problemset/problem/2021/A",
+  "contest_start_time": "2024-10-06T06:05:00+00:00",
+  "statement": {
+    "title": "A. Meaning Mean",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "Pak Chanek has an array $a$ of $n$ positive integers. Since he is currently learning how to calculate the floored average of two numbers, he wants to practice it on his array $a$.\n\nWhile the array $a$ has at least two elements, Pak Chanek will perform the following three-step operation:\n\n Pick two different indices $i$ and $j$ ($1 \\leq i, j \\leq |a|$; $i \\neq j$), note that $|a|$ denotes the current size of the array $a$.\n\n Append $\\lfloor \\frac{a_i+a_j}{2} \\rfloor$$^{\\text{∗}}$ to the end of the array.\n\n Remove elements $a_i$ and $a_j$ from the array and concatenate the remaining parts of the array.\n\nFor example, suppose that $a=[5,4,3,2,1,1]$. If we choose $i=1$ and $j=5$, the resulting array will be $a=[4,3,2,1,3]$. If we choose $i=4$ and $j=3$, the resulting array will be $a=[5,4,1,1,2]$.\n\nAfter all operations, the array will consist of a single element $x$. Find the maximum possible value of $x$ if Pak Chanek performs the operations optimally.\n\n$^{\\text{∗}}$$\\lfloor x \\rfloor$ denotes the floor function of $x$, which is the greatest integer that is less than or equal to $x$. For example, $\\lfloor 6 \\rfloor = 6$, $\\lfloor 2.5 \\rfloor=2$, $\\lfloor -3.6 \\rfloor=-4$ and $\\lfloor \\pi \\rfloor=3$",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 5000$). The description of the test cases follows.\n\nThe first line of each test case contains a single integer $n$ ($2 \\le n \\le 50$) — the length of the array $a$.\n\nThe second line of each test case contains $n$ integers $a_1, a_2, \\ldots, a_n$ ($1 \\le a_i \\le 10^9$) — the elements of the array $a$.\n\nDo note that the sum of $n$ over all test cases is not bounded.",
+    "output_spec": "For each test case, output a single integer: the maximum possible value of $x$ after all numbers have been picked.",
+    "note": "In the first test case, the array is initially $a=[1,7,8,4,5]$. Pak Chanek will perform the following operations:\n\n Pick $i=1$ and $j=2$, then $a=[8,4,5,4]$.\n\n Pick $i=3$ and $j=2$, then $a=[8,4,4]$.\n\n Pick $i=2$ and $j=3$, then $a=[8,4]$.\n\n Pick $i=1$ and $j=2$, then $a=[6]$.\n\nAfter all the operations, the array consists of a single element $x=6$. It can be proven that there is no series of operations that results in $x$ greater than $6$ in the end.",
+    "samples": [
+      {
+        "input": "3\n5\n1 7 8 4 5\n3\n2 6 5\n5\n5 5 5 5 5",
+        "output": "\n6\n4\n5"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 134873,
+    "url": "https://codeforces.com/blog/entry/134873",
+    "tutorial": "For now, let's ignore the floor operation, so an operation is merging two elements $a_i$ and $a_j$ into one element $\\frac{a_i+a_j}{2}$.\n\nConsider the end result. Each initial element in $a$ must contribute a fractional coefficient to the final result. It turns out that the sum of the coefficients is fixed (it must be $1$). That means we can greedily give the biggest values in $a$ the biggest coefficients.\n\nOne way to do this is by sorting $a$ in ascending order. We merge $a_1$ and $a_2$, then merge that result with $a_3$, then merge that result with $a_4$, and so on until $a_n$. If we do this, $a_n$ contributes $\\frac{1}{2}$ times, $a_{n-1}$ contributes $\\frac{1}{4}$ times, $a_{n-2}$ contributes $\\frac{1}{8}$ times, and so on. This is the optimal way to get the maximum final result.\n\nIt turns out that the strategy above is also the optimal strategy for the original version of the problem. So we can simulate that process to get the answer.\n\nTime complexity for each test case: $O(n\\log n)$",
+    "solution_code": []
+  }
+}

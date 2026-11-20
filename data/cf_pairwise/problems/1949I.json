@@ -1,0 +1,46 @@
+{
+  "contest_id": 1949,
+  "index": "I",
+  "name": "Disks",
+  "rating": 1800,
+  "tags": [
+    "dfs and similar",
+    "geometry",
+    "graph matchings",
+    "graphs"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1949I",
+  "url": "https://codeforces.com/problemset/problem/1949/I",
+  "contest_start_time": "2024-03-24T10:00:00+00:00",
+  "statement": {
+    "title": "I. Disks",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "You are given $n$ disks in the plane. The center of each disk has integer coordinates, and the radius of each disk is a positive integer. No two disks overlap in a region of positive area, but it is possible for disks to be tangent to each other.\n\nYour task is to determine whether it is possible to change the radii of the disks in such a way that:\n\n Disks that were tangent to each other remain tangent to each other.\n\n No two disks overlap in a region of positive area.\n\n The sum of all radii strictly decreases.\n\n The new radii are allowed to be arbitrary positive real numbers. The centers of the disks cannot be changed.",
+    "input_spec": "The first line contains an integer $n$ ($1\\le n \\le 1000$) — the number of disks.\n\nThe next $n$ lines contain three integers each. The $i$-th of such lines contains $x_i$, $y_i$ ($-10^9 \\leq x_i, y_i \\leq 10^9$), and $r_i$ ($1 \\leq r_i \\leq 10^9$) — the coordinates of the center, and the radius, of the $i$-th disk.",
+    "output_spec": "Print $\\texttt{YES}$ if it is possible to change the radii in the desired manner. Otherwise, print $\\texttt{NO}$.",
+    "note": "In the first sample, one can decrease the radii of the first and third disk by $0.5$, and increase the radius of the second disk by $0.5$. This way, the sum of all radii decreases by $0.5$. The situation before and after changing the radii is depicted below.\n  First sample (left) and a valid way to change the radii of the disks (right).\nIn the second sample, depicted below, there is no way to change the radii of the disks in the desired manner.\n  Second sample.",
+    "samples": [
+      {
+        "input": "5\n0 2 1\n0 0 1\n4 -3 4\n11 0 3\n11 5 2",
+        "output": "\nYES"
+      },
+      {
+        "input": "4\n2 2 2\n7 2 3\n7 7 2\n2 7 3",
+        "output": "\nNO"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 127514,
+    "url": "https://codeforces.com/blog/entry/127514",
+    "tutorial": "To start, we build the graph that describes the tangency relation between the disks: each disk is represented by a node in the graph, and an edge connects two nodes if and only if the corresponding disks are tangent. Constructing this graph can be done in time $O(n^2)$ by checking all pairs of disks. In fact, it can be done in faster than quadratic time, but this is not necessary to solve the problem with the given constraints.\n\nSuppose that you change the radii of the disks by real numbers $\\delta_1, \\dots, \\delta_n$. In order to maintain tangency, we must have $\\delta_i + \\delta_j = 0$ whenever the $i$-th and $j$-th disks are initially tangent. In fact, this is condition is also sufficient, provided that $\\delta_1, \\dots, \\delta_n$ are small enough in absolute value (to avoid overlaps and to keep all the radii positive).\n\nFix a connected component of the tangency graph, and fix any node $i$ in this component. The value $\\delta_i$ determines the values of $\\delta_j$ for all $j$ in the same connected component, and each $\\delta_j$ has to be equal to either $\\delta_i$ or $-\\delta_i$. If the connected component is not bipartite, it contains a cycle of odd length, and such a cycle shows that $\\delta_i = -\\delta_i$ and so $\\delta_i=0$. On the other hand, if the connected component is bipartite, then it is possible to assign any real value to $\\delta_i$. Color the nodes of such a bipartite connected component black and white, so that every edge connects a white node and a black node; use white to color the node $i$. The sum of the radii in this connected component changes by $\\delta_i \\cdot k$, where $k$ is the difference between the number of white nodes and the number of black nodes. In order to strictly decrease the sum of the radii, we need a different number of black and white nodes ($k \\neq 0$); if this happens, we can pick $\\delta_i$ to be any sufficiently small real number such that $\\delta_i \\cdot k  \\lt  0$.\n\nTo summarize, the answer is YES if and only if there is at least one connected component which is bipartite and has a different number of white and black nodes. This condition can be checked in time $O(n)$.",
+    "solution_code": []
+  }
+}

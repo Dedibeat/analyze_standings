@@ -1,0 +1,42 @@
+{
+  "contest_id": 2022,
+  "index": "C",
+  "name": "Gerrymandering",
+  "rating": 1800,
+  "tags": [
+    "dp",
+    "implementation"
+  ],
+  "points": 1750.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2022C",
+  "url": "https://codeforces.com/problemset/problem/2022/C",
+  "contest_start_time": "2024-10-13T19:35:00+00:00",
+  "statement": {
+    "title": "C. Gerrymandering",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "We all steal a little bit. But I have only one hand, while my adversaries have two.\n\nÁlvaro Obregón\n\nÁlvaro and José are the only candidates running for the presidency of Tepito, a rectangular grid of $2$ rows and $n$ columns, where each cell represents a house. It is guaranteed that $n$ is a multiple of $3$.\n\nUnder the voting system of Tepito, the grid will be split into districts, which consist of any $3$ houses that are connected$^{\\text{∗}}$. Each house will belong to exactly one district.\n\nEach district will cast a single vote. The district will vote for Álvaro or José respectively if at least $2$ houses in that district select them. Therefore, a total of $\\frac{2n}{3}$ votes will be cast.\n\nAs Álvaro is the current president, he knows exactly which candidate each house will select. If Álvaro divides the houses into districts optimally, determine the maximum number of votes he can get.\n\n$^{\\text{∗}}$A set of cells is connected if there is a path between any $2$ cells that requires moving only up, down, left and right through cells in the set.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 10^4$). The description of the test cases follows.\n\nThe first line of each test case contains one integer $n$ ($3 \\le n \\le 10^5$; $n$ is a multiple of $3$) — the number of columns of Tepito.\n\nThe following two lines each contain a string of length $n$. The $i$-th line contains the string $s_i$, consisting of the characters $\\texttt{A}$ and $\\texttt{J}$. If $s_{i,j}=\\texttt{A}$, the house in the $i$-th row and $j$-th column will select Álvaro. Otherwise if $s_{i,j}=\\texttt{J}$, the house will select José.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $10^5$.",
+    "output_spec": "For each test case, output a single integer — the maximum number of districts Álvaro can win by optimally dividing the houses into districts.",
+    "note": "The image below showcases the optimal arrangement of districts Álvaro can use for each test case in the example.",
+    "samples": [
+      {
+        "input": "4\n3\nAAA\nAJJ\n6\nJAJAJJ\nJJAJAJ\n6\nAJJJAJ\nAJJAAA\n9\nAJJJJAJAJ\nJAAJJJJJA",
+        "output": "\n2\n2\n3\n2"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 135095,
+    "url": "https://codeforces.com/blog/entry/135095",
+    "tutorial": "2022C - Gerrymandering\n\nStep 1\n\nWe will use dynamic programming to keep track of the maximum number of votes Álvaro can secure as we move from column to column (note that there are many ways to implement the DP, we will use the easiest to understand).\n\nAn important observation is that if you use a horizontal piece in one row, you also have to use it in the other to avoid leaving holes.\n\nStep 2:\n\nLet $dp[i][j]$ represent the maximum number of votes Álvaro can get considering up to the $i$-th column. The second dimension $j$ represents the current configuration of filled cells:\n\n$j = 0$: All cells up to the $i$-th column are completely filled (including $i$-th).\n\n$j = 1$: All cells up to the i-th column are completely filled (including $i$-th), and there’s one extra cell filled in the first row of the next column. $j = 2$: The $i$-th column is filled, and there’s one extra cell filled in the second row of the next column.\n\nStep 3:\n\nFor simplicity, we will call \"L\", \"second L\", \"third L\", and \"fourth L\" respectively the next pieces:\n\nFrom $dp[k][0]$ (Both rows filled at column $k$):\n\nYou can place a horizontal piece in both rows, leading to $dp[k+3][0]$.\n\nYou can place a first L piece, leading to $dp[k+1][1]$.\n\nYou can place an L piece, leading to $dp[k+1][2]$.\n\nFrom $dp[k][1]$ (One extra cell in the first row of the next column):\n\nYou can place a horizontal piece in the first row occupying from $k+2$ to $k+4$ and also a horizontal piece in the second row from $k+1$ to $k+3$, leading to $dp[k+3][1]$.\n\nYou can place a fourth L, leading to $dp[k+2][0]$.\n\nFrom $dp[k][2]$ (One extra cell in the second row of the next column):\n\nYou can place a horizontal piece in the first row occupying from $k+1$ to $k+3$ and also a horizontal piece in the second row from $k+2$ to $k+4$, leading to $dp[k+3][2]$.\n\nYou can place a third L, leading to $dp[k+2][0]$.\n\nStep 4:\n\nMore formally for each DP state, the following transitions are possible:\n\nFrom $dp[k][0]$:\n $ dp[k+3][0] = max(dp[k+3][0], dp[k][0] + \\text{vot}) $ $ dp[k+1][1] = max(dp[k+1][1], dp[k][0] + \\text{vot}) $ $ dp[k+1][2] = max(dp[k+1][2], dp[k][0] + \\text{vot}) $\nFrom $dp[k][1]$:\n $ dp[k+3][1] = max(dp[k+3][1], dp[k][1] + \\text{vot}) $ $ dp[k+2][0] = max(dp[k+2][0], dp[k][1] + \\text{vot}) $\nFrom $dp[k][2]$:\n $ dp[k+3][2] = max(dp[k+3][2], dp[k][2] + \\text{vot}) $ $ dp[k+2][0] = max(dp[k+2][0], dp[k][2] + \\text{vot}) $\nTo implement the DP solution, you only need to handle the transitions for states $dp[i][0]$ and $dp[i][1]$. For $dp[i][2]$, the transitions are the same as $dp[i][1]$, with the rows swapped.\n\nCode:\n\nKey Takeaways\n\nDon't begin to implement until all the details are very clear, this will make your implementation much easier.\n\nDraw images to visualize easier everything.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\nusing namespace std;\nvoid solve()\n{\n    int n;\n    cin>>n;\n    vector<string>cad(n);\n    vector<vector<int> >vot(2,vector<int>(n+8));\n    for(int k=0;k<2;k++)\n    {\n\tcin>>cad[k];\n\tfor(int i=0;i<n;i++)\n\t\tif(cad[k][i]=='A')\n\t\t\tvot[k][i+1]=1;\n    }\n    vector<vector<int> >dp(n+9,vector<int>(3,-1));\n    dp[0][0]=0;\n    for(int k=0;k<=n-1;k++)\n    {\n\tfor(int i=0;i<3;i++)\n\t{\n\t    if(dp[k][i]!=-1)\n\t    {\n\t   \tint vt=0,val=dp[k][i];\n\t  \t    if(i==0)\n\t\t    {\n\t\t\t// *\n\t\t\t// *\n\t\t\tvt=(vot[0][k+1]+vot[0][k+2]+vot[0][k+3])/2+(vot[1][k+1]+vot[1][k+2]+vot[1][k+3])/2;\n\t\t\tdp[k+3][0]=max(vt+val,dp[k+3][0]);\n\t\t\tvt=(vot[1][k+1]+vot[0][k+2]+vot[0][k+1])/2;\n\t\t\tdp[k+1][1]=max(vt+val,dp[k+1][1]);\n\t\t\tvt=(vot[1][k+1]+vot[1][k+2]+vot[0][k+1])/2;\n\t\t\tdp[k+1][2]=max(vt+val,dp[k+1][2]);\n\t\t    }\n\t\t    if(i==1)\n\t\t    {\n\t\t\t// **\n\t\t\t// *\n\t\t\tvt=(vot[0][k+2]+vot[0][k+3]+vot[0][k+4])/2+(vot[1][k+1]+vot[1][k+2]+vot[1][k+3])/2;\n\t\t\tdp[k+3][1]=max(vt+val,dp[k+3][1]);\n\t\t\tvt=(vot[1][k+1]+vot[1][k+2]+vot[0][k+2])/2;\n\t\t\tdp[k+2][0]=max(vt+val,dp[k+2][0]);\n\t   \t    }\n\t\t    if(i==2)\n\t\t    {\n\t\t\t//*\n\t\t\t//**\n\t\t\tvt=(vot[1][k+2]+vot[1][k+3]+vot[1][k+4])/2+(vot[0][k+1]+vot[0][k+2]+vot[0][k+3])/2;\n\t\t\tdp[k+3][2]=max(vt+val,dp[k+3][2]);\n\t\t\tvt=(vot[0][k+1]+vot[0][k+2]+vot[1][k+2])/2;\n\t\t\tdp[k+2][0]=max(vt+val,dp[k+2][0]);\n\t\t    }\n\t    }\n\t}\n    }\n    cout<<dp[n][0]<<endl;\n}\nint main() {\n    int t;\n    cin>>t;\n    while(t--)\n\tsolve();\n}"
+    ]
+  }
+}

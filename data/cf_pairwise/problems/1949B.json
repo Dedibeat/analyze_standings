@@ -1,0 +1,42 @@
+{
+  "contest_id": 1949,
+  "index": "B",
+  "name": "Charming Meals",
+  "rating": 1500,
+  "tags": [
+    "binary search",
+    "brute force",
+    "greedy",
+    "sortings"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1949B",
+  "url": "https://codeforces.com/problemset/problem/1949/B",
+  "contest_start_time": "2024-03-24T10:00:00+00:00",
+  "statement": {
+    "title": "B. Charming Meals",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "The Czech cuisine features $n$ appetizers and $n$ main dishes. The $i$-th appetizer has spiciness $a_i$, and the $i$-th main dish has spiciness $b_i$.\n\nA typical Czech meal consists of exactly one appetizer and one main dish. You want to pair up the $n$ appetizers and $n$ main dishes into $n$ meals with each appetizer and each main dish being included in exactly one meal.\n\nYour meals shall surprise the diners, so you want the spiciness levels of the two parts of the same meal to be as different as possible. The charm of a meal is the difference (in absolute value) between the spiciness of the appetizer and the spiciness of the main dish. So, a meal consisting of an appetizer with spiciness $x$ and a main dish with spiciness $y$ has charm equal to $|x-y|$.\n\nYou want to maximize the minimum charm of the resulting $n$ meals. What is the largest possible value of the minimum charm that you can achieve?",
+    "input_spec": "Each test contains multiple test cases. The first line contains an integer $t$ ($1\\le t\\le 1\\,000$) — the number of test cases. The descriptions of the $t$ test cases follow.\n\nThe first line of each test case contains a single integer $n$ ($1 \\leq n \\leq 5\\,000$) —the number of appetizers and main dishes.\n\nThe second line of each test case contains $n$ integers $a_1, a_2, \\ldots, a_n$ ($0 \\leq a_i \\leq 10^{9}$) — the spicinesses of the $n$ appetizers.\n\nThe third line of each test case contains $n$ integers $b_1, b_2, \\ldots, b_n$ ($0 \\leq b_i \\leq 10^{9}$) — the spicinesses of the $n$ main dishes.\n\nIt is guaranteed that the sum of $n^2$ over all test cases does not exceed $25\\cdot 10^6$.",
+    "output_spec": "For each test case, print the largest possible value of the minimum charm you can achieve.",
+    "note": "In the first test case, no matter how you pair up the appetizers with the main dishes, each meal will have an appetizer with spiciness $0$ and a main dish with spiciness $1000000000$, so the charm of each meal will be $1000000000$.\n\nIn the second test case, one optimal way to pair up appetizers and main dishes is: $(1, 5)$, $(2, 4)$, $(3, 1)$, $(4, 2)$, $(5, 3)$. The corresponding meals have charms: $4$, $2$, $2$, $2$, $2$. The resulting minimum charm is $2$.\n\nIn the third test case, one way to maximize the minimum charm is to pair up the three appetizers with spiciness $0$ with the three main dishes with spiciness $100$, and the three appetizers with spiciness $100$ with the three main dishes with spiciness $0$. Doing so, the charm of each meal will be exactly $100$.",
+    "samples": [
+      {
+        "input": "4\n3\n0 0 0\n1000000000 1000000000 1000000000\n5\n1 2 3 4 5\n1 2 3 4 5\n6\n0 0 0 100 100 100\n100 100 100 0 0 0\n7\n14 25 62 74 86 95 12\n51 62 71 72 92 20 84",
+        "output": "\n1000000000\n2\n100\n30"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 127514,
+    "url": "https://codeforces.com/blog/entry/127514",
+    "tutorial": "Let's sort spicinesses, assume $a_1 \\leq a_2 \\leq \\ldots \\leq a_n$, $b_1 \\leq b_2 \\leq \\ldots \\leq b_n$.\n\nLemma: Let $c, d$ be some nondecreasing arrays of length $n$. If there exists some permutation $\\sigma(1), \\sigma(2), \\ldots, \\sigma(n)$, such that $c_i \\leq d_{\\sigma(i)}$ for all $i$, then $c_i \\leq d_i$ for all $i$.\n\nProof: for each $i$, there can be at most $i-1$ $d$s smaller than $c_i$: $d_{p_1}, d_{p_2}, \\ldots, d_{p_{i-1}}$, as for any $j\\geq i$ we have $d_{p_j} \\geq c_j \\geq c_i$.\n\nConsider some optimal pairing, assume we paired $a_i$ with $b_{\\sigma(i)}$, and got a minimum charm of $k$. Let's call pairs with $a_i + k \\leq b_{\\sigma(i)}$ small, and pairs with $a_i \\geq b_{\\sigma(i)} + k$ large. Consider small pairs, assume there are $t$ of them. Note that, by the lemma, we can assume that $a_i$s and $b_{\\sigma(i)}$s in these pairs are nondecreasing. Similarly, they are nondecreasing in large pairs.\n\nBut then we can just pair smallest $t$ $a_i$s with largest $t$ $b_i$s, and largest $n-t$ $a_i$s with smallest $n-t$ $b_i$s, and we will still have a charm of at least $k$. More formally:\n\n For $1 \\leq i \\leq t$, pair $a_i$ with $b_{i + (n-t)}$;\n\n For $t+1 \\leq i \\leq n$, pair the $a_i$ with $b_{i - t}$.\n\nSo, it's enough to check such a pairing for each possible $0 \\leq 1 \\leq t \\leq n$, and to pick the best one!\n\nTotal runtime is $O(n^2)$.",
+    "solution_code": []
+  }
+}

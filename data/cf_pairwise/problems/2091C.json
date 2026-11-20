@@ -1,0 +1,42 @@
+{
+  "contest_id": 2091,
+  "index": "C",
+  "name": "Combination Lock",
+  "rating": 1000,
+  "tags": [
+    "constructive algorithms",
+    "greedy"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2091C",
+  "url": "https://codeforces.com/problemset/problem/2091/C",
+  "contest_start_time": "2025-03-25T14:35:00+00:00",
+  "statement": {
+    "title": "C. Combination Lock",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "At the IT Campus \"NEIMARK\", there are several top-secret rooms where problems for major programming competitions are developed. To enter one of these rooms, you must unlock a circular lock by selecting the correct code. This code is updated every day.\n\nToday's code is a permutation$^{\\text{∗}}$ of the numbers from $1$ to $n$, with the property that in every cyclic shift$^{\\text{†}}$ of it, there is exactly one fixed point. That is, in every cyclic shift, there exists exactly one element whose value is equal to its position in the permutation.\n\nOutput any valid permutation that satisfies this condition. Keep in mind that a valid permutation might not exist, then output $-1$.\n\n$^{\\text{∗}}$A permutation is defined as a sequence of length $n$ consisting of integers from $1$ to $n$, where each number appears exactly once. For example, (2 1 3), (1), (4 3 1 2) are permutations; (1 2 2), (3), (1 3 2 5) are not.\n\n$^{\\text{†}}$A cyclic shift of an array is obtained by moving the last element to the beginning of the array. A permutation of length $n$ has exactly $n$ cyclic shifts.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\leq t \\leq 500$). The description of the test cases follows.\n\nA single line of each test case contains a single integer $n$ ($1 \\leq n \\leq 2 \\cdot 10^5$).\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, output the desired permutation. If multiple solutions exist, output any one of them. If no suitable permutations exist, output $-1$.",
+    "note": "In the second example, there is a permutation such that in each cyclic shift there is a fixed point (highlighted in dark red):\n\nThe first line contains the element numbers, and the second line contains all the shifts of the desired permutation.",
+    "samples": [
+      {
+        "input": "3\n4\n5\n3",
+        "output": "\n-1\n4 1 3 5 2\n1 3 2"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 141047,
+    "url": "https://codeforces.com/blog/entry/141047",
+    "tutorial": "Let after $k$ cyclic shifts the element $p_i$ be at position $(i + k) \\mod n$. For this point to be fixed, it is necessary that $(i + k) \\mod n = p_i$. Let assume that permutation $p$ is starting from $0$, $[0, 1, 2, \\ldots, n - 1]$.\n\nFrom this we get that $k = p_i - i \\ (mod \\ n)$. For any cyclic shift to be a fixed point — it must be possible to obtain any $k$ from $0$ to $n - 1$. Let us sum both sides for all possible values of $k = p_i - i \\ (mod \\ n)$.\n\nWe get $\\sum_{k=0}^{n - 1} k = \\frac{n \\cdot (n - 1)}{2}$ and $\\sum_{i=0}^{n - 1} (p_i - i) =\\sum_{0=1}^{n - 1} p_i - \\sum_{i=0}^{n - 1} i = 0$. In order to construct a permutation, these sums must be equal modulo $n$, i.e. $\\frac{n \\cdot (n - 1)}{2} = 0 \\ (mod \\ n)$. For even $n$ — this is impossible and the answer is $-1$. And for odd $n$ one of the options — $p = [n, n - 1, \\ldots, 2, 1]$.\n\n$O(n)$.",
+    "solution_code": [
+      "#include <iostream>\n\nusing namespace std;\n \nvoid solve() {\n    int n;\n    cin >> n;\n    if (n % 2 == 0) {\n        cout << -1 << endl;\n        return;\n    }\n    for (int i = n; i > 0; i--) {\n        cout << i << ' ';\n    }\n    cout << endl;\n}\n \nint main() {\n    int t = 1;\n    cin >> t;\n    while (t--) \n        solve();\n}"
+    ]
+  }
+}

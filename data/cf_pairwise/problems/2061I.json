@@ -1,0 +1,44 @@
+{
+  "contest_id": 2061,
+  "index": "I",
+  "name": "Kevin and Nivek",
+  "rating": 3500,
+  "tags": [
+    "divide and conquer",
+    "dp"
+  ],
+  "points": 4500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2061I",
+  "url": "https://codeforces.com/problemset/problem/2061/I",
+  "contest_start_time": "2025-01-20T14:35:00+00:00",
+  "statement": {
+    "title": "I. Kevin and Nivek",
+    "time_limit": "4 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "Kevin and Nivek are competing for the title of \"The Best Kevin\". They aim to determine the winner through $n$ matches.\n\nThe $i$-th match can be one of two types:\n\n Type 1: Kevin needs to spend $a_i$ time to defeat Nivek and win the match. If Kevin doesn't spend $a_i$ time on it, Nivek will win the match.\n\n Type 2: The outcome of this match depends on their historical records. If Kevin's number of wins is greater than or equal to Nivek's up to this match, then Kevin wins. Otherwise, Nivek wins.\n\nKevin wants to know the minimum amount of time he needs to spend to ensure he wins at least $k$ matches.\n\nOutput the answers for $k = 0, 1, \\ldots, n$.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 10^4$). The description of the test cases follows.\n\nThe first line of each test case contains a single integer $n$ ($1 \\le n \\le 3 \\cdot 10^5$) — the number of matches.\n\nThe second line contains $n$ integers $a_1, a_2, \\ldots, a_n$ ($-1 \\leq a_i \\leq 10^9$).\n\nIf $a_i = -1$, the $i$-th match is of Type 2. Otherwise, the $i$-th match is of Type 1, and $a_i$ represents the amount of time Kevin needs to spend to win this match.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $3 \\cdot 10^5$.",
+    "output_spec": "For each test case, output $n + 1$ integers. The $i$-th integer represents the minimum amount of time to win at least $i-1$ matches.",
+    "note": "In the first test case, all matches are of Type 2. Kevin can automatically win all matches.\n\nIn the second test case, all matches are of Type 1. Kevin can choose matches in increasing order of $a_i$.\n\nIn the third test case:\n\n If Kevin spends $a_1$ time on match $1$, he can win matches $1, 2, 3, 4$.\n\n If Kevin spends $a_5$ time on match $5$, he can win match $5$.\n\n If Kevin spends $a_1$ time on match $1$ and $a_5$ time on match $5$, he can win all matches.",
+    "samples": [
+      {
+        "input": "3\n5\n-1 -1 -1 -1 -1\n5\n3 2 5 4 1\n5\n100 -1 -1 -1 1",
+        "output": "\n0 0 0 0 0 0 \n0 1 3 6 10 15 \n0 1 100 100 100 101 "
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 138620,
+    "url": "https://codeforces.com/blog/entry/138620",
+    "tutorial": "First, there is a straightforward dynamic programming solution with a time complexity of $O(n^2)$.\n\nLet $dp(i, j)$ represent the minimum cost for Kevin to achieve $j$ victories in the first $i$ games. However, optimizing this dynamic programming solution directly is difficult because it lacks convexity.\n\nTherefore, we use a divide-and-conquer approach to solve it (which is more commonly seen in certain counting problems).\n\n—\n\nKey Idea: To compute $dp(r, *)$ from $dp(l, *)$ efficiently, the following observations are used:\n\nAt time $l$, if the difference between Kevin's and Nivek's number of victories exceeds $r-l$, then:\n\n For Type 2 matches, Kevin will either always win or always lose.\n\n For Type 1 matches, Kevin should prioritize matches with the smallest cost $a_i$ in ascending order.\n\nLet $g(i)$ denote the minimum cost of selecting $i$ matches in this range, and let $t$ represent the number of Type 2 matches in the interval.\n\nWhen $j - (l - j)  \\gt  r-l$, the following transition applies: $$dp(l,j)+g(i) \\to dp(r,j+t+i).$$\n\nSimilarly, when $j - (l - j)  \\lt  -(r-l)$, a similar transition is used.\n\nSince $g(i)$ is convex, the best transition point is monotonic. This property allows us to optimize this part using divide-and-conquer, achieving a time complexity of $O(n \\log n)$.\n\nFor the case where $|j - (l - j)| \\leq r-l$, brute force is used to compute the transitions explicitly, with a time complexity of $O((r-l)^2)$.\n\nBy dividing the sequence into blocks of size $O(\\sqrt{n \\log n})$, the overall time complexity can be reduced to $O(n \\sqrt{n \\log n})$.\n\n—\n\nTo further optimize the problem, a more refined strategy is applied. Specifically, for the case where $|j - (l - j)| \\leq r-l$, instead of computing transitions explicitly with brute force, we recursively divide the problem into smaller subproblems. The goal in each subproblem is to compute the transitions from a segment of $dp(l)$ to $dp(r)$, ensuring that the segment length in $dp(l)$ does not exceed $O(r-l)$.\n\nLet $m = \\lfloor\\frac{l + r}{2}\\rfloor$. First, compute the transitions from $dp(l)$ to $dp(m)$. Then, use the results from $dp(m)$ to compute the transitions from $dp(m)$ to $dp(r)$. For each subinterval, the strategy remains the same:\n\n For differences in the number of victories that exceed the interval length, apply monotonicity to handle the transitions efficiently.\n\n For the remaining part, recursively compute transitions using the same divide-and-conquer approach.\n\nThe recurrence relation for this approach is: $T(n)=2T(n/2) + O(n \\log n)$ So the time complexity is $T(n)=O(n \\log^2 n)$.",
+    "solution_code": [
+      "1 3 2\n15\n5 6 9",
+      "\tmovl\t(%rdx), %esi\n\tandl\t%edi, %esi\n\tcmpl\t%esi, %ecx\n\tcmovg\t%esi, %ecx\n\taddq\t$4, %rdx\n\tcmpq\t%rdx, %r8\n\tjne\t.L115",
+      "vector<int> d;\n\n\t\nfor(int i = 0; i < n; i++){\n\tint g = a[i];\n\tint h = g;\n\twhile(true){\n\t\tfor(int j = 0; j < m; j++){\n\t\t\th = min(h, g & b[j]);\n\t\t}\n\t\tif(h == g)break;\n\t\td.push_back(g - h);\n\t\tg = h;\n\t}\n\n\t\n}"
+    ]
+  }
+}

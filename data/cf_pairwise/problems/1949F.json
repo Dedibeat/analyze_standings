@@ -1,0 +1,45 @@
+{
+  "contest_id": 1949,
+  "index": "F",
+  "name": "Dating",
+  "rating": 2200,
+  "tags": [
+    "greedy",
+    "sortings",
+    "trees"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1949F",
+  "url": "https://codeforces.com/problemset/problem/1949/F",
+  "contest_start_time": "2024-03-24T10:00:00+00:00",
+  "statement": {
+    "title": "F. Dating",
+    "time_limit": "3 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "You are the developer of a dating app which ignores gender completely. The app has $n$ users, indexed from $1$ to $n$. Each user's profile features a list of the activities they enjoy doing. There are $m$ possible activities, indexed from $1$ to $m$.\n\nA match between two users is good if they share at least one activity and, at the same time, both of them like at least one activity that the other user does not like.\n\nFind a good match if it exists.",
+    "input_spec": "The first line contains two integers $n$ and $m$ ($2 \\leq n \\leq 200\\,000$, $1 \\leq m \\leq 10^6$) — the number of users and the number of activities.\n\nEach of the following $n$ lines contains a number $k_i$ ($0 \\leq k_i \\leq m$) — the number of activities that user $i$ likes — followed by $k_i$ distinct integers from $1$ to $m$ — the activities user $i$ likes.\n\nIt is guaranteed that $k_1+k_2+\\cdots+k_n$ does not exceed $10^6$.",
+    "output_spec": "Print $\\texttt{YES}$ if a good match exists. Otherwise, print $\\texttt{NO}$.\n\nIf a good match exists, on the next line print two integers — the indexes of two users that make a match.",
+    "note": "In the first sample, users $1$ and $3$ form a match, because they share activity $1$, and, furthermore, user $3$ likes activity $5$ (which user $1$ does not like) and user $1$ likes activity $4$ (which user $3$ does not like). Note that users $1$ and $2$, as well as users $2$ and $3$, do not form a match, as there is no activity that users $1$ or $3$ like, and user $2$ doesn't like.",
+    "samples": [
+      {
+        "input": "3 5\n3 1 2 4\n5 1 2 3 4 5\n2 1 5",
+        "output": "\nYES\n3 1"
+      },
+      {
+        "input": "3 3\n1 1\n1 2\n3 2 3 1",
+        "output": "\nNO"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 127514,
+    "url": "https://codeforces.com/blog/entry/127514",
+    "tutorial": "After formalizing the statement, we get the following:\n\nGiven $n$ sets $S_1, S_2, \\ldots, S_n$ of activities, find a pair $(a, b)$ such that all three sets $S_a \\setminus S_b, S_b \\setminus S_a, S_a \\cap S_b$ are non-empty.\n\nIn essence, this means that for a pair $(a, b)$ to not be good, it must suffice that $S_a$ and $S_b$ are either disjoint or one included in the other. Consequently, it means that, if there are no such good pairs, then the sets must induce a tree structure! In this structure, some vertex $u$ is an ancestor of vertex $v$ if and only if $S_v \\subseteq S_u$.\n\nThe solution now can be summarized by the following idea: try to construct the tree (assuming there are no good pairs), and check for errors along the process (this will, in fact, expose a good pair). There are multiple ways of achieving that, both top-down and bottom-up (and they are more or less equivalent). We will describe a solution based on a top-down approach.\n\nTop down approach. Let's start by sort the activity sets in decreasing order of lengths. For all activity sets $S_i$ in this order, we will create a parent-child relationship $j = p(i)$ with the last processed index $j$ that contains some activity (or $-1$, if there is no such index). The activity based on which we choose $j$ is not relevant, for reasons that will be apparent as follows. After finding such $j$ (or deciding that $j = -1$), we have some cases to consider:\n\n If $j \\neq -1$ and $S_i \\not\\subseteq S_j$, then $(i, j)$ is a good pair, as $S_j$ cannot possibly include $S_i$ due to the length of $S_j$ being at least as much as $S_i$.\n\n If some activity $x \\in S_i$ is also in some other set $S_k$ where $p(k) = p(i)$, then $(i, k)$ is a good pair.\n\n Otherwise, the activity sets still form a tree, therefore no good pairs exist (yet).\n\nComplexity is $\\mathcal{O}(k \\log k)$ or $\\mathcal{O}(k)$, where $k$ is the total number of activities, depending on whether one uses ordered sets or hash maps. It is possible to implement this solution in $\\mathcal{O}(k)$ using just arrays, but this is not required.\n\nAlternative approach. One may solve this problem without leveraging the tree structure of the activity sets. It stems from the observation that any good pair $(a, b)$ must have a common element $x$. Let's fix all such $x$, and sort the sets having $x$ as an element in the order of length. Then, similarly to the first solution, one may prove that it is sufficient that a set with a smaller length has an element not present in some set with a larger length. We can solve this by simply keeping an array which keeps track of existing elements present in the sets, and iterating from right to left.\n\nThis approach does not quite work yet, as it has quadratic complexity; however, by considering the sets with large size (i.e., larger than $\\sqrt{k}$) separately than the elements with a small size (i.e. smaller than $\\sqrt{k}$), then one may achieve $\\mathcal{O}(k \\sqrt{k})$ complexity using this approach.",
+    "solution_code": []
+  }
+}

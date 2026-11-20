@@ -1,0 +1,41 @@
+{
+  "contest_id": 1951,
+  "index": "B",
+  "name": "Battle Cows",
+  "rating": 1200,
+  "tags": [
+    "binary search",
+    "data structures",
+    "greedy"
+  ],
+  "points": 1000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1951B",
+  "url": "https://codeforces.com/problemset/problem/1951/B",
+  "contest_start_time": "2024-04-06T14:35:00+00:00",
+  "statement": {
+    "title": "B. Battle Cows",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "The HU - Shireg Shireg\n\nඞ\n\nThere are $n$ cows participating in a coding tournament. Cow $i$ has a Cowdeforces rating of $a_i$ (all distinct), and is initially in position $i$. The tournament consists of $n-1$ matches as follows:\n\n The first match is between the cow in position $1$ and the cow in position $2$.\n\n Subsequently, each match $i$ is between the cow in position $i+1$ and the winner of match $i-1$.\n\n In each match, the cow with the higher Cowdeforces rating wins and proceeds to the next match.\n\nYou are the owner of cow $k$. For you, winning the tournament is not important; rather, you want your cow to win in as many matches as possible. As an acquaintance of the tournament organizers, you can ask them to swap the position of your cow with another cow only once, or you can choose to do nothing.\n\nFind the maximum number of wins your cow can achieve.",
+    "input_spec": "Each test contains multiple test cases. The first line contains an integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases. The description of the test cases follows.\n\nThe first line of each test case contains two integers $n$ and $k$ ($2 \\le n \\le 10^5, 1 \\le k \\le n$) — the number of cows and your cow's index.\n\nThe second line of each test case contains $n$ integers $a_1, a_2, \\ldots, a_n$ ($1 \\le a_i \\le 10^9$) — the Cowdeforces rating of the cows. It is guaranteed that $a_i$'s are pairwise different.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $10^5$.",
+    "output_spec": "For each test case, print one integer: the maximum number of wins cow $k$ can achieve if you choose to swap (or do nothing) optimally.",
+    "note": "In the first test case, it is optimal to do nothing. Let $a'$ be the Cowdeforces rating of the cows in the original order (with your cow's rating bolded), then\n\n Initially, $a' = [\\mathbf{12}, 10, 14, 11, 8, 3]$.\n\n Your cow plays against the cow with Cowdeforces rating $10$ and wins. $a' = [\\mathbf{12}, 14, 11, 8, 3]$.\n\n Your cow plays against the cow with Cowdeforces rating $14$ and loses.\n\n In total, your cow wins $1$ match.\nIn the second test case, it is optimal to swap your cow to position $3$. Then, let $a'$ be the Cowdeforces rating of the cows in the order after the swap.\n\n Initially, $a' = [7, 2, \\mathbf{12}, 10, 727, 13]$.\n\n The cow with Cowdeforces rating $7$ plays against the cow with Cowdeforces rating $2$ and wins. $a' = [7, \\mathbf{12}, 10, 727, 13]$.\n\n The cow with Cowdeforces rating $7$ plays against your cow, and your cow wins. $a' = [\\mathbf{12}, 10, 727, 13]$.\n\n Your cow plays against the cow with Cowdeforces rating $10$ and wins. $a' = [\\mathbf{12}, 727, 13]$.\n\n Your cow plays against the cow with Cowdeforces rating $727$ and loses.\n\n In total, your cow wins $2$ matches.",
+    "samples": [
+      {
+        "input": "3\n6 1\n12 10 14 11 8 3\n6 5\n7 2 727 10 12 13\n2 2\n1000000000 1",
+        "output": "\n1\n2\n0"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 128116,
+    "url": "https://codeforces.com/blog/entry/128116",
+    "tutorial": "It is easy to note that the $i$-th match is between cow $i+1$ and the strongest cow among cows $1, 2, \\cdots, i$. Therefore, in order to win any match at all, you cow have to be stronger than every cow before her (and cow $2$ if your cow is cow $1$). Consider the following cases:\n\n There exists no stronger cow before your cow. Then you should maximize the number of wins by swapping your cow with cow $1$.\n\n There exists some stronger cows before your cow. Let $i$ be the first such cow. Obviously you want cow $i$ to end up to the right of your cow. There are two ways to achieve this:\n\n Swap your cow before cow $i$. Since your cow will lose to cow $i$ anyway, you should maximize the number of wins by swapping with cow $1$.\n\n Swap your cow with cow $i$.\n\nThe answer for the problem is the maximum among all above candidates. Since there are only $2$ of them, the overall time complexity is $O(n)$.",
+    "solution_code": []
+  }
+}

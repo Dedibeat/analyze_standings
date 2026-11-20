@@ -1,0 +1,46 @@
+{
+  "contest_id": 1946,
+  "index": "D",
+  "name": "Birthday Gift",
+  "rating": 1900,
+  "tags": [
+    "bitmasks",
+    "brute force",
+    "constructive algorithms",
+    "greedy",
+    "implementation"
+  ],
+  "points": 1750.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1946D",
+  "url": "https://codeforces.com/problemset/problem/1946/D",
+  "contest_start_time": "2024-03-22T14:35:00+00:00",
+  "statement": {
+    "title": "D. Birthday Gift",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Yarik's birthday is coming soon, and Mark decided to give him an array $a$ of length $n$.\n\nMark knows that Yarik loves bitwise operations very much, and he also has a favorite number $x$, so Mark wants to find the maximum number $k$ such that it is possible to select pairs of numbers [$l_1, r_1$], [$l_2, r_2$], $\\ldots$ [$l_k, r_k$], such that:\n\n $l_1 = 1$.\n\n $r_k = n$.\n\n $l_i \\le r_i$ for all $i$ from $1$ to $k$.\n\n $r_i + 1 = l_{i + 1}$ for all $i$ from $1$ to $k - 1$.\n\n $(a_{l_1} \\oplus a_{l_1 + 1} \\oplus \\ldots \\oplus a_{r_1}) | (a_{l_2} \\oplus a_{l_2 + 1} \\oplus \\ldots \\oplus a_{r_2}) | \\ldots | (a_{l_k} \\oplus a_{l_k + 1} \\oplus \\ldots \\oplus a_{r_k}) \\le x$, where $\\oplus$ denotes the operation of bitwise XOR, and $|$ denotes the operation of bitwise OR.\n\nIf such $k$ does not exist, then output $-1$.",
+    "input_spec": "Each test consists of multiple test cases. The first line contains a single integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases. The following lines contain the descriptions of the test cases.\n\nThe first line of each test case contains two integers $n$ and $x$ ($1 \\le n \\le 10^5, 0 \\le x  \\lt  2^{30}$) — the length of the array $a$ and the number $x$ respectively.\n\nThe second line of each test case contains $n$ integers $a_1, a_2, \\ldots, a_n$ ($0 \\le a_i  \\lt  2^{30}$) — the array $a$ itself.\n\nIt is guaranteed that the sum of the values of $n$ across all test cases does not exceed $10^5$.",
+    "output_spec": "For each test case, output a single integer on a separate line — the maximum suitable number $k$, and $-1$ if such $k$ does not exist.",
+    "note": "In the first test case, you can take $k$ equal to $2$ and choose two segments [$1, 1$] and [$2, 3$], $(1) | (2 \\oplus 3) = 1$. It can be shown that $2$ is the maximum possible answer.\n\nIn the second test case, the segments [$1, 1$] and [$2, 2$] are suitable, $(1) | (1) = 1$. It is not possible to make more segments.\n\nIn the third test case, it is not possible to choose $2$ segments, as $(1) | (3) = 3  \\gt  2$, so the optimal answer is $1$.",
+    "samples": [
+      {
+        "input": "8\n3 1\n1 2 3\n2 2\n1 1\n2 2\n1 3\n2 3\n0 0\n3 2\n0 0 1\n4 2\n1 3 3 7\n2 2\n2 3\n5 0\n0 1 2 2 1",
+        "output": "\n2\n2\n1\n2\n3\n-1\n1\n2"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 127439,
+    "url": "https://codeforces.com/blog/entry/127439",
+    "tutorial": "For convenience, let's increase $x$ by $1$, and then iterate through the bit in which the final number is less than $x$. We will iterate from the most significant bit to the least significant bit, denoting it as $i$. The initial bit will be $30$. Let's look at all the numbers $a$ in which this bit is $1$.\n\nIf there is an odd number of such numbers, then the $\\oplus$ of some subsegment will be odd, and therefore the final $|$ will also be odd. If at the same time the bit $i$ in $x$ is $0$, then the process needs to be terminated, because in all the other bits it will no longer be possible to decrease the final number. If, however, in $x$ this bit is also $1$, then we need to move on to the less significant bits, since in both numbers this bit will always be $1$.\n\nIf the number of numbers with $1$ in bit $i$ is even, then in order to make this bit $0$ in the final number, each segment must contain an even number of such numbers, and since we want to maximize the number of segments, each segment must contain exactly $2$ such numbers. For this, for every two indices $l$ and $r$, such that $a_{l}$ and $a_{r}$ in bit $i$ contain $1$, and all numbers from $a_{l + 1}$ to $a_{r - 1}$ contain $0$, replace the subsegment $[l, r]$ with $a_{l} \\oplus a_{l + 1} \\oplus \\ldots \\oplus a_{r}$. After this, if there is a $1$ in $x$ in this bit, update the answer and return the array to its original state. Then move on to the less significant bits.\n\nThere is also an alternative solution that also iterates through the bits from the most significant to the least significant, but instead of compressing subsegments into one number, it uses a greedy algorithm.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n \nusing namespace std;\n \nusing ll = long long;\n \n#define int ll\n#define all(a) a.begin(), a.end()\n \nvoid solve() {\n    int n, x;\n    cin >> n >> x;\n    ++x;\n    vector<int> a(n);\n    for (int &i: a)\n        cin >> i;\n    int res = -1;\n    for (int i = 30; i >= 0; --i) {\n        vector<int> b;\n        bool open = false;\n        for (int j = 0; j < a.size(); ++j) {\n            if (!open)\n                b.push_back(a[j]);\n            else\n                b.back() ^= a[j];\n            if (a[j] & (1 << i))\n                open = !open;\n        }\n        if (!(x & (1 << i))) {\n            if (open) {\n                cout << res << '\\n';\n                return;\n            }\n            a = b;\n        } else {\n            if (!open)\n                res = max(res, (int) b.size());\n        }\n    }\n    cout << res << '\\n';\n}\n \nsigned main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(nullptr);\n    int t = 1;\n    cin >> t;\n    while (t--)\n        solve();\n}",
+      "#include<bits/stdc++.h>\n \nusing namespace std;\n \nint const maxn = 1e5 + 5;\nint a[maxn];\n \nint solve(int n, int x) {\n    int res = 0, curr = 0;\n    for (int i = 1; i <= n; i++) {\n        curr ^= a[i];\n        if ((curr|x) == x) curr = 0, res++;\n        else {\n            if (i == n) return -1;\n        }\n    }\n    return res;\n}\n \nmain() {\n    ios_base::sync_with_stdio(0);\n    cin.tie(0);\n    cout.tie(0);\n    int t;\n    cin >> t;\n    while (t--) {\n        int n, x;\n        cin >> n >> x;\n        for (int i = 1; i <= n; i++) cin >> a[i];\n        int ans = -1;\n        ans = max(ans, solve(n, x));\n        for (int b = 29; b >= 0; b--) {\n            if ((x>>b)&1) {\n                int y = (x^(1 << b));\n                for (int c = b - 1; c >= 0; c--) {\n                    if (((y>>c)&1) == 0) y ^= (1 << c);\n                }\n                ans = max(ans, solve(n, y));\n            }\n        }\n        cout << ans << '\\n';\n    }\n    return 0;\n}"
+    ]
+  }
+}

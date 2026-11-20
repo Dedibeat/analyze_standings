@@ -1,0 +1,51 @@
+{
+  "contest_id": 2104,
+  "index": "G",
+  "name": "Modulo 3",
+  "rating": 2700,
+  "tags": [
+    "data structures",
+    "divide and conquer",
+    "dsu",
+    "graphs",
+    "trees"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2104G",
+  "url": "https://codeforces.com/problemset/problem/2104/G",
+  "contest_start_time": "2025-04-28T14:35:00+00:00",
+  "statement": {
+    "title": "G. Modulo 3",
+    "time_limit": "4 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "Surely, you have seen problems which require you to output the answer modulo $10^9+7$, $10^9+9$, or $998244353$. But have you ever seen a problem where you have to print the answer modulo $3$?\n\nYou are given a functional graph consisting of $n$ vertices, numbered from $1$ to $n$. It is a directed graph, in which each vertex has exactly one outgoing arc. The graph is given as the array $g_1, g_2, \\dots, g_n$, where $g_i$ means that there is an arc that goes from $i$ to $g_i$. For some vertices, the outgoing arcs might be self-loops.\n\nInitially, all vertices of the graph are colored in color $1$. You can perform the following operation: select a vertex and a color from $1$ to $k$, and then color this vertex and all vertices that are reachable from it. You can perform this operation any number of times (even zero).\n\nYou should process $q$ queries. The query is described by three integers $x$, $y$ and $k$. For each query, you should:\n\n assign $g_x := y$;\n\n then calculate the number of different graph colorings for the given value of $k$ (two colorings are different if there exists at least one vertex that is colored in different colors in these two colorings); since the answer can be very large, print it modulo $3$.\n\nNote that in every query, the initial coloring of the graph is reset (all vertices initially have color $1$ in each query).",
+    "input_spec": "The first line contains two integers $n$ and $q$ ($1 \\le n, q \\le 2 \\cdot 10^5$).\n\nThe second line contains $n$ integers $g_1, g_2, \\dots, g_n$ ($1 \\le g_i \\le n$).\n\nThe $q$ lines follow. The $i$-th line contains three integers $x_i$, $y_i$ and $k_i$ ($1 \\le x_i, y_i \\le n$; $1 \\le k_i \\le 10^9$).",
+    "output_spec": "For each query, print a single integer — the number of different graph colorings for the given value of $k$, taken modulo $3$.",
+    "note": null,
+    "samples": [
+      {
+        "input": "4 5\n2 3 1 4\n4 3 1\n2 1 2\n3 4 3\n4 1 5\n2 4 4",
+        "output": "\n1\n2\n0\n2\n1"
+      },
+      {
+        "input": "8 10\n7 4 6 8 7 7 1 4\n1 7 5\n2 3 3\n8 6 1\n3 1 3\n7 2 5\n5 2 4\n2 7 4\n4 6 5\n5 2 3\n4 5 1",
+        "output": "\n1\n0\n1\n0\n2\n1\n1\n2\n0\n1"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 142472,
+    "url": "https://codeforces.com/blog/entry/142472",
+    "tutorial": "First, let's find out how to solve the following problem: you are given a directed graph where all vertices have color $1$. You can choose a vertex and a color from $1$ to $k$, then color it and all vertices reachable from it with that color. How many different colorings are there?\n\nClearly, if a pair of vertices is in the same strongly connected component, they will always have the same color. Furthermore, if we fix a color for each strongly connected component, there is always a way to color the graph such that the colors for all components match the chosen ones. To do this, we can condense the graph and color it in topological order of the condensation. Therefore, the answer for an arbitrary directed graph is $k^c$, where $c$ is the number of strongly connected components.\n\nNow let's return to the original problem and try to utilize the fact that the answer is required modulo $3$ (this is probably an important constraint). If $k \\bmod 3 = 0$ or $k \\bmod 3 = 1$, then any power of $k$ is equal to $k$ itself. Therefore, the only complex case is when $k \\bmod 3 = 2$. For $k \\bmod 3 = 2$, even powers are equal to $1$ modulo $3$, while odd powers are equal to $2$. Thus, we are actually interested in the parity of the number of strongly connected components.\n\nLet's try to understand how to conveniently count the parity of the number of SCCs for a functional graph. Vertices that are not on cycles represent separate components, and each cycle is a separate component. If a cycle has even length, it changes the parity of the number of SCCs, while if it has odd length, it leaves it unchanged. Therefore, we are actually interested in the number of cycles of even length in the functional graph.\n\nIf instead of a directed graph, we treat it as an undirected one (making each edge bidirectional), the cycles will not change. We are interested in the number of even cycles, and since there will be a cycle in each connected component, we are interested in the number of connected components without odd cycles. In other words, we need to maintain the number of bipartite connected components in the undirected graph.\n\nThe further part of the solution is purely technical. Let's use the Dynamic Connectivity Offline method:\n\n For each edge, find all time segments during which it exists.\n\n Build a segment tree, where each leaf represents a moment in time (the $1$-st leaf is the $1$-st query, the $2$-nd leaf is the $2$-nd query, and so on).\n\n For each existence segment of an edge, do the following: break it into $O(\\log q)$ vertices of the segment tree (as in any segment query) and add information to each corresponding vertex that this edge exists throughout this segment.\n\n Implement a Disjoint Set Union with the ability to roll back the last operations (we will need to use rank heuristics, but not path compression heuristics). Since we need to maintain bipartiteness, for each vertex in the DSU we will store the parity of the distance to the parent. To perform rollbacks, we can store two arrays that will show for each operation which cell's value changed (the address of the modified variable) and what it was before.\n\n We will traverse the segment tree using depth-first search. Each time we enter a vertex of the segment tree, we will add all edges that exist throughout this segment to the DSU and recalculate the number of bipartite components. Upon exiting a vertex, we will roll back the DSU to the version that was present when we entered the vertex. When processing a leaf of the segment tree, we will know how many bipartite components are in the graph at that moment, and thus we will count the number of colorings modulo $3$.\n\nComplexity of the solution: $O((q+n) \\log q \\log n)$.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n \nusing namespace std;\n \nusing pt = pair<int, int>;\n \nconst int N = 200007;\n \nint n, q;\nint k[N];\nvector<pt> t[4 * N];\nint p[N], e[N], rk[N];\nint *pos[3 * N];\nint val[3 * N];\nint csz;\nint ans[N];\n \nvoid upd(int v, int l, int r, int L, int R, pt val) {\n  if (L >= R) return;\n  if (l == L && r == R) {\n    t[v].push_back(val);\n    return;\n  }\n  int m = (l + r) / 2;\n  upd(v * 2 + 1, l, m, L, min(R, m), val);\n  upd(v * 2 + 2, m, r, max(m, L), R, val);\n}\n \nvoid rollback(int tsz) {\n  while (csz > tsz) {\n    --csz;\n    (*pos[csz]) = val[csz];\n  }\n}\n \npt get(int v) {\n  if (p[v] == v) return {v, 0};\n  auto [u, d] = get(p[v]);\n  return {u, d ^ e[v]};\n}\n \nvoid assign(int& x, int y) {\n  pos[csz] = &x;\n  val[csz] = x;\n  ++csz;\n  x = y;\n}\n \npt unite(int x, int y) {\n  auto [v, d1] = get(x);\n  auto [u, d2] = get(y);\n  if (v == u) return {0, d1 ^ d2};\n  if (rk[v] > rk[u]) swap(v, u);\n  assign(p[v], u);\n  assign(e[v], d1 ^ d2 ^ 1);\n  assign(rk[u], rk[v] + rk[u]);\n  return {1, 0};\n}\n \nvoid solve(int v, int l, int r, int cnt) {\n  int tsz = csz;\n  for (auto [x, y] : t[v]) {\n    auto [f, d] = unite(x, y);\n    //cerr << l << \" \" << r << \" \" << x + 1 << \" \" << y + 1 << \" \" << f << \" \" << d << endl;\n    if (!f) cnt ^= d;\n  }\n  if (l != r - 1) {\n    int m = (l + r) / 2;\n    solve(v * 2 + 1, l, m, cnt);\n    solve(v * 2 + 2, m, r, cnt);\n  } else {\n    ans[l] = k[l] % 3;\n    if (ans[l] == 2) ans[l] = cnt + 1;\n  }\n  rollback(tsz);\n}\n \nint main() {\n  cin >> n >> q;\n  vector<int> g(n), lst(n);\n  for (int i = 0; i < n; ++i) {\n    cin >> g[i];\n    --g[i];\n  }\n  for (int i = 0; i < q; ++i) {\n    int x, y;\n    cin >> x >> y >> k[i];\n    --x; --y;\n    upd(0, 0, q, lst[x], i, {x, g[x]});\n    g[x] = y;\n    lst[x] = i;\n  }\n  for (int i = 0; i < n; ++i) {\n    upd(0, 0, q, lst[i], q, {i, g[i]});\n    p[i] = i;\n    rk[i] = 1;\n  }\n  solve(0, 0, q, n & 1);\n  for (int i = 0; i < q; ++i) {\n    cout << ans[i] << '\\n';\n  }\n}",
+      "while(1){\n                // vector<int> vals;\n                int val(-INFLL);\n                fo(i, k){\n                    if(v[i].size() == 0){\n                        found = true; break;\n                    }\n                    auto it = lower_bound(all(v[i]), cnt);\n                    if(it == v[i].end()){\n                        found = true; break;\n                    }\n                    val = max(val, *it);\n                }\n                if(found) break;\n                cnt = val + 1;\n                ans++;\n            }",
+      "    idxes = defaultdict(list)\n    cnts = [0]\n    ss = set()\n    cur = 0\n    for i in range(n - 1, -1, -1):\n        ss.add(s[i])\n        if len(ss) == k:\n            cur += 1\n            ss = set()\n        \n        cnts.append(cur)\n \n    cnts = cnts[::-1]\n    for i in range(n):\n        idxes[s[i]].append(i)\n \n \n    q = read_int()\n    for _ in range(q):\n        t = read_str()\n \n        lowest = -1\n        nooo = False\n        for j in range(len(t)):\n            if not idxes[t[j]] or idxes[t[j]][-1] <= lowest:\n                nooo = True\n                break\n \n            lowest = idxes[t[j]][bisect_right(idxes[t[j]], lowest)]\n \n        \n        if nooo:\n            print(0)\n            continue\n \n        ans = cnts[lowest + 1] + 1\n        print(ans)"
+    ]
+  }
+}

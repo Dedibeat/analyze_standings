@@ -1,0 +1,41 @@
+{
+  "contest_id": 1996,
+  "index": "A",
+  "name": "Legs",
+  "rating": 800,
+  "tags": [
+    "binary search",
+    "math",
+    "ternary search"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1996A",
+  "url": "https://codeforces.com/problemset/problem/1996/A",
+  "contest_start_time": "2024-07-26T14:35:00+00:00",
+  "statement": {
+    "title": "A. Legs",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "It's another beautiful day on Farmer John's farm.\n\nAfter Farmer John arrived at his farm, he counted $n$ legs. It is known only chickens and cows live on the farm, and a chicken has $2$ legs while a cow has $4$.\n\nWhat is the minimum number of animals Farmer John can have on his farm assuming he counted the legs of all animals?",
+    "input_spec": "The first line contains single integer $t$ ($1 \\leq t \\leq 10^3$) — the number of test cases.\n\nEach test case contains an integer $n$ ($2 \\leq n \\leq 2 \\cdot 10^3$, $n$ is even).",
+    "output_spec": "For each test case, output an integer, the minimum number of animals Farmer John can have on his farm.",
+    "note": null,
+    "samples": [
+      {
+        "input": "3\n2\n6\n8",
+        "output": "\n1\n2\n2"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 131948,
+    "url": "https://codeforces.com/blog/entry/131948",
+    "tutorial": "1996A - Legs\n\nHint\n\nGreedily take Cow as long as you can.\n\nVideo editorial",
+    "solution_code": []
+  }
+}

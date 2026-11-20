@@ -1,0 +1,44 @@
+{
+  "contest_id": 1957,
+  "index": "B",
+  "name": "A BIT of a Construction",
+  "rating": 1100,
+  "tags": [
+    "bitmasks",
+    "constructive algorithms",
+    "greedy",
+    "implementation"
+  ],
+  "points": 1000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1957B",
+  "url": "https://codeforces.com/problemset/problem/1957/B",
+  "contest_start_time": "2024-04-21T14:35:00+00:00",
+  "statement": {
+    "title": "B. A BIT of a Construction",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Given integers $n$ and $k$, construct a sequence of $n$ non-negative (i.e. $\\geq 0$) integers $a_1, a_2, \\ldots, a_n$ such that\n\n $\\sum\\limits_{i = 1}^n a_i = k$\n\n The number of $1$s in the binary representation of $a_1 | a_2 | \\ldots | a_n$ is maximized, where $|$ denotes the bitwise OR operation.",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\leq t \\leq 10^4$) — the number of test cases.\n\nThe only line of each test case contains two integers $n$ and $k$ ($1 \\leq n \\leq 2 \\cdot 10^5$, $1 \\leq k \\leq 10^9$) — the number of non-negative integers to be printed and the sum respectively.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, output a sequence $a_1, a_2, \\ldots, a_n$ on a new line that satisfies the conditions given above.\n\nIf there are multiple solutions, print any of them.",
+    "note": "In the first test case, we have to print exactly one integer, hence we can only output $5$ as the answer.\n\nIn the second test case, we output $1, 2$ which sum up to $3$, and $1 | 2 = (11)_2$ has two $1$s in its binary representation, which is the maximum we can achieve in these constraints.\n\nIn the fourth test case, we output $3, 1, 1, 32, 2, 12$ which sum up to $51$, and $3 | 1 | 1 | 32 | 2 | 12 = (101\\,111)_2$ has five $1$s in its binary representation, which is the maximum we can achieve in these constraints.",
+    "samples": [
+      {
+        "input": "4\n1 5\n2 3\n2 5\n6 51",
+        "output": "\n5\n1 2\n5 0\n3 1 1 32 2 12"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 128716,
+    "url": "https://codeforces.com/blog/entry/128716",
+    "tutorial": "The case $n = 1$ needs to be handled separately, as we can only output $k$ itself.\n\nFor $n  \\gt  1$, we make the following observations. Let $x$ be the position of the most significant bit in $k$, that is $2^{x} \\leq k  \\lt  2^{x+1}$. From this, we learn that the bitwise OR of the sequence cannot have more than $x+1$ set bits because that would make the sum greater than $2^{x+1}$.\n\nNow, having $x+1$ bits set in the bitwise OR of the sequence is only possible if $k = 2^{x+1} - 1$ (or $k = 111\\ldots1_2$). Any $k$ less than this cannot have $x+1$ bits set in the bitwise OR of the sequence, as otherwise the sum would exceed $k$.\n\nHowever, we can always set $x$ bits, as we can always have one number in the sequence as $2^x - 1$ (which has exactly $x$ bits set). Using these observations, we get our solution as $2^x - 1, k - (2^x - 1), 0, 0, 0,\\ldots, 0$. This ensures that we have at least $x$ bits set in the bitwise OR, and additionally also handles the case where $x+1$ bits can be set, while maintaining the sum.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n\nusing namespace std;\n \nint main(){\n    int t; \n    cin >> t;\n    while(t--) {\n        int n, k;\n        cin >> n >> k;\n        vector<int> a(n);\n        if (n == 1) {\n            a[0] = k;\n        }\n        else {\n            int msb = 0;\n            // find the msb of k\n            for (int i = 0; i < 31; i++) {\n                if (k & (1 << i)) {\n                    msb = i;\n                }\n            }\n            a[0] = (1 << msb) - 1;\n            a[1] = k - a[0];\n            for (int i = 2; i < n; i++) {\n                a[i] = 0;\n            }\n        }\n        for (int i = 0; i < n; i++) {\n            cout << a[i] << \" \";\n        }\n        cout << \"\\n\";\n    }\n    return 0;\n}"
+    ]
+  }
+}

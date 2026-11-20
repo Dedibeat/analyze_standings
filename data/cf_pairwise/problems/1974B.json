@@ -1,0 +1,43 @@
+{
+  "contest_id": 1974,
+  "index": "B",
+  "name": "Symmetric Encoding",
+  "rating": 800,
+  "tags": [
+    "implementation",
+    "sortings",
+    "strings"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1974B",
+  "url": "https://codeforces.com/problemset/problem/1974/B",
+  "contest_start_time": "2024-05-20T14:35:00+00:00",
+  "statement": {
+    "title": "B. Symmetric Encoding",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Polycarp has a string $s$, which consists of lowercase Latin letters. He encodes this string using the following algorithm:\n\n first, he constructs a new auxiliary string $r$, which consists of all distinct letters of the string $s$, written in alphabetical order;\n\n then the encoding happens as follows: each character in the string $s$ is replaced by its symmetric character from the string $r$ (the first character of the string $r$ will be replaced by the last, the second by the second from the end, and so on).\n\nFor example, encoding the string $s$=\"codeforces\" happens as follows:\n\n the string $r$ is obtained as \"cdefors\";\n\n the first character $s_1$='c' is replaced by 's';\n\n the second character $s_2$='o' is replaced by 'e';\n\n the third character $s_3$='d' is replaced by 'r';\n\n ...\n\n the last character $s_{10}$='s' is replaced by 'c'.\n\n  The string $r$ and replacements for $s$=\"codeforces\".\nThus, the result of encoding the string $s$=\"codeforces\" is the string \"serofedsoc\".\n\nWrite a program that performs decoding — that is, restores the original string $s$ from the encoding result.",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases.\n\nThe first line of each test case contains a single integer $n$ ($1 \\le n \\le 2 \\cdot 10^5$) — the length of the string $b$.\n\nThe second line of each test case contains a string $b$ of length $n$, consisting of lowercase Latin letters — the result of encoding the original string $s$.\n\nIt is guaranteed that the sum of the values of $n$ over all test cases in the test does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, output the string $s$ from which the encoding result $b$ was obtained.",
+    "note": null,
+    "samples": [
+      {
+        "input": "5\n10\nserofedsoc\n3\nttf\n9\ntlrhgmaoi\n1\nw\n15\nhnndledmnhlttin",
+        "output": "\ncodeforces\nfft\nalgorithm\nw\nmeetinthemiddle"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 129686,
+    "url": "https://codeforces.com/blog/entry/129686",
+    "tutorial": "Let's construct a string $r$ according to the definition from the condition: we write down all the letters from $s$ once in ascending order.\n\nAfter that, we just need to replace all the characters in $s$ with their symmetric characters in the string $r$. The length of string $r$ does not exceed $26$, so the position of this character can be found by linear search.",
+    "solution_code": [
+      "def solve():\n    n = int(input())\n    b = input()\n    cnt = [0] * 26\n    for c in b:\n        cnt[ord(c) - ord('a')] = 1\n    tmp = ''\n    for i in range(26):\n        if cnt[i] > 0:\n            tmp += chr(ord('a') + i)\n    a = ''\n    for c in b:\n        a += tmp[-1 - tmp.find(c)]\n    print(a)\n    \n \nfor _ in range(int(input())):\n    solve()"
+    ]
+  }
+}

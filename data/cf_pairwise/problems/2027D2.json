@@ -1,0 +1,44 @@
+{
+  "contest_id": 2027,
+  "index": "D2",
+  "name": "The Endspeaker (Hard Version)",
+  "rating": 2200,
+  "tags": [
+    "binary search",
+    "data structures",
+    "dp",
+    "greedy",
+    "implementation",
+    "two pointers"
+  ],
+  "points": 1000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2027D2",
+  "url": "https://codeforces.com/problemset/problem/2027/D2",
+  "contest_start_time": "2024-10-26T14:35:00+00:00",
+  "statement": {
+    "title": "D2. The Endspeaker (Hard Version)",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "This is the hard version of this problem. The only difference is that you need to also output the number of optimal sequences in this version. You must solve both versions to be able to hack.\n\nYou're given an array $a$ of length $n$, and an array $b$ of length $m$ ($b_i  \\gt  b_{i+1}$ for all $1 \\le i  \\lt  m$). Initially, the value of $k$ is $1$. Your aim is to make the array $a$ empty by performing one of these two operations repeatedly:\n\n Type $1$ — If the value of $k$ is less than $m$ and the array $a$ is not empty, you can increase the value of $k$ by $1$. This does not incur any cost.\n\n Type $2$ — You remove a non-empty prefix of array $a$, such that its sum does not exceed $b_k$. This incurs a cost of $m - k$.\n\nYou need to minimize the total cost of the operations to make array $a$ empty. If it's impossible to do this through any sequence of operations, output $-1$. Otherwise, output the minimum total cost of the operations, and the number of sequences of operations which yield this minimum cost modulo $10^9 + 7$.\n\nTwo sequences of operations are considered different if you choose a different type of operation at any step, or the size of the removed prefix is different at any step.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 1000$). The description of the test cases follows.\n\nThe first line of each test case contains two integers $n$ and $m$ ($1 \\le n, m \\le 3 \\cdot 10^5$, $\\boldsymbol{1 \\le n \\cdot m \\le 3 \\cdot 10^5}$).\n\nThe second line of each test case contains $n$ integers $a_1, a_2, \\ldots, a_n$ ($1 \\le a_i \\le 10^9$).\n\nThe third line of each test case contains $m$ integers $b_1, b_2, \\ldots, b_m$ ($1 \\le b_i \\le 10^9$).\n\nIt is also guaranteed that $b_i  \\gt  b_{i+1}$ for all $1 \\le i  \\lt  m$.\n\nIt is guaranteed that the sum of $\\boldsymbol{n \\cdot m}$ over all test cases does not exceed $3 \\cdot 10^5$.",
+    "output_spec": "For each test case, if it's possible to make $a$ empty, then output two integers. The first should be the minimum total cost of the operations, and the second should be the number of sequences of operations which achieve this minimum cost, modulo $10^9 + 7$.\n\nIf there is no possible sequence of operations which makes $a$ empty, then output a single integer $-1$.",
+    "note": "In the first test case, there are $3$ optimal sequences of operations which yield a total cost of $1$:\n\n All $3$ sequences begin with a type $2$ operation, removing the prefix $[9]$ to make $a = [3, 4, 3]$, incurring a cost of $1$. Then, we perform a type $1$ operation to increase the value of $k$ by $1$. All subsequent operations now incur a cost of $0$.\n\n One sequence continues by removing the prefixes $[3, 4]$ then $[3]$.\n\n Another sequence continues by removing the prefixes $[3]$ then $[4, 3]$.\n\n Another sequence continues by removing the prefixes $[3]$ then $[4]$ then $[3]$.\n\nIn the second test case, it's impossible to remove any prefix of the array since $a_1  \\gt  b_1$, so array $a$ cannot be made empty by any sequence of operations.",
+    "samples": [
+      {
+        "input": "5\n4 2\n9 3 4 3\n11 7\n1 2\n20\n19 18\n10 2\n2 5 2 1 10 3 2 9 9 6\n17 9\n10 11\n2 2 2 2 2 2 2 2 2 2\n20 18 16 14 12 10 8 6 4 2 1\n1 6\n10\n32 16 8 4 2 1",
+        "output": "\n1 3\n-1\n2 11\n10 42\n4 1"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "missing"
+  },
+  "editorial": {
+    "blog_id": 135558,
+    "url": "https://codeforces.com/blog/entry/135558",
+    "tutorial": null,
+    "solution_code": []
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "contest_id": 2063,
+  "index": "E",
+  "name": "Triangle Tree",
+  "rating": 2300,
+  "tags": [
+    "data structures",
+    "dfs and similar",
+    "dp",
+    "greedy",
+    "trees"
+  ],
+  "points": 2750.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2063E",
+  "url": "https://codeforces.com/problemset/problem/2063/E",
+  "contest_start_time": "2025-01-22T12:05:00+00:00",
+  "statement": {
+    "title": "E. Triangle Tree",
+    "time_limit": "2 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "One day, a giant tree grew in the countryside. Little John, with his childhood eagle, decided to make it his home. Little John will build a structure on the tree with galvanized square steel. However, little did he know, he could not build what is physically impossible.\nYou are given a rooted tree$^{\\text{∗}}$ containing $n$ vertices rooted at vertex $1$. A pair of vertices $(u,v)$ is called a good pair if $u$ is not an ancestor$^{\\text{†}}$ of $v$ and $v$ is not an ancestor of $u$. For any two vertices, $\\text{dist}(u,v)$ is defined as the number of edges on the unique simple path from $u$ to $v$, and $\\text{lca}(u,v)$ is defined as their lowest common ancestor.\n\nA function $f(u,v)$ is defined as follows.\n\n If $(u,v)$ is a good pair, $f(u,v)$ is the number of distinct integer values $x$ such that there exists a non-degenerate triangle$^{\\text{‡}}$ formed by side lengths $\\text{dist}(u,\\text{lca}(u,v))$, $\\text{dist}(v,\\text{lca}(u,v))$, and $x$.\n\n Otherwise, $f(u,v)$ is $0$.\n\nYou need to find the following value: $$\\sum_{i = 1}^{n-1} \\sum_{j = i+1}^n f(i,j).$$\n\n$^{\\text{∗}}$A tree is a connected graph without cycles.  A rooted tree is a tree where one vertex is special and called the root.\n\n$^{\\text{†}}$An ancestor of vertex $v$ is any vertex on the simple path from $v$ to the root, including the root, but not including $v$. The root has no ancestors.\n\n$^{\\text{‡}}$A triangle with side lengths $a$, $b$, $c$ is non-degenerate when $a+b  \\gt  c$, $a+c  \\gt  b$, $b+c  \\gt  a$.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 10^4$). The description of the test cases follows.\n\nThe first line of each test case contains a single integer $n$ ($1 \\le n \\le 3 \\cdot 10^5$).\n\nEach of the next $n-1$ lines contains two integers $u_i$ and $v_i$, denoting the two vertices connected by an edge ($1 \\le u_i,v_i \\le n$, $u_i \\neq v_i$).\n\nIt is guaranteed that the given edges form a tree.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $3 \\cdot 10^5$.",
+    "output_spec": "For each test case, output the answer on a separate line.",
+    "note": "On the first test case, the only good pair $(i,j)$ satisfying $i \\lt j$ is $(2,3)$. Here, $\\text{lca}(2,3)$ is $1$, and the two distances are $1$ and $1$.\n\nThere is only one value of $x$ for two side lengths $1$ and $1$, which is $1$. Therefore, the answer for the first test case is $1$.\n\nOn the second test case, there is no good pair. Therefore, the answer for the second test case is $0$.\n\nOn the third test case, the good pairs $(i,j)$ satisfying $i \\lt j$ are as follows.\n\n $(2,5)$: $\\text{lca}(2,5)$ is $1$, distances are $1$ and $1$. There is only one possible value of $x$, which is $1$.\n\n $(3,4)$: $\\text{lca}(3,4)$ is $2$, distances are $1$ and $1$. There is only one possible value of $x$, which is $1$.\n\n $(3,5)$: $\\text{lca}(3,5)$ is $1$, distances are $2$ and $1$. There is only one possible value of $x$, which is $2$.\n\n $(4,5)$: $\\text{lca}(4,5)$ is $1$, distances are $2$ and $1$. There is only one possible value of $x$, which is $2$.\n\nTherefore, the answer for the third test case is $1+1+1+1=4$.",
+    "samples": [
+      {
+        "input": "4\n3\n1 2\n1 3\n3\n1 2\n3 2\n5\n2 3\n1 5\n4 2\n1 2\n11\n2 1\n2 3\n2 4\n4 5\n6 5\n5 7\n4 8\n8 9\n7 10\n10 11",
+        "output": "\n1\n0\n4\n29"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 138593,
+    "url": "https://codeforces.com/blog/entry/138593",
+    "tutorial": "In this editorial, we will denote the depth of vertex $v$ as $d_v$, and the subtree size of vertex $v$ as $s_v$. They can be easily calculated using DFS.\n\nLet us try to first understand what $f(x,y)$ means. If the two edge lengths are $a$ and $b$ (WLOG $a \\le b$), the third edge length $L$ must satisfy $a+b \\gt L$ and $a+L \\gt b$. This results in the inequality $b-a \\lt L \\lt a+b$. There are exactly $2a-1$ values that satisfy this, from $b-a+1$ to $a+b-1$. This means, if $(u,v)$ is a good pair, the following holds.\n\n$$f(u,v)=2 \\cdot \\min(\\text{dist}(u,\\text{lca}(u,v)),\\text{dist}(v,\\text{lca}(u,v)))-1$$\n\nAnd of course, if $(u,v)$ is not a good pair, $f(u,v)=0$ by definition.\n\nNaively summing this up for all pairs takes at least $\\Theta(n^2)$ time. We will simplify the function $f(u,v)$ into a form that can be computed in batches easily, and provide a different summation that finds the same answer using a double counting proof. The simplified version of $f(u,v)$ is as follows:\n\n$$\\begin{split} f(u,v) & = 2 \\cdot \\min(\\text{dist}(u,\\text{lca}(u,v)),\\text{dist}(v,\\text{lca}(u,v)))-1 \\\\ & = 2 \\cdot \\min(d_u-d_\\text{lca},d_v-d_\\text{lca})-1 \\\\ & = 2 \\cdot \\min(d_u,d_v)-2 d_\\text{lca} -1 \\end{split}$$\n\nSo now we can consider summing up $2 \\cdot \\min(d_u,d_v)$ and $2d_\\text{lca}+1$ separately.\n\nFor the former, consider the condition for vertex $u$ to decide the value of $\\min(d_u,d_v)$. For this, $d_v$ must be no less than $d_u$, and $v$ must not be a descendant of $u$ (because then it will not be a good pair). Therefore, vertex $u$ decides $\\min(d_u,d_v)$ for $(\\#(d \\ge d_u)-s_u)$ different vertices. $\\#(d \\ge d_u)$ can be computed using a suffix sum of frequency values of $d$. Thus, we will sum up $2 d_u \\cdot (\\#(d \\ge d_u)-s_u)$ for all vertices.\n\nThis only has a very small issue; it counts pairs $(u,v)$ where $d_u=d_v$ twice. But thankfully, all of these pairs are good pairs (otherwise they would be the same vertex), and we can simply subtract the sum of $2k \\cdot \\binom{\\#(d = k)}{2}$ over all $k$ from the last value.\n\nFor the latter, consider the condition for vertex $w$ to be the LCA of $u$ and $v$. $u$ and $v$ should be descendants of $w$ not equal to $w$, and they should not be in the same subtree under $w$ (because then there will be a lower common ancestor). Thus, given that the number of possible descendants is $S=s_w-1$, we can get the following value for one vertex $w$ in $\\mathcal{O}(\\#(\\text{children}))$. Counting for all vertices thus takes $\\mathcal{O}(n)$ time.\n\n$$\\sum_{par_u=w} {s_u(S-s_u)}$$\n\nThis also has a very slight issue; it counts $(u,v)$ and $(v,u)$ separately, so we only have to divide this value by $2$ to get the number of good pairs with vertex $w$ as LCA. Multiplying $2d_w+1$ during the summation, we get the sum of the latter value.\n\nThus, we have proved that the following sum yields the very same value that we need:\n\n$$\\sum_{u=1}^n{\\left({2 d_u \\cdot (\\#(d \\ge d_u)-s_u)}\\right)}-\\sum_{k=0}^{n-1}{\\left({2k \\cdot \\binom{\\#(d = k)}{2}}\\right)}-\\frac{1}{2}\\sum_{w=1}^n {\\left({(2d_w+1) \\cdot \\sum_{par_u=w}{s_u(s_w-1-s_u)}}\\right)}$$\n\nEverything in this summation is in a form that can be computed in $\\mathcal{O}(n)$ total time. Therefore, we have solved the problem with time complexity $\\mathcal{O}(n)$.",
+    "solution_code": [
+      "#include<bits/stdc++.h>\nusing namespace std;\nusing ll=long long;\n\nint main()\n{\n    cin.tie(0)->sync_with_stdio(0);\n    int t;cin>>t;\n    while(t--)\n    {\n        ll n;cin>>n;\n        vector<ll>d(n,0),s(n),dc(n),dcs;\n        vector<vector<ll>>adj(n);\n        for(int i=1;i<n;i++)\n        {\n            int u,v;cin>>u>>v;\n            u--;v--;\n            adj[u].push_back(v);\n            adj[v].push_back(u);\n        }\n        auto dfs1=[&](auto dfs1,int v,int p=-1)->void\n        {\n            dc[d[v]]++;\n            ll sz=1;\n            for(int w:adj[v])if(w!=p)\n            {\n                d[w]=d[v]+1;\n                dfs1(dfs1,w,v);\n                sz+=s[w];\n            }\n            s[v]=sz;\n        };\n        dfs1(dfs1,0);\n        dcs=dc;\n        for(int i=n-2;i>=0;i--)dcs[i]+=dcs[i+1];\n        ll ans=0,ans2=0;\n        auto dfs2=[&](auto dfs2,int v,int p=-1)->void\n        {\n            // v is min\n            ans+=2*d[v]*(dcs[d[v]]-s[v]);\n            // v is lca\n            ll subcnt=s[v]-1,lcnt=0;\n            for(int w:adj[v])if(w!=p)\n            {\n                lcnt+=(subcnt-s[w])*s[w];\n                dfs2(dfs2,w,v);\n            }\n            ans2+=(2*d[v]+1)*(lcnt/2);\n        };\n        dfs2(dfs2,0);\n        for(int i=0;i<n;i++)\n        {\n            ans2+=i*dc[i]*(dc[i]-1);\n        }\n        cout<<ans-ans2<<\"\\n\";\n    }\n}"
+    ]
+  }
+}

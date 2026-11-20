@@ -1,0 +1,45 @@
+{
+  "contest_id": 2104,
+  "index": "C",
+  "name": "Card Game",
+  "rating": 1100,
+  "tags": [
+    "brute force",
+    "constructive algorithms",
+    "games",
+    "greedy",
+    "math"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2104C",
+  "url": "https://codeforces.com/problemset/problem/2104/C",
+  "contest_start_time": "2025-04-28T14:35:00+00:00",
+  "statement": {
+    "title": "C. Card Game",
+    "time_limit": "2 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "Alice and Bob are playing a game. They have $n$ cards numbered from $1$ to $n$. At the beginning of the game, some of these cards are given to Alice, and the rest are given to Bob.\n\nCard with number $i$ beats card with number $j$ if and only if $i  \\gt  j$, with one exception: card $1$ beats card $n$.\n\nThe game continues as long as each player has at least one card. During each turn, the following occurs:\n\n Alice chooses one of her cards and places it face up on the table;\n\n Bob, seeing Alice's card, chooses one of his cards and places it face up on the table;\n\n if Alice's card beats Bob's card, both cards are taken by Alice. Otherwise, both cards are taken by Bob.\n\nA player can use a card that they have taken during one of the previous turns.\n\nThe player who has no cards at the beginning of a turn loses. Determine who will win if both players play optimally.",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\le t \\le 5000$) — the number of test cases.\n\nEach test case consists of two lines:\n\n the first line contains a single integer $n$ ($2 \\le n \\le 50$) — the number of cards;\n\n the second line contains $n$ characters, each either A or B. If the $i$-th character is A, then card number $i$ is initially given to Alice; otherwise, it is given to Bob.\n\nAdditional constraint on the input: in each test case, at least one card is initially given to Alice, and at least one card is initially given to Bob.",
+    "output_spec": "For each test case, output Alice if Alice wins with optimal play, or Bob if Bob wins. It can be shown that if both players play optimally, the game will definitely end in a finite number of turns with one of the players winning.",
+    "note": "In the first test case, Alice has only one card, and Bob has only one card. Since Alice's card beats Bob's card, she wins after the first turn.\n\nIn the second test case, Alice has only one card, and Bob has only one card. Since Bob's card beats Alice's card, he wins after the first turn.\n\nIn the third test case, there are two possible game scenarios:\n\n if Alice plays the card $1$ on the first turn, Bob can respond with the card $2$ and take both cards. Then, Alice has to play the card $3$ on the second turn, and Bob will respond by playing the card $4$. Then, he wins;\n\n if Alice plays the card $3$ on the first turn, Bob can respond with the card $4$ and take both cards. Then, Alice has to play the card $1$, and Bob can respond either with the card $2$ or the card $3$. Then, he wins.\n\nIn the fourth test case, there are two possible game scenarios:\n\n if Alice plays the card $2$ on the first turn, Bob can respond with the card $3$ and take both cards. Then, Alice has to play the card $4$ on the second turn, and Bob will respond by playing the card $1$. Then, he wins;\n\n if Alice plays the card $4$ on the first turn, Bob can respond with the card $1$ and take both cards. Then, Alice has to play the card $2$, and Bob can respond either with the card $3$ or the card $4$. Then, he wins.",
+    "samples": [
+      {
+        "input": "8\n2\nAB\n2\nBA\n4\nABAB\n4\nBABA\n3\nBAA\n5\nAAAAB\n5\nBAAAB\n6\nBBBAAA",
+        "output": "\nAlice\nBob\nBob\nBob\nAlice\nAlice\nBob\nAlice"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 142472,
+    "url": "https://codeforces.com/blog/entry/142472",
+    "tutorial": "There are many ways to solve this problem. I will describe one of the ways that doesn't use too much casework.\n\nThe key observation we need is that, if a player has a strategy that allows him/her to take the cards on turn $i$, then he/she has a strategy to take the cards on turn $i+1$. There are two ways to prove it, choose any of them:\n\n the first way is to consider the options each player has. When a player loses a card, they lose one of their options; when a player gains a card, they gain a new option for a turn. So, if a player can't take cards on some turn, then on the next turn, their options will be even more limited, and the opponent will still be able to use all the cards they were able to use on the previous turn;\n\n the second way is to consider it for Alice and Bob separately. If Alice can take cards on turn $i$ no matter what Bob does, then she has a card which beats every card Bob has (and she will still have this card on the next turn). Otherwise, if Bob can take cards on turn $i$ no matter what Alice does, then for every card Alice has, Bob has a card that beats it (and that won't change on the next turn).\n\nSo, if a player can take cards on the first turn, they win. All that's left to check is who wins on the first turn. If Alice has a card that beats every card Bob has, she wins. Otherwise, Bob wins.",
+    "solution_code": [
+      "def beats(n, x, y):\n    if x == 0:\n        return y == n - 1\n    if x == n - 1:\n        return y != 0\n    return x > y\n \nfor _ in range(int(input())):\n    n = int(input())\n    owner = input()\n    good = False\n    for i in range(n):\n        if owner[i] != 'A':\n            continue\n        good_move = True\n        for j in range(n):\n            if owner[j] == 'B' and beats(n, j, i):\n                good_move = False\n        if good_move:\n            good = True\n    if good:\n        print('Alice')\n    else:\n        print('Bob')"
+    ]
+  }
+}

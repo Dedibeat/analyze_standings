@@ -1,0 +1,42 @@
+{
+  "contest_id": 2036,
+  "index": "C",
+  "name": "Anya and 1100",
+  "rating": 1100,
+  "tags": [
+    "brute force",
+    "implementation"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2036C",
+  "url": "https://codeforces.com/problemset/problem/2036/C",
+  "contest_start_time": "2024-11-02T14:35:00+00:00",
+  "statement": {
+    "title": "C. Anya and 1100",
+    "time_limit": "3 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "While rummaging through things in a distant drawer, Anya found a beautiful string $s$ consisting only of zeros and ones.\n\nNow she wants to make it even more beautiful by performing $q$ operations on it.\n\nEach operation is described by two integers $i$ ($1 \\le i \\le |s|$) and $v$ ($v \\in \\{0, 1\\}$) and means that the $i$-th character of the string is assigned the value $v$ (that is, the assignment $s_i = v$ is performed).\n\nBut Anya loves the number $1100$, so after each query, she asks you to tell her whether the substring \"1100\" is present in her string (i.e. there exist such $1 \\le i \\le |s| - 3$ that $s_{i}s_{i + 1}s_{i + 2}s_{i + 3} = \\texttt{1100}$).",
+    "input_spec": "The first line contains one integer $t$ ($1 \\leq t \\leq 10^4$) — the number of test cases.\n\nThe first line of the test case contains the string $s$ ($1 \\leq |s| \\leq 2 \\cdot 10^5$), consisting only of the characters \"0\" and \"1\". Here $|s|$ denotes the length of the string $s$.\n\nThe next line contains an integer $q$ ($1 \\leq q \\leq 2 \\cdot 10^5$) — the number of queries.\n\nThe following $q$ lines contain two integers $i$ ($1 \\leq i \\leq |s|$) and $v$ ($v \\in \\{0, 1\\}$), describing the query.\n\nIt is guaranteed that the sum of $|s|$ across all test cases does not exceed $2 \\cdot 10^5$. It is also guaranteed that the sum of $q$ across all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each query, output \"YES\", if \"1100\" is present in Anya's string; otherwise, output \"NO\".\n\nYou can output the answer in any case (upper or lower). For example, the strings \"yEs\", \"yes\", \"Yes\", and \"YES\" will be recognized as positive responses.",
+    "note": null,
+    "samples": [
+      {
+        "input": "4\n100\n4\n1 1\n2 0\n2 0\n3 1\n1100000\n3\n6 1\n7 1\n4 1\n111010\n4\n1 1\n5 0\n4 1\n5 0\n0100\n4\n3 1\n1 1\n2 0\n2 1",
+        "output": "\nNO\nNO\nNO\nNO\nYES\nYES\nNO\nNO\nYES\nYES\nYES\nNO\nNO\nNO\nNO"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 135849,
+    "url": "https://codeforces.com/blog/entry/135849",
+    "tutorial": "2036C - Anya and 1100\n\nIdea: m3tr0\n\nHint\n\nWith each query, to track the change in the presence of “1100” in a row, you don't have to go through the entire row — you can check just a few neighboring cells.\n\nTutorial\n\nFirst, in a naive way, let's count $count$ — the number of times “1100” occurs in $s$.\n\nThen for each of $q$ queries we will update $count$: consider the substring $s[\\max(1, i - 3); \\min(i + 3, n)]$ before changing $s_i$ and find $before$ — the number of times that “1100” occurs in it. Then update $s_i = v$ and similarly find $after$ — the number of times that “1100” occurs in $s[\\max(1, i - 3); \\min(i + 3, n)]$ after applying the query.\n\nThus, by doing $count = count + (after - before)$, we get the number of times that “1100” occurs in $s$ after the query is applied. If $count \\gt 0$, the answer to the query is “YES”, otherwise it is “NO”.\n\nComplexity: $O(|s| + q)$\n\nSolution (m3tr0)",
+    "solution_code": [
+      "#include <cstdio>\n#include <cstring>\n\nusing namespace std;\ntypedef long long l;\n\nchar buf[1000000];\nl n;\n\nbool check_1100(l i) {\n\tif (i < 0) return false;\n\tif (i >= n - 3) return false;\n\tif (buf[i] == '1' && buf[i + 1] == '1' && buf[i + 2] == '0' && buf[i + 3] == '0') return true;\n\treturn false;\n}\n\nvoid solve() {\n\tscanf(\"%s\", buf);\n\tn = strlen(buf);\n\tl count = 0;\n\tfor (l i = 0; i < n; i++)\n\t\tif (check_1100(i)) count++;\n\t\n\tl q; scanf(\"%lld\", &q);\n\twhile (q--) {\n\t\tl i, v; scanf(\"%lld %lld\", &i, &v); i--;\n\t\tif (buf[i] != '0' + v) {\n\t\t    bool before = check_1100(i - 3) || check_1100(i - 2) || check_1100(i - 1) || check_1100(i);\n\t\t    buf[i] = '0' + v;\n\t\t    bool after = check_1100(i - 3) || check_1100(i - 2) || check_1100(i - 1) || check_1100(i);\n\t\t    count += after - before;\n\t\t}\n\t\tprintf(count ? \"YES\\n\" : \"NO\\n\");\n\t}\n}\n\nint main() {\n\tl t; scanf(\"%lld\", &t);\n\twhile (t--) solve();\n}"
+    ]
+  }
+}

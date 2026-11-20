@@ -1,0 +1,44 @@
+{
+  "contest_id": 1955,
+  "index": "B",
+  "name": "Progressive Square",
+  "rating": 1000,
+  "tags": [
+    "constructive algorithms",
+    "data structures",
+    "implementation",
+    "sortings"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1955B",
+  "url": "https://codeforces.com/problemset/problem/1955/B",
+  "contest_start_time": "2024-04-08T14:35:00+00:00",
+  "statement": {
+    "title": "B. Progressive Square",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "A progressive square of size $n$ is an $n \\times n$ matrix. Maxim chooses three integers $a_{1,1}$, $c$, and $d$ and constructs a progressive square according to the following rules:\n\n$$a_{i+1,j} = a_{i,j} + c$$\n\n$$a_{i,j+1} = a_{i,j} + d$$\n\nFor example, if $n = 3$, $a_{1,1} = 1$, $c=2$, and $d=3$, then the progressive square looks as follows:\n\n$$ \\begin{pmatrix} 1 & 4 & 7 \\\\ 3 & 6 & 9 \\\\ 5 & 8 & 11 \\end{pmatrix} $$\n\nLast month Maxim constructed a progressive square and remembered the values of $n$, $c$, and $d$. Recently, he found an array $b$ of $n^2$ integers in random order and wants to make sure that these elements are the elements of that specific square.\n\nIt can be shown that for any values of $n$, $a_{1,1}$, $c$, and $d$, there exists exactly one progressive square that satisfies all the rules.",
+    "input_spec": "The first line contains an integer $t$ ($1 \\le t \\le {10} ^ 4$) — the number of test cases.\n\nThe first line of each test case contains three integers $n$, $c$, and $d$ ($2 \\le n \\le 500$, $1 \\le c, d \\le 10^6$) — the size of the square and the values of $c$ and $d$ as described in the statement.\n\nThe second line of each test case contains $n \\cdot n$ integers $b_1, b_2, \\dots, b_{n \\cdot n}$ ($1 \\le b_i \\le 10^9$) — the elements found by Maxim.\n\nIt is guaranteed that the sum of $n ^ 2$ over all test cases does not exceed $25 \\cdot {10} ^ 4$.",
+    "output_spec": "For each test case, output \"YES\" in a separate line if a progressive square for the given $n$, $c$, and $d$ can be constructed from the array elements $a$, otherwise output \"NO\".\n\nYou can output each letter in any case (lowercase or uppercase). For example, the strings \"yEs\", \"yes\", \"Yes\", and \"YES\" will be accepted as a positive answer.",
+    "note": null,
+    "samples": [
+      {
+        "input": "5\n3 2 3\n3 9 6 5 7 1 10 4 8\n3 2 3\n3 9 6 5 7 1 11 4 8\n2 100 100\n400 300 400 500\n3 2 3\n3 9 6 6 5 1 11 4 8\n4 4 4\n15 27 7 19 23 23 11 15 7 3 19 23 11 15 11 15",
+        "output": "\nNO\nYES\nYES\nNO\nNO"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 128243,
+    "url": "https://codeforces.com/blog/entry/128243",
+    "tutorial": "Since $c  \\gt  0$ and $d  \\gt  0$, the elements of the square increase starting from the top left corner. Thus, $a_{1,1}$ is the minimum element in the square, and consequently in the found elements.\n\nGiven $n$, $c$, $d$, and the found $a_{1,1}$, we will reconstruct the square. It remains to check that the given numbers in the input form the same square. The easiest way is to sort both arrays of numbers and check for equality. The complexity of the solution is $O(n ^ 2 \\cdot \\log{n})$.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n \nusing namespace std;\n \n#define all(x) (x).begin(), (x).end()\n \nusing ll = signed long long int;\nusing pii = pair<int, int>;\nusing pll = pair<ll, ll>;\nusing vi = vector<int>;\nusing vl = vector<ll>;\n \nvoid solve() {\n    int n;\n    ll c, d;\n    cin >> n >> c >> d;\n    vl a(n * n);\n    for (int i = 0; i < n * n; ++i) {\n        cin >> a[i];\n    }\n    sort(all(a));\n    vl b(n * n);\n    b[0] = a[0];\n    for (int i = 1; i < n; ++i) {\n        b[i] = b[i - 1] + c;\n    }\n    for (int i = 1; i < n; ++i) {\n        for (int j = 0; j < n; ++j) {\n            b[i * n + j] = b[(i - 1) * n + j] + d;\n        }\n    }\n    sort(all(b));\n    cout << (a == b ? \"YEs\" : \"nO\") << '\\n';\n}\n \nint main() {\n    int t;\n    cin >> t;\n    while (t--) {\n        solve();\n    }\n}"
+    ]
+  }
+}

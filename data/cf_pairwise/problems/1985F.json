@@ -1,0 +1,43 @@
+{
+  "contest_id": 1985,
+  "index": "F",
+  "name": "Final Boss",
+  "rating": 1500,
+  "tags": [
+    "binary search",
+    "data structures"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1985F",
+  "url": "https://codeforces.com/problemset/problem/1985/F",
+  "contest_start_time": "2024-06-11T14:35:00+00:00",
+  "statement": {
+    "title": "F. Final Boss",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "You are facing the final boss in your favorite video game. The boss enemy has $h$ health. Your character has $n$ attacks. The $i$'th attack deals $a_i$ damage to the boss but has a cooldown of $c_i$ turns, meaning the next time you can use this attack is turn $x + c_i$ if your current turn is $x$. Each turn, you can use all attacks that are not currently on cooldown, all at once. If all attacks are on cooldown, you do nothing for the turn and skip to the next turn.\n\nInitially, all attacks are not on cooldown. How many turns will you take to beat the boss? The boss is beaten when its health is $0$ or less.",
+    "input_spec": "The first line contains $t$ ($1 \\leq t \\leq 10^4$)  – the number of test cases.\n\nThe first line of each test case contains two integers $h$ and $n$ ($1 \\leq h, n \\leq 2 \\cdot 10^5$) – the health of the boss and the number of attacks you have.\n\nThe following line of each test case contains $n$ integers $a_1, a_2, ..., a_n$ ($1 \\leq a_i \\leq 2 \\cdot 10^5$) – the damage of your attacks.\n\nThe following line of each test case contains $n$ integers $c_1, c_2, ..., c_n$ ($1 \\leq c_i \\leq 2 \\cdot 10^5$) – the cooldown of your attacks.\n\nIt is guaranteed that the sum of $h$ and $n$ over all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, output an integer, the minimum number of turns required to beat the boss.",
+    "note": "For the first test case, you can use attacks $1$ and $2$ on the first turn, dealing $3$ damage in total, and slaying the boss.\n\nFor the second case, you can beat the boss in $3$ turns by using the following attacks:\n\nTurn $1$: Use attacks $1$ and $2$, dealing $3$ damage to the boss. The boss now has $2$ health left.\n\nTurn $2$: Use attack $2$, dealing $1$ damage to the boss. The boss now has $1$ health left.\n\nTurn $3$: Use attack $1$, dealing $2$ damage to the boss. The boss now has $-1$ health left. Since its health is less than or equal to $0$, you beat the boss.\n\nFor the sixth test case: remember to use 64-bit integers as the answer can get large.",
+    "samples": [
+      {
+        "input": "8\n3 2\n2 1\n2 1\n5 2\n2 1\n2 1\n50 3\n5 6 7\n5 6 7\n50 3\n2 2 2\n3 3 3\n90000 2\n200000 200000\n1 1\n100000 1\n1\n200000\n6 7\n3 2 3 2 3 1 2\n6 5 9 5 10 7 7\n21 6\n1 1 1 1 1 1\n5 5 8 10 7 6",
+        "output": "\n1\n3\n15\n25\n1\n19999800001\n1\n21"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 129620,
+    "url": "https://codeforces.com/blog/entry/129620",
+    "tutorial": "1985F - Final Boss\n\nProblem Credits: cry, sum\n Analysis: cry, sum\n\nAbout Hacks\n\nUnfortunately, there was a lot of hacks on this problem, and we're sorry for it. Since our intended solution is not binary search, we didn't really take overflow using binary search seriously. I (cry) prepared this problem and I only took into account about overflow with big cooldown, but I forgot overflow can happen on attacks as well. I apologize and we will do better next time!\n\nSolution\n\nSince the sum of $h$ is bounded by $2 \\cdot 10^5$, and each attack deals at least $1$ damage. If we assume every turn we can make at least one attack, the sum of turns to kill the boss in every test case is bounded by $2 \\cdot 10^5$. This means that we can afford to simulate each turn where we make at least one attack.\n\nBut what if we cannot make an attack on this turn? Since the cooldown for each attack can be big, we cannot increment turns one by one. We must jump to the next turn we can make an attack. This can be done by retrieving the first element of a sorted set, where the set stores pairs {$t$, $i$} which means {next available turn you can use this attack, index of this attack} for all $i$. Here, we can set the current turn to $t$ and use all attacks in the set with first element in the pair equal to $t$. Remember to insert the pair to {$c_i + t$, $i$} back into the set after processing the attacks.\n\nThe time complexity is $\\mathcal{O}(h \\log n)$.\n\nCode (C++)\n\nBonus\n\nTry to solve this if $1 \\le h \\le 10^9$.\n\nSolution\n\nWe can do this by binary searching for the answer. For some time $t$, we know that we can perform an attack of cooldown $c$ exactly $\\lfloor \\frac{t - 1}{c} \\rfloor + 1$ times. The total damage we will do in time $t$ will be:\n $ \\displaystyle \\sum_{i=1}^{n}{a_i\\left( \\lfloor\\frac{t - 1}{c_i}\\rfloor + 1 \\right)} $\nSo we binary search for the first $t$ such that the total damage we do in time $t$ is greater than or equal to $h$. This runs in $\\mathcal{O(n \\log {(h \\cdot \\max c_i)})}$. Be careful of long long overflow!\n\nCode (C++)",
+    "solution_code": [
+      "#include <bits/stdc++.h>\nusing namespace std;\n\nint main(){\n\tint t; cin >> t;\n\twhile(t--){\n\t\tint h, n; cin >> h >> n;\n\t\tvector<int> a(n), c(n);\n\t\tfor(int& i: a) cin >> i;\n\t\tfor(int& i: c) cin >> i;\n\t\tset<pair<long long, int>> S;\n\t\tfor(int i = 0; i < n; i++){\n\t\t\tS.insert({1, i});\n\t\t}\n\t\tlong long last_turn = 1;\n\t\twhile(h > 0){\n\t\t\tauto [turn, i] = *S.begin();\n\t\t\tS.erase(S.begin());\n\t\t\tlast_turn = turn;\n\t\t\th -= a[i];\n\t\t\tS.insert({turn + c[i], i});\n\t\t}\n\t\tcout << last_turn << \"\\n\";\n\t}\n}\n\n// comment \"tomato\" if you see this comment",
+      "#include <bits/stdc++.h>\nusing namespace std;\n\n#define ll long long\n\nvoid solve(){\n    ll h, n;\n    cin >> h >> n;\n\n    vector<ll> A(n), C(n);\n\n    for (ll &i : A)\n        cin >> i;\n    for (ll &i : C)\n        cin >> i;\n    \n    auto chk = [&](ll t){\n        ll dmg = 0;\n        for (int i = 0; i < n and dmg < h; i++){\n            ll cnt = (t - 1) / C[i] + 1;\n\n            if (cnt >= h)\n                return true;\n\n            dmg += cnt * A[i];\n        }\n        return dmg >= h;\n    };\n\n    ll L = 1, H = 1e12;\n\n    while (L < H){\n        ll M = (L + H) / 2;\n        chk(M) ? H = M : L = M + 1;\n    }\n    cout << L << \"\\n\";\n}\n\nint main(){\n    ios_base::sync_with_stdio(0); cin.tie(0); \n    int tc;\n    cin >> tc;\n\n    while (tc--)\n        solve();\n}"
+    ]
+  }
+}

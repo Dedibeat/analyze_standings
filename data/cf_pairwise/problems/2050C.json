@@ -1,0 +1,43 @@
+{
+  "contest_id": 2050,
+  "index": "C",
+  "name": "Uninteresting Number",
+  "rating": 1200,
+  "tags": [
+    "brute force",
+    "dp",
+    "math"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2050C",
+  "url": "https://codeforces.com/problemset/problem/2050/C",
+  "contest_start_time": "2024-12-05T14:35:00+00:00",
+  "statement": {
+    "title": "C. Uninteresting Number",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "You are given a number $n$ with a length of no more than $10^5$.\n\nYou can perform the following operation any number of times: choose one of its digits, square it, and replace the original digit with the result. The result must be a digit (that is, if you choose the digit $x$, then the value of $x^2$ must be less than $10$).\n\nIs it possible to obtain a number that is divisible by $9$ through these operations?",
+    "input_spec": "The first line contains an integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases.\n\nThe only line of each test case contains the number $n$, without leading zeros. The length of the number does not exceed $10^5$.\n\nIt is guaranteed that the sum of the lengths of the numbers across all test cases does not exceed $10^5$.",
+    "output_spec": "For each test case, output \"YES\" if it is possible to obtain a number divisible by $9$ using the described operations, and \"NO\" otherwise.\n\nYou can output each letter in any case (lowercase or uppercase). For example, the strings \"yEs\", \"yes\", \"Yes\", and \"YES\" will be accepted as a positive answer.",
+    "note": "In the first example, from the integer $123$, it is possible to obtain only $123$, $143$, $129$, and $149$, none of which are divisible by $9$.\n\nIn the second example, you need to replace the second digit with its square; then $n$ will equal $342 = 38 \\cdot 9$.\n\nIn the third example, the integer is already divisible by $9$.",
+    "samples": [
+      {
+        "input": "9\n123\n322\n333333333333\n9997\n5472778912773\n1234567890\n23\n33\n52254522632",
+        "output": "\nNO\nYES\nYES\nNO\nNO\nYES\nNO\nYES\nYES"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 137018,
+    "url": "https://codeforces.com/blog/entry/137018",
+    "tutorial": "The requirement that a digit must remain a digit imposes the following restrictions on transformations: we can transform $0$ into $0$, $1$ into $1$, $2$ into $4$, and $3$ into $9$. Any other digit squared will exceed 9, therefore, it cannot be transformed. Transformations involving $0$ and $1$ are useless, leaving us with two possible actions: squaring the digit $2$ or the digit $3$.\n\nWe will use the divisibility rule for $9$. It states that a number is divisible by $9$ if and only if the sum of its digits is divisible by $9$. Let's see how the sum of the digits will change with the possible transformations. If we square $2$, the sum of the digits increases by $2^2 - 2 = 2$, and if we square $3$, the sum of the digits increases by $3^2 - 3 = 6$.\n\nWe will count the number of digits $2$ in the number and the number of digits $3$ in the number. We can choose how many of the available digits $2$ and $3$ we will transform. Transforming more than 8 twos and more than 8 threes is pointless because remainders modulo $9$ their transformation adds to the sum will repeat.\n\nThus, the final solution looks like this: we calculate the sum of the digits in the number, count the number of digits $2$ and $3$. We will iterate over how many digits $2$ we change (possibly 0, but no more than 8), and how many digits $3$ we change (possibly 0, but also no more than 8). Let's say we changed $x$ digits $2$ and $y$ digits $3$, then the sum of the digits in the number increased by $x * 2 + y * 6$. If new sum is divisible by $9$, the answer is \"YES\". If such a situation was never reached during the iteration, then the answer is \"NO\".",
+    "solution_code": [
+      "def solve():\n    s = [int(x) for x in list(input())]\n\n    sm = sum(s)\n    twos = s.count(2)\n    threes = s.count(3)\n\n    for i in range(min(10, twos + 1)):\n        for j in range(min(10, threes + 1)):\n            if (sm + i * 2 + j * 6) % 9 == 0:\n                print('YES')\n                return\n    print('NO')\n\n\nt = int(input())\nfor _ in range(t):\n    solve()"
+    ]
+  }
+}

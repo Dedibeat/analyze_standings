@@ -1,0 +1,45 @@
+{
+  "contest_id": 2026,
+  "index": "E",
+  "name": "Best Subsequence",
+  "rating": 2500,
+  "tags": [
+    "bitmasks",
+    "dfs and similar",
+    "flows",
+    "graph matchings",
+    "graphs"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2026E",
+  "url": "https://codeforces.com/problemset/problem/2026/E",
+  "contest_start_time": "2024-10-28T14:35:00+00:00",
+  "statement": {
+    "title": "E. Best Subsequence",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Given an integer array $a$ of size $n$.\n\nLet's define the value of the array as its size minus the number of set bits in the bitwise OR of all elements of the array.\n\nFor example, for the array $[1, 0, 1, 2]$, the bitwise OR is $3$ (which contains $2$ set bits), and the value of the array is $4-2=2$.\n\nYour task is to calculate the maximum possible value of some subsequence of the given array.",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\le t \\le 100$) — the number of test cases.\n\nThe first line of each test case contains a single integer $n$ ($1 \\le n \\le 100$).\n\nThe second line of each test case contains $n$ integers $a_1, a_2, \\dots, a_n$ ($0 \\le a_i  \\lt  2^{60}$).",
+    "output_spec": "For each test case, print the maximum possible value of some subsequence of the given array.",
+    "note": null,
+    "samples": [
+      {
+        "input": "4\n3\n0 0 0\n4\n1 0 1 2\n1\n5\n8\n7 1 48 14 13 8 7 6",
+        "output": "\n3\n2\n0\n3"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 135680,
+    "url": "https://codeforces.com/blog/entry/135680",
+    "tutorial": "Let the number of chosen elements be $k$, and their bitwise OR be $x$. The answer is equal to $k - popcount(x)$, where $popcount(x)$ is the number of bits equal to $1$ in $x$.\n\nHowever, we can rewrite $popcount(x)$ as $60 - zeroes(x)$, where $zeroes(x)$ is equal to the number of bits equal to $0$ among the first $60$ bits in $x$. So, we have to maximize the value of $k + zeroes(x)$.\n\nConsider the following bipartite graph: the left part consists of elements of the given array, the right part consists of bits. An edge between vertex $i$ from the left part and vertex $j$ from the right part means that the $j$-th bit in $a_i$ is set to $1$.\n\nSuppose we've chosen a set of vertices in the left part (the elements of our subsequence). The bits which are equal to $0$ in the bitwise OR are represented by such vertices $j$ such that no chosen vertex from the left part is connected to $j$. So, if we unite the chosen vertices from the left part with the vertices in the right part representing bits equal to $0$, this will be an independent subset of vertices.\n\nThus, our problem is reduced to finding the maximum size of the independent subset of vertices. Usually, this problem is NP-complete. However, our graph is bipartite. So, we can use the following:\n\n by Konig's theorem, in a bipartite graph, the size of the minimum vertex cover is equal to the size of the maximum matching;\n\n and in every graph, independent subsets and vertex covers are complements of each other (if $S$ is a vertex cover, then the set of all vertices not belonging to $S$ is an independent subset, and vice versa). So, the maximum independent subset is the complement of the minimum vertex cover.\n\nIt means that we can calculate the size of the maximum independent subset as $V - MM$, where $V$ is the number of vertices in the graph, and $MM$ is the size of the maximum matching. We can compute $MM$ using any maximum matching algorithm or network flow.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n \nusing namespace std;\n \n#define sz(a) int((a).size())\n \ntemplate<typename T = int>\nstruct Dinic {\n  struct edge {\n    int u, rev;\n    T cap, flow;\n  };\n  \n  int n, s, t;\n  T flow;\n  vector<int> lst;\n  vector<int> d;\n  vector<vector<edge>> g;\n  \n  Dinic() {}\n  \n  Dinic(int n, int s, int t) : n(n), s(s), t(t) {\n    g.resize(n);\n    d.resize(n);\n    lst.resize(n);\n    flow = 0;\n  }\n \n  void add_edge(int v, int u, T cap, bool directed = true) {\n    g[v].push_back({u, sz(g[u]), cap, 0});\n    g[u].push_back({v, sz(g[v]) - 1, directed ? 0 : cap, 0});\n  }\n \n  T dfs(int v, T flow) {\n    if (v == t) return flow;\n    if (flow == 0) return 0;\n    T result = 0;\n    for (; lst[v] < sz(g[v]); ++lst[v]) {\n      edge& e = g[v][lst[v]];\n      if (d[e.u] != d[v] + 1) continue;\n      T add = dfs(e.u, min(flow, e.cap - e.flow));\n      if (add > 0) {\n        result += add;\n        flow -= add;\n        e.flow += add;\n        g[e.u][e.rev].flow -= add;\n      }\n      if (flow == 0) break;\n    }\n    return result;\n  }\n \n  bool bfs() {\n    fill(d.begin(), d.end(), -1);\n    queue<int> q({s});\n    d[s] = 0;\n    while (!q.empty() && d[t] == -1) {\n      int v = q.front(); q.pop();\n      for (auto& e : g[v]) {\n        if (d[e.u] == -1 && e.cap - e.flow > 0) {\n          q.push(e.u);\n          d[e.u] = d[v] + 1;\n        }\n      }\n    }\n    return d[t] != -1;\n  }\n \n  T calc() {\n    T add;\n    while (bfs()) {\n      fill(lst.begin(), lst.end(), 0);\n      while((add = dfs(s, numeric_limits<T>::max())) > 0)\n        flow += add;\n    }\n    return flow;\n  }\n};\n \nconst int B = 60;\nconst int INF = 1e9;\n \nint main() {\n  int t;\n  cin >> t;\n  while (t--) {\n    int n;\n    cin >> n;\n    int s = n + B, t = n + B + 1;\n    Dinic mf(t + 1, s, t);\n    for (int i = 0; i < n; ++i) {\n      long long x;\n      cin >> x;\n      mf.add_edge(s, i, 1);\n      for (int j = 0; j < B; ++j) {\n        if ((x >> j) & 1) mf.add_edge(i, j + n, INF);\n      }\n    }\n    for (int i = 0; i < B; ++i) mf.add_edge(i + n, t, 1);\n    cout << n - mf.calc() << '\\n';\n  }\n}"
+    ]
+  }
+}

@@ -1,0 +1,154 @@
+{
+  "name": "projects/703166210069/locations/us-central1/tuningJobs/3895319841782890496",
+  "tunedModelDisplayName": "cf-pairwise-phase2-editorial-20260806",
+  "baseModel": "gemini-3.5-flash",
+  "supervisedTuningSpec": {
+    "trainingDatasetUri": "gs://gctc-vertex-batch-703166210069/cf-pairwise-20260805/phase2-editorial-v1/phase2_editorial_train.jsonl",
+    "validationDatasetUri": "gs://gctc-vertex-batch-703166210069/cf-pairwise-20260805/phase2-editorial-v1/phase2_editorial_validation.jsonl",
+    "hyperParameters": {
+      "epochCount": "2",
+      "learningRateMultiplier": 2,
+      "adapterSize": "ADAPTER_SIZE_FOUR"
+    },
+    "exportLastCheckpointOnly": true
+  },
+  "state": "JOB_STATE_SUCCEEDED",
+  "createTime": "2026-08-06T07:21:41.456817Z",
+  "startTime": "2026-08-06T07:21:41.527003Z",
+  "endTime": "2026-08-06T09:02:20.369640Z",
+  "updateTime": "2026-08-06T09:02:20.369640Z",
+  "experiment": "projects/703166210069/locations/us-central1/metadataStores/default/contexts/tuning-experiment-20260806002232440184",
+  "tunedModel": {
+    "model": "projects/703166210069/locations/us/models/4564679697316708352@1",
+    "endpoint": "projects/703166210069/locations/us/endpoints/8084383543595106304"
+  },
+  "tuningDataStats": {
+    "supervisedTuningDataStats": {
+      "tuningDatasetExampleCount": "400",
+      "userInputTokenDistribution": {
+        "sum": "1041217",
+        "min": 1021,
+        "max": 6832,
+        "mean": 2603.0425,
+        "median": 2417,
+        "p5": 1643,
+        "p95": 4100,
+        "buckets": [
+          {
+            "count": 90,
+            "left": 1021,
+            "right": 1989
+          },
+          {
+            "count": 200,
+            "left": 1990,
+            "right": 2958
+          },
+          {
+            "count": 83,
+            "left": 2959,
+            "right": 3926
+          },
+          {
+            "count": 20,
+            "left": 3927,
+            "right": 4895
+          },
+          {
+            "count": 4,
+            "left": 4896,
+            "right": 5864
+          },
+          {
+            "count": 3,
+            "left": 5865,
+            "right": 6832
+          }
+        ]
+      },
+      "userOutputTokenDistribution": {
+        "sum": "2400",
+        "min": 6,
+        "max": 6,
+        "mean": 6,
+        "median": 6,
+        "p5": 6,
+        "p95": 6,
+        "buckets": [
+          {
+            "count": 400,
+            "left": 6,
+            "right": 6
+          }
+        ]
+      },
+      "userMessagePerExampleDistribution": {
+        "sum": "800",
+        "min": 2,
+        "max": 2,
+        "mean": 2,
+        "median": 2,
+        "p5": 2,
+        "p95": 2,
+        "buckets": [
+          {
+            "count": 400,
+            "left": 2,
+            "right": 2
+          }
+        ]
+      },
+      "userDatasetExamples": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "Problem A:\n[Statement]\n[Problem]\nKarel is a salesman in a car dealership. The dealership has $n$ different models of cars. There are $a_i$ cars of the $i$-th model. Karel is an excellent salesperson and can convince customers to buy up to $x$ cars (of Karel's choice), as long as the cars are from different models. Determine the minimum number of customers Karel has to bring in to sell all the c..."
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "{\"harder\":\"B\"}"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "Problem A:\n[Statement]\n[Problem]\nTwo hungry red pandas, Oscar and Lura, have a tree $T$ with $n$ nodes. They are willing to perform the following shuffle procedure on the whole tree $T$ exactly once. With this shuffle procedure, they will create a new tree out of the nodes of the old tree. Choose any node $V$ from the original tree $T$. Create a new tree $T_2$, with $V$ as the root. Remove $V$ ..."
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "{\"harder\":\"A\"}"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "Problem A:\n[Statement]\n[Problem]\nPelican Town represents $n$ houses connected by $m$ bidirectional roads. Some roads have NPCs standing on them. Farmer Buba needs to walk on each road with an NPC and talk to them. Help the farmer find a route satisfying the following properties: The route starts at some house, follows the roads, and ends at the same house. The route does not follow any road mor..."
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "{\"harder\":\"B\"}"
+            }
+          ]
+        }
+      ],
+      "totalBillableTokenCount": "1043617"
+    }
+  }
+}

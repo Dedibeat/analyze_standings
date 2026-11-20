@@ -68,8 +68,11 @@ release steps above. Full history:
   `PYTHONUTF8=1 OPENBLAS_NUM_THREADS=1` for long fits.
 - Long fits (`hier_binary all`, `hier_time evaluate`) run on the PC. Their caches
   (`hier_binary_run/`) exist only there.
-- The `*_run/` folders at the root are gitignored experiment caches. Pairwise
-  artifacts are synced and checked with `scripts/sync_pairwise_artifacts.sh`.
+- **Expensive caches are committed** (since 2026-11-20, about 490 MB): the paid
+  `*_run/` outputs, raw CF API data, `team_r3` downloads, `ec_online_cache` and
+  `cf_pairwise/problems`. Machines sync them with `git pull`. Derived caches
+  stay gitignored; see `data/CLAUDE.md`.
+- **The repository is public** (not announced). Never commit cookies or tokens.
 - Dependencies: `./.venv/bin/pip install -r requirements.txt`. Sibling checkouts
   are listed inside. The DE stability experiment pins
   `requirements-de-stability.txt`.

@@ -1,0 +1,44 @@
+{
+  "contest_id": 2043,
+  "index": "D",
+  "name": "Problem about GCD",
+  "rating": 1800,
+  "tags": [
+    "brute force",
+    "flows",
+    "math",
+    "number theory"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2043D",
+  "url": "https://codeforces.com/problemset/problem/2043/D",
+  "contest_start_time": "2024-12-24T14:35:00+00:00",
+  "statement": {
+    "title": "D. Problem about GCD",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "Given three integers $l$, $r$, and $G$, find two integers $A$ and $B$ ($l \\le A \\le B \\le r$) such that their greatest common divisor (GCD) equals $G$ and the distance $|A - B|$ is maximized.\n\nIf there are multiple such pairs, choose the one where $A$ is minimized. If no such pairs exist, output \"-1 -1\".",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\le t \\le 10^3$) — the number of test cases. Then, $t$ test cases follow.\n\nEach test case consists of a single line containing three integers $l, r, G$ ($1 \\le l \\le r \\le 10^{18}$; $1 \\le G \\le 10^{18}$) — the range boundaries and the required GCD.",
+    "output_spec": "For each test case, output two integers $A$ and $B$ — the solution to the problem, or \"-1 -1\" if no such pair exists.",
+    "note": null,
+    "samples": [
+      {
+        "input": "4\n4 8 2\n4 8 3\n4 8 4\n5 7 6",
+        "output": "\n4 6\n-1 -1\n4 8\n6 6"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 137801,
+    "url": "https://codeforces.com/blog/entry/137801",
+    "tutorial": "First, let's try to solve this problem with $G=1$. We can check the pair $(l, r)$. If its greatest common divisor is not $1$, then we should check $(l, r-1)$ and $(l+1, r)$, i. e. the pairs on the distance $(r-l-1)$. If these don't work, we can check $(l, r-2)$, $(l+1, r-1)$ and $(l+2, r)$, and so on, and the answer will be located fast enough (more about that in the third paragraph of the editorial). So, we get a solution in $O(K^2 \\log A)$ per test case, where $A$ is the bound on the integers on the input, and $K$ is the decrease in distance we had to make to find this pair (i. e. if the answer has distance $|A-B|$, then $K = |r - l| - |A - B|$).\n\nWhat to do if $G \\ne 1$? Almost the same, but first, we need to ensure that the first pair we try has both integers divisible by $G$. So, if $l \\bmod G \\ne 0$, let's shift it to the next closest integer which is divisible by $G$; and if $r \\bmod G \\ne 0$, let's subtract $r \\bmod G$ from $r$ to make it divisible. Then, we make the same process, but instead of trying pairs like $(l, r-1)$, $(l+1, r)$, $(l, r-2)$ and so on, we try $(l, r-G)$, $(l+G, r)$, $(l, r - 2G)$, and so on.\n\nOkay, now let's talk about why this works fast, i. e. why this $K$ in the complexity formula is not that big. All the following paragraphs will assume $G=1$, but we can use the same reasoning with $G \\gt 1$ if we divide everything by $G$.\n\nIntuitively, we can think about it in terms of prime gaps: as soon as $r-K$ becomes a prime number, we get our result. Average gap between two primes is about $ln A$, but there can be pretty big gaps, more than $1000$. If you're bold and brave, you can stop here and submit, but let's find a better bound.\n\nInstead of thinking about the gap between two primes, let's think about the gap between two numbers which are coprime with $l$. Let's assume that $l$ is the product of several first prime numbers (if it is not, integers which are coprime with $l$ will appear even more often). $\\frac{1}{2}$ of all integers are not divisible by $2$; $\\frac{2}{3}$ of them are not divisible by $3$; $\\frac{4}{5}$ of them are not divisible by $5$, and so on. If we repeat this process until the product of primes we considered becomes too large, we can get that, on average, $1$ in $7$ or $8$ integers is coprime with $l$. This is a better bound, but it still uses \"average\" gaps. However, this should be enough to try to submit the solution.\n\nOkay, now let's show a rigorous proof (which you really shouldn't need during the contest) of some reasonable bound. We can prove that if you consider all possible pairs of integers from intervals $[l, l+30)$ and $(r-30, r]$, you will find at least one coprime pair.\n\nThere are $30$ integers in each interval, so there are $900$ pairs to consider. Suppose in some of them, both integers are divisible by $2$. There will be at most $225$ such pairs, so we are left with $675$ pairs.\n\nSuppose in some of the remaining pairs, both integers are divisible by $3$. There will be at most $10$ integers divisible by $3$ in each segment, so at most $100$ pairs. We are left with $575$ pairs.\n\nSuppose in some of the remaining pairs, both integers are divisible by $5$. There will be at most $6$ integers divisible by $5$ in each segment, so at most $36$ pairs. We are left with $539$ pairs.\n\nIf we repeat this until some prime number like $37$, we will still have to \"fix\" more than $450$ pairs, so at least one number has $15$ or more pairs to \"fix\". This should mean that it is divisible by at least $15$ primes which are greater than $37$, and it means it's greater than $10^{18}$. So, in every pair of intervals $[l, l+30)$ and $(r-30, r]$ such that the numbers are not greater than $10^{18}$, there will be at least one coprime pair, and this proves that $K \\le 60$. In practice, it is much lower since, in our proof, we didn't consider the fact that a lot of pairs will have more than $1$ prime which they are divisible by; if we take this into account (or repeat the same process until primes become much greater), we can prove tighter bounds, for example, $K = 40$.",
+    "solution_code": [
+      "#include<bits/stdc++.h>\n \nusing namespace std;\n \nlong long gcd(long long x, long long y)\n{\n    if(x == 0) return y;\n    else return gcd(y % x, x);\n}\n \nvoid solve()\n{\n    long long l, r, g;\n    scanf(\"%lld %lld %lld\", &l, &r, &g);\n    long long L = l + (l % g == 0 ? 0 : g - (l % g));\n    long long R = r - r % g;\n    for(int i = 0; i <= (R - L) / g; i++)\n        for(int j = 0; j <= i; j++)\n            if(gcd(L + j * g, R - (i - j) * g) == g)\n            {\n                printf(\"%lld %lld\\n\", L + j * g, R - (i - j) * g);\n                return;\n            }   \n    puts(\"-1 -1\");\n}\n \nint main()\n{                             \n    int t;\n    scanf(\"%d\", &t);\n    for(int i = 0; i < t; i++) solve();\n}"
+    ]
+  }
+}

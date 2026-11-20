@@ -1,0 +1,42 @@
+{
+  "contest_id": 1990,
+  "index": "B",
+  "name": "Array Craft",
+  "rating": 1200,
+  "tags": [
+    "constructive algorithms",
+    "greedy"
+  ],
+  "points": 1000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1990B",
+  "url": "https://codeforces.com/problemset/problem/1990/B",
+  "contest_start_time": "2024-07-20T14:35:00+00:00",
+  "statement": {
+    "title": "B. Array Craft",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "For an array $b$ of size $m$, we define:\n\n the maximum prefix position of $b$ is the smallest index $i$ that satisfies $b_1+\\ldots+b_i=\\max_{j=1}^{m}(b_1+\\ldots+b_j)$;\n\n the maximum suffix position of $b$ is the largest index $i$ that satisfies $b_i+\\ldots+b_m=\\max_{j=1}^{m}(b_j+\\ldots+b_m)$.\n\nYou are given three integers $n$, $x$, and $y$ ($x  \\gt  y$). Construct an array $a$ of size $n$ satisfying:\n\n $a_i$ is either $1$ or $-1$ for all $1 \\le i \\le n$;\n\n the maximum prefix position of $a$ is $x$;\n\n the maximum suffix position of $a$ is $y$.\n\nIf there are multiple arrays that meet the conditions, print any. It can be proven that such an array always exists under the given conditions.",
+    "input_spec": "The first line contains an integer $t$ ($1 \\leq t \\leq 10^4$) — the number of test cases.\n\nFor each test case:\n\n The only line contains three integers $n$, $x$, and $y$ ($2 \\leq n \\leq 10^5, 1 \\le y \\lt x \\le n)$.\n\nIt is guaranteed that the sum of $n$ over all test cases will not exceed $10^5$.",
+    "output_spec": "For each test case, output $n$ space-separated integers $a_1, a_2, \\ldots, a_n$ in a new line.",
+    "note": "In the second test case,\n\n $i=x=4$ is the smallest index that satisfies $a_1+\\ldots +a_i=\\max_{j=1}^{n}(a_1+\\ldots+a_j)=2$;\n\n $i=y=3$ is the greatest index that satisfies $a_i+\\ldots +a_n=\\max_{j=1}^{n}(a_j+\\ldots+a_n)=2$.\n\nThus, the array $a=[1,-1,1,1]$ is considered correct.",
+    "samples": [
+      {
+        "input": "3\n2 2 1\n4 4 3\n6 5 1",
+        "output": "\n1 1\n1 -1 1 1\n1 1 -1 1 1 -1"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 131716,
+    "url": "https://codeforces.com/blog/entry/131716",
+    "tutorial": "B — Array Craft\n\nhint1\n\nStarting from a trival construction.\n\nhint2\n\nUtilize the condition $x \\gt y$.\n\nsolution\n\nFirst, we consider making $presum_x \\gt presum_j$ for all $x \\lt i \\le n$, and similarly for $y$. We can think of a trivial construction: $a[r, \\ldots ,l]=[1, \\ldots ,1], a[1, \\ldots...,r-1]=[-1, \\ldots, -1]$ and $a[l+1,\\ldots,n]=[-1, \\ldots, -1]$.\n\nThe construction doesn't works when $presum_x \\lt 0$, but we are close to the correct solution. Next, we will make a little adjustment: $a[r, \\ldots, l]=[1,\\ldots,1], a[1, \\ldots...,r-1]=[\\ldots,1, -1]$ and $a[l+1,\\ldots,n]=[-1,1, \\ldots]$.\n\nIt is not hard to see $presum_x \\ge presum_j$ for all $x \\lt i \\le n$, and for $1 \\le i \\le y$, $\\max(presum_i)-min(presum_i)\\le 1$. Thus, we get $presum_x \\ge 2+presum_{y-1} \\ge 2+min(presum_i) \\ge 1+max(presum_i)$. The same applies to the suffix sum as well. Therefore, this construction is valid.\n\nTime complexity: $O(n)$.\n\nBonus\n\nSolve the problem when $x \\le y$.\n\ncode",
+    "solution_code": [
+      "#include<bits/stdc++.h>\n\nusing namespace std;\n\nint main(){\n  ios::sync_with_stdio(false);\n  cin.tie(nullptr);\n  int t;\n  cin >> t;\n  while(t>0){\n    t--;\n    int n,x,y;\n    cin >> n >> x >> y;\n    x--; y--;\n    vector<int> a(n,1);\n    int e;\n    e=-1;\n    for(int i=x+1;i<n;i++){\n      a[i]=e;\n      e*=-1;\n    }\n    e=-1;\n    for(int i=y-1;i>=0;i--){\n      a[i]=e;\n      e*=-1;\n    }\n    for(int i=0;i<n;i++){\n      if(i){cout << \" \";}\n      cout << a[i];\n    }cout << \"\\n\";\n  }\n  return 0;\n}"
+    ]
+  }
+}

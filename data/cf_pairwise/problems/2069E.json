@@ -1,0 +1,44 @@
+{
+  "contest_id": 2069,
+  "index": "E",
+  "name": "A, B, AB and BA",
+  "rating": 2300,
+  "tags": [
+    "constructive algorithms",
+    "greedy",
+    "sortings",
+    "strings"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2069E",
+  "url": "https://codeforces.com/problemset/problem/2069/E",
+  "contest_start_time": "2025-02-18T14:35:00+00:00",
+  "statement": {
+    "title": "E. A, B, AB and BA",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "You are given a string $s$ consisting of characters A and B.\n\nYour task is to split it into blocks of length $1$ and $2$ in such a way that\n\n there are no more than $a$ strings equal to \"A\";\n\n there are no more than $b$ strings equal to \"B\";\n\n there are no more than $ab$ strings \"AB\";\n\n there are no more than $ba$ strings \"BA\";\n\nStrings \"AA\" and \"BB\" are prohibited. Each character of the initial string $s$ should belong to exactly one block.",
+    "input_spec": "The first line contains one integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases. Next, $t$ independent cases follow.\n\nThe first line of each test case contains a single string $s$ ($1 \\le |s| \\le 5 \\cdot 10^5$) consisting only of characters A and/or B.\n\nThe second line of each test case contains four integers $a$, $b$, $ab$, and $ba$ ($0 \\le a, b, ab, ba \\le 5 \\cdot 10^5$) — the maximum allowed number of strings \"A\", \"B\", \"AB\", and \"BA\" correspondingly.\n\nIt's guaranteed that the total length of $s$ doesn't exceed $5 \\cdot 10^5$ over all test cases.",
+    "output_spec": "For each test case, print YES if it's possible to split string $s$. Otherwise, print NO.",
+    "note": "In the third test case, all possible splits are: A|B|A, AB|A or A|BA. All of them have at least one \"A\".\n\nIn the fourth test case, one of the possible splits is the following: A|B|B|A|B|A|A|B.\n\nIn the fifth test case, one of the possible splits is the following: A|BA|B|BA|AB|BA|AB.",
+    "samples": [
+      {
+        "input": "7\nA\n0 0 10 10\nB\n0 1 0 0\nABA\n0 0 1 1\nABBABAAB\n5 5 0 0\nABABBAABBAAB\n1 1 2 3\nABBBBAB\n0 3 2 0\nBAABBA\n1 3 2 0",
+        "output": "\nNO\nYES\nNO\nYES\nYES\nYES\nNO"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 139774,
+    "url": "https://codeforces.com/blog/entry/139774",
+    "tutorial": "Firstly, let's find the solution that maximizes the number of used blocks of length $2$ (AB and BA). Each used block of length $2$ frees us one A and B, so we don't lose anything.\n\nSecondly, since we don't have AA and BB, any pair of equal neighboring characters will be split in-between in any possible partition. So, let's split them at the start. As a result, we'll get blocks with alternating characters of four types:\n\n ABA..A: if it's length $l$ it can be split in $x$ AB-s and $y$ BA-s for any $x + y \\le \\frac{l}{2}$. For example: A|BA|BA, AB|B|BA or AB|AB|A;\n\n BAB..B: practically the same as the previous, so let's just count the total number of blocks we can get from the first two types as $tot$;\n\n ABA..B: it can be split in $\\frac{l}{2}$ of AB, but if we need at least one BA the total number of blocks will reduce to $\\frac{l}{2} - 1$. For example: AB|AB|AB, but AB|A|BA|B;\n\n BAB..A: the same case, but favors BA-s instead.\n\nSo, let's split ABA..B into AB and BAB..A into BA as much as we can. As a result, one of three cases will follow:\n\n We spent all $ab$: then remaining ABA..B blocks will be split into BA. We lose one pair of A and B for each ABA..B block, so it's optimal to reduce the number of remaining ABA...B, so it's optimal to split shortest ABA...B-s into AB-s at the first step.\n\n We spent all $ba$: remaining BAB..A blocks will be split into AB. The case is the same as previous and gives the same greedy: split shortest BAB..A-s into BA-s at the first step.\n\n There are no AB..B and BA..A left. Only odd-length blocks left (the first two types}, so it doesn't matter how to split it. In total we'll get $\\min{(ab + ba, tot)}$ more blocks of length $2$.\n\n Note that cases $1$ and $2$ will lead to either case $3$ or zeroing both $ab$ and $ba$, but if both $ab = 0$ and $ba = 0$ we'll also get $\\min{(ab + ba, tot)} = 0$ extra blocks from the first two types of alternating strings. In other words, there are not so much casework as it seems.\nIn total, the strategy is the following:\n\n split AB..B-s into AB in increasing order of lengths;\n\n split BA..A-s into BA in increasing order of lengths;\n\n split remaining AB..B-s into BA in any order;\n\n split remaining BA..A-s into AB in any order;\n\n calculate extra pairs you'll get using the formula $\\min{(ab + ba, tot)}$.\n\n check that you have enough $a$ and $b$ to cover remaining A-s and B-s.\n\nTotal complexity is $O(|s| \\log{|s|})$.",
+    "solution_code": [
+      "#include<bits/stdc++.h>\n\nusing namespace std;\n\n#define fore(i, l, r) for(int i = int(l); i < int(r); i++)\n#define sz(a) int((a).size())\n\ntypedef long long li;\n\ntemplate<class A, class B> ostream& operator <<(ostream& out, const pair<A, B> &p) {\n\treturn out << \"(\" << p.x << \", \" << p.y << \")\";\n}\ntemplate<class A> ostream& operator <<(ostream& out, const vector<A> &v) {\n\tfore(i, 0, sz(v)) {\n\t\tif(i) out << \" \";\n\t\tout << v[i];\n\t}\n\treturn out;\n}\n\nconst int INF = int(1e9);\nconst li INF64 = li(1e18);\n\nstring s;\nint a, b, ab, ba;\n\ninline bool read() {\n\tif(!(cin >> s))\n\t\treturn false;\n\tcin >> a >> b >> ab >> ba;\n\treturn true;\n}\n\nint process(vector<int> &rem, int &tot) {\n\tint placed = 0;\n\tsort(rem.begin(), rem.end(), greater<int>());\n\twhile (!rem.empty() && tot > 0) {\n\t\tint cnt = min(rem.back() / 2, tot);\n\t\tplaced += cnt;\n\t\ttot -= cnt;\n\t\trem.back() -= 2 * cnt;\n\t\tif (rem.back() == 0)\n\t\t\trem.pop_back();\n\t}\n\treturn placed;\n}\n\nint remnants(vector<int> &rem, int &tot) {\n\tint placed = 0;\n\tfor (int &cur : rem) {\n\t\tint cnt = min(tot, (cur - 2) / 2);\n\t\tplaced += cnt;\n\t\ttot -= cnt;\n\t\tcur -= 2 * cnt + 2;\n\t}\n\treturn placed;\n}\n\ninline void solve() {\n\ts.push_back(s.back());\n\tint eq = 0, placedPairs = 0;\n\tvector<int> remAB, remBA;\n\n\tint lst = 0;\n//\tcerr << \"s = \" << s << endl;\n\tfore (i, 1, sz(s)) {\n\t\tif (s[i] != s[i - 1])\n\t\t\tcontinue;\n\t\t\n\t\tif (s[lst] == s[i - 1]) {\n\t\t\t// ABA..A or BAB..B\n\t\t\teq += (i - lst) / 2;\n\t\t}\n\t\telse {\n\t\t\tint len = i - lst;\n\t\t\tif (s[lst] == 'A') {\n\t\t\t\t// ABA..B\n\t\t\t\tremAB.push_back(len);\n\t\t\t}\n\t\t\telse {\n\t\t\t\t// BAB..A\n\t\t\t\tremBA.push_back(len);\n\t\t\t}\n\t\t}\n//\t\tcerr << lst << \", \" << i << endl;\n\t\tlst = i;\n\t}\n\ts.pop_back();\n\t\n\tplacedPairs += process(remAB, ab);\n\tassert(remAB.empty() || ab == 0);\n\n\tplacedPairs += process(remBA, ba);\n\tassert(remBA.empty() || ba == 0);\n\n\tplacedPairs += remnants(remAB, ba);\n\tplacedPairs += remnants(remBA, ab);\n\n\tint remPlaced = min(eq, ab + ba);\n\tplacedPairs += remPlaced;\n\n\tint needA = count(s.begin(), s.end(), 'A') - placedPairs;\n\tint needB = count(s.begin(), s.end(), 'B') - placedPairs;\n\n\tif (needA <= a && needB <= b)\n\t\tcout << \"YES\\n\";\n\telse\n\t\tcout << \"NO\\n\";\n}\n\nint main() {\n#ifdef _DEBUG\n\tfreopen(\"input.txt\", \"r\", stdin);\n\tint tt = clock();\n#endif\n\tios_base::sync_with_stdio(false);\n\tcin.tie(0), cout.tie(0);\n\tcout << fixed << setprecision(15);\n\t\n\tint t; cin >> t;\n\twhile (t--) {\n\t\tread();\n\t\tsolve();\n\t\t\n#ifdef _DEBUG\n\t\tcerr << \"TIME = \" << clock() - tt << endl;\n\t\ttt = clock();\n#endif\n\t}\n\treturn 0;\n}"
+    ]
+  }
+}

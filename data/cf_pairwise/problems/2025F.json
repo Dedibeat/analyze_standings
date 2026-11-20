@@ -1,0 +1,54 @@
+{
+  "contest_id": 2025,
+  "index": "F",
+  "name": "Choose Your Queries",
+  "rating": 2700,
+  "tags": [
+    "constructive algorithms",
+    "dfs and similar",
+    "dp",
+    "graphs",
+    "greedy",
+    "trees"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2025F",
+  "url": "https://codeforces.com/problemset/problem/2025/F",
+  "contest_start_time": "2024-10-14T14:35:00+00:00",
+  "statement": {
+    "title": "F. Choose Your Queries",
+    "time_limit": "3 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "You are given an array $a$, consisting of $n$ integers (numbered from $1$ to $n$). Initially, they are all zeroes.\n\nYou have to process $q$ queries. The $i$-th query consists of two different integers $x_i$ and $y_i$. During the $i$-th query, you have to choose an integer $p$ (which is either $x_i$ or $y_i$) and an integer $d$ (which is either $1$ or $-1$), and assign $a_p = a_p + d$.\n\nAfter each query, every element of $a$ should be a non-negative integer.\n\nProcess all queries in such a way that the sum of all elements of $a$ after the last query is the minimum possible.",
+    "input_spec": "The first line contains two integers $n$ and $q$ ($2 \\le n \\le 3 \\cdot 10^5$; $1 \\le q \\le 3 \\cdot 10^5$) — the number of elements in $a$ and the number of queries, respectively.\n\nThen $q$ lines follow. The $i$-th of these lines contains two integers $x_i$ and $y_i$ ($1 \\le x_i, y_i \\le n$; $x_i \\ne y_i$) — the description of the $i$-th query.",
+    "output_spec": "For each query, print a line containing two characters:\n\n the first character should be x if you choose $p=x_i$, or y if you choose $p=y_i$;\n\n the second character should be + if you choose $d=1$, or - if you choose $d=-1$.\n\nIf there are multiple answers, print any of them.",
+    "note": null,
+    "samples": [
+      {
+        "input": "3 4\n1 2\n3 2\n3 1\n1 2",
+        "output": "\ny+\nx+\nx-\ny-"
+      },
+      {
+        "input": "4 4\n1 2\n2 3\n3 4\n3 2",
+        "output": "\ny+\ny+\nx-\ny-"
+      },
+      {
+        "input": "4 2\n2 1\n4 3",
+        "output": "\ny+\nx+"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 135173,
+    "url": "https://codeforces.com/blog/entry/135173",
+    "tutorial": "We will use the classical method for solving maximization/minimization problems: we will come up with an estimate for the answer and try to achieve it constructively.\n\nThe first idea. Since we have $n$ objects connected by binary relations, we can model the problem as a graph. Let the $n$ elements of the array be the vertices, and the $q$ queries be the edges. For each query, we would like to choose the direction of the edge (let the edge be directed towards the vertex to which the operation is applied) and the sign of the operation.\n\nIt would be great if, in each connected component, we could choose an equal number of pluses and minuses so that the sum equals zero. Or, if the number of edges in the component is odd, to make the sum equal to one. Obviously, it is not possible to do less than this.\n\nIt turns out that this is always possible. There is a well-known graph problem: to split the edges of an undirected connected graph into pairs with at least one common endpoint. We will reduce our problem to this one. If we split the graph into pairs, we will construct the answer from them as follows: we will direct the edges of each pair towards any common vertex, write + on the edge with the smaller number (query index), and write - on the edge with the larger number. This construction guarantees that each pair will not add anything to the sum, and each element will be non-negative after each query.\n\nThe problem of splitting into pair can be solved using the following algorithm. We will perform a DFS from any vertex and construct a DFS tree. Now we will divide the edges into pairs in the order from the leaves to the root. Let us stand at some vertex $v$. First, run the algorithm recursively for the children of $v$. When we finish processing the children, we will consider the following edges from the current vertex $v$: tree edges to the children, the edge to the parent, and back edges with the lower endpoint at $v$. Now, we form as many pairs as possible from the edges to the children and the back edges. We will remove all such edges from the graph. If their total number was odd, then one edge remains unpaired. Form a pair from it and the edge to the parent, and again remove them from the graph. It turns out that when we exit the recursive call, either there will be no edges left in the subtree at all, or there will be one tree edge that will be processed by the parent later. If the number of edges in the component is odd, then at the end, one edge without a pair will remain at the root.\n\nI would also like to mention the following implementation details. In the adjacency list, it is better to store the indices of the queries rather than the vertices, and then derive the vertex numbers from them. This will allow for careful handling of multiple edges. Removing edges from the graph directly is also not very convenient. The most convenient way to work around this, in my opinion, is to maintain an array that marks that the edge with such a query number is now removed. Alternatively, for back edges, we can check whether $v$ is the upper or lower endpoint, as well as return a flag from the depth-first search indicating \"is the edge to the child removed\".\n\nOverall complexity: $O(n + q)$.",
+    "solution_code": [
+      "#include<bits/stdc++.h>\n \nusing namespace std;\n \nconst int N = 300043;\n \nstring choice = \"xy\";\nstring sign = \"+-\";\n \nint qs[N][2];\nstring ans[N];\nint n, q;\nvector<int> g[N];\nint color[N];\n \nvoid pair_queries(int q1, int q2)\n{\n \tif(q1 > q2) swap(q1, q2);\n \tfor(int i = 0; i < 2; i++)\n \t\tfor(int j = 0; j < 2; j++)\n \t\t\tif(qs[q1][i] == qs[q2][j])\n \t\t\t{\n \t\t\t \tans[q1] = { choice[i], sign[0] };\n \t\t\t \tans[q2] = { choice[j], sign[1] };\n \t\t\t \treturn;\n \t\t\t}\n}\n \nbool dfs(int v, int pe = -1)\n{\n \t// return true if parent edge still exists\n \tcolor[v] = 1;\n \tvector<int> edge_nums;\n \tfor(auto e : g[v])\n \t{\n \t\tint u = v ^ qs[e][0] ^ qs[e][1];\n \t\tif(color[u] == 1) continue;\n \t\tif(color[u] == 0)\n \t\t{\n \t\t\tif(dfs(u, e))\n \t\t\t\tedge_nums.push_back(e);\n \t\t}\n \t\telse\n \t\t\tedge_nums.push_back(e);\n \t}\n \tbool res = true;\n \tif(edge_nums.size() % 2 != 0)\n \t{\n \t\tif(pe != -1) edge_nums.push_back(pe);\n \t\telse edge_nums.pop_back();\n \t\tres = false;\n \t}\n \tfor(int i = 0; i < edge_nums.size(); i += 2)\n \t\tpair_queries(edge_nums[i], edge_nums[i + 1]);\n \tcolor[v] = 2;\n \treturn res;\n}\n \nint main()\n{\n\tios_base::sync_with_stdio(0);\n\tcin.tie(0);\n\tcin >> n >> q;\n\tfor(int i = 0; i < q; i++)\n\t{\n\t \tcin >> qs[i][0] >> qs[i][1];\n\t \t--qs[i][0];\n\t \t--qs[i][1];\n\t \tg[qs[i][0]].push_back(i);\n\t \tg[qs[i][1]].push_back(i);\n\t \tans[i] = \"x+\";\n\t}\n\tfor(int i = 0; i < n; i++)\n\t\tif(color[i] == 0)\n\t\t\tdfs(i);\n\tfor(int i = 0; i < q; i++) cout << ans[i] << endl;\n}"
+    ]
+  }
+}

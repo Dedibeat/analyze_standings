@@ -1,0 +1,36 @@
+{
+  "contest_id": 2010,
+  "index": "B",
+  "name": "Three Brothers",
+  "rating": 800,
+  "tags": [
+    "brute force",
+    "implementation",
+    "math"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2010B",
+  "url": "https://codeforces.com/problemset/problem/2010/B",
+  "contest_start_time": "2024-08-28T20:35:00+00:00",
+  "statement": {
+    "title": "B. Three Brothers",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "Three brothers agreed to meet. Let's number the brothers as follows: the oldest brother is number 1, the middle brother is number 2, and the youngest brother is number 3.\n\nWhen it was time for the meeting, one of the brothers was late. Given the numbers of the two brothers who arrived on time, you need to determine the number of the brother who was late.",
+    "input_spec": "The first line of input contains two different integers a and b (1 ≤ a, b ≤ 3, a ≠ b) — the numbers of the brothers who arrived on time. The numbers are given in arbitrary order.",
+    "output_spec": "Output a single integer — the number of the brother who was late to the meeting.",
+    "note": null,
+    "samples": [
+      {
+        "input": "3 1",
+        "output": "2"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "missing"
+  },
+  "editorial": null
+}

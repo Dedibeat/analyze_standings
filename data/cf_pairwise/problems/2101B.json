@@ -1,0 +1,45 @@
+{
+  "contest_id": 2101,
+  "index": "B",
+  "name": "Quartet Swapping",
+  "rating": 1800,
+  "tags": [
+    "brute force",
+    "data structures",
+    "divide and conquer",
+    "greedy",
+    "sortings"
+  ],
+  "points": 1250.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2101B",
+  "url": "https://codeforces.com/problemset/problem/2101/B",
+  "contest_start_time": "2025-05-11T14:35:00+00:00",
+  "statement": {
+    "title": "B. Quartet Swapping",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "You are given a permutation $a$ of length $n$$^{\\text{∗}}$. You are allowed to do the following operation any number of times (possibly zero):\n\n Choose an index $1\\le i\\le n - 3$. Then, swap $a_i$ with $a_{i + 2}$, and $a_{i + 1}$ with $a_{i + 3}$ simultaneously. In other words, permutation $a$ will be transformed from $[\\ldots, a_i, a_{i+1}, a_{i+2}, a_{i+3}, \\ldots]$ to $[\\ldots, a_{i+2}, a_{i+3}, a_{i}, a_{i+1}, \\ldots]$.\n\nDetermine the lexicographically smallest permutation$^{\\text{†}}$ that can be obtained by applying the above operation any number of times.\n\n$^{\\text{∗}}$A permutation of length $n$ is an array consisting of $n$ distinct integers from $1$ to $n$ in arbitrary order. For example, $[2,3,1,5,4]$ is a permutation, but $[1,2,2]$ is not a permutation ($2$ appears twice in the array), and $[1,3,4]$ is also not a permutation ($n=3$ but there is $4$ in the array).\n\n$^{\\text{†}}$An array $x$ is lexicographically smaller than an array $y$ of the same size if and only if the following holds:\n\n in the first position where $x$ and $y$ differ, the array $x$ has a smaller element than the corresponding element in $y$.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 1000$). The description of the test cases follows.\n\nThe first line of each test case contains a single integer $n$ ($4\\le n\\le 2\\cdot 10^5$) — the length of permutation $a$.\n\nThe second line contains $n$ integers $a_1, a_2, \\ldots, a_n$ ($1 \\le a_i \\le n$) — the elements of permutation $a$.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $2\\cdot 10^5$.",
+    "output_spec": "For each test case, output the lexicographically smallest permutation that can be obtained by applying the above operation any number of times.",
+    "note": "In the first test case, an operation can be done on index $i = 1$, and the permutation will become $[1, 2, 3, 4]$, which is the lexicographically smallest permutation achievable.\n\nIn the second test case, we can do the following sequence of operations:\n\n Do an operation on index $i = 2$. The permutation becomes $[5, 1, 2, 4, 3]$.\n\n Do an operation on index $i = 1$. The permutation becomes $[2, 4, 5, 1, 3]$.\n\n Do an operation on index $i = 2$. The permutation becomes $[2, 1, 3, 4, 5]$.",
+    "samples": [
+      {
+        "input": "3\n4\n3 4 1 2\n5\n5 4 3 1 2\n10\n10 9 8 7 6 5 4 3 2 1",
+        "output": "\n1 2 3 4 \n2 1 3 4 5 \n2 1 4 3 6 5 8 7 10 9 "
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 142788,
+    "url": "https://codeforces.com/blog/entry/142788",
+    "tutorial": "2101B - Quartet Swapping\n\nHints\n\nHint 1\n\nIs it possible for an element to change its index parity after some operations?\n\nHint 2\n\nWhat else is not effected by the operation?\n\nHint 3\n\nHow to combine the above two properties under the time limit?\n\nSolution\n\nThe first observation is that the parity of the position of the elements doesn't change with the operations. Thus, if an element is at an odd or even index in the initial permutation, it will retain the same parity in the final permutation. As long as we have four elements left, we can freely adjust them within their index parity zone, but what about the last three ones? We can see that the parity of the number of inversions is fixed, so by counting the inversions of the initial permutation, the order of the last four elements will be uniquely determined.\n\nCode (C++)\n\nBonus\n\nThis problem was one of the first problems that we had, and the intended constraits were $n\\le 3000$ as a D1A, but later was moved to D1B with $n\\le 2\\cdot 10^5$!\n\nDo you know how to count the parity of inversions without counting the number of inversions?",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n\n#define pb push_back\n#define int long long \n#define F first\n#define S second\n#define sz(a) (int)a.size()\n#define pii pair<int,int> \n#define rep(i , a , b) for(int i = (a) ; i <= (b) ; i++)\n#define per(i , a , b) for(int i = (a) ; i >= (b) ; i--)\n#define all(a) a.begin(),a.end() \n\nusing namespace std ;\nconst int maxn = 1e6 + 10 ;\nint a[maxn] , n , fen[maxn] ; \n\nvoid upd(int x){\n    while(x <= n){\n        fen[x]++;\n        x += x&-x;\n    }\n}\n\nint que(int x){\n    int ans =0 ;\n    while(x){\n        ans += fen[x] ;\n        x -= x&-x;\n    }\n    return ans ; \n}\n\nint f(vector<int> x){\n    rep(i , 0, n)fen[i] =0;\n    int ans =0 ;\n    per(i , sz(x)-1 , 0){\n        ans += que(x[i]);\n        upd(x[i]) ;\n    }\n    \n    return ans ; \n}\n\nsigned main(){\n    ios::sync_with_stdio(0) ; cin.tie(0);\n    \n    int T ;\n    cin >> T ;\n    \n    while(T--){\n        vector <int> a1 , a2 ; \n        \n        cin >> n ;\n        rep(i ,1 ,n){\n            int x; cin >> x; \n            \n            if (i%2==1) {\n                a1.pb(x);\n            } else {\n                a2.pb(x);\n            }\n        }    \n        \n        bool v = (f(a1)%2 != f(a2)%2);\n        \n        sort(all(a1)); sort(all(a2));\n        \n        int x1 = 0, x2 =0;    \n        \n        rep (i ,1 , n) {\n            if (i%2==1) {\n                a[i] = a1[x1] ; x1++; \n            } else {\n                a[i] = a2[x2] ; x2++;\n            }\n        }\n        \n        if (v) {\n            swap(a[n] , a[n-2]) ;\n        }\n        \n        rep(i ,1 ,n) cout << a[i] << \" \";\n        cout << \"\\n\";\n    }\n}"
+    ]
+  }
+}

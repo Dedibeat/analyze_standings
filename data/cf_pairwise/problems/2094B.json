@@ -1,0 +1,42 @@
+{
+  "contest_id": 2094,
+  "index": "B",
+  "name": "Bobritto Bandito",
+  "rating": 800,
+  "tags": [
+    "brute force",
+    "constructive algorithms"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2094B",
+  "url": "https://codeforces.com/problemset/problem/2094/B",
+  "contest_start_time": "2025-04-13T15:35:00+00:00",
+  "statement": {
+    "title": "B. Bobritto Bandito",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "In Bobritto Bandito's home town of residence, there are an infinite number of houses on an infinite number line, with houses at $\\ldots, -2, -1, 0, 1, 2, \\ldots$. On day $0$, he started a plague by giving an infection to the unfortunate residents of house $0$. Each succeeding day, the plague spreads to exactly one healthy household that is next to an infected household. It can be shown that each day the infected houses form a continuous segment.\n\nLet the segment starting at the $l$-th house and ending at the $r$-th house be denoted as $[l, r]$. You know that after $n$ days, the segment $[l, r]$ became infected. Find any such segment $[l', r']$ that could have been infected on the $m$-th day ($m \\le n$).",
+    "input_spec": "The first line contains an integer $t$ ($1 \\leq t \\leq 100$) – the number of independent test cases.\n\nThe only line of each test case contains four integers $n$, $m$, $l$, and $r$ ($1 \\leq m\\leq n \\leq 2000, -n \\leq l \\leq 0 \\leq r \\leq n, r-l=n$).",
+    "output_spec": "For each test case, output two integers $l'$ and $r'$ on a new line. If there are multiple solutions, output any.",
+    "note": "In the first test case, it is possible that on the $1$-st, $2$-nd, and $3$-rd days the interval of houses affected is $[-1,0]$, $[-1,1]$, $[-2,1]$. Therefore, $[-1,1]$ is a valid output.",
+    "samples": [
+      {
+        "input": "4\n4 2 -2 2\n4 1 0 4\n3 3 -1 2\n9 8 -6 3",
+        "output": "\n-1 1\n0 1\n-1 2\n-5 3"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 141796,
+    "url": "https://codeforces.com/blog/entry/141796",
+    "tutorial": "2094B - Bobritto Bandito\n\nProblem Credits: Proof_by_QED\n\nHint\n\nWhat is the condition for $l'$ and $r'$ to be valid?\n\nAnswer\n\nWe must have $r' - l' = m$ and $l\\leq l' \\leq 0 \\leq r'\\leq r$.\n\nSolution\n\nThe problem reduces to finding $l'$ and $r'$ such that $r' - l' = m$ and $l\\leq l' \\leq 0 \\leq r'\\leq r$. There are several different approaches; two are outlined below.\n\nOne approach which runs in $O(1)$ time is to case on whether $m\\leq r$. If $m\\leq r$, we can choose $l' = 0$ and $r' = m$, and then we see that $r' - l' = m - 0 = m$ and $l \\leq 0 \\leq 0 \\leq m \\leq r$ as desired. If $m \\gt r$, we can choose $l' = r-m$ and $r' = r$, and then we see that $r' - l' = r - (r-m) = m$ and $l \\leq r-m \\leq 0 \\leq r \\leq r$, where $l \\leq r-m$ holds because $r-l = n \\geq m$.\n\nAn alternative approach which runs in $O(m)$ time is to simply simulate the process; expand in an arbitrary direction which satisfies the desired inequalities until $r' - l' = m$.\n\nCode\n\nRate The Problem!\n\n Good Problem\n\n Okay Problem\n\n Bad Problem\n\n Didn't Solve",
+    "solution_code": [
+      "#include <bits/stdc++.h>\nusing namespace std;\n#define int long long\n\nvoid solve() {\n    int n, m, l, r; cin >> n >> m >> l >> r;\n    int diff = n - m;\n    l = abs(l);\n    if (l >= diff) {\n        l -= diff;\n        diff = 0;\n    }\n    else {\n        diff -= l;\n        l = 0;\n    }\n    cout << -l << \" \" << r - diff << '\\n';\n}\n\nsigned main() {\n    ios_base::sync_with_stdio(0);\n    cin.tie(0);\n    int t; cin >> t;\n    while (t--) solve();\n    return 0;\n}"
+    ]
+  }
+}
