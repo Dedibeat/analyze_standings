@@ -106,3 +106,4 @@ to other files may name the old root locations (reports keep their filenames und
 - 2026-11-20 · data · [Expensive caches committed to git](2026-11-20-expensive-caches-committed-to-git.md) — ~490 MB raw/paid caches tracked; derived and cookies stay ignored
 - 2026-11-20 · team-r3 · [Training for the Hong Kong regional](2026-11-20-hong-kong-training.md) — six mocks, three fitted solo starting bands and a Shenyang next-solve review
 - 2026-11-20 · team-r3 · [Team solves around 2400](2026-11-20-team-r3-2400.md) — 78/84 rated ACs below 2400, including all 15 official ACs
+- 2026-11-20 · team-r3 · [Fresh CF problems and QOJ upsolving](2026-11-20-team-r3-cf-qoj-practice.md) — Dedi/Tamir/Erdene had 43/4/8 practice ACs at CF 2300–2500
