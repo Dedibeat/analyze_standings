@@ -542,6 +542,15 @@ Members by Dedi's account: **L, C, J Dedi; D, H Tamir; Erdene none.**
   usually opens queued on Tamir.
 - **Dedi overloaded again** (3 of 5), and the 6th problem had one person on it from 168': F
   (observation + DSU) or A (number theory, Dedi's category), both ~60 solves.
+- **The saved code (added 2026-11-20)** was printed at 256–259'. It is in
+  `data/team_r3/shenyang_2026/` and checked in `shenyang_2026_code_checks.py`.
+  - The five accepted files agree with brute forces.
+  - Two of them are simpler than the coach's solutions: H uses another colouring, and J goes by
+    value instead of popcount.
+  - F's file at 257' is a chain greedy that fails sample 2 and still prints debug output. That
+    is §3's unproven idea plus debug leftovers, caught by checklist (g)–(i).
+  - There is no file for A.
+  - So 43 minutes before the end, neither 6th problem had a correct idea.
 
 **Changes for Hong Kong** (details in the dossier):
 1. Erdene opens with the easy problems again; a harder one only when it is his type.
@@ -554,7 +563,9 @@ Members by Dedi's account: **L, C, J Dedi; D, H Tamir; Erdene none.**
 7. Upsolve the set: C and J (Erdene), F (Erdene + Tamir), A (Dedi), H (Tamir).
 8. Erdene's topic weeks gain DP state design and submask / bit arguments.
 
-**Open:** the editorial, our code and six statements are missing; the dossier's ideas are the
-coach's own, checked by brute force in `shenyang_2026_checks.py`. Questions for the team are at
-the end of the dossier (when H was started and what its wrong run was, when C and J changed
-hands, who ran F).
+**Open:**
+- The editorial and six statements are missing. The dossier's ideas are the coach's own, checked
+  by brute force in `shenyang_2026_checks.py`.
+- The code of H's wrong run and of the F run is not among the printouts.
+- Questions for the team are at the end of the dossier: when H was started and what its wrong run
+  was, when C and J changed hands, and who ran F and with what code.

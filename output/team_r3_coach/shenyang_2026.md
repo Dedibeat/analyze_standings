@@ -11,9 +11,19 @@ Sources and limits:
 - **Statements:** Dedi's photos of the Chinese statements of A, C, D, F, H, J and L (2026-11-16).
   H's second page (output format and samples) and the pages of B, E, G, I, K and M were not
   sent. The photos are not in the repo; each problem below starts with what the statement asks.
-- **No editorial and none of our code.** The ideas below are the coach's own solutions. Each is
-  checked against a brute force and the statement's samples in `shenyang_2026_checks.py`; where
-  only part of a solution is checked, the problem's section says so.
+- **Our code (received 2026-11-20).** Six files were printed on the contest's print service:
+  c, d, f, h, j and l.cpp. Dedi sent photos of the printouts.
+  - They are transcribed into `data/team_r3/shenyang_2026/` with the printouts' line numbers.
+  - The print stamps run from 13:15:47 to 13:19:18 in file-name order. The contest ran
+    09:00–14:00 (UTC+8), so that is minutes 256–259, two minutes after J's AC (253.9'). This
+    assumes the print server's clock is the contest clock.
+  - So they are the files as they stood at 256–259': the final code of the five solved problems,
+    and an F draft from 38 minutes before F's only run.
+  - H's wrong run (138') and the F run (295.8') are not among them.
+  - `shenyang_2026_code_checks.py` runs each file against the references below.
+- **No editorial.** The ideas below are the coach's own solutions. Each is checked against a
+  brute force and the statement's samples in `shenyang_2026_checks.py`; where only part of a
+  solution is checked, the problem's section says so.
 - `members_solved.csv` has no Shenyang 2026 rows: `team_r3_participations.py` needs a QOJ contest
   id in the sheet's contest name, and the set has none yet.
 
@@ -54,6 +64,7 @@ Sources and limits:
 | 167.7 | H AC (Tamir) | #106 |
 | 168.4 | H AC again, 43 seconds later (a second submission of an accepted problem) | |
 | 253.9 | J AC (Dedi, with Erdene debugging), first try. Erdene had it first and did not see the offline segment tree | #73 |
+| 255.8–259.3 | all six source files printed (c, d, f, h, j, l, in name order); F's file is a greedy that fails sample 2 | |
 | 295.8 | F WA (not solved; who submitted is not recorded) | final #87 |
 
 - 60 minutes after the start we still had one problem (#191 at that moment).
@@ -94,6 +105,8 @@ The 33 teams that finished with the same five problems:
 - **Idea:** a string has a palindrome of length ≥ 2 exactly when it has one of length 2 or 3. So
   keep a stack and accept a letter if it differs from the top two characters. Tags: strings, stack.
 - **Ours:** on pace (gold median 10').
+- **Code** (`l.cpp`, 34 lines): the stack and the two-character test, as above. It passes the five
+  samples and 20,000 random strings.
 
 ### D. Prefix Extremes — field 387/399, **17% first try** — **AC 65', first try** (Tamir)
 - **Statement:** among the permutations of 1..n with exactly a prefix maxima and b prefix minima
@@ -110,6 +123,13 @@ The 33 teams that finished with the same five problems:
   one run (1.8 wrong runs per solver).
 - **Ours:** first try on the set's trap problem. This is Tamir's profile (careful, constructive).
   14 minutes behind the silver median.
+- **Code** (`d.cpp`, 106 lines): casework in O(1) per query.
+  - The first branch rejects a = 0, b = 0, a = b = 1 with n > 1, and a + b − 1 > n.
+  - The second handles b = 1 (p1 = 1).
+  - So both traps of the field are dealt with in the first 30 lines.
+  - Checked: every (n ≤ 8, a, b ≤ n + 1, k) and 20,000 random cases up to n = 10^9 agree with the
+    reference.
+  - Two `y < 1` / `x < 1` guards can no longer trigger after the first check; they are harmless.
 
 ### H. Perfect Puzzle — field 357/381 — **AC 168' after 1 WA** (Tamir)
 - **Statement:** n ≤ 9. n non-attacking rooks are given, one per colour. Colour the n × n board
@@ -129,6 +149,23 @@ The 33 teams that finished with the same five problems:
 - **Ours:** the third-easiest problem by solves, accepted later than the bronze median (131').
   Tamir solved D first and H after it; H's first run came 73 minutes after D's AC. The wrong run
   and its 30-minute fix are not explained (open questions).
+- **Code** (`h.cpp`, 80 lines, the accepted version). It uses a different construction from the
+  idea above. It goes down the rows; in row i, with the rook at column c and colour x:
+  - x spreads left and right in row i over empty cells that lie in the column of a rook from an
+    earlier row;
+  - x fills the empty cells of row i − 1 that are contiguous with column c;
+  - at the end every empty cell takes the colour of the cell below it. The bottom row is always
+    full by then.
+
+  Checks and what the code adds:
+  - It satisfies the shape and uniqueness conditions on all 5,913 boards with n ≤ 7 and on 600
+    random boards with n = 8, 9.
+  - It was accepted with a colouring other than the coach's. That agrees with the dossier's
+    reading that any valid colouring is accepted, and with its conditions.
+  - It gives H's format, which the missing second page holds: n, then an n × n grid with `.` for
+    an empty cell and one character per rook; the output is the filled grid; one test per file.
+  - Two commented lines (`char last;`, `last = x;`) are left from an earlier version that kept
+    the previous row's colour. Whether that version was the 138' wrong run is not known.
 
 ### C. Cache or Not — field 229/319 — **AC 130', first try** (Dedi; Erdene first)
 - **Statement:** an LRU cache holds two addresses. For each of n requests (addresses 1..m,
@@ -142,6 +179,13 @@ The 33 teams that finished with the same five problems:
 - **Ours:** Erdene did not find the DP; Dedi took it over and it went in first try, 18 minutes
   behind the silver median. This is the problem type the Codeforces review named as Erdene's wall
   (DP state design: 2174 B, 2190 B2 in `cf_rounds.md`).
+- **Code** (`c.cpp`, 103 lines). It is the idea above: a `Table` with a lazy offset (`lift(A)`),
+  one patched row per request, and the argmin of each row.
+  - Row 0 is the empty slot.
+  - Requests where the address is already the most recent also write the state (x, x). That state
+    is always dominated by a real one (C ≥ B), so it does no harm.
+  - Checked: the four samples, 4,000 random cases against the full-state brute force, and 30
+    larger cases (m ≤ 40, costs up to 10^9) against the O(n·m) reference.
 
 ### J. Sirius I — field 93/188 — **AC 254', first try** (Dedi, Erdene debugging; Erdene first)
 - **Statement:** distinct m-bit numbers (m ≤ 60). For a permutation p of the bit positions,
@@ -162,6 +206,24 @@ The 33 teams that finished with the same five problems:
     permutations (m ≤ 5). The segment-tree part is not implemented here.
 - **Ours:** on the silver median (251'), first try where 45% of the solvers were. After C, D, H, L
   the same-set teams needed 89 minutes for J; we needed 86.
+- **Code** (`j.cpp`, 194 lines). It is simpler than the popcount form above. The values are
+  distinct, so a smaller value that is comparable with x must be a submask of x, and a larger one
+  a supermask. So it goes by value instead of popcount:
+  - In increasing order of value, it finds the widest window around each position in which the
+    OR of the smaller values is inside x. This is a binary lifting from 2^20 down over an OR
+    segment tree.
+  - In decreasing order, it finds the widest window in which x is inside the AND of the larger
+    values (an AND tree).
+  - Position i counts for a query (l, r) when both l and r lie in the intersection of the two
+    windows. The queries are answered offline by left end, with a sum segment tree over right
+    ends.
+
+  Checks and leftovers:
+  - This is the part the dossier left unchecked. The code passes the sample, 1,500 small sets
+    with every query against all m! orders, and 20 sets of 50–400 60-bit values (400 queries
+    each) against the lemma.
+  - An empty `if(x == 6) { //hha… }` block is left from debugging sample 1, which contains a 6.
+    It is harmless.
 
 ### F. MEX Deletion — field 60/124 — **1 wrong run at 296', not solved**
 - **Statement:** a sorted array and d. Delete any chosen set at cost mex of {⌊(a_r − a_l)/d⌋}
@@ -179,6 +241,21 @@ The 33 teams that finished with the same five problems:
   - Tags: observation, graphs / DSU. Checked against all partitions for n ≤ 8, with a plain
     graph search for the bipartite test.
 - **Ours:** one run 4 minutes before the end. Whose run and what idea is not recorded.
+- **Code at 257'** (`f.cpp`, 44 lines, printed 38 minutes before the run): a greedy over chains.
+  - It keeps a multiset of chain ends. Each value joins the chain with the lowest end that is
+    less than d below it; if there is none, the chain with the highest end that is at least 2d
+    below it; if there is none, it starts a new chain. It prints the number of chains.
+  - **Wrong idea.** It checks only neighbours inside a chain, but the cost is the mex over all
+    pairs. Sample 2 (d = 3: 1 3 4 6 6 8) becomes one chain, since every gap is < 3. Yet
+    8 − 1 = 7 and 6 − 1 = 5 give the values 2 and 1, so that set costs 3. The greedy also never
+    uses a set of cost 2.
+  - With its debug lines removed it prints 2, 1, 1 on the samples (answers 2, 3, 1). It is wrong
+    on 122 of 1,500 random small cases.
+  - **Debug output left in.** As printed, it writes the multiset after every value (`print(st)`,
+    18 extra lines on the samples).
+  - So at 257' F had no correct idea, and the file did not pass the samples. The 3-is-enough
+    observation was not in it.
+  - Whether the 295.8' run was this code, a cleaned copy or a new idea is not known.
 
 ### A. Minimalism — field 59/81 — not submitted
 - **Statement:** n is given by its factorisation (≤ 15 primes, n ≤ 9·10^18). Number n's divisors
@@ -194,6 +271,8 @@ The 33 teams that finished with the same five problems:
 - **Missed?** Yes, as much as F: the same number of solves, and a better conversion (59 of the
   81 teams that tried it, against 60 of 124). It is Dedi's category (number theory), and he was
   on J until 254'.
+- **Code:** none was printed. The six files came out in name order, which looks like a print of
+  the whole folder. If so, nobody had started coding A by 256'.
 
 ### B, E, G, I, K, M — statements not seen
 3–6 solves each for B, E, I, M and none for G, K. Correct skips for a five- or six-solve team.
@@ -227,6 +306,45 @@ The 33 teams that finished with the same five problems:
 6. **Load.** Dedi 3 of 5 (L, C, J), Tamir 2 (D, H), **Erdene 0**. Dedi's overload is the pattern of
    4593, 1799, 4113 and 1053 (summary §4), now onsite. Erdene without a solve is new: he had 18
    solo solves in the virtuals, 4 of the 6 at Chengdu.
+
+## What the code says
+
+The six printed files, run against brute forces in `shenyang_2026_code_checks.py` (~1 min):
+
+| file | problem | result |
+|---|---|---|
+| `l.cpp` | L, AC | agrees on every test |
+| `d.cpp` | D, AC | agrees on all n ≤ 8 and 20,000 random cases up to 10^9 |
+| `c.cpp` | C, AC | agrees with the brute force and the O(n·m) reference |
+| `h.cpp` | H, AC | valid and unique on all 5,913 boards n ≤ 7, 600 boards n = 8, 9 |
+| `j.cpp` | J, AC | agrees with all m! orders (small) and with the lemma (60-bit) |
+| `f.cpp` | F, draft at 257' | **fails sample 2**; wrong on 122 / 1,500 small cases; debug output on |
+
+1. **The accepted code is clean.**
+   - No debug output is left in the five accepted files: the leftovers are commented out, plus
+     one empty `if` in J.
+   - Each file is one idea, written once. This matches the single wrong run on the board.
+2. **Twice our solution was simpler than the coach's.**
+   - H uses a different colouring.
+   - J goes by value instead of popcount, which removes the same-popcount case.
+   - Both were found in the contest without an editorial. The ideas the team had were good. The
+     time went elsewhere (board, §2–3).
+3. **D shows why it was first try.** The two cases the field missed (b = 1; a = b = 1) are
+   handled before anything else.
+4. **The 6th problem was not close.**
+   - At 257' F's file held an unproven greedy that fails the second sample. It checks
+     neighbours, not all pairs, and it still printed its debug output.
+   - There is no file for A.
+   - So "the 6th problem had one person" (board, §5) understates it: at 257' there was no
+     correct idea for either problem, 43 minutes before the end.
+   - By the bug classes of summary §3 the draft is an **unproven idea** plus **debug leftovers**.
+     Checklist items (g), (h) and (i) of §6.3 each catch it: no debug output, samples run, a
+     greedy compared with a brute force. The brute force over all partitions is 20 lines for
+     n ≤ 8.
+   - Whether the 295.8' run still had these faults is not known.
+5. **Not in the printouts:** H's 138' wrong run, H's second accepted run at 168.4', and the F run
+   at 295.8'. The board's run data does not include code, so those three stay unexplained until
+   the team answers.
 
 ## The opening pattern: Erdene takes a hard problem early
 
@@ -294,9 +412,12 @@ Dedi's last problem.
 7. **Upsolve this set first, from scratch and timed:**
    - Erdene: C (write the state and the one-row update before coding), then J (prove the lemma,
      then the offline version).
-   - Erdene and Tamir together: F.
+   - Erdene and Tamir together: F. Start from why the 257' greedy prints 1 on sample 2, and
+     write the all-partitions brute force before any new idea.
    - Dedi: A.
    - Tamir: H, until the wrong run is explained; then D's case list from memory.
+   - J is solved; compare `j.cpp` (value order) with the popcount version above. It is short
+     material for the submask block in item 8.
 8. **Topic weeks** (summary §6.1) stay, with two additions for Erdene: DP state design (start
    from C and his own 2174 B, 2190 B2) and submask / bit arguments (Dedi teaches, as planned in
    §6.5).
@@ -306,13 +427,18 @@ Dedi's last problem.
 
 ## Open questions
 
-1. **The rest of the set:** H's second page, the pages of B, E, G, I, K, M, the editorial once it
-   is out, and any onsite code that was saved.
+1. **The rest of the set:**
+   - the pages of B, E, G, I, K and M, and the editorial once it is out;
+   - H's second page (its format is now known from `h.cpp`, its samples are not).
+   - The saved code arrived on 2026-11-20 (six files, above).
 2. **H:** when did Tamir start it? What was the wrong run, and why did the fix take 30 minutes?
-   Who submitted the second AC at 168.4', and why?
+   Was the 138' run the earlier version whose `char last` / `last = x` lines are commented out in
+   `h.cpp`? Who submitted the second AC at 168.4', and why?
 3. **D:** was it 65' because of the case analysis, or because the keyboard was busy?
 4. **Erdene:** when did he start C, and did he read D or H first? At what minute did C and then
    J move to Dedi? On J, was the blocker the submask lemma or the data structure?
-5. **F at 295.8':** whose run, and what was the idea? Did anyone read A?
+5. **F at 295.8':** whose run? Who wrote the chain greedy in `f.cpp`? Was the run that greedy (it
+   fails sample 2), a copy without the debug output, or a new idea? Were the samples run before
+   it? Did anyone read A? No `a.cpp` was printed; is that because none existed?
 6. **Setup:** are the virtuals played on one computer? Who typed between 168' and 254'?
 7. Tamir's and Erdene's own accounts of the contest.

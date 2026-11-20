@@ -9501,3 +9501,85 @@ An extended [five-hour CF search](cf_five_hour_search.md) is testing cross-conte
 
 
 The five-hour all-metric search has completed. Five disjoint held-out handle partitions pool 2.16M predictions across the 2026 rounds. The loss-selected model improves all four point metrics over the incumbent. Its calibration-error interval includes zero, while loss, Brier and AUC intervals favor the new model. See [experiment design and full results](cf_five_hour_search.md).
+
+
+## Shenyang 2026 dossier finished: our onsite code (2026-11-20)
+
+**Request.** "These are our submissions which we were able to save in Shenyang. Finish the
+Shenyang dossier." Twelve photos of printouts: c.cpp (2 pages), d.cpp (2), f.cpp (1), h.cpp (2),
+j.cpp (4), l.cpp (1).
+
+**Branch merged.** The dossier (`output/team_r3_coach/shenyang_2026.md`), its checks, the
+`team_r3_onsite.py` and `ecfinal_cutoff_2026.py` scripts and the three 2026-11-16 entries above
+were on the unmerged branch `claude/shenyang-2026-debrief-q2hrco`. It is merged into this branch.
+The only conflict was the end of this file; the three entries are placed by date, before the
+hierarchical-fit entries of the same day. The merged `shenyang_2026_checks.py` still passes.
+
+**Transcription.** The files are in `data/team_r3/shenyang_2026/`, verbatim, with the printouts'
+line counts (103, 106, 44, 80, 194, 34). All six compile with `g++ -std=c++17 -Wall` without a
+warning.
+- Lines 44–56 of h.cpp are partly under a finger in the photo. The visible tokens and line
+  numbers fix them, and the file passes every check below.
+
+**When they were printed.**
+- The stamps run 13:15:47 (c), 13:16:00 (d), 13:17:21 (f), 13:18:41 (h), 13:18:49 (j) and
+  13:19:18 (l): file-name order.
+- The board page gives the contest as 2026-11-15 09:00–14:00 (UTC+8). So the prints were at
+  minutes 256–259, two minutes after J's AC (253.9').
+- This assumes the print server's clock is the contest clock. The fit with J's AC supports it.
+- So the five solved files are final. f.cpp is a draft from 38 minutes before F's only run
+  (295.8').
+
+**Checks.** `output/team_r3_coach/shenyang_2026_code_checks.py` (new, ~1 min, needs g++) feeds
+each file the input format it reads and compares with the references and brute forces of
+`shenyang_2026_checks.py`:
+
+| file | checked against | result |
+|---|---|---|
+| l.cpp | 5 samples + 20,000 random op strings | agrees |
+| d.cpp | every n ≤ 8, a, b ≤ n + 1, k; 20,000 random up to n = 10^9 | agrees |
+| c.cpp | 4 samples, 4,000 random vs the full-state brute force, 30 larger vs the O(n·m) reference | agrees |
+| h.cpp | shape + unique rook placement on all 5,913 boards n ≤ 7 and 600 random n = 8, 9 | valid |
+| j.cpp | sample; 1,500 small sets, every query, vs all m! orders; 20 sets of 50–400 60-bit values vs the lemma | agrees |
+| f.cpp | 3 samples, 1,500 random small cases vs all partitions | fails sample 2 (1 vs 3); 122 / 1,500 wrong; 18 debug lines on the samples |
+
+**Findings** (dossier: a "Code" line per problem and a new section "What the code says";
+summary §8).
+- **C** is the dossier's idea exactly: a lazy +A and one row per request.
+- **H** uses another construction, row by row with fill-from-below. It was accepted, which
+  agrees with the dossier's reading that any valid colouring passes.
+- **H's format** (the missing second page) comes from the code: n, then the grid with `.` and
+  one character per rook; the output is the grid.
+- **J** goes by value instead of popcount. Distinct values mean a comparable smaller value is a
+  submask. It uses OR/AND segment trees with binary lifting for each value's widest window, then
+  an offline sweep with a sum tree. This covers the part the dossier left unimplemented.
+- **D** handles b = 1 and a = b = 1 before anything else. That fits its first-try AC where 83% of
+  solvers failed.
+- **F at 257'** is a greedy over chains:
+  - it checks only neighbours, but the cost is the mex over all pairs, and it never uses a set of
+    cost 2;
+  - it still had `print(st)` debug output;
+  - by summary §3 it is an unproven idea plus debug leftovers, caught by checklist (g), (h) and
+    (i).
+- **A:** no file was printed. If the name-ordered print was the whole folder, nobody had coded A
+  by 256'.
+- **The 6th problem:** at 257' there was no correct idea for either one.
+- **Not inferred:**
+  - whether the 295.8' F run was this greedy;
+  - who wrote f.cpp;
+  - what H's 138' wrong run was.
+
+  These are in the dossier's open questions. The commented `char last` / `last = x` lines in
+  h.cpp are marked as an earlier version, without claiming it was the wrong run.
+
+**Found while working, not fixed.** The XCPCIO data paths `board.xcpcio.com/data/...` returned
+404 on 2026-11-20 for every board tried (51st Shenyang and Xi'an, 50th Shenyang). The board page
+now names `https://board-data.xcpcio.com/data/`, but this session's proxy closed the connection
+to that host, so the new path is unconfirmed. Until it is checked and `DATA_URL` in
+`fetch_xcpcio_standings.py` is changed, `team_r3_onsite.py` and the XCPCIO fetches cannot run.
+The contest start time above came from the board page's description instead.
+
+**Still missing:** the editorial, six statements, H's samples, and the code of H's 138' run and
+of the F run.
+
+Run: `python3 output/team_r3_coach/shenyang_2026_code_checks.py`.

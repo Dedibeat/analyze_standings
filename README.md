@@ -873,6 +873,15 @@ no editorial, so `output/team_r3_coach/shenyang_2026_checks.py` checks each idea
 against a brute force (`python3 output/team_r3_coach/shenyang_2026_checks.py`,
 ~10 s). `summary.md` §8 has the short version. Details are in `details.md`.
 
+Our onsite code (2026-11-20): the six files printed in the contest are
+transcribed in `data/team_r3/shenyang_2026/{c,d,f,h,j,l}.cpp`, and
+`python3 output/team_r3_coach/shenyang_2026_code_checks.py` (needs g++, ~1 min)
+runs each against those references. The five accepted files agree; F's draft
+fails sample 2. On 2026-11-20 the `board.xcpcio.com/data/...` paths used by
+`team_r3_onsite.py` and `fetch_xcpcio_standings.py` returned 404. The board page
+now names `board-data.xcpcio.com/data/`, but that host was unreachable from this
+session, so the new path is not confirmed.
+
 ### EC-Final cutoffs from the finished 2026 regionals (2026-11-16)
 
 ```bash
