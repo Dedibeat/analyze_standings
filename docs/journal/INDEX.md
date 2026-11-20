@@ -109,3 +109,4 @@ to other files may name the old root locations (reports keep their filenames und
 - 2026-11-20 · team-r3 · [Fresh CF problems and QOJ upsolving](2026-11-20-team-r3-cf-qoj-practice.md) — Dedi/Tamir/Erdene had 43/4/8 practice ACs at CF 2300–2500
 - 2026-11-20 · team-r3 · [CP training methods for HK](2026-11-20-cp-training-methods.md) — seven of nine misses at 2300–2500 had no recorded submission, motivating a three-mock problem-choice trial
 - 2026-11-20 · team-r3 · [Dedi's solo CF practice](2026-11-20-dedi-solo-practice.md) — 52 CF round performances, four upsolves and a solo 2300–2500 plan
+- 2026-11-20 · team-r3 · [Joint upsolve priority and teammate questions](2026-11-20-hk-teammate-questions.md) — attempted problems first, five questions each for Tamir and Erdene
