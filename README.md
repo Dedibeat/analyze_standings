@@ -48,6 +48,7 @@ The release commands are in [docs/STATUS.md](docs/STATUS.md#regenerate-the-shipp
 | `*_run/` | Paid experiment outputs, committed: Gemini pairwise/LLM runs and the BigQuery TabFM responses. `de_stability_run/` and `hier_binary_run/` are local, derived and gitignored |
 
 Sibling repositories:
+- `../mostafa_sheet`: Mostafa Saad’s problem sheets and trainee logs used in the HK training plan.
 - `../my-react-app`: the public app that receives the exported viewers and ratings.
 - `../llm-integration`: the LLM tags and `difficulty_estimate` in `tagged.json`, and
   the named-technique extraction.
@@ -66,6 +67,7 @@ Sibling repositories:
 - `strat.tex`, `strat_detailed.tex`: the mathematical write-up that code comments cite.
 
 **Reports** (`docs/reports/`)
+- `team-r3/`: [Hong Kong training plan](docs/reports/team-r3/hong-kong-2027.md), including the six regional mocks and individual practice bands.
 - `rating/`
   - `hier_time_report.md`: solve time in the hierarchical fit (the shipped model).
   - `hier_binary_report.md`: hierarchical binary as a DE rival.

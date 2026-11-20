@@ -4,7 +4,7 @@ Current state of the project. Keep this file short (≤150 lines) and true: when
 task changes what ships, what is open, or a rule below, edit this file in the same
 commit. History belongs in [journal/](journal/INDEX.md), not here.
 
-Last updated: 2026-11-20 (repository reorganized; no model or data change).
+Last updated: 2026-11-20 (Hong Kong dates and team training plan).
 
 ## What ships
 
@@ -103,8 +103,10 @@ release steps above. Full history:
     [problem rating audit](reports/rating/problem_rating_audit.md).
 - **Medals for the 2026 regionals:** the 2026 EA regionals are in the fit but not
   in the medal analysis (`data/xcpcio_ea_official.json` lacks them).
-- **NUM-R^3 season** (our team): Shenyang was 2026-11-15. Hong Kong is around
-  2027-01-07/08 and EC-Final 2027-01-22/23. Forecasts are in the
+- **NUM-R^3 season** (our team): Shenyang was 2026-11-15. Hong Kong is
+  [2027-01-09/10](https://registration.nerc.icpc.global/regionals/finder/HongKong-2027).
+  The [training plan](reports/team-r3/hong-kong-2027.md) runs through the regional.
+  The EC-Final estimate is 2027-01-22/23. Forecasts are in the
   hong-kong / ec-final journal entries; coaching data is in `data/team_r3/` and
   [usage/team-r3.md](usage/team-r3.md).
 

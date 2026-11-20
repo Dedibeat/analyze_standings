@@ -104,3 +104,4 @@ to other files may name the old root locations (reports keep their filenames und
 - 2026-11-20 · meta · [Repository reorganized for agent navigation](2026-11-20-repository-reorganized-for-agent-navigation.md) — docs only; details.md split into this journal
 - 2026-11-20 · meta · [requirements.txt, WF files removed, cache inventory](2026-11-20-requirements-txt-wf-files-removed-cache-inventory.md) — raw+paid caches ≈0.5 GB; derived ≈9.5 GB
 - 2026-11-20 · data · [Expensive caches committed to git](2026-11-20-expensive-caches-committed-to-git.md) — ~490 MB raw/paid caches tracked; derived and cookies stay ignored
+- 2026-11-20 · team-r3 · [Training for the Hong Kong regional](2026-11-20-hong-kong-training.md) — six mocks, three fitted solo starting bands and a Shenyang next-solve review
