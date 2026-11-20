@@ -1,6 +1,6 @@
 # Stable DE exploration scripts (2026-11-10)
 
-Exploratory scripts behind the "Stable DE, continued" entry in `details.md`.
+Exploratory scripts behind the "Stable DE, continued" entry in `docs/journal/`.
 Research only. They print to the terminal and write nothing under `output/`.
 They are kept as run, without tests; treat them as a record, not a library.
 

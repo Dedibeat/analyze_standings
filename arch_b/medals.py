@@ -34,7 +34,7 @@ scale (predicted-minus-actual solve rate +0.10 bronze / +0.34 gold), and even
 the solve-count-inversion ability is miscalibrated at the 50% point (where it
 predicts 50%, cutoff cohorts actually solve 57-92%) because EA fields' solve
 curves are far steeper than the global Rasch slope (the 2PL finding: EA
-discrimination ~2.1, see details.md). The isotonic crossing measures the 50%
+discrimination ~2.1, see docs/journal/). The isotonic crossing measures the 50%
 point directly and stays a threshold on b, so badges remain monotone in
 difficulty and cross-contest comparable.
 

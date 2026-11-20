@@ -9,7 +9,7 @@ as ``external_validate``), applies the locked gym-learned monotone shape from
 the affine leg on the *other* contests and predict the held-out one. Pooled RMSE
 over all anchor problems, in CF points.
 
-Why this metric (see details.md): it measures the shipped deliverable
+Why this metric (see docs/journal/): it measures the shipped deliverable
 (``difficulty_cf``) directly, in interpretable units; it is sensitive to both
 ranking *and* scale (Spearman is blind to compression); and LOCO punishes
 overfitting the anchor set. The shape is locked at NBINS=15, ALPHA=0.75, with

@@ -360,7 +360,7 @@ def run(project, location, dataset="tabfm_research", cleanup=True):
               "selected_by_outer_contest": selected, "metrics": {method: _metrics(predictions, method) for method in methods},
               "predictions": predictions, "baseline_provenance_sha256": baseline["provenance_sha256"],
               "source_sha256": {"module": _file_digest(__file__),
-                                "plan": _file_digest(Path(__file__).parent.parent / "tabfm_cloud_plan.md")},
+                                "plan": _file_digest(Path(__file__).parent.parent / "docs/reports/calibration/tabfm_cloud_plan.md")},
               "archive": str(archive), "tables_deleted_after_archive": cleanup}
     OUT.write_text(json.dumps(result, indent=2))
     return result

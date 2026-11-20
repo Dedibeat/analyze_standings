@@ -16,8 +16,8 @@ from .joint import OLDER_ICPC, PETROZ, TAGGED, UCUP, WF
 
 OUT = os.path.join(os.path.dirname(__file__), os.pardir, "output",
                    "calibration_ablation.json")
-PLAN = os.path.join(os.path.dirname(__file__), os.pardir,
-                    "calibration_ablation_plan.md")
+PLAN = os.path.join(os.path.dirname(__file__), os.pardir, "docs", "reports",
+                    "calibration", "calibration_ablation_plan.md")
 LAMDAS = (0.0, 0.25, 0.5, 0.75, 1.0)
 RIDGE_ALPHAS = (0.1, 1.0, 10.0)
 BUNDLES = ("D", "E", "T", "DE", "DT", "ET", "DET")

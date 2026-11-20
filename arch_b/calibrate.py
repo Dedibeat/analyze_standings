@@ -4,14 +4,14 @@ Production ``problem_cf`` reads the hierarchical-with-time release. The CLI
 and calibration mathematics below retain the previous DE research baseline.
 
 Our difficulties live on a relative scale pinned at the arbitrary anchor MU0=2000
-(no member-CF ratings exist; see the anchoring decision in details.md), and the CF
+(no member-CF ratings exist; see the anchoring decision in docs/journal/), and the CF
 checks showed the scale is *compressed* — correctly ranked but on a narrower span
 than Codeforces, more so in the hard tail. The map to CF points is therefore built
 in two legs:
 
 1. **Shape** (nonlinear, gym-learned): a monotone quantile map ``f`` fit on the
    ~660 problems the CF gym-mirror yardstick covers (``output/gym_difficulty.json``
-   — certified nearly CF-native in scale, see details.md), shrunk toward its own
+   — certified nearly CF-native in scale, see docs/journal/), shrunk toward its own
    linear approximation by ``ALPHA``. The gym population is authoritative on
    *scale* but noisier than our fit at *ranking*; a monotone map consumes only the
    scale and cannot reorder our problems. qoj 2692 (the one gym contest that is
