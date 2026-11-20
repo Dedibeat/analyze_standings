@@ -1,0 +1,17 @@
+# Python 3.12. Versions pinned to the working .venv on 2026-11-20.
+#   python3 -m venv .venv && ./.venv/bin/pip install -r requirements.txt
+numpy==2.5.1
+scipy==1.18.1
+pandas==3.1.1                    # scripts/cf_participation_check.py
+lightgbm==4.7.0                  # scripts/cf_* boosted solve-prediction searches
+openpyxl==3.1.5                  # arch_b/hk_field_2026.py (PTA .xlsx exports)
+pypinyin==0.55.0                 # Hong Kong / Macau name matching
+curl_cffi==0.16.0                # QOJ login: scripts/add_qoj_contest.py, fetch_team_r3.py
+google-cloud-bigquery==3.45.0    # arch_b/tabfm_bigquery.py; brings google-auth for pairwise_tuning.py
+
+# Not on PyPI, imported from sibling checkouts when needed:
+#   ../qoj-intergration (qoj)              QOJ HTML parser
+#   ../codeforces_integration (cf_problems) Codeforces statements for pairwise_tuning.py
+# The DE stability experiment pins its own numpy in requirements-de-stability.txt.
+# The optional local TabFM checkpoint (TABFM_CHECKPOINT_DIR) is installed separately; see
+# docs/reports/calibration/calibration_experiment_report.md.

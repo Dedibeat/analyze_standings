@@ -70,8 +70,8 @@ release steps above. Full history:
   (`hier_binary_run/`) exist only there.
 - The `*_run/` folders at the root are gitignored experiment caches. Pairwise
   artifacts are synced and checked with `scripts/sync_pairwise_artifacts.sh`.
-- No `requirements.txt` exists. The venv needs numpy (plus pypinyin for the Hong
-  Kong modules and openpyxl for `hk_field_2026`). The DE stability experiment pins
+- Dependencies: `./.venv/bin/pip install -r requirements.txt`. Sibling checkouts
+  are listed inside. The DE stability experiment pins
   `requirements-de-stability.txt`.
 - **Tests:** `./.venv/bin/python -m unittest discover -s tests -p 'test_*.py'`
   (about 1 min). **Known failures:** 3 in `test_medal_predict` (city-mean and 2026

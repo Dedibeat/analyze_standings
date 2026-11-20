@@ -19,7 +19,7 @@ This file is the **master map**: what is where and what it is for.
 | The method | [docs/design/](docs/design/) |
 | Code in one folder | that folder's `CLAUDE.md` (module map) |
 
-Setup: `python3 -m venv .venv && ./.venv/bin/pip install numpy pypinyin openpyxl`.
+Setup: `python3 -m venv .venv && ./.venv/bin/pip install -r requirements.txt`.
 Tests: `./.venv/bin/python -m unittest discover -s tests -p 'test_*.py'`.
 The release commands are in [docs/STATUS.md](docs/STATUS.md#regenerate-the-shipped-products).
 
@@ -43,8 +43,8 @@ The release commands are in [docs/STATUS.md](docs/STATUS.md#regenerate-the-shipp
 | `docs/usage/` | How to run each tool family |
 | `docs/teaching/` | Teaching selections and the probability-course problems (`.tex` + `.pdf`) |
 | `autoresearch/` | Logs of the July 2026 auto-research campaigns on the metric (see `docs/design/program.md`) |
+| `requirements.txt` | Pinned dependencies of the venv; sibling checkouts it needs are listed inside |
 | `requirements-de-stability.txt` | Pinned NumPy for the frozen DE stability experiment |
-| `WF.txt` | Four QOJ contest URLs; origin and purpose not recorded |
 | `*_run/` (gitignored) | Local experiment caches (pairwise, LLM, TabFM, DE stability) |
 
 Sibling repositories:

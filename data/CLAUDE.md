@@ -3,8 +3,9 @@
 Paths are relative to `data/`. Never hand-edit a file that a script builds; rerun
 the builder. Downloads go to gitignored caches here. `.gitignore` lists them:
 `cf_ai/`, `cphof_cache/`, `ec_online_cache/`, `gym_checkpoints/`,
-`cf_pairwise/problems/`, and the team_r3 PDFs/zips. Note: 28 files in
-`ec_online_cache/` were committed before that folder was ignored.
+`cf_pairwise/problems/`, and the team_r3 PDFs/zips. 28 files in `ec_online_cache/`
+were committed before that folder was ignored. They stay tracked on purpose,
+because refetching is slow and the sources can change.
 
 ## Fit inputs (read by `arch_b.joint`)
 
@@ -34,7 +35,6 @@ the builder. Downloads go to gitignored caches here. `.gitignore` lists them:
   by the hierarchical fits.
 - `tagged_official.json`: official-row variant read by
   `scripts/team_r3_participations.py`.
-- `wf_contests.json`: no code reads it; origin not recorded.
 
 ## Regional results, rosters, forecasts
 
@@ -54,4 +54,8 @@ the builder. Downloads go to gitignored caches here. `.gitignore` lists them:
   contest dashboards and statements, XCPCIO boards, `members_solved.csv` and `cf/`.
   Built by `scripts/fetch_team_r3.py`.
 - `cf_pairwise/`: snapshot and summary of the pairwise Gemini experiment.
-- `cf_ai/` (gitignored, about 10 GB): Codeforces API cache for `scripts/cf_*`.
+- `cf_ai/` (gitignored, about 10 GB): Codeforces data for `scripts/cf_*`.
+  - Raw API downloads: `rc/` (rating changes), `st/` (standings) and
+    `contest_list.json`, about 240 MB.
+  - Derived feature caches: `boost_v1*`, `cross_history_v1/` and `replay.npz`,
+    about 9.5 GB, rebuildable from the raw downloads by the `cf_*` scripts.
