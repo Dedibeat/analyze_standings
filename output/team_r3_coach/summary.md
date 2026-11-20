@@ -41,6 +41,7 @@ Fixed conventions:
 | 1799 EC Online II 2024 | online virtual | 6 / 402 | #514 / 2450 (21%) | Tamir joined late |
 | **4071 EC Online I 2026** | **official** | 6 / 877 | **#544 / 2535 (21%)** | standard six at 2× the top-10% penalty |
 | **4113 EC Online II 2026** | **official** | 4 / 482 | **#352 / 2636 (13%)** | standard four, 93 min behind top 10% |
+| **Shenyang 2026** (added 2026-11-16, §8) | **official, onsite** | 5 / 647 | **#87 / 401** | **silver**, 6 ranks outside the EC-Final estimate (#81) |
 
 - **The six ICPC regional virtuals:** 1 gold, 4 silver, 1 bronze. Inside the EC-Final line twice
   (1071, 4607). Three near misses: 4593 (one wrong run), 1096 (two wrong runs) and 1051 (one more
@@ -515,3 +516,45 @@ still apply to owners: an owner stuck on their own category hands it to the back
 - Codeforces code: with a browser `cf_clearance` cookie (passed in the environment, never saved) the
   CF chains could be read as code (`cf.md` §7). Other handles or platforms used for rounds or
   upsolving?
+
+## 8. Shenyang 2026 onsite (added 2026-11-16; dossier: `shenyang_2026.md`)
+
+Sections 1–7 were written before Shenyang and are left as they were. The onsite result:
+**5 solved (C D H J L), 647 min, #87 / 401, silver**, six ranks and 43 minutes outside the
+EC-Final estimate (#81 = 5 / 604; re-estimated on 2026-11-16 as ~81, range 77–84, was ~75).
+Hong Kong's ten places should reach about rank 21–25 (was 32–37).
+Members by Dedi's account: **L, C, J Dedi; D, H Tamir; Erdene none.**
+
+**How the plan above held up.**
+- **The §6.0 target was met, and it was set too low.** We solved the standard set with one
+  penalised wrong run and got the 5th problem at 254'. But rank 75 was 5 / 569 this year, against
+  4 / 297 in 2025: the target was read off easier past Shenyangs.
+- **Wrong runs: 1, against 4.9 per virtual.** The 33 teams with the same five problems made 4
+  (median). Dedi: three solves, all first try. Tamir's D was first try where 17% of solvers were.
+- **Pace got worse onsite:** ×1.6 to ×2.2 the gold medians on D, C, H and J (virtuals ×1.3–1.9).
+  "Virtual medals are an upper bound" (§5) held: the 22nd percentile, as in the Xi'an virtual.
+- **H is the gap, and it waited behind D.** Tamir solved both: D at 65', then H with a first run
+  at 138' and the AC at 168'; the silver median was 105'. H first try at 138' is #81.
+- **Erdene had no solve.** He was given C (DP state design, his Codeforces wall, §4b) and then J
+  (a submask lemma plus an offline segment tree); Dedi took both over and both went in first try.
+  §6.5 made Erdene the data-structure owner; J is the first evidence against that.
+- **The "hard problem for Erdene" opening cost twice:** no solve from it, and the easy problems he
+  usually opens queued on Tamir.
+- **Dedi overloaded again** (3 of 5), and the 6th problem had one person on it from 168': F
+  (observation + DSU) or A (number theory, Dedi's category), both ~60 solves.
+
+**Changes for Hong Kong** (details in the dossier):
+1. Erdene opens with the easy problems again; a harder one only when it is his type.
+2. Mid problems are assigned by type with a clock (explain at 30', hand over at 45').
+3. No two easy problems queued on one member.
+4. While Dedi codes the last standard problem, Tamir and Erdene pair on the field's next one.
+5. Erdene has a fixed next job after a miss; in training he finishes every virtual and always
+   submits on the field's next problem.
+6. Speed on easy-mid problems comes before new topics; virtuals on one computer.
+7. Upsolve the set: C and J (Erdene), F (Erdene + Tamir), A (Dedi), H (Tamir).
+8. Erdene's topic weeks gain DP state design and submask / bit arguments.
+
+**Open:** the editorial, our code and six statements are missing; the dossier's ideas are the
+coach's own, checked by brute force in `shenyang_2026_checks.py`. Questions for the team are at
+the end of the dossier (when H was started and what its wrong run was, when C and J changed
+hands, who ran F).

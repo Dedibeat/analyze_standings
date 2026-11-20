@@ -8890,6 +8890,249 @@ then, for each missing QOJ id,
 `python3 scripts/add_qoj_contest.py <id> --name "CCPC …" --region "China Collegiate" --year <y> --output data/qoj_ccpc.json`.
 
 
+## NUM-R^3 at Shenyang 2026: onsite debrief (2026-11-16)
+
+**Request.** Take the coach role. The team played the Shenyang 2026 regional onsite and
+finished 87th of the official rows.
+
+**User facts (Dedi, 2026-11-16).**
+- Dedi solved L, C and J; Tamir H; Erdene the fifth problem (remembered as D; the board
+  confirms the fifth is D).
+- The team's usual plan in virtuals: Erdene gets a hard problem early while Dedi and Tamir
+  clear the rest. Dedi credits it for the Chengdu virtual.
+- At Shenyang Erdene did not see the DP in C or the offline segment tree in J. Dedi took both
+  over. He asked Erdene to solve F with Tamir; Erdene had lost confidence and debugged J with
+  him instead.
+- Dedi had an allergic reaction to an insect bite in Shenyang: a hormonal injection, ebastine in
+  the morning, bismuth potassium citrate in the evening. Tamir was bitten after the contest.
+
+**Script.** `scripts/team_r3_onsite.py <board-link> [--team NAME] [--at SOLVED:MINUTES]` (new)
+reads a live XCPCIO board through `fetch_xcpcio_standings._fetch_json` and prints, for official
+teams only:
+- the medal and EC-Final (≈ 75) lines and our row;
+- our runs by minute with the rank after each AC;
+- the solve sets by solve count;
+- per problem: solved/tried, first-try share, the median solve minute of the gold, silver and
+  bronze teams, solves in the last hour, and ours;
+- with `--at`, the rank a score would have had.
+
+It exists because `team_r3_digest.py` needs a QOJ contest directory, and the run-level data
+(the minute of a wrong run, a resubmission after AC, a run on an unsolved problem) is not in
+`data/xcpcio_51st_regionals.json`.
+
+**Medal counts.** XCPCIO's `medal.official` holds counts per medal (Shenyang 40 / 80 / 120), not
+cumulative ranks: silver is #41–#120. My first scratch pass read them as cumulative and called
+#87 a bronze; the script sums them. This matches the 2026-11-04 digest (Chengdu "32 / 64 / 96",
+last silver #96).
+
+**Result.** 5 solved (C D H J L), 647 min, **#87 / 401, silver**.
+
+| line | rank | scoreline |
+|---|---|---|
+| last gold | #40 | 7 / 1169 |
+| six solves | #44–#62 | |
+| EC-Final estimate | #75 | 5 / 569 |
+| us | #87 | 5 / 647 |
+| last silver | #120 | 4 / 328 |
+
+Our runs: L 11.1 AC, D 64.7 AC, C 129.6 AC, H 138.1 WA, H 167.7 AC, H 168.4 AC (a second
+submission after the AC), J 253.9 AC, F 295.8 WA.
+
+**Findings** (`output/team_r3_coach/shenyang_2026.md`; summary §8).
+- **Accuracy.** One penalised wrong run. The 14 virtuals averaged 4.9; the 33 teams with the same
+  five problems made 4 (median). Dedi's three solves were all first try. D was first try where
+  only 17% of its solvers were.
+- **Speed.** ×1.6 to ×2.2 the gold medians on D, C, H and J, against ×1.3–1.9 in the virtuals.
+  #87 of 401 is the 22nd percentile, the same as the Xi'an 2026 virtual.
+- **H is the gap to the EC-Final estimate.** 357 solves; our first run at 138', AC at 168'; the
+  silver median is 105'. H first try at 138' gives #81; H clean at 105' gives #75.
+- **C and J were at our tier's pace** (C 18 minutes behind the silver median, J on it). After
+  C, D, H, L the same-set teams needed 89 minutes for J; we needed 86.
+- **J made the medal silver:** four problems would have been 4 / 393 = #139, a bronze.
+- **The 6th problem** (A 59 solves, F 60) was worth #58 even at the last minute. From 168' it had
+  one person; our only run on either was F at 295.8'.
+- **The opening pattern.** In the Chengdu virtual Erdene's solves were the two easiest problems
+  and the two interactive/communication ones, his best category. Shenyang's mid problems were a
+  DP (his Codeforces wall) and an offline data-structure problem. The summary's §6.5 choice of
+  Erdene as data-structure owner now has one result against it.
+- **The §6.0 target** (standard set, ≤ 2 wrong runs, a 5th problem late) was met and was too low:
+  rank 75 was 5 / 569 this year and 4 / 297 in 2025.
+
+**Plan changes for Hong Kong** (dossier, last section): mid problems by type with a 30/45-minute
+clock; the keyboard to the most-solved open problem with a complete solution; Tamir and Erdene
+pair on the field's next problem while Dedi closes; a fixed next job for Erdene after a miss;
+speed on easy-mid problems before new topics, with virtuals on one computer; DP state design and
+offline data-structure blocks for Erdene; an incentive-seat application if NUM has no seat after
+Nanchang.
+
+**Missing, reported rather than guessed.**
+- The statements, the editorial and our onsite code. The set was not on QOJ at the 2026-11-15
+  pull and QOJ credentials are not in this session, so the dossier has no per-problem ideas and
+  "DP" / "offline segment tree" are Dedi's words.
+- `members_solved.csv` was not changed: `team_r3_participations.py` reads a QOJ id from the
+  sheet's contest name and would fail on a Shenyang 2026 row. The attribution is in the dossier.
+- Open questions for the team (dossier): why H was late and what its wrong run was, why D took
+  65', when C and J changed hands, who ran F and whether A was read, whether virtuals use one
+  computer, and Tamir's and Erdene's accounts.
+- The page https://claude.ai/artifact/4i24BaGeoogkxfA45ZTjp7 was not updated.
+
+Run: `python3 scripts/team_r3_onsite.py /icpc/51st/shenyang --at 5:598 --at 5:565 --at 4:394 --at 6:943`.
+
+
+## EC-Final cutoffs re-estimated from the finished 2026 regionals (2026-11-16, second entry)
+
+**Request.** Recompute the EC-Final cutoff estimate from the finished regionals, and estimate
+the cutoff in Hong Kong.
+
+**Script.** `scripts/ecfinal_cutoff_2026.py [--team NAME]` (new, ~25 s; needs numpy, pypinyin
+and openpyxl through `arch_b.hk_field_2026`).
+
+### Mainland: the last of the 230 seats falls at rank ~81 (77–84); it was ~75 (70–80)
+
+**Method.**
+- The round-robin rule of `ecfinal_cutoff.py` is replayed on the official rows of the five
+  played sites in `data/xcpcio_51st_regionals.json` (Xi'an, Chengdu, Wuhan, Nanjing, Shenyang).
+  Identity is (school, member name), not the bare name the old script uses.
+- Shanghai (12-05) and Nanchang (12-19) are added from history. For 2023–2025 the sites are put
+  in calendar order (XCPCIO start dates) and the 6th site's new admits within rank d are counted.
+  No season had a 7th site, so it gets rho × the 6th, rho = 0.5 / 0.7 / 0.9. The ratio between
+  consecutive sites at positions 4–6 was 0.50–1.12, mean 0.74.
+- The cutoff is the first tier d with admitted(d) + late(d) ≥ 230.
+
+**Numbers.** Teams admitted within rank d by the first five sites:
+
+| season | d = 70 | 75 | 80 | 85 | 90 | 6th site adds (d = 70 … 90) |
+|---|---|---|---|---|---|---|
+| 2023 | 186 | 197 | 206 | 220 | 234 | 14, 15, 18, 16, 16 |
+| 2024 | 187 | 199 | 214 | 225 | 233 | 12, 11, 12, 13, 14 |
+| 2025 | 179 | 189 | 200 | 212 | 228 | 9, 10, 11, 12, 11 |
+| 2026 | 185 | 196 | 209 | 218 | 231 | to come |
+
+- 2026 after five sites looks like the earlier seasons after five sites.
+- Cutoff by scenario (6th site as 2023 / 2024 / 2025 × rho): 77–79, 80–82, 81–83. Median 81.
+  With no further admits at all the five sites alone reach rank 90.
+- **Why it moved from ~75.** The pre-season projection needed 230 admits by rank 75. The five
+  played sites give 196 there, so the last two would have to add 34; history gives 15–29.
+
+**Xi'an has no member names** on XCPCIO (0 of 402 official rows). Members were taken from the
+same school + team name on another 2026 board (135 teams), else from a 2026 online roster (110).
+157 teams stay name-only, 25 of them in Xi'an's top 100, and count as teams of their own.
+- Among the roster-resolved teams whose name is on no other board, 4 of 28 in the top 100 share a
+  member with a team at another site. At that rate about 3–4 of the 25 are hidden duplicates.
+- Treating 25% of them as duplicates moves the cutoff by 0–2 ranks deeper (81 → 81–83), 50% by
+  1–4. That is why the range is given as 77–84 and not 77–83.
+
+**NUM-R^3 (Shenyang #87).** Shenyang has the most valid teams, so it is first in every tier.
+A seat needs fewer than 230 seats filled after tier 86: the last two sites may admit at most
+10 new teams within their top 86. The scenarios give 18–30, and the smallest 6th-site number
+alone in 2023–2025 is 12 at d = 85. So a direct seat from Shenyang is unlikely; I put it at a
+few percent and cannot do better without the registered fields.
+
+### Hong Kong: the 10th place falls at about rank 21–25; it was 32–37
+
+**Method.**
+- **Field.** The 10-28 registration export through `arch_b.hk_field_2026`: the top 95 non-local
+  round-1 teams by school rank, the 7 registered local teams, and 13 more local teams drawn from
+  the 2024/2025 local teams (the notice gives 20 local seats). 115 teams, medals to rank 69.
+- **Eligibility** from the mainland replay down to the cutoff: a team with a member on an
+  admitted team is skipped, and so is a school that already has 3 seats.
+- **Ranks.** logit(rank share of the field) fitted on the 2024/2025 Hong Kong boards. With a
+  mainland result that season: −4.865 − 0.739 x + 0.237 m (133 teams, residual SD 1.03), x the
+  online strength and m the mean logit rank share at the mainland sites. Without one:
+  −7.792 − 1.234 x (82 teams, SD 1.18). Teams with no online link draw from the 2024/2025
+  unlinked teams of the same kind. 4,000 draws; in each, the medal ranks are walked and the rank
+  of the 10th eligible team is recorded.
+
+**Backtest** (fit on one season, simulate the other with its real eligibility):
+
+| season | teams with a mainland seat | board (2026 rule replayed) | simulated median (10–90%) |
+|---|---|---|---|
+| 2024 | 18 of 149 | 37 | 34 (29–38) |
+| 2025 | 16 of 126 | 32 | 28 (24–32) |
+
+The simulation reads 3–4 ranks too shallow in both seasons.
+
+**2026.** 6 field teams hold a mainland seat and 26 more come from schools that already have 3.
+The 10th eligible medal team is at rank **21** (25–75% 19–23, 10–90% 18–25), with 11 teams
+skipped above it and 3.0 of the 10 places going to local teams. It does not move with the
+mainland cutoff (77 / 81 / 83 give 21). Adding the backtest's 3–4 ranks: **about 21–25**.
+- **Why it is shallower than 32–37.** That figure replayed the 2024/2025 boards, whose top was
+  full of teams with a mainland seat (16–18 in the field). This year the strong schools sent
+  second line-ups or did not register, so only 6 field teams hold a seat.
+- **NUM-R^3:** predicted Hong Kong rank median 47 (10–90% 15–88); it takes a place in 18% of the
+  draws. The 2026-10-08 figure was 19% for rank ≤ 32–37: the bar is higher, the field weaker.
+
+**Not known, reported rather than guessed.**
+- **The registered fields of Shanghai, Nanchang and the final Hong Kong list.** One request to
+  PTA (`uep.pintia.cn`) failed with a connection reset and the retry was blocked by this
+  session's permissions, so nothing was fetched. With those lists the late sites could be
+  replayed team by team instead of taken from history, and the Hong Kong field would be the real
+  one (rounds 1–2 closed on 10-30 and 11-14; the list used is from 10-28).
+- **Hong Kong teams that qualify later** at Shanghai or Nanchang are not removed, and schools at
+  2 seats may reach 3. Both make the Hong Kong cutoff deeper.
+- **Reward seats** (a school with one may hold 4): not known per school; the cap is 3 here.
+- Whether seats unused at Hong Kong return to the mainland is not stated in the rule as recorded.
+
+**Changed elsewhere.** `team_r3_onsite.py` now marks rank 81 as the EC-Final line (Shenyang:
+#81 = 5 / 604, so NUM-R^3 is six ranks and 43 minutes outside; H first try at 138' would have
+been exactly #81). The Shenyang dossier and summary §8 use the new numbers.
+`ecfinal_chance.py` still uses K = 70 / 75 / 80 and the Hong Kong depth of 32–37; it was not
+rerun. No test was added for the new script.
+
+Run: `python3 scripts/ecfinal_cutoff_2026.py`.
+
+
+## Shenyang 2026: statements received, member correction, problem ideas (2026-11-16, third entry)
+
+**User facts (Dedi).**
+- Photos of the Chinese statements of A, C, D, F, H, J and L. H's second page (output format,
+  samples) and the pages of B, E, G, I, K and M were not sent. The photos are not committed.
+- **Correction: Tamir solved D, not Erdene.** Asked who solved H, Dedi confirmed Tamir. So the
+  members are Dedi L, C, J; Tamir D, H; **Erdene none**. This supersedes "Erdene solved D" in the
+  first entry of today and everything built on it there.
+
+**Problem ideas** (dossier, new "Problems" section). There is no editorial, so these are my own
+solutions:
+
+| problem | idea | checked against |
+|---|---|---|
+| L | no palindrome ≥ 2 ⇔ none of length 2 or 3; a stack | a direct palindrome test, 20,000 random op strings |
+| D | a + b − 1 ≤ n; p = [n−a+1..n] then 1..n−a with b−1 prefix minima; b = 1 forces p1 = 1 | every permutation for n ≤ 7, all (a, b, k) |
+| H | cell (x, y) is colour x if y ≥ π(x), else the nearest row below (else above) whose rook is at a column ≤ y; rooks are forced from the rightmost column leftwards | every permutation for n ≤ 7: shape rules and a full count of rook placements |
+| C | state (most recent, least recent); a direct access is a lazy +A, a cache access rewrites one row; O(n·m) | a full-state DP, 4,000 random cases |
+| J | anchored ⇔ comparable (submask/supermask) with every other value; popcount form; nearest incomparable by popcount-ordered OR/AND segment trees, then a Fenwick sweep | the lemma and popcount form against all m! orders, m ≤ 5 |
+| F | the answer is 1, 2 or 3 (blocks ⌊a/d⌋ mod 3); bipartite test of the d ≤ diff < 2d graph | all partitions for n ≤ 8 |
+| A | answer = Σ φ(n/g) over good g; the divisors of g are a prefix of D[1], D[1+s], …; one walk per prime | a direct count for n < 2500 and the 19-digit sample |
+
+- `output/team_r3_coach/shenyang_2026_checks.py` holds the reference solutions and the checks
+  (~10 s, all pass, all statement samples included).
+- **Not checked:** J's segment-tree part and F's DSU implementation at full size are described,
+  not written. H's output format is unknown, so only the colouring's properties are checked.
+- Mistake caught while working: nothing in the solutions, but my first reading of the member
+  correction was ambiguous (D ↔ H swap or both to Tamir), so it was asked, not assumed.
+
+**What the correction changes in the debrief.**
+- Load: Dedi 3, Tamir 2, Erdene 0 (it read 3 / 1 / 1).
+- D, first try on the problem only 17% of solvers got first try, is Tamir's.
+- H's lateness has a cause now: Tamir solved D (65') and then H (first run 138', AC 168'), so two
+  of the three easiest problems were queued on one member while Erdene's C and J gave no solve.
+- The opening pattern cost twice: no solve from Erdene's problems, and no Erdene on the easy
+  problems he opened at Chengdu (M at 23').
+- By category: C is DP state design (Erdene's Codeforces wall); J needs a bit lemma first (Dedi's
+  strength); A is number theory (Dedi's category, never read as far as is known); F is an
+  observation plus DSU.
+
+**Plan changes** (dossier and summary §8 rewritten): Erdene opens with the easy problems again;
+no two easy problems queued on one member; upsolve list by member (C and J Erdene, F Erdene +
+Tamir, A Dedi, H Tamir); Erdene's topic weeks gain DP state design and submask arguments. The
+other rules of the first entry stand.
+
+**Still missing:** the editorial, our onsite code, H's second page and six statements. Open
+questions are at the end of the dossier.
+
+Run: `python3 output/team_r3_coach/shenyang_2026_checks.py`.
+
+
 ## Hierarchical fit: loader bugs fixed, solve time added, release candidate (2026-11-16)
 
 **Request.** Continue the hierarchical binary experiment and improve it for

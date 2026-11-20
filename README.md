@@ -855,6 +855,39 @@ the onsite field from XCPCIO for the 2026 regionals, the CCPC stations and the
 `1053_checks.py` and `2661_checks.py` are brute-force and UBSan checks of our
 runs, kept as evidence. Details are in `details.md`.
 
+### NUM-R^3 onsite debrief: Shenyang 2026 (2026-11-16)
+
+```bash
+python3 scripts/team_r3_onsite.py /icpc/51st/shenyang              # lines, our runs by minute, field per problem
+python3 scripts/team_r3_onsite.py /icpc/51st/shenyang --at 5:565   # the rank a score would have had
+```
+
+Reads a live XCPCIO board (official teams only) and prints the medal and
+EC-Final lines, our runs with the rank after each AC, the solve sets by count,
+and per problem the first-try share and the median solve minute of each medal
+tier. `output/team_r3_coach/shenyang_2026.md` is the debrief of the first onsite
+contest: 5 solved, #87 / 401, silver; one wrong run but ×1.6–2.2 the gold pace;
+the plan changes for Hong Kong; and the open questions. It has an idea for each
+of the seven problems whose statements we have (A, C, D, F, H, J, L); there is
+no editorial, so `output/team_r3_coach/shenyang_2026_checks.py` checks each idea
+against a brute force (`python3 output/team_r3_coach/shenyang_2026_checks.py`,
+~10 s). `summary.md` §8 has the short version. Details are in `details.md`.
+
+### EC-Final cutoffs from the finished 2026 regionals (2026-11-16)
+
+```bash
+python3 scripts/ecfinal_cutoff_2026.py [--team NUM-R^3]   # ~25 s; needs numpy, pypinyin, openpyxl
+```
+
+Replays the EC-Final seat rule on the five played 2026 sites and adds the two
+sites still to come from the 6th-site admits of 2023-2025: the last mainland
+seat falls at rank ~81 (77-84), up from the pre-season ~75. For Hong Kong it
+simulates the registered field (10-28 export) with a rank model fitted and
+backtested on the 2024/2025 boards and walks the medal ranks under the 2026
+rule: the 10th place falls at about rank 21-25 (was 32-37). The registered
+fields of Shanghai, Nanchang and the final Hong Kong list were not available.
+Details are in `details.md`.
+
 ### NUM-R^3 members on Codeforces (2026-11-05)
 
 ```bash
