@@ -877,7 +877,9 @@ Our onsite code (2026-11-20): the six files printed in the contest are
 transcribed in `data/team_r3/shenyang_2026/{c,d,f,h,j,l}.cpp`, and
 `python3 output/team_r3_coach/shenyang_2026_code_checks.py` (needs g++, ~1 min)
 runs each against those references. The five accepted files agree; F's draft
-fails sample 2. On 2026-11-20 the `board.xcpcio.com/data/...` paths used by
+fails sample 2. `output/team_r3_coach/hk_plan.md` is the training plan
+to Hong Kong (2026-11-20): the target from the 2024/2025 Hong Kong boards,
+a week-by-week calendar, the in-contest rules to rehearse, and per-member work. On 2026-11-20 the `board.xcpcio.com/data/...` paths used by
 `team_r3_onsite.py` and `fetch_xcpcio_standings.py` returned 404. The board page
 now names `board-data.xcpcio.com/data/`, but that host was unreachable from this
 session, so the new path is not confirmed.

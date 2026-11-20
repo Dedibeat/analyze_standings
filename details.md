@@ -9699,3 +9699,55 @@ Changed in the dossier:
 - Open question 5 keeps only the F run's idea, for Tamir.
 
 Summary §8 is updated the same way.
+
+
+## NUM-R^3 training plan to Hong Kong (2026-11-20, fifth entry)
+
+**Request.** "What will be our training plan until HK."
+
+**Output.** `output/team_r3_coach/hk_plan.md` (new). It builds on summary §6, which was written
+before Shenyang, and on the dossier's Hong Kong changes. Where they differ, the new file wins.
+
+**Target, from data.** The scorelines at Hong Kong ranks 18–27 were read from the official rows
+of `data/ec_online/regional_teams.csv` (site `hongkong`, `official == 1`):
+
+| season | teams | #21 | #23 | #25 | teams with 4+ solves |
+|---|---|---|---|---|---|
+| 2024 | 149 | 4 / 602 | 4 / 647 | 3 / 230 | 24 |
+| 2025 | 126 | 4 / 499 | 4 / 541 | 4 / 638 | 28 |
+
+- With the 10th EC-Final place at about rank 21–25 (2026-11-16 estimate), the line is the 4th
+  problem. The target is 4 solved in about 550 minutes.
+- That 4th problem is like Shenyang's 6th (solved by about 15% of the field), the step that
+  failed there.
+- The QOJ mirrors of the Hong Kong sets in `tagged_official.json` ("Hong Kong 2024", "Grand Prix
+  of Hong Kong 2025") are open fields, so they were not used for the lines.
+
+**Plan, in short.**
+- Week 0: the Shenyang upsolve and setup (a `diff` sample check, the stress kit, a 64-bit
+  compiler for Erdene, Dedi's interactive template).
+- Weeks 1–5: one virtual a week on one computer, each reviewed the same day in the dossier
+  format. Topic blocks: observation (all three), counting and DP state design (Erdene, the swap
+  test), number theory and bits (Dedi), graphs and trees (Tamir, the second swap test), geometry
+  (Tamir).
+- Week 6: a dress rehearsal on a Hong Kong-style set. Week 7: taper and travel.
+- Flows get no block: library code plus 1051 B and 1794 H for Erdene alone.
+- If a week is lost, cut a topic block, not a virtual.
+
+The plan also has the in-contest rules to rehearse (summary §6.3 plus Shenyang's changes),
+measures for every virtual with Shenyang as the baseline, and per-member work.
+
+**Not known, asked rather than assumed (plan §9):**
+- exam and holiday weeks;
+- the team day;
+- which candidate sets a member has read;
+- what library code was built before Shenyang.
+
+The candidate list for the virtuals is not checked against QOJ: whether the 2026 Wuhan, Nanjing,
+Shanghai and Nanchang sets are public is not known here.
+
+The NUM-R^3 Hong Kong strength rank (about 24th of 103 registrants) comes from
+`output/hk_shenyang_rank.md` on the unmerged branch `claude/peaceful-brahmagupta-ix7p5m`. It is
+cited as such.
+
+Summary §8 and README point to the plan.

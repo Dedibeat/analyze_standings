@@ -568,7 +568,9 @@ Members by Dedi's account: **L, C, J Dedi; D, H Tamir; Erdene none.**
   - So 43 minutes before the end, neither 6th problem had a correct solution. The board
     favoured A (59 solved of 81 that tried it, against F's 60 of 124).
 
-**Changes for Hong Kong** (details in the dossier):
+**Changes for Hong Kong** (details in the dossier). The week-by-week plan to Hong Kong is in
+`hk_plan.md` (2026-11-20). It also takes the target from the 2024/2025 boards: 4 solved in
+about 550 minutes is rank 21–24.
 1. Erdene opens with the easy problems again; a harder one only when it is his type.
 2. Mid problems are assigned by type with a clock (explain at 30', hand over at 45').
 3. No two easy problems queued on one member.
