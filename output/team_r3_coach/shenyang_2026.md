@@ -19,7 +19,8 @@ Sources and limits:
     assumes the print server's clock is the contest clock.
   - So they are the files as they stood at 256–259': the final code of the five solved problems,
     and an F draft from 38 minutes before F's only run.
-  - H's wrong run (138') and the F run (295.8') are not among them.
+  - H's wrong run (138') and the F run (295.8') are not among them. H's wrong run is explained
+    by Dedi's account (2026-11-20): a space between the characters of each output row.
   - `shenyang_2026_code_checks.py` runs each file against the references below.
 - **No editorial.** The ideas below are the coach's own solutions. Each is checked against a
   brute force and the statement's samples in `shenyang_2026_checks.py`; where only part of a
@@ -60,7 +61,7 @@ Sources and limits:
 | 11.1 | L AC (Dedi), first try | #91 |
 | 64.7 | D AC (Tamir), first try | #96 |
 | 129.6 | C AC (Dedi), first try. Erdene had it first and did not see the DP | #129 |
-| 138.1 | H WA (Tamir) | |
+| 138.1 | H WA (Tamir): the right grid, printed with a space between characters | |
 | 167.7 | H AC (Tamir) | #106 |
 | 168.4 | H AC again, 43 seconds later (a second submission of an accepted problem) | |
 | 253.9 | J AC (Dedi, with Erdene debugging), first try. Erdene had it first and did not see the offline segment tree | #73 |
@@ -148,8 +149,13 @@ The 33 teams that finished with the same five problems:
   - Tags: constructive with a uniqueness proof. Checked for every permutation up to n = 7 (shape
     rules and a full count of rook placements).
 - **Ours:** the third-easiest problem by solves, accepted later than the bronze median (131').
-  Tamir solved D first and H after it; H's first run came 73 minutes after D's AC. The wrong run
-  and its 30-minute fix are not explained (open questions).
+  Tamir solved D first and H after it; H's first run came 73 minutes after D's AC.
+- **The wrong run was output format** (Dedi, 2026-11-20).
+  - The 138' run printed a space between the characters of each row. Tamir noticed after about
+    20 minutes, and the AC came 29.6 minutes after the wrong run.
+  - So the idea and the code were right at 138'. The format slip cost 20 penalty minutes plus
+    29.6 minutes of delay: **49.6 minutes on the scoreline**.
+  - Without it: 5 / 598, **#81**, the estimated last EC-Final seat (range 77–84).
 - **Code** (`h.cpp`, 80 lines, the accepted version). It uses a different construction from the
   idea above. It goes down the rows; in row i, with the rook at column c and colour x:
   - x spreads left and right in row i over empty cells that lie in the column of a rook from an
@@ -166,7 +172,8 @@ The 33 teams that finished with the same five problems:
   - It gives H's format, which the missing second page holds: n, then an n × n grid with `.` for
     an empty cell and one character per rook; the output is the filled grid; one test per file.
   - Two commented lines (`char last;`, `last = x;`) are left from an earlier version that kept
-    the previous row's colour. Whether that version was the 138' wrong run is not known.
+    the previous row's colour. They have nothing to do with the wrong run, which was the
+    output format.
 
 ### C. Cache or Not — field 229/319 — **AC 130', first try** (Dedi; Erdene first)
 - **Statement:** an LRU cache holds two addresses. For each of n requests (addresses 1..m,
@@ -302,7 +309,9 @@ The 33 teams that finished with the same five problems:
    constructive problems one after the other: D at 65', then H with a first run at 138' and the AC
    at 168'. H was the third-easiest problem (357 solves); half of its eventual solvers had it
    before our first run, and our AC was later than the bronze median (131').
-   - H first try at 138' → 5 / 598 → **#81, the estimated last seat**.
+   - H first try at 138' → 5 / 598 → **#81, the estimated last seat**. That run *was* correct
+     apart from a space between characters (Dedi, 2026-11-20). So the format slip alone cost
+     49.6 minutes, the whole margin to the line.
    - H clean at the silver median (105') → 5 / 565 → #75.
    - Two of the three easiest problems were on one member while the third member's problems
      (C, then J) produced no solve. That is the cost of the opening plan (next section), not a
@@ -358,8 +367,9 @@ The six printed files, run against brute forces in `shenyang_2026_code_checks.py
      n ≤ 8.
    - Whether the 295.8' run still had these faults is not known.
 5. **Not in the printouts:** H's 138' wrong run, H's second accepted run at 168.4', and the F run
-   at 295.8'. The board's run data does not include code, so those three stay unexplained until
-   the team answers.
+   at 295.8'. The board's run data does not include code.
+   - H's wrong run is now explained by Dedi's account: spaces between the characters of each row.
+   - The 168.4' run and the F run stay unexplained until the team answers.
 
 ## The opening pattern: Erdene takes a hard problem early
 
@@ -435,7 +445,8 @@ Dedi's last problem.
    - Tamir, with Erdene: F. Keep the bound. Write the all-partitions brute force first, then
      find the tests for 1 and 2. Then see why the 257' greedy prints 1 on sample 2.
    - Dedi: A.
-   - Tamir: H, until the wrong run is explained; then D's case list from memory.
+   - Tamir: D's case list from memory. H needs no upsolve: the wrong run was the output format
+     (item 10).
    - J is solved; compare `j.cpp` (value order) with the popcount version above. It is short
      material for the submask block in item 8.
 8. **Topic weeks** (summary §6.1) stay, with two additions for Erdene: DP state design (start
@@ -444,6 +455,11 @@ Dedi's last problem.
 9. **Incentive seat.** If the allocation after Nanchang leaves NUM without a seat, the rule lets a
    school apply for one of up to 10 incentive seats, judged on regional results (details.md
    2026-10-08). A silver at #87 is the result to cite. Deadline and form are not known here.
+10. **Samples are compared with `diff`, not by eye.** Set up a one-line check at the start
+    (`./h < 1.in | diff - 1.out`). After any wrong run, the first two minutes go to the
+    output format against the sample, before any search for a logic bug. H lost 49.6 minutes
+    to a space between characters, the whole margin to the EC-Final estimate. That is item (h)
+    of the checklist in summary §6.3, already learned from 1096 L.
 
 ## Open questions
 
@@ -451,9 +467,8 @@ Dedi's last problem.
    - the pages of B, E, G, I, K and M, and the editorial once it is out;
    - H's second page (its format is now known from `h.cpp`, its samples are not).
    - The saved code arrived on 2026-11-20 (six files, above).
-2. **H:** when did Tamir start it? What was the wrong run, and why did the fix take 30 minutes?
-   Was the 138' run the earlier version whose `char last` / `last = x` lines are commented out in
-   `h.cpp`? Who submitted the second AC at 168.4', and why?
+2. **H:** when did Tamir start it? Who submitted the second AC at 168.4', and why? (The wrong run
+   is answered: spaces in the output, noticed after about 20 minutes.)
 3. **D:** was it 65' because of the case analysis, or because the keyboard was busy?
 4. **Erdene:** when did he start C, and did he read D or H first? At what minute did C and then
    J move to Dedi? On J, was the blocker the submask lemma or the data structure?

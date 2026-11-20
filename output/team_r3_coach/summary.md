@@ -535,6 +535,10 @@ Members by Dedi's account: **L, C, J Dedi; D, H Tamir; Erdene none.**
   "Virtual medals are an upper bound" (§5) held: the 22nd percentile, as in the Xi'an virtual.
 - **H is the gap, and it waited behind D.** Tamir solved both: D at 65', then H with a first run
   at 138' and the AC at 168'; the silver median was 105'. H first try at 138' is #81.
+  - The wrong run was output format: a space between the characters of each row (Dedi,
+    2026-11-20). Tamir noticed after about 20 minutes.
+  - It cost 49.6 minutes (20 penalty + 29.6 delay), the whole margin to the EC-Final estimate.
+    It is a checklist (h) slip, the class of 1096 L.
 - **Erdene had no solve.** He was given C (DP state design, his Codeforces wall, §4b) and then J
   (a submask lemma plus an offline segment tree); Dedi took both over and both went in first try.
   §6.5 made Erdene the data-structure owner; J is the first evidence against that.
@@ -566,10 +570,13 @@ Members by Dedi's account: **L, C, J Dedi; D, H Tamir; Erdene none.**
 6. Speed on easy-mid problems comes before new topics; virtuals on one computer.
 7. Upsolve the set: C and J (Erdene), F (Erdene + Tamir), A (Dedi), H (Tamir).
 8. Erdene's topic weeks gain DP state design and submask / bit arguments.
+9. Samples are compared with `diff`, not by eye. After a wrong run, check the output format
+   against the sample first (H).
 
 **Open:**
 - The editorial and six statements are missing. The dossier's ideas are the coach's own, checked
   by brute force in `shenyang_2026_checks.py`.
-- The code of H's wrong run and of the F run is not among the printouts.
-- Questions for the team are at the end of the dossier: when H was started and what its wrong run
-  was, when C and J changed hands, and who ran F and with what code.
+- The code of the F run is not among the printouts. H's wrong run is explained by Dedi's
+  account (spaces in the output).
+- Questions for the team are at the end of the dossier: when H was started, when C and J changed
+  hands, and who ran F and with what code.

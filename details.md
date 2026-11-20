@@ -9616,3 +9616,31 @@ Run: `python3 output/team_r3_coach/shenyang_2026_code_checks.py`.
 **Statements.** Asked whether this session had statement information: no. The dossier's
 statement summaries come from the 2026-11-16 photos, which are not committed. This session only
 added what the code shows, H's input/output format and each problem's input format.
+
+
+## Shenyang 2026: H's wrong run was output format (2026-11-20, third entry)
+
+**User fact (Dedi).** H's wrong run printed a space between the characters of each row. Tamir
+realised it after about 20 minutes and got AC after that. Dedi put the cost at "+40 min of
+penalty".
+
+**The cost from the board is 49.6 minutes, not 40.**
+- The wrong run was at 138.1' and the AC at 167.7', 29.6 minutes later.
+- The wrong run adds 20 penalty minutes, so the total is 49.6.
+- Without it the scoreline is 5 / 598 instead of 5 / 647, **#81**. That is the estimated last
+  EC-Final seat (range 77–84; `team_r3_onsite.py --at 5:598`, run on 2026-11-16).
+- So the format slip alone was the whole margin to the line. The "≈ 20 minutes to notice" is
+  Dedi's; the board does not show when the bug was found.
+
+**Changed.**
+- Dossier: the H section has the cause and the cost; the timeline row; board §3 notes that the
+  first-try counterfactual at 138' was the real code minus the spaces.
+- Dossier, code section: the commented `char last` / `last = x` lines in `h.cpp` are no longer
+  linked to the wrong run.
+- Dossier, open question 2: only when H was started and the 168.4' resubmission remain.
+- Dossier, Hong Kong plan: H is dropped from the upsolve list, and **item 10** is new. Samples
+  are compared with `diff` (a one-line check set up at the start), and after any wrong run the
+  first two minutes go to the output format.
+- Summary §8 has the same, as Hong Kong change 9.
+- The class is checklist (h) ("all samples run and output format checked"), the class of
+  1096 L in summary §3. Sections 1–7 of the summary are left as they were, as §8 says.
