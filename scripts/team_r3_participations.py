@@ -107,7 +107,9 @@ def main():
     who = defaultdict(dict)
     with open(TEAM / "members_solved.csv", encoding="utf-8") as f:
         for r in csv.DictReader(f):
-            cid = int(re.search(r"\((\d+)\)", r["Contest:"]).group(1))
+            cid = int(re.search(r"\((-?\d+)\)", r["Contest:"]).group(1))
+            if cid < 0:  # Onsite XCPCIO boards are outside this QOJ report.
+                continue
             lab = r["Problem"].strip()
             who[cid][lab] = (who[cid].get(lab, "") + " / " if lab in who[cid] else "") + r["Member solved"].strip()
             if r["Additional info"].strip():
