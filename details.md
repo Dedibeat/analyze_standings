@@ -9683,3 +9683,19 @@ Changed:
 - Summary §8.
 
 The F run's idea is left to Tamir's own account (open question 7).
+
+**Later still (Dedi).**
+- He tried F before Erdene handed him C, so after L (11') and before C's AC (129.6'). The bound
+  comes from that attempt.
+- Erdene "maybe" read A in the first 5 minutes and dropped it with no idea.
+
+Changed in the dossier:
+- The timeline notes and the F and A sections.
+- A new point in the opening-pattern section. In the opening, Dedi was on F (60 solves) while H
+  (357 solves) waited behind D on Tamir. So both other members were on hard or mid problems,
+  which is what Hong Kong rule 3 targets.
+- Hong Kong item 11 adds that a problem dropped in the first minutes is re-read at the
+  6th-problem decision if the board says it is solvable. A: gold median 184', 38 solves by 240'.
+- Open question 5 keeps only the F run's idea, for Tamir.
+
+Summary §8 is updated the same way.

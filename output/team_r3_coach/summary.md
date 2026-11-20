@@ -544,6 +544,8 @@ Members by Dedi's account: **L, C, J Dedi; D, H Tamir; Erdene none.**
   §6.5 made Erdene the data-structure owner; J is the first evidence against that.
 - **The "hard problem for Erdene" opening cost twice:** no solve from it, and the easy problems he
   usually opens queued on Tamir.
+  Dedi, free after L, was on F (60 solves) until C reached him, while H (357 solves) waited
+  behind D on Tamir.
 - **Dedi overloaded again** (3 of 5), and the 6th problem had one person on it from 168': F
   (observation + DSU) or A (number theory, Dedi's category), both ~60 solves. Tamir was on F,
   working from Dedi's observation that the answer is at most 3 (Dedi, 2026-11-20).
@@ -557,9 +559,12 @@ Members by Dedi's account: **L, C, J Dedi; D, H Tamir; Erdene none.**
     checklist (g)–(i).
   - The missing step was the test between 1, 2 and 3, not the bound. The idea was handed over
     as a fact, not as an algorithm.
-  - There is no file for A. Erdene read A and had no idea for it, and the team did not hear about it. Dedi stayed on
-    F because he had tried it earlier. Tamir submitted F at 295.8', by Dedi's recollection not
-    the printed draft (all Dedi, 2026-11-20).
+  - There is no file for A. Erdene read A probably in the first 5 minutes, had no idea, and the
+    team did not hear about it.
+  - Dedi tried F after L and before Erdene handed him C. The bound comes from then, and it is
+    why the team stayed on F.
+  - Tamir submitted F at 295.8', by Dedi's recollection not the printed draft. (All of this is
+    Dedi's account, 2026-11-20.)
   - So 43 minutes before the end, neither 6th problem had a correct solution. The board
     favoured A (59 solved of 81 that tried it, against F's 60 of 124).
 

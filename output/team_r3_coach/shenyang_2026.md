@@ -71,6 +71,11 @@ Sources and limits:
 - 60 minutes after the start we still had one problem (#191 at that moment).
 - From 168' to 254' there was no submission. Dedi and Erdene were on J. Tamir was on F, working
   from Dedi's observation that the answer is at most 3 (Dedi, 2026-11-20).
+- Before 168' (Dedi, 2026-11-20):
+  - Erdene probably read A in the first 5 minutes and dropped it with no idea. That is Dedi's
+    guess.
+  - Dedi tried F after L (11') and before Erdene handed him C (C AC at 129.6'). The bound "the
+    answer is at most 3" comes from then. When C changed hands is not known.
 - Dedi asked Erdene to take F with Tamir. By Dedi's account Erdene had lost confidence after C
   and J and stayed on J with him.
 
@@ -250,8 +255,9 @@ The 33 teams that finished with the same five problems:
     graph search for the bipartite test.
 - **Ours:** one run 4 minutes before the end. **Tamir worked on F, starting from Dedi's
   observation that the answer is at most 3** (Dedi, 2026-11-20). So the key bound was found in
-  the contest. Dedi had tried F earlier himself, which is why he stayed focused on it.
-  Tamir submitted the 295.8' run (Dedi, 2026-11-20).
+  the contest. Dedi found it when he tried F himself, after L and before Erdene handed him C.
+  That earlier attempt is why the team stayed on F. Tamir submitted the 295.8' run (Dedi,
+  2026-11-20).
 - **Code at 257'** (`f.cpp`, 44 lines, Tamir's, printed 38 minutes before the run): a greedy over
   chains.
   - It keeps a multiset of chain ends. Each value joins the chain with the lowest end that is
@@ -289,10 +295,13 @@ The 33 teams that finished with the same five problems:
 - **Missed?** Yes, as much as F: the same number of solves, and a better conversion (59 of the
   81 teams that tried it, against 60 of 124). It is Dedi's category (number theory), and he was
   on J until 254'.
-- **Erdene read A and had no idea for it, and the rest of the team did not hear about it**
-  (Dedi, 2026-11-20). Dedi stayed on F because he had tried it earlier. So the 6th problem was chosen by who had
-  started it, not by the board. The board favoured A: the same solves, better conversion, and
-  Dedi's category.
+- **Erdene read A, probably in the first 5 minutes, and dropped it with no idea. The rest of the
+  team did not hear about it** (Dedi, 2026-11-20; the minute is his guess).
+  - Dropping it at minute 5 was reasonable: A's gold median is 184'.
+  - The miss came later. A was never looked at again, and when the team chose its 6th problem
+    it stayed on F because Dedi had tried F earlier.
+  - The board favoured A: the same solves, better conversion (59 of 81 against 60 of 124), and
+    Dedi's category. 38 teams had solved A by 240'.
 - **Code:** none was printed. The six files came out in name order, which looks like a print of
   the whole folder. If so, nobody had started coding A by 256'.
 
@@ -394,6 +403,12 @@ Dedi credits it for the Chengdu virtual (59 minutes from gold).
     against that, though the blocker may have been the lemma and not the tree.
 - **Here the plan cost twice.** His two problems gave no solve, and the easy problems he usually
   opens (Chengdu M at 23') went to Tamir one after the other, which is where H's 63 minutes went.
+- **Dedi was not on the easy problems either.** After L (11') he tried F, a problem only 60
+  of 401 teams solved, until Erdene handed him C (Dedi, 2026-11-20).
+  - So in the opening both other members were on hard or mid problems.
+  - Meanwhile H, solved by 357 teams, waited behind D on Tamir.
+  - The F attempt did produce the bound used later, so it was not wasted.
+  - Hong Kong rule 3 is about exactly this: the free member takes the queued easy problem.
 - **The weak point is not the miss, it is the missing clock.** A plan that rests on one member
   hitting needs a fixed moment at which the problem is explained aloud and handed over. Rule 3 of
   §6.3 has it (25 minutes without a submission → a second reader; 45 minutes stuck → switch).
@@ -469,9 +484,11 @@ Dedi's last problem.
 11. **Every problem read is reported aloud,** in two lines: what it asks, and a first idea or
     "no idea". "No idea" is worth saying too: it hands the problem to the member whose
     category it is. The 6th problem is chosen from those reports by the board (solves, then
-    conversion), not by who started it first. At Shenyang Erdene read A, had no idea for it,
-    and it never reached the team; A is number theory, Dedi's category. The team stayed on F because Dedi had tried it earlier, although the
-    board favoured A.
+    conversion), not by who started it first. A problem dropped in the first minutes is
+    re-read at that point if the board says it is solvable.
+    - At Shenyang Erdene read A in the first minutes, had no idea, and it never reached the
+      team. A is number theory, Dedi's category.
+    - The team stayed on F because Dedi had tried it early, although the board favoured A.
 
 ## Open questions
 
@@ -486,15 +503,12 @@ Dedi's last problem.
    J move to Dedi? On J, was the blocker the submask lemma or the data structure?
 5. **F at 295.8':** answered on 2026-11-20:
    - Tamir wrote the chain greedy in `f.cpp` from Dedi's bound, and Tamir submitted the run.
-   - Dedi thinks the run was not the printed `f.cpp`.
-   - Erdene read A, but the team did not hear about it.
+   - Dedi thinks the run was not the printed `f.cpp`, and does not know its idea.
+   - Erdene read A probably in the first 5 minutes, had no idea, and the team did not hear
+     about it.
+   - Dedi tried F between L (11') and the C handover.
 
-   - Erdene had no idea for A. Dedi does not know the idea of Tamir's run.
-
-   Still open:
-   - What idea did the run use, and were the samples run before it? Only Tamir can say
-     (question 7).
-   - When did Dedi try F first?
-   - When did Erdene read A?
+   Still open: what idea the run used, and whether its samples were run. Only Tamir can say
+   (question 7).
 6. **Setup:** are the virtuals played on one computer? Who typed between 168' and 254'?
 7. Tamir's and Erdene's own accounts of the contest.
