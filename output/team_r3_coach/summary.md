@@ -557,8 +557,11 @@ Members by Dedi's account: **L, C, J Dedi; D, H Tamir; Erdene none.**
     checklist (g)–(i).
   - The missing step was the test between 1, 2 and 3, not the bound. The idea was handed over
     as a fact, not as an algorithm.
-  - There is no file for A.
-  - So 43 minutes before the end, neither 6th problem had a correct solution.
+  - There is no file for A. Erdene read A, but the team did not hear about it. Dedi stayed on
+    F because he had tried it earlier. Tamir submitted F at 295.8', by Dedi's recollection not
+    the printed draft (all Dedi, 2026-11-20).
+  - So 43 minutes before the end, neither 6th problem had a correct solution. The board
+    favoured A (59 solved of 81 that tried it, against F's 60 of 124).
 
 **Changes for Hong Kong** (details in the dossier):
 1. Erdene opens with the easy problems again; a harder one only when it is his type.
@@ -572,6 +575,8 @@ Members by Dedi's account: **L, C, J Dedi; D, H Tamir; Erdene none.**
 8. Erdene's topic weeks gain DP state design and submask / bit arguments.
 9. Samples are compared with `diff`, not by eye. After a wrong run, check the output format
    against the sample first (H).
+10. Every problem read is reported aloud in two lines. The 6th problem is chosen by the board,
+    not by who started it (A).
 
 **Open:**
 - The editorial and six statements are missing. The dossier's ideas are the coach's own, checked

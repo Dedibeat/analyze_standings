@@ -9644,3 +9644,30 @@ penalty".
 - Summary §8 has the same, as Hong Kong change 9.
 - The class is checklist (h) ("all samples run and output format checked"), the class of
   1096 L in summary §3. Sections 1–7 of the summary are left as they were, as §8 says.
+
+
+## Shenyang 2026: the F run, A, and the H resubmission (2026-11-20, fourth entry)
+
+**User facts (Dedi).**
+- The 295.8' F run was, he thinks, not the printed `f.cpp`. **Tamir submitted it.**
+- **Erdene read A, but the team did not hear about it.** Dedi stayed on F because he had tried it
+  earlier.
+- A submission after AC does not count towards the penalty.
+
+**On the H resubmission.** Correct. The dossier's numbers never counted it: 647 = 11.1 + 64.7 +
+129.6 + (167.7 + 20) + 253.9, the board's penalty. The open question about the 168.4' run is
+removed. The timeline now says it cost nothing, so it does not read as a fault.
+
+**Changed.**
+- Dossier, F and A sections:
+  - Tamir's run;
+  - Dedi's earlier attempt as the reason the team stayed on F;
+  - Erdene's unreported read of A;
+  - the 6th problem was chosen by who had started it, while the board favoured A (59 solved of
+    81 that tried it, against F's 60 of 124, and Dedi's category).
+- Dossier, Hong Kong plan item 11 (new): every problem read is reported aloud in two lines (what
+  it asks, a first idea or "no idea"). The 6th problem is picked from those reports by the board.
+- Summary §8 has the same, as change 10.
+- Open question 5 now asks only what idea the F run used, whether its samples were run, when Dedi
+  first tried F, and when Erdene read A and what he made of it.
+- The F run's code stays unknown; nothing about it is inferred from the 257' draft.

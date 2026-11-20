@@ -63,10 +63,10 @@ Sources and limits:
 | 129.6 | C AC (Dedi), first try. Erdene had it first and did not see the DP | #129 |
 | 138.1 | H WA (Tamir): the right grid, printed with a space between characters | |
 | 167.7 | H AC (Tamir) | #106 |
-| 168.4 | H AC again, 43 seconds later (a second submission of an accepted problem) | |
+| 168.4 | H AC again, 43 seconds later (a run after the first AC: no penalty, the board counts only the first AC) | |
 | 253.9 | J AC (Dedi, with Erdene debugging), first try. Erdene had it first and did not see the offline segment tree | #73 |
 | 255.8–259.3 | all six source files printed (c, d, f, h, j, l, in name order); F's file (Tamir's) is a greedy that fails sample 2 | |
-| 295.8 | F WA (not solved; who submitted is not recorded) | final #87 |
+| 295.8 | F WA (Tamir's run; by Dedi's recollection not the printed `f.cpp`) | final #87 |
 
 - 60 minutes after the start we still had one problem (#191 at that moment).
 - From 168' to 254' there was no submission. Dedi and Erdene were on J. Tamir was on F, working
@@ -250,7 +250,8 @@ The 33 teams that finished with the same five problems:
     graph search for the bipartite test.
 - **Ours:** one run 4 minutes before the end. **Tamir worked on F, starting from Dedi's
   observation that the answer is at most 3** (Dedi, 2026-11-20). So the key bound was found in
-  the contest. Who submitted the 295.8' run is not recorded.
+  the contest. Dedi had tried F earlier himself, which is why he stayed focused on it.
+  Tamir submitted the 295.8' run (Dedi, 2026-11-20).
 - **Code at 257'** (`f.cpp`, 44 lines, Tamir's, printed 38 minutes before the run): a greedy over
   chains.
   - It keeps a multiset of chain ends. Each value joins the chain with the lowest end that is
@@ -272,7 +273,7 @@ The 33 teams that finished with the same five problems:
     - otherwise 3.
   - Read from the code, the greedy counts sets of cost 1, testing consecutive values only, and
     it has no branch for a single set of cost 2. At 257' it did not pass the samples.
-  - Whether the 295.8' run was this code, a cleaned copy or a new idea is not known.
+  - Dedi thinks the 295.8' run was not this code. What it was is not known.
 
 ### A. Minimalism — field 59/81 — not submitted
 - **Statement:** n is given by its factorisation (≤ 15 primes, n ≤ 9·10^18). Number n's divisors
@@ -288,6 +289,10 @@ The 33 teams that finished with the same five problems:
 - **Missed?** Yes, as much as F: the same number of solves, and a better conversion (59 of the
   81 teams that tried it, against 60 of 124). It is Dedi's category (number theory), and he was
   on J until 254'.
+- **Erdene read A, but the rest of the team did not hear about it** (Dedi, 2026-11-20). Dedi
+  stayed on F because he had tried it earlier. So the 6th problem was chosen by who had
+  started it, not by the board. The board favoured A: the same solves, better conversion, and
+  Dedi's category.
 - **Code:** none was printed. The six files came out in name order, which looks like a print of
   the whole folder. If so, nobody had started coding A by 256'.
 
@@ -356,7 +361,7 @@ The six printed files, run against brute forces in `shenyang_2026_code_checks.py
      a decision (when 1, when 2) was never worked out.
    - At 257' Tamir's file held a greedy that fails the second sample. It checks neighbours, not
      all pairs, and it still printed its debug output.
-   - There is no file for A.
+   - There is no file for A. Erdene had read it, but it never reached the others.
    - So 43 minutes before the end neither 6th problem had a correct solution. F was the nearer
      one: the hard observation was done.
    - The idea went from one member to another as a bound, not as an algorithm. The coder then
@@ -365,11 +370,12 @@ The six printed files, run against brute forces in `shenyang_2026_code_checks.py
      Checklist items (g), (h) and (i) of §6.3 each catch it: no debug output, samples run, a
      greedy compared with a brute force. The brute force over all partitions is 20 lines for
      n ≤ 8.
-   - Whether the 295.8' run still had these faults is not known.
+   - Dedi thinks the 295.8' run was not this draft, so what that run contained is not known.
 5. **Not in the printouts:** H's 138' wrong run, H's second accepted run at 168.4', and the F run
    at 295.8'. The board's run data does not include code.
    - H's wrong run is now explained by Dedi's account: spaces between the characters of each row.
-   - The 168.4' run and the F run stay unexplained until the team answers.
+   - The 168.4' run cost nothing: runs after the first AC do not count.
+   - The F run was Tamir's. Its code stays unknown.
 
 ## The opening pattern: Erdene takes a hard problem early
 
@@ -460,6 +466,11 @@ Dedi's last problem.
     output format against the sample, before any search for a logic bug. H lost 49.6 minutes
     to a space between characters, the whole margin to the EC-Final estimate. That is item (h)
     of the checklist in summary §6.3, already learned from 1096 L.
+11. **Every problem read is reported aloud,** in two lines: what it asks, and a first idea or
+    "no idea". The 6th problem is chosen from those reports by the board (solves, then
+    conversion), not by who started it first. At Shenyang Erdene read A, and it never
+    reached the team. The team stayed on F because Dedi had tried it earlier, although the
+    board favoured A.
 
 ## Open questions
 
@@ -467,14 +478,19 @@ Dedi's last problem.
    - the pages of B, E, G, I, K and M, and the editorial once it is out;
    - H's second page (its format is now known from `h.cpp`, its samples are not).
    - The saved code arrived on 2026-11-20 (six files, above).
-2. **H:** when did Tamir start it? Who submitted the second AC at 168.4', and why? (The wrong run
-   is answered: spaces in the output, noticed after about 20 minutes.)
+2. **H:** when did Tamir start it? (Answered: the wrong run was spaces in the output, noticed
+   after about 20 minutes. The 168.4' resubmission cost nothing.)
 3. **D:** was it 65' because of the case analysis, or because the keyboard was busy?
 4. **Erdene:** when did he start C, and did he read D or H first? At what minute did C and then
    J move to Dedi? On J, was the blocker the submask lemma or the data structure?
-5. **F at 295.8':** Tamir wrote the chain greedy in `f.cpp` from Dedi's bound (answered
-   2026-11-20). Who submitted the run? Was it that greedy (it fails sample 2), a copy without the
-   debug output, or a new idea? Were the samples run before it? Did anyone read A? No `a.cpp`
-   was printed; is that because none existed?
+5. **F at 295.8':** answered on 2026-11-20:
+   - Tamir wrote the chain greedy in `f.cpp` from Dedi's bound, and Tamir submitted the run.
+   - Dedi thinks the run was not the printed `f.cpp`.
+   - Erdene read A, but the team did not hear about it.
+
+   Still open:
+   - What idea did the run use, and were the samples run before it?
+   - When did Dedi try F first?
+   - When did Erdene read A, and what did he make of it?
 6. **Setup:** are the virtuals played on one computer? Who typed between 168' and 254'?
 7. Tamir's and Erdene's own accounts of the contest.
