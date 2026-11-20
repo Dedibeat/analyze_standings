@@ -110,3 +110,4 @@ to other files may name the old root locations (reports keep their filenames und
 - 2026-11-20 · team-r3 · [CP training methods for HK](2026-11-20-cp-training-methods.md) — seven of nine misses at 2300–2500 had no recorded submission, motivating a three-mock problem-choice trial
 - 2026-11-20 · team-r3 · [Dedi's solo CF practice](2026-11-20-dedi-solo-practice.md) — 52 CF round performances, four upsolves and a solo 2300–2500 plan
 - 2026-11-20 · team-r3 · [Joint upsolve priority and teammate questions](2026-11-20-hk-teammate-questions.md) — attempted problems first, five questions each for Tamir and Erdene
+- 2026-11-20 · team-r3 · [CF virtuals for individual HK practice](2026-11-20-hk-solo-virtuals.md) — a virtual plus one upsolve can fill Dedi’s solo CF allocation
