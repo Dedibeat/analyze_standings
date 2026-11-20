@@ -105,7 +105,7 @@ release steps above. Full history:
   in the medal analysis (`data/xcpcio_ea_official.json` lacks them).
 - **NUM-R^3 season** (our team): Shenyang was 2026-11-15. Hong Kong is
   [2027-01-09/10](https://registration.nerc.icpc.global/regionals/finder/HongKong-2027).
-  The [training plan](reports/team-r3/hong-kong-2027.md) runs through the regional.
+  The [training plan](reports/team-r3/hong-kong-2027.md) starts with a Wuhan 2026 virtual on Nov 21 and runs through the regional.
   The EC-Final estimate is 2027-01-22/23. Forecasts are in the
   hong-kong / ec-final journal entries; coaching data is in `data/team_r3/` and
   [usage/team-r3.md](usage/team-r3.md).

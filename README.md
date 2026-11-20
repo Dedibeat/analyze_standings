@@ -67,7 +67,7 @@ Sibling repositories:
 - `strat.tex`, `strat_detailed.tex`: the mathematical write-up that code comments cite.
 
 **Reports** (`docs/reports/`)
-- `team-r3/`: [Hong Kong training plan](docs/reports/team-r3/hong-kong-2027.md), including the six regional mocks and individual practice bands.
+- `team-r3/`: [Hong Kong training plan](docs/reports/team-r3/hong-kong-2027.md), with the Wuhan virtual, weekly practice routine and remaining mock dates.
 - `rating/`
   - `hier_time_report.md`: solve time in the hierarchical fit (the shipped model).
   - `hier_binary_report.md`: hierarchical binary as a DE rival.
