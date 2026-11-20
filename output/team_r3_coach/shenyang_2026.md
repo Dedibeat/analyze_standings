@@ -289,8 +289,8 @@ The 33 teams that finished with the same five problems:
 - **Missed?** Yes, as much as F: the same number of solves, and a better conversion (59 of the
   81 teams that tried it, against 60 of 124). It is Dedi's category (number theory), and he was
   on J until 254'.
-- **Erdene read A, but the rest of the team did not hear about it** (Dedi, 2026-11-20). Dedi
-  stayed on F because he had tried it earlier. So the 6th problem was chosen by who had
+- **Erdene read A and had no idea for it, and the rest of the team did not hear about it**
+  (Dedi, 2026-11-20). Dedi stayed on F because he had tried it earlier. So the 6th problem was chosen by who had
   started it, not by the board. The board favoured A: the same solves, better conversion, and
   Dedi's category.
 - **Code:** none was printed. The six files came out in name order, which looks like a print of
@@ -467,9 +467,10 @@ Dedi's last problem.
     to a space between characters, the whole margin to the EC-Final estimate. That is item (h)
     of the checklist in summary §6.3, already learned from 1096 L.
 11. **Every problem read is reported aloud,** in two lines: what it asks, and a first idea or
-    "no idea". The 6th problem is chosen from those reports by the board (solves, then
-    conversion), not by who started it first. At Shenyang Erdene read A, and it never
-    reached the team. The team stayed on F because Dedi had tried it earlier, although the
+    "no idea". "No idea" is worth saying too: it hands the problem to the member whose
+    category it is. The 6th problem is chosen from those reports by the board (solves, then
+    conversion), not by who started it first. At Shenyang Erdene read A, had no idea for it,
+    and it never reached the team; A is number theory, Dedi's category. The team stayed on F because Dedi had tried it earlier, although the
     board favoured A.
 
 ## Open questions
@@ -488,9 +489,12 @@ Dedi's last problem.
    - Dedi thinks the run was not the printed `f.cpp`.
    - Erdene read A, but the team did not hear about it.
 
+   - Erdene had no idea for A. Dedi does not know the idea of Tamir's run.
+
    Still open:
-   - What idea did the run use, and were the samples run before it?
+   - What idea did the run use, and were the samples run before it? Only Tamir can say
+     (question 7).
    - When did Dedi try F first?
-   - When did Erdene read A, and what did he make of it?
+   - When did Erdene read A?
 6. **Setup:** are the virtuals played on one computer? Who typed between 168' and 254'?
 7. Tamir's and Erdene's own accounts of the contest.

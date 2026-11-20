@@ -557,7 +557,7 @@ Members by Dedi's account: **L, C, J Dedi; D, H Tamir; Erdene none.**
     checklist (g)–(i).
   - The missing step was the test between 1, 2 and 3, not the bound. The idea was handed over
     as a fact, not as an algorithm.
-  - There is no file for A. Erdene read A, but the team did not hear about it. Dedi stayed on
+  - There is no file for A. Erdene read A and had no idea for it, and the team did not hear about it. Dedi stayed on
     F because he had tried it earlier. Tamir submitted F at 295.8', by Dedi's recollection not
     the printed draft (all Dedi, 2026-11-20).
   - So 43 minutes before the end, neither 6th problem had a correct solution. The board

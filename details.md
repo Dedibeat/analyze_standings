@@ -9671,3 +9671,15 @@ removed. The timeline now says it cost nothing, so it does not read as a fault.
 - Open question 5 now asks only what idea the F run used, whether its samples were run, when Dedi
   first tried F, and when Erdene read A and what he made of it.
 - The F run's code stays unknown; nothing about it is inferred from the 257' draft.
+
+**Later the same day (Dedi).**
+- He does not know the idea of Tamir's F run.
+- Erdene had no idea for A.
+
+Changed:
+- The dossier's A section, open question 5 and Hong Kong item 11. Item 11 now says a "no idea"
+  report matters too: it hands the problem to the member whose category it is (A is number
+  theory, Dedi's).
+- Summary §8.
+
+The F run's idea is left to Tamir's own account (open question 7).
