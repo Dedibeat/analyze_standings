@@ -9751,3 +9751,41 @@ The NUM-R^3 Hong Kong strength rank (about 24th of 103 registrants) comes from
 cited as such.
 
 Summary §8 and README point to the plan.
+
+**Goal changed the same day (team): gold at Hong Kong, while securing the EC-Final place.**
+`hk_plan.md` was revised for it.
+
+The lines come from the official rows of `regional_teams.csv`:
+
+| season | teams | golds | last gold | first silver | #21 | #25 |
+|---|---|---|---|---|---|---|
+| 2022 | 115 | 12 | 6 / 564 | 6 / 650 | 5 / 685 | 5 / 957 |
+| 2023 Macau | 82 | 8 | 6 / 718 | 6 / 801 | 5 / 803 | 4 / 574 |
+| 2024 | 149 | 15 | 5 / 918 | 4 / 311 | 4 / 602 | 3 / 230 |
+| 2025 | 126 | 13 | 5 / 495 | 5 / 507 | 4 / 499 | 4 / 638 |
+
+- **Gold** is 5 in about 450 minutes, or 6. In 2025 the 5-solvers split at 495 / 507.
+- **The floor** is 4 in about 550 minutes. On an easy set like 2022/2023 it moves up to 5.
+- A gold team that is eligible gets a place, since the 10th place (about rank 21–25) is deeper
+  than every last gold.
+
+**Chance, stated in the plan.**
+- `output/hk_gold.md` gives NUM-R^3 1.3% gold. That model uses online ranks only and was made
+  before Shenyang.
+- The unmerged 11-16 ranking puts us about 24th by strength against about 12 golds.
+- The Hangzhou 2022 virtual (gold) and the Chengdu 2026 virtual (59 minutes from gold) are the
+  team's gold-level days.
+- So gold is the stretch and the place the realistic target.
+
+**Plan changes.**
+- A weekly 2.5-hour speed sprint on the easy-mid half of an unread set, timed against its gold
+  medians. The cut order if a week is short: topic block first, then the sprint, never the
+  virtual.
+- Topic problems are drawn from the gold band (solved by 5–20% of an onsite field).
+- After each virtual, upsolve up to the board's gold line.
+- In-contest rule 0, "secure, then push": the first four with zero wrong runs; with 4 solved,
+  everyone goes for the 5th; everyone on the 4th if it is not in by 200'.
+- Measures: pace ≤ ×1.2 the gold medians (was ≤ ×1.4), zero wrong runs on the first four,
+  first AC ≤ 15', the 15–20% problem solved in 4 of 6 virtuals, the 5–15% problem in 2 of 6, and
+  a gap to gold of at most 1 problem in the last three virtuals.
+- Plan §9 now asks for two team sessions a week and five more unread sets for the sprints.

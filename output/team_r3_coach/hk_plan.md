@@ -1,40 +1,63 @@
-# NUM-R^3: training plan to Hong Kong (2026-11-21 → 2027-01-09/10)
+# NUM-R^3: training plan to Hong Kong (2026-11-21 → 2027-01-09/10). Goal: gold, with the EC-Final place secured
 
 Seven weeks. The plan builds on summary §6 (written before Shenyang) and on the Shenyang dossier
 (`shenyang_2026.md`, "What changes for Hong Kong"). Where they differ, this file wins.
 
-## 1. What Hong Kong asks for
+## 1. What Hong Kong asks for: gold, with the EC-Final place secured
 
-The ten EC-Final places go to medal teams in rank order. The 2026-11-16 estimate puts the 10th
-place at about **rank 21–25**. Here is what that rank cost on the last two onsite boards
-(official teams, `data/ec_online/regional_teams.csv`):
+**Goal (team, 2026-11-20): gold at Hong Kong, with the EC-Final place secured on the way.** Gold
+is about the top 10% (12 of 115, 8 of 82, 15 of 149, 13 of 126 in 2022–2025). The ten places go
+to medal teams in rank order, and the 10th falls at about rank 21–25 (2026-11-16 estimate). That
+is deeper than the last gold in every season, so a gold team that is eligible gets a place. Gold and the place come from the same thing: the first four
+problems fast and clean.
 
-| season | teams | #18 | #21 | #23 | #25 | teams with 4+ solves |
-|---|---|---|---|---|---|---|
-| 2024 | 149 | 4 / 457 | 4 / 602 | 4 / 647 | 3 / 230 | 24 |
-| 2025 | 126 | 5 / 894 | 4 / 499 | 4 / 541 | 4 / 638 | 28 |
+The lines on the onsite boards (official teams, `data/ec_online/regional_teams.csv`):
 
-- **The line is the 4th problem.**
-  - Only 24 and 28 teams solved 4 or more, which is 16–22% of the field.
-  - The best 3-solve team was #25 in 2024 and lower in 2025.
-- **The target is 4 solved in about 550 minutes**, so the 4th problem needs to be in by about 250'.
-  Five solves was top 18 in both seasons.
-- **Our chance is real but not large.**
-  - The 11-16 estimate: Hong Kong rank median 47 (10–90%: 15–88), a place in 18% of the draws.
-  - A later 11-16 ranking, on a branch not merged here: about the 24th-strongest of the 103
-    registrants with a 2026 result.
-- **The 4th Hong Kong problem is our Shenyang 6th problem.** That was the problem solved by about
-  15% of the field (F 60 / 401, A 59 / 401), and Shenyang showed what we lack there:
-  - we were slow on the standard set (×1.6–2.2 the gold medians), so it started late;
-  - one person was on it;
-  - the idea went over as a bound, not an algorithm;
-  - the one problem read early (A) was never re-read.
+| season | teams | last gold | first silver | #21 | #25 |
+|---|---|---|---|---|---|
+| 2022 | 115 | #12, 6 / 564 | 6 / 650 | 5 / 685 | 5 / 957 |
+| 2023 (Macau) | 82 | #8, 6 / 718 | 6 / 801 | 5 / 803 | 4 / 574 |
+| 2024 | 149 | #15, 5 / 918 | 4 / 311 | 4 / 602 | 3 / 230 |
+| 2025 | 126 | #13, 5 / 495 | 5 / 507 | 4 / 499 | 4 / 638 |
 
-  This plan trains exactly those four things.
+- **Floor, the EC-Final place: 4 solved in about 550 minutes.**
+  - That was rank 21–24 in 2024 and 2025, when only 24 and 28 teams solved 4 or more.
+  - The 2022 and 2023 sets were easier at the top, and rank 21 needed 5 there. So on an easy set
+    the floor moves up to 5.
+- **Goal, gold: 5 solved in about 450 minutes, or 6.**
+  - In 2024 every 5-solver was gold.
+  - In 2025 the 5-solvers split at 495 / 507 minutes: one wrong run decided gold.
+  - In 2022 and 2023 gold needed 6.
+- **What 5 in 450 minutes looks like.** The first four by about 150' with no wrong run (for
+  example 15', 40', 80', 140': 275), then the 5th by about 175'. Shenyang shows the size of the
+  step. Our five problems took 647 minutes; the gold teams' median times for the same five sum to
+  325, and they then solved two more.
+- **The honest chance.**
+  - The Hong Kong gold model (online ranks only, made before Shenyang) gives NUM-R^3 1.3%.
+  - By 2026 strength we are about the 24th of the 103 registrants with a result (11-16 ranking,
+    on a branch not merged here). Gold means finishing about 12 places above that.
+  - Our best virtuals show the team has had gold-level days: Hangzhou 2022 (gold, #19 / 556),
+    and Chengdu 2026 (59 minutes from gold).
+  - So gold needs our best contest plus the training below. The EC-Final place is the realistic
+    target, and training for gold is what makes it safe.
+- **The two problems that decide it.**
+  - The 4th Hong Kong problem (solved by 16–22% of the field) decides the place.
+  - The 5th (10–14%) decides gold.
+  - These are Shenyang's 6th problem (A and F, about 15%) and the one after it. Shenyang showed
+    what we lack there:
+    - we were slow on the standard set (×1.6–2.2 the gold medians), so the hard problem started
+      late;
+    - one person was on it;
+    - the idea went over as a bound, not an algorithm;
+    - the one problem read early (A) was never re-read.
 
 ## 2. Calendar
 
-Weeks run Monday to Sunday. One full team virtual a week, on a fixed day, on **one computer**.
+Weeks run Monday to Sunday. Each week has two team sessions, on **one computer**:
+- a full virtual;
+- a **speed sprint**: 2.5 hours on the easy-mid half of an unread set (the problems more than
+  30% of its field solved), timed against that board's gold medians. Gold needs the standard set
+  at gold pace, and the sprints train only that.
 
 | week | dates | topic block (owner leads) | team virtual | also |
 |---|---|---|---|---|
@@ -50,8 +73,8 @@ Weeks run Monday to Sunday. One full team virtual a week, on a fixed day, on **o
 - **Flows have no block.** Six weeks do not fit all of summary §6.1. Flows are the item with the
   least evidence that it costs us a medal problem (1051 B and 1794 H only). Erdene keeps Dinic
   and min-cost flow as tested library code and solves those two on his own.
-- **If exams or holidays take a week, cut a topic block, not a virtual.** The virtuals and their
-  reviews are the core of the plan.
+- **If exams or holidays take a week**, cut in this order: the topic block, then the sprint.
+  Never cut the virtual; the virtuals and their reviews are the core of the plan.
 
 ## 3. Week 0 (this weekend): Shenyang upsolve and setup
 
@@ -80,12 +103,15 @@ Setup (one evening, all three):
   - silent minutes;
   - who read what and when;
   - how the 6th problem was chosen.
-- Then upsolve the first problem we did not solve, before the next virtual.
+- **Upsolve up to the gold line before the next virtual.** Do every problem that the board's
+  last gold team solved and we did not, not only the first one.
 
 **Topic block.**
 - The owner gives a one-hour talk on the method and our own past failures.
 - During the week each member solves 3–5 problems from the block's list (summary §6.1), timed,
   with the brute force written before the first submission.
+- **Problems come from the gold band:** solved by 5–20% of an onsite field. These are the 4th
+  and 5th problems of Hong Kong. Easier ones belong in the sprints.
 - The two swap tests (counting for Erdene, graphs for Tamir) decide the owners for EC-Final.
   The deciding question: who solved more of the block's problems, faster and cleaner?
 
@@ -96,7 +122,13 @@ Setup (one evening, all three):
 
 ## 5. In-contest rules to rehearse in every virtual
 
-From summary §6.3 and the Shenyang changes. These are the ones Shenyang tested:
+From summary §6.3 and the Shenyang changes. These are the ones Shenyang tested.
+
+0. **Secure, then push.**
+   - The first four are the EC-Final place. Play them for zero wrong runs: a run that is not
+     ready costs 20 minutes, and in 2025 gold and silver were 12 minutes apart.
+   - With 4 solved, all three go for the 5th: two on it, one on the next.
+   - If the 4th is not in by 200', everyone works on the 4th.
 
 1. **Opening.**
    - Erdene opens with the easy problems.
@@ -146,14 +178,17 @@ Already read, so not usable:
 
 | measure | Shenyang | target by week 6 |
 |---|---|---|
-| standard set, pace against the gold medians | ×1.6–2.2 | ≤ ×1.4 |
-| penalised wrong runs | 1 | ≤ 2 |
-| first AC | 11' | ≤ 20' |
-| the next problem (solved by 15–20% of the field) | one person from 168', no correct idea | two people from the 200' decision at the latest; solved in 3 of the 6 virtuals |
+| standard set, pace against the gold medians (virtuals and sprints) | ×1.6–2.2 | **≤ ×1.2** |
+| penalised wrong runs on the first four | 1 | 0 |
+| first AC | 11' | ≤ 15' |
+| the next problem (solved by 15–20% of the field) | one person from 168', no correct idea | solved in 4 of the 6 virtuals |
+| the problem after it (5–15%) | not reached | attempted by two people in every virtual; solved in 2 of 6 |
+| gap to the board's gold line | 2 problems | 1 problem or less in the last three virtuals |
 | problems read and not reported | A | none |
 | a member without a clear next job | after C and J, Erdene stayed on J instead of taking F | none |
 
-On a Hong Kong-style set the target is the one from §1: **4 solved in about 550 minutes**.
+On a Hong Kong-style set: **4 solved in about 550 minutes** is the floor, and **5 in about 450
+minutes** (or 6) is gold.
 
 ## 8. Per member
 
@@ -178,9 +213,10 @@ On a Hong Kong-style set the target is the one from §1: **4 solved in about 550
 ## 9. What would change this plan (please answer)
 
 1. **Exams and holidays** between now and Jan 8. Which weeks are short?
-2. **Team days.** Can the three of you meet for a 6-hour virtual-plus-review once a week, and
-   on which day?
-3. **Sets read.** Which candidates in §6 has any member already read?
+2. **Team days.** Can the three of you meet twice a week (a 6-hour virtual plus review, and a
+   2.5-hour sprint), and on which days?
+3. **Sets read.** Which candidates in §6 has any member already read? The sprints need five more
+   unread sets; CCPC 2024–2025 stations and Universal Cup stages nobody has read will do.
 4. **The library** of summary §6.2 (DSU, modint/CRT, stress kit, Dinic, geometry core). What was
    built before Shenyang? Week 0 and the weekly checks assume nothing beyond the code in the
    saved submissions.

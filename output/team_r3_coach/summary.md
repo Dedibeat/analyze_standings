@@ -569,8 +569,10 @@ Members by Dedi's account: **L, C, J Dedi; D, H Tamir; Erdene none.**
     favoured A (59 solved of 81 that tried it, against F's 60 of 124).
 
 **Changes for Hong Kong** (details in the dossier). The week-by-week plan to Hong Kong is in
-`hk_plan.md` (2026-11-20). It also takes the target from the 2024/2025 boards: 4 solved in
-about 550 minutes is rank 21–24.
+`hk_plan.md` (2026-11-20). The goal is gold with the EC-Final place secured. From the
+2022–2025 boards:
+- the floor is 4 solved in about 550 minutes (rank 21–24 in 2024/2025);
+- gold is 5 in about 450 minutes, or 6.
 1. Erdene opens with the easy problems again; a harder one only when it is his type.
 2. Mid problems are assigned by type with a clock (explain at 30', hand over at 45').
 3. No two easy problems queued on one member.
