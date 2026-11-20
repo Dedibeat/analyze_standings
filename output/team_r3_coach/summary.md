@@ -541,16 +541,20 @@ Members by Dedi's account: **L, C, J Dedi; D, H Tamir; Erdene none.**
 - **The "hard problem for Erdene" opening cost twice:** no solve from it, and the easy problems he
   usually opens queued on Tamir.
 - **Dedi overloaded again** (3 of 5), and the 6th problem had one person on it from 168': F
-  (observation + DSU) or A (number theory, Dedi's category), both ~60 solves.
+  (observation + DSU) or A (number theory, Dedi's category), both ~60 solves. Tamir was on F,
+  working from Dedi's observation that the answer is at most 3 (Dedi, 2026-11-20).
 - **The saved code (added 2026-11-20)** was printed at 256–259'. It is in
   `data/team_r3/shenyang_2026/` and checked in `shenyang_2026_code_checks.py`.
   - The five accepted files agree with brute forces.
   - Two of them are simpler than the coach's solutions: H uses another colouring, and J goes by
     value instead of popcount.
-  - F's file at 257' is a chain greedy that fails sample 2 and still prints debug output. That
-    is §3's unproven idea plus debug leftovers, caught by checklist (g)–(i).
+  - F's file at 257' is Tamir's, built on Dedi's bound. It is a chain greedy that fails sample
+    2 and still prints debug output. That is §3's unproven idea plus debug leftovers, caught by
+    checklist (g)–(i).
+  - The missing step was the test between 1, 2 and 3, not the bound. The idea was handed over
+    as a fact, not as an algorithm.
   - There is no file for A.
-  - So 43 minutes before the end, neither 6th problem had a correct idea.
+  - So 43 minutes before the end, neither 6th problem had a correct solution.
 
 **Changes for Hong Kong** (details in the dossier):
 1. Erdene opens with the easy problems again; a harder one only when it is his type.

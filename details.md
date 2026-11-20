@@ -9583,3 +9583,36 @@ The contest start time above came from the board page's description instead.
 of the F run.
 
 Run: `python3 output/team_r3_coach/shenyang_2026_code_checks.py`.
+
+
+## Shenyang 2026: who worked on F (2026-11-20, second entry)
+
+**User facts (Dedi).**
+- F was not accepted. The board already showed this (one wrong run at 295.8', no AC), and the
+  dossier had it as unsolved. The question was what the board cannot show: whether `f.cpp` is
+  the code of that run.
+- **Tamir was trying F, based on Dedi's idea that the answer is at most 3.**
+- Not answered yet:
+  - whether the 295.8' run was the printed `f.cpp`;
+  - who submitted it.
+
+**What it changes in the dossier.**
+- `f.cpp` is Tamir's.
+- The key bound was found in the contest, by Dedi. The previous entry's "the 3-is-enough
+  observation was not in it" is replaced. The bound was there, and what was missing was the test
+  that tells 1, 2 and 3 apart:
+  - 1: no pair with d ≤ difference < 2d;
+  - 2: no pair with 2d ≤ difference < 3d, or the graph of pairs with d ≤ difference < 2d is
+    bipartite.
+- The greedy counts cost-1 sets by testing consecutive values only, and it has no single
+  cost-2 branch. That intent is read from the code, not from Tamir.
+- "What the code says" §4 is now "F had the bound but not the test". F was the nearer of the two
+  6th problems.
+- **New plan rule** (dossier, Hong Kong item 4): an idea is handed over as an algorithm, with
+  what to compute for each case, and checked by hand on the samples before typing.
+- The upsolve item for F is Tamir's (with Erdene): brute force first, then the tests for 1 and 2.
+- Load reads "Tamir 2 (D, H, then F unsolved)". Summary §8 is updated the same way.
+
+**Statements.** Asked whether this session had statement information: no. The dossier's
+statement summaries come from the 2026-11-16 photos, which are not committed. This session only
+added what the code shows, H's input/output format and each problem's input format.

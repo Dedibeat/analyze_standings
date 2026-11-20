@@ -6,8 +6,8 @@ Sources and limits:
 - **Board:** XCPCIO `icpc/51st/shenyang`, 401 official teams, with every team's runs. Read with
   `scripts/team_r3_onsite.py /icpc/51st/shenyang`. Minutes are contest minutes; penalty is the
   board's (seconds summed, 20 minutes per wrong run before the AC).
-- **Members and the story of the contest:** Dedi's account (2026-11-16). Tamir and Erdene have not
-  given theirs.
+- **Members and the story of the contest:** Dedi's account (2026-11-16; who worked on F added
+  2026-11-20). Tamir and Erdene have not given theirs.
 - **Statements:** Dedi's photos of the Chinese statements of A, C, D, F, H, J and L (2026-11-16).
   H's second page (output format and samples) and the pages of B, E, G, I, K and M were not
   sent. The photos are not in the repo; each problem below starts with what the statement asks.
@@ -64,11 +64,12 @@ Sources and limits:
 | 167.7 | H AC (Tamir) | #106 |
 | 168.4 | H AC again, 43 seconds later (a second submission of an accepted problem) | |
 | 253.9 | J AC (Dedi, with Erdene debugging), first try. Erdene had it first and did not see the offline segment tree | #73 |
-| 255.8–259.3 | all six source files printed (c, d, f, h, j, l, in name order); F's file is a greedy that fails sample 2 | |
+| 255.8–259.3 | all six source files printed (c, d, f, h, j, l, in name order); F's file (Tamir's) is a greedy that fails sample 2 | |
 | 295.8 | F WA (not solved; who submitted is not recorded) | final #87 |
 
 - 60 minutes after the start we still had one problem (#191 at that moment).
-- From 168' to 254' there was no submission: Dedi and Erdene were on J, and F was open.
+- From 168' to 254' there was no submission. Dedi and Erdene were on J. Tamir was on F, working
+  from Dedi's observation that the answer is at most 3 (Dedi, 2026-11-20).
 - Dedi asked Erdene to take F with Tamir. By Dedi's account Erdene had lost confidence after C
   and J and stayed on J with him.
 
@@ -240,8 +241,11 @@ The 33 teams that finished with the same five problems:
     per value.
   - Tags: observation, graphs / DSU. Checked against all partitions for n ≤ 8, with a plain
     graph search for the bipartite test.
-- **Ours:** one run 4 minutes before the end. Whose run and what idea is not recorded.
-- **Code at 257'** (`f.cpp`, 44 lines, printed 38 minutes before the run): a greedy over chains.
+- **Ours:** one run 4 minutes before the end. **Tamir worked on F, starting from Dedi's
+  observation that the answer is at most 3** (Dedi, 2026-11-20). So the key bound was found in
+  the contest. Who submitted the 295.8' run is not recorded.
+- **Code at 257'** (`f.cpp`, 44 lines, Tamir's, printed 38 minutes before the run): a greedy over
+  chains.
   - It keeps a multiset of chain ends. Each value joins the chain with the lowest end that is
     less than d below it; if there is none, the chain with the highest end that is at least 2d
     below it; if there is none, it starts a new chain. It prints the number of chains.
@@ -253,8 +257,14 @@ The 33 teams that finished with the same five problems:
     on 122 of 1,500 random small cases.
   - **Debug output left in.** As printed, it writes the multiset after every value (`print(st)`,
     18 extra lines on the samples).
-  - So at 257' F had no correct idea, and the file did not pass the samples. The 3-is-enough
-    observation was not in it.
+  - **What was missing was the test, not the bound.** With the answer at most 3, F reduces to
+    telling 1, 2 and 3 apart:
+    - 1 needs no pair at all with d ≤ difference < 2d;
+    - 2 is one set of cost 2 (no pair with 2d ≤ difference < 3d) or two sets of cost 1 (the
+      graph of pairs with d ≤ difference < 2d is bipartite);
+    - otherwise 3.
+  - Read from the code, the greedy counts sets of cost 1, testing consecutive values only, and
+    it has no branch for a single set of cost 2. At 257' it did not pass the samples.
   - Whether the 295.8' run was this code, a cleaned copy or a new idea is not known.
 
 ### A. Minimalism — field 59/81 — not submitted
@@ -302,8 +312,9 @@ The 33 teams that finished with the same five problems:
 5. **The 6th problem had one person on it.** A and F were equally solved (59 and 60), and the
    six-solvers split evenly between them. 21 of A's 59 solves and 10 of F's 60 came in the last
    hour. Our only run on either was F at 295.8'. By the specialisation in summary §6.5, F
-   (observation, graph/DSU) was Erdene's and Tamir's and A (number theory) was Dedi's.
-6. **Load.** Dedi 3 of 5 (L, C, J), Tamir 2 (D, H), **Erdene 0**. Dedi's overload is the pattern of
+   (observation, graph/DSU) was Erdene's and Tamir's and A (number theory) was Dedi's. F was
+   Tamir's, from Dedi's bound ("What the code says", §4).
+6. **Load.** Dedi 3 of 5 (L, C, J), Tamir 2 (D, H, then F unsolved), **Erdene 0**. Dedi's overload is the pattern of
    4593, 1799, 4113 and 1053 (summary §4), now onsite. Erdene without a solve is new: he had 18
    solo solves in the virtuals, 4 of the 6 at Chengdu.
 
@@ -331,12 +342,16 @@ The six printed files, run against brute forces in `shenyang_2026_code_checks.py
      time went elsewhere (board, §2–3).
 3. **D shows why it was first try.** The two cases the field missed (b = 1; a = b = 1) are
    handled before anything else.
-4. **The 6th problem was not close.**
-   - At 257' F's file held an unproven greedy that fails the second sample. It checks
-     neighbours, not all pairs, and it still printed its debug output.
+4. **F had the bound but not the test.**
+   - Dedi found that the answer is at most 3, and Tamir built on it. The step from the bound to
+     a decision (when 1, when 2) was never worked out.
+   - At 257' Tamir's file held a greedy that fails the second sample. It checks neighbours, not
+     all pairs, and it still printed its debug output.
    - There is no file for A.
-   - So "the 6th problem had one person" (board, §5) understates it: at 257' there was no
-     correct idea for either problem, 43 minutes before the end.
+   - So 43 minutes before the end neither 6th problem had a correct solution. F was the nearer
+     one: the hard observation was done.
+   - The idea went from one member to another as a bound, not as an algorithm. The coder then
+     had to invent the rest alone, and a greedy was the result.
    - By the bug classes of summary §3 the draft is an **unproven idea** plus **debug leftovers**.
      Checklist items (g), (h) and (i) of §6.3 each catch it: no debug output, samples run, a
      greedy compared with a brute force. The brute force over all partitions is 20 lines for
@@ -403,6 +418,11 @@ Dedi's last problem.
 4. **Two on the next problem while the closer codes.** From the moment Dedi starts the last
    standard problem, Tamir and Erdene pair on the field's next one (most-solved on the board, then
    best conversion). One of them reads Dedi's diff before each run, for at most 15 minutes.
+   - **An idea is handed over as an algorithm, not a fact.** When one member gives the idea and
+     another codes it, the giver states what to compute for each case (for F: when the answer is
+     1, when it is 2, otherwise 3). Both check it by hand on the samples before typing starts.
+     If the giver has only a bound, the two work out the rest together. F was handed over as
+     "the answer is at most 3", and the coder filled the gap with a greedy.
 5. **Erdene after a miss:** a fixed next job, so that a miss is not the end of his contest: first
    the cold read for the closer, then the next problem with Tamir. In training: every virtual
    played to the end, and a submission on the field's next problem in every round (already in
@@ -412,8 +432,8 @@ Dedi's last problem.
 7. **Upsolve this set first, from scratch and timed:**
    - Erdene: C (write the state and the one-row update before coding), then J (prove the lemma,
      then the offline version).
-   - Erdene and Tamir together: F. Start from why the 257' greedy prints 1 on sample 2, and
-     write the all-partitions brute force before any new idea.
+   - Tamir, with Erdene: F. Keep the bound. Write the all-partitions brute force first, then
+     find the tests for 1 and 2. Then see why the 257' greedy prints 1 on sample 2.
    - Dedi: A.
    - Tamir: H, until the wrong run is explained; then D's case list from memory.
    - J is solved; compare `j.cpp` (value order) with the popcount version above. It is short
@@ -437,8 +457,9 @@ Dedi's last problem.
 3. **D:** was it 65' because of the case analysis, or because the keyboard was busy?
 4. **Erdene:** when did he start C, and did he read D or H first? At what minute did C and then
    J move to Dedi? On J, was the blocker the submask lemma or the data structure?
-5. **F at 295.8':** whose run? Who wrote the chain greedy in `f.cpp`? Was the run that greedy (it
-   fails sample 2), a copy without the debug output, or a new idea? Were the samples run before
-   it? Did anyone read A? No `a.cpp` was printed; is that because none existed?
+5. **F at 295.8':** Tamir wrote the chain greedy in `f.cpp` from Dedi's bound (answered
+   2026-11-20). Who submitted the run? Was it that greedy (it fails sample 2), a copy without the
+   debug output, or a new idea? Were the samples run before it? Did anyone read A? No `a.cpp`
+   was printed; is that because none existed?
 6. **Setup:** are the virtuals played on one computer? Who typed between 168' and 254'?
 7. Tamir's and Erdene's own accounts of the contest.
