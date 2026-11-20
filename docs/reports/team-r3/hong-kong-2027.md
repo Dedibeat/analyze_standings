@@ -13,6 +13,21 @@ Use **rank 32–37** as a rehearsal target for an EC-Final place. It comes from 
 | Seven of 14 virtuals ended with at least 80 minutes without a submission. In official online round 4071, Erdene took A after four wrong attempts and solved it on his first try. | Practise a handover after two wrong answers. Give the new reader the statement and a failing case. At minute 200 name the next AC candidate, its owner and an independent reader. Count a counterexample, proof or tested implementation as progress. [Online I dossier](../../../output/team_r3_coach/4071.md) · [Season review](../../../output/team_r3_coach/summary.md) |
 | On eight graph/tree solves the team accumulated 21 wrong runs. On eight counting/combinatorial DP solves it accumulated 14. Geometry produced zero solves, including five failed submissions on Chengdu E. Interactive problems went in first try three times. | Put trees and counting first. Trial Tamir and Erdene as their respective leads. Give geometry one repair week. Keep Erdene available for interactive problems during mocks. [Season review](../../../output/team_r3_coach/summary.md) · [CF round dossiers](../../../output/team_r3_coach/cf_rounds.md) |
 
+## Where the next team solve lies
+
+Across 14 virtuals, two official EC online rounds and Shenyang onsite, **78 of 84 rated in-contest ACs (93%) were below 2400** on the shipped team scale. The other five ACs were at CCPC Harbin (2575), whose problems lack shipped ratings. The denominator below includes every rated problem on the 17 sets, including those the team skipped. These fractions describe five-hour team performance. [Rating audit and reproduction](../../journal/2026-11-20-team-r3-2400.md)
+
+| Fitted team problem rating | Virtual ACs / offered | Official ACs / offered | All rounds |
+|---|---:|---:|---:|
+| Below 2300 | 58/58 | 14/14 | 72/72 |
+| 2300 to below 2400 | 5/8 | 1/1 | 6/9 |
+| 2400 to below 2600 | 3/9 | 0/5 | 3/14 |
+| 2600 and above | 3/91 | 0/19 | 3/110 |
+
+The three misses below 2400 were **2524 I (2323), 1799 E (2325) and 2661 J (2358)**. The first two never got a submission. Dedi upsolved the third after time. At Shenyang the hardest AC was J (2304), followed in difficulty by the unsolved F (2416) and A (2447). Of the six virtual ACs at 2400+, the dossier marks one, 1794 L (2680), as GPT-assisted. The others include 4607 H (2578) and 1071 I (2789), both interactive. Allocate time to a harder problem when a teammate recognizes a workable approach. [Online II](../../../output/team_r3_coach/2524.md) · [Online II 2024](../../../output/team_r3_coach/1799.md) · [Zhengzhou](../../../output/team_r3_coach/2661.md) · [Season review](../../../output/team_r3_coach/summary.md)
+
+**Before HK, use the weekly two-hour team block to practise the next solve around 2300–2500.** First review any missed sub-2400 problem that peer teams converted. If the opening set went in cleanly, try a fresh 2400–2500 together, then compare with the editorial. For this week's replay use Shenyang F (2416), with 2661 J as the debugging fallback. Keep mock ratings hidden until the debrief. At the historical HK seat-replay lines the hardest AC was **2305** for rank 37 in 2024 and **2156** for both teams tied at rank 32 in 2025. Securing those reachable solves on time has direct precedent. Treat 2400 as an approximate boundary on the fitted scale. [HK comparisons and fitted ratings](../../journal/2026-11-20-team-r3-2400.md)
+
 ## How hard should individual practice be?
 
 SuperJ6's recommendation is a band where you solve **30–40% of new problems independently**. He suggests taking a hint when ideas have dried up, implementing afterward, and doing a weekly virtual in the target format. He gives no fixed rating offset. Mike Mirzayanov's original approximate *contest* curve gives about **76%** on a problem 200 points below the solver, **24%** at 200 above, and **30%** at about **147 above**. A displayed CF rating, a member's fitted contest level and a person's solo practice level can differ. [SuperJ6's guide](https://codeforces.com/blog/entry/116371/) · [Codeforces difficulty announcement](https://codeforces.com/blog/entry/62865)
@@ -48,7 +63,7 @@ Use the team's corrected November 5 fits as starting estimates. They count all r
 | Dec 28–Jan 3 | **Full rehearsal.** Pick the most frequent unresolved failure in the mock log. Owner repairs one case, backup solves a fresh related task. Recalibrate each solo band from ten starts where available. | Jan 2, [Hong Kong 2024](https://qoj.ac/contest/1885) only if fresh to everyone. Otherwise use [Kunming 2024](https://qoj.ac/contest/1871). Use onsite conditions and score against the original onsite field. |
 | Jan 4–10 | **Taper.** Jan 4–6, one 90-minute opener/next-problem relay, then replay one failing test and check the team's familiar library on it. Jan 7–8, keep travel days light. | Jan 9–10, HK event. Use the opening split and handover rules rehearsed together. Follow the host timetable for the timed round. |
 
-Additional reserve sets are [Xi'an 2023](https://qoj.ac/contest/1784) and [Shenyang 2024](https://qoj.ac/contest/1865). After each mock, pick the problem most often added by onsite teams with the same solves plus one. Give it an owner and a 48-hour upsolve deadline. If no team had that exact combination, choose the most-solved remaining task among teams one solve ahead. If that is also the week's repair topic, use the same two-hour block. When they differ, prioritise the reachable missed AC and carry the topic drill forward.
+Additional reserve sets are [Xi'an 2023](https://qoj.ac/contest/1784) and [Shenyang 2024](https://qoj.ac/contest/1865). After each mock, use the team rating bands above to choose the upsolve. Within the target band, prefer the problem most often added by onsite teams with the same solves plus one. Give it an owner and a 48-hour upsolve deadline. If no team had that exact combination, use the most-solved remaining task in range among teams one solve ahead. If the set has no suitable task, draw a fresh one from another regional. If that is also the week's repair topic, use the same two-hour block. When they differ, prioritise the reachable missed AC and carry the topic drill forward.
 
 ## One scorecard for the six mocks
 
@@ -57,6 +72,7 @@ Erdene starts the clearest opener while Tamir and Dedi split the unread statemen
 | Write one row per mock | Coaching target for the final three fresh mocks |
 |---|---|
 | Set, onsite comparison field, solves/penalty, reconstructed rank, first and third AC minutes | First AC within 20 minutes in at least two of three. On HK replays check rank 32–37. For other sites record the gap to the onsite team with one more solve and the median penalty at our solve count. |
+| After the finish, ACs / offered below 2400 and at 2400–2499, with any assistance recorded | Review each sub-2400 miss. Aim for one unaided 2400–2499 AC during the final three mocks if those sets offer one. Record a separate result for the two-hour practice block. |
 | Wrong runs on eventual ACs, failed cases caught locally, minute of second WA and handover | At most two penalised wrong runs in at least two of three, against a historical 68/14 ≈ 4.9 per virtual. Review any third submission on the same failure. |
 | Minute-200 candidate, owner/reader, strongest evidence reached, whether accepted, next-problem upsolve date | Aim to convert that late candidate in at least one of three mocks and finish the selected upsolve within 48 hours after all three. If all three miss, replace the next topic block with a replay starting at minute 200. |
 
