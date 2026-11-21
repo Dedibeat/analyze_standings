@@ -56,6 +56,8 @@ gives the exact command and outputs. Credentials come from the environment
   - `cf_ai_deflation.py`: CF deflation and AI use (API cache in gitignored
     `data/cf_ai/`).
   - `cf_participation_check.py`
+  - `cf_self_check.py <handle>`: one player's half-year change against same-level
+    peers, net of the pre-AI drift (reads the `data/cf_ai/` cache).
 - **Solve-prediction pipeline, in run order:**
   - `cf_difficulty_pilot.py`
   - `cf_player_rating.py`

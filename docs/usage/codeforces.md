@@ -39,3 +39,15 @@ A [25-model history search](../reports/codeforces/cf_25_experiments.md) lowered 
 The [multi-metric follow-up](../reports/codeforces/cf_metric_search.md) reached 0.201862 on the later period and reports Brier score, calibration error, and within-problem AUC.
 The [timing-history comparison](../reports/codeforces/cf_four_metrics.md) tests whether solve speed improves all four measures.
 The [extended CF search](../reports/codeforces/cf_five_hour_search.md) documents the time-budgeted experiments and confirmation protocol.
+
+## One player's improvement, net of deflation (2026-11-21)
+
+```bash
+./.venv/bin/python scripts/cf_self_check.py <handle>   # ~75 s, needs the data/cf_ai/ cache above
+```
+
+The script compares the player's rating level and solve level in each half-year since
+2024H2 with accounts that were at the same level in 2024H2. It then corrects by how
+such accounts moved over the same span from 2021–2022 bases. Output:
+`output/cf_self_check_<handle>.json`. The first run (Dedibeat) is in the
+[2026-11-21 journal entry](../journal/2026-11-21-dedibeat-improvement-net-of-cf-deflation.md).

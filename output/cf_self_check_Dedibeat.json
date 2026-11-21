@@ -1,0 +1,398 @@
+{
+ "handle": "Dedibeat",
+ "base": "2024H2",
+ "tolerance": 50,
+ "player": {
+  "2024H2": {
+   "rating_level": 1775.7,
+   "contests": 28,
+   "solve_level": 1860.0
+  },
+  "2025H1": {
+   "rating_level": 1795.4,
+   "contests": 24,
+   "solve_level": 1820.0
+  },
+  "2025H2": {
+   "rating_level": 1896.5,
+   "contests": 16,
+   "solve_level": 1940.0
+  },
+  "2026H1": {
+   "rating_level": 1838.9,
+   "contests": 15,
+   "solve_level": 1830.0
+  },
+  "2026H2": {
+   "rating_level": 1781.8,
+   "contests": 8,
+   "solve_level": 1980.0
+  }
+ },
+ "measures": {
+  "rating_level/all": {
+   "own_base": 1775.6785714285713,
+   "peers_base_n": {
+    "2024H2": 1185,
+    "2021H1": 1028,
+    "2021H2": 1007,
+    "2022H1": 883
+   },
+   "rows": [
+    {
+     "half_year": "2025H1",
+     "own_change": 19.7,
+     "peers_n": 572,
+     "peers_mean": 39.5,
+     "peers_q25_q75": [
+      -25.5,
+      112.5
+     ],
+     "own_percentile": 42.7,
+     "pre_ai_drift": 29.2,
+     "pre_ai_by_base": [
+      19.0,
+      29.5,
+      39.2
+     ],
+     "deflation": 10.2,
+     "vs_peers": -19.8,
+     "net_of_deflation": 9.5
+    },
+    {
+     "half_year": "2025H2",
+     "own_change": 120.8,
+     "peers_n": 469,
+     "peers_mean": 37.7,
+     "peers_q25_q75": [
+      -64.6,
+      130.8
+     ],
+     "own_percentile": 72.9,
+     "pre_ai_drift": 53.4,
+     "pre_ai_by_base": [
+      31.5,
+      53.7,
+      75.0
+     ],
+     "deflation": -15.7,
+     "vs_peers": 83.1,
+     "net_of_deflation": 136.5
+    },
+    {
+     "half_year": "2026H1",
+     "own_change": 63.3,
+     "peers_n": 245,
+     "peers_mean": 23.0,
+     "peers_q25_q75": [
+      -107.4,
+      130.1
+     ],
+     "own_percentile": 58.4,
+     "pre_ai_drift": 83.4,
+     "pre_ai_by_base": [
+      61.2,
+      78.1,
+      110.9
+     ],
+     "deflation": -60.4,
+     "vs_peers": 40.3,
+     "net_of_deflation": 123.7
+    },
+    {
+     "half_year": "2026H2",
+     "own_change": 6.1,
+     "peers_n": 165,
+     "peers_mean": -23.9,
+     "peers_q25_q75": [
+      -173.9,
+      95.1
+     ],
+     "own_percentile": 57.6,
+     "pre_ai_drift": 104.2,
+     "pre_ai_by_base": [
+      90.8,
+      100.6,
+      121.2
+     ],
+     "deflation": -128.1,
+     "vs_peers": 30.0,
+     "net_of_deflation": 134.2
+    }
+   ]
+  },
+  "rating_level/young": {
+   "own_base": 1775.6785714285713,
+   "peers_base_n": {
+    "2024H2": 210,
+    "2021H1": 329,
+    "2021H2": 249,
+    "2022H1": 188
+   },
+   "rows": [
+    {
+     "half_year": "2025H1",
+     "own_change": 19.7,
+     "peers_n": 113,
+     "peers_mean": 87.3,
+     "peers_q25_q75": [
+      20.1,
+      145.1
+     ],
+     "own_percentile": 24.8,
+     "pre_ai_drift": 67.4,
+     "pre_ai_by_base": [
+      60.1,
+      65.9,
+      76.4
+     ],
+     "deflation": 19.9,
+     "vs_peers": -67.6,
+     "net_of_deflation": -0.2
+    },
+    {
+     "half_year": "2025H2",
+     "own_change": 120.8,
+     "peers_n": 100,
+     "peers_mean": 91.1,
+     "peers_q25_q75": [
+      -37.9,
+      180.1
+     ],
+     "own_percentile": 55.0,
+     "pre_ai_drift": 114.3,
+     "pre_ai_by_base": [
+      99.1,
+      120.4,
+      123.5
+     ],
+     "deflation": -23.2,
+     "vs_peers": 29.7,
+     "net_of_deflation": 144.0
+    },
+    {
+     "half_year": "2026H1",
+     "own_change": 63.3,
+     "peers_n": 45,
+     "peers_mean": 137.4,
+     "peers_q25_q75": [
+      64.4,
+      204.0
+     ],
+     "own_percentile": 24.4,
+     "pre_ai_drift": 153.6,
+     "pre_ai_by_base": [
+      140.8,
+      152.0,
+      167.9
+     ],
+     "deflation": -16.2,
+     "vs_peers": -74.1,
+     "net_of_deflation": 79.4
+    },
+    {
+     "half_year": "2026H2",
+     "own_change": 6.1,
+     "peers_n": 27,
+     "peers_mean": 105.0,
+     "peers_q25_q75": [
+      24.4,
+      185.1
+     ],
+     "own_percentile": 22.2,
+     "pre_ai_drift": 196.1,
+     "pre_ai_by_base": [
+      188.7,
+      217.0,
+      182.7
+     ],
+     "deflation": -91.1,
+     "vs_peers": -98.9,
+     "net_of_deflation": 97.2
+    }
+   ]
+  },
+  "solve_level/all": {
+   "own_base": 1860.0,
+   "peers_base_n": {
+    "2024H2": 1185,
+    "2021H1": 1028,
+    "2021H2": 1007,
+    "2022H1": 883
+   },
+   "rows": [
+    {
+     "half_year": "2025H1",
+     "own_change": -40.0,
+     "peers_n": 572,
+     "peers_mean": 1.3,
+     "peers_q25_q75": [
+      -92.5,
+      120.0
+     ],
+     "own_percentile": 36.7,
+     "pre_ai_drift": 27.3,
+     "pre_ai_by_base": [
+      16.8,
+      33.7,
+      31.3
+     ],
+     "deflation": -26.0,
+     "vs_peers": -41.3,
+     "net_of_deflation": -14.0
+    },
+    {
+     "half_year": "2025H2",
+     "own_change": 80.0,
+     "peers_n": 469,
+     "peers_mean": 29.2,
+     "peers_q25_q75": [
+      -100.0,
+      170.0
+     ],
+     "own_percentile": 58.2,
+     "pre_ai_drift": 56.9,
+     "pre_ai_by_base": [
+      42.4,
+      43.6,
+      84.6
+     ],
+     "deflation": -27.7,
+     "vs_peers": 50.8,
+     "net_of_deflation": 107.7
+    },
+    {
+     "half_year": "2026H1",
+     "own_change": -30.0,
+     "peers_n": 245,
+     "peers_mean": 14.6,
+     "peers_q25_q75": [
+      -140.0,
+      180.0
+     ],
+     "own_percentile": 44.1,
+     "pre_ai_drift": 70.9,
+     "pre_ai_by_base": [
+      54.2,
+      76.6,
+      81.7
+     ],
+     "deflation": -56.2,
+     "vs_peers": -44.6,
+     "net_of_deflation": 26.2
+    },
+    {
+     "half_year": "2026H2",
+     "own_change": 120.0,
+     "peers_n": 163,
+     "peers_mean": -42.6,
+     "peers_q25_q75": [
+      -220.0,
+      115.0
+     ],
+     "own_percentile": 74.8,
+     "pre_ai_drift": 106.8,
+     "pre_ai_by_base": [
+      91.0,
+      81.9,
+      147.5
+     ],
+     "deflation": -149.4,
+     "vs_peers": 162.6,
+     "net_of_deflation": 269.4
+    }
+   ]
+  },
+  "solve_level/young": {
+   "own_base": 1860.0,
+   "peers_base_n": {
+    "2024H2": 210,
+    "2021H1": 329,
+    "2021H2": 249,
+    "2022H1": 188
+   },
+   "rows": [
+    {
+     "half_year": "2025H1",
+     "own_change": -40.0,
+     "peers_n": 113,
+     "peers_mean": 46.0,
+     "peers_q25_q75": [
+      -50.0,
+      150.0
+     ],
+     "own_percentile": 26.5,
+     "pre_ai_drift": 55.7,
+     "pre_ai_by_base": [
+      56.9,
+      50.4,
+      59.8
+     ],
+     "deflation": -9.7,
+     "vs_peers": -86.0,
+     "net_of_deflation": -30.3
+    },
+    {
+     "half_year": "2025H2",
+     "own_change": 80.0,
+     "peers_n": 100,
+     "peers_mean": 80.2,
+     "peers_q25_q75": [
+      -25.0,
+      220.0
+     ],
+     "own_percentile": 41.0,
+     "pre_ai_drift": 109.4,
+     "pre_ai_by_base": [
+      111.7,
+      77.4,
+      139.2
+     ],
+     "deflation": -29.2,
+     "vs_peers": -0.2,
+     "net_of_deflation": 109.2
+    },
+    {
+     "half_year": "2026H1",
+     "own_change": -30.0,
+     "peers_n": 45,
+     "peers_mean": 144.7,
+     "peers_q25_q75": [
+      60.0,
+      260.0
+     ],
+     "own_percentile": 17.8,
+     "pre_ai_drift": 119.2,
+     "pre_ai_by_base": [
+      121.3,
+      122.6,
+      113.8
+     ],
+     "deflation": 25.4,
+     "vs_peers": -174.7,
+     "net_of_deflation": -55.4
+    },
+    {
+     "half_year": "2026H2",
+     "own_change": 120.0,
+     "peers_n": 27,
+     "peers_mean": 94.1,
+     "peers_q25_q75": [
+      -20.0,
+      205.0
+     ],
+     "own_percentile": 51.9,
+     "pre_ai_drift": 192.3,
+     "pre_ai_by_base": [
+      196.7,
+      185.6,
+      194.6
+     ],
+     "deflation": -98.2,
+     "vs_peers": 25.9,
+     "net_of_deflation": 218.2
+    }
+   ]
+  }
+ }
+}
