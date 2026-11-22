@@ -51,6 +51,7 @@ SNAPSHOTS = {  # export -> when taken (UTC): a CSV's last registration, an xlsx 
     "icpc_hk_macau_public_teams_20261023.xlsx": "2026-10-23T14:45",
     "icpc_hk_macau_public_teams_20261026.xlsx": "2026-10-26T11:53",
     "icpc_hk_macau_public_teams_20261028.xlsx": "2026-10-28T05:50",
+    "icpc_hk_macau_public_teams_20261122.xlsx": "2026-11-22T08:26",
 }
 ROUND1_CLOSE = "2026-10-30T16:00"  # end of 10-30 in UTC+8 (the notice gives the date only)
 PACES = (1, 2, 3)
@@ -58,6 +59,10 @@ HK_EXPORTS = [og.ROOT / "data" / n for n in ("icpc_51_asia_hkmo_teams.csv", "icp
 PTA_EXPORTS = [og.ROOT / "data" / n for n in ("icpc_2026_ec_round1_teams.csv", "icpc_2026_ec_online_round2_teams.csv")] \
     + HK_EXPORTS  # PTA CSVs: English school name -> Chinese name and province
 NONLOCAL_SEATS = 95
+XLSX_ONLY_SCHOOLS = {  # schools no PTA CSV lists (no online team): English name -> (Chinese name, province)
+    "Lingnan University": ("岭南大学", "香港特别行政区"),
+    "New Mongol Institute of Technology": ("New Mongol Institute of Technology", ""),  # Mongolia; no Chinese name known
+}
 COUNT_RANKS = (50, 100, 200, 500)
 LOCAL_PROVINCES = ("香港特别行政区", "澳门特别行政区")
 
@@ -83,7 +88,7 @@ def read_registration(path):
         with open(path, encoding="utf-8-sig") as f:
             return list(csv.DictReader(f))
     import openpyxl
-    schools, created = pta_schools(), {}
+    schools, created = pta_schools() | XLSX_ONLY_SCHOOLS, {}
     for p in HK_EXPORTS:
         with open(p, encoding="utf-8-sig") as f:
             created.update({lineup(r["school_name_cn"], r["members"]): r["created_at"] for r in csv.DictReader(f)})
