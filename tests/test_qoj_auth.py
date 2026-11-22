@@ -124,3 +124,45 @@ class QOJAuthTests(unittest.TestCase):
         once = qoj_auth._tag(qoj_auth.BASE + "/login")
         self.assertEqual(once, qoj_auth.BASE + "/login?x=1")
         self.assertEqual(qoj_auth._tag(once), once)
+
+    def test_clearance_cookie_is_replayed_with_its_user_agent(self):
+        """A harvested cf_clearance must be sent with the UA that minted it."""
+        clearance = self.data / qoj_auth.CLEARANCE_FILE
+        clearance.write_text(json.dumps({
+            "user_agent": "Mozilla/5.0 (X11; Linux x86_64) Chrome/153.0.0.0 Safari/537.36",
+            "cookies": {"__Host-UOJSESSID": "browser", qoj_auth.CLEARANCE_COOKIE: "cleared"},
+        }))
+        client = qoj_auth.QOJSession()
+        self.addCleanup(client.close)
+        self.assertEqual(client.clearance["cookies"][qoj_auth.CLEARANCE_COOKIE], "cleared")
+        self.assertIn("Chrome/153", client.session.headers["User-Agent"])
+        self.assertIn("cleared", [c.value for c in client.session.cookies.jar])
+
+    def test_offset_session_header_is_not_pinned_by_the_clearance(self):
+        """Only cf_clearance is injected; a stale session cookie must not shadow login."""
+        clearance = self.data / qoj_auth.CLEARANCE_FILE
+        clearance.write_text(json.dumps({
+            "user_agent": "UA",
+            "cookies": {"__Host-UOJSESSID": "browser-sid", qoj_auth.CLEARANCE_COOKIE: "cleared"},
+        }))
+        client = qoj_auth.QOJSession()
+        self.addCleanup(client.close)
+        self.assertNotIn("Cookie", client.session.headers)
+        values = {c.name: c.value for c in client.session.cookies.jar}
+        self.assertEqual(values.get(qoj_auth.CLEARANCE_COOKIE), "cleared")
+        self.assertNotIn("__Host-UOJSESSID", values)
+
+    def test_challenge_without_a_clearance_points_at_the_harvester(self):
+        self.request.return_value = self.reply("/login", status=403, **{"cf-mitigated": "challenge"})
+        with self.assertRaisesRegex(qoj_auth.QOJError, "scripts.qoj_clearance"):
+            self.client.login("example", "password")
+
+    def test_challenge_with_a_stale_clearance_says_it_is_stale(self):
+        (self.data / qoj_auth.CLEARANCE_FILE).write_text(json.dumps({
+            "user_agent": "UA", "cookies": {qoj_auth.CLEARANCE_COOKIE: "stale"}}))
+        client = qoj_auth.QOJSession()
+        self.addCleanup(client.close)
+        client.session.request = self.request
+        self.request.return_value = self.reply("/login", status=403, **{"cf-mitigated": "challenge"})
+        with self.assertRaisesRegex(qoj_auth.QOJError, "expired or is for another network"):
+            client.login("example", "password")
