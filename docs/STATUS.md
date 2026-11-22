@@ -4,7 +4,7 @@ Current state of the project. Keep this file short (≤150 lines) and true: when
 task changes what ships, what is open, or a rule below, edit this file in the same
 commit. History belongs in [journal/](journal/INDEX.md), not here.
 
-Last updated: 2026-11-20 (Hong Kong dates and team training plan).
+Last updated: 2026-11-22 (shared QOJ fetch session).
 
 ## What ships
 
@@ -36,6 +36,9 @@ python -m arch_b.export_medal_viewer
 
 To add or refresh a contest, run
 `QOJ_USERNAME=… QOJ_PASSWORD=… python3 scripts/add_qoj_contest.py <id> --name … --region … [--refresh]`.
+The team-submission and single-contest fetchers share a browserless session.
+QOJ currently presents a Cloudflare challenge to direct clients from the
+development environment. See [QOJ fetcher usage](usage/qoj.md).
 For XCPCIO-only boards, use `scripts/fetch_xcpcio_standings.py`. Rerun
 `scripts/attach_online_rosters.py` after EC online rounds change, then run the
 release steps above. Full history:

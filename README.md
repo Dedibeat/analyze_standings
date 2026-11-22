@@ -16,6 +16,7 @@ This file is the **master map**: what is where and what it is for.
 | What ships now, rules that are easy to break, open threads | [docs/STATUS.md](docs/STATUS.md) |
 | Why something is the way it is, past experiments | [docs/journal/INDEX.md](docs/journal/INDEX.md) (grep it, then open the entry) |
 | How to run a tool | [docs/usage/](docs/usage/) and the module's docstring |
+| Fetch QOJ submissions and contest data | [QOJ fetchers](docs/usage/qoj.md) |
 | The method | [docs/design/](docs/design/) |
 | Code in one folder | that folder's `CLAUDE.md` (module map) |
 
@@ -98,7 +99,7 @@ Sibling repositories:
   - `external_data_sources.md`: audit of internet sources.
 
 **Usage** (`docs/usage/`): `rating-model.md`, `medals-and-forecasts.md`, `team-r3.md`,
-`ccpc.md`, `codeforces.md`, `llm-difficulty.md`, `viewers-and-app.md`.
+`ccpc.md`, `codeforces.md`, `llm-difficulty.md`, `qoj.md`, `viewers-and-app.md`.
 
 ## Where new work goes
 

@@ -9,13 +9,12 @@ QOJ_USERNAME=Dedibeat QOJ_PASSWORD=... python3 scripts/fetch_team_r3.py 4071 411
 python3 scripts/team_r3_participations.py      # output/team_r3_participations.{md,json}
 ```
 
-`fetch_team_r3.py` logs in without a browser (`../p1/qoj/BROWSERLESS_AUTH.md`)
-and stores every TEAM_R3 submission with its source, plus each contest's
+`fetch_team_r3.py` uses the [shared QOJ session](qoj.md)
+and stores TEAM_R3 submissions and visible source files, plus each contest's
 dashboard, per-problem statements (the HTML problem page when QOJ refuses the
 PDF) and all attachments (statements, tutorials), PDFs also as text. It also
 saves the QOJ boards with and without unofficial rows. Files already on disk are
-reused. It waits out QOJ's Cloudflare 429 rate limit (about 3 pages a minute
-once triggered).
+reused. On a server challenge or rate limit the fetcher stops so you can resume later.
 
 Log in with a personal account: TEAM_R3 has QOJ Training Mode on, which hides
 every board. The submissions read are always TEAM_R3's.

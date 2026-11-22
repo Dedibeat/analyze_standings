@@ -9,7 +9,7 @@ gives the exact command and outputs. Credentials come from the environment
 ## Data: fetch, build, attach (they change `data/`)
 
 - `add_qoj_contest.py`: add or refresh one QOJ contest in `data/tagged.json`
-  (`curl_cffi` login).
+  (shared QOJ login).
 - `fetch_xcpcio_standings.py`: XCPCIO boards → standings JSON (CCPC, XCPCIO-only
   regionals).
 - `fetch_qoj_supplemental.py`: standings-only QOJ category collector.
@@ -25,6 +25,8 @@ gives the exact command and outputs. Credentials come from the environment
 - `cphof_cf_participants.py`: CPHoF → Codeforces identities.
 - `backfill_standings.py`: no docstring.
 - `fetch_team_r3.py`: download the team account's QOJ submissions and contests.
+- `qoj_auth.py`: shared password login, session cache and QOJ HTTP requests
+  for the single-contest and team fetchers. [Usage](../docs/usage/qoj.md).
 
 ## Forecasts and contest analysis
 

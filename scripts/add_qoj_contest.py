@@ -5,11 +5,8 @@
         --name "EC Online (I)" --region "Asia East Continent"
 
 QOJ shows contest pages only to logged-in users, so the script logs in with
-QOJ_USERNAME / QOJ_PASSWORD through the browserless flow of
-``../p1/qoj/BROWSERLESS_AUTH.md`` (curl_cffi Chrome impersonation, md5 password,
-``_token`` from the page's JS; the session cookies are cached per account in the
-git-ignored ``data/.cookies-<user>.json`` and reused until they go stale) and
-reads two pages:
+QOJ_USERNAME / QOJ_PASSWORD through the shared browserless client and reads
+two pages:
 
 * the dashboard (``/contest/<id>``) for problem names and, unless ``--year`` is
   given, the year in the contest title;
@@ -30,70 +27,19 @@ and replaces the stored entry (used to pull a board's newer standings).
 """
 
 import argparse
-import hashlib
 import html
 import json
 import os
 import re
-import urllib.parse
 
-from curl_cffi import requests as cr_requests  # TLS impersonation: QOJ 403s plain clients
+if __package__:
+    from .qoj_auth import BASE, QOJError, authenticate
+else:
+    from qoj_auth import BASE, QOJError, authenticate
 
-BASE = "https://qoj.ac"
 DATA = os.path.join(os.path.dirname(__file__), os.pardir, "data")
 TAGGED = os.path.join(DATA, "tagged.json")
-TOKEN = re.compile(r'_token\s*:\s*"([A-Za-z0-9]{60})"')
 MEMBERS = re.compile(r"^(.*\S) \(([^()]*)\)$")
-
-
-class Qoj:
-    """Browserless session (``../p1/qoj/BROWSERLESS_AUTH.md``): Chrome TLS
-    fingerprint, md5 password, ``_token`` from the page's JS, cookies cached per
-    account in the git-ignored ``data/.cookies-<user>.json``."""
-
-    def __init__(self):
-        self.session = cr_requests.Session(impersonate="chrome136")
-        self.user = None
-
-    def get(self, path, data=None):
-        url = BASE + path
-        resp = (self.session.post(url, data=data, timeout=60) if data is not None
-                else self.session.get(url, timeout=60))
-        if "Just a moment" in resp.text[:3000]:
-            raise SystemExit(f"Cloudflare challenge on {path}; retry later")
-        if urllib.parse.urlparse(resp.url).path == "/login" and path != "/login":
-            raise SystemExit(f"QOJ asked for a login again on {path}")
-        return resp.text
-
-    def _logged_in(self):
-        return "My Profile" in self.get(f"/user/profile/{self.user}")
-
-    def login(self):
-        self.user = os.environ.get("QOJ_USERNAME")
-        password = os.environ.get("QOJ_PASSWORD")
-        if not self.user:
-            raise SystemExit("set QOJ_USERNAME (and QOJ_PASSWORD for a fresh login): "
-                             "QOJ shows contests only to logged-in users")
-        cookies = os.path.join(DATA, f".cookies-{self.user}.json")
-        if os.path.exists(cookies):
-            with open(cookies) as f:
-                self.session.headers["Cookie"] = "; ".join(
-                    f"{k}={v}" for k, v in json.load(f).items())
-            if self._logged_in():
-                return
-        if not password:
-            raise SystemExit("saved cookies are stale; set QOJ_PASSWORD")
-        token = TOKEN.search(self.get("/login"))
-        if not token:
-            raise SystemExit("QOJ's login page has no _token; the login needs updating")
-        form = {"_token": token.group(1), "login": "", "username": self.user,
-                "password": hashlib.md5(password.encode()).hexdigest()}  # md5 hex, not plaintext
-        if self.get("/login", form).strip() != "ok":
-            raise SystemExit("QOJ rejected the login")
-        if not self._logged_in():
-            raise SystemExit("QOJ said ok but the session is not authenticated")
-        with open(cookies, "w") as f:
-            json.dump({c.name: c.value for c in self.session.cookies.jar}, f, indent=2)
 
 
 def page_var(page, name):
@@ -149,7 +95,7 @@ def standing_row(entry, cells, labels):
 
 
 def fetch_contest(qoj, cid, name, region, year=None):
-    dashboard = qoj.get(f"/contest/{cid}")
+    dashboard = qoj.get(f"/contest/{cid}").text
     names = {int(pid): html.unescape(title) for pid, title in re.findall(
         rf'<a href="/contest/{cid}/problem/(\d+)">([^<]*)</a>', dashboard)}
     if year is None:
@@ -159,7 +105,7 @@ def fetch_contest(qoj, cid, name, region, year=None):
             raise SystemExit(f"no year in the title {title!r}; pass --year")
         year = int(m.group(1))
 
-    page = qoj.get(f"/contest/{cid}/standings")
+    page = qoj.get(f"/contest/{cid}/standings").text
     if page_var(page, "contest_type") != "ICPC":
         raise SystemExit(f"contest {cid} is not an ICPC-format contest")
     ids, labels = page_var(page, "problems"), page_var(page, "problems_id")
@@ -200,9 +146,11 @@ def main():
         print(f"contest {args.contest_id} is already in {os.path.basename(target)}; nothing to do")
         return
 
-    qoj = Qoj()
-    qoj.login()
-    contest = fetch_contest(qoj, args.contest_id, args.name, args.region, args.year)
+    qoj = authenticate()
+    try:
+        contest = fetch_contest(qoj, args.contest_id, args.name, args.region, args.year)
+    finally:
+        qoj.close()
     if existing is None:
         contests.append(contest)
         verb = "added"
@@ -220,4 +168,7 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except (QOJError, OSError) as exc:
+        raise SystemExit(str(exc)) from exc

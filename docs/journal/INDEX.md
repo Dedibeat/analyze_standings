@@ -114,3 +114,4 @@ to other files may name the old root locations (reports keep their filenames und
 - 2026-11-20 · team-r3 · [Dedi's team-contest solves](2026-11-20-dedi-team-solves.md) — 21 individual credits, median 1847, plus six paired solves
 - 2026-11-20 · team-r3 · [Shenyang J credited to Dedi](2026-11-20-shenyang-j-credit.md) — highest official credit 2304.1, 22 individual ACs, median 1878.6
 - 2026-11-20 · team-r3 · [Compact HK plan starting with Wuhan](2026-11-20-hk-wuhan-plan.md) — Nov 21 virtual confirmed, six later mock dates proposed
+- 2026-11-22 · data · [Shared QOJ authentication for downloads](2026-11-22-shared-qoj-auth.md) — two fetchers share login, seven focused tests passed, live QOJ returned a Cloudflare challenge
