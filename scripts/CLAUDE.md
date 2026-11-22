@@ -26,7 +26,9 @@ gives the exact command and outputs. Credentials come from the environment
 - `backfill_standings.py`: no docstring.
 - `fetch_team_r3.py`: download the team account's QOJ submissions and contests.
 - `qoj_auth.py`: shared password login, session cache and QOJ HTTP requests
-  for the single-contest and team fetchers. [Usage](../docs/usage/qoj.md).
+  for the single-contest and team fetchers. Impersonates Chrome and appends
+  the challenge-evasion query suffix to every request — keep both.
+  [Usage](../docs/usage/qoj.md).
 
 ## Forecasts and contest analysis
 

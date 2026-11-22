@@ -4,7 +4,7 @@ Current state of the project. Keep this file short (≤150 lines) and true: when
 task changes what ships, what is open, or a rule below, edit this file in the same
 commit. History belongs in [journal/](journal/INDEX.md), not here.
 
-Last updated: 2026-11-22 (shared QOJ fetch session).
+Last updated: 2026-11-22 (live QOJ fetching restored).
 
 ## What ships
 
@@ -37,8 +37,10 @@ python -m arch_b.export_medal_viewer
 To add or refresh a contest, run
 `QOJ_USERNAME=… QOJ_PASSWORD=… python3 scripts/add_qoj_contest.py <id> --name … --region … [--refresh]`.
 The team-submission and single-contest fetchers share a browserless session.
-QOJ currently presents a Cloudflare challenge to direct clients from the
-development environment. See [QOJ fetcher usage](usage/qoj.md).
+The client impersonates Chrome and appends a query suffix to every QOJ request;
+that pair is what gets past Cloudflare, which challenges the bare auth paths.
+Live login and downloads verified 2026-11-22. See
+[QOJ fetcher usage](usage/qoj.md).
 For XCPCIO-only boards, use `scripts/fetch_xcpcio_standings.py`. Rerun
 `scripts/attach_online_rosters.py` after EC online rounds change, then run the
 release steps above. Full history:
@@ -46,6 +48,10 @@ release steps above. Full history:
 
 ## Rules that are easy to break
 
+- **QOJ transport:** `scripts/qoj_auth.py` must keep `impersonate` on the
+  `Session` and the `_tag()` query suffix on every request. Removing either
+  makes every live QOJ call fail with a Cloudflare challenge — ungated pages
+  included ([why](journal/2026-11-22-qoj-cloudflare-evasion.md)).
 - **Fit inputs:** `data/tagged.json` plus the supplements read by `arch_b.joint`
   (`ucup_s3/s4`, `icpc_2020_2021`, `petroz_2022_2026`, `wf_tagged_format`).
   CCPC boards (`xcpcio_ccpc.json`, `qoj_ccpc.json`), AOJ and Kattis are

@@ -5,6 +5,7 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 from types import SimpleNamespace
 from unittest.mock import patch
+from urllib.parse import urlsplit
 
 from scripts import qoj_auth
 
@@ -23,6 +24,15 @@ class QOJAuthTests(unittest.TestCase):
         return SimpleNamespace(url=qoj_auth.BASE + path, status_code=status, text=body,
                                headers={"Content-Type": "text/html", **headers})
 
+    def assert_requested(self, method, path):
+        """Assert one request to `path`, carrying the challenge-evasion parameter."""
+        self.request.assert_called_once()
+        args, _ = self.request.call_args
+        self.assertEqual(args[0], method)
+        parts = urlsplit(args[1])
+        self.assertEqual(parts.path, path)
+        self.assertIn(qoj_auth.CHALLENGE_EVASION, parts.query.split("&"))
+
     def test_expired_cache_is_cleared_before_password_login(self):
         path = self.data / ".cookies-example.json"
         path.write_text(json.dumps({"__Host-UOJSESSID": "expired"}))
@@ -36,7 +46,7 @@ class QOJAuthTests(unittest.TestCase):
         ])
 
         def respond(method, url, **kwargs):
-            if url.endswith("/login"):
+            if urlsplit(url).path == "/login":
                 self.assertNotIn("__Host-UOJSESSID", self.client.session.cookies)
             if method == "POST":
                 self.assertEqual(kwargs["data"], {
@@ -58,7 +68,7 @@ class QOJAuthTests(unittest.TestCase):
         legacy.write_text(json.dumps({"__Host-UOJSESSID": "active"}))
         self.request.return_value = self.reply("/user/profile/example", "My Profile")
         self.client.login("example", None)
-        self.request.assert_called_once_with("GET", qoj_auth.BASE + "/user/profile/example")
+        self.assert_requested("GET", "/user/profile/example")
         self.assertTrue((self.data / legacy.name).exists())
 
     def test_login_rejects_ok_without_signed_in_profile(self):
@@ -80,7 +90,7 @@ class QOJAuthTests(unittest.TestCase):
         self.request.return_value = self.reply("/login", status=403, **{"cf-mitigated": "challenge"})
         with self.assertRaisesRegex(qoj_auth.QOJError, "Cloudflare challenge"):
             self.client.login("example", "password")
-        self.request.assert_called_once_with("GET", qoj_auth.BASE + "/login")
+        self.assert_requested("GET", "/login")
 
     def test_rate_limit_stops_download_and_reports_retry_after(self):
         self.request.return_value = self.reply("/submissions", status=429, **{"Retry-After": "20"})
@@ -94,3 +104,23 @@ class QOJAuthTests(unittest.TestCase):
         with self.assertRaisesRegex(qoj_auth.QOJError, "outside https://qoj.ac"):
             self.client.get("/download.php")
         self.request.assert_called_once()
+
+    def test_every_request_carries_the_challenge_evasion_parameter(self):
+        """Cloudflare challenges the bare auth paths; every request must be tagged."""
+        self.request.return_value = self.reply("/contests", "<html>ok</html>")
+        self.client.get("/contests")
+        self.assert_requested("GET", "/contests")
+
+    def test_existing_query_parameters_are_preserved_when_tagging(self):
+        self.request.return_value = self.reply("/submissions", "<html>ok</html>")
+        self.client.get("/submissions?submitter=example")
+        _, url = self.request.call_args.args
+        parts = urlsplit(url)
+        self.assertEqual(parts.path, "/submissions")
+        self.assertIn("submitter=example", parts.query)
+        self.assertIn(qoj_auth.CHALLENGE_EVASION, parts.query.split("&"))
+
+    def test_tagging_is_idempotent(self):
+        once = qoj_auth._tag(qoj_auth.BASE + "/login")
+        self.assertEqual(once, qoj_auth.BASE + "/login?x=1")
+        self.assertEqual(qoj_auth._tag(once), once)

@@ -21,9 +21,13 @@ unset QOJ_PASSWORD
 The first command checks that QOJ returns the signed-in profile. The tools
 reuse session cookies from the gitignored `data/.cookies-<username>.json`.
 Supply `QOJ_PASSWORD` when a fresh password-only login is needed.
-Direct clients require QOJ to allow their connection. A Cloudflare challenge
-stops the fetcher. A rate-limit response stops the fetcher and reports
-`Retry-After` when QOJ supplies it.
+
+All QOJ requests go through `scripts/qoj_auth.py`, which impersonates Chrome and
+appends a query suffix. Cloudflare challenges the bare auth paths (`/login`,
+`/register`), so both are required; see [the journal entry](../journal/2026-11-22-qoj-cloudflare-evasion.md).
+Do not bypass the helper or strip the suffix. A challenge that still arrives
+stops the fetcher, and a rate-limit response stops it and reports `Retry-After`
+when QOJ supplies it.
 
 `fetch_team_r3` writes the TEAM_R3 submission list and visible source files,
 plus dashboards, statements, attachments and standings under `data/team_r3/`.

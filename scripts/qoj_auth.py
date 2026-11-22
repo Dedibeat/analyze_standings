@@ -8,13 +8,18 @@ import tempfile
 import time
 from pathlib import Path
 from urllib.error import HTTPError
-from urllib.parse import urljoin, urlsplit
+from urllib.parse import urljoin, urlsplit, urlunsplit
 
 from curl_cffi.requests import Session
 from curl_cffi.requests.exceptions import RequestException
 
 BASE = "https://qoj.ac"
 DATA = Path(__file__).resolve().parents[1] / "data"
+# Cloudflare serves a managed challenge (403 + cf-mitigated: challenge) on the
+# BARE auth paths (/login, /register). The WAF rule matches the bare path, so any
+# query string reaches the origin; the app ignores unknown parameters. See
+# docs/journal/2026-11-22-qoj-cloudflare-evasion.md.
+CHALLENGE_EVASION = "x=1"
 TOKEN = re.compile(r'''["']?_token["']?\s*:\s*["']([A-Za-z0-9]{60})["']''')
 LOGIN_FORM = re.compile(r"\bfunction\s+submitLoginPost\s*\(")
 AUTH_COOKIES = {"__Host-UOJSESSID", "__Host-UOJREMEMBER", "UOJSESSID", "UOJREMEMBER"}
@@ -24,9 +29,19 @@ class QOJError(Exception):
     """A QOJ request or session could not be used."""
 
 
+def _tag(url):
+    """Append the challenge-evasion query parameter (idempotent)."""
+    parts = urlsplit(url)
+    params = [p for p in parts.query.split("&") if p and p != CHALLENGE_EVASION]
+    query = "&".join([*params, CHALLENGE_EVASION])
+    return urlunsplit((parts.scheme, parts.netloc, parts.path, query, parts.fragment))
+
+
 class QOJSession:
     def __init__(self):
-        self.session = Session(timeout=40, allow_redirects=False)
+        # impersonate is REQUIRED: Cloudflare challenges libcurl's default TLS
+        # fingerprint on every page, including ungated ones.
+        self.session = Session(timeout=40, allow_redirects=False, impersonate="chrome136")
         self.next_request = 0.0
 
     def close(self):
@@ -37,6 +52,7 @@ class QOJSession:
             parsed = urlsplit(url)
             if (parsed.scheme, parsed.netloc) != ("https", "qoj.ac"):
                 raise QOJError("request is outside https://qoj.ac")
+            url = _tag(url)
             delay = self.next_request - time.monotonic()
             if delay > 0:
                 time.sleep(delay)
@@ -46,7 +62,10 @@ class QOJSession:
                 raise QOJError(f"QOJ network error on {parsed.path}: {exc}") from exc
             self.next_request = time.monotonic() + 1.5
             if response.headers.get("cf-mitigated") == "challenge":
-                raise QOJError(f"QOJ presented a Cloudflare challenge on {parsed.path}")
+                raise QOJError(
+                    f"QOJ presented a Cloudflare challenge on {parsed.path} "
+                    f"despite the query-suffix evasion; re-check qoj.ac's WAF rules"
+                )
             if response.status_code == 429:
                 retry_after = response.headers.get("Retry-After")
                 detail = f" (Retry-After: {retry_after})" if retry_after else ""
