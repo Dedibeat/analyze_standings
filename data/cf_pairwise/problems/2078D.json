@@ -1,0 +1,41 @@
+{
+  "contest_id": 2078,
+  "index": "D",
+  "name": "Scammy Game Ad",
+  "rating": 1800,
+  "tags": [
+    "dp",
+    "greedy",
+    "implementation"
+  ],
+  "points": 1750.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2078D",
+  "url": "https://codeforces.com/problemset/problem/2078/D",
+  "contest_start_time": "2025-03-10T14:45:00+00:00",
+  "statement": {
+    "title": "D. Scammy Game Ad",
+    "time_limit": "3 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Consider the following game.\n\nIn this game, a level consists of $n$ pairs of gates. Each pair contains one left gate and one right gate. Each gate performs one of two operations:\n\n Addition Operation (+ a): Increases the number of people in a lane by a constant amount $a$.\n\n Multiplication Operation (x a): Multiplies the current number of people in a lane by an integer $a$. This means the number of people increases by $(a - 1)$ times the current count in that lane.\n\nThe additional people gained from each operation can be assigned to either lane. However, people already in a lane cannot be moved to the other lane.\n\nInitially, there is one person in each lane. Your task is to determine the maximum total number of people that can be achieved by the end of the level.",
+    "input_spec": "The first line contains an integer $t$ ($1 \\leq t \\leq 10^4$) — the number of test cases.\n\nThe first line of each test case contains one integer $n$ ($1 \\leq n \\le 30$) — the number of pairs of gates.\n\nThe next $n$ lines of each test case provide the information for the left gate followed by the right gate of each gate pair. The information for each gate is given in the form + $a$ ($1 \\le a \\le 1000$) or x $a$ ($2 \\le a \\le 3$) for some integer $a$.",
+    "output_spec": "For each test case, output a single integer — the maximum total number of people at the end of the level.",
+    "note": "In the first case, here is one possible way to play this game optimally.\n\nInitially, we have $l=1$ person in the left lane and $r=1$ person in the right lane.\n\nAfter passing through the first pair of gates, we gain $4$ people from the left gate and $1 \\cdot (2-1) = 1$ person from the right gate, for a total of $4+1=5$ people. We allocate $2$ people to the left lane and $3$ people to the right lane. This results in $l=1+2=3$ people in the left lane and $r=1+3=4$ people in the right lane.\n\nAfter passing through the second pair of gates, we gain $3 \\cdot (3-1) = 6$ people from the left gate and $4 \\cdot (3-1) = 8$ people from the right gate, for a total of $6+8=14$ people. We allocate $7$ people to the left lane and $7$ people to the right lane. This results in $l=3+7=10$ people in the left lane and $r=4+7=11$ people in the right lane.\n\nAfter passing through the last pair of gates, we gain $7$ people from the left gate and $4$ people from the right gate, for a total of $7+4=11$ people. We allocate $6$ people to the left lane and $5$ people to the right lane. This results in $l=10+6=16$ people in the left lane and $r=11+5=16$ people in the right lane.\n\nAt the end, the total number of people is $16+16=32$.",
+    "samples": [
+      {
+        "input": "4\n3\n+ 4 x 2\nx 3 x 3\n+ 7 + 4\n4\n+ 9 x 2\nx 2 x 3\n+ 9 + 10\nx 2 + 1\n4\nx 2 + 1\n+ 9 + 10\nx 2 x 3\n+ 9 x 2\n5\nx 3 x 3\nx 2 x 2\n+ 21 + 2\nx 2 x 3\n+ 41 x 3",
+        "output": "\n32\n98\n144\n351"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 140505,
+    "url": "https://codeforces.com/blog/entry/140505",
+    "tutorial": "2078D - Scammy Game Ad\n\nHint 1\n\nIt is optimal to place everyone on the same lane.\n\nHint 2\n\nThink about the multiplier.\n\nHint 3\n\nIt is best to think of each $\\tt{+}$ as \"how much can we multiply this by\".\n\nSolution 1\n\nThis is the greedy solution.\n\nWhen we get more people, place all to where the $\\tt{x}$ will occur first. If both lanes have the next multiply at the same gate pair, then choose the one with higher multiply. If the multiply is the same, look to the next multiply.\n\nProof\n\nIt's easier to think of $\\tt{+}$ as $\\tt{x} 1$. The idea is as follows.\n\nConsider the range of gate pairs between two pairs with different multiply, and the pairs in the range all have the same multiply. You have $l$ people on the left side and $r$ on the right side before you enter the range. In this range, you will gain a constant number of people, say $x$, regardless of your actions here. You choose to allocate $y$ to the left side.\n\nAt the end of the range, there's a pair of gates $\\tt{x} a$ $\\tt{x} b$ where $a \\gt b$ (same argument for case $a \\lt b$). After passing the gate, you will gain $(a-1)(l+y) + (b-1)(r+x-y)$ more people. With the current number people of $l+y$ on the left side and $r+x-y$ on the right side, we can see that maximizing $y$ is the optimal choice, because there always exist an allocation such that both number of people on the left and right side will exceed those with lower selection of $y$.\n\nTime complexity: $\\mathcal{O}(n)$ per test case. $\\mathcal{O}(n^2)$ implementations are also acceptable.\n\nSubmission: 310297718\n\nSolution 2\n\nThis is the dynamic programming solution.\n\nLet $dp_l[i]$ and $dp_r[i]$ be the maximum possible multiplication possible that can be applied if a person enters the $i$-th left and right gate, respectively. Then we have the following equation (only for left is written, it's the same for the right).\n\nIf the gate is $\\tt{+}$\n $dp_l[i] = dp_l[i+1]$\nIf the gate is $\\tt{x}$ by $a$\n $dp_l[i] = dp_l[i+1] + (a-1)\\max(dp_l[i+1], dp_r[i+1])$\nFor each $\\tt{+}$, we choose to place people at the side with more multiplication.\n\nTime complexity: $\\mathcal{O}(n)$ per test case.\n\nSubmission: 310297763\n\nNote\n\n$n = 30$ constraint is due to overflow. The maximum answer is the case with $n = 30$, the first pair of gates is $\\tt{+} 1000$ $\\tt{+} 1000$, and the other pairs of gates are $\\tt{+} 1000$ $\\tt{x} 3$, giving the answer $171644573789571884 \\lt 10^{18}$.\n\nIt is possible to solve this task under modulo and force $\\mathcal{O}(n)$ solution, but it will be hard, or maybe impossible, to implement the DP solution which requires min/max operations, so I decided against it.",
+    "solution_code": []
+  }
+}

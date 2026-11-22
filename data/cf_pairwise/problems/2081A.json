@@ -1,0 +1,44 @@
+{
+  "contest_id": 2081,
+  "index": "A",
+  "name": "Math Division",
+  "rating": 1800,
+  "tags": [
+    "bitmasks",
+    "dp",
+    "math",
+    "probabilities"
+  ],
+  "points": 500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2081A",
+  "url": "https://codeforces.com/problemset/problem/2081/A",
+  "contest_start_time": "2025-03-15T14:35:00+00:00",
+  "statement": {
+    "title": "A. Math Division",
+    "time_limit": "2 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "Ecrade has an integer $x$. He will show you this number in the form of a binary number of length $n$.\n\nThere are two kinds of operations.\n\n Replace $x$ with $\\left\\lfloor \\dfrac{x}{2}\\right\\rfloor$, where $\\left\\lfloor \\dfrac{x}{2}\\right\\rfloor$ is the greatest integer $\\le \\dfrac{x}{2}$.\n\n Replace $x$ with $\\left\\lceil \\dfrac{x}{2}\\right\\rceil$, where $\\left\\lceil \\dfrac{x}{2}\\right\\rceil$ is the smallest integer $\\ge \\dfrac{x}{2}$.\n\nEcrade will perform several operations until $x$ becomes $1$. Each time, he will independently choose to perform either the first operation or the second operation with probability $\\frac{1}{2}$.\n\nEcrade wants to know the expected number of operations he will perform to make $x$ equal to $1$, modulo $10^9 + 7$. However, it seems a little difficult, so please help him!",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\le t \\le 10^5$) — the number of test cases. The description of the test cases follows.\n\nThe first line of each test case contains a single integer $n$ ($1 \\le n \\le 10^5$) — the length of $x$ in binary representation.\n\nThe second line of each test case contains a binary string of length $n$: the number $x$ in the binary representation, presented from the most significant bit to the least significant bit. It is guaranteed that the most significant bit of $x$ is $1$.\n\nIt is guaranteed that the sum of $n$ across all test cases does not exceed $10^5$.",
+    "output_spec": "For each test case, print a single integer representing the expected number of operations Ecrade will perform to make $x$ equal to $1$, modulo $10^9+7$.\n\nFormally, let $M = 10^9+7$. It can be shown that the exact answer can be expressed as an irreducible fraction $\\frac{p}{q}$, where $p$ and $q$ are integers and $q \\not \\equiv 0 \\pmod{M}$. Output the integer equal to $p \\cdot q^{-1} \\bmod M$. In other words, output such an integer $x$ that $0 \\le x  \\lt  M$ and $x \\cdot q \\equiv p \\pmod{M}$.",
+    "note": "For simplicity, we call the first operation $\\text{OPER 1}$ and the second operation $\\text{OPER 2}$.\n\nIn the first test case, $x=6$, and there are six possible series of operations:\n\n $6 \\xrightarrow{\\text{OPER 1}} 3 \\xrightarrow{\\text{OPER 1}} 1$, the probability is $\\dfrac{1}{4}$.\n\n $6 \\xrightarrow{\\text{OPER 1}} 3 \\xrightarrow{\\text{OPER 2}} 2 \\xrightarrow{\\text{OPER 1}} 1$, the probability is $\\dfrac{1}{8}$.\n\n $6 \\xrightarrow{\\text{OPER 1}} 3 \\xrightarrow{\\text{OPER 2}} 2 \\xrightarrow{\\text{OPER 2}} 1$, the probability is $\\dfrac{1}{8}$.\n\n $6 \\xrightarrow{\\text{OPER 2}} 3 \\xrightarrow{\\text{OPER 1}} 1$, the probability is $\\dfrac{1}{4}$.\n\n $6 \\xrightarrow{\\text{OPER 2}} 3 \\xrightarrow{\\text{OPER 2}} 2 \\xrightarrow{\\text{OPER 1}} 1$, the probability is $\\dfrac{1}{8}$.\n\n $6 \\xrightarrow{\\text{OPER 2}} 3 \\xrightarrow{\\text{OPER 2}} 2 \\xrightarrow{\\text{OPER 2}} 1$, the probability is $\\dfrac{1}{8}$.\n\nThus, the expected number of operations is $2 \\cdot \\dfrac{1}{4} + 3 \\cdot \\dfrac{1}{8} + 3 \\cdot \\dfrac{1}{8} + 2 \\cdot \\dfrac{1}{4} + 3 \\cdot \\dfrac{1}{8} + 3 \\cdot \\dfrac{1}{8} = \\dfrac{5}{2} \\equiv 500\\,000\\,006 \\pmod{10^9 + 7}$.",
+    "samples": [
+      {
+        "input": "3\n3\n110\n3\n100\n10\n1101001011",
+        "output": "\n500000006\n2\n193359386"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 140702,
+    "url": "https://codeforces.com/blog/entry/140702",
+    "tutorial": "2081A - Math Division\n Idea: Ecrade_\n\nHint 1\n\nConsider $x$ in binary form.\n\nHint 2\n\nWhat are all possible numbers of operations to make $x$ equal to $1$?\n\nHint 3\n\nConsider using dynamic programming to calculate the answer.\n\nSolution\n\nSimilar to the previous problem, the possible number of operations can only be $n-1$ or $n$, depending on whether a carry-over occurs in $x$ during the $(n-1)$ -th operation.\n\nWe can use dynamic programming to compute the probability of a carry-over occurring during the $(n-1)$ -th operation.\n\nLet $f_i$ denote the probability of a carry-over occurring at the $i$ -th least significant bit. The recurrence relation is:\n $ f_i = \\begin{cases} \\dfrac{1}{2} \\times f_{i-1} & x_i = 0 \\\\ \\dfrac{1}{2} \\times (1 - f_{i-1}) + f_{i-1} & x_i = 1 \\end{cases} $\nThe final answer is given by $n-1+f_{n-1}$.\n\nThe time complexity is $O(\\sum n)$.\n\nCode",
+    "solution_code": [
+      "#include<bits/stdc++.h>\nusing namespace std;\ntypedef long long ll;\nconst ll inv2 = 5e8 + 4,mod = 1e9 + 7;\nll t,n;\nchar s[1000009];\ninline ll read(){\n\tll s = 0,w = 1;\n\tchar ch = getchar();\n\twhile (ch > '9' || ch < '0'){ if (ch == '-') w = -1; ch = getchar();}\n\twhile (ch <= '9' && ch >= '0') s = (s << 1) + (s << 3) + (ch ^ 48),ch = getchar();\n\treturn s * w;\n}\nint main(){\n\tt = read();\n\twhile (t --){\n\t\tn = read(),scanf(\"%s\",s + 1);\n\t\tll ans = 0;\n\t\tfor (ll i = n;i > 1;i -= 1) ans = (ans + (s[i] == '1')) * inv2 % mod;\n\t\tprintf(\"%lld\\n\",(n - 1 + ans) % mod);\n\t}\n\treturn 0;\n}"
+    ]
+  }
+}

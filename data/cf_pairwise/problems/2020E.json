@@ -1,0 +1,44 @@
+{
+  "contest_id": 2020,
+  "index": "E",
+  "name": "Expected Power",
+  "rating": 2000,
+  "tags": [
+    "bitmasks",
+    "dp",
+    "math",
+    "probabilities"
+  ],
+  "points": 2000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2020E",
+  "url": "https://codeforces.com/problemset/problem/2020/E",
+  "contest_start_time": "2024-09-29T15:35:00+00:00",
+  "statement": {
+    "title": "E. Expected Power",
+    "time_limit": "4 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "You are given an array of $n$ integers $a_1,a_2,\\ldots,a_n$. You are also given an array $p_1, p_2, \\ldots, p_n$.\n\nLet $S$ denote the random multiset (i. e., it may contain equal elements) constructed as follows:\n\n Initially, $S$ is empty.\n\n For each $i$ from $1$ to $n$, insert $a_i$ into $S$ with probability $\\frac{p_i}{10^4}$. Note that each element is inserted independently.\n\nDenote $f(S)$ as the bitwise XOR of all elements of $S$. Please calculate the expected value of $(f(S))^2$. Output the answer modulo $10^9 + 7$.\n\nFormally, let $M = 10^9 + 7$. It can be shown that the answer can be expressed as an irreducible fraction $\\frac{p}{q}$, where $p$ and $q$ are integers and $q \\not \\equiv 0 \\pmod{M}$. Output the integer equal to $p \\cdot q^{-1} \\bmod M$. In other words, output such an integer $x$ that $0 \\le x  \\lt  M$ and $x \\cdot q \\equiv p \\pmod{M}$.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 10^4$). The description of the test cases follows.\n\nThe first line of each test case contains a single integer $n$ ($1 \\le n \\le 2 \\cdot 10^5$).\n\nThe second line of each test case contains $n$ integers $a_1,a_2,\\ldots,a_n$ ($1 \\le a_i \\le 1023$).\n\nThe third line of each test case contains $n$ integers $p_1,p_2,\\ldots,p_n$ ($1 \\le p_i \\le 10^4$).\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, output the expected value of $(f(S))^2$, modulo $10^9 + 7$.",
+    "note": "In the first test case, $a = [1, 2]$ and each element is inserted into $S$ with probability $\\frac{1}{2}$, since $p_1 = p_2 = 5000$ and $\\frac{p_i}{10^4} = \\frac{1}{2}$. Thus, there are $4$ outcomes for $S$, each happening with the same probability of $\\frac{1}{4}$:\n\n $S = \\varnothing$. In this case, $f(S) = 0$, $(f(S))^2 = 0$.\n\n $S = \\{1\\}$. In this case, $f(S) = 1$, $(f(S))^2 = 1$.\n\n $S = \\{2\\}$. In this case, $f(S) = 2$, $(f(S))^2 = 4$.\n\n $S = \\{1,2\\}$. In this case, $f(S) = 1 \\oplus 2 = 3$, $(f(S))^2 = 9$.\n\nHence, the answer is $0 \\cdot \\frac{1}{4} + 1 \\cdot \\frac{1}{4} + 4\\cdot \\frac{1}{4} + 9 \\cdot \\frac{1}{4} = \\frac{14}{4} = \\frac{7}{2} \\equiv 500\\,000\\,007 \\pmod{10^9 + 7}$.\n\nIn the second test case, $a = [1, 1]$, $a_1$ is inserted into $S$ with probability $0.1$, while $a_2$ is inserted into $S$ with probability $0.2$. There are $3$ outcomes for $S$:\n\n $S = \\varnothing$. In this case, $f(S) = 0$, $(f(S))^2 = 0$. This happens with probability $(1-0.1) \\cdot (1-0.2) = 0.72$.\n\n $S = \\{1\\}$. In this case, $f(S) = 1$, $(f(S))^2 = 1$. This happens with probability $(1-0.1) \\cdot 0.2 + 0.1 \\cdot (1-0.2) = 0.26$.\n\n $S = \\{1, 1\\}$. In this case, $f(S) = 0$, $(f(S))^2 = 0$. This happens with probability $0.1 \\cdot 0.2 = 0.02$.\n\nHence, the answer is $0 \\cdot 0.72 + 1 \\cdot 0.26 + 0 \\cdot 0.02 = 0.26 = \\frac{26}{100} \\equiv 820\\,000\\,006 \\pmod{10^9 + 7}$.",
+    "samples": [
+      {
+        "input": "4\n2\n1 2\n5000 5000\n2\n1 1\n1000 2000\n6\n343 624 675 451 902 820\n6536 5326 7648 2165 9430 5428\n1\n1\n10000",
+        "output": "\n500000007\n820000006\n280120536\n1"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 134516,
+    "url": "https://codeforces.com/blog/entry/134516",
+    "tutorial": "E. Expected Power\n\nBy nishkarsh\n\nHint 1\n\nTry to find the expected value of $f(S)$ rather than $(f(S))^2$.\n\nHint 2\n\nWrite the binary representation of $f(S)$ and find $(f(S))^2$.\n\nSolution\n\nLet the binary representation of the $Power$ be $b_{20}b_{19}...b_{0}$. Now $Power^2$ is $\\sum_{i=0}^{20} \\sum_{j=0}^{20} b_i b_j * 2^{i+j}$. Now if we compute the expected value of $b_ib_j$ for every pair $(i,j)$, then we are done.\n\nWe can achieve this by dynamic programming. For each pair $i,j$, there are only 4 possible values of $b_i,b_j$. For every possible value, we can maintain the probability of reaching it, and we are done.\n\nThe complexity of the solution is $O(n.log(max(a_i))^2)$.\n\nCode",
+    "solution_code": [
+      "#include <bits/stdc++.h>\nusing namespace std;\nint fast_exp(int b, int e, int mod){\n\tint ans = 1;\n\twhile(e){\n\t\tif(e&1) ans = (1ll*ans*b) % mod;\n\t\tb = (1ll*b*b) % mod;\n\t\te >>= 1;\n\t}\n\treturn ans;\n}\nconst int mod = 1e9+7;\nconst int bits = 11;\n \nint inv(int n){\n\treturn fast_exp(n,mod-2,mod);\n}\n \nconst int inverse_1e4 = inv(10000);\nint dp[bits][bits][2][2];\nvoid transition(int a, int p){\n\tp = (1ll*p*inverse_1e4) % mod;\n\tint negp = (mod+1-p) % mod;\n\tint bin[bits];\n\tfor(int i = 0; i < bits; i++){\n\t\tbin[i] = a&1;\n\t\ta >>= 1;\n\t}\n\tfor(int i = 0; i < bits; i++){\n\t\tfor(int j = 0; j < bits; j++){\n\t\t\tint temp[2][2];\n \n\t\t\tfor(int k : {0,1}) for(int l : {0,1}) temp[k][l] = (1ll*dp[i][j][k][l]*negp + 1ll*dp[i][j][k^bin[i]][l^bin[j]]*p) % mod;\n \n\t\t\tfor(int k : {0,1}) for(int l : {0,1}) dp[i][j][k][l] = temp[k][l];\n\t\t}\n\t}\n}\nint main() {\n    int t;\n    cin >> t;\n    while(t--){\n    \tint n;\n    \tcin >> n;\n    \tint a[n],p[n];\n    \tfor(int i = 0; i < n; i++) cin >> a[i];\n    \tfor(int i = 0; i < n; i++) cin >> p[i];\n    \tfor(int i = 0; i < bits; i++) for(int j = 0; j < bits; j++) dp[i][j][0][0] = 1;\n    \tfor(int i = 0; i < n; i++) transition(a[i],p[i]);\n    \tint ans = 0;\n    \tfor(int i = 0; i < bits; i++){\n    \t\tfor(int j = 0; j < bits; j++){\n    \t\t\tint pw2 = (1ll<<(i+j)) % mod;\n    \t\t\tans += (1ll*pw2*dp[i][j][1][1]) % mod;\n    \t\t\tans %= mod;\n    \t\t\tfor(int k : {0,1}) for(int l : {0,1}) dp[i][j][k][l] = 0;\n    \t\t}\n    \t}\n    \tcout << ans << \"\\n\";\n    }\n\treturn 0;\n}"
+    ]
+  }
+}

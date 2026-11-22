@@ -1,0 +1,44 @@
+{
+  "contest_id": 2030,
+  "index": "B",
+  "name": "Minimise Oneness",
+  "rating": 800,
+  "tags": [
+    "combinatorics",
+    "constructive algorithms",
+    "games",
+    "math"
+  ],
+  "points": 500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2030B",
+  "url": "https://codeforces.com/problemset/problem/2030/B",
+  "contest_start_time": "2024-10-19T14:05:00+00:00",
+  "statement": {
+    "title": "B. Minimise Oneness",
+    "time_limit": "1.5 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "For an arbitrary binary string $t$$^{\\text{∗}}$, let $f(t)$ be the number of non-empty subsequences$^{\\text{†}}$ of $t$ that contain only $\\mathtt{0}$, and let $g(t)$ be the number of non-empty subsequences of $t$ that contain at least one $\\mathtt{1}$.\n\nNote that for $f(t)$ and for $g(t)$, each subsequence is counted as many times as it appears in $t$. E.g., $f(\\mathtt{000}) = 7, g(\\mathtt{100}) = 4$.\n\nWe define the oneness of the binary string $t$ to be $|f(t)-g(t)|$, where for an arbitrary integer $z$, $|z|$ represents the absolute value of $z$.\n\nYou are given a positive integer $n$. Find a binary string $s$ of length $n$ such that its oneness is as small as possible. If there are multiple strings, you can print any of them.\n\n$^{\\text{∗}}$A binary string is a string that only consists of characters $\\texttt{0}$ and $\\texttt{1}$.\n\n$^{\\text{†}}$A sequence $a$ is a subsequence of a sequence $b$ if $a$ can be obtained from $b$ by the deletion of several (possibly, zero or all) elements. For example, subsequences of $\\mathtt{1011101}$ are $\\mathtt{0}$, $\\mathtt{1}$, $\\mathtt{11111}$, $\\mathtt{0111}$, but not $\\mathtt{000}$ nor $\\mathtt{11100}$.",
+    "input_spec": "The first line contains an integer $t$ ($1 \\leq t \\leq 10^4$) — the number of test cases.\n\nThe only line of each test case contains an integer $n$ ($1 \\leq n \\leq 2\\cdot10^5$) — the length of $s$.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $2\\cdot10^5$.",
+    "output_spec": "For each test case, output $s$ on a new line. If multiple answers exist, output any.",
+    "note": "In the first test case, for the example output, $f(t)=1$ because there is one subsequence that contains only $\\mathtt{0}$ ($\\mathtt{0}$), and $g(t)=0$ because there are no subsequences that contain at least one $1$. The oneness is $|1-0|=1$. The output $\\mathtt{1}$ is correct as well because its oneness is $|0-1|=1$.\n\nFor the example output of the second test case, $f(t)=1$ because there is one non-empty subsequence that contains only $\\mathtt{0}$, and $g(t)=2$ because there are two non-empty subsequences that contain at least one $\\mathtt{1}$ ($\\mathtt{01}$ and $\\mathtt{1}$). The oneness is thus $|1-2|=1$. It can be shown that $1$ is the minimum possible value of its oneness over all possible binary strings of size $2$.",
+    "samples": [
+      {
+        "input": "3\n1\n2\n3",
+        "output": "\n0\n01\n010"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 135218,
+    "url": "https://codeforces.com/blog/entry/135218",
+    "tutorial": "2030B - Minimise Oneness\n\nProblem Credits: Proof_by_QED\n Analysis: Proof_by_QED\n\nSolution\n\nObservation: $f(t)-g(t)$ is odd.\n\nProof: $f(t)+g(t)$ is the set of all non-empty subsets of $t$, which is $2^{|t|}-1$, which is odd. The sum and difference of two integers has the same parity, so $f(t)-g(t)$ is always odd.\n\nBy including exactly one $1$ in the string $s$, we can make $f(s)=2^{n-1}-1$ and $g(s)=2^{n-1}$, or $f(s)-g(s)=1$ by the multiplication principle. Clearly, this is the best we can do. So, we print out any string with exactly one $1$.\n\nCode (C++)",
+    "solution_code": [
+      "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    int t;\n    cin >> t;\n    while(t--) {\n        int n;\n        cin >> n;\n        cout << '1';\n        for(int i = 1; i < n; i++) cout << '0';\n        cout << endl;\n    }\n}"
+    ]
+  }
+}

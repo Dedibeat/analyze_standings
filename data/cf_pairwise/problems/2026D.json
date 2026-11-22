@@ -1,0 +1,45 @@
+{
+  "contest_id": 2026,
+  "index": "D",
+  "name": "Sums of Segments",
+  "rating": 1900,
+  "tags": [
+    "binary search",
+    "data structures",
+    "dp",
+    "implementation",
+    "math"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2026D",
+  "url": "https://codeforces.com/problemset/problem/2026/D",
+  "contest_start_time": "2024-10-28T14:35:00+00:00",
+  "statement": {
+    "title": "D. Sums of Segments",
+    "time_limit": "4 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "You are given a sequence of integers $[a_1, a_2, \\dots, a_n]$. Let $s(l,r)$ be the sum of elements from $a_l$ to $a_r$ (i. e. $s(l,r) = \\sum\\limits_{i=l}^{r} a_i$).\n\nLet's construct another sequence $b$ of size $\\frac{n(n+1)}{2}$ as follows: $b = [s(1,1), s(1,2), \\dots, s(1,n), s(2,2), s(2,3), \\dots, s(2,n), s(3,3), \\dots, s(n,n)]$.\n\nFor example, if $a = [1, 2, 5, 10]$, then $b = [1, 3, 8, 18, 2, 7, 17, 5, 15, 10]$.\n\nYou are given $q$ queries. During the $i$-th query, you are given two integers $l_i$ and $r_i$, and you have to calculate $\\sum \\limits_{j=l_i}^{r_i} b_j$.",
+    "input_spec": "The first line contains one integer $n$ ($1 \\le n \\le 3 \\cdot 10^5$).\n\nThe second line contains $n$ integers $a_1, a_2, \\dots, a_n$ ($-10 \\le a_i \\le 10$).\n\nThe third line contains one integer $q$ ($1 \\le q \\le 3 \\cdot 10^5$).\n\nThen $q$ lines follow, the $i$-th of them contains two integers $l_i$ and $r_i$ ($1 \\le l_i \\le r_i \\le \\frac{n(n+1)}{2}$).",
+    "output_spec": "Print $q$ integers, the $i$-th of which should be equal to $\\sum \\limits_{j=l_i}^{r_i} b_j$.",
+    "note": null,
+    "samples": [
+      {
+        "input": "4\n1 2 5 10\n15\n1 1\n1 2\n1 3\n1 4\n1 5\n1 10\n5 10\n6 10\n2 8\n3 4\n3 10\n3 8\n5 6\n5 5\n1 8",
+        "output": "\n1\n4\n12\n30\n32\n86\n56\n54\n60\n26\n82\n57\n9\n2\n61"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 135680,
+    "url": "https://codeforces.com/blog/entry/135680",
+    "tutorial": "In the editorial, we will treat all elements as $0$-indexed.\n\nThe array $b$ consists of $n$ \"blocks\", the first block has the elements $[s(0,0), s(0,1), \\dots, s(0,n-1)]$, the second block contains $[s(1,1), s(1,2), \\dots, s(1,n-1)]$, and so on. Each position of element in $b$ can be converted into a pair of the form \"index of the block, index of element in the block\" using either a formula or binary search.\n\nLet's analyze a query of the form \"get the sum from the $i_1$-th element in the $j_1$-th block to the $i_2$-th element in the $j_2$-th block\". Let's initialize the result with the sum of all blocks from $j_1$ to $j_2$ (inclusive), then drop some first elements from the block $j_1$, and then drop some last elements from the block $j_2$.\n\nWe have to be able to calculate the following values:\n\n given an index of the block $b$ and the indices of elements $l$ and $r$ from this block, calculate the sum from the $l$-th element to the $r$-th element in that block;\n\n given two indices of blocks $l$ and $r$, calculate the sum from block $l$ to block $r$.\n\nIn the first case, we need to calculate $s(b,l+b) + s(b,l+b+1) + \\dots + s(b,r+b)$. Let $p_i$ be the sum of the first $i$ elements from the given array. The sum can be rewritten as $(p_{l+b+1} - p_b) + (p_{l+b+2} - p_b) + \\dots + (p_{r+b+1}-p_b)$. This is equal to $\\sum\\limits_{i=l+b+1}^{r+b+1} p_i - (r-l+1) \\cdot p_l$; the first value can be calculated in $O(1)$ by building prefix sums over the array $p$.\n\nThe easiest way to calculate the sum over several blocks is the following one:\n\n for each block, calculate the sum in it the same way as we calculate the sum over part of the block;\n\n build prefix sums over sums in blocks.\n\nDepending on the implementation, the resulting complexity will be either $O(n)$ or $O(n \\log n)$.",
+    "solution_code": [
+      "#include<bits/stdc++.h>\n \nusing namespace std;\n \nconst int MOD = 998244353;\n \nint n;\n \nvector<long long> a;\nvector<long long> pa;\nvector<long long> ppa;\nvector<long long> start;\nvector<long long> block;\nvector<long long> pblock;\n \nvector<long long> prefix_sums(vector<long long> v)\n{\n \tint k = v.size();\n \tvector<long long> res(k + 1);\n \tfor(int i = 0; i < k; i++) res[i + 1] = res[i] + v[i];\n \treturn res;\n}\n \nlong long get_partial(int l, int r1, int r2)\n{\n\t// s(l, r1) + s(l, r1 + 1) + ... + s(l, r2 - 1)\n \tif(r2 <= r1) return 0ll;\n \tint cnt = r2 - r1;\n \tlong long rem = pa[l] * cnt;\n \tlong long add = ppa[r2 + 1] - ppa[r1 + 1];\n \treturn add - rem;\n}\n \npair<int, int> convert(long long i)\n{\n\tint idx = upper_bound(start.begin(), start.end(), i) - start.begin() - 1;\n\tpair<int, int> res = {idx, i - start[idx] + idx};\n\treturn res; \t\n}\n \nlong long query(long long l, long long r)\n{\n\tpair<int, int> lf = convert(l);\n\tpair<int, int> rg = convert(r);\n\tlong long res = pblock[rg.first + 1] - pblock[lf.first];\n\tif(lf.second != lf.first) res -= get_partial(lf.first, lf.first, lf.second);\n\tif(rg.second != n - 1) res -= get_partial(rg.first, rg.second + 1, n);\n\treturn res;\t\n}\n \nint main()\n{\n\tscanf(\"%d\", &n);\n\ta.resize(n);\n\tfor(int i = 0; i < n; i++) scanf(\"%lld\", &a[i]);\n\tpa = prefix_sums(a);\n\tppa = prefix_sums(pa);\n\tstart = {0};\n\tfor(int i = n; i >= 1; i--)\n\t\tstart.push_back(start.back() + i);\n\tblock.resize(n);\n\tfor(int i = 0; i < n; i++)\n\t\tblock[i] = get_partial(i, i, n);\n\tpblock = prefix_sums(block);\n\tint q;\n\tscanf(\"%d\", &q);\n\tfor(int i = 0; i < q; i++)\n\t{\n\t \tlong long l, r;\n\t \tscanf(\"%lld %lld\", &l, &r);\n\t \tprintf(\"%lld\\n\", query(l - 1, r - 1));\n\t}\n \n}"
+    ]
+  }
+}

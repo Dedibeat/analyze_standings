@@ -1,0 +1,47 @@
+{
+  "contest_id": 2008,
+  "index": "E",
+  "name": "Alternating String",
+  "rating": 1500,
+  "tags": [
+    "brute force",
+    "data structures",
+    "dp",
+    "greedy",
+    "implementation",
+    "strings"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2008E",
+  "url": "https://codeforces.com/problemset/problem/2008/E",
+  "contest_start_time": "2024-09-01T14:35:00+00:00",
+  "statement": {
+    "title": "E. Alternating String",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Sakurako really loves alternating strings. She calls a string $s$ of lowercase Latin letters an alternating string if characters in the even positions are the same, if characters in the odd positions are the same, and the length of the string is even.\n\nFor example, the strings 'abab' and 'gg' are alternating, while the strings 'aba' and 'ggwp' are not.\n\nAs a good friend, you decided to gift such a string, but you couldn't find one. Luckily, you can perform two types of operations on the string:\n\n Choose an index $i$ and delete the $i$-th character from the string, which will reduce the length of the string by $1$. This type of operation can be performed no more than $1$ time;\n\n Choose an index $i$ and replace $s_i$ with any other letter.\n\nSince you are in a hurry, you need to determine the minimum number of operations required to make the string an alternating one.",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\le t \\le 10^4$)  — the number of test cases.\n\nThe first line of each test case contains a single number $n$ ($1 \\le n\\le 2\\cdot 10^5$)  — the length of the string.\n\nThe second line of each test case contains a string $s$, consisting of lowercase Latin letters.\n\nIt is guaranteed that the sum of $n$ across all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, output a single integer — the minimum number of operations required to turn the string $s$ into an alternating one.",
+    "note": "For the string ababa, you can delete the first character to get baba, which is an alternating string.\n\nFor the string acdada, you can change the first two characters to get dadada, which is an alternating string.",
+    "samples": [
+      {
+        "input": "10\n1\na\n2\nca\n3\naab\n5\nababa\n6\nacdada\n9\nejibmyyju\n6\nbbccbc\n6\nabacba\n5\nbcbca\n5\ndcbdb",
+        "output": "\n1\n0\n1\n1\n2\n6\n2\n3\n1\n1"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 133509,
+    "url": "https://codeforces.com/blog/entry/133509",
+    "tutorial": "Firstly, since first operation can be used at most 1 time, we need to use it only when string has odd length.\n\nLet's assume that the string has even length, then we can look at characters on odd and even positions independently. So, if we change all characters on even positions to the character that which is occurs the most. Same goes to the characters on the odd position.\n\nNow, we have case where we need to delete one character. We can make prefix sum on even positions (let's call $pref_1[i][c]$ number of $c$ on such even $i \\gt j$ and $s[j]=c$), prefix sum on odd position (let's call it $pref_2[i][c]$. Definition same as for $pref_1[i][c]$ but with odd instead of even), suffix sum on even positions (let's call it $suff_1[i][c]$ and definition same as $pref_1[i][c]$ but with $j \\gt i$ instead of $i \\gt j$) and suffix sum on odd positions (let's call it $suff_2[i][c]$ and definition same as $pref_2[i][c]$ but with $j \\gt i$ instead of $i \\gt j$). If we delete character on index $i$, our string after $i$ shift right and changes parity for all indeces bigger then $i$, so to find how many characters $c$ there are on even positions after deleting index $i$ is $pref_1[i][c]+suf_2[i][c]$. Using this, we can try to delete each character independently and solve the task as it has even length.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n\nusing namespace std;\n\nint main()\n{\n    int t;\n    cin>>t;\n    while(t--)\n    {\n        int n;\n        cin>>n;\n        string s;\n        cin>>s;\n        int res=s.size();\n        if(n%2==0)\n        {\n            vector<int>v[2]={vector<int>(26),vector<int>(26)};\n            for(int i=0;i<n;i++)\n            {\n                v[i%2][s[i]-'a']++;\n            }\n            for(int i=0;i<2;i++)\n            {\n                int mx=0;\n                for(int j=0;j<26;j++)\n                {\n                    mx=max(mx,v[i][j]);\n                }\n                res-=mx;\n            }\n            cout<<res<<endl;\n        }\n        else\n        {\n            vector<int>pref[2]={vector<int>(26),vector<int>(26)};\n            vector<int>suf[2]={vector<int>(26),vector<int>(26)};\n            for(int i=n-1;i>=0;i--)\n            {\n                suf[i%2][s[i]-'a']++;\n            }\n            for(int i=0;i<n;i++)\n            {\n                suf[i%2][s[i]-'a']--;\n                int ans=n;\n                for(int k=0;k<2;k++)\n                {\n                    int mx=0;\n                    for(int j=0;j<26;j++)\n                    {\n                        mx=max(mx,suf[1-k][j]+pref[k][j]);\n                    }\n                    ans-=mx;\n                }\n                res=min(res,ans);\n                pref[i%2][s[i]-'a']++;\n            }\n            cout<<res<<endl;\n        }\n    }\n}",
+      "t = int(input())\nfor _ in range(t):\n    n = int(input())\n    s = input()\n    res = len(s)\n    if n % 2 == 0:\n        v = [[0] * 26 for _ in range(2)]\n        for i in range(n):\n            v[i % 2][ord(s[i]) - ord('a')] += 1\n        for i in range(2):\n            mx = max(v[i])\n            res -= mx\n        print(res)\n    else:\n        pref = [[0] * 26 for _ in range(2)]\n        suf = [[0] * 26 for _ in range(2)]\n        for i in range(n - 1, -1, -1):\n            suf[i % 2][ord(s[i]) - ord('a')] += 1\n        for i in range(n):\n            suf[i % 2][ord(s[i]) - ord('a')] -= 1\n            ans = n\n            for k in range(2):\n                mx = 0\n                for j in range(26):\n                    mx = max(mx, suf[1 - k][j] + pref[k][j])\n                ans -= mx\n            res = min(res, ans)\n            pref[i % 2][ord(s[i]) - ord('a')] += 1\n        print(res)"
+    ]
+  }
+}

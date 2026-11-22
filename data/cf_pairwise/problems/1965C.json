@@ -1,0 +1,43 @@
+{
+  "contest_id": 1965,
+  "index": "C",
+  "name": "Folding Strip",
+  "rating": 2300,
+  "tags": [
+    "constructive algorithms",
+    "greedy",
+    "strings"
+  ],
+  "points": 1500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1965C",
+  "url": "https://codeforces.com/problemset/problem/1965/C",
+  "contest_start_time": "2024-04-27T14:35:00+00:00",
+  "statement": {
+    "title": "C. Folding Strip",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "You have a strip of paper with a binary string $s$ of length $n$. You can fold the paper in between any pair of adjacent digits.\n\nA set of folds is considered valid if after the folds, all characters that are on top of or below each other match. Note that all folds are made at the same time, so the characters don't have to match in between folds.\n\nFor example, these are valid foldings of $s = \\mathtt{110110110011}$ and $s = \\mathtt{01110}$:\n\nThe length of the folded strip is the length seen from above after all folds are made. So for the two above examples, after the folds shown above, the lengths would be $7$ and $3$, respectively.\n\nNotice that for the above folding of $s = \\mathtt{01110}$, if we made either of the two folds on their own, that would not be a valid folding. However, because we don't check for validity until all folds are made, this folding is valid.\n\nAfter performing a set of valid folds, what is the minimum length strip you can form?",
+    "input_spec": "The first line of the input contains a single integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases. The description of the test cases follows.\n\nThe first line of each test case contains a single integer $n$ ($1 \\le n \\le 2\\cdot 10^5$) — the size of the strip.\n\nThe second line of each test case contains a string $s$ of $n$ characters '0' and '1' — a description of the digits on the strip.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $2\\cdot 10^5$.",
+    "output_spec": "For each test case, output a single integer — the minimum possible length of the strip after a valid folding.",
+    "note": "For the first example case, one optimal folding is to fold the strip in the middle, which produces a strip of length 3.\n\nThe third and fourth example cases correspond to the images above. Note that the folding shown above for $s = \\mathtt{110110110011}$ is not of minimal length.",
+    "samples": [
+      {
+        "input": "6\n6\n101101\n1\n0\n12\n110110110011\n5\n01110\n4\n1111\n2\n01",
+        "output": "\n3\n1\n3\n3\n1\n2"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 128914,
+    "url": "https://codeforces.com/blog/entry/128914",
+    "tutorial": "Define the pattern of a (validly) folded strip to be the set of characters, in order, seen from above after all folds are made.\n\nIt is always possible to fold the strip in such a way that no two adjacent characters in the pattern are equal. If we fold in between every pair of equal characters, and don't fold in between every pair of distinct characters, we will achieve this. This diagram shows one example of this (the red lines indicate where to fold, and the final pattern is $10101$):\n\nThis set of folds will always be valid because it ensures that all $1$s in the original string are on odd indices and all $0$s are on even indices (or vice versa).\n\nAlso, there is only one obtainable pattern (up to reversal) that is alternating in this way. It is never possible to fold in between two adjacent different characters, because that can never be part of a valid folding, and if there exists a pair of adjacent equal characters that you don't fold in between, the pattern will not be alternating.\n\nWe can also show that the pattern formed by this process is always optimal. Let $t$ be any pattern obtained from a valid folding of $s$. Notice that if we perform a valid fold on $t$, that corresponds to a valid fold on $s$, because we can essentially \"compose\" the valid folding of $s$ into $t$ and the valid folding of $t$ into one valid folding.\n\nSo we can fold $t$ using the process above, which will yield a pattern with alternating characters of length at most $len(t)$. Because the alternating pattern is unique for a given $s$, it must be the same (up to reversal) as the one described above. So the above pattern is of size at most $len(t)$ for any valid pattern $t$, and is therefore optimal.\n\nWe can simulate the folding process to determine the final length.\n\nComplexity: $O(n)$",
+    "solution_code": [
+      "t = int(input())\n\nfor tc in range(t):\n    n = int(input())\n    s = input()\n    mn = 0\n    mx = 0\n    cur = 0\n\n    for c in s:\n\n        if (cur % 2 == 0) == (c == '1'):\n            cur = cur + 1\n        else:\n            cur = cur - 1\n\n        mn = min(mn, cur)\n        mx = max(mx, cur)\n\n    print(mx - mn)"
+    ]
+  }
+}

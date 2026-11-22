@@ -1,0 +1,42 @@
+{
+  "contest_id": 1987,
+  "index": "D",
+  "name": "World is Mine",
+  "rating": 1800,
+  "tags": [
+    "dp",
+    "games"
+  ],
+  "points": 1500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1987D",
+  "url": "https://codeforces.com/problemset/problem/1987/D",
+  "contest_start_time": "2024-06-30T14:35:00+00:00",
+  "statement": {
+    "title": "D. World is Mine",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Alice and Bob are playing a game. Initially, there are $n$ cakes, with the $i$-th cake having a tastiness value of $a_i$.\n\nAlice and Bob take turns eating them, with Alice starting first:\n\n In her turn, Alice chooses and eats any remaining cake whose tastiness is strictly greater than the maximum tastiness of any of the cakes she's eaten before that. Note that on the first turn, she can choose any cake.\n\n In his turn, Bob chooses any remaining cake and eats it.\n\nThe game ends when the current player can't eat a suitable cake. Let $x$ be the number of cakes that Alice ate. Then, Alice wants to maximize $x$, while Bob wants to minimize $x$.\n\nFind out how many cakes Alice will eat if both players play optimally.",
+    "input_spec": "Each test contains multiple test cases. The first line of input contains a single integer $t$ ($1 \\le t \\le 500$) — the number of test cases. The description of the test cases follows.\n\nThe first line of each test case contains a single integer $n$ ($1 \\le n \\le 5000$) — the number of cakes.\n\nThe second line of each test case contains $n$ integers $a_1, a_2, \\ldots, a_n$ ($1 \\le a_i \\le n$) — the tastiness values of the cakes.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $5000$.",
+    "output_spec": "For each test case, output a single integer — the number of cakes Alice will eat if both players play optimally.",
+    "note": "In the first test case, one possible sequence of turns is:\n\n Alice eats a cake with a tastiness value of $1$. The remaining cakes are $[4, 2, 3]$.\n\n Bob eats a cake with a tastiness value of $2$. The remaining cakes are $[4, 3]$.\n\n Alice eats a cake with a tastiness of $3$. The remaining cakes are $[4]$.\n\n Bob eats a cake with a tastiness value of $4$. The remaining cakes are $[]$.\n\n Since there are no more cakes left, the game ends.\n\nIn the second test case, one possible sequence of turns is:\n\n Alice eats a cake with a tastiness value of $1$. The remaining cakes are $[1, 1]$.\n\n Bob eats a cake with a tastiness value of $1$. The remaining cakes are $[1]$.\n\n Since Alice has already eaten a cake with a tastiness value of $1$, she cannot make a turn, so the game ends.",
+    "samples": [
+      {
+        "input": "9\n4\n1 4 2 3\n3\n1 1 1\n5\n1 4 2 3 4\n4\n3 4 1 4\n1\n1\n8\n4 3 2 5 6 8 3 4\n7\n6 1 1 3 5 3 1\n11\n6 11 6 8 7 5 3 11 2 3 5\n17\n2 6 5 3 9 1 6 2 5 6 3 2 3 9 6 1 6",
+        "output": "\n2\n1\n3\n2\n1\n3\n2\n4\n4"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 131053,
+    "url": "https://codeforces.com/blog/entry/131053",
+    "tutorial": "Let's consider Alice's strategy. Notice that if both players play optimally, Alice eating a cake with a tastiness value of $t$ is equivalent to her eating all remaining cakes with $a_i \\le t$. Since it is better for her to have more cakes to choose from later on, she will choose the minimum possible $t$ on each turn.\n\nNow let's consider Bob's strategy. Suppose Bob ate at least one cake with a tastiness value of $t$. Then he has to have eaten all of them, because eating only some of them does not affect Alice's possible moves, resulting in wasted turns (he might be forced to waste moves at the end of the game when there are some leftover cakes).\n\nLet $A_1, \\ldots, A_m$ be the sorted unique values of $a_1, \\ldots, a_n$, and let $c_i$ be the number of occurrences of $A_i$ in $a$. Then the game is reduced to Alice finding the first $c_i  \\gt  0$ and assigning $c_i := 0$, and Bob choosing any $c_i  \\gt  0$ and decreasing it by $1$.\n\nSince Bob's optimal strategy is for each $c_i$ either not to touch it or make $c_i = 0$, we can model it as him selecting some set of indices $1 \\le i_1  \\lt  \\ldots  \\lt  i_k \\le m$ and zeroing out $c_{i_1}, c_{i_2}, \\ldots, c_{i_k}$ in this order. To be able to zero out $c_{i_p}$ ($1 \\le p \\le k$), Alice must not have gotten to the value $c_{i_p}$. In $c_{i_1} + \\ldots + c_{i_p}$ turns, Alice will zero out exactly that many values. Additionally, Bob would have zeroed out $p - 1$ values before index $i_p$. So, $c_{i_1} + \\ldots + c_{i_p} + p - 1$ must be less than $i_p$. Transforming this a bit, we get that the condition $\\sum_{j=1}^{p}{c_{i_j}} \\le i_p - p$ must hold for all $1 \\le p \\le k$.\n\nBob's objective to maximize the size of the set of incides $1 \\le i_1  \\lt  \\ldots  \\lt  i_k \\le m$. Let $dp[i][k] =$ the minimum possible $\\sum_{j=1}^{k}{c_{i_j}}$ over all valid sets of indices $1 \\le i_1  \\lt  \\ldots  \\lt  i_k \\le i$. Initialize $dp[0][0] = 0$, and everything else to $+\\infty$. The main idea is to grow valid sets of indices one index at a time.\n\nWe will iterate over all $i$ from $1$ to $m$, and then for each $k$ from $0$ to $m$. The transitions are:\n\n $dp[i][k] = \\min(dp[i][k], d[i - 1][k])$, which corresponds to not using the current index in the set.\n\n Let $s := dp[i - 1][k - 1] + c_i$. If $s \\le i_k - k$, update $dp[i][k] = \\min(dp[i][k], s)$, which is equivalent to adding the current index to the set. We only need to check the condition on the last index because it is already satisfied for all the previous indices.\n\nThe answer to the problem is $m - y$, where $y$ is the largest value where $dp[m][y]  \\lt  +\\infty$.\n\nComplexity: $\\mathcal{O}(n^2)$\n\nNote: it is possible to solve in $\\mathcal{O}(n \\log n)$ by making an additional observation.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n\n#define all(x) (x).begin(), (x).end()\n#define allr(x) (x).rbegin(), (x).rend()\n\nconst char nl = '\\n';\ntypedef long long ll;\ntypedef long double ld;\n\nusing namespace std;\n\nconst int inf = 1e9;\n\nvoid solve() {\n    vector<int> a;\n    {\n        int n;\n        cin >> n;\n        \n        map<int, int> cnt;\n        while (n--) {\n            int x;\n            cin >> x;\n            cnt[x]++;\n        }\n        \n        for (auto const &[k, v]: cnt) {\n            a.push_back(v);\n        }\n    }\n    \n    int n = a.size();\n    vector<int> dp(n + 1, inf);\n    dp[0] = 0;\n    \n    for (int i = 1; i <= n; i++) {\n        vector<int> ndp = dp;\n        \n        for (int k = 1; k <= n; k++) {\n            int nv = dp[k - 1] + a[i - 1];\n            \n            if (nv <= i - k) {\n                ndp[k] = min(ndp[k], nv);\n            }\n        }\n        \n        dp = ndp;\n    }\n    \n    int ans = n;\n    while (dp[ans] >= inf) ans--;\n    cout << n - ans << nl;\n}\n\nint main() {\n\tios::sync_with_stdio(0); cin.tie(0);\n    \n    int T;\n    cin >> T;\n    while (T--) solve();\n}"
+    ]
+  }
+}

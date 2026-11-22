@@ -1,0 +1,45 @@
+{
+  "contest_id": 2068,
+  "index": "D",
+  "name": "Morse Code",
+  "rating": 3100,
+  "tags": [
+    "dp",
+    "sortings",
+    "trees"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2068D",
+  "url": "https://codeforces.com/problemset/problem/2068/D",
+  "contest_start_time": "2025-03-02T10:35:00+00:00",
+  "statement": {
+    "title": "D. Morse Code",
+    "time_limit": "2 seconds",
+    "memory_limit": "1024 megabytes",
+    "legend": "Morse code is a classical way to communicate over long distances, but there are some drawbacks that increase the transmission time of long messages.\n\nIn Morse code, each character in the alphabet is assigned a sequence of dots and dashes such that no sequence is a prefix of another. To transmit a string of characters, the sequences corresponding to each character are sent in order. A dash takes twice as long to transmit as a dot.\n\nYour alphabet has $n$ characters, where the $i$-th character appears with frequency $f_i$ in your language. Your task is to design a Morse code encoding scheme, assigning a sequence of dots and dashes to each character, that minimizes the expected transmission time for a single character. In other words, you want to minimize $f_1t_1 + f_2t_2 + \\cdots + f_nt_n$, where $t_i$ is the time required to transmit the sequence of dots and dashes assigned to the $i$-th character.",
+    "input_spec": "The first line contains an integer $n$ ($2\\le n\\le 200$) — the number of characters in the alphabet.\n\nThe second line contains $n$ real numbers $f_1$, $f_2$, $\\ldots$, $f_n$ ($0  \\lt  f_i  \\lt  1$) — $f_i$ is the frequency of the $i$-th character. All values $f_1$, $f_2$, $\\ldots$, $f_n$ are given with exactly four digits after the decimal point. The sum of all frequencies is exactly 1.",
+    "output_spec": "Print $n$ lines, each containing one string consisting of dots $\\texttt{.}$ and dashes $\\texttt{-}$. The $i$-th line corresponds to the sequence of dots and dashes that you assign to the $i$-th character.\n\nIf there are multiple valid assignments with the minimum possible expected transmission time, any of them is considered correct.",
+    "note": "In the first sample, the alphabet contains three letters, say $a$, $b$, and $c$, with respective frequencies $0.3$, $0.6$, and $0.1$. In the optimal assignment, we assign $a$ to '$\\texttt{-.}$', $b$ to '$\\texttt{.}$', and $c$ to '$\\texttt{--}$'. This gives an expected transmission time of $0.3 \\cdot 3 + 0.6 \\cdot 1 + 0.1 \\cdot 4 = 1.9$ time units per character, which is optimal.\n\nFor comparison, the assignment $a\\to$ '$\\texttt{..}$', $b \\to$ '$\\texttt{-}$', $c \\to$ '$\\texttt{.-}$' has an expected transmission time of $0.3 \\cdot 2 + 0.6 \\cdot 2 + 0.1 \\cdot 3 = 2.1$. The assignment $a \\to$ '$\\texttt{-}$', $b \\to$ '$\\texttt{.}$', $c \\to$ '$\\texttt{..}$' has a lower expected transmission time, but is invalid since '$\\texttt{.}$' is a prefix of '$\\texttt{..}$'.",
+    "samples": [
+      {
+        "input": "3\n0.3000 0.6000 0.1000",
+        "output": "\n-.\n.\n--"
+      },
+      {
+        "input": "3\n0.3000 0.4500 0.2500",
+        "output": "\n..\n-\n.-"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 140239,
+    "url": "https://codeforces.com/blog/entry/140239",
+    "tutorial": "Any assignment of Morse codes to characters can be represented with a binary tree, where going to a left child appends a dot and going to a right child appends a dash. We then associate each character with a leaf in the tree. This ensures that the codes will not be prefixes of each other.\n\nEach vertex, both leafs and internal vertices, has a depth in the tree. For this depth to correspond to the length of the associated Morse code, we declare that going to a right child increases the depth by two. Once we know what an optimal binary tree looks like, we can greedily match the characters to the leafs by assigning the most frequent characters to the leafs with the smallest depth.\n\nThe key observation is that we initially do not need to know what exactly the tree looks like. We only need to know how many leafs and internal vertices exist at each depth. This allows us to use dynamic programming (DP) to determine an optimal tree bottom up. In each state, we keep track of:\n\n $v_c$, the number of vertices at the current depth level, where we can still decide whether they become leafs or internal vertices.\n\n $v_n$, the number of vertices at the next (deeper) depth level, where we can still decide whether they become leafs or internal vertices.\n\n $a$, the number of characters that have already been assigned a value\n\n The value of this state is how much the expected transmission length increases due to dashes and dots that correspond to edges at the current level or deeper.\nThe base state is $DP[0,0,0] = 0$, since transmitting nothing costs nothing. The value we want to know is $DP[1,0,n]$, the cost to transmit all characters from depth zero where we only have a root vertex.\n\nThe transition function is a minimum of two values. To determine $DP[v_c,v_n,a]$, we can either make a vertex a leaf and assign a character to it, or we can determine that we do not want anymore leafs at this depth by splitting all remaining vertices into two new vertices and going to the next depth. In the first case, this results in the value $DP[v_c-1,v_n,a-1]$ with no additional costs. In the second case, this results in the value $DP[v_n+v_c,v_c,a]$ plus the sum of the frequencies of the least frequent $a$ characters; the cost is caused by the fact that these characters are now placed one level deeper.\n\nFinally, there are some boundary conditions where we assign the value infinity. If $v_c = v_n = 0$ and $a  \\gt  0$ the state is unsolvable since there are some unassigned characters left but no more leafs can be created. If $v_c + v_n  \\gt  a$ then the state is trivially suboptimal since we will then obtain more leafs then needed.\n\nAfter completing the DP, the final step is to actually construct an optimal tree. This can be done greedily by keeping track of two vectors of partial codes (one for the current depth, one for the next one) and backtracking through the DP.\n\nEach parameter in the state description is bounded by $n$ and the transition function is constant, so overall this results in an $O(n^3)$ algorithm.",
+    "solution_code": []
+  }
+}

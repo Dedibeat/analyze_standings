@@ -1,0 +1,39 @@
+{
+  "contest_id": 2048,
+  "index": "I1",
+  "name": "Kevin and Puzzle (Easy Version)",
+  "rating": 3500,
+  "tags": [
+    "constructive algorithms"
+  ],
+  "points": 3000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2048I1",
+  "url": "https://codeforces.com/problemset/problem/2048/I1",
+  "contest_start_time": "2024-12-19T14:35:00+00:00",
+  "statement": {
+    "title": "I1. Kevin and Puzzle (Easy Version)",
+    "time_limit": "2 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "This is the easy version of the problem. The difference between the versions is that in this version, you need to find any one good array. You can hack only if you solved all versions of this problem.\n\nKevin is visiting the Red Church, and he found a puzzle on the wall.\n\nFor an array $ a $, let $ c(l,r) $ indicate how many distinct numbers are among $ a_l, a_{l+1}, \\ldots, a_r $. In particular, if $ l  \\gt  r $, define $ c(l,r) = 0 $.\n\nYou are given a string $ s $ of length $ n $ consisting of letters $ \\texttt{L} $ and $ \\texttt{R} $ only. Let a non-negative array $ a $ be called good, if the following conditions hold for $ 1 \\leq i \\leq n $:\n\n if $s_i=\\replacedVerb {L}$, then $c(1,i-1)=a_i$;\n\n if $s_i=\\replacedVerb {R}$, then $c(i+1,n)=a_i$.\n\nIf there is a good array $a$, print any of the good arrays. Otherwise, report that no such arrays exists.",
+    "input_spec": "Each test contains multiple test cases. The first line contains a single integer $t$ ($1\\le t \\le 10^4$) — the number of test cases. The description of the test cases follows.\n\nThe first line of each test case contains a single integer $n$ ($2\\leq n\\leq 2\\cdot 10^5$) — the length of string $s$.\n\nThe second line of each test case contains a string $s$ with a length $n$, containing only English uppercase letters $\\replacedVerb {L}$ and $\\replacedVerb {R}$.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $2\\cdot 10^5$.",
+    "output_spec": "For each test case, if a good array exists, print $n$ non-negative integers: a good array $a$. Otherwise, print a single integer $-1$.\n\nIf there are multiple arrays $a$ satisfying the conditions, you can output any of them.",
+    "note": "In the first test case, the array $[0,1,0]$ satisfies the conditions because:\n\n When $i=1$, $s_i=\\replacedVerb {L}$, and $c(1,0)=0$;\n\n When $i=2$, $s_i=\\replacedVerb {L}$, and $c(1,1)=1$, since there is only one distinct number in $a_1$;\n\n When $i=3$, $s_i=\\replacedVerb {R}$, and $c(4,3)=0$.\n\nIn the second test case, another suitable answer is $[1,1,1]$.\n\nIn the third test case, it can be proven that there's no array satisfying the conditions.",
+    "samples": [
+      {
+        "input": "4\n3\nLLR\n3\nRRL\n4\nRRLR\n5\nLLRLR",
+        "output": "\n0 1 0\n2 1 2\n-1\n0 1 2 3 0"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 137473,
+    "url": "https://codeforces.com/blog/entry/137473",
+    "tutorial": "2048I1 - Kevin and Puzzle (Easy Version)\n\nAuthor: Little09\n\nHint 1\n\nConsider the leftmost and rightmost characters, and recursively construct the sequence.\n\nTutorial\n\n2048I1 - Kevin and Puzzle (Easy Version)\n\nLemma: Suppose the largest value filled is $mx$, and the number of distinct values is $c$. Let $d = c - mx$. Then, $d = 0$ or $d = 1$.\n\nProof: Clearly, $c \\le mx + 1$. If $c \\lt mx$, observe where $mx$ is placed, and a contradiction arises.\n\nNow, consider the leftmost and rightmost characters in sequence $s$:\n\nIf they are L and R, we can see that both positions must be filled with $0$, and no other position can be filled with $0$. For internal positions, whether L or R, $0$ counts as a distinct number. Therefore, we can remove these two positions, recursively solve for the remaining part, add $1$ to all numbers, and then place a $0$ at both ends.\n\nIf both are L, the leftmost L must be $0$. Suppose the rightmost L is filled with $x$. It is easy to prove that $x$ cannot be placed in internal positions. For internal positions, whether L or R, either $0$ or $x$ is counted as a distinct number. So, as in the previous case, we remove the two positions, recursively solve for the remaining part, add $1$ to all numbers, and then add $0$ and $x$ at both ends. The value of $x$ must be the number of distinct values inside plus 1. This condition is equivalent to the internal region satisfying $d = 1$.\n\nIf both are R, the analysis is the same as for the L and L case.\n\nIf the leftmost character is R and the rightmost character is L, a simple construction is to fill everything with $1$. In this case, no $0$ will appear, so this case can only correspond to $d = 0$.\n\nWe recursively remove the leftmost and rightmost characters, solve for the inner region, add $1$ to all of them, and place $0$ and $x$ at both ends.\n\nNow, consider how $d$ changes:\n\nFor the LR case, $d$ remains unchanged.\n\nFor LL or RR, the internal region must satisfy $d = 1$.\n\nFor RL, the entire region results in $d = 0$.\n\nTherefore, consider the outermost RL. If it contains LL or RR inside, there is no solution.\n\nOtherwise, a solution always exists, and it can be easily constructed based on the above process, the time complexity is $O(n)$.",
+    "solution_code": []
+  }
+}

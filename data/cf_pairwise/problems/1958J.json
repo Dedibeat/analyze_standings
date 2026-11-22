@@ -1,0 +1,41 @@
+{
+  "contest_id": 1958,
+  "index": "J",
+  "name": "Necromancer",
+  "rating": 3200,
+  "tags": [
+    "*special"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1958J",
+  "url": "https://codeforces.com/problemset/problem/1958/J",
+  "contest_start_time": "2024-05-13T14:35:00+00:00",
+  "statement": {
+    "title": "J. Necromancer",
+    "time_limit": "6 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "Monocarp is playing a computer game. In this game, his character is a necromancer. He is fighting $n$ monsters numbered from $1$ to $n$. Each monster has two parameters: health and strength.\n\nMonocarp considers $q$ scenarios of the battle. In each scenario, he chooses some segment $[l, r]$ of monsters and calculates the number of moves it takes to defeat all these monsters.\n\nEach scenario proceeds as follows. First, Monocarp kills monster $l$ and revives it as a zombie (this does not count as a move). Then each move the following happens: let $i$ be the index of the first monster in the segment $[l, r]$ that is still alive. All zombies attack monster $i$, reducing its health by their total strength. After that, if monster $i$ has $0$ or less health, it dies and Monocarp revives it as a zombie.\n\nWhen the monster is revived, the zombie's strength is equal to the monster's strength.\n\nHelp Monocarp for each scenario to calculate how many moves it will take to kill all the monsters in the segment.",
+    "input_spec": "The first line contains two integers $n$ and $q$ ($1 \\le n, q \\le 2 \\cdot 10^5$) — the number of monsters and the number of scenarios, respectively.\n\nThe second line contains $n$ integers $a_1, a_2, \\dots, a_n$ ($1 \\le a_i \\le 10^4$), where $a_i$ is the number of health points of the $i$-th monster.\n\nThe third line contains $n$ integers $b_1, b_2, \\dots, b_n$ ($1 \\le b_i \\le 10^4$), where $b_i$ is the strength of the $i$-th monster.\n\nThen $q$ lines follow. The $j$-th of them contains two integers $l_j$ and $r_j$ ($1 \\le l_j \\le r_j \\le n$) — the boundaries of the $j$-th scenario.",
+    "output_spec": "For each scenario, print a single integer — the number of moves it will take to kill all the monsters in the segment.",
+    "note": null,
+    "samples": [
+      {
+        "input": "7 5\n4 5 9 9 4 2 4\n1 3 3 1 2 3 3\n3 5\n1 4\n6 6\n1 7\n2 6",
+        "output": "\n4\n10\n0\n13\n7"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 129483,
+    "url": "https://codeforces.com/blog/entry/129483",
+    "tutorial": "In this problem, most people were submitting solutions working in $O((n+q) \\sqrt{A} \\log n)$, where $A$ is the maximum monster health value. A good implementation with this complexity might pass, but the model solution has a slightly better complexity: $O((n + q) \\sqrt{A \\log n})$.\n\nThe main idea is that if we process the first $M$ monsters for a query naively, then the total strength of zombies becomes at least $M$, so for every remaining monster, we will use at most $\\frac{A}{M}$ turns.\n\nFor every monster $i$ and every value $j$ from $1$ to $\\frac{A}{M}$ we find the minimum left border $l$ such that, if we consider a query with left border $l$, we need at least $j$ operations to kill the monster. It means that the total strength of all monsters from $l$ to $i-1$ is less than $\\lceil \\frac{a_i}{j-1} \\rceil$ (this is the minimum total strength that allows killing the $i$-th monster in less than $j$ turns). Using prefix sums, we can find every such border in $O(\\log n)$: let $s_i$ be the total strength of the first $i$ monsters. Then, if we consider monsters in $0$-indexation, we need the minimum $l$ such that $\\lceil \\frac{a_i}{j-1} \\rceil  \\gt  s_i - s_l$. In other words, we need the minimum $l$ such that $s_l  \\gt  s_i - \\lceil \\frac{a_i}{j-1} \\rceil$, and we can use binary search to find it. Let's remember that in this left border $l$ the number of turns required to kill the $i$-th monster increases by $1$.\n\nThen, we use a sweep line approach. Sort all queries according to their left borders, and maintain a data structure that allows adding $+1$ to a single element and querying the sum on a segment (Fenwick tree, for example). In this structure, for every monster, we store the number of turns required to kill it, considering the current left border. When the left border gets moved from $l-1$ to $l$, we add $1$ to every monster, for which the number of turns increases (it might increase more than by $1$ for some monsters, but we can handle it because we precalculated the left border for every monster and every number of turns required to kill it).\n\nWhen we process a query with left border $l$, our Fenwick tree stores the values of $\\min(\\frac{A}{M}, cnt_{i,l})$ for the monsters, where $cnt_{i,l}$ is the number of turns to kill the $i$-th monster when we start from the left border $l$. Process the first $M$ monsters in the query in $O(M)$, so our Fenwick tree stores the \"actual\" values for all remaining monsters, and use a range sum query to process the remaining monsters in $O(\\log n)$.\n\nWe get $O(n \\frac{A}{M} \\log n)$ for preprocessing and $O(M + \\log n)$ for each query. If we choose $M$ close to $\\sqrt{A \\log n}$, the solution complexity becomes $O((n + q) \\sqrt{A \\log n})$.",
+    "solution_code": [
+      "const val M = 1000\nconst val K = 10\n\nfun main() {  \n  val (n, q) = readLine()!!.split(\" \").map { it.toInt() }\n  val a = readLine()!!.split(\" \").map { it.toInt() }\n  val b = readLine()!!.split(\" \").map { it.toInt() }\n  val l = IntArray(q)\n  val r = IntArray(q)\n  for (i in 0 until q) {\n    val (x, y) = readLine()!!.split(\" \").map { it.toInt() - 1}\n    l[i] = x\n    r[i] = y\n  }\n  val s = b.scan(0, Int::plus)\n  val ev = Array(n) { mutableListOf<Int>() }\n  for (i in 0 until n) {\n    for (j in 1 until K) {\n      val x = s[i] - (a[i] + j - 1) / j + 1\n      val pos = s.binarySearch { if (it < x) -1 else 1 }.inv()\n      if (pos < i) ev[pos].add(i)\n    }\n  }\n  val qr = Array(n) { mutableListOf<Int>() }\n  for (i in 0 until q) qr[l[i]].add(i)\n  val f = IntArray(n) { 0 }\n  fun inc(i : Int) = generateSequence(i) { (it or (it + 1)).takeIf { it < n } }.forEach { ++f[it] }\n  fun sum(i : Int) = generateSequence(i) { ((it and (it + 1)) - 1).takeIf { it >= 0 } }.sumOf { f[it] }\n  for (i in 0 until n) inc(i)\n  val ans = IntArray(q) { 0 }\n  for (i in 0 until n) {\n    for (j in ev[i]) inc(j)\n    for (j in qr[i]) {\n      var cur = b[l[j]]\n      for (x in 1 until M.coerceAtMost(r[j] - l[j] + 1)) {\n        ans[j] += (a[l[j] + x] + cur - 1) / cur\n        cur += b[l[j] + x]\n      }\n      if (l[j] + M <= r[j]) ans[j] += sum(r[j]) - sum(l[j] + M - 1)\n    }\n  }\n  println(ans.joinToString(\"\\n\"))\n}"
+    ]
+  }
+}

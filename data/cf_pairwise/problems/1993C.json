@@ -1,0 +1,42 @@
+{
+  "contest_id": 1993,
+  "index": "C",
+  "name": "Light Switches",
+  "rating": 1400,
+  "tags": [
+    "implementation",
+    "math"
+  ],
+  "points": 1500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1993C",
+  "url": "https://codeforces.com/problemset/problem/1993/C",
+  "contest_start_time": "2024-08-04T14:35:00+00:00",
+  "statement": {
+    "title": "C. Light Switches",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "There is an apartment consisting of $n$ rooms, each with its light initially turned off.\n\nTo control the lights in these rooms, the owner of the apartment decided to install chips in the rooms so that each room has exactly one chip, and the chips are installed at different times. Specifically, these times are represented by the array $a_1, a_2, \\ldots, a_n$, where $a_i$ is the time (in minutes) at which a chip is installed in the $i$-th room.\n\nAs soon as a chip is installed, it changes the room's light status every $k$ minutes — it turns on the light for $k$ minutes, then turns it off for the next $k$ minutes, then turns it back on for the next $k$ minutes, and so on. In other words, the light status is changed by the chip at minute $a_i$, $a_i + k$, $a_i + 2k$, $a_i + 3k$, $\\ldots$ for the $i$-th room.\n\nWhat is the earliest moment when all rooms in the apartment have their lights turned on?",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases.\n\nThe first line of each test case contains two integers $n$ and $k$ ($1 \\le k \\le n \\le 2 \\cdot 10^5$) — the number of rooms in the apartment and the period of the chips.\n\nThe second line contains $n$ distinct integers $a_1, a_2, \\ldots, a_n$ ($1 \\le a_i \\le 10^9$) — the moments when the chips are installed.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, print a single integer — the answer to the question (in minutes). If there is no such moment that the lights are turned on in all the rooms, print $-1$ instead.",
+    "note": "In the first test case, all lights will be on by the minute $5$ without any of them being turned off by the chips. The answer is $5$.\n\nIn the second test case, due to $k=3$, the $1$-st light will be on at minutes $2, 3, 4, 8, 9, 10, 14, \\ldots$; meanwhile, the $4$-th light will be on at minutes $5, 6, 7, 11, 12, 13, 17, \\ldots$. These two sequences don't have any number in common, so they will never be on at the same time.\n\nIn the third test case, it can be seen that the $1$-st and $2$-nd lights will be turned off at minutes $6$ and $7$, but the chips will turn them back on at minutes $9$ and $10$. The $3$-rd and $4$-th lights will also be on at minute $10$, so the answer is $10$.",
+    "samples": [
+      {
+        "input": "9\n4 4\n2 3 4 5\n4 3\n2 3 4 5\n4 3\n3 4 8 9\n3 3\n6 2 1\n1 1\n1\n7 5\n14 34 6 25 46 7 17\n6 5\n40 80 99 60 90 50\n6 5\n64 40 50 68 70 10\n2 1\n1 1000000000",
+        "output": "\n5\n-1\n10\n8\n1\n47\n100\n-1\n-1"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 132185,
+    "url": "https://codeforces.com/blog/entry/132185",
+    "tutorial": "1993C - Light Switches\n\nHint 1\n\nTry to find the segments of moments when a light is on.\n\nHint 2\n\nSelect this segment from each light. The answer should be the intersection of all of them.\n\nSolution\n\nAs soon as a chip is installed, it changes the light's status every $k$ minutes.\n\nLet's first list the segments of the moments when a light is on if we install a chip at moment $x$:\n\n$x\\rightarrow x+k-1$\n\n$x+2k\\rightarrow x+3k-1$\n\n$x+4k\\rightarrow x+5k-1$\n\n$\\dots$\n\nHave you seen the pattern yet? Apparently each segment in the list (except the first one) is actually the segment before it, shifted by $2k$ minutes. This also means that if we divide by $2k$ and take the remainder at both ends of each segment, all these segments become equal. With that, let's call $(a_i\\bmod 2k, (a_i+k-1)\\bmod 2k)$ the segment of the $i$-th chip.\n\nOur problem is thus simplified to: find the smallest integer $s$ such that:\n\n$max(a) \\le s$\n\n$s\\bmod 2k$ appears in every segments of all chips.\n\nIn order to satisfy the first condition, it seems if we figure out some $r = s\\bmod 2k$ that satisfy the second condition, we may come up with:\n $s = max(a) + ((r - max(a))\\bmod 2k)$\nNext, in order for a segment to contain $r$, this inequality must be satisfied: $r-k+1 \\le a_i \\le r \\pmod{2k}$. This is because a light is on only for at most $k$ minutes (before it gets turned off), so it must come not long before the moment $r$. Let's call $d[z]$ the number of chips that has $a_i \\equiv z \\pmod{2k}$, then in order for all lights to be on at moment $s$, the condition is:\n $\\sum \\limits_{z=r-k+1}^{r} d[z] = n$\nThis idea can be implemented using two-pointer technique, that traverse all $r$ from $0$ to $2k-1$. As there can be many possible values of $r$, we only take one that produces $s$ with minimum value. Be careful when handling signs in problems with modules to avoid unnecessary errors.\n\nTime complexity: $O(n)$.\n\nCode (C++)",
+    "solution_code": [
+      "#include <bits/stdc++.h>\nusing namespace std;\n \n \nconst int N = 2e5 + 5;\n \nint n, k, d[2*N];\n \nint main() {\n    cin.tie(0)->sync_with_stdio(0);\n    \n    int t;\n    cin >> t;\n \n    while (t--) {\n        cin >> n >> k;\n \n        int mx = -1;\n        fill(d, d + 2*k, 0);\n \n        for (int i = 0; i < n; i++) {\n            int x;\n            cin >> x;\n            assert(x >= 1);\n            d[x % (2*k)]++;\n            mx = max(mx, x);\n        }\n \n        int cnt = 0;\n        int ans = INT_MAX;\n        for (int i = 0; i <= k - 2; i++) {\n            cnt += d[i];\n        }\n \n        for (int l = 0, r = k-1; l < 2*k; l++, r++) {\n            if (r >= 2*k) r -= 2*k;\n \n            if (cnt += d[r]; cnt == n) {\n                int wait = (r-mx) % (2*k);\n                if (wait < 0) wait += 2*k;\n                ans = min(ans, mx + wait);\n            }\n \n            cnt -= d[l];\n        }\n \n        if (ans == INT_MAX) {\n            ans = -1;\n        }\n        cout << ans << '\\n';\n    }\n}"
+    ]
+  }
+}

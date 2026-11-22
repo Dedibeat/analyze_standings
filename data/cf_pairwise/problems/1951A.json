@@ -1,0 +1,41 @@
+{
+  "contest_id": 1951,
+  "index": "A",
+  "name": "Dual Trigger",
+  "rating": 900,
+  "tags": [
+    "constructive algorithms",
+    "greedy",
+    "math"
+  ],
+  "points": 500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1951A",
+  "url": "https://codeforces.com/problemset/problem/1951/A",
+  "contest_start_time": "2024-04-06T14:35:00+00:00",
+  "statement": {
+    "title": "A. Dual Trigger",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "Ngọt - LẦN CUỐI (đi bên em xót xa người ơi)\n\nඞ\n\nThere are $n$ lamps numbered $1$ to $n$ lined up in a row, initially turned off. You can perform the following operation any number of times (possibly zero):\n\n Choose two non-adjacent${}^\\dagger$ lamps that are currently turned off, then turn them on.\n\nDetermine whether you can reach configuration $s$, where $s_i = 1$ means the $i$-th lamp is turned on, and $s_i = 0$ otherwise.\n\n${}^\\dagger$ Only lamp $i$ and $i + 1$ are adjacent for all $1 \\le i  \\lt  n$. Note that lamp $n$ and $1$ are not adjacent when $n \\ne 2$.",
+    "input_spec": "Each test contains multiple test cases. The first line contains an integer $t$ ($1 \\le t \\le 1000$) — the number of test cases. The description of the test cases follows.\n\nThe first line of each test case contains an integer $n$ ($1 \\le n \\le 50$) — the number of lamps.\n\nThe second line of each test case contains a binary string $s$ of size $n$ — the final desired configuration.",
+    "output_spec": "For each test case, print on one line \"YES\" if we can reach the configuration $s$ via applying the given operation any number of times. Otherwise, print \"NO\".",
+    "note": "In the first test case, the sequence of operation could have been as follows (note that initially $s$ is all zero): $\\mathtt{0000000000} \\to \\mathtt{\\color{red}{1}0000000\\color{red}{1}0} \\to \\mathtt{1\\color{red}{1}00000\\color{red}{1}10} \\to \\mathtt{110\\color{red}{1}0\\color{red}{1}0110}$.\n\nIn the third test case, we don't have to do any operation.\n\nIn the fourth test case, we cannot do any operation, but we need the first lamp to be on. Therefore, it is impossible to achieve the desired state.",
+    "samples": [
+      {
+        "input": "5\n10\n1101010110\n10\n1001001110\n6\n000000\n1\n1\n12\n111111111111",
+        "output": "\nYES\nNO\nYES\nNO\nYES"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 128116,
+    "url": "https://codeforces.com/blog/entry/128116",
+    "tutorial": "The answer is obviously \"NO\" if there is an odd amount of $\\mathtt{1}$ in $s$. When there are zero $\\mathtt{1}$'s, the answer is trivially \"YES\". When there are exactly two $\\mathtt{1}$'s in $s$, then we also need to check whether the two $\\mathtt{1}$'s are adjacent or not.\n\nOtherwise, when there are $k \\ge 4$ $\\mathtt{1}$'s in $s$, let their positions be $x_1, x_2, \\dots, x_k$. Note that we can always turn on the $x_i$-th and the $x_{i + k/2}$-th lamp as they are not adjacent. Therefore the answer is \"YES\" in this case.",
+    "solution_code": []
+  }
+}

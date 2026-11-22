@@ -1,0 +1,46 @@
+{
+  "contest_id": 2062,
+  "index": "D",
+  "name": "Balanced Tree",
+  "rating": 2200,
+  "tags": [
+    "dfs and similar",
+    "dp",
+    "graphs",
+    "greedy",
+    "trees"
+  ],
+  "points": 2000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2062D",
+  "url": "https://codeforces.com/problemset/problem/2062/D",
+  "contest_start_time": "2025-01-26T14:35:00+00:00",
+  "statement": {
+    "title": "D. Balanced Tree",
+    "time_limit": "3 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "You are given a tree$^{\\text{∗}}$ with $n$ nodes and values $l_i, r_i$ for each node. You can choose an initial value $a_i$ satisfying $l_i\\le a_i\\le r_i$ for the $i$-th node. A tree is balanced if all node values are equal, and the value of a balanced tree is defined as the value of any node.\n\nIn one operation, you can choose two nodes $u$ and $v$, and increase the values of all nodes in the subtree$^{\\text{†}}$ of node $v$ by $1$ while considering $u$ as the root of the entire tree. Note that $u$ may be equal to $v$.\n\nYour goal is to perform a series of operations so that the tree becomes balanced. Find the minimum possible value of the tree after performing these operations. Note that you don't need to minimize the number of operations.\n\n$^{\\text{∗}}$A tree is a connected graph without cycles.\n\n$^{\\text{†}}$Node $w$ is considered in the subtree of node $v$ if any path from root $u$ to $w$ must go through $v$.",
+    "input_spec": "The first line of input contains a single integer $t$ ($1 \\leq t \\leq 10^5$) — the number of input test cases.\n\nThe first line of each test case contains one integer $n$ ($1 \\le n \\le 2\\cdot 10^5$) — the number of nodes in the tree.\n\nThen $n$ lines follow. The $i$-th line contains two integers $l_i,r_i$ ($0\\le l_i \\le r_i\\le 10^9$) — the constraint of the value of the $i$-th node.\n\nThe next $n-1$ lines contain the edges of the tree. The $i$-th line contains two integers $u_i,v_i$ ($1\\le u_i,v_i \\le n$, $u_i \\neq v_i$) — an edge connecting $u_i$ and $v_i$. It is guaranteed that the given edges form a tree.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $2\\cdot 10^5$.",
+    "output_spec": "For each test case, output a single integer — the minimum possible value that all $a_i$ can be made equal to after performing the operations. It can be shown that the answer always exists.",
+    "note": "In the first test case, you can choose $a=[6,6,0,5]$.\n\nYou can perform the following operations to make all $a_i$ equal:\n\n Choose $u=4$, $v=3$ and perform the operation $5$ times.\n\n Choose $u=1$, $v=3$ and perform the operation $6$ times.\n\nThe complete process is shown as follows (where the numbers inside the parentheses are elements of $a$):\n\nIt can be proven that this is the optimal solution.",
+    "samples": [
+      {
+        "input": "6\n4\n0 11\n6 6\n0 0\n5 5\n2 1\n3 1\n4 3\n7\n1 1\n0 5\n0 5\n2 2\n2 2\n2 2\n2 2\n1 2\n1 3\n2 4\n2 5\n3 6\n3 7\n4\n1 1\n1 1\n1 1\n0 0\n1 4\n2 4\n3 4\n7\n0 20\n0 20\n0 20\n0 20\n3 3\n4 4\n5 5\n1 2\n1 3\n1 4\n2 5\n3 6\n4 7\n5\n1000000000 1000000000\n0 0\n1000000000 1000000000\n0 0\n1000000000 1000000000\n3 2\n2 1\n1 4\n4 5\n6\n21 88\n57 81\n98 99\n61 76\n15 50\n23 67\n2 1\n3 2\n4 3\n5 3\n6 4",
+        "output": "\n11\n3\n3\n5\n3000000000\n98"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 138866,
+    "url": "https://codeforces.com/blog/entry/138866",
+    "tutorial": "First, assume that the values of $a_i$ have already been determined and $1$ is the root of the tree. For any edge connecting $x$ and $\\text{fa}(x)$, to make $a_x=a_{\\text{fa}(x)}$, the only useful operation is to set $u=x,v=\\text{fa}(x)$ or $v=x,u=\\text{fa}(x)$. After the operation, $a_x-a_{\\text{fa}(x)}$ changes by $1$, so you will always perform exactly $|a_x - a_{\\text{fa}(x)}|$ operations to make $a_x=a_{\\text{fa}(x)}$. You will perform the above operation for each edge to make all nodes' values equal. Among those operations, the connected component containing $1$ will increase by $\\sum \\max(a_u - a_{\\text{fa}(u)}, 0)$ times. Thus, the final answer is $a_1 + \\sum \\max(a_u - a_{\\text{fa}(u)}, 0)$.\n\nNow, consider how to choose the values of $a$. If $r_u = +\\infty$, then $a_u$ should always be no less than the maximum value of its child nodes $a_v$ (why? Because decreasing $a_u$ by $1$ can only reduce $a_u - a_{\\text{fa}(u)}$ by at most $1$, but it will increase $a_v - a_u$ by at least $1$). So $a_u=\\min(r_u,\\max(l_u,\\max\\limits_{\\text{fa}(v)=u}a_v))$.",
+    "solution_code": [
+      "#include \"bits/stdc++.h\"\nusing namespace std;\n#define all(x) (x).begin(),(x).end()\nint main()\n{\n\tios::sync_with_stdio(0); cin.tie(0);\n\tint T; cin >> T;\n\twhile (T--)\n\t{\n\t\tint n, i;\n\t\tcin >> n;\n\t\tvector<int> l(n), r(n), a(n);\n\t\tfor (i = 0; i < n; i++) cin >> l[i] >> r[i];\n\t\tvector e(n, vector<int>(0));\n\t\tfor (i = 1; i < n; i++)\n\t\t{\n\t\t\tint u, v;\n\t\t\tcin >> u >> v;\n\t\t\t--u, --v;\n\t\t\te[u].push_back(v);\n\t\t\te[v].push_back(u);\n\t\t}\n\t\tlong long ans = 0;\n\t\tfunction<void(int)> dfs = [&](int u) {\n\t\t\tint mx = l[u];\n\t\t\tfor (int v : e[u])\n\t\t\t{\n\t\t\t\terase(e[v], u);\n\t\t\t\tdfs(v);\n\t\t\t\tmx = max(mx, a[v]);\n\t\t\t}\n\t\t\ta[u] = min(mx, r[u]);\n\t\t\tfor (int v : e[u]) ans += max(0, a[v] - a[u]);\n\t\t};\n\t\tdfs(0);\n\t\tcout << ans + a[0] << \"\\n\";\n\t}\n}",
+      "for _ in range(int(input())):\n\tn = int(input())\n\tl,r=[],[]\n\tfor i in range(n):\n\t\tL,R=map(int,input().split())\n\t\tl.append(L)\n\t\tr.append(R)\n\te=[[] for i in range(n)]\n\tfor i in range(n-1):\n\t\tu,v=map(int,input().split())\n\t\te[u-1].append(v-1)\n\t\te[v-1].append(u-1)\n\tstk=[0]\n\tf=[-1]*n\n\tnfd=[]\n\twhile stk:\n\t\tu=stk.pop()\n\t\tnfd.append(u)\n\t\tfor v in e[u]:\n\t\t\tif v!=f[u]:\n\t\t\t\tf[v]=u\n\t\t\t\tstk.append(v)\n\tnfd.reverse()\n\tans=0\n\tfor u in nfd:\n\t\tfor v in e[u]:\n\t\t\tif f[v]==u:\n\t\t\t\tl[u]=max(l[u],l[v])\n\t\tl[u]=min(l[u],r[u])\n\t\tfor v in e[u]:\n\t\t\tif f[v]==u:\n\t\t\t\tans+=max(0,l[v]-l[u])\n\tprint(ans+l[0])"
+    ]
+  }
+}

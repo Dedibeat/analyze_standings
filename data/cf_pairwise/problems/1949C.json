@@ -1,0 +1,50 @@
+{
+  "contest_id": 1949,
+  "index": "C",
+  "name": "Annual Ants' Gathering",
+  "rating": 1900,
+  "tags": [
+    "dfs and similar",
+    "dp",
+    "greedy",
+    "trees"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1949C",
+  "url": "https://codeforces.com/problemset/problem/1949/C",
+  "contest_start_time": "2024-03-24T10:00:00+00:00",
+  "statement": {
+    "title": "C. Annual Ants' Gathering",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Deep within a forest lies an ancient tree, home to $n$ ants living in $n$ tiny houses, indexed from $1$ to $n$, connected by the branches of the tree.\n\nOnce a year, all the ants need to gather to watch the EUC. For this, all ants move along the $n-1$ branches of the tree they live on to meet at the home of one ant.\n\nHowever, this year the ants could not agree on where to meet and need your help to gather up. You can tell all the ants currently at house $u$ to move to house $v$ if there is a branch directly connecting those two houses. However, the ants ignore your command if there are fewer ants gathered in house $v$ than in house $u$, i.e., if it would be easier for the ants from house $v$ to move. This even holds true if no ant at all is currently in house $v$. You can give this kind of commands as many times as you want.\n\nIs it possible for you to gather all the ants in a single house?",
+    "input_spec": "The first line contains one integer $n$ ($1\\leq n\\leq 200\\,000$) — the number of ant homes.\n\nEach of the following $n-1$ lines contains two integers $u$ and $v$ ($1\\leq u, v\\leq n$) — there is a branch directly connecting the house $u$ and house $v$. It is guaranteed that every ant can reach the house of any other ant just by following the branches of the tree.",
+    "output_spec": "Print $\\texttt{YES}$ if it is possible to gather all the ants in a single house. Otherwise, print $\\texttt{NO}$.",
+    "note": "In the first sample, you can gather all the ants at house $3$ as follows:\n\n You tell to the ant at house $4$ to move to house $6$.\n\n You tell to the ant at house $2$ to move to house $3$.\n\n You tell to the two ants at house $6$ to move to house $3$ (which already contains two ants).\n\n You tell to the ant at house $5$ to move to house $1$.\n\n You tell to the ant at house $7$ to move to house $1$ (which already contains two ants).\n\n You tell to the three ants at house $1$ to move to house $3$ (which already contains four ants).\n\nIn the second sample, it is impossible to gather all the ants in a single house.",
+    "samples": [
+      {
+        "input": "7\n5 1\n3 2\n4 6\n3 6\n7 1\n1 3",
+        "output": "\nYES"
+      },
+      {
+        "input": "5\n1 4\n4 2\n3 2\n5 3",
+        "output": "\nNO"
+      },
+      {
+        "input": "6\n4 5\n5 6\n6 1\n2 6\n3 2",
+        "output": "\nYES"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 127514,
+    "url": "https://codeforces.com/blog/entry/127514",
+    "tutorial": "First Solution\n\nSince ants can not move to an empty house the region of non-empty homes always needs to stay connected. Therefore, only ants on a leaf of the tree (of non-empty homes) can ever move and they can only move in one direction. Further, notice that if the smallest group of ants on a leaf can not move the solution is impossible (all other leaf groups are larger and can therefore also never be merged into the parent group of the smallest group). We can simply simulate this process.\n\nSecond Solution\n\nNotice that the centroids of the tree are the only homes where all ants can gather up. For a fixed root we can greedily simulate the process with a DFS for each centroid.",
+    "solution_code": []
+  }
+}

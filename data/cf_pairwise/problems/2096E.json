@@ -1,0 +1,43 @@
+{
+  "contest_id": 2096,
+  "index": "E",
+  "name": "Wonderful Teddy Bears",
+  "rating": 2400,
+  "tags": [
+    "greedy",
+    "implementation",
+    "sortings"
+  ],
+  "points": 2000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2096E",
+  "url": "https://codeforces.com/problemset/problem/2096/E",
+  "contest_start_time": "2025-04-19T14:35:00+00:00",
+  "statement": {
+    "title": "E. Wonderful Teddy Bears",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "You are the proud owner of $n$ teddy bears, which are arranged in a row on a shelf. Each teddy bear is colored either black or pink.\n\nAn arrangement of teddy bears is beautiful if all the black teddy bears are to the left of all the pink teddy bears. In other words, there does not exist a pair of indices $(i, j)$ ($1 \\leq i  \\lt  j \\leq n$) such that the $i$-th teddy bear is pink, and the $j$-th teddy bear is black.\n\nYou want to reorder the teddy bears into a beautiful arrangement. You are too short to reach the shelf, but luckily, you can send instructions to a robot to move the teddy bears around. In a single instruction, the robot can:\n\n Choose an index $i$ ($1 \\le i \\le n - 2$) and reorder the teddy bears at positions $i$, $i + 1$ and $i + 2$ so that all the black teddy bears are to the left of all the pink teddy bears.\n\nWhat is the minimum number of instructions needed to reorder the teddy bears?",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 10^4$). The description of the test cases follows.\n\nThe first line of each test case contains a single integer $n$ ($3 \\le n \\le 2 \\cdot 10^5$) — the number of teddy bears.\n\nThe second line of each test case contains a single string $s$ of length $n$ consisting of characters B and P — the colors of the teddy bears. For each $i$ from $1$ to $n$, the $i$-th teddy bear is colored black if $s_i = \\texttt{B}$ and pink if $s_i = \\texttt{P}$.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, output a single integer — the minimum number of instructions needed to reorder the teddy bears.",
+    "note": "For the first test case, all the teddy bears are pink. Thus, the arrangement is already beautiful, so the answer is $0$.\n\nFor the second test case, all the black teddy bears are to the left of all the pink teddy bears. Thus, the answer is $0$.\n\nFor the third test case, we can perform $1$ instruction with $i = 1$.\n\nAfter the instruction, the sequence of colors changes from $\\texttt{PPB}$ to $\\texttt{BPP}$, and we are done.\n\nFor the fourth test case, we can perform $5$ instructions as follows:\n\n $i = 1$: $\\texttt{}\\color{magenta}{\\texttt{PPB}}\\texttt{PPBB} \\rightarrow \\texttt{}\\color{magenta}{\\texttt{BPP}}\\texttt{PPBB}$\n\n $i = 5$: $\\texttt{BPPP}\\color{magenta}{\\texttt{PBB}}\\texttt{} \\rightarrow \\texttt{BPPP}\\color{magenta}{\\texttt{BBP}}\\texttt{}$\n\n $i = 4$: $\\texttt{BPP}\\color{magenta}{\\texttt{PBB}}\\texttt{P} \\rightarrow \\texttt{BPP}\\color{magenta}{\\texttt{BBP}}\\texttt{P}$\n\n $i = 3$: $\\texttt{BP}\\color{magenta}{\\texttt{PBB}}\\texttt{PP} \\rightarrow \\texttt{BP}\\color{magenta}{\\texttt{BBP}}\\texttt{PP}$\n\n $i = 2$: $\\texttt{B}\\color{magenta}{\\texttt{PBB}}\\texttt{PPP} \\rightarrow \\texttt{B}\\color{magenta}{\\texttt{BBP}}\\texttt{PPP}$",
+    "samples": [
+      {
+        "input": "5\n3\nPPP\n3\nBPP\n3\nPPB\n7\nPPBPPBB\n15\nBPBPBBBBBPBBBBB",
+        "output": "\n0\n0\n1\n5\n14"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 142070,
+    "url": "https://codeforces.com/blog/entry/142070",
+    "tutorial": "2096E - Wonderful Teddy Bears\n\nIdea: SanguineChameleon\n\nStep 1\n\nFirst, we'll treat all the black teddy bears as $0$ and all the pink teddy bears as $1$.\n\nSo we are given a binary array of length $n$. In one operation, we can choose three consecutive elements and sort them in ascending order. Now we need to find the minimum number of operations required to sort the array.\n\nThere are four possible types of operations, depending on the values of the elements:\n\nOperation A: $(0, 1, 0) \\rightarrow (0, 0, 1)$\n\nOperation B: $(1, 0, 0) \\rightarrow (0, 0, 1)$\n\nOperation C: $(1, 0, 1) \\rightarrow (0, 1, 1)$\n\nOperation D: $(1, 1, 0) \\rightarrow (0, 1, 1)$\n\nStep 2\n\nLet's think of a greedy solution first. Which operations are better than others?\n\nStep 3\n\nWe can evaluate an operation by how much it reduces the number of inversions in the array:\n\nOperation A reduces the number of inversions by $1$.\n\nOperation B reduces the number of inversions by $2$.\n\nOperation C reduces the number of inversions by $1$.\n\nOperation D reduces the number of inversions by $2$.\n\nTherefore, ideally, we'd only perform operations B and D.\n\nLet $x$ be the number of inversions in the original array. Then the answer is at least $\\left\\lceil \\frac{x}{2} \\right\\rceil$.\n\nStep 4\n\nSuppose we keep performing operations B and D until we can no longer do so. What will the array look like?\n\nAnswer\n\nThe array will have the form $[0, 0, \\ldots, 0, 0, 1, 0, 1, 0, \\ldots 1, 0, 1, 0, 1, 1, \\ldots, 1, 1]$.\n\nIn other words, the array will consist of:\n\nA (possibly empty) sequence of consecutive $0$'s;\n\nA (possibly empty) sequence of alternating $1$'s and $0$'s;\n\nAnd a (possibly empty) sequence of consecutive $1$'s.\n\nStep 5\n\nSince the array has a sequence of alternating $1$'s and $0$'s, we should think about parity.\n\nStep 6\n\nLet $a$ be the number of $0$'s in the entire array, and $b$ be the number of $0$'s in the even positions.\n\nWhen the array is sorted, all the $0$'s will be at the beginning of the array. So in the end, $b = \\left\\lfloor \\frac{a}{2} \\right\\rfloor$.\n\nConsider how each type of operation changes the value of $b$:\n\nOperation A either increases or decreases the value of $b$ by $1$.\n\nOperation B does not change the value of $b$.\n\nOperation C either increases or decreases the value of $b$ by $1$.\n\nOperation D does not change the value of $b$.\n\nTherefore, we can only use operations A and C to change the value of $b$.\n\nStep 7\n\nLet $d = \\lvert \\, \\left\\lfloor \\frac{a}{2} \\right\\rfloor - b \\, \\rvert$. Then we need at least $d$ operations of type A or type C.\n\nAfter these $d$ operations, the array will have $(x - d)$ inversions. We can show that $(x - d)$ must be even.\n\nThen, we perform $\\frac{x - d}{2}$ operations of type B or type D to reduce the number of inversions to $0$.\n\nSo the answer to the problem is: $d + \\frac{x - d}{2} = \\frac{x + d}{2}$.\n\nImplementation",
+    "solution_code": [
+      "#include <bits/stdc++.h>\nusing namespace std;\n\nvoid test() {\n    int n;\n    cin >> n;\n\n    string s;\n    cin >> s;\n\n    long long x = 0;\n    int a = 0;\n    int b = 0;\n    for (int i = n - 1; i >= 0; i--) {\n        if (s[i] == 'B') {\n            a++;\n            if ((i + 1) % 2 == 0) {\n                b++;\n            }\n        }\n        if (s[i] == 'P') {\n            x += a;\n        }\n    }\n\n    int d = abs(a / 2 - b);\n    cout << (x + d) / 2 << '\\n';\n}\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(nullptr);\n\n    int t;\n    cin >> t;\n    for (int i = 0; i < t; i++) {\n        test();\n    }\n    \n    return 0;\n}"
+    ]
+  }
+}

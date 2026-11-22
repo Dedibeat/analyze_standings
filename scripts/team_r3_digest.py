@@ -17,10 +17,10 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 D = ROOT / "data" / "team_r3"
-# Medal counts (gold, silver, bronze) by contest: board counts for the 2026 regionals (details.md
+# Medal counts (gold, silver, bronze) by contest: board counts for the 2026 regionals (docs/journal/
 # 2026-10-26), data/ec_online/regional_teams.csv (rule 10/20/30) for the 2022 regionals,
 # output/ccpc_icpc_medals.json for the 11th CCPC stations.  Elsewhere the top 10% stand in for gold.
-# 2022 regionals: 35 / 70 / 105 at every site (details.md 2026-10-05 medal diagnosis); their lines
+# 2022 regionals: 35 / 70 / 105 at every site (docs/journal/ 2026-10-05 medal diagnosis); their lines
 # and our rank use the XCPCIO official rows in data/ec_online/regional_teams.csv, because QOJ's
 # "official" 2022 rows are a larger set (Shenyang 1004 vs 708).
 MEDALS = {4607: (32, 64, 96), 4593: (41, 82, 123), 1051: (35, 70, 105), 1071: (35, 70, 105),
@@ -30,7 +30,7 @@ ONSITE_2022 = {1051: "xian", 1071: "hangzhou", 1053: "jinan", 1096: "shenyang"}
 # CCPC stations: the onsite official field from the cached XCPCIO board (QOJ's "official" rows
 # are not the onsite field there: 343 vs 260 at Harbin).
 CCPC = {2575: "ccpc_11th_harbin", 2693: "ccpc_11th_jinan", 2661: "ccpc_11th_zhengzhou"}
-ECF_LINE = 75  # 2026 EC-Final rule estimate, plausible 70-80 (details.md 2026-10-01)
+ECF_LINE = 75  # 2026 EC-Final rule estimate, plausible 70-80 (docs/journal/ 2026-10-01)
 
 
 def xcpcio_rows(name):

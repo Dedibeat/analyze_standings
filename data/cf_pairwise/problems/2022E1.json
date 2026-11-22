@@ -1,0 +1,47 @@
+{
+  "contest_id": 2022,
+  "index": "E1",
+  "name": "Billetes MX (Easy Version)",
+  "rating": 2500,
+  "tags": [
+    "2-sat",
+    "binary search",
+    "combinatorics",
+    "constructive algorithms",
+    "dfs and similar",
+    "dsu",
+    "graphs"
+  ],
+  "points": 2250.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2022E1",
+  "url": "https://codeforces.com/problemset/problem/2022/E1",
+  "contest_start_time": "2024-10-13T19:35:00+00:00",
+  "statement": {
+    "title": "E1. Billetes MX (Easy Version)",
+    "time_limit": "2 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "This is the easy version of the problem. In this version, it is guaranteed that $q = 0$. You can make hacks only if both versions of the problem are solved.\n\nAn integer grid $A$ with $p$ rows and $q$ columns is called beautiful if:\n\n All elements of the grid are integers between $0$ and $2^{30}-1$, and\n\n For any subgrid, the XOR of the values at the corners is equal to $0$. Formally, for any four integers $i_1$, $i_2$, $j_1$, $j_2$ ($1 \\le i_1  \\lt  i_2 \\le p$; $1 \\le j_1  \\lt  j_2 \\le q$), $A_{i_1, j_1} \\oplus A_{i_1, j_2} \\oplus A_{i_2, j_1} \\oplus A_{i_2, j_2} = 0$, where $\\oplus$ denotes the bitwise XOR operation.\n\nThere is a partially filled integer grid $G$ with $n$ rows and $m$ columns where only $k$ cells are filled. Polycarp wants to know how many ways he can assign integers to the unfilled cells so that the grid is beautiful.\n\nHowever, Monocarp thinks that this problem is too easy. Therefore, he will perform $q$ updates on the grid. In each update, he will choose an unfilled cell and assign an integer to it. Note that these updates are persistent. That is, changes made to the grid will apply when processing future updates.\n\nFor each of the $q + 1$ states of the grid, the initial state and after each of the $q$ queries, determine the number of ways Polycarp can assign integers to the unfilled cells so that the grid is beautiful. Since this number can be very large, you are only required to output their values modulo $10^9+7$.",
+    "input_spec": "The first line contains $t$ ($1 \\le t \\le 10^4$) — the number of test cases.\n\nThe first line of each test case contains four integers $n$, $m$, $k$ and $q$ ($2 \\le n, m \\le 10^5$; $0 \\le k \\le 10^5$; $q = 0$) — the number of rows, the number of columns, the number of fixed cells, and the number of updates.\n\nThe following $k$ lines contain three integers $r$, $c$ and $v$ ($1 \\le r \\le n, 1 \\le c \\le m$; $0 \\le v  \\lt  2^{30}$) — indicating that $G_{r, c}$ is assigned the integer $v$.\n\nThe following $q$ lines contain three integers $r$, $c$ and $v$ ($1 \\le r \\le n, 1 \\le c \\le m$; $0 \\le v  \\lt  2^{30}$) — indicating that $G_{r, c}$ is assigned the integer $v$.\n\nIt is guaranteed that the pairs $(r,c)$ over all assignments are distinct.\n\nIt is guaranteed that the sum of $n$, $m$, $k$ and $q$ over all test cases does not exceed $10^5$ respectively.",
+    "output_spec": "For each test case, output $q + 1$ lines. The $i$-th line of output should contain the answer of the $i$-th state of the grid modulo $10^9 + 7$.",
+    "note": "In the first test case of the example, we have the following grid:\n\n$0$$6$$10$\n\n$6$$0$$12$\n\n$10$$12$$?$\n\nIt can be proven that the only valid value for tile $(3, 3)$ is $0$.",
+    "samples": [
+      {
+        "input": "2\n3 3 8 0\n2 1 6\n3 2 12\n1 2 6\n2 2 0\n1 3 10\n1 1 0\n2 3 12\n3 1 10\n2 5 2 0\n1 1 10\n1 2 30",
+        "output": "\n1\n489373567"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 135095,
+    "url": "https://codeforces.com/blog/entry/135095",
+    "tutorial": "2022E1 - Billetes MX (Easy Version)\n\nHint 1\n\nConsider the extremal cases, what is the answer if the grid is empty? What is the answer if the grid is full? What happens if $N = 2$?\n\nHint 2\n\nObserve that if $N = 2$, the xor of every column is constant. Can we generalize this idea?\n\nHint 4\n\nImagine you have a valid full grid $a$. For each $i$, change $a[0][i]$ to $a[0][0]\\oplus a[0][i]$. Observe that the grid still satisfies the condition!\n\nHint 5\n\nUsing the previous idea we can show that for any valid grid, there must exist two arrays $X$ and $Y$, such that $a[i][j] = X[i] \\oplus Y[j]$.\n\nProof\n\nConsider doing the operation described in hint 4 for every row and every column of a full grid that satisfies the condition;\n\nThat is, for each row, and each column, fix the first element, and change every value in that row or column by their xor with the first element.\n\nWe will be left with a grid whose first row and first column are all zeros.\n\nBut this grid also satisfies the condition! So it must hold that $a[i][j] \\oplus a[i][0] \\oplus a[0][j] \\oplus a[0][0] = 0$, but 3 of this values are zero!\n\nWe can conclude that $a[i][j]$ must also be zero. This shows that there must exist two arrays $X$ and $Y$, such that $a[i][j] = X[i] \\oplus Y[j]$, for any valid full grid.\n\nHint 6\n\nThink of each tile of the grid that we know of, as imposing a condition between two elements of arrays $X$ and $Y$. For each tile added, we lose one degree of freedom right? We could make a bunch of substitutions to determine new values of the grid. How can we best model the problem now?\n\nHint 7\n\nThink about it as a graph where the nodes are rows and columns, and there is an edge between row $i$ and column $j$ with weight $a[i][j]$. Substitutions are now just paths on the graph. If we have a path between the node that represents row $i$ and column $j$, the xor of the weights in this path represents the value of $a[i][j]$. What happens if there's more than one path, and two paths have different values?\n\nHint 8\n\nTo continue hint 7, we can deduce that if there is a cycle with xor of weights distinct to $0$ in this graph, there would be a contradiction, and arrays $X$ and $Y$ can't exist. How can we check if this is the case?\n\nAnswer to hint 8\n\nDo a dfs on this graph, maintaining an array $p$, such that $p[u]$ is the xor of all edges in the path you took from the root, to node $u$. Whenever you encounter a back edge between nodes $u$ and $v$ with weight $w$, check if $p[u] \\oplus p[v] = w$.\n\nHint 9\n\nSo lets assume there is no contradiction, ie, all cycles have xor 0. What would be the answer to the problem? We know that if the graph is connected, there exists a path between any two tiles and all the values of the tiles would be determined. So, in how many ways can we make a graph connected?\n\nAnswer to hint 9\n\nSay there are $K$ connected components. We can connect them all using $K - 1$ edges. For each edge, there are $2^{30}$ possible values they can have. Thus, the number of ways of making the graph connected is $\\left(2^{30} \\right)^{K - 1}$.\n\nCheck your understanding\n\nWhy is this the answer to the problem?\n\nSolution\n\nThis is just the solution. Please read the hints in order to understand why it works and how to derive it.\n\nPrecompute an array $c$, with $c[i] = 2^{30\\cdot i} \\pmod{10^9 + 7}$.\n\nLet $a$ be the 2d array with known values of the grid. Consider the graph formed by adding an edge between node $i$ and node $j + n$ and weight $a[i][j]$ for every known tile $(i, j)$ in the grid. Iterate from $1$ to $n + m$ maintaining an array $p$ initialized in $-1$s. If the current proceed node hasn't been visited, we run a dfs through it. We will use array $p$ to maintain the running xor for each node during the dfs. If we ever encounter a back edge between nodes $u, v$ and weight $w$, we check if $p[u] \\oplus p[v] = w$. If not, we the answer is zero. If this condition always holds, let $K$ be the number of times you had to run the dfs. $K$ is also the number of connected components in the graph. The answer is $c[K - 1]$.\n\nComplexity: $\\mathcal{O}(n + m + k)$.\n\nCode:",
+    "solution_code": [
+      "#include <bits/stdc++.h>\nusing namespace std;\n \nint const Mxn = 2e5 + 2;\nlong long int const MOD = 1e9 + 7;\nlong long int precalc[Mxn];\n \nvector<vector<array<int, 2>>> adj;\n \nbool valid = 1;\nint pref[Mxn];\n \nvoid dfs(int node) {\n  for (auto [child, w] : adj[node]) {\n    if (pref[child] == -1) {\n      pref[child] = pref[node]^w;\n      dfs(child);\n    } else {\n      if ((pref[child]^pref[node]) != w) valid = 0;\n    }\n  }\n}\n \nint main() {\n    \n  precalc[0] = 1;\n  for (int i = 1; i < Mxn; i++) {\n    precalc[i] = (precalc[i - 1]<<30)%MOD;\n  }\n \n  int tt;\n  for (cin >> tt; tt; --tt) {\n    int N, M, K, Q;\n    cin >> N >> M >> K >> Q;\n    \n    adj.clear();\n    adj.assign(N + M, vector<array<int, 2>>{});\n \n    int x, y, z;\n    for (int i = 0; i < K; i++) {\n      cin >> x >> y >> z;\n      x--, y--;\n      adj[x].push_back({y + N, z});\n      adj[y + N].push_back({x, z});\n    }\n \n    for (int i = 0; i < N + M; i++) pref[i] = -1;\n    valid = 1;\n    int cnt = 0;\n \n    for (int i = 0; i < N + M; i++) {\n      if (pref[i] != -1) continue;\n      cnt++; pref[i] = 0; dfs(i);\n    }\n \n    if (valid) cout << precalc[cnt - 1] << '\\n';\n    else cout << 0 << '\\n';\n  }\n}"
+    ]
+  }
+}

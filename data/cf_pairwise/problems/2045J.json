@@ -1,0 +1,43 @@
+{
+  "contest_id": 2045,
+  "index": "J",
+  "name": "Xorderable Array",
+  "rating": 2600,
+  "tags": [
+    "bitmasks",
+    "data structures"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2045J",
+  "url": "https://codeforces.com/problemset/problem/2045/J",
+  "contest_start_time": "2024-12-01T05:05:00+00:00",
+  "statement": {
+    "title": "J. Xorderable Array",
+    "time_limit": "1 second",
+    "memory_limit": "1024 megabytes",
+    "legend": "You are given an array $A$ of $N$ integers: $[A_1, A_2, \\dots, A_N]$.\n\nThe array $A$ is $(p, q)$-xorderable if it is possible to rearrange $A$ such that for each pair $(i, j)$ that satisfies $1 \\leq i  \\lt  j \\leq N$, the following conditions must be satisfied after the rearrangement: $A_i \\oplus p \\leq A_j \\oplus q$ and $A_i \\oplus q \\leq A_j \\oplus p$. The operator $\\oplus$ represents the bitwise xor.\n\nYou are given another array $X$ of length $M$: $[X_1, X_2, \\dots, X_M]$. Calculate the number of pairs $(u, v)$ where array $A$ is $(X_u, X_v)$-xorderable for $1 \\leq u  \\lt  v \\leq M$.",
+    "input_spec": "The first line consists of two integers $N$ $M$ ($2 \\leq N, M \\leq 200\\,000)$.\n\nThe second line consists of $N$ integers $A_i$ ($0 \\leq A_i  \\lt  2^{30})$.\n\nThe third line consists of $M$ integers $X_u$ ($0 \\leq X_u  \\lt  2^{30})$.",
+    "output_spec": "Output a single integer representing the number of pairs $(u, v)$ where array $A$ is $(X_u, X_v)$-xorderable for $1 \\leq u  \\lt  v \\leq M$.",
+    "note": "Explanation for the sample input/output #1\n\nThe array $A$ is $(1, 1)$-xorderable by rearranging the array $A$ to $[0, 0, 3]$.\n\nExplanation for the sample input/output #2\n\nThe array $A$ is $(12, 10)$-xorderable by rearranging the array $A$ to $[13, 0, 7, 24, 22]$.",
+    "samples": [
+      {
+        "input": "\n3 4\n0 3 0\n1 2 1 1",
+        "output": "\n3"
+      },
+      {
+        "input": "\n5 2\n0 7 13 22 24\n12 10",
+        "output": "\n1"
+      },
+      {
+        "input": "\n3 3\n0 0 0\n1 2 3",
+        "output": "\n0"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "missing"
+  },
+  "editorial": null
+}

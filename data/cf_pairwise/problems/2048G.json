@@ -1,0 +1,42 @@
+{
+  "contest_id": 2048,
+  "index": "G",
+  "name": "Kevin and Matrices",
+  "rating": 2800,
+  "tags": [
+    "brute force",
+    "combinatorics",
+    "dp",
+    "math"
+  ],
+  "points": 2250.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2048G",
+  "url": "https://codeforces.com/problemset/problem/2048/G",
+  "contest_start_time": "2024-12-19T14:35:00+00:00",
+  "statement": {
+    "title": "G. Kevin and Matrices",
+    "time_limit": "6 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Kevin has been transported to Sacred Heart Hospital, which contains all the $ n \\times m $ matrices with integer values in the range $ [1,v] $.\n\nNow, Kevin wants to befriend some matrices, but he is willing to befriend a matrix $ a $ if and only if the following condition is satisfied:\n\n$$ \\min_{1\\le i\\le n}\\left(\\max_{1\\le j\\le m}a_{i,j}\\right)\\le\\max_{1\\le j\\le m}\\left(\\min_{1\\le i\\le n}a_{i,j}\\right). $$\n\nPlease count how many matrices in Sacred Heart Hospital can be friends with Kevin.\n\nSince Kevin is very friendly, there could be many matrices that meet this condition. Therefore, you only need to output the result modulo $998\\,244\\,353$.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $ t $ ($ 1 \\le t \\le 8\\cdot 10^3 $).\n\nThe only line of each test case contains three integers $n$, $m$, $v$ ($ 1 \\le n, v, n \\cdot v \\leq 10^6$, $1 \\le m \\le 10^9 $).\n\nIt is guaranteed that the sum of $ n \\cdot v $ over all test cases doesn't exceed $ 10^6 $.",
+    "output_spec": "For each test case, output one integer — the number of matrices that can be friends with Kevin modulo $998\\,244\\,353$.",
+    "note": "In the first test case, besides the matrices $ a=\\begin{bmatrix}1&2\\\\2&1\\end{bmatrix} $ and $ a=\\begin{bmatrix}2&1\\\\1&2\\end{bmatrix} $, which do not satisfy the condition, the remaining $ 2^{2 \\cdot 2} - 2 = 14 $ matrices can all be friends with Kevin.",
+    "samples": [
+      {
+        "input": "3\n2 2 2\n2 3 4\n11 45 14",
+        "output": "\n14\n2824\n883799966"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 137473,
+    "url": "https://codeforces.com/blog/entry/137473",
+    "tutorial": "2048G - Kevin and Matrices\n\nAuthor: cmk666\n\nHint 1\n\nCan the left-hand side be less than the right-hand side?\n\nHint 2\n\nConsider the positions where the extremes are reached in the expression. What properties do they have?\n\nHint 3\n\nUse the principle of inclusion-exclusion.\n\nHint 4\n\nApply the Binomial Theorem.\n\nTutorial\n\n2048G - Kevin and Matrices\n\nLet us assume the left-hand side attains its maximum at position $L$, and the right-hand side attains its maximum at position $R$.\n\nFor any $L, R$, let $P$ be the position in the same row as $L$ and the same column as $R$. Then we have $a_L \\geq a_P \\geq a_R$, which implies $a_L \\geq a_R$. Hence, we only need to consider cases where $a_L = a_R$.\n\nNow, consider positions where both sides attain their maximum value, denoted as $S$. Positions in $S$ are the maximum in their respective column and the minimum in their respective row. For any two positions $P, Q$ in $S$ that are not in the same row or column, we can observe that the positions in the same row as $P$ and the same column as $Q$, and vice versa, can also attain the maximum value. By induction, we can conclude that $S$ forms a subrectangle.\n\nNext, enumerate the maximum value $k$ and the size of $S$, denoted by $i \\times j$. The constraints are as follows: all remaining elements in the rows of $S$ must be $\\leq k$, and all remaining elements in the columns of $S$ must be $\\geq k$. Using the principle of inclusion-exclusion, we derive:\n $ ans=\\sum_{k=1}^v\\sum_{i=1}^n\\sum_{j=1}^m(-1)^{i+j}\\binom ni\\binom mjk^{i(m-j)}(v-k+1)^{(n-i)j}v^{(n-i)(m-j)} $\nThe naive approach is $O(nmv)$, which is computationally expensive. Let us simplify:\n $ =\\sum_{k=1}^v\\sum_{i=1}^n(-1)^i\\binom ni\\sum_{j=1}^m(-1)^{j}\\binom mj\\left(k^i\\right)^{m-j}\\left((v-k+1)^{n-i}\\right)^j\\left(v^{n-i}\\right)^{m-j}\\\\ =\\sum_{k=1}^v\\sum_{i=1}^n(-1)^i\\binom ni\\sum_{j=1}^m\\binom mj\\left(-(v-k+1)^{n-i}\\right)^j\\left(k^iv^{n-i}\\right)^{m-j} $\nThis resembles the Binomial Theorem. To simplify further, add and subtract the term for $j=0$:\n $ =\\sum_{k=1}^v\\sum_{i=1}^n(-1)^i\\binom ni\\left(\\sum_{j=0}^m\\binom mj\\left(-(v-k+1)^{n-i}\\right)^j\\left(k^iv^{n-i}\\right)^{m-j}-\\left(k^iv^{n-i}\\right)^m\\right)\\\\ =\\sum_{k=1}^v\\sum_{i=1}^n(-1)^i\\binom ni\\left(\\left(-(v-k+1)^{n-i}+k^iv^{n-i}\\right)^m-\\left(k^iv^{n-i}\\right)^m\\right) $\nThus, the problem can be solved in $O(nv\\log m)$ time.",
+    "solution_code": []
+  }
+}

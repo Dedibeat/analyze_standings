@@ -1,0 +1,44 @@
+{
+  "contest_id": 1992,
+  "index": "D",
+  "name": "Test of Love",
+  "rating": 1200,
+  "tags": [
+    "dp",
+    "greedy",
+    "implementation"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1992D",
+  "url": "https://codeforces.com/problemset/problem/1992/D",
+  "contest_start_time": "2024-07-11T14:35:00+00:00",
+  "statement": {
+    "title": "D. Test of Love",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "ErnKor is ready to do anything for Julen, even to swim through crocodile-infested swamps. We decided to test this love. ErnKor will have to swim across a river with a width of $1$ meter and a length of $n$ meters.\n\nThe river is very cold. Therefore, in total (that is, throughout the entire swim from $0$ to $n+1$) ErnKor can swim in the water for no more than $k$ meters. For the sake of humanity, we have added not only crocodiles to the river, but also logs on which he can jump. Our test is as follows:\n\nInitially, ErnKor is on the left bank and needs to reach the right bank. They are located at the $0$ and $n+1$ meters respectively. The river can be represented as $n$ segments, each with a length of $1$ meter. Each segment contains either a log 'L', a crocodile 'C', or just water 'W'. ErnKor can move as follows:\n\n If he is on the surface (i.e., on the bank or on a log), he can jump forward for no more than $m$ ($1 \\le m \\le 10$) meters (he can jump on the bank, on a log, or in the water).\n\n If he is in the water, he can only swim to the next river segment (or to the bank if he is at the $n$-th meter).\n\n ErnKor cannot land in a segment with a crocodile in any way.\n\nDetermine if ErnKor can reach the right bank.",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\le t \\le 10^4$)  — the number of test cases.\n\nThe first line of each test case contains three numbers $n, m, k$ ($0 \\le k \\le 2 \\cdot 10^5$, $1 \\le n \\le 2 \\cdot 10^5$, $1 \\le m \\le 10$) — the length of the river, the distance ErnKor can jump, and the number of meters ErnKor can swim without freezing.\n\nThe second line of each test case contains a string $a$ of length $n$. $a_i$ denotes the object located at the $i$-th meter. ($a_i \\in \\{$'W','C','L'$\\}$)\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, output \"YES\" if ErnKor can pass the test, and output \"NO\" otherwise.\n\nYou can output the answer in any case (upper or lower). For example, the strings \"yEs\", \"yes\", \"Yes\", and \"YES\" will be recognized as positive responses.",
+    "note": "Let's consider examples:\n\n First example: We jump from the shore to the first log ($0 \\rightarrow 1$), from the first log to the second ($1 \\rightarrow 3$), from the second to the fourth ($3 \\rightarrow 5$), and from the last log to the shore ($5 \\rightarrow 7$). So, we have $0 \\rightarrow 1 \\rightarrow 3 \\rightarrow 5 \\rightarrow 7$. Since we did not encounter a crocodile and swam no more than k meters, the answer is «YES».\n\n Second example: $0 \\rightarrow 1$, we jump into the water from the first log ($1 \\rightarrow 2$), swim a cell to the log ($2 \\leadsto 3$), $3 \\rightarrow 4 \\rightarrow 5 \\rightarrow 6 \\rightarrow 7$. Since we did not encounter a crocodile and swam no more than k meters, the answer is «YES».\n\n In the third example, ErnKor needs to swim two cells 'W', but can only swim one. Therefore, the answer is «NO».\n\n Sixth example: We jump from the shore into the water ($0 \\rightarrow 6$) and swim one cell in the water ($6 \\leadsto 7$). Since we did not encounter a crocodile and swam no more than k meters, the answer is «YES».",
+    "samples": [
+      {
+        "input": "6\n6 2 0\nLWLLLW\n6 1 1\nLWLLLL\n6 1 1\nLWLLWL\n6 2 15\nLWLLCC\n6 10 0\nCCCCCC\n6 6 1\nWCCCCW",
+        "output": "\nYES\nYES\nNO\nNO\nYES\nYES"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 131461,
+    "url": "https://codeforces.com/blog/entry/131461",
+    "tutorial": "1992D - Test of Love\n\nIdea: ArSarapkin\n\nPreparation: K1o0n\n\nTutorial\n\nIn this problem, there are two main solutions: dynamic programming and greedy algorithm.\n\nDynamic programming solution: $dp_i$ $-$ the minimum number of meters that need to be swum to reach the $i$-th cell. The base case of the dynamic programming is $dp_0 = 0$. Then, the update rule is: \\begin{equation*} dp_i = \\text{minimum of} \\begin{cases} dp_{i-1} + 1& \\text{if } A_i = \\text{'W'} \\\\ min(dp_j) & \\text{for all } j, \\text{where:} \\max(0, i — m) \\le j < i \\text{ and } A_j = \\text{'L'} \\end{cases} \\end{equation*} Solution complexity: $O(nm)$.\n\nGreedy algorithm solution: If we can jump, we want to jump to the shore if possible. If we can't, we want to jump to any log ahead to jump from it later. If we can't, we jump as far as possible to avoid crocodiles and swim as little as possible.\n\nSolution complexity: $O(n)$.\n\nSolution (greedy)\n\nSolution (DP)",
+    "solution_code": [
+      "def run() -> None:\n    n,m,k = map(int, input().split())\n    A = input()\n    logs = [i for i in range(n) if A[i] == \"L\"]\n    logs.append(n+1)\n    i = -1\n    next_log = 0\n    while i < n-1:\n        if m >= logs[next_log] - i:\n            i = logs[next_log]\n        else:\n            i+=m\n            if i > n-1:\n                print(\"YES\")\n                return\n            while i < n and i < logs[next_log]:\n                if A[i] != \"C\" and k > 0:\n                    i+=1\n                    k-=1\n                else:\n                    print(\"NO\")\n                    return\n        next_log +=1\n    print(\"YES\")\n \nfor _ in range(int(input())):\n    run()",
+      "#include <bits/stdc++.h>\nusing namespace std;\nint main() {\n    int t;\n    cin >> t;\n    while (t--) {\n        int n, m, k; \n        cin >> n >> m >> k;\n        string s;\n        cin >> s;\n        vector<int> dp(n + 2, -1);\n        dp[0] = k;\n        for (int i = 1; i <= n + 1; i++) {\n            if (i != n + 1 && s[i - 1] == 'C') \n                continue;\n            for (int t = 1; t <= m; t++)\n                if (i - t >= 0 && (i - t == 0 || s[i - t - 1] == 'L'))\n                    dp[i] = max(dp[i], dp[i - t]);\n            if (i > 1 && s[i - 2] == 'W') \n                dp[i] = max(dp[i], dp[i - 1] - 1);\n        }\n        if (dp[n + 1] >= 0) \n            cout << \"YES\\n\";\n        else \n            cout << \"NO\\n\";\n    }\n}"
+    ]
+  }
+}

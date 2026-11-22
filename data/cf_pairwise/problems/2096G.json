@@ -1,0 +1,41 @@
+{
+  "contest_id": 2096,
+  "index": "G",
+  "name": "Wonderful Guessing Game",
+  "rating": 3200,
+  "tags": [
+    "bitmasks",
+    "constructive algorithms",
+    "interactive"
+  ],
+  "points": 2750.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2096G",
+  "url": "https://codeforces.com/problemset/problem/2096/G",
+  "contest_start_time": "2025-04-19T14:35:00+00:00",
+  "statement": {
+    "title": "G. Wonderful Guessing Game",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "This is an interactive problem.\n\nYou are a proud teacher at the Millennium Science School. Today, a student named Alice challenges you to a guessing game.\n\nAlice is thinking of an integer from $1$ to $n$, and you must guess it by asking her some queries.\n\nTo make things harder, she says you must ask all the queries first, and she will ignore exactly $1$ query.\n\nFor each query, you choose an array of $k$ distinct integers from $1$ to $n$, where $k$ is even. Then, Alice will respond with one of the following:\n\n $\\texttt{L}$: the number is one of the first $\\frac{k}{2}$ elements of the array;\n\n $\\texttt{R}$: the number is one of the last $\\frac{k}{2}$ elements of the array;\n\n $\\texttt{N}$: the number is not in the array;\n\n $\\texttt{?}$: this query is ignored.\n\nAlice is impatient, so you must find a strategy that minimizes the number of queries. Can you do it?\n\nFormally, let $f(n)$ be the minimum number of queries required to determine Alice's number. Then you must find a strategy that uses exactly $f(n)$ queries.\n\nNote that the interactor is adaptive, which means Alice's number is not fixed at the beginning and may depend on your queries. However, it is guaranteed that there exists at least one number that is consistent with Alice's responses.\n\nWe can show that $f(n) \\leq 20$ for all $n$ such that $2 \\le n \\le 2 \\cdot 10^5$.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 10^4$). The description of the test cases follows.\n\nThe only line of each test case contains a single integer $n$ ($2 \\le n \\le 2 \\cdot 10^5$) — the maximum possible value of Alice's number.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": null,
+    "note": "In the first test case, $n = 3$. We ask $2$ queries: $[1, 2]$, and $[1, 2]$ again.\n\n For the first query, Alice's response is $\\texttt{?}$, which means this query is ignored.\n\n For the second query, Alice's response is $\\texttt{N}$, which means her number is not in the array $[1, 2]$.\n\nFrom the information above, we can determine that Alice's number is $3$.\n\nIt can be shown that all valid strategies for $n = 3$ require at least $2$ queries.\n\nIn the second test case, $n = 5$. We ask $3$ queries: $[3, 2, 4, 1]$, $[5, 4, 3, 1]$, and $[1, 5, 3, 4]$.\n\n For the first query, Alice's response is $\\texttt{R}$, which means her number is in the array $[4, 1]$.\n\n For the second query, Alice's response is $\\texttt{?}$, which means this query is ignored.\n\n For the third query, Alice's response is $\\texttt{L}$, which means her number is in the array $[1, 5]$.\n\nFrom the information above, we can determine that Alice's number is $1$.\n\nIt can be shown that all valid strategies for $n = 5$ require at least $3$ queries.",
+    "samples": [
+      {
+        "input": "\n2\n3\n\n\n\n?N\n\n5\n\n\n\n\nR?L",
+        "output": "\n\n\n2\n2 1 2\n2 1 2\n\n3\n\n3\n4 3 2 4 1\n4 5 4 3 1\n4 1 5 3 4\n\n1"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 142070,
+    "url": "https://codeforces.com/blog/entry/142070",
+    "tutorial": "2096G - Wonderful Guessing Game\n\nIdea: SanguineChameleon\n\nStep 1\n\nFirst, try solving it if Alice doesn't ignore any queries.\n\nStep 2\n\nWe can represent the queries using a table. Let's look at the second test case in the example:\n\n $1$  $2$  $3$  $4$  $5$\n\n $\\texttt{R}$  $\\texttt{L}$  $\\texttt{L}$  $\\texttt{R}$  $\\texttt{N}$\n\n $\\texttt{R}$  $\\texttt{N}$  $\\texttt{R}$  $\\texttt{L}$  $\\texttt{L}$\n\n $\\texttt{L}$  $\\texttt{N}$  $\\texttt{R}$  $\\texttt{R}$  $\\texttt{L}$\n\nEach row is a query. Column $x$ contains Alice's responses if her number was $x$.\n\nStep 3\n\nLet's treat $\\texttt{L}$ as $-1$, $\\texttt{R}$ as $1$, and $\\texttt{N}$ as $0$.\n\n $1$  $2$  $3$  $4$  $5$\n\n $1$  $-1$  $-1$  $1$  $0$\n\n $1$  $0$  $1$  $-1$  $-1$\n\n $-1$  $0$  $1$  $1$  $-1$\n\nThen, our strategy works if each row has a sum of $0$ and all $n$ columns are distinct.\n\nSince there are only $3$ possible values, we need at least $q = \\left\\lceil \\log_3(n) \\right\\rceil$ queries. In fact, this lower bound can be achieved.\n\nStep 4\n\nWe generate all $3^{q}$ possible columns: $[x_1, x_2, \\ldots, x_q]$, where $x_i \\in$ $\\text{\\{}$$-1, 0, 1$$\\text{\\}}$.\n\nNow we need to choose $n$ of them so that they sum to $0$.\n\nTo do this, we can choose one pair of columns at a time:\n\nFirst, we choose $[x_1, x_2, \\ldots, x_q]$;\n\nThen, we choose $[-x_1, -x_2, \\ldots, -x_q]$.\n\nWe see that each pair of columns sums to $0$.\n\nIf $n$ is odd, we can include $[0, 0, \\ldots, 0]$.\n\nStep 5\n\nNow let's try to solve the original problem. For our strategy to work, it must satisfy the following:\n\nEach row has a sum of $0$.\n\nNo two columns are the same.\n\nNo two columns differ by exactly $1$ element.\n\nTo achieve this, we only need $1$ additional query.\n\nStep 6\n\nHere's another way to think about it:\n\nFor each column, no matter which element is ignored, we should be able to uniquely determine the missing value.\n\nStep 7\n\nWe use the same solution as before, but with $1$ more element:\n\nFor each column $[x_1, x_2, \\ldots, x_q]$, add an element $x_{q + 1}$ such that $(x_1 + x_2 + \\ldots + x_{q + 1})\\mod 3 = 0$.\n\nBecause the sum of each column is $0$ modulo $3$, we can uniquely recover any missing element.",
+    "solution_code": []
+  }
+}

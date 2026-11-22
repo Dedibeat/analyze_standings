@@ -1,0 +1,45 @@
+{
+  "contest_id": 1992,
+  "index": "A",
+  "name": "Only Pluses",
+  "rating": 800,
+  "tags": [
+    "brute force",
+    "constructive algorithms",
+    "greedy",
+    "math",
+    "sortings"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1992A",
+  "url": "https://codeforces.com/problemset/problem/1992/A",
+  "contest_start_time": "2024-07-11T14:35:00+00:00",
+  "statement": {
+    "title": "A. Only Pluses",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "Kmes has written three integers $a$, $b$ and $c$ in order to remember that he has to give Noobish_Monk $a \\times b \\times c$ bananas.\n\nNoobish_Monk has found these integers and decided to do the following at most $5$ times:\n\n pick one of these integers;\n\n increase it by $1$.\n\nFor example, if $a = 2$, $b = 3$ and $c = 4$, then one can increase $a$ three times by one and increase $b$ two times. After that $a = 5$, $b = 5$, $c = 4$. Then the total number of bananas will be $5 \\times 5 \\times 4 = 100$.\n\nWhat is the maximum value of $a \\times b \\times c$ Noobish_Monk can achieve with these operations?",
+    "input_spec": "Each test contains multiple test cases. The first line of input contains a single integer $t$ ($1 \\le t \\le 1000$) — the number of test cases. The description of the test cases follows.\n\nThe first and only line of each test case contains three integers $a$, $b$ and $c$ ($1 \\le a, b, c \\le 10$) — Kmes's integers.",
+    "output_spec": "For each test case, output a single integer — the maximum amount of bananas Noobish_Monk can get.",
+    "note": null,
+    "samples": [
+      {
+        "input": "2\n2 3 4\n10 1 10",
+        "output": "\n100\n600"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 131461,
+    "url": "https://codeforces.com/blog/entry/131461",
+    "tutorial": "1992A - Only Pluses\n\nIdea: Vladosiya\n\nPreparation: K1o0n\n\nTutorial\n\nLet's prove why it's always better to add to the smallest number, let $a \\le b \\le c$, then compare the three expressions: $(a+1)\\times b \\times c$, $a \\times (b+1) \\times c$, and $a \\times b \\times (c+1)$. Remove the common part $a \\times b \\times c$, and we get: $b \\times c$, $a \\times c$, $a \\times b$.\n\n$b \\times c \\ge a \\times c$, since $a \\le b$, similarly, $b \\times c \\ge a \\times b$, since $a \\le c$. Therefore, we can simply find the minimum $5$ times and add one to it. And thus, obtain the answer.\n\nAnother, primitive approach is to simply iterate through what we will add to $a$, $b$, and $c$ with three loops.\n\nSince we can only add $5$ times, the time complexity of the solution is $O(1)$.\n\nSolution (Python)",
+    "solution_code": [
+      "for _ in range(int(input())):\n    arr = sorted(list(map(int,input().split())))\n    for i in range(5):\n        arr[0]+=1\n        arr.sort()\n    print(arr[0] * arr[1] * arr[2])"
+    ]
+  }
+}

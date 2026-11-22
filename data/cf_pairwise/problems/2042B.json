@@ -1,0 +1,42 @@
+{
+  "contest_id": 2042,
+  "index": "B",
+  "name": "Game with Colored Marbles",
+  "rating": 900,
+  "tags": [
+    "games",
+    "greedy"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2042B",
+  "url": "https://codeforces.com/problemset/problem/2042/B",
+  "contest_start_time": "2024-12-02T14:35:00+00:00",
+  "statement": {
+    "title": "B. Game with Colored Marbles",
+    "time_limit": "2 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "Alice and Bob play a game. There are $n$ marbles, the $i$-th of them has color $c_i$. The players take turns; Alice goes first, then Bob, then Alice again, then Bob again, and so on.\n\nDuring their turn, a player must take one of the remaining marbles and remove it from the game. If there are no marbles left (all $n$ marbles have been taken), the game ends.\n\nAlice's score at the end of the game is calculated as follows:\n\n she receives $1$ point for every color $x$ such that she has taken at least one marble of that color;\n\n additionally, she receives $1$ point for every color $x$ such that she has taken all marbles of that color (of course, only colors present in the game are considered).\n\nFor example, suppose there are $5$ marbles, their colors are $[1, 3, 1, 3, 4]$, and the game goes as follows: Alice takes the $1$-st marble, then Bob takes the $3$-rd marble, then Alice takes the $5$-th marble, then Bob takes the $2$-nd marble, and finally, Alice takes the $4$-th marble. Then, Alice receives $4$ points: $3$ points for having at least one marble for colors $1$, $3$ and $4$, and $1$ point for having all marbles of color $4$. Note that this strategy is not necessarily optimal for both players.\n\nAlice wants to maximize her score at the end of the game. Bob wants to minimize it. Both players play optimally (i. e. Alice chooses a strategy which allows her to get as many points as possible, and Bob chooses a strategy which minimizes the amount of points Alice can get).\n\nCalculate Alice's score at the end of the game.",
+    "input_spec": "The first line contains one integer $t$ ($1 \\le t \\le 1000$) — the number of test cases.\n\nEach test case consists of two lines:\n\n the first line contains one integer $n$ ($1 \\le n \\le 1000$) — the number of marbles;\n\n the second line contains $n$ integers $c_1, c_2, \\dots, c_n$ ($1 \\le c_i \\le n$) — the colors of the marbles.\n\nAdditional constraint on the input: the sum of $n$ over all test cases does not exceed $1000$.",
+    "output_spec": "For each test case, print one integer — Alice's score at the end of the game, assuming that both players play optimally.",
+    "note": "In the second test case of the example, the colors of all marbles are distinct, so, no matter how the players act, Alice receives $4$ points for having all marbles of two colors, and no marbles of the third color.\n\nIn the third test case of the example, the colors of all marbles are the same, so, no matter how the players act, Alice receives $1$ point for having at least one (but not all) marble of color $4$.",
+    "samples": [
+      {
+        "input": "3\n5\n1 3 1 3 4\n3\n1 2 3\n4\n4 4 4 4",
+        "output": "\n4\n4\n1"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 136886,
+    "url": "https://codeforces.com/blog/entry/136886",
+    "tutorial": "It's fairly intuitive that if there is at least one unique marble available (a marble is unique if there are no other marbles with the same color), taking it is optimal: if Alice takes that marble, she gets $2$ points, and if Bob takes that marble, he denies $2$ points to Alice. So, initially, both players take unique marbles one by one, until there is none left. Let's denote the number of unique marbles as $u$; then, Alice takes $\\lceil \\frac{u}{2} \\rceil$ unique marbles and gets $2$ points for each of them.\n\nAfter that, all remaining marbles are non-unique; for each remaining color, there are at least two marbles. Let's denote the number of remaining colors as $k$. We can show that Alice can get $k$ more points no matter how Bob plays, but she can't get more points if Bob plays optimally.\n\nThere exists a symmetric strategy for each player: if during the previous turn, your opponent took the first marble of some color, respond by taking a marble of the same color; otherwise, play any legal move. This symmetric strategy ensures that Alice gets exactly $1$ point for each remaining color, since each color will be shared between two players. So, Alice can always achieve $k$ points, and Bob can make sure she doesn't get more than $k$.\n\nSo, to solve this problem, you need to calculate the number of marbles for each color. Then, let the number of colors with exactly one marble be $u$, and the number of colors with more than $1$ marble be $k$. Alice's score will be $2 \\cdot \\lceil \\frac{u}{2} \\rceil + k$.",
+    "solution_code": [
+      "#include<bits/stdc++.h>\n\nusing namespace std;\n\nint main()\n{\n    int t;\n    scanf(\"%d\", &t);\n    for(int _ = 0; _ < t; _++)\n    {\n        int n;\n        scanf(\"%d\", &n);\n        vector<int> c(n);\n        for(int i = 0; i < n; i++)\n        {\n            scanf(\"%d\", &c[i]);\n            --c[i];\n        }\n        vector<int> cnt(n);\n        for(auto x : c) cnt[x]++;\n        int exactly1 = 0, morethan1 = 0;\n        for(auto x : cnt)\n            if (x == 1)\n                exactly1++;\n            else if(x > 1)\n                morethan1++;\n        printf(\"%d\\n\", morethan1 + (exactly1 + 1) / 2 * 2);\n    }\n}"
+    ]
+  }
+}

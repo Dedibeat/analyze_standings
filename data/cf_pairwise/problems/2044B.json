@@ -1,0 +1,42 @@
+{
+  "contest_id": 2044,
+  "index": "B",
+  "name": "Normal Problem",
+  "rating": 800,
+  "tags": [
+    "implementation",
+    "strings"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2044B",
+  "url": "https://codeforces.com/problemset/problem/2044/B",
+  "contest_start_time": "2024-12-15T14:35:00+00:00",
+  "statement": {
+    "title": "B. Normal Problem",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "A string consisting of only characters 'p', 'q', and 'w' is painted on a glass window of a store. Ship walks past the store, standing directly in front of the glass window, and observes string $a$. Ship then heads inside the store, looks directly at the same glass window, and observes string $b$.\n\nShip gives you string $a$. Your job is to find and output $b$.",
+    "input_spec": "The first line contains an integer $t$ ($1 \\leq t \\leq 100$) — the number of test cases.\n\nThe only line of each test case contains a string $a$ ($1 \\leq |a| \\leq 100$) — the string Ship observes from outside the store. It is guaranteed that $a$ only contains characters 'p', 'q', and 'w'.",
+    "output_spec": "For each test case, output string $b$, the string Ship observes from inside the store, on a new line.",
+    "note": null,
+    "samples": [
+      {
+        "input": "5\nqwq\nppppp\npppwwwqqq\nwqpqwpqwwqp\npqpqpqpq",
+        "output": "\npwp\nqqqqq\npppwwwqqq\nqpwwpqwpqpw\npqpqpqpq"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 137306,
+    "url": "https://codeforces.com/blog/entry/137306",
+    "tutorial": "2044B - Normal Problem\n\nProblem Credits: Lilypad\n Analysis: Lilypad, macaquedev\n\nSolution\n\nThe letters she reads that comprise string $b$ are just the letters that comprise string $a$, flipped left-to-right. This means that 'p' becomes 'q', 'q' becomes 'p', and 'w' stays 'w', since it is vertically symmetrical. The order in which the letters are read is also reversed, because what used to be the left side of string $a$ gets flipped over to the right side of string $b$, and vice versa.\n\nWe now have an algorithm for constructing string $b$, which is to iterate from right-to-left on string $a$, outputting 'p' when there is a 'q', 'q' when there is a 'p', and 'w' when there is a 'w'.\n\nCode (C++)",
+    "solution_code": [
+      "#include <bits/stdc++.h>\nusing namespace std;\n#define ll long long\n#define pll pair<ll, ll>\n\nint t;\n\nint main() {\n\tcin.tie(0)->sync_with_stdio(0);\n\tcin >> t;\n\twhile (t--) {\n\t\tstring s;\n\t\tcin >> s;\n\t\treverse(s.begin(), s.end());\n\t\tfor (char &c : s) if (c == 'q') c = 'p'; else if (c == 'p') c = 'q';\n\t\tcout << s << '\\n';\n\t}\n}"
+    ]
+  }
+}

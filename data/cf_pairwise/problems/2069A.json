@@ -1,0 +1,42 @@
+{
+  "contest_id": 2069,
+  "index": "A",
+  "name": "Was there an Array?",
+  "rating": 800,
+  "tags": [
+    "graph matchings",
+    "greedy"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2069A",
+  "url": "https://codeforces.com/problemset/problem/2069/A",
+  "contest_start_time": "2025-02-18T14:35:00+00:00",
+  "statement": {
+    "title": "A. Was there an Array?",
+    "time_limit": "2 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "For an array of integers $a_1, a_2, \\dots, a_n$, we define its equality characteristic as the array $b_2, b_3, \\dots, b_{n-1}$, where $b_i = 1$ if the $i$-th element of the array $a$ is equal to both of its neighbors, and $b_i = 0$ if the $i$-th element of the array $a$ is not equal to at least one of its neighbors.\n\nFor example, for the array $[1, 2, 2, 2, 3, 3, 4, 4, 4, 4]$, the equality characteristic will be $[0, 1, 0, 0, 0, 0, 1, 1]$.\n\nYou are given the array $b_2, b_3, \\dots, b_{n-1}$. Your task is to determine whether there exists such an array $a$ for which the given array is the equality characteristic.",
+    "input_spec": "The first line contains one integer $t$ ($1 \\le t \\le 1000$) — the number of test cases.\n\nEach test case consists of two lines:\n\n the first line contains one integer $n$ ($3 \\le n \\le 100$);\n\n the second line contains $n-2$ integers $b_2, b_3, \\dots, b_{n-1}$ ($0 \\le b_i \\le 1$).",
+    "output_spec": "For each test case, output YES if the array $a$ exists, or NO if such an array does not exist. Each letter can be printed in any case.",
+    "note": "In the first example, the array $a = [1, 2, 2, 2, 3, 3, 4, 4, 4, 4]$ is suitable.\n\nIn the second example, the array $a = [7, 7, 7]$ is suitable.",
+    "samples": [
+      {
+        "input": "3\n10\n0 1 0 0 0 0 1 1\n3\n1\n10\n0 1 0 1 1 0 0 1",
+        "output": "\nYES\nYES\nNO"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 139774,
+    "url": "https://codeforces.com/blog/entry/139774",
+    "tutorial": "Let's try to find some contradiction of the following kind for the given array: we know for sure that some element $a$ must be equal to its neighbors, but the corresponding value $b_i$ is zero, or vice versa.\n\nIf both $b_{i-1}$ and $b_{i+1}$ are equal to $1$, it means that the $i$-th element is equal to both of its neighbors, then $b_i$ must also be equal to $1$. That is, if there exists such an index $i$ that $b_{i-1} = b_{i+1} = 1$ and $b_i = 0$, we have a contradiction.\n\nIt is not difficult to prove that if such an index does not exist, then it is always possible to find an array $a$ that satisfies all conditions. Let's construct it as follows:\n\n $a_1 = 1$;\n\n for each subsequent element $a_i$, if at least one of $(b_{i-1}, b_i)$ is equal to $1$, we must choose $a_i = a_{i-1}$, otherwise we set $a_i = a_{i-1} + 1$.\n\nThis way, we can be sure that if $b_i$ is equal to $1$, then $a_{i-1} = a_i = a_{i+1}$. Therefore, the only problem may arise if some $b_i$ is equal to $0$, but at the same time $a_{i-1} = a_i = a_{i+1}$. However, if $a_{i-1} = a_i$ and $b_i = 0$, then $b_{i-1} = 1$. Similarly, $b_{i+1} = 1$. Thus, we have constructed the case where $b_{i-1} = b_{i+1} = 1$ and $b_i = 0$, which is the only case which can lead to a contradiction.\n\nTherefore, the solution reduces to checking whether there exists such an index $i$ that $b_{i-1} = b_{i+1} = 1$ and $b_i = 0$.",
+    "solution_code": [
+      "t = int(input())\nfor i in range(t):\n    n = int(input())\n    s = list(input().split())\n    s = \"\".join(s)\n    if \"101\" in s:\n        print('NO')\n    else:\n        print('YES')"
+    ]
+  }
+}

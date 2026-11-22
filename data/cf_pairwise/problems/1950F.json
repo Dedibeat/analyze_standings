@@ -1,0 +1,45 @@
+{
+  "contest_id": 1950,
+  "index": "F",
+  "name": "0, 1, 2, Tree!",
+  "rating": 1700,
+  "tags": [
+    "bitmasks",
+    "brute force",
+    "greedy",
+    "implementation",
+    "trees"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1950F",
+  "url": "https://codeforces.com/problemset/problem/1950/F",
+  "contest_start_time": "2024-03-28T14:45:00+00:00",
+  "statement": {
+    "title": "F. 0, 1, 2, Tree!",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Find the minimum height of a rooted tree$^{\\dagger}$ with $a+b+c$ vertices that satisfies the following conditions:\n\n $a$ vertices have exactly $2$ children,\n\n $b$ vertices have exactly $1$ child, and\n\n $c$ vertices have exactly $0$ children.\n\n If no such tree exists, you should report it.\nThe tree above is rooted at the top vertex, and each vertex is labeled with the number of children it has. Here $a=2$, $b=1$, $c=3$, and the height is $2$.\n\n$^{\\dagger}$ A rooted tree is a connected graph without cycles, with a special vertex called the root. In a rooted tree, among any two vertices connected by an edge, one vertex is a parent (the one closer to the root), and the other one is a child.\n\nThe distance between two vertices in a tree is the number of edges in the shortest path between them. The height of a rooted tree is the maximum distance from a vertex to the root.",
+    "input_spec": "The first line contains an integer $t$ ($1 \\leq t \\leq 10^4$) — the number of test cases.\n\nThe only line of each test case contains three integers $a$, $b$, and $c$ ($0 \\leq a, b, c \\leq 10^5$; $1 \\leq a + b + c$).\n\nThe sum of $a + b + c$ over all test cases does not exceed $3 \\cdot 10^5$.",
+    "output_spec": "For each test case, if no such tree exists, output $-1$. Otherwise, output one integer — the minimum height of a tree satisfying the conditions in the statement.",
+    "note": "The first test case is pictured in the statement. It can be proven that you can't get a height smaller than $2$.\n\nIn the second test case, you can form a tree with a single vertex and no edges. It has height $0$, which is clearly optimal.\n\nIn the third test case, you can form a tree with two vertices joined by a single edge. It has height $1$, which is clearly optimal.",
+    "samples": [
+      {
+        "input": "10\n2 1 3\n0 0 1\n0 1 1\n1 0 2\n1 1 3\n3 1 4\n8 17 9\n24 36 48\n1 0 0\n0 3 1",
+        "output": "\n2\n0\n1\n1\n-1\n3\n6\n-1\n-1\n3"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 127664,
+    "url": "https://codeforces.com/blog/entry/127664",
+    "tutorial": "Note that since the tree has $a+b+c$ vertices, all vertices have $0$, $1$, or $2$ children. Call a vertex a leaf if it has no children.\n\nThe idea is to \"grow\" the tree from the root by adding one or two vertices at a time. Formally:\n\n Start with a root (which is initially a leaf).\n\n Repeatedly add $1$ or $2$ children to a leaf. In total, add $2$ children $a$ times and $1$ child $b$ times.\n\n It turns out that at the end of this process, the number of leaves is predetermined:\n\n Every time we grow by adding $1$ child, the number of leaves does not change (since we lose one and gain one).\n\n Every time we grow by adding $2$ children, the number of leaves increases by one (since we lose one and gain two).\n\n Initially, there is one leaf. Thus, at the end of the process, we need $\\boxed{c = a + 1}$ for the tree to be valid. If it's not, then the answer is $-1$.\nOtherwise we need to minimize the height. The idea is greedy: note that we should always grow by $2$ instead of $1$ when we have a choice, because it's clear that it will strictly decrease the height. Similarly, we should always grow the node closest to the root to minimize the height.\n\nThus we can just simulate the process described above growing by $2$ first and $1$ afterwards, which takes $\\mathcal{O}(a+b+c)$ time.\n\nBonus: can you solve the problem in $\\mathcal{O}(\\log(a+b+c))$ time? Or even better?\n\nA note on the implementation. You can store the number of \"free\" nodes on the current level and the next level in two variables, i.e. you don't need to store a whole tree at all. As you iterate through the current level, store the number of nodes in the next level.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n\nusing namespace std;\n\nvoid solve() {\n\tint a, b, c;\n\tcin >> a >> b >> c;\n\tif (a + 1 != c) {cout << -1 << '\\n'; return;}\n\tif (a + b + c == 1) {cout << 0 << '\\n'; return;}\n\tint curr = 1, next = 0, res = 1;\n\tfor (int i = 0; i < a + b; i++) {\n\t\tif (!curr) {\n\t        swap(next, curr);\n\t        res++;\n\t    }\n\t    curr--;\n\t    next++;\n\t    if (i < a) {next++;}\n\t}\n\tcout << res << '\\n';\n}\n\nint main() {\n\tint tt; cin >> tt; for (int i = 1; i <= tt; i++) {solve();}\n\t// solve();\n}"
+    ]
+  }
+}

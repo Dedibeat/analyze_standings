@@ -1,0 +1,45 @@
+{
+  "contest_id": 2108,
+  "index": "B",
+  "name": "SUMdamental Decomposition",
+  "rating": 1300,
+  "tags": [
+    "bitmasks",
+    "constructive algorithms",
+    "greedy",
+    "implementation",
+    "math"
+  ],
+  "points": 1250.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2108B",
+  "url": "https://codeforces.com/problemset/problem/2108/B",
+  "contest_start_time": "2025-05-01T14:35:00+00:00",
+  "statement": {
+    "title": "B. SUMdamental Decomposition",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "On a recent birthday, your best friend Maurice gave you a pair of numbers $n$ and $x$, and asked you to construct an array of positive numbers $a$ of length $n$ such that $a_1 \\oplus a_2 \\oplus \\cdots \\oplus a_n = x$ $^{\\text{∗}}$.\n\nThis task seemed too simple to you, and therefore you decided to give Maurice a return gift by constructing an array among all such arrays that has the smallest sum of its elements. You immediately thought of a suitable array; however, since writing it down turned out to be too time-consuming, Maurice will have to settle for just the sum of its elements.\n\n$^{\\text{∗}}$$\\oplus$ denotes the bitwise XOR operation.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 10^4$). The description of the test cases follows.\n\nEach test case consists of a single line containing a pair of numbers $n$ and $x$ ($1 \\le n \\le 10^9, \\; 0 \\le x \\le 10^9$) — the numbers given to you by Maurice.",
+    "output_spec": "For each test case, output your gift to Maurice — the sum of the elements of the array that satisfies all the described properties. If a suitable array does not exist, output $-1$.",
+    "note": "In the first test case, one of the suitable arrays is $[2, 3]$. It can be shown that it is impossible to achieve a smaller sum of array elements.\n\nIn the second case, one of the suitable arrays is $[1, 3, 4]$. It can also be shown that this is the optimal amount.",
+    "samples": [
+      {
+        "input": "8\n2 1\n3 6\n1 0\n2 0\n5 0\n2 27\n15 43\n12345678 9101112",
+        "output": "\n5\n8\n-1\n2\n8\n27\n55\n21446778"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 142512,
+    "url": "https://codeforces.com/blog/entry/142512",
+    "tutorial": "2108B - SUMdamental Decomposition\n\nAuthor: eugenechka.boyko.2_0-0\n\nSolution\n\nLet $x \\gt 1$, and let $c$ denote the number of 1-bits in its binary representation. Clearly, when $n \\le c$, it is optimal to simply distribute distinct powers of two across the elements of the array, resulting in the minimum achievable sum of $x$. If, however, $n \\gt c$, then it is obviously beneficial to add only ones to the extra $n - c$ elements. In the case where $n - c$ is odd, we will also need to add one more one to one of the $c$ blocks with powers of two so that the $\\text{XOR}$ of all ones equals $x$ $\\text{mod}$ $2$.\n\nIf $x = 1$, then for odd $n$ we can clearly just fill all array elements with ones. Otherwise, we need to use the pair $[2, 3]$, whose $\\text{XOR}$ is $1$, resulting in the minimum score of $n + 3$.\n\nIn the remaining case of $x = 0$, the situation is nearly identical to the previous one, with the exception that no valid example exists for $n = 1$ (this is the only case with an answer of $-1$). So for even $n$, the answer is simply $n$, and otherwise it’s $n + 3$ (since we use the triple $1 \\oplus 2 \\oplus 3 = 0$).\n\nThe time complexity is $\\text{O}(1)$ per test.\n\nCode",
+    "solution_code": [
+      "#include <bits/stdc++.h>\nusing namespace std;\ntypedef long long int ll;\n\nvoid solution(){\n    int n,x;cin>>n>>x;\n    int bits=__builtin_popcountll(x);\n    if (n<=bits){cout<<x;return;}\n    if ((n-bits)%2==0)cout<<x+n-bits;\n    else{\n        if (x>1){cout<<x+n-bits+1;return;}\n        if (x==1){cout<<n+3;return;}\n        else{\n            if (n==1){cout<<-1;return;}\n            else cout<<n+3;\n        }\n    }\n}\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    cout.tie(nullptr);\n    int t=1; \n    cin>>t;\n    while (t--){\n        solution();\n        cout << '\\n';\n    } return 0;\n}"
+    ]
+  }
+}

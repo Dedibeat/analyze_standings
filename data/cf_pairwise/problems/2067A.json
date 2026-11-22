@@ -1,0 +1,41 @@
+{
+  "contest_id": 2067,
+  "index": "A",
+  "name": "Adjacent Digit Sums",
+  "rating": 800,
+  "tags": [
+    "brute force",
+    "constructive algorithms",
+    "math"
+  ],
+  "points": 500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2067A",
+  "url": "https://codeforces.com/problemset/problem/2067/A",
+  "contest_start_time": "2025-02-11T14:35:00+00:00",
+  "statement": {
+    "title": "A. Adjacent Digit Sums",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "You are given two numbers $x, y$. You need to determine if there exists an integer $n$ such that $S(n) = x$, $S(n + 1) = y$.\n\nHere, $S(a)$ denotes the sum of the digits of the number $a$ in the decimal numeral system.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 500$). The description of the test cases follows.\n\nThe first line of each test case contains two integers $x, y$ ($1 \\le x \\le 1000, 1 \\le y \\le 1000$).",
+    "output_spec": "For each test case, print \"NO\" if a suitable $n$ does not exist. Otherwise, output \"YES\".\n\nYou can output each letter in any case (for example, \"YES\", \"Yes\", \"yes\", \"yEs\", \"yEs\" will be recognized as a positive answer).",
+    "note": "In the first test case, for example, $n = 100$ works. $S(100) = 1$, $S(101) = 2$.\n\nIn the second test case, it can be shown that $S(n) \\neq S(n+1)$ for all $n$; therefore, the answer is No.\n\nIn the fourth test case, $n = 10^{111}-1$ works, which is a number consisting of $111$ digits of $9$.",
+    "samples": [
+      {
+        "input": "7\n1 2\n77 77\n997 999\n999 1\n1000 1\n1 11\n18 1",
+        "output": "\nYes\nNo\nNo\nYes\nNo\nNo\nYes"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 139415,
+    "url": "https://codeforces.com/blog/entry/139415?locale=en",
+    "tutorial": "Let's look at the last digit of the number $n$. If it is not equal to $9$, then in the number $n+1$, this last digit will be increased by $1$, while the rest of the number will remain unchanged. Thus, for such $n$, we have $S(n+1) = S(n) + 1$.\n\nIn general, if the number $n$ ends with $k$ consecutive digits of $9$, then it turns out that $S(n+1) = S(n) + 1 - 9k$, since all these $9$s will be replaced by $0$s after adding one to the number $n$.\n\nTherefore, if there does not exist an integer $k \\geq 0$ such that $y = x + 1 - 9k$, then the answer is definitely No. Otherwise, it is easy to see that the answer is definitely Yes.\n\nOne of the suitable numbers is: $n = \\underbrace{11 \\ldots 1}_{x-9k}\\underbrace{99 \\ldots 9}_{k}$. Then, $S(n) = x - 9k + 9k = x$.\n\nAnd $n + 1 = \\underbrace{11 \\ldots 1}_{x-9k-1}2\\underbrace{00 \\ldots 0}_{k}$. Thus, $S(n+1) = x - 9k - 1 + 2 = x + 1 - 9k$.\n\nTherefore, to solve the problem, we need to check whether the number $\\frac{x + 1 - y}{9}$ is an integer and non-negative.",
+    "solution_code": []
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "contest_id": 2032,
+  "index": "B",
+  "name": "Medians",
+  "rating": 1100,
+  "tags": [
+    "constructive algorithms",
+    "greedy",
+    "implementation",
+    "math"
+  ],
+  "points": 750.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2032B",
+  "url": "https://codeforces.com/problemset/problem/2032/B",
+  "contest_start_time": "2024-11-01T14:35:00+00:00",
+  "statement": {
+    "title": "B. Medians",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "You are given an array $a = [1, 2, \\ldots, n]$, where $n$ is odd, and an integer $k$.\n\nYour task is to choose an odd positive integer $m$ and to split $a$ into $m$ subarrays$^{\\dagger}$ $b_1, b_2, \\ldots, b_m$ such that:\n\n Each element of the array $a$ belongs to exactly one subarray.\n\n For all $1 \\le i \\le m$, $|b_i|$ is odd, i.e., the length of each subarray is odd.\n\n $\\operatorname{median}([\\operatorname{median}(b_1), \\operatorname{median}(b_2), \\ldots, \\operatorname{median}(b_m)]) = k$, i.e., the median$^{\\ddagger}$ of the array of medians of all subarrays must equal $k$. $\\operatorname{median}(c)$ denotes the median of the array $c$.\n\n$^{\\dagger}$A subarray of the array $a$ of length $n$ is the array $[a_l, a_{l + 1}, \\ldots, a_r]$ for some integers $1 \\le l \\le r \\le n$.\n\n$^{\\ddagger}$A median of the array of odd length is the middle element after the array is sorted in non-decreasing order. For example: $\\operatorname{median}([1,2,5,4,3]) = 3$, $\\operatorname{median}([3,2,1]) = 2$, $\\operatorname{median}([2,1,2,1,2,2,2]) = 2$.",
+    "input_spec": "Each test consists of multiple test cases. The first line contains a single integer $t$ ($1 \\le t \\le 5000$) — the number of test cases. The description of the test cases follows.\n\nThe first line of each test case contains two integers $n$ and $k$ ($1 \\le k \\le n  \\lt  2 \\cdot 10^5$, $n$ is odd) — the length of array $a$ and the desired median of the array of medians of all subarrays.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case:\n\n If there is no suitable partition, output $-1$ in a single line.\n\n Otherwise, in the first line, output an odd integer $m$ ($1 \\le m \\le n$), and in the second line, output $m$ distinct integers $p_1, p_2 , p_3 , \\ldots, p_m$ ($1 = p_1  \\lt  p_2  \\lt  p_3  \\lt  \\ldots  \\lt  p_m \\le n$) — denoting the left borders of each subarray.\n\nIn detail, for a valid answer $[p_1, p_2, \\ldots, p_m]$:\n\n $b_1 = \\left[ a_{p_1}, a_{p_1 + 1}, \\ldots, a_{p_2 - 1} \\right]$\n\n $b_2 = \\left[ a_{p_2}, a_{p_2 + 1}, \\ldots, a_{p_3 - 1} \\right]$\n\n $\\ldots$\n\n $b_m = \\left[ a_{p_m}, a_{p_m + 1}, \\ldots, a_n \\right]$.\n\nIf there are multiple solutions, you can output any of them.",
+    "note": "In the first test case, the given partition has $m = 1$ and $b_1 = [1]$. It is obvious that $\\operatorname{median}([\\operatorname{median}([1])]) = \\operatorname{median}([1]) = 1$.\n\nIn the second test case, the given partition has $m = 3$ and:\n\n $b_1 = [1]$\n\n $b_2 = [2]$\n\n $b_3 = [3]$\n\nTherefore, $\\operatorname{median}([\\operatorname{median}([1]), \\operatorname{median}([2]), \\operatorname{median}([3])]) = \\operatorname{median}([1, 2, 3]) = 2$.\n\nIn the third test case, there is no valid partition for $k = 3$.\n\nIn the fourth test case, the given partition has $m = 5$ and:\n\n $b_1 = [1, 2, 3]$\n\n $b_2 = [4, 5, 6]$\n\n $b_3 = [7, 8, 9]$\n\n $b_4 = [10, 11, 12]$\n\n $b_5 = [13, 14, 15]$\n\nTherefore, $\\operatorname{median}([\\operatorname{median}([1, 2, 3]), \\operatorname{median}([4, 5, 6]), \\operatorname{median}([7, 8, 9]), \\operatorname{median}([10, 11, 12]), \\operatorname{median}([13, 14, 15])]) = \\operatorname{median}([2, 5, 8, 11, 14]) = 8$.",
+    "samples": [
+      {
+        "input": "4\n1 1\n3 2\n3 3\n15 8",
+        "output": "\n1\n1\n3\n1 2 3\n-1\n5\n1 4 7 10 13"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 135622,
+    "url": "https://codeforces.com/blog/entry/135622",
+    "tutorial": "For $n = 1$ (and $k = 1$ as well), the obvious answer would be not partitioning anything, i.e., partition with 1 subarray being itself.\n\nFor $n  \\gt  1$, we see that $k = 1$ and $k = n$ cannot yield a satisfactory construction. Proof is as follows:\n\n $m = 1$ will yield $ans = \\lfloor \\frac{n+1}{2} \\rfloor$, which will never be equal to $1$ or $n$ when $n \\ge 3$.\n\n If $m  \\gt  1$, considering the case of $k = 1$, we see that $\\operatorname{median}(b_i) = 1$ iff $i \\ge 2$, and since the original array $a$ is an increasingly-sorted permutation, we can conclude that $\\operatorname{median}(b_1)  \\lt  1$. This is not possible.\n\n Similarly, $k = n$ also doesn't work with $m  \\gt  1$, as it'll require $\\operatorname{median}(b_m)  \\gt  n$.\n\nApart from these cases, any other $k$ can yield an answer with $m = 3$  — a prefix subarray $b_1$, a middle subarray $b_2$ containing $k$ ($b_2$ will be centered at $k$, of course), and a suffix subarray $b_3$. This way, the answer will be $\\operatorname{median}(b_2) = k$.\n\nThe length of $b_2$ can be either $1$ or $3$, depending on the parity of $k$ (so that $b_1$ and $b_3$ could have odd lengths). In detail: $b_2$ will have length $1$ (i.e., $[k]$) if $k$ is an even integer, and length $3$ (i.e., $[k-1, k, k+1]$) if $k$ is an odd integer.\n\nTime complexity: $\\mathcal{O}(1)$.",
+    "solution_code": [
+      "namespace solution {\n    bool hasMultipleTests = true;\n\n    int n, k;\n\n    void preprocess() {\n\n    }\n\n    void input(int testcase) {\n        cin >> n >> k;\n    }\n\n    void solve(int testcase) {\n        if (n == 1) {cout << \"1\\n1\\n\"; return;}\n\n        if (k == 1 || k == n) {cout << \"-1\\n\"; return;}\n\n        int p2 = k - k % 2;\n        int p3 = k + 1 + k % 2;\n        cout << \"3\\n1 \" << p2 << \" \" << p3 << endl;\n    }\n}",
+      "class Solution:\n    hasMultipleTests = True\n\n    n: int = None\n    k: int = None\n\n    @classmethod\n    def preprocess(cls):\n        pass\n\n    @classmethod\n    def input(cls, testcase):\n        cls.n, cls.k = map(int, input().split())\n\n    @classmethod\n    def solve(cls, testcase):\n        if cls.n == 1: return(print('1\\n1'))\n\n        if cls.k in {1, cls.n}: return(print(-1))\n\n        p2, p3 = cls.k - cls.k % 2, cls.k + 1 + cls.k % 2\n        print(f'3\\n1 {p2} {p3}')\n\n# end Solution"
+    ]
+  }
+}

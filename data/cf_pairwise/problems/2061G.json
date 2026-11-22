@@ -1,0 +1,41 @@
+{
+  "contest_id": 2061,
+  "index": "G",
+  "name": "Kevin and Teams",
+  "rating": 2900,
+  "tags": [
+    "constructive algorithms",
+    "graphs",
+    "interactive"
+  ],
+  "points": 3000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2061G",
+  "url": "https://codeforces.com/problemset/problem/2061/G",
+  "contest_start_time": "2025-01-20T14:35:00+00:00",
+  "statement": {
+    "title": "G. Kevin and Teams",
+    "time_limit": "4 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "This is an interactive problem.\n\nKevin has $n$ classmates, numbered $1, 2, \\ldots, n$. Any two of them may either be friends or not friends.\n\nKevin wants to select $2k$ classmates to form $k$ teams, where each team contains exactly $2$ people. Each person can belong to at most one team.\n\nLet $u_i$ and $v_i$ be two people in the $i$-th team. To avoid potential conflicts during team formation, the team members must satisfy one of the following two conditions:\n\n For all $i$ ($1\\leq i \\leq k$), classmate $u_i$ and $v_i$ are friends.\n\n For all $i$ ($1\\leq i \\leq k$), classmate $u_i$ and $v_i$ are not friends.\n\nKevin wants to determine the maximum $k$ such that, regardless of the friendship relationships among the $n$ people, he can always find $2k$ people to form the teams. After that, he needs to form $k$ teams. But asking whether two classmates are friends is awkward, so Kevin wants to achieve this while asking about the friendship status of no more than $n$ pairs of classmates.\n\nThe interactor is adaptive. It means that the hidden relationship between classmates is not fixed before the interaction and will change during the interaction.",
+    "input_spec": null,
+    "output_spec": null,
+    "note": "In the first test case:\n\nKevin claims he can form $1$ team regardless of the friendship relationships among the $3$ people.\n\nKevin asks about the friendship relationship between people $1$ and $2$. The jury responds that they are friends.\n\nKevin answers that he can form a team with people $1$ and $2$.\n\nIn the second test case:\n\nKevin claims he can form $2$ teams regardless of the friendship relationships among the $5$ people.\n\nKevin asks about the friendship relationship between people $(1, 2), (3, 4), (3, 5), (1, 3), (2, 4)$. The jury responds with $1, 0, 1, 0, 0$.\n\nKevin answers that he can form two teams with people $(1, 2)$ and $(3, 5)$.\n\nIt is also possible to form two teams with people $(1, 3)$ and $(2, 4)$, since they are both not friends.",
+    "samples": [
+      {
+        "input": "\n2\n3\n\n\n1\n\n5\n\n\n1\n\n0\n\n1\n\n0\n\n0",
+        "output": "\n\n\n1\n? 1 2\n\n! 1 2\n\n2\n? 1 2\n\n? 3 4\n\n? 3 5\n\n? 1 3\n\n? 2 4\n\n! 1 2 3 5"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 138620,
+    "url": "https://codeforces.com/blog/entry/138620",
+    "tutorial": "Using graph theory terminology, let edges labeled as $0$ be represented in red and edges labeled as $1$ be represented in blue.\n\n—\n\nWe can prove that if a graph has $3k + 1$ vertices, the maximum matching will be at most $k$. To see this, you can construct a blue clique of size $2k+1$, with all other edges colored red. It is not hard to verify that the maximum matching in both colors is $k$.\n\nSo the maximum matching you can find is $\\lfloor \\frac{n+1}{3} \\rfloor$.\n\n—\n\nTo construct a matching, we can maintain a chain of edges of the same color. Suppose we currently have a red chain $p_1, p_2, \\dots, p_k$. Now, we want to add a new vertex $q$. We check the color of the edge between $p_k$ and $q$:\n\n If the edge is red, we add $q$ to the chain.\n\n If the edge is blue, $p_{k-1}, p_k, q$ will form a \"mixed-color triplet.\" In this case, we remove $p_{k-1}$ and $p_k$ from the chain.\n\nAfter at most $n-1$ queries, the graph will be divided into several \"mixed-color triplets\" and one chain of edges of the same color.\n\nFor the chain of length $k$, we can find $\\lfloor \\frac{k}{2} \\rfloor$ matchings. For each \"mixed-color triplet\", we can always find one matching corresponding to the color.\n\nWe can construct a matching of size $\\lfloor \\frac{n+1}{3} \\rfloor$.",
+    "solution_code": []
+  }
+}

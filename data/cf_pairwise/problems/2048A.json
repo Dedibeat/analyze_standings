@@ -1,0 +1,43 @@
+{
+  "contest_id": 2048,
+  "index": "A",
+  "name": "Kevin and Combination Lock",
+  "rating": 800,
+  "tags": [
+    "brute force",
+    "greedy",
+    "implementation",
+    "math",
+    "number theory"
+  ],
+  "points": 250.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2048A",
+  "url": "https://codeforces.com/problemset/problem/2048/A",
+  "contest_start_time": "2024-12-19T14:35:00+00:00",
+  "statement": {
+    "title": "A. Kevin and Combination Lock",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "Kevin is trapped in Lakeside Village by Grace. At the exit of the village, there is a combination lock that can only be unlocked if Kevin solves it.\n\nThe combination lock starts with an integer $ x $. Kevin can perform one of the following two operations zero or more times:\n\n If $ x \\neq 33 $, he can select two consecutive digits $ 3 $ from $ x $ and remove them simultaneously. For example, if $ x = 13\\,323 $, he can remove the second and third $ 3 $, changing $ x $ to $ 123 $.\n\n If $ x \\geq 33 $, he can change $ x $ to $ x - 33 $. For example, if $ x = 99 $, he can choose this operation to change $ x $ to $ 99 - 33 = 66 $.\n\nWhen the value of $ x $ on the combination lock becomes $ 0 $, Kevin can unlock the lock and escape from Lakeside Village. Please determine whether it is possible for Kevin to unlock the combination lock and escape.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 10^4$).\n\nThe only line of each test case contains a positive integer $x$ ($1\\leq x\\leq 10^9$).",
+    "output_spec": "For each test case, output \"YES\" or \"NO\" (without quotes) in one line, representing whether Kevin can unlock the combination lock and escape. You can output the answer in any case (upper or lower). For example, the strings \"yEs\", \"yes\", \"Yes\", and \"YES\" will be recognized as positive responses.",
+    "note": "For the first test case, $165\\xrightarrow{-33}132\\xrightarrow{-33}99\\xrightarrow{-33}66\\xrightarrow{-33}33\\xrightarrow{-33}0$.\n\nFor the second test case, $6369\\xrightarrow{-33}6{\\color{red}{33}}6\\xrightarrow{\\text{remove \"33\"}}66\\xrightarrow{-33}33\\xrightarrow{-33}0$.\n\nFor the third test case, it can be proven that, regardless of the operations performed, $666$ cannot be transformed into $0$.",
+    "samples": [
+      {
+        "input": "5\n165\n6369\n666\n114514\n133333332",
+        "output": "\nYES\nYES\nNO\nNO\nYES"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 137473,
+    "url": "https://codeforces.com/blog/entry/137473",
+    "tutorial": "2048A - Kevin and Combination Lock\n\nAuthor: Little09\n\nHint 1\n\nHow much does the number decrease when we remove two consecutive $3$ s?\n\nTutorial\n\n2048A - Kevin and Combination Lock\n\nWhen we transform $\\overline{x33y}$ into $\\overline{xy}$ (where $x$ and $y$ are decimal numbers), the actual value changes from $10^{p+2} \\cdot x + 33 \\cdot 10^p + y$ to $10^p \\cdot x + y$. The decrease is $99 \\cdot 10^p \\cdot x + 33 \\cdot 10^p$. It is easy to see that $33 \\mid (99 \\cdot 10^p \\cdot x + 33 \\cdot 10^p)$. Therefore, we can replace the operation of removing two consecutive $3$ s with a series of $-33$ operations.\n\nHence, we only need to determine whether $x$ can be reduced to $0$ using a series of $-33$ operations, which is equivalent to checking whether $x \\bmod 33$ equals zero.",
+    "solution_code": []
+  }
+}

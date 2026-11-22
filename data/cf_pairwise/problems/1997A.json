@@ -1,0 +1,43 @@
+{
+  "contest_id": 1997,
+  "index": "A",
+  "name": "Strong Password",
+  "rating": 800,
+  "tags": [
+    "brute force",
+    "implementation",
+    "strings"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1997A",
+  "url": "https://codeforces.com/problemset/problem/1997/A",
+  "contest_start_time": "2024-07-30T14:35:00+00:00",
+  "statement": {
+    "title": "A. Strong Password",
+    "time_limit": "2 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "Monocarp's current password on Codeforces is a string $s$, consisting of lowercase Latin letters. Monocarp thinks that his current password is too weak, so he wants to insert exactly one lowercase Latin letter into the password to make it stronger. Monocarp can choose any letter and insert it anywhere, even before the first character or after the last character.\n\nMonocarp thinks that the password's strength is proportional to the time it takes him to type the password. The time it takes to type the password is calculated as follows:\n\n the time to type the first character is $2$ seconds;\n\n for each character other than the first, the time it takes to type it is $1$ second if it is the same as the previous character, or $2$ seconds otherwise.\n\nFor example, the time it takes to type the password abacaba is $14$; the time it takes to type the password a is $2$; the time it takes to type the password aaabacc is $11$.\n\nYou have to help Monocarp — insert a lowercase Latin letter into his password so that the resulting password takes the maximum possible amount of time to type.",
+    "input_spec": "The first line contains one integer $t$ ($1 \\le t \\le 1000$) — the number of test cases.\n\nEach test case consists of one line containing the string $s$ ($1 \\le |s| \\le 10$), consisting of lowercase Latin letters.",
+    "output_spec": "For each test case, print one line containing the new password — a string which can be obtained from $s$ by inserting one lowercase Latin letter. The string you print should have the maximum possible required time to type it. If there are multiple answers, print any of them.",
+    "note": null,
+    "samples": [
+      {
+        "input": "4\na\naaa\nabb\npassword",
+        "output": "\nwa\naada\nabcb\npastsword"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 132154,
+    "url": "https://codeforces.com/blog/entry/132154",
+    "tutorial": "The time it takes to type a string can actually be calculated as follows: $2 \\cdot |s| - p$, where $|s|$ is the number of characters in the string, and $p$ is the number of pairs of adjacent equal characters (usually a character takes $2$ seconds to type, but the right character in every pair of adjacent equal characters takes only $1$, so each pair reduces the total time by $1$). Since we always add a new character, $|s|$ will increase by $1$ no matter what; so we need to minimize $p$.\n\nNow there are two cases:\n\n if there is a pair of adjacent equal characters in the string, we can decrease $p$ by $1$ by \"breaking\" it as follows: choose any character different from the characters in that pair, and insert it between them. It's easy to see that we can \"break\" at most one such pair, so we can't do better;\n\n otherwise, $p$ is already $0$, so we just need to keep it equal to $0$. For example, we can choose any character not equal to the last character in the string, and append it to the right of it.\n\nThere are other solutions as well, like iterating on all possible characters and all possible insertion positions.",
+    "solution_code": [
+      "#include<bits/stdc++.h>\n \nusing namespace std;\n \nvoid solve()\n{\n\tstring s;\n\tcin >> s;\n\tint n = s.size();\n\tint idx = -1;\n\tfor(int i = 0; i + 1 < n; i++)\n\t\tif(s[i] == s[i + 1])\n\t\t\tidx = i;\n\tif(idx == -1)\n\t{\n\t\tif(s.back() == 'a') cout << (s + \"b\") << endl;\n\t\telse cout << (s + \"a\") << endl;\n\t}\n\telse\n\t{\n\t\tstring t = \"a\";\n\t\tif(s[idx] == 'a') t = \"b\";\n\t\tcout << s.substr(0, idx + 1) + t + s.substr(idx + 1) << endl;\n\t}\n}\n \nint main()\n{\n\tint t;\n\tcin >> t;\n\tfor(int i = 0; i < t; i++)\n\t\tsolve();\n}"
+    ]
+  }
+}

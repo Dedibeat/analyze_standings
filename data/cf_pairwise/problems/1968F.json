@@ -1,0 +1,42 @@
+{
+  "contest_id": 1968,
+  "index": "F",
+  "name": "Equal XOR Segments",
+  "rating": 1800,
+  "tags": [
+    "binary search",
+    "data structures"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1968F",
+  "url": "https://codeforces.com/problemset/problem/1968/F",
+  "contest_start_time": "2024-05-02T14:45:00+00:00",
+  "statement": {
+    "title": "F. Equal XOR Segments",
+    "time_limit": "5 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Let us call an array $x_1,\\dots,x_m$ interesting if it is possible to divide the array into $k \\gt 1$ parts so that bitwise XOR of values from each part are equal.\n\nMore formally, you must split array $x$ into $k$ consecutive segments, each element of $x$ must belong to exactly $1$ segment. Let $y_1,\\dots,y_k$ be the XOR of elements from each part respectively. Then $y_1=y_2=\\dots=y_k$ must be fulfilled.\n\nFor example, if $x = [1, 1, 2, 3, 0]$, you can split it as follows: $[\\color{blue}1], [\\color{green}1], [\\color{red}2, \\color{red}3, \\color{red}0]$. Indeed $\\color{blue}1=\\color{green}1=\\color{red}2 \\oplus \\color{red}3\\oplus \\color{red}0$.\n\nYou are given an array $a_1,\\dots,a_n$. Your task is to answer $q$ queries:\n\n For fixed $l$, $r$, determine whether the subarray $a_l,a_{l+1},\\dots,a_r$ is interesting.",
+    "input_spec": "The first line contains a single integer $t$ ($1\\le t\\le 10^4$) — the number of test cases.\n\nThe first line of each test case contains two integers $n$ and $q$ ($2 \\le n \\le 2 \\cdot 10^5$, $1 \\le q \\le 2 \\cdot 10^5$) — the number of elements in the array and the number of queries respectively.\n\nThe next line contains $n$ integers $a_1,\\dots,a_n$ ($0 \\le a_i  \\lt  2^{30}$) — elements of the array.\n\nEach of the next $q$ lines contains two integers $l$ and $r$ ($1 \\le l  \\lt  r \\le n$) describing the query.\n\nIt is guaranteed that the sum of $n$ over all testcases does not exceed $2 \\cdot 10^5$.\n\nIt is guaranteed that the sum of $q$ over all testcases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each query, output \"YES\" if the subarray is interesting and \"NO\" otherwise.\n\nYou can output \"Yes\" and \"No\" in any case (for example, the strings \"yES\", \"yes\", and \"Yes\" will be recognized as correct answers).",
+    "note": "Explanation for the first test case:\n\nThe first query is described in the statement.\n\nIn the second query, we should divide $[1,2,3]$. A possible division is $[1,2],[3]$, since $1\\oplus 2=3$.\n\nIt can be shown that for queries $3,4,5$, the subarrays are not interesting.",
+    "samples": [
+      {
+        "input": "4\n5 5\n1 1 2 3 0\n1 5\n2 4\n3 5\n1 3\n3 4\n5 5\n1 2 3 4 5\n1 5\n2 4\n3 5\n1 3\n2 3\n7 4\n12 9 10 9 10 11 9\n1 5\n1 7\n2 6\n2 7\n11 4\n0 0 1 0 0 1 0 1 1 0 1\n1 2\n2 5\n6 9\n7 11",
+        "output": "\nYES\nYES\nNO\nNO\nNO\n\nYES\nNO\nNO\nYES\nNO\n\nNO\nNO\nNO\nNO\n\nYES\nNO\nYES\nYES"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 129096,
+    "url": "https://codeforces.com/blog/entry/129096",
+    "tutorial": "Observation: any division on more than $k \\gt 3$ segments can be reduced to at most $3$ segments.\n\nProof: suppose the XORs of elements from the segments are $x_1,\\dots,x_k$. The condition $x_1=x_2=\\dots=x_k$ must be fulfilled. If $k \\gt 3$ we may take any three consecutive segments and merge them into one, because $x\\oplus x\\oplus x=x$. In such way, we reduce $k$ by two. We may repeat this process while $k \\gt 3$.\n\nLet us construct an array $b_1=a_1$ and $b_i=b_{i-1}\\oplus a_i$ for $i\\geq 2$. Now, $a_l\\oplus a_{l+1}\\oplus \\dots \\oplus a_r=b_r\\oplus b_{l-1}$.\n\nThere are two cases:\n\n $k=2$, meaning that we divide the segment $[l,r]$ into two segments. Suppose the segments are $[l,m]$ and $[m+1,r]$. In such case we must check if $b_m\\oplus b_{l-1}=b_{r}\\oplus b_m$. This equality reduces to $b_{l-1}=b_r$.\n\n $k=3$, meaning that we divide segment $[l,r]$ into $[l,s]$, $[s+1,t]$ and $[t+1,r]$. We must check if $b_s\\oplus b_{l-1}=b_{t}\\oplus b_s$ and $b_s \\oplus b_{t}=b_r \\oplus b_{t}$. It is equivalent to check if $b_{l-1}=b_t$ and $b_s=b_r$. Also, $s \\lt t$ must be fulfilled. Hence, we may find the largest $t  \\lt  r$ that $b_t=b_{l-1}$ and the minimal $s\\geq l$ that $b_s=b_r$. It can be done using binary search on the positions of a certain value.",
+    "solution_code": [
+      "#include<bits/stdc++.h>\nusing namespace std;\nconst int N=200005;\nint a[N];\nint main(){\n\tint t;\n\tcin>>t;\n\twhile(t--){\n\t\tint n,q;\n\t\tcin>>n>>q;\n\t\tmap<int,vector<int>>id;\n\t\tid[0].push_back(0);\n\t\tfor(int i=1;i<=n;i++){\n\t\t\tcin>>a[i];\n\t\t\ta[i]^=a[i-1];\n\t\t\tid[a[i]].push_back(i);\n\t\t}\n\t\twhile(q--){\n\t\t\tint l,r;\n\t\t\tcin>>l>>r;\n\t\t\tif(a[r]==a[l-1]){\n\t\t\t\tcout<<\"YES\\n\";\n\t\t\t\tcontinue;\n\t\t\t}\n\t\t\tint pL=*--lower_bound(id[a[l-1]].begin(),id[a[l-1]].end(),r);\n\t\t\tint pR=*lower_bound(id[a[r]].begin(),id[a[r]].end(),l);\n\t\t\tcout<<(pL>pR?\"YES\\n\":\"NO\\n\");\n\t\t}\n\t\tif(t)cout << \"\\n\";\n\t}\n}"
+    ]
+  }
+}

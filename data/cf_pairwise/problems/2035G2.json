@@ -1,0 +1,44 @@
+{
+  "contest_id": 2035,
+  "index": "G2",
+  "name": "Go Learn! (Hard Version)",
+  "rating": 3500,
+  "tags": [
+    "divide and conquer",
+    "dp"
+  ],
+  "points": 2000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2035G2",
+  "url": "https://codeforces.com/problemset/problem/2035/G2",
+  "contest_start_time": "2024-10-27T14:35:00+00:00",
+  "statement": {
+    "title": "G2. Go Learn! (Hard Version)",
+    "time_limit": "5 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "The differences between the easy and hard versions are the constraints on $n$ and the sum of $n$. In this version, $n \\leq 3\\cdot 10^5$ and the sum of $n$ does not exceed $10^6$. You can only make hacks if both versions are solved.\n\nWell, well, well, let's see how Bessie is managing her finances. She seems to be in the trenches! Fortunately, she is applying for a job at Moogle to resolve this issue. Moogle interviews require intensive knowledge of obscure algorithms and complex data structures, but Bessie received a tip-off from an LGM on exactly what she has to go learn.\n\nBessie wrote the following code to binary search for a certain element $k$ in a possibly unsorted array $[a_1, a_2,\\ldots,a_n]$ with $n$ elements.\n\nlet l = 1let h = nwhile l < h:  let m = floor((l + h) / 2)  if a[m] < k:    l = m + 1  else:    h = mreturn l\n\nBessie submitted her code to Farmer John's problem with $m$ ($1 \\leq m \\leq n$) tests. The $i$-th test is of the form $(x_i, k_i)$ ($1 \\leq x, k \\leq n$). It is guaranteed all the $x_i$ are distinct and all the $k_i$ are distinct.\n\nTest $i$ is correct if the following hold:\n\n The $x_i$-th element in the array is $k_i$.\n\n If Bessie calls the binary search as shown in the above code for $k_i$, it will return $x_i$.\n\nIt might not be possible for all $m$ tests to be correct on the same array, so Farmer John will remove some of them so Bessie can AC. Let $r$ be the minimum of tests removed so that there exists an array $[a_1, a_2,\\ldots,a_n]$ with $1 \\leq a_i \\leq n$ so that all remaining tests are correct.\n\nIn addition to finding $r$, Farmer John wants you to count the number of arrays $[a_1, a_2,\\ldots,a_n]$ with $1 \\leq a_i \\leq n$ such that there exists a way to remove exactly $r$ tests so that all the remaining tests are correct. Since this number may be very large, please find it modulo $998\\,244\\,353$.",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases.\n\nThe first line of each test case contains two integers $n$ and $m$ ($1 \\leq m \\leq n \\leq 3 \\cdot 10^5$) denoting the number of the array and the number of tests.\n\nThe following $m$ lines each contain two integers, describing the tests. The $i$-th line contains two integers $x_i$ and $k_i$ ($1 \\leq x_i, k_i \\leq n$) denoting the index and value of the test. It is guaranteed all $x_i$ are distinct and all $k_i$ are distinct.\n\nIt is guaranteed the sum of $n$ across all test cases does not exceed $10^6$.",
+    "output_spec": "For each test case, output two integers, $r$ — the minimum of tests removed so that there exists an array so that all remaining tests are correct, and the number of arrays such that it is possible to remove $r$ tests to make all remaining tests correct modulo $998\\,244\\,353$.",
+    "note": "Consider the first example.\n\nIn the first test case, the array $[1,2,2,3,4]$ satisfies all $m$ tests, so the minimum number of tests Bessie has to remove is $0$. Note that this is also the only array that satisfies all $m$ tests.\n\nIn the second test case, the minimum number of tests Bessie has to remove is $1$. The only test Bessie can remove is $(2,5)$. If Bessie removes test $(2,5)$, then the arrays satisfying the remaining $m-1$ tests are $[2,2,3,1,4]$, $[2,2,3,2,4]$, $[2,2,3,3,4]$.",
+    "samples": [
+      {
+        "input": "2\n5 4\n1 1\n2 2\n4 3\n5 4\n5 4\n5 4\n2 5\n1 2\n3 3",
+        "output": "\n0 1\n1 3"
+      },
+      {
+        "input": "3\n6 6\n1 3\n2 5\n3 1\n4 2\n5 4\n6 6\n30 8\n19 22\n6 12\n12 1\n28 27\n3 4\n14 25\n29 14\n11 15\n300000 1\n5 10",
+        "output": "\n3 78\n3 839271911\n0 702730519"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 135609,
+    "url": "https://codeforces.com/blog/entry/135609",
+    "tutorial": "Read the editorial for G1; we will build off of that. The most important observation is that $b$ is defined above as at most $1$. If you consider binary searching for $j$ and $i$, at the index $m$ which is present both in $\\text{touch}(j)$ and $\\text{touch}(i)$ and between $j$ and $i$, the search must go left for $j$ and go right for $i$. Then none of the points after $m$ can occur in both $\\text{touch}(i)$ and $\\text{touch}(j)$. The only time when such $m$ doesn't exist is when the $m = i$ or $m = j$. We can call such $m$ as the LCA of $i$ and $j$.\n\nWe can also observe that the indices in $\\text{touch}(i)$ but not in $\\text{touch}(j)$ are between $m$ and $i$. Similarly, the indices in $\\text{touch}(j)$ but not in $\\text{touch}(i)$ are between $j$ and $m$.\n\nWe can associate all the transitions from $j$ to $i$ with the same LCA together and transition simultaneously. We can break our dp into parts only dependent on $i$ and $j$, and only the $(a_i - a_j)^b$ depends on both. We can account for this by storing $ dp_j \\cdot (n - k_j + 1)^g$ and $k_j\\cdot dp_j (n - k_j + 1)^g$. A little extra casework is needed when $j$ or $i$ is also the LCA. Then for each $i$, we can iterate all the possible LCA's and do all the candidate $j$ transitions at once.\n\nTo ensure our dp only makes valid transitions, we can insert $i$ in increasing order of $k_i$.\n\nFor each $i$, there are $\\log n$ transitions, making the complexity $O(m \\log n)$. Depending on the precomputation used and constant factors, $O(m \\log^2 n)$ might pass as well.",
+    "solution_code": []
+  }
+}

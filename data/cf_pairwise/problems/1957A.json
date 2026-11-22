@@ -1,0 +1,42 @@
+{
+  "contest_id": 1957,
+  "index": "A",
+  "name": "Stickogon",
+  "rating": 800,
+  "tags": [
+    "constructive algorithms",
+    "greedy"
+  ],
+  "points": 500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1957A",
+  "url": "https://codeforces.com/problemset/problem/1957/A",
+  "contest_start_time": "2024-04-21T14:35:00+00:00",
+  "statement": {
+    "title": "A. Stickogon",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "You are given $n$ sticks of lengths $a_1, a_2, \\ldots, a_n$. Find the maximum number of regular (equal-sided) polygons you can construct simultaneously, such that:\n\n Each side of a polygon is formed by exactly one stick.\n\n No stick is used in more than $1$ polygon.\n\nNote: Sticks cannot be broken.",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\leq t \\leq 100$) — the number of test cases.\n\nThe first line of each test case contains a single integer $n$ ($1 \\leq n \\leq 100$) — the number of sticks available.\n\nThe second line of each test case contains $n$ integers $a_1, a_2, \\ldots, a_n$ ($1 \\leq a_i \\leq 100$) — the stick lengths.",
+    "output_spec": "For each test case, output a single integer on a new line — the maximum number of regular (equal-sided) polygons you can make simultaneously from the sticks available.",
+    "note": "In the first test case, we only have one stick, hence we can't form any polygon.\n\nIn the second test case, the two sticks aren't enough to form a polygon either.\n\nIn the third test case, we can use the $4$ sticks of length $3$ to create a square.\n\nIn the fourth test case, we can make a pentagon with side length $2$, and a square of side length $4$.",
+    "samples": [
+      {
+        "input": "4\n1\n1\n2\n1 1\n6\n2 2 3 3 3 3\n9\n4 2 2 2 2 4 2 4 4",
+        "output": "\n0\n0\n1\n2"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 128716,
+    "url": "https://codeforces.com/blog/entry/128716",
+    "tutorial": "The first observation that needs to be made in this problem is that we have to greedily try to build triangles from the sticks available.\n\nThe number of triangles that can be created simultaneously by $S$ sticks of the same length is $\\left\\lfloor \\frac{S}{3} \\right\\rfloor$. Hence, the answer is just the sum of the count of all triangles for all stick lengths, $\\sum\\limits_{i = 1}^{100} \\left\\lfloor \\frac{S_i}{3} \\right\\rfloor$, where $S_i$ denotes the number of sticks of length $i$.\n\nThe time complexity of the problem is therefore $O(n) + O(100) = O(n)$.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n\nusing namespace std;\n\nint main(){ \n  int t; \n  cin >> t;\n  while(t--) {\n    int n; \n    cin >> n; \n    vector<int> a(101, 0);\n    for (int i = 0; i < n; i++) {\n      int x; \n      cin >> x;\n      a[x]++;\n    }\n    int sum = 0;\n    for (auto& s : a) \n      sum += s / 3;\n    cout << sum << \"\\n\";\n  }\n}"
+    ]
+  }
+}

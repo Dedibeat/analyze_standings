@@ -1,0 +1,41 @@
+{
+  "contest_id": 2070,
+  "index": "D",
+  "name": "Tree Jumps",
+  "rating": 1600,
+  "tags": [
+    "dfs and similar",
+    "dp",
+    "trees"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2070D",
+  "url": "https://codeforces.com/problemset/problem/2070/D",
+  "contest_start_time": "2025-02-27T14:35:00+00:00",
+  "statement": {
+    "title": "D. Tree Jumps",
+    "time_limit": "2 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "You are given a rooted tree, consisting of $n$ vertices. The vertices in the tree are numbered from $1$ to $n$, and the root is the vertex $1$. Let $d_x$ be the distance (the number of edges on the shortest path) from the root to the vertex $x$.\n\nThere is a chip that is initially placed at the root. You can perform the following operation as many times as you want (possibly zero):\n\n move the chip from the current vertex $v$ to a vertex $u$ such that $d_u = d_v + 1$. If $v$ is the root, you can choose any vertex $u$ meeting this constraint; however, if $v$ is not the root, $u$ should not be a neighbor of $v$ (there should be no edge connecting $v$ and $u$).\n\nFor example, in the tree above, the following chip moves are possible: $1 \\rightarrow 2$, $1 \\rightarrow 5$, $2 \\rightarrow 7$, $5 \\rightarrow 3$, $5 \\rightarrow 4$, $3 \\rightarrow 6$, $7 \\rightarrow 6$.\n\nA sequence of vertices is valid if you can move the chip in such a way that it visits all vertices from the sequence (and only them), in the order they are given in the sequence.\n\nYour task is to calculate the number of valid vertex sequences. Since the answer might be large, print it modulo $998244353$.",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases.\n\nThe first line of each test case contains a single integer $n$ ($2 \\le n \\le 3 \\cdot 10^5$).\n\nThe second line contains $n-1$ integers $p_2, p_3, \\dots, p_n$ ($1 \\le p_i  \\lt  i$), where $p_i$ is the parent of the $i$-th vertex in the tree. Vertex $1$ is the root.\n\nAdditional constraint on the input: the sum of $n$ over all test cases doesn't exceed $3 \\cdot 10^5$.",
+    "output_spec": "For each test case, print a single integer — the number of valid vertex sequences, taken modulo $998244353$.",
+    "note": "In the first example, the following sequences are valid: $[1]$, $[1, 2]$, $[1, 4]$, $[1, 4, 3]$.\n\nIn the second example, the following sequences are valid: $[1]$, $[1, 2]$.\n\nIn the third example, the following sequences are valid: $[1]$, $[1, 2]$, $[1, 2, 7]$, $[1, 2, 7, 6]$, $[1, 5]$, $[1, 5, 3]$, $[1, 5, 3, 6]$, $[1, 5, 4]$.",
+    "samples": [
+      {
+        "input": "3\n4\n1 2 1\n3\n1 2\n7\n1 2 2 1 4 5",
+        "output": "\n4\n2\n8"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 140118,
+    "url": "https://codeforces.com/blog/entry/140118",
+    "tutorial": "2070D — Tree Jumps\n\nVideo",
+    "solution_code": []
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "contest_id": 2070,
+  "index": "A",
+  "name": "FizzBuzz Remixed",
+  "rating": 800,
+  "tags": [
+    "brute force",
+    "math"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2070A",
+  "url": "https://codeforces.com/problemset/problem/2070/A",
+  "contest_start_time": "2025-02-27T14:35:00+00:00",
+  "statement": {
+    "title": "A. FizzBuzz Remixed",
+    "time_limit": "1 second",
+    "memory_limit": "512 megabytes",
+    "legend": "FizzBuzz is one of the most well-known problems from coding interviews. In this problem, we will consider a remixed version of FizzBuzz:\n\nGiven an integer $n$, process all integers from $0$ to $n$. For every integer such that its remainders modulo $3$ and modulo $5$ are the same (so, for every integer $i$ such that $i \\bmod 3 = i \\bmod 5$), print FizzBuzz.\n\nHowever, you don't have to solve it. Instead, given the integer $n$, you have to report how many times the correct solution to that problem will print FizzBuzz.",
+    "input_spec": "The first line contains one integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases.\n\nEach test case contains one line consisting of one integer $n$ ($0 \\le n \\le 10^9$).",
+    "output_spec": "For each test case, print one integer — the number of times the correct solution will print FizzBuzz with the given value of $n$.",
+    "note": "In the first test case, the solution will print FizzBuzz for the integer $0$.\n\nIn the second test case, the solution will print FizzBuzz for the integers $0, 1, 2$.\n\nIn the third test case, the solution will print FizzBuzz for the integers $0, 1, 2, 15$.",
+    "samples": [
+      {
+        "input": "7\n0\n5\n15\n42\n1337\n17101997\n998244353",
+        "output": "\n1\n3\n4\n9\n270\n3420402\n199648872"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 140118,
+    "url": "https://codeforces.com/blog/entry/140118",
+    "tutorial": "2070A — FizzBuzz Remixed\n\nVideo",
+    "solution_code": []
+  }
+}

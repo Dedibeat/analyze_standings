@@ -1,0 +1,44 @@
+{
+  "contest_id": 2053,
+  "index": "C",
+  "name": "Bewitching Stargazer",
+  "rating": 1500,
+  "tags": [
+    "bitmasks",
+    "divide and conquer",
+    "dp",
+    "math"
+  ],
+  "points": 1250.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2053C",
+  "url": "https://codeforces.com/problemset/problem/2053/C",
+  "contest_start_time": "2024-12-28T14:35:00+00:00",
+  "statement": {
+    "title": "C. Bewitching Stargazer",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "I'm praying for owning a transparent heart; as well as eyes with tears more than enough...\n\n— Escape Plan, Brightest Star in the Dark\n\nIris looked at the stars and a beautiful problem emerged in her mind. She is inviting you to solve it so that a meteor shower is believed to form.\n\nThere are $n$ stars in the sky, arranged in a row. Iris has a telescope, which she uses to look at the stars.\n\nInitially, Iris observes stars in the segment $[1, n]$, and she has a lucky value of $0$. Iris wants to look for the star in the middle position for each segment $[l, r]$ that she observes. So the following recursive procedure is used:\n\n First, she will calculate $m = \\left\\lfloor \\frac{l+r}{2} \\right\\rfloor$.\n\n If the length of the segment (i.e. $r - l + 1$) is even, Iris will divide it into two equally long segments $[l, m]$ and $[m+1, r]$ for further observation.\n\n Otherwise, Iris will aim the telescope at star $m$, and her lucky value will increase by $m$; subsequently, if $l \\neq r$, Iris will continue to observe two segments $[l, m-1]$ and $[m+1, r]$.\n\nIris is a bit lazy. She defines her laziness by an integer $k$: as the observation progresses, she will not continue to observe any segment $[l, r]$ with a length strictly less than $k$. In this case, please predict her final lucky value.",
+    "input_spec": "Each test contains multiple test cases. The first line of input contains a single integer $t$ ($1 \\leq t \\leq 10^5$) — the number of test cases. The description of test cases follows.\n\nThe only line of each test case contains two integers $n$ and $k$ ($1 \\leq k \\leq n \\leq 2\\cdot 10^9$).",
+    "output_spec": "For each test case, output a single integer — the final lucky value.",
+    "note": "In the first test case, at the beginning, Iris observes $[1, 7]$. Since $[1, 7]$ has an odd length, she aims at star $4$ and therefore increases her lucky value by $4$. Then it is split into $2$ new segments: $[1, 3]$ and $[5, 7]$. The segment $[1, 3]$ again has an odd length, so Iris aims at star $2$ and increases her lucky value by $2$. Then it is split into $2$ new segments: $[1, 1]$ and $[3, 3]$, both having a length less than $2$, so no further observation is conducted. For range $[5, 7]$, the progress is similar and the lucky value eventually increases by $6$. Therefore, the final lucky value is $4 + 2 + 6 = 12$.\n\nIn the last test case, Iris finally observes all the stars and the final lucky value is $1 + 2 + \\cdots + 8\\,765\\,432 = 38\\,416\\,403\\,456\\,028$.",
+    "samples": [
+      {
+        "input": "6\n7 2\n11 3\n55 13\n5801 6\n8919 64\n8765432 1",
+        "output": "\n12\n18\n196\n1975581\n958900\n38416403456028"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 136455,
+    "url": "https://codeforces.com/blog/entry/136455",
+    "tutorial": "2053C - Bewitching Stargazer\n\nHint 1\n\nProcess many segments simultaneously. What kind of segments do we process at a time?\n\nHint 2\n\nThe length.\n\nSolution\n\nThe point that must be noted is: that if we call the process of splitting a large segment into two smaller segments a round, then all segments are of the same length when the $i$-th round of the observation is conducted; and, the number of rounds does not exceed $\\mathcal O(\\log n)$. The $k$ restriction is equivalent to specifying that only a certain prefix of rounds is computed.\n\nHere are some different approaches:\n\n(Most succinctly) Note that the distribution of segments after round 1 is centrally symmetric; Also, $x$ and $y$ being centrally symmetric implies that $x + y = n + 1$, so it is simple to calculate by simulating the number of segments and the length directly.\n\nIf a segment $[l, r]$ is split into $[l, m - 1]$ and $[m + 1, r]$, its left endpoint sum changes from $l$ to $2l + \\frac{r - l}{2} + 1$, and since $(r - l)$ is fixed, the sum of the left endpoints of all segments can be maintained similarly.\n\nThe following recursive method also works: the answer to $n$ can be recovered by the answer to $\\lfloor \\frac{n}{2} \\rfloor$. The time complexity is $\\mathcal O(t\\log n)$.\n\nCode (C++)\n\nThis is written by _TernaryTree_.\n\nRate the Problem\n\nAmazing problem:\n\nGood problem:\n\nAverage problem:\n\nBad problem:\n\nDidn't solve:",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n#define int long long\n \nusing namespace std;\n \nint T;\nint n, k;\n \nsigned main() {\n\tcin >> T;\n\twhile (T--) {\n\t\tcin >> n >> k;\n\t\tint mul = n + 1, sum = 0, cur = 1;\n\t\twhile (n >= k) {\n\t\t\tif (n & 1) sum += cur;\n\t\t\tn >>= 1;\n\t\t\tcur <<= 1;\n\t\t}\n\t\tcout << mul * sum / 2 << endl;\n\t}\n\treturn 0;\n}"
+    ]
+  }
+}

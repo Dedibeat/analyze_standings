@@ -1,0 +1,45 @@
+{
+  "contest_id": 1989,
+  "index": "F",
+  "name": "Simultaneous Coloring",
+  "rating": 3000,
+  "tags": [
+    "dfs and similar",
+    "divide and conquer",
+    "graphs"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1989F",
+  "url": "https://codeforces.com/problemset/problem/1989/F",
+  "contest_start_time": "2024-06-27T14:35:00+00:00",
+  "statement": {
+    "title": "F. Simultaneous Coloring",
+    "time_limit": "6 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "You are given a matrix, consisting of $n$ rows and $m$ columns.\n\nYou can perform two types of actions on it:\n\n paint the entire column in blue;\n\n paint the entire row in red.\n\nNote that you cannot choose which color to paint the row or column.\n\nIn one second, you can perform either one action or multiple actions at the same time. If you perform one action, it will be free. If you perform $k  \\gt  1$ actions at the same time, it will cost $k^2$ coins. When multiple actions are performed at the same time, for each cell affected by actions of both types, the color can be chosen independently.\n\nYou are asked to process $q$ queries. Before each query, all cells become colorless. Initially, there are no restrictions on the color of any cells. In the $i$-th query, a restriction of the following form is added:\n\n $x_i~y_i~c_i$ — the cell in row $x_i$ in column $y_i$ should be painted in color $c_i$.\n\nThus, after $i$ queries, there are $i$ restrictions on the required colors of the matrix cells. After each query, output the minimum cost of painting the matrix according to the restrictions.",
+    "input_spec": "The first line contains three integers $n, m$ and $q$ ($1 \\le n, m, q \\le 2 \\cdot 10^5$) — the size of the matrix and the number of queries.\n\nIn the $i$-th of the next $q$ lines, two integers $x_i, y_i$ and a character $c_i$ ($1 \\le x_i \\le n$; $1 \\le y_i \\le m$; $c_i \\in$ {'R', 'B'}, where 'R' means red, and 'B' means blue) — description of the $i$-th restriction. The cells in all queries are pairwise distinct.",
+    "output_spec": "Print $q$ integers — after each query, output the minimum cost of painting the matrix according to the restrictions.",
+    "note": null,
+    "samples": [
+      {
+        "input": "2 2 4\n1 1 R\n2 2 R\n1 2 B\n2 1 B",
+        "output": "\n0\n0\n0\n16"
+      },
+      {
+        "input": "3 5 10\n1 1 B\n2 5 B\n2 2 B\n2 3 R\n2 1 B\n3 2 R\n3 3 B\n1 2 R\n1 3 B\n3 1 B",
+        "output": "\n0\n0\n0\n0\n0\n0\n16\n16\n25\n25"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 130937,
+    "url": "https://codeforces.com/blog/entry/130937",
+    "tutorial": "1989F — Simultaneous Coloring",
+    "solution_code": []
+  }
+}

@@ -131,7 +131,7 @@ def run_audit():
         paths.update(ROOT / path for path in artifacts[name]["provenance_sha256"])
     tabfm = artifacts["calibration_tabfm_bigquery"]
     verify_provenance({"provenance_sha256": tabfm["baseline_provenance_sha256"]})
-    for key, path in (("module", "arch_b/tabfm_bigquery.py"), ("plan", "tabfm_cloud_plan.md")):
+    for key, path in (("module", "arch_b/tabfm_bigquery.py"), ("plan", "docs/reports/calibration/tabfm_cloud_plan.md")):
         if _file_sha256(ROOT / path) != tabfm["source_sha256"][key]:
             raise RuntimeError(f"stale TabFM source: {path}")
         paths.add(ROOT / path)
@@ -141,7 +141,7 @@ def run_audit():
     paths.update(path for path in (ROOT / "output").iterdir() if path.is_file() and path != OUT)
     paths.add(Path(__file__))
     paths.update(ROOT / path for path in (
-        "shipped_fit_update_plan.md", "tests/test_shipped_fit_audit.py",
+        "docs/reports/rating/shipped_fit_update_plan.md", "tests/test_shipped_fit_audit.py",
         "arch_b/export_viewer.py", "arch_b/export_ucup_only.py",
         "arch_b/export_virtual_calc.py", "arch_b/medals.py", "arch_b/metric.py",
         "arch_b/hier_calibrate.py"))

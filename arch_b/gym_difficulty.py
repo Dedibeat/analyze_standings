@@ -1,6 +1,6 @@
 """Fixed-theta Rasch difficulty from the Codeforces gym-mirror population.
 
-``data/cf_gym_mirrors.json`` (see details.md) records, for 62 of our contests,
+``data/cf_gym_mirrors.json`` (see docs/journal/) records, for 62 of our contests,
 every real timed gym attempt with each solver's **time-accurate Codeforces
 rating** (``cf_rating_at_attempt``). Unlike the main fit, ability is therefore
 *known* on the true CF scale, so we fix theta and solve a 1-D concave MAP per

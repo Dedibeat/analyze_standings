@@ -1,0 +1,44 @@
+{
+  "contest_id": 1994,
+  "index": "F",
+  "name": "Stardew Valley",
+  "rating": 2500,
+  "tags": [
+    "constructive algorithms",
+    "dfs and similar",
+    "graphs",
+    "trees"
+  ],
+  "points": 2500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1994F",
+  "url": "https://codeforces.com/problemset/problem/1994/F",
+  "contest_start_time": "2024-07-18T14:35:00+00:00",
+  "statement": {
+    "title": "F. Stardew Valley",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Pelican Town represents $n$ houses connected by $m$ bidirectional roads. Some roads have NPCs standing on them. Farmer Buba needs to walk on each road with an NPC and talk to them.\n\nHelp the farmer find a route satisfying the following properties:\n\n The route starts at some house, follows the roads, and ends at the same house.\n\n The route does not follow any road more than once (in both directions together).\n\n The route follows each road with an NPC exactly once.\n\n Note that the route can follow roads without NPCs, and you do not need to minimize the length of the route.\nIt is guaranteed that you can reach any house from any other by walking on the roads with NPCs only.",
+    "input_spec": "Each test consists of multiple test cases. The first line contains an integer $t$ ($1 \\le t \\le 10^{4}$) — the number of test cases. Then follows the description of the test cases.\n\nThe first line of each test case contains two integers $n$ and $m$ ($2 \\leq n \\leq 5 \\cdot 10^5, 1 \\leq m \\leq 5 \\cdot 10^5$) — the number of houses and roads in Pelican Town respectively.\n\nIn each of the next $m$ lines, three integers $u$, $v$, and $c$ ($1 \\leq u, v \\leq n, c = 0/1$) are given — the ends of the road and whether an NPC is on this road. If $c = 1$, then the road has an NPC. If $c = 0$, then the road has no NPC.\n\nThe graph may contain multiple edges and loops, and if there are multiple edges with NPCs standing on them, the route must follow each of these roads.\n\nIt is guaranteed that you can reach any house from any other by walking on the roads with NPCs only.\n\nIt is guaranteed that the sum of $n$ and $m$ for all test cases does not exceed $5 \\cdot 10^5$.",
+    "output_spec": "For each test case, if there is no solution, then output \"No\" (without quotes).\n\nOtherwise, output \"Yes\" (without quotes), and then output $k$ — the number of roads in the route. In the next line, output $k + 1$ numbers — the houses of the route in the order of traversal. Note that the first house should match the last one, as the route is cyclic.\n\nIf there are multiple answers, you can print any of them.\n\nYou can output each letter in any case (for example, the strings \"yEs\", \"yes\", \"Yes\", and \"YES\" will be recognized as a positive answer).",
+    "note": "Note that in the third test case, there are multiple edges $(5, 2)$. You must walk on two of them.",
+    "samples": [
+      {
+        "input": "3\n3 2\n1 2 1\n2 3 1\n3 3\n1 2 1\n1 3 1\n2 3 0\n5 9\n1 2 0\n5 2 1\n5 4 1\n5 1 1\n2 3 1\n5 2 1\n4 1 0\n4 3 0\n5 2 0",
+        "output": "\nNO\nYES\n3\n1 2 3 1 \nYES\n7\n1 2 5 4 3 2 5 1 "
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 131666,
+    "url": "https://codeforces.com/blog/entry/131666",
+    "tutorial": "The edges with $0$ on them will be called black, the other edges will be called white.\n\nTo find such a route, we need the graph to be Eulerian (degree of each vertex is even). To achieve this, we can remove some black edges.\n\nLet's calculate the degree of each vertex (further we will keep this degree in mind) and leave only black edges. Solve the problem independently for each component. If a component has an odd number of vertices with odd degree, we cannot remove edges so that all degrees become even (since removing an edge does not change the parity of the sum of degrees), so in this case the answer is NO. Otherwise, such a route exists. Leave only the spanning tree and run dfs on it. If we leave a vertex and it has an odd degree, we remove an edge to its ancestor. This will work since the sum of the degrees in the component is even.\n\nFinally, we need to find the Eulerian cycle in the resulting graph and print it.",
+    "solution_code": [
+      "#include<bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    cin.tie(nullptr)->sync_with_stdio(false);\n\n    int tests;\n    cin >> tests;\n    while (tests--) {\n        int n, m;\n        cin >> n >> m;\n        vector<vector<int>> black(n);\n        vector<int> edg(m);\n        vector<vector<int>> g(n);\n        for (int i = 0; i < m; ++i) {\n            int x, y, c;\n            cin >> x >> y >> c;\n            --x, --y;\n            edg[i] = x ^ y;\n            g[x].push_back(i);\n            g[y].push_back(i);\n            if (c == 0) {\n                black[x].push_back(i);\n                black[y].push_back(i);\n            }\n        }\n        vector<int> deg(n);\n        for (int i = 0; i < n; ++i) deg[i] = g[i].size() & 1;\n        vector<bool> del(m, false), used(n, false);\n        auto dfs = [&](auto dfs, int u) -> void {\n            used[u] = true;\n            for (auto id : black[u]) {\n                int to = edg[id] ^ u;\n                if (used[to]) continue;\n                dfs(dfs, to);\n                if (deg[to]) {\n                    del[id] = true;\n                    deg[to] ^= 1;\n                    deg[u] ^= 1;\n                }\n            }\n        };\n        bool ok = true;\n        for (int i = 0; i < n; ++i) {\n            if (used[i]) continue;\n            dfs(dfs, i);\n            ok &= !deg[i];\n        }\n        if (!ok) {\n            cout << \"NO\\n\";\n            continue;\n        }\n        auto euler = [&](auto euler, int u) -> void {\n            while (!g[u].empty()) {\n                int id = g[u].back();\n                g[u].pop_back();\n                int to = edg[id] ^ u;\n                if (del[id]) continue;\n                del[id] = true;\n                euler(euler, to);\n            }\n            cout << u + 1 << ' ';\n        };\n        cout << \"YES\\n\";\n        cout << m - accumulate(del.begin(), del.end(), 0) << '\\n';\n        euler(euler, 0);\n        cout << '\\n';\n    }\n}"
+    ]
+  }
+}

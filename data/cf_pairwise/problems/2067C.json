@@ -1,0 +1,42 @@
+{
+  "contest_id": 2067,
+  "index": "C",
+  "name": "Devyatkino",
+  "rating": 1500,
+  "tags": [
+    "brute force",
+    "dfs and similar",
+    "greedy",
+    "math"
+  ],
+  "points": 1250.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2067C",
+  "url": "https://codeforces.com/problemset/problem/2067/C",
+  "contest_start_time": "2025-02-11T14:35:00+00:00",
+  "statement": {
+    "title": "C. Devyatkino",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "You are given a positive integer $n$. In one operation, you can add to $n$ any positive integer whose decimal representation contains only the digit $9$, possibly repeated several times.\n\nWhat is the minimum number of operations needed to make the number $n$ contain at least one digit $7$ in its decimal representation?\n\nFor example, if $n = 80$, it is sufficient to perform one operation: you can add $99$ to $n$, after the operation $n = 179$, which contains the digit $7$.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 10^4$). The description of the test cases follows.\n\nThe only line of each test case contains an integer $n$ ($10 \\leq n \\leq 10^9$).",
+    "output_spec": "For each test case, output the minimum number of operations required for the number $n$ to contain the digit $7$.",
+    "note": "In the first test case, three operations are sufficient: $51 + 9 + 9 + 9 = 78$, which contains the digit $7$. It can be shown that it is impossible to achieve the goal in one or two operations.\n\nIn the second test case, two operations are sufficient: $60 + 9 + 9 = 78$.\n\nIn the third test case, one operation is sufficient: $61 + 9 = 70$.\n\nIn the fourth test case, $n$ already contains the digit $7$, so no operations are required.\n\nIn the fifth test case, you can add $99$ to $n$ to obtain a number containing the digit $7$.",
+    "samples": [
+      {
+        "input": "16\n51\n60\n61\n777\n12345689\n1000000000\n2002\n3001\n977\n989898986\n80\n800001\n96\n70\n15\n90",
+        "output": "\n3\n2\n1\n0\n1\n3\n5\n4\n0\n7\n1\n2\n7\n0\n7\n3"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 139415,
+    "url": "https://codeforces.com/blog/entry/139415?locale=en",
+    "tutorial": "The first idea: the answer does not exceed $9$, since we can add $9$ and keep track of the last digit; with each addition, it will decrease by $1$ (going from $0$ to $9$), so after $9$ additions, the last digit will complete a full cycle and will be $7$ exactly once during the process.\n\nThe second idea: it is quite difficult to briefly answer how adding a number like $99..99$ will affect the digits of an arbitrary number. However, there is an arithmetically similar operation, adding a number of the form $10^x$, which affects the digits in a much more predictable way. It would be nice if we could add powers of ten in the operation instead of $99..99$.\n\nThe combination of these two ideas solves the problem.\n\nLet's iterate through the possible values of the answer. For each $k$ from $0$ to $9$, we want to determine: is it possible to add exactly $k$ numbers made up of nines to produce a digit $7$? One operation is adding a number of the form $10^x - 1$. Since we know we will perform exactly $k$ operations, we can view this process as adding $k$ powers of ten to the number $n-k$.\n\nAdding a power of ten increases one of the digits of the number by $1$ (including leading zeros). It may also replace some $9$s with $0$s, which effectively is also an increase of the digit by $1$, modulo $10$. Therefore, it is not difficult to understand that the minimum number of additions of powers of ten needed to introduce a digit $7$ into the number is $\\min((7 - digit) \\bmod 10)$ across all digits $digit$ from the number, including leading zeros.\n\nIn summary, we need to iterate $k$ from $0$ to $9$ and compare $k$ with $\\min((7 - digit) \\bmod 10)$ (where $digit$ is any digit from the number $n-k$, including leading zeros), and output the minimum suitable $k$.\n\nFrom interesting facts: during the solution process, it becomes clear that the answer is $\\leq 7$, since $digit$ can always be $0$. However, this is only true under the constraints $n \\geq 7$, as in the solution we implicitly rely on the fact that the number $n-k$ does not go negative! For $n=5$ and $n=6$, the answer is actually $8$.\n\nAdditionally, the solution presented above serves as a proof of another solution that one could believe with sufficient intuition. Let's say that in the optimal answer we add the same number, meaning we never mix adding $9$ and $99$. Believing this, we can iterate through the number being added and keep adding it until we encounter the digit $7$. We then take the minimum of all options for the answer.",
+    "solution_code": []
+  }
+}

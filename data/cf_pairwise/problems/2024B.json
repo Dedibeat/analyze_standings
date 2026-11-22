@@ -1,0 +1,41 @@
+{
+  "contest_id": 2024,
+  "index": "B",
+  "name": "Buying Lemonade",
+  "rating": 1100,
+  "tags": [
+    "binary search",
+    "constructive algorithms",
+    "sortings"
+  ],
+  "points": 1000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2024B",
+  "url": "https://codeforces.com/problemset/problem/2024/B",
+  "contest_start_time": "2024-10-20T09:05:00+00:00",
+  "statement": {
+    "title": "B. Buying Lemonade",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "There is a vending machine that sells lemonade. The machine has a total of $n$ slots. You know that initially, the $i$-th slot contains $a_i$ cans of lemonade. There are also $n$ buttons on the machine, each button corresponds to a slot, with exactly one button corresponding to each slot. Unfortunately, the labels on the buttons have worn off, so you do not know which button corresponds to which slot.\n\nWhen you press the button corresponding to the $i$-th slot, one of two events occurs:\n\n If there is a can of lemonade in the $i$-th slot, it will drop out and you will take it. At this point, the number of cans in the $i$-th slot decreases by $1$.\n\n If there are no cans of lemonade left in the $i$-th slot, nothing will drop out.\n\nAfter pressing, the can drops out so quickly that it is impossible to track from which slot it fell. The contents of the slots are hidden from your view, so you cannot see how many cans are left in each slot. The only thing you know is the initial number of cans in the slots: $a_1, a_2, \\ldots, a_n$.\n\nDetermine the minimum number of button presses needed to guarantee that you receive at least $k$ cans of lemonade.\n\nNote that you can adapt your strategy during the button presses based on whether you received a can or not. It is guaranteed that there are at least $k$ cans of lemonade in total in the machine. In other words, $k \\leq a_1 + a_2 + \\ldots + a_n$.",
+    "input_spec": "Each test consists of multiple test cases. The first line contains a single integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases. The description of the test cases follows.\n\nThe first line of each test case contains two integers $n$ and $k$ ($1 \\le n \\le 2 \\cdot 10^5$, $1 \\leq k \\leq 10^9$) — the number of slots in the machine and the required number of cans of lemonade.\n\nThe second line of each test case contains $n$ integers $a_1, a_2, \\ldots, a_n$ ($1 \\le a_i \\le 10^9$) — the number of cans in the slots.\n\nIt is guaranteed that $k \\leq a_1 + a_2 + \\ldots + a_n$, meaning there are at least $k$ cans of lemonade in the machine.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, output a single integer — the minimum number of button presses needed to guarantee that you receive at least $k$ cans of lemonade.",
+    "note": "In the first test case, we can simply press the first button and receive one can of lemonade.\n\nIn the second test case, we can press each button once and guarantee that we receive $2$ cans of lemonade. Note that if we simply press one button twice, we might not be lucky, and that button could correspond to the first slot, in which case we would only receive $1$ can of lemonade for two presses.\n\nIn the third test case, one of the optimal strategies is as follows:\n\nPress the first button twice. After the first press, a can of lemonade will definitely drop out. Then there are two options:\n\n If no can of lemonade drops after the second press, we know that this button must correspond to the second slot, since $a_2 = 1$ and $a_1, a_3  \\gt  1$. Then we can press the second button twice and the third button once. Since $a_1, a_3 \\geq 2$, we will definitely receive three cans of lemonade for these three presses. Thus, after $5$ presses, we will have $4$ cans of lemonade.\n\n If a can of lemonade drops after the second press, we can make one press on the second button and one press on the third button. After each of these presses, we will definitely receive a can of lemonade. Thus, after $4$ presses, we will have $4$ cans of lemonade.\n\nIt can be shown that it is impossible to guarantee receiving $4$ cans of lemonade with only $4$ presses, so the answer is $5$.",
+    "samples": [
+      {
+        "input": "5\n2 1\n1 1\n2 2\n1 2\n3 4\n2 1 3\n10 50\n1 1 3 8 8 9 12 13 27 27\n2 1000000000\n1000000000 500000000",
+        "output": "\n1\n2\n5\n53\n1000000000"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 135341,
+    "url": "https://codeforces.com/blog/entry/135341",
+    "tutorial": "Let's make a few simple observations about the optimal strategy of actions. First, if after pressing a certain button, no cans have been obtained, there is no point in pressing that button again. Second, among the buttons that have not yet resulted in a failure, it is always advantageous to press the button that has been pressed the least number of times. This can be loosely justified by the fact that the fewer times a button has been pressed, the greater the chance that the next press will be successful, as we have no other information to distinguish these buttons from one another. From this, our strategy clearly emerges: let's sort the array, let $a_1 \\leq a_2 \\leq \\ldots a_n$. In the first action, we will press all buttons $a_1$ times. It is clear that all these presses will yield cans, and in total, we will collect $a_1 \\cdot n$ cans. If $k \\leq a_1 \\cdot n$, no further presses are needed. However, if $k  \\gt  a_1 \\cdot n$, we need to make at least one more press. Since all buttons are still indistinguishable to us, it may happen that this press will be made on the button corresponding to $a_1$ and will be unsuccessful. Next, we will press all remaining buttons $a_2 - a_1$ times; these presses will also be guaranteed to be successful. After that, again, if $k$ does not exceed the number of cans already collected, we finish; otherwise, we need to make at least one more press, which may hit an empty cell $a_2$. And so on. In total, the answer to the problem will be $k + x$, where $x$ is the smallest number from $0$ to $n-1$ such that the following holds: $\\displaystyle\\sum_{i=0}^{x} (a_{i+1}-a_i) \\cdot (n-i) \\geq k$ (here we consider $a_0 = 0$). $O(n \\log n)$.",
+    "solution_code": []
+  }
+}

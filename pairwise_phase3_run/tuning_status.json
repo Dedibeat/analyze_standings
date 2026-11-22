@@ -1,0 +1,17 @@
+{
+  "name": "projects/703166210069/locations/us-central1/tuningJobs/8563467981319831552",
+  "tunedModelDisplayName": "cf-pairwise-phase3-editorial600-20260806",
+  "baseModel": "gemini-3.5-flash",
+  "supervisedTuningSpec": {
+    "trainingDatasetUri": "gs://gctc-vertex-batch-703166210069/cf-pairwise-20260805/phase3-editorial600-v1/phase2_editorial_train.jsonl",
+    "validationDatasetUri": "gs://gctc-vertex-batch-703166210069/cf-pairwise-20260805/phase3-editorial600-v1/phase2_editorial_validation.jsonl",
+    "hyperParameters": {
+      "epochCount": "2"
+    },
+    "exportLastCheckpointOnly": true
+  },
+  "state": "JOB_STATE_RUNNING",
+  "createTime": "2026-08-06T10:26:08.220261Z",
+  "startTime": "2026-08-06T10:26:08.273595Z",
+  "updateTime": "2026-08-06T10:26:09.370407Z"
+}

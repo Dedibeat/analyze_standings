@@ -1,0 +1,46 @@
+{
+  "contest_id": 2030,
+  "index": "E",
+  "name": "MEXimize the Score",
+  "rating": 2200,
+  "tags": [
+    "combinatorics",
+    "data structures",
+    "dp",
+    "greedy",
+    "implementation",
+    "math"
+  ],
+  "points": 2000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2030E",
+  "url": "https://codeforces.com/problemset/problem/2030/E",
+  "contest_start_time": "2024-10-19T14:05:00+00:00",
+  "statement": {
+    "title": "E. MEXimize the Score",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Suppose we partition the elements of an array $b$ into any number $k$ of non-empty multisets $S_1, S_2, \\ldots, S_k$, where $k$ is an arbitrary positive integer. Define the score of $b$ as the maximum value of $\\operatorname{MEX}(S_1)$$^{\\text{∗}}$$ + \\operatorname{MEX}(S_2) + \\ldots + \\operatorname{MEX}(S_k)$ over all possible partitions of $b$ for any integer $k$.\n\nEnvy is given an array $a$ of size $n$. Since he knows that calculating the score of $a$ is too easy for you, he instead asks you to calculate the sum of scores of all $2^n - 1$ non-empty subsequences of $a$.$^{\\text{†}}$ Since this answer may be large, please output it modulo $998\\,244\\,353$.\n\n$^{\\text{∗}}$$\\operatorname{MEX}$ of a collection of integers $c_1, c_2, \\ldots, c_k$ is defined as the smallest non-negative integer $x$ that does not occur in the collection $c$. For example, $\\operatorname{MEX}([0,1,2,2]) = 3$ and $\\operatorname{MEX}([1,2,2]) = 0$\n\n$^{\\text{†}}$A sequence $x$ is a subsequence of a sequence $y$ if $x$ can be obtained from $y$ by deleting several (possibly, zero or all) elements.",
+    "input_spec": "The first line contains an integer $t$ ($1 \\leq t \\leq 10^4$) — the number of test cases.\n\nThe first line of each test case contains an integer $n$ ($1 \\leq n \\leq 2 \\cdot 10^5$) — the length of $a$.\n\nThe second line of each test case contains $n$ integers $a_1, a_2, \\ldots, a_n$ ($0 \\leq a_i  \\lt  n$) — the elements of the array $a$.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, output the answer, modulo $998\\,244\\,353$.",
+    "note": "In the first testcase, we must consider seven subsequences:\n\n $[0]$: The score is $1$.\n\n $[0]$: The score is $1$.\n\n $[1]$: The score is $0$.\n\n $[0,0]$: The score is $2$.\n\n $[0,1]$: The score is $2$.\n\n $[0,1]$: The score is $2$.\n\n $[0,0,1]$: The score is $3$.\n\n The answer for the first testcase is $1+1+2+2+2+3=11$.\nIn the last testcase, all subsequences have a score of $0$.",
+    "samples": [
+      {
+        "input": "4\n3\n0 0 1\n4\n0 0 1 1\n5\n0 0 1 2 2\n4\n1 1 1 1",
+        "output": "\n11\n26\n53\n0"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 135218,
+    "url": "https://codeforces.com/blog/entry/135218",
+    "tutorial": "2030E - MEXimize the Score\n\nProblem Credits: Proof_by_QED, cry, satyam343\n Analysis: cry\n\nSolution\n\nObservation: The score of $b$ is equivalent to $f_0$ + $\\min(f_0, f_1)$ + $\\ldots$ + $\\min(f_0, \\ldots, f_{n-1})$ where $f_i$ stores the frequency of integer $i$ in $b$.\n\nIntuition: We can greedily construct the $k$ arrays by repeating this step: Select the minimum $j$ such that $f_j = 0$ and $\\min(f_0, \\ldots f_{j-1}) \\gt 0$, and construct the array $[0, 1, \\ldots, j-1]$. This is optimal because every element we add will increase the MEX by $1$, which will increase the score by $1$. If we add $j$, the MEX will not increase. Also, when we add an element, we cannot increase the score by more than $1$. Adding less than $j$ elements cannot increase MEX for future arrays.\n\nFrom this observation, we can see that only the frequency array of $a$ matters. From now on, let's denote the frequency of $i$ in $a$ as $f_i$. We can find the sum over all subsequences using dynamic programming.\n\nLet's denote $dp[i][j]$ as the number of subsequences containing only the first $i$ integers and $min(f_0, \\ldots, f_i) = j$. Initially, $dp[0][i] = \\binom{f_0}{i}$. To transition, we need to consider two cases:\n\nIn the first case, let's assume $j \\lt \\min(f_0, \\ldots, f_{i-1})$. The number of subsequences that can be created is $(\\sum_{k=j+1}^n dp[i-1][k]) \\cdot \\binom{f_i}{j}$. That is, all the subsequences from previous length such that it is possible for $j$ to be the new minimum, multiplied by the number of subsequences where $f_i = j$.\n\nIn the second case, let's assume $j \\geq \\min(f_0, \\ldots, f_{i-1})$. The number of subsequences that can be created is $(\\sum_{k=j}^{f_i} \\binom{f_i}{k}) \\cdot dp[i-1][j]$. That is, all subsequences containing at least $j$ elements of $i$, multiplied by all previous subsequences with minimum already equal to $j$.\n\nThe total score is $dp[i][j] \\cdot j \\cdot 2^{f_{i+1} + \\dots + f_{n-1}}$ over the length of the prefix $i$ and prefix minimum $j$.\n\nWe can speed up the calculations for both cases using suffix sums, however, this still yields an $O(n^2)$ algorithm. However, $j$ is bounded to the interval $[1, f_i]$ for each $i$. Since the sum of $f_i$ is $n$, the total number of secondary states is $n$. This becomes just a constant factor, so the total complexity is $O(n)$.\n\nCode (C++)",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n#define int long long\n#define ll long long \n#define pii pair<int,int> \n#define piii pair<pii,pii>\n#define fi first\n#define se second\n#pragma GCC optimize(\"O3,unroll-loops\")\n#pragma GCC target(\"avx2,bmi,bmi2,lzcnt,popcnt\")\nusing namespace std;\n\nconst int MX = 2e5;\nll fact[MX+1];\nll ifact[MX+1];\nll MOD=998244353;\n \nll binPow(ll base, ll exp) {\n    ll ans = 1;\n    while(exp) {\n        if(exp%2) {\n            ans = (ans*base)%MOD;\n        }\n        base = (base*base)%MOD;\n        exp /= 2;\n    }\n    return ans;\n}\n \nint nCk(int N, int K) {\n    if(K>N||K<0) {\n        return 0;\n    }\n    return (fact[N]*((ifact[K]*ifact[N-K])%MOD))%MOD;\n}\n \nvoid ICombo() {\n\tfact[0] = 1;\n    for(int i=1;i<=MX;i++) {\n        fact[i] = (fact[i-1]*i)%MOD;\n    }    \n    ifact[MX] = binPow(fact[MX],MOD-2);\n    for(int i=MX-1;i>=0;i--) {\n        ifact[i] = (ifact[i+1]*(i+1))%MOD;\n    }\n}\n\nvoid solve() {\n    int n, ans=0; cin >> n;\n    vector<int> c(n);\n    for (int r:c) {\n        cin >> r; c[r]++; \n    }\n    vector<vector<int>> dp(n,vector<int>(1));\n    vector<int> ps, co; \n    for (int i = 1; i <= c[0]; i++) dp[0].push_back(nCk(c[0],i));\n    for (int i = 1; i < n; i++) {\n        ps.resize(1); co=ps; \n        for (int r:dp[i-1]) ps.push_back((ps.back()+r)%MOD); \n        int m=ps.size()-1;\n        dp[i].resize(min(m,c[i]+1));\n        for (int j = 0; j <= c[i]; j++) co.push_back((co.back()+nCk(c[i],j))%MOD);\n        for (int j = 1; j < dp[i].size(); j++) dp[i][j]=nCk(c[i],j)*(ps[m]-ps[j]+MOD)%MOD+(co.back()-co[j+1]+MOD)*dp[i-1][j]%MOD; \n    }\n    int j=0;\n    for (auto r:dp) {\n        n-=c[j++];\n        for (int i = 1; i < r.size(); i++) (ans+=i*r[i]%MOD*binPow(2,n))%=MOD;\n    }\n    cout << ans << \"\\n\"; \n}\n\nint32_t main() {\n\tios::sync_with_stdio(0); cin.tie(0);\n        ICombo();\n\tint t = 1; cin >> t;\n\twhile (t--) solve();\n}"
+    ]
+  }
+}

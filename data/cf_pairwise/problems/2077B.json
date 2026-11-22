@@ -1,0 +1,43 @@
+{
+  "contest_id": 2077,
+  "index": "B",
+  "name": "Finding OR Sum",
+  "rating": 1900,
+  "tags": [
+    "bitmasks",
+    "constructive algorithms",
+    "implementation",
+    "interactive",
+    "math"
+  ],
+  "points": 1000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2077B",
+  "url": "https://codeforces.com/problemset/problem/2077/B",
+  "contest_start_time": "2025-03-10T14:45:00+00:00",
+  "statement": {
+    "title": "B. Finding OR Sum",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "ALTER EGO - Yuta Imai vs Qlarabelle\n\nThis is an interactive problem.\n\nThere are two hidden non-negative integers $x$ and $y$ ($0 \\leq x, y  \\lt  2^{30}$). You can ask no more than $2$ queries of the following form.\n\n Pick a non-negative integer $n$ ($0 \\leq n  \\lt  2^{30}$). The judge will respond with the value of $(n \\mathbin{|} x) + (n \\mathbin{|} y)$, where $|$ denotes the bitwise OR operation.\n\nAfter this, the judge will give you another non-negative integer $m$ ($0 \\leq m  \\lt  2^{30}$). You must answer the correct value of $(m \\mathbin{|} x) + (m \\mathbin{|} y)$.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 10^4$). The description of the test cases follows.",
+    "output_spec": null,
+    "note": "In the first test, the interaction proceeds as follows.\n\nSolutionJuryExplanation\n\n$\\texttt{2}$There are 2 test cases.\n\n$\\texttt{}$In the first test case, $x=1$ and $y=2$.\n\n$\\texttt{0}$$\\texttt{3}$The solution requests $(0 \\mathbin{|} 1) + (0 \\mathbin{|} 2)$, and the jury responds with $3$.\n\n$\\texttt{1}$$\\texttt{4}$The solution requests $(1 \\mathbin{|} 1) + (1 \\mathbin{|} 2)$, and the jury responds with $4$.\n\n$\\texttt{!}$$\\texttt{1}$The solution requests the value of $m$, and the jury responds with $1$.\n\n$\\texttt{4}$The solution knows that $(1 \\mathbin{|} x) + (1 \\mathbin{|} y)=4$ because of earlier queries.\n\n$\\texttt{}$In the second test case, $x=0$ and $y=0$.\n\n$\\texttt{0}$$\\texttt{0}$The solution requests $(0 \\mathbin{|} 0) + (0 \\mathbin{|} 0)$, and the jury responds with $0$.\n\n$\\texttt{!}$$\\texttt{1}$The solution requests the value of $m$, and the jury responds with $1$.\n\n$\\texttt{2}$The solution somehow deduces that $x=y=0$, so it responds with $(1 \\mathbin{|} 0) + (1 \\mathbin{|} 0)=2$.\n\nNote that the empty lines in the example input and output are for the sake of clarity and do not occur in the real interaction.",
+    "samples": [
+      {
+        "input": "\n2\n\n3\n\n4\n\n1\n\n0\n\n1",
+        "output": "\n\n0\n\n1\n\n!\n\n4\n\n0\n\n!\n\n2"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 140505,
+    "url": "https://codeforces.com/blog/entry/140505",
+    "tutorial": "2077B - Finding OR Sum\n\nHint 1\n\nTry to get information on half of the bits.\n\nHint 2\n\nAlternate the bits.\n\nSolution\n\nThe queries are $\\ldots 0101_2$ and $\\ldots 1010_2$.\n\nIt's easier to look at the case with only two binary digits first.\n\nLet the result of query $01_2$ be $q_1$ and $10_2$ be $q_2$.\n\nObserve that if\n\n$q_2 = 100_2$ then the first (from the right) digit of both $x$ and $y$ is $0$.\n\n$q_2 = 101_2$ then the first (from the right) digit of one of $x$ or $y$ is $0$, and the other one is $1$.\n\n$q_2 = 110_2$ then the first (from the right) digit of both $x$ and $y$ is $1$.\n\nSimilarly, if\n\n$q_1 = 10_2$ then the second (from the right) digit of both $x$ and $y$ is $0$.\n\n$q_1 = 100_2$ then the second (from the right) digit of one of $x$ or $y$ is $0$, and the other one is $1$.\n\n$q_1 = 110_2$ then the second (from the right) digit of both $x$ and $y$ is $1$.\n\nTo generalize to every other digit, apply the same logic to every consecutive pair of digits in $x$ and $y$. Note that you must account for the carries from the digits before too.\n\nAfter this, you will know for every digit position whether both $x$ and $y$ are $0$, are $1$, or have one $0$ and one $1$. You can use this information to find $(m|x) + (m|y)$ for any $m$.\n\nTime complexity: $\\mathcal{O}(\\log \\max (x))$ per test case.\n\nSubmission: 310297820",
+    "solution_code": []
+  }
+}

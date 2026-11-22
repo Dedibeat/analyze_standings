@@ -1,0 +1,45 @@
+{
+  "contest_id": 2084,
+  "index": "D",
+  "name": "Arcology On Permafrost",
+  "rating": 1600,
+  "tags": [
+    "binary search",
+    "brute force",
+    "constructive algorithms",
+    "greedy",
+    "math"
+  ],
+  "points": 1750.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2084D",
+  "url": "https://codeforces.com/problemset/problem/2084/D",
+  "contest_start_time": "2025-04-05T14:35:00+00:00",
+  "statement": {
+    "title": "D. Arcology On Permafrost",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "You are given three integers $n$, $m$, and $k$, where $m \\cdot k  \\lt  n$.\n\nFor a sequence $b$ consisting of non-negative integers, define $f(b)$ as follows:\n\n You may perform the following operation on $b$:\n\n Let $l$ denote the current length of $b$. Choose a positive integer $1 \\leq i \\leq l - k + 1$, remove the subarray from index $i$ to $i + k - 1$ and concatenate the remaining parts. In other words, replace $b$ with $$[b_1, b_2, \\ldots, b_{i - 1}, b_{i + k}, b_{i + k + 1}, \\ldots, b_l].$$\n\n $f(b)$ is defined as the minimum possible value of $\\operatorname{mex}(b)$$^{\\text{∗}}$ after performing the above operation at most $m$ times (possibly zero).\n\nYou need to construct a sequence $a$ of length $n$ consisting of non-negative integers, such that:\n\n For all $1 \\le i \\le n$, $0 \\le a_i \\le 10^9$.\n\n Over all such sequences $a$, $f(a)$ is maximized.\n\n$^{\\text{∗}}$The minimum excluded (MEX) of a collection of integers $c_1, c_2, \\ldots, c_k$ is defined as the smallest non-negative integer $x$ which does not occur in the collection $c$.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 10^4$). The description of the test cases follows.\n\nThe first line of each test case contains three integers $n$, $m$, and $k$ ($2 \\le n \\le 2 \\cdot 10^5$, $1 \\le m  \\lt  n$, $1 \\le k  \\lt  n$, $1 \\le m \\cdot k  \\lt  n$).\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, output $n$ integers $a_1, a_2, \\ldots, a_n$ ($0 \\le a_i \\le 10^9$).\n\nIf there are multiple answers, print any of them.",
+    "note": "In the first test case, it can be shown that $f(a) = 1$, which is maximized.\n\nIn the second test case, it can be shown that $f(a) = 1$, which is maximized. $f(a) = 1$ since you can perform the following operations:\n\n Choose $i = 3$, remove the subarray from index $3$ to $4$ and concatenate the remaining parts. The sequence $a$ becomes $[0, 1, 0]$.\n\n Choose $i = 1$, remove the subarray from index $1$ to $2$ and concatenate the remaining parts. The sequence $a$ becomes $[0]$.\n\nIn the third test case, it can be shown that $f(a) = 2$, which is maximized. $f(a) = 2$ since you can perform the following operation:\n\n Choose $i = 2$, remove the subarray from index $2$ to $5$ and concatenate the remaining parts. The sequence $a$ becomes $[0, 1]$.\n\nIn the fourth test case, it can be shown that $f(a) = 2$, which is maximized.\n\nIn the fifth test case, it can be shown that $f(a) = 3$, which is maximized.\n\nIn the sixth test case, it can be shown that $f(a) = 2$, which is maximized.",
+    "samples": [
+      {
+        "input": "8\n2 1 1\n5 2 2\n6 1 4\n8 2 2\n8 1 5\n11 3 3\n22 6 3\n17 2 2",
+        "output": "\n0 0\n0 1 0 0 0\n0 1 2 2 0 1\n0 2 1 0 1 0 8 1\n0 1 2 1000000000 1 0 1 2\n1 0 0 1 0 2 1 0 2 1 0\n0 2 1 0 2 1 0 3 2 1 0 2 1 0 2 1 0 2 1 0 2 1\n4 0 2 1 3 4 0 2 1 0 3 4 0 1 2 1 3"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 141155,
+    "url": "https://codeforces.com/blog/entry/141155",
+    "tutorial": "Since performing the operation will never increase $\\operatorname{mex}$ of the sequence, we can treat \"at most $m$ operations\" as \"exactly $m$ operations\".\n\nNext, we consider computing the maximum value of $f(a)$.\n\n First, we have $f(a) \\leq n - m \\cdot k$ because after the operations, the length of $a$ becomes $n - m \\cdot k$, and the $\\operatorname{mex}$ of a sequence must be no more than its length.\n\n Second, we have $f(a) \\leq \\frac{n}{m + 1}$, because to ensure that all numbers in $0 \\sim f(a) - 1$ are not completely removed, each of them must appear at least $m + 1$ times.\n\nWe claim that the maximum value of $f(a)$ is\n\n$$\\min(n - m \\cdot k, \\left\\lfloor\\frac{n}{m + 1}\\right\\rfloor)$$\n\nNext, we prove that this maximum value can be achieved through construction.\n\n If $n - m \\cdot k  \\lt  \\frac{n}{m + 1}$, then $n  \\lt  (m + 1) \\cdot k$, which implies $n - m \\cdot k  \\lt  k$, meaning that the final length of $a$ is less than $k$. In this case, we construct $a_i = i \\bmod k$. This ensures that no matter which subarray is removed, the remaining sequence still satisfies $a_i = i \\bmod k$. After performing $m$ deletions, we are left with $a_i = i$.\n\n If $n - m \\cdot k \\geq \\frac{n}{m + 1}$, then $n \\geq (m + 1) \\cdot k$, which implies $\\frac{n}{m + 1} \\geq k$. Here, we construct $a_i = i \\bmod \\left\\lfloor\\frac{n}{m + 1}\\right\\rfloor$. This guarantees that every pair of identical numbers has a distance of at least $k$, and that all numbers in $0 \\sim \\left\\lfloor\\frac{n}{m + 1}\\right\\rfloor - 1$ appear at least $m + 1$ times. Thus, each deletion can remove at most one of these numbers, ensuring that no number is completely removed after $m$ deletions.\n\nTime complexity: $O(n)$ per test case.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n\tint T;\n\tcin >> T;\n\twhile (T--) {\n\t\tint n, m, k;\n\t\tcin >> n >> m >> k;\n\t\tfor (int i = 0; i < n; ++i) {\n\t\t\tcout << i % (n < (m + 1) * k ? k : n / (m + 1)) << \" \\n\"[i == n - 1];\n\t\t}\n\t}\n\treturn 0;\n}"
+    ]
+  }
+}

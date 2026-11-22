@@ -1,0 +1,43 @@
+{
+  "contest_id": 2013,
+  "index": "B",
+  "name": "Battle for Survive",
+  "rating": 900,
+  "tags": [
+    "constructive algorithms",
+    "greedy",
+    "math"
+  ],
+  "points": 750.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2013B",
+  "url": "https://codeforces.com/problemset/problem/2013/B",
+  "contest_start_time": "2024-09-20T14:35:00+00:00",
+  "statement": {
+    "title": "B. Battle for Survive",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "Eralim, being the mafia boss, manages a group of $n$ fighters. Fighter $i$ has a rating of $a_i$.\n\nEralim arranges a tournament of $n - 1$ battles, in each of which two not yet eliminated fighters $i$ and $j$ ($1 \\le i  \\lt  j \\le n$) are chosen, and as a result of the battle, fighter $i$ is eliminated from the tournament, and the rating of fighter $j$ is reduced by the rating of fighter $i$. That is, $a_j$ is decreased by $a_i$. Note that fighter $j$'s rating can become negative. The fighters indexes do not change.\n\nEralim wants to know what maximum rating the last remaining fighter can preserve if he chooses the battles optimally.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 10^4$). The description of the test cases follows.\n\nThe first line of each test case contains a single integer $n$ ($2 \\le n \\le 2 \\cdot 10^5$) — the number of fighters.\n\nThe second line of each test case contains $n$ integers $a_1, a_2, \\ldots a_n$ ($1 \\le a_i \\le 10^9$) — the ratings of the fighters.\n\nThe sum of $n$ over all testcases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each testcase, output a single integer — the maximum rating that the last remaining fighter can preserve.",
+    "note": "In the first example, you can arrange a fight between fighters with indices $1$ and $2$, where the fighter with index $2$ will win. The rating of the last fighter, that is, the fighter with index $2$, will be $1 - 2 = -1$.\n\nIn the second example, you can first conduct a fight between fighters with indices $1$ and $2$, where the fighter with index $2$ will win, and then conduct a fight between fighters with indices $2$ and $3$, where the fighter with index $3$ will win.\n\nThe rating of the fighter with index $2$ after the first fight will be $2 - 2 = 0$. The rating of the fighter with index $3$ after the second fight will be $8 - 0 = 8$.",
+    "samples": [
+      {
+        "input": "5\n2\n2 1\n3\n2 2 8\n4\n1 2 4 3\n5\n1 2 3 4 5\n5\n3 2 4 5 4",
+        "output": "\n-1\n8\n2\n7\n8"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "missing"
+  },
+  "editorial": {
+    "blog_id": 134298,
+    "url": "https://codeforces.com/blog/entry/134298",
+    "tutorial": null,
+    "solution_code": [
+      "#include <bits/stdc++.h>\n\nusing namespace std;\ntypedef long long ll;\ntypedef unsigned long long ull;\n\n#define forn(i,j,k) for(ll i=(j); i<=(k); i++)\n#define rofn(i,j,k) for(ll i=(j); i>=(k); i--)\n\nint main() {\n    ll t;\n    cin >> t;\n\n    ll n;\n    while(t--) {\n        cin >> n;\n        vector<ll> a(n+1);\n        ll mn = 1e15, mx=-1;\n        forn(i, 1, n) {\n            cin >> a[i];\n            mn = min(mn, a[i]);\n            mx = max(mx, a[i]);\n        }\n        \n        ll low = mn, high = mx;\n        ll alpha, beta;\n        while(low+1 < high) {\n            alpha = (low + high) / 2;\n            ll tmp = 0;\n            bool valid = true;\n            rofn(i, n, 1) {\n                tmp += a[i];\n                if(tmp > (n-i+1)*alpha) {\n                    valid = false;\n                    break;\n                }\n            }\n            if(valid) high = alpha;\n            else low = alpha;\n        }\n        alpha = high;\n\n        low = mn; high = mx;\n        while(low+1 < high) {\n            beta = (low + high) / 2;\n            ll tmp = 0;\n            bool valid = true;\n            forn(i, 1, n) {\n                tmp += a[i];\n                if(tmp < i*beta) {\n                    valid = false;\n                    break;\n                }\n            }\n            \n            if(valid) low = beta;\n            else high = beta;\n        }\n        beta = low;\n\n        cout << alpha - beta << endl;\n    }\n}"
+    ]
+  }
+}

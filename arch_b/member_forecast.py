@@ -244,7 +244,7 @@ def run():
                 "static": aggregate(base_group), "members": aggregate(member_group),
                 "minus_static": comparison(member_group, base_group)}
     code = ["arch_b/member_forecast.py", "arch_b/model.py", "arch_b/dynamic_rating.py",
-            "arch_b/medals.py", "arch_a/load.py", "arch_a/elo.py", "member_forecast_plan.md"]
+            "arch_b/medals.py", "arch_a/load.py", "arch_a/elo.py", "docs/reports/forecast/member_forecast_plan.md"]
     paths += [ROOT / p for p in code]
     return {"scope": "Recorded-event-date development replay; retrospective roster snapshots; research only",
             "sha256": {str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest() for p in paths},

@@ -1,0 +1,44 @@
+{
+  "contest_id": 2085,
+  "index": "C",
+  "name": "Serval and The Formula",
+  "rating": 1600,
+  "tags": [
+    "bitmasks",
+    "constructive algorithms",
+    "dp",
+    "greedy"
+  ],
+  "points": 1250.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2085C",
+  "url": "https://codeforces.com/problemset/problem/2085/C",
+  "contest_start_time": "2025-03-22T14:35:00+00:00",
+  "statement": {
+    "title": "C. Serval and The Formula",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "You are given two positive integers $x$ and $y$ ($1\\le x, y\\le 10^9$).\n\nFind a non-negative integer $k\\le 10^{18}$, such that $(x+k) + (y+k) = (x+k)\\oplus (y+k)$ holds$^{\\text{∗}}$, or determine that such an integer does not exist.\n\n$^{\\text{∗}}$$\\oplus$ denotes the bitwise XOR operation.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 10^4$). The description of the test cases follows.\n\nThe only line of each test case contains two integers $x$ and $y$ ($1\\le x, y\\le 10^9$) — the given integers.",
+    "output_spec": "For each test case, output a single integer $k$ ($0\\le k\\le 10^{18}$) — the integer you found. Print $-1$ if it is impossible to find such an integer.\n\nIf there are multiple answers, you may print any of them.",
+    "note": "In the first test case, since $(2 + 0) + (5 + 0) = (2 + 0) \\oplus (5 + 0) = 7$, $k=0$ is a possible answer. Note that $k=4$ is also a possible answer because $(2 + 4) + (5 + 4) = (2 + 4) \\oplus (5 + 4) = 15$.\n\nIn the second test case, $(x+k)\\oplus (y+k) = (6+k)\\oplus (6+k) = 0$. However, $(x+k)+(y+k)  \\gt  0$ holds for every $k \\ge 0$, implying that such an integer $k$ does not exist.",
+    "samples": [
+      {
+        "input": "5\n2 5\n6 6\n19 10\n1024 4096\n1198372 599188",
+        "output": "\n0\n-1\n1\n1024\n28"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 140933,
+    "url": "https://codeforces.com/blog/entry/140933",
+    "tutorial": "2085C - Serval and The Formula\n\nHint 1\n\nThe formula $(x+k) + (y+k) = (x+k) \\oplus (y+k)$ is equivalent to $(x+k) \\mathbin{\\&} (y+k) = 0$, where $\\&$ denotes the bitwise AND operation.\n\nHint 2\n\nNote that a power of $2$ shares no common bits with any positive integer less than it.\n\nSolution\n\nIt can be shown that such an non-negative integer $k$ does not exist when $x=y$.\n\nWhen $x\\neq y$, one can show that $k = 2^n - \\max(x, y)$ is a possible answer, where $2^n$ is a power of $2$ that is sufficiently large.\n\nCode (Python)",
+    "solution_code": [
+      "getint = lambda: int(input())\ngetints = lambda: map(int, input().split())\n\ndef solve():\n\tx, y = getints()\n\tif x == y:\n\t\tprint(-1)\n\telse:\n\t\tprint(2 ** 48 - max(x, y))\n\nt = getint()\nfor _ in range(t):\n\tsolve()"
+    ]
+  }
+}

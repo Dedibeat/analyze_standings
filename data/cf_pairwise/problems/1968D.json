@@ -1,0 +1,47 @@
+{
+  "contest_id": 1968,
+  "index": "D",
+  "name": "Permutation Game",
+  "rating": 1300,
+  "tags": [
+    "brute force",
+    "dfs and similar",
+    "games",
+    "graphs",
+    "greedy",
+    "math"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1968D",
+  "url": "https://codeforces.com/problemset/problem/1968/D",
+  "contest_start_time": "2024-05-02T14:45:00+00:00",
+  "statement": {
+    "title": "D. Permutation Game",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Bodya and Sasha found a permutation $p_1,\\dots,p_n$ and an array $a_1,\\dots,a_n$. They decided to play a well-known \"Permutation game\".\n\nA permutation of length $n$ is an array consisting of $n$ distinct integers from $1$ to $n$ in arbitrary order. For example, $[2,3,1,5,4]$ is a permutation, but $[1,2,2]$ is not a permutation ($2$ appears twice in the array), and $[1,3,4]$ is also not a permutation ($n=3$ but there is $4$ in the array).\n\nBoth of them chose a starting position in the permutation.\n\nThe game lasts $k$ turns. The players make moves simultaneously. On each turn, two things happen to each player:\n\n If the current position of the player is $x$, his score increases by $a_x$.\n\n Then the player either stays at his current position $x$ or moves from $x$ to $p_x$.\n\n The winner of the game is the player with the higher score after exactly $k$ turns.\nKnowing Bodya's starting position $P_B$ and Sasha's starting position $P_S$, determine who wins the game if both players are trying to win.",
+    "input_spec": "The first line contains a single integer $t$ ($1\\le t\\le 10^4$) — the number of testcases.\n\nThe first line of each testcase contains integers $n$, $k$, $P_B$, $P_S$ ($1\\le P_B,P_S\\le n\\le 2\\cdot 10^5$, $1\\le k\\le 10^9$) — length of the permutation, duration of the game, starting positions respectively.\n\nThe next line contains $n$ integers $p_1,\\dots,p_n$ ($1 \\le p_i \\le n$) — elements of the permutation $p$.\n\nThe next line contains $n$ integers $a_1,\\dots,a_n$ ($1\\le a_i\\le 10^9$) — elements of array $a$.\n\nIt is guaranteed that the sum of values of $n$ over all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each testcase output:\n\n \"Bodya\" if Bodya wins the game.\n\n \"Sasha\" if Sasha wins the game.\n\n \"Draw\" if the players have the same score.",
+    "note": "Below you can find the explanation for the first testcase, where the game consists of $k=2$ turns.\n\nTurnBodya's positionBodya's scoreBodya's moveSasha's positionSasha's scoreSasha's move\n\nfirst$3$$0 + a_3 = 0 + 5 = 5$stays on the same position$2$$0 + a_2 = 0 + 2 = 2$moves to $p_2=1$\n\nsecond$3$$5 + a_3 = 5 + 5 = 10$stays on the same position$1$$2 + a_1 = 2 + 7 = 9$stays on the same position\n\nfinal results$3$$10$$1$$9$\n\nAs we may see, Bodya's score is greater, so he wins the game. It can be shown that Bodya always can win this game.",
+    "samples": [
+      {
+        "input": "10\n4 2 3 2\n4 1 2 3\n7 2 5 6\n10 8 2 10\n3 1 4 5 2 7 8 10 6 9\n5 10 5 1 3 7 10 15 4 3\n2 1000000000 1 2\n1 2\n4 4\n8 10 4 1\n5 1 4 3 2 8 6 7\n1 1 2 1 2 100 101 102\n5 1 2 5\n1 2 4 5 3\n4 6 9 4 2\n4 2 3 1\n4 1 3 2\n6 8 5 3\n6 9 5 4\n6 1 3 5 2 4\n6 9 8 9 5 10\n4 8 4 2\n2 3 4 1\n5 2 8 7\n4 2 3 1\n4 1 3 2\n6 8 5 3\n2 1000000000 1 2\n1 2\n1000000000 2",
+        "output": "\nBodya\nSasha\nDraw\nDraw\nBodya\nSasha\nSasha\nSasha\nSasha\nBodya"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 129096,
+    "url": "https://codeforces.com/blog/entry/129096",
+    "tutorial": "Because $p$ is a permutation, it will be divided into cycles.\n\nFor every player it is optimal to move during the first $min(n,k)$ turns.\n\nWe will answer the question by calculating maximal possible score for both players.\n\nLet us define $sum_i$ and $pos_i$:\n\n sum of values in the positions that occur during the first $i$ turns.\n\n position in which player will stop if he decides to move $i$ times.\n\n We will calculate them as follows:\n\n $sum_i = sum_{i-1} + a_{pos_{i}}$\n\n $pos_i$=$p_{pos_{i-1}}$.\n\nNow the maximal possible answer for one player is equal to:\n\n$$ans=\\max\\limits_{0\\le i\\le \\min(n,k)}(sum_i+(k-i)a_{pos_i})$$\n\nNow we will compare maximal possible answers for every player.",
+    "solution_code": [
+      "#include<bits/stdc++.h>\nusing namespace std;\nlong long score(vector<int>&p,vector<int>&a,int s,int k){\n\tint n=p.size();\n\tlong long mx=0,cur=0;\n\tvector<bool>vis(n);\n\twhile(!vis[s]&&k>0){\n\t\tvis[s]=1;\n\t\tmx=max(mx,cur+1ll*k*a[s]);\n\t\tcur+=a[s];\n\t\tk--;\n\t\ts=p[s];\n\t}\n\treturn mx;\n}\nint main(){\n\tint t;\n\tcin>>t;\n\twhile(t--){\n\t\tint n,k,s1,s2;\n\t\tcin>>n>>k>>s1>>s2;\n\t\tvector<int>p(n),a(n);\n\t\tfor(auto&e:p){\n\t\t\tcin>>e;\n\t\t\te--;\n\t\t}\n\t\tfor(auto&e:a){\n\t\t\tcin>>e;\n\t\t}\n\t\tlong long A=score(p,a,s1-1,k),B=score(p,a,s2-1,k);\n\t\tcout<<(A>B?\"Bodya\\n\":A<B?\"Sasha\\n\":\"Draw\\n\");\n\t}\n}",
+      "#include<iostream>\nusing namespace std;\nint main(){\n\tint t;\n\tcin>>t;\n\twhile(t--){\n\t\tint n;\n\t\tcin>>n;\n\t\tfor(int i=1;i<=n-2;i++){\n\t\t\tcout<<i<<' '<<i<<\"\\n\";\n\t\t}\n\t\tcout<<n-1<<' '<<n<<\"\\n\"<<n<<' '<<n<<\"\\n\";\n\t}\n}"
+    ]
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "contest_id": 2082,
+  "index": "A",
+  "name": "Binary Matrix",
+  "rating": 800,
+  "tags": [
+    "constructive algorithms",
+    "greedy"
+  ],
+  "points": 500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2082A",
+  "url": "https://codeforces.com/problemset/problem/2082/A",
+  "contest_start_time": "2025-03-15T14:35:00+00:00",
+  "statement": {
+    "title": "A. Binary Matrix",
+    "time_limit": "1 second",
+    "memory_limit": "512 megabytes",
+    "legend": "A matrix is called binary if all its elements are either $0$ or $1$.\n\nEcrade calls a binary matrix $A$ good if the following two properties hold:\n\n The bitwise XOR of all numbers in each row of matrix $A$ is equal to $0$.\n\n The bitwise XOR of all numbers in each column of matrix $A$ is equal to $0$.\n\nEcrade has a binary matrix of size $n \\cdot m$. He is interested in the minimum number of elements that need to be changed for the matrix to become good.\n\nHowever, it seems a little difficult, so please help him!",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 400$). The description of the test cases follows.\n\nThe first line of each test case contains two integers $n, m$ ($1 \\le n, m \\le 100$).\n\nThis is followed by $n$ lines, each containing exactly $m$ characters consisting only of $0$ and $1$, describing the elements of Ecrade's matrix.\n\nIt is guaranteed that the sum of $n \\cdot m$ across all test cases does not exceed $5 \\cdot 10^4$.",
+    "output_spec": "For each test case, output a single integer, the minimum number of elements that need to be changed.",
+    "note": "In the first test case, he needs to change 2 elements to obtain the following matrix $\\begin{pmatrix}1&1&0\\\\1&0&1\\\\0&1&1\\end{pmatrix}$.\n\nIn the second test case, he can make no changes to obtain the following matrix $\\begin{pmatrix}0&0&0\\\\0&0&0\\\\0&0&0\\end{pmatrix}$.\n\nIn the third test case, he needs to change 3 elements to obtain the following matrix $\\begin{pmatrix}1&0&1\\\\0&0&0\\\\1&0&1\\end{pmatrix}$.",
+    "samples": [
+      {
+        "input": "7\n3 3\n010\n101\n010\n3 3\n000\n000\n000\n3 3\n100\n010\n001\n3 3\n101\n010\n000\n3 3\n000\n010\n000\n1 4\n0101\n4 1\n0\n1\n0\n1",
+        "output": "\n2\n0\n3\n3\n1\n2\n2"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 140702,
+    "url": "https://codeforces.com/blog/entry/140702",
+    "tutorial": "2082A - Binary Matrix\n Idea: Ecrade_\n\nHint\n\nDo we really have to consider the problem on the whole matrix?\n\nSolution\n\nLet $r$ be the number of rows where the bitwise XOR of all the numbers in it is $1$, and $c$ be the number of columns where the bitwise XOR of all the numbers in it is $1$. Our goal is to make both $r$ and $c$ zero.\n\nWhen we change an element in the matrix, both $r$ and $c$ change by exactly one. Thus, it's not hard to see that the answer is $\\max (r,c)$.\n\nThe time complexity is $O(\\sum nm)$.\n\nCode",
+    "solution_code": [
+      "#include<bits/stdc++.h>\nusing namespace std;\ntypedef long long ll;\nll t,n,m,r,c;\nchar s[1009];\nbool a[1009][1009];\ninline ll read(){\n\tll s = 0,w = 1;\n\tchar ch = getchar();\n\twhile (ch > '9' || ch < '0'){ if (ch == '-') w = -1; ch = getchar();}\n\twhile (ch <= '9' && ch >= '0') s = (s << 1) + (s << 3) + (ch ^ 48),ch = getchar();\n\treturn s * w;\n}\nint main(){\n\tt = read();\n\twhile (t --){\n\t\tn = read(),m = read(),r = c = 0;\n\t\tfor (ll i = 1;i <= n;i += 1){\n\t\t\tscanf(\"%s\",s + 1);\n\t\t\tfor (ll j = 1;j <= m;j += 1) a[i][j] = s[j] - '0';\n\t\t}\n\t\tfor (ll i = 1;i <= n;i += 1){\n\t\t\tbool sum = 0;\n\t\t\tfor (ll j = 1;j <= m;j += 1) sum ^= a[i][j];\n\t\t\tif (sum) r += 1;\n\t\t}\n\t\tfor (ll j = 1;j <= m;j += 1){\n\t\t\tbool sum = 0;\n\t\t\tfor (ll i = 1;i <= n;i += 1) sum ^= a[i][j];\n\t\t\tif (sum) c += 1;\n\t\t}\n\t\tprintf(\"%lld\\n\",max(r,c));\n\t}\n\treturn 0;\n}"
+    ]
+  }
+}

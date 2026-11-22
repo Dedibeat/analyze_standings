@@ -1,0 +1,50 @@
+{
+  "contest_id": 2063,
+  "index": "F1",
+  "name": "Counting Is Not Fun (Easy Version)",
+  "rating": 2400,
+  "tags": [
+    "combinatorics",
+    "data structures",
+    "dfs and similar",
+    "dp",
+    "dsu",
+    "graphs",
+    "hashing",
+    "implementation",
+    "math",
+    "trees"
+  ],
+  "points": 1750.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2063F1",
+  "url": "https://codeforces.com/problemset/problem/2063/F1",
+  "contest_start_time": "2025-01-22T12:05:00+00:00",
+  "statement": {
+    "title": "F1. Counting Is Not Fun (Easy Version)",
+    "time_limit": "3 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "This is the easy version of the problem. The difference between the versions is that in this version, the limits on $t$ and $n$ are smaller. You can hack only if you solved all versions of this problem.\n Now Little John is rich, and so he finally buys a house big enough to fit himself and his favorite bracket sequence. But somehow, he ended up with a lot of brackets! Frustrated, he penetrates through the ceiling with the \"buddha palm\".\nA bracket sequence is called balanced if it can be constructed by the following formal grammar.\n\n The empty sequence $\\varnothing$ is balanced.\n\n If the bracket sequence $A$ is balanced, then $\\mathtt{(}A\\mathtt{)}$ is also balanced.\n\n If the bracket sequences $A$ and $B$ are balanced, then the concatenated sequence $A B$ is also balanced.\n\nFor example, the sequences \"(())()\", \"()\", \"(()(()))\", and the empty sequence are balanced, while \"(()\" and \"(()))(\" are not.\n\nGiven a balanced bracket sequence $s$, a pair of indices $(i,j)$ ($i \\lt j$) is called a good pair if $s_i$ is '(', $s_j$ is ')', and the two brackets are added simultaneously with respect to Rule 2 while constructing the sequence $s$. For example, the sequence \"(())()\" has three different good pairs, which are $(1,4)$, $(2,3)$, and $(5,6)$. One can show that any balanced bracket sequence of $2n$ brackets contains exactly $n$ different good pairs, and using any order of rules to construct the same bracket sequence will yield the same set of good pairs.\n\nEmily will play a bracket guessing game with John. The game is played as follows.\n\nInitially, John has a balanced bracket sequence $s$ containing $n$ different good pairs, which is not known to Emily. John tells Emily the value of $n$ and asks Emily to guess the sequence.\n\nThroughout $n$ turns, John gives Emily the following kind of clue on each turn.\n\n $l\\;r$: The sequence $s$ contains a good pair $(l,r)$.\n\nThe clues that John gives Emily are pairwise distinct and do not contradict each other.\n\nAt a certain point, Emily can be certain that the balanced bracket sequence satisfying the clues given so far is unique. For example, assume Emily knows that $s$ has $3$ good pairs, and it contains the good pair $(2,5)$. Out of $5$ balanced bracket sequences with $3$ good pairs, there exists only one such sequence \"((()))\" with the good pair $(2,5)$. Therefore, one can see that Emily does not always need $n$ turns to guess $s$.\n\nTo find out the content of $s$ as early as possible, Emily wants to know the number of different balanced bracket sequences that match the clues after each turn. Surely, this is not an easy job for Emily, especially when she is given so many good pairs. Now it is your turn to help Emily. Given the clues, you must find the answer before and after each turn. As the answers may be huge, you need to find them modulo $998\\,244\\,353$.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 10^3$). The description of the test cases follows.\n\nThe first line of each test case contains one integer $n$ ($2 \\le n \\le 5000$) — the number of good pairs.\n\nThen, each of the $n$ following lines contains two integers $l_i$ and $r_i$ representing the $i$-th clue ($1 \\le l_i  \\lt  r_i \\le 2n$).\n\nThe clues in one test case are pairwise distinct and do not contradict each other.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $5000$.",
+    "output_spec": "For each test case, output $n+1$ integers on a separate line:\n\n The first integer is the answer before all clues, modulo $998\\,244\\,353$.\n\n For all $i \\ge 1$, the $i+1$-th integer is the answer after the $i$-th clue, modulo $998\\,244\\,353$.",
+    "note": "The first test case of the example is explained in the problem description.\n\nThe third test case of the example is explained as follows. It can be shown that there are $132$ balanced bracket sequences with $6$ good pairs. The answers after each clue are given as follows:\n\n You are given the good pair $(2,3)$. There are $42$ balanced bracket sequences having the good pair $(2,3)$.\n\n You are given the good pair $(1,6)$. There are $5$ balanced bracket sequences having good pairs $(2,3)$, $(1,6)$.\n\n You are given the good pair $(7,8)$. There are $2$ balanced bracket sequences having the three good pairs. The strings are \"(()())()(())\" and \"(()())()()()\", respectively.\n\n You are given the good pair $(9,12)$. There is only one balanced bracket sequence having the four good pairs. The content of $s$ is therefore the only string, which is \"(()())()(())\".\n\nThen, the number of bracket sequences after the fifth and the sixth clue are both $1$ as you already know the content of $s$.",
+    "samples": [
+      {
+        "input": "3\n3\n2 5\n1 6\n3 4\n4\n1 6\n7 8\n2 3\n4 5\n6\n2 3\n1 6\n7 8\n9 12\n10 11\n4 5",
+        "output": "\n5 1 1 1\n14 2 2 1 1\n132 42 5 2 1 1 1"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 138593,
+    "url": "https://codeforces.com/blog/entry/138593",
+    "tutorial": "To solve the easy subtask, you can derive some helpful properties from the usual stack-based algorithm to determine whether a bracket sequence is balanced. Note the following well-known fact.\n\n Fact: The good pairs are exactly the pairs of brackets that are popped \"together\" in the stack-based algorithm.\n\nConsidering this, we can observe these two facts.\n\n The subsequence inside the good pair must be balanced, or otherwise the two brackets would not be popped together.\n\n The subsequence outside the good pair must be balanced, or otherwise the entire string won't be balanced.\n\nThen, given $k$ good pairs, you will find $\\mathcal{O}(k)$ \"minimal subsequences\" that you know are balanced, defined by this information. (In fact, it is more correct to define \"minimal balanced subsequences\" to include the good pairs themselves, but in the easy subtask we ignore this to get an easier explanation by sacrificing details.)\n\nIn fact, these $\\mathcal{O}(k)$ minimal balanced subsequences are just the subsequences found by the following modification to the stack-based algorithm:\n\n In the usual stack-based algorithm, instead of pushing only brackets into the stack, push everything on the way into the stack.\n\n When you pop a closing bracket, pop everything until you find an opening bracket.\n\n Then, the $k$ popped subsequences, and the subsequence outside the outermost good pairs, are minimal balanced subsequences.\n\nIt is known that there are $C_n$ different balanced bracket sequences of length $2n$, where $C_k$ is the $k$-th Catalan number. So for each of the minimal balanced subsequences, you can multiply $C_{len/2}$ to the answer, given that the minimal balanced subsequence has length $len$. This is the answer we needed to know.\n\nTherefore, you can simply update the string and re-run the stack-based algorithm everytime. Each run of the stack-based algorithm takes $\\mathcal{O}(n)$ time, so the problem is solved in $\\mathcal{O}(n^2)$ time complexity. For the easy subtask, the Catalan numbers can be preprocessed in $\\mathcal{O}(n^2)$ time, and it was not necessary to use the combinatorial definition. However, if you compute Catalan numbers on the fly instead of preprocessing, or construct a tree explicitly, the time limit may be a little tight for you as the solution will have an extra log factor. Do keep this in mind when you implement the solution.",
+    "solution_code": [
+      "#include<bits/stdc++.h>\nusing namespace std;\nusing ll=long long;\nconst ll md=998244353;\n \nint main()\n{\n    int t;cin>>t;\n    vector<ll>ctl(5050);\n    ctl[0]=1;\n    for(int n=1;n<5050;n++)\n    {\n        for(int i=1;i<=n;i++)\n        {\n            ctl[n]=(ctl[n]+ctl[i-1]*ctl[n-i]%md)%md;\n        }\n    }\n    while(t--)\n    {\n        int n;cin>>n;\n        ll ans=ctl[n];\n        cout<<ans<<\" \";\n        string s(2*n+2,'.');\n        s[0]='(';s[2*n+1]=')';\n        for(int a=0;a<n;a++)\n        {\n            int i,j;cin>>i>>j;\n            ans=1;\n            s[i]='(';\n            s[j]=')';\n            string stk;\n            for(char c:s)\n            {\n                if(c==')')\n                {\n                    int cnt=0;\n                    while(stk.back()!='(')\n                    {\n                        cnt++;\n                        stk.pop_back();\n                    }\n                    stk.pop_back();\n                    ans=(ans*ctl[cnt/2])%md;\n                }\n                else stk+=c;\n            }\n            cout<<ans<<\" \\n\"[a+1==n];\n        }\n    }\n}"
+    ]
+  }
+}

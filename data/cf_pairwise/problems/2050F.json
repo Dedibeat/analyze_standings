@@ -1,0 +1,44 @@
+{
+  "contest_id": 2050,
+  "index": "F",
+  "name": "Maximum modulo equality",
+  "rating": 1700,
+  "tags": [
+    "data structures",
+    "divide and conquer",
+    "math",
+    "number theory"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2050F",
+  "url": "https://codeforces.com/problemset/problem/2050/F",
+  "contest_start_time": "2024-12-05T14:35:00+00:00",
+  "statement": {
+    "title": "F. Maximum modulo equality",
+    "time_limit": "5 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "You are given an array $a$ of length $n$ and $q$ queries $l$, $r$.\n\nFor each query, find the maximum possible $m$, such that all elements $a_l$, $a_{l+1}$, ..., $a_r$ are equal modulo $m$. In other words, $a_l \\bmod m = a_{l+1} \\bmod m = \\dots = a_r \\bmod m$, where $a \\bmod b$ — is the remainder of division $a$ by $b$. In particular, when $m$ can be infinite, print $0$.",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases.\n\nThe first line of each test case contains two integers $n$, $q$ ($1 \\le n, q \\le 2\\cdot 10^5$) — the length of the array and the number of queries.\n\nThe second line of each test case contains $n$ integers $a_i$ ($1 \\le a_i \\le 10^9$) — the elements of the array.\n\nIn the following $q$ lines of each test case, two integers $l$, $r$ are provided ($1 \\le l \\le r \\le n$) — the range of the query.\n\nIt is guaranteed that the sum of $n$ across all test cases does not exceed $2\\cdot 10^5$, and the sum of $q$ does not exceed $2\\cdot 10^5$.",
+    "output_spec": "For each query, output the maximum value $m$ described in the statement.",
+    "note": "In the first query of the first sample, $6 \\bmod 3 = 3 \\bmod 3 = 0$. It can be shown that for greater $m$, the required condition will not be fulfilled.\n\nIn the third query of the first sample, $14 \\bmod 4 = 2 \\bmod 4 = 6 \\bmod 4 = 2$. It can be shown that for greater $m$, the required condition will not be fulfilled.",
+    "samples": [
+      {
+        "input": "3\n5 5\n5 14 2 6 3\n4 5\n1 4\n2 4\n3 5\n1 1\n1 1\n7\n1 1\n3 2\n1 7 8\n2 3\n1 2",
+        "output": "\n3 1 4 1 0 \n0 \n1 6 "
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 137018,
+    "url": "https://codeforces.com/blog/entry/137018",
+    "tutorial": "Let's look at two arbitrary integers $x$ and $y$. Now we want to find the maximum $m$, which satisfies $x\\bmod m = y\\bmod m$. We know that $x\\bmod m = y\\bmod m$, then $|x - y|\\bmod m = 0$, because they have the same remainder by $m$. That means that any $m$ which is a divisor of $|x - y|$ will satisfy the required condition.\n\nNow let's generalize the idea we've obtained to the segment: $a_l\\bmod m = a_{l+1}\\bmod m = \\dots = a_r\\bmod m$ means that $a_l\\bmod m = a_{l+1}\\bmod m$, and $a_{l+1}\\bmod m = a_{l+2}\\bmod m$, and ..., and $a_{r-1}\\bmod m = a_r\\bmod m$. So, $m$ must be a divisor of $|a_l - a_{l+1}|$, $|a_{l+1} - a_{l+2}|$, ..., $|a_{r-1} - a_r|$ at the same time. That means that $m$ should be GCD($|a_l - a_{l+1}|$, $|a_{l+1} - a_{l+2}|$, ..., $|a_{r-1} - a_r|$), where GCD is the greatest common divisor. $m = 0$, when all the elements on the segment [$l; r$] are equal.\n\nLet's build an array consisting of differences of adjacent elements; now we can use sparse table to find GCD on the segments efficiently.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n\nusing namespace std;\n\nconst int LOGN = 20;\n\nvector<vector<int>> stGCD;\n\nint get_gcd(int l, int r) {\n    int k = __lg(r - l + 1);\n    return __gcd(stGCD[k][l], stGCD[k][r - (1 << k) + 1]);\n}\n\nvoid solve() {\n    stGCD.clear();\n    int n, q; cin >> n >> q;\n    vector<int> a(n);\n    for (int &x : a) cin >> x;\n\n    vector<int> b;\n    for (int i = 1; i < n; i++)\n        b.push_back(abs(a[i - 1] - a[i]));\n\n    stGCD.resize(LOGN, vector<int>(b.size(), 1));\n    for (int i = 0; i < b.size(); i++)\n        stGCD[0][i] = b[i];\n    for (int i = 1; i < LOGN; i++)\n        for (int j = 0; j + (1 << (i - 1)) < b.size(); j++)\n            stGCD[i][j] = __gcd(stGCD[i - 1][j], stGCD[i - 1][j + (1 << (i - 1))]);\n\n    while (q--) {\n        int l, r; cin >> l >> r;\n        if (l == r) {\n            cout << 0 << \" \";\n            continue;\n        }\n        l--; r -= 2;\n        int gcd = get_gcd(l, r);\n        cout << gcd << \" \";\n    }\n}\n\nint main() {\n    int TESTS = 1; cin >> TESTS;\n    while (TESTS --> 0) {\n        solve();\n        cout << \"\\n\";\n    }\n    return 0;\n}"
+    ]
+  }
+}

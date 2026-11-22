@@ -1,0 +1,41 @@
+{
+  "contest_id": 1955,
+  "index": "A",
+  "name": "Yogurt Sale",
+  "rating": 800,
+  "tags": [
+    "math"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1955A",
+  "url": "https://codeforces.com/problemset/problem/1955/A",
+  "contest_start_time": "2024-04-08T14:35:00+00:00",
+  "statement": {
+    "title": "A. Yogurt Sale",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "The price of one yogurt at the \"Vosmiorochka\" store is $a$ burles, but there is a promotion where you can buy two yogurts for $b$ burles.\n\nMaxim needs to buy exactly $n$ yogurts. When buying two yogurts, he can choose to buy them at the regular price or at the promotion price.\n\nWhat is the minimum amount of burles Maxim should spend to buy $n$ yogurts?",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\le t \\le {10}^{4}$) — the number of test cases.\n\nThe first and only line of each test case contains three integers $n$, $a$, and $b$ ($1 \\le n \\le 100$, $1 \\le a, b \\le 30$) — the number of yogurts Maxim wants to buy, the price for one yogurt, and the price for two yogurts on promotion.",
+    "output_spec": "For each test case, print in a separate line the minimum cost of buying $n$ yogurts at \"Vosmiorochka\".",
+    "note": "In the third test case of the example, it is more advantageous to buy three yogurts for $15$ burles than two for $11$ and one for $5$.\n\nIn the fourth test case of the example, you need to buy four yogurts, each for $5$ burles.",
+    "samples": [
+      {
+        "input": "4\n2 5 9\n3 5 9\n3 5 11\n4 5 11",
+        "output": "\n9\n14\n15\n20"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 128243,
+    "url": "https://codeforces.com/blog/entry/128243",
+    "tutorial": "You can always buy yogurts one by one without using the promotion, then the answer is $n \\cdot a$.\n\nSuppose it is more advantageous to buy yogurts on promotion than one by one, that is, $b  \\lt  2 \\cdot a$. If $n$ is even, the answer is ${n \\over 2} \\cdot b$, otherwise ${(n - 1) \\over 2} \\cdot b + a$.\n\nNow you just need to choose whether to buy yogurts one by one or on promotion, taking the minimum of the two options.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n \nusing ll = signed long long int;\n \nusing namespace std;\n \nvoid solve() {\n    ll n, a, b;\n    cin >> n >> a >> b;\n    ll ans = n * a;\n    if (b < 2 * a) {\n        ans = (n / 2) * b + (n % 2) * a;\n    }\n    cout << ans << '\\n';\n}\n \nint main() {\n    int t;\n    cin >> t;\n    while (t--) {\n        solve();\n    }\n}"
+    ]
+  }
+}

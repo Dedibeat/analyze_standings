@@ -1,0 +1,41 @@
+{
+  "contest_id": 1971,
+  "index": "C",
+  "name": "Clock and Strings",
+  "rating": 900,
+  "tags": [
+    "implementation"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1971C",
+  "url": "https://codeforces.com/problemset/problem/1971/C",
+  "contest_start_time": "2024-05-10T14:35:00+00:00",
+  "statement": {
+    "title": "C. Clock and Strings",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "There is a clock labeled with the numbers $1$ through $12$ in clockwise order, as shown below.\n\nIn this example, $(a,b,c,d)=(2,9,10,6)$, and the strings intersect.\n\nAlice and Bob have four distinct integers $a$, $b$, $c$, $d$ not more than $12$. Alice ties a red string connecting $a$ and $b$, and Bob ties a blue string connecting $c$ and $d$. Do the strings intersect? (The strings are straight line segments.)",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\leq t \\leq 5940$) — the number of test cases.\n\nThe only line of each test case contains four distinct integers $a$, $b$, $c$, $d$ ($1 \\leq a, b, c, d \\leq 12$).",
+    "output_spec": "For each test case, output \"YES\" (without quotes) if the strings intersect, and \"NO\" (without quotes) otherwise.\n\nYou can output \"YES\" and \"NO\" in any case (for example, strings \"yEs\", \"yes\", and \"Yes\" will be recognized as a positive response).",
+    "note": "The first test case is pictured in the statement.\n\nIn the second test case, the strings do not intersect, as shown below.",
+    "samples": [
+      {
+        "input": "15\n2 9 10 6\n3 8 9 1\n1 2 3 4\n5 3 4 12\n1 8 2 10\n3 12 11 8\n9 10 12 1\n12 1 10 2\n3 12 6 9\n1 9 8 4\n6 7 9 12\n7 12 9 6\n10 12 11 1\n3 9 6 12\n1 4 3 5",
+        "output": "\nYES\nNO\nNO\nYES\nYES\nNO\nNO\nNO\nNO\nNO\nNO\nYES\nYES\nYES\nYES"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 129364,
+    "url": "https://codeforces.com/blog/entry/129364",
+    "tutorial": "There are many ways to implement the solution, but many involve a lot of casework. Below is the shortest solution we know of.\n\nWalk around the clock in the order $1$, $2$, $\\dots$, $12$. If we pass by two red strings or two blue strings in a row, the strings don't intersect; otherwise, they do.\n\nThis is because if we don't have two red or blue in a row, then the red and blue strings alternate, so there must be an intersection.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n \nusing namespace std;\n \nconst int MAX = 200'007;\nconst int MOD = 1'000'000'007;\n \nvoid solve() {\n\tint a, b, c, d;\n\tcin >> a >> b >> c >> d;\n\tstring s;\n\tfor (int i = 1; i <= 12; i++) {\n\t\tif (i == a || i == b) {s += \"a\";}\n\t\tif (i == c || i == d) {s += \"b\";}\n\t}\n\tcout << (s == \"abab\" || s == \"baba\" ? \"YES\\n\" : \"NO\\n\");\n}\n \nint main() {\n\tint tt; cin >> tt; for (int i = 1; i <= tt; i++) {solve();}\n\t// solve();\n}"
+    ]
+  }
+}

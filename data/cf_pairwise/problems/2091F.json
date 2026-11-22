@@ -1,0 +1,43 @@
+{
+  "contest_id": 2091,
+  "index": "F",
+  "name": "Igor and Mountain",
+  "rating": 1800,
+  "tags": [
+    "binary search",
+    "brute force",
+    "dp"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2091F",
+  "url": "https://codeforces.com/problemset/problem/2091/F",
+  "contest_start_time": "2025-03-25T14:35:00+00:00",
+  "statement": {
+    "title": "F. Igor and Mountain",
+    "time_limit": "5 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "The visitors of the IT Campus \"NEIMARK\" are not only strong programmers but also physically robust individuals! Some practice swimming, some rowing, and some rock climbing!\n\nMaster Igor is a prominent figure in the local rock climbing community. One day, he went on a mountain hike to ascend one of the peaks. As an experienced climber, Igor decided not to follow the established trails but to use his skills to climb strictly vertically.\n\nIgor found a rectangular vertical section of the mountain and mentally divided it into $n$ horizontal levels. He then split each level into $m$ segments using vertical partitions. Upon inspecting these segments, Igor discovered convenient protrusions that can be grasped (hereafter referred to as holds). Thus, the selected part of the mountain can be represented as an $n \\times m$ rectangle, with some cells containing holds.\n\nBeing an experienced programmer, Igor decided to count the number of valid routes. A route is defined as a sequence of distinct holds. A route is considered valid if the following conditions are satisfied:\n\n The first hold in the route is located on the very bottom level (row $n$);\n\n The last hold in the route is located on the very top level (row $1$);\n\n Each subsequent hold is not lower than the previous one;\n\n At least one hold is used on each level (i.e., in every row of the rectangle);\n\n At most two holds are used on each level (since Igor has only two hands);\n\n Igor can reach from the current hold to the next one if the distance between the centers of the corresponding sections does not exceed Igor's arm span.\n\nIgor's arm span is $d$, which means he can move from one hold to another if the Euclidean distance between the centers of the corresponding segments does not exceed $d$. The distance between sections ($i_1, j_1$) and ($i_2, j_2$) is given by $\\sqrt{(i_1 - i_2) ^ 2 + (j_1 - j_2) ^ 2}$.\n\nCalculate the number of different valid routes. Two routes are considered different if they differ in the list of holds used or in the order in which these holds are visited.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\leq t \\leq 10^3$). The description of the test cases follows.\n\nThe first line of each test case contains three integers $n$, $m$, $d$ ($2 \\leq n \\leq 2000$, $1 \\leq m, d \\leq 2000$).\n\nEach of the following $n$ lines contains $m$ characters — the description of the corresponding level of the mountain. The symbol '#' represents an empty section, and the symbol 'X' represents a section with a hold. The levels are described from top to bottom.\n\nIt is guaranteed that the sum of $n \\cdot m$ over all test cases does not exceed $4 \\cdot 10^6$.",
+    "output_spec": "For each test case, output the number of different routes modulo $998244353$.",
+    "note": "Possible routes in the first case:\n\nIn the second example, Igor's arm span has become larger, so new routes are available to him, for example this one:\n\nIn the third example, there are no holds on the lower level, so there are no correct routes.",
+    "samples": [
+      {
+        "input": "3\n3 4 1\nXX#X\n#XX#\n#X#X\n3 4 2\nXX#X\n#XX#\n#X#X\n3 1 3\nX\nX\n#",
+        "output": "\n2\n60\n0"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 141047,
+    "url": "https://codeforces.com/blog/entry/141047",
+    "tutorial": "Let's use the dynamic programming method $dp[i][j][f]$:\n\n $i$ — row number.\n\n $j$ — column number.\n\n $f = 0$ means that exactly one hold has already been selected in the current row, and a second one can still be added (since there are a maximum of two holds per level).\n\n $f = 1$ means that two holds have already been used in this level.\n\n $dp[i][j][f]$ — the number of ways to construct a correct route starting with a hold in cell $(i,j)$, given that $f + 1$ holds are already used in row $i$.\n\nFor a cell $(i,j)$ with a hold (i.e. $s[i][j] =$ 'X'):\n\n At the lower level, i.e. $i = n - 1$, this hold can serve as the start of the route, so all such $dp[n - 1][j][f] = 1$.\n\n If one hold $f = 0$ is already selected at the current level, then you can take the second hold at the same level at a distance of no more than $d$, i.e. $dp[i][j][f]= dp[i][j][f] + \\sum_{y = j - d}^{j + d}{dp[i][y][1]} - dp[i][j][1]$ (let's not forget to exclude the point $(i, j)$ from the sum, so as not to count it twice).\n\n The transition to the next level (if possible) $i$ in $i+1$ takes a vertical distance equal to $1$. So the range of $j$ for the transition will be $[j - dx, j + dx]$, where $dx = \\lfloor \\sqrt{d^2 - 1^2} \\rfloor = d - 1$\n$dp[i][j][f]= dp[i][j][f] + \\sum_{y = j - dx}^{j + dx}{dp[i + 1][y][0]}$\n\nThis solution recalculates each state in $O(d)$, to make it more efficient — you need to use prefix sums.\n\n$O(n \\cdot m)$.",
+    "solution_code": [
+      "#include <iostream>\n\nusing namespace std;\n\nconst int MAXN = 2010;\nconst int MOD = 998244353;\n\nstring s[MAXN];\nint dp[MAXN][MAXN][2];\nlong long sdp[MAXN][MAXN][2];\n\nint n, m, d;\n\nlong long getsum(int x, int y1, int y2, int f) {\n    long long res = sdp[x][y2][f];\n    if (y1) res -= sdp[x][y1 - 1][f];\n    return res;\n}\n\nint get(int i, int j, int f) {\n    if (s[i][j] != 'X') return 0;\n    long long res = 0;\n    if (i == n - 1) res++;\n\n    if (!f) {\n        res += getsum(i, max(0, j - d),\n                      min(m - 1, j + d), 1);\n        res -= dp[i][j][1];\n    }\n\n    if (i < n - 1) {\n        res += getsum(i + 1, max(0, j - d + 1),\n                      min(m - 1, j + d - 1), 0);\n    }\n\n    return res % MOD;\n}\n\nvoid solve() {\n\n    cin >> n >> m >> d;\n    for (int i = 0; i < n; i++) {\n        cin >> s[i];\n    }\n    for (int i = n - 1; i >= 0; i--) {\n        for (int f = 1; f >= 0; f--) {\n            for (int j = 0; j < m; j++) {\n                sdp[i][j][f] = dp[i][j][f] = get(i, j, f);\n            }\n            for (int j = 1; j < m; j++) {\n                sdp[i][j][f] += sdp[i][j - 1][f];\n            }\n        }\n    }\n\n    long long ans = 0;\n    for (int j = 0; j < m; j++) {\n        ans += dp[0][j][0];\n    }\n\n    cout << ans % MOD << endl;\n\n}\n\nint main() {\n    int t;\n    cin >> t;\n    while (t--) {\n        solve();\n    }\n}"
+    ]
+  }
+}

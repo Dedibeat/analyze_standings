@@ -1,0 +1,47 @@
+{
+  "contest_id": 2071,
+  "index": "C",
+  "name": "Trapmigiano Reggiano",
+  "rating": 1700,
+  "tags": [
+    "constructive algorithms",
+    "data structures",
+    "dfs and similar",
+    "dp",
+    "greedy",
+    "sortings",
+    "trees"
+  ],
+  "points": 1500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2071C",
+  "url": "https://codeforces.com/problemset/problem/2071/C",
+  "contest_start_time": "2025-02-28T14:35:00+00:00",
+  "statement": {
+    "title": "C. Trapmigiano Reggiano",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "In an Italian village, a hungry mouse starts at vertex $\\textrm{st}$ on a given tree$^{\\text{∗}}$ with $n$ vertices.\n\nGiven a permutation $p$ of length $n$$^{\\text{†}}$, there are $n$ steps. For the $i$-th step:\n\n A tempting piece of Parmesan cheese appears at vertex $p_i$. If the mouse is currently at vertex $p_i$, it will stay there and enjoy the moment. Otherwise, it will move along the simple path to vertex $p_i$ by one edge.\n\nYour task is to find such a permutation so that, after all $n$ steps, the mouse inevitably arrives at vertex $\\textrm{en}$, where a trap awaits.\n\nNote that the mouse must arrive at $\\textrm{en}$ after all $n$ steps, though it may pass through $\\textrm{en}$ earlier during the process.\n\n$^{\\text{∗}}$A tree is a connected graph without cycles.\n\n$^{\\text{†}}$A permutation of length $n$ is an array consisting of $n$ distinct integers from $1$ to $n$ in arbitrary order. For example, $[2,3,1,5,4]$ is a permutation, but $[1,2,2]$ is not a permutation ($2$ appears twice in the array), and $[1,3,4]$ is also not a permutation ($n=3$ but there is $4$ in the array).",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 10^4$). The description of the test cases follows.\n\nThe first line of each test case contains three integers $n$, $\\textrm{st}$, and $\\textrm{en}$ ($1 \\le n \\le 10^5$; $1 \\le \\textrm{st}, \\textrm{en} \\le n$) — the number of vertices of the tree, the starting vertex, and the trap vertex.\n\nEach of the next $n - 1$ lines contains two integers $u$ and $v$ ($1 \\le u, v \\le n$, $u \\neq v$) — the indices of the vertices connected by an edge.\n\nIt is guaranteed that the given edges form a tree.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $10^5$.",
+    "output_spec": "For each test case:\n\n If no such permutation exists, output $-1$.\n\n Otherwise, output $n$ integers $p_1, p_2, \\ldots, p_n$, representing the order in which the cheese will appear at the vertices, ensuring the mouse will eventually be caught at vertex $\\textrm{en}$.\n\nIf there are multiple solutions, print any of them.",
+    "note": "In the first test case, there is only one permutation with length $n = 1$ that is $p = [1]$, which successfully catches the mouse:\n\n$$\\textrm{st} = 1 \\overset{p_1 = 1}{\\xrightarrow{\\hspace{1.3cm}}} 1 = \\textrm{en}.$$\n\nIn the second test case, one possible permutation with length $n = 2$ is $p = [1, 2]$:\n\n$$\\textrm{st} = 1 \\overset{p_1 = 1}{\\xrightarrow{\\hspace{1.3cm}}} 1 \\overset{p_2 = 2}{\\xrightarrow{\\hspace{1.3cm}}} 2 = \\textrm{en}.$$\n\nIn the third test case, one possible permutation with length $n = 3$ is $p = [3, 1, 2]$:\n\n$$\\textrm{st} = 2 \\overset{p_1 = 3}{\\xrightarrow{\\hspace{1.3cm}}} 3 \\overset{p_2 = 1}{\\xrightarrow{\\hspace{1.3cm}}} 2 \\overset{p_3 = 2}{\\xrightarrow{\\hspace{1.3cm}}} 2 = \\textrm{en}.$$",
+    "samples": [
+      {
+        "input": "4\n1 1 1\n2 1 2\n1 2\n3 2 2\n1 2\n2 3\n6 1 4\n1 2\n1 3\n4 5\n5 6\n1 4",
+        "output": "\n1 \n1 2 \n3 1 2 \n1 4 3 2 6 5"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 140115,
+    "url": "https://codeforces.com/blog/entry/140115",
+    "tutorial": "2071C - Trapmigiano Reggiano\n\nHints\n\nHint 1\n\nRoot the tree at vertex $\\textrm{en}$. What observations can you make?\n\nHint 2\n\nCan the cheese be placed at the vertices in a specific sequence that prevents the mouse from moving farther away from vertex $\\textrm{en}$?\n\nSolution\n\nFirst, root the tree at vertex $\\textrm{en}$ and approach it step by step. Observe that after processing all vertices at the largest depth $n−1$, the mouse’s current depth cannot exceed $n−1$. By repeating this process for the next largest depth $n−2$, the mouse’s depth will inevitably become $n−2$ or less. Continuing this way, we process vertices in descending order of depth until we reach the root, achieving the desired result.\n\nThe overall time complexity is: $O(n)$.\n\nCode\n\nRate the Problem\n\nAmazing problem:\n\nGood problem:\n\nAverage problem:\n\nBad problem:\n\nDidn't solve:",
+    "solution_code": [
+      "#include<bits/stdc++.h>\nusing namespace std;\nvoid solve() {\n    int n, s, e;\n    cin >> n >> s >> e;\n    vector adj(n + 1, vector<int> ());\n    for (int i = 1; i < n; i++) {\n        int u, v;\n        cin >> u >> v;\n        adj[u].push_back(v), adj[v].push_back(u);\n    }\n    vector dis(n + 1, vector<int> ());\n    vector<int> d(n + 1);\n    auto dfs = [&](auto &&self, int v, int par) -> void {\n        d[v] = d[par] + 1;\n        dis[d[v]].push_back(v);\n        for (int u: adj[v]) {\n            if (u == par) continue;\n            self(self, u, v);\n        }\n    };\n    dfs(dfs, e, 0);\n    for (int i = n; i >= 1; i--) {\n        for (int j: dis[i]) {\n            cout << j << \" \";\n        }\n    }\n    cout << \"\\n\";\n}\nint main() {\n    ios::sync_with_stdio(0), cin.tie(0);\n    int tt = 1;\n    cin >> tt;\n    while (tt--) {\n        solve();\n    }\n}"
+    ]
+  }
+}

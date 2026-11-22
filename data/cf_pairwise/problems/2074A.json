@@ -1,0 +1,42 @@
+{
+  "contest_id": 2074,
+  "index": "A",
+  "name": "Draw a Square",
+  "rating": 800,
+  "tags": [
+    "geometry",
+    "implementation"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2074A",
+  "url": "https://codeforces.com/problemset/problem/2074/A",
+  "contest_start_time": "2025-03-11T14:35:00+00:00",
+  "statement": {
+    "title": "A. Draw a Square",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "The pink soldiers have given you $4$ distinct points on the plane. The $4$ points' coordinates are $(-l,0)$, $(r,0)$, $(0,-d)$, $(0,u)$ correspondingly, where $l$, $r$, $d$, $u$ are positive integers.\n  In the diagram, a square is drawn by connecting the four points $L$, $R$, $D$, $U$.\nPlease determine if it is possible to draw a square$^{\\text{∗}}$ with the given points as its vertices.\n\n$^{\\text{∗}}$A square is defined as a polygon consisting of $4$ vertices, of which all sides have equal length and all inner angles are equal. No two edges of the polygon may intersect each other.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 10^4$). The description of the test cases follows.\n\nThe first line of each test case contains four integers $l$, $r$, $d$, $u$ ($1 \\le l,r,d,u \\le 10$).",
+    "output_spec": "For each test case, if you can draw a square using the four points, output \"Yes\". Otherwise, output \"No\".\n\nYou can output the answer in any case. For example, the strings \"yEs\", \"yes\", and \"YES\" will also be recognized as positive responses.",
+    "note": "On the first test case, the four given points form a square, so the answer is \"Yes\".\n\nOn the second test case, the four given points do not form a square, so the answer is \"No\".",
+    "samples": [
+      {
+        "input": "2\n2 2 2 2\n1 2 3 4",
+        "output": "\nYes\nNo"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 140540,
+    "url": "https://codeforces.com/blog/entry/140540",
+    "tutorial": "For the given four points to make a square, we can see that the following must hold:\n\n $l$, $r$, $d$, $u$ must all be equal.\n\nThe proof is left as a practice for the reader, but generally, it can be proved easily by seeing that the square is both a rhombus and a rectangle.\n\nThe problem is solved in $\\mathcal{O}(1)$ per test case.",
+    "solution_code": [
+      "for i in range(int(input())):\n    l,r,d,u=map(int,input().split())\n    if l==r==d==u:\n        print(\"Yes\")\n    else:\n        print(\"No\")"
+    ]
+  }
+}

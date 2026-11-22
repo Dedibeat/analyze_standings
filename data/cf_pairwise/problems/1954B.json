@@ -1,0 +1,42 @@
+{
+  "contest_id": 1954,
+  "index": "B",
+  "name": "Make It Ugly",
+  "rating": 1200,
+  "tags": [
+    "implementation",
+    "math"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1954B",
+  "url": "https://codeforces.com/problemset/problem/1954/B",
+  "contest_start_time": "2024-04-12T14:35:00+00:00",
+  "statement": {
+    "title": "B. Make It Ugly",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Let's call an array $a$ beautiful if you can make all its elements the same by using the following operation an arbitrary number of times (possibly, zero):\n\n choose an index $i$ ($2 \\le i \\le |a| - 1$) such that $a_{i - 1} = a_{i + 1}$, and replace $a_i$ with $a_{i - 1}$.\n\nYou are given a beautiful array $a_1, a_2, \\dots, a_n$. What is the minimum number of elements you have to remove from it in order for it to stop being beautiful? Swapping elements is prohibited. If it is impossible to do so, then output -1.",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases.\n\nThe first line of each test case contains a single integer $n$ ($1 \\le n \\le 3 \\cdot 10^5$).\n\nThe second line contains $n$ integers $a_1, a_2, \\dots, a_n$ ($1 \\le a_i \\le n$).\n\nAdditional constraints on the input:\n\n in every test case, the given array $a$ is beautiful;\n\n the sum of $n$ over all test cases does not exceed $3 \\cdot 10^5$.",
+    "output_spec": "For each test case, output a single integer — the minimum number of elements you have to remove from the array $a$ in order for it to stop being beautiful. If it is impossible, then output -1.",
+    "note": "In the first testcase, it is impossible to modify the array in such a way that it stops being beautiful. An array consisting of identical numbers will remain beautiful no matter how many numbers we remove from it.\n\nIn the second testcase, you can remove the number at the index $5$, for example.\n\nThe resulting array will be $[1, 2, 1, 2]$. Let's check if it is beautiful. Two operations are available:\n\n Choose $i = 2$: the array becomes $[1, 1, 1, 2]$. No more operations can be applied to it, and the numbers are not all the same.\n\n Choose $i = 3$ instead: the array becomes $[1, 2, 2, 2]$. No more operations can be applied to it either, and the numbers are still not all the same.\n\nThus, the array $[1, 2, 1, 2]$ is not beautiful.\n\nIn the fourth testcase, you can remove the first three elements, for example. The resulting array $[5, 3, 3, 3]$ is not beautiful.",
+    "samples": [
+      {
+        "input": "4\n3\n2 2 2\n5\n1 2 1 2 1\n1\n1\n7\n3 3 3 5 3 3 3",
+        "output": "\n-1\n1\n-1\n3"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 128421,
+    "url": "https://codeforces.com/blog/entry/128421",
+    "tutorial": "As given in the problem statement, the definition of a beautiful array is not very interesting to us, since checking the beauty of an array is quite complex. Let's try to simplify it.\n\nFirst of all, the first and last elements will never be changed, as it is impossible to choose such $i$ for operations. If they are different, then the array is definitely not beautiful. Moreover, if the array is beautiful, then all its elements at the end will be equal to the first and the last elements.\n\nThe second idea is a bit more complicated. Notice that each element can be changed at most once. Consider an arbitrary operation. We choose some $i$ for which $a_{i - 1} = a_{i + 1}$, and change $a_i$ to $a_{i - 1}$. Now both $a_{i - 1}$ and $a_{i + 1}$ will always remain equal to their current values, because in any operation involving them, $a_i$ will also be involved. This means that $a_i$ will also remain equal to the new value.\n\nThe next idea is as follows. We know what all the elements should be equal to in the end. This means that we need to apply operations to all elements that are not equal to this value. According to the previous idea, this is possible if and only if there are no two consecutive numbers in the array that are not equal to this value. The sufficiency of this condition is obvious, and the necessity is left as an exercise to the reader.\n\nIn other words, the check looks like this: $a_1 = a_n$, and $a_i = a_1$ or $a_{i + 1} = a_1$ (or both are equal) for all $i$.\n\nWhat elements should be removed so that the check does not pass? There are two options: break the first or second condition. So, you can do the following:\n\n remove the entire prefix of numbers equal to $a_1$;\n\n remove the entire suffix of numbers equal to $a_1$ (or $a_n$ — they are equal to each other, since the given array is beautiful);\n\n choose two numbers that are not equal to $a_1$, and remove all the numbers between them, so that these two numbers become adjacent.\n\nThe third condition can be simplified. If other numbers not equal to $a_1$ are encountered between the selected numbers, then another pair can be chosen, for which fewer numbers have to be removed. Therefore, it is only optimal to choose a pair for which all the numbers between them are equal to $a_1$.\n\nThen the solution is as follows. Find the shortest block of numbers equal to $a_1$. Remove it from the array. It can be at the prefix or at the suffix — then the first condition will be broken. Or it can be somewhere in the middle — then the second condition will be broken.\n\nTo find such a block, you can go through the array from left to right, maintaining the position of the previous element not equal to $a_1$. If the current element is not equal to $a_1$, update the answer with the difference between the saved and current positions, and update the saved position.\n\nThe only case when the answer is -1 is when all the elements of the array are the same. Otherwise, it is always possible to make the array not beautiful.\n\nOverall complexity: $O(n)$ for each testcase.",
+    "solution_code": [
+      "for _ in range(int(input())):\n    n = int(input())\n    a = list(map(int, input().split()))\n    lst = -1\n    ans = n\n    for i in range(n):\n        if a[i] != a[0]:\n            ans = min(ans, i - lst - 1)\n            lst = i\n    ans = min(ans, n - lst - 1)\n    if ans == n:\n        print(-1)\n    else:\n        print(ans)"
+    ]
+  }
+}

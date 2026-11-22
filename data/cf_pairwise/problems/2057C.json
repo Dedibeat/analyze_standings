@@ -1,0 +1,44 @@
+{
+  "contest_id": 2057,
+  "index": "C",
+  "name": "Trip to the Olympiad",
+  "rating": 1500,
+  "tags": [
+    "bitmasks",
+    "constructive algorithms",
+    "greedy",
+    "math"
+  ],
+  "points": 1500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2057C",
+  "url": "https://codeforces.com/problemset/problem/2057/C",
+  "contest_start_time": "2025-01-04T14:35:00+00:00",
+  "statement": {
+    "title": "C. Trip to the Olympiad",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "In the upcoming year, there will be many team olympiads, so the teachers of \"T-generation\" need to assemble a team of three pupils to participate in them. Any three pupils will show a worthy result in any team olympiad. But winning the olympiad is only half the battle; first, you need to get there...\n\nEach pupil has an independence level, expressed as an integer. In \"T-generation\", there is exactly one student with each independence levels from $l$ to $r$, inclusive. For a team of three pupils with independence levels $a$, $b$, and $c$, the value of their team independence is equal to $(a \\oplus b) + (b \\oplus c) + (a \\oplus c)$, where $\\oplus$ denotes the bitwise XOR operation.\n\nYour task is to choose any trio of students with the maximum possible team independence.",
+    "input_spec": "Each test contains multiple test cases. The first line contains a single integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases. The description of the test cases follows.\n\nThe first line of each test case set contains two integers $l$ and $r$ ($0 \\le l, r  \\lt  2^{30}$, $r - l  \\gt  1$) — the minimum and maximum independence levels of the students.",
+    "output_spec": "For each test case set, output three pairwise distinct integers $a, b$, and $c$, such that $l \\le a, b, c \\le r$ and the value of the expression $(a \\oplus b) + (b \\oplus c) + (a \\oplus c)$ is maximized. If there are multiple triples with the maximum value, any of them can be output.",
+    "note": "In the first test case, the only suitable triplet of numbers ($a, b, c$) (up to permutation) is ($0, 1, 2$).\n\nIn the second test case, one of the suitable triplets is ($8, 7, 1$), where $(8 \\oplus 7) + (7 \\oplus 1) + (8 \\oplus 1) = 15 + 6 + 9 = 30$. It can be shown that $30$ is the maximum possible value of $(a \\oplus b) + (b \\oplus c) + (a \\oplus c)$ for $0 \\le a, b, c \\le 8$.",
+    "samples": [
+      {
+        "input": "8\n0 2\n0 8\n1 3\n6 22\n128 137\n69 98\n115 127\n0 1073741823",
+        "output": "\n1 2 0\n8 7 1\n2 1 3\n7 16 11\n134 132 137\n98 85 76\n123 121 118\n965321865 375544086 12551794"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 138119,
+    "url": "https://codeforces.com/blog/entry/138119",
+    "tutorial": "Let's take a look at the $i$-th bit. If it appears in all numbers or in none, it contributes nothing to the answer; however, if it appears in one or two numbers, it adds $2^{i + 1}$ to the answer.\n\nTherefore, let's examine the most significant bit, let's say the $k$-th bit, which differs in the numbers $l$ and $r$, and note that the more significant bits do not affect the outcome, so the answer cannot exceed $T = 2 \\cdot (1 + 2 + \\ldots + 2^k)$.\n\nThus, let $x$ be the only number that is divisible by $2^k$ in the range $[l, r]$. Take $y = x - 1$ and $z$ as any number in the range $[l, r]$ that is neither $x$ nor $y$. Notice that by choosing such a triplet of numbers, the value of the expression $(x \\oplus y) + (x \\oplus z) + (y \\oplus z)$ is exactly equal to $T$.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n \nusing i64 = long long;\n \nvoid solve() {\n    int l, r;\n    std::cin >> l >> r;\n    int k = 31 - __builtin_clz(l ^ r);\n    int a = l | ((1 << k) - 1), b = a + 1, c = (a == l ? r : l);\n    std::cout << a << \" \" << b << \" \" << c << \"\\n\";\n}\n \nsigned main() {\n    std::ios::sync_with_stdio(false);\n    std::cin.tie(nullptr);\n \n    int t = 1;\n    std::cin >> t;\n \n    while (t--) {\n        solve();\n    }\n}"
+    ]
+  }
+}

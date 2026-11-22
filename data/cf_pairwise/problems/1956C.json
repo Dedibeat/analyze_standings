@@ -1,0 +1,46 @@
+{
+  "contest_id": 1956,
+  "index": "C",
+  "name": "Nene's Magical Matrix",
+  "rating": 1600,
+  "tags": [
+    "constructive algorithms",
+    "greedy",
+    "math"
+  ],
+  "points": 1500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1956C",
+  "url": "https://codeforces.com/problemset/problem/1956/C",
+  "contest_start_time": "2024-04-13T14:35:00+00:00",
+  "statement": {
+    "title": "C. Nene's Magical Matrix",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "The magical girl Nene has an $n\\times n$ matrix $a$ filled with zeroes. The $j$-th element of the $i$-th row of matrix $a$ is denoted as $a_{i, j}$.\n\nShe can perform operations of the following two types with this matrix:\n\n Type $1$ operation: choose an integer $i$ between $1$ and $n$ and a permutation $p_1, p_2, \\ldots, p_n$ of integers from $1$ to $n$. Assign $a_{i, j}:=p_j$ for all $1 \\le j \\le n$ simultaneously.\n\n Type $2$ operation: choose an integer $i$ between $1$ and $n$ and a permutation $p_1, p_2, \\ldots, p_n$ of integers from $1$ to $n$. Assign $a_{j, i}:=p_j$ for all $1 \\le j \\le n$ simultaneously.\n\nNene wants to maximize the sum of all the numbers in the matrix $\\sum\\limits_{i=1}^{n}\\sum\\limits_{j=1}^{n}a_{i,j}$. She asks you to find the way to perform the operations so that this sum is maximized. As she doesn't want to make too many operations, you should provide a solution with no more than $2n$ operations.\n\nA permutation of length $n$ is an array consisting of $n$ distinct integers from $1$ to $n$ in arbitrary order. For example, $[2,3,1,5,4]$ is a permutation, but $[1,2,2]$ is not a permutation ($2$ appears twice in the array), and $[1,3,4]$ is also not a permutation ($n=3$ but there is $4$ in the array).",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 500$). The description of test cases follows.\n\nThe only line of each test case contains a single integer $n$ ($1 \\le n \\le 500$) — the size of the matrix $a$.\n\nIt is guaranteed that the sum of $n^2$ over all test cases does not exceed $5 \\cdot 10^5$.",
+    "output_spec": "For each test case, in the first line output two integers $s$ and $m$ ($0\\leq m\\leq 2n$) — the maximum sum of the numbers in the matrix and the number of operations in your solution.\n\nIn the $k$-th of the next $m$ lines output the description of the $k$-th operation:\n\n an integer $c$ ($c \\in \\{1, 2\\}$) — the type of the $k$-th operation;\n\n an integer $i$ ($1 \\le i \\le n$) — the row or the column the $k$-th operation is applied to;\n\n a permutation $p_1, p_2, \\ldots, p_n$ of integers from $1$ to $n$ — the permutation used in the $k$-th operation.\n\nNote that you don't need to minimize the number of operations used, you only should use no more than $2n$ operations. It can be shown that the maximum possible sum can always be obtained in no more than $2n$ operations.",
+    "note": "In the first test case, the maximum sum $s=1$ can be obtained in $1$ operation by setting $a_{1, 1}:=1$.\n\nIn the second test case, the maximum sum $s=7$ can be obtained in $3$ operations as follows:\n\nIt can be shown that it is impossible to make the sum of the numbers in the matrix larger than $7$.",
+    "samples": [
+      {
+        "input": "2\n1\n2",
+        "output": "\n1 1\n1 1 1\n7 3\n1 1 1 2\n1 2 1 2\n2 1 1 2"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 128426,
+    "url": "https://codeforces.com/blog/entry/128426",
+    "tutorial": "C. Nene's Magical Matrix\n\nIdea: Otomachi_Una\n\nHint\n\nWhen $n=3$, the optimal matrix is the following:\n\nTutorial\n\nThe optimal matrix would be:\n\nConstruction method:\n\nThis takes exactly $2n$ operations.\n\nProof\n\nFor the final matrix, we define $f(x)$ as the number of elements greater or equal to $x$. The sum of all elements in the matrix is $\\sum_{i=1}^n f(i)$ because an element with value $x$ will be counted $x$ times in the formula before.\n\nNow, we proof that $f(x) \\le n^2-(x-1)^2$:\n\nLet's rewrite the problem to make it a little simpler:\n\nYou have an $n\\times n$ matrix. In each operation, you can paint exactly $x-1$ cells white and $n-(x-1)$ cells black in a row or a column. Proof that there will be at most $n^2-(x-1)^2$ black cells.\n\nTry to strengthen the conclusion by stating that:\n\nFor any matrix of size $n\\times m$, each operation can paint a row into $x$ white cells and $m-x$ black cells, or a column into $y$ white cells and $n-y$ black cells. No matter how we paint, the final matrix will have at most $nm-xy$ black cells.\n\nWe will prove this by induction.\n\nIf $x=m$ or $y=n$, the conclusion holds.\n\nOtherwise, if the last operation is to paint a row, then this row has exactly $m-x$ black cells. And, by induction, other rows will contain at most $(n-1)m-x(y-1)$ black cells. Painting a column in the last step is similar.\n\nThen, we have proven the conclusion above.\n\nSince the construction above maximizes each $f(x)$, it is the optimal answer.\n\nSolution",
+    "solution_code": [
+      "1 2 3\n2 2 3\n3 3 3",
+      "1 2 3 ... n\n2 2 3 ... n\n3 3 3 ... n\n..... ... n\nn n n n n n",
+      "for i in [n, n-1, ..., 1]:\n  set the i-th column to [1, 2, ..., n];\n  set the i-th row to [1, 2, ..., n];",
+      "#include<bits/stdc++.h>\nusing namespace std;\n#define ll long long\n#define MP make_pair\nmt19937 rnd(time(0));\nvoid solve(){\n\tint n;cin>>n;\n\tint ans=0;\n\tfor(int i=1;i<=n;i++) ans+=(2*i-1)*i;\n\tcout<<ans<<' '<<2*n<<endl;\n\tfor(int i=n;i>=1;i--){\n\t\tcout<<\"1 \"<<i<<' ';\n\t\tfor(int j=1;j<=n;j++) cout<<j<<' ';cout<<endl;\n\t\tcout<<\"2 \"<<i<<' ';\n\t\tfor(int j=1;j<=n;j++) cout<<j<<' ';cout<<endl;\n\t}\n}\nint main(){\n\tios::sync_with_stdio(false);\n\tint _;cin>>_;\n\twhile(_--) solve(); \n}"
+    ]
+  }
+}

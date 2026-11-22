@@ -1,0 +1,41 @@
+{
+  "contest_id": 1972,
+  "index": "B",
+  "name": "Coin Games",
+  "rating": 900,
+  "tags": [
+    "games"
+  ],
+  "points": 750.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1972B",
+  "url": "https://codeforces.com/problemset/problem/1972/B",
+  "contest_start_time": "2024-04-30T14:35:00+00:00",
+  "statement": {
+    "title": "B. Coin Games",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "There are $n$ coins on the table forming a circle, and each coin is either facing up or facing down. Alice and Bob take turns to play the following game, and Alice goes first.\n\nIn each operation, the player chooses a facing-up coin, removes the coin, and flips the two coins that are adjacent to it. If (before the operation) there are only two coins left, then one will be removed and the other won't be flipped (as it would be flipped twice). If (before the operation) there is only one coin left, no coins will be flipped. If (before the operation) there are no facing-up coins, the player loses.\n\nDecide who will win the game if they both play optimally. It can be proved that the game will end in a finite number of operations, and one of them will win.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1\\le t\\le 100$). The description of the test cases follows.\n\nThe first line of each test case contains only one positive integer $n$ ($1 \\leq n \\leq 100$), representing the number of the coins.\n\nA string $s$ of length $n$ follows on the second line of each test case, containing only \"U\" and \"D\", representing that each coin is facing up or facing down.",
+    "output_spec": "For each test case, print \"YES\" if Alice will win the game, and \"NO\" otherwise.\n\nYou can output the answer in any case (upper or lower). For example, the strings \"yEs\", \"yes\", \"Yes\", and \"YES\" will be recognized as positive responses.",
+    "note": "In the first test case, the game may go as follows.\n\n Alice chooses the first coin and $s$ becomes \"DDUU\".\n\n Bob chooses the last coin and $s$ becomes \"UDD\".\n\n Alice chooses the first coin and $s$ becomes \"UU\".\n\n Bob chooses the first coin and $s$ becomes \"U\".\n\n Alice chooses the only coin and $s$ becomes empty.\n\n Bob can't choose any coin now, and he loses the game.\n\nIt can be proved that Bob will always lose if they both play optimally.",
+    "samples": [
+      {
+        "input": "3\n5\nUUDUD\n5\nUDDUD\n2\nUU",
+        "output": "\nYES\nNO\nNO"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 129027,
+    "url": "https://codeforces.com/blog/entry/129027",
+    "tutorial": "It can be proved that Alice will win the game if and only if the number of facing-up coins is odd.\n\nTime complexity: $\\mathcal O(n)$ for each case.\n\nProof:\n\nConsider all possible operations:\n\n ...UUU... -> ...DD...: The number of U decreases by $3$.\n\n ...UUD... -> ...DU...: The number of U decreases by $1$.\n\n ...DUU... -> ...UD...: The number of U decreases by $1$.\n\n ...DUD... -> ...UU...: The number of U increases by $1$.\n\nIt can be seen that the parity always changes.\n\nIt's obvious that if the number of U is equal to $0$, the player loses because there aren't any available operations. So Alice wins if and only if the number of U is odd.",
+    "solution_code": [
+      "//By: OIer rui_er\n#include <bits/stdc++.h>\n#define rep(x, y, z) for(int x = (y); x <= (z); ++x)\n#define per(x, y, z) for(int x = (y); x >= (z); --x)\n#define endl '\\n'\nusing namespace std;\ntypedef long long ll;\n \nint T, n;\nstring s;\n \nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(0); cout.tie(0);\n    for(cin >> T; T; --T) {\n        cin >> n >> s;\n        int cntU = 0;\n        for(char c : s) if(c == 'U') ++cntU;\n        if(cntU & 1) cout << \"YES\" << endl;\n        else cout << \"NO\" << endl;\n    }\n    return 0;\n}"
+    ]
+  }
+}

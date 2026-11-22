@@ -1,0 +1,40 @@
+{
+  "contest_id": 2068,
+  "index": "J",
+  "name": "The Ultimate Wine Tasting Event",
+  "rating": 2000,
+  "tags": [
+    "combinatorics",
+    "greedy"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2068J",
+  "url": "https://codeforces.com/problemset/problem/2068/J",
+  "contest_start_time": "2025-03-02T10:35:00+00:00",
+  "statement": {
+    "title": "J. The Ultimate Wine Tasting Event",
+    "time_limit": "2 seconds",
+    "memory_limit": "1024 megabytes",
+    "legend": "Rumors of the excellence of Gabriella's wine tasting events have toured the world and made it to the headlines of prestigious wine magazines. Now, she has been asked to organize an event at the EUC 2025!\n\nThis time she selected $2n$ bottles of wine, of which exactly $n$ are of white wine, and exactly $n$ of red wine. She arranged them in a line as usual, in a predetermined order described by a string $s$ of length $2n$: for $1 \\le i \\le 2n$, the $i$-th bottle from the left is white wine if $s_i = \\texttt{W}$ and red wine if $s_i = \\texttt{R}$.\n\nTo spice things up for the attendees (which include EUC contestants), Gabriella came up with the following wine-themed problem:\n\nConsider a way of dividing the $2n$ bottles into two disjoint subsets, each containing $n$ bottles. Then, for every $1 \\le i \\le n$, swap the $i$-th bottle in the first subset (from the left) and the $i$-th bottle of the second subset (also from the left). Is it possible to choose the subsets so that, after this operation is done exactly once, the white wines occupy the first $n$ positions?",
+    "input_spec": "The first line contains an integer $t$ ($1 \\le t \\le 500$) — the number of test cases. The descriptions of the $t$ test cases follow.\n\nThe first line of each test case contains an integer $n$ ($1 \\le n \\le 100$) — where $2n$ is the total number of bottles.\n\nThe second line of each test case contains a string $s$ of length $2n$, describing the bottle arrangement — the $i$-th character of $s$ ($1 \\le i \\le 2n$) is $\\texttt{W}$ for a white wine and $\\texttt{R}$ for a red wine.\n\nIt is guaranteed that $s$ contains exactly $n$ $\\texttt{W}$'s and $n$ $\\texttt{R}$'s.",
+    "output_spec": "For each test case, print $\\texttt{YES}$ if it is possible to divide the bottles as explained in the statement. Otherwise, print $\\texttt{NO}$.",
+    "note": "In the first test case, we can make one subset out of the bottles at positions $1$, $2$, $3$ and $7$ (which are, respectively: white, red, red, red) and the other subset out of the bottles at positions $4$, $5$, $6$, $8$ (which are, respectively: white, white, white, red). We will then swap pairs $(1, 4)$, $(2, 5)$, $(3, 6)$ and $(7, 8)$, after which the white wines will occupy the first $4$ positions, and the red wines the last $4$ positions.\n\nIn the second test case, there is only one possible way to form the subsets: one with the first bottle, and one with the second bottle. After swapping, the resulting arrangement is $\\texttt{RW}$, therefore there is no solution.",
+    "samples": [
+      {
+        "input": "3\n4\nWRRWWWRR\n1\nWR\n20\nWWWWRRWRRRRRWRRWRWRRWRRWWWWWWWRWWRWWRRRR",
+        "output": "\nYES\nNO\nYES"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 140239,
+    "url": "https://codeforces.com/blog/entry/140239",
+    "tutorial": "We will find a simple necessary and sufficient condition on the string $s$ for the operation to be successful. Then, it will be trivial to check whether this condition is satisfied.\n\nFirst, suppose that it is possible to rearrange the bottles as described in the statement. That is, there esist two subsets $A = \\{a_1, \\, \\dots, \\, a_n\\}$ and $B = \\{b_1, \\, \\, \\dots, \\, b_n\\}$ of $\\{1, \\, 2, \\, \\dots, \\, 2n\\}$, each of size $n$ and disjoint, such that swapping $s_{a_i}$ and $s_{b_i}$ (assuming the elements are sorted in each subset) results in the string $\\texttt{WW} \\dots \\texttt{WWRR} \\dots \\texttt{RR}$.\n\nLet $h$ be the last index such that $a_h \\le n$, and similarly let $k$ be the last index such that $b_k \\le n$. If either of them do not exist, set it equal to $0$. Note that, by definition, $h + k = n$. Modulo swapping $A$ and $B$, we can assume that $h \\le k$. Then, upon swapping $a_i$ with $b_i$ for $1 \\le i \\le n$, all the bottles at indices $a_1, \\, \\dots, \\, a_h$ will occupy positions among the leftmost $n$, which means that $s_{a_i} = \\texttt{W}$ for all $1 \\le i \\le h$. Also, after swapping, all bottles at indices $b_1, \\, \\dots, \\, b_h$ will occupy positions among the first $n$, and therefore $s_{b_i} = \\texttt{W}$ for $1 \\le i \\le h$. On the other hand, the bottles at indices $b_{h + 1}, \\, \\dots, \\, b_k$ will occupy positions greater than $n$, so that $s_{b_i} = \\texttt{R}$ for each $h + 1 \\le i \\le k$. This implies that, among the first $n$ bottles, the white ones are $2h$ and the red ones are $k - h = n - 2h$.\n\nFinally, consider the first $h$ bottles in the initial arrangement. Each of these belongs to either $\\{a_1, \\, \\dots, \\, a_h\\}$ or $\\{b_1, \\, \\dots, \\, b_h\\}$, and therefore, when swapped, it will end up in one of the first $n$ positions. This implies that $s_i = \\texttt{W}$ for $1 \\le i \\le h$.\n\nWe deduced that a necessary condition is: the number of white bottles in the first half is even, say $2h$, and the first $h$ bottles are white. Note that the number of red bottles in the second half is also $2h$ and, by the same argument, the last $h$ bottles have to be red.\n\nLet's now prove that this condition is also sufficient. We construct $A$ and $B$ as follows:\n\n $A$ contains the first $h$ positions (which are white wines), and the first $n - h$ positions with red wines.\n\n $B$ contains everything else, that is, all positions with white wines except the first $h$, and the last $h$ positions (with red wines).\n\nIt is easy to see that the operation of swapping $A$ and $B$ places all white wines in the first half and all red wines in the second half.\n\nChecking whether this condition is satisfied is trivial and can be done in time $O(n)$.\n\nRemark. Arrangements such as $\\texttt{WWRWWRRRRW}$ ($n = 5$), where only the \"first-half\" condition is satisfied, do not work. One needs to check that both the white wines in the first half as well as the red wines in the second half satisfy the condition.",
+    "solution_code": []
+  }
+}

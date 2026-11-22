@@ -1,0 +1,42 @@
+{
+  "contest_id": 1987,
+  "index": "C",
+  "name": "Basil's Garden",
+  "rating": 1200,
+  "tags": [
+    "dp",
+    "greedy"
+  ],
+  "points": 1000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1987C",
+  "url": "https://codeforces.com/problemset/problem/1987/C",
+  "contest_start_time": "2024-06-30T14:35:00+00:00",
+  "statement": {
+    "title": "C. Basil's Garden",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "There are $n$ flowers in a row, the $i$-th of them initially has a positive height of $h_i$ meters.\n\nEvery second, the wind will blow from the left, causing the height of some flowers to decrease.\n\nSpecifically, every second, for each $i$ from $1$ to $n$, in this order, the following happens:\n\n If $i = n$ or $h_i  \\gt  h_{i + 1}$, the value of $h_i$ changes to $\\max(0, h_i - 1)$.\n\nHow many seconds will pass before $h_i=0$ for all $1 \\le i \\le n$ for the first time?",
+    "input_spec": "Each test contains multiple test cases. The first line of input contains a single integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases. The description of the test cases follows.\n\nThe first line of each test case contains a single integer $n$ ($1 \\le n \\le 10^5$) — the number of flowers.\n\nThe second line of each test case contains $n$ integers $h_1, h_2, \\ldots, h_n$ ($1 \\le h_i \\le 10 ^ 9$) — the heights of the flowers.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $10^5$.",
+    "output_spec": "For each test case, output a single integer — the number of seconds that will pass before $h_i=0$ for all $1 \\le i \\le n$.",
+    "note": "In the first test case, the flower heights change as follows: $[1, 1, 2] \\rightarrow [1, 1, 1] \\rightarrow [1, 1, 0] \\rightarrow [1, 0, 0] \\rightarrow [0, 0, 0]$.\n\nIn the second test case, the flower heights change as follows: $[3, 1] \\rightarrow [2, 0] \\rightarrow [1, 0] \\rightarrow [0, 0]$.",
+    "samples": [
+      {
+        "input": "4\n3\n1 1 2\n2\n3 1\n1\n9\n5\n7 4 4 3 2",
+        "output": "\n4\n3\n9\n7"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 131053,
+    "url": "https://codeforces.com/blog/entry/131053",
+    "tutorial": "First, let's try to find when $h_{n}$ will first be equal to zero. The answer is clearly $h_{n}$.\n\nSuppose for some $2 \\le i \\le n$ we know that $h_{i}$ will first become equal to zero at time $t_{i}$ ($t_n = h_n$). If at some point in time, $h_{i-1}$ was equal to $h_{i}$ (at the start of the second and before they are both equal to zero), $t_{i-1}$ is equal to $t_{i} + 1$. Since after that point in time, if $h_{i}$ decreases, $h_{i-1}$ must decrease in the next second. If $h_{i-1}$ is never equal to $h_{i}$ (until they hit zero), $h_{i - 1}$ must always be strictly greater than $h_{i}$. This means that $h_{i-1}$ will keep decreasing every second until it hits zero, so $t_{i-1}$ is equal to $h_{i-1}$ in this case.\n\nExamples:\n\n The array $[2, 3, 1, 1, 1]$ changes as follows: $[2, \\color{red}{3}, 1, 1, \\color{red}{1}] \\rightarrow [2, \\color{red}{2}, 1, \\color{red}{1}, 0] \\rightarrow [\\color{red}{2}, 1, \\color{red}{1}, 0, 0] \\rightarrow$ $[1, \\color{red}{1}, 0, 0, 0] \\rightarrow [\\color{red}{1}, 0, 0, 0, 0] \\rightarrow [0, 0, 0, 0, 0]$. If we focus on the first two elements, they change as follows: $[2, \\color{red}{3}] \\rightarrow [2, \\color{red}{2}] \\rightarrow [\\color{red}{2}, 1] \\rightarrow [1, 1] \\rightarrow [1, \\color{red}{1}] \\rightarrow [\\color{red}{1}, 0] \\rightarrow [0, 0]$.\n\n The array $[4, 1, 1]$ changes as follows: $[\\color{red}{4}, 1, \\color{red}{1}] \\rightarrow [\\color{red}{3}, \\color{red}{1}, 0] \\rightarrow [\\color{red}{2}, 0, 0] \\rightarrow [\\color{red}{1}, 0, 0] \\rightarrow [0, 0, 0]$.\n\nLet's combine the two cases. If initially $h_{i-1} \\le h_{i}$ holds, $h_{i-1}$ will become equal to $h_{i}$ at some point in time, so $t_{i-1} = t_{i} + 1$. Else, $h_{i-1}  \\gt  h_{i}$, so $t_{i-1} = h_{i-1}$. Combining the two, we get $t_{i-1} = \\max(h_{i-1}, t_{i} + 1)$.\n\nSince we know $t_n = h_n$, we can easily calculate all the other values of $t_i$ by iterating from $n - 1$ to $1$. The answer to the problem is $t_1$, since $t_{i-1} \\ge t_{i} + 1$ for all $2 \\le i \\le n$.\n\nComplexity: $\\mathcal{O}(n)$",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n\n#define all(x) (x).begin(), (x).end()\n#define allr(x) (x).rbegin(), (x).rend()\n\nconst char nl = '\\n';\ntypedef long long ll;\ntypedef long double ld;\n\nusing namespace std;\n\nvoid solve() {\n    int n;\n    cin >> n;\n    \n    vector<int> h(n);\n    for (auto &x: h) cin >> x;\n    \n    int ans = h[n - 1];\n    for (int i = n - 2; i >= 0; i--) {\n        ans = max(ans + 1, h[i]);\n    }\n\n    cout << ans << nl;\n}\n\nint main() {\n\tios::sync_with_stdio(0); cin.tie(0);\n    \n    int T;\n    cin >> T;\n    while (T--) solve();\n}"
+    ]
+  }
+}

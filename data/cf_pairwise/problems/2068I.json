@@ -1,0 +1,44 @@
+{
+  "contest_id": 2068,
+  "index": "I",
+  "name": "Pinball",
+  "rating": 3500,
+  "tags": [
+    "graphs",
+    "shortest paths"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2068I",
+  "url": "https://codeforces.com/problemset/problem/2068/I",
+  "contest_start_time": "2025-03-02T10:35:00+00:00",
+  "statement": {
+    "title": "I. Pinball",
+    "time_limit": "5 seconds",
+    "memory_limit": "1024 megabytes",
+    "legend": "You are playing a pinball-like game on a $h \\times w$ grid.\n\nThe game begins with a small ball located at the center of a specific cell marked as $\\texttt{S}$. Each cell of the grid is either:\n\n A block-type wall ($\\texttt{#}$) that prevents the ball from entering the cell, reflecting it instead.\n\n A thin oblique wall, either left-leaning ($\\texttt{\\\\}$) or right-leaning ($\\texttt{/}$), which reflects the ball according to its orientation.\n\n A free cell ($\\texttt{.}$) where the ball can move freely.\n\nThe goal is to make the ball escape the grid.\n\nAt the start, you can nudge the ball in one of four directions: up ($\\texttt{U}$), down ($\\texttt{D}$), left ($\\texttt{L}$), or right ($\\texttt{R}$). The ball traverses a free cell in one second, it enters and exits a cell containing a thin oblique wall in one second, and it bounces off a block-type wall in no time (the block-type wall occupies all of its cell).\n\nCollisions between the ball and all walls, both block-type and oblique, are perfectly elastic, causing the ball to reflect upon contact.\n\nFor example, the ball takes two seconds to enter a free cell, traverse it, bounce off an adjacent block-type wall, and traverse back the free cell until it exits.\n\nAs the ball moves, you may destroy oblique walls at any time, permanently converting them into free cells. You may destroy multiple oblique walls throughout the game, at any given time.\n\nDetermine whether it is possible for the ball to escape, and if so, find the minimum number of oblique walls that need to be destroyed, along with the precise time each chosen wall should be destroyed.",
+    "input_spec": "The first line contains two integers $h$ and $w$ ($1\\le h, w \\le 1000$) — the size of the grid.\n\nThe next $h$ lines describe the grid at the beginning of the game.\n\nThe $i$-th of these lines contains $w$ characters, describing the cells on the $i$-th row. A dot ($\\texttt{.}$) denotes a free cell, a hash sign ($\\texttt{#}$) denotes a block-type wall, a ($\\texttt{\\\\}$) or ($\\texttt{/}$) denotes a thin oblique wall, and an $\\texttt{S}$ denotes the starting position of the ball (the starting position is a free cell).\n\nIt is guaranteed that all the $h\\cdot w$ characters describing the grid belong to the set $\\{\\texttt{.},\\, \\texttt{#},\\, \\texttt{\\\\},\\, \\texttt{/},\\, \\texttt{S}\\}$ and the character $\\texttt{S}$ appears exactly once.",
+    "output_spec": "Print $\\texttt{YES}$ if it is possible to make the ball escape the grid. Otherwise, print $\\texttt{NO}$.\n\nIf it is possible, print the following extra information.\n\nOn the second line, print a single character $d \\in \\{ \\texttt{U}, \\texttt{D}, \\texttt{L}, \\texttt{R} \\}$ — the direction of the starting nudge of the ball.\n\nOn the third line, print $k$ — the minimum number of oblique walls to be destroyed.\n\nOn each of the following $k$ lines, print three integers $t_i$, $r_i$, and $c_i$ — the oblique wall in the cell on the $r_i$-th row from the top and on the $c_i$-th column from the left is destroyed $t_i$ seconds after the ball starts moving. Note that the corresponding wall is destroyed just before $t_i$ seconds have elapsed, essentially meaning that the corresponding cell acts as a free cell if the ball would have hit that wall exactly $t_i$ seconds after the start.\n\nThe operations must be printed in chronological order (i.e., $t_i\\le t_{i+1}$ for all $1\\le i\\le k-1$). The same wall cannot be destroyed multiple times (i.e., $(r_i,c_i)\\not=(r_j,c_j)$ if $i\\not=j$). Initially, there must be an oblique wall at the cell identified by $(r_i, c_i)$ for all $1\\le i\\le k$.\n\nAll $t_i$ must satisfy $0 \\leq t_i \\leq 10^7$. It can be proved that, if there exists a solution, there exists a solution where no $t_i$ exceeds $10^7$.",
+    "note": "In the first sample, the minimum number of walls to be destroyed is 2. We describe the relevant moments of the solution given as sample output.\n\n At time $t=0$, the ball is in its initial position and gets nudged towards the left direction.\n\n At time $t=4.5$, the ball hits a block-type wall and reflects off of it.\n\n Right before $t=7$, the wall at position $(3, 3)$ is destroyed.\n\n Right before $t=8$, the wall at position $(1, 2)$ is destroyed.\n\n At time $t = 10.5$, the ball finally escapes the grid.\n\nIn the second sample, you can just nudge the ball towards the left or right direction, and the ball will eventually escape the grid.",
+    "samples": [
+      {
+        "input": "4 6\n#\\###.\n#./S##\n#\\\\..#\n######",
+        "output": "\nYES\nL\n2\n7 3 3\n8 1 2"
+      },
+      {
+        "input": "3 3\n###\n.S.\n###",
+        "output": "\nYES\nR\n0"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 140239,
+    "url": "https://codeforces.com/blog/entry/140239",
+    "tutorial": "Let's decompose the whole grid into regions delimited by the movement of the ball without altering the walls. These regions are depicted in the picture below by colored lines. The path described by the solution is bolded.\n\nLet's build a graph over the set of all regions where we add an edge $(i, j)$ if regions $i$ and $j$ share an oblique wall. In the picture above, the red and blue regions will be connected by an edge. Similarly, the blue and purple regions, as well as the blue and green regions and the red and orange regions are adjacent in this formulation.\n\nFurthermore, let's compute the minimum distance between any of the two initial regions where the ball is located, and any of the regions that go outside the grid in this above described graph. Intuitively, this distance is a lower bound for our answer, as destroying $k$ walls can only let the ball travel to regions at distance at most $k$ from the initial regions. For a more formal proof, consider the relaxation of the problem where instead of destroying $k$ walls, we can choose $k$ walls and allow each of them to independently be active or inactive at any moment in time. Clearly, under this relaxation, the ball can only reach regions at distance at most $k$ from its initial position.\n\nNext, we can prove that this lower bound is, in fact, the answer to our problem, by providing a construction that allows the ball to escape under this minimum number of destroyed walls. There are multiple ways of solving the reconstruction problem. The easiest is perhaps to first find any sequence of $k$ regions that end up with the ball escaping. Then, starting from the most distant ($k$-th) region, simulate the game in reverse order, and once you first reach the oblique wall that connects the $k$-th and $(k-1)$-th regions, \"destroy\" such wall (in reverse, the correct formulation is to \"restore\" the already-destroyed wall), and continue the process until the ball reaches its initial position.\n\nFinally, an important aspect to quickly solve this problem is implementation. In order to simplify the implementation, one may skip constructing the graph described above and instead use it implicitly by keeping information over triplets of the form $(i, j, d)$ where $(i, j)$ is the position of the ball, and $d \\in \\{ \\texttt{U}, \\texttt{D}, \\texttt{L}, \\texttt{R} \\}$ is the direction where the ball is heading, and using 0-1 BFS or even Dijkstra to compute the minimum number of walls that need to be destroyed to reach any such state.",
+    "solution_code": []
+  }
+}

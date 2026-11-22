@@ -1,0 +1,43 @@
+{
+  "contest_id": 1967,
+  "index": "B2",
+  "name": "Reverse Card (Hard Version)",
+  "rating": 2200,
+  "tags": [
+    "brute force",
+    "math",
+    "number theory"
+  ],
+  "points": 750.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1967B2",
+  "url": "https://codeforces.com/problemset/problem/1967/B2",
+  "contest_start_time": "2024-04-30T14:35:00+00:00",
+  "statement": {
+    "title": "B2. Reverse Card (Hard Version)",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "The two versions are different problems. You may want to read both versions. You can make hacks only if both versions are solved.\n\nYou are given two positive integers $n$, $m$.\n\nCalculate the number of ordered pairs $(a, b)$ satisfying the following conditions:\n\n $1\\le a\\le n$, $1\\le b\\le m$;\n\n $b \\cdot \\gcd(a,b)$ is a multiple of $a+b$.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1\\le t\\le 10^4$). The description of the test cases follows.\n\nThe first line of each test case contains two integers $n$, $m$ ($1\\le n,m\\le 2 \\cdot 10^6$).\n\nIt is guaranteed that neither the sum of $n$ nor the sum of $m$ over all test cases exceeds $2 \\cdot 10^6$.",
+    "output_spec": "For each test case, print a single integer: the number of valid pairs.",
+    "note": "In the first test case, no pair satisfies the conditions.\n\nIn the fourth test case, $(2,2),(3,6),(4,4),(6,3),(6,6),(8,8)$ satisfy the conditions.",
+    "samples": [
+      {
+        "input": "6\n1 1\n2 3\n3 5\n10 8\n100 1233\n1000000 1145141",
+        "output": "\n0\n1\n1\n6\n423\n5933961"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 129027,
+    "url": "https://codeforces.com/blog/entry/129027",
+    "tutorial": "Denote $\\gcd(a,b)$ as $d$. Assume that $a=pd$ and $b=qd$, then we know that $\\gcd(p,q)=1$.\n\n$(a+b)\\mid (b\\cdot\\gcd(a,b))\\iff (pd+qd)\\mid (qd^2)\\iff (p+q)\\mid (qd)$.\n\nWe know that $\\gcd(p+q,q)=\\gcd(p,q)=1$, so $(p+q)\\mid d$.\n\nWe also know that $p\\ge 1,q\\ge 1$, so $p  \\lt  d=\\frac{a}{p}\\le \\frac{n}{p}$ and thus $p^2  \\lt  n$. Similarly, we can prove $q^2  \\lt  m$.\n\nSo the number of $(p,q)$ is $\\mathcal O(\\sqrt{nm})=\\mathcal O(n+m)$. We can enumerate each $(p,q)$ such that $\\gcd(p,q)=1$ and calculate the answer. $(p+q)\\mid d$ is required, so we add $\\left\\lfloor\\frac{\\min\\{\\lfloor\\frac{n}{p}\\rfloor,\\lfloor\\frac{m}{q}\\rfloor\\}}{p+q}\\right\\rfloor$.\n\nTime Complexity: $\\mathcal O(\\sum n + \\sum m)$.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\nusing namespace std;\n \n#define nl \"\\n\"\n#define nf endl\n#define ll long long\n#define pb push_back\n#define _ << ' ' <<\n \n#define INF (ll)1e18\n#define mod 998244353\n#define maxn 110\n \nint main() {\n    ios::sync_with_stdio(0);\n    cin.tie(0);\n \n    #if !ONLINE_JUDGE && !EVAL\n        ifstream cin(\"input.txt\");\n        ofstream cout(\"output.txt\");\n    #endif\n    int t;\n    cin>>t;\n    while(t--)\n    {\n        ll n,m; cin >> n>>m;\n        ll sq = sqrt(n) + 2,sqm=sqrt(m)+2;\n    \n        vector bad(sq + 1, vector<bool>(sqm+1, 0));\n        for (ll i = 2; i <= min(sq,sqm); i++) {\n            for (ll a = i; a <= sq; a += i) {\n                for (ll b = i; b <= sqm; b += i) {\n                    bad[a][b] = true;\n                }\n            }\n        }\n    \n        ll ans = 0;\n        for (ll a = 1; a * a <= n; a++) {\n            for (ll b = 1; b * b <= m; b++) {\n                if (bad[a][b]) continue;\n                ans += min(n/(a+b)/a,m/(a+b)/b);\n            }\n        }\n        cout << ans << nl;\n    }\n \n    return 0;\n}"
+    ]
+  }
+}

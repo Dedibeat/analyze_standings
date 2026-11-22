@@ -1,0 +1,45 @@
+{
+  "contest_id": 2008,
+  "index": "A",
+  "name": "Sakurako's Exam",
+  "rating": 800,
+  "tags": [
+    "brute force",
+    "constructive algorithms",
+    "greedy",
+    "math"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2008A",
+  "url": "https://codeforces.com/problemset/problem/2008/A",
+  "contest_start_time": "2024-09-01T14:35:00+00:00",
+  "statement": {
+    "title": "A. Sakurako's Exam",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "Today, Sakurako has a math exam. The teacher gave the array, consisting of $a$ ones and $b$ twos.\n\nIn an array, Sakurako must place either a '+' or a '-' in front of each element so that the sum of all elements in the array equals $0$.\n\nSakurako is not sure if it is possible to solve this problem, so determine whether there is a way to assign signs such that the sum of all elements in the array equals $0$.",
+    "input_spec": "The first line contains a single integer $t$ ($1\\le t\\le 100$)  — the number of test cases.\n\nThe only line of each test case contains two integers $a$ and $b$ ($0\\le a,b \\lt 10$)  — the number of '1's and the number of '2's in the array.",
+    "output_spec": "For each test case, output \"Yes\" if you can make the sum of the entire array equal to $0$, and \"No\" otherwise.\n\nYou can output each letter in any case (lowercase or uppercase). For example, the strings \"yEs\", \"yes\", \"Yes\", and \"YES\" will be accepted as a positive answer.",
+    "note": "$a=0$, $b=1$: This means the array is $[2]$ — it is impossible to add the signs '+' or '-' to get $0$ as a result;\n\n $a=0$, $b=3$: This means the array is $[2, 2, 2]$ — it is impossible to add the signs '+' or '-' to get $0$ as a result;\n\n $a=2$, $b=0$: This means the array is $[1, 1]$ — it is possible to add the signs '+' or '-' to get $0$ as a result ($+1-1=0$);\n\n $a=2$, $b=3$: This means the array is $[1, 1, 2, 2, 2]$ — it is possible to add the signs '+' or '-' to get $0$ as a result ($+1+1-2-2+2=0$);",
+    "samples": [
+      {
+        "input": "5\n0 1\n0 3\n2 0\n2 3\n3 1",
+        "output": "\nNO\nNO\nYES\nYES\nNO"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 133509,
+    "url": "https://codeforces.com/blog/entry/133509",
+    "tutorial": "First of all, this task is the same as: \"divide an array into two arrays with equal sum\". So, obviously, we need to check if the sum of all elements is even which implies that the number of ones is even. Then, we can out half of 2s in one array and the other half in another, but if number of 2s is odd, then one array will have a greater sum then another, so we need to put two 1s there.\n\nSo, if we don't have two ones while the number of 2s is odd then the answer is \"NO\". Also, if sum is odd, the answer is also \"NO\". In all other cases, the answer is \"YES\".",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n\nusing namespace std;\n\nint main(){\n    int t;\n    cin>>t;\n    while(t--)\n    {\n        int cnt1,cnt2;\n        cin>>cnt1>>cnt2;\n        if(cnt1%2)\n        {\n            cout<<\"NO\"<<endl;\n        }\n        else\n        {\n            if(cnt2%2==0)\n            {\n                cout<<\"YES\"<<endl;\n            }\n            else\n            {\n                if(cnt1==0)\n                {\n                    cout<<\"NO\"<<endl;\n                }\n                else\n                {\n                    cout<<\"YES\"<<endl;\n                }\n            }\n        }\n    }\n}",
+      "t=int(input())\nfor _ in range(t):\n    a,b=map(int,input().split())\n    if a%2==1:\n        print(\"NO\")\n        continue\n    if a==0 and b%2==1:\n        print(\"NO\")\n        continue\n    print(\"YES\")"
+    ]
+  }
+}

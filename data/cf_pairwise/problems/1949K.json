@@ -1,0 +1,42 @@
+{
+  "contest_id": 1949,
+  "index": "K",
+  "name": "Make Triangle",
+  "rating": 2800,
+  "tags": [
+    "constructive algorithms",
+    "math"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1949K",
+  "url": "https://codeforces.com/problemset/problem/1949/K",
+  "contest_start_time": "2024-03-24T10:00:00+00:00",
+  "statement": {
+    "title": "K. Make Triangle",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "You are given $n$ positive integers $x_1, x_2, \\ldots, x_n$ and three positive integers $n_a, n_b, n_c$ satisfying $n_a+n_b+n_c = n$.\n\nYou want to split the $n$ positive integers into three groups, so that:\n\n The first group contains $n_a$ numbers, the second group contains $n_b$ numbers, the third group contains $n_c$ numbers.\n\n Let $s_a$ be the sum of the numbers in the first group, $s_b$ be the sum in the second group, and $s_c$ be the sum in the third group. Then $s_a, s_b, s_c$ are the sides of a triangle with positive area.\n\nDetermine if this is possible. If this is possible, find one way to do so.",
+    "input_spec": "Each test contains multiple test cases. The first line contains an integer $t$ ($1\\le t\\le 100\\,000$) — the number of test cases. The descriptions of the $t$ test cases follow.\n\nThe first line of each test case contains the integers $n, n_a, n_b, n_c$ ($3 \\leq n \\leq 200\\,000, 1\\leq n_a,n_b,n_c \\leq n-2, n_a+n_b+n_c = n$) — the number of integers to split into three groups, and the desired sizes of the three groups.\n\nThe second line of each test case contains $n$ integers $x_1, x_2, \\ldots, x_n$ ($1 \\leq x_i \\leq 10^{9}$).\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $200\\,000$.",
+    "output_spec": "For each test case, print $\\texttt{YES}$ if it is possible to split the numbers into three groups satisfying all the conditions. Otherwise, print $\\texttt{NO}$.\n\nIf such a split exists, then describe the three groups as follows.\n\nOn the next line, print $n_a$ integers $a_1, a_2, \\ldots, a_{n_a}$ — the numbers in the first group.\n\nOn the next line, print $n_b$ integers $b_1, b_2, \\ldots, b_{n_b}$ — the numbers in the second group.\n\nOn the next line, print $n_c$ integers $c_1, c_2, \\ldots, c_{n_c}$ — the numbers in the third group.\n\nThese $n_a+n_b+n_c=n$ integers should be a permutation of $x_1, x_2, \\ldots, x_n$, and they should satisfy the conditions from the statement.\n\nIf there are multiple solutions, print any of them.",
+    "note": "In the first test case, we can put two $1$s into each group: the sum in each group would be $2$, and there exists a triangle with positive area and sides $2$, $2$, $2$.\n\nIn the second and third test cases, it can be shown that there is no such way to split numbers into groups.\n\nIn the fourth test case, we can put number $16$ into the first group, with sum $16$, numbers $12$ and $1$ into the second group, with sum $13$, and the remaining five $1$s into the third group, with sum $5$, as there exists a triangle with positive area and sides $16, 13, 5$.",
+    "samples": [
+      {
+        "input": "4\n6 2 2 2\n1 1 1 1 1 1\n5 3 1 1\n1 1 1 1 1\n6 2 2 2\n1 1 1 1 1 3\n8 1 2 5\n16 1 1 1 1 1 1 12",
+        "output": "\nYES\n1 1 \n1 1 \n1 1 \nNO\nNO\nYES\n16 \n12 1 \n1 1 1 1 1 "
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 127514,
+    "url": "https://codeforces.com/blog/entry/127514",
+    "tutorial": "We will denote these groups as $A, B, C$ correspondingly.\n\nWlog $n_a \\leq n_b \\leq n_c$, and $x_1 \\leq x_2 \\leq \\ldots \\leq x_n$. Let $x_1 + x_2 + \\ldots + x_n = S$. We just want the sum in each group to be smaller than $\\frac{S}{2}$. Let's note some obvious conditions for construction to be possible:\n\n The largest group is not too large: $x_1 + x_2 + \\ldots + x_{n_c}  \\lt  \\frac{S}{2}$;\n\n The largest item is not too large: $x_n + (x_1 + x_2 + \\ldots + x_{n_a - 1})  \\lt  \\frac{S}{2}$.\n\nIt turns out that these conditions are sufficient! We will prove even stronger statement.\n\nLemma. Assume we already placed some numbers, which are $\\geq$ than any remaining numbers. Assume current sum in group $g$ is $S_g$, the number of empty spots in group $g$ is $n'_g$, and there are $n'_a + n'_b + n'_c = n'$ numbers remaining, $x_1 \\leq x_2 \\leq \\ldots \\leq x_{n'}$. Then, it's possible to distribute the remaining numbers if and only if the following conditions hold:\n\n No group is too large: for any group $g$, $$S_g + x_1 + x_2 + \\ldots + x_{n'_g}  \\lt  \\frac{S}{2}$$\n\n The largest item is not too large: there exists a group $g$ with $n'_g \\gt 0$, such that $$S_g + x_{n'} + (x_1 + x_2 + \\ldots + x_{n'_g - 1})  \\lt  \\frac{S}{2}$$\n\nProof. These conditions are obviously necessary; let's show that they are sufficient. Forget about $n_a \\leq n_b \\leq n_c$ for now Wlog we can put the largest element $x_{n'}$ in group $a$, so $S_a + x_{n'} + (x_1 + x_2 + \\ldots + x_{n'_a - 1})  \\lt  \\frac{S}{2}$. Put the remaining numbers in the other two groups arbitrarily. If both have sum less than $\\frac{S}{2}$, we are good! Otherwise, wlog, sum in group $B$ is at least $\\frac{S}{2}$.\n\nNow, start swapping free elements in $B$ and $C$ one by one. If at some point sums in both $B$ and $C$ were smaller than $\\frac{S}{2}$, we are good. Note that it's not possible that at one moment, the sum in $B$ is $\\geq \\frac{S}{2}$, and at next the sum in $C$ is $\\geq \\frac{S}{2}$: the sum in $C$ currently is at most $S - \\frac{S}{2} - x_{n'}$, and it will decrease by at most $x_{n'}$ and increase by at least $1$ after the swap, so it will still be at most $S - \\frac{S}{2} - 1  \\lt  \\frac{S}{2}$. So, the only possibility is that the sum in $B$ is still $\\geq \\frac{S}{2}$.\n\nNow, note that if we swap free elements in $A$ and $C$, the sum in $B$ is still $\\geq \\frac{S}{2}$. Also, note that if $n'_C = 0$, that is, there are no free elements in $C$ remaining, then we swap free elements in $A$ and $B$, and we will either get a valid partition, or the sum in $B$ will still be $\\geq \\frac{S}{2}$, as it's not possible for sum in $A$ to get $\\geq \\frac{S}{2}$ after one swap, for the same reason.\n\nSo, here is the idea: we will start swapping elements, so that the smallest $n'_B$ end up in $B$. We will get a contradiction, since we know that $S_B + x_1 + x_2 + \\ldots + x_{n'_B})  \\lt  \\frac{S}{2}$.\n\nThis lemma also gives us a way to find a construction: add elements from largest to smallest. When deciding where to put an element, put it in any group, such that the conditions will hold after we put it there. We can check these conditions in $O(1)$ after we sorted $x_i$s and precomputed their prefix sums.\n\nRuntime $O(n\\log{n})$.",
+    "solution_code": [
+      "bool dfs(vvl &adj , ll u , ll par , vl &vis , vl&sym, ll &curr)\n{\n\tif (par == 0)\n\t{\n\t\tsym[u] = 1; // pos;\n\t\tcurr++;\n\t}\n\telse\n\t{\n\t\tsym[u] = (sym[par] == 0);\n\t\tif (sym[u])curr += 1;\n\t\telse curr -= 1;\n\t}\n\tvis[u] = 1;\n\tfor (auto v : adj[u])\n\t{\n\t\tif (!vis[v] && par != v)\n\t\t{\n\t\t\tif (!dfs(adj , v , u , vis , sym , curr))\n\t\t\t{\n\t\t\t\treturn 0;\n\t\t\t}\n\t\t}\n\n\t\tif (sym[u] == sym[v])\n\t\t{\n\t\t\treturn 0;\n\t\t}\n\n\t}\n\n\treturn 1;\n}\n\nvoid solve()\n{\n\tll n;\n\tcin >> n;\n\n\tvvl adj(n + 1);\n\tvll po(n);\n\tvl r(n);\n\n\tforf(n, i)\n\t{\n\t\tcin >> po[i].ff >> po[i].ss >> r[i];\n\t}\n\n\tforf(n, i)\n\t{\n\t\tll cr = r[i];\n\t\tll x = po[i].ff , y = po[i].ss;\n\t\tfor (int j = i + 1 ; j < n ; j++)\n\t\t{\n\t\t\tif ( (po[j].ff - x) * (po[j].ff - x) + (po[j].ss - y) * (po[j].ss - y) == (cr + r[j]) * (cr + r[j])  )\n\t\t\t{\n\t\t\t\tadj[i + 1].pb(j + 1);\n\t\t\t\tadj[j + 1].pb(i + 1);\n\t\t\t}\n\t\t}\n\n\t}\n\n\tdebug(adj);\n\n\tll curr = 0;\n\tvl vis(n + 1, 0);\n\tvl sym(n + 1, 0);\n\tfor1(n, i)\n\t{\n\t\tif (!vis[i])\n\t\t{\n\t\t\tcurr = 0;\n\t\t\tif (dfs(adj , i , 0 , vis, sym , curr) && curr != 0)\n\t\t\t{\n\t\t\t\tdebug(sym);\n\t\t\t\tyes;\n\t\t\t\trtn;\n\t\t\t}\n\t\t}\n\t}\n\tdebug(sym);\n\n\tno;\n\n}"
+    ]
+  }
+}

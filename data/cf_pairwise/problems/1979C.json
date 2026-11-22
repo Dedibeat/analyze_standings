@@ -1,0 +1,44 @@
+{
+  "contest_id": 1979,
+  "index": "C",
+  "name": "Earning on Bets",
+  "rating": 1200,
+  "tags": [
+    "binary search",
+    "combinatorics",
+    "constructive algorithms",
+    "number theory"
+  ],
+  "points": 1500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1979C",
+  "url": "https://codeforces.com/problemset/problem/1979/C",
+  "contest_start_time": "2024-06-06T14:35:00+00:00",
+  "statement": {
+    "title": "C. Earning on Bets",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "You have been offered to play a game. In this game, there are $n$ possible outcomes, and for each of them, you must bet a certain integer amount of coins. In the event that the $i$-th outcome turns out to be winning, you will receive back the amount of coins equal to your bet on that outcome, multiplied by $k_i$. Note that exactly one of the $n$ outcomes will be winning.\n\nYour task is to determine how to distribute the coins in such a way that you will come out ahead in the event of any winning outcome. More formally, the total amount of coins you bet on all outcomes must be strictly less than the number of coins received back for each possible winning outcome.",
+    "input_spec": "Each test consists of multiple test cases. The first line contains a single integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases. The description of the test cases follows.\n\nThe first line of each test case contains a single integer $n$ ($1 \\le n \\le 50$) — the number of outcomes.\n\nThe second line of each test case contains $n$ integers $k_1,k_2,\\ldots,k_n$ ($2 \\le k_i \\le 20$) — the multiplier for the amount of coins if the $i$-th outcome turns out to be winning.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, output $-1$ if there is no way to distribute the coins as required. Otherwise, output $n$ integers $x_1, x_2,\\ldots, x_n$ ($1 \\le x_i \\le 10^{9}$) — your bets on the outcomes.\n\nIt can be shown that if a solution exists, there is always a solution that satisfies these constraints.\n\nIf there are multiple suitable solutions, output any of them.",
+    "note": "In the first test case, the coins can be distributed as follows: $27$ coins on the first outcome, $41$ coins on the second outcome, $12$ coins on the third outcome. Then the total amount of coins bet on all outcomes is $27 + 41 + 12 = 80$ coins. If the first outcome turns out to be winning, you will receive back $3 \\cdot 27 = 81$ coins, if the second outcome turns out to be winning, you will receive back $2 \\cdot 41 = 82$ coins, if the third outcome turns out to be winning, you will receive back $7 \\cdot 12 = 84$ coins. All these values are strictly greater than $80$.\n\nIn the second test case, one way is to bet one coin on each of the outcomes.",
+    "samples": [
+      {
+        "input": "6\n3\n3 2 7\n2\n3 3\n5\n5 5 5 5 5\n6\n7 9 3 17 9 13\n3\n6 3 2\n5\n9 4 6 8 3",
+        "output": "\n27 41 12 \n1 1 \n-1\n1989 1547 4641 819 1547 1071 \n-1\n8 18 12 9 24"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 130213,
+    "url": "https://codeforces.com/blog/entry/130213",
+    "tutorial": "1979C - Earning on Bets\n\nHint\n\nTry to come up with a condition for the existence of an answer.\n\nSolution\n\nLet $S$ be the total amount of coins placed on all possible outcomes. Then, if the coefficient for winning is $k_i$, we have to place more than $\\frac{S}{k_i}$ on this outcome.\n\nWe can obtain the following inequality:\n $\\sum_{i = 1}^n \\frac{S}{k_i}  \\lt  S.$\nDividing both sides by $S$, we obtain the necessary and sufficient condition for the existence of an answer:\n $\\sum_{i = 1}^n \\frac{1}{k_i}  \\lt  1.$\nThis check can be performed by reducing all fractions to a common denominator. Notice that the numerators of the reduced fractions correspond to the required bets on the outcomes.\n\nCode",
+    "solution_code": [
+      "#include <bits/stdc++.h>\nusing namespace std;\n\n#define int long long\n\nint gcd(int a, int b) {\n    while (b != 0) {\n        int tmp = a % b;\n        a = b;\n        b = tmp;\n    }\n    return a;\n}\nint lcm(int a, int b) {\n    return a * b / gcd(a, b);\n}\n\nvoid solve() {\n    int n;\n    cin >> n;\n    \n    vector <int> k(n);\n    for (int i = 0; i < n; i++) {\n        cin >> k[i];\n    }\n    \n    int z = 1;\n    for (int i = 0; i < n; i++) {\n        z = lcm(z, k[i]);\n    }\n    \n    int suma = 0;\n    for (int i = 0; i < n; i++) {\n        suma += z / k[i];\n    }\n    \n    if (suma < z) {\n        for (int i = 0; i < n; i++) {\n            cout << z / k[i] << \" \";\n        }\n        cout << \"\\n\";\n    } else {\n        cout << -1 << \"\\n\";\n    }\n}\n\nsigned main() {\n    int t;\n    cin >> t;\n    while (t--) {\n        solve();\n    }\n}"
+    ]
+  }
+}

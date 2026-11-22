@@ -1,0 +1,45 @@
+{
+  "contest_id": 1976,
+  "index": "C",
+  "name": "Job Interview",
+  "rating": 1600,
+  "tags": [
+    "binary search",
+    "dp",
+    "greedy",
+    "implementation",
+    "two pointers"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1976C",
+  "url": "https://codeforces.com/problemset/problem/1976/C",
+  "contest_start_time": "2024-05-30T14:35:00+00:00",
+  "statement": {
+    "title": "C. Job Interview",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Monocarp is opening his own IT company. He wants to hire $n$ programmers and $m$ testers.\n\nThere are $n+m+1$ candidates, numbered from $1$ to $n+m+1$ in chronological order of their arriving time. The $i$-th candidate has programming skill $a_i$ and testing skill $b_i$ (a person's programming skill is different from their testing skill). The skill of the team is the sum of the programming skills of all candidates hired as programmers, and the sum of the testing skills of all candidates hired as testers.\n\nWhen a candidate arrives to interview, Monocarp tries to assign them to the most suitable position for them (if their programming skill is higher, then he hires them as a programmer, otherwise as a tester). If all slots for that position are filled, Monocarp assigns them to the other position.\n\nYour task is, for each candidate, calculate the skill of the team if everyone except them comes to interview. Note that it means that exactly $n+m$ candidates will arrive, so all $n+m$ positions in the company will be filled.",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases.\n\nEach test case consists of three lines:\n\n the first line contains two integers $n$ and $m$ ($0 \\le n, m \\le 2 \\cdot 10^5$; $2 \\le n + m + 1 \\le 2 \\cdot 10^5$) — the number of programmers and the number of testers Monocarp wants to hire, respectively;\n\n the second line contains $n + m + 1$ integers $a_1, a_2, \\dots, a_{n+m+1}$ ($1 \\le a_i \\le 10^9$), where $a_i$ is the programming skill of the $i$-th candidate;\n\n the third line contains $n + m + 1$ integers $b_1, b_2, \\dots, b_{n+m+1}$ ($1 \\le b_i \\le 10^9$; $b_i \\ne a_i$), where $b_i$ is the testing skill of the $i$-th candidate.\n\nAdditional constraint on the input: the sum of $(n + m + 1)$ over all test cases doesn't exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, print $n + m + 1$ integers, where the $i$-th integer should be equal to the skill of the team if everyone except the $i$-th candidate comes to interview.",
+    "note": "Let's consider the third test case of the example:\n\n if the $1$-st candidate does not arrive, the $2$-nd candidate gets hired as a tester, the $3$-rd candidate gets hired as a programmer, the $4$-th candidate gets hired as a tester. The total skill of the team will be $2 + 5 + 1 = 8$;\n\n if the $2$-nd candidate does not arrive, the $1$-st candidate gets hired as a tester, the $3$-rd candidate gets hired as a programmer, the $4$-th candidate gets hired as a tester. The total skill of the team will be $5 + 5 + 1 = 11$;\n\n if the $3$-rd candidate does not arrive, the $1$-st candidate gets hired as a tester, the $2$-nd candidate gets hired as a tester, the $4$-th candidate gets hired as a programmer. The total skill of the team will be $5 + 2 + 4 = 11$;\n\n if the $4$-th candidate does not arrive, the $1$-st candidate gets hired as a tester, the $2$-nd candidate gets hired as a tester, the $3$-rd candidate gets hired as a programmer. The total skill of the team will be $5 + 2 + 5 = 12$.",
+    "samples": [
+      {
+        "input": "4\n1 0\n2 1\n1 2\n0 2\n4 5 5\n5 4 1\n1 2\n2 1 5 4\n5 2 3 1\n3 1\n4 3 3 4 1\n5 5 4 5 2",
+        "output": "\n1 2 \n5 6 9 \n8 11 11 12 \n13 13 13 12 15 "
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 129992,
+    "url": "https://codeforces.com/blog/entry/129992",
+    "tutorial": "Let's naively calculate the answer for the $(n+m+1)$-th candidate. While calculating it, let's store two values: $type_i$ — the type of job the $i$-th candidate was hired for; $bad$ — the index of the first candidate who was hired for a suboptimal role.\n\nWe can show that this first candidate $bad$ who was hired for a suboptimal role is the only possible candidate who can change his role if another candidate doesn't show up. So, for all other candidates among the first $n+m$ candidates, their roles are fixed.\n\nTo prove this, we can consider the following cases:\n\n if the candidate who doesn't show up has an index $bad$ or greater, then for all candidates after them, there is only one possible job (when we consider that candidate $bad$, all positions on one of the job are already filled);\n\n if the index who doesn't show up has index less than $bad$, then the candidate $bad$ will take the same job as that candidate has taken, and in any case, all positions of the optimal job of the candidate $bad$ will be filled after we take that candidate.\n\nNow we can use the $(n+m+1)$-th candidate's answer to calculate the answer for the $i$-th candidate as follows:\n\n if $i  \\lt  bad$ and $type_i \\ne type_{bad}$, we can \"move\" the $bad$-th candidate to the role $type_i$ and the $(n+m+1)$-th candidate to the role $type_{bad}$, this will change the answer by $(a_{bad} - a_i) + (b_{n+m+1} - b_{bad})$ in case of the $i$-th candidate was hired as programmer (similarly for tester);\n\n otherwise, we can simply \"move\" the $(n+m+1)$-th candidate to the role $type_i$, this will change the answer by $(a_{n+m+1} - a_i)$ in case of the $i$-th candidate was hired as programmer (similarly for tester).",
+    "solution_code": [
+      "for _ in range(int(input())):\n    n, m = map(int, input().split())\n    bounds = [n, m]\n    a = []\n    a.append(list(map(int, input().split())))\n    a.append(list(map(int, input().split())))\n    \n    bad = -1\n    badType = -1\n    cur = [0, 0]\n    ans = 0\n    types = [0 for i in range(n + m + 1)]\n    for i in range(n + m):\n        curType = 0\n        if a[0][i] < a[1][i]:\n            curType = 1\n        if cur[curType] == bounds[curType]:\n            curType = 1 - curType\n            if bad == -1:\n                bad = i\n                badType = 1 - curType\n        types[i] = curType\n        ans += a[types[i]][i]\n        cur[types[i]] += 1\n        \n    res = []\n    for i in range(n + m):\n        val = ans - a[types[i]][i]\n        if bad != -1 and i < bad and types[i] == badType:\n            val = val + a[badType][bad] - a[1 - badType][bad] + a[1 - badType][n + m]\n        else:\n            val = val + a[types[i]][n + m]\n        res.append(val)\n    res.append(ans)\n    print(*res)"
+    ]
+  }
+}

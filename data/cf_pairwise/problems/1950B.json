@@ -1,0 +1,41 @@
+{
+  "contest_id": 1950,
+  "index": "B",
+  "name": "Upscaling",
+  "rating": 800,
+  "tags": [
+    "implementation"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1950B",
+  "url": "https://codeforces.com/problemset/problem/1950/B",
+  "contest_start_time": "2024-03-28T14:45:00+00:00",
+  "statement": {
+    "title": "B. Upscaling",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "You are given an integer $n$. Output a $2n \\times 2n$ checkerboard made of $2 \\times 2$ squares alternating '$\\texttt{#}$' and '$\\texttt{.}$', with the top-left cell being '$\\texttt{#}$'.\n\nThe picture above shows the answers for $n=1,2,3,4$.",
+    "input_spec": "The first line contains an integer $t$ ($1 \\leq t \\leq 20$) — the number of test cases.\n\nThe only line of each test case contains a single integer $n$ ($1 \\leq n \\leq 20$) — it means you need to output a checkerboard of side length $2n$.",
+    "output_spec": "For each test case, output $2n$ lines, each containing $2n$ characters without spaces — the checkerboard, as described in the statement. Do not output empty lines between test cases.",
+    "note": null,
+    "samples": [
+      {
+        "input": "4\n1\n2\n3\n4",
+        "output": "\n##\n##\n##..\n##..\n..##\n..##\n##..##\n##..##\n..##..\n..##..\n##..##\n##..##\n##..##..\n##..##..\n..##..##\n..##..##\n##..##..\n##..##..\n..##..##\n..##..##"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 127664,
+    "url": "https://codeforces.com/blog/entry/127664",
+    "tutorial": "You just need to implement what is written. One way is to go cell-by-cell in a regular $n \\times n$ checkerboard, and construct the larger one one cell at a time by copying cell $(i,j)$ into cells $(2i,2j)$, $(2i+1, 2j)$, $(2i, 2j+1)$, $(2i+1, 2j+1)$.\n\nA faster solution is to notice that if we round down coordinates $(x,y)$ in the enlarged checkerboard to $(\\lfloor \\frac{x}{2} \\rfloor, \\lfloor \\frac{y}{2} \\rfloor)$, we get the corresponding cell in the original checkerboard. And to output a regular checkerboard, we output $\\texttt{#}$ if the sum of coordinates is even, and $\\texttt{.}$ if it is odd.\n\nSo the faster implementation is: iterate over all cells $(x,y)$ in the $2n \\times 2n$ checkerboard. If $\\lfloor \\frac{x}{2} \\rfloor + \\lfloor \\frac{y}{2} \\rfloor$ is even output $\\texttt{#}$, else output $\\texttt{.}$.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n\nusing namespace std;\n\nvoid solve() {\n\tint n;\n\tcin >> n;\n\tfor (int i = 0; i < 2 * n; i++) {\n\t\tfor (int j = 0; j < 2 * n; j++) {\n\t\t\tcout << (i / 2 + j / 2 & 1 ? '.' : '#');\n\t\t}\n\t\tcout << '\\n';\n\t}\t\n}\n\nint main() {\n\tios::sync_with_stdio(false);\n\tcin.tie(nullptr);\n\tint tt; cin >> tt; for (int i = 1; i <= tt; i++) {solve();}\n\t// solve();\n}"
+    ]
+  }
+}

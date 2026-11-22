@@ -1,0 +1,48 @@
+{
+  "contest_id": 1965,
+  "index": "F",
+  "name": "Conference",
+  "rating": 3300,
+  "tags": [
+    "data structures",
+    "flows"
+  ],
+  "points": 3500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1965F",
+  "url": "https://codeforces.com/problemset/problem/1965/F",
+  "contest_start_time": "2024-04-27T14:35:00+00:00",
+  "statement": {
+    "title": "F. Conference",
+    "time_limit": "4 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "You have been asked to organize a very important art conference. The first step is to choose the dates.\n\nThe conference must last for a certain number of consecutive days. Each day, one lecturer must perform, and the same lecturer cannot perform more than once.\n\nYou asked $n$ potential lecturers if they could participate in the conference. Lecturer $i$ indicated that they could perform on any day from $l_i$ to $r_i$ inclusive.\n\nA certain segment of days can be chosen as the conference dates if there is a way to assign an available lecturer to each day of the segment, assigning each lecturer to no more than one day.\n\nFor each $k$ from $1$ to $n$, find how many ways there are to choose a segment of $k$ consecutive days as the conference dates.",
+    "input_spec": "The first line of input contains one integer $n$ — the number of potential lecturers ($1 \\le n \\le 2 \\cdot 10^5$).\n\nEach of the next $n$ lines contains two integers $l_i$ and $r_i$ — the segment of available days for the $i$th lecturer ($1 \\le l_i \\le r_i \\le 2 \\cdot 10^5$).",
+    "output_spec": "Print $n$ integers, where the $k$th number denotes the number of ways to select a segment of $k$ consecutive days as conference dates.",
+    "note": "In the first testcase, a one-day conference can be organized on any of the days from $1$ to $6$. A two-day conference can be organized from day $2$ to day $3$, as well as from day $4$ to day $5$.\n\nIn the second testcase, five lecturers can perform only from day $1$ to day $3$, so it will not be possible to organize a conference longer than three days.",
+    "samples": [
+      {
+        "input": "3\n1 2\n3 4\n5 6",
+        "output": "\n6\n2\n0"
+      },
+      {
+        "input": "5\n1 3\n1 3\n1 3\n1 3\n1 3",
+        "output": "\n3\n2\n1\n0\n0"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 128914,
+    "url": "https://codeforces.com/blog/entry/128914",
+    "tutorial": "For a segment of days, how can we tell if there's a way to assign a lecturer to each day of the segment? Consider a bipartite graph: the first part consists of the days in the segment, the second part consists of all lecturers, an edge between a day and a lecturer exists if that lecturer is available on that day. We need to check if the maximum matching covers all vertices in the first part. If this is the case, we'll call the segment of days valid.\n\nA common way to check if a segment is valid is to use Hall's marriage theorem. In our case, we can formulate it as follows:\n\n If for each subset of days $s$, the number of lecturers available on at least one day of that subset is at least $|s|$, then this segment of days is valid.\n\nIt might be tempting to only consider subsets which form contiguous subsegments. However, consider the following test case:\n\n31 32 22 2\n\nFor a segment of days $[1; 3]$, the only subset that violates the Hall's marriage theorem condition is $\\{1, 3\\}$, which is not contiguous.\n\nLet's try to fix that.\n\nSuppose there are two lecturers with equal $l_i$: let their availability segments be $[a; b]$ and $[a; c]$, where $b \\le c$. Then, if we replace $[a; c]$ with $[a+1; c]$, the answer does not change. This can be easily seen if you consider the set of all pairs of days that these two lecturers can cover, and notice that this set stays the same after the $[a; c] \\rightarrow [a+1; c]$ transformation.\n\n(Note that when $a = b = c$, replacing $[a; c]$ with $[a+1; c]$ is effectively equivalent to removing one of the lecturers: their segment becomes empty.)\n\nWe can keep applying this operation until all $l_i$ are distinct (potentially removing some lecturers in the process). This process can be simulated in $O(n \\log n)$ time by going left to right using a priority queue.\n\nWhy is this transformation useful? Consider a subset of days $t$ that violates the Hall's marriage theorem condition. Suppose it's non-contiguous: say, days $x$ and $y$ ($x + 1  \\lt  y$) belong to $t$, while none of days $x+1, x+2, \\ldots, y-1$ belong to $t$. Then, if we include days $x+1, x+2, \\ldots, y-1$ into $t$, then $t$ will still violate the condition! (proof left as an exercise)\n\nAs a consequence, if we include all \"gaps\" in $t$, we'll still get a violating subset, but this time, it will be contiguous.\n\nWe have described a transformation that makes all $l_i$ distinct. Similarly, we can apply it in the same way to make all $r_i$ distinct. After that, we'll get another useful property: monotonicity. Specifically, if $t = [l; r]$ is a violating subset, then $[l-1; r]$ and $[l; r+1]$ are violating subsets as well.\n\nNow we can see that a segment of days is valid iff it is not a violating subset itself (i.e. instead of checking all subsets of the segment, it's enough to just check the whole segment).\n\nTo finish the solution, we can use the two pointers technique to find all valid segments in linear time.\n\nBonus: solve the problem for $1 \\le l_i \\le r_i \\le 10^{12}$.",
+    "solution_code": [
+      "/**\n *    author:  tourist\n *    created: 26.11.2023 09:36:38       \n**/\n#include <bits/stdc++.h>\n \nusing namespace std;\n \n#ifdef LOCAL\n#include \"algo/debug.h\"\n#else\n#define debug(...) 42\n#endif\n \nconst long long inf = (long long) 1e18;\n \nint main() {\n  ios::sync_with_stdio(false);\n  cin.tie(0);\n  int n;\n  cin >> n;\n  vector<long long> l(n), r(n);\n  for (int i = 0; i < n; i++) {\n    cin >> l[i] >> r[i];\n  }\n  int original_n = n;\n  for (int rot = 0; rot < 2; rot++) {\n    // make all left ends distinct\n    map<long long, vector<long long>> mp;\n    for (int i = 0; i < n; i++) {\n      mp[l[i]].push_back(r[i]);\n    }\n    vector<long long> new_l, new_r;\n    auto it = mp.begin();\n    multiset<long long> s;\n    long long T = -inf;\n    while (true) {\n      if (s.empty()) {\n        if (it == mp.end()) {\n          break;\n        }\n        T = it->first;\n      }\n      while (it != mp.end() && T == it->first) {\n        s.insert(it->second.begin(), it->second.end());\n        ++it;\n      }\n      assert(!s.empty());\n      new_l.push_back(T);\n      new_r.push_back(*s.begin());\n      s.erase(s.begin());\n      T += 1;\n      while (!s.empty() && *s.begin() < T) {\n        s.erase(s.begin());\n      }\n    }\n    swap(l, new_l);\n    swap(r, new_r);\n    n = (int) l.size();\n    for (int i = 0; i < n; i++) {\n      l[i] *= -1;\n      r[i] *= -1;\n      swap(l[i], r[i]);\n    }\n  }\n  sort(l.begin(), l.end());\n  sort(r.begin(), r.end());\n  vector<long long> ans(original_n + 1);\n  long long lx = -inf, rx = -inf;\n  int pl = 0, pr = 0;\n  int k = 0;\n  while (pl < n || pr < n) {\n    long long wait = min(pl < n ? l[pl] - lx : inf, pr < n ? r[pr] - rx : inf);\n    ans[k] += wait;\n    lx += wait;\n    rx += wait;\n    while (pl < n && l[pl] == lx) {\n      k += 1;\n      lx += 1;\n      pl += 1;\n    }\n    while (pr < n && r[pr] == rx) {\n      ans[k] += 1;\n      k -= 1;\n      rx += 1;\n      pr += 1;\n    }\n  }\n  for (int i = n; i > 1; i--) {\n    ans[i - 1] += ans[i];\n  }\n  for (int i = 1; i <= original_n; i++) {\n    cout << ans[i] << '\\n';\n  }\n  return 0;\n}",
+      "         k--;\n         while(k!=0){\n           add((k+1)/2);\n            k/=2;\n         }",
+      "bs |= bs << x;"
+    ]
+  }
+}

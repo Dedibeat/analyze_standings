@@ -1,0 +1,46 @@
+{
+  "contest_id": 2053,
+  "index": "D",
+  "name": "Refined Product Optimality",
+  "rating": 1700,
+  "tags": [
+    "binary search",
+    "data structures",
+    "greedy",
+    "math",
+    "schedules",
+    "sortings"
+  ],
+  "points": 1750.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2053D",
+  "url": "https://codeforces.com/problemset/problem/2053/D",
+  "contest_start_time": "2024-12-28T14:35:00+00:00",
+  "statement": {
+    "title": "D. Refined Product Optimality",
+    "time_limit": "3 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "As a tester, when my solution has a different output from the example during testing, I suspect the author first.\n\n— Chris, a comment\n\nAlthough Iris occasionally sets a problem where the solution is possibly wrong, she still insists on creating problems with her imagination; after all, everyone has always been on the road with their stubbornness... And like ever before, Iris has set a problem to which she gave a wrong solution, but Chris is always supposed to save it! You are going to play the role of Chris now:\n\n Chris is given two arrays $a$ and $b$, both consisting of $n$ integers.\n\n Iris is interested in the largest possible value of $P = \\prod\\limits_{i=1}^n \\min(a_i, b_i)$ after an arbitrary rearrangement of $b$. Note that she only wants to know the maximum value of $P$, and no actual rearrangement is performed on $b$.\n\n There will be $q$ modifications. Each modification can be denoted by two integers $o$ and $x$ ($o$ is either $1$ or $2$, $1 \\leq x \\leq n$). If $o = 1$, then Iris will increase $a_x$ by $1$; otherwise, she will increase $b_x$ by $1$.\n\n Iris asks Chris the maximum value of $P$ for $q + 1$ times: once before any modification, then after every modification.\n\n Since $P$ might be huge, Chris only needs to calculate it modulo $998\\,244\\,353$.\n\nChris soon worked out this problem, but he was so tired that he fell asleep. Besides saying thanks to Chris, now it is your turn to write a program to calculate the answers for given input data.\n\nNote: since the input and output are large, you may need to optimize them for this problem.\n\nFor example, in C++, it is enough to use the following lines at the start of the main() function:\n\nint main() {    std::ios::sync_with_stdio(false);    std::cin.tie(nullptr); std::cout.tie(nullptr);}",
+    "input_spec": "Each test contains multiple test cases. The first line of input contains a single integer $t$ ($1 \\leq t \\leq 10^4$) — the number of test cases. The description of test cases follows.\n\nThe first line of each test case contains two integers $n$ and $q$ ($1 \\leq n \\leq 2\\cdot 10^5$, $1 \\leq q \\leq 2\\cdot 10^5$) — the length of the array and the number of operations.\n\nThe second line of each test case contains $n$ integers $a_1, a_2, \\ldots, a_n$ ($1 \\leq a_i \\leq 5\\cdot 10^8$) — the array $a$.\n\nThe third line of each test case contains $n$ integers $b_1, b_2, \\ldots, b_n$ ($1 \\leq b_i \\leq 5\\cdot 10^8$) — the array $b$.\n\nThen $q$ lines follow, each line contains two integers $o$ and $x$ ($o \\in \\{1, 2\\}$, $1 \\leq x \\leq n$), representing an operation.\n\nIt's guaranteed that the sum of $n$ and the sum of $q$ over all test cases does not exceed $4\\cdot 10^5$, respectively.",
+    "output_spec": "For each test case, output $q + 1$ integers in a line, representing the answers that Chris will calculate, modulo $998\\,244\\,353$.",
+    "note": "In the first test case:\n\n Before the modifications, Chris can rearrange $b$ to $[1, 2, 3]$ so that $P = \\prod\\limits_{i=1}^n \\min(a_i, b_i) = 1 \\cdot 1 \\cdot 2 = 2$. We can prove that this is the maximum possible value. For example, if Chris rearranges $b = [2, 3, 1]$, $P$ will be equal $1 \\cdot 1 \\cdot 1 = 1  \\lt  2$, which is not optimal.\n\n After the first modification, Chris can rearrange $b$ to $[1, 2, 3]$ so that $P = 1 \\cdot 1 \\cdot 3 = 3$, which is maximized.\n\n After the second modification, Chris can rearrange $b$ to $[2, 2, 3]$ so that $P = 1 \\cdot 1 \\cdot 3 = 3$, which is maximized.\n\n After the third modification, Chris can rearrange $b$ to $[2, 2, 3]$ so that $P = 6$, which is maximized.\n\n After the fourth modification, Chris can rearrange $b$ to $[2, 2, 4]$ so that $P = 6$, which is maximized.",
+    "samples": [
+      {
+        "input": "4\n3 4\n1 1 2\n3 2 1\n1 3\n2 3\n1 1\n2 1\n6 8\n1 4 2 7 3 5\n7 6 5 6 3 3\n2 5\n1 6\n1 5\n1 5\n1 5\n2 3\n2 3\n1 6\n13 8\n7 7 6 6 5 5 5 2 2 3 4 5 1\n1 4 1 9 6 6 9 1 5 1 3 8 4\n2 2\n2 11\n2 4\n2 4\n1 7\n1 1\n2 12\n1 5\n5 3\n10000000 20000000 30000000 40000000 50000000\n10000000 20000000 30000000 40000000 50000000\n1 1\n2 2\n2 1",
+        "output": "\n2 3 3 6 6\n840 840 1008 1344 1680 2016 2016 2016 2352\n2116800 2646000 3528000 3528000 3528000 4233600 4838400 4838400 4838400\n205272023 205272023 205272023 264129429"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 136455,
+    "url": "https://codeforces.com/blog/entry/136455",
+    "tutorial": "2053D - Refined Product Optimality\n\nHint 1\n\nWhat if $q = 0$?\n\nHint 2\n\nHow do you keep the array sorted?\n\nSolution\n\nThe problem makes no difference when both $a$ and $b$ can be rearranged. Let the rearranged arrays of $a$ and $b$ be $c$ and $d$ respectively.\n\nIf $q = 0$, we can write $c$ as $\\operatorname{SORTED}(a_1, a_2 \\ldots, a_n)$ and $d$ as $\\operatorname{SORTED}(b_1, b_2 \\ldots, b_n)$. It can be proved that this reaches the maximum value: if not so, then\n\nThere must be some pair $(i, j)$ such that $c_i \\lt c_j, d_i \\gt d_j$.\n\nSince $\\min(c_i, d_i) \\cdot \\min(c_j, d_j) = c_i \\cdot \\min(c_j, d_j) \\leq c_i \\cdot \\min(c_j, d_i) = \\min(c_i, d_j) \\cdot \\min(c_j, d_i)$, we can swap $d_i$ and $d_j$, and the product does not decrease.\n\nConsider the modification, which is a single element increment by $1$. Without loss of generality, let $c_x$ be increased by $1$ (and the processing method for $d$ is the same). If $c_x \\lt c_{x+1}$, then after the modification $c_x \\leq c_{x+1}$, which would be fine. Otherwise, we can modify the array $c$ in the form of a single round of \"Insertion Sort\": We continuously swap $c_x$ and $c_{x+1}$, $x \\gets x + 1$, until $c_x \\lt c_{x+1}$ (or $x = n$), and thus the array remains sorted after the increment.\n\nIn fact, the swap operation does nothing in the above process: in these cases, $c_x = c_{x+1}$ holds! So we can just set $x'$ as the maximum $k$ such that $c_k = c_x$, and then increase $c_{x'}$ by $1$, after which $c$ is still sorted. The $k$ can be found with a naive binary search, so the problem is solved in $\\mathcal O(n\\log n + q(\\log p + \\log n))$ per test case.\n\nCode (C++)\n\nRate the Problem\n\nAmazing problem:\n\nGood problem:\n\nAverage problem:\n\nBad problem:\n\nDidn't solve:",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n \nconstexpr int MOD = 998244353;\nint qpow(int a, int x = MOD - 2) {\n\tint res = 1;\n\tfor (; x; x >>= 1, a = 1ll * a * a % MOD) if (x & 1) res = 1ll * res * a % MOD;\n\treturn res;\n}\n \n#define MAXN 200001\nint a[MAXN], b[MAXN], c[MAXN], d[MAXN];\nvoid solve() {\n\tint n, q, res = 1; std::cin >> n >> q;\n\tfor (int i = 1; i <= n; ++i) std::cin >> a[i], c[i] = a[i];\n\tfor (int i = 1; i <= n; ++i) std::cin >> b[i], d[i] = b[i];\n\tstd::sort(c + 1, c + n + 1), std::sort(d + 1, d + n + 1);\n\tfor (int i = 1; i <= n; ++i) res = 1ll * res * std::min(c[i], d[i]) % MOD;\n\tstd::cout << res << \" \\n\"[q == 0];\n\tfor (int i = 1, op, x; i <= q; ++i) {\n\t\tstd::cin >> op >> x;\n\t\tif (op == 1) {\n\t\t\tint p = std::upper_bound(c + 1, c + n + 1, a[x]) - c - 1;\n\t\t\tif (c[p] < d[p]) res = 1ll * res * qpow(c[p]) % MOD * (c[p] + 1) % MOD;\n\t\t\t++a[x], ++c[p];\n\t\t} else {\n\t\t\tint p = std::upper_bound(d + 1, d + n + 1, b[x]) - d - 1;\n\t\t\tif (d[p] < c[p]) res = 1ll * res * qpow(d[p]) % MOD * (d[p] + 1) % MOD;\n\t\t\t++b[x], ++d[p];\n\t\t}\n\t\tstd::cout << res << \" \\n\"[i == q];\n\t}\n}\n \nint main() {\n\tstd::ios::sync_with_stdio(false);\n\tstd::cin.tie(nullptr), std::cout.tie(nullptr);\n\tint t; std::cin >> t; while (t--) solve(); return 0;\n}"
+    ]
+  }
+}

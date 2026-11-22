@@ -1,0 +1,45 @@
+{
+  "contest_id": 2018,
+  "index": "E1",
+  "name": "Complex Segments (Easy Version)",
+  "rating": 3300,
+  "tags": [
+    "binary search",
+    "data structures",
+    "divide and conquer",
+    "dsu",
+    "greedy",
+    "math",
+    "sortings"
+  ],
+  "points": 2250.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2018E1",
+  "url": "https://codeforces.com/problemset/problem/2018/E1",
+  "contest_start_time": "2024-09-27T13:35:00+00:00",
+  "statement": {
+    "title": "E1. Complex Segments (Easy Version)",
+    "time_limit": "6 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Ken Arai - COMPLEX\n\n⠀\n\nThis is the easy version of the problem. In this version, the constraints on $n$ and the time limit are lower. You can make hacks only if both versions of the problem are solved.\n\nA set of (closed) segments is complex if it can be partitioned into some subsets such that\n\n all the subsets have the same size; and\n\n a pair of segments intersects if and only if the two segments are in the same subset.\n\nYou are given $n$ segments $[l_1, r_1], [l_2, r_2], \\ldots, [l_n, r_n]$. Find the maximum size of a complex subset of these segments.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 10^3$). The description of the test cases follows.\n\nThe first line of each test case contains a single integer $n$ ($1 \\le n \\le 2 \\cdot 10^4$) — the number of segments.\n\nThe second line of each test case contains $n$ integers $l_1, l_2, \\ldots, l_n$ ($1 \\le l_i \\le 2n$) — the left endpoints of the segments.\n\nThe third line of each test case contains $n$ integers $r_1, r_2, \\ldots, r_n$ ($l_i \\leq r_i \\le 2n$) — the right endpoints of the segments.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $2 \\cdot 10^4$.",
+    "output_spec": "For each test case, output a single integer: the maximum size of a complex subset of the given segments.",
+    "note": "In the first test case, all pairs of segments intersect, therefore it is optimal to form a single group containing all of the three segments.\n\nIn the second test case, there is no valid partition for all of the five segments. A valid partition with four segments is the following: $\\{\\{ [1, 5], [2, 4] \\}, \\{ [6, 9], [8, 10] \\}\\}$.\n\nIn the third test case, it is optimal to make a single group containing all the segments except the second.",
+    "samples": [
+      {
+        "input": "3\n3\n1 2 3\n5 4 6\n5\n1 2 3 6 8\n5 4 7 9 10\n5\n3 1 4 1 5\n7 2 6 5 10",
+        "output": "\n3\n4\n4"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 134420,
+    "url": "https://codeforces.com/blog/entry/134420",
+    "tutorial": "2018E1 - Complex Segments (Easy Version), 2018E2 - Complex Segments (Hard Version)\n\nAuthors: lorenzoferrari, TheScrasse\n Full solution: Flamire\n Preparation: francesco, lorenzoferrari\n\nHint 1\n\nSolve for a fixed $m$ (size of the subsets).\n\nHint 2\n\n$m = 1$ is easy. Can you do something similar for other $m$?\n\nHint 3\n\nSolve for a fixed $k$ (number of subsets).\n\nHint 4\n\nIf you have a $O(n \\log n)$ solution for a fixed $m$, note that there exists a faster solution!\n\nSolution\n\nLet's write a function max_k(m), which returns the maximum $k$ such that there exists a partition of $k$ valid sets containing $m$ intervals each. max_k works in $O(n \\log n)$ in the following way (using a lazy segment tree):\n\n(wlog) $r_i \\leq r_{i+1}$;\n\nfor each $i$ not intersecting the previous subset, add $1$ on the interval $[l[i], r[i]]$;\n\nas soon as a point belongs to $m$ intervals, they become a subset;\n\nreturn the number of subsets.\n\nFor a given $k$, you can binary search the maximum $m$ such that max_k(m) $\\geq k$ in $O(n \\log^2 n)$.\n\nThe problem asks for the maximum $mk$. Since $mk \\leq n$, for any constant $C$ either $m \\leq C$ or $k \\leq n/C$. For $C = (n \\log n)^{1/2}$, the total complexity becomes $O((n \\log n)^{3/2})$, which is enough to solve 2018E1 - Complex Segments (Easy Version). You can also find max_k(m) for all $m$ with a divide and conquer approach, and the complexity becomes $O(n \\sqrt n \\log n)$ (see here).\n\nNow let's go back to max_k(m). It turns out you can implement it in $O(n \\alpha(n))$.\n\nFirst of all, let's make all the endpoints distinct, in such a way that two intervals intersect if and only if they were intersecting before.\n\nLet's maintain a binary string of size $n$, initially containing only ones, that can support the following queries:\n\nset bit in position $p$ to 0;\n\nfind the nearest 1 to the left of position $p$.\n\nThis can be maintained with DSU, where the components are the maximal intervals containing 100...00.\n\nNow let's reuse the previous solution (sweeping $r$ from left to right), but instead of a segment tree we will maintain a binary string with the following information:\n\nthe positions $ \\gt r$ store 1;\n\nthe positions $\\leq r$ store 1 if and only if the value in that position (in the previous solution) is a suffix max.\n\nSo the queries become:\n\nadd $1$ to $[l, r]$:\n\n$r$ changes, so you have to set elements in $[r'+1, r-1]$ to $0$;\n\nthe only other element that changes is the nearest 1 to the left of position $l$, which does not represent a suffix max anymore.\n\nfind the maximum: it's equal to the number of suffix maximums, which depends on $r$ and on the number of components.\n\nThis solution allows us to replace a $O(\\log n)$ factor with a $O(\\alpha(n))$ factor.\n\nComplexity: $O(n \\sqrt n \\alpha(n))$\n\n[Bonus: there exists a data structure faster than DSU to solve the subproblem above, so you can solve the problem in $O(n \\sqrt n)$. See here.]",
+    "solution_code": []
+  }
+}

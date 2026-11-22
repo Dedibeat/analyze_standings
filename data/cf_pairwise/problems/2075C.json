@@ -1,0 +1,43 @@
+{
+  "contest_id": 2075,
+  "index": "C",
+  "name": "Two Colors",
+  "rating": 1500,
+  "tags": [
+    "binary search",
+    "combinatorics",
+    "math"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2075C",
+  "url": "https://codeforces.com/problemset/problem/2075/C",
+  "contest_start_time": "2025-03-17T14:35:00+00:00",
+  "statement": {
+    "title": "C. Two Colors",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Monocarp has installed a new fence at his summer house. The fence consists of $n$ planks of the same size arranged in a row.\n\nMonocarp decided that he would paint his fence according to the following rules:\n\n each plank of the fence will be painted in exactly one color;\n\n the number of different colors that the planks will be painted in is exactly two;\n\n the planks of the fence that are painted in the same color must form a continuous sequence, meaning that for all pairs of planks painted in the same color, there will be no planks painted in a different color between them.\n\nMonocarp has $m$ different paints, and the paint of the $i$-th color is sufficient to paint no more than $a_i$ planks of the fence. Monocarp will not buy any additional paints.\n\nYour task is to determine the number of different ways to paint the fence that satisfy all of Monocarp's described wishes. Two ways to paint are considered different if there exists a plank that is painted in different colors in these two ways.",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases.\n\nThe first line of each test case contains two integers $n$ and $m$ ($2 \\le n, m \\le 2 \\cdot 10^5$) — the number of planks in the fence and the number of different colors of paint that Monocarp has.\n\nThe second line contains $m$ integers $a_1, a_2, \\dots, a_m$ ($1 \\le a_i \\le n$), where $a_i$ is the maximum number of planks that can be painted with the paint of color $i$.\n\nThe sum of $n$ over all test cases does not exceed $2 \\cdot 10^5$. The sum of $m$ over all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, output the number of different ways to paint the fence that satisfy all of Monocarp's described wishes.",
+    "note": "In the first test case, there are $4$ different ways to paint the fence (the sequences of color numbers in which the planks can be painted from left to right are listed below):\n\n $[1, 2, 2, 2, 2]$;\n\n $[1, 1, 2, 2, 2]$;\n\n $[2, 2, 2, 1, 1]$;\n\n $[2, 2, 2, 2, 1]$.\n\nIn the second test case, there are $6$ different ways to paint the fence (the sequences of color numbers in which the planks can be painted from left to right are listed below):\n\n $[1, 2, 2, 2, 2]$;\n\n $[1, 1, 2, 2, 2]$;\n\n $[1, 1, 1, 2, 2]$;\n\n $[2, 2, 1, 1, 1]$;\n\n $[2, 2, 2, 1, 1]$;\n\n $[2, 2, 2, 2, 1]$.",
+    "samples": [
+      {
+        "input": "3\n5 2\n2 4\n5 2\n3 4\n12 3\n5 9 8",
+        "output": "\n4\n6\n22"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 140781,
+    "url": "https://codeforces.com/blog/entry/140781",
+    "tutorial": "Consider a general form of a fence: the planks from $1$ to $k$ are painted in one color, and the planks from $k + 1$ to $n$ are painted in another color.\n\nLet's iterate over the value of $k$. It is then easy to determine which colors are suitable for the first half and which are suitable for the second half. Any color with $a_i \\ge k$ will work for the first half, while for the second half, the colors must satisfy $a_i \\ge n - k$. If we sort the values of $a_i$ in non-decreasing order, we can find the number of available colors using binary search. In C++, we can use lower_bound, and in Python, we can use bisect.bisect_left.\n\nLet there be $x$ candidates for the first half and $y$ candidates for the second half. We would like the number of ways to choose two colors to be equal to $x \\cdot y$. However, we have accidentally counted cases where we chose the same color for both halves of the fence. The number of such cases is $\\min(x, y)$, as that color must be sufficient for both halves. Therefore, the contribution of $k$ to the answer is $x \\cdot y - \\min(x, y)$.\n\nSum up the answers for all $k$ to obtain the final answer to the problem.\n\nOverall complexity: $O((n + m) \\log m)$ for each test case.",
+    "solution_code": [
+      "from bisect import bisect_left\n\nfor _ in range(int(input())):\n    n, m = map(int, input().split())\n    a = sorted(list(map(int, input().split())))\n    ans = 0\n    for k in range(1, n):\n        x = m - bisect_left(a, k)\n        y = m - bisect_left(a, n - k)\n        ans += x * y - min(x, y)\n    print(ans)"
+    ]
+  }
+}

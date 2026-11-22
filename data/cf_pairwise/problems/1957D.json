@@ -1,0 +1,42 @@
+{
+  "contest_id": 1957,
+  "index": "D",
+  "name": "A BIT of an Inequality",
+  "rating": 1900,
+  "tags": [
+    "bitmasks",
+    "brute force",
+    "dp",
+    "math"
+  ],
+  "points": 1750.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1957D",
+  "url": "https://codeforces.com/problemset/problem/1957/D",
+  "contest_start_time": "2024-04-21T14:35:00+00:00",
+  "statement": {
+    "title": "D. A BIT of an Inequality",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "You are given an array $a_1, a_2, \\ldots, a_n$. Find the number of tuples ($x, y, z$) such that:\n\n $1 \\leq x \\leq y \\leq z \\leq n$, and\n\n $f(x, y) \\oplus f(y, z)  \\gt  f(x, z)$.\n\nWe define $f(l, r) = a_l \\oplus a_{l + 1} \\oplus \\ldots \\oplus a_{r}$, where $\\oplus$ denotes the bitwise XOR operation.",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\leq t \\leq 10^4$) — the number of test cases.\n\nThe first line of each test case contains a single integer $n$ ($1 \\leq n \\leq 10^5$).\n\nThe second line of each test case contains $n$ integers $a_1, a_2, \\ldots, a_n$ ($1 \\leq a_i \\leq 10^9$).\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $10^5$.",
+    "output_spec": "For each test case, output a single integer on a new line — the number of described tuples.",
+    "note": "In the first case, there are 4 such tuples in the array $[6, 2, 4]$:\n\n ($1$, $2$, $2$): $(a_1 \\oplus a_2) \\oplus (a_2) = 4 \\oplus 2  \\gt  (a_1 \\oplus a_2) = 4$\n\n ($1$, $1$, $3$): $(a_1) \\oplus (a_1 \\oplus a_2 \\oplus a_3) = 6 \\oplus 0  \\gt  (a_1 \\oplus a_2 \\oplus a_3) = 0$\n\n ($1$, $2$, $3$): $(a_1 \\oplus a_2) \\oplus (a_2 \\oplus a_3) = 4 \\oplus 6  \\gt  (a_1 \\oplus a_2 \\oplus a_3) = 0$\n\n ($1$, $3$, $3$): $(a_1 \\oplus a_2 \\oplus a_3) \\oplus (a_3) = 0 \\oplus 4  \\gt  (a_1 \\oplus a_2 \\oplus a_3) = 0$\n\nIn the second test case, there are no such tuples.",
+    "samples": [
+      {
+        "input": "3\n3\n6 2 4\n1\n3\n5\n7 3 7 2 1",
+        "output": "\n4\n0\n16"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "missing"
+  },
+  "editorial": {
+    "blog_id": 128716,
+    "url": "https://codeforces.com/blog/entry/128716",
+    "tutorial": null,
+    "solution_code": []
+  }
+}

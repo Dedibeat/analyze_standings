@@ -1,0 +1,43 @@
+{
+  "contest_id": 2033,
+  "index": "F",
+  "name": "Kosuke's Sloth",
+  "rating": 1800,
+  "tags": [
+    "brute force",
+    "math",
+    "number theory"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2033F",
+  "url": "https://codeforces.com/problemset/problem/2033/F",
+  "contest_start_time": "2024-10-24T14:35:00+00:00",
+  "statement": {
+    "title": "F. Kosuke's Sloth",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "Kosuke is too lazy. He will not give you any legend, just the task:\n\nFibonacci numbers are defined as follows:\n\n $f(1)=f(2)=1$.\n\n $f(n)=f(n-1)+f(n-2)$ $(3\\le n)$\n\n We denote $G(n,k)$ as an index of the $n$-th Fibonacci number that is divisible by $k$. For given $n$ and $k$, compute $G(n,k)$.\nAs this number can be too big, output it by modulo $10^9+7$.\n\nFor example: $G(3,2)=9$ because the $3$-rd Fibonacci number that is divisible by $2$ is $34$. $[1,1,\\textbf{2},3,5,\\textbf{8},13,21,\\textbf{34}]$.",
+    "input_spec": "The first line of the input data contains a single integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases.\n\nThe first and only line contains two integers $n$ and $k$ ($1 \\le n \\le 10^{18}$, $1 \\le k \\le 10^5$).\n\nIt is guaranteed that the sum of $k$ across all test cases does not exceed $10^6$.",
+    "output_spec": "For each test case, output the only number: the value $G(n,k)$ taken by modulo $10^9+7$.",
+    "note": null,
+    "samples": [
+      {
+        "input": "3\n3 2\n100 1\n1000000000000 1377",
+        "output": "\n9\n100\n999244007"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 135520,
+    "url": "https://codeforces.com/blog/entry/135520",
+    "tutorial": "This was one of my favourite tasks untill I realised that the amount of numbers in Fibonacci cycle is either $1$, $2$ or $4$...\n\nFirst of all, the length of cycle after which our sequence would be repeating for modulo $k$ is at most $6k$ (We will just take this as a fact for now, it is too long to explain but you can read it here.\n\nNow, if we know that the amount of operations needed to take untill we are in a cycle is at most $6k$, we can brute-force our solution in $O(k)$ time.\n\nAlso, one last thing that we will need to consider is the fact that\n\nif $F_i$ is divisible by $k$, then for every $j$, $F_{i\\cdot j}$ is also divisible by $k$.\n\nProof:\n\nas we know, $gcd(F_n,F_m)=F_{gcd(n,m)}$ so if we take any multiple of $i$ as $n$ and $i=m$, then the $gcd(F_{n},F_{m})$ would be equal to $F_{i}$.\n\nAnd because $F_{i}$ is divisible by $k$, every other multiple of $i$ is going to be also divisible by $k$.\n\nSo, our final solution would be brute-forcing first $6k$ Fibonacci numbers and their remainder after division by $k$ in order to find the first one that is divisible by $k$. Then just multiply that number by $n$ and we will get the answer for our task. Also, don't forget to take everything via modulo $10^9+7$. (Someone kept whining about it in comments)\n\nTotal time complexity $O(k)$.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n \nusing namespace std;\nusing LL = long long;\n#define ssize(x) (int)(x.size())\n#define ALL(x) (x).begin(), (x).end()\n \nmt19937 rng(chrono::steady_clock::now().time_since_epoch().count());\n \nint rd(int l, int r) {\n    return uniform_int_distribution<int>(l, r)(rng);\n}\nconst LL MOD = 1e9 + 7;\nint bp(int a, int n) {\n    if (n == 0)\n        return 1;\n    if (n % 2 == 0)\n        return bp(1LL * a * a % MOD, n / 2);\n    else\n        return 1LL * bp(a, n - 1) * a % MOD;\n}\nint inv(int a) {\n    return bp(a, MOD - 2);\n}\nvoid solve() {\n    LL n, k;\n    cin >> n >> k;\n    n %= MOD;\n    if (k == 1) {\n        cout << n << \"\\n\";\n        return;\n    }\n    vector<int> fib(3);\n    fib[0] = fib[1] = 1;\n    int cnt = 0;\n    for (int i = 2; i <= 10 * k; i++) {\n        fib[i % 3] = (fib[(i + 2) % 3] + fib[(i + 1) % 3]) % k;\n        if (fib[i % 3] == 0)\n            cnt++;\n        if (fib[i % 3] == 1 && fib[(i + 2) % 3] == 0) {\n            cout << 1LL * i * n % MOD * inv(cnt) % MOD << \"\\n\";\n            return;\n        }\n    }\n}\nint main() {\n    ios_base::sync_with_stdio(0);\n    cin.tie(0);\n    cout.tie(0);\n    int t = 1;\n     cin >> t;\n    while (t--) {\n        solve();\n    }\n}"
+    ]
+  }
+}

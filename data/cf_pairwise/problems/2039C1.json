@@ -1,0 +1,44 @@
+{
+  "contest_id": 2039,
+  "index": "C1",
+  "name": "Shohag Loves XOR (Easy Version)",
+  "rating": 1200,
+  "tags": [
+    "bitmasks",
+    "brute force",
+    "math",
+    "number theory"
+  ],
+  "points": 1000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2039C1",
+  "url": "https://codeforces.com/problemset/problem/2039/C1",
+  "contest_start_time": "2024-11-23T14:35:00+00:00",
+  "statement": {
+    "title": "C1. Shohag Loves XOR (Easy Version)",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "This is the easy version of the problem. The differences between the two versions are highlighted in bold. You can only make hacks if both versions of the problem are solved.\n\nShohag has two integers $x$ and $m$. Help him count the number of integers $1 \\le y \\le m$ such that $\\mathbf{x \\neq y}$ and $x \\oplus y$ is a divisor$^{\\text{∗}}$ of either $x$, $y$, or both. Here $\\oplus$ is the bitwise XOR operator.\n\n$^{\\text{∗}}$The number $b$ is a divisor of the number $a$ if there exists an integer $c$ such that $a = b \\cdot c$.",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases.\n\nThe first and only line of each test case contains two space-separated integers $x$ and $m$ ($1 \\le x \\le 10^6$, $1 \\le m \\le 10^{18}$).\n\nIt is guaranteed that the sum of $x$ over all test cases does not exceed $10^7$.",
+    "output_spec": "For each test case, print a single integer — the number of suitable $y$.",
+    "note": "In the first test case, for $x = 6$, there are $3$ valid values for $y$ among the integers from $1$ to $m = 9$, and they are $4$, $5$, and $7$.\n\n $y = 4$ is valid because $x \\oplus y = 6 \\oplus 4 = 2$ and $2$ is a divisor of both $x = 6$ and $y = 4$.\n\n $y = 5$ is valid because $x \\oplus y = 6 \\oplus 5 = 3$ and $3$ is a divisor of $x = 6$.\n\n $y = 7$ is valid because $x \\oplus y = 6 \\oplus 7 = 1$ and $1$ is a divisor of both $x = 6$ and $y = 7$.\n\nIn the second test case, for $x = 5$, there are $2$ valid values for $y$ among the integers from $1$ to $m = 7$, and they are $4$ and $6$.\n\n $y = 4$ is valid because $x \\oplus y = 5 \\oplus 4 = 1$ and $1$ is a divisor of both $x = 5$ and $y = 4$.\n\n $y = 6$ is valid because $x \\oplus y = 5 \\oplus 6 = 3$ and $3$ is a divisor of $y = 6$.",
+    "samples": [
+      {
+        "input": "5\n6 9\n5 7\n2 3\n6 4\n4 1",
+        "output": "\n3\n2\n1\n1\n0"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 136523,
+    "url": "https://codeforces.com/blog/entry/136523",
+    "tutorial": "THOUGHT: Here $x  \\gt  0$ and $y  \\gt  0$. So $x \\oplus y$ is neither equal to $x$ nor $y$. So $x \\oplus y$ is a divisor of $x$ or $y$ and $x \\oplus y  \\lt  x$ or $x \\oplus y  \\lt  y$.\n\nOBSERVATION: Any divisor $d$ of $p$ such that $d  \\lt  p$ we know that $d \\le \\lfloor \\frac{p}{2} \\rfloor$.\n\nAlso, the highest bits of $d$ and $p$ are different when $d \\le \\lfloor \\frac{p}{2} \\rfloor$.\n\nTHOUGHT: Wait but $x \\oplus y$ has the same highest bit as $y$ if $y \\ge 2 \\cdot x$.\n\nCONCLUSION: So if $y \\ge 2 \\cdot x$, then $x \\oplus y$ can not be a divisor of $y$.\n\nTHOUGHT: But can it be a divisor of $x$?\n\nOBSERVATION: If $y \\ge 2 \\cdot x$, then $x \\oplus y  \\gt  x$ because the highest bit in $x \\oplus y$ is greater than that in $x$. So $x \\oplus y$ can not be a divisor of $x$.\n\nCONCLUSION: If $y \\ge 2 \\cdot x$, then $x \\oplus y$ can not be a divisor of $x$ or $y$. So no solution in this case.\n\nTHOUGHT: Now we need to consider the case when $y  \\lt  2 \\cdot x$. But $x$ is small in this problem, making it feasible to iterate over all possible values of $y$.\n\nACTION: Iterate over all possible values of $y  \\lt  2 \\cdot x$ and check if $x \\oplus y$ is a divisor of either $x$ or $y$.\n\nTime Complexity: $\\mathcal{O}(x)$.",
+    "solution_code": [
+      "#include<bits/stdc++.h>\nusing namespace std;\n\nusing ll = long long;\n\nvoid solve() {\n  int x; ll m; cin >> x >> m;\n\n  int ans = 0;\n  for (int y = 1; y <= min(2LL * x, m); y++) {\n    if (x != y and ((x % (x ^ y)) == 0 or (y % (x ^ y) == 0))) {\n      ++ans;\n    }\n  }\n  cout << ans << '\\n';\n}\n\nint32_t main() {\n  ios_base::sync_with_stdio(0);\n  cin.tie(0);\n  int t = 1;\n  cin >> t;\n  while (t--) {\n    solve();\n  }\n  return 0;\n}"
+    ]
+  }
+}

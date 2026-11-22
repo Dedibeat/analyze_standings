@@ -1,0 +1,60 @@
+{
+  "contest_id": 1975,
+  "index": "G",
+  "name": "Zimpha Fan Club",
+  "rating": 3000,
+  "tags": [
+    "fft",
+    "greedy",
+    "math",
+    "strings"
+  ],
+  "points": 3000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1975G",
+  "url": "https://codeforces.com/problemset/problem/1975/G",
+  "contest_start_time": "2024-05-25T14:35:00+00:00",
+  "statement": {
+    "title": "G. Zimpha Fan Club",
+    "time_limit": "12 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "One day, Zimpha casually came up with a problem. As a member of \"Zimpha fan club\", you decided to solve that problem.\n\nYou are given two strings $s$ and $t$ of length $n$ and $m$, respectively. Both strings only consist of lowercase English letters, - and *.\n\nYou need to replace all occurrences of * and -, observing the following rules:\n\n For each -, you must replace it with any lowercase English letter.\n\n For each *, you must replace it with a string of any (possibly, zero) length which only consists of lowercase English letters.\n\nNote that you can replace two different instances of - with different characters. You can also replace each two different instances of * with different strings.\n\nSuppose $s$ and $t$ have been transformed into $s'$ and $t'$. Now you're wondering if there's a replacement that makes $s'=t'$.",
+    "input_spec": "The first line of input contains two integers $n$ and $m$ ($1 \\leq n, m \\leq 2 \\cdot 10^6$) — the length of the strings $s$ and $t$, respectively.\n\nThe second line contains the string $s$ of length $n$. It is guaranteed that $s$ only consists of lowercase English letters, - and *.\n\nThe third line contains the string $t$ of length $m$. It is guaranteed that $t$ only consists of lowercase English letters, - and *.",
+    "output_spec": "For each test case, output \"Yes\" if there is a replacement that makes $s'=t'$, and output \"No\" otherwise.\n\nYou can output \"Yes\" and \"No\" in any case (for example, strings \"yEs\", \"yes\", \"Yes\" and \"YES\" will be recognized as a positive response).",
+    "note": "In the second test case, we can transform both strings into ttklwxx. In $s$, - will be replaced with l. In $t$, * will be replaced by the empty string with the first and second - will be replaced with k and w respectively.\n\nIn the fifth test case, we can transform both strings into bulijiojioxdibuliduo.",
+    "samples": [
+      {
+        "input": "10 10\njustmonika\nj-stsayori",
+        "output": "\nNo"
+      },
+      {
+        "input": "7 8\nttk-wxx\n*tt-l-xx",
+        "output": "\nYes"
+      },
+      {
+        "input": "13 11\nasoulwangziji\n-soulg*z-y-",
+        "output": "\nNo"
+      },
+      {
+        "input": "7 3\nabc*cba\na*c",
+        "output": "\nNo"
+      },
+      {
+        "input": "20 18\nbulijiojio-dibuliduo\n*li*ji-*ox*i*-du*-",
+        "output": "\nYes"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 129801,
+    "url": "https://codeforces.com/blog/entry/129801",
+    "tutorial": "1975G - Zimpha Fan Club\n\nIdea: Gellyfish, zimpha Solution: Gellyfish Prepared by: Gellyfish, errorgorn, MagicalFlower\n\nHint 1\n\nIf $s, t$ both have $*$, or both don't have $*$, then it will be a simple problem. Can you try to solve this problem?\n\nHint 2\n\nAccording to the first hint, we have discussed two cases. In the remaining cases, without loss of generality, we think that only $t$ has $*$. Suppose we write $t$ as $t'_0*t'_1*t'_2* \\dots*t'_k$. Where $t'_i$ does not take $*$, assuming that $|t'_i| \\leq 50$ is satisfied for all $i$, can you solve this problem?\n\nHint 3\n\nThere is a strictly subproblem of this problem, namely, given two strings $s$ and $t$ consisting only of characters from $a$ to $z$ and $-$, you need to find all positions in $s$ where $t$ can be matched.\n\nThis problem has a classic solution, where $-$ is set to $0$, and $a$ to $z$ are sequentially assigned values from $1$ to $26$, and then let $f_i = \\sum_{j=1}^m [s_{i +j-1} \\gt 0] \\times [t_j \\gt 0] (s_{i+j-1}-t_j)^2$, then all positions of $f_i = 0$ satisfy $s[i, i + m -1]$ can match $t$​.\n\nDecompose the calculation formula, $f_i = \\sum_{j=1}^m s_{i+j-1}^2+s_j^2 - 2\\sum_{j=1}^m s_{i+j -1}{t_j} - \\sum_{j=1}^m [s_{i+j-1} = 0] t_j^2 - \\sum_{j=1}^m s_{i+j-1}^ 2[t_j=0]$. For $\\sum_{j=1}^m s_{i+j-1}^2+s_j^2$, you can prefix and process it, and for the remaining part, you can use FFT in $O(n \\log n )$ to be resolved.\n\nWhat is the use of this solution in the original problem?\n\nSolution\n\nRead the hints.\n\nIn the following, we consider $n, m$ to be of the same order.\n\nConsider the case where $s$ and $t$ do not contain $*$. We only need to be compared bit by bit.\n\nConsider the case where $s, t$ both contain $*$, if the beginning of $s$ is not $*$ or the beginning of $t$ is not $*$:\n\nIf one of the first characters of $s$ and $t$ is $*$ or the first characters can match, delete the first characters of the two strings that are not $*$.\n\nOherwise the answer is obviously No.\n\nPerforming the same operation on the last characters, it is not difficult to find that it will be reduced to two strings $*s’$ and $t'*$, where $s'$ and $t'$ are arbitrary strings. Then it is not difficult to find that $t's'$ matches two strings at the same time. Therefore, as long as the head and tail can be successfully deleted, the answer must be Yes.\n\nConsider the hardest case. Without loss of generality, we assume that only $t$ contains $*$, otherwise $s, t$ can be exchanged. We still delete the beginning and the end first. It is not difficult to find that thereafter $t$ can be written as $*t'_1*t'_2*\\dots*t'_k *$.\n\nThen we will have a greedy solution. We iterate $i$ from $1$ to $n$, find the first matching position of $t'_i$ in $s$ each time, and delete tthese matching characters and all preceding characters in $s$, that is, remove a prefix of $s$, and then until all matching is completed or no matching position is found in $s$.\n\nAssume that we use FFT to brute force solve this problem every time. See Hint.3 for the specific solution, then the complexity is $O(nk \\log n)$.\n\nBut it is not difficult to find that this is very wasteful. In fact, we can do this:\n\nWhen matching $t'_i$, only take out the first $|2t'_i|$ characters of $s$ each time and try to match $t'_i$. Because if the match is successful, then since all positions matching $t'_i$ are deleted, it is not difficult to find that at least $|t'_i|$ characters are deleted. And if the match fails, it is not difficult to find that the first $|t'_i|$ characters of $s$ will no longer be useful and can also be deleted. Therefore we remove at least the first $|t'_i|$ characters in $s$ in complexity $O(|t'_i| \\log |t'_i|)$.\n\nSince the total length of $s$ is $n$, the total time complexity does not exceed $O(n \\log n)$.\n\nCode",
+    "solution_code": [
+      "#include<bits/stdc++.h>\n\nusing namespace std;\ntypedef long long ll;\n\nconst ll N = (1 << 22) + 5, Mod = 2013265921, G = 31;\n\ninline ll power(ll x, ll y){\n\tll ret = 1;\n\twhile(y){\n\t\tif(y & 1) ret = ret * x % Mod;\n\t\tx = x * x % Mod, y >>= 1;\n\t}\n\treturn ret;\n}\n\nll p[N] = {}, w[N] = {}, g[N] = {}, iv[N] = {};\n\ninline void dft(ll n, ll a[], bool idft){\n\tfor(ll i = 0 ; i < n ; i ++) if(i < p[i]) swap(a[i], a[p[i]]);\n\tfor(ll m = 1 ; m < n ; m <<= 1) for(ll j = 0, k = 0 ; j < n ; j += m << 1, k ++) for(ll i = j ; i < j + m ; i ++){\n\t\tll x = a[i], y = a[i + m];\n\t\ta[i] = x + y, a[i] >= Mod && (a[i] -= Mod);\n\t\ta[i + m] = (x - y + Mod) * w[k] % Mod;\n\t}\n\tif(!idft) return;\n\treverse(a + 1, a + n);\n\tfor(int i = 0 ; i < n ; i ++) a[i] = a[i] * iv[n] % Mod;\n}\n\ninline ll sqr(ll x){\n\treturn x * x;\n}\n\nll n = 0, m = 0, a[3][N] = {}, b[3][N] = {}, c[N] = {}, d[N] = {};\nchar s[N] = {}, t[N] = {};\n\ninline ll work(ll L, ll R, ll l, ll r){\n\tll M = 1; while(M < R - L + r - l) M <<= 1;\n\tw[0] = 1;\n\tfor(ll k = 1 ; k < M ; k <<= 1){\n\t\tll bit = M / 2 / k;\n        if(k == M / 2) for(ll i = 0; i < k ; i ++) p[i + k] = p[i] | bit;\n        else for(ll i = 0 ; i < k ; i ++){\n            w[i + k] = w[i] * g[k] % Mod;\n            p[i + k] = p[i] | bit;\n        }\n    }\n\tfor(ll i = 0 ; i < M ; i ++){\n\t\tp[i] = p[i >> 1] >> 1;\n\t\tif(i & 1) p[i] |= M >> 1;\n\t}\n\tll z = 0;\n\tfor(ll i = 0 ; i < M ; i ++){\n\t\tc[i] = 0;\n\t\tfor(ll f = 0 ; f < 3 ; f ++)  a[f][i] = b[f][i] = 0;\n\t}\n\tfor(ll i = L ; i < R ; i ++){\n\t\tll x = (s[i] == '-') ? 0 : (s[i] - 'a' + 1);\n\t\ta[0][i - L] = x ? 0 : 1, a[1][i - L] = 2 * x, a[2][i - L] = sqr(x), d[i] = sqr(x);\n\t}\n\td[R] = 0;\n\tfor(ll i = l ; i < r ; i ++){\n\t\tll x = (t[i] == '-') ? 0 : (t[i] - 'a' + 1);\n\t\tb[0][r - i] = sqr(x), b[1][r - i] = x, b[2][r - i] = x ? 0 : 1, z += sqr(x);\n\t}\n\tfor(ll f = 0 ; f < 3 ; f ++){\n\t\tdft(M, a[f], 0), dft(M, b[f], 0);\n\t\tfor(ll i = 0 ; i < M ; i ++) c[i] = (c[i] + a[f][i] * b[f][i]) % Mod;\n\t}\n\tdft(M, c, 1);\n\tfor(ll i = 0 ; i < r - l ; i ++) z += d[i + L];\n\tfor(ll i = L ; i <= R - (r - l) ; z -= d[i], z += d[i + (r - l)], i ++) if(z % Mod == c[i - L + r - l]) return i;\n\treturn -1;\n}\n\nint main(){\n\tfor(ll i = 1 ; i < N ; i <<= 1) g[i] = power(G, Mod / 4 / i), iv[i] = power(i, Mod - 2);\n\tscanf(\"%lld %lld\", &n, &m);\n\tscanf(\"%s %s\", s, t);\n\twhile(n && m && s[n - 1] != '*' && t[m - 1] != '*'){\n\t\tif(s[n - 1] != t[m - 1] && s[n - 1] != '-' && t[m - 1] != '-'){\n\t\t\tprintf(\"No\");\n\t\t\treturn 0;\n\t\t}\n\t\telse n --, m --;\n\t}\n\treverse(s, s + n), reverse(t, t + m);\n\twhile(n && m && s[n - 1] != '*' && t[m - 1] != '*'){\n\t\tif(s[n - 1] != t[m - 1] && s[n - 1] != '-' && t[m - 1] != '-'){\n\t\t\tprintf(\"No\");\n\t\t\treturn 0;\n\t\t}\n\t\telse n --, m --;\n\t}\n\treverse(s, s + n), reverse(t, t + m);\n\tif(min(n, m) == 0){\n\t\twhile(n && s[n - 1] == '*') n --;\n\t\twhile(m && t[m - 1] == '*') m --;\n\t\tif(max(n, m) == 0) printf(\"Yes\");\n\t\telse printf(\"No\");\n\t\treturn 0;\n\t}\n\tbool u = 0, v = 0;\n\tfor(ll i = 0 ; i < n ; i ++) if(s[i] == '*') u = 1;\n\tfor(ll i = 0 ; i < m ; i ++) if(t[i] == '*') v = 1;\n\tif(u){\n\t\tif(v){\n\t\t\tprintf(\"Yes\");\n\t\t\treturn 0;\n\t\t}\n\t\telse swap(n, m), swap(s, t);\n\t}\n\tll L = 0, R = 0;\n\tfor(ll l = 1, r = l ; l < m ; l = r + 1, r = l){\n\t\twhile(t[r] != '*') r ++;\n\t\tif(r - l) while(1){\n\t\t\tR = min(n, L + 2 * (r - l));\n\t\t\tif(R - L < r - l){\n\t\t\t\tprintf(\"No\");\n\t\t\t\treturn 0;\n\t\t\t}\n\t\t\tll h = work(L, R, l, r);\n\t\t\tif(h == -1) L = R - (r - l) + 1;\n\t\t\telse{\n\t\t\t\tL = h + r - l;\n\t\t\t\tbreak;\n\t\t\t}\n\t\t}\n\t}\n\tprintf(\"Yes\");\n\treturn 0;\n}"
+    ]
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "contest_id": 2072,
+  "index": "C",
+  "name": "Creating Keys for StORages Has Become My Main Skill",
+  "rating": 1200,
+  "tags": [
+    "bitmasks",
+    "constructive algorithms",
+    "greedy"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2072C",
+  "url": "https://codeforces.com/problemset/problem/2072/C",
+  "contest_start_time": "2025-02-25T14:35:00+00:00",
+  "statement": {
+    "title": "C. Creating Keys for StORages Has Become My Main Skill",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Akito still has nowhere to live, and the price for a small room is everywhere. For this reason, Akito decided to get a job at a bank as a key creator for storages.\n\nIn this magical world, everything is different. For example, the key for a storage with the code $(n, x)$ is an array $a$ of length $n$ such that:\n\n $a_1 \\ | \\ a_2 \\ | \\ a_3 \\ | \\ \\ldots \\ | \\ a_n = x$, where $a \\ | \\ b$ is the bitwise \"OR\" of numbers $a$ and $b$.\n\n $\\text{MEX}(\\{ a_1, a_2, a_3, \\ldots, a_n \\})$$^{\\text{∗}}$ is maximized among all such arrays.\n\nAkito diligently performed his job for several hours, but suddenly he got a headache. Substitute for him for an hour; for the given $n$ and $x$, create any key for the storage with the code $(n, x)$.\n\n$^{\\text{∗}}$$\\text{MEX}(S)$ is the minimum non-negative integer $z$ such that $z$ is not contained in the set $S$ and all $0 \\le y  \\lt  z$ are contained in $S$.",
+    "input_spec": "The first line contains the number $t$ ($1 \\le t \\le 10^4$) — the number of test cases.\n\nIn the only line of each test case, two numbers $n$ and $x$ ($1 \\le n \\le 2 \\cdot 10^5, 0 \\le x  \\lt  2^{30}$) are given — the length of the array and the desired value of the bitwise \"OR\".\n\nIt is guaranteed that the sum of $n$ across all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, output $n$ integers $a_i$ ($0 \\le a_i  \\lt  2^{30}$) — the elements of the key array that satisfy all the conditions.\n\nIf there are multiple suitable arrays, output any of them.",
+    "note": null,
+    "samples": [
+      {
+        "input": "9\n1 69\n7 7\n5 7\n7 3\n8 7\n3 52\n9 11\n6 15\n2 3",
+        "output": "\n69\n6 0 3 4 1 2 5\n4 1 3 0 2\n0 1 2 3 2 1 0\n7 0 6 1 5 2 4 3\n0 52 0\n0 1 8 3 0 9 11 2 10\n4 0 3 8 1 2\n0 3"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 140039,
+    "url": "https://codeforces.com/blog/entry/140039",
+    "tutorial": "In problems involving $\\text{MEX}$, a common idea is its greedy maximization. This problem is no exception.\n\nNote that $a\\ |\\ b \\ge \\max(a, b)$. We will iterate through the number $m$ from $0$ to $\\min(n - 1, x)$. We will also keep a number $v$ initially set to $0$. When processing the current $m$, we check that $v\\ |\\ m$ has only those bits set that are set in the number $x$. If this is the case, we assign $m$ to $a_{m + 1}$, update $v$ to $v\\ |\\ m$, and proceed to check the next $m$. If this is not the case, we exit the loop.\n\nFinally, we need to check if the current bitwise OR of the array equals the number $x$. If so, we immediately output this array. Otherwise, we assign the number $x$ to $a_n$.\n\nAsymptotic complexity: $\\mathcal{O}(n)$.",
+    "solution_code": [
+      "#include <iostream>\n#include <vector>\n\nusing namespace std;\n\nvoid Solve() {\n  int len, val;\n  cin >> len >> val;\n  vector<int> ans(len, val);\n  int or_val = 0;\n  bool flag = true;\n  for (int i = 0; i < len - 1; ++i) {\n    if (((or_val | i) & val) == (or_val | i)) {\n      or_val |= i;\n      ans[i] = i;\n    } else {\n      flag = false;\n      break;\n    }\n  }\n  if (flag && (or_val | (len - 1)) == val) {\n    ans[len - 1] = len - 1;\n  }\n  for (auto it : ans) cout << it << ' ';\n  cout << '\\n';\n}\n\nsigned main() {\n  cin.tie(0)->sync_with_stdio(0);\n  int test_count = 1;\n  cin >> test_count;\n  while (test_count --> 0) Solve();\n}"
+    ]
+  }
+}

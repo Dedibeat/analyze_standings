@@ -1,0 +1,35 @@
+{
+  "contest_id": 2038,
+  "index": "J",
+  "name": "Waiting for...",
+  "rating": 800,
+  "tags": [
+    "greedy",
+    "implementation"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2038J",
+  "url": "https://codeforces.com/problemset/problem/2038/J",
+  "contest_start_time": "2024-11-18T10:35:00+00:00",
+  "statement": {
+    "title": "J. Waiting for...",
+    "time_limit": "2 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "Monocarp is waiting for a bus at the bus stop. Unfortunately, there are many people who want to ride a bus too.\n\nYou are given a list of events of two types:\n\n B $b_i$ — a bus with $b_i$ free seats arrives at the stop;\n\n P $p_i$ — $p_i$ people arrive at the stop.\n\nThese events are listed in a chronological order.\n\nWhen a bus arrives, the following happens. All people at the bus stop (except for Monocarp) try to enter the bus. If there are enough free seats for all of them, then they all enter the bus. Otherwise, some people remain at the bus stop (the number of people who enter the bus is equal to the number of free seats).\n\nIf there is still at least one free seat after all people (except for Monocarp) enter the bus, then Monocarp can decide to enter this bus as well (but he might choose to wait for another bus). For each bus, you have to determine if it is possible for Monocarp to take that bus.",
+    "input_spec": "The first line contains one integer $n$ $(1 \\le n \\le 10^3)$ — the number of events.\n\nThen, $n$ lines follow. The $i$-th of them contains the description of the $i$-th event in one of the two following formats:\n\n B $b_i$ ($1 \\le b_i \\le 10^6$) — a bus with $b_i$ free seats arrives at the stop;\n\n P $p_i$ ($1 \\le p_i \\le 10^6$) — $p_i$ people arrive at the stop.\n\nAdditional constraint on the input: there is at least one event of type B.",
+    "output_spec": "For each event of type B, print YES if it is possible for Monocarp to take the corresponding bus, or NO otherwise (case-insensitive).",
+    "note": null,
+    "samples": [
+      {
+        "input": "10\nP 2\nP 5\nB 8\nP 14\nB 5\nB 9\nB 3\nP 2\nB 1\nB 2",
+        "output": "\nYES\nNO\nNO\nYES\nNO\nYES"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "missing"
+  },
+  "editorial": null
+}

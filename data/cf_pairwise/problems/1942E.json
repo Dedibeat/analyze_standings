@@ -1,0 +1,42 @@
+{
+  "contest_id": 1942,
+  "index": "E",
+  "name": "Farm Game",
+  "rating": 2300,
+  "tags": [
+    "combinatorics",
+    "games"
+  ],
+  "points": 2500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1942E",
+  "url": "https://codeforces.com/problemset/problem/1942/E",
+  "contest_start_time": "2024-03-30T14:35:00+00:00",
+  "statement": {
+    "title": "E. Farm Game",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Lunatic Princess - Touhou\n\n⠀\n\nFarmer Nhoj has brought his cows over to Farmer John's farm to play a game! FJ's farm can be modeled by a number line with walls at points $0$ and $l + 1$. On the farm, there are $2n$ cows, with $n$ of the cows belonging to FJ and the other $n$ belonging to FN. They place each of their cows at a distinct point, and no two FJ's cows nor FN's cows are adjacent. Two cows are adjacent if there are no other cows between them.\n\nFormally, if $a_1, a_2, \\ldots, a_n$ represents the positions of FJ's cows and $b_1, b_2, \\ldots, b_n$ represents the positions of FN's cows, then either $0  \\lt  a_1  \\lt  b_1  \\lt  a_2  \\lt  b_2  \\lt  \\ldots  \\lt  a_n  \\lt  b_n  \\lt  l + 1$ or $0  \\lt  b_1  \\lt  a_1  \\lt  b_2  \\lt  a_2  \\lt  \\ldots  \\lt  b_n  \\lt  a_n  \\lt  l + 1$.\n\nIn one move, a farmer chooses a number $k$ $(1 \\leq k \\leq n)$ and a direction (left or right). Then, that farmer chooses $k$ of his cows and moves them one position towards the chosen direction. A farmer cannot move any of his cows onto the walls or onto another farmer's cow. If a farmer cannot move any cows, then that farmer loses. FJ starts the game, making the first turn.\n\nGiven $l$ and $n$, find the number of possible game configurations for Farmer John to win if both farmers play optimally. It may be the case that the game will continue indefinitely, in which no farmer wins. A configuration is different from another if there is any $i$ such that $a_i$ or $b_i$ is different. Output the answer modulo $998\\,244\\,353$.",
+    "input_spec": "The first line contains $t$ ($1 \\leq t \\leq 10^4$) — the number of test cases.\n\nEach test case contains two integers $l$ and $n$ ($2 \\leq l \\leq 10^6, 1 \\leq n \\leq \\lfloor \\frac{l}{2} \\rfloor$) — the length of the number line and the number of cows each farmer will place.\n\nIt is guaranteed the sum of $l$ over all test cases does not exceed $10^6$.",
+    "output_spec": "For each test case output an integer: the number of game configurations where Farmer John wins if both farmers play optimally, modulo $998\\,244\\,353$.",
+    "note": "Let J denote FJ's cow, N denote FN's cow, and _ denote an empty space.\n\nFor the first test case, the two possible configurations are JN or NJ. In both cases, since FJ makes the first turn and cannot make any moves, he cannot win.\n\nFor the second case there are two possible configurations for FJ to win: N_J and J_N.",
+    "samples": [
+      {
+        "input": "3\n2 1\n3 1\n420 69",
+        "output": "\n0\n2\n870279412"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 126942,
+    "url": "https://codeforces.com/blog/entry/126942",
+    "tutorial": "1942E - Farm Game\n\nProblem Credits: cry\nAnalysis: sum\n\nHint 1\n\nThink about the gaps between $(a_1,b_1), (a_2,b_2), ... ,(a_n,b_n)$. Let the gaps be $g_1,g_2,...,g_n$. What effect do the moves have on the gaps?\n\nHint 2\n\nWLOG let the first cow be FJ's cow. FN wins if all $g_i$ are even. Otherwise FJ wins. Note that the game will always end.\n\nHint 3\n\nTry to count the number of ways FN wins. We can iterate over the sum of $g_i$ and use stars and bars as well as other counting techniques.\n\nSolution\n\nConsider the gaps between $(a_1,b_1), (a_2,b_2), ... ,(a_n,b_n)$. In the example below, '$\\texttt{a}$' represents FJ's cow, '$\\texttt{b}$' represents FN's cow, and '$\\texttt{.}$' represents an empty space. The gaps are $[2,3]$.\n $\\texttt{|.a..b....a...b.|}$\nConsider the gaps $g_1,g_2,...,g_n$. When a farmer moves, they choose some non-empty subset of non-zero $g_i$ and add or subtract $1$ from every element in the subset (so long such move is possible). The game ends when some farmer cannot move (which implies that all $g_i$ must be $0$ when the game ends).\n\nWLOG let the first cow be FJ's cow. The winner of the game is determined as follows:\n\n1) If all $g_i$ are even, then FN wins. If FJ pushes the cows corresponding to gaps $i_1, i_2, \\ldots, i_k$ some direction in a move, then $g_{i_1}, g_{i_2}, \\ldots g_{i_k}$ will change by $1$ and become odd. FN can then push the cows corresponding to gaps $i_1, i_2, \\ldots, i_k$ left so that $g_{i_1}, g_{i_2}, \\ldots g_{i_k}$ will become even again. Therefore, all $g_i$ will be even when it's FJ's turn and at least one $g_i$ will be odd when it's FN's turn. Since the game ends when all $g_i$ are $0$ (which is even), then FJ will lose. Note that the game will always end. This is since the sum of positions of FN's cows will always be decreasing since FN will always push some cow left.\n\n2) Otherwise, FJ wins since he can subtract $1$ to all odd $g_i$ in his first move to make all elements even. Then it's FN's turn and all $g_i$ are even so by the reasoning above, FJ wins.\n\nLet's use complementary counting and determine the number of ways FN wins (which is when all $g_i$ are even). We can iterate over the sum, $s$ ($s$ is even), of all $g_i$. At each $s$, we can use stars and bars to find how many such $g_1,g_2,...,g_n$ (all $g_i$ are even) sum to $s$. Specifically, the number of ways are $\\frac{s}{2} + n - 1 \\choose n - 1$. The number of ways to place the cows in the available positions given the gaps will be $2 \\cdot {l - s - n \\choose n}$. We multiply by $2$ since we can alternate starting with either FJ's cow or FN's cow.\n\nFinally, we subtract this result from the total number of configurations, $2 \\cdot {l \\choose 2 \\cdot n}$, to get the number of ways FJ wins. This runs in $\\mathcal{O}(l)$ time.\n\nCode (C++)",
+    "solution_code": [
+      "#include <bits/stdc++.h>\nusing namespace std;\n\n#define ll long long\n\nconst int MAX = 2e6 + 5, MOD = 998244353;\n\nll fact[MAX], ifact[MAX];\n\nll bpow(ll a, int p){\n    ll ans = 1;\n\n    for (;p; p /= 2, a = (a * a) % MOD) \n        if (p & 1) \n            ans = (ans * a) % MOD;\n\n    return ans;\n}\nll ncr(int n, int r){\n    if (n < 0)\n        return 0;\n    if (r > n)\n        return 0;\n\n    return fact[n] * ifact[r] % MOD * ifact[n - r] % MOD;\n}\nvoid solve(){\n    int l, n;\n    cin >> l >> n;\n \n    ll all_even = 0;\n \n    for (int s = 0; s <= l; s += 2){\n        all_even += 2 * ncr(s / 2 + n - 1, n - 1) % MOD * ncr(l - s - n, n) % MOD;\n        all_even %= MOD;\n    }\n    cout << (2 * ncr(l, 2 * n) % MOD - all_even + MOD) % MOD << \"\\n\";\n}\n\nint main(){\n    ios_base::sync_with_stdio(0); cin.tie(0);\n    \n    for (int i = 0; i < MAX; i++)\n        fact[i] = !i ? 1 : fact[i - 1] * i % MOD;\n    \n    for (int i = MAX - 1; i >= 0; i--)\n        ifact[i] = (i == MAX - 1) ? bpow(fact[MAX - 1], MOD - 2) : ifact[i + 1] * (i + 1) % MOD;\n\n    int tc;\n    cin >> tc;\n\n    while (tc--)\n        solve();\n}"
+    ]
+  }
+}

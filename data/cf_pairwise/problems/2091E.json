@@ -1,0 +1,44 @@
+{
+  "contest_id": 2091,
+  "index": "E",
+  "name": "Interesting Ratio",
+  "rating": 1300,
+  "tags": [
+    "brute force",
+    "math",
+    "number theory",
+    "two pointers"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2091E",
+  "url": "https://codeforces.com/problemset/problem/2091/E",
+  "contest_start_time": "2025-03-25T14:35:00+00:00",
+  "statement": {
+    "title": "E. Interesting Ratio",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Recently, Misha at the IT Campus \"NEIMARK\" camp learned a new topic — the Euclidean algorithm.\n\nHe was somewhat surprised when he realized that $a \\cdot b = lcm(a, b) \\cdot gcd(a, b)$, where $gcd(a, b)$ — is the greatest common divisor (GCD) of the numbers $a$ and $b$ and $lcm(a, b)$ — is the least common multiple (LCM). Misha thought that since the product of LCM and GCD exists, it might be interesting to consider their quotient: $F(a,b)=\\frac{lcm(a, b)}{gcd(a, b)}$.\n\nFor example, he took $a = 2$ and $b = 4$, computed $F(2, 4) = \\frac{4}{2} = 2$ and obtained a prime number (a number is prime if it has exactly two divisors)! Now he considers $F(a, b)$ to be an interesting ratio if $a  \\lt  b$ and $F(a, b)$ is a prime number.\n\nSince Misha has just started studying number theory, he needs your help to calculate — how many different pairs of numbers $a$ and $b$ are there such that $F(a, b)$ is an interesting ratio and $1 \\leq a  \\lt  b \\leq n$?",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\leq t \\leq 10^3$). The description of the test cases follows.\n\nA single line of each test case contains a single integer $n$ ($2 \\leq n \\leq 10^7$).\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $10^7$.",
+    "output_spec": "For each test case, output the number of interesting ratios $F(a, b)$ for pairs satisfying $1 \\leq a  \\lt  b \\leq n$.",
+    "note": null,
+    "samples": [
+      {
+        "input": "4\n5\n10\n34\n10007",
+        "output": "\n4\n11\n49\n24317"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 141047,
+    "url": "https://codeforces.com/blog/entry/141047",
+    "tutorial": "Let $a = gcd(a, b) \\cdot x$, $b = gcd(a, b) \\cdot y$ for some $x$ and $y$.\n\nNow $F(a,b)=\\frac{lcm(a, b)}{gcd(a, b)} = \\frac{a \\cdot b}{ gcd(a,b)^2} = x \\cdot y$.\n\nSince $F(a,b)$ — is a prime number, then $x \\cdot y$ — is a prime number. For $x \\cdot y$ to be a prime number, then one of the numbers must be prime and the other must be equal to $1$. We have the condition that $a  \\lt  b$, which means that $x = 1$, and $y$ — is a prime number.\n\nWe get that $a = gcd(a, b)$, $b = gcd(a, b) \\cdot y$, where $y$ — is a prime number.\n\nThe problem becomes the following — count pairs $(a,b)$ such that $1 \\leq gcd(a,b)  \\lt  gcd(a,b) \\cdot y \\leq n$. Let's fix $y$, then $gcd(a,b)$ can take any value from $1$ to $\\lfloor \\frac{n}{y} \\rfloor$. Thus, for each prime $y$, the number of suitable pairs $(a, b)$ is $\\lfloor \\frac{n}{y} \\rfloor$. It remains to enumerate all prime numbers up to $n$.\n\nWith the constraint $n \\leq 10^7$, this can be done using the sieve of Eratosthenes.\n\n$O(n \\ log \\ log \\ n)$.",
+    "solution_code": [
+      "#include <iostream>\n\nusing namespace std;\n\nconst int MAXN = 10000001;\nbool prime[MAXN];\n\nvoid solve() {\n    int n, ans = 0;\n    cin >> n;\n    \n    for (int i = 2; i <= n; i++) {\n        if (prime[i]) {\n            ans += n / i;\n        }\n    }\n    \n    cout << ans << endl;\n}\n\nint main() {\n    for (int i = 0; i < MAXN; i++) prime[i] = 1;\n    prime[0] = prime[1] = 0;\n\tfor (int i = 2; i * i < MAXN; i++) {\n\t    if (!prime[i]) continue;\n\t    for (int j = i * i; j < MAXN; j += i) \n            prime[j] = 0;\n\t}\n\t\n    int t;\n    cin >> t;\n    while (t--) {\n        solve();\n    }\n}"
+    ]
+  }
+}

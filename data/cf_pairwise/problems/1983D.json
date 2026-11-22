@@ -1,0 +1,44 @@
+{
+  "contest_id": 1983,
+  "index": "D",
+  "name": "Swap Dilemma",
+  "rating": 1700,
+  "tags": [
+    "constructive algorithms",
+    "data structures",
+    "divide and conquer",
+    "greedy",
+    "math",
+    "sortings"
+  ],
+  "points": 1750.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1983D",
+  "url": "https://codeforces.com/problemset/problem/1983/D",
+  "contest_start_time": "2024-07-07T14:35:00+00:00",
+  "statement": {
+    "title": "D. Swap Dilemma",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "Given two arrays of distinct positive integers $a$ and $b$ of length $n$, we would like to make both the arrays the same. Two arrays $x$ and $y$ of length $k$ are said to be the same when for all $1 \\le i \\le k$, $x_i = y_i$.\n\nNow in one move, you can choose some index $l$ and $r$ in $a$ ($l \\le r$) and swap $a_l$ and $a_r$, then choose some $p$ and $q$ ($p \\le q$) in $b$ such that $r-l=q-p$ and swap $b_p$ and $b_q$.\n\nIs it possible to make both arrays the same?",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 2 \\cdot 10^4$). The description of the test cases follows.\n\nThe first line of each test case contains a single integer $n$ ($1 \\le n \\le 10^5$) — the length of the arrays $a$ and $b$.\n\nThe second line of each test case contains $n$ distinct integers $a_1,a_2,a_3,\\ldots,a_n$ ($1 \\le a_i \\le 2 \\cdot 10^5$) — the integers in the array $a$.\n\nThe third line of each test case contains $n$ distinct integers $b_1,b_2,b_3,\\ldots,b_n$ ($1 \\le b_i \\le 2 \\cdot 10^5$) — the integers in the array $b$.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $10^5$.",
+    "output_spec": "For each testcase, print \"YES\" if the arrays $a$ and $b$ can be made the same. Otherwise, print \"NO\". can output the answer in any case (upper or lower). For example, the strings \"yEs\", \"yes\", \"Yes\", and \"YES\" will be recognized as positive responses.",
+    "note": "In the first testcase, you don't need to perform any operations since the arrays are same.\n\nIn the second testcase, it can be proven there exists no way to make the arrays same.\n\nIn the third testcase, one of the ways to make the arrays same is to first choose $l=1$, $r=3$, $p=1$, $q=3$ then choose $l=1$, $r=2$, $p=3$, $q=4$.",
+    "samples": [
+      {
+        "input": "6\n4\n1 2 3 4\n1 2 3 4\n5\n1 3 4 2 5\n7 1 2 5 4\n4\n1 2 3 4\n4 3 2 1\n3\n1 2 3\n1 3 2\n5\n1 5 7 1000 4\n4 1 7 5 1000\n3\n1 4 2\n1 3 2",
+        "output": "\nYES\nNO\nYES\nNO\nNO\nNO"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 131268,
+    "url": "https://codeforces.com/blog/entry/131268",
+    "tutorial": "If both the arrays don't have the same multiset of elements then trivially the answer is \"NO\".\n\nOtherwise, we can convert any operation of the form $l$, $r$, $p$, $q$ to swapping $l$, $l+1$, $p$, $p+1$ multiple times.\n\nFor example: swapping $l=1$, $r=3$, $p=2$, $q=4$ can be converted into three steps: swapping $l=1$, $r=2$, $p=2$, $q=3$, then swapping $l=2$, $r=3$, $p=3$, $q=4$ and finally $l=1$, $r=2$, $p=2$, $q=3$.\n\nThis can be generalized for any such operation.\n\nAn interesting observation here is that swapping any two adjacent elements in a distinct array leads to a change in number of inversions of that array by $1$ — which essentially means the parity of inversions of the array gets changed.\n\nSo, if both the arrays don't have the same parity of inversions initially, they will never have the same parity of inversions.\n\nNow, we will prove that when both arrays have the same parity of inversions, then it is definitely possible to make them equal. Keep using operations for array $a$ of the form $l=1$ and $r=2$ while changing the operation $p, q$ to different values to make the elements at indices $3, 4, \\ldots n$ the same in array $b$ as they are in array $a$. Now, since both the arrays should have the same parity of inversions at the end, $a_1 = b_1$ and $a_2 = b_2$, and so, our arrays $a$ and $b$ will become equal.\n\nTherefore, the answer is \"YES\" in this case.",
+    "solution_code": []
+  }
+}

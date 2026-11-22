@@ -1,0 +1,101 @@
+{
+  "created_at": "2026-08-06T10:12:10.121970+00:00",
+  "base": {
+    "count": 100,
+    "valid_count": 100,
+    "accuracy": 0.8,
+    "exact_200": {
+      "count": 30,
+      "accuracy": 0.7
+    },
+    "exact_300": {
+      "count": 40,
+      "accuracy": 0.725
+    },
+    "at_least_300": {
+      "count": 70,
+      "accuracy": 0.8428571428571429
+    },
+    "at_least_400": {
+      "count": 30,
+      "accuracy": 1.0
+    },
+    "swapped_consistency": 0.76,
+    "gap_counts": {
+      "300": 40,
+      "200": 30,
+      "1300": 4,
+      "1400": 4,
+      "1200": 2,
+      "2700": 2,
+      "900": 4,
+      "1800": 4,
+      "1100": 2,
+      "1500": 2,
+      "700": 2,
+      "1900": 2,
+      "2100": 2
+    },
+    "usage": {
+      "promptTokenCount": 269318,
+      "candidatesTokenCount": 1200,
+      "totalTokenCount": 270518
+    },
+    "estimated_cost_usd": 0.456255
+  },
+  "tuned": {
+    "count": 100,
+    "valid_count": 100,
+    "accuracy": 0.84,
+    "exact_200": {
+      "count": 30,
+      "accuracy": 0.7333333333333333
+    },
+    "exact_300": {
+      "count": 40,
+      "accuracy": 0.8
+    },
+    "at_least_300": {
+      "count": 70,
+      "accuracy": 0.8857142857142857
+    },
+    "at_least_400": {
+      "count": 30,
+      "accuracy": 1.0
+    },
+    "swapped_consistency": 0.84,
+    "gap_counts": {
+      "300": 40,
+      "200": 30,
+      "1300": 4,
+      "1400": 4,
+      "1200": 2,
+      "2700": 2,
+      "900": 4,
+      "1800": 4,
+      "1100": 2,
+      "1500": 2,
+      "700": 2,
+      "1900": 2,
+      "2100": 2
+    },
+    "usage": {
+      "promptTokenCount": 269318,
+      "candidatesTokenCount": 600,
+      "totalTokenCount": 269918
+    },
+    "estimated_cost_usd": 0.675472
+  },
+  "gain": {
+    "accuracy": 0.039999999999999925,
+    "exact_200": 0.033333333333333326,
+    "exact_300": 0.07500000000000007,
+    "at_least_300": 0.042857142857142816
+  },
+  "cost_ledger": {
+    "estimated_training_cost_usd": 20.86682,
+    "estimated_inference_cost_usd": 1.131727,
+    "pilot_total_cap_usd": 25.0,
+    "estimated_total_usd": 21.998547
+  }
+}

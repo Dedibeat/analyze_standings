@@ -1,0 +1,40 @@
+{
+  "contest_id": 2061,
+  "index": "B",
+  "name": "Kevin and Geometry",
+  "rating": 1100,
+  "tags": [
+    "binary search",
+    "geometry"
+  ],
+  "points": 1000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2061B",
+  "url": "https://codeforces.com/problemset/problem/2061/B",
+  "contest_start_time": "2025-01-20T14:35:00+00:00",
+  "statement": {
+    "title": "B. Kevin and Geometry",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "Kevin has $n$ sticks with length $a_1,a_2,\\ldots,a_n$.\n\nKevin wants to select $4$ sticks from these to form an isosceles trapezoid$^{\\text{∗}}$ with a positive area. Note that rectangles and squares are also considered isosceles trapezoids. Help Kevin find a solution. If no solution exists, output $-1$.\n\n$^{\\text{∗}}$An isosceles trapezoid is a convex quadrilateral with a line of symmetry bisecting one pair of opposite sides. In any isosceles trapezoid, two opposite sides (the bases) are parallel, and the two other sides (the legs) are of equal length.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 10^4$). The description of the test cases follows.\n\nThe first line of each test case contains a single integer $n$ ($4 \\le n \\le 2\\cdot 10^5$).\n\nThe second line contains $n$ integers $a_1, a_2, \\ldots, a_n$ ($1 \\le a_i \\le 10^8$).\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $2\\cdot 10^5$.",
+    "output_spec": "For each test case, output $4$ integers — the lengths of sticks. If no solution exists, output $-1$.\n\nIf there are multiple solutions, print any of them.",
+    "note": "In the first test case, you can form an isosceles trapezoid with bases of length $5$ and $10$, and two legs of length $5$.\n\nIn the second test case, you can form an isosceles trapezoid with two bases of length $5$ and two legs of length $10$. A rectangle is considered an isosceles trapezoid here.\n\nIn the third test case, there are no sticks with the same length. It's impossible to form an isosceles trapezoid.\n\nIn the fourth test case, it's impossible to form an isosceles trapezoid with a positive area.",
+    "samples": [
+      {
+        "input": "7\n4\n5 5 5 10\n4\n10 5 10 5\n4\n1 2 3 4\n4\n1 1 1 3\n6\n4 2 1 5 7 1\n6\n10 200 30 300 30 100\n4\n100000000 100000000 1 2",
+        "output": "\n5 5 5 10\n5 5 10 10\n-1\n-1\n1 1 4 5\n-1\n100000000 100000000 1 2"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 138620,
+    "url": "https://codeforces.com/blog/entry/138620",
+    "tutorial": "Let $a$ and $b$ be the lengths of the two bases, and let $c$ be the length of the two legs. A necessary and sufficient condition for forming an isosceles trapezoid with a positive area is $|a - b|  \\lt  2c$, as the longest edge must be shorter than the sum of the other three edges.\n\nTo determine whether an isosceles trapezoid can be formed, consider the following cases:\n\n If there are two distinct pairs of identical numbers that do not overlap, these pairs can always form an isosceles trapezoid.\n\n If there are no pairs of identical numbers, it is impossible to form an isosceles trapezoid.\n\n If there is exactly one pair of identical numbers, denoted by $c$, we will use them as the legs. Remove this pair and check whether there exist two other numbers whose difference is less than $2c$. This can be efficiently done by sorting the remaining numbers and checking adjacent pairs.\n\nThe time complexity of this approach is $O(n \\log n)$.",
+    "solution_code": []
+  }
+}

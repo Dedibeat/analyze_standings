@@ -21,7 +21,7 @@ from .run import MIN_SOLVE_HOURS
 
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "output/calibration_audit.json"
-PLAN = ROOT / "calibration_audit_plan.md"
+PLAN = ROOT / "docs/reports/calibration/calibration_audit_plan.md"
 METHODS = ("raw_affine", "gym_shape_affine", "ridge_DE")
 TOLERANCE = 1e-7
 
@@ -173,7 +173,7 @@ def run_audit(output_path=None, progress=False):
     verify_provenance(transfer)
     paths = set(saved["provenance_sha256"]) | set(transfer["provenance_sha256"])
     paths.update(("output/calibration_ablation.json", "output/calibration_ablation_transfer.json",
-                  "calibration_audit_plan.md", "arch_b/calibration_audit.py", "arch_a/load.py",
+                  "docs/reports/calibration/calibration_audit_plan.md", "arch_b/calibration_audit.py", "arch_a/load.py",
                   "arch_b/joint.py", "arch_b/run.py", "arch_b/calibrate.py",
                   "arch_b/external_validate.py"))
     provenance = {path: _file_sha256(ROOT / path) for path in sorted(paths)}

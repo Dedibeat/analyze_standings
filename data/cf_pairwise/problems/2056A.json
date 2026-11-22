@@ -1,0 +1,42 @@
+{
+  "contest_id": 2056,
+  "index": "A",
+  "name": "Shape Perimeter",
+  "rating": 800,
+  "tags": [
+    "constructive algorithms",
+    "math"
+  ],
+  "points": 500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2056A",
+  "url": "https://codeforces.com/problemset/problem/2056/A",
+  "contest_start_time": "2025-01-17T14:35:00+00:00",
+  "statement": {
+    "title": "A. Shape Perimeter",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "There is an $m$ by $m$ square stamp on an infinite piece of paper. Initially, the bottom-left corner of the square stamp is aligned with the bottom-left corner of the paper. You are given two integer sequences $x$ and $y$, each of length $n$. For each step $i$ from $1$ to $n$, the following happens:\n\n Move the stamp $x_i$ units to the right and $y_i$ units upwards.\n\n Press the stamp onto the paper, leaving an $m$ by $m$ colored square at its current position.\n\nNote that the elements of sequences $x$ and $y$ have a special constraint: $1\\le x_i, y_i\\le m - 1$.\n\nNote that you do not press the stamp at the bottom-left corner of the paper. Refer to the notes section for better understanding.\n\nIt can be proven that after all the operations, the colored shape on the paper formed by the stamp is a single connected region. Find the perimeter of this colored shape.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 1000$). The description of the test cases follows.\n\nThe first line of each test case contains two integers $n$ and $m$ ($1 \\le n \\le 100$, $2 \\le m \\le 100$) — the number of operations performed and the side length of the square stamp.\n\nThe $i$-th of the next $n$ lines contains two integers $x_i$ and $y_i$ ($1 \\le x_i, y_i \\le m - 1$) — the distance that the stamp will be moved right and up during the $i$-th operation, respectively.\n\nNote that there are no constraints on the sum of $n$ over all test cases.",
+    "output_spec": "For each test case, output a single integer representing the perimeter of the colored shape on the paper.",
+    "note": "In the first example, the stamp has a side length of $3$ and is pressed $4$ times at coordinates $(1, 1)$, $(3, 3)$, $(5, 4)$, and $(6, 6)$. The piece of paper looks like that afterwards:\n\nHere, the square formed by the first press is colored blue, the second red, the third green, and the fourth purple. The combined shape, whose perimeter we need to calculate, looks like that:\n\nFrom the diagram, it can be seen that this shape has a perimeter of $32$.",
+    "samples": [
+      {
+        "input": "3\n4 3\n1 1\n2 2\n2 1\n1 2\n1 2\n1 1\n6 7\n3 6\n1 1\n3 1\n6 6\n5 4\n6 1",
+        "output": "\n32\n8\n96"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 138487,
+    "url": "https://codeforces.com/blog/entry/138487",
+    "tutorial": "2056A - Периметр фигуры\n\nHints\n\nHint 1\n\nLook at the picture. I mean, look at the picture.\n\nHint 2\n\nConsider coordinates $x$ and $y$ separately.\n\nSolution\n\nConsider coordinates $x$ and $y$ separately. Since $1 \\le x_i, y_i \\le m - 1$, after each step both coordinates increase and remain connected with the previous square.\n\nFrom the picture we can see that each coordinate spans from the bottom-left corner of the first square to the top-right corner of the last square.\n\nTo calculate the perimeter we can add the length of that interval for both coordinates and multiply it by $2$, as it is counted in the perimeter twice, going in both directions:\n\nThe coordinates of the bottom-left corner of the first square are $(x_1, y_1)$ and of the top-right corner of the last square are $(m + \\sum\\limits_{i = 1}^n x_i, m + \\sum\\limits_{i = 1}^n y_i)$.\n\nThe lengths of the intervals are $m + \\sum\\limits_{i = 2}^n x_i$ and $m + \\sum\\limits_{i = 2}^n y_i$.\n\nTherefore, the answer is $2(2m + \\sum\\limits_{i = 2}^n (x_i + y_i))$.\n\nCode",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n\nusing namespace std;\n\nvoid solve() {\n    int n, m;\n    cin >> n >> m;\n    vector<int> x(n), y(n);\n    for(int i = 0; i < n; i++) {\n        cin >> x[i] >> y[i];\n    }\n    int ans = 2 * (accumulate(x.begin(), x.end(), 0) + m - x[0] + accumulate(y.begin(), y.end(), 0) + m - y[0]);\n    cout << ans << '\\n';\n}\n\nsigned main() {\n    ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);\n    int ttt = 1;\n    cin >> ttt;\n    while(ttt--) {\n        solve();\n    }\n}"
+    ]
+  }
+}

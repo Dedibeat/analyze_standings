@@ -1,0 +1,43 @@
+{
+  "contest_id": 1954,
+  "index": "C",
+  "name": "Long Multiplication",
+  "rating": 1200,
+  "tags": [
+    "greedy",
+    "math",
+    "number theory"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1954C",
+  "url": "https://codeforces.com/problemset/problem/1954/C",
+  "contest_start_time": "2024-04-12T14:35:00+00:00",
+  "statement": {
+    "title": "C. Long Multiplication",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "You are given two integers $x$ and $y$ of the same length, consisting of digits from $1$ to $9$.\n\nYou can perform the following operation any number of times (possibly zero): swap the $i$-th digit in $x$ and the $i$-th digit in $y$.\n\nFor example, if $x=73$ and $y=31$, you can swap the $2$-nd digits and get $x=71$ and $y=33$.\n\nYour task is to maximize the product of $x$ and $y$ using the aforementioned operation any number of times. If there are multiple answers, print any of them.",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\le t \\le 1000$) — the number of test cases.\n\nThe first line of each test case contains a single integer $x$ ($1 \\le x  \\lt  10^{100}$).\n\nThe second line of each test case contains a single integer $y$ ($1 \\le y  \\lt  10^{100}$).\n\nAdditional constraint on input: the integers $x$ and $y$ consist only of digits from $1$ to $9$.",
+    "output_spec": "For each test case, print two lines — the first line should contain the number $x$ after performing the operations; similarly, the second line should contain the number $y$ after performing the operations. If there are multiple answers, print any of them.",
+    "note": null,
+    "samples": [
+      {
+        "input": "3\n73\n31\n2\n5\n3516\n3982",
+        "output": "\n71\n33\n5\n2\n3912\n3586"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 128421,
+    "url": "https://codeforces.com/blog/entry/128421",
+    "tutorial": "There are two observations to solve the problem:\n\n applying the operation does not change the sum of the numbers;\n\n the smaller the difference of the numbers, the greater their product (the proof is given below).\n\nProof: let's denote the sum of the numbers as $s$, the smallest number as $\\frac{s}{2} - a$ and the largest number as $\\frac{s}{2} + a$. Then the product is equal to $\\left(\\frac{s}{2} - a\\right)\\left(\\frac{s}{2} + a\\right) = \\left(\\frac{s}{2}\\right)^2 - a^2$. We can see that, the smaller $a$ (the half of difference), the larger the product.\n\nIn order to get the minimum difference, we can use the following algorithm: let $i$ be the smallest index (the most significant digit) such that $x_i \\ne y_i$ and set the maximum digit among $x_i$ and $y_i$ to the number $x$ and smallest to the number $y$; thus $x$ is definitely greater than $y$, then the less significant digits should be the maximum possible for the number $y$ (i. e. the inequality $x_j \\le y_j$ must hold for all $j  \\gt  i$).",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n \nusing namespace std;\n \nint main() {\n  int t;\n  cin >> t;\n  while (t--) {\n    string x, y;\n    cin >> x >> y;\n    int n = x.size();\n    bool f = false;\n    for (int i = 0; i < n; ++i) {\n      if ((x[i] > y[i]) == f) swap(x[i], y[i]);\n      f |= (x[i] != y[i]);\n    }\n    cout << x << '\\n' << y << '\\n';\n  }\n}"
+    ]
+  }
+}

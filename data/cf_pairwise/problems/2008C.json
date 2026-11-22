@@ -1,0 +1,44 @@
+{
+  "contest_id": 2008,
+  "index": "C",
+  "name": "Longest Good Array",
+  "rating": 800,
+  "tags": [
+    "binary search",
+    "brute force",
+    "math"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2008C",
+  "url": "https://codeforces.com/problemset/problem/2008/C",
+  "contest_start_time": "2024-09-01T14:35:00+00:00",
+  "statement": {
+    "title": "C. Longest Good Array",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Today, Sakurako was studying arrays. An array $a$ of length $n$ is considered good if and only if:\n\n the array $a$ is increasing, meaning $a_{i - 1}  \\lt  a_i$ for all $2 \\le i \\le n$;\n\n the differences between adjacent elements are increasing, meaning $a_i - a_{i-1}  \\lt  a_{i+1} - a_i$ for all $2 \\le i  \\lt  n$.\n\nSakurako has come up with boundaries $l$ and $r$ and wants to construct a good array of maximum length, where $l \\le a_i \\le r$ for all $a_i$.\n\nHelp Sakurako find the maximum length of a good array for the given $l$ and $r$.",
+    "input_spec": "The first line contains a single integer $t$ ($1\\le t\\le 10^4$)  — the number of test cases.\n\nThe only line of each test case contains two integers $l$ and $r$ ($1\\le l\\le r\\le 10^9$).",
+    "output_spec": "For each test case, output a single integer  — the length of the longest good array Sakurako can form given $l$ and $r$.",
+    "note": "For $l=1$ and $r=5$, one possible array could be $(1,2,5)$. It can be proven that an array of length $4$ does not exist for the given $l$ and $r$.\n\nFor $l=2$ and $r=2$, the only possible array is $(2)$.\n\nFor $l=10$ and $r=20$, the only possible array is $(10,11,13,16,20)$.",
+    "samples": [
+      {
+        "input": "5\n1 2\n1 5\n2 2\n10 20\n1 1000000000",
+        "output": "\n2\n3\n1\n5\n44721"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 133509,
+    "url": "https://codeforces.com/blog/entry/133509",
+    "tutorial": "We can solve this problem greedily. Let's choose the first element equal to $l$. Then, the second element should be $l+1$. The third $l+3$, and so on. In general, the $i-$th element is equal to $l+\\frac{i\\cdot (i+1)}{2}$.\n\nProof of this solution:\n\nAssume that array $a$ is the array made by our algorithm and $b$ is the array with a better answer. This means that $len(b) \\gt len(a)$. By the construction of $a$, there exists an integer $i$ such that for all $j \\lt i$, $a_j=b_j$ and $a_i \\lt b_i$, because $a_i$ we choose as the smallest possible element. WLOG assume that $len(b)=len(a)+1=n$. Then $b_n-b_{n-1} \\gt b_{n-1}-b_{n-2}\\ge a_{n-1}-a_{n-2}$. So, we can append $b_n$ to the array $a$, which leads to a contradiction.\n\nNow, the task is to find the biggest $x$ such that $l+\\frac{x\\cdot (x+1)}{2}\\le r$. In fact, it can be found by binary search, the formula of discriminant, or just by brute force.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n\nusing namespace std;\n\nint main(){\n    int t;\n    cin>>t;\n    while(t--)\n    {\n        long long a,b;\n        cin>>a>>b;\n        b-=a;\n        long long l=2,r=1000000000;\n        while(l<r)\n        {\n            long long m=(l+r)/2;\n            if(m*(m-1)/2<=b)\n            {\n                l=m+1;\n            }\n            else\n            {\n                r=m;\n            }\n        }\n        cout<<l-1<<endl;\n    }\n}",
+      "for _ in range(int(input())): \n    a, b = map(int, input().split())\n    i = 0\n    while a + i <= b:\n        a += i\n        i += 1\n    print(i)"
+    ]
+  }
+}

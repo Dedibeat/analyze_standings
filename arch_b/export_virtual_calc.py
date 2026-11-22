@@ -71,7 +71,7 @@ def event_field(official):
     also holds mirror rows and the official field has at least MIN_EVENT_FIELD rows,
     else every row. Mirror entries play online and finish ~100 CF above the same
     teams onsite, so on a merged board they push the onsite rows down by the
-    board's mirror share (details.md, 2026-10-13)."""
+    board's mirror share (docs/journal/, 2026-10-13)."""
     official = np.asarray(official, bool)
     if official.sum() >= MIN_EVENT_FIELD and not official.all():
         return official

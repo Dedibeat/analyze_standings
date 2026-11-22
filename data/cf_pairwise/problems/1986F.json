@@ -1,0 +1,41 @@
+{
+  "contest_id": 1986,
+  "index": "F",
+  "name": "Non-academic Problem",
+  "rating": 1900,
+  "tags": [
+    "dfs and similar",
+    "graphs",
+    "trees"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1986F",
+  "url": "https://codeforces.com/problemset/problem/1986/F",
+  "contest_start_time": "2024-06-23T14:50:00+00:00",
+  "statement": {
+    "title": "F. Non-academic Problem",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "You are given a connected undirected graph, the vertices of which are numbered with integers from $1$ to $n$. Your task is to minimize the number of pairs of vertices $1 \\leq u  \\lt  v \\leq n$ between which there exists a path in this graph. To achieve this, you can remove exactly one edge from the graph.\n\nFind the smallest number of pairs of vertices!",
+    "input_spec": "Each test consists of several sets of input data. The first line contains a single integer $t$ ($1 \\leq t \\leq 10^4$) — the number of sets of input data. Then follows their description.\n\nThe first line of each set of input data contains two integers $n$ and $m$ ($2 \\leq n \\leq 10^5$, $n - 1 \\leq m \\leq \\min(10^5, \\frac{n \\cdot (n - 1)}{2})$) — the number of vertices in the graph and the number of edges.\n\nEach of the next $m$ lines contains two integers $u$ and $v$ ($1 \\leq u, v \\leq n, u \\neq v$), indicating that there is an undirected edge in the graph between vertices $u$ and $v$.\n\nIt is guaranteed that the given graph is connected and without multiple edges.\n\nIt is guaranteed that the sum of $n$ and the sum of $m$ over all sets of input data does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each set of input data, output the smallest number of pairs of reachable vertices, if exactly one edge can be removed.",
+    "note": "In the first set of input data, we will remove the single edge $(1, 2)$ and the only pair of vertices $(1, 2)$ will become unreachable from each other.\n\nIn the second set of input data, no matter which edge we remove, all vertices will be reachable from each other.\n\nIn the fourth set of input data, the graph looks like this initially.\n\nWe will remove the edge $(3, 4)$ and then the only reachable pairs of vertices will be $(1, 2)$, $(1, 3)$, $(2, 3)$, $(4, 5)$, $(4, 6)$, $(5, 6)$.\n\nIn the sixth set of input data, the graph looks like this initially.\n\nAfter removing the edge $(2, 4)$, the graph will look like this. Thus, there will be $21$ pairs of reachable vertices.",
+    "samples": [
+      {
+        "input": "6\n2 1\n1 2\n3 3\n1 2\n2 3\n1 3\n5 5\n1 2\n1 3\n3 4\n4 5\n5 3\n6 7\n1 2\n1 3\n2 3\n3 4\n4 5\n4 6\n5 6\n5 5\n1 2\n1 3\n2 3\n2 4\n3 5\n10 12\n1 2\n1 3\n2 3\n2 4\n4 5\n5 6\n6 7\n7 4\n3 8\n8 9\n9 10\n10 8",
+        "output": "\n0\n3\n4\n6\n6\n21"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 130783,
+    "url": "https://codeforces.com/blog/entry/130783",
+    "tutorial": "1986F — Non-academic Problem",
+    "solution_code": []
+  }
+}

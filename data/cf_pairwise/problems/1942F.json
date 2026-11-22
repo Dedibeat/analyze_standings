@@ -1,0 +1,57 @@
+{
+  "contest_id": 1942,
+  "index": "F",
+  "name": "Farmer John's Favorite Function",
+  "rating": 2700,
+  "tags": [
+    "brute force",
+    "data structures",
+    "implementation",
+    "math"
+  ],
+  "points": 3000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1942F",
+  "url": "https://codeforces.com/problemset/problem/1942/F",
+  "contest_start_time": "2024-03-30T14:35:00+00:00",
+  "statement": {
+    "title": "F. Farmer John's Favorite Function",
+    "time_limit": "5 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "ΩΩPARTS - Camellia\n\n⠀\n\nFarmer John has an array $a$ of length $n$. He also has a function $f$ with the following recurrence:\n\n $f(1) = \\sqrt{a_1}$;\n\n For all $i  \\gt  1$, $f(i) = \\sqrt{f(i-1)+a_i}$.\n\nNote that $f(i)$ is not necessarily an integer.\n\nHe plans to do $q$ updates to the array. Each update, he gives you two integers $k$ and $x$ and he wants you to set $a_k = x$. After each update, he wants to know $\\lfloor f(n) \\rfloor$, where $\\lfloor t \\rfloor$ denotes the value of $t$ rounded down to the nearest integer.",
+    "input_spec": "The first line contains $n$ and $q$ ($1 \\leq n, q \\leq 2 \\cdot 10^5$), the length of $a$ and the number of updates he will perform.\n\nThe second line contains $n$ integers $a_1, a_2, \\ldots, a_n$ ($0 \\leq a_i \\leq 10^{18}$).\n\nThe next $q$ lines each contain two integers $k$ and $x$ ($1 \\leq k \\leq n$, $0 \\leq x \\leq 10^{18}$), the index of the update and the element he will replace $a_k$ with.",
+    "output_spec": "For each update, output an integer, $\\lfloor f(n) \\rfloor$, on a new line.",
+    "note": "In the first test case, the array after the first update is $[4, 14, 0, 7, 6]$. The values of $f$ are:\n\n $f(1)=2$;\n\n $f(2)=4$;\n\n $f(3)=2$;\n\n $f(4)=3$;\n\n $f(5)=3$.\n\nSince $\\lfloor f(5) \\rfloor = 3$, we output $3$.\n\nThe array after the second update is $[3, 14, 0, 7, 6]$. The values of $f$, rounded to $6$ decimal places, are:\n\n $f(1)\\approx 1.732051$;\n\n $f(2)\\approx 3.966365$;\n\n $f(3)\\approx 1.991573$;\n\n $f(4)\\approx 2.998595$;\n\n $f(5)\\approx 2.999766$.\n\nSince $\\lfloor f(5) \\rfloor = 2$, we output $2$.",
+    "samples": [
+      {
+        "input": "5 6\n0 14 0 7 6\n1 4\n1 3\n2 15\n4 1\n5 2\n5 8",
+        "output": "\n3\n2\n3\n2\n1\n3"
+      },
+      {
+        "input": "15 10\n3364 1623 5435 7 6232 245 7903 3880 9738 577 4598 1868 1112 8066 199\n14 4284\n14 8066\n6 92\n6 245\n2 925\n2 1623\n5 176\n5 6232\n3 1157\n3 5435",
+        "output": "\n16\n17\n16\n17\n16\n17\n16\n17\n16\n17"
+      },
+      {
+        "input": "2 2\n386056082462833225 923951085408043421\n1 386056082462833225\n1 386056082462833224",
+        "output": "\n961223744\n961223743"
+      },
+      {
+        "input": "13 10\n31487697732100 446330174221392699 283918145228010533 619870471872432389 11918456891794188 247842810542459080 140542974216802552 698742782599365547 533363381213535498 92488084424940128 401887157851719898 128798321287952855 137376848358184069\n3 283918145228010532\n3 283918145228010533\n1 2183728930312\n13 1000000000000000000\n10 1000000000000000000\n9 1000000000000000000\n8 1000000000000000000\n7 1000000000000000000\n6 1000000000000000000\n5 1000000000000000000",
+        "output": "\n370643829\n370643830\n370643829\n1000000000\n1000000000\n1000000000\n1000000000\n1000000000\n1000000000\n1000000000"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 126942,
+    "url": "https://codeforces.com/blog/entry/126942",
+    "tutorial": "1942F - Farmer John's Favorite Function\n\nProblem Credits: sum\nAnalysis: sum\n\nHint 1\n\nConsider the case where all $f(i)$ are integers. Decreasing any $a_i$ will decrease $\\lfloor f(n) \\rfloor$. So solutions that iterate over the last few elements will not work.\n\nHint 2\n\nIf $n \\ge 6$, changing $a_1$ will only affect $\\lfloor f(n) \\rfloor$ by at most $1$.\n\nHint 3\n\nWe can take the floor each time we square root. Specifically, we can define $f$ as:\n\n$f(1) = \\lfloor \\sqrt{a_1} \\rfloor$\n\nFor all $i \\gt 1$, $f(i) = \\lfloor \\sqrt{f(i-1)+a_i} \\rfloor$\n\nThis allows us to work with integers.\n\nHint 4\n\nWe can divide our array into blocks of size $b \\ge 6$ (note that the value of $b$ depends on the solution). How can we use hint $2$? What should we store for each block?\n\nSolution\n\nLet's first look at the impact of earlier numbers on the final result. Earlier numbers can still influence $\\lfloor f(n) \\rfloor$ when $n$ is large. Suppose that all $f(i)$ are integers. Then decreasing any $a_i$ will decrease $\\lfloor f(n) \\rfloor$.\n\nHowever, it is clear that the impact of earlier number on $\\lfloor f(n) \\rfloor$ is still extremely small. A key observation is that when $n \\ge 6$, changing $a_1$ will only affect $\\lfloor f(n) \\rfloor$ by at most $1$.\n\nAnother observation is that we can take the floor each time we square root. Specifically, we can define $f$ as:\n\n$f(1) = \\lfloor \\sqrt{a_1} \\rfloor$\n\nFor all $i \\gt 1$, $f(i) = \\lfloor \\sqrt{f(i-1)+a_i} \\rfloor$\n\nThis allows us to work with integers. From here on, we work with this new definition of $f$.\n\nLet's divide our array into blocks of size $b=6$. We can append zeroes to the front of the array to make $n$ a multiple of $b$.\n\nConsider some block representing range $[l,r]$. Let's consider the subarray $a_l,a_{l+1},\\ldots ,a_r$. Let $v$ be the value of $f(r)$ if we let $f(l - 1)=0$. Using our first observation, we know that $f(r)$ will be either $v$ or $v+1$ depending on $f(l - 1)$. So let's find the smallest value $c$ such that if $f(l - 1)=c$, then $f(r)=v+1$. This can be done by iterating over the elements of the block backwards.\n\nFor each block, we store its corresponding ($v,c$). We can build a segment tree over the blocks for an $\\mathcal{O}((n + q) \\log n)$ solution.\n\nAlternatively, we can do square root decomposition by having $b=\\sqrt n$ which leads to an $\\mathcal{O}(n + q \\sqrt n)$ solution (in practice, we should set $b$ to something small like $100$).\n\nCode (C++)\n\nSegment Tree\n\nSquare Root Decomposition",
+    "solution_code": [
+      "#include <bits/stdc++.h>\nusing namespace std;\n\n#define ll long long\n#define pll pair<ll, ll>\n\nconst int B = 6, MAX = 2e5 + B + 5;\n\nint n, q, offset, numBlocks; ll A[MAX]; pll seg[MAX];\n\npll comb(pll a, pll b){\n    auto [vl, cl] = a;\n    auto [vr, cr] = b;\n\n    // Not defined\n    if (vl == -1)\n        return b;\n    if (vr == -1)\n        return a;\n\n    // Doesn't cross cutoff\n    if (vl < cr - 1)\n        return {vr, (ll)2e18};\n    if (vl >= cr)\n        return {vr + 1, (ll)2e18};\n    \n    // If vl == cr - 1\n    return {vr, cl};\n}\nvoid updSeg(int i, pll v){\n    seg[i += numBlocks] = v;\n\n    for (i /= 2; i > 0; i /= 2) \n        seg[i] = comb(seg[i * 2], seg[i * 2 + 1]);\n}\nll qry(int l = 0, int r = numBlocks - 1){ \n    pll retL = {-1, -1};\n    pll retR = {-1, -1};\n\n    for (l += numBlocks, r += numBlocks; l <= r; r /= 2, l /= 2){\n        if (l % 2 == 1) \n            retL = comb(retL, seg[l++]);\n        if (r % 2 == 0) \n            retR = comb(seg[r--], retR);\n    }\n    return comb(retL, retR).first;\n}\nvoid updBlock(int blk){\n    int l = blk * B;\n    int r = l + B - 1;\n\n    ll val = 0;\n    for (int i = l; i <= r; i++)\n        val = floor(sqrtl((long double)val + A[i]));\n    \n    ll req = val + 1;\n    for (int i = r; i >= l; i--){\n        if (req > 2e9){\n            updSeg(blk, {val, (ll)2e18});\n            return;\n        }\n        req = req * req - A[i];\n    }\n    updSeg(blk, {val, req});\n}\n\nint main(){\n    ios_base::sync_with_stdio(0); cin.tie(0); \n    cin >> n >> q;\n\n    offset = (B - n % B) % B;\n    n += offset;\n    numBlocks = n / B;\n\n    for (int i = offset; i < n; i++)\n        cin >> A[i];\n    \n    for (int b = 0; b < numBlocks; b++)\n        updBlock(b);\n\n    while (q--){\n        ll k, x;\n        cin >> k >> x;\n        k--; \n        k += offset;\n\n        A[k] = x;\n        updBlock(k / B);\n\n        cout << qry() << \"\\n\";\n    }\n}",
+      "#include <bits/stdc++.h>\nusing namespace std;\n\n#define ll long long\n\nconst int B = 100, MAX = 2e5 + B + 5;\n\nint n, q, offset, numBlocks; ll A[MAX], val[MAX], cut[MAX];\n\nvoid buildBlock(int blk){\n    int l = blk * B;\n    int r = l + B - 1;\n\n    ll cur = 0;\n\n    for (int i = l; i <= r; i++)\n        cur = floor(sqrtl((long double)cur + A[i]));\n    \n    val[blk] = cur;\n\n    ll req = cur + 1;\n\n    for (int i = r; i >= l; i--){\n        if (req > 2e9){\n            cut[blk] = 2e18;\n            return;\n        }\n        req = req * req - A[i];\n    }\n    cut[blk] = req;\n}\nll qry(){\n    ll cur = 0;\n\n    for (int b = 0; b < numBlocks; b++)\n        cur = (cur >= cut[b]) ? val[b] + 1 : val[b];\n    \n    return cur;\n}\n\nint main(){\n    ios_base::sync_with_stdio(0); cin.tie(0); \n    cin >> n >> q;\n\n    offset = (B - n % B) % B;\n    n += offset;\n    numBlocks = n / B;\n\n    for (int i = offset; i < n; i++)\n        cin >> A[i];\n    \n    for (int b = 0; b < numBlocks; b++)\n        buildBlock(b);\n\n    while (q--){\n        ll k, x;\n        cin >> k >> x;\n        k--; \n        k += offset;\n\n        A[k] = x;\n        buildBlock(k / B);\n\n        cout << qry() << \"\\n\";\n    }\n}"
+    ]
+  }
+}

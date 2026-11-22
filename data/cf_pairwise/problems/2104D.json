@@ -1,0 +1,44 @@
+{
+  "contest_id": 2104,
+  "index": "D",
+  "name": "Array and GCD",
+  "rating": 1400,
+  "tags": [
+    "binary search",
+    "greedy",
+    "math",
+    "number theory"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2104D",
+  "url": "https://codeforces.com/problemset/problem/2104/D",
+  "contest_start_time": "2025-04-28T14:35:00+00:00",
+  "statement": {
+    "title": "D. Array and GCD",
+    "time_limit": "2 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "You are given an integer array $a$ of size $n$.\n\nYou can perform the following operations any number of times (possibly, zero):\n\n pay one coin and increase any element of the array by $1$ (you must have at least $1$ coin to perform this operation);\n\n gain one coin and decrease any element of the array by $1$.\n\nLet's say that an array is ideal if both of the following conditions hold:\n\n each element of the array is at least $2$;\n\n for each pair of indices $i$ and $j$ ($1 \\le i, j \\le n$; $i \\ne j$) the greatest common divisor (GCD) of $a_i$ and $a_j$ is equal to $1$. If the array has less than $2$ elements, this condition is automatically satisfied.\n\nLet's say that an array is beautiful if it can be transformed into an ideal array using the aforementioned operations, provided that you initially have no coins. If the array is already ideal, then it is also beautiful.\n\nThe given array is not necessarily beautiful or ideal. You can remove any elements from it (including removing the entire array or not removing anything at all). Your task is to calculate the minimum number of elements you have to remove (possibly, zero) from the array $a$ to make it beautiful.",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases.\n\nThe first line of each test case contains a single integer $n$ ($1 \\le n \\le 4 \\cdot 10^5$).\n\nThe second line contains $n$ integers $a_1, a_2, \\dots, a_n$ ($2 \\le a_i \\le 10^9$).\n\nAdditional constraint on the input: the sum of $n$ over all test cases doesn't exceed $4 \\cdot 10^5$.",
+    "output_spec": "For each test case, print a single integer — the minimum number of elements you have to remove (possibly, zero) from the array $a$ to make it beautiful.",
+    "note": "In the first example, you don't need to delete any elements, because the array is already beautiful. It can be transformed into an ideal array as follows: $[5, 5, 5] \\rightarrow [4, 5, 5] \\rightarrow [4, 4, 5] \\rightarrow [4, 3, 5]$ (you end up with $3$ coins).\n\nIn the second example, you need to remove $2$ elements so that the array becomes beautiful. If you leave the elements $[2, 3]$ and delete the other elements, then the given array is already ideal (and therefore, beautiful).\n\nIn the third example, you don't need to delete any elements because the array is already ideal (and thus, beautiful).\n\nIn the fourth example, the array is beautiful. It can be transformed into an ideal array as follows: $[2, 100, 2] \\rightarrow [2, 99, 2] \\rightarrow [2, 99, 3] \\rightarrow [2, 98, 3] \\rightarrow [2, 97, 3]$ (you end up with $2$ coins).",
+    "samples": [
+      {
+        "input": "5\n3\n5 5 5\n4\n2 3 2 4\n1\n3\n3\n2 100 2\n5\n2 4 2 11 2",
+        "output": "\n0\n2\n0\n0\n1"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 142472,
+    "url": "https://codeforces.com/blog/entry/142472",
+    "tutorial": "First, let's understand that operations from the statement impose only one restriction: the sum of the resulting array must not be greater than the sum of the original one.\n\nNow let's consider an ideal array. If there is an element that contains at least two distinct prime factors (or its factorization includes some prime more than once), we can reduce the element to any of its factors and the array remains ideal. This means, we can transform any ideal array into another ideal array that consists only of primes. Furthermore, if a prime $p$ is in the array, but another prime $q$, such that $p  \\gt  q$, is absent, we can reduce $p$ to $q$ without losing the array's ideal property. Therefore, any ideal array of length $n$ can be transformed into the array that consists of the first $n$ primes.\n\nBased on the aforementioned facts, an array of length $n$ is beautiful if its sum is at least the sum of the first $n$ prime numbers.\n\nTo solve the problem, we can iterate over the number of remaining elements $k$. If the sum of $k$ maximums from the array $a$ is at least the sum of $k$ first primes, we can update the answer.\n\nIt's also useful to note that the sieve of Eratosthenes can efficiently generate the list of the first prime numbers. You need $4 \\cdot 10^5$ primes, so you have to use the sieve up to something like $6 \\cdot 10^6$.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n \nusing namespace std;\n \nconst int N = 6e6;\n \nint main() {\n  ios::sync_with_stdio(false); cin.tie(0);\n  vector<int> p, ip(N, 1);\n  for (int i = 2; i < N; ++i) {\n    if (!ip[i]) continue;\n    p.push_back(i);\n    for (int j = i; j < N; j += i) {\n      ip[j] = 0;\n    }\n  }\n  int t;\n  cin >> t;\n  while (t--) {\n    int n;\n    cin >> n;\n    vector<int> a(n);\n    for (auto& x : a) cin >> x;\n    sort(a.begin(), a.end(), greater<int>());\n    int ans = 0;\n    long long suma = 0, sump = 0;\n    for (int i = 0; i < n; ++i) {\n      suma += a[i];\n      sump += p[i];\n      if (suma >= sump) ans = i + 1;\n    }\n    cout << n - ans << endl;\n  }\n}"
+    ]
+  }
+}

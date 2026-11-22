@@ -1,0 +1,43 @@
+{
+  "contest_id": 2051,
+  "index": "D",
+  "name": "Counting Pairs",
+  "rating": 1200,
+  "tags": [
+    "binary search",
+    "sortings",
+    "two pointers"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2051D",
+  "url": "https://codeforces.com/problemset/problem/2051/D",
+  "contest_start_time": "2024-12-22T14:35:00+00:00",
+  "statement": {
+    "title": "D. Counting Pairs",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "You are given a sequence $a$, consisting of $n$ integers, where the $i$-th element of the sequence is equal to $a_i$. You are also given two integers $x$ and $y$ ($x \\le y$).\n\nA pair of integers $(i, j)$ is considered interesting if the following conditions are met:\n\n $1 \\le i  \\lt  j \\le n$;\n\n if you simultaneously remove the elements at positions $i$ and $j$ from the sequence $a$, the sum of the remaining elements is at least $x$ and at most $y$.\n\nYour task is to determine the number of interesting pairs of integers for the given sequence $a$.",
+    "input_spec": "The first line contains one integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases.\n\nEach test case consists of two lines:\n\n The first line contains three integers $n, x, y$ ($3 \\le n \\le 2 \\cdot 10^5$, $1 \\le x \\le y \\le 2 \\cdot 10^{14}$);\n\n The second line contains $n$ integers $a_1, a_2, \\dots, a_n$ ($1 \\le a_i \\le 10^{9}$).\n\nAdditional constraint on the input: the sum of $n$ across all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, output one integer — the number of interesting pairs of integers for the given sequence $a$.",
+    "note": "In the first example, there are $4$ interesting pairs of integers:\n\n $(1, 2)$;\n\n $(1, 4)$;\n\n $(2, 3)$;\n\n $(3, 4)$.",
+    "samples": [
+      {
+        "input": "7\n4 8 10\n4 6 3 6\n6 22 27\n4 9 6 3 4 5\n3 8 10\n3 2 1\n3 1 1\n2 3 4\n3 3 6\n3 2 1\n4 4 12\n3 3 2 1\n6 8 8\n1 1 2 2 2 3",
+        "output": "\n4\n7\n0\n0\n1\n5\n6"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 137623,
+    "url": "https://codeforces.com/blog/entry/137623",
+    "tutorial": "There is a common trick in problems of the form \"count something on segment $[l, r]$\": calculate the answer for $[0, r]$, and then subtract the answer for $[0, l-1]$. We can use this trick in our problem as follows: calculate the number of pairs $i,j$ such that the sum of all other elements is less than $y+1$, and subtract the number of pairs such that the sum is less than $x$.\n\nNow we need to solve the following problem: given an array and an integer $x$, calculate the number of ways to choose $i,j$ ($1 \\le i  \\lt  j \\le n$) so that the sum of all elements, except for $a_i$ and $a_j$, is less than $x$.\n\nNaive solution (iterate on the pair, calculate the sum of remaining elements) works in $O(n^3)$. It can be improved to $O(n^2)$ if, instead of calculating the sum of remaining elements in $O(n)$, we do it in $O(1)$: if we remove $a_i$ and $a_j$, the remaining elements sum up to $s - a_i - a_j$, where $s$ is the sum of all elements.\n\nHowever, $O(n^2)$ is still too slow. For every $i$, let's try to calculate the number of elements $j$ which \"match\" it faster. If we sort the array, the answer won't change; but in a sorted array, for every $i$, all possible values of $j$ form a suffix of the array (if $s - a_i - a_j  \\lt  x$ and $a_{j+1} \\ge a_j$, then $s - a_i - a_{j+1}  \\lt  x$).\n\nSo, for every $i$, let's find the minimum $j'$ such that $s - a_i - a_{j'}  \\lt  x$; all $j \\ge j'$ are possible \"matches\" for $i$. This can be done with two pointers method: when we decrease $i$, the index $j'$ won't decrease.\n\nUnfortunately, this method has an issue. We need to calculate only pairs where $i \\lt j$, but this method doesn't maintain this constraint. However, this issue can be easily resolved.\n\nFirst, let's get rid of pairs where $i=j$. To do so, simply calculate the number of indices $i$ such that $s - 2a_i  \\lt  x$.\n\nThen, let's get rid of pairs where $i \\gt j$. For every such pair, there is a pair with $i \\lt j$ where these two indices are swapped (and vice versa), so we just need to divide the number of pairs by $2$.\n\nNow we have a solution working in $O(n \\log n)$ for each test case. Instead of two pointers, you can use binary search, the complexity will be the same.",
+    "solution_code": [
+      "def calcLessThanX(a, x):\n    n = len(a)\n    s = sum(a)\n    j = 0\n    ans = 0\n\n    for i in range(n-1, -1, -1):\n        while j < n and s - a[i] - a[j] >= x:\n            j += 1\n        ans += (n - j)\n\n    for i in range(n):\n        if s - a[i] - a[i] < x:\n            ans -= 1\n    \n    return ans // 2\n\nfor _ in range(int(input())):\n    n, x, y = map(int, input().split())\n    a = list(map(int, input().split()))\n    \n    a = sorted(a)\n    print(calcLessThanX(a, y+1) - calcLessThanX(a, x))"
+    ]
+  }
+}

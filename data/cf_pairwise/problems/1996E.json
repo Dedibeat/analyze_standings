@@ -1,0 +1,42 @@
+{
+  "contest_id": 1996,
+  "index": "E",
+  "name": "Decode",
+  "rating": 1600,
+  "tags": [
+    "combinatorics",
+    "data structures",
+    "implementation",
+    "math"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1996E",
+  "url": "https://codeforces.com/problemset/problem/1996/E",
+  "contest_start_time": "2024-07-26T14:35:00+00:00",
+  "statement": {
+    "title": "E. Decode",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "In a desperate attempt to obtain your waifu favorite character, you have hacked into the source code of the game. After days of struggling, you finally find the binary string that encodes the gacha system of the game. In order to decode it, you must first solve the following problem.\n\nYou are given a binary string $s$ of length $n$. For each pair of integers $(l, r)$ $(1 \\leq l \\leq r \\leq n)$, count the number of pairs $(x, y)$ $(l \\leq x \\leq y \\leq r)$ such that the amount of $\\mathtt{0}$ equals the amount of $\\mathtt{1}$ in the substring $s_xs_{x+1}...s_y$.\n\nOutput the sum of counts over all possible $(l, r)$ modulo $10^9+7$.",
+    "input_spec": "The first line contains $t$ ($1 \\leq t \\leq 1000$) — the number of test cases.\n\nEach test case contains a binary string $s$ ($1 \\leq |s| \\leq 2 \\cdot 10^5$). It is guaranteed $s$ only contains characters $\\mathtt{0}$ and $\\mathtt{1}$.\n\nIt is guaranteed the sum of $|s|$ over all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, output an integer, the answer modulo $10^9+7$.",
+    "note": null,
+    "samples": [
+      {
+        "input": "4\n0000\n01010101\n1100111001\n11000000111",
+        "output": "\n0\n130\n147\n70"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 131948,
+    "url": "https://codeforces.com/blog/entry/131948",
+    "tutorial": "1996E - Decode\n\nEasy version\n\nCount no of substrings with equal 0s and 1s\n\nHint 1\n\nReplace all 0 with -1. Now all segments with equal 0 and 1 have zero sum.\n\nHint 2\n\nInstead of counting segments inside each range. For each substring with zero sum, count segments it is a part of.\n\nVideo editorial",
+    "solution_code": []
+  }
+}

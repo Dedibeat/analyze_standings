@@ -1,0 +1,43 @@
+{
+  "contest_id": 1995,
+  "index": "E1",
+  "name": "Let Me Teach You a Lesson (Easy Version)",
+  "rating": 2700,
+  "tags": [
+    "2-sat",
+    "data structures",
+    "dp",
+    "matrices",
+    "two pointers"
+  ],
+  "points": 2500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1995E1",
+  "url": "https://codeforces.com/problemset/problem/1995/E1",
+  "contest_start_time": "2024-07-23T14:35:00+00:00",
+  "statement": {
+    "title": "E1. Let Me Teach You a Lesson (Easy Version)",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "This is the easy version of a problem. The only difference between an easy and a hard version is the constraints on $t$ and $n$. You can make hacks only if both versions of the problem are solved.\n\nArthur is giving a lesson to his famous $2 n$ knights. Like any other students, they're sitting at the desks in pairs, but out of habit in a circle. The knight $2 i - 1$ is sitting at the desk with the knight $2 i$.\n\nEach knight has intelligence, which can be measured by an integer. Let's denote the intelligence of the $i$-th knight as $a_i$. Arthur wants the maximal difference in total intelligence over all pairs of desks to be as small as possible. More formally, he wants to minimize $\\max\\limits_{1 \\le i \\le n} (a_{2 i - 1} + a_{2 i}) - \\min\\limits_{1 \\le i \\le n} (a_{2 i - 1} + a_{2 i})$.\n\nHowever, the Code of Chivalry only allows swapping the opposite knights in the circle, i.e., Arthur can simultaneously perform $a_i := a_{i + n}$, $a_{i + n} := a_i$ for any $1 \\le i \\le n$. Arthur can make any number of such swaps. What is the best result he can achieve?",
+    "input_spec": "Each test consists of several test cases. The first line contains a single integer $t$ ($1 \\le t \\le 1000$) — the number of test cases. It is followed by descriptions of the test cases.\n\nThe first line of each test case contains a single integer $n$ ($1 \\le n \\le 2000$) — the number of desks.\n\nThe second line consists of $2n$ integers $a_1, a_2, \\ldots, a_{2 n}$ ($1 \\le a_i \\le 10^9$) — the intelligence values of the knights.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $2000$.",
+    "output_spec": "For each test case, output a single line containing one integer — the minimal difference Arthur can achieve.",
+    "note": "In the first test case, Arthur can swap the second and the fourth knights. Then the total intelligence at both desks will be $10$.\n\nIn the third test case, Arthur can make $0$ operations, which will result in the total intelligence of $11$ at each of the desks.\n\nIn the fourth test case, Arthur can swap knights with indices $2$ and $5$ and achieve the difference of $2$. It can be proven that he cannot improve his result any further.",
+    "samples": [
+      {
+        "input": "5\n2\n6 6 4 4\n1\n10 17\n3\n1 10 1 10 1 10\n3\n3 3 4 5 5 4\n5\n1 2 3 4 5 6 7 8 9 10",
+        "output": "\n0\n0\n0\n2\n4"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 131851,
+    "url": "https://codeforces.com/blog/entry/131851",
+    "tutorial": "1995E1 - Let Me Teach You a Lesson (Easy Version)\n\nHint 1\n\nConsider cases of odd and even $n$. Which one is simpler?\n\nAnswer to Hint 1\n\nEven. In this case you can solve the problem for the opposite desks independently. From now on $n$ is odd.\n\nWhy independently?\n\nLet a desk have knights with intelligence $a$, $b$ and the opposite one with $c$, $d$. Since $(a + b) + (c + d) = (a + c) + (b + d)$, the minimal total intelligence on these desks is greater iff the maximal total intelligence is less.\n\nHint 2\n\nIf you reorder desks/knights in a way that you swap neighbors (i.e. $2$ with $3$, $4$ with $5$, ..., $2 n$ with $1$) instead of opposite knights, it'll probably become easier to think about this problem. We will use this notation from now on.\n\nHint 3\n\nYou're allowed to run in $O(n^2)$. Wouldn't it have sense to fix some entity and solve in linear time for fixed entity?\n\nAnswer to Hint 3\n\nFix the minimal (maximal) desk and the knights who are sitting at it (if the original knights were swapped or not). You'll need to find the minimal maximum on a desk for $4 n$ such cases.\n\nHint 4\n\nDP.\n\nSolution\n\n(Read the hints.) Let the fixed desk have index $k$. Let $dp_{i, b}$ (where $i$ is the index of the desk and $b$ is $0$ / $1$ which indicates whether the knight $2 i$ was swapped) be the minimal maximum that can be achieved on a segment from $k$ to $i$ (satisfying bit $b$ and the fact that the desk $k$ is actually minimal). Then you can easily make transitions $dp_{i, 0}, dp_{i, 1} \\to dp_{i + 1, 0}, dp_{i + 1, 1}$. In the end you'll just need to check $dp_{k - 1, b'}$ where $b'$ indicates whether the knight $2 * k - 1$ was swapped in our choice.\n\n(All the indices for the desks are taken modulo $n$ and all the indices for the knights are taken modulo $2 n$.)\n\nTime complexity: $O(n^2)$, but the constant is large and $O(n^2\\log n)$ solutions with binary search are unlikely to pass.\n\nCode\n\n272207462",
+    "solution_code": []
+  }
+}

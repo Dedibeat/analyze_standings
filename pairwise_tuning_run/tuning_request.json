@@ -1,0 +1,12 @@
+{
+  "baseModel": "gemini-3.5-flash",
+  "supervisedTuningSpec": {
+    "trainingDatasetUri": "gs://gctc-vertex-batch-703166210069/cf-pairwise-20260805/pilot-v1/pilot_train.jsonl",
+    "validationDatasetUri": "gs://gctc-vertex-batch-703166210069/cf-pairwise-20260805/pilot-v1/pilot_validation.jsonl",
+    "hyperParameters": {
+      "epochCount": 2
+    },
+    "exportLastCheckpointOnly": true
+  },
+  "tunedModelDisplayName": "cf-pairwise-pilot-20260805"
+}

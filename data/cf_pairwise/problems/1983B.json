@@ -1,0 +1,42 @@
+{
+  "contest_id": 1983,
+  "index": "B",
+  "name": "Corner Twist",
+  "rating": 1200,
+  "tags": [
+    "constructive algorithms",
+    "greedy",
+    "implementation",
+    "math"
+  ],
+  "points": 1000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1983B",
+  "url": "https://codeforces.com/problemset/problem/1983/B",
+  "contest_start_time": "2024-07-07T14:35:00+00:00",
+  "statement": {
+    "title": "B. Corner Twist",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "You are given two grids of numbers $a$ and $b$, with $n$ rows and $m$ columns. All the values in the grid are $0$, $1$ or $2$.\n\nYou can perform the following operation on $a$ any number of times:\n\n Pick any subrectangle in the grid with length and width $\\ge 2$. You are allowed to choose the entire grid as a subrectangle.\n\n The subrectangle has four corners. Take any pair of diagonally opposite corners of the chosen subrectangle and add $1$ to their values modulo $3$.\n\n For the pair of corners not picked, add $2$ to their values modulo $3$.\n\nNote that the operation only changes the values of the corners of the picked subrectangle.\n\nIs it possible to convert the grid $a$ into grid $b$ by applying the above operation any number of times (possibly zero)?",
+    "input_spec": "The first line contains an integer $t$, the number of testcases ($1 \\le t \\le 250$).\n\nFor each testcase:\n\nThe first line contains two integers $n$ and $m$, the number of rows and columns in the grid ($2 \\le n,m \\le 500$).\n\nEach of the next n lines contain m characters — the $j$-th character of the $i$-th line represents $a_{i,j}$.\n\nEach of the next n lines contain m characters — the $j$-th character of the $i$-th line represents $b_{i,j}$ ($0 \\le a_{i,j}, b_{i,j} \\le 2$).\n\nIt is guaranteed that the sum of $n$ over all test cases and the sum of $m$ over all test cases do not exceed $500$.",
+    "output_spec": "For each test case print \"YES\" (without quotes) if it is possible to convert grid $a$ into grid $b$ and \"NO\" (without quotes) otherwise.\n\nYou can output the answer in any case (upper or lower). For example, the strings \"yEs\", \"yes\", \"Yes\", and \"YES\" will be recognized as positive responses.",
+    "note": "In the first testcase, grid $a$ can be converted into $b$ in the following manner:\n\n$\\begin{matrix}\\fbox{0} & 0 & \\fbox{0}\\\\ 0 & 0 & 0\\\\ \\fbox{0} & 0 & \\fbox{0}\\end{matrix} \\Rightarrow \\begin{matrix}1 & 0 & 2\\\\ 0 & \\fbox{0} & \\fbox{0}\\\\ 2 & \\fbox{0} & \\fbox{1}\\end{matrix} \\Rightarrow \\begin{matrix}1 & 0 & 2\\\\ \\fbox{0} & \\fbox{1} & 2\\\\ \\fbox{2} & \\fbox{2} & 2\\end{matrix} \\Rightarrow \\begin{matrix}1 & \\fbox{0} & \\fbox{2}\\\\ 1 & 0 & 2\\\\ 1 & \\fbox{0} & \\fbox{2}\\end{matrix} \\Rightarrow \\begin{matrix}1 & 1 & 1\\\\ 1 & \\fbox{0} & \\fbox{2}\\\\ 1 & \\fbox{2} & \\fbox{0}\\end{matrix} \\Rightarrow \\begin{matrix}1 & 1 & 1\\\\ 1 & 1 & 1\\\\ 1 & 1 & 1\\end{matrix}$\n\nHere, in each operation, the top-right and bottom-left corners highlighted by a box are incremented by $2$ modulo $3$, while the top-left and bottom-right corners are incremented by $1$ modulo $3$.\n\nIn the fourth testcase, it can be proven that it is not possible to convert grid $a$ into grid $b$ using the above-mentioned operations any number of times.",
+    "samples": [
+      {
+        "input": "7\n3 3\n000\n000\n000\n111\n111\n111\n4 4\n0000\n0000\n0000\n0000\n2100\n1200\n0012\n0021\n4 4\n1020\n1200\n1210\n0000\n0000\n1200\n2200\n0000\n3 3\n012\n012\n012\n010\n111\n011\n8 8\n00000000\n00000000\n00000000\n00000000\n00000000\n00000000\n00000000\n10000000\n00000000\n01200000\n02010000\n00102000\n00020100\n00001020\n00000210\n10000000\n2 7\n0000000\n0000000\n2220111\n0111222\n2 7\n0000000\n0100010\n2220111\n1210202",
+        "output": "\nYES\nYES\nYES\nNO\nYES\nNO\nYES"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 131268,
+    "url": "https://codeforces.com/blog/entry/131268",
+    "tutorial": "Notice how the operations affect each row and column. The problem offers a really simple solution: the sum of each row and each column modulo $3$ needs to remain constant throughout all the operations. It is easy to see that this is a necessary condition.\n\nLet's prove that this is sufficient as well.\n\nNotice that using the 2x2 versions of the operations defined in the statement, i.e., addition of $\\begin{matrix}1 & 2 \\\\ 2 & 1\\end{matrix}$ or $\\begin{matrix}2 & 1 \\\\ 1 & 2\\end{matrix}$ along the corners of a 2x2 square can be used to generate the same result as the operation applied on any rectangle. For instance, we can combine two 2x2 operations sideways to get a 2x3 operation:\n\n$$\\begin{matrix}1 & \\fbox{2+1} & 2\\\\ 2 & \\fbox{1+2} & 1\\end{matrix} \\equiv \\begin{matrix}1 & 0 & 2\\\\ 2 & 0 & 1\\end{matrix} \\pmod{3}$$ Let the grid $a$ and $b$ have $n$ rows and $m$ columns, you can iterate over $i$ thorugh $1\\ldots n-1$ and for $i$'s each iteration, $j$ through $1\\ldots m-1$.\n\n If $a[i][j] + 1 \\equiv b[i][j] \\pmod{3}$, add $\\begin{matrix}1 & 2 \\\\ 2 & 1\\end{matrix}$ to the subrectange of $a$ starting at $a[i[j]$.\n\n If $a[i][j] + 2 \\equiv b[i][j] \\pmod{3}$, add $\\begin{matrix}2 & 1 \\\\ 1 & 2\\end{matrix}$ to the subrectange of $a$ starting at $a[i[j]$.\n\n Make no changes otherwise.\n\nWe see that it is always possible to make all the elements in the first $n-1$ rows and $m-1$ columns equal using this method.\n\nNote that the sum of each row and each column stays constant after each operation. If $b$ is derived from $a$ using these operations, then all the values for the remaining $n + m - 1$ elements of the grid can be uniquely determined using the row and column sums and need to be equal. Hence, proving sufficiency.",
+    "solution_code": []
+  }
+}

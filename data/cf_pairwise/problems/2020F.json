@@ -1,0 +1,43 @@
+{
+  "contest_id": 2020,
+  "index": "F",
+  "name": "Count Leaves",
+  "rating": 2900,
+  "tags": [
+    "dp",
+    "math",
+    "number theory"
+  ],
+  "points": 2750.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2020F",
+  "url": "https://codeforces.com/problemset/problem/2020/F",
+  "contest_start_time": "2024-09-29T15:35:00+00:00",
+  "statement": {
+    "title": "F. Count Leaves",
+    "time_limit": "4 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Let $n$ and $d$ be positive integers. We build the the divisor tree $T_{n,d}$ as follows:\n\n The root of the tree is a node marked with number $n$. This is the $0$-th layer of the tree.\n\n For each $i$ from $0$ to $d - 1$, for each vertex of the $i$-th layer, do the following. If the current vertex is marked with $x$, create its children and mark them with all possible distinct divisors$^\\dagger$ of $x$. These children will be in the $(i+1)$-st layer.\n\n The vertices on the $d$-th layer are the leaves of the tree.\n\nFor example, $T_{6,2}$ (the divisor tree for $n = 6$ and $d = 2$) looks like this:\n\nDefine $f(n,d)$ as the number of leaves in $T_{n,d}$.\n\nGiven integers $n$, $k$, and $d$, please compute $\\sum\\limits_{i=1}^{n} f(i^k,d)$, modulo $10^9+7$.\n\n$^\\dagger$ In this problem, we say that an integer $y$ is a divisor of $x$ if $y \\ge 1$ and there exists an integer $z$ such that $x = y \\cdot z$.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 10^4$). The description of the test cases follows.\n\nThe only line of each test case contains three integers $n$, $k$, and $d$ ($1 \\le n \\le 10^9$, $1 \\le k,d \\le 10^5$).\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $10^9$.",
+    "output_spec": "For each test case, output $\\sum\\limits_{i=1}^{n} f(i^k,d)$, modulo $10^9+7$.",
+    "note": "In the first test case, $n = 6$, $k = 1$, and $d = 1$. Thus, we need to find the total number of leaves in the divisor trees $T_{1,1}$, $T_{2,1}$, $T_{3,1}$, $T_{4,1}$, $T_{5,1}$, $T_{6,1}$.\n\n $T_{1,1}$ has only one leaf, which is marked with $1$.\n\n $T_{2,1}$ has two leaves, marked with $1$ and $2$.\n\n $T_{3,1}$ has two leaves, marked with $1$ and $3$.\n\n $T_{4,1}$ has three leaves, marked with $1$, $2$, and $4$.\n\n $T_{5,1}$ has two leaves, marked with $1$ and $5$.\n\n $T_{6,1}$ has four leaves, marked with $1$, $2$, $3$, and $6$.\n\nThe total number of leaves is $1 + 2 + 2 + 3 + 2 + 4 = 14$.\n\nIn the second test case, $n = 1$, $k = 3$, $d = 3$. Thus, we need to find the number of leaves in $T_{1,3}$, because $1^3 = 1$. This tree has only one leaf, so the answer is $1$.",
+    "samples": [
+      {
+        "input": "3\n6 1 1\n1 3 3\n10 1 2",
+        "output": "\n14\n1\n53"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 134516,
+    "url": "https://codeforces.com/blog/entry/134516",
+    "tutorial": "F. Count Leaves\n\nBy nishkarsh\n\nHint 1\n\n$f$ satisfies a special property for fixed d.\n\nAnswer\n\n$f$ is multiplicative i.e. $f(x.y)$ = $f(x) * f(y)$ if $x,y$ are coprime, for fixed d.\n\nSolution\n\nIt can be observed that the number of leaves is equal to the number of ways of choosing $d$ integers $a_0,a_1,a_2...a_d$ with $a_d = n$ and $a_i divides a_{i+1}$ for all $(0 \\le i \\le d-1)$.\n\nLets define $g(n) = f(n,d)$ for given $d$. It can be seen that the function $g$ is multiplicative i.e. $g(p*q) = g(p)*g(q)$ if $p$ and $q$ are coprime.\n\nNow, lets try to calculate $g(n)$ when $n$ is of the form $p^x$ where $p$ is a prime number and $x$ is any non negative integer. From the first observation, we can say that here all the $a_i$ will be a power of $p$. Therefore $a_0,a_1,a_2...a_d$ can be written as $p^{b_0},p^{b_1},p^{b_2}...p^{b_d}$. Now we just have to ensure that $0 \\le b_0 \\le b_1 \\le b_2 ... \\le b_d = x$. The number of ways of doing so is $\\binom{x+d}{d}$.\n\nNow, lets make a dp (inspired by the idea of the dp used in fast prime counting) where $dp(n,x) = \\sum_{i=1, spf(i) \\gt = x}^{n} g(i)$. Here $spf(i)$ means smallest prime factor of $i$.\n $ dp(x, p) = \\begin{cases} 0 & \\text{if } x = 0 \\\\ 1 & \\text{if } p  \\gt  x \\\\ dp(x, p+1) & \\text{if } p \\text{ is not prime} \\\\ \\sum\\limits_{i=0 \\, \\text{to} \\, p^i \\le x} dp\\left(\\lfloor{\\frac{x}{p^i}} \\rfloor, p+1\\right) f(p^{ik}, d) & \\text{otherwise} \\end{cases} $\nOur required answer is $dp(n,2)$.\n\nThe overall complexity of the solution is $O(n^{\\frac{2}{3}})$.\n\nCode",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n#define ll long long\n#define pb push_back\n#define mp make_pair\n#define F first\n#define S second\n#define pii pair<int,int>\n#define pll pair<ll,ll>\n#define pcc pair<char,char>\n#define vi vector <int>\n#define vl vector <ll>\n#define sd(x) scanf(\"%d\",&x)\n#define slld(x) scanf(\"%lld\",&x)\n#define pd(x) printf(\"%d\",x)\n#define plld(x) printf(\"%lld\",x)\n#define pds(x) printf(\"%d \",x)\n#define pllds(x) printf(\"%lld \",x)\n#define pdn(x) printf(\"%d\\n\",x)\n#define plldn(x) printf(\"%lld\\n\",x)\nusing namespace std;\nll powmod(ll base,ll exponent,ll mod){\n\tll ans=1;\n\tif(base<0) base+=mod;\n\twhile(exponent){\n\t\tif(exponent&1)ans=(ans*base)%mod;\n\t\tbase=(base*base)%mod;\n\t\texponent/=2;\n\t}\n\treturn ans;\n}\nll gcd(ll a, ll b){\n\tif(b==0) return a;\n\telse return gcd(b,a%b);\n}\nconst int INF = 2e9;\nconst ll INFLL = 4e18;\nconst int small_lim = 1e6+1;\nconst int mod = 1e9+7;\nconst int big_lim = 1e3+1;\nll primes_till_i[small_lim];\nll primes_till_bigger_i[big_lim];\nvl sieved_primes[small_lim];\nvl sieved_primes_big[big_lim];\nvi prime;\nint N,k,d;\nvoid sieve(){\n\tvi lpf(small_lim);\n\tll pw;\n\tfor(int i = 2; i < small_lim; i++){\n\t\tif(! lpf[i]){\n\t\t\tprime.pb(i);\n\t\t\tlpf[i] = i;\n\t\t}\n\t\tfor(int j : prime){\n\t\t\tif((j > lpf[i]) || (j*i >= small_lim)) break;\n\t\t\tlpf[j*i] = j;\n\t\t}\n\t}\n\tfor(int i = 2; i < small_lim; i++){\n\t\tprimes_till_i[i] = primes_till_i[i-1] + (lpf[i] == i);\n\t}\n}\nll count_primes(ll n, int ind){\n\tif(ind < 0) return n-1;\n\tif(1ll*prime[ind]*prime[ind] > n){\n\t\tif(n < small_lim) return primes_till_i[n];\n\t\tif(primes_till_bigger_i[N/n]) return primes_till_bigger_i[N/n];\n\t\tint l = -1, r = ind;\n\t\twhile(r-l > 1){\n\t\t\tint mid = (l+r)>>1;\n\t\t\tif(1ll*prime[mid]*prime[mid] > n) r = mid;\n\t\t\telse l = mid;\n\t\t}\n\t\treturn primes_till_bigger_i[N/n] = count_primes(n,l);\n\t}\n\tint sz;\n\tif(n < small_lim) sz = sieved_primes[n].size();\n\telse sz = sieved_primes_big[N/n].size();\n\tll ans;\n\tif(sz <= ind){\n\t\tans = count_primes(n,ind-1);\n\t\tans -= count_primes(n/prime[ind],ind-1);\n\t\tans += ind;\n\t\tif(n < small_lim) sieved_primes[n].pb(ans);\n\t\telse sieved_primes_big[N/n].pb(ans);\n\t}\n\tif(n < small_lim) return sieved_primes[n][ind];\n\telse return sieved_primes_big[N/n][ind];\n}\nll count_primes(ll n){\n\tif(n < small_lim) return primes_till_i[n];\n\tif(primes_till_bigger_i[N/n]) return primes_till_bigger_i[N/n];\n\treturn count_primes(n,prime.size()-1);\n}\n \nconst int ncrlim = 3.5e6;\n \nint fact[ncrlim];\nint invfact[ncrlim];\n \nvoid init_fact(){\n\tfact[0] = 1;\n\tfor(int i = 1; i < ncrlim; i++) fact[i] = (1ll*fact[i-1]*i)%mod;\n\tinvfact[ncrlim-1] = powmod(fact[ncrlim-1], mod-2, mod);\n\tfor(int i = ncrlim-1; i > 0; i--) invfact[i-1] = (1ll*invfact[i]*i)%mod;\n}\n \nint ncr(int n, int r){\n\tif(r > n || r < 0) return 0;\n\tint ans = fact[n];\n\tans = (1ll*ans*invfact[n-r]) % mod;\n\tans = (1ll*ans*invfact[r]) % mod;\n\treturn ans;\n}\n \nll calculate_dp(ll n, int ind){\n\tif(n == 0) return 0;\n\tif(prime[ind] > n) return 1;\n\tll ans = 1,temp;\n\tif(1ll*prime[ind]*prime[ind] > n){\n\t\ttemp = ncr(k+d,d);\n\t\ttemp *= count_primes(n)-ind;\n\t\tans+=temp; ans %= mod;\n\t\treturn ans;\n\t}\n\tans = 0;\n\tll gg = 1;\n\tll mult = d;\n\twhile(gg <= n){\n\t\ttemp = calculate_dp(n/gg,ind+1);\n\t\ttemp *= ncr(mult,d);\n\t\tans += temp;\n\t\tans %= mod;\n\t\tmult += k;\n\t\tgg *= prime[ind];\n\t}\n\treturn ans;\n}\nint main(){\n\tsieve();\n\tinit_fact();\n\tint t;\n\tsd(t);\n\twhile(t--){\n\t\tsd(N);sd(k);sd(d);\n\t\tplldn(calculate_dp(N,0));\n\t\tfor(int i = 1; i < big_lim; i++){\n\t\t\tprimes_till_bigger_i[i] = 0;\n\t\t\tsieved_primes_big[i].clear();\n\t\t}\n\t}\n\treturn 0;\n}"
+    ]
+  }
+}

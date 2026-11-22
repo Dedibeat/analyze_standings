@@ -1,0 +1,45 @@
+{
+  "contest_id": 2032,
+  "index": "C",
+  "name": "Trinity",
+  "rating": 1400,
+  "tags": [
+    "binary search",
+    "math",
+    "sortings",
+    "two pointers"
+  ],
+  "points": 1250.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2032C",
+  "url": "https://codeforces.com/problemset/problem/2032/C",
+  "contest_start_time": "2024-11-01T14:35:00+00:00",
+  "statement": {
+    "title": "C. Trinity",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "You are given an array $a$ of $n$ elements $a_1, a_2, \\ldots, a_n$.\n\nYou can perform the following operation any number (possibly $0$) of times:\n\n Choose two integers $i$ and $j$, where $1 \\le i, j \\le n$, and assign $a_i := a_j$.\n\nFind the minimum number of operations required to make the array $a$ satisfy the condition:\n\n For every pairwise distinct triplet of indices $(x, y, z)$ ($1 \\le x, y, z \\le n$, $x \\ne y$, $y \\ne z$, $x \\ne z$), there exists a non-degenerate triangle with side lengths $a_x$, $a_y$ and $a_z$, i.e. $a_x + a_y  \\gt  a_z$, $a_y + a_z  \\gt  a_x$ and $a_z + a_x  \\gt  a_y$.",
+    "input_spec": "Each test consists of multiple test cases. The first line contains a single integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases. The description of the test cases follows.\n\nThe first line of each test case contains a single integer $n$ ($3 \\le n \\le 2 \\cdot 10^5$) — the number of elements in the array $a$.\n\nThe second line of each test case contains $n$ integers $a_1, a_2, \\ldots, a_n$ ($1 \\le a_i \\le 10^9$) — the elements of the array $a$.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, output a single integer — the minimum number of operations required.",
+    "note": "In the first test case, one of the possible series of operations would be:\n\n Assign $a_1 := a_4 = 4$. The array will become $[4, 2, 3, 4, 5, 6, 7]$.\n\n Assign $a_2 := a_5 = 5$. The array will become $[4, 5, 3, 4, 5, 6, 7]$.\n\n Assign $a_7 := a_1 = 4$. The array will become $[4, 5, 3, 4, 5, 6, 4]$.\n\nIt can be proven that any triplet of elements with pairwise distinct indices in the final array forms a non-degenerate triangle, and there is no possible answer using less than $3$ operations.\n\nIn the second test case, we can assign $a_1 := a_2 = 3$ to make the array $a = [3, 3, 2]$.\n\nIn the third test case, since $3$, $4$ and $5$ are valid side lengths of a triangle, we don't need to perform any operation to the array.",
+    "samples": [
+      {
+        "input": "4\n7\n1 2 3 4 5 6 7\n3\n1 3 2\n3\n4 5 3\n15\n9 3 8 1 6 5 3 8 2 1 4 2 9 4 7",
+        "output": "\n3\n1\n0\n8"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 135622,
+    "url": "https://codeforces.com/blog/entry/135622",
+    "tutorial": "Without loss of generality, we assume that every array mentioned below is sorted in non-descending order.\n\nAn array $b$ of $k$ elements ($k \\ge 3$) will satisfy the problem's criteria iff $b_1 + b_2  \\gt  b_k$. The proof is that $b_1 + b_2$ is the minimum sum possible of any pair of distinct elements of array $b$, and if it is larger than the largest element of $b$, every pair of distinct elements of $b$ will be larger than any element of $b$ on its own.\n\nThe upper bound for our answer is $n - 2$. This can be done as follows: we will turn every value from $a_2$ to $a_{n-1}$ to $a_n$ — this way, we only have two types of triangles: $(a_1, a_n, a_n)$ and $(a_n, a_n, a_n)$. Since $a_1 \\ge 1  \\gt  0$, we have $a_1 + a_n  \\gt  a_n$, which means the former type of triangles is non-degenerate. The latter is also trivially one, as it is a regular/equilateral triangle.\n\nOtherwise, we'll need a pair of indices $(i, j)$ ($1 \\le i \\le n-2$, $i+2 \\le j \\le n$), so that in the final array after applying operations to $a$, $a_i$ and $a_{i+1}$ will be respectively the smallest and second smallest element, and $a_j$ will be the largest element. Such indices must satisfy $a_i + a_{i+1}  \\gt  a_j$.\n\nLet's consider a pair $(i, j)$ that satisfies the above condition, then we need to turn elements outside of it (i.e. those before $i$ or after $j$) into some elements within the range $[a_{i+1}, a_j]$, and indeed we can change them into $a_{i+1}$ — this way, we have everything in place while keeping the relative rankings of $a_i$, $a_{i+1}$ and $a_j$ as what they are initially. Therefore, for such a pair, the number of operations needed is $n - (j - i + 1)$. This means that for every $i$, we need to find the largest $j  \\gt  i$ that satisfies the condition, which can easily be done using two pointers.\n\nSorting complexity: $\\mathcal{O}(n \\log n)$.\n\nTwo-pointer complexity: $\\mathcal{O}(n)$.",
+    "solution_code": [
+      "namespace solution {\n    bool hasMultipleTests = true;\n\n    int n;\n    vector<int> a;\n\n    void preprocess() {\n\n    }\n\n    void input(int testcase) {\n        cin >> n;\n        a.clear();\n        a.resize(n);\n        for (auto &z: a) cin >> z;\n    }\n\n    void solve(int testcase) {\n        sort(a.begin(), a.end());\n\n        int l = 0, ans = n - 2;\n        for (int r = 2; r < n; r++) {\n            while (r - l >= 2 && a[l] + a[l+1] <= a[r]) l++;\n            ans = min(ans, n - (r - l + 1));\n        }\n\n        cout << ans << endl;\n    }\n}",
+      "class Solution:\n    hasMultipleTests = True\n\n    n: int = None\n    a: list = None\n\n    @classmethod\n    def preprocess(cls):\n        pass\n\n    @classmethod\n    def input(cls, testcase):\n        cls.n = int(input())\n        cls.a = list(map(int, input().split()))\n\n    @classmethod\n    def solve(cls, testcase):\n        cls.a.sort()\n        l, r, ans = 0, 2, cls.n - 2\n        while r < cls.n:\n            while r - l >= 2 and cls.a[l] + cls.a[l+1] <= cls.a[r]: l += 1\n            ans = min(ans, cls.n - (r - l + 1))\n            r += 1\n        print(ans)\n\n# end Solution"
+    ]
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "contest_id": 2044,
+  "index": "E",
+  "name": "Insane Problem",
+  "rating": 1300,
+  "tags": [
+    "binary search",
+    "greedy",
+    "implementation",
+    "math",
+    "number theory"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2044E",
+  "url": "https://codeforces.com/problemset/problem/2044/E",
+  "contest_start_time": "2024-12-15T14:35:00+00:00",
+  "statement": {
+    "title": "E. Insane Problem",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Wave is given five integers $k$, $l_1$, $r_1$, $l_2$, and $r_2$. Wave wants you to help her count the number of ordered pairs $(x, y)$ such that all of the following are satisfied:\n\n $l_1 \\leq x \\leq r_1$.\n\n $l_2 \\leq y \\leq r_2$.\n\n There exists a non-negative integer $n$ such that $\\frac{y}{x} = k^n$.",
+    "input_spec": "The first line contains an integer $t$ ($1 \\leq t \\leq 10^4$) — the number of test cases.\n\nThe only line of each test case contains five integers $k$, $l_1$, $r_1$, $l_2$, and $r_2$ ($2 \\leq k \\leq 10^9, 1 \\leq l_1 \\leq r_1 \\leq 10^9, 1 \\leq l_2 \\leq r_2 \\leq 10^9$).",
+    "output_spec": "For each test case, output the number of matching ordered pairs $(x, y)$ on a new line.",
+    "note": "In the third test case, the matching ordered pairs are the following:\n\n $(5,15)$\n\n $(5,45)$\n\n $(6,18)$\n\n $(6,54)$\n\n $(7,21)$\n\n $(7,63)$\n\nIn the fourth test case, the only valid ordered pair is $(1,1\\,000\\,000\\,000)$",
+    "samples": [
+      {
+        "input": "5\n2 2 6 2 12\n2 1 1000000000 1 1000000000\n3 5 7 15 63\n1000000000 1 5 6 1000000000\n15 17 78 2596 20914861",
+        "output": "\n12\n1999999987\n6\n1\n197"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 137306,
+    "url": "https://codeforces.com/blog/entry/137306",
+    "tutorial": "2044E - Insane Problem\n\nProblem Credits: Proof_by_QED,Lilypad\n Analysis: macaquedev, chromate00\n\nSolution 1 (Binary Search)\n\nClearly, trying to bruteforce over all possible values of $x$ or $y$ is too slow, because the bounds are $1 \\leq l_1 \\leq r_1 \\leq 10^9$. However, there is another variable that you can actually bruteforce over — and that is $n$. This is because exponentiation famously makes numbers very big very quickly — and if we set $k$ as small as possible (i.e. $2$), we only need to check $1 \\leq n \\leq 32$. This is because $2^{32} \\gt 10^9$, so there cannot possibly be any solutions for $n \\gt 32$ for any $k$.\n\nNow, let's rephrase the problem. We need to find pairs $(x, y)$ such that $x \\cdot k^n = y$. Now, we can check every value of $n$ from $1$ to $32$, and for each, binary search to find the smallest $x$ such that $y$ fits the conditions, and the largest $x$. Now, we can subtract these two values and add this to the answer.\n\nSolution 2 (Intervals)\n\nNote that we do not need to care about more than $32$ different values of $k^n$, because obviously $k^{32} \\ge 2^{32} \\gt 10^9$. From here and on, we focus on solving for only one value of $k^n$.\n\nWhen $k^n$ is fixed and you are given $\\frac{y}{x}=k^n$, notice $y$ is fixed as $x k^n$. Therefore, if we count the values $x$ such that $y$ is in the given interval as well, we will be properly counting the ordered pairs.\n\nFormally, this condition can be cleared out as:\n\n$l_2 \\le x k^n \\le r_2$\n\n$\\frac{l_2}{k^n} \\le x \\le \\frac{r_2}{k^n}$\n\nBecause $x$ is an integer, $\\left \\lceil {\\frac{l_2}{k^n}} \\right \\rceil \\le x \\le \\left \\lfloor {\\frac{r_2}{k^n}} \\right \\rfloor$\n\nThus, when we intersect the two intervals, we get the following interval at last.\n $\\max \\left({l_1,\\left \\lceil {\\frac{l_2}{k^n}} \\right \\rceil}\\right) \\le x \\le \\min \\left({r_1,\\left \\lfloor {\\frac{r_2}{k^n}} \\right \\rfloor}\\right)$\nCompute the size of this interval for all $k^n$ (at most $32$ values) and the answer can be found.\n\nDo note the following details while implementing:\n\nWhen $r \\lt l$, the size of the interval is $0$, not negative.\n\nBeware of overflows. Dealing with big integers can be helpful in avoiding this, but it may make your solution slow.\n\nDo not round up a fraction using the ceil function; This has been a recurring issue in almost every Div.4!\n\nCode (C++)",
+    "solution_code": [
+      "#include<bits/stdc++.h>\n#define ll long long\nusing namespace std;\n\n\nint main()\n{\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    int tt;\n    cin>>tt;\n    while(tt--)\n    {\n        ll k,l1,r1,l2,r2;\n        cin>>k>>l1>>r1>>l2>>r2;\n        ll kn=1,ans=0;\n        for(int n=0;r2/kn>=l1;n++)\n        {\n            ans+=max(0ll,min(r2/kn,r1)-max((l2-1)/kn+1,l1)+1ll);\n            kn*=k;\n        }\n        cout<<ans<<'\\n';\n    }\n    return 0;\n}"
+    ]
+  }
+}

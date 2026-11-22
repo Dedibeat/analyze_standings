@@ -1,0 +1,44 @@
+{
+  "contest_id": 2064,
+  "index": "B",
+  "name": "Variety is Discouraged",
+  "rating": 1100,
+  "tags": [
+    "binary search",
+    "constructive algorithms",
+    "greedy",
+    "two pointers"
+  ],
+  "points": 1000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2064B",
+  "url": "https://codeforces.com/problemset/problem/2064/B",
+  "contest_start_time": "2025-02-16T14:35:00+00:00",
+  "statement": {
+    "title": "B. Variety is Discouraged",
+    "time_limit": "1.5 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Define the score of an arbitrary array $b$ to be the length of $b$ minus the number of distinct elements in $b$. For example:\n\n The score of $[1, 2, 2, 4]$ is $1$, as it has length $4$ and only $3$ distinct elements ($1$, $2$, $4$).\n\n The score of $[1, 1, 1]$ is $2$, as it has length $3$ and only $1$ distinct element ($1$).\n\n The empty array has a score of $0$.\n\nYou have an array $a$. You need to remove some non-empty contiguous subarray from $a$ at most once.\n\nMore formally, you can do the following at most once:\n\n pick two integers $l$, $r$ where $1 \\le l \\le r \\le n$, and\n\n delete the contiguous subarray $[a_l,\\ldots,a_r]$ from $a$ (that is, replace $a$ with $[a_1,\\ldots,a_{l - 1},a_{r + 1},\\ldots,a_n]$).\n\nOutput an operation such that the score of $a$ is maximum; if there are multiple answers, output one that minimises the final length of $a$ after the operation. If there are still multiple answers, you may output any of them.",
+    "input_spec": "The first line contains an integer $t$ ($1 \\le t \\le 10^4$) — the number of testcases.\n\nThe first line of each testcase contains an integer $n$ ($1 \\le n \\le 2 \\cdot 10^5$) — the length of the array $a$.\n\nThe second line of each testcase contains $n$ integers $a_1,a_2,\\ldots,a_n$ ($1 \\le a_i \\le n$).\n\nThe sum of $n$ across all testcases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each testcase, if you wish to not make a move, output $0$.\n\nOtherwise, output two integers $l$ and $r$ ($1 \\le l \\le r \\le n$), representing the left and right bound of the removed subarray.\n\nThe removed subarray should be chosen such that the score is maximized, and over all such answers choose any of them that minimises the final length of the array.",
+    "note": "In the first testcase, we have two options:\n\n do nothing: the score of $[1]$ is $1-1=0$.\n\n remove the subarray with $l=1$, $r=1$: we remove the only element, and we get an empty array with score $0$.\n\n Therefore, the maximum score possible is $0$. However, since we need to additionally minimise the final length of the array, we must output the second option with $l=r=1$. Note that the first option of doing nothing is incorrect, since it has a longer final length.\nIn the second testcase, no subarray is selected, so after which $a$ is still $[1, 1, 1, 1, 1]$. This has length $5$ and $1$ distinct element, so it has a score of $5 - 1 = 4$. This can be proven to be a shortest array which maximises the score.\n\nIn the third testcase, the subarray selected is $[2, \\color{red}1, \\color{red}3, 2]$, after which $a$ becomes $[2, 2]$. This has length $2$ and $1$ distinct element, so it has a score of $2 - 1 = 1$. This can be proven to be a shortest array which maximises the score.",
+    "samples": [
+      {
+        "input": "3\n1\n1\n5\n1 1 1 1 1\n4\n2 1 3 2",
+        "output": "\n1 1\n0\n2 3"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 138912,
+    "url": "https://codeforces.com/blog/entry/138912",
+    "tutorial": "2064B - Variety is Discouraged:\n\nSolution\n\nThe first thing to notice is that if we remove an element from $a$ then our score will never increase. Because removing one element will cause $|a|$ to decrease by $1$ and $\\mathrm{distinct}(a)$ will decrease by at most $1$ and so the $|a|$ — $\\mathrm{distinct}(a)$ will never increase. This means that we should be trying to removing the longest subarray which does not decrease our score.\n\nWe can see that removing any element which only occurs once in $a$ will never decrease our score, and that removing any element which occurs more than once will always decrease our score. Thus we should try to find the longest subarray of elements which only have $1$ occurrence in $a$ and this will be the answer. This can be calculated with a single loop in $O(n)$.\n\nCode(c++)",
+    "solution_code": [
+      "#include<bits/stdc++.h>\nusing namespace std;\ntypedef long long ll;\n#define debug(x) cout << #x << \" = \" << x << \"\\n\";\n#define vdebug(a) cout << #a << \" = \"; for(auto x: a) cout << x << \" \"; cout << \"\\n\";\nmt19937 rng(chrono::steady_clock::now().time_since_epoch().count());\nint uid(int a, int b) { return uniform_int_distribution<int>(a, b)(rng); }\nll uld(ll a, ll b) { return uniform_int_distribution<ll>(a, b)(rng); }\n\nvoid solve(){\n    int n;\n    cin >> n;\n\n    vector<int> a(n);\n    for (int &x : a) cin >> x;\n\n    vector<int> freq(n + 1);\n    for (int x : a) freq[x]++;\n\n    vector<int> len(n + 1);\n    len[0] = freq[a[0]] == 1;\n    for (int i = 1; i < n; i++)\n        if (freq[a[i]] == 1)\n            len[i] = len[i - 1] + 1;\n    \n    int mx = *max_element(len.begin(), len.end());\n    if (mx == 0){\n        cout << \"0\\n\";\n        return;\n    }\n\n    for (int i = 0; i < n; i++){\n        if (len[i] == mx){\n            cout << i - len[i] + 2 << \" \" << i + 1 << \"\\n\";\n            return;\n        }\n    }\n}\n\nint main(){\n    ios::sync_with_stdio(false);\n    cin.tie(0);\n    cout.tie(0);\n    \n    int t;\n    cin >> t;\n    while (t--) solve();\n}"
+    ]
+  }
+}

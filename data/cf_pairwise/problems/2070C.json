@@ -1,0 +1,40 @@
+{
+  "contest_id": 2070,
+  "index": "C",
+  "name": "Limited Repainting",
+  "rating": 1500,
+  "tags": [
+    "binary search",
+    "greedy"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2070C",
+  "url": "https://codeforces.com/problemset/problem/2070/C",
+  "contest_start_time": "2025-02-27T14:35:00+00:00",
+  "statement": {
+    "title": "C. Limited Repainting",
+    "time_limit": "2 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "You are given a strip, consisting of $n$ cells, all cells are initially colored red.\n\nIn one operation, you can choose a segment of consecutive cells and paint them blue. Before painting, the chosen cells can be either red or blue. Note that it is not possible to paint them red. You are allowed to perform at most $k$ operations (possibly zero).\n\nFor each cell, the desired color after all operations is specified: red or blue.\n\nIt is clear that it is not always possible to satisfy all requirements within $k$ operations. Therefore, for each cell, a penalty is also specified, which is applied if the cell ends up the wrong color after all operations. For the $i$-th cell, the penalty is equal to $a_i$.\n\nThe penalty of the final painting is calculated as the maximum penalty among all cells that are painted the wrong color. If there are no such cells, the painting penalty is equal to $0$.\n\nWhat is the minimum penalty of the final painting that can be achieved?",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases.\n\nThe first line of each test case contains two integers $n$ and $k$ ($1 \\le n \\le 3 \\cdot 10^5$; $0 \\le k \\le n$) — the length of the strip and the maximum number of operations.\n\nThe second line contains a string $s$, consisting of $n$ characters 'R' and/or 'B'. 'R' means that the cell should be painted red. 'B' means that the cell should be painted blue.\n\nThe third line contains $n$ integers $a_1, a_2, \\dots, a_n$ ($1 \\le a_i \\le 10^9$) — the penalty for each cell.\n\nThe sum of $n$ over all test cases does not exceed $3 \\cdot 10^5$.",
+    "output_spec": "For each test case, print a single integer — the minimum penalty of the final painting.",
+    "note": "In the first test case, you can paint the cells from $1$ to $3$. The painting will be BBBR. So, only cell $2$ is painted the wrong color. Therefore, the penalty for it is the final penalty and equals $3$.\n\nIn the second test case, the painting BBBR will now result in a penalty of $5$. However, if you paint the cells from $1$ to $1$, resulting in BRRR, then only cell $3$ is painted the wrong color. The final penalty is $3$.\n\nIn the third test case, you can paint the cells from $1$ to $1$ and from $3$ to $3$. Then all cells will be the correct color, the penalty equals $0$.",
+    "samples": [
+      {
+        "input": "5\n4 1\nBRBR\n9 3 5 4\n4 1\nBRBR\n9 5 3 4\n4 2\nBRBR\n9 3 5 4\n10 2\nBRBRBBRRBR\n5 1 2 4 5 3 6 1 5 4\n5 5\nRRRRR\n5 3 1 2 4",
+        "output": "\n3\n3\n0\n4\n0"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 140118,
+    "url": "https://codeforces.com/blog/entry/140118",
+    "tutorial": "2070C — Limited Repainting\n\nVideo",
+    "solution_code": []
+  }
+}

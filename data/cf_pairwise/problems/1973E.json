@@ -1,0 +1,41 @@
+{
+  "contest_id": 1973,
+  "index": "E",
+  "name": "Cat, Fox and Swaps ",
+  "rating": 2500,
+  "tags": [
+    "graphs",
+    "math",
+    "sortings"
+  ],
+  "points": 2250.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1973E",
+  "url": "https://codeforces.com/problemset/problem/1973/E",
+  "contest_start_time": "2024-05-17T14:35:00+00:00",
+  "statement": {
+    "title": "E. Cat, Fox and Swaps",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Fox has found an array $p_1, p_2, \\ldots, p_n$, that is a permutation of length $n^\\dagger$ of the numbers $1, 2, \\ldots, n$. She wants to sort the elements in increasing order. Cat wants to help her — he is able to swap any two numbers $x$ and $y$ in the array, but only if $l \\leq x + y \\leq r$ (note that the constraint is imposed on the values of the elements, not their positions). He can make such swaps any number of times.\n\nThey don't know the numbers $l$, $r$ yet, they only know that it's true that $1 \\leq l \\leq r \\leq 2 \\cdot n$.\n\nYou are given the number $n$ and the array $p_1, p_2, \\ldots, p_n$. Determine how many pairs $(l, r)$ satisfying the conditions are there such that you can sort the permutation if you can only swap two number $(x, y)$ such that $l \\leq x + y \\leq r$ (arbitrary number of times, possibly $0$).\n\n$^\\dagger$ A permutation of length $n$ is an array consisting of $n$ distinct integers from $1$ to $n$ in arbitrary order. For example, $[2,3,1,5,4]$ is a permutation, but $[1,2,2]$ is not a permutation ($2$ appears twice in the array), and $[1,3,4]$ is also not a permutation ($n=3$ but there is $4$ in the array).",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 10^4$). The description of the test cases follows.\n\nDescription of each test case consists of two lines. The first line contains one integer $n$ ($1 \\leq n \\leq 10^5$).\n\nThe second line contains $n$ integers: the array $p_1, p_2, \\ldots, p_n$ ($1 \\le p_i \\le n$). It is guaranteed that this array is a permutation of length $n$.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $10^5$.",
+    "output_spec": "For each test case, print the number of pairs of integers $(l, r)$ such that $1 \\leq l \\leq r \\leq 2 \\cdot n$, and you can sort the array under the constraints.",
+    "note": "In the first example, we need to be able to swap $1$ and $2$, so we must be able to swap numbers with sum $3$. There are exactly $6$ pairs satisfying the condition: $(1, 3), (2, 3), (3, 3), (1, 4), (2, 4)$ and $(3, 4)$, so the answer is $6$.\n\nIn the second example, the $11$ pairs satisfying the condition are $(1, 4), (1, 5), (1, 6), (2, 4), (2, 5), (2, 6), (3, 4), (3, 5), (3, 6), (4, 5)$ and $(4, 6)$. For example, if we pick the pair $(3, 4)$ we can first swap the numbers $1$ and $2$ and then the numbers $1$ and $3$, after this, the permutation is sorted.",
+    "samples": [
+      {
+        "input": "7\n2\n2 1\n3\n3 1 2\n4\n3 2 1 4\n5\n5 3 1 2 4\n5\n1 2 3 4 5\n6\n3 2 1 5 4 6\n6\n1 3 2 4 5 6",
+        "output": "\n6\n11\n23\n29\n55\n46\n58"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 129556,
+    "url": "https://codeforces.com/blog/entry/129556",
+    "tutorial": "Problem E: idea by prvocislo, prepared by prvocislo\n\nHint 1:\n\nForget about graphs and data structures, there exists a simple $O(n)$ solution.\n\nHint 2:\n\nFind the number of pairs with $l = r$ for which you can sort the permutation.\n\nHint 3:\n\nOkay now that you have the special case handled, let's proceed to the general case. Find the minimum and maximum number that need to be swapped. Write down the inequalities that $l$ and $r$ have to satisfy so that we can swap these two elements with some other elements. This is the obvious necessary condition, right?\n\nHint 4:\n\nRight, so if $l \\neq r$ and additionally, $l$ and $r$ satisfy the inequalities mentioned above, is it enough?\n\nHint 5:\n\nYes, it is enough. But you can try to find the proof too :)\n\nSolution:\n\nLet's consider the pairs $l, r$ that have $l = r$ first. Then you can swap each $x$ with at most one other element, $l - x$. So if $i \\neq p_i$ for some $i$, then we need to be able to swap the element $i$ with the element $p_i$, so it must hold that $l = i + p_i$. This is obviously also a sufficient condition, so it's enough to just find all $i + p_i$ for $i \\neq p_i$, if there exist more then one different value, there's no good pair with $l = r$, if there's exactly one different value, there's exactly one good pair with $l = r$ and otherwise there are $2 n$ such pairs.\n\nNow let's count the pairs with $l \\neq r$. If the array is sorted already, all pairs of $l, r$ are good. From now, consider only the case when the array isn't sorted yet.\n\nLet $L$ be the smallest value such that $p_L \\neq L$ and $R$ the largest such value respectively. We obviously need to be able to swap $L$ and $R$ with some other values.\n\nNote that $L \\neq n$ and $R \\neq 1$, otherwise the array would be sorted already. Now we can get the inequalities $l \\leq L + n$ and $R + 1 \\leq r$, those are the necessary conditions for being able to swap the numbers $L, R$ with at least one other element.\n\nWe can actually prove that these are the sufficient conditions too. If $l, r$ satisfy these conditions, then for any number $X$ in the range $[L, R-1]$, we can find an $x$ in the range $[l, r]$ such that $1 \\leq x - X \\leq n$ and then we can swap the numbers $X$ and $X + 1$, while not affecting any other element, by swapping $X$ and $x - X$ first and then swapping $X + 1$ and $x - X$. Thanks to this, we can sort the whole range of values between $L$ and $R$ — while the array isn't sorted, we will always find the smallest index $i$ that doesn't have the right value and keep swapping the value $p_i$ with the value $p_i - 1$, so eventually we will get $p_i = i$ and we can continue sorting on the right.\n\nSo it's enough to just count the number of pairs $l, r$ such that $l \\neq r$, $l \\leq L + n$ and $R + 1 \\leq r$, add it to the answer and print it.\n\nAll of this can be done in time and memory complexity $O(n)$.\n\nImplementation in C++: 261999566 (I used set and therefore the time complexity is $O(n \\log n)$ because it was more comfortable)",
+    "solution_code": []
+  }
+}

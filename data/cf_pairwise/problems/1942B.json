@@ -1,0 +1,42 @@
+{
+  "contest_id": 1942,
+  "index": "B",
+  "name": "Bessie and MEX",
+  "rating": 1100,
+  "tags": [
+    "constructive algorithms",
+    "math"
+  ],
+  "points": 1000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1942B",
+  "url": "https://codeforces.com/problemset/problem/1942/B",
+  "contest_start_time": "2024-03-30T14:35:00+00:00",
+  "statement": {
+    "title": "B. Bessie and MEX",
+    "time_limit": "1.5 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "MOOO! - Doja Cat\n\n⠀\n\nFarmer John has a permutation $p_1, p_2, \\ldots, p_n$, where every integer from $0$ to $n-1$ occurs exactly once. He gives Bessie an array $a$ of length $n$ and challenges her to construct $p$ based on $a$.\n\nThe array $a$ is constructed so that $a_i$ = $\\texttt{MEX}(p_1, p_2, \\ldots, p_i) - p_i$, where the $\\texttt{MEX}$ of an array is the minimum non-negative integer that does not appear in that array. For example, $\\texttt{MEX}(1, 2, 3) = 0$ and $\\texttt{MEX}(3, 1, 0) = 2$.\n\nHelp Bessie construct any valid permutation $p$ that satisfies $a$. The input is given in such a way that at least one valid $p$ exists. If there are multiple possible $p$, it is enough to print one of them.",
+    "input_spec": "The first line contains $t$ ($1 \\leq t \\leq 10^4$) — the number of test cases.\n\nThe first line of each test case contains an integer $n$ ($1 \\leq n \\leq 2 \\cdot 10^5$) — the lengths of $p$ and $a$.\n\nThe second line of each test case contains $n$ integers $a_1, a_2, \\ldots, a_n$ ($-n \\leq a_i \\leq n$) — the elements of array $a$.\n\nIt is guaranteed that there is at least one valid $p$ for the given data.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, output $n$ integers on a new line, the elements of $p$.\n\nIf there are multiple solutions, print any of them.",
+    "note": "In the first case, $p = [0, 1, 4, 2, 3]$ is one possible output.\n\n$a$ will then be calculated as $a_1 = \\texttt{MEX}(0) - 0 = 1$, $a_2 = \\texttt{MEX}(0, 1) - 1 = 1$, $a_3 = \\texttt{MEX}(0, 1, 4) - 4 = -2$, $a_4 = \\texttt{MEX}(0, 1, 4, 2) - 2 = 1$, $a_5 = \\texttt{MEX}(0, 1, 4, 2, 3) - 3 = 2$.\n\nSo, as required, $a$ will be $[1, 1, -2, 1, 2]$.",
+    "samples": [
+      {
+        "input": "3\n5\n1 1 -2 1 2\n5\n1 1 1 1 1\n3\n-2 1 2",
+        "output": "\n0 1 4 2 3 \n0 1 2 3 4 \n2 0 1 "
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 126942,
+    "url": "https://codeforces.com/blog/entry/126942",
+    "tutorial": "1942B - Bessie and MEX\n\nProblem Credits: buffering\nAnalysis: buffering\n\nSolution 1\n\nHint 1\n\nWe will construct the solution forward.\n\nHint 2\n\nSeparate the $a_i$'s given into negative and positive cases. What does this tell us about the $\\texttt{MEX}$?\n\nSolution\n\nWe can find $p_1, p_2, ... , p_n$ in order, looking at positive and negative cases. Note that $a_i \\neq 0$ because $p_i$ would equal $\\texttt{MEX}$($p_1 \\dots p_i$), which can never happen.\n\nIf $a_i \\gt 0$, then $\\texttt{MEX}$($p_1, p_2, ... p_i$) must increase from $\\texttt{MEX}$($p_1, p_2, ... p_{i-1}$), so we know $p_i$ must equal $\\texttt{MEX}$($p_1, p_2, ... p_{i-1}$).\n\nOtherwise, the $\\texttt{MEX}$ stays the same, so $p_i$ is just simply $\\texttt{MEX}$($p_1, p_2, ... p_{i-1}$) — $a_i$.\n\nThus, we can just maintain the $\\texttt{MEX}$ and find each $p_i$ as we go forward.\n\nHere's more justification about specific differences leading to specific MEX changes\n\nThere are only 2 things the $\\texttt{MEX}$ can do: increase or stay the same (it can never decrease since larger prefixes contain smaller ones).\n\nIn the case of a positive difference, consider what would happen if the $\\texttt{MEX}$ stayed the same. Since the difference is positive, the $\\texttt{MEX}$ would have to be greater than the current value, which is impossible because that value had to appear earlier on in the prefix. Since the $\\texttt{MEX}$ is calculated on a permutation that can’t happen. So the $\\texttt{MEX}$ has to increase.\n\nIn the case of a negative value, the $\\texttt{MEX}$ has to be less than the current value. But if it increased that means the current value changed its the $\\texttt{MEX}$, meaning its the $\\texttt{MEX}$ is now at least (current value + 1) and it is actually greater. So it has to stay the same.\n\nNote that this is also a way to show $p$ is always unique.\n\nCode (C++)\n\nSolution 2\n\nHint 1\n\nWe will construct the solution backwards.\n\nHint 2\n\nThe $\\texttt{MEX}$ is determined at the last index, since all of $0, 1 \\dots n-1$ appear in $p$.\n\nSolution\n\nRead the hints.\n\nSince we know the $\\texttt{MEX}$ of the last position is $n$, then $n - p_n = a_n$. From this equation, we can find that $p_n = n - a_n$.\n\nNow, because we know $p_n$, we can determine the $\\texttt{MEX}$ of the first $n-1$ numbers. Like how we found $p_n$, we can do a similar process for finding $p_{n-1}$. Doing this for $i = n, n - 1 \\dots 1$ will get us a valid answer $p$.\n\nNote that this is also a way to show $p$ is always unique.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\nusing namespace std;\n\nvoid solve(){\n\tint n; cin >> n;\n\tvector<int> a(n);\n\tfor(int& i: a) cin >> i;\n\tvector<int> p(n), has(n + 1);\n\tint mex = 0;\n\tfor(int i = 0; i < n; i++){\n\t\tif(a[i] >= 0){\n\t\t\tp[i] = mex;\n\t\t}\n\t\telse{\n\t\t\tp[i] = mex - a[i];\n\t\t}\n\t\thas[p[i]] = true;\n\t\twhile(has[mex]) mex++;\n\t}\n\tfor(int i: p) cout << i << \" \";\n\tcout << \"\\n\";\n}\n\nint main(){\n\tcin.tie(0) -> sync_with_stdio(0);\n\tint T = 1;\n\tcin >> T;\n\twhile(T--) solve();\n}\n\n/*   /\\_/\\\n*   (= ._.)\n*   / >  \\>\n*/"
+    ]
+  }
+}

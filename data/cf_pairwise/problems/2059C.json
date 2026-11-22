@@ -1,0 +1,46 @@
+{
+  "contest_id": 2059,
+  "index": "C",
+  "name": "Customer Service",
+  "rating": 1600,
+  "tags": [
+    "brute force",
+    "constructive algorithms",
+    "graph matchings",
+    "greedy",
+    "math",
+    "sortings"
+  ],
+  "points": 1500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2059C",
+  "url": "https://codeforces.com/problemset/problem/2059/C",
+  "contest_start_time": "2025-02-02T14:35:00+00:00",
+  "statement": {
+    "title": "C. Customer Service",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Nikyr has started working as a queue manager at the company \"Black Contour.\" He needs to choose the order of servicing customers. There are a total of $n$ queues, each initially containing $0$ people. In each of the next $n$ moments of time, there are two sequential events:\n\n New customers arrive in all queues. More formally, at the $j$-th moment of time, the number of people in the $i$-th queue increases by a positive integer $a_{i,j}$.\n\n Nikyr chooses exactly one of the $n$ queues to be served at that moment in time. The number of customers in this queue becomes $0$.\n\nLet the number of people in the $i$-th queue after all events be $x_i$. Nikyr wants MEX$^{\\dagger}$ of the collection $x_1, x_2, \\ldots, x_n$ to be as large as possible. Help him determine the maximum value he can achieve with an optimal order of servicing the queues.\n\n$^{\\dagger}$The minimum excluded (MEX) of a collection of integers $c_1, c_2, \\ldots, c_k$ is defined as the smallest non-negative integer $y$ which does not occur in the collection $c$.\n\nFor example:\n\n $\\operatorname{MEX}([2,2,1])= 0$, since $0$ does not belong to the array.\n\n $\\operatorname{MEX}([3,1,0,1]) = 2$, since $0$ and $1$ belong to the array, but $2$ does not.\n\n $\\operatorname{MEX}([0,3,1,2]) = 4$, since $0$, $1$, $2$, and $3$ belong to the array, but $4$ does not.",
+    "input_spec": "Each test consists of multiple test cases. The first line contains a single integer $t$ ($1 \\le t \\le 2 \\cdot 10^4$) — the number of test cases. The description of the test cases follows.\n\nThe first line of each test case contains a single integer $n$ ($1 \\le n \\le 300$) — the number of queues and moments of time.\n\nThe $i$-th of the next $n$ lines contains $n$ integers $a_{i,1}, a_{i,2}, \\ldots, a_{i,n}$ ($1 \\le a_{i,j} \\le 10^9$) — the number of new customers in the $i$-th queue at each moment of time.\n\nIt is guaranteed that the sum of $n^2$ over all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, output a single integer — the maximum value of $\\operatorname{MEX}([x_1, x_2, \\ldots, x_n])$ that can be achieved.",
+    "note": "In the first test case, the second queue can be served at time $1$, and the first queue at time $2$. There will be $x_1 = 0$ people left in the first queue and $x_2 = 1$ person left in the second queue. Therefore, the answer is $\\operatorname{MEX}([0, 1]) = 2$.\n\nIn the second test case, the first queue can be served both times. There will be $x_1 = 0$ people left in the first queue and $x_2 = 20$ people left in the second queue. Therefore, the answer is $\\operatorname{MEX}([0, 20]) = 1$.\n\nIn the third test case, the third queue can be served at time $1$, the second queue at time $2$, and the first queue at time $3$. There will be $x_1 = 0$ people left in the first queue, $x_2 = 1$ person left in the second queue, and $x_3 = 2$ people left in the third queue. Therefore, the answer is $\\operatorname{MEX}([0, 1, 2]) = 3$.",
+    "samples": [
+      {
+        "input": "4\n2\n1 2\n2 1\n2\n10 10\n10 10\n3\n2 3 3\n4 4 1\n2 1 1\n4\n4 2 2 17\n1 9 3 1\n5 5 5 11\n1 2 1 1",
+        "output": "\n2\n1\n3\n3"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 139094,
+    "url": "https://codeforces.com/blog/entry/139094",
+    "tutorial": "At the last moment in time, we clear some queue, and it will have an empty number of people left, so among the $x_i$, there is guaranteed to be a $0$. To maximize the value of $MEX$, it is necessary for the value $1$ to appear among the $x_i$. However, a positive number of people was added to each queue at the last moment in time. Thus, if $1$ appears among the $x_i$, then the $i$-th queue was served in the penultimate moment in time. We can continue this reasoning and conclude that if we find $x_i$ with values from $0$ to $k$, then the value $k + 1$ could only have been obtained if, in some queue different from these, one was added in each of the last $k + 1$ moments in time, and in the $k + 2$-th moment from the end, that queue was empty.\n\nLet's calculate the maximum suffix consisting only of $1$s in the array of additions for each queue. If a queue has a suffix of $m$ ones, then after all events in that queue, we could leave any number from $0$ to $m$, which will participate in $MEX$. To solve this, we will greedily collect the answer by taking the smallest suitable suffix each time.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\nusing namespace std;\n \nconst int N=305;\n \nint a[N][N],suff[N];\n \nvoid solve(){\n    int n;cin>>n;\n    for(int i=1;i<=n;i++){\n        suff[i]=0;\n        for(int j=1;j<=n;j++){\n            cin>>a[i][j];\n        }\n    }\n    for(int i=1;i<=n;i++){\n        for(int j=n;j>=1;j--){\n            if(a[i][j]!=1)break;\n            suff[i]++;\n        }\n    }\n    multiset<int> s;\n    for(int i=1;i<=n;i++){\n        s.insert(suff[i]);\n    }\n    int ans=1;\n    while(!s.empty()){\n        int cur=*s.begin();\n        if(cur>=ans){\n            ans++;\n        }\n        s.extract(cur);\n    }\n    cout<<min(ans,n)<<'\\n';\n}\n \nint main(){\n    ios_base::sync_with_stdio(0);\n    cin.tie(0);\n \n    int t;cin>>t;\n    while(t--){\n        solve();\n    }\n \n    return 0;\n}"
+    ]
+  }
+}

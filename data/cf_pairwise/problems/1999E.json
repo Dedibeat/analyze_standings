@@ -1,0 +1,41 @@
+{
+  "contest_id": 1999,
+  "index": "E",
+  "name": "Triple Operations",
+  "rating": 1300,
+  "tags": [
+    "dp",
+    "implementation",
+    "math"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1999E",
+  "url": "https://codeforces.com/problemset/problem/1999/E",
+  "contest_start_time": "2024-08-06T14:35:00+00:00",
+  "statement": {
+    "title": "E. Triple Operations",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "On the board Ivy wrote down all integers from $l$ to $r$, inclusive.\n\nIn an operation, she does the following:\n\n pick two numbers $x$ and $y$ on the board, erase them, and in their place write the numbers $3x$ and $\\lfloor \\frac{y}{3} \\rfloor$. (Here $\\lfloor \\bullet \\rfloor$ denotes rounding down to the nearest integer).\n\nWhat is the minimum number of operations Ivy needs to make all numbers on the board equal $0$? We have a proof that this is always possible.",
+    "input_spec": "The first line contains an integer $t$ ($1 \\leq t \\leq 10^4$) — the number of test cases.\n\nThe only line of each test case contains two integers $l$ and $r$ ($1 \\leq l  \\lt  r \\leq 2 \\cdot 10^5$).",
+    "output_spec": "For each test case, output a single integer — the minimum number of operations needed to make all numbers on the board equal $0$.",
+    "note": "In the first test case, we can perform $5$ operations as follows: $$ 1,2,3 \\xrightarrow[x=1,\\,y=2]{} 3,0,3 \\xrightarrow[x=0,\\,y=3]{} 1,0,3 \\xrightarrow[x=0,\\,y=3]{} 1,0,1 \\xrightarrow[x=0,\\,y=1]{} 0,0,1 \\xrightarrow[x=0,\\,y=1]{} 0,0,0 .$$",
+    "samples": [
+      {
+        "input": "4\n1 3\n2 4\n199999 200000\n19 84",
+        "output": "\n5\n6\n36\n263"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 132383,
+    "url": "https://codeforces.com/blog/entry/132383",
+    "tutorial": "1999E — Triple Operation\n\nVideo",
+    "solution_code": []
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "contest_id": 1970,
+  "index": "D1",
+  "name": "Arithmancy (Easy)",
+  "rating": 2100,
+  "tags": [
+    "brute force",
+    "constructive algorithms",
+    "interactive",
+    "strings"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1970D1",
+  "url": "https://codeforces.com/problemset/problem/1970/D1",
+  "contest_start_time": "2024-05-04T07:05:00+00:00",
+  "statement": {
+    "title": "D1. Arithmancy (Easy)",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Professor Vector is preparing to teach her Arithmancy class. She needs to prepare $n$ distinct magic words for the class. Each magic word is a string consisting of characters X and O. A spell is a string created by concatenating two magic words together. The power of a spell is equal to the number of its different non-empty substrings. For example, the power of the spell XOXO is equal to 7, because it has 7 different substrings: X, O, XO, OX, XOX, OXO and XOXO.\n\nEach student will create their own spell by concatenating two magic words. Since the students are not very good at magic yet, they will choose each of the two words independently and uniformly at random from the $n$ words provided by Professor Vector. It is therefore also possible that the two words a student chooses are the same. Each student will then compute the power of their spell, and tell it to Professor Vector. In order to check their work, and of course to impress the students, Professor Vector needs to find out which two magic words and in which order were concatenated by each student.\n\nYour program needs to perform the role of Professor Vector: first, create $n$ distinct magic words, and then handle multiple requests where it is given the spell power and needs to determine the indices of the two magic words, in the correct order, that were used to create the corresponding spell.",
+    "input_spec": null,
+    "output_spec": null,
+    "note": null,
+    "samples": [
+      {
+        "input": "\n2\n\n\n2\n15\n\n11",
+        "output": "\n\nXOXO\nX\n\n\n1 1\n\n2 1"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "missing"
+  },
+  "editorial": {
+    "blog_id": 129149,
+    "url": "https://codeforces.com/blog/entry/129149",
+    "tutorial": "Given that we need to output 3 words only, we can manually (trying a few options on paper until we find a solution) construct 3 words such that all 9 spell powers are different.",
+    "solution_code": []
+  }
+}

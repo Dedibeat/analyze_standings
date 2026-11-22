@@ -1,0 +1,119 @@
+{
+  "created_at": "2026-08-06T04:04:09.887047+00:00",
+  "base": {
+    "count": 200,
+    "valid_count": 200,
+    "accuracy": 0.69,
+    "exact_200": {
+      "count": 46,
+      "accuracy": 0.41304347826086957
+    },
+    "exact_300": {
+      "count": 52,
+      "accuracy": 0.5576923076923077
+    },
+    "at_least_300": {
+      "count": 154,
+      "accuracy": 0.7727272727272727
+    },
+    "at_least_400": {
+      "count": 102,
+      "accuracy": 0.8823529411764706
+    },
+    "swapped_consistency": 0.84,
+    "gap_counts": {
+      "300": 52,
+      "1300": 6,
+      "900": 10,
+      "800": 6,
+      "600": 4,
+      "200": 46,
+      "2200": 8,
+      "500": 10,
+      "1800": 4,
+      "400": 4,
+      "1700": 2,
+      "1400": 8,
+      "1000": 8,
+      "1100": 4,
+      "2100": 2,
+      "2000": 2,
+      "700": 2,
+      "2500": 4,
+      "1900": 6,
+      "1500": 6,
+      "2300": 4,
+      "1600": 2
+    },
+    "usage": {
+      "promptTokenCount": 319416,
+      "candidatesTokenCount": 2385,
+      "totalTokenCount": 321801
+    },
+    "estimated_cost_usd": 0.550648
+  },
+  "tuned": {
+    "count": 200,
+    "valid_count": 200,
+    "accuracy": 0.7,
+    "exact_200": {
+      "count": 46,
+      "accuracy": 0.3695652173913043
+    },
+    "exact_300": {
+      "count": 52,
+      "accuracy": 0.6538461538461539
+    },
+    "at_least_300": {
+      "count": 154,
+      "accuracy": 0.7987012987012987
+    },
+    "at_least_400": {
+      "count": 102,
+      "accuracy": 0.8725490196078431
+    },
+    "swapped_consistency": 0.94,
+    "gap_counts": {
+      "300": 52,
+      "1300": 6,
+      "900": 10,
+      "800": 6,
+      "600": 4,
+      "200": 46,
+      "2200": 8,
+      "500": 10,
+      "1800": 4,
+      "400": 4,
+      "1700": 2,
+      "1400": 8,
+      "1000": 8,
+      "1100": 4,
+      "2100": 2,
+      "2000": 2,
+      "700": 2,
+      "2500": 4,
+      "1900": 6,
+      "1500": 6,
+      "2300": 4,
+      "1600": 2
+    },
+    "usage": {
+      "promptTokenCount": 319416,
+      "candidatesTokenCount": 1200,
+      "totalTokenCount": 320616
+    },
+    "estimated_cost_usd": 0.808375
+  },
+  "gain": {
+    "accuracy": 0.010000000000000009,
+    "exact_200": -0.043478260869565244,
+    "exact_300": 0.09615384615384615,
+    "at_least_300": 0.025974025974025983
+  },
+  "cost_ledger": {
+    "estimated_training_cost_usd": 12.99028,
+    "estimated_inference_cost_usd": 1.359023,
+    "pilot_total_cap_usd": 25.0,
+    "estimated_total_usd": 14.349303
+  }
+}

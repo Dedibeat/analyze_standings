@@ -1,0 +1,45 @@
+{
+  "contest_id": 2044,
+  "index": "H",
+  "name": "Hard Demon Problem",
+  "rating": 2100,
+  "tags": [
+    "constructive algorithms",
+    "data structures",
+    "dp",
+    "implementation",
+    "math"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2044H",
+  "url": "https://codeforces.com/problemset/problem/2044/H",
+  "contest_start_time": "2024-12-15T14:35:00+00:00",
+  "statement": {
+    "title": "H. Hard Demon Problem",
+    "time_limit": "3.5 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "Swing is opening a pancake factory! A good pancake factory must be good at flattening things, so Swing is going to test his new equipment on 2D matrices.\n\nSwing is given an $n \\times n$ matrix $M$ containing positive integers. He has $q$ queries to ask you.\n\nFor each query, he gives you four integers $x_1$, $y_1$, $x_2$, $y_2$ and asks you to flatten the submatrix bounded by $(x_1, y_1)$ and $(x_2, y_2)$ into an array $A$. Formally, $A = [M_{(x1,y1)}, M_{(x1,y1+1)}, \\ldots, M_{(x1,y2)}, M_{(x1+1,y1)}, M_{(x1+1,y1+1)}, \\ldots, M_{(x2,y2)}]$.\n\nThe following image depicts the flattening of a submatrix bounded by the red dotted lines. The orange arrows denote the direction that the elements of the submatrix are appended to the back of $A$, and $A$ is shown at the bottom of the image.\n\nAfterwards, he asks you for the value of $\\sum_{i=1}^{|A|} A_i \\cdot i$ (sum of $A_i \\cdot i$ over all $i$).",
+    "input_spec": "The first line contains an integer $t$ ($1 \\leq t \\leq 10^3$) — the number of test cases.\n\nThe first line of each test contains two integers $n$ and $q$ ($1 \\leq n \\leq 2000, 1 \\leq q \\leq 10^6$) — the length of $M$ and the number of queries.\n\nThe following $n$ lines contain $n$ integers each, the $i$'th of which contains $M_{(i,1)}, M_{(i,2)}, \\ldots, M_{(i,n)}$ ($1 \\leq M_{(i, j)} \\leq 10^6$).\n\nThe following $q$ lines contain four integers $x_1$, $y_1$, $x_2$, and $y_2$ ($1 \\leq x_1 \\leq x_2 \\leq n, 1 \\leq y_1 \\leq y_2 \\leq n$) — the bounds of the query.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $2000$ and the sum of $q$ over all test cases does not exceed $10^6$.",
+    "output_spec": "For each test case, output the results of the $q$ queries on a new line.",
+    "note": "In the second query of the first test case, $A = [9, 5, 5, 2]$. Therefore, the sum is $1 \\cdot 9 + 2 \\cdot 5 + 3 \\cdot 5 + 4 \\cdot 2 = 42$.",
+    "samples": [
+      {
+        "input": "2\n4 3\n1 5 2 4\n4 9 5 3\n4 5 2 3\n1 5 5 2\n1 1 4 4\n2 2 3 3\n1 2 4 3\n3 3\n1 2 3\n4 5 6\n7 8 9\n1 1 1 3\n1 3 3 3\n2 2 2 2",
+        "output": "\n500 42 168 \n14 42 5 "
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 137306,
+    "url": "https://codeforces.com/blog/entry/137306",
+    "tutorial": "2044H - Hard Demon Problem\n\nProblem Credits: cry\n Analysis: chromate00\n\nSolution\n\nConsider translating the sum back onto the matrix. For simplicity we discuss about querying the whole matrix.\n\nThe sum we would like to find is $\\sum_i i\\cdot A_i$. Here, $A_i$ corresponds to $M_{(x,y)}$, so we will translate this to $\\sum_{x,y} i\\cdot M_{(x,y)}$. The issue left is on the $i$ multiplied to it.\n\nRemember that we index the entries in increasing order of $y$, and then increasing order of $x$. Assuming $y$ and $x$ were $0$-indexed, this will mean entry $(x,y)$ corresponds to $x\\cdot n + y$ (also $0$-indexed). You can notice that this naturally corresponds to the order we had defined as well.\n\nThen, what we want to find is $\\sum_{x,y} (x \\cdot n + y + 1)\\cdot M_{(x,y)}$. Notice $x \\cdot n$, $y$, $1$ are independent, and we can split them into sums $\\sum_x x \\cdot n \\cdot M_{(x,y)}$, $\\sum_y y \\cdot M_{(x,y)}$, $\\sum M_{(x,y)}$. Each of these three sums can be precomputed entry by entry, and a 2D prefix sum can solve the answer for the entire matrix.\n\nThe query for a submatrix is very similar. Formally, you have to care about:\n\nThat we have $y_2-y_1+1$ columns instead of $n$ now;\n\nThat the precomputed values might not start from $0$ on the first row/column of the query.\n\nStill, these two issues can be fixed using the three sums we have precomputed. The time complexity becomes $\\mathcal{O}(n^2+q)$.\n\nCode (C++)",
+    "solution_code": [
+      "#include <bits/stdc++.h>\nusing namespace std;\nusing ll = long long;\nusing vll = vector <ll>;\nusing ii = pair <ll, ll>;\nusing vii = vector <ii>;\n\nvoid tc () {\n    ll n, Q;\n    cin >> n >> Q;\n    vector <vll> mat(n, vll(n));\n    for (vll &ve : mat) {\n        for (ll &i : ve) cin >> i;\n    }\n    vector <vll> psR(n, vll(n+1)), psRr(n, vll(n+1)), psRc(n+1, vll(n+1)), ps(n+1, vll(n+1)), psRrc(n+1, vll(n+1));\n    for (ll i = 0; i < n; i++) {\n        for (ll j = 0; j < n; j++) {\n            psR[i][j+1] = psR[i][j] + mat[i][j];\n        }\n    }\n    for (ll i = 0; i < n; i++) {\n        for (ll j = 0; j < n; j++) {\n            psRr[i][j+1] = psRr[i][j] + mat[i][j]*(j+1);\n        }\n    }\n    for (ll i = 0; i < n; i++) {\n        for (ll j = 0; j <= n; j++) {\n            psRc[i+1][j] = psRc[i][j] + psR[i][j]*(i+1);\n        }\n    }\n    for (ll i = 0; i < n; i++) {\n        for (ll j = 0; j <= n; j++) {\n            psRrc[i+1][j] = psRrc[i][j] + psRr[i][j];\n        }\n    }\n    for (ll i = 0; i < n; i++) {\n        for (ll j = 0; j <= n; j++) {\n            ps[i+1][j] = ps[i][j] + psR[i][j];\n        }\n    }\n    while (Q--) {\n        ll x1, y1, x2, y2;\n        cin >> x1 >> y1 >> x2 >> y2;\n        x1--; y1--; x2--; y2--;\n        ll ans = 0;\n        ans += -(ps[x2+1][y2+1]-ps[x2+1][y1]-ps[x1][y2+1]+ps[x1][y1])*x1*(y2-y1+1);\n        ans += (psRc[x2+1][y2+1] - psRc[x1][y2+1] - (ps[x2+1][y2+1]-ps[x1][y2+1]))*(y2-y1+1);\n\n        ans += (psRc[x2+1][y1] - psRc[x1][y1] - (ps[x2+1][y1]-ps[x1][y1]))*-(y2-y1+1);\n        ans += (ps[x2+1][y2+1]-ps[x1][y2+1])*-y1;\n        ans += (ps[x2+1][y1]-ps[x1][y1])*y1;\n\n        ans += psRrc[x2+1][y2+1] - psRrc[x1][y2+1];\n        ans +=-(psRrc[x2+1][y1] - psRrc[x1][y1]);\n        cout << ans << ' ';\n    }\n    cout << '\\n';\n}\n\nint main () {\n    cin.tie(nullptr) -> sync_with_stdio(false);\n    ll T; cin >> T; while (T--) { tc(); }\n    return 0;\n}"
+    ]
+  }
+}

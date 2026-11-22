@@ -1,0 +1,44 @@
+{
+  "contest_id": 1979,
+  "index": "F",
+  "name": "Kostyanych's Theorem",
+  "rating": 2900,
+  "tags": [
+    "brute force",
+    "constructive algorithms",
+    "graphs",
+    "interactive"
+  ],
+  "points": 3000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1979F",
+  "url": "https://codeforces.com/problemset/problem/1979/F",
+  "contest_start_time": "2024-06-06T14:35:00+00:00",
+  "statement": {
+    "title": "F. Kostyanych's Theorem",
+    "time_limit": "3 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "This is an interactive problem.\n\nKostyanych has chosen a complete undirected graph$^{\\dagger}$ with $n$ vertices, and then removed exactly $(n - 2)$ edges from it. You can ask queries of the following type:\n\n \"? $d$\" — Kostyanych tells you the number of vertex $v$ with a degree at least $d$. Among all possible such vertices, he selects the vertex with the minimum degree, and if there are several such vertices, he selects the one with the minimum number. He also tells you the number of another vertex in the graph, with which $v$ is not connected by an edge (if none is found, then $0$ is reported). Among all possible such vertices, he selects the one with the minimum number. Then he removes the vertex $v$ and all edges coming out of it. If the required vertex $v$ is not found, then \"$0\\ 0$\" is reported.\n\nFind a Hamiltonian path$^{\\ddagger}$ in the original graph in at most $n$ queries. It can be proven that under these constraints, a Hamiltonian path always exists.\n\n$^{\\dagger}$A complete undirected graph is a graph in which there is exactly one undirected edge between any pair of distinct vertices. Thus, a complete undirected graph with $n$ vertices contains $\\frac{n(n-1)}{2}$ edges.\n\n$^{\\ddagger}$A Hamiltonian path in a graph is a path that passes through each vertex exactly once.",
+    "input_spec": "Each test consists of multiple test cases. The first line contains a single integer $t$ ($1 \\le t \\le 1000$) — the number of test cases. The description of the test cases follows.\n\nThe only line of each test case contains a single integer $n$ ($2 \\le n \\le 10^5$) — the number of vertices in the graph.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $10^5$.",
+    "output_spec": null,
+    "note": "In the first test case, the original graph looks as follows:\n\nConsider the queries:\n\n There are no vertices with a degree of at least $3$ in the graph, so \"$0\\ 0$\" is reported.\n\n There are four vertices with a degree of at least $2$, and all of them have a degree of exactly $2$: $1$, $2$, $3$, $4$. Vertex $1$ is reported, because it has the minimum number, and vertex $4$ is reported, because it is the only one not connected to vertex $1$. After this, vertex $1$ is removed from the graph.\n\n There are three vertices with a degree of at least $1$, among them vertices $2$ and $3$ have a minimum degree of $1$ (vertex $4$ has a degree of $2$). Vertex $2$ is reported, because it has the minimum number, and vertex $3$ is reported, because it is the only one not connected to vertex $2$. After this, vertex $2$ is removed from the graph.\n\nThe path $4 - 3 - 1 - 2$ is a Hamiltonian path.\n\nIn the second test case, the original graph looks as follows:\n\nConsider the queries:\n\n Vertex $1$ has a degree of at least $3$, but it is connected to all vertices, so \"$1\\ 0$\" is reported. After this, vertex $1$ is removed from the graph.\n\n The remaining vertices $2$, $3$, and $4$ have a degree of at least $0$, but among them vertex $4$ has the minimum degree of $0$ (vertices $2$ and $3$ have a degree of $1$). Vertex $4$ is not connected to both vertices $2$ and $3$, so vertex $2$ is reported (as it has the minimum number). After this, vertex $4$ is removed from the graph.\n\nThe path $4 - 1 - 2 - 3$ is a Hamiltonian path.\n\nIn the third test case, the graph consists of $2$ vertices connected by an edge.",
+    "samples": [
+      {
+        "input": "\n3\n4\n\n0 0\n\n1 4\n\n2 3\n\n4\n\n1 0\n\n4 2\n\n2\n\n1 0",
+        "output": "\n\n\n? 3\n\n? 2\n\n? 1\n\n! 4 3 1 2\n\n? 3\n\n? 0\n\n! 4 1 2 3\n\n? 0\n\n! 2 1"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 130213,
+    "url": "https://codeforces.com/blog/entry/130213",
+    "tutorial": "1979F - Kostyanych's Theorem\n\nSolution\n\nLet's consider the following recursive algorithm. We will store the Hamiltonian path as a double-ended queue, maintaining the start and end.\n\nIn case there are only $1$ or $2$ vertices left in the graph, the problem is solved trivially.\n\nSuppose we know that the current graph has $n$ vertices, and there are at most $(n - 2)$ edges missing. Then the total number of edges in such a graph is at least\n $\\frac{n(n - 1)}{2} - (n - 2) = \\frac{n^2 - 3n + 4}{2}.$\nLet all vertices in the graph have a degree of at most $(n - 3)$, then the total number of edges does not exceed\n $\\frac{n(n-3)}{2} = \\frac{n^2 - 3n}{2},$\nwhich is less than the stated value. Hence, we conclude that there is at least one vertex with a degree greater than $(n - 3)$.\n\nIf there exists a vertex $v$ with a degree of $(n - 2)$, then it is sufficient to run our recursive algorithm for the remaining graph. Since $v$ is only not connected by an edge to one vertex, $v$ is connected either to the start or the end of the maintained path in the remaining graph. Thus, we can insert the vertex $v$ either at the beginning or at the end of the path.\n\nOtherwise, let $u$ be the vertex with a degree of $(n - 1)$. There is at least one vertex $w$ with a degree not exceeding $(n - 3)$. Remove $u$ and $w$ from the graph. Notice that the number of edges in such a graph does not exceed\n $\\frac{n^2 - 3n + 4}{2} - (n - 1) - (n - 3) + 1 = \\frac{n^2 - 7n + 14}{2}$ $\\frac{n^2 - 7n + 14}{2} = \\frac{n^2 - 5n + 6}{2} - \\frac{2n - 8}{2}$ $\\frac{n^2 - 5n + 6}{2} - \\frac{2n - 8}{2} = \\frac{(n - 2)(n - 3)}{2} - (n - 4)$ $\\frac{(n - 2)(n - 3)}{2} - (n - 4) = \\frac{(n - 2)((n - 2) - 1)}{2} - ((n - 2) - 2).$\nThe invariant is preserved, so we can run the algorithm for the remaining graph. Then, we can arrange the vertices in the following order: $w$ — $u$ — $s$ — ..., where $s$ — the start of the Hamiltonian path in the remaining graph.\n\nIt remains to understand how to use queries.\n\nMake a query $d = (n - 2)$. Let $u$ be the second number in the response to our query. If $u \\neq 0$, the degree of vertex $v$ is $(n - 2)$. Run our recursive algorithm, and then compare the start and end of the obtained path with $u$.\n\nOtherwise, if $u = 0$, it means the degree of vertex $v$ is $(n - 1)$. In this case, ask about any vertex with a low degree (this can be done with a query $d = 0$). Then simply arrange the vertices in the order mentioned above.\n\nWe will make no more than $n$ queries, and the final asymptotic will be $O(n)$.\n\nCode",
+    "solution_code": [
+      "#include <bits/stdc++.h>\nusing namespace std;\n\npair <int, int> ask(int d) {\n    cout << \"? \" << d << endl;\n    int v, u;\n    cin >> v >> u;\n    return {v, u};\n}\n \npair <int, int> get(int n, vector <int>& nxt) {\n    if (n == 1) {\n        int v = ask(0).first;\n        return {v, v};\n    }\n    if (n == 2) {\n        int u = ask(0).first;\n        int v = ask(0).first;\n        nxt[u] = v;\n        return {u, v};\n    }\n    pair <int, int> t = ask(n - 2);\n    int v = t.first;\n    int ban = t.second;\n    if (ban != 0) {\n        pair <int, int> res = get(n - 1, nxt);\n        if (ban != res.first) {\n            nxt[v] = res.first;\n            return {v, res.second};\n        } else {\n            nxt[res.second] = v;\n            return {res.first, v};\n        }\n    } else {\n        int u = ask(0).first;\n        nxt[u] = v;\n        pair <int, int> res = get(n - 2, nxt);\n        nxt[v] = res.first;\n        return {u, res.second};\n    }\n}\n \nvoid solve() {\n    int n;\n    cin >> n;\n    \n    vector <int> nxt(n + 1, -1);\n    pair <int, int> ans = get(n, nxt);\n    \n    int v = ans.first;\n    cout << \"! \";\n    do {\n        cout << v << \" \";\n        v = nxt[v];\n    } while (v != -1);\n    cout << endl;\n}\n\nint main() {\n    int t;\n    cin >> t;\n    while (t--) {\n        solve();\n    }\n}"
+    ]
+  }
+}

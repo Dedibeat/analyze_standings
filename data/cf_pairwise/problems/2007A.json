@@ -1,0 +1,41 @@
+{
+  "contest_id": 2007,
+  "index": "A",
+  "name": "Dora's Set",
+  "rating": 800,
+  "tags": [
+    "greedy",
+    "math",
+    "number theory"
+  ],
+  "points": 500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2007A",
+  "url": "https://codeforces.com/problemset/problem/2007/A",
+  "contest_start_time": "2024-08-30T14:35:00+00:00",
+  "statement": {
+    "title": "A. Dora's Set",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "Dora has a set $s$ containing integers. In the beginning, she will put all integers in $[l, r]$ into the set $s$. That is, an integer $x$ is initially contained in the set if and only if $l \\leq x \\leq r$. Then she allows you to perform the following operations:\n\n Select three distinct integers $a$, $b$, and $c$ from the set $s$, such that $\\gcd(a, b) = \\gcd(b, c) = \\gcd(a, c) = 1^\\dagger$.\n\n Then, remove these three integers from the set $s$.\n\nWhat is the maximum number of operations you can perform?\n\n$^\\dagger$Recall that $\\gcd(x, y)$ means the greatest common divisor of integers $x$ and $y$.",
+    "input_spec": "Each test consists of multiple test cases. The first line contains a single integer $t$ ($1 \\leq t \\leq 500$) — the number of test cases. The description of the test cases follows.\n\nThe only line of each test case contains two integers $l$ and $r$ ($1 \\leq l \\leq r \\leq 1000$) — the range of integers in the initial set.",
+    "output_spec": "For each test case, output a single integer — the maximum number of operations you can perform.",
+    "note": "In the first test case, you can choose $a = 1$, $b = 2$, $c = 3$ in the only operation, since $\\gcd(1, 2) = \\gcd(2, 3) = \\gcd(1, 3) = 1$, and then there are no more integers in the set, so no more operations can be performed.\n\nIn the second test case, you can choose $a = 3$, $b = 5$, $c = 7$ in the only operation.\n\nIn the third test case, you can choose $a = 11$, $b = 19$, $c = 20$ in the first operation, $a = 13$, $b = 14$, $c = 15$ in the second operation, and $a = 10$, $b = 17$, $c = 21$ in the third operation. After the three operations, the set $s$ contains the following integers: $12$, $16$, $18$. It can be proven that it's impossible to perform more than $3$ operations.",
+    "samples": [
+      {
+        "input": "8\n1 3\n3 7\n10 21\n2 8\n51 60\n2 15\n10 26\n1 1000",
+        "output": "\n1\n1\n3\n1\n2\n3\n4\n250"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 133411,
+    "url": "https://codeforces.com/blog/entry/133411",
+    "tutorial": "2007A — Dora's Set\n\nVideo",
+    "solution_code": []
+  }
+}

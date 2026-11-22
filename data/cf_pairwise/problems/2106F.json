@@ -1,0 +1,46 @@
+{
+  "contest_id": 2106,
+  "index": "F",
+  "name": "Goblin",
+  "rating": 1900,
+  "tags": [
+    "dfs and similar",
+    "dp",
+    "dsu",
+    "greedy",
+    "math"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2106F",
+  "url": "https://codeforces.com/problemset/problem/2106/F",
+  "contest_start_time": "2025-04-24T14:35:00+00:00",
+  "statement": {
+    "title": "F. Goblin",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Dr. TC has a new patient called Goblin. He wants to test Goblin's intelligence, but he has gotten bored of his standard test. So, he decided to make it a bit harder.\n\nFirst, he creates a binary string$^{\\text{∗}}$ $s$ having $n$ characters. Then, he creates $n$ binary strings $a_1, a_2, \\ldots, a_n$. It is known that $a_i$ is created by first copying $s$, then flipping the $i$-th character ($\\texttt{1}$ becomes $\\texttt{0}$ and vice versa). After creating all $n$ strings, he arranges them into an $n \\times n$ grid $g$ where $g_{i, j} = a_{i_j}$.\n\nA set $S$ of size $k$ containing distinct integer pairs $\\{(x_1, y_1), (x_2, y_2), \\ldots, (x_k, y_k)\\}$ is considered good if:\n\n $1 \\leq x_i, y_i \\leq n$ for all $1 \\leq i \\leq k$.\n\n $g_{x_i, y_i} = \\texttt{0}$ for all $1 \\leq i \\leq k$.\n\n For any two integers $i$ and $j$ ($1 \\leq i, j \\leq k$), coordinate $(x_i, y_i)$ is reachable from coordinate $(x_j, y_j)$ by traveling through a sequence of adjacent cells (which share a side) that all have a value of $\\texttt{0}$.\n\nGoblin's task is to find the maximum possible size of a good set $S$. Because Dr. TC is generous, this time he gave him two seconds to find the answer instead of one. Goblin is not known for his honesty, so he has asked you to help him cheat.\n\n$^{\\text{∗}}$A binary string is a string that only consists of characters $\\texttt{1}$ and $\\texttt{0}$.",
+    "input_spec": "The first line of the input consists of a single integer $t$ $(1 \\le t \\le 10^3)$ — the number of test cases.\n\nThe first line of each test contains a single integer $n$ $(1 \\le n \\le 2 \\cdot 10^5)$ — the length of the binary string $s$.\n\nThe second line of each test contains a single binary string $s$ of length $n$.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, output a single number, the maximum possible size of a good set of cells from the grid.",
+    "note": "In the first example, the following grid has been written on the board:\n\n$$ 1 0 0 $$ $$ 0 1 0 $$ $$ 0 0 1 $$\n\nThe set that consists of cells $(1, 2)$ and $(1, 3)$ is good. The set that consists of cells $(1, 1)$ and $(1, 2)$ is not good, since the value of cell $(1, 1)$ is not $0$. The set of cells $(1, 2)$, $(1, 3)$, $(2, 3)$ is good and has a maximum size of $3$. Note that the set of cells $(2, 1)$, $(3, 1)$, and $(3, 2)$ is also good with a maximum size of $3$.\n\nIn the second example, the following grid is written on the board:\n\n$$ 1 0 1 0 $$ $$ 0 1 1 0 $$ $$ 0 0 0 0 $$ $$ 0 0 1 1 $$\n\nAnd the maximum possible size of a good set is $9$.",
+    "samples": [
+      {
+        "input": "6\n3\n000\n4\n0010\n7\n1011001\n4\n0001\n2\n11\n1\n0",
+        "output": "\n3\n9\n10\n7\n1\n0"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 142254,
+    "url": "https://codeforces.com/blog/entry/142254",
+    "tutorial": "Problem F — GOBLIN\n\n(Author & Analysis: SpyrosAliv)\n\nSolution\n\nEach column can be broken down to $3$ components:\n\nIf $a_i = 0$, the top-most component will contain $i-1$ zeros, the second component a single one, and the third component $n-i$ zeros.\n\nIf $a_i = 1$, the top-most component will contain $i-1$ ones, the second component a single zero, and the third component $n-i$ ones.\n\nThe easiest way to visualize is with DSU. For each column, create $3$ components, and for each component implicitly store the number of $0$s in it. Now, we will try to merge all adjacent components that both consist of zeros. Consider the following transitions, for every $1 \\lt i \\le n$:\n\nIf $a_i = 0$ and $a_{i-1} = 0$, then the top-most component of column $i-1$ will be merged with the top-most component of column $i$. The same goes for the two bottom-most components.\n\nIf $a_i = 0$ and $a_{i-1} = 1$, then the top-most component of column $i$ will be merged with the top-most component of column $i-1$.\n\nIf $a_i = 1$ and $a_{i-1} = 0$, then the bottom-most component of column $i$ will be merged with the bottom-most component of column $i-1$.\n\nIf $a_i = 1$ and $a_{i-1} = 1$, we merge nothing.\n\nAfter we finish the merging, we just take the component with the maximum number of zeros, which will be the answer to this problem. Note that you do not actually have to use DSU; we only care about the sizes and not the representatives, so we can also use simple prefix sums.\n\nImplementation (Prefix Sums)\n\nImplementation (DSU)\n\nRate the Problem\n\n Amazing\n\n Good\n\n Average\n\n Bad\n\n Didn't Solve",
+    "solution_code": [
+      "#include <bits/stdc++.h>\nusing namespace std;\n#define int long long\n \nvoid solve() {\n    int n; cin >> n;\n    string s; cin >> s;\n    s = \" \" + s;\n    vector<int> top(n+1, 0), bot(n+1, 0);\n    int ans = 0;\n    for (int i = 1; i <= n; i++) {\n        if (s[i] == '1') {\n            top[i] = bot[i-1] + 1;\n        }\n        else {\n            top[i] = top[i-1] + (i - 1);\n            bot[i] = bot[i-1] + (n - i);\n        }\n        ans = max(ans, max(top[i], bot[i]));\n    }\n    cout << ans << \"\\n\";\n}\n \nsigned main() {\n    ios_base::sync_with_stdio(0);\n    cin.tie(0);\n    int t; cin >> t;\n    while (t--) solve();\n    return 0;\n}",
+      "#include<bits/stdc++.h>\nusing namespace std;\ntypedef long long ll;\n#define debug(x) cout << #x << \" = \" << x << \"\\n\";\n#define vdebug(a) cout << #a << \" = \"; for(auto x: a) cout << x << \" \"; cout << \"\\n\";\nmt19937 rng(chrono::steady_clock::now().time_since_epoch().count());\nint uid(int a, int b) { return uniform_int_distribution<int>(a, b)(rng); }\nll uld(ll a, ll b) { return uniform_int_distribution<ll>(a, b)(rng); }\n \nstruct DSU{\n    vector<int> p, sz;\n    vector<ll> score;\n    \n    DSU(int n){\n        p.assign(n, 0);\n        sz.assign(n, 1);\n        score.assign(n, 0);\n        \n        for (int i = 0; i < n; i++) p[i] = i;\n    }\n    \n    int find(int u){\n        if (p[u] == u) return u;\n        p[u] = find(p[u]);\n        return p[u];\n    }\n    \n    void unite(int u, int v){\n        u = find(u);\n        v = find(v);\n        if (u == v) return;\n        \n        if (sz[u] < sz[v]) swap(u, v);\n        p[v] = u;\n        sz[u] += sz[v];\n        score[u] += score[v];\n    }\n    \n    bool same(int u, int v){\n        return find(u) == find(v);\n    }\n    \n    int size(int u){\n        u = find(u);\n        return sz[u];\n    }\n};\n \nvoid solve(){\n    int n;\n    cin >> n;\n \n    string s;\n    cin >> s;\n    \n    DSU dsu(2 * n);\n    vector<array<int, 2>> prev;\n    for (int i = 0; i < n; i++){\n        if (s[i] == '1'){\n            dsu.score[2 * i] = 1;\n            dsu.unite(2 * i, 2 * i + 1);\n            \n            for (int j = 0; j < prev.size(); j++){\n                int l = prev[j][0];\n                int r = prev[j][1];\n                if (i >= l && i <= r)\n                    dsu.unite(2 * i, 2 * (i - 1) + j);\n            }\n            prev = {{i, i}};\n            continue;\n        }\n \n        vector<array<int, 2>> nxt = {{0, i - 1}, {i + 1, n - 1}};\n        for (int j = 0; j < nxt.size(); j++){\n            auto [l, r] = nxt[j];\n            dsu.score[2 * i + j] = r - l + 1;\n        }\n \n        for (int j = 0; j < prev.size(); j++){\n            for (int k = 0; k < nxt.size(); k++){\n                auto [l1, r1] = prev[j];\n                auto [l2, r2] = nxt[k];\n \n                if (l2 > r1 || r2 < l1)\n                    continue;\n \n                dsu.unite(2 * i + k, 2 * (i - 1) + j);\n            }\n        }\n        prev = nxt;\n    }\n \n    ll ans = 0;\n    for (int i = 0; i < 2 * n; i++)\n        ans = max(ans, dsu.score[i]);\n    cout << ans << \"\\n\";\n}\n \nint main(){\n    ios::sync_with_stdio(false);\n    cin.tie(0);\n    cout.tie(0);\n    \n    int t;\n    cin >> t;\n    while (t--) solve();\n}"
+    ]
+  }
+}

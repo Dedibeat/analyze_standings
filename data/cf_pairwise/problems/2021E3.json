@@ -1,0 +1,46 @@
+{
+  "contest_id": 2021,
+  "index": "E3",
+  "name": "Digital Village (Extreme Version)",
+  "rating": 2800,
+  "tags": [
+    "data structures",
+    "dfs and similar",
+    "dp",
+    "dsu",
+    "graphs",
+    "greedy",
+    "math",
+    "trees"
+  ],
+  "points": 1000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2021E3",
+  "url": "https://codeforces.com/problemset/problem/2021/E3",
+  "contest_start_time": "2024-10-06T06:05:00+00:00",
+  "statement": {
+    "title": "E3. Digital Village (Extreme Version)",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "This is the extreme version of the problem. In the three versions, the constraints on $n$ and $m$ are different. You can make hacks only if all the versions of the problem are solved.\n\nPak Chanek is setting up internet connections for the village of Khuntien. The village can be represented as a connected simple graph with $n$ houses and $m$ internet cables connecting house $u_i$ and house $v_i$, each with a latency of $w_i$.\n\nThere are $p$ houses that require internet. Pak Chanek can install servers in at most $k$ of the houses. The houses that need internet will then be connected to one of the servers. However, since each cable has its latency, the latency experienced by house $s_i$ requiring internet will be the maximum latency of the cables between that house and the server it is connected to.\n\nFor each $k = 1,2,\\ldots,n$, help Pak Chanek determine the minimum total latency that can be achieved for all the houses requiring internet.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 10^4$). The description of the test cases follows.\n\nThe first line of each test case contains 3 integers $n$, $m$, $p$ ($2 \\le n \\le 2 \\cdot 10^5$; $n-1 \\le m \\le 2 \\cdot 10^5$; $1 \\le p \\le n$) — the number of houses, the number of cables, and the number of houses that need internet.\n\nThe second line of each test case contains $p$ integers $s_1, s_2, \\ldots, s_p$ ($1 \\le s_i \\le n$) — the houses that need internet. It is guaranteed that all elements of $s$ are distinct.\n\nThe $i$-th of the next $m$ lines of each test case contains three integers $u_i$, $v_i$, and $w_i$ ($1 \\le u_i  \\lt  v_i \\le n$; $1 \\le w_i \\le 10^9$) — the internet cable connecting house $u_i$ and house $v_i$ with latency of $w_i$. It is guaranteed that the given edges form a connected simple graph.\n\nIt is guaranteed that the sum of $n$ and the sum of $m$ do not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, output $n$ integers: the minimum total latency that can be achieved for all the houses requiring internet for each $k = 1,2,\\ldots,n$.",
+    "note": "In the first test case for $k=3$, a possible optimal solution is to install servers at vertices $2$, $6$ and $8$ and obtain the following latency:\n\n $\\text{latency}(2) = 0$\n\n $\\text{latency}(5) = \\max(3, 5) = 5$\n\n $\\text{latency}(6) = 0$\n\n $\\text{latency}(8) = 0$\n\n $\\text{latency}(9) = \\max(2, 4) = 4$\n\nSo the total latency is $9$.",
+    "samples": [
+      {
+        "input": "2\n9 8 5\n2 5 6 8 9\n1 2 1\n1 3 2\n3 4 10\n4 5 3\n4 6 5\n1 7 10\n7 8 4\n7 9 2\n3 3 2\n3 1\n1 2 1\n2 3 3\n1 3 2",
+        "output": "\n34 19 9 4 0 0 0 0 0\n2 0 0"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 134873,
+    "url": "https://codeforces.com/blog/entry/134873",
+    "tutorial": "Since the cost of a path uses the maximum edge weight in the path, we can use a Kruskal-like algorithm that is similar to finding the MST (Minimum Spanning Tree). Initially, the graph has no edges, and we add each edge one by one starting from the smallest values of $w_i$, while maintaining the connected components in the graph using DSU (Disjoint Set Union).\n\nWhile doing the MST algorithm, we simultaneously construct the reachability tree of the graph, whose structure represents the sequence of mergings of connected components in the algorithm. Each vertex in the reachability tree corresponds to some connected component at some point in time in the algorithm. Each non-leaf vertex in the reachability tree always has two children, which are the two connected components that are merged to form the connected component represented by that vertex, so every time two connected components merge in the algorithm, we make a new vertex in the reachability tree that is connected to its two corresponding children.\n\nAfter doing all that, we've constructed a reachability tree that is a rooted binary tree with $2n-1$ vertices, $n$ of which are leaves. For each non-leaf vertex $x$, we write down $\\text{weight}[x]$ which is the weight of the edge that forms its connected component. For each leaf, we mark it as special if and only if it corresponds to a house that needs internet. Then, for each vertex $x$, we calculate $\\text{cnt}[x]$, which is the number of special leaves in the subtree of $x$. These values will be used later.\n\nConsider a non-leaf $x$ in the reachability tree. It can be obtained that two vertices in the original graph corresponding to any two leaves in the subtree of $x$ can have a path between them in the original graph with a weight of at most $\\text{weight}[x]$.\n\nLet's solve for some value of $k$. For each special vertex $x$, we want to choose a target vertex $y$ that's an ancestor of $x$. Then, we choose a set of $k$ leaves for the houses with installed servers. We want it such that each chosen target has at least one leaf in its subtree that is a member of the set. The total path cost of this is the sum of $\\text{weight}[y]$ for all chosen targets $y$.\n\nLet's say we've fixed the set of $k$ leaves. Then, we mark every ancestor of these leaves. If we only consider the marked vertices with the edges between them, we have a reduced tree. For each special leaf, we want to choose its nearest ancestor that is in the reduced tree for its target to get the one with the smallest weight.\n\nKnowing this, we can solve the problem in another point of view. Initially, we have the original reachability tree. We want to reduce it into a reduced tree with $k$ leaves. We want to do it while maintaining the chosen targets of the special leaves and their costs. Initially, for each special leaf, we choose itself as its target. In one operation, we can do the following:\n\n Choose a vertex that's currently a leaf.\n\n Move every target that's currently in that leaf to its parent.\n\n Remove that leaf and the edge connecting it to its parent.\n\nWe want to do that until the reduced tree has $k$ leaves.\n\nFor each edge connecting a vertex $x$ to its parent $y$ in the reachability tree, calculate $(\\text{weight}[y]-\\text{weight}[x])\\times\\text{cnt}[x]$. That is the cost to move every target in vertex $x$ to vertex $y$. Define that as the edge's length.\n\nWe want to do operations with the minimum cost so that the reduced tree has $k$ leaves. We want to minimize the sum of lengths of the deleted edges. If we look at it in a different way, we want to choose edges to be in the reduced tree with the maximum sum of lengths.\n\nFor some value of $k$, the edges of the reduced tree can be decomposed into $k$ paths from some vertex to its descendant. We want the total sum of lengths of these paths to be as big as possible. But how do we solve it for every $k$ from $1$ to $n$?\n\nLet's say $k=1$. We can choose the path from the root to its furthest leaf. How do we solve for $k=2$ onwards? It turns out that we can use the optimal solution for some value of $k$ to make the optimal solution for $k+1$, by just adding the longest possible available path. That means, for each $k$ from $1$ to $n$, we just find the current longest available path and add it to our reduced tree.\n\nWhat if at some point. there are more than one possible longest paths? It can be proven that we can choose any of these paths and the optimal solutions for the next values of $k$ will still be optimal.\n\nThe proof for this greedy strategy involves the convexity of the total length as $k$ goes from $1$ to $n$. However, we won't explain it in detail here.\n\nSo to solve the problem, we do DFS in the reachability tree to calculate for each vertex $x$, the furthest leaf and the second furthest leaf in its subtree. For each $k$ from $1$ to $n$, we add the current longest available path using this precalculation.\n\nTime complexity: $O(n\\log n+m\\log m)$",
+    "solution_code": []
+  }
+}

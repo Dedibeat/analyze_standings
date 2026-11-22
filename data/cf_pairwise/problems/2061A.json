@@ -1,0 +1,39 @@
+{
+  "contest_id": 2061,
+  "index": "A",
+  "name": "Kevin and Arithmetic",
+  "rating": 800,
+  "tags": [
+    "math"
+  ],
+  "points": 500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2061A",
+  "url": "https://codeforces.com/problemset/problem/2061/A",
+  "contest_start_time": "2025-01-20T14:35:00+00:00",
+  "statement": {
+    "title": "A. Kevin and Arithmetic",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "To train young Kevin's arithmetic skills, his mother devised the following problem.\n\nGiven $n$ integers $a_1, a_2, \\ldots, a_n$ and a sum $s$ initialized to $0$, Kevin performs the following operation for $i = 1, 2, \\ldots, n$ in order:\n\n Add $a_i$ to $s$. If the resulting $s$ is even, Kevin earns a point and repeatedly divides $s$ by $2$ until it becomes odd.\n\nNote that Kevin can earn at most one point per operation, regardless of how many divisions he does.\n\nSince these divisions are considered more beneficial for Kevin's development, his mother wants to rearrange $a$ so that the number of Kevin's total points is maximized. Determine the maximum number of points.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 500$). The description of the test cases follows.\n\nThe first line of each test case contains a single integer $n$ ($1\\leq n \\leq 100$) — the number of integers.\n\nThe second line contains $n$ integers $a_1, a_2, \\ldots, a_n$ ($1\\leq a_i \\leq 10^9$).",
+    "output_spec": "For each test case, output one integer — the maximum number of points.",
+    "note": "In the first test case, the only arrangement of $a$ is $[1]$. $s$ becomes $1$. Kevin earns no points.\n\nIn the second test case, the only possible arrangement of $a$ is $[2, 1]$. $s$ becomes $1$ and $1$ successively. Kevin earns points in both operations.\n\nIn the third test case, one possible arrangement of $a$ is $[2, 4, 6]$. $s$ becomes $1$, $5$, and $11$ successively. Kevin earns a point in the first operation.",
+    "samples": [
+      {
+        "input": "5\n1\n1\n2\n1 2\n3\n2 4 6\n4\n1000000000 999999999 999999998 999999997\n10\n3 1 4 1 5 9 2 6 5 3",
+        "output": "\n0\n2\n1\n3\n8"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 138620,
+    "url": "https://codeforces.com/blog/entry/138620",
+    "tutorial": "After the first operation, $s$ is always odd. You can only earn points when $a_i$ is odd after this operation. However, during the first operation, you can only earn a point if $a_i$ is even.\n\nLet $c_0$ and $c_1$ be the number of even and odd numbers, respectively.\n\nIf there is at least one even number, you can place it first, making the answer $c_1 + 1$. Otherwise, since no points can be earned during the first operation, the answer is $c_1 - 1$.\n\nTime complexity: $O(n)$.",
+    "solution_code": []
+  }
+}

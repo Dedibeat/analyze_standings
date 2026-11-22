@@ -1,0 +1,47 @@
+{
+  "contest_id": 2033,
+  "index": "E",
+  "name": "Sakurako, Kosuke, and the Permutation",
+  "rating": 1400,
+  "tags": [
+    "brute force",
+    "data structures",
+    "dfs and similar",
+    "dsu",
+    "graphs",
+    "greedy",
+    "math"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2033E",
+  "url": "https://codeforces.com/problemset/problem/2033/E",
+  "contest_start_time": "2024-10-24T14:35:00+00:00",
+  "statement": {
+    "title": "E. Sakurako, Kosuke, and the Permutation",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Sakurako's exams are over, and she did excellently. As a reward, she received a permutation $p$. Kosuke was not entirely satisfied because he failed one exam and did not receive a gift. He decided to sneak into her room (thanks to the code for her lock) and spoil the permutation so that it becomes simple.\n\nA permutation $p$ is considered simple if for every $i$ $(1\\le i \\le n)$ one of the following conditions holds:\n\n $p_i=i$\n\n $p_{p_i}=i$\n\nFor example, the permutations $[1, 2, 3, 4]$, $[5, 2, 4, 3, 1]$, and $[2, 1]$ are simple, while $[2, 3, 1]$ and $[5, 2, 1, 4, 3]$ are not.\n\nIn one operation, Kosuke can choose indices $i,j$ $(1\\le i,j\\le n)$ and swap the elements $p_i$ and $p_j$.\n\nSakurako is about to return home. Your task is to calculate the minimum number of operations that Kosuke needs to perform to make the permutation simple.",
+    "input_spec": "The first line contains one integer $t$ ($1\\le t\\le 10^4$) — the number of test cases.\n\nEach test case is described by two lines.\n\n The first line contains one integer $n$ ($1\\le n \\le 10^6$) — the length of the permutation $p$.\n\n The second line contains $n$ integers $p_i$ ($1\\le p_i\\le n$) — the elements of the permutation $p$.\n\nIt is guaranteed that the sum of $n$ across all test cases does not exceed $10^6$.\n\nIt is guaranteed that $p$ is a permutation.",
+    "output_spec": "For each test case, output the minimum number of operations that Kosuke needs to perform to make the permutation simple.",
+    "note": "In the first and second examples, the permutations are already simple.\n\nIn the fourth example, it is sufficient to swap $p_2$ and $p_4$. Thus, the permutation will become $[2, 1, 4, 3]$ in $1$ operation.",
+    "samples": [
+      {
+        "input": "6\n5\n1 2 3 4 5\n5\n5 4 3 2 1\n5\n2 3 4 5 1\n4\n2 3 4 1\n3\n1 3 2\n7\n2 3 1 5 6 7 4",
+        "output": "\n0\n0\n2\n1\n0\n2"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 135520,
+    "url": "https://codeforces.com/blog/entry/135520",
+    "tutorial": "Lets make this the shortest editorial out of all.\n\nObservation $1$:\n\nAll permutations can be split into cycles. All cycles of permutation can be traversed in $O(n)$ time.\n\nObservation $2$:\n\nWhen we are swapping $2$ elements that belong to one cycle, we are splitting our cycle into $2$ parts.\n\nIf we rephrase our definition of simple permutation, we can see that the permutation is called simple if every cycle in it has length not larger than $2$.\n\nObservation $3$:\n\nBy splitting our initial cycle of length $x$ repeatedly, we can achieve its division into cycles of length not larger than $2$ in $\\lfloor\\frac{x-1}{2}\\rfloor$ swaps. (this is achieved by repeatedly decreasing size of the cycle by $2$)\n\nObservation $4$:\n\nAll cycles are independent, so the answer for the initial task is the sum of answers for every cycle.\n\nTotal time complexity is $O(n)$.",
+    "solution_code": [
+      "#include<bits/stdc++.h>\nusing namespace std;\nint main(){\n    int t;\n    ios_base::sync_with_stdio(false);cout.tie(nullptr);cin.tie(nullptr);\n    cin>>t;\n    while(t--){\n        int n;\n        cin>>n;\n        int p[n+1];\n        for(int i=1;i<=n;i++){\n            cin>>p[i];\n        }\n        bool us[n+1];\n        memset(us,0,sizeof us);\n        int re=0;\n        for(int i=1;i<=n;i++){\n            if(!us[i]){\n                int cu=i;\n                int le=0;\n                while(us[cu]==0){\n                    le++;\n                    us[cu]=1;\n                    cu=p[cu];\n                }\n                re+=(le-1)/2;\n            }\n        }\n        cout<<re<<'\\n';\n    }\n}"
+    ]
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "contest_id": 2025,
+  "index": "E",
+  "name": "Card Game",
+  "rating": 2200,
+  "tags": [
+    "combinatorics",
+    "dp",
+    "fft",
+    "greedy",
+    "math"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2025E",
+  "url": "https://codeforces.com/problemset/problem/2025/E",
+  "contest_start_time": "2024-10-14T14:35:00+00:00",
+  "statement": {
+    "title": "E. Card Game",
+    "time_limit": "2 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "In the most popular card game in Berland, a deck of $n \\times m$ cards is used. Each card has two parameters: suit and rank. Suits in the game are numbered from $1$ to $n$, and ranks are numbered from $1$ to $m$. There is exactly one card in the deck for each combination of suit and rank.\n\nA card with suit $a$ and rank $b$ can beat a card with suit $c$ and rank $d$ in one of two cases:\n\n $a = 1$, $c \\ne 1$ (a card of suit $1$ can beat a card of any other suit);\n\n $a = c$, $b  \\gt  d$ (a card can beat any other card of the same suit but of a lower rank).\n\nTwo players play the game. Before the game starts, they receive exactly half of the deck each. The first player wins if for every card of the second player, he can choose his card that can beat it, and there is no card that is chosen twice (i. e. there exists a matching of the first player's cards with the second player's cards such that in each pair the first player's card beats the second player's card). Otherwise, the second player wins.\n\nYour task is to calculate the number of ways to distribute the cards so that the first player wins. Two ways are considered different if there exists a card such that in one way it belongs to the first player and in the other way it belongs to the second player. The number of ways can be very large, so print it modulo $998244353$.",
+    "input_spec": "The only line contains two integers $n$ and $m$ ($1 \\le n, m \\le 500$).\n\nAdditional constraint on the input: $m$ is even.",
+    "output_spec": "Print a single integer — the number of ways to distribute the cards so that the first player wins, taken modulo $998244353$.",
+    "note": null,
+    "samples": [
+      {
+        "input": "1 4",
+        "output": "\n2"
+      },
+      {
+        "input": "2 2",
+        "output": "\n2"
+      },
+      {
+        "input": "3 6",
+        "output": "\n1690"
+      },
+      {
+        "input": "5 4",
+        "output": "\n568"
+      },
+      {
+        "input": "500 500",
+        "output": "\n84693741"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 135173,
+    "url": "https://codeforces.com/blog/entry/135173",
+    "tutorial": "Suppose we're solving the problem for one suit. Consider a distribution of cards between two players; how to check if at least one matching between cards of the first player and cards of the second player exists?\n\nLet's order the cards from the highest rank to the lowest rank and go through them in that order. If we get a card of the first player, we can add it to the \"pool\" of cards to be matched; if we get a card belonging to the second player, we match it with one of the cards from the \"pool\" (if there are none — there is no valid matching). So, if there exists a prefix of this order where the number of cards of the second player exceeds the number of cards belonging to the first player, it is not a valid distribution. Does this sound familiar?\n\nLet's say that a card belonging to the first player is represented by an opening bracket, and a card belonging to the second player is represented by a closing bracket. Then, if we need to solve the problem for just one suit, the distribution must be a regular bracket sequence. So, in this case, we just need to count the number of regular bracket sequences.\n\nHowever, if there are at least $2$ suits, there might be \"extra\" cards of the $1$-st suit belonging to the first player, which we can match with \"extra\" cards of other suits belonging to the second player. To resolve this issue, we can use the following dynamic programming: let $dp_{i,j}$ be the number of ways to distribute the cards of the first $i$ suits so that there are $j$ extra cards of the $1$-st suit belonging to the $1$-st player.\n\nTo calculate $dp_{1,j}$, we have to count the number of bracket sequences such that the balance on each prefix is at least $0$, and the balance of the whole sequence is exactly $j$. In my opinion, the easiest way to do this is to run another dynamic programming (something like \"$w_{x,y}$ is the number of sequences with $x$ elements and balance $y$\"); however, you can try solving it in a combinatorial way similar to how Catalan numbers are calculated.\n\nWhat about transitions from $dp_{i,j}$ to $dp_{i+1, j'}$? Let's iterate on $k$ — the number of \"extra\" cards we will use to match the cards of the $(i+1)$-th suit belonging to the second player, so we transition from $dp_{i,j}$ to $dp_{i+1,j-k}$.\n\nNow we need to count the ways to distribute $m$ cards of the same suit so that the second player receives $k$ cards more than the first player, and all cards of the first player can be matched. Consider that we ordered the cards from the lowest rank to the highest rank. Then, on every prefix, the number of cards belonging to the first player should not exceed the number of cards belonging to the second player (otherwise we won't be able to match all cards belonging to the first player), and in total, the number of cards belonging to the second player should be greater by $k$. So this is exactly the number of bracket sequences with balance $\\ge 0$ on every prefix and balance equal to $k$ in total (and we have already calculated that)!\n\nSo, the solution consists of two steps. First, for every $k \\in [0, m]$, we calculate the number of bracket sequences with non-negative balance on each prefix and total balance equal to $k$; then we run dynamic programming of the form \"$dp_{i,j}$ is the number of ways to distribute the cards of the first $i$ suits so that there are $j$ extra cards of the $1$-st suit belonging to the $1$-st player\". The most time-consuming part of the solution is this dynamic programming, and it works in $O(nm^2)$, so the whole solution works in $O(nm^2)$.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n \nusing namespace std;\n \nconst int MOD = 998244353;\n \nint add(int x, int y) {\n  x += y;\n  if (x >= MOD) x -= MOD;\n  return x;\n}\n \nint mul(int x, int y) {\n  return x * 1LL * y % MOD;\n}\n \nint main() {\n  int n, m;\n  cin >> n >> m;\n  vector<vector<int>> ways(m + 1, vector<int>(m + 1));\n  ways[0][0] = 1;\n  for (int i = 0; i < m; ++i) {\n    for (int j = 0; j <= i; ++j) {\n      ways[i + 1][j + 1] = add(ways[i + 1][j + 1], ways[i][j]);\n      if (j) ways[i + 1][j - 1] = add(ways[i + 1][j - 1], ways[i][j]);\n    }\n  }\n  \n  vector<vector<int>> dp(n + 1, vector<int>(m + 1));\n  dp[0][0] = 1;\n  for (int i = 0; i < n; ++i) {\n    for (int j = 0; j <= m; ++j) {\n      for (int k = 0; k <= m; ++k) {\n        int nj = i ? j - k : j + k;\n        if (0 <= nj && nj <= m) {\n          dp[i + 1][nj] = add(dp[i + 1][nj], mul(dp[i][j], ways[m][k]));\n        }\n      }\n    }\n  }\n  cout << dp[n][0] << '\\n';\n}"
+    ]
+  }
+}

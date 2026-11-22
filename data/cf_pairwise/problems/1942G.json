@@ -1,0 +1,41 @@
+{
+  "contest_id": 1942,
+  "index": "G",
+  "name": "Bessie and Cards",
+  "rating": 2800,
+  "tags": [
+    "combinatorics",
+    "dp",
+    "math"
+  ],
+  "points": 3000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1942G",
+  "url": "https://codeforces.com/problemset/problem/1942/G",
+  "contest_start_time": "2024-03-30T14:35:00+00:00",
+  "statement": {
+    "title": "G. Bessie and Cards",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Second Dark Matter Battle - Pokemon Super Mystery Dungeon\n\n⠀\n\nBessie has recently started playing a famous card game. In the game, there is only one deck of cards, consisting of $a$ \"draw $0$\" cards, $b$ \"draw $1$\" cards, $c$ \"draw $2$\" cards, and $5$ special cards. At the start of the game, all cards are in the randomly shuffled deck.\n\nBessie starts the game by drawing the top $5$ cards of the deck. She may then play \"draw $x$\" cards from the hand to draw the next $x$ cards from the top of the deck. Note that every card can only be played once, special cards cannot be played, and if Bessie uses a \"draw $2$\" card when there is only $1$ card remaining in the deck, then she simply draws that remaining card. Bessie wins if she draws all $5$ special cards.\n\nSince Bessie is not very good at math problems, she wants you to find the probability that she wins, given that the deck is shuffled randomly over all $(a + b + c + 5)!$ possible orderings. It can be shown that this answer can always be expressed as a fraction $\\frac{p}{q}$ where $p$ and $q$ are coprime integers. Output $p \\cdot q^{-1}$ modulo $998\\,244\\,353$.",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases.\n\nEach test case contains three integers $a$, $b$, and $c$ ($0 \\le a, b, c \\le 2 \\cdot 10^5$) – the number of draw $0$ cards, draw $1$ cards, and draw $2$ cards, respectively.\n\nIt is guaranteed that the sum of $a$ over all test cases does not exceed $2 \\cdot 10^5$, the sum of $b$ over all test cases does not exceed $2 \\cdot 10^5$, and the sum of $c$ over all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, output a single integer — the probability that Bessie wins, modulo $998\\,244\\,353$.",
+    "note": "In the first case, we have $1$ of each type of \"draw\" card and $5$ special cards. There are $30\\,720$ starting decks where Bessie will win by drawing the top $5$ cards and $40\\,320$ starting decks in total. Thus, the probability of Bessie winning is $\\frac{30\\,720}{40\\,320} = \\frac{16}{21}$.\n\nOne example of a winning starting deck is, top to bottom,\n\n \"Special\",\n\n \"Draw $1$\",\n\n \"Special\",\n\n \"Special\",\n\n \"Draw $0$\",\n\n \"Draw $2$\",\n\n \"Special\",\n\n \"Special\".\n\nOne example of a losing starting deck is:\n\n \"Special\",\n\n \"Draw $1$\",\n\n \"Special\",\n\n \"Special\",\n\n \"Draw $0$\",\n\n \"Special\",\n\n \"Special\",\n\n \"Draw $2$\".",
+    "samples": [
+      {
+        "input": "4\n1 1 1\n0 0 0\n5 3 7\n3366 1434 1234",
+        "output": "\n903173463\n1\n35118742\n398952013"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 126942,
+    "url": "https://codeforces.com/blog/entry/126942",
+    "tutorial": "1942G - Bessie and Cards\n\nProblem Credits: smax\nAnalysis: smax\n\nHint 1\n\n\"Draw $1$\" cards do not matter because we can immediately play them when we draw them.\n\nHint 2\n\nTreat \"draw $2$\" as $+1$ and \"draw $0$\" as $-1$. We start with a balance of $+5$. We draw all the cards up to the first prefix where the balance dips to $0$. We are interested in the number of ways where the special cards lie in this prefix.\n\nSolution\n\nRead the hints.\n\nTreat the special cards as \"draw $0$\" cards and multiply by the appropriate binomial coefficient at the end. Also treat cards of the same type as indistinguishable and multiply by the appropriate factorials at the end.\n\nEnumerate the length of the prefix where the balance first hits $0$. This dictates how many $+1$ and $-1$ we have. Now we want to count the number of ways of arranging $+1$ and $-1$ such that the balance never dips to $0$, assuming we start with $+5$.\n\nTo solve this subproblem, we can draw inspiration from the path counting interpretation for counting balanced bracket sequences. We have $n$ open and $n$ close brackets and want to count the number of balanced bracket sequences starting with (((( (note that there are only $4$ instead of $5$ open brackets to shift from all balances being strictly positive to all balances being non-negative). The number of sequences ignoring the balance constraint is $\\binom{2n-4}{n}$. Any bracket sequence where some balance dips negative corresponds to a path that walks above the line $y = x$. For those paths, we reflect over the line $y = x + 1$ at the first point where it steps over the line. So there is a bijection between these paths and paths that reach the point $(n-1,n+1)$, of which there are $\\binom{2n-4}{n+1}$. So the total number of ways is $\\binom{2n-4}{n} - \\binom{2n-4}{n+1}$.\n\nOur final answer is summing up the number of ways over all prefix lengths. Make sure to handle the case where you draw the entire deck correctly. The complexity is $\\mathcal O(\\min(a,c))$.\n\nCode (C++)",
+    "solution_code": []
+  }
+}

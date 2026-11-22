@@ -1,0 +1,44 @@
+{
+  "contest_id": 2090,
+  "index": "C",
+  "name": "Dining Hall",
+  "rating": 1700,
+  "tags": [
+    "data structures",
+    "greedy",
+    "implementation",
+    "sortings"
+  ],
+  "points": 1750.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2090C",
+  "url": "https://codeforces.com/problemset/problem/2090/C",
+  "contest_start_time": "2025-03-23T05:35:00+00:00",
+  "statement": {
+    "title": "C. Dining Hall",
+    "time_limit": "2 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "Inside the large kingdom, there is an infinite dining hall. It can be represented as a set of cells ($x, y$), where $x$ and $y$ are non-negative integers. There are an infinite number of tables in the hall. Each table occupies four cells ($3x + 1, 3y + 1$), ($3x + 1, 3y + 2$), ($3x + 2, 3y + 1$), ($3x + 2, 3y + 2$), where $x$ and $y$ are arbitrary non-negative integers. All cells that do not belong to any of the tables are corridors.\n\nThere are $n$ guests that come to the dining hall one by one. Each guest appears in the cell $(0, 0)$ and wants to reach a table cell. In one step, they can move to any neighboring by side corridor cell, and in their last step, they must move to a neighboring by side a free table cell. They occupy the chosen table cell, and no other guest can move there.\n\nEach guest has a characteristic $t_i$, which can either be $0$ or $1$. They enter the hall in order, starting to walk from the cell ($0, 0$). If $t_i=1$, the $i$-th guest walks to the nearest vacant table cell. If $t_i=0$, they walk to the nearest table cell that belongs to a completely unoccupied table. Note that other guests may choose the same table later.\n\nThe distance is defined as the smallest number of steps needed to reach the table cell. If there are multiple table cells at the same distance, the guests choose the cell with the smallest $x$, and if there are still ties, they choose among those the cell with the smallest $y$.\n\nFor each guest, find the table cell which they choose.",
+    "input_spec": "The first line contains a single integer $q$ ($1 \\leq q \\leq 5000$) — the number of test cases. Then follows their description.\n\nThe first line of each test case contains a single integer $n$ ($1 \\leq n \\leq 50\\,000$) — the number of guests.\n\nThe second line of each test case contains $n$ integers $t_1, t_2, \\ldots, t_n$ ($t_i \\in \\{0, 1\\}$) — the characteristics of the guests.\n\nIt is guaranteed that the sum of $n$ for all test cases does not exceed $50\\,000$.",
+    "output_spec": "For each test case, output $n$ lines — for each guest, the cell where they sit.",
+    "note": "Consider the first test case:\n\nThe distance from the first guest to the cell ($1, 1$) is $2$, so he sits there.\n\nThe distance from the second guest to the cell ($1, 2$) is $3$, as is the distance to the cell ($2, 1$), but since the first coordinate is smaller for the first option, he will choose it.\n\nThe distance from the third guest to the cell ($2, 1$) is $3$, so he will choose it.\n\nThe distance from the fourth guest to the cell ($1, 4$) is $5$, and he will choose it.\n\nThe distance from the fifth guest to the cell ($4, 1$) is $5$.\n\nThe distance from the sixth guest to the cell ($1, 5$) is $6$, as is the distance to the cell ($2, 2$), but since the first coordinate is smaller, he will choose the first option.",
+    "samples": [
+      {
+        "input": "2\n6\n0 1 1 0 0 1\n5\n1 0 0 1 1",
+        "output": "\n1 1\n1 2\n2 1\n1 4\n4 1\n1 5\n1 1\n1 4\n4 1\n1 2\n2 1"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 141053,
+    "url": "https://codeforces.com/blog/entry/141053",
+    "tutorial": "2090C - Dining Hall\n Idea: myee\n\nSolution\n\nOriginal idea from myee has $4$ cases, which is a medium difficulty problem using deletable heap. You may find the original statement in zh-cn on GitHub later.\n\nThe Codeforces version by FairyWinx has only $2$ cases, in order to meet the difficulty as Div2C.\n\nThe En/Ru statement changes for times after checking. Sorry for the inconvenience.\n\nFirstly we can get the distance of each cell by BFS or Math Way: $d(x,y)=x+y+2[x\\bmod3=y\\bmod3=2]$.\n\nThe proof is trivial.\n\nThen we can sort out the first $4n$ table cell with the lowest distance in $O(n)$ time: by BFS or enumerating possible $d(x,y)=k$.\n\nSuppose we record whether a table cell is occupied or not by a bool array. Then we can check whether a cell can be allowed to go by someone $o=0/1$ in $O(1)$ time.\n\nSuppose the shortest table cell we can choose is $x_0$ -th and $x_1$ -th ones, then $x_1\\le x_0\\le4n$. We can keep trying the smallest $x_o$ until it's okay.\n\nThe time complexity is $O(n)$.\n\nCode",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n\nusing uint = unsigned;\nusing bol = bool;\n\nconst uint T=2000;\nconst uint R=200000;\n\nuint Ord[R+5];\nuint Nxt(uint p,uint o)\n{\n    uint x=p/T,y=p%T;\n    if(o&1)y=y/3*3+3-y%3;\n    if(o&2)x=x/3*3+3-x%3;\n    return x*T+y;\n}\n\nbol G[2][T*T];uint Ans[2];\n\nint main()\n{\n#ifdef MYEE\n    freopen(\"QAQ.in\",\"r\",stdin);\n    freopen(\"QAQ.out\",\"w\",stdout);\n#endif\n    for(uint i=2,tp=0;i<T&&tp<R;i++)if(i%3==2)\n    {\n        for(uint x=1;x<i&&tp<R;x+=3)Ord[tp++]=x*T+i-x;\n    }\n    else if(!(i%3))\n    {\n        for(uint x=1;x<=i-2&&tp<R;x++)\n            if(x%3==1)Ord[tp++]=x*T+i-x;\n            else if(x%3==2)Ord[tp++]=x*T+i-x-2,Ord[tp++]=x*T+i-x;\n        Ord[tp++]=(i-1)*T+1;\n    }\n    uint t;scanf(\"%u\",&t);\n    while(t--)\n    {\n        uint q;scanf(\"%u\",&q);\n        for(uint i=0;i<q*4;i++)G[0][Ord[i]]=G[1][Ord[i]]=0;\n        Ans[0]=Ans[1]=0;\n        while(q--)\n        {\n            uint t;scanf(\"%u\",&t);while(G[t][Ord[Ans[t]]])Ans[t]++;\n            t=Ord[Ans[t]];printf(\"%u %u\\n\",t/T,t%T);\n            G[1][t]=1;for(uint o=0;o<4;o++)G[0][Nxt(t,o)]=1;\n        }\n    }\n    return 0;\n}"
+    ]
+  }
+}

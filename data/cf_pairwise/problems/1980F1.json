@@ -1,0 +1,43 @@
+{
+  "contest_id": 1980,
+  "index": "F1",
+  "name": "Field Division (easy version)",
+  "rating": 1900,
+  "tags": [
+    "data structures",
+    "math",
+    "sortings"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1980F1",
+  "url": "https://codeforces.com/problemset/problem/1980/F1",
+  "contest_start_time": "2024-06-03T14:35:00+00:00",
+  "statement": {
+    "title": "F1. Field Division (easy version)",
+    "time_limit": "3 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "This is an easy version of the problem; it differs from the hard version only by the question. The easy version only needs you to print whether some values are non-zero or not. The hard version needs you to print the exact values.\n\nAlice and Bob are dividing the field. The field is a rectangle of size $n \\times m$ ($2 \\le n, m \\le 10^9$), the rows are numbered from $1$ to $n$ from top to bottom, and the columns are numbered from $1$ to $m$ from left to right. The cell at the intersection of row $r$ and column $c$ is denoted as ($r, c$).\n\nBob has $k$ ($2 \\le k \\le 2 \\cdot 10^5$) fountains, all of them are located in different cells of the field. Alice is responsible for dividing the field, but she must meet several conditions:\n\n To divide the field, Alice will start her path in any free (without a fountain) cell on the left or top side of the field and will move, each time moving to the adjacent cell down or right. Her path will end on the right or bottom side of the field.\n\n Alice's path will divide the field into two parts — one part will belong to Alice (this part includes the cells of her path), the other part — to Bob.\n\n Alice will own the part that includes the cell ($n, 1$).\n\n Bob will own the part that includes the cell ($1, m$).\n\nAlice wants to divide the field in such a way as to get as many cells as possible.\n\nBob wants to keep ownership of all the fountains, but he can give one of them to Alice. First, output the integer $\\alpha$ — the maximum possible size of Alice's plot, if Bob does not give her any fountain (i.e., all fountains will remain on Bob's plot). Then output $k$ non-negative integers $a_1, a_2, \\dots, a_k$, where:\n\n $a_i=0$, if after Bob gives Alice the $i$-th fountain, the maximum possible size of Alice's plot does not increase (i.e., remains equal to $\\alpha$);\n\n $a_i=1$, if after Bob gives Alice the $i$-th fountain, the maximum possible size of Alice's plot increases (i.e., becomes greater than $\\alpha$).",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases.\n\nThe first line of each test case contains three integers $n$, $m$, and $k$ ($2 \\le n, m \\le 10^9$, $2 \\le k \\le 2 \\cdot 10^5$) — the field sizes and the number of fountains, respectively.\n\nThen follow $k$ lines, each containing two numbers $r_i$ and $c_i$ ($1 \\le r_i \\le n$, $1 \\le c_i \\le m$) — the coordinates of the cell with the $i$-th fountain. It is guaranteed that all cells are distinct and none of them is ($n, 1$).\n\nIt is guaranteed that the sum of $k$ over all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, first output $\\alpha$ — the maximum size of the plot that can belong to Alice if Bob does not give her any of the fountains. Then output $k$ non-negative integers $a_1, a_2, \\dots, a_k$, where:\n\n $a_i=0$, if after Bob gives Alice the $i$-th fountain, the maximum possible size of Alice's plot does not increase compared to the case when all $k$ fountains belong to Bob;\n\n $a_i=1$, if after Bob gives Alice the $i$-th fountain, the maximum possible size of Alice's plot increases compared to the case when all $k$ fountains belong to Bob.\n\nIf you output any other positive number instead of $1$ that fits into a 64-bit signed integer type, it will also be recognized as $1$. Thus, a solution to the hard version of this problem will also pass the tests for the easy version.",
+    "note": "Below are the images for the second example:\n  The indices of the fountains are labeled in green. The cells belonging to Alice are marked in blue.\nNote that if Bob gives Alice fountain $1$ or fountain $3$, then that fountain cannot be on Alice's plot.",
+    "samples": [
+      {
+        "input": "5\n2 2 3\n1 1\n1 2\n2 2\n5 5 4\n1 2\n2 2\n3 4\n4 3\n2 5 9\n1 2\n1 5\n1 1\n2 2\n2 4\n2 5\n1 4\n2 3\n1 3\n6 4 4\n6 2\n1 3\n1 4\n1 2\n3 4 5\n2 1\n3 2\n1 4\n1 3\n2 4",
+        "output": "\n1\n1 0 1 \n11\n0 1 0 1 \n1\n0 0 1 1 0 0 0 0 0 \n6\n1 0 0 0 \n1\n1 1 0 0 0 "
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 130135,
+    "url": "https://codeforces.com/blog/entry/130135",
+    "tutorial": "Since Alice can only move down or to the right, if in the $i$-th row $x$ cells belong to her, then in the $(i-1)$-th row she can have no more than $x$ cells. The construction of the maximum plot can be represented as follows: we will go through the rows from bottom to top and keep track of how many cells we have collected in the row below. In the current row, we will collect either the same number of cells, or all the cells up to the leftmost fountain in the row, if there are fewer such cells.\n\nThere are three possible positions of the fountains relative to the boundary with Alice's plot:\n\n the fountain has no adjacent cells belonging to Alice's plot;\n\n the fountain has one adjacent cell belonging to Alice's plot;\n\n the fountain has two adjacent cells belonging to Alice's plot.\n\nThe area of Alice's plot changes only when removing the third type of fountain position, which we will call the corner. Since a corner has formed, in the row below Alice had more cells, and when removing this fountain, she will be able to take at least one cell with this fountain, and the answer for it will be $1$. For the other two types of positions, removing the fountain will not change the size of the plot, and the answer for them will be $0$ (you can proof it by yourself).\n\nTo ensure that the solution does not depend on the size of the field, we will sort the fountains in descending order of the $x$ coordinate, and in case of equality of $x$, in ascending order of the $y$ coordinate. We will iterate through the fountains in this order, keep track of the coordinates of the last corner, and update the answer when a new corner is found.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n \n#define int long long\n#define pb emplace_back\n#define mp make_pair\n#define x first\n#define y second\n#define all(a) a.begin(), a.end()\n#define rall(a) a.rbegin(), a.rend()\n \ntypedef long double ld;\ntypedef long long ll;\n \nusing namespace std;\n \nmt19937 rnd(time(nullptr));\n \nconst ll inf = 1e9 + 1;\nconst ll M = 998244353;\nconst ld pi = atan2(0, -1);\nconst ld eps = 1e-6;\n \nbool cmp(pair<int, int> &a, pair<int, int> &b){\n    if(a.x != b.x) return a.x > b.x;\n    return a.y < b.y;\n}\n \nvoid solve(int tc){\n    int n, m, k;\n    cin >> n >> m >> k;\n    vector<pair<int, int>> a(k);\n    map<pair<int, int>, int> idx;\n    for(int i = 0; i < k; ++i){\n        cin >> a[i].x >> a[i].y;\n        idx[a[i]] = i;\n    }\n    sort(all(a), cmp);\n    vector<int> ans(k);\n    int total = 0;\n    int cur = m + 1;\n    int last = n;\n    for(auto e: a){\n        if(cur > e.y) {\n            ans[idx[e]] = 1;\n            total += (cur - 1) * (last - e.x);\n            cur = e.y;\n            last = e.x;\n        }\n    }\n    total += (cur - 1) * last;\n    cout << total << \"\\n\";\n    for(int e: ans) cout << e << \" \";\n}\n \nbool multi = true;\n \nsigned main() {\n    int t = 1;\n    if (multi)cin >> t;\n    for (int i = 1; i <= t; ++i) {\n        solve(i);\n        cout << \"\\n\";\n    }\n    return 0;\n}"
+    ]
+  }
+}

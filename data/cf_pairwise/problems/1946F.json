@@ -1,0 +1,49 @@
+{
+  "contest_id": 1946,
+  "index": "F",
+  "name": "Nobody is needed",
+  "rating": 2500,
+  "tags": [
+    "2-sat",
+    "data structures",
+    "dfs and similar",
+    "dp"
+  ],
+  "points": 2750.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1946F",
+  "url": "https://codeforces.com/problemset/problem/1946/F",
+  "contest_start_time": "2024-03-22T14:35:00+00:00",
+  "statement": {
+    "title": "F. Nobody is needed",
+    "time_limit": "6 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "Oleg received a permutation $a$ of length $n$ as a birthday present.\n\nOleg's friend Nechipor asks Oleg $q$ questions, each question is characterized by two numbers $l$ and $r$, in response to the question Oleg must say the number of sets of indices $(t_1, t_2, \\ldots, t_k)$ of any length $k \\ge 1$ such that:\n\n $l \\le t_i \\le r$ for each $i$ from $1$ to $k$.\n\n $t_i  \\lt  t_{i+1}$ for each $i$ from $1$ to $k-1$.\n\n $a_{t_{i+1}}$ is divisible by $a_{t_i}$ for each $i$ from $1$ to $k-1$.\n\nHelp Oleg and answer all of Nechipor's questions.",
+    "input_spec": "Each test consists of several sets of input data. The first line contains a single integer $t$ ($1 \\le t \\le 10^4$) — the number of sets of input data. The description of the sets of input data follows.\n\nThe first line of each set of input data contains two integers $n$ and $q$ ($1 \\le n, q \\le 10^6$) — the length of the permutation and the number of Nechipor's questions.\n\nThe second line of each set of input data contains $n$ integers $a_1, a_2, \\ldots, a_n$ ($1 \\le a_i \\le n$) — the permutation $a$ itself.\n\nIn each of the next $q$ lines of each set of input data, there are two integers $l$ and $r$ ($1 \\le l \\le r \\le n$) — the next question of Nechipor.\n\nIt is guaranteed that the sum of the values of $n$ and the sum of the values of $q$ over all test cases does not exceed $10^6$.",
+    "output_spec": "For each set of input data, output the answers to all of Nechipor's questions.",
+    "note": "All suitable arrays in the first set of input data: ($1$), ($2$), ($3$), ($4$), ($5$), ($6$), ($7$), ($8$), ($1, 3$), ($1, 6$), ($1, 7$), ($1, 6, 7$), ($2, 3$), ($2, 4$), ($2, 5$), ($2, 6$), ($2, 7$), ($2, 8$), ($2, 6, 7$), ($6, 7$).\n\nAll suitable arrays in the fourth set of input data: ($1$), ($2$), ($3$), ($4$), ($5$), ($6$), ($7$), ($8$), ($1, 2$), ($1, 3$), ($1, 4$), ($1, 5$), ($1, 6$), ($1, 7$), ($1, 8$), ($1, 2, 4$), ($1, 2, 6$), ($1, 2, 8$), ($1, 2, 4, 8$), ($1, 3, 6$), ($1, 4, 8$), ($2, 4$), ($2, 6$), ($2, 8$), ($2, 4, 8$), ($3, 6$), ($4, 8$).",
+    "samples": [
+      {
+        "input": "4\n8 8\n2 1 6 3 5 4 8 7\n1 8\n2 8\n1 7\n1 6\n1 3\n5 8\n4 4\n2 3\n1 1\n1\n1 1\n3 3\n3 2 1\n1 2\n1 3\n2 3\n8 1\n1 2 3 4 5 6 7 8\n1 8",
+        "output": "\n20 15 18 12 5 5 1 3\n1\n2 3 2\n27"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 127439,
+    "url": "https://codeforces.com/blog/entry/127439",
+    "tutorial": "Let's iterate the left boundary of our queries $L$ from $n$ to $1$ and maintain the Fenwick tree $F$, where $F_i$ = the number of sought sets of indices in which $t_k = i$, and $t_1 \\ge L$. Then the answer to the query with the left boundary at $L$ will be the sum over the interval $[l_i; r_i]$ in our Fenwick tree. Now we just need to learn how to update our tree when transitioning from $L$ to $L - 1$. Some new sets of indices may have been added, starting at $L - 1$. Let's denote $pos_i$ as the position of the number $i$ in the permutation. We'll create an auxiliary array $dp$. We'll learn to calculate the dynamics $dp_i = $ the number of sought sets of indices where $t_1 = L - 1$, $t_k = i$. The base case will be $dp_{L - 1} = 1$. Suppose we know the value of $dp_{pos_x}$. Then we can update $dp_{pos_y} = dp_{pos_y} + dp_{pos_x}$, if $y$ is divisible by $x$ and $y \\ne x$, $pos_{a_i} \\le pos_x \\le pos_y$. We can calculate this dynamics straightforwardly, iterating over $x$ and $y$ $(y$ is divisible by $x$ and $x$ is divisible by $a_i)$. Notice that this will work in total for $O(n \\cdot \\log{n} \\cdot \\log{n})$ for the permutation. Now we can iterate over all numbers again that are multiples of $a_i$, update the Fenwick tree, and clear the $dp$ array to reuse it in the future.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n\nusing i64 = long long;\n\ntemplate<class Info>\nstruct Fenwick {\n    std::vector<Info> t;\n    int n;\n    \n    Fenwick(int n = 0) : n(n) {\n        t.resize(n);\n    }\n    \n    void add(int x, const Info &v) {\n        for (int i = x + 1; i <= n; i += i & -i) {\n            t[i - 1] = t[i - 1] + v;\n        }\n    }\n    \n    Info sum(int x) {\n        x++;\n        Info res = Info();\n        for (int i = x; i > 0; i -= i & -i) {\n            res = res + t[i - 1];\n        }\n        return res;\n    }\n    \n    Info rangeSum(int l, int r) {\n        Info res = sum(r) - sum(l - 1);\n        return res;\n    }\n};\n\nvoid solve() {\n    int n, q;\n    std::cin >> n >> q;\n    std::vector<int> a(n), pos(n + 1);\n    for (int i = 0; i < n; i++) {\n        std::cin >> a[i];\n    }\n    std::reverse(a.begin(), a.end());\n    for (int i = 0; i < n; i++) {\n        pos[a[i]] = i;\n    }\n    constexpr int K = 19;\n    std::vector<i64> res(q);\n    std::vector<std::vector<std::pair<int, int>>> qry(n);\n    for (int i = 0; i < q; i++) {\n        int l, r;\n        std::cin >> l >> r;\n        l--, r--;\n        std::swap(l, r);\n        l = n - l - 1;\n        r = n - r - 1;\n        qry[r].emplace_back(l, i);\n    }\n    std::vector<i64> dp(n + 1);\n    Fenwick<i64> f(n);\n    for (int r = 0; r < n; r++) {\n        int x = a[r];\n        dp[x] = 1;\n        // n * log(n) * log(n)\n        for (int y = x; y <= n; y += x) {\n            if (pos[y] > pos[x]) {\n                continue;\n            }\n            for (int z = 2 * y; z <= n; z += y) {\n                if (pos[z] > pos[y]) {\n                    continue;\n                }\n                dp[z] += dp[y];\n            }\n        }\n        // n * log(n) * log(n)\n        for (int y = x; y <= n; y += x) {\n            f.add(pos[y], dp[y]);\n            dp[y] = 0;\n        }\n        // q * log(n)\n        for (auto [l, i] : qry[r]) {\n            res[i] += f.rangeSum(l, r);\n        }\n    }\n    for (int i = 0; i < q; i++) {\n        std::cout << res[i] << \" \\n\"[i == q - 1];\n    }\n}\n\nsigned main() {\n    std::ios::sync_with_stdio(false);\n    std::cin.tie(nullptr);\n\n    int t = 1;\n    std::cin >> t;\n\n    while (t--) {\n        solve();\n    }\n}",
+      "#include <bits/stdc++.h>\nusing namespace std;\n\nconst int MOD = 1e9+7;\nconst int N = 2e5+7;\nint inv[N];\n\nint main () {\n  ios_base::sync_with_stdio(0); cin.tie(0);\n  inv[0] = inv[1] = 1;\n  for (int i = 2; i < N; i++) inv[i] = 1LL*(MOD-MOD/i)*inv[MOD % i] % MOD;\n\n  int T;\n  cin >> T;\n  while (T--) {\n    int n, a, b;\n    cin >> n >> a >> b;\n    vector<int> p(a), q(b);\n    for (int& x: p) cin >> x, x--;\n    for (int& x: q) cin >> x, x--;\n    reverse(q.begin(), q.end());\n    if (p.back() != q.back() || p[0] != 0 || q[0] != n-1) {\n      cout << \"0\\n\";\n      continue;\n    }\n    int ans = 1;\n    for (int i = 1; i <= n-1; i++) ans = 1LL*ans*i%MOD;\n    for (int x: p) ans = 1LL*ans*inv[x]%MOD;\n    for (int x: q) ans = 1LL*ans*inv[n-1-x]%MOD;\n    cout << ans << '\\n';\n  }\n}",
+      "int y = (x^(1 << b));\nfor (int c = b - 1; c >= 0; c--) {\n    if (((y>>c)&1) == 0) y ^= (1 << c);\n}",
+      "int y = ((x >> b) << b) - 1;",
+      "     1\n   /  \\\n  2    3\n / \\   / \\\n4   5  6  7",
+      "[ 2 , 1 , 2 , 2 , 1 , 2 ]\n  ^       ^   ^       ^\n  L1      R1  L2      R2"
+    ]
+  }
+}

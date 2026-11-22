@@ -1,0 +1,47 @@
+{
+  "contest_id": 2045,
+  "index": "C",
+  "name": "Saraga",
+  "rating": 1400,
+  "tags": [
+    "greedy",
+    "strings"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2045C",
+  "url": "https://codeforces.com/problemset/problem/2045/C",
+  "contest_start_time": "2024-12-01T05:05:00+00:00",
+  "statement": {
+    "title": "C. Saraga",
+    "time_limit": "1 second",
+    "memory_limit": "1024 megabytes",
+    "legend": "The word saraga is an abbreviation of sarana olahraga, an Indonesian term for a sports facility. It is created by taking the prefix sara of the word sarana and the suffix ga of the word olahraga. Interestingly, it can also be created by the prefix sa of the word sarana and the suffix raga of the word olahraga.\n\nAn abbreviation of two strings $S$ and $T$ is interesting if there are at least two different ways to split the abbreviation into two non-empty substrings such that the first substring is a prefix of $S$ and the second substring is a suffix of $T$.\n\nYou are given two strings $S$ and $T$. You want to create an interesting abbreviation of strings $S$ and $T$ with minimum length, or determine if it is impossible to create an interesting abbreviation.",
+    "input_spec": "The first line consists of a string $S$ ($1 \\leq |S| \\leq 200\\,000$).\n\nThe second line consists of a string $T$ ($1 \\leq |T| \\leq 200\\,000$).\n\nBoth strings $S$ and $T$ only consist of lowercase English letters.",
+    "output_spec": "If it is impossible to create an interesting abbreviation, output -1.\n\nOtherwise, output a string in a single line representing an interesting abbreviation of strings $S$ and $T$ with minimum length. If there are multiple solutions, output any of them.",
+    "note": "Explanation for the sample input/output #1\n\nYou can split saga into s and aga, or sa and ga. The abbreviation saraga is interesting, but saga has a smaller length.\n\nExplanation for the sample input/output #2\n\nThe abbreviation belhijau is also interesting with minimum length, so it is another valid solution.",
+    "samples": [
+      {
+        "input": "\nsarana\nolahraga",
+        "output": "\nsaga"
+      },
+      {
+        "input": "\nberhiber\nwortelhijau",
+        "output": "\nberhijau"
+      },
+      {
+        "input": "\nicpc\nicpc",
+        "output": "\nicpc"
+      },
+      {
+        "input": "\nicpc\njakarta",
+        "output": "\n-1"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "missing"
+  },
+  "editorial": null
+}

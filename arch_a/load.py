@@ -36,7 +36,7 @@ DATA_PATH = os.path.join(os.path.dirname(__file__), os.pardir, "data", "ucup_s4.
 
 # ICPC season vs calendar year: continental *Championships* and the World Finals
 # are held the calendar year *after* the regional season they belong to (see the
-# season map in details.md), so their season is ``year - 1``; everything else is
+# season map in docs/journal/), so their season is ``year - 1``; everything else is
 # its calendar year. Used only when ``season_key`` separates teams by season.
 _CHAMPIONSHIP = re.compile(r"championship|world final", re.I)
 
@@ -329,7 +329,7 @@ class Dataset:
     # Observed competitor--problem cells, in COO form (row-major: sorted by row,
     # then by problem).  A cell is observed exactly when the problem belongs to
     # the row's contest, including no-attempt cells, which are censored
-    # non-solves (see the solve_mask decision in details.md).  The dense
+    # non-solves (see the solve_mask decision in docs/journal/).  The dense
     # (n_rows, n_problems) matrices this replaces were 99.65% empty -- every
     # consumer either flattened them straight back to these arrays
     # (``model._observations``) or reduced them per problem (``solved_count``).

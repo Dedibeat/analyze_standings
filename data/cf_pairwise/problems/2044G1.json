@@ -1,0 +1,45 @@
+{
+  "contest_id": 2044,
+  "index": "G1",
+  "name": "Medium Demon Problem (easy version)",
+  "rating": 1700,
+  "tags": [
+    "dfs and similar",
+    "graph matchings",
+    "graphs",
+    "implementation",
+    "trees"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2044G1",
+  "url": "https://codeforces.com/problemset/problem/2044/G1",
+  "contest_start_time": "2024-12-15T14:35:00+00:00",
+  "statement": {
+    "title": "G1. Medium Demon Problem (easy version)",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "This is the easy version of the problem. The key difference between the two versions is highlighted in bold.\n\nA group of $n$ spiders has come together to exchange plushies. Initially, each spider has $1$ plushie. Every year, if spider $i$ has at least one plushie, he will give exactly one plushie to spider $r_i$. Otherwise, he will do nothing. Note that all plushie transfers happen at the same time. In this version, if any spider has more than $1$ plushie at any point in time, they will throw all but $1$ away.\n\nThe process is stable in the current year if each spider has the same number of plushies (before the current year's exchange) as he did the previous year (before the previous year's exchange). Note that year $1$ can never be stable.\n\nFind the first year in which the process becomes stable.",
+    "input_spec": "The first line contains an integer $t$ ($1 \\leq t \\leq 10^4$) — the number of test cases.\n\nThe first line of each test case contains an integer $n$ ($2 \\leq n \\leq 2 \\cdot 10^5$) — the number of spiders.\n\nThe following line contains $n$ integers $r_1, r_2, \\ldots, r_n$ ($1 \\leq r_i \\leq n, r_i \\neq i$) — the recipient of the plushie of each spider.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, output an integer on a new line, the first year in which the process becomes stable.",
+    "note": "For the second test case:\n\n At year $1$, the following array shows the number of plushies each spider has: $[1, 1, 1, 1, 1]$. Then, year $1$'s exchange happens.\n\n At year $2$, the following array shows the number of plushies each spider has: $[1, 1, 1, 1, 1]$. Since this array is the same as the previous year, this year is stable.\n\nFor the third test case:\n\n At year $1$, the following array shows the number of plushies each spider has: $[1, 1, 1, 1, 1]$. Then, year $1$'s exchange happens.\n\n At year $2$, the following array shows the number of plushies each spider has: $[1, 1, 1, 1, 0]$. Then, year $2$'s exchange happens. Note that even though two spiders gave spider $2$ plushies, spider $2$ may only keep one plushie.\n\n At year $3$, the following array shows the number of plushies each spider has: $[1, 1, 0, 1, 0]$. Then, year $3$'s exchange happens.\n\n At year $4$, the following array shows the number of plushies each spider has: $[1, 1, 0, 0, 0]$. Then, year $4$'s exchange happens.\n\n At year $5$, the following array shows the number of plushies each spider has: $[1, 1, 0, 0, 0]$. Since this array is the same as the previous year, this year is stable.",
+    "samples": [
+      {
+        "input": "5\n2\n2 1\n5\n2 3 4 5 1\n5\n2 1 4 2 3\n5\n4 1 1 5 4\n10\n4 3 9 1 6 7 9 10 10 3",
+        "output": "\n2\n2\n5\n4\n5"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 137306,
+    "url": "https://codeforces.com/blog/entry/137306",
+    "tutorial": "2044G1 - Medium Demon Problem (easy version)\n\nProblem Credits: Lilypad\n Analysis: macaquedev\n\nSolution\n\nThis problem deals with a specific subclass of graphs called \"functional graphs\", also known as \"successor graphs\". The key feature that they have is that each node only has one successor. Therefore, the graph in the problem will necessarily be split into $k \\geq 1$ components, where each component necessarily contains one cycle, and each node will either be in the cycle, or it will be on a path leading towards the cycle.\n\nObserve that if a node that is not on a cycle currently has a plushie, this plushie will cause the arrangement to be unstable until the plushie reaches the cycle. Proof: suppose node $u$ has the plushie on day $i$. On the next day, $u$ will no longer have this plushie, because they will have passed it down to $r_u$, therefore, the arrangement has changed. This continues inductively until the plushie reaches the cycle of its component.\n\nFrom this, we know that the answer is at least the distance of any node to the cycle. Now, since every node in the cycle already has a plushie, we know that these plushies just get passed round and round, so actually, nodes within the cycle cannot change the answer. Therefore, we've already found the final answer.\n\nCode (C++)",
+    "solution_code": [
+      "#include<bits/stdc++.h>\n#define ll long long\nusing namespace std;\n\n\nint main()\n{\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    int tt;\n    cin>>tt;\n    while(tt--)\n    {\n        int n;\n        cin>>n;\n        vector<int> r(n+1),d(n+1);\n        for(int i=1;i<=n;i++)\n        {\n            cin>>r[i];\n            d[r[i]]++;\n        }\n        set<pair<int,int> > s;\n        for(int i=1;i<=n;i++)\n            s.insert({d[i],i});\n        int ans=2;\n        queue<int> q;\n        while(!s.empty()&&(*s.begin()).first==0)\n        {\n            while(!s.empty()&&(*s.begin()).first==0)\n            {\n                int k=(*s.begin()).second;\n                auto it=s.find({d[r[k]],r[k]});\n                d[r[k]]--;\n                if(it!=s.end())\n                {\n                    s.erase(it);\n                    q.push(r[k]);\n                }\n                s.erase(s.begin());\n            }\n            while(!q.empty())\n                s.insert({d[q.front()],q.front()}),q.pop();\n            ans++;\n        }\n        cout<<ans<<'\\n';\n    }\n    return 0;\n}"
+    ]
+  }
+}

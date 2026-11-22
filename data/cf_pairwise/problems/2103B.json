@@ -1,0 +1,43 @@
+{
+  "contest_id": 2103,
+  "index": "B",
+  "name": "Binary Typewriter",
+  "rating": 1100,
+  "tags": [
+    "greedy",
+    "math"
+  ],
+  "points": 1000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2103B",
+  "url": "https://codeforces.com/problemset/problem/2103/B",
+  "contest_start_time": "2025-04-21T14:35:00+00:00",
+  "statement": {
+    "title": "B. Binary Typewriter",
+    "time_limit": "1.5 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "You are given a binary string $s$ of length $n$ and a typewriter with two buttons: 0 and 1. Initially, your finger is on the button 0. You can do the following two operations:\n\n Press the button your finger is currently on. This will type out the character that is on the button.\n\n Move your finger to the other button. If your finger is on button 0, move it to button 1, and vice versa.\n\nThe cost of a binary string is defined as the minimum number of operations needed to type the entire string.\n\nBefore typing, you may reverse at most one substring$^{\\text{∗}}$ of $s$. More formally, you can choose two indices $1\\le l\\le r\\le n$, and reverse the substring $s_{l\\ldots r}$, resulting in the new string $s_1s_2\\ldots s_{l-1}s_rs_{r-1}\\ldots s_ls_{r+1}\\ldots s_n$.\n\nYour task is to find the minimum possible cost among all strings obtainable by performing at most one substring reversal on $s$.\n\n$^{\\text{∗}}$A string $a$ is a substring of a string $b$ if $a$ can be obtained from $b$ by the deletion of several (possibly, zero or all) characters from the beginning and several (possibly, zero or all) characters from the end.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 10^4$). The description of the test cases follows.\n\nThe first line of each test case contains a single integer $n$ ($1\\le n\\le 2\\cdot 10^5$) — the length of the binary string $s$.\n\nThe second line of each test case contains a binary string $s_1s_2\\ldots s_n$ ($s_i = \\mathtt{0}$ or $s_i = \\mathtt{1}$) — the characters of the binary string $s$.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, output the minimum cost of string $s$ after performing at most one substring reversal.",
+    "note": "In the first test case, we can choose not to reverse any substrings. We can do operation $1$ three times to type 000.\n\nIn the second test case, we can choose not to reverse any substrings. We can do operation $2$ to move our finger to button 1. Then, we do operation $1$ three times to type 111.\n\nIn the third test case, we can choose not to reverse any substring. We can do operation $1$ to type 0. Then, we do operation $2$ to move our finger to button 1. Finally, we do operation $1$ two times to type 11, resulting in the final string 011 using only $4$ operations.\n\nIn the fourth test case, we can reverse the substring $s_{1\\ldots 3}$, resulting in the string 001. We can do operation $1$ two times to type 00. Then we do operation $2$ to move our finger to button 1. Finally, we do operation $1$ once to type 1, resulting in the final string 001 using only $4$ operations.\n\nIn the fifth test case, we can reverse the substring $s_{2\\ldots 3}$, resulting in the string 11001. The cost of the string is $8$ as we can do the following sequence of operations:\n\n Do operation $2$ to move our finger to button 1.\n\n Do operation $1$ two times to type 11.\n\n Do operation $2$ to move our finger to button 0.\n\n Do operation $1$ two times to type 00.\n\n Do operation $2$ to move our finger to button 1.\n\n Do operation $1$ once to type 1.\n\nIn the sixth test case, we can reverse the substring $s_{5\\ldots 17}$, resulting in the string 1101111011001001000. It can be proven that the minimum number of operations needed to type the binary string is $29$.",
+    "samples": [
+      {
+        "input": "6\n3\n000\n3\n111\n3\n011\n3\n100\n5\n10101\n19\n1101010010011011100",
+        "output": "\n3\n4\n4\n4\n8\n29"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 142149,
+    "url": "https://codeforces.com/blog/entry/142149",
+    "tutorial": "2103B - Binary Typewriter\n\nAuthor: Blagoj\n\nHint 1\n\nGiven the string $s$, how do we calculate the answer?\n\nHint 2\n\nWe know that we need to type a character (apply operation $1$ exactly $n$ times). How many switches do we do?\n\nHint 3\n\nIf the string $s$ starts with a 1, we need to do a switch immediately. From that point on, we only switch if the current number in the string changes. We can assume that we start with a 0, as the other case can be handled by appending 0 to the start and subtracting $1$ from the final answer.\n\nHint 4\n\nWe will assume that we only want to make the answer smaller, as for keeping the answer, we can pick any interval of size $1$. How does reversing some interval [ $l$, $r$ ] change the answer?\n\nHint 5\n\nNotice that all switches before $l-1$, after $r+1$ and inbetween $l$ and $r$ will stay. So we only care about the values of $s_{l-1}$, $s_l$, $s_r$ and $s_{r+1}$.\n\nHint 6\n\nNotice that if $s_l = s_r$, then the swap does not change the number of changes. So we can assume that $s_l \\neq s_r$ in the optimal swap. Now, to evaluate how good the swap is, we can observe the following:\n\nif $s_{l-1} = s_l$, the number of changes increases by $1$, otherwise it decreases by $1$.\n\nif $s_{r} = s_{r+1}$, the number of changes increases by $1$, otherwise it decreases by $1$.\n\nThose 2 changes stack.\n\nHint 7\n\nFrom the previous hint, we can conclude that we can decrease the number of changes by at most $2$. For us to be able to decrease the number of changes by $2$, it shall hold that $s_{l-1} \\neq s_l$ and $s_r \\neq s_{r+1}$.\n\nIf we want to decrease the number of changes by $1$, it is enough to make $s_{l-1} \\neq s_l$ and to make $r=n$.\n\nIf we cannot do either of the previous two, the number of changes cannot be decreased.\n\nSolution\n\nRead the hints.\n\nAs said in the hints, we will assume that string $s$ starts with a 0. Now we need to check if it is possible to pick indices $l$ and $r$ such that the number of changes after the swap decreases by $2$. With some casework, we can see that it is always possible if the original number of changes is at least $3$. If the original number of changes is $2$, we cannot decrease it by $2$, but we can decrease it by $1$. If the original number of changes is $0$ or $1$, we cannot decrease it.\n\nCounting the number of changes can be done in a single pass of a loop. The time and memory complexities are $O(n)$ per testcase.\n\nImplementation (c++)\n\nImplementation (python)\n\nBonus\n\nSolve the problem if you were given $n$ strings. You will swap their order however you want and then concatenate them all into one string $s$. What is the minimal number of operations needed to write $s$ obtained in that way?",
+    "solution_code": [
+      "#include<bits/stdc++.h>\nusing namespace std;\nvoid testCase() {\n    string s;\n    int n;\n    cin >> n;\n    cin >> s;\n    s=\"0\"+s;\n    int ans = 0, cur = s[0];\n    for (int i = 1; i <= n; i++) {\n        int dig = s[i];\n        if (cur != dig) \n           ans++;\n        cur = dig;\n    }\n   if(ans>=3)\n     cout<< ans-2 + n<<\"\\n\";\n   else if(ans==2)\n     cout<< ans-1 + n<<\"\\n\";\n   else \n     cout<<ans+n<<\"\\n\";\n}\nint main(){\n    int t;\n    cin>>t;\n    while(t--)\n        testCase();\n    return 0;\n}",
+      "for _ in range(int(input())):\n    n = int(input())\n    a = input().strip()\n    cnt = 0\n    for i in range(n-1):\n        if a[i] != a[i+1]: cnt += 1\n    if cnt == 0:\n        print(n + int(a[0] == \"1\"))\n    elif cnt == 1:\n        print(n + 1)\n    else:\n        print(n+cnt-1 - int(a[0] == \"0\" and cnt > 2))"
+    ]
+  }
+}

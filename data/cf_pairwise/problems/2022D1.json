@@ -1,0 +1,45 @@
+{
+  "contest_id": 2022,
+  "index": "D1",
+  "name": "Asesino (Easy Version)",
+  "rating": 1900,
+  "tags": [
+    "binary search",
+    "brute force",
+    "constructive algorithms",
+    "implementation",
+    "interactive"
+  ],
+  "points": 1750.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2022D1",
+  "url": "https://codeforces.com/problemset/problem/2022/D1",
+  "contest_start_time": "2024-10-13T19:35:00+00:00",
+  "statement": {
+    "title": "D1. Asesino (Easy Version)",
+    "time_limit": "2.5 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "This is the easy version of the problem. In this version, you can ask at most $n+69$ questions. You can make hacks only if both versions of the problem are solved.\n\nThis is an interactive problem.\n\nIt is a tradition in Mexico's national IOI trainings to play the game \"Asesino\", which is similar to \"Among Us\" or \"Mafia\".\n\nToday, $n$ players, numbered from $1$ to $n$, will play \"Asesino\" with the following three roles:\n\n Knight: a Knight is someone who always tells the truth.\n\n Knave: a Knave is someone who always lies.\n\n Impostor: an Impostor is someone everybody thinks is a Knight, but is secretly a Knave.\n\nEach player will be assigned a role in the game. There will be exactly one Impostor but there can be any (possible zero) number of Knights and Knaves.\n\nAs the game moderator, you have accidentally forgotten the roles of everyone, but you need to determine the player who is the Impostor.\n\nTo determine the Impostor, you will ask some questions. In each question, you will pick two players $i$ and $j$ ($1 \\leq i, j \\leq n$; $i \\neq j$) and ask if player $i$ thinks that player $j$ is a Knight. The results of the question is shown in the table below.\n\nKnightKnaveImpostor\n\nKnightYesNoYes\n\nKnaveNoYesNo\n\nImpostorNoYes—\n The response of the cell in row $a$ and column $b$ is the result of asking a question when $i$ has role $a$ and $j$ has role $b$. For example, the \"Yes\" in the top right cell belongs to row \"Knight\" and column \"Impostor\", so it is the response when $i$ is a Knight and $j$ is an Impostor.\nFind the Impostor in at most $n + 69$ questions.\n\nNote: the grader is adaptive: the roles of the players are not fixed in the beginning and may change depending on your questions. However, it is guaranteed that there exists an assignment of roles that is consistent with all previously asked questions under the constraints of this problem.",
+    "input_spec": "The first line of input contains a single integer $t$ ($1 \\leq t \\leq 10^3$) — the number of test cases. The description of the test cases follows.\n\nThe first line of each test case contains a single integer $n$ ($3 \\le n \\le 10^5$) — the number of people playing the game.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $10^5$.",
+    "output_spec": null,
+    "note": "Note that the example test cases do not represent an optimal strategy for asking questions and are only shown for the sake of demonstrating the interaction format. Specifically, we cannot determine which player is the Impostor from the questions asked in the examples.\n\nIn the first test case of the example, players at indices $2$ and $6$ are Knights, players at indices $1$, $3$, $5$, and $7$ are Knaves, and the Impostor is at index $4$. The following is an explanation of the questions asked:\n\n In the first query, player $i$ is a Knave and player $j$ is a Knave. The answer is \"yes\" since Knaves always lie.\n\n In the second query, player $i$ is a Knave and player $j$ is a Knight. The answer is \"no\" since Knaves always lie.\n\n In the third query, player $i$ is a Knight and player $j$ is a Knave. The answer is \"no\" since Knights always tell the truth.\n\n In the fourth query, player $i$ is a Knight and player $j$ is a Knight. The answer is \"yes\" since Knights always tell the truth.\n\n In the fifth query, player $i$ is a Impostor and player $j$ is a Knave. The answer is \"yes\" since the Impostor always lies.\n\n In the sixth query, player $i$ is a Impostor and player $j$ is a Knight. The answer is \"no\" since the Impostor always lies.\n\n In the seventh query, player $i$ is a Knave and player $j$ is a Impostor. The answer is \"no\" since Knaves always lie and Knaves thinks that the Impostor is a Knight.\n\n In the eighth query, player $i$ is a Knight and player $j$ is a Impostor. The answer is \"yes\" since Knights always tell the truth and Knights think that the Impostor is a Knight.",
+    "samples": [
+      {
+        "input": "\n2\n7\n\n1\n\n0\n\n0\n\n1\n\n1\n\n0\n\n0\n\n1\n\n4\n\n0\n\n1\n\n1\n\n1",
+        "output": "\n\n\n? 1 3\n\n? 7 6\n\n? 2 5\n\n? 6 2\n\n? 4 5\n\n? 4 6\n\n? 1 4\n\n? 2 4\n\n! 4\n\n? 1 2\n\n? 2 3\n\n? 3 4\n\n? 4 1\n\n! 3"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 135095,
+    "url": "https://codeforces.com/blog/entry/135095",
+    "tutorial": "2022D1 - Asesino (Easy Version)\n\nHint 1\n\nTry to do casework for small $n$. It is also a good idea to simulate it. Think about this problem as a directed graph, where for each query there is a directed edge.\n\nHint 2\n\nObserve that if you ask $u \\mapsto v$ and $v \\mapsto u$, both answers will match if and only if $u$ and $v$ are not the impostor. This can be easily shown by case work.\n\nHint 3\n\nWe can observe that $n = 3$ and $n = 4$ are solvable with $4$ queries. This strategies are illustrated in the image below:\n\nSolution to D1\n\nThere's many solutions that work. Given that 69 is big enough, we can use the previous observation of asking in pairs and reducing the problem recursively.\n\nCombining hint 2 with our solutions for $n = 3$ and $n = 4$, we can come up with the following algorithm:\n\nWhile $n \\gt 4$,\n\nquery $n \\mapsto n - 1$ and $n - 1 \\mapsto n$.\n\nIf their answers don't match, one of them is the impostor. Query $n \\mapsto n - 2$ and $n - 2 \\mapsto n$.\n\nIf their answers don't match, $n$ is the impostor.\n\nOtherwise, $n - 1$ is the impostor.\n\nIf the answers match, do $n -= 2$.\n\nIf $n \\gt 4$ doesn't hold and we haven't found the impostor, we either have the $n = 3$ case or the $n = 4$ case, and we can solve either of them in $4$ queries.\n\nIn the worst case, this algorithm uses $n + 1$ queries. I'm also aware of a solution with $n + 4$ queries, $n + 2$ queries, and one with $n + \\lceil\\log(n)\\rceil$ queries. We only present this solution to shorten the length of the blog but feel free to ask about the others in the comments.\n\nCode:",
+    "solution_code": [
+      "#include <bits/stdc++.h>\nusing namespace std;\n \nbool query(int i, int j, int ans = 0) {\n  cout << \"? \" << i << \" \" << j << endl;\n  cin >> ans;\n  return ans;\n}\n \nint main() {\n  int tt; \n  for (cin >> tt; tt; --tt) {\n    int n, N; cin >> N; n = N;\n    array<int, 2> candidates = {-1, -1};\n \n    while (n > 4) {\n      if (query(n - 1, n) != query(n, n - 1)) {\n        candidates = {n - 1, n}; break;\n      } else n -= 2;\n    }\n \n    if (candidates[0] != -1) {\n      int not_candidate = (candidates[0] == N - 1) ? N - 2 : N;\n \n      if (query(candidates[0], not_candidate) != query(not_candidate, candidates[0])) {\n        cout << \"! \" << candidates[0] << endl;\n      } else cout << \"! \" << candidates[1] << endl;\n \n    } else  {\n \n      if (n == 3) {\n \n        if (query(1, 2) == query(2, 1)) cout << \"! 3\\n\";\n        else {\n          if (query(1, 3) == query(3, 1)) cout << \"! 2\\n\";\n          else cout << \"! 1\\n\";\n        }\n \n      } else {\n \n        if (query(1 , 2) != query(2, 1)) {\n          if (query(1, 3) == query(3, 1)) cout << \"! 2\\n\";\n          else cout << \"! 1\\n\";\n        } else {\n          if (query(1, 3) != query(3, 1)) cout << \"! 3\\n\";\n          else cout << \"! 4\\n\";\n        }\n \n      }\n    }\n  }\n}"
+    ]
+  }
+}

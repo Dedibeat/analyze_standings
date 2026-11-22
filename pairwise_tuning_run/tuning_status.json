@@ -1,0 +1,154 @@
+{
+  "name": "projects/703166210069/locations/us-central1/tuningJobs/2518784060365471744",
+  "tunedModelDisplayName": "cf-pairwise-pilot-20260805",
+  "baseModel": "gemini-3.5-flash",
+  "supervisedTuningSpec": {
+    "trainingDatasetUri": "gs://gctc-vertex-batch-703166210069/cf-pairwise-20260805/pilot-v1/pilot_train.jsonl",
+    "validationDatasetUri": "gs://gctc-vertex-batch-703166210069/cf-pairwise-20260805/pilot-v1/pilot_validation.jsonl",
+    "hyperParameters": {
+      "epochCount": "2",
+      "learningRateMultiplier": 2,
+      "adapterSize": "ADAPTER_SIZE_FOUR"
+    },
+    "exportLastCheckpointOnly": true
+  },
+  "state": "JOB_STATE_SUCCEEDED",
+  "createTime": "2026-08-05T13:55:35.337735Z",
+  "startTime": "2026-08-05T13:55:35.389856Z",
+  "endTime": "2026-08-05T15:04:10.357500Z",
+  "updateTime": "2026-08-05T15:04:10.357500Z",
+  "experiment": "projects/703166210069/locations/us-central1/metadataStores/default/contexts/tuning-experiment-20260805065650092828",
+  "tunedModel": {
+    "model": "projects/703166210069/locations/us/models/4456593306259816448@1",
+    "endpoint": "projects/703166210069/locations/us/endpoints/432767776692633600"
+  },
+  "tuningDataStats": {
+    "supervisedTuningDataStats": {
+      "tuningDatasetExampleCount": "400",
+      "userInputTokenDistribution": {
+        "sum": "646854",
+        "min": 755,
+        "max": 2756,
+        "mean": 1617.135,
+        "median": 1624,
+        "p5": 1103,
+        "p95": 2242,
+        "buckets": [
+          {
+            "count": 17,
+            "left": 755,
+            "right": 1088
+          },
+          {
+            "count": 114,
+            "left": 1089,
+            "right": 1422
+          },
+          {
+            "count": 133,
+            "left": 1423,
+            "right": 1755
+          },
+          {
+            "count": 98,
+            "left": 1756,
+            "right": 2089
+          },
+          {
+            "count": 30,
+            "left": 2090,
+            "right": 2423
+          },
+          {
+            "count": 8,
+            "left": 2424,
+            "right": 2756
+          }
+        ]
+      },
+      "userOutputTokenDistribution": {
+        "sum": "2400",
+        "min": 6,
+        "max": 6,
+        "mean": 6,
+        "median": 6,
+        "p5": 6,
+        "p95": 6,
+        "buckets": [
+          {
+            "count": 400,
+            "left": 6,
+            "right": 6
+          }
+        ]
+      },
+      "userMessagePerExampleDistribution": {
+        "sum": "800",
+        "min": 2,
+        "max": 2,
+        "mean": 2,
+        "median": 2,
+        "p5": 2,
+        "p95": 2,
+        "buckets": [
+          {
+            "count": 400,
+            "left": 2,
+            "right": 2
+          }
+        ]
+      },
+      "userDatasetExamples": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "Problem A:\n[Problem]\nArtem wrote the digit $d$ on the board exactly $n!$ times in a row. So, he got the number $dddddd \\dots ddd$ (exactly $n!$ digits). Now he is curious about which odd digits from $1$ to $9$ divide the number written on the board.\n\n[Input]\nThe first line contains a single integer $t$ ($1 \\le t \\le 100$) \u2014 the number of test cases. The next $t$ test cases follow. Each test cas..."
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "{\"harder\":\"A\"}"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "Problem A:\n[Problem]\n3, 2, 1, ... We are the \u2014 RiOI Team! \u2014 Felix & All, Special Thanks 3 Peter: Good news: My problem T311013 is approved! $\\delta$: I'm glad my computer had gone out of battery so that I wouldn't have participated in wyrqwq's round and gained a negative delta. Felix: [thumbs_up] The problem statement concerning a removed song! Aquawave: Do I mourn my Chemistry? E.Space: ahh? T..."
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "{\"harder\":\"A\"}"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "Problem A:\n[Problem]\nThis really says a lot about our society. One day, a turtle gives you a tree with $n$ nodes rooted at node $x$. Each node has an initial nonnegative value; the $i$-th node has starting value $a_i$. You want to make the values of all nodes equal to $0$. To do so, you will perform a series of operations on the tree, where each operation will be performed on a certain node. De..."
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "{\"harder\":\"B\"}"
+            }
+          ]
+        }
+      ],
+      "totalBillableTokenCount": "649254"
+    }
+  }
+}

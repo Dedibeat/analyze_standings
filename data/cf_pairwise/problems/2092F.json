@@ -1,0 +1,46 @@
+{
+  "contest_id": 2092,
+  "index": "F",
+  "name": "Andryusha and CCB",
+  "rating": 2900,
+  "tags": [
+    "brute force",
+    "constructive algorithms",
+    "greedy",
+    "math",
+    "number theory",
+    "strings"
+  ],
+  "points": 3000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2092F",
+  "url": "https://codeforces.com/problemset/problem/2092/F",
+  "contest_start_time": "2025-03-29T14:35:00+00:00",
+  "statement": {
+    "title": "F. Andryusha and CCB",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Let us define the beauty of a binary string $z$ as the number of indices $i$ such that $1 \\le i  \\lt  |z|$ and $z_i \\neq z_{i+1}$.\n\nWhile waiting for his friends from the CCB, Andryusha baked a pie, represented by a binary string $s$ of length $n$. To avoid offending anyone, he wants to divide this string into $k$ substrings such that each digit belongs to exactly one substring, and the beauties of all substrings are the same.\n\nAndryusha does not know the exact number of friends from the CCB who will come to his house, so he wants to find the number of values of $k$ for which it is possible to split the pie into exactly $k$ parts with equal beauties.\n\nHowever, Andryusha's brother, Tristan, decided that this formulation of the problem is too simple. Therefore, he wants you to find the number of such values of $k$ for each prefix of the string. In other words, for each $i$ from $1$ to $n$, you need to find the number of values of $k$ for which it is possible to split the prefix $s_1 s_2 \\ldots s_i$ into exactly $k$ parts with equal beauties.",
+    "input_spec": "Each test consists of several test cases. The first line of the input data contains one integer $t$ ($1 \\le t \\le 10^5$) — the number of test cases. The description of the test cases follows.\n\nThe first line of each test case contains a single integer $n$ ($1 \\leq n \\leq 10^6$) — the length of the binary string.\n\nThe second line of each test case contains a binary string of length $n$, consisting only of digits 0 and 1.\n\nIt is guaranteed that the sum of $n$ across all test cases does not exceed $10^6$.",
+    "output_spec": "For each test case, output a single line containing $n$ integers $c_i$ ($0 \\le c_i \\le n$) — the number of values of $k$ for which it is possible to split the prefix $s_1 s_2 \\ldots s_i$ into exactly $k$ parts with equal beauties.",
+    "note": "In the third case, the values of $k$ that satisfy the conditions are:\n\n $i = 1$: $k \\in \\{1\\}$,\n\n $i = 2$: $k \\in \\{1, 2\\}$,\n\n $i = 3$: $k \\in \\{1, 2, 3\\}$,\n\n $i = 4$: $k \\in \\{1, 3, 4\\}$,\n\n $i = 5$: $k \\in \\{1, 2, 4, 5\\}$,\n\n $i = 6$: $k \\in \\{1, 5, 6\\}$,\n\n $i = 7$: $k \\in \\{1, 5, 6, 7\\}$.",
+    "samples": [
+      {
+        "input": "3\n5\n00011\n10\n0101010101\n7\n0010100",
+        "output": "\n1 2 3 4 5\n1 2 2 3 2 4 2 4 3 4\n1 2 3 3 4 3 4"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 141023,
+    "url": "https://codeforces.com/blog/entry/141023",
+    "tutorial": "2092F - Andryusha and CCB\n\nAuthor: k1sara\n\nHint 1\n\nIt is sufficient to consider only two types of blocks of consecutive 0s and 1s: those of size $1$ and those of size greater than $1$.\n\nHint 2\n\nFor a fixed beauty value $m$ of a substring, there are $O\\left(\\frac{sz}{m}\\right)$ possible values of $k$, where $sz$ is the number of blocks of consecutive 0s and 1s.\n\nHint 3\n\nFor a fixed pair $(m, k)$, let $S$ be the set of indices $i$ such that it is possible to divide the prefix $[1, i]$ of the string into $k$ substrings of beauty $m$. It is claimed that $S$ forms a continuous segment $[l, r]$ for some $1 \\le l \\le r \\le sz$.\n\nSolution\n\nFirst, note that it is sufficient to consider only two types of blocks of consecutive 0s and 1s: those of size $1$ and those of size greater than $1$. Based on this, we construct a new string of length $sz$, consisting of characters 1 and 2, representing the types of blocks. For example, for the original string 00101110, the new string is 21121.\n\nLet’s fix a value of $m$—the desired beauty of the substrings we are dividing the string into. It is easy to see that there are $O\\left(\\frac{sz}{m}\\right)$ possible values of $k$ (the number of substrings).\n\nNow, for a fixed pair $(m, k)$, let $S_k$ be the set of indices $i$ such that it is possible to divide the prefix $[1, i]$ of the new string (representing block types) into $k$ substrings of beauty $m$. It is claimed that $S_k$ forms a continuous segment $[l, r]$ for some $1 \\le l \\le r \\le sz$. Let’s prove this by induction.\n\nBase case ($k = 1$). We set $l = m$, $r = m$ (0-based indexing).\n\nInductive step ($k \\rightarrow k + 1$). Suppose that for every index $i \\in [l, r]$, the first $i$ blocks can be divided into $k$ substrings of beauty $m$. Then we can construct a valid division into $k+1$ substrings by:\n\nSimply appending a new substring of length $m+1$ starting at block $i+1$, giving us a new upper bound at $i + m + 1$.\n\nAdditionally, if block $i$ is of type $2$, we can split it between the $k$-th and $(k+1)$-th substrings, allowing us to finish the $k$-th substring earlier and start the $(k+1)$-th within the same block. This enables us to reach $i + m$ as well.\n\nThus, we conclude:\n\n$S_{k+1} = [l + m, r + m + 1]$ if the $l$-th block is of type 2.\n\nOtherwise, $S_{k+1} = [l + m + 1, r + m + 1]$.\n\nTo compute the full solution, we iterate over all values of $m$ from $1$ to $sz - 1$. For each $m$, we iterate over $k$ until the left bound $l$ of the corresponding segment exceeds $sz$. The special case $m=0$ should be handled separately.\n\nFor each $k$, we need to increment the answer for all positions from $l$ to $r$ by one. This can be efficiently done by recording the operations $(l, +1)$ and $(r + 1, -1)$ and then applying a scanline technique to process the accumulated changes.\n\nSince there are $O\\left(\\frac{sz}{m}\\right)$ possible values of $k$ for each $m$, the total complexity of this solution is $O(n \\log n)$.\n\nCode (C++)\n\nRate the problem\n\n Amazing problem:\n\n Good problem:\n\n Average problem:\n\n Bad problem:\n\n Didn't solve:",
+    "solution_code": [
+      "#include <iostream>\n#include <vector>\n \nusing namespace std;\n \nusing ll = long long;\n \nvoid solve() {\n    int n; cin >> n;\n    string s; cin >> s;\n    vector <int> a;\n    int curr = 0;\n    for (int i = 0; i < n; ++i) {\n        if (i && s[i] != s[i - 1]) {\n            if (curr) a.push_back(curr);\n            curr = 1;\n        }\n        else ++curr;\n    }\n    a.push_back(curr);\n    int sz = a.size();\n \n    vector <int> ans(n, 0), left(sz, 0), right(sz, 0);\n    for (int i = 0; i < sz; ++i) {\n        if (!i) {\n            left[i] = 0; right[i] = a[i] - 1;\n        } else {\n            left[i] = right[i - 1] + 1;\n            right[i] = left[i] + a[i] - 1;\n        }\n    }\n    for (int i = 0; i < sz; ++i) {\n        for (int j = left[i]; j <= right[i]; ++j) {\n            ans[j] += j - i + 1;\n        }\n    }\n    vector <int> add(sz, 0);\n    for (int m = 1; m < sz; ++m) {\n        ll l = m, r = m, k = 1;\n        while (l < sz) {\n            ++add[l];\n            if (r + 1 < sz) --add[r + 1];\n \n            if (a[l] == 1) {\n                l += m + 1;\n            } else {\n                l += m;\n            }\n \n            r += m + 1;\n            ++k;\n        }\n    }\n    int pref = 0;\n    for (int i = 0; i < sz; ++i) {\n        pref += add[i];\n        for (int j = left[i]; j <= right[i]; ++j) {\n            ans[j] += pref;\n        }\n    }\n    for (int i = 0; i < n; ++i) {\n        cout << ans[i];\n        if (i != n - 1) cout << ' ';\n    }\n    cout << '\\n';\n}\n \nsigned main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(nullptr);\n    cout.tie(nullptr);\n    int t; cin >> t;\n    while (t--) {\n        solve();\n    }\n}"
+    ]
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "contest_id": 2009,
+  "index": "G1",
+  "name": "Yunli's Subarray Queries (easy version)",
+  "rating": 1900,
+  "tags": [
+    "binary search",
+    "data structures",
+    "two pointers"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2009G1",
+  "url": "https://codeforces.com/problemset/problem/2009/G1",
+  "contest_start_time": "2024-09-03T14:35:00+00:00",
+  "statement": {
+    "title": "G1. Yunli's Subarray Queries (easy version)",
+    "time_limit": "3 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "This is the easy version of the problem. In this version, it is guaranteed that $r=l+k-1$ for all queries.\n\nFor an arbitrary array $b$, Yunli can perform the following operation any number of times:\n\n Select an index $i$. Set $b_i = x$ where $x$ is any integer she desires ($x$ is not limited to the interval $[1,n]$).\n\nDenote $f(b)$ as the minimum number of operations she needs to perform until there exists a consecutive subarray$^{\\text{∗}}$ of length at least $k$ in $b$.\n\nYunli is given an array $a$ of size $n$ and asks you $q$ queries. In each query, you must output $\\sum_{j=l+k-1}^{r} f([a_l, a_{l+1}, \\ldots, a_j])$. Note that in this version, you are only required to output $f([a_l, a_{l+1}, \\ldots, a_{l+k-1}])$.\n\n$^{\\text{∗}}$If there exists a consecutive subarray of length $k$ that starts at index $i$ ($1 \\leq i \\leq |b|-k+1$), then $b_j = b_{j-1} + 1$ for all $i  \\lt  j \\leq i+k-1$.",
+    "input_spec": "The first line contains $t$ ($1 \\leq t \\leq 10^4$) — the number of test cases.\n\nThe first line of each test case contains three integers $n$, $k$, and $q$ ($1 \\leq k \\leq n \\leq 2 \\cdot 10^5$, $1 \\leq q \\leq 2 \\cdot 10^5$) — the length of the array, the length of the consecutive subarray, and the number of queries.\n\nThe following line contains $n$ integers $a_1, a_2, \\dots, a_n$ ($1 \\leq a_i \\leq n$).\n\nThe following $q$ lines contain two integers $l$ and $r$ ($1 \\leq l \\leq r \\leq n$, $r=l+k-1$) — the bounds of the query.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $2 \\cdot 10^5$ and the sum of $q$ over all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "Output $\\sum_{j=l+k-1}^{r} f([a_l, a_{l+1}, \\ldots, a_j])$ for each query on a new line.",
+    "note": "In the first query of the first testcase, $b=[1,2,3,2,1]$. Yunli can make a consecutive subarray of length $5$ in $2$ moves:\n\n Set $b_4=4$\n\n Set $b_5=5$\n\n After operations $b=[1, 2, 3, 4, 5]$.\nIn the second query of the first testcase, $b=[2,3,2,1,2]$. Yunli can make a consecutive subarray of length $5$ in $3$ moves:\n\n Set $b_3=0$\n\n Set $b_2=-1$\n\n Set $b_1=-2$\n\n After operations $b=[-2, -1, 0, 1, 2]$.",
+    "samples": [
+      {
+        "input": "3\n7 5 3\n1 2 3 2 1 2 3\n1 5\n2 6\n3 7\n8 4 2\n4 3 1 1 2 4 3 2\n3 6\n2 5\n5 4 2\n4 5 1 2 3\n1 4\n2 5",
+        "output": "\n2\n3\n2\n2\n2\n2\n1"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 133296,
+    "url": "https://codeforces.com/blog/entry/133296",
+    "tutorial": "2009G1 - Запросы подмассивов Юнли (простая версия)\n\nProblem Credits: cry, Proof_by_QED\n Analysis: Proof_by_QED\n\nSolution\n\nWe first make the sequence $b_i=a_i-i$ for all $i$. Now, if $b_i=b_j$, then $i$ and $j$ are in correct relative order.\n\nNow, to solve the problem, we precompute the answer for every window of $k$, and then each query is a lookup. We use a sliding window, maintaining a multiset of frequencies of values of $b$ in the current window. To move from the window $[i\\ldots i+k-1]$ to $i+1 \\ldots i+k$, we lower the frequency of $b_i$ by $1$, and increase the frequency of $b_{i+k}$ by $1$.\n\nCode (C++) (yash_9a3b)",
+    "solution_code": [
+      "#include \"bits/stdc++.h\"\n#pragma GCC optimize(\"O3,unroll-loops\")\n#pragma GCC target(\"avx,avx2,sse,sse2\")\n#define fast ios_base::sync_with_stdio(0) , cin.tie(0) , cout.tie(0)\n#define endl '\\n'\n#define int long long\n#define f first\n#define mp make_pair\n#define s second\nusing namespace std;\n\nvoid solve(){\n    int n, k, q; cin >> n >> k >> q;\n    int a[n + 1]; for(int i = 1; i <= n; i++) cin >> a[i];\n    map <int,int> m;\n    multiset <int> tot;\n    for(int i = 1; i <= n; i++) tot.insert(0);\n    for(int i = 1; i < k; i++){\n        tot.erase(tot.find(m[a[i] - i]));\n        m[a[i] - i]++;\n        tot.insert(m[a[i] - i]);\n    }\n    int ret[n + 1];\n    for(int i = k; i <= n; i++){\n        tot.erase(tot.find(m[a[i] - i]));\n        m[a[i] - i]++;\n        tot.insert(m[a[i] - i]);\n        int p = i - k + 1;\n        ret[p] = k - *tot.rbegin();\n        tot.erase(tot.find(m[a[p] - p]));\n        m[a[p] - p]--;\n        tot.insert(m[a[p] - p]);\n    }\n    while(q--){\n        int l, r ; cin >> l >> r;\n        cout << ret[l] << endl;\n    }\n    tot.clear();\n    m.clear();\n}\n\nsigned main()\n{\n    fast;\n    int t;\n    cin >> t;\n    while(t--){\n        solve();\n    }\n}"
+    ]
+  }
+}

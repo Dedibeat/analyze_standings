@@ -1,0 +1,54 @@
+{
+  "contest_id": 1976,
+  "index": "E",
+  "name": "Splittable Permutations",
+  "rating": 2500,
+  "tags": [
+    "combinatorics",
+    "data structures",
+    "dfs and similar",
+    "greedy",
+    "math",
+    "trees"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1976E",
+  "url": "https://codeforces.com/problemset/problem/1976/E",
+  "contest_start_time": "2024-05-30T14:35:00+00:00",
+  "statement": {
+    "title": "E. Splittable Permutations",
+    "time_limit": "2 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "Initially, we had one array, which was a permutation of size $n$ (an array of size $n$ where each integer from $1$ to $n$ appears exactly once).\n\nWe performed $q$ operations. During the $i$-th operation, we did the following:\n\n choose any array we have with at least $2$ elements;\n\n split it into two non-empty arrays (prefix and suffix);\n\n write two integers $l_i$ and $r_i$, where $l_i$ is the maximum element in the left part which we get after the split, and $r_i$ is the maximum element in the right part;\n\n remove the array we've chosen from the pool of arrays we can use, and add the two resulting parts into the pool.\n\nFor example, suppose the initial array was $[6, 3, 4, 1, 2, 5]$, and we performed the following operations:\n\n choose the array $[6, 3, 4, 1, 2, 5]$ and split it into $[6, 3]$ and $[4, 1, 2, 5]$. Then we write $l_1 = 6$ and $r_1 = 5$, and the arrays we have are $[6, 3]$ and $[4, 1, 2, 5]$;\n\n choose the array $[4, 1, 2, 5]$ and split it into $[4, 1, 2]$ and $[5]$. Then we write $l_2 = 4$ and $r_2 = 5$, and the arrays we have are $[6, 3]$, $[4, 1, 2]$ and $[5]$;\n\n choose the array $[4, 1, 2]$ and split it into $[4]$ and $[1, 2]$. Then we write $l_3 = 4$ and $r_3 = 2$, and the arrays we have are $[6, 3]$, $[4]$, $[1, 2]$ and $[5]$.\n\nYou are given two integers $n$ and $q$, and two sequences $[l_1, l_2, \\dots, l_q]$ and $[r_1, r_2, \\dots, r_q]$. A permutation of size $n$ is called valid if we can perform $q$ operations and produce the given sequences $[l_1, l_2, \\dots, l_q]$ and $[r_1, r_2, \\dots, r_q]$.\n\nCalculate the number of valid permutations.",
+    "input_spec": "The first line contains two integers $n$ and $q$ ($1 \\le q  \\lt  n \\le 3 \\cdot 10^5$).\n\nThe second line contains $q$ integers $l_1, l_2, \\dots, l_q$ ($1 \\le l_i \\le n$).\n\nThe third line contains $q$ integers $r_1, r_2, \\dots, r_q$ ($1 \\le r_i \\le n$).\n\nAdditional constraint on the input: there exists at least one permutation which can produce the given sequences $[l_1, l_2, \\dots, l_q]$ and $[r_1, r_2, \\dots, r_q]$.",
+    "output_spec": "Print one integer — the number of valid permutations, taken modulo $998244353$.",
+    "note": null,
+    "samples": [
+      {
+        "input": "6 3\n6 4 4\n5 5 2",
+        "output": "\n30"
+      },
+      {
+        "input": "10 1\n10\n9",
+        "output": "\n1814400"
+      },
+      {
+        "input": "4 1\n2\n4",
+        "output": "\n8"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 129992,
+    "url": "https://codeforces.com/blog/entry/129992",
+    "tutorial": "First, let's deal with the case $q=n-1$. In this case, after all operations are performed, all arrays have only one element each, and can no longer be split. We can show that the initial order of elements can be restored uniquely in this case. For example, we can start with $n$ arrays consisting of single elements (one array for each integer from $1$ to $n$), and \"undo\" the operations to restore the initial order. \"Undoing\" the operations means linking two arrays together, and we don't have any choice which arrays and in which order we link, so the result of each operation is uniquely determined. So, in the case $q = n-1$, the answer is $1$.\n\nWhat about the case $q  \\lt  n-1$? Let's divide all integers from $1$ to $n$ into two groups: the integers from the sequences $l$ and/or $r$, and all other integers. We can use the same process to show that the order of elements from the first group (the ones which were present in at least one of the given sequences) is unique, and we can restore their order using something like DSU (performing operations from the last to the first) or a double-linked list (performing operations from the first to the last).\n\nSo, suppose we restored the order of elements which are present in the input; we need to insert all of the remaining integers and don't make the sequence of operations invalid. We have an array of $q+1$ elements, the order of which is fixed; and there are $q+2$ \"buckets\" where we can insert the remaining elements (before the first element, between the first and the second, and so on).\n\nFor each of these \"buckets\", let's consider the maximum between the elements on the borders of the bucket (the fixed elements between which we insert the remaining elements). It's quite easy to see that each element we insert in a \"bucket\" should be less than this maximum: suppose the fixed element on the left border is $y$, the fixed element on the right border is $z$, and there was an element $x  \\gt  \\max(y,z)$ between them. After we performed all operations, $x$ is either in the same array as $y$ or in the same array as $z$; so when we \"made\" that array during an operation, we would have written the integer $x$ (or some even greater integer) instead of $y$ or $z$.\n\nAnd we can also show the opposite: if each element in each \"bucket\" is less than the maximum of the two elements bordering the bucket, the operation sequence is valid. To prove it, let's merge every bucket with the greater of the elements on its borders, and then again \"undo\" all operations to restore the original order of elements.\n\nSo, for each remaining element, there are some buckets where we can put it, and some buckets where we can't. However, we also have to consider the relative order of the elements we insert in the same bucket.\n\nLet's start with the sequence of \"fixed\" elements, and insert the remaining elements one by one from the greatest integer to the smallest integer. We can show that every time we insert an element in this order, the number of places where it can go does not depend on where we inserted the previous elements. Suppose we insert an element which \"fits\" into $b$ buckets, and before inserting it, we also inserted $k$ other elements. Then there are exactly $b+k$ places where this element can fit, because every element we inserted earlier went into one of those same $b$ buckets and split that bucket into two. So, maintaining these two numbers (the number of available buckets and the number of elements we already inserted) is enough, and the positions of elements we inserted does not matter.\n\nThis allows us to count the number of possible permutations in $O(n)$.",
+    "solution_code": [
+      "#include<bits/stdc++.h>\n \nusing namespace std;\n \nconst int N = 300043;\nconst int MOD = 998244353;\n \nint add(int x, int y)\n{\n\tx += y;\n\twhile(x >= MOD) x -= MOD;\n\twhile(x < 0) x += MOD;\n\treturn x;\n}\n \nint mul(int x, int y)\n{\n\treturn (x * 1ll * y) % MOD;\n}\n \nint nxt[N], prv[N];\nbool exists[N];\n \nint main()\n{\n\tint n, q;\n\tscanf(\"%d %d\", &n, &q);\n\tfor(int i = 1; i <= n; i++) nxt[i] = prv[i] = -1;\n\texists[n] = true;\n\tvector<int> l(q), r(q);\n\tfor(int i = 0; i < q; i++) scanf(\"%d\", &l[i]);\n\tfor(int i = 0; i < q; i++) scanf(\"%d\", &r[i]);\n\tfor(int i = 0; i < q; i++)\n\t{\n\t\tint L = l[i], R = r[i];\n\t\tif(exists[L])\n\t\t{\n\t\t\texists[R] = true;\n\t\t\tnxt[R] = nxt[L];\n\t\t\tif(nxt[R] != -1) prv[nxt[R]] = R;\n\t\t\tprv[R] = L;\n\t\t\tnxt[L] = R;\n\t\t}\n\t\telse\n\t\t{\n\t\t\texists[L] = true;\n\t\t\tprv[L] = prv[R];\n\t\t\tif(prv[L] != -1) nxt[prv[L]] = L;\n\t\t\tnxt[L] = R;\n\t\t\tprv[R] = L;\n\t\t}\n\t}\n\tvector<int> seq;\n\tint start = -1;\n\tfor(int i = 1; i <= n; i++)\n\t\tif(prv[i] == -1 && exists[i])\n\t\t\tstart = i;\n\tseq.push_back(start);\n\twhile(nxt[start] != -1)\n\t{\n\t\tstart = nxt[start];\n\t\tseq.push_back(start);\n\t}\n\tvector<int> cnt_segments(n + 1);\n\tcnt_segments[seq[0]]++;\n\tcnt_segments[seq[q]]++;\n\tfor(int i = 0; i < q; i++)\n\t\tcnt_segments[max(seq[i], seq[i + 1])]++;\n\tint ans = 1;\n\tint places = 0;\n\tfor(int i = n; i >= 1; i--)\n\t{\n\t\tif(exists[i])\n\t\t\tplaces += cnt_segments[i];\n\t\telse\n\t\t{\n\t\t\tans = mul(ans, places);\n\t\t\tplaces++;\n\t\t}\n\t}\n\tprintf(\"%d\\n\", ans);\n}"
+    ]
+  }
+}

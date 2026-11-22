@@ -1,0 +1,42 @@
+{
+  "contest_id": 2101,
+  "index": "A",
+  "name": "Mex in the Grid",
+  "rating": 1300,
+  "tags": [
+    "constructive algorithms",
+    "implementation"
+  ],
+  "points": 500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2101A",
+  "url": "https://codeforces.com/problemset/problem/2101/A",
+  "contest_start_time": "2025-05-11T14:35:00+00:00",
+  "statement": {
+    "title": "A. Mex in the Grid",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "You are given $n^2$ cards with values from $0$ to $n^2-1$. You are to arrange them in a $n$ by $n$ grid such that there is exactly one card in each cell.\n\nThe MEX (minimum excluded value) of a subgrid$^{\\text{∗}}$ is defined as the smallest non-negative integer that does not appear in the subgrid.\n\nYour task is to arrange the cards such that the sum of MEX values over all $\\left(\\frac{n(n+1)}{2}\\right)^2$ subgrids is maximized.\n\n$^{\\text{∗}}$A subgrid of a $n$ by $n$ grid is specified by four numbers $l_1, r_1, l_2, r_2$ satisfying $1\\le l_1\\le r_1\\le n$ and $1\\le l_2\\le r_2\\le n$. The element in the $i$-th row and the $j$-th column of the grid is part of the subgrid if and only if $l_1\\le i\\le r_1$ and $l_2\\le j\\le r_2$.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 100$). The description of the test cases follows.\n\nThe first line of each test case contains a single integer $n$ ($1\\le n\\le 500$) — the side length of the grid.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $1000$.",
+    "output_spec": "For each test case, output $n$ lines, each containing $n$ integers representing the elements of the grid.\n\nIf there are multiple answers, you can output any of them.",
+    "note": "In the first test case, one valid arrangement is:\n\n01\n\n23\n\nThere are $9$ subgrids in total, and the $4$ of them with non-zero MEX are shown below:\n\n0\n values:$[0]$ — MEX: $1$\n\n01\n values:$[0, 1]$  — MEX: $2$\n\n0\n\n2\n values:$[0, 2]$  — MEX: $1$\n\n01\n\n23\n values:$[0, 1, 2, 3]$  — MEX: $4$\n\nThe sum of MEX over all subgrids would be $1+2+1+4 = 8$. It can be proven that no other arrangements have a larger sum of MEX values.",
+    "samples": [
+      {
+        "input": "2\n2\n3",
+        "output": "\n0 1 \n2 3 \n8 4 5 \n6 0 1 \n7 2 3"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 142788,
+    "url": "https://codeforces.com/blog/entry/142788",
+    "tutorial": "2101A - Mex in the Grid\n\nHints\n\nHint 1\n\nWhat is the MEX, if $0$ is not there?\n\nHint 2\n\nWhen is the MEX equal to $k$?\n\nHint 3\n\nIf we want a subgrid to be included in as many other subgrids as possible, what shape should it have? What about its place?\n\nSolution\n\nThe first fact to notice is that if the subgrid does not contain $0$, then the MEX is $0$ and we can ignore such subgrids. If the MEX is going to be $k$, it means all the values from $0$ to $k-1$ are included in the subgrid. For each $0\\le k\\le n^2$, we count how many subgrids have a MEX of at least $k$, aiming to maximize this.\nTo find the total sum of all MEX values, for each $k$ we count the number of subgrids that contain all the values from $0$ to $k-1$. Summing these counts gives us the final result.\n\nWe claim that if our subgrid is nearly square (either a perfect square or a difference of $1$ in lengths), and is placed in the middle of the grid, then the answer is maximized.\n\nProof: The multiplication of two numbers with the same sum is maximized when they are as close to each other as possible. Therefore, for each subgrid, if we consider the empty rows above and below it and separately consider the columns on its right and left, if one is fixed, the place is optimized to be in the middle. Now, similarly, we can say that it is optimal if the length and height of the subgrid are close to each other as well, as increasing one will cause the other one to decrease. With these two observations combined, a subgrid having the above properties is optimal when it's a nearly square subgrid in the middle of the grid.\n\nAny ordering with this property works; an easy example is a spiral shape that starts from the center of the grid and turns around itself.\n\nCode (Python 3)\n\nBonus\n\nWe had the idea of dividing this problem into two subtasks, in which the second subtask requires you to count the sum of MEX of all subgrids!\n\nDo you have a solution for this? Comment it below",
+    "solution_code": [
+      "def magical_spiral(n):\n    arr = [[-1] * n for _ in range(n)]\n    \n    if n % 2 == 0:\n        x, y = n // 2 - 1, n // 2 - 1\n    else:\n        x, y = n // 2, n // 2\n    \n    arr[x][y] = 0\n    value = step = 1\n\n    dir = [(0, 1), (1, 0), (0, -1), (-1, 0)]\n\n\n    while value < n * n:\n        for d in range(4):\n            steps = step\n            \n            step += d % 2; dx, dy = dir[d]\n\n            for _ in range(steps):\n                x += dx; y += dy\n\n                if 0 <= x < n and 0 <= y < n and arr[x][y] == -1:\n                    arr[x][y] = value\n                    value += 1\n                if value >= n * n:\n                    break\n            \n            if value >= n * n:\n                break\n\n\n    for row in arr:\n        print(\" \".join(str(num) for num in row))\n    print()\n\n\nt = int(input())\n\nfor _ in range(t):\n    n = int(input())\n\n    magical_spiral(n)"
+    ]
+  }
+}

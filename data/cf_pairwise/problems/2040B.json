@@ -1,0 +1,44 @@
+{
+  "contest_id": 2040,
+  "index": "B",
+  "name": "Paint a Strip",
+  "rating": 1000,
+  "tags": [
+    "constructive algorithms",
+    "greedy",
+    "math"
+  ],
+  "points": 1000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2040B",
+  "url": "https://codeforces.com/problemset/problem/2040/B",
+  "contest_start_time": "2024-12-08T14:35:00+00:00",
+  "statement": {
+    "title": "B. Paint a Strip",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "You have an array of zeros $a_1, a_2, \\ldots, a_n$ of length $n$.\n\nYou can perform two types of operations on it:\n\n Choose an index $i$ such that $1 \\le i \\le n$ and $a_i = 0$, and assign $1$ to $a_i$;\n\n Choose a pair of indices $l$ and $r$ such that $1 \\le l \\le r \\le n$, $a_l = 1$, $a_r = 1$, $a_l + \\ldots + a_r \\ge \\lceil\\frac{r - l + 1}{2}\\rceil$, and assign $1$ to $a_i$ for all $l \\le i \\le r$.\n\nWhat is the minimum number of operations of the first type needed to make all elements of the array equal to one?",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 10^4$). The description of the test cases follows.\n\nThe only line of each test case contains one integer $n$ ($1 \\le n \\le 10^5$) — the length of the array.\n\nNote that there is no limit on the sum of $n$ over all test cases.",
+    "output_spec": "For each test case, print one integer — the minimum number of needed operations of first type.",
+    "note": "In the first test case, you can perform an operation of the $1$st type with $i = 1$.\n\nIn the second test case, you can perform the following sequence of operations:\n\n Operation of $1$st type, $i = 1$. After performing this operation, the array will look like this: $[1, 0]$.\n\n Operation of $1$st type, $i = 2$. After performing this operation, the array will look like this: $[1, 1]$.\n\n The sequence of operations in the second test case\nIn the third test case, you can perform the following sequence of operations:\n\n Operation of $1$st type, $i = 1$. After performing this operation, the array will look like this: $[1, 0, 0, 0]$.\n\n Operation of $1$st type, $i = 4$. After performing this operation, the array will look like this: $[1, 0, 0, 1]$.\n\n Operation of $2$nd type, $l = 1$, $r = 4$. On this segment, $a_l + \\ldots + a_r = a_1 + a_2 + a_3 + a_4 = 2$, which is not less than $\\lceil\\frac{r - l + 1}{2}\\rceil = 2$. After performing this operation, the array will look like this: $[1, 1, 1, 1]$.\n\n The sequence of operations in the third test case",
+    "samples": [
+      {
+        "input": "4\n1\n2\n4\n20",
+        "output": "\n1\n2\n2\n4"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 137074,
+    "url": "https://codeforces.com/blog/entry/137074",
+    "tutorial": "At each moment of time, the array contains a number of non-intersecting segments consisting only of ones. Using an operation of the first type can increase the number of these segments by $1$. Using an operation of the second type decreases the number of these segments by $x - 1$, where $x$ — is the number of segments that this operation covers. Therefore, the number of operations of the second type is no more than the number of operations of the first type minus $1$.\n\nThe optimal strategy — is to perform one operation of the first type, and then alternate operations of the first and second types, increasing the number of ones from $x$ to $2 \\cdot (x + 1)$ on each such pair of operations. There is no point in doing more operations of the first type on the prefix of operations, since we still must cover no more than two segments of ones with operations of the second type; otherwise, we will reduce the possible number of operations of the second type.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n \nusing namespace std;\n \nint main() {\n    int tt;\n    cin >> tt;\n    while (tt--) {\n        int n;\n        cin >> n;\n        for (int ans = 1, cur = 1; ; ans++, cur = cur * 2 + 2) {\n            if (cur >= n) {\n                cout << ans << '\\n';\n                break;\n            }\n        }\n    }\n    \n    return 0;\n}",
+      "tt = int(input())\nfor _ in range(tt):\n    n = int(input())\n    ans = 1\n    cur = 1\n    while True:\n        if cur >= n:\n            print(ans)\n            break\n        ans += 1\n        cur = cur * 2 + 2"
+    ]
+  }
+}

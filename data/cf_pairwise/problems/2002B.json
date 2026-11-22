@@ -1,0 +1,42 @@
+{
+  "contest_id": 2002,
+  "index": "B",
+  "name": "Removals Game",
+  "rating": 1000,
+  "tags": [
+    "constructive algorithms",
+    "games"
+  ],
+  "points": 750.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2002B",
+  "url": "https://codeforces.com/problemset/problem/2002/B",
+  "contest_start_time": "2024-08-11T14:35:00+00:00",
+  "statement": {
+    "title": "B. Removals Game",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "Alice got a permutation $a_1, a_2, \\ldots, a_n$ of $[1,2,\\ldots,n]$, and Bob got another permutation $b_1, b_2, \\ldots, b_n$ of $[1,2,\\ldots,n]$. They are going to play a game with these arrays.\n\nIn each turn, the following events happen in order:\n\n Alice chooses either the first or the last element of her array and removes it from the array;\n\n Bob chooses either the first or the last element of his array and removes it from the array.\n\nThe game continues for $n-1$ turns, after which both arrays will have exactly one remaining element: $x$ in the array $a$ and $y$ in the array $b$.\n\nIf $x=y$, Bob wins; otherwise, Alice wins. Find which player will win if both players play optimally.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1\\le t\\le10^4$). The description of the test cases follows.\n\nThe first line of each test case contains a single integer $n$ ($1\\le n\\le 3\\cdot 10^5$).\n\nThe next line contains $n$ integers $a_1,a_2,\\ldots,a_n$ ($1\\le a_i\\le n$, all $a_i$ are distinct) — the permutation of Alice.\n\nThe next line contains $n$ integers $b_1,b_2,\\ldots,b_n$ ($1\\le b_i\\le n$, all $b_i$ are distinct) — the permutation of Bob.\n\nIt is guaranteed that the sum of all $n$ does not exceed $3\\cdot 10^5$.",
+    "output_spec": "For each test case, print a single line with the name of the winner, assuming both players play optimally. If Alice wins, print $\\texttt{Alice}$; otherwise, print $\\texttt{Bob}$.",
+    "note": "In the first test case, Bob can win the game by deleting the same element as Alice did.\n\nIn the second test case, Alice can delete $3$ in the first turn, and then in the second turn, delete the element that is different from the one Bob deleted in the first turn to win the game.",
+    "samples": [
+      {
+        "input": "2\n2\n1 2\n1 2\n3\n1 2 3\n2 3 1",
+        "output": "\nBob\nAlice"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 132569,
+    "url": "https://codeforces.com/blog/entry/132569",
+    "tutorial": "2002B — Removals Game\n\nidea & solution: xcyle\n\nHint\n\nFind some conditions that Bob need to win.\n\nTutorial\n\nA general idea is that it is very difficult for Bob to win. We make some observations regarding the case where Bob wins. It is intuitive to see that for any subarray $[A_l,A_{l+1},\\cdots,A_r]$, the elements' positions in $B$ must also form an interval. If $A[l:r]$ does not form an interval in $B$, Alice can simply remove elements until only $A[l:r]$ is left, no matter how Bob plays, there must now be an element in $A$ but not in $B$ because of our previous condition. Alice can then remove everything other than this element to win.\n\nFrom here, it is easy to prove by induction that for Bob to win, either $A=B$ or $A=\\textrm{rev}(B)$.\n\nTime complexity: $O(n)$.\n\nSolution",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n#define ll long long\n#define lc(x) ((x) << 1)\n#define rc(x) ((x) << 1 | 1)\n#define ru(i, l, r) for (int i = (l); i <= (r); i++)\n#define rd(i, r, l) for (int i = (r); i >= (l); i--)\n#define mid ((l + r) >> 1)\n#define pii pair<int, int>\n#define mp make_pair\n#define fi first\n#define se second\n#define sz(s) (int)s.size()\n#include <ext/pb_ds/assoc_container.hpp>\n#include <ext/pb_ds/tree_policy.hpp>\nusing namespace __gnu_pbds;\n#define ordered_set tree<int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_update>\nusing namespace std;\nmt19937 Rand(chrono::steady_clock::now().time_since_epoch().count());\nint read() {\n    int x = 0, w = 0;\n    char ch = getchar();\n\n    while (!isdigit(ch))\n        w |= ch == '-', ch = getchar();\n\n    while (isdigit(ch))\n        x = x * 10 + ch - '0', ch = getchar();\n\n    return w ? -x : x;\n}\nint main() {\n    int T = read();\n\n    while (T--) {\n        int n = read();\n        vector<int> a, b;\n        ru(i, 1, n) a.push_back(read());\n        ru(i, 1, n) b.push_back(read());\n\n        if (a == b) {\n            printf(\"Bob\\n\");\n            continue;\n        }\n\n        reverse(a.begin(), a.end());\n\n        if (a == b) {\n            printf(\"Bob\\n\");\n            continue;\n        }\n\n        printf(\"Alice\\n\");\n    }\n\n    return 0;\n}"
+    ]
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "contest_id": 2003,
+  "index": "A",
+  "name": "Turtle and Good Strings",
+  "rating": 800,
+  "tags": [
+    "greedy",
+    "strings"
+  ],
+  "points": 500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2003A",
+  "url": "https://codeforces.com/problemset/problem/2003/A",
+  "contest_start_time": "2024-08-25T14:35:00+00:00",
+  "statement": {
+    "title": "A. Turtle and Good Strings",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "Turtle thinks a string $s$ is a good string if there exists a sequence of strings $t_1, t_2, \\ldots, t_k$ ($k$ is an arbitrary integer) such that:\n\n $k \\ge 2$.\n\n $s = t_1 + t_2 + \\ldots + t_k$, where $+$ represents the concatenation operation. For example, $\\texttt{abc} = \\texttt{a} + \\texttt{bc}$.\n\n For all $1 \\le i  \\lt  j \\le k$, the first character of $t_i$ isn't equal to the last character of $t_j$.\n\nTurtle is given a string $s$ consisting of lowercase Latin letters. Please tell him whether the string $s$ is a good string!",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 500$). The description of the test cases follows.\n\nThe first line of each test case contains a single integer $n$ ($2 \\le n \\le 100$) — the length of the string.\n\nThe second line of each test case contains a string $s$ of length $n$, consisting of lowercase Latin letters.",
+    "output_spec": "For each test case, output \"YES\" if the string $s$ is a good string, and \"NO\" otherwise.\n\nYou can output the answer in any case (upper or lower). For example, the strings \"yEs\", \"yes\", \"Yes\", and \"YES\" will be recognized as positive responses.",
+    "note": "In the first test case, the sequence of strings $\\texttt{a}, \\texttt{a}$ satisfies the condition $s = t_1 + t_2 + \\ldots + t_k$, but the first character of $t_1$ is equal to the last character of $t_2$. It can be seen that there doesn't exist any sequence of strings which satisfies all of the conditions, so the answer is \"NO\".\n\nIn the third test case, the sequence of strings $\\texttt{ab}, \\texttt{cb}$ satisfies all of the conditions.\n\nIn the fourth test case, the sequence of strings $\\texttt{abca}, \\texttt{bcab}, \\texttt{cabc}$ satisfies all of the conditions.",
+    "samples": [
+      {
+        "input": "4\n2\naa\n3\naba\n4\nabcb\n12\nabcabcabcabc",
+        "output": "\nNo\nnO\nYes\nYES"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 133168,
+    "url": "https://codeforces.com/blog/entry/133168",
+    "tutorial": "2003A - Turtle and Good Strings\n\nHint 1\n\nSolve with $K=2$ only.\n\nMy submission — 278058173\n\nVideo Editorial",
+    "solution_code": []
+  }
+}

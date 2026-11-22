@@ -1,0 +1,42 @@
+{
+  "contest_id": 2045,
+  "index": "L",
+  "name": "Buggy DFS",
+  "rating": 3000,
+  "tags": [
+    "constructive algorithms"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2045L",
+  "url": "https://codeforces.com/problemset/problem/2045/L",
+  "contest_start_time": "2024-12-01T05:05:00+00:00",
+  "statement": {
+    "title": "L. Buggy DFS",
+    "time_limit": "1 second",
+    "memory_limit": "1024 megabytes",
+    "legend": "You are currently studying a graph traversal algorithm called the Depth First Search (DFS). However, due to a bug, your algorithm is slightly different from the standard DFS. The following is an algorithm for your Buggy DFS (BDFS), assuming the graph has $N$ nodes (numbered from $1$ to $N$).\n\n  BDFS():    let S be an empty stack    let FLAG be a boolean array of size N which are all false initially    let counter be an integer initialized with 0    push 1 to S    while S is not empty:      pop the top element of S into u      FLAG[u] = true      for each v neighbour of u in ascending order:        counter = counter + 1        if FLAG[v] is false:          push v to S    return counter\n\nYou realized that the bug made the algorithm slower than standard DFS, which can be investigated by the return value of the function BDFS(). To investigate the behavior of this algorithm, you want to make some test cases by constructing an undirected simple graph such that the function BDFS() returns $K$, or determine if it is impossible to do so.",
+    "input_spec": "A single line consisting of an integer $K$ ($1 \\leq K \\leq 10^9$).",
+    "output_spec": "If it is impossible to construct an undirected simple graph such that the function BDFS() returns $K$, then output -1 -1 in a single line.\n\nOtherwise, output the graph in the following format. The first line consists of two integers $N$ and $M$, representing the number of nodes and undirected edges in the graph, respectively. Each of the next $M$ lines consists of two integers $u$ and $v$, representing an undirected edge that connects node $u$ and node $v$. You are allowed to output the edges in any order. This graph has to satisfy the following constraints:\n\n $1 \\leq N \\leq 32\\,768$\n\n $1 \\leq M \\leq 65\\,536$\n\n $1 \\leq u, v \\leq N$, for all edges.\n\n The graph is a simple graph, i.e. there are no multi-edges nor self-loops.\n\nNote that you are not required to minimize the number of nodes or edges. It can be proven that if constructing a graph in which the return value of BDFS() is $K$ is possible, then there exists one that satisfies all the constraints above. If there are several solutions, you can output any of them.",
+    "note": "Explanation for the sample input/output #1\n\nThe graph on the left describes the output of this sample. The graph on the right describes another valid solution for this sample.\n\nExplanation for the sample input/output #3\n\nThe following graph describes the output of this sample.",
+    "samples": [
+      {
+        "input": "\n8",
+        "output": "\n3 3\n1 2\n1 3\n2 3"
+      },
+      {
+        "input": "\n1",
+        "output": "\n-1 -1"
+      },
+      {
+        "input": "\n23",
+        "output": "\n5 7\n4 5\n2 3\n3 1\n2 4\n4 3\n2 1\n1 5"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "missing"
+  },
+  "editorial": null
+}

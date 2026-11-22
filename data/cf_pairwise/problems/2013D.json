@@ -1,0 +1,42 @@
+{
+  "contest_id": 2013,
+  "index": "D",
+  "name": "Minimize the Difference",
+  "rating": 1900,
+  "tags": [
+    "binary search",
+    "greedy"
+  ],
+  "points": 2000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2013D",
+  "url": "https://codeforces.com/problemset/problem/2013/D",
+  "contest_start_time": "2024-09-20T14:35:00+00:00",
+  "statement": {
+    "title": "D. Minimize the Difference",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Zhan, tired after the contest, gave the only task that he did not solve during the contest to his friend, Sungat. However, he could not solve it either, so we ask you to try to solve this problem.\n\nYou are given an array $a_1, a_2, \\ldots, a_n$ of length $n$. We can perform any number (possibly, zero) of operations on the array.\n\nIn one operation, we choose a position $i$ ($1 \\leq i \\leq n - 1$) and perform the following action:\n\n $a_i := a_i - 1$, and $a_{i+1} := a_{i+1} + 1$.\n\nFind the minimum possible value of $\\max(a_1, a_2, \\ldots, a_n) - \\min(a_1, a_2, \\ldots, a_n)$.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 10^5$). The description of the test cases follows.\n\nThe first line of each test case contains an integer $n$ ($1 \\leq n \\leq 2 \\cdot 10^5$).\n\nThe second line of each test case contains $n$ integers $a_1, a_2, \\ldots, a_n$ ($1 \\leq a_i \\leq 10^{12}$).\n\nThe sum of $n$ over all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, output a single integer: the minimum possible value of $\\max(a_1, a_2, \\ldots, a_n) - \\min(a_1, a_2, \\ldots, a_n)$.",
+    "note": "In the third testcase, you can perform the operation twice with $i = 1$.\n\nAfter that, the array is $a = [2, 3, 2, 3]$, and $\\max(2, 3, 2, 3) - \\min(2, 3, 2, 3) = 3 - 2 = 1$.",
+    "samples": [
+      {
+        "input": "5\n1\n1\n3\n1 2 3\n4\n4 1 2 3\n4\n4 2 3 1\n5\n5 14 4 10 2",
+        "output": "\n0\n2\n1\n1\n3"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "missing"
+  },
+  "editorial": {
+    "blog_id": 134298,
+    "url": "https://codeforces.com/blog/entry/134298",
+    "tutorial": null,
+    "solution_code": [
+      "#include <bits/stdc++.h>\n\nusing namespace std;\ntypedef long long ll;\ntypedef unsigned long long ull;\n\n#define forn(i,j,k) for(ll i=(j); i<=(k); i++)\n#define rofn(i,j,k) for(ll i=(j); i>=(k); i--)\n\nint main() {\n    ll t;\n    cin >> t;\n\n    ll n;\n    while(t--) {\n        cin >> n;\n        vector<ll> a(n+1);\n        ll mn = 1e15, mx=-1;\n        forn(i, 1, n) {\n            cin >> a[i];\n            mn = min(mn, a[i]);\n            mx = max(mx, a[i]);\n        }\n        \n        ll low = mn, high = mx;\n        ll alpha, beta;\n        while(low+1 < high) {\n            alpha = (low + high) / 2;\n            ll tmp = 0;\n            bool valid = true;\n            rofn(i, n, 1) {\n                tmp += a[i];\n                if(tmp > (n-i+1)*alpha) {\n                    valid = false;\n                    break;\n                }\n            }\n            if(valid) high = alpha;\n            else low = alpha;\n        }\n        alpha = high;\n\n        low = mn; high = mx;\n        while(low+1 < high) {\n            beta = (low + high) / 2;\n            ll tmp = 0;\n            bool valid = true;\n            forn(i, 1, n) {\n                tmp += a[i];\n                if(tmp < i*beta) {\n                    valid = false;\n                    break;\n                }\n            }\n            \n            if(valid) low = beta;\n            else high = beta;\n        }\n        beta = low;\n\n        cout << alpha - beta << endl;\n    }\n}"
+    ]
+  }
+}

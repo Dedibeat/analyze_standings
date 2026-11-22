@@ -1,0 +1,48 @@
+{
+  "contest_id": 2072,
+  "index": "G",
+  "name": "I've Been Flipping Numbers for 300 Years and Calculated the Sum",
+  "rating": 2200,
+  "tags": [
+    "binary search",
+    "brute force",
+    "combinatorics",
+    "divide and conquer",
+    "math",
+    "number theory"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2072G",
+  "url": "https://codeforces.com/problemset/problem/2072/G",
+  "contest_start_time": "2025-02-25T14:35:00+00:00",
+  "statement": {
+    "title": "G. I've Been Flipping Numbers for 300 Years and Calculated the Sum",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "After three hundred years of slime farming, Akito finally obtained the magical number $n$. Upon reaching the merchant, he wanted to exchange the number for gold, but the merchant gave the hero a quest.\n\nThe merchant said that for the quest, the skill $\\text{rev}(n, p)$ would be required, which Akito, by happy coincidence, had recently learned. $\\text{rev}(n, p)$ represents the following procedure:\n\n Write the number $n$ in base $p$, let this representation be $n = \\overline{n_{\\ell - 1} \\ldots n_1 n_0}$, where $\\ell$ is the length of the base $p$ representation of the number $n$.\n\n Reverse the base $p$ representation, let this be $m = \\overline{n_0 n_1 \\ldots n_{\\ell - 1}}$.\n\n Convert the number $m$ back to decimal and return it as the result.\n\nThe merchant's quest was to calculate the sum $x = \\sum\\limits_{p = 2}^{k} \\text{rev}(n, p)$. Since this number can be quite large, only the remainder of $x$ when divided by $10^9 + 7$ is required. The merchant also mentioned that the previous traveler had been calculating this sum for three hundred years and had not finished it. But you will help Akito finish it faster, right?",
+    "input_spec": "The first line contains the number $t$ ($1 \\le t \\le 5000$) — the number of test cases.\n\nIn the only line of each test case, two numbers $n$ and $k$ are given ($1 \\le n \\le 3 \\cdot 10^5, 2 \\le k \\le 10^{18}$) — the magical number and the upper limit for summation.\n\nNote that the sum of $n$ across all test cases is not bounded.",
+    "output_spec": "For each test case, you need to output a single number — the remainder of $x = \\sum\\limits_{p = 2}^{k} \\text{rev}(n, p)$ when divided by $10^9 + 7$.",
+    "note": "In the third test case, $n = 1$. The number one in any numeral system is represented by a single digit, which means $\\text{rev}(1, p) = 1$ for any $p \\ge 2$. Thus, $x = \\sum\\limits_{p = 2}^{k} 1 = \\sum\\limits_{p = 2}^{10} 1 = 10 - 2 + 1 = 9$.\n\nIn the fourth test case, $x = \\text{rev}(4, 2) + \\text{rev}(4, 3) + \\text{rev}(4, 4)$. Let's calculate each term:\n\n $4 = 100_2 \\rightarrow \\text{rev}(4, 2) = 001_2 = 1$\n\n $4 = 11_3 \\rightarrow \\text{rev}(4, 3) = 11_3 = 4$\n\n $4 = 10_4 \\rightarrow \\text{rev}(4, 4) = 01_4 = 1$\n\n Thus, $x = 1 + 4 + 1 = 6$.\nIn the seventh test case, $x = \\text{rev}(9, 2) + \\text{rev}(9, 3)$. Let's calculate each term:\n\n $9 = 1001_2 \\rightarrow \\text{rev}(9, 2) = 1001_2 = 9$\n\n $9 = 100_3 \\rightarrow \\text{rev}(9, 3) = 001_3 = 1$\n\n Thus, $x = 9 + 1 = 10$.",
+    "samples": [
+      {
+        "input": "12\n3 2\n42 52\n1 10\n4 4\n16 2\n69 69\n9 3\n19 84\n9982 44353\n100000 1000000007\n17 30\n777 1000000000000000000",
+        "output": "\n3\n7594\n9\n6\n1\n33471\n10\n2006\n120792461\n584502117\n775\n46058362"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 140039,
+    "url": "https://codeforces.com/blog/entry/140039",
+    "tutorial": "Let's consider three cases:\n\n $2 \\le p \\le \\sqrt{n}$. We calculate for each of the $\\mathcal{O}(\\sqrt{n})$ values of $p$ in $\\mathcal{O}(\\log n)$. One could think that it takes $\\mathcal{O}(\\sqrt{n} \\log{n})$ time, but it actually takes $\\mathcal{O}(\\sqrt{n})$ time! Read this comment for explanation.\n\n $n  \\lt  p \\le k$. For each such $p$, $\\text{rev}(n, p) = n$, and their count is $k - n$. Thus, the sum for them is $(k - n) \\cdot n$. This takes $O(1)$ for the calculation.\n\n $\\sqrt{n}  \\lt  p \\le n$. We note that $\\log_p{n} \\le \\log_{\\sqrt{n}}{n} = \\frac{\\log{n}}{\\log{\\sqrt{n}}} = \\frac{\\log{n}}{\\log{n^{ \\frac{1}{2} }}} = 2 \\cdot \\frac{\\log{n}}{\\log{n}} = 2$. Thus, the length of the base $p$ representation of the number $n$ is 2.\nLet's consider some $p$ from this range. Let $n = \\overline{n_1 n_0} = n_1 \\cdot p + n_0$. It is easy to show that $n_0 = (n \\text{ mod } p)$, and $n_1 = \\left\\lfloor \\frac{n}{p} \\right\\rfloor$. We find the value $\\text{rev}(n, p) = n_0 \\cdot p + n_1 = p \\cdot (n \\text{ mod } p) + \\left\\lfloor \\frac{n}{p} \\right\\rfloor$, so the entire sum looks like this:\n\n$$\\sum\\limits_{p = \\sqrt{n} + 1}^{n} (p \\cdot (n \\text{ mod } p) + \\left\\lfloor \\frac{n}{p} \\right\\rfloor) = \\sum\\limits_{p = \\sqrt{n} + 1}^{n} p \\cdot (n \\text{ mod } p) + \\sum\\limits_{p = \\sqrt{n} + 1}^{n} \\left\\lfloor \\frac{n}{p} \\right\\rfloor$$\n\nwhich in turn equals $$ \\sum\\limits_{p = \\sqrt{n} + 1}^{n} p \\cdot (n - \\left\\lfloor \\frac{n}{p} \\right\\rfloor \\cdot p) + \\sum\\limits_{p = \\sqrt{n} + 1}^{n} \\left\\lfloor \\frac{n}{p} \\right\\rfloor = \\sum\\limits_{p = \\sqrt{n} + 1}^{n} pn - \\sum\\limits_{p = \\sqrt{n} + 1}^{n} \\left\\lfloor \\frac{n}{p} \\right\\rfloor \\cdot p^2 + \\sum\\limits_{p = \\sqrt{n} + 1}^{n} \\left\\lfloor \\frac{n}{p} \\right\\rfloor$$\n\nWe will calculate all three sums separately. $\\sum\\limits_{p = \\sqrt{n} + 1}^{n} pn = n \\sum\\limits_{p = \\sqrt{n} + 1}^{n} p$. The sum is simply the sum of an arithmetic progression multiplied by $n$. This takes $\\mathcal{O}(1)$ for the calculation.\n\nFor the remaining sums, we need to note the following fact. The number of distinct values of $\\left\\lfloor \\frac{n}{i} \\right\\rfloor$ is $\\le 2\\sqrt{n}$. The proof is quite simple:\n\nConsider two cases:\n\n $i \\le \\sqrt{n}$ — the number of numbers we divide by is equal to the square root, so we cannot get more than $\\sqrt{n}$ distinct values.\n\n $i  \\gt  \\sqrt{n}$ — if $i  \\gt  \\sqrt{n}$, then $\\left\\lfloor \\frac{n}{i} \\right\\rfloor \\le \\sqrt{n}$, so there are also no more than $\\sqrt{n}$ such values.\n\n In total, we find that the number of distinct values is $\\sqrt{n} + \\sqrt{n} = 2\\sqrt{n}$ q. e. d.\nTo calculate $\\sum\\limits_{p = \\sqrt{n} + 1}^{n} \\left\\lfloor \\frac{n}{p} \\right\\rfloor$, we will explicitly iterate over the value $x = \\left\\lfloor \\frac{n}{p} \\right\\rfloor$ and find such $l, r$ that all numbers from $l$ to $r$ give the value $x$ and we will sum $x \\cdot (r - l + 1)$. This takes $\\mathcal{O}(\\sqrt{n})$ for the calculation.\n\nTo calculate $\\sum\\limits_{p = \\sqrt{n} + 1}^{n} \\left\\lfloor \\frac{n}{p} \\right\\rfloor \\cdot p^2$, we will do exactly the same as in the previous sum, but now $x$ will have to be multiplied by the sum of squares of numbers from $l$ to $r$. This also takes $\\mathcal{O}(\\sqrt{n})$ for the calculation.\n\nThus, in total, the third case takes $\\mathcal{O}(1) + \\mathcal{O}(\\sqrt{n}) + \\mathcal{O}(\\sqrt{n}) = \\mathcal{O}(\\sqrt{n})$.\n\nFinal asymptotic complexity: $\\mathcal{O}(\\sqrt{n}) + \\mathcal{O}(1) + \\mathcal{O}(\\sqrt{n}) = \\mathcal{O}(\\sqrt{n} + \\sqrt{n}) = \\mathcal{O}(\\sqrt{n})$",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n\nusing namespace std;\n\nconstexpr int64_t mod = 1e9 + 7;\nconstexpr int64_t twoInv = 500'000'004;\nconstexpr int64_t sixInv = 166'666'668;\n\nint64_t add(int64_t a, int64_t b) {\n  return (a % mod + b % mod) % mod;\n}\n\nint64_t mns(int64_t a, int64_t b) {\n  return (a % mod - b % mod + mod) % mod;\n}\n\nint64_t mul(int64_t a, int64_t b) {\n  return (a % mod) * (b % mod) % mod;\n}\n\nint64_t rev(int64_t n, int64_t p) {\n  int64_t res = 0;\n  while (n) {\n    res = add(mul(res, p), n % p);\n    n /= p;\n  }\n  return res;\n}\n\nint64_t stupid(int64_t n, int64_t k) {\n  int64_t res = 0;\n  for (int64_t p = 2; p <= k; ++p) {\n    res = add(res, rev(n, p));\n  }\n  return res;\n}\n\nint64_t sum1(int64_t r) {\n  return mul(mul(r, r + 1), twoInv);\n}\n\nint64_t sum1(int64_t l, int64_t r) {\n  return mns(sum1(r), sum1(l - 1));\n}\n\nint64_t sum2(int64_t r) {\n  return mul(mul(mul(r, r + 1), 2 * r + 1), sixInv);\n}\n\nint64_t sum2(int64_t l, int64_t r) {\n  return mns(sum2(r), sum2(l - 1));\n}\n\nint64_t get(int64_t n, int64_t l, int64_t r) {\n  if (l > r) {\n    return 0;\n  }\n\n  int64_t res = mul(sum1(l, r), n);\n  int64_t minus = 0, plus = 0;\n\n  int64_t L = l;\n  while (L <= r) {\n    int64_t value = n / L;\n    int64_t R = min(r, n / value);\n\n    minus = add(minus, mul(sum2(L, R), value));\n    plus = add(plus, mul(R - L + 1, value));\n\n    L = R + 1;\n  }\n\n  return add(mns(res, minus), plus);\n}\n\nvoid solve() {\n  int64_t n, k;\n  cin >> n >> k;\n\n  int64_t sq = (int64_t)sqrtl((long double)n);\n  int64_t ans = mul(max<int64_t>(0, k - n), n);\n  ans = add(ans, stupid(n, min(sq, k)));\n  ans = add(ans, get(n, sq + 1, min(n, k)));\n\n  cout << ans << '\\n';\n}\n\nint main() {\n  int tt = 1;\n  cin >> tt;\n  while (tt --> 0) {\n    solve();\n  }\n  return 0;\n}",
+      "int a,b;cin>>a>>b;a--;\nfor(int i = 0;i<=a;i++) cout << (int)((a&i)==i)*b << ' ';",
+      "        for(int i =0;i < n;i++)\n        {\n            if((i|(n-1))==n-1)\n                cout<<k<<' ';\n            else\n                cout<<0<<' ';\n            cout<<endl;\n        }"
+    ]
+  }
+}

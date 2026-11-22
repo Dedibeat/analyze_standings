@@ -1,0 +1,45 @@
+{
+  "contest_id": 1969,
+  "index": "E",
+  "name": "Unique Array",
+  "rating": 2400,
+  "tags": [
+    "binary search",
+    "data structures",
+    "divide and conquer",
+    "dp",
+    "greedy"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1969E",
+  "url": "https://codeforces.com/problemset/problem/1969/E",
+  "contest_start_time": "2024-04-29T14:35:00+00:00",
+  "statement": {
+    "title": "E. Unique Array",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "You are given an integer array $a$ of length $n$. A subarray of $a$ is one of its contiguous subsequences (i. e. an array $[a_l, a_{l+1}, \\dots, a_r]$ for some integers $l$ and $r$ such that $1 \\le l  \\lt  r \\le n$). Let's call a subarray unique if there is an integer that occurs exactly once in the subarray.\n\nYou can perform the following operation any number of times (possibly zero): choose an element of the array and replace it with any integer.\n\nYour task is to calculate the minimum number of aforementioned operation in order for all the subarrays of the array $a$ to be unique.",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases.\n\nThe first line of each test case contains a single integer $n$ ($1 \\le n \\le 3 \\cdot 10^5$).\n\nThe second line contains $n$ integers $a_1, a_2, \\dots, a_n$ ($1 \\le a_i \\le n$).\n\nAdditional constraint on the input: the sum of $n$ over all test cases doesn't exceed $3 \\cdot 10^5$.",
+    "output_spec": "For each test case, print a single integer — the minimum number of aforementioned operation in order for all the subarrays of the array $a$ to be unique.",
+    "note": "In the second test case, you can replace the $1$-st and the $3$-rd element, for example, like this: $[3, 4, 1, 4]$.\n\nIn the third test case, you can replace the $4$-th element, for example, like this: $[3, 1, 2, 3, 2]$.",
+    "samples": [
+      {
+        "input": "4\n3\n2 1 2\n4\n4 4 4 4\n5\n3 1 2 1 2\n5\n1 3 2 1 2",
+        "output": "\n0\n2\n1\n0"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 129022,
+    "url": "https://codeforces.com/blog/entry/129022",
+    "tutorial": "When we replace an element, we can always choose an integer that is not present in the array. So, if we replace the $i$-th element, every subarray containing it becomes unique; and the problem can be reformulated as follows: consider all non-unique subarrays of the array, and calculate the minimum number of elements you have to choose so that, for every non-unique subarray, at least one of its elements is chosen.\n\nWe can use the following greedy strategy to do it: go through the array from left to right, maintaining the index $s$ of the last element we replaced. When we consider the $i$-th element of the array, if there is a non-unique subarray $[l, r]$ with $l  \\gt  s$, we replace the $i$-th element, otherwise we don't replace anything.\n\nWhy is it optimal? Essentially, this greedy approach always finds a non-unique subarray $[l, r]$ with the lowest value of $r$, and replaces the $r$-th element. We obviously have to replace at least one element from the subarray $[l, r]$; but replacing the $r$-th element is optimal since we picked the lowest value of $r$, so every non-unique subarray which contains any element from $[l, r]$ also contains the $r$-th element.\n\nOkay, but we need to make this greedy solution work fast. When we consider the $i$-th element, how do we check that there's a non-unique subarray starting after the element $s$ and ending at the $i$-th element? Suppose we go from the $i$-th element to the left and maintain a counter; when we meet an element for the first time, we increase this counter; when we meet an element for the second time, we decrease this counter. If this counter is equal to $0$, then the current subarray is non-unique: every element appears at least twice. Otherwise, at least one element has exactly one occurrence.\n\nSuppose we maintain an array $t$ where for each integer present in the original array, we put $1$ in the last position we've seen this element, and $-1$ in the second-to-last position we've seen this element (i. e. for every element, we consider its two last occurrences among the first $i$ positions in the array, put $1$ in the last of them, and $-1$ in the second-to-last of them). Then, if we go from $i$ to $l$ and maintain the counter in the same way as we described in the previous paragraph, the value of this counter will be equal to the sum of the corresponding segment in this array $t$.\n\nSo, we want to check if there's a segment in the array $t$ such that its left border is greater than $s$ (the last position where we made a replacement), the right border is $i$, and the sum is $0$. We can show that the sum on any segment ending in the $i$-th position is currently non-negative; so, we actually want to find the segment with the minimum sum. We can store a segment tree that, for every position $l$ from $s+1$ to $i$, maintains the sum on segment $[l, i]$; then changing an element is just performing the query \"add on segment\", and finding the minimum sum is just performing the query \"minimum on segment\". This allows us to get a solution with complexity of $O(n \\log n)$.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n \nusing namespace std;\n\n#define sz(a) int((a).size())\n\nvector<int> t, p;\n\nvoid push(int v) {\n  if (v * 2 + 2 >= sz(t)) return;\n  t[v * 2 + 1] += p[v]; p[v * 2 + 1] += p[v];\n  t[v * 2 + 2] += p[v]; p[v * 2 + 2] += p[v];\n  p[v] = 0;\n}\n\nvoid upd(int v, int l, int r, int L, int R, int x) {\n  if (L >= R) return;\n  if (l == L && r == R) {\n    t[v] += x; p[v] += x;\n    return;\n  }\n  int m = (l + r) / 2;\n  push(v);\n  upd(v * 2 + 1, l, m, l, min(m, R), x);\n  upd(v * 2 + 2, m, r, max(m, L), R, x);\n  t[v] = min(t[v * 2 + 1], t[v * 2 + 2]);\n}\n\nint get(int v, int l, int r, int L, int R) {\n  if (L >= R) return 1e9;\n  if (l == L && r == R) return t[v];\n  int m = (l + r) / 2;\n  push(v);\n  return min(\n    get(v * 2 + 1, l, m, l, min(m, R)),\n    get(v * 2 + 2, m, r, max(m, L), R)\n  );\n}\n\nvoid solve() {\n  int n;\n  cin >> n;\n  vector<int> a(n);\n  for (auto& x : a) cin >> x, --x;\n  t = p = vector<int>(4 * n);\n  vector<vector<int>> pos(n);\n  int ans = 0, st = 0;\n  for (int i = 0; i < n; ++i) {\n    int x = a[i];\n    pos[x].push_back(i);\n    int k = sz(pos[x]);\n    if (k > 0) upd(0, 0, n, st, pos[x][k - 1] + 1, +1);\n    if (k > 1) upd(0, 0, n, st, pos[x][k - 2] + 1, -2);\n    if (k > 2) upd(0, 0, n, st, pos[x][k - 3] + 1, +1);\n    if (get(0, 0, n, st, i + 1) == 0) {\n      ans += 1;\n      st = i + 1;\n    }\n  }\n  cout << ans << '\\n';\n}\n\nint main() {\n  int t;\n  cin >> t;\n  while (t--) solve();\n}"
+    ]
+  }
+}

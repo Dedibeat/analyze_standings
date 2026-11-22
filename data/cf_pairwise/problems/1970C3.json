@@ -1,0 +1,46 @@
+{
+  "contest_id": 1970,
+  "index": "C3",
+  "name": "Game on Tree (Hard)",
+  "rating": 1900,
+  "tags": [
+    "dfs and similar",
+    "dp",
+    "games",
+    "trees"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1970C3",
+  "url": "https://codeforces.com/problemset/problem/1970/C3",
+  "contest_start_time": "2024-05-04T07:05:00+00:00",
+  "statement": {
+    "title": "C3. Game on Tree (Hard)",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "This is the hard version of the problem. The only difference in this version is the constraint on $t$.\n\nRon and Hermione are playing a game on a tree of $n$ nodes that are initially inactive. The game consists of $t$ rounds, each of which starts with a stone on exactly one node, which is considered as activated. A move consists of picking an inactive neighbor of the node with a stone on it and moving the stone there (thus activating this neighbor). Ron makes the first move, after which he alternates with Hermione until no valid move is available. The player that cannot make a move loses the round. If both players play optimally, who wins each round of this game?\n\nNote that all the rounds are played with the same tree; only the starting node changes. Moreover, after each round, all active nodes are considered inactive again.",
+    "input_spec": "The first line contains integers $n$ ($2 \\leq n \\leq 2\\times 10^5$), $t$ ($1 \\leq t \\leq n$), the number of nodes in the tree and the number of rounds, respectively.\n\nThe next $n-1$ lines contain two integers $1 \\leq u, v \\leq n$ each, corresponding to an edge of the tree.\n\nThe next line contains $t$ integers $1 \\leq u_1 , \\dots , u_t \\leq n$, corresponding to the node where the stone is initially put.",
+    "output_spec": "The output consists of $t$ lines, each line being either \"Ron\" or \"Hermione\".",
+    "note": null,
+    "samples": [
+      {
+        "input": "5 2\n1 2\n1 3\n3 4\n3 5\n1 2",
+        "output": "\nRon\nRon"
+      },
+      {
+        "input": "6 3\n1 2\n2 3\n1 4\n4 5\n4 6\n1 4 6",
+        "output": "\nHermione\nRon\nHermione"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 129149,
+    "url": "https://codeforces.com/blog/entry/129149",
+    "tutorial": "Repeating the previous solution for each $u_i$ is too slow as it gives a $O(n.t)$ solution.  Instead, we will reuse the computations we did when assigning losing/winning positions. We do so using the re-rooting technique. Let's first compute the positions of the nodes in the tree rooted at 0. We will now find in linear time the position of each node if the tree was rooted at that node.  Let $v$ be the current root (initially $v=0$) and let $w$ be a child of $v$. Let $T$ be the initial tree and $T'$ be the tree re-rooted at $w$. We know the positions of all nodes in $T$, and we want to find the position of nodes in $T'$. First note that only the positions of $v$ and $w$ may differ because the subtrees of all the other nodes remain unchanged.   If $v$ has a child other than $w$ which corresponds to a losing position (in $T)$, then $v$ is a winning position in $T'$. If $v$ has no losing child or has exactly one losing child which is $w$ (in $T)$, then it is a losing position in $T'$. Similarly, if $w$ has some child that is a losing position (including $v$ in $T'$), then it is a winning position otherwise it is a losing position in $T'$. The above checks can be done in constant time by counting the number of losing children before the recursive calls (this count also needs to be maintained before recurring on a subtree). We thus recur on $W$ and repeat. Once the recursive call is over, we backtrack our changes before recurring on a different child of $v$.\n\nAt the beginning of each recursive call, we know whether Ron or Hermione wins if the game started at that node so we can answer all the queries by doing linear-time pre-processing.",
+    "solution_code": []
+  }
+}

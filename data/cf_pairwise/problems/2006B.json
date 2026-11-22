@@ -1,0 +1,46 @@
+{
+  "contest_id": 2006,
+  "index": "B",
+  "name": "Iris and the Tree",
+  "rating": 1800,
+  "tags": [
+    "brute force",
+    "data structures",
+    "dfs and similar",
+    "dsu",
+    "math",
+    "trees"
+  ],
+  "points": 1250.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2006B",
+  "url": "https://codeforces.com/problemset/problem/2006/B",
+  "contest_start_time": "2024-08-30T14:35:00+00:00",
+  "statement": {
+    "title": "B. Iris and the Tree",
+    "time_limit": "3 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Given a rooted tree with the root at vertex $1$. For any vertex $i$ ($1  \\lt  i \\leq n$) in the tree, there is an edge connecting vertices $i$ and $p_i$ ($1 \\leq p_i  \\lt  i$), with a weight equal to $t_i$.\n\nIris does not know the values of $t_i$, but she knows that $\\displaystyle\\sum_{i=2}^n t_i = w$ and each of the $t_i$ is a non-negative integer.\n\nThe vertices of the tree are numbered in a special way: the numbers of the vertices in each subtree are consecutive integers. In other words, the vertices of the tree are numbered in the order of a depth-first search.\n  The tree in this picture satisfies the condition. For example, in the subtree of vertex $2$, the vertex numbers are $2, 3, 4, 5$, which are consecutive integers.   The tree in this picture does not satisfy the condition, as in the subtree of vertex $2$, the vertex numbers $2$ and $4$ are not consecutive integers.\nWe define $\\operatorname{dist}(u, v)$ as the length of the simple path between vertices $u$ and $v$ in the tree.\n\nNext, there will be $n - 1$ events:\n\n Iris is given integers $x$ and $y$, indicating that $t_x = y$.\n\nAfter each event, Iris wants to know the maximum possible value of $\\operatorname{dist}(i, i \\bmod n + 1)$ independently for each $i$ ($1\\le i\\le n$). She only needs to know the sum of these $n$ values. Please help Iris quickly get the answers.\n\nNote that when calculating the maximum possible values of $\\operatorname{dist}(i, i \\bmod n + 1)$ and $\\operatorname{dist}(j, j \\bmod n + 1)$ for $i \\ne j$, the unknown edge weights may be different.",
+    "input_spec": "Each test consists of multiple test cases. The first line contains a single integer $t$ ($1 \\leq t \\leq 10^4$) — the number of test cases. The description of the test cases follows.\n\nThe first line of each test case contains two integers $n$ and $w$ ($2 \\le n \\le 2 \\cdot 10^5$, $0 \\leq w \\leq 10^{12}$) — the number of vertices in the tree and the sum of the edge weights.\n\nThe second line of each test case contains $n - 1$ integers $p_2, p_3, \\ldots, p_n$ ($1 \\leq p_i  \\lt  i$) — the description of the edges of the tree.\n\nThen follow $n-1$ lines indicating the events. Each line contains two integers $x$ and $y$ ($2 \\leq x \\leq n$, $0 \\leq y \\leq w$), indicating that $t_x = y$.\n\nIt is guaranteed that all $x$ in the events are distinct. It is also guaranteed that the sum of all $y$ equals $w$.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, output one line containing $n-1$ integers, each representing the answer after each event.",
+    "note": "In the first test case, $\\operatorname{dist}(1, 2) = \\operatorname{dist}(2, 1) = t_2 = w = 10^{12}$, so $\\operatorname{dist}(1, 2) + \\operatorname{dist}(2, 1) = 2 \\cdot 10^{12}$.\n\nIn the second test case, the tree after Iris found out all $t_x$ is shown below:\n\n$\\operatorname{dist}(1, 2) = t_2$, $\\operatorname{dist}(2, 3) = t_2 + t_3$, $\\operatorname{dist}(3, 4) = t_3 + t_4$, $\\operatorname{dist}(4, 1) = t_4$. After the first event, she found out that $t_2 = 2$, so $\\operatorname{dist}(1, 2) = 2$. At the same time:\n\n $\\operatorname{dist}(2, 3)$ is maximized if $t_3 = 7$, $t_4 = 0$. Then $\\operatorname{dist}(2, 3) = 9$.\n\n $\\operatorname{dist}(3, 4)$ and $\\operatorname{dist}(4, 1)$ are maximized if $t_3 = 0$, $t_4 = 7$. Then $\\operatorname{dist}(3, 4) = \\operatorname{dist}(4, 1) = 7$.\n\nThus, the answer is $2 + 9 + 7 + 7 = 25$.\n\nAfter the second event, she found out that $t_4 = 4$, then $t_3 = w - t_2 - t_4 = 4$. $\\operatorname{dist}(1, 2) = 2$, $\\operatorname{dist}(2, 3) = 2 + 3 = 5$, $\\operatorname{dist}(3, 4) = 3 + 4 = 7$, $\\operatorname{dist}(4, 1) = 4$. Thus, the answer is $2 + 5 + 7 + 4 = 18$.",
+    "samples": [
+      {
+        "input": "4\n2 1000000000000\n1\n2 1000000000000\n4 9\n1 1 1\n2 2\n4 4\n3 3\n6 100\n1 2 3 2 1\n6 17\n3 32\n2 4\n4 26\n5 21\n10 511\n1 2 2 4 2 1 1 8 8\n3 2\n6 16\n10 256\n9 128\n2 1\n5 8\n8 64\n4 4\n7 32",
+        "output": "\n2000000000000\n25 18 18\n449 302 247 200 200\n4585 4473 2681 1567 1454 1322 1094 1022 1022"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 133382,
+    "url": "https://codeforces.com/blog/entry/133382",
+    "tutorial": "The nodes are numbered by dfs order, which tells us the vertex numbers in one subtree are always consecutive. Let's consider an edge connecting vertex $i$ and $p_i$. Suppose the size of the subtree $i$ is $s_i$, so the vertices are numbered between $[i,i+s_i-1]$. Then for each $j$ that $i\\le j \\lt i+s_i-1$, the path between node $j$ and $j+1$ is always in the subtree, so it doesn't pass the edge. The only two paths that passes edge $(i,p_i)$ is the path between $i-1$ and $i$, and between $i+s_i-1$ and $i+s_i$.\n\nLet's calculate the maximum value of $\\text{dist}(i,(i\\bmod n)+1)$. First, if all of the weights of its edges have been determined, then it's already calculated. Otherwise, it's optimal to set one of the edges with undetermined weight with weight $w-\\text{sum of weights of the known edges}$. Then the answer is $w-\\text{sum of weights of the known edges outside the path}$.\n\nHow to maintain the process? Each time we know the weight of an edge, we specially check whether the weights of the two paths that passes this edge are uniquely determined or not. For all other paths that are not uniquely determined, the contribution of the edge is $-y$ ($y$ is the weight). We can use addition tags to handle this.\n\nThe time complexity is $O(n)$.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n \nnamespace FastIO {\n\ttemplate <typename T> inline T read() { T x = 0, w = 0; char ch = getchar(); while (ch < '0' || ch > '9') w |= (ch == '-'), ch = getchar(); while ('0' <= ch && ch <= '9') x = x * 10 + (ch ^ '0'), ch = getchar(); return w ? -x : x; }\n\ttemplate <typename T> inline void write(T x) { if (!x) return; write<T>(x / 10), putchar(x % 10 ^ '0'); }\n\ttemplate <typename T> inline void print(T x) { if (x < 0) putchar('-'), x = -x; else if (x == 0) putchar('0'); write<T>(x); }\n\ttemplate <typename T> inline void print(T x, char en) { if (x < 0) putchar('-'), x = -x; else if (x == 0) putchar('0'); write<T>(x), putchar(en); }\n}; using namespace FastIO;\n \n#define MAXN 200001\nint fa[MAXN], dep[MAXN];\nint c1[MAXN], c2[MAXN], len[MAXN];\n \nvoid solve() {\n\tint N = read<int>(); long long w = read<long long>();\n\tfor (int i = 2; i <= N; ++i) fa[i] = read<int>();\n\tfor (int i = 2; i <= N; ++i) dep[i] = dep[fa[i]] + 1;\n\tfor (int i = 1; i <= N; ++i) len[i] = c1[i] = 0;\n\tfor (int i = 1, x, y; i <= N; ++i) {\n\t\tx = i, y = (i == N ? 1 : i + 1);\n\t\twhile (x != y) {\n\t\t\tif (dep[x] < dep[y]) std::swap(x, y);\n\t\t\t(c1[x] ? c2[x] : c1[x]) = i, x = fa[x], ++len[i];\n\t\t}\n\t}\n\tlong long sum = 0, sur = N;\n\tfor (int i = 1, x; i < N; ++i) {\n\t\tx = read<int>(), sum += read<long long>();\n\t\tif ((--len[c1[x]]) == 0) --sur;\n\t\tif ((--len[c2[x]]) == 0) --sur;\n\t\tprint<long long>(sum * 2 + sur * (w - sum), \" \\n\"[i == N - 1]);\n\t}\n}\n \nint main() { int T = read<int>(); while (T--) solve(); return 0; }"
+    ]
+  }
+}

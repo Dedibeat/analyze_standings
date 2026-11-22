@@ -1,0 +1,39 @@
+{
+  "contest_id": 1989,
+  "index": "A",
+  "name": "Catch the Coin",
+  "rating": 800,
+  "tags": [
+    "implementation"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1989A",
+  "url": "https://codeforces.com/problemset/problem/1989/A",
+  "contest_start_time": "2024-06-27T14:35:00+00:00",
+  "statement": {
+    "title": "A. Catch the Coin",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Monocarp visited a retro arcade club with arcade cabinets. There got curious about the \"Catch the Coin\" cabinet.\n\nThe game is pretty simple. The screen represents a coordinate grid such that:\n\n the X-axis is directed from left to right;\n\n the Y-axis is directed from bottom to top;\n\n the center of the screen has coordinates $(0, 0)$.\n\nAt the beginning of the game, the character is located in the center, and $n$ coins appear on the screen — the $i$-th coin is at coordinates $(x_i, y_i)$. The coordinates of all coins are different and not equal to $(0, 0)$.\n\nIn one second, Monocarp can move the character in one of eight directions. If the character is at coordinates $(x, y)$, then it can end up at any of the coordinates $(x, y + 1)$, $(x + 1, y + 1)$, $(x + 1, y)$, $(x + 1, y - 1)$, $(x, y - 1)$, $(x - 1, y - 1)$, $(x - 1, y)$, $(x - 1, y + 1)$.\n\nIf the character ends up at the coordinates with a coin, then Monocarp collects that coin.\n\nAfter Monocarp makes a move, all coins fall down by $1$, that is, they move from $(x, y)$ to $(x, y - 1)$. You can assume that the game field is infinite in all directions.\n\nMonocarp wants to collect at least one coin, but cannot decide which coin to go for. Help him determine, for each coin, whether he can collect it.",
+    "input_spec": "The first line contains a single integer $n$ ($1 \\le n \\le 500$) — the number of coins.\n\nIn the $i$-th of the next $n$ lines, two integers $x_i$ and $y_i$ ($-50 \\le x_i, y_i \\le 50$) are written — the coordinates of the $i$-th coin. The coordinates of all coins are different. No coin is located at $(0, 0)$.",
+    "output_spec": "For each coin, print \"YES\" if Monocarp can collect it. Otherwise, print \"NO\".",
+    "note": "Pay attention to the second coin in the example. Monocarp can first move from $(0, 0)$ to $(-1, -1)$. Then the coin falls $1$ down and ends up at $(-2, -2)$. Finally, Monocarp moves to $(-2, -2)$ and collects the coin.",
+    "samples": [
+      {
+        "input": "5\n24 42\n-2 -1\n-1 -2\n0 -50\n15 0",
+        "output": "\nYES\nYES\nNO\nNO\nYES"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 130937,
+    "url": "https://codeforces.com/blog/entry/130937",
+    "tutorial": "1989A — Catch the Coin",
+    "solution_code": []
+  }
+}

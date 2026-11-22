@@ -1,0 +1,44 @@
+{
+  "contest_id": 2063,
+  "index": "B",
+  "name": "Subsequence Update",
+  "rating": 1100,
+  "tags": [
+    "constructive algorithms",
+    "data structures",
+    "greedy",
+    "sortings"
+  ],
+  "points": 1000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2063B",
+  "url": "https://codeforces.com/problemset/problem/2063/B",
+  "contest_start_time": "2025-01-22T12:05:00+00:00",
+  "statement": {
+    "title": "B. Subsequence Update",
+    "time_limit": "1.5 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "After Little John borrowed expansion screws from auntie a few hundred times, eventually she decided to come and take back the unused ones.\nBut as they are a crucial part of home design, Little John decides to hide some in the most unreachable places — under the eco-friendly wood veneers.\n\nYou are given an integer sequence $a_1, a_2, \\ldots, a_n$, and a segment $[l,r]$ ($1 \\le l \\le r \\le n$).\n\nYou must perform the following operation on the sequence exactly once.\n\n Choose any subsequence$^{\\text{∗}}$ of the sequence $a$, and reverse it. Note that the subsequence does not have to be contiguous.\n\nFormally, choose any number of indices $i_1,i_2,\\ldots,i_k$ such that $1 \\le i_1  \\lt  i_2  \\lt  \\ldots  \\lt  i_k \\le n$. Then, change the $i_x$-th element to the original value of the $i_{k-x+1}$-th element simultaneously for all $1 \\le x \\le k$.\n\nFind the minimum value of $a_l+a_{l+1}+\\ldots+a_{r-1}+a_r$ after performing the operation.\n\n$^{\\text{∗}}$A sequence $b$ is a subsequence of a sequence $a$ if $b$ can be obtained from $a$ by the deletion of several (possibly, zero or all) element from arbitrary positions.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 10^4$). The description of the test cases follows.\n\nThe first line of each test case contains three integers $n$, $l$, $r$ ($1 \\le l \\le r \\le n \\le 10^5$) — the length of $a$, and the segment $[l,r]$.\n\nThe second line of each test case contains $n$ integers $a_1,a_2,\\ldots,a_n$ ($1 \\le a_{i} \\le 10^9$).\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $10^5$.",
+    "output_spec": "For each test case, output the minimum value of $a_l+a_{l+1}+\\ldots+a_{r-1}+a_r$ on a separate line.",
+    "note": "On the second test case, the array is $a=[1,2,3]$ and the segment is $[2,3]$.\n\nAfter choosing the subsequence $a_1,a_3$ and reversing it, the sequence becomes $[3,2,1]$. Then, the sum $a_2+a_3$ becomes $3$. It can be shown that the minimum possible value of the sum is $3$.",
+    "samples": [
+      {
+        "input": "6\n2 1 1\n2 1\n3 2 3\n1 2 3\n3 1 3\n3 1 2\n4 2 3\n1 2 2 2\n5 2 5\n3 3 2 3 5\n6 1 3\n3 6 6 4 3 2",
+        "output": "\n1\n3\n6\n3\n11\n8"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 138593,
+    "url": "https://codeforces.com/blog/entry/138593",
+    "tutorial": "To solve this problem, it is important to observe and prove the following claim:\n\n Claim: It is not beneficial to choose indices $i \\lt l$ and $j \\gt r$ at the same time.\n\nNotice that we only care about values that end up on indices in $[l,r]$.\n\nIf we choose $i_1,i_2,\\ldots,i_k$ such that $i_1 \\lt l$ and $i_k \\gt r$, $i_1$ and $i_k$ will be swapped with each other and not change the values that end up on $[l,r]$. This means we can exchange it for a shorter sequence of indices $i_2,i_3,\\ldots,i_{k-1}$, preserving the values ending up on $[l,r]$. If we repeat this exchange until it is no longer possible, it will satisfy either:\n\n Every index $i$ is in $[l,n]$;\n\n or every index $i$ is in $[1,r]$.\n\nWe can solve for both cases separately. For either case, we can constructively show that we can get the minimum $r-l+1$ values in the subsegment into $[l,r]$. The proof is as follows:\n\nWLOG assume we are solving for $[1,r]$, and the indices of the $k=r-l+1$ minimum values are $j_1,j_2,\\ldots,j_k$. Then:\n\n If we select every index in $[l,r]$ not one of the minimum $k$ values, there will be $x$ of them.\n\n If we select every index outside $[l,r]$ which is one of the minimum $k$ values, there will be also $x$ of them.\n\nThus, we end up with a subsequence of length $2x$, that gets the minimum $k$ values into the subsegment $[l,r]$. As a result, we only have to find the minimum $k$ values of the subsegment. This can be done easily with sorting. Do this for both $[1,r]$ and $[l,n]$, and we get the answer.\n\nThe problem has been solved with time complexity $\\mathcal{O}(n \\log n)$ per test case, due to sorting.",
+    "solution_code": [
+      "import sys\ninput=lambda:sys.stdin.readline().rstrip()\n \nfor _ in range(int(input())):\n    n,l,r=map(int,input().split());l-=1\n    arr=[*map(int,input().split())]\n    brr=arr[:l]+sorted(arr[l:])\n    crr=sorted(arr[:r])[::-1]+arr[r:]\n    print(min(sum(brr[l:r]),sum(crr[l:r])))"
+    ]
+  }
+}

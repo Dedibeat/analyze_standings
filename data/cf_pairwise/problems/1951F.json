@@ -1,0 +1,41 @@
+{
+  "contest_id": 1951,
+  "index": "F",
+  "name": "Inversion Composition",
+  "rating": 2500,
+  "tags": [
+    "constructive algorithms",
+    "data structures",
+    "greedy"
+  ],
+  "points": 2750.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1951F",
+  "url": "https://codeforces.com/problemset/problem/1951/F",
+  "contest_start_time": "2024-04-06T14:35:00+00:00",
+  "statement": {
+    "title": "F. Inversion Composition",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "My Chemical Romance - Disenchanted\n\nඞ\n\nYou are given a permutation $p$ of size $n$, as well as a non-negative integer $k$. You need to construct a permutation $q$ of size $n$ such that $\\operatorname{inv}(q) + \\operatorname{inv}(q \\cdot p) = k {}^\\dagger {}^\\ddagger$, or determine if it is impossible to do so.\n\n${}^\\dagger$ For two permutations $p$ and $q$ of the same size $n$, the permutation $w = q \\cdot p$ is such that $w_i = q_{p_i}$ for all $1 \\le i \\le n$.\n\n${}^\\ddagger$ For a permutation $p$ of size $n$, the function $\\operatorname{inv}(p)$ returns the number of inversions of $p$, i.e. the number of pairs of indices $1 \\le i  \\lt  j \\le n$ such that $p_i  \\gt  p_j$.",
+    "input_spec": "Each test contains multiple test cases. The first line contains an integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases. The description of the test cases follows.\n\nThe first line of each test case contains two integers $n$ and $k$ ($1 \\le n \\le 3 \\cdot 10^5, 0 \\le k \\le n(n - 1)$) — the size of $p$ and the target number of inversions.\n\nThe second line of each test case contains $n$ integers $p_1, p_2, \\ldots, p_n$ ($1 \\le p_i \\le n$, $p_i$'s are pairwise distinct) — the given permutation $p$.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $3 \\cdot 10^5$.",
+    "output_spec": "For each test case, print on one line \"YES\" if there exists a permutation $q$ that satisfies the given condition, or \"NO\" if there is no such permutation.\n\nIf the answer is \"YES\", on the second line, print $n$ integers $q_1, q_2, \\ldots, q_n$ that represent such a satisfactory permutation $q$. If there are multiple such $q$'s, print any of them.",
+    "note": "In the first test case, we have $q \\cdot p = [2, 1, 3]$, $\\operatorname{inv}(q) = 3$, and $\\operatorname{inv}(q \\cdot p) = 1$.\n\nIn the fourth test case, we have $q \\cdot p = [9, 1, 8, 5, 7, 6, 4, 3, 2]$, $\\operatorname{inv}(q) = 24$, and $\\operatorname{inv}(q \\cdot p) = 27$.",
+    "samples": [
+      {
+        "input": "5\n3 4\n2 3 1\n5 5\n2 3 5 1 4\n6 11\n5 1 2 3 4 6\n9 51\n3 1 4 2 5 6 7 8 9\n1 0\n1",
+        "output": "\nYES\n3 2 1\nNO\nNO\nYES\n1 5 9 8 7 6 4 3 2\nYES\n1"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 128116,
+    "url": "https://codeforces.com/blog/entry/128116",
+    "tutorial": "We say that $(i, j)$ is an inverse on permutation $p$ if $i  \\lt  j$ and $p_i  \\gt  p_j$, or $i  \\gt  j$ and $p_i  \\lt  p_j$.\n\nFor any two integers $1 \\le i  \\lt  j \\le n$, let's observe the \"inverseness\" of $(p_i, p_j)$ on $q$ and $(i, j)$ on $q \\cdot p$:\n\n If $(i, j)$ is not an inverse on $p$, then the inverseness of $(p_i, p_j)$ on $q$ and $(i, j)$ on $q \\cdot p$ is the same. Therefore, this pair contributes either $0$ or $2$ to $\\operatorname{inv}(q) + \\operatorname{inv}(q \\cdot p)$.\n\n Otherwise, the inverseness of $(p_i, p_j)$ on $q$ and $(i, j)$ on $q \\cdot p$ is different. Therefore, this pair always contribute $1$ to $\\operatorname{inv}(q) + \\operatorname{inv}(q \\cdot p)$.\n\nTherefore, the answer is \"NO\" if $k \\notin [\\operatorname{inv}(p), n(n - 1) - \\operatorname{inv}(p)]$, or if $k$ has different parity from $\\operatorname{inv}(p)$. Otherwise, we claim that we can always construct $q$; the following implementation actually constructs $q \\cdot p$, but we can easily find one permutation from the other.\n\nLet $k' = \\frac{k - \\operatorname{inv}(p)}{2}$, then the problem becomes \"find $q \\cdot p$ with $k'$ special inversions\", where an inverse $(i, j)$ on $q \\cdot p$ is special if $(i, j)$ is not an inverse on $p$. Let $x_i$ be the number of indices $j  \\lt  i$ where $p_j  \\lt  p_i$, which can be easily found via a standard Fenwick tree (note that $\\sum_{i=1}^n x_i = \\frac{n(n-1)}{2} - \\operatorname{inv}(p)$). Then there exists an index $t$ such that $\\sum_{i  \\lt  t} x_i \\le k'$, and $\\sum_{i \\le t} x_i \\ge k'$. It's straightforward to see that the permutation $q \\cdot p = [t, t - 1, \\dots, v + 1, v - 1, v - 2, \\dots, 1, v, t + 1, t + 2, \\dots, n]$ works for some value $v \\in [1, t]$, chosen such that there are exactly $k' - \\sum_{i  \\lt  t} x_i$ indices before $t$ that forms a special inversion with $t$.\n\nTime complexity: $O(n \\log n)$.",
+    "solution_code": []
+  }
+}

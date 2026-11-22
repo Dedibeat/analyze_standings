@@ -1,0 +1,41 @@
+{
+  "contest_id": 2042,
+  "index": "C",
+  "name": "Competitive Fishing",
+  "rating": 1800,
+  "tags": [
+    "greedy"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2042C",
+  "url": "https://codeforces.com/problemset/problem/2042/C",
+  "contest_start_time": "2024-12-02T14:35:00+00:00",
+  "statement": {
+    "title": "C. Competitive Fishing",
+    "time_limit": "2 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "Alice and Bob participate in a fishing contest! In total, they caught $n$ fishes, numbered from $1$ to $n$ (the bigger the fish, the greater its index). Some of these fishes were caught by Alice, others — by Bob.\n\nTheir performance will be evaluated as follows. First, an integer $m$ will be chosen, and all fish will be split into $m$ non-empty groups. The first group should contain several (at least one) smallest fishes, the second group — several (at least one) next smallest fishes, and so on. Each fish should belong to exactly one group, and each group should be a contiguous subsegment of fishes. Note that the groups are numbered in exactly that order; for example, the fishes from the second group cannot be smaller than the fishes from the first group, since the first group contains the smallest fishes.\n\nThen, each fish will be assigned a value according to its group index: each fish in the first group gets value equal to $0$, each fish in the second group gets value equal to $1$, and so on. So, each fish in the $i$-th group gets value equal to $(i-1)$.\n\nThe score of each contestant is simply the total value of all fishes that contestant caught.\n\nYou want Bob's score to exceed Alice's score by at least $k$ points. What is the minimum number of groups ($m$) you have to split the fishes into? If it is impossible, you should report that.",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases.\n\nThe first line of each test case contains two integers $n$ and $k$ ($2 \\le n \\le 2 \\cdot 10^5$; $1 \\le k \\le 10^9$).\n\nThe second line contains a string, consisting of exactly $n$ characters. The $i$-th character is either 0 (denoting that the $i$-th fish was caught by Alice) or 1 (denoting that the $i$-th fish was caught by Bob).\n\nAdditional constraint on the input: the sum of $n$ over all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, print a single integer — the minimum number of groups you have to split the fishes into; or -1 if it's impossible.",
+    "note": "In the first test case of the example, you can split the fishes into groups as follows: the first three fishes form the $1$-st group, the last fish forms the $2$-nd group. Then, Bob's score will be $1$, and Alice's score will be $0$.\n\nIn the third test case of the example, you can split the fishes into groups as follows: the first fish forms the $1$-st group, the last three fishes form the $2$-nd group. Then, Bob's score will be $2$, and Alice's score will be $1$.",
+    "samples": [
+      {
+        "input": "7\n4 1\n1001\n4 1\n1010\n4 1\n0110\n4 2\n0110\n6 3\n001110\n10 20\n1111111111\n5 11\n11111",
+        "output": "\n2\n-1\n2\n-1\n3\n4\n-1"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 136886,
+    "url": "https://codeforces.com/blog/entry/136886",
+    "tutorial": "The main idea we need to solve this problem is the following one. For each fish, its value will be equal to the number of groups before its group. So, each \"border\" between two groups increases the value of every fish after the border by $1$.\n\nLet $s_i$ be the number of Bob's fishes minus the number of Alice's fishes among the fishes with indices $i, i+1, \\dots, n-1, n$; also, let $a_j$ be the index of the fish from which the $j$-th group starts.\n\nThen the difference in scores between Bob and Alice is equal to $0 \\cdot (s_{a_1} - s_{a_2}) + 1 \\cdot (s_{a_2} - s_{a_3}) + \\cdots + (m - 1) \\cdot s_{a_m}$, where $m$ is the number of groups. This sum can be rewritten as: $0 \\cdot s_{a_1} + (2 - 1) \\cdot s_{a_2} + (3 - 2) \\cdot s_{a_3} + \\cdots + s_{a_m}$. So, $s_i$ denotes how the difference between Bob's score and Alice's score changes if we split the $i$-th fish and the $(i-1)$-th fish into different groups.\n\nFrom this, it is clear that the final score is the sum of certain elements of the array $s$. Since we have to minimize the number of groups (the number of selected elements from the array $s$), it is optimal to choose the maximum elements.\n\nSo, the solution is the following: construct the array $s$, sort it, and take the next maximum element until the sum is less than $k$. The answer to the problem is the number of selected elements plus $1$.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n \nusing namespace std;\n\nint main() {\n  int t;\n  cin >> t;\n  while (t--) {\n    int n, k;\n    string s;\n    cin >> n >> k >> s;\n    vector<int> vals;\n    int sum = 0;\n    for (int i = n - 1; i > 0; --i) {\n      sum += (s[i] == '1' ? 1 : -1);\n      if (sum > 0) vals.push_back(sum);\n    }\n    sort(vals.begin(), vals.end());\n    int ans = 1;\n    while (k > 0 && !vals.empty()) {\n      k -= vals.back();\n      vals.pop_back();\n      ++ans;\n    }\n    cout << (k > 0 ? -1 : ans) << '\\n';\n  }\n}"
+    ]
+  }
+}

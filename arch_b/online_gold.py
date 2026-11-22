@@ -387,7 +387,7 @@ def contest_difficulty(rows):
     """Per regional: online rank at which gold is a coin flip (shared slope,
     per-contest intercept), next to the rating fit's CF gold line and gold bar.
     The fit's side of the disagreement is the line. The bar is a problem
-    threshold and tracks gold difficulty less well (details.md, 2026-10-13)."""
+    threshold and tracks gold difficulty less well (docs/journal/, 2026-10-13)."""
     contests = sorted({(r["season"], r["site"]) for r in rows})
     col = {c: i for i, c in enumerate(contests)}
     X = []

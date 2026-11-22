@@ -1,0 +1,42 @@
+{
+  "contest_id": 2009,
+  "index": "D",
+  "name": "Satyam and Counting",
+  "rating": 1400,
+  "tags": [
+    "geometry",
+    "math"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2009D",
+  "url": "https://codeforces.com/problemset/problem/2009/D",
+  "contest_start_time": "2024-09-03T14:35:00+00:00",
+  "statement": {
+    "title": "D. Satyam and Counting",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Satyam is given $n$ distinct points on the 2D coordinate plane. It is guaranteed that $0 \\leq y_i \\leq 1$ for all given points $(x_i, y_i)$. How many different nondegenerate right triangles$^{\\text{∗}}$ can be formed from choosing three different points as its vertices?\n\nTwo triangles $a$ and $b$ are different if there is a point $v$ such that $v$ is a vertex of $a$ but not a vertex of $b$.\n\n$^{\\text{∗}}$A nondegenerate right triangle has positive area and an interior $90^{\\circ}$ angle.",
+    "input_spec": "The first line contains an integer $t$ ($1 \\leq t \\leq 10^4$) — the number of test cases.\n\nThe first line of each test case contains an integer $n$ ($3 \\leq n \\leq 2 \\cdot 10^5$) — the number of points.\n\nThe following $n$ lines contain two integers $x_i$ and $y_i$ ($0 \\leq x_i \\leq n$, $0 \\leq y_i \\leq 1$) — the $i$'th point that Satyam can choose from. It is guaranteed that all $(x_i, y_i)$ are pairwise distinct.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "Output an integer for each test case, the number of distinct nondegenerate right triangles that can be formed from choosing three points.",
+    "note": "The four triangles in question for the first test case:",
+    "samples": [
+      {
+        "input": "3\n5\n1 0\n1 1\n3 0\n5 0\n2 1\n3\n0 0\n1 0\n3 0\n9\n1 0\n2 0\n3 0\n4 0\n5 0\n2 1\n7 1\n8 1\n9 1",
+        "output": "\n4\n0\n8"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 133296,
+    "url": "https://codeforces.com/blog/entry/133296",
+    "tutorial": "2009D - Сатьям и подсчет\n\nProblem Credits: Proof_by_QED\n Analysis: cry\n\nSolution\n\nInitially, the obvious case one might first consider is an upright right triangle (specifically, the triangle with one of its sides parallel to the $y$-axis). This side can only be made with two points in the form $(x, 0)$ and $(x,1)$. We only need to search third point. Turns out, the third point can be any other unused vertex! If the third point has $y = 0$, then it will be an upright triangle, but if the third point has $y = 1$, it will simply be upside down.\n\nOne of the other case is in the form of $(x,0), (x+1,1), (x+2, 0)$. Let's see why this is a right triangle. Recall that in right triangle, the sum of the squares of two of the sides must equal to the square of the third side. The length between the first and the second point is $\\sqrt 2$ because it is the diagonal of $1$ by $1$ unit block. Similarily, the second and third point also has length $\\sqrt 2$. Obviously, the length between the first and third point is $2$. Since we have $\\sqrt 2^2 + \\sqrt 2^2 = 2^2$, this is certainly a right triangle. Of course, we can flip the $y$ values of each point and it will still be a valid right triangle, just upside down.\n\nCode (Python) (ntarsis30)",
+    "solution_code": [
+      "from collections import Counter\nfor _ in range(int(input())):\n    n = int(input())\n    nums = []\n    for i in range(n):\n        x,y = map(int,input().split())\n        nums.append((x,y))\n    ans = 0\n    b = Counter(x[0] for x in nums)\n    check = set(nums)\n    for i in b:\n        if b[i]==2: ans += n-2\n    for p in check:\n        if (p[0]-1,p[1]^1) in check and (p[0]+1,p[1]^1) in check: \n            ans +=1\n    print(ans)\n    "
+    ]
+  }
+}

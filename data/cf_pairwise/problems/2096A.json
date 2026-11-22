@@ -1,0 +1,42 @@
+{
+  "contest_id": 2096,
+  "index": "A",
+  "name": "Wonderful Sticks",
+  "rating": 800,
+  "tags": [
+    "constructive algorithms",
+    "greedy"
+  ],
+  "points": 500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2096A",
+  "url": "https://codeforces.com/problemset/problem/2096/A",
+  "contest_start_time": "2025-04-19T14:35:00+00:00",
+  "statement": {
+    "title": "A. Wonderful Sticks",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "You are the proud owner of $n$ sticks. Each stick has an integer length from $1$ to $n$. The lengths of the sticks are distinct.\n\nYou want to arrange the sticks in a row. There is a string $s$ of length $n - 1$ that describes the requirements of the arrangement.\n\nSpecifically, for each $i$ from $1$ to $n - 1$:\n\n If $s_i = \\texttt{ \\lt }$, then the length of the stick at position $i + 1$ must be smaller than all sticks before it;\n\n If $s_i = \\texttt{ \\gt }$, then the length of the stick at position $i + 1$ must be larger than all sticks before it.\n\nFind any valid arrangement of sticks. We can show that an answer always exists.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 500$). The description of the test cases follows.\n\nThe first line of each test case contains a single integer $n$ ($2 \\le n \\le 100$) — the number of sticks.\n\nThe second line of each test case contains a single string $s$ of length $n - 1$ consisting of characters $\\texttt{ \\lt }$ and $\\texttt{ \\gt }$ — describing the requirements of the arrangement.",
+    "output_spec": "For each test case, output $n$ integers $a_1, a_2, \\ldots, a_n$ ($1 \\leq a_i \\leq n$, the $a_i$ are distinct) — the lengths of the sticks in order. If there are multiple solutions, print any of them.",
+    "note": "For the first test case, the requirements of the arrangement are as follows:\n\n $s_1 = \\texttt{ \\lt }$, which means $a_2$ is smaller than $a_1$.\n\nThus, one possible arrangement is $[2, 1]$.\n\nFor the second test case, the requirements of the arrangement are as follows:\n\n $s_1 = \\texttt{ \\lt }$, which means $a_2$ is smaller than $a_1$;\n\n $s_2 = \\texttt{ \\lt }$, which means $a_3$ is smaller than $a_1$ and $a_2$;\n\n $s_3 = \\texttt{ \\gt }$, which means $a_4$ is larger than $a_1$, $a_2$, and $a_3$;\n\n $s_4 = \\texttt{ \\lt }$, which means $a_5$ is smaller than $a_1$, $a_2$, $a_3$, and $a_4$.\n\nThus, one possible arrangement is $[4, 3, 2, 5, 1]$.",
+    "samples": [
+      {
+        "input": "5\n2\n<\n5\n<<><\n2\n>\n3\n<>\n7\n><>>><",
+        "output": "\n2 1 \n4 3 2 5 1 \n1 2 \n2 1 3 \n3 4 2 5 6 7 1 "
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 142070,
+    "url": "https://codeforces.com/blog/entry/142070",
+    "tutorial": "2096A - Wonderful Sticks\n\nIdea: SanguineChameleon\n\nStep 1\n\nCreate your own test cases and solve them! What can you observe?\n\nStep 2\n\nWhat is the length of the $n$-th stick?\n\nAnswer\n\nIf $s_{n - 1} = \\texttt{ \\lt }$, then $a_n = 1$, because the $n$-th stick must be shorter than all the other sticks.\n\nIf $s_{n - 1} = \\texttt{ \\gt }$, then $a_n = n$, because the $n$-th stick must be longer than all the other sticks.\n\nStep 3\n\nCan we do something similar for the remaining sticks?\n\nAnswer\n\nYes! Remove the $n$-th stick, and then solve for the remaining $n - 1$ sticks.\n\nWe can make similar observations about the $(n - 1)$-th stick.\n\nThen, remove the $(n - 1)$-th stick, and solve for the remaining $n - 2$ sticks, and so on.\n\nStep 4\n\nSo the algorithm is as follows:\n\nInitialize an array $b = [1, 2, \\ldots, n]$. This represents the lengths of the remaining sticks.\n\nFor each $i$ from $n - 1$ to $1$:\n\nIf $s_i = \\texttt{ \\lt }$, then set $a_{i + 1} = \\min(b)$.\n\nIf $s_i = \\texttt{ \\gt }$, then set $a_{i + 1} = \\max(b)$.\n\nNow remove $a_{i + 1}$ from $b$, and continue.\n\nIn the end, we have $1$ remaining element in $b$. This is the value of $a_1$.\n\nThe time complexity of this solution is $O(n^2)$.\n\nStep 5 (Optional)\n\nWe can notice that at any point, $b$ has the form $[l, l + 1, \\ldots, r]$.\n\nSo we can represent $b$ using two integers $l$ and $r$:\n\nWhen we remove $\\min(b)$, we increase $l$ by $1$.\n\nWhen we remove $\\max(b)$, we decrease $r$ by $1$.\n\nNow the time complexity of our solution is $O(n)$.\n\nImplementation",
+    "solution_code": [
+      "#include <bits/stdc++.h>\nusing namespace std;\n\nvoid test() {\n    int n;\n    cin >> n;\n    string s;\n    cin >> s;\n\n    int l = 1;\n    int r = n;\n    vector<int> a(n);\n    for (int i = n - 2; i >= 0; i--) {\n        if (s[i] == '<') {\n            a[i + 1] = l;\n            l++;\n        }\n        if (s[i] == '>') {\n            a[i + 1] = r;\n            r--;\n        }\n    }\n    a[0] = l;\n\n    for (int i = 0; i < n; i++) {\n        cout << a[i] << \" \";\n    }\n    cout << '\\n';\n}\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(nullptr);\n\n    int t;\n    cin >> t;\n    for (int i = 0; i < t; i++) {\n        test();\n    }\n    \n    return 0;\n}"
+    ]
+  }
+}

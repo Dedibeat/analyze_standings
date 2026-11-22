@@ -1,0 +1,46 @@
+{
+  "contest_id": 2049,
+  "index": "E",
+  "name": "Broken Queries",
+  "rating": 2400,
+  "tags": [
+    "binary search",
+    "bitmasks",
+    "brute force",
+    "constructive algorithms",
+    "implementation",
+    "interactive"
+  ],
+  "points": 2250.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2049E",
+  "url": "https://codeforces.com/problemset/problem/2049/E",
+  "contest_start_time": "2024-12-20T14:35:00+00:00",
+  "statement": {
+    "title": "E. Broken Queries",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "You, a wizard whose creation was destroyed by a dragon, are determined to hunt it down with a magical AOE tracker. But it seems to be toyed with...\n\nThis is an interactive problem.\n\nThere is a hidden binary array $a$ of length $n$ ($\\mathbf{n}$ is a power of 2) and a hidden integer $k\\ (2 \\le k \\le n - 1)$. The array $a$ contains exactly one 1 (and all other elements are 0). For two integers $l$ and $r$ ($1 \\le l \\le r \\le n$), define the range sum $s(l, r) = a_l + a_{l+1} + \\cdots + a_r$.\n\nYou have a magical device that takes ranges and returns range sums, but it returns the opposite result when the range has length at least $k$. Formally, in one query, you can give it a pair of integers $[l, r]$ where $1 \\le l \\le r \\le n$, and it will return either $0$ or $1$ according to the following rules:\n\n If $r - l + 1  \\lt  k$, it will return $s(l, r)$.\n\n If $r - l + 1 \\ge k$, it will return $1 - s(l, r)$.\n\nFind $k$ using at most $33$ queries.\n\nThe device is not adaptive. It means that the hidden $a$ and $k$ are fixed before the interaction and will not change during the interaction.",
+    "input_spec": null,
+    "output_spec": null,
+    "note": "In the first test case, $k = 6$ and the 1 in the hidden array is at index 6, so $a = [0, 0, 0, 0, 0, 1, 0, 0]$.\n\n For the query 3 5, since $5-3+1 = 3  \\lt  k$, the device answers correctly. Since 6 is not contained in the range $[3, 5]$, the device answers $0$.\n\n For the query 1 8, since $8 - 1 + 1 = 8 \\ge k$, the device answers $0$ incorrectly.\n\n For the query 4 8, since $8 - 4 + 1 = 5  \\lt  k$, the device answers $1$ correctly.\n\n For the query 3 8, since $8 - 3 + 1 = 6 \\ge k$, the device answers $0$ incorrectly.\n\n The example solution then outputs $6$ as the answer, which is correct.\nIn the second test case, $k = 2$ and the 1 in the hidden array is at index 3, so $a = [0, 0, 1, 0]$.\n\nNote that the example solution may not have enough information to determine $k$ above; this is only an example.",
+    "samples": [
+      {
+        "input": "\n2\n8\n\n0\n\n0\n\n1\n\n0\n\n4\n\n1\n\n0",
+        "output": "\n? 3 5\n\n? 1 8\n\n? 4 8\n\n? 3 8\n\n! 6\n\n? 3 3\n\n? 3 4\n\n! 2"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 137273,
+    "url": "https://codeforces.com/blog/entry/137273",
+    "tutorial": "2049E - Broken Queries\n\nIdea & preparation: Evirir\n Solution: Kaey\n\nTutorial\n\n2049E - Broken Queries\n\nMake 2 queries $[1, n/4]$ and $[n/4+1, n/2]$. This tells us which half the 1 is in: it is in $[1, n / 2]$ if the query results are different and $[n / 2 + 1, n]$ otherwise.\n\nMake 1 query: query $[1, n/2]$ if the 1 is in it or $[n/2+1, n]$ otherwise. This tells us that $k \\lt n / 2$ if the result is $1$ and $k \\ge n / 2$ otherwise.\n\nWithout loss of generality, assume that the 1 is in $[1, n / 2]$. Now we can binary search for $k$ in $[1, n / 2]$ or $[n / 2 + 1, n]$. Let $k'$ be our guess.\n\nIf $k \\lt n / 2$, query $[n / 2 + 1, n / 2 + k']$. The result is $1$ if $k' \\ge k$ and $0$ otherwise.\n\nIf $k \\ge n / 2$, query $[1, k']$. The result is $0$ if $k' \\ge k$ and $1$ otherwise.\n\nIn both cases, the binary search takes $\\log n - 1 \\le 29$ queries. Overall, this takes at most $2 + 1 + 29 = 32$ queries.\n\nThe limit of $33$ queries (instead of $32$) is to allow less optimized solutions and other solutions. For example, one can instead do 3 queries in the beginning $[1, n / 4]$, $[n / 4 + 1, n / 2]$, $[n / 2 + 1, 3n / 4]$ to determine which quarter the 1 is in.\n\nSolution",
+    "solution_code": [
+      "#include <bits/stdc++.h>\nusing namespace std;\n\nint qry(int l, int r, bool rev = 0, int n = 0) {\n    if (rev) {\n        int t = n - l;\n        l = n - r;\n        r = t;\n    }\n    cout << \"? \" << l + 1 << ' ' << r << endl;\n    cin >> r;\n    return r;\n}\n\nvoid solve() {\n    int n;\n    cin >> n;\n    int a = qry(0, n / 4);\n    int b = qry(n / 4, n / 2);\n    bool kSmall = 1;\n    bool firstHalf = 1;\n    if (a == b) firstHalf = 0;\n    int bs = 0;\n    if (qry(0, n / 2, firstHalf, n) == 0) kSmall = 0;\n    if (kSmall) {\n        for (int k = n / 4; k; k /= 2)\n            if (qry(0, bs + k, firstHalf, n) == 0) bs += k;\n    } else {\n        bs = n / 2 - 1;\n        for (int k = n / 4; k; k /= 2)\n            if (qry(0, bs + k, 1-firstHalf, n) == 1) bs += k;\n    }\n    cout << \"! \" << bs + 1 << endl;\n}\n\nint main() {\n    int T = 1;\n    cin >> T;\n    while (T--) solve();\n    return 0;\n}"
+    ]
+  }
+}

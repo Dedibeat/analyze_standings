@@ -1,0 +1,43 @@
+{
+  "contest_id": 2048,
+  "index": "E",
+  "name": "Kevin and Bipartite Graph",
+  "rating": 2000,
+  "tags": [
+    "constructive algorithms",
+    "graphs",
+    "greedy"
+  ],
+  "points": 1750.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2048E",
+  "url": "https://codeforces.com/problemset/problem/2048/E",
+  "contest_start_time": "2024-12-19T14:35:00+00:00",
+  "statement": {
+    "title": "E. Kevin and Bipartite Graph",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "The Arms Factory needs a poster design pattern and finds Kevin for help.\n\nA poster design pattern is a bipartite graph with $ 2n $ vertices in the left part and $ m $ vertices in the right part, where there is an edge between each vertex in the left part and each vertex in the right part, resulting in a total of $ 2nm $ edges.\n\nKevin must color each edge with a positive integer in the range $ [1, n] $. A poster design pattern is good if there are no monochromatic cycles$^{\\text{∗}}$ in the bipartite graph.\n\nKevin needs your assistance in constructing a good bipartite graph or informing him if it is impossible.\n\n$^{\\text{∗}}$A monochromatic cycle refers to a simple cycle in which all the edges are colored with the same color.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $ t $ ($ 1 \\le t \\le 100 $).\n\nThe only line of each test case contains two integers $ n $ and $ m $ ($ 1 \\le n, m \\leq 10^3 $) — the bipartite graph has $ 2n $ vertices in the left part and $ m $ vertices in the right part.\n\nIt is guaranteed that both the sum of $ n $ and the sum of $ m $ over all test cases do not exceed $ 10^3 $.",
+    "output_spec": "For each test case, if there is no solution, then output No.\n\nOtherwise, output Yes, and then output $ 2n $ lines, with each line containing $ m $ positive integers. The $ i $-th line's $ j $-th integer represents the color of the edge between the $ i $-th vertex in the left part and the $ j $-th vertex in the right part.\n\nIf there are multiple answers, you can print any of them.\n\nYou can output each letter in any case (for example, the strings yEs, yes, Yes, and YES will be recognized as a positive answer).",
+    "note": "For the first test case, the graph is shown as follows:\n\nFor the second test case, it can be proven that there is no valid solution.",
+    "samples": [
+      {
+        "input": "3\n2 2\n3 7\n5 4",
+        "output": "\nYES\n1 2\n2 1\n2 2\n2 1\nNO\nYES\n1 1 1 1\n1 2 2 2\n1 2 3 3\n1 2 3 4\n1 2 3 4\n1 2 3 4\n1 2 3 4\n1 2 3 4\n1 2 3 4\n1 2 3 4"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 137473,
+    "url": "https://codeforces.com/blog/entry/137473",
+    "tutorial": "2048E - Kevin and Bipartite Graph\n\nAuthor: Little09\n\nHint 1\n\nIt can be observed that the larger $m$ is, the harder it is to satisfy the conditions. Try to find an upper bound for $m$.\n\nTutorial\n\n2048E - Kevin and Bipartite Graph\n\nThe graph has a total of $2nm$ edges, and each color forms a forest. Therefore, for any given color, there are at most $2n + m - 1$ edges. Thus, the total number of edges cannot exceed $(2n + m - 1)n$. This gives the condition: $(2n+m-1)n\\ge 2nm$. Simplifying, we find $m \\leq 2n - 1$.\n\nNext, we only need to construct a valid case for $m = 2n - 1$ to solve the problem.\n\nIn fact, this is easy to construct. Since each right-side vertex has a degree of $2n$, and there are $n$ total colors, let each color have exactly $2$ edges. For any given color, this is equivalent to choosing two left-side vertices to connect (ignoring the existence of the right-side vertices). After $2n - 1$ connections, the left-side vertices need to form a tree. It turns out that connecting the left-side vertices into a chain suffices. During construction, we can cycle the colors of the first right-side vertex. For example, for $n = 4$ and $m = 7$, the result looks like this:\n\nThus, a simple construction method is as follows: for left-side vertex $i$ and right-side vertex $j$, the color of the edge connecting them is given by:\n $ \\left\\lfloor\\dfrac{(i+j)\\bmod 2n}2\\right\\rfloor+1 $",
+    "solution_code": [
+      "1 4 4 3 3 2 2\n1 1 4 4 3 3 2\n2 1 1 4 4 3 3\n2 2 1 1 4 4 3\n3 2 2 1 1 4 4\n3 3 2 2 1 1 4\n4 3 3 2 2 1 1\n4 4 3 3 2 2 1"
+    ]
+  }
+}

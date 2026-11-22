@@ -1,0 +1,48 @@
+{
+  "contest_id": 2028,
+  "index": "E",
+  "name": "Alice's Adventures in the Rabbit Hole",
+  "rating": 2300,
+  "tags": [
+    "combinatorics",
+    "dfs and similar",
+    "dp",
+    "games",
+    "greedy",
+    "math",
+    "probabilities",
+    "trees"
+  ],
+  "points": 2000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2028E",
+  "url": "https://codeforces.com/problemset/problem/2028/E",
+  "contest_start_time": "2024-11-10T15:35:00+00:00",
+  "statement": {
+    "title": "E. Alice's Adventures in the Rabbit Hole",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Alice is at the bottom of the rabbit hole! The rabbit hole can be modeled as a tree$^{\\text{∗}}$ which has an exit at vertex $1$, and Alice starts at some vertex $v$. She wants to get out of the hole, but unfortunately, the Queen of Hearts has ordered her execution.\n\nEach minute, a fair coin is flipped. If it lands heads, Alice gets to move to an adjacent vertex of her current location, and otherwise, the Queen of Hearts gets to pull Alice to an adjacent vertex of the Queen's choosing. If Alice ever ends up on any of the non-root leaves$^{\\text{†}}$ of the tree, Alice loses.\n\nAssuming both of them move optimally, compute the probability that Alice manages to escape for every single starting vertex $1\\le v\\le n$. Since these probabilities can be very small, output them modulo $998\\,244\\,353$.\n\nFormally, let $M = 998\\,244\\,353$. It can be shown that the exact answer can be expressed as an irreducible fraction $\\frac{p}{q}$, where $p$ and $q$ are integers and $q \\not \\equiv 0 \\pmod{M}$. Output the integer equal to $p \\cdot q^{-1} \\bmod M$. In other words, output such an integer $x$ that $0 \\le x  \\lt  M$ and $x \\cdot q \\equiv p \\pmod{M}$.\n\n$^{\\text{∗}}$A tree is a connected simple graph which has $n$ vertices and $n-1$ edges.\n\n$^{\\text{†}}$A leaf is a vertex that is connected to exactly one edge.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 10^4$). The description of the test cases follows.\n\nThe first line of each test case contains a single integer $n$ ($2\\le n\\le 2\\cdot 10^5$) — the number of vertices in the tree.\n\nThe $i$-th of the next $n - 1$ lines contains two integers $x_i$ and $y_i$ ($1 \\le x_i, y_i \\le n$ and $x_i \\neq y_i$) — the edges of the tree. It is guaranteed that the given edges form a tree.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $2\\cdot 10^5$.",
+    "output_spec": "For each test case, output $n$ integers on one line — the probabilities of Alice escaping starting from vertex $1, 2, \\ldots, n$. Since these probabilities can be very small, output them modulo $998\\,244\\,353$.",
+    "note": "For the first test case:\n\n Alice escapes from the root (vertex $1$) by definition with probability $1$.\n\n Alice immediately loses from vertices $4$ and $5$ since they are leaves.\n\n From the other two vertices, Alice escapes with probability $\\frac 12$ since the Queen will pull her to the leaves.",
+    "samples": [
+      {
+        "input": "2\n5\n1 2\n1 3\n2 4\n3 5\n9\n1 2\n2 3\n4 5\n5 6\n7 8\n8 9\n2 4\n5 7",
+        "output": "\n1 499122177 499122177 0 0 \n1 499122177 0 332748118 166374059 0 443664157 720954255 0 "
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 136096,
+    "url": "https://codeforces.com/blog/entry/136096",
+    "tutorial": "Note that Alice should always aim to move to the root, as this maximizes her probability of escaping (i.e., for any path from leaf to root, Alice's probability of escaping increases moving up the path). Furthermore, the Queen should always move downward for the same reason as above. Furthermore, the Queen should always move to the closest leaf in the subtree rooted at the current node.\n\nThere are now a few ways to compute this, but basically all of them are $O(n)$. For one such slick way, define $d(v)$ to be the distance to the closest leaf of the subtree of $v$, $p(v)$ to be the parent of $v$, and $t(v)$ to be the probability Alice gets the treasure starting at node $v$. Then, we claim that $t(v) = \\frac{d(v)}{d(v)+1}\\cdot t(p(v))$ for all vertices except the root. We can populate these values as we DFS down the tree.\n\nIndeed, suppose that the tree is just a path with $d + 1$ vertices, labelled from $1$ through $d + 1$. Then, Alice's probability of getting the treasure at node $i$ is $1 - \\frac{i - 1}{d}$ (this comes from solving a system of linear equations). This lines up with the above $t(v)$ calculation.\n\nNow, we can construct the answer inductively. Let $P$ be a shortest root-to-leaf path in $T$ and consider the subtrees formed by removing the edges of $P$ from $T$. Each such subtree is rooted at some node $v\\in P$. Then, in a subtree $T'$ rooted at $v$, the probability of Alice getting the treasure is exactly the probability that Alice gets to node $v$ and then to node $1$ from $v$, by the chain rule of conditioning and noting that the Queen will never re-enter the subtree $T'$ and the game will only play out along $P$ from this point forward. Therefore, it suffices to deconstruct $T$ into shortest root-to-leaf paths and note that at a given vertex $v$, we only have to play along the sequence of shortest root-to-leaf paths leading from $v$ to $1$. Along each of these paths, the above probability calculation holds, so we are done.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\nusing namespace std;\n \nusing ll = long long;\nusing ld = long double;\nusing pii = pair<int, int>;\nusing vi = vector<int>;\n#define rep(i, a, b) for(int i = a; i < (b); ++i)\n#define all(x) (x).begin(), (x).end()\n#define sz(x) (int)(x).size()\n#define smx(a, b) a = max(a, b)\n#define smn(a, b) a = min(a, b)\n#define pb push_back\n#define endl '\\n'\n \nconst ll MOD = 1e9 + 7;\nconst ld EPS = 1e-9;\n \n// mt19937 rng(time(0));\n \nll euclid(ll a, ll b, ll &x, ll &y) {\n\tif (!b) return x = 1, y = 0, a;\n\tll d = euclid(b, a % b, y, x);\n\treturn y -= a/b * x, d;\n}\n \nconst ll mod = 998244353;\nstruct mint {\n\tll x;\n\tmint(ll xx) : x(xx) {}\n\tmint operator+(mint b) { return mint((x + b.x) % mod); }\n\tmint operator-(mint b) { return mint((x - b.x + mod) % mod); }\n\tmint operator*(mint b) { return mint((x * b.x) % mod); }\n\tmint operator/(mint b) { return *this * invert(b); }\n\tmint invert(mint a) {\n\t\tll x, y, g = euclid(a.x, mod, x, y);\n\t\tassert(g == 1); return mint((x + mod) % mod);\n\t}\n\tmint operator^(ll e) {\n\t\tif (!e) return mint(1);\n\t\tmint r = *this ^ (e / 2); r = r * r;\n\t\treturn e&1 ? *this * r : r;\n\t}\n};\n \nvoid solve() {\n\tint n; cin >> n;\n\tvector<vector<int>> t(n);\n\trep(i,0,n-1) {\n\t\tint x, y; cin >> x >> y; --x, --y;\n\t\tt[x].push_back(y);\n\t\tt[y].push_back(x);\n\t}\n \n\tvector<int> d(n, n + 1);\n\tfunction<int(int, int)> depths = [&](int curr, int par) {\n\t\tfor (auto v : t[curr]) {\n\t\t\tif (v == par) continue;\n\t\t\td[curr] = min(d[curr], 1 + depths(v, curr));\n\t\t}\n\t\tif (d[curr] > n) d[curr] = 0;\n\t\treturn d[curr];\n\t};\n \n\tdepths(0, -1);\n \n\tvector<mint> ans(n, 0);\n\tfunction<void(int, int, mint)> dfs = [&](int curr, int par, mint val) {\n\t\tans[curr] = val;\n\t\tfor (auto v : t[curr]) {\n\t\t\tif (v == par) continue;\n\t\t\tdfs(v, curr, val * d[v] / (d[v] + 1));\n\t\t}\n\t};\n \n\tdfs(0, -1, mint(1));\n\tfor (auto x : ans) {\n\t\tcout << x.x << \" \";\n\t}\n\tcout << \"\\n\";\n}\n \nint main() {\n\tcin.tie(0)->sync_with_stdio(0);\n \n\tint t; cin >> t;\n\twhile (t--) solve();\n}"
+    ]
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "contest_id": 1975,
+  "index": "F",
+  "name": "Set",
+  "rating": 2600,
+  "tags": [
+    "bitmasks",
+    "brute force",
+    "combinatorics",
+    "dfs and similar",
+    "divide and conquer",
+    "dp",
+    "math"
+  ],
+  "points": 2500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1975F",
+  "url": "https://codeforces.com/problemset/problem/1975/F",
+  "contest_start_time": "2024-05-25T14:35:00+00:00",
+  "statement": {
+    "title": "F. Set",
+    "time_limit": "2 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "Define the binary encoding of a finite set of natural numbers $T \\subseteq \\{0,1,2,\\ldots\\}$ as $f(T) = \\sum\\limits_{i \\in T} 2^i$. For example, $f(\\{0,2\\}) = 2^0 + 2^2 = 5$ and $f(\\{\\}) = 0$. Notice that $f$ is a bijection from all such sets to all non-negative integers. As such, $f^{-1}$ is also defined.\n\nYou are given an integer $n$ along with $2^n-1$ sets $V_1,V_2,\\ldots,V_{2^n-1}$.\n\nFind all sets $S$ that satisfy the following constraint:\n\n $S \\subseteq \\{0,1,\\ldots,n-1\\}$. Note that $S$ can be empty.\n\n For all non-empty subsets $T \\subseteq \\{0,1,\\ldots,n-1\\}$, $|S \\cap T| \\in V_{f(T)}$.\n\nDue to the large input and output, both input and output will be given in terms of binary encodings of the sets.",
+    "input_spec": "The first line of input contains a single integer $n$ ($1 \\leq n \\leq 20$).\n\nThe second line of input contains $2^n-1$ integers $v_1,v_2,\\ldots,v_{2^n-1}$ ($0 \\leq v_i  \\lt  2^{n+1}$) — the sets $V_i$ given in their binary encoding where $V_i = f^{-1}(v_i)$.",
+    "output_spec": "The first line of output should contain an integer $k$ indicating the number of possible $S$.\n\nIn the following $k$ lines, you should output $f(S)$ for all possible $S$ in increasing order.",
+    "note": "In the first test case, one possible $S$ is $f^{-1}(3) = \\{0,1\\}$. All the non-empty subsets $T \\subseteq \\{0,1,2\\}$ and the corresponding $|S \\cap T|$, $f(T)$ and $V_f(T)$ are as follows:\n\n$T$$|S\\cap T|$$f(T)$$V_{f(T)}$\n\n$\\{0\\}$$1$$1$$\\{0,1,2,3\\}$\n\n$\\{1\\}$$1$$2$$\\{0,1,2,3\\}$\n\n$\\{2\\}$$0$$4$$\\{0,1,2,3\\}$\n\n$\\{0,1\\}$$2$$3$$\\{0,1,2,3\\}$\n\n$\\{0,2\\}$$1$$5$$\\{0,1,2,3\\}$\n\n$\\{1,2\\}$$1$$6$$\\{0,1,2,3\\}$\n\n$\\{0,1,2\\}$$2$$7$$\\{2,3\\}$",
+    "samples": [
+      {
+        "input": "3\n15 15 15 15 15 15 12",
+        "output": "\n4\n3\n5\n6\n7"
+      },
+      {
+        "input": "5\n63 63 63 63 6 63 63 63 63 63 63 5 63 63 63 63 63 63 8 63 63 63 63 2 63 63 63 63 63 63 63",
+        "output": "\n1\n19"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 129801,
+    "url": "https://codeforces.com/blog/entry/129801",
+    "tutorial": "1975F - Set\n\nIdea: Toxel Solution: errorgorn, Toxel Prepared by: Nerovix\n\nHint 1\n\nConsider enumerating each number from $0$ to $n-1$ whether it is contained by $S$, when we have enumerated the first $x$ numbers, there are only $2^{n-x}$ constraints.\n\nSolution\n\nRead the hints.\n\nConsider enumerating each number from $0$ to $n-1$ whether it is contained by $S$. Suppose that the current enumeration reaches $i$, and in the remaining constraints, $T_1$ and $T_2$ are two sets, the only difference between them is whether they contain $i$ ($T_1$ contains $i$):\n\n$S$ contains $i$. We can merge $T_1$ and $T_2$ into a new constraint $T'$ and $v_{T'}=(v_{T_1}»1)$&$v_{T_2}$.\n\n$S$ doesn't contain $i$. We can merge $T_1$ and $T_2$ into a new constraint $T'$ and $v_{T'}=v_{T_1}$&$v_{T_2}$.\n\nWe can merge constraints quickly when the enumeration reaches a new number. And the time complexity is $O(n\\cdot 2^n)$\n\nCode",
+    "solution_code": [
+      "#include<bits/stdc++.h>\n\nusing namespace std;\n\nconst int N = 24, S = (1 << 20) + 5;\nint n = 0, f[N][S] = {};\nvector<int> ans;\n\ninline void dfs(int s = 0, int i = 0){\n\tif(i < n){\n\t\tint m = 1 << (n - i - 1);\n\t\tfor(int t = 0 ; t < m ; t ++) f[i + 1][t] = f[i][t] & f[i][m | t];\n\t\tdfs(s << 1, i + 1);\n\t\tfor(int t = 0 ; t < m ; t ++) f[i + 1][t] = f[i][t] & (f[i][m | t] >> 1);\n\t\tdfs(s << 1 | 1, i + 1);\n\t}\n\telse if(f[n][0] & 1) ans.push_back(s);\n}\n\nint main(){\n\tscanf(\"%d\", &n);\n\tf[0][0] = 1;\n\tfor(int s = 1 ; s < 1 << n ; s ++) scanf(\"%d\", &f[0][s]);\n\tdfs();\n\tprintf(\"%d\\n\", int(ans.size()));\n\tfor(int s : ans) printf(\"%d\\n\", s);\n\treturn 0;\n}"
+    ]
+  }
+}

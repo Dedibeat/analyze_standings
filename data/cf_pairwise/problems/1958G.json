@@ -1,0 +1,45 @@
+{
+  "contest_id": 1958,
+  "index": "G",
+  "name": "Observation Towers",
+  "rating": 2400,
+  "tags": [
+    "*special"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1958G",
+  "url": "https://codeforces.com/problemset/problem/1958/G",
+  "contest_start_time": "2024-05-13T14:35:00+00:00",
+  "statement": {
+    "title": "G. Observation Towers",
+    "time_limit": "3 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Consider a segment of an OX axis from $1$ to $n$. There are $k$ observation towers on this segment.\n\nEach tower has two parameters — the coordinate $x_i$ and the height $h_i$. The coordinates of all towers are distinct. From tower $i$, you can see point $j$ if $|x_i - j| \\le h_i$ (where $|a|$ is an absolute value of $a$).\n\nYou can increase the height of any tower by $1$ for one coin. The height of each tower can be increased any number of times (including zero).\n\nYou need to process $q$ independent queries. In the $i$-th query, two different points $l$ and $r$ are given. You need to calculate the minimum number of coins required to be able to see both of these points (from one tower or from different towers).",
+    "input_spec": "The first line contains two integers $n$ and $k$ ($2 \\le n \\le 2 \\cdot 10^5$; $1 \\le k \\le n$) — the length of the segment of an OX axis and the number of observation towers.\n\nThe second line contains $k$ integers $x_1, x_2, \\dots, x_k$ ($1 \\le x_i \\le n$) — the coordinates of the observation towers. The coordinates of all towers are distinct.\n\nThe third line contains $k$ integers $h_1, h_2, \\dots, h_k$ ($0 \\le h_i \\le n$) — the heights of the observation towers.\n\nThe fourth line contains a single integer $q$ ($1 \\le q \\le 2 \\cdot 10^5$) — the number of queries.\n\nEach of the next $q$ lines contains two integers $l$ and $r$ ($1 \\le l  \\lt  r \\le n$) — the description of the next query.",
+    "output_spec": "For each query, output a single integer — the minimum number of coins required to be able to see both points (from one tower or from different towers).",
+    "note": null,
+    "samples": [
+      {
+        "input": "20 3\n2 15 10\n6 2 0\n3\n1 20\n10 11\n3 4",
+        "output": "\n3 1 0"
+      },
+      {
+        "input": "10 2\n2 9\n1 2\n3\n4 5\n5 6\n1 10",
+        "output": "\n2 2 0"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 129483,
+    "url": "https://codeforces.com/blog/entry/129483",
+    "tutorial": "Let's start with a simple case: the points are visible from different towers. That is, for each point, we need to find a tower to increase as little as possible, and add the two answers together.\n\nLet's solve for point $l$. There are three possibilities here. The point is already covered by some tower, there is a tower to the left of the point, and there is a tower to the right of the point.\n\nLet's start with the case to the left. Which points are visible from the towers to the left? We don't care about the left boundaries, and the right boundaries are equal to $x_i + h_i$ for all such $i$ that $x_i  \\lt  l$. If we increase the height by $k$, it will be $x_i + h_i + k$. So, we need to find the tower with the greatest value of $x_i + h_i$. Then the answer will be $l - (x_i + h_i)$. You can notice that if $x_i + h_i \\ge l$, then we can take the maximum with $0$ in the formula, and the first case will disappear by itself. For the tower to the right, the situation is symmetric: we need to find the tower with the smallest value of $x_i - h_i$, and the answer will be $\\max(0, (x_i - h_i) - l)$.\n\nThus, we can build prefix maximums based on the values of $x_i + h_i$ at position $x_i$ and suffix minimums based on the values of $x_i - h_i$ at position $x_i$ and make queries in $O(1)$.\n\nNow the case where both points are covered by the same tower. Again, we will divide the problem into two cases. Either we will first see point $l$ from the tower, and then $r$, or vice versa. Where should the tower be for each case? Obviously, in the first case it is closer to $l$, and in the second case it is closer to $r$. That is, if $x_i \\le \\frac{l + r}{2}$ (formula without rounding), then the first case, otherwise the second.\n\nIt turns out that we have now reduced the problem to the case with independent towers. In the first case, we need to find a tower on the prefix up to the middle between $l$ and $r$, from which $r$ will be visible as soon as possible — maximum by $x_i + h_i$. In the second case — a tower on the suffix from the middle between $l$ and $r$, from which $l$ will be visible as soon as possible — minimum by $x_i - h_i$. That is, we can use the same prefix and suffix arrays.\n\nOverall complexity: $O(n + q)$.",
+    "solution_code": [
+      "import kotlin.math.abs\nimport kotlin.math.sign\n\nfun main() {\n    readInts()\n    val x = readInts()\n    val h = readInts()\n    val ord = buildList {\n        for (i in x.indices.sortedBy { x[it] }) {\n            while (isNotEmpty() && h[i] - h[last()] >= x[i] - x[last()]) {\n                removeLast()\n            }\n            if (isEmpty() || h[last()] - h[i] <= x[i] - x[last()]) {\n                add(i)\n            }\n        }\n    }.map { x[it] to h[it] }\n\n    fun nextAfter(pos: Int) = ord.binarySearch { (x, _) -> if (x >= pos) 1 else -1 }.inv()\n    fun coverBy(idx: Int, pos: Int) = ord.getOrNull(idx)?.let { (x, h) -> maxOf(0, abs(x - pos) - h) } ?: Int.MAX_VALUE\n    fun cover(pos: Int): Int {\n        val a = nextAfter(pos)\n        return minOf(coverBy(a - 1, pos), coverBy(a, pos))\n    }\n\n    fun cover2(l: Int, r: Int): Int {\n        val a = nextAfter((l + r) / 2)\n        return minOf(maxOf(coverBy(a, l), coverBy(a, r)), maxOf(coverBy(a - 1, l), coverBy(a - 1, r)))\n    }\n\n    val ans = List(readInt()) {\n        val (l, r) = readInts()\n        minOf(\n            cover(l) + cover(r),\n            cover2(l, r)\n        )\n    }\n    println(ans.joinToString(\" \"))\n}\n\nprivate fun readInt() = readln().toInt()\nprivate fun readLongs() = readStrings().map { it.toLong() }\nprivate fun readStrings() = readln().split(\" \")\nprivate fun readInts() = readStrings().map { it.toInt() }"
+    ]
+  }
+}

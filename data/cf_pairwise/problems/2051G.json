@@ -1,0 +1,52 @@
+{
+  "contest_id": 2051,
+  "index": "G",
+  "name": "Snakes",
+  "rating": 2100,
+  "tags": [
+    "bitmasks",
+    "dp",
+    "dsu",
+    "graphs"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2051G",
+  "url": "https://codeforces.com/problemset/problem/2051/G",
+  "contest_start_time": "2024-12-22T14:35:00+00:00",
+  "statement": {
+    "title": "G. Snakes",
+    "time_limit": "3 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "Suppose you play a game where the game field looks like a strip of $1 \\times 10^9$ square cells, numbered from $1$ to $10^9$.\n\nYou have $n$ snakes (numbered from $1$ to $n$) you need to place into some cells. Initially, each snake occupies exactly one cell, and you can't place more than one snake into one cell. After that, the game starts.\n\nThe game lasts for $q$ seconds. There are two types of events that may happen each second:\n\n snake $s_i$ enlarges: if snake $s_i$ occupied cells $[l, r]$, it enlarges to a segment $[l, r + 1]$;\n\n snake $s_i$ shrinks: if snake $s_i$ occupied cells $[l, r]$, it shrinks to a segment $[l + 1, r]$.\n\nEach second, exactly one of the events happens.\n\nIf at any moment of time, any snake runs into some obstacle (either another snake or the end of the strip), you lose. Otherwise, you win with the score equal to the maximum cell occupied by any snake so far.\n\nWhat is the minimum possible score you can achieve?",
+    "input_spec": "The first line contains two integers $n$ and $q$ ($1 \\le n \\le 20$; $1 \\le q \\le 2 \\cdot 10^5$) — the number of snakes and the number of events. Next $q$ lines contain the description of events — one per line.\n\nThe $i$-th line contains\n\n either \"$s_i$ +\" ($1 \\le s_i \\le n$) meaning that the $s_i$-th snake enlarges\n\n or \"$s_i$ -\" ($1 \\le s_i \\le n$) meaning that the $s_i$-th snake shrinks.\n\nAdditional constraint on the input: the given sequence of events is valid, i. e. a snake of length $1$ never shrinks.",
+    "output_spec": "Print one integer — the minimum possible score.",
+    "note": "In the first test, the optimal strategy is to place the second snake at cell $1$, the third snake — at $2$, and the first one — at $3$. The maximum occupied cell is cell $4$, and it's the minimum possible score.\n\nIn the second test, one of the optimal strategies is to place:\n\n snake $2$ at position $1$;\n\n snake $3$ at position $4$;\n\n snake $5$ at position $6$;\n\n snake $1$ at position $9$;\n\n snake $4$ at position $10$.",
+    "samples": [
+      {
+        "input": "3 6\n1 +\n1 -\n3 +\n3 -\n2 +\n2 -",
+        "output": "\n4"
+      },
+      {
+        "input": "5 13\n5 +\n3 +\n5 -\n2 +\n4 +\n3 +\n5 +\n5 -\n2 +\n3 -\n3 +\n3 -\n2 +",
+        "output": "\n11"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 137623,
+    "url": "https://codeforces.com/blog/entry/137623",
+    "tutorial": "Note that when you place snakes on the strip in some order, they form some permutation. And when you fix that permutation, you can place them greedily.\n\nIn other words, when you know in what order you'll place snakes, it's always optimal to place them as close to each other as possible. Since the bigger the initial distance — the bigger the resulting distance of the farthest snake (or the bigger the final score). We can even calculate that final score precisely: it's equal to $1 + \\texttt{sum of distances} + \\texttt{number of times the last snake enlarges}$.\n\nSo, we can solve the task in two steps. First, let's calculate $\\mathrm{minDist}[i][j]$ — the minimum possible distance between snakes $i$ and $j$ if we plan to place snake $j$ right after snake $i$. Suppose the initial gap between these snakes is $x$. Let's skim through all events:\n\n each time the $i$-th snake enlarges, our gap decreases, or $x' = x - 1$.\n\n each time the $j$-th snake shrinks, our gap increases, or $x' = x + 1$.\n\n if at any moment $x'$ becomes negative, then we lose. In other words, we needed bigger initial $x$.\n\nWe can rephrase what happens more formally: for each event $i$ let $e_i = 1$ if $x$ increases, $e_i = -1$ if $x$ decreases or $0$ otherwise. Then after the $i$-th event the current gap will be equal to $x' = x + \\sum_{j=1}^{i}{e_j}$.\n\nThe following inequality should hold for each $i$: $x + \\sum_{j=1}^{i}{e_j} \\ge 0$ or $x \\ge -\\sum_{j=1}^{i}{e_j}$. So, if we will find the minimum $\\min\\limits_{1 \\le i \\le q}{\\sum_{j=1}^{i}{e_j}}$ then we can set the initial distance to this minimum gap plus one, or $\\mathrm{minDist}[i][j] = -\\min\\limits_{1 \\le i \\le q}{\\sum_{j=1}^{i}{e_j}} + 1$.\n\nNow we know the minimum distances between neighboring snakes, so we can find the optimal order. Let's do it with bitmask dp $d[mask][lst]$, since all we need to know in each state is the set of already placed snakes $mask$ and the last snake $lst$. Transitions are straightforward: let's just choose the next snake to place and place it at distance $\\mathrm{minDist}$.\n\nThe initial states are $d[2^i][i] = 1$ for each $i$. The answer is $\\min\\limits_{1 \\le i \\le n}{d[2^n - 1][i] + \\texttt{number of times snake $i$ enlarges}}$, i. e. we just choose the last snake.\n\nThe time complexity is $O(n^2 q)$ for the first part (or $O(n q)$ if written more optimally) plus $O(2^n n^2)$ for the second part.",
+    "solution_code": [
+      "#include<bits/stdc++.h>\n\nusing namespace std;\n\n#define fore(i, l, r) for(int i = int(l); i < int(r); i++)\n#define sz(a) int((a).size())\n\nconst int INF = int(1e9);\n\nint n, q;\nvector<int> id, ch;\n\nbool read() {\n    if (!(cin >> n >> q))\n        return false;\n    id.resize(q);\n    ch.resize(q);\n    fore (i, 0, q) {\n        char c;\n        cin >> id[i] >> c;\n        id[i]--;\n        ch[i] = c == '+' ? 1 : -1;\n    }\n    return true;\n}\n\nint getDist(int s, int t) {\n    int pSum = 0, cMin = 0;\n    fore (e, 0, q) {\n        if (id[e] == t)\n            pSum += ch[e] < 0;\n        if (id[e] == s)\n            pSum -= ch[e] > 0;\n        cMin = min(cMin, pSum);\n    }\n    return -cMin + 1;\n}\n\ninline void solve() {\n    vector<vector<int>> minDist(n, vector<int>(n, INF));\n\n    fore (i, 0, n) fore (j, 0, n)\n        minDist[i][j] = getDist(i, j);\n\n    vector<int> len(n, 0);\n    fore (e, 0, q)\n        len[id[e]] += ch[e] > 0;\n    \n    vector< vector<int> > d(1 << n, vector<int>(n, INF));\n    fore (i, 0, n)\n        d[1 << i][i] = 1;\n    \n    fore (mask, 1, 1 << n) fore (lst, 0, n) {\n        if (d[mask][lst] == INF)\n            continue;\n        fore (nxt, 0, n) {\n            if ((mask >> nxt) & 1)\n                continue;\n            int nmask = mask | (1 << nxt);\n            d[nmask][nxt] = min(d[nmask][nxt], d[mask][lst] + minDist[lst][nxt]);\n        }\n    }\n    int ans = INF;\n    fore (lst, 0, n)\n        ans = min(ans, d[(1 << n) - 1][lst] + len[lst]);\n    cout << ans << endl;\n}\n\nint main() {\n#ifdef _DEBUG\n    freopen(\"input.txt\", \"r\", stdin);\n    int tt = clock();\n#endif\n    ios_base::sync_with_stdio(false);\n\n    if(read()) {\n        solve();\n        \n#ifdef _DEBUG\n        cerr << \"TIME = \" << clock() - tt << endl;\n        tt = clock();\n#endif\n    }\n    return 0;\n}",
+      "3 1\n2 9 5\n12 14 9",
+      "#include <bits/stdc++.h>\nusing namespace std;\n#define int long long\n#define endl \"\\n\"\n\nvoid solve() {\n    int n, k;\n    cin >> n >> k;\n    map<int, int> positive_review, negative_review;\n    priority_queue<int, vector<int>, greater<>> prices;\n\n    for (int i = 0; i < n; i++) {\n        int a;\n        cin >> a;\n        positive_review[a]++;\n        prices.emplace(a);\n    }\n\n    for (int i = 0; i < n; i++) {\n        int a;\n        cin >> a;\n        negative_review[a]++;\n        prices.emplace(a);\n    }\n\n    int best = 0;\n    int negative = 0;\n    int last = -1;\n    while (!prices.empty()) {\n        int price = prices.top();\n        prices.pop();\n        if (price == last)\n            continue;\n        last = price;\n        int cur = n * price;\n        if (negative <= k)\n            best = max(best, n * price);\n        negative += positive_review[price];\n        negative -= negative_review[price];\n        n -= negative_review[price];\n    }\n\n    cout << best << endl;\n}\n\nsigned main() {\n    #ifndef ONLINE_JUDGE\n    freopen(\"input.in\", \"r\", stdin);\n    freopen(\"output.out\", \"w\", stdout);\n    #endif\n\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    cout.tie(NULL);\n\n    int t;\n    cin >> t;\n    while (t--) {\n        solve();\n    }\n\n    return 0;\n}",
+      "// this is code\ntemp.push_back(v[0]);\nfor(int i = 1; i < n; i++) {\n        int l = lower_bound(temp.begin(), temp.end(), left - v[i]) - temp.begin();\n        int r = upper_bound(temp.begin(), temp.end(), right - v[i]) - temp.begin();\n        ans += r - l;\n        temp.push_back(v[i]);\n}",
+      "int countLessThan(const vector<int>& arr, int x) {\n    int lo = 0, hi = arr.size();\n    while (lo < hi) {\n        int mid = lo + (hi &mdash; lo) / 2;\n        if (arr[mid] < x) lo = mid + 1;\n        else hi = mid;\n    }\n    return lo;\n}\n\n\nint countGreaterEqual(const vector<int>& arr, int x) {\n    int lo = 0, hi = arr.size();\n    while (lo < hi) {\n        int mid = lo + (hi &mdash; lo) / 2;\n        if (arr[mid] < x) lo = mid + 1;\n        else hi = mid;\n    }\n    return arr.size() &mdash; lo;\n}\n\n\nvoid solve() {\n\n    int n, k;\n    cin >> n >> k;\n\n    vector<int> a(n), b(n);\n    for(int i = 0; i < n; i++) cin >> a[i];\n    for(int i = 0; i < n; i++) cin >> b[i];\n\n    sort(a.begin(), a.end());\n    sort(b.begin(), b.end());\n\n    int res = 0;\n\n\n    for(int i = 0; i < n; i++) {\n        int c2 = countLessThan(a, a[i]);\n        int c3 = countLessThan(b, a[i]);\n        if(c2 - c3 <= k) {\n            int cnt = countGreaterEqual(b, a[i]);\n            res = max(res, cnt * a[i]);\n        }\n    }\n\n\n    for(int i = 0; i < n; i++) {\n        int cnt = countLessThan(a, b[i]);\n        int c3 = countLessThan(b, b[i]);\n        int c2 = countGreaterEqual(b, b[i]);\n        if(cnt - c3 <= k || c2 <= k) {\n            res = max(res, b[i] * c2);\n        }\n    }\n\n    cout << res << endl;\n\n}"
+    ]
+  }
+}

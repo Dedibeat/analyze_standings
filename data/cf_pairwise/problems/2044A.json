@@ -1,0 +1,42 @@
+{
+  "contest_id": 2044,
+  "index": "A",
+  "name": "Easy Problem",
+  "rating": 800,
+  "tags": [
+    "brute force",
+    "math"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2044A",
+  "url": "https://codeforces.com/problemset/problem/2044/A",
+  "contest_start_time": "2024-12-15T14:35:00+00:00",
+  "statement": {
+    "title": "A. Easy Problem",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "Cube is given an integer $n$. She wants to know how many ordered pairs of positive integers $(a,b)$ there are such that $a=n-b$. Since Cube is not very good at math, please help her!",
+    "input_spec": "The first line contains an integer $t$ ($1 \\leq t \\leq 99$) — the number of test cases.\n\nThe only line of each test case contains an integer $n$ ($2 \\leq n \\leq 100$).",
+    "output_spec": "For each test case, output the number of ordered pairs $(a, b)$ on a new line.",
+    "note": "In the first test case, the only ordered pair that works is $(a,b)=(1,1)$.\n\nIn the second test case, the three ordered pairs of $(a,b)$ that work are $(3,1), (2,2), (1,3)$.",
+    "samples": [
+      {
+        "input": "3\n2\n4\n6",
+        "output": "\n1\n3\n5"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 137306,
+    "url": "https://codeforces.com/blog/entry/137306",
+    "tutorial": "2044A - Easy Problem\n\nProblem Credits: cry\n Analysis: macaquedev\n\nSolution\n\nFor any $n$, Cube can set $a$ = any integer between $1$ and $n-1$ inclusive, and set $b = n - a$. $a$ cannot be less than $1$, because then it would be non-positive, and $a$ cannot be greater than $n-1$, because then $b$ would be less than $1$, which would make it non-positive. Therefore the answer is just $n-1$ for all $n$.\n\nCode (Python)",
+    "solution_code": [
+      "input = sys.stdin.readline\nfor _ in range(int(input())):\n    print(int(input())-1)"
+    ]
+  }
+}

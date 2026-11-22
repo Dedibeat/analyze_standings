@@ -1,0 +1,40 @@
+{
+  "contest_id": 2068,
+  "index": "K",
+  "name": "Amusement Park Rides",
+  "rating": 3000,
+  "tags": [
+    "flows",
+    "graphs"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2068K",
+  "url": "https://codeforces.com/problemset/problem/2068/K",
+  "contest_start_time": "2025-03-02T10:35:00+00:00",
+  "statement": {
+    "title": "K. Amusement Park Rides",
+    "time_limit": "2 seconds",
+    "memory_limit": "1024 megabytes",
+    "legend": "Ivan, Dmitrii, and Pjotr are celebrating Ivan's birthday at an amusement park with $n$ attractions. The $i$-th attraction operates at minutes $a_i, 2a_i, 3a_i, \\dots$ (i.e., every $a_i$ minutes).\n\nEach minute, the friends can either ride exactly one available attraction together or wait. Since the rides are very short, they can board another attraction the next minute. They may ride the attractions in any order.\n\nThey want to experience each ride exactly once before heading off to enjoy the birthday cake. What is the earliest time by which they can finish all $n$ attractions?",
+    "input_spec": "Each test contains multiple test cases. The first line contains an integer $t$ ($1\\le t\\le 2000$) — the number of test cases. The descriptions of the $t$ test cases follow.\n\nThe first line contains an integer $n$ ($1\\le n \\le 2000$) — the number of attractions.\n\nThe second line contains $n$ integers $a_1,\\, a_2,\\,\\ldots,\\, a_n$ ($1 \\le a_i \\le 10^9$) — the values determining when the various attractions operate.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $2000$.",
+    "output_spec": "For each test case, print the earliest time the three friends can finish all $n$ attractions.",
+    "note": "In the first test case, the three friends can ride the $i$-th attraction at the $i$-th minute. Since there are $4$ attractions, they need $4$ minutes to ride them all.\n\nIn the third test case, the three friends can ride the attractions in order at minutes $1,\\, 2,\\, 3,\\, 4,\\, 6,\\, 8$ respectively. Therefore, they can ride all attractions in $8$ minutes. One can show that it is impossible to finish all the attractions earlier.",
+    "samples": [
+      {
+        "input": "3\n4\n1 2 3 4\n4\n1 1 1 1\n6\n1 2 1 2 2 2",
+        "output": "\n4\n4\n8"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 140239,
+    "url": "https://codeforces.com/blog/entry/140239",
+    "tutorial": "Assume that among the numbers $a_i$ there are $k$ distinct values, denoted by $p_1, p_2, \\dots, p_k$. Suppose each $p_j$ appears $q_j$ times in the sequence $\\{a_i\\}$.\n\nWe now construct a flow graph as follows:\n\n Define the vertex set as $V = \\{S, T\\} \\cup \\{A_1, A_2, \\dots, A_k\\}$.\n\n For each vertex $A_i$ (with $1 \\le i \\le k$), add an edge from $S$ to $A_i$ with capacity $q_i$.\n\n For each positive integer $i$, introduce a vertex $B_i$. For every vertex $A_j$ (with $1 \\le j \\le k$), if $i \\equiv 0 \\pmod{p_j}$, then add an edge from $A_j$ to $B_i$ with capacity $1$. In addition, add an edge from $B_i$ to $T$ with capacity $1$.\n\nWe continue adding vertices $B_i$ (in increasing order of $i$) until the maximum flow from $S$ to $T$ reaches $n$. The answer to the problem is the largest index $i$ for which a vertex $B_i$ was added.\n\nThis approach has a running time of $O(\\mathrm{ans} \\cdot E)$, where $\\mathrm{ans}$ denotes the final value of $i$ and $E$ is the number of edges. However, this is too slow since it requires creating a vertex $B_i$ for every positive integer $i$.\n\nWe can improve efficiency by avoiding the creation of every $B_i$. Instead, we maintain a mapping $M: \\mathbb{Z}^+ \\to \\{\\mathrm{indices}\\}$, where $M(i)$ is a set of indices. Initially, for each $1 \\le j \\le k$, we set $M(p_j) = \\{j\\}$.\n\nAt each step, perform the following:\n\n Find the smallest $i$ for which $M(i)$ is nonempty.\n\n Add the vertex $B_i$ along with its edge to $T$ and add edges from $A_j$ to $B_i$ for every $j \\in M(i)$.\n\n If adding these edges increases the maximum flow, then for each $j \\in M(i)$ insert $j$ into $M(i+p_j)$. This means that a future vertex $B_{i+p_j}$ may also need to be connected to $A_j$. Otherwise, if the maximum flow does not increase, no additional edges from $A_j$ (for $j \\in M(i)$) will be needed.\n\n Finally, clear the set $M(i)$.\n\nNote that we examine at most $n+k$ distinct values of $i$ (because in each step we either increase the maximum flow or remove at least one element from $\\bigcup_i M(i)$). Therefore, the overall time complexity of the solution is $O(n \\cdot E)$, and it can be shown that $E = O(n \\log n)$.",
+    "solution_code": []
+  }
+}

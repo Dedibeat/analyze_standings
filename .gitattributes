@@ -1,0 +1,7 @@
+# Expensive caches are committed byte-for-byte: no line-ending conversion on Windows,
+# so frozen hashes (e.g. data/cf_pairwise/artifact_snapshot.json) still verify.
+data/cf_ai/** -text
+data/cf_pairwise/** -text
+data/ec_online_cache/** -text
+data/team_r3/** -text
+*_run/** -text

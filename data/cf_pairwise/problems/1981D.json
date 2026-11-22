@@ -1,0 +1,44 @@
+{
+  "contest_id": 1981,
+  "index": "D",
+  "name": "Turtle and Multiplication",
+  "rating": 2400,
+  "tags": [
+    "constructive algorithms",
+    "dfs and similar",
+    "graphs",
+    "number theory"
+  ],
+  "points": 2000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1981D",
+  "url": "https://codeforces.com/problemset/problem/1981/D",
+  "contest_start_time": "2024-05-31T10:05:00+00:00",
+  "statement": {
+    "title": "D. Turtle and Multiplication",
+    "time_limit": "3 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "Turtle just learned how to multiply two integers in his math class, and he was very excited.\n\nThen Piggy gave him an integer $n$, and asked him to construct a sequence $a_1, a_2, \\ldots, a_n$ consisting of integers which satisfied the following conditions:\n\n For all $1 \\le i \\le n$, $1 \\le a_i \\le 3 \\cdot 10^5$.\n\n For all $1 \\le i  \\lt  j \\le n - 1$, $a_i \\cdot a_{i + 1} \\ne a_j \\cdot a_{j + 1}$.\n\nOf all such sequences, Piggy asked Turtle to find the one with the minimum number of distinct elements.\n\nTurtle definitely could not solve the problem, so please help him!",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 10^4$). The description of the test cases follows.\n\nThe first line of each test case contains a single integer $n$ ($2 \\le n \\le 10^6$) — the length of the sequence $a$.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $10^6$.",
+    "output_spec": "For each test case, output $n$ integers $a_1, a_2, \\ldots, a_n$ — the elements of the sequence $a$.\n\nIf there are multiple answers, print any of them.",
+    "note": "In the third test case, $a = [3, 4, 2, 6]$ violates the second condition since $a_1 \\cdot a_2 = a_3 \\cdot a_4$. $a = [2, 3, 4, 4]$ satisfy the conditions but its number of distinct elements isn't minimum.",
+    "samples": [
+      {
+        "input": "3\n2\n3\n4",
+        "output": "\n114514 114514\n1 2 2\n3 3 4 4"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 129848,
+    "url": "https://codeforces.com/blog/entry/129848",
+    "tutorial": "The necessary condition for $a_i \\cdot a_{i + 1} = a_j \\cdot a_{j + 1}$ is that the unordered pairs $(a_i, a_{i + 1})$ and $(a_j, a_{j + 1})$ are identical. In fact, if $a_i$ are all prime numbers, then this necessary condition becomes sufficient.\n\nIf we consider $(a_i, a_{i + 1})$ as an edge, then the problem can be transformed into finding the undirected complete graph with the fewest nodes (where each node also has a self-loop) such that this complete graph contains a path of $n - 1$ edges without repeating any edge.\n\nNext, we consider how to calculate the length of the longest path in a complete graph with a given number of vertices that does not repeat any edges.\n\nLet the number of vertices in the complete graph be $m$. If $m$ is odd, then the degree of each node is even, so this graph contains an Eulerian path, and the path length is equal to the number of edges, which is $\\frac{m(m + 1)}{2}$.\n\nIf $m$ is even, then the degree of each node is odd, and we need to remove some edges to make this graph contain an Eulerian path. It is easy to see that each edge removed can reduce the number of vertices with odd degrees by at most $2$, so we need to remove at least $\\frac{m}{2} - 1$ edges. Removing the edges $(2, 3), (4, 5), \\ldots, (m - 2, m - 1)$ will suffice, and the path length will be $\\frac{m(m - 1)}{2} - \\frac{m}{2} + 1 + m = \\frac{m^2}{2} + 1$.\n\nWhen $n = 10^6$, the smallest $m$ is $1415$, and the $1415$-th smallest prime number is $11807$, which satisfies $a_i \\le 3 \\cdot 10^5$.\n\nWe can use binary search to find the smallest $m$ and use Hierholzer's algorithm to find an Eulerian path in an undirected graph.\n\nTime complexity: $O(n)$ per test case.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n#define pb emplace_back\n#define fst first\n#define scd second\n#define mkp make_pair\n#define mems(a, x) memset((a), (x), sizeof(a))\n\nusing namespace std;\ntypedef long long ll;\ntypedef double db;\ntypedef unsigned long long ull;\ntypedef long double ldb;\ntypedef pair<int, int> pii;\n\nconst int maxn = 4000100;\nconst int N = 1000000;\n\nint n, a[maxn], pr[maxn], tot, stk[maxn], top;\nbool vis[maxn];\n\ninline void init() {\n\tfor (int i = 2; i <= N; ++i) {\n\t\tif (!vis[i]) {\n\t\t\tpr[++tot] = i;\n\t\t}\n\t\tfor (int j = 1; j <= tot && i * pr[j] <= N; ++j) {\n\t\t\tvis[i * pr[j]] = 1;\n\t\t\tif (i % pr[j] == 0) {\n\t\t\t\tbreak;\n\t\t\t}\n\t\t}\n\t}\n\tmems(vis, 0);\n}\n\ninline bool check(int x) {\n\tif (x & 1) {\n\t\treturn x + 1 + x * (x - 1) / 2 >= n;\n\t} else {\n\t\treturn x * (x - 1) / 2 - x / 2 + 2 + x >= n;\n\t}\n}\n\nvector<pii> G[10000];\n\nvoid dfs(int u) {\n\twhile (G[u].size()) {\n\t\tpii p = G[u].back();\n\t\tG[u].pop_back();\n\t\tif (vis[p.scd]) {\n\t\t\tcontinue;\n\t\t}\n\t\tvis[p.scd] = 1;\n\t\tdfs(p.fst);\n\t}\n\tstk[++top] = pr[u];\n}\n\nvoid solve() {\n\tscanf(\"%d\", &n);\n\tint l = 1, r = 10000, ans = -1;\n\twhile (l <= r) {\n\t\tint mid = (l + r) >> 1;\n\t\tif (check(mid)) {\n\t\t\tans = mid;\n\t\t\tr = mid - 1;\n\t\t} else {\n\t\t\tl = mid + 1;\n\t\t}\n\t}\n\tfor (int i = 1; i <= ans; ++i) {\n\t\tvector<pii>().swap(G[i]);\n\t}\n\tint tot = 0;\n\tfor (int i = 1; i <= ans; ++i) {\n\t\tfor (int j = i; j <= ans; ++j) {\n\t\t\tif (ans % 2 == 0 && i % 2 == 0 && i + 1 == j) {\n\t\t\t\tcontinue;\n\t\t\t}\n\t\t\tG[i].pb(j, ++tot);\n\t\t\tG[j].pb(i, tot);\n\t\t}\n\t}\n\tfor (int i = 1; i <= tot; ++i) {\n\t\tvis[i] = 0;\n\t}\n\ttop = 0;\n\tdfs(1);\n\treverse(stk + 1, stk + top + 1);\n\tfor (int i = 1; i <= n; ++i) {\n\t\tprintf(\"%d%c\", stk[i], \" \\n\"[i == n]);\n\t}\n}\n\nint main() {\n\tinit();\n\tint T = 1;\n\tscanf(\"%d\", &T);\n\twhile (T--) {\n\t\tsolve();\n\t}\n\treturn 0;\n}"
+    ]
+  }
+}

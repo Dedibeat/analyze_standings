@@ -1,0 +1,63 @@
+{
+  "predictions": [
+    {
+      "a": "2092D",
+      "b": "2072E",
+      "gap": 300,
+      "truth": "A",
+      "predicted": "B",
+      "request_location": "eu",
+      "usage": {
+        "promptTokenCount": 1429,
+        "candidatesTokenCount": 12,
+        "totalTokenCount": 1441,
+        "trafficType": "ON_DEMAND",
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1429
+          }
+        ],
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 12
+          }
+        ]
+      }
+    },
+    {
+      "a": "2066D2",
+      "b": "2081D",
+      "gap": 300,
+      "truth": "A",
+      "predicted": "A",
+      "request_location": "eu",
+      "usage": {
+        "promptTokenCount": 1650,
+        "candidatesTokenCount": 12,
+        "totalTokenCount": 1662,
+        "trafficType": "ON_DEMAND",
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1650
+          }
+        ],
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 12
+          }
+        ]
+      }
+    }
+  ],
+  "project": "project-0e393569-b54a-4a67-bc5",
+  "target": "gemini-3.5-flash",
+  "location": "eu",
+  "pairs_key": "baseline_pairs",
+  "thinking_level": "minimal",
+  "manifest_sha256": "0a15f0d93e12f6128ac4497e83fbf091e1d1601642d052ad1f2e4ec63b434d33",
+  "updated_at": "2026-08-05T14:10:09.462776+00:00"
+}

@@ -1,0 +1,49 @@
+{
+  "contest_id": 1983,
+  "index": "E",
+  "name": "I Love Balls",
+  "rating": 2300,
+  "tags": [
+    "combinatorics",
+    "math",
+    "probabilities"
+  ],
+  "points": 2000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1983E",
+  "url": "https://codeforces.com/problemset/problem/1983/E",
+  "contest_start_time": "2024-07-07T14:35:00+00:00",
+  "statement": {
+    "title": "E. I Love Balls",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Alice and Bob are playing a game. There are $n$ balls, out of which $k$ are special. Each ball has a value associated with it.\n\nThe players play turn by turn. In each turn, the player randomly picks a ball and adds the value of the ball to their score, which is $0$ at the beginning of the game. The selected ball is removed from the game. If the ball was special, the same player takes the next turn if at least one ball is remaining. If the ball picked was not special, the next player plays their turn.\n\nThey play this game until no balls are remaining in the game. Alice plays first.\n\nFind the expected score that both the players have at the end of the game modulo $10^9+7$.\n\nFormally, let $M = 10^9+7$. It can be shown that the answer can be expressed as an irreducible fraction $\\frac{p}{q}$, where $p$ and $q$ are integers and $q \\not \\equiv 0 \\pmod{M}$. Output the integer equal to $p \\cdot q^{-1} \\bmod M$. In other words, output such an integer $x$ that $0 \\le x  \\lt  M$ and $x \\cdot q \\equiv p \\pmod{M}$.",
+    "input_spec": "There are multiple test cases. The first line of the input contains an integer $t$, the number of test cases ($1 \\le t \\le 2 \\cdot 10^5$).\n\nEach test case description is on a new line. The first line of the test case contains two integers $n$ and $k$ in the respective order separated by a space ($1 \\le k \\le n \\le 4 \\cdot 10^5$).\n\nThe second line of the test case contains $n$ integers: $v_1, v_2, \\ldots, v_n$, the value for each ball separated by spaces. The first $k$ balls are special ($1 \\le v_i \\le 10^7$).\n\nThe sum of $n$ over all test cases does not exceed $5 \\cdot 10^5$.",
+    "output_spec": "Output two integers per test case in a new line, the expected score of Alice and the expected score of Bob modulo $10^9+7$.",
+    "note": "In the first test case, Alice's expected score is $45$, and Bob's is $30$ at the end of the game.",
+    "samples": [
+      {
+        "input": "1\n5 2\n10 20 5 15 25",
+        "output": "\n45 30"
+      },
+      {
+        "input": "5\n1 1\n732507\n2 2\n5817860 5398510\n5 1\n2122894 4951549 2750585 7821535 3214167\n8 4\n1405323 5069867 6883092 6972029 328406 2478975 7628890 9973340\n4 2\n9662050 3566134 3996473 9872255",
+        "output": "\n732507 0\n11216370 0\n810642660 210218077\n722402997 318336932\n349086489 678010430"
+      },
+      {
+        "input": "5\n3 3\n1095611 8219204 7773462\n2 1\n8176490 2774103\n3 1\n9178636 5138057 3367761\n12 9\n7597698 6843019 2298534 1522386 4969588 1340345 3967362 9152890 6689668 9986080 4745473 7407325\n10 5\n6986368 2397882 5804127 6980694 3740836 3215836 5195724 3179261 4136769 4544231",
+        "output": "\n17088277 0\n6862348 4088245\n677038671 340645790\n36949997 29570371\n725118051 321063684"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 131268,
+    "url": "https://codeforces.com/blog/entry/131268",
+    "tutorial": "When there are no special balls, Alice and Bob alternately pick balls starting with Alice. This means Alice picks ${\\frac{n+1}{2}}$ balls if $n$ is odd or $\\frac{n}{2}$ if $n$ is even. The total value of all balls is $\\sum v_i$. On average, Alice's score is $\\lfloor\\frac{n + 1}{2}\\rfloor \\cdot \\frac{\\sum v_i}{n}$.\n\nWith $k$ special balls, the picking order can be interrupted, allowing the same player to pick again. We need to distribute $k$ special balls into $n - k + 1$ possible positions (gaps). The expected number of special balls picked by Alice can be derived as the expected number of gaps encountered by Alice ($\\lfloor\\frac{n - k + 2}{2}\\rfloor$) times the expected number of special balls per gap($\\frac{k}{n - k + 1}$). The formula is $\\frac{(\\lfloor\\frac{n - k + 2}{2} \\rfloor) \\cdot k}{n - k + 1}$.\n\nExpected value without special balls: $\\lfloor\\frac{n + 1}{2}\\rfloor \\cdot \\frac{\\sum v_i}{n}$.\n\nExpected special balls for Alice: $\\frac{(\\lfloor\\frac{n - k}{2}\\rfloor + 1) \\cdot k}{n - k + 1}$.\n\nExpected normal balls for Alice when there are non-zero special balls: $\\lfloor\\frac{n - k + 1}{2}\\rfloor$\n\nTherefore, expected score of Alice: $\\frac{(\\lfloor\\frac{n - k}{2}\\rfloor + 1) \\cdot k}{n - k + 1} \\cdot \\frac{\\sum_{i \\in \\{1,2, \\cdot \\cdot \\cdot k\\}}{v_i}}{k} + \\lfloor\\frac{n - k + 1}{2}\\rfloor \\cdot \\frac{\\sum_{i \\in \\{k+1,k+2, \\cdot \\cdot \\cdot n\\}}{v_i}}{n - k}$\n\nSimilarly, expected score of Bob: $(k - \\frac{(\\lfloor\\frac{n - k}{2}\\rfloor + 1) \\cdot k}{n - k + 1}) \\cdot \\frac{\\sum_{i \\in \\{1,2, \\cdot \\cdot \\cdot k\\}}{v_i}}{k} + (n - k - \\lfloor \\frac{n - k + 1}{2} \\rfloor) \\cdot \\frac{\\sum_{i \\in \\{k+1,k+2, \\cdot \\cdot \\cdot n\\}}{v_i}}{n - k}$",
+    "solution_code": []
+  }
+}

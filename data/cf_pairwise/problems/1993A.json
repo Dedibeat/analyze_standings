@@ -1,0 +1,42 @@
+{
+  "contest_id": 1993,
+  "index": "A",
+  "name": "Question Marks",
+  "rating": 800,
+  "tags": [
+    "greedy",
+    "implementation"
+  ],
+  "points": 500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1993A",
+  "url": "https://codeforces.com/problemset/problem/1993/A",
+  "contest_start_time": "2024-08-04T14:35:00+00:00",
+  "statement": {
+    "title": "A. Question Marks",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "Tim is doing a test consisting of $4n$ questions; each question has $4$ options: 'A', 'B', 'C', and 'D'. For each option, there are exactly $n$ correct answers corresponding to that option — meaning there are $n$ questions with the answer 'A', $n$ questions with the answer 'B', $n$ questions with the answer 'C', and $n$ questions with the answer 'D'.\n\nFor each question, Tim wrote his answer on the answer sheet. If he could not figure out the answer, he would leave a question mark '?' for that question.\n\nYou are given his answer sheet of $4n$ characters. What is the maximum number of correct answers Tim can get?",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\le t \\le 1000$) — the number of test cases.\n\nThe first line of each test case contains an integer $n$ ($1 \\le n \\le 100$).\n\nThe second line of each test case contains a string $s$ of $4n$ characters ($s_i \\in \\{\\texttt{A}, \\texttt{B}, \\texttt{C}, \\texttt{D}, \\texttt{?}\\}$) — Tim's answers for the questions.",
+    "output_spec": "For each test case, print a single integer — the maximum score that Tim can achieve.",
+    "note": "In the first test case, there is exactly one question with each answer 'A', 'B', 'C', and 'D'; so it's possible that Tim gets all his answers correct.\n\nIn the second test case, there are only two correct answers 'A' which makes him get exactly $2$ points in any case.\n\nIn the third test case, Tim can get at most $2$ correct answers with option 'A' and $2$ correct answers with option 'B'. For example, he would get $4$ points if the answers were 'AACCBBDD'.\n\nIn the fourth test case, he refuses to answer any question at all, which makes him get $0$ points.",
+    "samples": [
+      {
+        "input": "6\n1\nABCD\n2\nAAAAAAAA\n2\nAAAABBBB\n2\n????????\n3\nABCABCABCABC\n5\nACADC??ACAC?DCAABC?C",
+        "output": "\n4\n2\n4\n0\n9\n13"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 132185,
+    "url": "https://codeforces.com/blog/entry/132185",
+    "tutorial": "1993A - Question Marks\n\nHint\n\nWhat is the pattern of Tim's answer sheet that can give him maximum score?\n\nSolution\n\nLet's say there are $n$ problems take $A$ as the answer, therefore he can only get $n$ points with the answer $A$. The same is correct for $B$, $C$ and $D$. Therefore, the maximum score can be achieved is $min(n, A) + min(n, B) + min(n, C) + min(n, D)$.\n\nTime complexity: $O(4n)$\n\nCode (python)",
+    "solution_code": [
+      "t = int(input())\nfor _ in range(t):\n    n = int(input())\n    s = input()\n\n    print(sum(min(n, s.count(c)) for c in \"ABCD\"))"
+    ]
+  }
+}

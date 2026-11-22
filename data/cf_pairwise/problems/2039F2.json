@@ -1,0 +1,43 @@
+{
+  "contest_id": 2039,
+  "index": "F2",
+  "name": "Shohag Loves Counting (Hard Version)",
+  "rating": 3200,
+  "tags": [
+    "dp",
+    "number theory"
+  ],
+  "points": 2000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2039F2",
+  "url": "https://codeforces.com/problemset/problem/2039/F2",
+  "contest_start_time": "2024-11-23T14:35:00+00:00",
+  "statement": {
+    "title": "F2. Shohag Loves Counting (Hard Version)",
+    "time_limit": "4 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "This is the hard version of the problem. The only differences between the two versions of this problem are the constraints on $t$, $m$, and the sum of $m$. You can only make hacks if both versions of the problem are solved.\n\nFor an integer array $a$ of length $n$, define $f(k)$ as the greatest common divisor (GCD) of the maximum values of all subarrays$^{\\text{∗}}$ of length $k$. For example, if the array is $[2, 1, 4, 6, 2]$, then $f(3) = \\operatorname{gcd}(\\operatorname{max}([2, 1, 4]), \\operatorname{max}([1, 4, 6]), \\operatorname{max}([4, 6, 2])) = \\operatorname{gcd}(4, 6, 6) = 2$.\n\nAn array is good if $f(i) \\neq f(j)$ is satisfied over all pairs $1 \\le i \\lt j \\le n$.\n\nShohag has an integer $m$. Help him count the number, modulo $998\\,244\\,353$, of non-empty good arrays of arbitrary length such that each element of the array is an integer from $1$ to $m$.\n\n$^{\\text{∗}}$An array $d$ is a subarray of an array $c$ if $d$ can be obtained from $c$ by deletion of several (possibly, zero or all) elements from the beginning and several (possibly, zero or all) elements from the end.",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\le t \\le 3 \\cdot 10^5$) — the number of test cases.\n\nThe first and only line of each test case contains an integer $m$ ($1 \\le m \\le 10^6$).\n\nNote that there is no limit on the sum of $m$ over all test cases.",
+    "output_spec": "For each test case, output an integer — the number of valid arrays modulo $998\\,244\\,353$.",
+    "note": "In the first test case, the valid arrays are $[1]$, $[1, 2]$, $[2]$, and $[2, 1]$.\n\nIn the second test case, there are a total of $29$ valid arrays. In particular, the array $[2, 1, 4]$ with length $n = 3$ is valid because all elements are from $1$ to $m = 5$ and $f(1)$, $f(2)$ and $f(n = 3)$ all are distinct:\n\n $f(1) = \\operatorname{gcd}(\\operatorname{max}([2]), \\operatorname{max}([1]), \\operatorname{max}([4])) = \\operatorname{gcd}(2, 1, 4) = 1.$\n\n $f(2) = \\operatorname{gcd}(\\operatorname{max}([2, 1]), \\operatorname{max}([1, 4])) = \\operatorname{gcd}(2, 4) = 2.$\n\n $f(3) = \\operatorname{gcd}(\\operatorname{max}([2, 1, 4])) = \\operatorname{gcd}(4) = 4.$",
+    "samples": [
+      {
+        "input": "3\n2\n5\n9",
+        "output": "\n4\n29\n165"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 136523,
+    "url": "https://codeforces.com/blog/entry/136523",
+    "tutorial": "First, check the editorial of F1.\n\nNote that for F2 there is no limit on the sum of $m$, so we need to change the approach a bit.\n\nAnd for F2 you need to remove the length from the dp state (which I described at the end of the editorial of F1).\n\nNow instead of iterating $i$ from $m$ to $1$, we iterate from $1$ to $m$. And reformulate the dp as follows.\n\nLet's say we are building the strictly increasing sequence $a$ from left to right and we are fixing what the suffix GCD of the final array $a$ starting from each element will be.\n\nLet $\\text{dp}_{j, h}$ be the sum of $2^{\\text{length of array so far} - 1}$ for all $a$ such that we are at element $j$ and the suffix GCD of the final array $a$ starting from element $j$ is $h$.\n\nThen the transition is to iterate over the previous suffix GCD $g$ at element $i$ such that $g$ divides $h$, $g  \\lt  h$ and $g = \\text{gcd}(i, h)$ and then add $\\text{dp}_{i, g}$ to $\\text{dp}_{j, h}$.\n\nJust like F1, we can speed up the transitions by tracking some prefix sums and doing inclusion-exclusion on the divisors of $i$. We can use the Mobius Inversion Formula to do it in $O(\\sum_{d | i} \\sigma(d))$. Another way to make it faster is to do SOS DP on the divisors of $i$ which will take $O(\\sigma(i) \\cdot p(i))$ where $p(i)$ is the number of unique prime factors of $i$.\n\nIt is hard to describe all the little details of the implementation here, please refer to the code for more details.\n\nThe overall time complexity is $O(\\sum_{i = 1}^M \\sigma(i) \\cdot p(i))$ or $O(\\sum_{i = 1}^M \\sum_{d | i} \\sigma(d))$ where $M$ is the maximum value of $m$. Both work fast enough.",
+    "solution_code": [
+      "#include<bits/stdc++.h>\nusing namespace std;\n \nconst int N = 1e6 + 9, mod = 998244353;\n \ninline void add(int &x, int y) {\n  x = x + y >= mod ? x + y - mod : x + y;\n}\nint mob[N];\nvoid mobius() {\n  mob[1] = 1;\n  for (int i = 2; i < N; i++){\n    mob[i]--;\n    for (int j = i + i; j < N; j += i) {\n      mob[j] -= mob[i];\n    }\n  }\n  for (int i = 1; i < N; i++) {\n    mob[i] = (mob[i] % mod + mod) % mod;\n  }\n}\nvector<int> divs[N];\nint dp[N];\nint f[N];\nint tmp[N], ans[N];\nvoid solve() {\n  for (int i = 1; i < N; i++) {\n    for (int d: divs[i]) {\n      tmp[d] = (mod - f[d]) % mod;\n      for (int c: divs[d]) {\n        add(tmp[d], dp[c]);\n      }\n      tmp[d] = (2 * tmp[d] + 1) % mod;\n    }\n\n    // apply mobius inversion formula\n    for (int d: divs[i]) {\n      for (int c: divs[d]) {\n        add(dp[d], 1LL * mob[c] * tmp[d / c] % mod);\n      }\n      add(f[d], tmp[d]);\n    }\n\n    ans[i] = ans[i - 1];\n    add(ans[i], f[i]);\n  }\n}\n \nint32_t main() {\n  ios_base::sync_with_stdio(0);\n  cin.tie(0);\n  for (int i = 1; i < N; i++) {\n    for (int j = i; j < N; j += i) {\n      divs[j].push_back(i);\n    }\n  }\n  mobius();\n  solve();\n  int t = 1;\n  cin >> t;\n  while (t--) {\n    int m; cin >> m;\n    cout << ans[m] << '\\n';\n  }\n  return 0;\n}",
+      "#include<bits/stdc++.h>\nusing namespace std;\n \nconst int N = 1e6 + 9, mod = 998244353;\n \ninline void add(int &x, int y) {\n  x = x + y >= mod ? x + y - mod : x + y;\n}\nint spf[N];\nvoid sieve() {\n  vector<int> p;\n  for(int i = 2; i < N; i++) {\n    if (spf[i] == 0) spf[i] = i, p.push_back(i);\n    int sz = p.size();\n    for (int j = 0; j < sz && i * p[j] < N && p[j] <= spf[i]; j++) {\n      spf[i * p[j]] = p[j];\n    }\n  }\n}\nint mob[N];\nvoid mobius() {\n  mob[1] = 1;\n  for (int i = 2; i < N; i++){\n    mob[i]--;\n    for (int j = i + i; j < N; j += i) {\n      mob[j] -= mob[i];\n    }\n  }\n  for (int i = 1; i < N; i++) {\n    mob[i] = (mob[i] % mod + mod) % mod;\n  }\n}\nint c[N];\nvector<int> divs[N];\nvoid gen_divs(int n) { // not sorted\n  int id = 1, x = n;\n  divs[n][0] = 1;\n  while (n > 1) {\n    int k = spf[n];\n    int cur = 1, sz = id;\n    while (n % k == 0) {\n      cur *= k;\n      n /= k;\n      for (int i = 0; i < sz; i++) {\n        divs[x][id++] = divs[x][i] * cur;\n      }\n    }\n  }\n}\n\nvoid prec() {\n  sieve();\n  // generate divisors without using push_back as its really slow on Codeforces\n  for (int i = 1; i < N; i++) {\n    for (int j = i; j < N; j += i) {\n      c[j]++;\n    }\n    divs[i].resize(c[i]);\n    gen_divs(i);\n  }\n  mobius();\n}\nint dp[N];\nint f[N];\nint tmp[N], ans[N];\nvoid solve() {\n  for (int i = 1; i < N; i++) {\n    for (int d: divs[i]) {\n      tmp[d] = (mod - f[d]) % mod;\n      for (int c: divs[d]) {\n        add(tmp[d], dp[c]);\n      }\n      tmp[d] = (2 * tmp[d] + 1) % mod;\n    }\n\n    // apply mobius inversion formula\n    for (int d: divs[i]) {\n      for (int c: divs[d]) {\n        add(dp[d], 1LL * mob[c] * tmp[d / c] % mod);\n      }\n      add(f[d], tmp[d]);\n    }\n\n    ans[i] = ans[i - 1];\n    add(ans[i], f[i]);\n  }\n}\n \nint32_t main() {\n  ios_base::sync_with_stdio(0);\n  cin.tie(0);\n  prec();\n  solve();\n  int t = 1;\n  cin >> t;\n  while (t--) {\n    int m; cin >> m;\n    cout << ans[m] << '\\n';\n  }\n  return 0;\n}"
+    ]
+  }
+}

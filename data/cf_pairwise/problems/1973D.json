@@ -1,0 +1,41 @@
+{
+  "contest_id": 1973,
+  "index": "D",
+  "name": "Cat, Fox and Maximum Array Split",
+  "rating": 2400,
+  "tags": [
+    "brute force",
+    "interactive",
+    "math"
+  ],
+  "points": 2000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1973D",
+  "url": "https://codeforces.com/problemset/problem/1973/D",
+  "contest_start_time": "2024-05-17T14:35:00+00:00",
+  "statement": {
+    "title": "D. Cat, Fox and Maximum Array Split",
+    "time_limit": "3 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "This is an interactive problem.\n\nFox gave Cat two positive integers $n$ and $k$. She has a hidden array $a_1, \\ldots , a_n$ of length $n$, such that $1 \\leq a_i \\leq n$ for every $i$. Now they are going to play the following game:\n\nFor any two integers $l, r$ such that $1 \\leq l \\leq r \\leq n$, define $f(l, r) = (r - l + 1) \\cdot \\max\\limits_{x=l}^r a_x$. In other words, $f(l, r)$ is equal to the maximum of the subarray $a_l, \\ldots, a_r$ multiplied by its size.\n\nCat can ask Fox at most $2 n$ questions about the array. He will tell her two integers $l$ and $x$ ($1 \\leq l \\leq n, 1 \\leq x \\leq 10^9$), and she will tell him one integer $p$ as the answer — the smallest positive integer $r$ such that $f(l, r) = x$, or $n+1$ if no such $r$ exists.\n\nNow, Cat needs to find the largest value $m$ such that there exists a sequence $c_1, \\ldots, c_{k-1}$ such that $1 \\leq c_1  \\lt  \\ldots  \\lt  c_{k-1}  \\lt  n$ and $f(1, c_1) = f(c_1 + 1, c_2) = \\ldots = f(c_{k-1}+1, n) = m$. If no such $m$ exists, he should indicate this and take $-1$ as the answer. Note that for $k = 1$, $m$ is always equal to $f(1, n)$.\n\nIn other words, the goal is to find the largest $m$ such that you can split the array into exactly $k$ subarrays ($k$ is the constant given to you in the beginning of the interaction) so that all the subarrays have the product of their length and their maximum equal to $m$, or determine that no such $m$ exists. Every element should belong in exactly one of the subarrays.\n\nCat doesn't know what he should do, so he asked you to play the game for him.",
+    "input_spec": null,
+    "output_spec": null,
+    "note": "The hidden arrays in the three testcases are $[1]$, $[1, 2]$ and $[1, 3, 6, 1, 2, 1]$. In the second testcase, no split satisfies the constraints, so the answer is $-1$.\n\nThe answer for the first query of the third testcase is $7$ since no valid $r$ exists. For the second query of the third testcase, since $2 \\cdot \\max(1, 3) = 6$, we will get $2$ as the answer, since $r = 1$ doesn't satisfy the constraint.\n\nThe sample interaction guessed all three answers ($1, -1$ and $6$) correctly, so it received $1$ after each answer.",
+    "samples": [
+      {
+        "input": "\n3\n1 1\n\n1\n2 2\n\n1\n\n3\n\n1\n6 3\n\n7\n\n2\n\n3\n\n6\n\n1",
+        "output": "\n! 1\n\n\n? 1 1\n\n? 2 1\n\n! -1\n\n\n? 1 9\n\n? 1 6\n\n? 3 6\n\n? 4 6\n\n! 6"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 129556,
+    "url": "https://codeforces.com/blog/entry/129556",
+    "tutorial": "Problem D: idea by prvocislo and TimDee, prepared by prvocislo and TimDee\n\nHint 1:\n\nLet $m$ be value we want to find. What values can $m$ take?\n\nHint 2:\n\nLook at the maximum value in array $a$.\n\nHint 3:\n\nCan you find the maximum value in array?\n\nHint 4:\n\nThink about the segment containing the maximum value.\n\nHint 5:\n\nCan you finish the problem in $n$ queries?\n\nSolution:\n\nLet's denote maximum value in array $a$ as $mx$. Since the element with maximum value will belong to some segment, then if $m$ exists, $m$ will be divisible by $mx$. Obviously, $m$ can't be greater than $n \\cdot mx$, so now the candidates for value of $m$ are $mx, 2 \\cdot mx, 3 \\cdot mx, \\dots, n \\cdot mx$.\n\nTo find the value of $mx$ we can query $?$ $1$ $n \\cdot i$ for each $1\\leq i \\leq n$ and $mx$ will be equal to such $i$, querying which will give $n$ as the answer.\n\nWe can check each of $n$ possible values in $k$ queries, but that wouldn't fit in query limit.\n\nActually, since the length of each segment in partition will be greater than or equal to $\\frac{m}{mx}$, and there are exactly $k$ segments, we can get a simple inequality $k \\cdot \\frac{m}{mx} \\leq n$ (since sum of lengths of segments is exactly $n$), which means $m$ can not be greater than $mx \\cdot \\lfloor{n/k}\\rfloor$, so it is enough to check first $\\lfloor{n/k}\\rfloor$ candidates for $m$ in $k$ queries each. Total number of queries used would be $n + k \\cdot \\lfloor{n/k}\\rfloor$ which doesn't exceed $2n$.\n\nImplementation in C++: 261999488",
+    "solution_code": []
+  }
+}

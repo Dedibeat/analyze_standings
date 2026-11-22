@@ -1,0 +1,42 @@
+{
+  "contest_id": 2039,
+  "index": "A",
+  "name": "Shohag Loves Mod",
+  "rating": 800,
+  "tags": [
+    "constructive algorithms",
+    "number theory"
+  ],
+  "points": 500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2039A",
+  "url": "https://codeforces.com/problemset/problem/2039/A",
+  "contest_start_time": "2024-11-23T14:35:00+00:00",
+  "statement": {
+    "title": "A. Shohag Loves Mod",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "Shohag has an integer $n$. Please help him find an increasing integer sequence $1 \\le a_1 \\lt a_2 \\lt \\ldots \\lt a_n \\le 100$ such that $a_i \\bmod i \\neq a_j \\bmod j$ $^{\\text{∗}}$ is satisfied over all pairs $1 \\le i \\lt j \\le n$.\n\nIt can be shown that such a sequence always exists under the given constraints.\n\n$^{\\text{∗}}$$a \\bmod b$ denotes the remainder of $a$ after division by $b$. For example, $7 \\bmod 3 = 1, 8 \\bmod 4 = 0$ and $69 \\bmod 10 = 9$.",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\le t \\le 50$) — the number of test cases.\n\nThe first and only line of each test case contains an integer $n$ ($2 \\le n \\le 50$).",
+    "output_spec": "For each test case, print $n$ integers — the integer sequence that satisfies the conditions mentioned in the statement. If there are multiple such sequences, output any.",
+    "note": "In the first test case, the sequence is increasing, values are from $1$ to $100$ and each pair of indices satisfies the condition mentioned in the statement:\n\n For pair $(1, 2)$, $a_1 \\bmod 1 = 2 \\bmod 1 = 0$, and $a_2 \\bmod 2 = 7 \\bmod 2 = 1$. So they are different.\n\n For pair $(1, 3)$, $a_1 \\bmod 1 = 2 \\bmod 1 = 0$, and $a_3 \\bmod 3 = 8 \\bmod 3 = 2$. So they are different.\n\n For pair $(2, 3)$, $a_2 \\bmod 2 = 7 \\bmod 2 = 1$, and $a_3 \\bmod 3 = 8 \\bmod 3 = 2$. So they are different.\n\nNote that you do not necessarily have to print the exact same sequence, you can print any other sequence as long as it satisfies the necessary conditions.",
+    "samples": [
+      {
+        "input": "2\n3\n6",
+        "output": "\n2 7 8\n2 3 32 35 69 95"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 136523,
+    "url": "https://codeforces.com/blog/entry/136523",
+    "tutorial": "THOUGHT: A general approach to tackle ad-hoc problems is to play around with the conditions and see if we can add more constraints to limit the search space.\n\nACTION: Let's analyze the modular condition $a_i \\bmod i$.\n\nWe know that $a_i \\bmod i  \\lt  i$, and all $a_i \\bmod i$ values are distinct. Let's explore this step by step:\n\n $a_1 \\bmod 1$ is always $0$.\n\n $a_2 \\bmod 2$ can be $0$ or $1$. But since all $a_i \\bmod i$ values must be distinct, $a_2 \\bmod 2$ must be $1$ (otherwise, it would equal $a_1 \\bmod 1$).\n\n $a_3 \\bmod 3$ can be $0$, $1$, or $2$. Similarly, $a_3 \\bmod 3$ must be $2$ (to avoid duplication with $a_1 \\bmod 1$ or $a_2 \\bmod 2$).\n\n $\\ldots$\n\n $a_n \\bmod n$ must be $n-1$.\n\nOBSERVATION: This leads to the constraint $a_i \\bmod i = i - 1$.\n\nTHOUGHT: Next, let's consider the increasing sequence condition.\n\nOBSERVATION: Since the sequence must be increasing, we add the constraint $a_i \\ge i$.\n\nTHOUGHT: To further limit the search space, note that $n$ can be up to $50$, and $a_i$ must be $\\le 100$.\n\nOBSERVATION: This suggests that we can restrict $a_i$ to values up to $2 \\cdot n$.\n\nTHOUGHT: Let's compile the constraints:\n\n $a_i \\bmod i = i - 1$.\n\n $a_i \\ge i$.\n\n $a_i \\le 2 \\cdot n$.\n\nNow we need to build the sequence that satisfies these conditions.\n\nACTION: Let's build the sequence starting from the end.\n\n $a_n \\bmod n = n-1$. Thus, $a_n$ can be $n-1$ or $2 \\cdot n - 1$. Since $a_n \\ge n$, $a_n$ must be $2 \\cdot n - 1$.\n\n $a_{n-1} \\bmod (n-1) = n-2$. So $a_{n-1}$ can be $n-2$ or $(n - 2) + (n - 1) = 2 \\cdot n - 3$. Since $a_{n-1} \\ge n-1$, $a_{n-1}$ must be $2 \\cdot n - 3$.\n\n $\\ldots$\n\n $a_i \\bmod i = i - 1$. Thus, $a_i$ can be $i - 1$ or $2 \\cdot i - 1$ or $3 \\cdot i - 1 \\ldots$. Since $a_i \\ge i$ and the odd numbers greater than $2 \\cdot i$ have already been used, $a_i$ must be $2 \\cdot i - 1$.\n\nOBSERVATION: If we limit the elements to $2 \\cdot n$, there is exactly one sequence that satisfies all conditions.\n\nCONCLUSION: The sequence is $a_i = 2 \\cdot i - 1$, which is $1, 3, 5, \\ldots, 2 \\cdot n - 1$.\n\nVALIDATION: We can validate the solution by checking if it satisfies all the constraints. $a_i \\bmod i = (2 \\cdot i - 1) \\bmod i = i - 1$. So all $a_i \\bmod i$ are distinct and values are under $2 \\cdot n$. So the sequence is valid.\n\nTime Complexity: $\\mathcal{O}(n)$.",
+    "solution_code": [
+      "#include<bits/stdc++.h>\nusing namespace std;\n\nconst int N = 3e5 + 9;\nusing ll = long long;\n\nvoid solve() {\n  int n; cin >> n;\n  for (int i = 1; i <= n; i++) {\n    cout << 2 * i - 1 << ' ';\n  }\n  cout << '\\n';\n}\n\nint32_t main() {\n  ios_base::sync_with_stdio(0);\n  cin.tie(0);\n  int t = 1;\n  cin >> t;\n  while (t--) {\n    solve();\n  }\n  return 0;\n}"
+    ]
+  }
+}

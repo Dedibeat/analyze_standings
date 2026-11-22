@@ -1,0 +1,41 @@
+{
+  "contest_id": 2021,
+  "index": "D",
+  "name": "Boss, Thirsty",
+  "rating": 2500,
+  "tags": [
+    "dp",
+    "greedy",
+    "implementation"
+  ],
+  "points": 2500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2021D",
+  "url": "https://codeforces.com/problemset/problem/2021/D",
+  "contest_start_time": "2024-10-06T06:05:00+00:00",
+  "statement": {
+    "title": "D. Boss, Thirsty",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Pak Chanek has a friend who runs a drink stall in a canteen. His friend will sell drinks for $n$ days, numbered from day $1$ to day $n$. There are also $m$ types of drinks, numbered from $1$ to $m$.\n\nThe profit gained from selling a drink on a particular day can vary. On day $i$, the projected profit from selling drink of type $j$ is $A_{i, j}$. Note that $A_{i, j}$ can be negative, meaning that selling the drink would actually incur a loss.\n\nPak Chanek wants to help his friend plan the sales over the $n$ days. On day $i$, Pak Chanek must choose to sell at least one type of drink. Furthermore, the types of drinks sold on a single day must form a subarray. In other words, in each day, Pak Chanek will select $i$ and $j$ such that $1 \\leq i \\leq j \\leq m$. Then all types of drinks between $i$ and $j$ (inclusive) will be sold.\n\nHowever, to ensure that customers from the previous day keep returning, the selection of drink types sold on day $i$ ($i \\gt 1$) must meet the following conditions:\n\n At least one drink type sold on day $i$ must also have been sold on day $i-1$.\n\n At least one drink type sold on day $i$ must not have been sold on day $i-1$.\n\nThe daily profit is the sum of the profits from all drink types sold on that day. The total profit from the sales plan is the sum of the profits over $n$ days. What is the maximum total profit that can be achieved if Pak Chanek plans the sales optimally?",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 1000$). The description of the test cases follows.\n\nThe first line of each test case contains two integers $n$ and $m$ ($1 \\leq n \\leq 2 \\cdot 10^5$; $3 \\leq m \\leq 2 \\cdot 10^5$; $n \\cdot m \\leq 2 \\cdot 10^5$) — the number of rows and columns in a grid.\n\nThe next $n$ lines of each test case contain $m$ integers each, where the $i$-th line contains the integers $A_{i,1} A_{i,2}, \\ldots, A_{i,m}$ ($-10^9 \\leq A_{i,j} \\leq 10^9$) — project profits of each drink type on the $i$-th day.\n\nIt is guaranteed that the sum of $n \\cdot m$ over all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, output a single integer: the maximum profit that Pak Chanek can achieve.",
+    "note": "Here is Pak Chanek's optimal plan:\n\n On day $1$, Pak Chanek sells drink types $1$ to $3$. Generating a profit of $79+20+49 = 148$.\n\n On day $2$, Pak Chanek sells drink types $2$ to $4$. Generating a profit of $9+109+24 = 142$\n\n On day $3$, Pak Chanek sells drink types $1$ to $6$. Generating a profit of $185$.\n\nSo, the total profit of Pak Chanek's plan is $148 + 142 + 185 = 475$.",
+    "samples": [
+      {
+        "input": "1\n3 6\n79 20 49 5 -1000 500\n-105 9 109 24 -98 -499\n14 47 12 39 23 50",
+        "output": "\n475"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 134873,
+    "url": "https://codeforces.com/blog/entry/134873",
+    "tutorial": "We can see it as a grid of square tiles, consisting of $n$ rows and $m$ columns. Consider a single row. Instead of looking at the $m$ tiles, we can look at the $m+1$ edges between tiles, including the leftmost edge and the rightmost edge. We number the edges from $0$ to $m$ such that tile $j$ ($1\\leq j\\leq m$) is the tile between edge $j-1$ and edge $j$.\n\nFor a single row $i$, choosing a segment of tiles is equivalent to choosing two different edges $l$ and $r$ ($0\\leq l \\lt r\\leq m$) as the endpoints of the segment, which denotes choosing the tiles from $l+1$ to $r$. For each edge $j$, we can precompute a prefix sum $\\text{pref}[j]=A_{i,1}+A_{i,2}+\\ldots+A_{i,j}$. That means, choosing edges $l$ and $r$ yields a profit of $\\text{pref}[r]-\\text{pref}[l]$.\n\nLet's say we've chosen edges $l'$ and $r'$ for row $i-1$ and we want to choose two edges $l$ and $r$ for row $i$ that satisfies the problem requirement. We want to choose a continuous segment that includes at least one chosen tile and at least one unchosen tile from the previous row. A chosen tile that is adjacent to an unchosen tile only appears at the endpoints of the previous segment. That means, to satisfy the requirement, the new segment must strictly contain at least one endpoint of the previous segment. More formally, at least one of the following conditions must be satisfied:\n\n $l \\lt l' \\lt r$\n\n $l \\lt r' \\lt r$\n\nKnowing that, we can see that when going from one row to the next, we only need the information for one of the two endpoints, not both.\n\nWe can solve this with dynamic programming from row $1$ to row $n$. For each row, we find the optimal profit for each $l$ and the optimal profit for each $r$. We do those two things separately. For each row $i$, define the following things:\n\n $\\text{dpL}[i][l]$: the optimal profit for the first $i$ rows if the left endpoint of the last segment is $l$.\n\n $\\text{dpR}[i][r]$: the optimal profit for the first $i$ rows if the right endpoint of the last segment is $r$.\n\nLet's say we've calculated all values of $\\text{dpL}$ and $\\text{dpR}$ for row $i-1$ and we want to calculate for row $i$. Let $l$ and $r$ be the left and right endpoints of the new segment respectively. Let $p$ be one of the endpoints of the previous segment. Then it must hold that $l \\lt p \\lt r$, which yields a maximum profit of $-\\text{pref}[l]+\\max(\\text{dpL}[i-1][p],\\text{dpR}[i-1][p])+\\text{pref}[r]$.\n\nLet's calculate all values of $\\text{dpR}$ first for row $i$. For each $r$, we want to consider all corresponding triples $(l,p,r)$ and find the maximum profit among them. In order to do that, we do three steps:\n\n Make a prefix maximum of $-\\text{pref}[l]$.\n\n Then, for each $p$, we add $\\max(\\text{dpL[i-1][p]},\\text{dpR}[i-1][p])$ with the maximum value of $-\\text{pref}[l]$ for all $0\\leq l \\lt j$. And then we make a prefix maximum of those values.\n\n Then, for each $r$, the value of $\\text{dpR}[i][r]$ is $\\text{pref}[r]$ added by the maximum value for the previous calculation for each $p$ from $0$ to $r-1$.\n\nWe do the same thing for $\\text{dpL}$ but we use suffix maxmiums instead.\n\nAfter doing all that for every row from $1$ to $n$, we find the maximum value of $\\text{dpL}$ and $\\text{dpR}$ in the last row to get the answer.\n\nTime complexity of each test case: $O(nm)$",
+    "solution_code": []
+  }
+}

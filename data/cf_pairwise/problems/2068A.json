@@ -1,0 +1,46 @@
+{
+  "contest_id": 2068,
+  "index": "A",
+  "name": "Condorcet Elections",
+  "rating": 2300,
+  "tags": [
+    "constructive algorithms",
+    "graphs",
+    "greedy",
+    "probabilities"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2068A",
+  "url": "https://codeforces.com/problemset/problem/2068/A",
+  "contest_start_time": "2025-03-02T10:35:00+00:00",
+  "statement": {
+    "title": "A. Condorcet Elections",
+    "time_limit": "2 seconds",
+    "memory_limit": "1024 megabytes",
+    "legend": "It is a municipality election year. Even though the leader of the country has not changed for two decades, the elections are always transparent and fair.\n\nThere are $n$ political candidates, numbered from $1$ to $n$, contesting the right to govern. The elections happen using a variation of the Ranked Voting System. In their ballot, each voter will rank all $n$ candidates from most preferable to least preferable. That is, each vote is a permutation of $\\{1, 2, \\ldots, n\\}$, where the first element of the permutation corresponds to the most preferable candidate.\n\nWe say that candidate $a$ defeats candidate $b$ if in more than half of the votes candidate $a$ is more preferable than candidate $b$.\n\nAs the election is fair and transparent, the state television has already decreed a list of $m$ facts—the $i$-th fact being \"candidate $a_i$ has defeated candidate $b_i$\"—all before the actual election!\n\nYou are in charge of the election commission and tallying up the votes. You need to present a list of votes that produces the outcome advertised on television, or to determine that it is not possible. However, you are strongly encouraged to find a solution, or you might upset higher-ups.",
+    "input_spec": "The first line contains integers $n$ and $m$ ($2 \\le n \\le 50$, $1 \\le m \\le \\frac{n(n-1)}{2}$) — the number of parties and the number of pairs with known election outcomes.\n\nThe $i$-th of the following $m$ lines contains two integers $a_i$ and $b_i$ ($1 \\le a_i, b_i \\le n$, $a_i \\ne b_i$) — candidate $a_i$ defeats candidate $b_i$.\n\nEach unordered pair $\\{a_i, b_i\\}$ is given at most once.",
+    "output_spec": "Print $\\texttt{YES}$ if there is a list of votes matching the facts advertised on television. Otherwise, print $\\texttt{NO}$.\n\nIf there is a valid list of votes, print one such list in the following lines.\n\nPrint the number $k$ of votes cast ($1 \\le k \\le 50\\,000$). It can be shown that if there is a valid list of votes, there is one with at most $50\\,000$ votes.\n\nThen print $k$ lines. The $i$-th of these lines consists of a permutation of $\\{1, 2, \\ldots, n\\}$ describing the $i$-th vote. The first number in the permutation is the most preferable candidate and the last one is the least preferable candidate.\n\nFor $1\\le i\\le m$, $a_i$ shall appear earlier than $b_i$ in more than $k{/}2$ of the $k$ permutations. For pairs of candidates $\\{a, b\\}$ not appearing in the election requirements list, the outcome can be arbitrary, including neither of $a$ and $b$ defeating the other.",
+    "note": "In the second sample, Observe that candidate $1$ defeats candidate $2$ because it goes earlier in two out of three voters' permutations, which is more than half of all votes. Similarly, candidate $2$ defeats candidate $3$, and candidate $3$ defeats candidate $1$.",
+    "samples": [
+      {
+        "input": "2 1\n1 2",
+        "output": "\nYES\n1\n1 2"
+      },
+      {
+        "input": "3 3\n1 2\n2 3\n3 1",
+        "output": "\nYES\n3\n1 2 3\n2 3 1\n3 1 2"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 140239,
+    "url": "https://codeforces.com/blog/entry/140239",
+    "tutorial": "This problem is inspired by Condorcet's paradox. To put it simply, Condorcet's paradox states that for certain voters preferences, it's impossible to always resolve the elections fairly. No matter the outcome, more than half of the voters would prefer to change the result to some other outcome. This is illustrated by the second example in the statement.\n\nThe problem's answer is always YES. It's possible to construct a list of votes such that any (not trivially contradicting) list of statements \"candidate $x_i$ has defeated candidate $y_i$\" can be satisfied.\n\nLet $S = \\{(a, b) \\mid 1 \\leq a, b \\leq n, \\, a \\ne b\\}$, and let $R \\subseteq S$ be the list of requirements. Let $\\delta_{a,b}(\\text{ans})$, where $(a, b) \\in S$ and \"$\\text{ans}$\" is our answer, be how many votes prefer $a$ to $b$ minus how many votes prefer $b$ to $a$. We want to ensure that $\\delta_{a,b}(\\text{ans})  \\gt  0$ for every $(a, b) \\in R$.\n\nFor every $(a, b) \\in S$, it's actually possible to construct votes $\\pi_1$, $\\pi_2$, such that:\n\n $\\delta_{a,b}(\\{\\pi_1, \\pi_2\\}) = 2$.\n\n $\\delta_{x,y}(\\{\\pi_1, \\pi_2\\}) = 0$ for all $(x, y) \\in S$, $\\{x, y\\} \\ne \\{a, b\\}$.\n\nThen clearly adding $\\pi_1$, $\\pi_2$ for every $(a, b) \\in R$ results in a correct answer. Thus, the jury solution uses at most $2 {n \\choose 2} \\le n^2$ votes.\n\nLet us construct $\\pi_1$, $\\pi_2$. For the sake of exposition, let us assume $a = 1$, $b = 2$. Observe that the $\\pi_1$, $\\pi_2$ given below satisfy the requirements. Votes $\\pi$ for any $(a, b) \\ne (1, 2)$ can be constructed by the re-numeration.\n\n $\\pi_1 = (1, 2, 3, 4, \\ldots, n - 1, n)$\n\n $\\pi_2 = (n, n - 1, \\ldots, 4, 3, 1, 2)$",
+    "solution_code": []
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "contest_id": 2056,
+  "index": "C",
+  "name": "Palindromic Subsequences",
+  "rating": 1200,
+  "tags": [
+    "brute force",
+    "constructive algorithms",
+    "math"
+  ],
+  "points": 1500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2056C",
+  "url": "https://codeforces.com/problemset/problem/2056/C",
+  "contest_start_time": "2025-01-17T14:35:00+00:00",
+  "statement": {
+    "title": "C. Palindromic Subsequences",
+    "time_limit": "2 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "For an integer sequence $a = [a_1, a_2, \\ldots, a_n]$, we define $f(a)$ as the length of the longest subsequence$^{\\text{∗}}$ of $a$ that is a palindrome$^{\\text{†}}$.\n\nLet $g(a)$ represent the number of subsequences of length $f(a)$ that are palindromes. In other words, $g(a)$ counts the number of palindromic subsequences in $a$ that have the maximum length.\n\nGiven an integer $n$, your task is to find any sequence $a$ of $n$ integers that satisfies the following conditions:\n\n $1 \\le a_i \\le n$ for all $1 \\le i \\le n$.\n\n $g(a)  \\gt  n$\n\nIt can be proven that such a sequence always exists under the given constraints.\n\n$^{\\text{∗}}$A sequence $x$ is a subsequence of a sequence $y$ if $x$ can be obtained from $y$ by the deletion of several (possibly, zero or all) element from arbitrary positions.\n\n$^{\\text{†}}$A palindrome is a sequence that reads the same from left to right as from right to left. For example, $[1, 2, 1, 3, 1, 2, 1]$, $[5, 5, 5, 5]$, and $[4, 3, 3, 4]$ are palindromes, while $[1, 2]$ and $[2, 3, 3, 3, 3]$ are not.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 100$). The description of the test cases follows.\n\nThe first line of each test case contains a single integer $n$ ($\\color{red}{6} \\le n \\le 100$) — the length of the sequence.\n\nNote that there are no constraints on the sum of $n$ over all test cases.",
+    "output_spec": "For each test case, output $n$ integers $a_1, a_2, \\ldots, a_n$, representing an array that satisfies the conditions.\n\nIf there are multiple solutions, you may output any of them.",
+    "note": "In the first example, one possible solution is $a = [1, 1, 2, 3, 1, 2]$. In this case, $f(a) = 3$ as the longest palindromic subsequence has length $3$. There are $7$ ways to choose a subsequence of length $3$ that is a palindrome, as shown below:\n\n $[a_1, a_2, a_5] = [1, 1, 1]$\n\n $[a_1, a_3, a_5] = [1, 2, 1]$\n\n $[a_1, a_4, a_5] = [1, 3, 1]$\n\n $[a_2, a_3, a_5] = [1, 2, 1]$\n\n $[a_2, a_4, a_5] = [1, 3, 1]$\n\n $[a_3, a_4, a_6] = [2, 3, 2]$\n\n $[a_3, a_5, a_6] = [2, 1, 2]$\n\nTherefore, $g(a) = 7$, which is greater than $n = 6$. Hence, $a = [1, 1, 2, 3, 1, 2]$ is a valid solution.\n\nIn the second example, one possible solution is $a = [7, 3, 3, 7, 5, 3, 7, 7, 3]$. In this case, $f(a) = 5$. There are $24$ ways to choose a subsequence of length $5$ that is a palindrome. Some examples are $[a_2, a_4, a_5, a_8, a_9] = [3, 7, 5, 7, 3]$ and $[a_1, a_4, a_6, a_7, a_8] = [7, 7, 3, 7, 7]$. Therefore, $g(a) = 24$, which is greater than $n = 9$. Hence, $a = [7, 3, 3, 7, 5, 3, 7, 7, 3]$ is a valid solution.\n\nIn the third example, $f(a) = 7$ and $g(a) = 190$, which is greater than $n = 15$.",
+    "samples": [
+      {
+        "input": "3\n6\n9\n15",
+        "output": "\n1 1 2 3 1 2\n7 3 3 7 5 3 7 7 3\n15 8 8 8 15 5 8 1 15 5 8 15 15 15 8"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 138487,
+    "url": "https://codeforces.com/blog/entry/138487",
+    "tutorial": "2056C - Палиндромные подпоследовательности\n\nHints\n\nHint 1\n\nAnalyze the example with $n = 6$.\n\nHint 2\n\nIf $[a_1, a_2, \\ldots, a_k, a_{n - k + 1}, a_{n - k + 2}, \\ldots, a_n]$ is a palindrome, then $[a_1, a_2, \\ldots, a_k, a_i, a_{n - k + 1}, a_{n - k + 2}, \\ldots, a_n]$ is also a palindrome for all $k \\lt i \\lt n - k + 1$.\n\nSolution\n\nIf $[a_1, a_2, \\ldots, a_k, a_{n - k + 1}, a_{n - k + 2}, \\ldots, a_n]$ is a palindrome, then $[a_1, a_2, \\ldots, a_k, a_i, a_{n - k + 1}, a_{n - k + 2}, \\ldots, a_n]$ is also a palindrome for all $k \\lt i \\lt n - k + 1$, because we make it's length odd and add $a_i$ to the middle.\n\nWe can use this to create a sequence with a big value of $g$. However, we shouldn't create a palindrome of a greater length than $2k + 1$ by using the fact above.\n\nThat make us try something like $a = [1, 2, 3, \\ldots, n - 2, 1, 2]$. $f(a) = 3$ here, and any of $[a_1, a_i, a_{n - 1}]$ for $1 \\lt i \\lt n - 1$ and $[a_2, a_i, a_n]$ for $2 \\lt i \\lt n$ are palindromes, which means that $g(a) = 2(n - 3) = 2n - 6$.\n\nThis construction works for $n \\ge 7$, so we have to handle $n = 6$ separately.\n\nWe can also use the construction from the example with $n = 6$ directly: $a = [1, 1, 2, 3, 4, \\ldots, n - 3, 1, 2]$, which has $g(a) = 3n - 11$.\n\nCode",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n\nusing namespace std;\n\nvoid solve() {\n    int n;\n    cin >> n;\n    if (n == 6) {\n        cout << \"1 1 2 3 1 2\\n\";\n    }\n    else if(n == 9) {\n        cout << \"7 3 3 7 5 3 7 7 3\\n\";\n    }\n    else if(n == 15) {\n        cout << \"15 8 8 8 15 5 8 1 15 5 8 15 15 15 8\\n\";\n    }\n    else {\n        for(int i = 1; i <= n - 2; i++) cout << i << \" \"; cout << \"1 2\\n\";\n    }\n}\n\n\nsigned main() {\n    ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);\n    int ttt = 1;\n    cin >> ttt;\n    while(ttt--) {\n        solve();\n    }\n}"
+    ]
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "contest_id": 1989,
+  "index": "B",
+  "name": "Substring and Subsequence",
+  "rating": 1200,
+  "tags": [
+    "brute force",
+    "greedy",
+    "strings"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1989B",
+  "url": "https://codeforces.com/problemset/problem/1989/B",
+  "contest_start_time": "2024-06-27T14:35:00+00:00",
+  "statement": {
+    "title": "B. Substring and Subsequence",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "You are given two strings $a$ and $b$, both consisting of lowercase Latin letters.\n\nA subsequence of a string is a string which can be obtained by removing several (possibly zero) characters from the original string. A substring of a string is a contiguous subsequence of that string.\n\nFor example, consider the string abac:\n\n a, b, c, ab, aa, ac, ba, bc, aba, abc, aac, bac and abac are its subsequences;\n\n a, b, c, ab, ba, ac, aba, bac and abac are its substrings.\n\nYour task is to calculate the minimum possible length of the string that contains $a$ as a substring and $b$ as a subsequence.",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\le t \\le 10^3$) — the number of test cases.\n\nThe first line of each test case contains a string $a$ ($1 \\le |a| \\le 100$), consisting of lowercase Latin letters.\n\nThe second line of each test case contains a string $b$ ($1 \\le |b| \\le 100$), consisting of lowercase Latin letters.",
+    "output_spec": "For each test case, print a single integer — the minimum possible length of the string that contains $a$ as a substring and $b$ as a subsequence.",
+    "note": "In the examples below, the characters that correspond to the subsequence equal to $b$ are bolded.\n\nIn the first example, one of the possible answers is caba.\n\nIn the second example, one of the possible answers is ercf.\n\nIn the third example, one of the possible answers is mmm.\n\nIn the fourth example, one of the possible answers is contest.\n\nIn the fifth example, one of the possible answers is abcdefg.",
+    "samples": [
+      {
+        "input": "5\naba\ncb\ner\ncf\nmmm\nmmm\ncontest\ntest\ncde\nabcefg",
+        "output": "\n4\n4\n3\n7\n7"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 130937,
+    "url": "https://codeforces.com/blog/entry/130937",
+    "tutorial": "1989B — Substring and Subsequence",
+    "solution_code": []
+  }
+}

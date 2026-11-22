@@ -1,0 +1,43 @@
+{
+  "contest_id": 2028,
+  "index": "A",
+  "name": "Alice's Adventures in ''Chess''",
+  "rating": 900,
+  "tags": [
+    "brute force",
+    "implementation",
+    "math"
+  ],
+  "points": 500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2028A",
+  "url": "https://codeforces.com/problemset/problem/2028/A",
+  "contest_start_time": "2024-11-10T15:35:00+00:00",
+  "statement": {
+    "title": "A. Alice's Adventures in \"Chess\"",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "Alice is trying to meet up with the Red Queen in the countryside! Right now, Alice is at position $(0, 0)$, and the Red Queen is at position $(a, b)$. Alice can only move in the four cardinal directions (north, east, south, west).\n\nMore formally, if Alice is at the point $(x, y)$, she will do one of the following:\n\n go north (represented by N), moving to $(x, y+1)$;\n\n go east (represented by E), moving to $(x+1, y)$;\n\n go south (represented by S), moving to $(x, y-1)$; or\n\n go west (represented by W), moving to $(x-1, y)$.\n\nAlice's movements are predetermined. She has a string $s$ representing a sequence of moves that she performs from left to right. Once she reaches the end of the sequence, she repeats the same pattern of moves forever.\n\nCan you help Alice figure out if she will ever meet the Red Queen?",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 500$). The description of the test cases follows.\n\nThe first line of each test case contains three integers $n$, $a$, $b$ ($1 \\le n$, $a$, $b \\le 10$) — the length of the string and the initial coordinates of the Red Queen.\n\nThe second line contains a string $s$ of length $n$ consisting only of the characters N, E, S, or W.",
+    "output_spec": "For each test case, output a single string \"YES\" or \"NO\" (without the quotes) denoting whether Alice will eventually meet the Red Queen.\n\nYou can output the answer in any case (upper or lower). For example, the strings \"yEs\", \"yes\", \"Yes\", and \"YES\" will be recognized as positive responses.",
+    "note": "In the first test case, Alice follows the path $(0,0) \\xrightarrow[\\texttt{N}]{} (0,1) \\xrightarrow[\\texttt{E}]{} (1,1) \\xrightarrow[\\texttt{N}]{} (1,2) \\xrightarrow[\\texttt{E}]{} (2,2)$.\n\nIn the second test case, Alice can never reach the Red Queen.",
+    "samples": [
+      {
+        "input": "6\n2 2 2\nNE\n3 2 2\nNNE\n6 2 1\nNNEESW\n6 10 10\nNNEESW\n3 4 2\nNEE\n4 5 5\nNEWS",
+        "output": "\nYES\nNO\nYES\nYES\nYES\nNO"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 136096,
+    "url": "https://codeforces.com/blog/entry/136096",
+    "tutorial": "We can run the whole pattern $100\\gg \\max(a, b, n)$ times, which gives a total runtime of $O(100tn)$ (be careful in that running the pattern only 10 times is not enough!)\n\nTo prove that $100$ repeats suffices, suppose that Alice's steps on the first run of the pattern are $(0, 0), (x_1, y_1), (x_2, y_2), \\ldots, (x_n, y_n)$ (we will take $x_0 = 0, y_0 = 0$ for convenience) Then, Alice ends up at position $(a, b)$ if there exists a $t\\ge 0$ (the number of extra repeats) such that for some $i$, $x_i + tx_n = a$ and $y_i + ty_n = b$.\n\nCertainly, if $x_n = y_n = 0$, we only need one repeat so assume WLOG that $x_n \\neq 0$. Then, it must be the case that $t = \\frac{a - x_i}{x_n}$. However, $a - x_i \\le 20$ (since $x_i \\ge -10$) and $|x_n|\\ge 1$, so $t \\le 20$ and therefore $21$ repeats always suffice.\n\nIn fact, the above proof shows that we can solve each testcase in time $O(n)$.",
+    "solution_code": [
+      "def solve():\n    [n, a, b] = list(map(int, input().split()))\n    s = str(input())\n    x, y = 0, 0\n    for __ in range(100):\n        for c in s:\n            if c == 'N':\n                y += 1\n            elif c == 'E':\n                x += 1\n            elif c == 'S':\n                y -= 1\n            else:\n                x -= 1\n            if x == a and y == b:\n                print(\"YES\")\n                return\n    print(\"NO\")\n \nt = int(input())\n \nfor _ in range(t):\n    solve()"
+    ]
+  }
+}

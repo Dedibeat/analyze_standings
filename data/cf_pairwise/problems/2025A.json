@@ -1,0 +1,44 @@
+{
+  "contest_id": 2025,
+  "index": "A",
+  "name": "Two Screens",
+  "rating": 800,
+  "tags": [
+    "binary search",
+    "greedy",
+    "strings",
+    "two pointers"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2025A",
+  "url": "https://codeforces.com/problemset/problem/2025/A",
+  "contest_start_time": "2024-10-14T14:35:00+00:00",
+  "statement": {
+    "title": "A. Two Screens",
+    "time_limit": "2 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "There are two screens which can display sequences of uppercase Latin letters. Initially, both screens display nothing.\n\nIn one second, you can do one of the following two actions:\n\n choose a screen and an uppercase Latin letter, and append that letter to the end of the sequence displayed on that screen;\n\n choose a screen and copy the sequence from it to the other screen, overwriting the sequence that was displayed on the other screen.\n\nYou have to calculate the minimum number of seconds you have to spend so that the first screen displays the sequence $s$, and the second screen displays the sequence $t$.",
+    "input_spec": "The first line contains one integer $q$ ($1 \\le q \\le 500$) — the number of test cases.\n\nEach test case consists of two lines. The first line contains the string $s$, and the second line contains the string $t$ ($1 \\le |s|, |t| \\le 100$). Both strings consist of uppercase Latin letters.",
+    "output_spec": "For each test case, print one integer — the minimum possible number of seconds you have to spend so that the first screen displays the sequence $s$, and the second screen displays the sequence $t$.",
+    "note": "In the first test case, the following sequence of actions is possible:\n\n spend $6$ seconds to write the sequence GARAGE on the first screen;\n\n copy the sequence from the first screen to the second screen;\n\n spend $7$ seconds to complete the sequence on the second screen by writing FORSALE.\n\nIn the second test case, the following sequence of actions is possible:\n\n spend $1$ second to write the sequence A on the second screen;\n\n copy the sequence from the second screen to the first screen;\n\n spend $4$ seconds to complete the sequence on the first screen by writing BCDE;\n\n spend $4$ seconds to complete the sequence on the second screen by writing ABCD.\n\nIn the third test case, the fastest way to display the sequences is to type both of them character by character without copying, and this requires $16$ seconds.",
+    "samples": [
+      {
+        "input": "3\nGARAGE\nGARAGEFORSALE\nABCDE\nAABCD\nTRAINING\nDRAINING",
+        "output": "\n14\n10\n16"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 135173,
+    "url": "https://codeforces.com/blog/entry/135173",
+    "tutorial": "Whenever we perform the second action (copy from one screen to the other screen), we overwrite what was written on the other screen. It means that we can consider the string on the other screen to be empty before the copying, and that we only need to copy at most once.\n\nSo, the optimal sequence of operations should look as follows: add some characters to one of the screens, copy them to the other screen, and then finish both strings.\n\nWe need to copy as many characters as possible. Since after copying, we can only append new characters to the end of the strings on the screens, the string we copy must be a prefix of both of the given strings. So, we need to find the length of the longest common prefix of the given strings. This can be done in linear time if we scan these strings until we find a pair of different characters in the same positions; however, the constraints were low enough so that you could do it slower (like, for example, iterate on the length of the prefix and check that both prefixes of this length are equal).\n\nOkay, now let $l$ be the length of the longest common prefix. Using $l+1$ operations, we write $2l$ characters in total; so the number of operations we need will be $|s|+|t|-2l+l+1 = |s|+|t|+1-l$. However, if the longest common prefix is empty, there's no need to copy anything, and we can write both strings in $|s|+|t|$ seconds.",
+    "solution_code": [
+      "for _ in range(int(input())):\n\ts = input()\n\tt = input()\n\n\tlcp = 0\n\tn = len(s)\n\tm = len(t)\n\tfor i in range(1, min(n, m) + 1):\n\t\tif s[:i] == t[:i]:\n\t\t\tlcp = i\n\tprint(n + m - max(lcp, 1) + 1)"
+    ]
+  }
+}

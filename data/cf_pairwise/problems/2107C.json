@@ -1,0 +1,45 @@
+{
+  "contest_id": 2107,
+  "index": "C",
+  "name": "Maximum Subarray Sum",
+  "rating": 1500,
+  "tags": [
+    "binary search",
+    "constructive algorithms",
+    "dp",
+    "implementation",
+    "math"
+  ],
+  "points": 1500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2107C",
+  "url": "https://codeforces.com/problemset/problem/2107/C",
+  "contest_start_time": "2025-05-05T14:35:00+00:00",
+  "statement": {
+    "title": "C. Maximum Subarray Sum",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "You are given an array $a_1,a_2,\\ldots,a_n$ of length $n$ and a positive integer $k$, but some parts of the array $a$ are missing. Your task is to fill the missing part so that the maximum subarray sum$^{\\text{∗}}$ of $a$ is exactly $k$, or report that no solution exists.\n\nFormally, you are given a binary string $s$ and a partially filled array $a$, where:\n\n If you remember the value of $a_i$, $s_i = 1$ to indicate that, and you are given the real value of $a_i$.\n\n If you don't remember the value of $a_i$, $s_i = 0$ to indicate that, and you are given $a_i = 0$.\n\nAll the values that you remember satisfy $|a_i| \\le 10^6$. However, you may use values up to $10^{18}$ to fill in the values that you do not remember. It can be proven that if a solution exists, a solution also exists satisfying $|a_i| \\le 10^{18}$.\n\n$^{\\text{∗}}$The maximum subarray sum of an array $a$ of length $n$, i.e. $a_1, a_2, \\ldots a_n$ is defined as $\\max_{1 \\le i \\le j \\le n} S(i, j)$ where $S(i, j) = a_i + a_{i + 1} + \\ldots + a_j$.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 10^4$). The description of the test cases follows.\n\nThe first line of each test case contains two numbers $n,k$ ($1 \\le n \\le 2 \\cdot 10^5,1 \\le k \\le 10^{12}$).\n\nThe second line of each test case contains a binary ($\\texttt{01}$) string $s$ of length $n$.\n\nThe third line of each test case contains $n$ numbers $a_1,a_2,\\ldots,a_n$ ($|a_i| \\le 10^6$). If $s_i = \\texttt{0}$, then it's guaranteed that $a_i = 0$.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, first output $\\texttt{Yes}$ if a solution exists or $\\texttt{No}$ if no solution exists. You may print each character in either case, for example $\\texttt{YES}$ and $\\texttt{yEs}$ will also be accepted.\n\nIf there's at least one solution, print $n$ numbers $a_1,a_2,\\ldots,a_n$ on the second line. $|a_i| \\le 10^{18}$ must hold.",
+    "note": "In test case $1$, only the first position is not filled. We can fill it with $4$ to get the array $[4, 0, 1]$ which has maximum subarray sum of $5$.\n\nIn test case $2$, only the third position is not filled. We can fill it with $5$ to get the array $[4, -3, 5, -2, 1]$. Here the maximum subarray sum comes from the subarray $[4, -3, 5]$ and it is $6$, as required.\n\nIn test case $3$, the first and second positions are unfilled. We can fill both with $2$ to get the array $[2, 2, -4, -5]$ which has a maximum subarray sum of $4$. Note that other outputs are also possible such as $[0, 4, -4, -5]$.\n\nIn test case $4$, it is impossible to get a valid array. For example, if we filled the third position with $0$, we get $[1, 2, 0, 5, -1, 9]$, but this has a maximum subarray sum of $16$, not $12$ as required.",
+    "samples": [
+      {
+        "input": "10\n3 5\n011\n0 0 1\n5 6\n11011\n4 -3 0 -2 1\n4 4\n0011\n0 0 -4 -5\n6 12\n110111\n1 2 0 5 -1 9\n5 19\n00000\n0 0 0 0 0\n5 19\n11001\n-8 6 0 0 -5\n5 10\n10101\n10 0 10 0 10\n1 1\n1\n0\n3 5\n111\n3 -1 3\n4 5\n1011\n-2 0 1 -5",
+        "output": "\nYes\n4 0 1\nYes\n4 -3 5 -2 1\nYes\n2 2 -4 -5\nNo\nYes\n5 1 9 2 2\nYes\n-8 6 6 7 -5\nYes\n10 -20 10 -20 10\nNo\nYes\n3 -1 3\nYes\n-2 4 1 -5"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 142642,
+    "url": "https://codeforces.com/blog/entry/142642",
+    "tutorial": "2107C - Maximum Subarray Sum\n\nSolution\n\nWe assume that there is at least one $s_i = 0$ (unfilled position). In the other case that all $s_i = 1$, we can easily check if the maximum subarray sum is $k$ or not.\n\nLet us first figure out when the answer is impossible. Replace all $a_i = -\\texttt{INF}$ such that $s_i = 0$. If the maximum subarray sum is still $ \\gt k$, then the answer is clearly impossible.\n\nIn every other case, the answer is infact possible! All positions with $s_i = 0$ will be kept $-\\texttt{INF}$ except for $1$. Choose that position arbitrarily, let's call it $pos$.\n\nSolution 1 (Linear)\n\nLet $b =$ max prefix sum in the subarray $[a_{pos + 1}, a_{pos + 2}, \\ldots, a_n]$. Let $c =$ max suffix sum in the subarray $[a_1, a_2, \\ldots, a_{pos - 1}]$. Here we will allow the empty prefix and suffix too.\n\nSuppose the value of $a_{pos} = x$. Then, the maximum subarray sum including $pos$ will be $x + b + c$.\n\nAnd the maximum subarray not including $pos$ will be $\\le k$, because thats equivalent to replacing $a_{pos}$ with $-\\texttt{INF}$.\n\nThus, we can simply replace $x$ with $k - b - c$ and it will satisfy the conditions.\n\nSolution 2 (Binary Search)\n\nLet $f(x)$ be defined as the maximum subarray sum when we replace $a_{pos}$ with $x$.\n\nNote the following properties of $f(x)$:\n\n$f(-\\texttt{INF}) \\le k$: Because this is the assumption for the non-impossible case.\n\n$f(k) \\ge k$: Because the subarray $[a_{pos}]$ itself has a sum of $k$, so the maximum subarray sum must be greater.\n\n$f(x + 1) \\ge f(x)$ : Because increasing an element cannot reduce the maximum subarray sum.\n\n$f(x + 1) \\le f(x) + 1$: Because by increasing $a_{pos}$, each subarray increases by $0$ or $1$ depending on whether it includes $pos$. Thus, there is no way for the function calculating maximum subarray sum to increase by more than $1$.\n\nWith these observations, we can infact binary search on the first $x$ such that $f(x) = k$.\n\nThis is because, $f$ becomes continuous on the set of integers by the third and fourth property, and hence it will take all values in the range $[f(a), f(b)]$ for $a \\le b$, and we have shown that $k \\in [f(-\\texttt{INF}), f(k)]$ by the first and second property.\n\nIn both solutions, be careful to avoid overflow. One simple way is to have $\\texttt{INF} = 10^{13}$, as that is sufficient for our purposes (prevents overflow, but still larger than $k + \\sum{a_i}$).\n\nTime complexity: $O(n)$ or $O(n \\cdot \\log(A))$.\n\nCode",
+    "solution_code": [
+      "#include <bits/stdc++.h>\nusing namespace std;\n\nint main(){\n    int t; cin >> t;\n    while (t--){\n        int n; \n        long long k; \n        cin >> n >> k;\n        string s; cin >> s;\n        vector <long long> a(n);\n        for (auto &x : a) cin >> x;\n        \n        int pos = -1;\n        for (int i = 0; i < n; i++){\n            if (s[i] == '0'){\n                pos = i;\n                a[i] = -1e13;\n            }\n        }\n        \n        long long mx = 0;\n        long long curr = 0;\n        for (int i = 0; i < n; i++){\n            curr = max(curr + a[i], a[i]);\n            mx = max(mx, curr);\n        }\n        if (mx > k || (mx != k && pos == -1)){\n            cout << \"No\\n\";\n            continue;\n        }\n        if (pos != -1){\n            mx = 0, curr = 0;\n            long long L, R;\n            \n            for (int i = pos + 1; i < n; i++){\n                curr += a[i];\n                mx = max(mx, curr);\n            }\n            L = mx;\n            mx = 0;\n            curr = 0;\n            for (int i = pos - 1; i >= 0; i--){\n                curr += a[i];\n                mx = max(mx, curr);\n            }\n            R = mx;\n            \n            a[pos] = k - L - R;\n        }\n        \n        cout << \"Yes\\n\";\n        for (int i = 0; i < n; i++){\n            cout << a[i] << \" \\n\"[i + 1 == n];\n        }\n    }\n    return 0;\n}"
+    ]
+  }
+}

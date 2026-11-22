@@ -1,0 +1,48 @@
+{
+  "contest_id": 2063,
+  "index": "C",
+  "name": "Remove Exactly Two",
+  "rating": 1600,
+  "tags": [
+    "brute force",
+    "data structures",
+    "dfs and similar",
+    "dp",
+    "graphs",
+    "greedy",
+    "sortings",
+    "trees"
+  ],
+  "points": 1500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2063C",
+  "url": "https://codeforces.com/problemset/problem/2063/C",
+  "contest_start_time": "2025-01-22T12:05:00+00:00",
+  "statement": {
+    "title": "C. Remove Exactly Two",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Recently, Little John got a tree from his aunt to decorate his house. But as it seems, just one tree is not enough to decorate the entire house. Little John has an idea. Maybe he can remove a few vertices from the tree. That will turn it into more trees! Right?\nYou are given a tree$^{\\text{∗}}$ of $n$ vertices. You must perform the following operation exactly twice.\n\n Select a vertex $v$;\n\n Remove all edges incident to $v$, and also the vertex $v$.\n\nPlease find the maximum number of connected components after performing the operation exactly twice.\n\nTwo vertices $x$ and $y$ are in the same connected component if and only if there exists a path from $x$ to $y$. For clarity, note that the graph with $0$ vertices has $0$ connected components by definition.$^{\\text{†}}$\n\n$^{\\text{∗}}$A tree is a connected graph without cycles.\n\n$^{\\text{†}}$But is such a graph connected?",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 10^4$). The description of the test cases follows.\n\nThe first line of each test case contains a single integer $n$ ($2 \\le n \\le 2 \\cdot 10^5$).\n\nEach of the next $n-1$ lines contains two integers $u_i$ and $v_i$, denoting the two vertices connected by an edge ($1 \\le u_i,v_i \\le n$, $u_i \\neq v_i$). It is guaranteed that the given edges form a tree.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, output the maximum number of connected components on a separate line.",
+    "note": "On the first test case, removing a vertex twice will make the graph empty. By definition, the number of connected components in the graph with $0$ vertices is $0$. Therefore, the answer is $0$.\n\nOn the second test case, removing two vertices $1$ and $2$ leaves $2$ connected components. As it is impossible to make $3$ connected components with $2$ vertices, the answer is $2$.\n\nOn the third test case, removing two vertices $1$ and $5$ leaves $4$ connected components, which are $\\left\\{ 2,4\\right\\}$, $\\left\\{ 3\\right\\}$, $\\left\\{ 6\\right\\}$, and $\\left\\{ 7\\right\\}$. It can be shown that it is impossible to make $5$ connected components. Therefore, the answer is $4$.",
+    "samples": [
+      {
+        "input": "3\n2\n1 2\n4\n1 2\n2 3\n2 4\n7\n1 2\n1 3\n2 4\n4 5\n5 6\n5 7",
+        "output": "\n0\n2\n4"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 138593,
+    "url": "https://codeforces.com/blog/entry/138593",
+    "tutorial": "The main observation behind this task is that the number of connected components increases by $\\text{deg}-1$, where $\\text{deg}$ is the degree of the removed vertex at the time of removing. Thus, the number of connected components after removing two vertices $i$ and $j$ is:\n\n $d_i+d_j-1$ if $i$ and $j$ are not adjacent;\n\n $d_i+d_j-2$ if $i$ and $j$ are adjacent, because removing $i$ will decrease $\\text{deg}$ of $j$ by $1$.\n\nThe main approaches in maximizing this appear only after this observation. There are multiple approaches to this, where the editorial will introduce two of them.\n\n First Approach: Bruteforcing the First Vertex\n\nYou can maintain a sorted version of the degree sequence, using a std::multiset, a heap, or possibly even simply a sorted sequence.\n\nAfter you fix the first vertex $i$, you can find the maximum degree after decreasing the degrees of all adjacent vertices by $1$. std::multiset can deal with this directly by removing and inserting values, while a heap or a sorted sequence can deal with this by popping elements from the end while the two maximums have the same value. Then, the second vertex is easily the one with maximum degree.\n\nMaintaining the degrees takes $\\mathcal{O}(d \\log n)$ time. As $\\sum d = 2m = 2(n-1) = \\mathcal{O}(n)$, the total time complexity of this approach is $\\mathcal{O}(n \\log n)$.\n\n Second Approach: Bruteforcing the Second Vertex\n\nIf we greedily select the first vertex by degree, we can notice that selecting the first vertex as one with maximum initial degree will find at least one optimal solution. Assume that the first vertex with maximum degree had a maximum value $d_i+d_j-2$. Then, consider any solution with both vertices' initial degrees strictly less than $d_i$. This second solution's maximum possible value $d_{i'}+d_{j'}-1$ will never exceed $d_i+d_j-2$, because $d_{i'} \\lt d_i$ and $d_{j'} \\le d_j$. Thus, at least one optimal answer must have the first vertex as one with maximum initial degree.\n\nBut we do not know what to do when there are multiple first vertices with maximum initial degree. Luckily, trying only two first vertices with maximum initial degrees will always find one optimal answer. This can be proven by contradiction; If the two first vertices are $u$ and $v$, and the second vertex chosen in the bruteforce is $w$. At least one pair in $(u,v)$, $(u,w)$, $(v,w)$ will be not adjacent, because otherwise it implies the existence of a $3$-cycle, which can only exist if the graph is not a tree. Thus, if the optimal solution is in the form $d_u+d_w-1$, trying two first vertices will always find it.\n\nTherefore, we can try two vertices greedily for the first vertex and try all other vertices as the second vertex, finding at least one optimal answer in the process.\n\nThe time complexity of this approach is $\\mathcal{O}(n \\log n)$ or $\\mathcal{O}(n)$ depending on how adjacency is checked. Adjacency check in $\\mathcal{O}(1)$ is possible by preprocessing parents using DFS, because \"$u$ and $v$ are adjacent\" is equivalent to \"$par_u=v$ or $par_v=u$\".",
+    "solution_code": [
+      "import sys\ninput=lambda:sys.stdin.readline().rstrip()\nfor i in range(int(input())):\n    n=int(input())\n    deg=[0]*n\n    adj=[[] for i in range(n)]\n    for i in range(n-1):\n        u,v=map(int,input().split())\n        u-=1;v-=1\n        deg[u]+=1\n        deg[v]+=1\n        adj[u].append(v)\n        adj[v].append(u)\n    ans=1\n    mans=0\n    sdeg=sorted(deg)\n    for i in range(n):\n        ans=deg[i]\n        ideg=[]\n        for v in adj[i]:\n            ideg.append(deg[v])\n        ideg.append(deg[i])\n        ideg.sort(reverse=True)\n        rem=[]\n        mx=-1\n        for d in ideg:\n            if sdeg[-1]==d:\n                sdeg.pop()\n                rem.append(d)\n        rem.reverse()\n        if sdeg:\n            mx=max(mx,sdeg[-1])\n        for v in adj[i]:\n            mx=max(mx,deg[v]-1)\n        for d in rem:\n            sdeg.append(d)\n        mans=max(ans+mx-1,mans)\n    print(mans)"
+    ]
+  }
+}

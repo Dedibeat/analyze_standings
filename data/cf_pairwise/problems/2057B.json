@@ -1,0 +1,42 @@
+{
+  "contest_id": 2057,
+  "index": "B",
+  "name": "Gorilla and the Exam",
+  "rating": 1000,
+  "tags": [
+    "greedy",
+    "sortings"
+  ],
+  "points": 1000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2057B",
+  "url": "https://codeforces.com/problemset/problem/2057/B",
+  "contest_start_time": "2025-01-04T14:35:00+00:00",
+  "statement": {
+    "title": "B. Gorilla and the Exam",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "Due to a shortage of teachers in the senior class of the \"T-generation\", it was decided to have a huge male gorilla conduct exams for the students. However, it is not that simple; to prove his competence, he needs to solve the following problem.\n\nFor an array $b$, we define the function $f(b)$ as the smallest number of the following operations required to make the array $b$ empty:\n\n take two integers $l$ and $r$, such that $l \\le r$, and let $x$ be the $\\min(b_l, b_{l+1}, \\ldots, b_r)$; then\n\n remove all such $b_i$ that $l \\le i \\le r$ and $b_i = x$ from the array, the deleted elements are removed, the indices are renumerated.\n\nYou are given an array $a$ of length $n$ and an integer $k$. No more than $k$ times, you can choose any index $i$ ($1 \\le i \\le n$) and any integer $p$, and replace $a_i$ with $p$.\n\nHelp the gorilla to determine the smallest value of $f(a)$ that can be achieved after such replacements.",
+    "input_spec": "Each test contains multiple test cases. The first line contains a single integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases. The description of the test cases follows.\n\nThe first line of each set of input data contains two integers $n$ and $k$ ($1 \\le n \\le 10^5$, $0 \\le k \\le n$) — the length of the array $a$ and the maximum number of changes, respectively.\n\nThe second line of each set of input data contains $n$ integers $a_1, a_2, \\ldots, a_n$ ($1 \\le a_i \\le 10^9$) — the array $a$ itself.\n\nIt is guaranteed that the sum of the values of $n$ across all sets of input data does not exceed $10^5$.",
+    "output_spec": "For each set of input data, output a single integer on a separate line — the smallest possible value of $f(a)$.",
+    "note": "In the first set of input data, $f([48\\,843]) = 1$, since the array consists of a single number, and thus it can be removed in one operation.\n\nIn the second set of input data, you can change the second number to $2$, resulting in the array $[2, 2, 2]$, where $f([2, 2, 2]) = 1$, since you can take the entire array as a subarray, the minimum on it is $2$, so we will remove all the $2$s from the array, and the array will become empty.",
+    "samples": [
+      {
+        "input": "6\n1 0\n48843\n3 1\n2 3 2\n5 3\n1 2 3 4 5\n7 0\n4 7 1 3 2 4 1\n11 4\n3 2 1 4 4 3 4 2 1 3 3\n5 5\n1 2 3 4 5",
+        "output": "\n1\n1\n2\n5\n2\n1"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 138119,
+    "url": "https://codeforces.com/blog/entry/138119",
+    "tutorial": "Note that $f(a)$ is the number of distinct numbers in the array. Since it is beneficial for us to always choose the entire array as the segment, because we will eventually remove the minimum element, it is advantageous to remove it from the entire array at once.\n\nTherefore, our task has been reduced to changing no more than $k$ elements in order to minimize the number of distinct elements. To achieve this, we observe that it is always beneficial to change all the numbers that occur the least in the array and change them to the number that occurs the most frequently. This process can be easily accomplished in $O(n \\log n) $.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n\nusing i64 = long long;\n\nvoid solve() {\n    int n, k;\n    std::cin >> n >> k;\n    std::vector<int> a(n);\n    for (int i = 0; i < n; i++) {\n        std::cin >> a[i];\n    }\n    std::sort(a.begin(), a.end());\n    std::vector<int> cnt = {1};\n    for (int i = 1; i < n; i++) {\n        if (a[i] == a[i - 1]) {\n            cnt.back()++;\n        } else {\n            cnt.emplace_back(1);\n        }\n    }\n    std::sort(cnt.begin(), cnt.end());\n    int m = cnt.size();\n    for (int i = 0; i < m - 1; i++) {\n        if (cnt[i] > k) {\n            std::cout << m - i << \"\\n\";\n            return;\n        }\n        k -= cnt[i];\n    }\n    std::cout << 1 << \"\\n\";\n}\n\nsigned main() {\n    std::ios::sync_with_stdio(false);\n    std::cin.tie(nullptr);\n\n    int t = 1;\n    std::cin >> t;\n\n    while (t--) {\n        solve();\n    }\n}"
+    ]
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "contest_id": 2039,
+  "index": "B",
+  "name": "Shohag Loves Strings",
+  "rating": 1000,
+  "tags": [
+    "constructive algorithms",
+    "greedy",
+    "implementation",
+    "strings"
+  ],
+  "points": 1000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2039B",
+  "url": "https://codeforces.com/problemset/problem/2039/B",
+  "contest_start_time": "2024-11-23T14:35:00+00:00",
+  "statement": {
+    "title": "B. Shohag Loves Strings",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "For a string $p$, let $f(p)$ be the number of distinct non-empty substrings$^{\\text{∗}}$ of $p$.\n\nShohag has a string $s$. Help him find a non-empty string $p$ such that $p$ is a substring of $s$ and $f(p)$ is even or state that no such string exists.\n\n$^{\\text{∗}}$A string $a$ is a substring of a string $b$ if $a$ can be obtained from $b$ by deletion of several (possibly, zero or all) characters from the beginning and several (possibly, zero or all) characters from the end.",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases.\n\nThe first and only line of each test case contains a string $s$ ($1 \\le |s| \\le 10^5$) consisting of lowercase English letters.\n\nIt is guaranteed that the sum of the length of $s$ over all test cases doesn't exceed $3 \\cdot 10^5$.",
+    "output_spec": "For each test case, print a non-empty string that satisfies the conditions mentioned in the statement, or $-1$ if no such string exists. If there are multiple solutions, output any.",
+    "note": "In the first test case, we can set $p = $ abaa because it is a substring of $s$ and the distinct non-empty substrings of $p$ are a, b, aa, ab, ba, aba, baa and abaa, so it has a total of $8$ distinct substrings which is even.\n\nIn the second test case, we can only set $p = $ a but it has one distinct non-empty substring but this number is odd, so not valid.\n\nIn the third test case, the whole string contains $52$ distinct non-empty substrings, so the string itself is a valid solution.",
+    "samples": [
+      {
+        "input": "5\ndcabaac\na\nyouknowwho\ncodeforces\nbangladesh",
+        "output": "\nabaa\n-1\nyouknowwho\neforce\nbang"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 136523,
+    "url": "https://codeforces.com/blog/entry/136523",
+    "tutorial": "THOUGHT: The condition seems hard to track. So a good way is to play around with smaller cases and see if we can make some observations.\n\nACTION: Let's start with the smallest string. When $s=$ a, the number of unique substrings $f(s) = 1$, so it's odd and not valid.\n\nOBSERVATION: No one length strings are valid.\n\nACTION: Let's try the next smallest strings.\n\nWhen $s=$ aa, $f(s) = 2$, so it's even and valid.\n\nWhen $s=$ ab, $f(s) = 3$, so it's odd and not valid.\n\nOBSERVATION: Two length strings are valid if the adjacent characters are same.\n\nTHOUGHT: So if $s$ contains two consecutive same characters, we can print it right away. All that remains is to consider strings without two consecutive same characters.\n\nACTION: Let's try the next smallest strings with adjacent different characters.\n\nWhen $s=$ aba, $f(s) = 5$, so it's odd and not valid.\n\nWhen $s=$ abc, $f(s) = 6$, so it's even and valid.\n\nOBSERVATION: Three length strings are valid if all characters are different.\n\nTHOUGHT: So if $s$ contains three consecutive different characters, we can print it right away.\n\nAll that remains is to consider strings without two adjacent same characters but no three consecutive different characters.\n\nSo all the remaining strings are of the form $s =$ abababababa...\n\nLet's try to see if we can make some observations about these strings.\n\nACTION: Let's try to calculate the number of unique substrings for a string of the form $s =$ abababababa...\n\n There are exactly $2$ unique substrings of length $1$: a and b.\n\n There are exactly $2$ unique substrings of length $2$: ab and ba.\n\n There are exactly $2$ unique substrings of length $3$: aba and bab.\n\n $\\ldots$\n\n There are exactly $2$ unique substrings of length $n - 1$.\n\n However, the length $n$ substring occurs exactly once.\n\nOBSERVATION: The number of unique substrings of any length is $2$. But only the length $n$ substring occurs exactly once. So total number of unique substrings is $2n - 1$. And this is always odd! So there is no solution for these strings.\n\nTHOUGHT: We have covered all the cases.\n\nCONCLUSION: If there are adjacent same characters, we can print it right away. If there are three consecutive different characters, we can print it right away. Otherwise there is no solution.\n\nTime Complexity: $\\mathcal{O}(n)$.",
+    "solution_code": [
+      "#include<bits/stdc++.h>\nusing namespace std;\n\nconst int N = 3e5 + 9;\nusing ll = long long;\n\nvoid solve() {\n  string s; cin >> s;\n  int n = s.size();\n  for (int i = 0; i + 1 < n; i++) {\n    if (s[i] == s[i + 1]) {\n      cout << s.substr(i, 2) << '\\n';\n      return;\n    }\n  }\n  for (int i = 0; i + 2 < n; i++) {\n    if (s[i] != s[i + 1] and s[i] != s[i + 2] and s[i + 1] != s[i + 2]) {\n      cout << s.substr(i, 3) << '\\n';\n      return;\n    }\n  }\n  cout << -1 << '\\n';\n}\n\nint32_t main() {\n  ios_base::sync_with_stdio(0);\n  cin.tie(0);\n  int t = 1;\n  cin >> t;\n  while (t--) {\n    solve();\n  }\n  return 0;\n}"
+    ]
+  }
+}
