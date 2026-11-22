@@ -4,6 +4,10 @@
 
 ## Teaching material
 
+[Tutorial video problems](tutorial_video_problems.md) gives 27 filmable puzzles
+across divide and conquer, greedy, recursion, DP, and binary search. Each pairs a question for
+the audience with a worked example or drawing prompt and a short proof.
+
 [Recent Codeforces Div. 2 A/B teaching notes](cf_div2_teaching.md) select five
 problems for a general audience, with complete proofs, teaching prompts,
 common traps, and a reproducible small-case checker. The bounded search covers

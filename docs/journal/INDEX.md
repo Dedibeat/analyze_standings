@@ -123,3 +123,5 @@ to other files may name the old root locations (reports keep their filenames und
 - 2026-11-22 · team-r3 · [Wuhan 2026 virtual: dossier](2026-11-22-wuhan-2026-virtual-dossier.md) — counted 5/631 #53 silver; B (not counted) first try would be gold #36; QOJ downloads 404 via the helper
 - 2026-11-22 · data · [QOJ downloads: the query suffix broke /cached-downloads/](2026-11-22-qoj-cached-downloads-404.md) — download.php redirect targets 404 with ?x=1; _tag skips them, Wuhan statements fetched, 15 auth tests pass
 - 2026-11-22 · hong-kong · [Hong Kong registration: 11-22 export, the field is full](2026-11-22-hong-kong-registration-11-22-export-field-is-full.md) — 95/95 non-local and 17/~20 local Reviewed, cut at school #199; 6.3 expected golds vs 12.3 in 2025; NUM-R^3 Reviewed
+- 2026-11-22 · teaching · [Competitive programming problems for tutorial videos](2026-11-22-tutorial-video-problems.md) — 21 problems with opening questions and short proofs across four techniques
+- 2026-11-22 · teaching · [Binary search for tutorial videos](2026-11-22-binary-search-tutorial-videos.md) — added six worked puzzles, bringing the guide to 27
