@@ -36,7 +36,7 @@ OFFICIAL = {4071: "NUM-R^3", 4113: "NUM-R^3"}
 NOT_A_PARTICIPATION = {4071}  # TEAM_R3's in-contest runs there are 28-byte tests
 DURATION = 5 * 3600
 PENALTY = 20 * 60
-XCPCIO = {4593: "/icpc/51st/xian", 4607: "/icpc/51st/chengdu"}
+XCPCIO = {4593: "/icpc/51st/xian", 4607: "/icpc/51st/chengdu", 4694: "/icpc/51st/wuhan"}
 # first file holding the contest wins: official-only copies before full boards
 BOARD_FILES = ["tagged_official.json", "tagged.json", "petroz_2022_2026.json",
                "ucup_s4.json", "ucup_s3.json"]
@@ -122,6 +122,9 @@ def main():
     played = {cid for cid, xs in by_contest.items()
               if any(x["in_contest"] for x in xs) and cid not in NOT_A_PARTICIPATION}
     ids = played | set(OFFICIAL) | set(who)
+    for cid in sorted(ids - set(dashes)):  # labels unknown until fetch_team_r3.py gets it
+        print(f"skipped {cid}: no dashboard.json (run scripts/fetch_team_r3.py {cid})")
+    ids &= set(dashes)
     boards = load_boards(ids)
 
     report = []

@@ -119,3 +119,4 @@ to other files may name the old root locations (reports keep their filenames und
 - 2026-11-20 · team-r3 · [Compact HK plan starting with Wuhan](2026-11-20-hk-wuhan-plan.md) — Nov 21 virtual confirmed, six later mock dates proposed
 - 2026-11-22 · data · [Shared QOJ authentication for downloads](2026-11-22-shared-qoj-auth.md) — two fetchers share login, seven focused tests passed, live QOJ returned a Cloudflare challenge
 - 2026-11-22 · data · [Live QOJ fetching restored](2026-11-22-qoj-cloudflare-evasion.md) — Cloudflare auth-path challenge bypassed with a query suffix; live login ok, ten QOJ tests pass
+- 2026-11-22 · team-r3 · [Wuhan 2026 virtual: dossier](2026-11-22-wuhan-2026-virtual-dossier.md) — counted 5/631 #53 silver; B (not counted) first try would be gold #36; QOJ downloads 404 via the helper

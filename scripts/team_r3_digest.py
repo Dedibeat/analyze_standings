@@ -18,12 +18,13 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 D = ROOT / "data" / "team_r3"
 # Medal counts (gold, silver, bronze) by contest: board counts for the 2026 regionals (docs/journal/
-# 2026-10-26), data/ec_online/regional_teams.csv (rule 10/20/30) for the 2022 regionals,
+# 2026-10-26; Wuhan 4694 is that pattern, ceil(10% of 369) x1/x2/x3, not read from its board),
+# data/ec_online/regional_teams.csv (rule 10/20/30) for the 2022 regionals,
 # output/ccpc_icpc_medals.json for the 11th CCPC stations.  Elsewhere the top 10% stand in for gold.
 # 2022 regionals: 35 / 70 / 105 at every site (docs/journal/ 2026-10-05 medal diagnosis); their lines
 # and our rank use the XCPCIO official rows in data/ec_online/regional_teams.csv, because QOJ's
 # "official" 2022 rows are a larger set (Shenyang 1004 vs 708).
-MEDALS = {4607: (32, 64, 96), 4593: (41, 82, 123), 1051: (35, 70, 105), 1071: (35, 70, 105),
+MEDALS = {4694: (37, 74, 111), 4607: (32, 64, 96), 4593: (41, 82, 123), 1051: (35, 70, 105), 1071: (35, 70, 105),
           1053: (35, 70, 105), 1096: (35, 70, 105), 2575: (26, 50, 76), 2693: (26, 52, 78),
           2661: (25, 50, 75)}
 ONSITE_2022 = {1051: "xian", 1071: "hangzhou", 1053: "jinan", 1096: "shenyang"}
@@ -67,7 +68,7 @@ def main():
     dash = json.loads((c / "dashboard.json").read_text())
     labels = {p["problem_id"]: p["problem_label"] for p in dash["problems"]}
     official = json.loads((c / "standings_official.json").read_text())
-    xc = {4593: "/icpc/51st/xian", 4607: "/icpc/51st/chengdu"}.get(cid)
+    xc = {4593: "/icpc/51st/xian", 4607: "/icpc/51st/chengdu", 4694: "/icpc/51st/wuhan"}.get(cid)
     if xc:  # 2026 regionals: the onsite official field from XCPCIO, not QOJ's Universal Cup field
         board = next(b for b in json.loads((D / "boards" / "xcpcio_51st.json").read_text()) if b["board_link"] == xc)
         official = [r for r in board["standings"] if r.get("official")]

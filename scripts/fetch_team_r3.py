@@ -104,13 +104,13 @@ def save(path, data):
     if isinstance(data, bytes):
         path.write_bytes(data)
     else:
-        path.write_text(json.dumps(data, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+        path.write_text(json.dumps(data, ensure_ascii=False, indent=1) + "\n", encoding="utf-8", newline="\n")
 
 
 def pdf_with_text(path, data):
     save(path, data)
     if data[:4] == b"%PDF":
-        path.with_suffix(".txt").write_text(qoj.pdf_to_text(data), encoding="utf-8")
+        path.with_suffix(".txt").write_text(qoj.pdf_to_text(data), encoding="utf-8", newline="\n")
 
 
 def fetch_contest(session, cid):
@@ -131,7 +131,13 @@ def fetch_contest(session, cid):
     for i, a in enumerate(dash["attachments"]):
         stem = re.sub(r"[^\w().-]+", "_", f"{i}-{a['label']}")
         if not list((d / "attachments").glob(stem + ".*")):
-            data = session.get(a["url"]).content
+            try:
+                data = session.get(a["url"]).content
+            except HTTPError as e:  # 4694's listed "Statements (en)" answers 404
+                if e.code not in (403, 404):
+                    raise
+                print(f"  {cid} attachment {a['label']}: {e}", file=sys.stderr)
+                continue
             ext = ".pdf" if data[:4] == b"%PDF" else ".zip" if data[:2] == b"PK" else ".bin"
             pdf_with_text(d / "attachments" / (stem + ext), data)
     for p in dash["problems"]:
@@ -152,12 +158,12 @@ def fetch_contest(session, cid):
         # no PDF served: the problem page carries the statement as HTML (LaTeX source)
         page = session.get(f"{url}/problem/{p['problem_id']}").text
         m = ARTICLE.search(page)
-        if not m:
+        if not m or not m.group(1).strip():  # 4694: empty article, statement only in the PDF iframe
             print(f"  {cid} {p['problem_label']}: no statement", file=sys.stderr)
             continue
         save(pdf.with_suffix(".html"), m.group(1).encode())
         pdf.with_suffix(".txt").write_text(text(re.sub(r"<(?:/p|br\s*/?|/h\d|/li)>", "\n",
-                                                       m.group(1))), encoding="utf-8")
+                                                       m.group(1))), encoding="utf-8", newline="\n")
     for name, options in (("standings_all", {}),
                           ("standings_official", {"cookies": {"show_unofficial_mode": ""},
                                                   "discard_cookies": True})):
@@ -194,7 +200,7 @@ def fetch_team(session, contest_ids):
             print(f"  submission {sub['submission_id']}: no source on the page", file=sys.stderr)
             continue
         path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_text(html.unescape(m.group(1)), encoding="utf-8")
+        path.write_text(html.unescape(m.group(1)), encoding="utf-8", newline="\n")
 
     contests = sorted(set(contest_ids) |
                       {x["contest_id"] for x in subs if x["contest_id"]})

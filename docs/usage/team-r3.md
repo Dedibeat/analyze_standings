@@ -35,7 +35,7 @@ python3 scripts/team_r3_digest.py 4607 E --code   # every attempt at E, with dif
 ```
 
 `output/team_r3_coach/<contest>.md` has one dossier per contest (the 16
-participations): the idea and difficulty of every problem, our outcome and
+participations of 11-04, plus Wuhan 2026 `4694.md`, written without statements): the idea and difficulty of every problem, our outcome and
 member, every wrong run read and diffed, a comparison with the editorial, and a
 timeline against the field. `output/team_r3_coach/summary.md` has the synthesis:
 topics, the 68 penalised wrong runs by bug class, per-member profiles, strategy,

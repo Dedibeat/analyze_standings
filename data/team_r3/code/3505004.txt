@@ -1,0 +1,100 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define int long long
+#define F first 
+#define S second  
+#define all(v) (v).begin(), (v).end()
+#define hha(x) cout << #x << ": " << x << " ";
+#define hhal(x) cout << #x << ": " << x << endl;
+#define print(v) cout << #v << ": "; for(auto x : v) cout << x << " "; cout << endl;
+void solve()
+{
+    int n, m;
+    cin >> n >> m;
+    vector<vector<int>> adj(n + 1), nadj(n + 1);
+
+    map<int, int> mp[n + 1];
+    vector<int> a(n + 1);
+    vector<int> dep(n + 1);
+    for(int i = 1; i <= n; i++) {
+        cin >> dep[i];
+        a[i] = i;
+    }
+
+    for(int i = 1; i <= n; i++) {
+        int d;
+        cin >> d;
+        adj[i].resize(d);
+
+        for(int &j : adj[i]) cin >> j;
+    }
+
+    sort(all(a), [&](auto x, auto y) {
+        return dep[x] > dep[y];
+    });
+
+    int root, to = 0;
+    for(int i = 1; i <= n; i++) {
+        if(dep[i] == 0) {
+            root = i;
+            to++;
+        }
+    }
+
+    if(to != 1) {
+        cout << "-1\n";
+        return;
+    }
+
+
+    for(auto u : a) {
+
+        if(dep[u] == 0) continue;
+
+        int cnt = 0;    
+        int id = 0;
+
+
+        for(int v : adj[u]) {
+            if(dep[v] + 1 == dep[u]) {
+                id = v;
+                cnt++;
+            }
+            if(dep[v] == dep[u]) {
+                cout << "-1\n";
+                return;
+            }
+        }   
+
+        if(cnt != 1) {
+            cout << "-1\n";
+            return;
+        }
+
+
+        nadj[id].push_back(u);
+        mp[id][u] = 1;
+    }
+    cout << root << '\n';
+    for(int i = 1; i <= n; i++) {
+        for(int j : adj[i]) {
+            if(!mp[i][j]) {
+                nadj[i].push_back(j);
+                mp[i][j] = 1;
+            }
+        }
+
+
+        for(int j : nadj[i]) {
+            cout << j << " ";
+        }
+        cout << "\n";
+    }
+
+}
+signed main()
+{
+    ios::sync_with_stdio(0); cin.tie(0); 
+    // int t; cin >> t; while(t--)
+    solve();
+}

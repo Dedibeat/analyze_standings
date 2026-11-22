@@ -4,7 +4,7 @@ Current state of the project. Keep this file short (≤150 lines) and true: when
 task changes what ships, what is open, or a rule below, edit this file in the same
 commit. History belongs in [journal/](journal/INDEX.md), not here.
 
-Last updated: 2026-11-22 (live QOJ fetching restored).
+Last updated: 2026-11-22 (live QOJ fetching restored; Wuhan 2026 dossier).
 
 ## What ships
 
@@ -96,6 +96,10 @@ release steps above. Full history:
 
 ## Open threads (newest first)
 
+- **QOJ file downloads 404 through the helper** ([entry](journal/2026-11-22-wuhan-2026-virtual-dossier.md)).
+  Pages, boards and sources fetch, but every `download.php` request (statements,
+  attachments) answers 404 via `scripts/qoj_auth.py`, while the same URL in a browser
+  downloads. `/submission/<id>` is also challenged after ~3 pages per run.
 - **QOJ transport is a moving target** ([usage](usage/qoj.md),
   [entry](journal/2026-11-22-qoj-cloudflare-evasion.md)). Live fetching works by
   impersonating Chrome and appending a query suffix to beat a Cloudflare rule
