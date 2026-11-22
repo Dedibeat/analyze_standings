@@ -25,6 +25,9 @@ gives the exact command and outputs. Credentials come from the environment
 - `cphof_cf_participants.py`: CPHoF → Codeforces identities.
 - `backfill_standings.py`: no docstring.
 - `fetch_team_r3.py`: download the team account's QOJ submissions and contests.
+- `qoj_clearance.py`: harvest a QOJ `cf_clearance` with a headful Chrome when
+  Cloudflare challenges again; writes the gitignored clearance file that
+  `qoj_auth.py` replays. [Usage](../docs/usage/qoj.md).
 - `qoj_auth.py`: shared password login, session cache and QOJ HTTP requests
   for the single-contest and team fetchers. Impersonates Chrome and appends
   the challenge-evasion query suffix to every request — keep both.

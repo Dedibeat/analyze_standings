@@ -10,6 +10,7 @@ curl_cffi==0.16.0                # QOJ fetchers (scripts/qoj_auth.py). Browser
                                  #   impersonation is required: libcurl's default TLS
                                  #   fingerprint is Cloudflare-challenged on every page.
                                  #   Provides impersonate="chrome136"; keep >= 0.16.
+websocket-client==1.9.0          # scripts/qoj_clearance.py (Chrome DevTools Protocol)
 google-cloud-bigquery==3.45.0    # arch_b/tabfm_bigquery.py; brings google-auth for pairwise_tuning.py
 
 # Not on PyPI, imported from sibling checkouts when needed:

@@ -20,6 +20,11 @@ DATA = Path(__file__).resolve().parents[1] / "data"
 # query string reaches the origin; the app ignores unknown parameters. See
 # docs/journal/2026-11-22-qoj-cloudflare-evasion.md.
 CHALLENGE_EVASION = "x=1"
+# A real browser can mint cf_clearance (scripts/qoj_clearance.py). Replaying it
+# lifts the challenge entirely, including on the bare URLs, so it is the fallback
+# for the day the suffix stops working.
+CLEARANCE_FILE = ".qoj-clearance.json"
+CLEARANCE_COOKIE = "cf_clearance"
 TOKEN = re.compile(r'''["']?_token["']?\s*:\s*["']([A-Za-z0-9]{60})["']''')
 LOGIN_FORM = re.compile(r"\bfunction\s+submitLoginPost\s*\(")
 AUTH_COOKIES = {"__Host-UOJSESSID", "__Host-UOJREMEMBER", "UOJSESSID", "UOJREMEMBER"}
@@ -37,12 +42,33 @@ def _tag(url):
     return urlunsplit((parts.scheme, parts.netloc, parts.path, query, parts.fragment))
 
 
+def load_clearance(path=None):
+    """Return a harvested cf_clearance record, or None."""
+    path = (DATA / CLEARANCE_FILE) if path is None else path
+    try:
+        saved = json.loads(Path(path).read_text(encoding="utf-8"))
+    except (FileNotFoundError, ValueError):
+        return None
+    if not isinstance(saved, dict) or CLEARANCE_COOKIE not in saved.get("cookies", {}):
+        return None
+    return saved
+
+
 class QOJSession:
     def __init__(self):
         # impersonate is REQUIRED: Cloudflare challenges libcurl's default TLS
         # fingerprint on every page, including ungated ones.
         self.session = Session(timeout=40, allow_redirects=False, impersonate="chrome136")
         self.next_request = 0.0
+        self.clearance = load_clearance()
+        if self.clearance:
+            # Replay only the clearance cookie: a raw Cookie header would pin the
+            # pre-login session and shadow the UOJSESSID that a login issues.
+            # The User-Agent must match the browser that minted the cookie.
+            self.session.cookies.set(CLEARANCE_COOKIE, self.clearance["cookies"][CLEARANCE_COOKIE],
+                                     domain="qoj.ac", secure=True)
+            if self.clearance.get("user_agent"):
+                self.session.headers["User-Agent"] = self.clearance["user_agent"]
 
     def close(self):
         self.session.close()
@@ -62,9 +88,15 @@ class QOJSession:
                 raise QOJError(f"QOJ network error on {parsed.path}: {exc}") from exc
             self.next_request = time.monotonic() + 1.5
             if response.headers.get("cf-mitigated") == "challenge":
+                hint = (
+                    "the cached cf_clearance has expired or is for another network"
+                    if self.clearance else
+                    "run ./.venv/bin/python -m scripts.qoj_clearance to harvest "
+                    "a cf_clearance with a headful browser"
+                )
                 raise QOJError(
                     f"QOJ presented a Cloudflare challenge on {parsed.path} "
-                    f"despite the query-suffix evasion; re-check qoj.ac's WAF rules"
+                    f"despite the query-suffix evasion; {hint}"
                 )
             if response.status_code == 429:
                 retry_after = response.headers.get("Retry-After")

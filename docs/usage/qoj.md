@@ -29,11 +29,35 @@ Do not bypass the helper or strip the suffix. A challenge that still arrives
 stops the fetcher, and a rate-limit response stops it and reports `Retry-After`
 when QOJ supplies it.
 
+### If Cloudflare challenges anyway
+
+There are two layers and the second is only needed when the first fails.
+
+1. The query suffix plus Chrome impersonation. This needs no browser and works
+   today.
+2. A `cf_clearance` cookie harvested once from a real browser:
+
+   ```bash
+   ./.venv/bin/python -m scripts.qoj_clearance
+   ```
+
+   The command launches a headful Chrome, waits for the challenge to clear,
+   checks that a plain HTTP client can then reach the login page, and only then
+   writes the cookie and the User-Agent that minted it to the gitignored
+   `data/.qoj-clearance.json` (mode 600). `qoj_auth.py` replays it from then on,
+   which lifts the challenge on the bare URLs as well. Re-run the command when
+   `qoj_auth` reports that the cached clearance has expired.
+
+It needs `DISPLAY` and a Chrome binary; set `QOJ_CHROME` to point at one. A
+**headless** browser does not work — Cloudflare detects it — and neither does a
+plain HTTP client, which cannot answer a managed challenge. Headful Chrome
+without automation flags clears it in a few seconds.
+
 ### Running this from another machine
 
-The fix carries no IP or cookie state. No `cf_clearance` is fetched or sent, so
-a different machine, network or country gets the same result provided two things
-hold:
+Without a harvested clearance the transport carries no IP or cookie state. No
+`cf_clearance` is fetched or sent, so a different machine, network or country
+gets the same result provided two things hold:
 
 - `curl_cffi` resolves to the pinned `0.16.0` (or newer, with `chrome136`). An
   older version raises when the session is built rather than failing silently.
@@ -42,8 +66,12 @@ hold:
   `../qoj-intergration` checkout and `pdftotext`.
 - The network is not an ASN Cloudflare treats as hostile. A datacenter or cloud
   IP can still be challenged even with the correct fingerprint and suffix. If
-  that happens the error says the evasion was already applied; there is no
-  client-side workaround known.
+  that happens the error says the evasion was already applied; harvesting a
+  clearance is the next thing to try.
+
+A harvested `cf_clearance` is the exception to the portability above: it is bound
+to the IP and User-Agent that minted it, so copying `data/.qoj-clearance.json` to
+another machine does not work. Harvest again on that machine.
 
 Check a new machine with `.venv/bin/python -m scripts.qoj_auth`: it prints `QOJ
 signed-in profile verified` or stops with the reason.

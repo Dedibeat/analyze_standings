@@ -4,7 +4,7 @@ Current state of the project. Keep this file short (≤150 lines) and true: when
 task changes what ships, what is open, or a rule below, edit this file in the same
 commit. History belongs in [journal/](journal/INDEX.md), not here.
 
-Last updated: 2026-11-22 (live QOJ fetching restored).
+Last updated: 2026-11-22 (QOJ: harvested cf_clearance fallback).
 
 ## What ships
 
@@ -51,7 +51,11 @@ release steps above. Full history:
 - **QOJ transport:** `scripts/qoj_auth.py` must keep `impersonate` on the
   `Session` and the `_tag()` query suffix on every request. Removing either
   makes every live QOJ call fail with a Cloudflare challenge — ungated pages
-  included ([why](journal/2026-11-22-qoj-cloudflare-evasion.md)).
+  included ([why](journal/2026-11-22-qoj-cloudflare-evasion.md)). If a challenge
+  still arrives, `scripts/qoj_clearance.py` harvests a `cf_clearance` that
+  `qoj_auth.py` replays ([why](journal/2026-11-22-qoj-cf-clearance.md)). That
+  cookie file is a credential: gitignored, mode 600, never commit or copy it
+  between machines — it is bound to the minting IP and User-Agent.
 - **Fit inputs:** `data/tagged.json` plus the supplements read by `arch_b.joint`
   (`ucup_s3/s4`, `icpc_2020_2021`, `petroz_2022_2026`, `wf_tagged_format`).
   CCPC boards (`xcpcio_ccpc.json`, `qoj_ccpc.json`), AOJ and Kattis are
@@ -96,7 +100,10 @@ release steps above. Full history:
   impersonating Chrome and appending a query suffix to beat a Cloudflare rule
   that matches the bare auth path. Both are client-side and portable, but the
   rule can be tightened to include the query string at any time, and
-  datacenter ASNs can still be challenged. The failure is immediate and explicit
+  datacenter ASNs can still be challenged. The fallback is a harvested
+  `cf_clearance` ([entry](journal/2026-11-22-qoj-cf-clearance.md)), which is not
+  portable: it is bound to the minting IP and User-Agent and must be re-harvested
+  per machine when QOJ expires it. The failure is immediate and explicit
   (`python -m scripts.qoj_auth` stops with the reason), so no silent bad data.
 - **Codeforces research** ([usage](usage/codeforces.md), reports in
   [reports/codeforces/](reports/codeforces/)). The five-hour all-metric search is
