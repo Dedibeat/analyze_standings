@@ -91,6 +91,13 @@ release steps above. Full history:
 
 ## Open threads (newest first)
 
+- **QOJ transport is a moving target** ([usage](usage/qoj.md),
+  [entry](journal/2026-11-22-qoj-cloudflare-evasion.md)). Live fetching works by
+  impersonating Chrome and appending a query suffix to beat a Cloudflare rule
+  that matches the bare auth path. Both are client-side and portable, but the
+  rule can be tightened to include the query string at any time, and
+  datacenter ASNs can still be challenged. The failure is immediate and explicit
+  (`python -m scripts.qoj_auth` stops with the reason), so no silent bad data.
 - **Codeforces research** ([usage](usage/codeforces.md), reports in
   [reports/codeforces/](reports/codeforces/)). The five-hour all-metric search is
   complete; the loss-selected model beats the incumbent on all four point metrics.

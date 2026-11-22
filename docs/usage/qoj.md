@@ -29,6 +29,25 @@ Do not bypass the helper or strip the suffix. A challenge that still arrives
 stops the fetcher, and a rate-limit response stops it and reports `Retry-After`
 when QOJ supplies it.
 
+### Running this from another machine
+
+The fix carries no IP or cookie state. No `cf_clearance` is fetched or sent, so
+a different machine, network or country gets the same result provided two things
+hold:
+
+- `curl_cffi` resolves to the pinned `0.16.0` (or newer, with `chrome136`). An
+  older version raises when the session is built rather than failing silently.
+  Login needs only stdlib plus `curl_cffi`; the other requirements are for the
+  analysis code, and only the team fetcher additionally needs the sibling
+  `../qoj-intergration` checkout and `pdftotext`.
+- The network is not an ASN Cloudflare treats as hostile. A datacenter or cloud
+  IP can still be challenged even with the correct fingerprint and suffix. If
+  that happens the error says the evasion was already applied; there is no
+  client-side workaround known.
+
+Check a new machine with `.venv/bin/python -m scripts.qoj_auth`: it prints `QOJ
+signed-in profile verified` or stops with the reason.
+
 `fetch_team_r3` writes the TEAM_R3 submission list and visible source files,
 plus dashboards, statements, attachments and standings under `data/team_r3/`.
 Use an account that can view those files. TEAM_R3's Training Mode hides

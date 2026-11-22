@@ -72,6 +72,29 @@ GET /user/profile/<user>               200,  17,356 bytes
 No contest data, submission cache or shipped artifact changed; this was a
 transport fix.
 
+## Remote reproducibility
+
+Because no `cf_clearance` cookie is obtained or sent, the fix carries no IP or
+session state. Verified from a second network — the repo client with only
+`session.proxies` pointed at a SOCKS proxy, over Tor exit `204.8.96.107` against
+the local direct address `66.181.181.176`:
+
+| Vantage point | Logins | Result |
+|---|---|---|
+| direct | 1 | ok in 1–4 s |
+| Tor exit `204.8.96.107` | 5 (5 distinct accounts) | ok in 7.9–9.9 s; `/contests` and `/submissions` returned 200 |
+
+All five ran without a cached cookie, so each did a full password login.
+`scripts/qoj_auth.py` imports only the standard library plus `curl_cffi`, so the
+auth path alone needs just `pip install curl_cffi==0.16.0` on Python 3.12; the
+other requirements serve the analysis code.
+
+Two limits on that portability. An older `curl_cffi` raises when the session is
+constructed, because `chrome136` is not a known target — a loud failure, but it
+means the pin matters. And a datacenter or cloud ASN can still be challenged
+with the correct fingerprint and suffix; Tor exits are datacenter-hosted and
+passed here, which is encouraging but not a guarantee for every provider.
+
 ## Reproduce
 
 ```bash
