@@ -1,0 +1,30 @@
+The 2026 ICPC Asia Wuhan Regional Contest China, Wuhan, November 1, 2026
+Problem L. Jigsaw Puzzle
+This is an interactive problem. You have a box of jigsaw puzzle pieces, containing n pieces numbered 1, 2, . . . , n. These pieces can be assembled into one row, and in that row the i-th piece from the left is numbered ai. This is the only correct arrangement. But you have lost the reference picture of the jigsaw puzzle, so you do not know what the permutation a is. Luckily, you are an expert at jigsaw puzzles. When you arrange these n pieces into one row, for every pair of adjacent pieces in the row you can tell whether they fit together. Here fit together means that the two pieces are adjacent in the correct arrangement, and their left-to-right order is unchanged. Therefore you decide to determine the permutation a using several placements, and a placement goes as follows:
+1. Choose a permutation b. Arrange the n pieces into one row so that the i-th piece from the left is numbered bi.
+2. You will then obtain a binary string of length n - 1, namely c = c1c2 . . . cn-1. Here: � ci = 1 if and only if there exists 1  j  n - 1 such that bi = aj and bi+1 = aj+1; � otherwise, ci = 0.
+You have to determine the permutation a using at most n - 1 placements, and finally report it. The step of reporting the permutation a does not count toward the number of placements.
+Interaction Protocol
+There are multiple test cases. The first line of input contains an integer T (1  T  104), indicating the number of test cases. For each test case, the first line of input contains an integer n (2  n  200), indicating the number of pieces. After that, you may perform placements and finally report your answer:
+� Placement: print ? b1 b2 . . . bn. Here b1, . . . , bn must be a permutation. After flushing the output buffer, you have to read a binary string of length n - 1, namely c = c1c2 . . . cn-1, which is the result of this placement.
+� Report: print ! a1 a2 . . . an. You declare that the unknown permutation is a1, . . . , an. This operation does not count toward the number of placements. After flushing the output buffer, the current test case ends immediately. You then proceed to the next test case, or terminate your program if there is none.
+You may perform at most n - 1 placements, and you may report your answer at any moment within this limit. It is guaranteed that the sum of n2 over all test cases does not exceed 106. The interactor is non-adaptive. The permutation a is fixed before the interaction starts and does not change with your placements. Print each operation on a separate line and flush the output buffer. You can flush the output buffer as follows:
+� C++: fflush(stdout) or cout.flush(); � Java: System.out.flush(); � Python: sys.stdout.flush().
+Example
+Page 25 of 28
+
+The 2026 ICPC Asia Wuhan Regional Contest China, Wuhan, November 1, 2026
+
+2 4 010 000 111 5 0001 0010 0000 0111
+
+standard input
+
+standard output
+?1234 ?4321 ?1423 !1423 ?13542 ?32145 ?12345 ?53142 !31425
+
+Note
+For the first test case of the sample, the correct arrangement is a = (1, 4, 2, 3). In the first placement, you choose b = (1, 2, 3, 4) and obtain c = 010: among all the adjacent pieces, only pieces 2 and 3 fit together. In the second placement, you choose b = (4, 3, 2, 1) and obtain c = 000: none of the three adjacent pairs fit together. In the third placement, you choose b = (1, 4, 2, 3) and obtain c = 111: all three adjacent pairs fit together, so this arrangement is exactly the correct arrangement. Finally, you report that the correct arrangement is a = (1, 4, 2, 3).
+
+Page 26 of 28
+
+

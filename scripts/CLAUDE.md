@@ -30,7 +30,8 @@ gives the exact command and outputs. Credentials come from the environment
   `qoj_auth.py` replays. [Usage](../docs/usage/qoj.md).
 - `qoj_auth.py`: shared password login, session cache and QOJ HTTP requests
   for the single-contest and team fetchers. Impersonates Chrome and appends
-  the challenge-evasion query suffix to every request — keep both.
+  the challenge-evasion query suffix to every request (not to `/cached-downloads/`,
+  which 404s with a query) — keep both.
   [Usage](../docs/usage/qoj.md).
 
 ## Forecasts and contest analysis

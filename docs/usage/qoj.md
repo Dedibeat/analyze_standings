@@ -25,7 +25,9 @@ Supply `QOJ_PASSWORD` when a fresh password-only login is needed.
 All QOJ requests go through `scripts/qoj_auth.py`, which impersonates Chrome and
 appends a query suffix. Cloudflare challenges the bare auth paths (`/login`,
 `/register`), so both are required; see [the journal entry](../journal/2026-11-22-qoj-cloudflare-evasion.md).
-Do not bypass the helper or strip the suffix. A challenge that still arrives
+The one exception is `/cached-downloads/`, where `download.php` redirects for
+statements and attachments: those files answer 404 to any query string, so
+`_tag()` leaves them bare. Do not bypass the helper or strip the suffix elsewhere. A challenge that still arrives
 stops the fetcher, and a rate-limit response stops it and reports `Retry-After`
 when QOJ supplies it.
 

@@ -4,7 +4,7 @@ Current state of the project. Keep this file short (≤150 lines) and true: when
 task changes what ships, what is open, or a rule below, edit this file in the same
 commit. History belongs in [journal/](journal/INDEX.md), not here.
 
-Last updated: 2026-11-22 (QOJ: harvested cf_clearance fallback; Wuhan 2026 dossier).
+Last updated: 2026-11-22 (QOJ cached-download fix; Wuhan 2026 dossier).
 
 ## What ships
 
@@ -42,8 +42,9 @@ python -m arch_b.export_medal_viewer
 To add or refresh a contest, run
 `QOJ_USERNAME=… QOJ_PASSWORD=… python3 scripts/add_qoj_contest.py <id> --name … --region … [--refresh]`.
 The team-submission and single-contest fetchers share a browserless session.
-The client impersonates Chrome and appends a query suffix to every QOJ request;
-that pair is what gets past Cloudflare, which challenges the bare auth paths.
+The client impersonates Chrome and appends a query suffix to every QOJ request
+(except `/cached-downloads/`, which 404s with any query string); that pair is what
+gets past Cloudflare, which challenges the bare auth paths.
 Live login and downloads verified 2026-11-22. See
 [QOJ fetcher usage](usage/qoj.md).
 For XCPCIO-only boards, use `scripts/fetch_xcpcio_standings.py`. Rerun
@@ -54,7 +55,9 @@ release steps above. Full history:
 ## Rules that are easy to break
 
 - **QOJ transport:** `scripts/qoj_auth.py` must keep `impersonate` on the
-  `Session` and the `_tag()` query suffix on every request. Removing either
+  `Session` and the `_tag()` query suffix on every request except
+  `/cached-downloads/` (statement and attachment files, which 404 with a query;
+  [why](journal/2026-11-22-qoj-cached-downloads-404.md)). Removing either
   makes every live QOJ call fail with a Cloudflare challenge — ungated pages
   included ([why](journal/2026-11-22-qoj-cloudflare-evasion.md)). If a challenge
   still arrives, `scripts/qoj_clearance.py` harvests a `cf_clearance` that
@@ -100,10 +103,9 @@ release steps above. Full history:
 
 ## Open threads (newest first)
 
-- **QOJ file downloads 404 through the helper** ([entry](journal/2026-11-22-wuhan-2026-virtual-dossier.md)).
-  Pages, boards and sources fetch, but every `download.php` request (statements,
-  attachments) answers 404 via `scripts/qoj_auth.py`, while the same URL in a browser
-  downloads. `/submission/<id>` is also challenged after ~3 pages per run.
+- **`/submission/<id>` is challenged after ~3 pages per run**
+  ([entry](journal/2026-11-22-wuhan-2026-virtual-dossier.md)). Spaced reruns of
+  `fetch_team_r3` get through; a long source backlog (3295/4582: 15 sources) is slow.
 - **QOJ transport is a moving target** ([usage](usage/qoj.md),
   [entry](journal/2026-11-22-qoj-cloudflare-evasion.md)). Live fetching works by
   impersonating Chrome and appending a query suffix to beat a Cloudflare rule

@@ -1,0 +1,56 @@
+The 2026 ICPC Asia Wuhan Regional Contest China, Wuhan, November 1, 2026
+Problem M. Empire of Construction
+Alice was the old king of the Kingdom of Construction. A year ago, rebels exiled him to the kingdom's border. Rebel leader Bob then proclaimed himself emperor and renamed the kingdom the Empire of Construction. After a year of effort, Alice raised an army at the border and successfully fought his way back to the capital. At the city wall, Construction Emperor Bob was waiting for him. They decided to play a game to determine who would inherit the throne of the Empire of Construction; as Alice's strategist, you must help him win the game as quickly as possible. You are given a positive integer n. There are n positions arranged in order on a circle, numbered from 0 to n - 1. Alice selects a positive integer k (1  k  n) as the maximum number of positions he may operate on in each round. Once k is chosen, it cannot be changed throughout the game. The game is played in rounds. During the game, each position contains a number, which is either 0 or 1. Before the first round begins, Bob selects a binary string s of length n, uses it as the initial value at each position, and keeps it secret. Each round proceeds in the following order:
+1. Alice selects at most k distinct positions, possibly selecting none. 2. Alice selects one of the following two options:
+� Flip all selected positions. Flipping changes 0 to 1 and 1 to 0. � Assign each selected position a value of 0 or 1, independently. Assignment and flipping cannot both be performed in the same round. The operations on all selected positions take effect simultaneously, and unselected positions remain unchanged. 3. Bob selects any non-negative integer x and moves the number originally at position i to position (i + x) mod n. The numbers at all positions move simultaneously. Bob does not tell Alice which x he selects.
+At any time, including before the first round, if all positions are 0 or all positions are 1, Bob immediately loses the game, and the game ends. Before the game begins, Alice must determine a finite sequence of operations, specifying which positions are selected and which operation is performed in each round. All rounds containing assignment operations must occur strictly before all rounds containing flip operations. In addition, Bob knows the entire sequence in advance. The sequence is called feasible if Bob is guaranteed to have lost by the time the sequence finishes, no matter what initial string s he chooses and what x he chooses in each round. Complete the following objectives in order:
+1. Find the minimum integer k for which a feasible operation sequence exists. 2. Subject to k being this minimum value, find the minimum number of rounds t, and construct a shortest
+feasible operation sequence.
+Input
+The input contains only one integer n (2  n  30).
+Output
+Print two integers k and t on the first line: the minimum position limit and the corresponding minimum number of rounds. Then print t lines describing a shortest feasible operation sequence that uses this k. Each line is a string of length n that uses only the characters -F01. For 0  i < n, the (i + 1)-th character from the left specifies the operation at position i:
+Page 27 of 28
+
+The 2026 ICPC Asia Wuhan Regional Contest China, Wuhan, November 1, 2026
+
+� - means that the position is not selected; � F means that the position is flipped; � 0 means that the position is assigned the value 0; � 1 means that the position is assigned the value 1.
+
+Each line contains at most k characters other than -. No string may contain both F and 0, or both F and 1. Every line containing 0 or 1 must occur strictly before every line containing F.
+If multiple shortest solutions exist, output any one of them.
+It can be proven that, under the constraints of this problem, the answer t does not exceed 105.
+
+Example
+
+standard input
+
+standard output
+
+2
+
+11
+
+-F
+
+4
+
+26
+
+0-0-
+
+F-F-
+
+-F--
+
+F-F-
+
+-FF-
+
+-F-F
+
+Note
+For the first sample, Bob's initial string s can only be one of 00, 11, 01, and 10. If it is 00 or 11, Bob loses immediately when the game begins; if it is 01 or 10, Bob loses after the first round.
+
+Page 28 of 28
+
+

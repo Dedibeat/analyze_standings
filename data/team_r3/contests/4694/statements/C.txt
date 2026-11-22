@@ -1,0 +1,48 @@
+The 2026 ICPC Asia Wuhan Regional Contest China, Wuhan, November 1, 2026
+
+Problem C. Congruence Equation of Puro
+
+Puro found a congruence equation in the library: x1a + x2a + � � � + xna  r (mod p), where the variables satisfy xi  {0, 1, . . . , p - 1}. Of course, Puro knows how to solve this equation, but now he wants to know the number of solutions to this equation, that is, the number of n-tuples (x1, x2, . . . , xn) satisfying the above conditions. Since Dr. K's computer screen is too small to display this astronomical number,
+you only need to output the number of solutions modulo 109 + 7.
+
+Input
+
+The first line contains three integers p, a, r (2  p  107, 1  a  300, 0  r < p). It is guaranteed that p is prime.
+The second line contains an integer n (1  n < 10300).
+
+Output
+
+Output one line containing an integer, indicating the number of valid n-tuples modulo 109 + 7.
+
+Example
+
+standard input
+
+standard output
+
+322
+
+4
+
+2
+
+2 297 1 9876543210
+
+216768474
+
+97 10 0
+
+193
+
+2
+
+Note
+For the first sample, there are four valid pairs (x1, x2) satisfying x21 + x22  2 (mod 3): (1, 1), (1, 2), (2, 1), (2, 2). Thus, the output is 4.
+
+Page 5 of 28
+
+The 2026 ICPC Asia Wuhan Regional Contest China, Wuhan, November 1, 2026
+This page is intentionally left blank.
+Page 6 of 28
+
+

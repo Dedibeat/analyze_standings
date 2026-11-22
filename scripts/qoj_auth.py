@@ -35,8 +35,14 @@ class QOJError(Exception):
 
 
 def _tag(url):
-    """Append the challenge-evasion query parameter (idempotent)."""
+    """Append the challenge-evasion query parameter (idempotent).
+
+    Not on /cached-downloads/ (where download.php redirects): those static files
+    answer 404 to any query string and are not challenged bare (live, 2026-11-22).
+    """
     parts = urlsplit(url)
+    if parts.path.startswith("/cached-downloads/"):
+        return url
     params = [p for p in parts.query.split("&") if p and p != CHALLENGE_EVASION]
     query = "&".join([*params, CHALLENGE_EVASION])
     return urlunsplit((parts.scheme, parts.netloc, parts.path, query, parts.fragment))

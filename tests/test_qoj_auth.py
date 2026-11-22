@@ -125,6 +125,18 @@ class QOJAuthTests(unittest.TestCase):
         self.assertEqual(once, qoj_auth.BASE + "/login?x=1")
         self.assertEqual(qoj_auth._tag(once), once)
 
+    def test_cached_download_redirect_target_is_not_tagged(self):
+        """/cached-downloads/ answers 404 to any query string (live, 2026-11-22)."""
+        cached = "/cached-downloads/abc/def"
+        self.request.side_effect = [
+            self.reply("/download.php", status=302, Location=cached),
+            self.reply(cached, "%PDF", **{"Content-Type": "application/pdf"}),
+        ]
+        self.client.get("/download.php?type=statement&id=1&contest_id=2")
+        first, second = (call.args[1] for call in self.request.call_args_list)
+        self.assertIn(qoj_auth.CHALLENGE_EVASION, urlsplit(first).query.split("&"))
+        self.assertEqual(second, qoj_auth.BASE + cached)
+
     def test_clearance_cookie_is_replayed_with_its_user_agent(self):
         """A harvested cf_clearance must be sent with the UA that minted it."""
         clearance = self.data / qoj_auth.CLEARANCE_FILE

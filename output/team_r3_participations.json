@@ -2607,7 +2607,7 @@
     "difficulty_cf": 821.1,
     "ours": true,
     "member": "Dedi",
-    "statement": false
+    "statement": true
    },
    {
     "label": "B",
@@ -2616,7 +2616,7 @@
     "difficulty_cf": 2441.9,
     "ours": true,
     "member": "Dedi [3 WA from an out-of-bounds read; GPT spotted it, so the AC is not counted (user, 2026-11-22).]",
-    "statement": false
+    "statement": true
    },
    {
     "label": "C",
@@ -2625,7 +2625,7 @@
     "difficulty_cf": 3322.0,
     "ours": false,
     "member": null,
-    "statement": false
+    "statement": true
    },
    {
     "label": "D",
@@ -2634,7 +2634,7 @@
     "difficulty_cf": 1628.0,
     "ours": true,
     "member": "Dedi [Tamir made the first 2 WA; Dedi rewrote it, RE from an invalid sort comparator, then AC (user, 2026-11-22).]",
-    "statement": false
+    "statement": true
    },
    {
     "label": "E",
@@ -2643,7 +2643,7 @@
     "difficulty_cf": 3238.9,
     "ours": false,
     "member": null,
-    "statement": false
+    "statement": true
    },
    {
     "label": "F",
@@ -2652,7 +2652,7 @@
     "difficulty_cf": 3252.7,
     "ours": false,
     "member": null,
-    "statement": false
+    "statement": true
    },
    {
     "label": "G",
@@ -2660,8 +2660,8 @@
     "board_solves": 95,
     "difficulty_cf": 2328.0,
     "ours": true,
-    "member": "Erdene [Erdene came late and was given G (user, 2026-11-22). Its 2nd and 3rd AC are the first AC trimmed shorter (read from the code).]",
-    "statement": false
+    "member": "Erdene [Erdene came late and was given G; he resubmitted twice to make his own AC shorter (user, 2026-11-22).]",
+    "statement": true
    },
    {
     "label": "H",
@@ -2670,7 +2670,7 @@
     "difficulty_cf": 3205.5,
     "ours": false,
     "member": null,
-    "statement": false
+    "statement": true
    },
    {
     "label": "I",
@@ -2679,7 +2679,7 @@
     "difficulty_cf": 2650.8,
     "ours": false,
     "member": null,
-    "statement": false
+    "statement": true
    },
    {
     "label": "J",
@@ -2687,8 +2687,8 @@
     "board_solves": 117,
     "difficulty_cf": 2238.6,
     "ours": true,
-    "member": "Tamir and Dedi [Tamir and Dedi found the idea together; who typed it was not stated (user, 2026-11-22).]",
-    "statement": false
+    "member": "Dedi [Dedi found the core idea and implemented it; Tamir gave counterexamples to early incomplete ideas and pointed to the right directions (user, 2026-11-22).]",
+    "statement": true
    },
    {
     "label": "K",
@@ -2697,7 +2697,7 @@
     "difficulty_cf": 1947.6,
     "ours": true,
     "member": "Dedi",
-    "statement": false
+    "statement": true
    },
    {
     "label": "L",
@@ -2706,7 +2706,7 @@
     "difficulty_cf": 3036.2,
     "ours": false,
     "member": null,
-    "statement": false
+    "statement": true
    },
    {
     "label": "M",
@@ -2715,7 +2715,7 @@
     "difficulty_cf": 3710.3,
     "ours": false,
     "member": null,
-    "statement": false
+    "statement": true
    }
   ],
   "sheet_only": [],

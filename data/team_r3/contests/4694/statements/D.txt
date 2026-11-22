@@ -1,0 +1,72 @@
+The 2026 ICPC Asia Wuhan Regional Contest China, Wuhan, November 1, 2026
+Problem D. Travel Plan
+Rose is a girl who enjoys traveling. She has arrived in a new city.
+The city has n attractions, numbered 1  n, connected by m two-way roads. Each road connects two distinct attractions, and there is at most one road between any pair of attractions. Any attraction can be reached from any other attraction via a sequence of roads. In other words, all attractions and roads in the city form a simple connected undirected graph with n vertices and m edges.
+Rose wants to start from one attraction and visit all attractions in depth-first search (DFS) order. Specifically, for every attraction u, she arranges the vertices reached by each road starting from u into an ordered list adj(u) in some order. She then starts from the selected starting vertex s and travels according to the following pseudocode:
+
+Algorithm 1 Depth-First Search
+
+1: function DFS(u, d)
+
+2: visited[u]  true
+
+3: depth[u]  d
+
+4: for each v  adj(u) do
+
+5:
+
+if �visited[v] then
+
+6:
+
+dfs-tree  dfs-tree  {(u, v)}
+
+7:
+
+DFS(v, d + 1)
+
+8:
+
+end if
+
+9: end for
+
+10: end function
+
+11: dfs-tree   12: visited[1 . . . n]  false 13: depth[1 . . . n]  0 14: DFS(s, 0)
+After the traversal, she wants the depth of every attraction u in the DFS tree (namely, depth[u] in the pseudocode) to be exactly au.
+Determine whether there exists a plan satisfying the requirements. If so, construct a suitable s and adj(u).
+Input
+The first line contains two integers n, m (2  n  2 � 105, 1  m  2 � 105), indicating the number of attractions and roads.
+The second line contains n integers a1, a2, � � � , an (0  ai < n), indicating the required depth of every attraction in the DFS tree.
+The next n lines describe the graph. The i-th of them starts with an integer di (1  di < n), indicating the number of roads starting from vertex i, followed by di integers adj(i, 1), adj(i, 2), � � � , adj(i, di) (1  adj(i, j)  n), indicating the vertices reached by each road starting from vertex i.
+n
+It is guaranteed that di = 2m, and that all attractions and roads form a simple connected undirected
+i=1
+graph.
+Output
+If there is no solution, output one line containing an integer -1.
+Otherwise, output an integer s on the first line, indicating the selected starting vertex; then output n lines. On the i-th of them, output di integers adj(i, 1), adj(i, 2), � � � , adj(i, di) separated by single spaces, indicating the ordered list corresponding to vertex i. adj(i) must be a permutation of adj(i).
+
+Page 7 of 28
+
+The 2026 ICPC Asia Wuhan Regional Contest China, Wuhan, November 1, 2026
+
+Example
+57 20131 3342 41453 3412 3132 12
+57 10221 3524 3415 15 3251 41234
+
+standard input
+
+2 432 5314 142 132 2
+-1
+
+standard output
+
+Note
+The DFS tree obtained in the first sample is shown below. The bold edges are DFS tree edges, and the number on an edge near a vertex u indicates the position of that edge in the ordered list adj(u).
+
+Figure 2: The DFS tree in the first sample. Page 8 of 28
+
+

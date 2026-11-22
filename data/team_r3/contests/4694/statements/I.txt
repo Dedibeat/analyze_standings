@@ -1,0 +1,85 @@
+The 2026 ICPC Asia Wuhan Regional Contest China, Wuhan, November 1, 2026
+
+Problem I. Karma Gate
+
+Slugcat is traveling through the map of Rain World. The map consists of several regions, and the regions are connected by some karma gates, which form an undirected graph. Slugcat found a mural on some hanging structure, which depicts a map of another world and records the following problem that you need to help solve:
+
+You are given an undirected graph with n vertices and m edges. The vertices are numbered from 1 to n, and the edges are numbered from 1 to m in input order. The graph has no self-loops or multiple edges.
+For an interval [l, r] (1  l  r  m) on the sequence of edge indices, let k = r - l + 1. It is called valid if there exist k + 1 pairwise distinct vertices p0, p1, . . . , pk such that the edges with indices in [l, r] can be rearranged and oriented as (p0, p1), (p1, p2), . . . , (pk-1, pk). In other words, an interval is valid if all edges in this interval form exactly a simple path.
+
+Find the number of valid intervals.
+
+Input
+There are multiple test cases. The first line contains an integer T (1  T  105), the number of test cases.
+For each test case:
+� The first line contains two integers n and m (2  n  105, 1  m  105), the numbers of vertices and edges.
+� The next m lines: the i-th line contains two integers ui and vi (1  ui, vi  n, ui = vi), denoting an undirected edge. There is at most one edge between each pair of distinct vertices.
+It is guaranteed that both the sum of n and the sum of m over all test cases do not exceed 105.
+
+Output
+For each test case, output an integer, the number of valid intervals.
+
+Example
+
+standard input
+
+standard output
+
+3
+
+16
+
+77
+
+17
+
+12
+
+6
+
+34
+
+23
+
+45
+
+15
+
+56
+
+67
+
+78
+
+45
+
+56
+
+47
+
+67
+
+35
+
+12
+
+23
+
+13
+
+43
+
+12
+
+23
+
+34
+
+Page 19 of 28
+
+The 2026 ICPC Asia Wuhan Regional Contest China, Wuhan, November 1, 2026
+Note
+In the first test case of the sample, all 7 intervals of length 1 are valid. The other valid intervals are: � Length 2: [2, 3], [4, 5], [5, 6], and [6, 7]; � Length 3: [1, 3], [2, 4], and [5, 7]; � Length 4: [1, 4] and [2, 5]. Therefore, the answer is 7 + 4 + 3 + 2 = 16 . For example, the edges in [1, 4], taken in the order 1, 3, 2, 4, form the simple path 1  2  3  4  5. The edges in [1, 5] form a cycle, so this interval is invalid.
+Page 20 of 28
+
+

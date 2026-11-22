@@ -121,3 +121,4 @@ to other files may name the old root locations (reports keep their filenames und
 - 2026-11-22 · data · [Live QOJ fetching restored](2026-11-22-qoj-cloudflare-evasion.md) — Cloudflare auth-path challenge bypassed with a query suffix; live login ok, ten QOJ tests pass
 - 2026-11-22 · data · [Harvested cf_clearance for QOJ](2026-11-22-qoj-cf-clearance.md) — headful Chrome clears the challenge in 6s and its cookie makes the bare URLs work browserlessly; twenty-one tests pass
 - 2026-11-22 · team-r3 · [Wuhan 2026 virtual: dossier](2026-11-22-wuhan-2026-virtual-dossier.md) — counted 5/631 #53 silver; B (not counted) first try would be gold #36; QOJ downloads 404 via the helper
+- 2026-11-22 · data · [QOJ downloads: the query suffix broke /cached-downloads/](2026-11-22-qoj-cached-downloads-404.md) — download.php redirect targets 404 with ?x=1; _tag skips them, Wuhan statements fetched, 15 auth tests pass

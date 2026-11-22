@@ -1,0 +1,66 @@
+The 2026 ICPC Asia Wuhan Regional Contest China, Wuhan, November 1, 2026
+
+Problem J. Number Game
+
+Rose is playing a number game. She writes n non-negative integers a1, a2, � � � , an on the blackboard, which form a multiset A. In each operation, she may choose some numbers on the blackboard and change them simultaneously to the mex of the multiset they form. She also has a multiset B = {b1, b2, � � � , bn} as the goal of this number game. Please determine whether she can transform the numbers on the blackboard from A into B using a finite number of operations.  For a multiset S consisting of non-negative integers, define mex(S) as the smallest non-negative integer that does not belong to S. For example, mex{1, 2, 3} = 0 and mex{0, 1, 1, 4, 5} = 2.
+Input
+There are multiple test cases. The first line of the input contains an integer T (1  T  2 � 105), indicating the number of test cases. For each test case:
+
+� The first line contains an integer n (1  n  2 � 105), indicating the sizes of the multisets A, B. � The second line contains n integers a1, a2, � � � , an (0  ai  109), indicating the multiset A. � The third line contains n integers b1, b2, � � � , bn (0  bi  109), indicating the multiset B.
+
+It is guaranteed that the sum of n over all test cases does not exceed 2 � 105.
+Output
+
+For each test case, output one line containing a string YES or NO. If A can be transformed into B using a finite number of operations for the corresponding test case, print YES; otherwise, print NO. The output is case-insensitive.
+
+Example
+
+standard input
+
+standard output
+
+4
+
+YES
+
+3
+
+NO
+
+123
+
+YES
+
+223
+
+YES
+
+3
+
+000
+
+233
+
+3
+
+332
+
+233
+
+4
+
+10000 10000 10000 10000
+
+2333
+
+Note
+In the first test case of the sample, {1, 2, 3} can be transformed into {2, 2, 3} by the following operations: (choose the subset formed by the boxed elements)
+� {1, 2 , 3}  {1, 0, 3}. � { 1 , 0 , 3}  {2, 2, 3}.
+
+Page 21 of 28
+
+The 2026 ICPC Asia Wuhan Regional Contest China, Wuhan, November 1, 2026
+This page is intentionally left blank.
+Page 22 of 28
+
+
