@@ -43,3 +43,8 @@ was left alone.
 Reproduce:
 `./.venv/Scripts/python -m unittest tests.test_qoj_auth`, then
 `QOJ_USERNAME=Dedibeat ./.venv/Scripts/python -c "from contextlib import closing; from scripts.fetch_team_r3 import authenticate, fetch_contest; s=authenticate(); fetch_contest(s, 4694); s.close()"`.
+
+**Follow-up (same day).** Dedi confirmed the K reversal argument (he saw it in the contest) and
+said he gave Tamir the keyboard for D after A because more teams were solving D. The dossier
+now records the choice and proposes "a complete idea gets the keyboard before an unfinished one,
+the scoreboard breaks ties"; the sheet copy's K row notes it.
