@@ -1,0 +1,43 @@
+{
+  "contest_id": 1981,
+  "index": "A",
+  "name": "Turtle and Piggy Are Playing a Game",
+  "rating": 800,
+  "tags": [
+    "brute force",
+    "greedy",
+    "math"
+  ],
+  "points": 500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1981A",
+  "url": "https://codeforces.com/problemset/problem/1981/A",
+  "contest_start_time": "2024-05-31T10:05:00+00:00",
+  "statement": {
+    "title": "A. Turtle and Piggy Are Playing a Game",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "Turtle and Piggy are playing a number game.\n\nFirst, Turtle will choose an integer $x$, such that $l \\le x \\le r$, where $l, r$ are given. It's also guaranteed that $2l \\le r$.\n\nThen, Piggy will keep doing the following operation until $x$ becomes $1$:\n\n Choose an integer $p$ such that $p \\ge 2$ and $p \\mid x$ (i.e. $x$ is a multiple of $p$).\n\n Set $x$ to $\\frac{x}{p}$, and the score will increase by $1$.\n\nThe score is initially $0$. Both Turtle and Piggy want to maximize the score. Please help them to calculate the maximum score.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 10^4$). The description of the test cases follows.\n\nThe first line of each test case contains two integers $l, r$ ($1 \\le l \\le r \\le 10^9, 2l \\le r$) — The range where Turtle can choose the integer from.",
+    "output_spec": "For each test case, output a single integer — the maximum score.",
+    "note": "In the first test case, Turtle can choose an integer $x$, such that $2 \\le x \\le 4$. He can choose $x = 4$. Then Piggy can choose $p = 2$ for $2$ times. After that, $x$ will become $1$, and the score will be $2$, which is maximized.\n\nIn the second test case, Turtle can choose an integer $3 \\le x \\le 6$. He can choose $x = 6$. Then Piggy can choose $p = 2$, then choose $p = 3$. After that, $x$ will become $1$, and the score will be $2$, which is maximum.\n\nIn the third test case, Turtle can choose $x = 12$.\n\nIn the fourth test case, Turtle can choose $x = 16$.",
+    "samples": [
+      {
+        "input": "5\n2 4\n3 6\n2 15\n6 22\n114514 1919810",
+        "output": "\n2\n2\n3\n4\n20"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 129848,
+    "url": "https://codeforces.com/blog/entry/129848",
+    "tutorial": "For a specific $x$, Piggy always chooses $p$ such that $p$ is a prime number, so the score is the number of prime factors of $x$.\n\nIt is easy to see that the number with at least $t$ prime factors is $2^t$. The largest integer $t$ satisfying $2^t \\le r$ is $\\left\\lfloor\\log_2 r\\right\\rfloor$.\n\nAlso, because $2l \\le r$, then $\\log_2 l + 1 \\le \\log_2 r$, so $\\log_2 l  \\lt  \\left\\lfloor\\log_2 r\\right\\rfloor \\le \\log_2 r$, hence $l  \\lt  2^{\\left\\lfloor\\log_2 r\\right\\rfloor} \\le r$.\n\nSo the answer is $\\left\\lfloor\\log_2 r\\right\\rfloor$.\n\nTime complexity: $O(1)$ or $O(\\log r)$ per test case.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n\tint T;\n\tscanf(\"%d\", &T);\n\twhile (T--) {\n\t\tint l, r;\n\t\tscanf(\"%d%d\", &l, &r);\n\t\tprintf(\"%d\\n\", __lg(r));\n\t}\n\treturn 0;\n}"
+    ]
+  }
+}

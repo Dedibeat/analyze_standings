@@ -16,8 +16,8 @@ from .joint import OLDER_ICPC, PETROZ, TAGGED, UCUP, WF
 
 OUT = os.path.join(os.path.dirname(__file__), os.pardir, "output",
                    "calibration_ablation.json")
-PLAN = os.path.join(os.path.dirname(__file__), os.pardir,
-                    "calibration_ablation_plan.md")
+PLAN = os.path.join(os.path.dirname(__file__), os.pardir, "docs", "reports",
+                    "calibration", "calibration_ablation_plan.md")
 LAMDAS = (0.0, 0.25, 0.5, 0.75, 1.0)
 RIDGE_ALPHAS = (0.1, 1.0, 10.0)
 BUNDLES = ("D", "E", "T", "DE", "DT", "ET", "DET")
@@ -26,7 +26,7 @@ GROUPS = {
     "E": ("conditional_fit_se", "solve_rate", "log_field_size"),
     "T": ("log_median_solve_seconds", "timing_missing"),
 }
-CONTROL_DET_RMSE = 229.9701691633  # + 2026 regionals/UCup S5 (2026-11-15); was 229.0324113
+CONTROL_DET_RMSE = 229.9593327750  # loader fixes (2026-11-16); was 229.9701691633
 
 
 def bundle_features(bundle):

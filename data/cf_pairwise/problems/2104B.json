@@ -1,0 +1,45 @@
+{
+  "contest_id": 2104,
+  "index": "B",
+  "name": "Move to the End",
+  "rating": 1000,
+  "tags": [
+    "brute force",
+    "data structures",
+    "dp",
+    "greedy",
+    "implementation"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2104B",
+  "url": "https://codeforces.com/problemset/problem/2104/B",
+  "contest_start_time": "2025-04-28T14:35:00+00:00",
+  "statement": {
+    "title": "B. Move to the End",
+    "time_limit": "2 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "You are given an array $a$ consisting of $n$ integers.\n\nFor every integer $k$ from $1$ to $n$, you have to do the following:\n\n choose an arbitrary element of $a$ and move it to the right end of the array (you can choose the last element, then the array won't change);\n\n print the sum of $k$ last elements of $a$;\n\n move the element you've chosen on the first step to its original position (restore the original array $a$).\n\nFor every $k$, you choose the element which you move so that the value you print is the maximum possible.\n\nCalculate the value you print for every $k$.",
+    "input_spec": "The first line contains one integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases.\n\nEach test case consists of two lines:\n\n the first line contains one integer $n$ ($1 \\le n \\le 2 \\cdot 10^5$);\n\n the second line contains $n$ integers $a_1, a_2, \\dots, a_n$ ($1 \\le a_i \\le 10^9$).\n\nAdditional constraint on the input: the sum of $n$ over all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, print $n$ integers. The $i$-th of these integers should be equal to the maximum value you can print if $k=i$.",
+    "note": "Let's consider the first test case from the statement:\n\n when $k = 1$, you can move the $6$-th element to the end, the array becomes $[13, 5, 10, 14, 8, 13, 15]$, and the value you print is $15$;\n\n when $k = 2$, you can move the $6$-th element to the end, the array becomes $[13, 5, 10, 14, 8, 13, 15]$, and the value you print is $13 + 15 = 28$;\n\n when $k = 3$, you can move the $4$-th element to the end, the array becomes $[13, 5, 10, 8, 15, 13, 14]$, and the value you print is $15 + 13 + 14 = 42$;\n\n when $k = 4$, you can move the $5$-th element to the end, the array becomes $[13, 5, 10, 14, 15, 13, 8]$, and the value you print is $14 + 15 + 13 + 8 = 50$;\n\n when $k = 5$, you can move the $1$-st element to the end, the array becomes $[5, 10, 14, 8, 15, 13, 13]$, and the value you print is $14 + 8 + 15 + 13 + 13 = 63$;\n\n when $k = 6$, you can move the $1$-st element to the end, the array becomes $[5, 10, 14, 8, 15, 13, 13]$, and the value you print is $10 + 14 + 8 + 15 + 13 + 13 = 73$;\n\n when $k = 7$, you can move the $6$-th element to the end, the array becomes $[13, 5, 10, 14, 8, 13, 15]$, and the value you print is $13 + 5 + 10 + 14 + 8 + 13 + 15 = 78$.",
+    "samples": [
+      {
+        "input": "4\n7\n13 5 10 14 8 15 13\n6\n1000000000 1000000000 1000000000 1000000000 1000000000 1000000000\n1\n42\n2\n7 5",
+        "output": "\n15 28 42 50 63 73 78 \n1000000000 2000000000 3000000000 4000000000 5000000000 6000000000 \n42 \n7 12 "
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 142472,
+    "url": "https://codeforces.com/blog/entry/142472",
+    "tutorial": "If we move an element to the end of the array, then each element (except the one we selected) will either remain in its place or move $1$ position to the left. This means that if we are interested in the sum of the last $k$ elements after we have shifted some element to the end, it will necessarily include the last $(k-1)$ elements of the original array (each of them will move at most $1$ position to the left, so they will still be included in the last $k$ elements).\n\nThus, the answer for each $k$ is the sum of the last $(k-1)$ elements, plus some additional element. Can we use any element? It turns out, yes; if we want to use the element at index $i$, which is not among the last $(k-1)$, we just need to move it to the end. Obviously, among all these elements, we need to take the maximum.\n\nTherefore, the answer for each value of $k$ is $\\max \\limits_{i=1}^{n-k+1} a_i + \\sum\\limits_{i=n-k+2}^n a_i$. Calculating these values naively is too slow, but we can speed it up as follows: we will build two arrays $psum_i$ and $pmax_i$, where $psum_i$ is the sum of the first $i$ elements of the array, and $pmax_i$ is the maximum of them. Then the answer for $k$ is simply $pmax_{n-k+1} + psum_n - psum_{n-k+1}$.\n\nTo quickly construct these two arrays, we can use the fact that $psum_i=pmax_i=0$, $psum_{i+1} = psum_i + a_{i+1}$, and $pmax_{i+1} = \\max(pmax_i, a_{i+1})$. This way, we will obtain a solution in $O(n)$.",
+    "solution_code": [
+      "#include<bits/stdc++.h>\n \nusing namespace std;\n \nint main()\n{\n    int t;\n    cin >> t;\n    for(int i = 0; i < t; i++)\n    {\n        int n;\n        cin >> n;\n        vector<int> a(n);\n        for(int j = 0; j < n; j++) cin >> a[j];\n        vector<int> pmax(n + 1);\n        vector<long long> psum(n + 1);\n        for(int j = 0; j < n; j++)\n        {\n            pmax[j + 1] = max(pmax[j], a[j]);\n            psum[j + 1] = psum[j] + a[j];\n        }\n        for(int k = 1; k <= n; k++)\n            cout << pmax[n - k + 1] + psum[n] - psum[n - k + 1] << \" \";\n        cout << endl;\n    }\n}"
+    ]
+  }
+}

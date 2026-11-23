@@ -1,0 +1,42 @@
+{
+  "contest_id": 2057,
+  "index": "A",
+  "name": "MEX Table",
+  "rating": 800,
+  "tags": [
+    "constructive algorithms",
+    "math"
+  ],
+  "points": 500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2057A",
+  "url": "https://codeforces.com/problemset/problem/2057/A",
+  "contest_start_time": "2025-01-04T14:35:00+00:00",
+  "statement": {
+    "title": "A. MEX Table",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "One day, the schoolboy Mark misbehaved, so the teacher Sasha called him to the whiteboard.\n\nSasha gave Mark a table with $n$ rows and $m$ columns. His task is to arrange the numbers $0, 1, \\ldots, n \\cdot m - 1$ in the table (each number must be used exactly once) in such a way as to maximize the sum of MEX$^{\\text{∗}}$ across all rows and columns. More formally, he needs to maximize $$\\sum\\limits_{i = 1}^{n} \\operatorname{mex}(\\{a_{i,1}, a_{i,2}, \\ldots, a_{i,m}\\}) + \\sum\\limits_{j = 1}^{m} \\operatorname{mex}(\\{a_{1,j}, a_{2,j}, \\ldots, a_{n,j}\\}),$$ where $a_{i,j}$ is the number in the $i$-th row and $j$-th column.\n\nSasha is not interested in how Mark arranges the numbers, so he only asks him to state one number — the maximum sum of MEX across all rows and columns that can be achieved.\n\n$^{\\text{∗}}$The minimum excluded (MEX) of a collection of integers $c_1, c_2, \\ldots, c_k$ is defined as the smallest non-negative integer $x$ which does not occur in the collection $c$.\n\nFor example:\n\n $\\operatorname{mex}([2,2,1])= 0$, since $0$ does not belong to the array.\n\n $\\operatorname{mex}([3,1,0,1]) = 2$, since $0$ and $1$ belong to the array, but $2$ does not.\n\n $\\operatorname{mex}([0,3,1,2]) = 4$, since $0$, $1$, $2$, and $3$ belong to the array, but $4$ does not.",
+    "input_spec": "Each test contains multiple test cases. The first line contains a single integer $t$ ($1 \\le t \\le 1000$) — the number of test cases. The description of the test cases follows.\n\nThe first line of each test case contains two integers $n$ and $m$ ($1 \\le n, m \\le 10^9$) — the number of rows and columns in the table, respectively.",
+    "output_spec": "For each test case, output the maximum possible sum of $\\operatorname{mex}$ across all rows and columns.",
+    "note": "In the first test case, the only element is $0$, and the sum of the $\\operatorname{mex}$ of the numbers in the first row and the $\\operatorname{mex}$ of the numbers in the first column is $\\operatorname{mex}(\\{0\\}) + \\operatorname{mex}(\\{0\\}) = 1 + 1 = 2$.\n\nIn the second test case, the optimal table may look as follows:\n\n$3$$0$\n\n$2$$1$\n\nThen $\\sum\\limits_{i = 1}^{n} \\operatorname{mex}(\\{a_{i,1}, a_{i,2}, \\ldots, a_{i,m}\\}) + \\sum\\limits_{j = 1}^{m} \\operatorname{mex}(\\{a_{1,j}, a_{2,j}, \\ldots, a_{n,j}\\}) = \\operatorname{mex}(\\{3, 0\\}) + \\operatorname{mex}(\\{2, 1\\})$ $+ \\operatorname{mex}(\\{3, 2\\}) + \\operatorname{mex}(\\{0, 1\\}) = 1 + 0 + 0 + 2 = 3$.",
+    "samples": [
+      {
+        "input": "3\n1 1\n2 2\n3 5",
+        "output": "\n2\n3\n6"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 138119,
+    "url": "https://codeforces.com/blog/entry/138119",
+    "tutorial": "Note that $0$ appears in exactly one row and exactly one column. As for $1$, if it exists, it can only be placed in one of the rows or columns that contain $0$, so the answer does not exceed $\\operatorname{max}(n, m) + 1$, since only one column or row can have an answer greater than one, and in another one there can be an answer of $1$. It is not difficult to provide an example where the answer is achieved: if $n  \\gt  m$, we place the numbers from $0$ to $n - 1$ in the first column; otherwise, we place the numbers from $0$ to $m - 1$ in the first row. The remaining elements can be placed arbitrarily.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n \nusing i64 = long long;\n \nvoid solve() {\n    int n, m;\n    std::cin >> n >> m;\n    std::cout << std::max(n, m) + 1 << \"\\n\";\n}\n \nsigned main() {\n    std::ios::sync_with_stdio(false);\n    std::cin.tie(nullptr);\n \n    int t = 1;\n    std::cin >> t;\n    \n    while (t--) {\n        solve();\n    }\n}"
+    ]
+  }
+}

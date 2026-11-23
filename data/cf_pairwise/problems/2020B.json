@@ -1,0 +1,43 @@
+{
+  "contest_id": 2020,
+  "index": "B",
+  "name": "Brightness Begins",
+  "rating": 1200,
+  "tags": [
+    "binary search",
+    "math"
+  ],
+  "points": 750.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2020B",
+  "url": "https://codeforces.com/problemset/problem/2020/B",
+  "contest_start_time": "2024-09-29T15:35:00+00:00",
+  "statement": {
+    "title": "B. Brightness Begins",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "Imagine you have $n$ light bulbs numbered $1, 2, \\ldots, n$. Initially, all bulbs are on. To flip the state of a bulb means to turn it off if it used to be on, and to turn it on otherwise.\n\nNext, you do the following:\n\n for each $i = 1, 2, \\ldots, n$, flip the state of all bulbs $j$ such that $j$ is divisible by $i^\\dagger$.\n\nAfter performing all operations, there will be several bulbs that are still on. Your goal is to make this number exactly $k$.\n\nFind the smallest suitable $n$ such that after performing the operations there will be exactly $k$ bulbs on. We can show that an answer always exists.\n\n$^\\dagger$ An integer $x$ is divisible by $y$ if there exists an integer $z$ such that $x = y\\cdot z$.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 10^4$). The description of the test cases follows.\n\nThe only line of each test case contains a single integer $k$ ($1 \\le k \\le 10^{18}$).",
+    "output_spec": "For each test case, output $n$ — the minimum number of bulbs.",
+    "note": "In the first test case, the minimum number of bulbs is $2$. Let's denote the state of all bulbs with an array, where $1$ corresponds to a turned on bulb, and $0$ corresponds to a turned off bulb. Initially, the array is $[1, 1]$.\n\n After performing the operation with $i = 1$, the array becomes $[\\underline{0}, \\underline{0}]$.\n\n After performing the operation with $i = 2$, the array becomes $[0, \\underline{1}]$.\n\nIn the end, there are $k = 1$ bulbs on. We can also show that the answer cannot be less than $2$.\n\nIn the second test case, the minimum number of bulbs is $5$. Initially, the array is $[1, 1, 1, 1, 1]$.\n\n After performing the operation with $i = 1$, the array becomes $[\\underline{0}, \\underline{0}, \\underline{0}, \\underline{0}, \\underline{0}]$.\n\n After performing the operation with $i = 2$, the array becomes $[0, \\underline{1}, 0, \\underline{1}, 0]$.\n\n After performing the operation with $i = 3$, the array becomes $[0, 1, \\underline{1}, 1, 0]$.\n\n After performing the operation with $i = 4$, the array becomes $[0, 1, 1, \\underline{0}, 0]$.\n\n After performing the operation with $i = 5$, the array becomes $[0, 1, 1, 0, \\underline{1}]$.\n\nIn the end, there are $k = 3$ bulbs on. We can also show that the answer cannot be smaller than $5$.",
+    "samples": [
+      {
+        "input": "3\n1\n3\n8",
+        "output": "\n2\n5\n11"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 134516,
+    "url": "https://codeforces.com/blog/entry/134516",
+    "tutorial": "B. Brightness Begins\n\nBy nishkarsh\n\nHint 1\n\nThe final state of $i$th bulb (on or off) is independent of $n$.\n\nHint 2\n\nThe final state of the $i$th bulb tells us about the parity of number of divisors of $i$.\n\nSolution\n\nFor any bulb $i$, its final state depends on the parity of the number of divisors of $i$. If $i$ has an even number of divisors, then bulb $i$ will be on; else it will be off. This translates to, if $i$ is not a perfect square, bulb $i$ will be on; else it will be off. So now the problem is to find the $k$th number which is not a perfect square. This can be done by binary searching the value of $n$ such that $n- \\lfloor \\sqrt{n} \\rfloor = k$ or the direct formula $n$ = $\\lfloor k + \\sqrt{k} + 0.5 \\rfloor$.\n\nFor the proof of the second formula you can refer this book page 141 E18\n\nCode 1\n\nCode 2",
+    "solution_code": [
+      "#include <bits/stdc++.h>\nusing namespace std;\nint main(){\n    int t;\n    cin >> t;\n    while(t--){\n        long long k, l = 1, r = 2e18;\n        cin >> k;\n        while(r-l > 1){\n            long long mid = (l+r)>>1;\n            long long n = mid - int(sqrtl(mid));\n            if(n >= k) r = mid;\n            else l = mid;\n        }\n        cout << r << \"\\n\";\n    }\n    return 0;\n}",
+      "#include <bits/stdc++.h>\nusing namespace std;\nint main(){\n    int t;\n    cin >> t;\n    while(t--){\n        long long k;\n        cin >> k;\n        cout << k + int(sqrtl(k) + 0.5) << \"\\n\";\n    }\n    return 0;\n}"
+    ]
+  }
+}

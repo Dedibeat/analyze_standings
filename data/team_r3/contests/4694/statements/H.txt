@@ -1,0 +1,72 @@
+The 2026 ICPC Asia Wuhan Regional Contest China, Wuhan, November 1, 2026
+
+Problem H. Galaxy War
+
+Rose dreamed that she had become the commander-in-chief of an interstellar war.
+The battlefield is a square in which both coordinates lie in [-104, 104]. There are n civilizations on the battlefield. For civilization i, its base Ci is a circle centered at (xi, yi) with radius ri. These bases may intersect, but no two of them have the same center.
+Light-particle strikes are a common form of attack in interstellar warfare. A light particle can be regarded as a point traveling at the speed of light (a constant). It is launched from an orbit along the boundary of a base, and its trajectory is a tangent to the base boundary at the launch point. Therefore, for a point P that is not inside any base, the time required for civilization i to attack P is proportional to the length of a tangent segment from P to circle Ci. The civilization that requires the least time to attack P is called the lord of point P , and P belongs to that civilization's territory. Points inside any base do not belong to the territory of any civilization.
+Rose belongs to civilization 1. Please determine the area of the territory of civilization 1.
+
+Input
+
+The first line contains an integer n (2  n  105), indicating the number of civilizations.
+The next n lines each contain three real numbers xi, yi, ri (-104 < xi, yi < 104, 0 < ri  104), indicating the base of civilization i.
+Every input real number has at most three digits after the decimal point. All bases are entirely contained within the battlefield. Bases may overlap, but no two bases have the same center.
+
+Output
+
+Output one line containing a real number, indicating the area of the territory of civilization 1.
+Your answer is considered correct if and only if its absolute or relative error from the standard answer does not exceed 10-4.
+
+Example
+
+standard input
+
+standard output
+
+4 1.000 1.000 2.000 4.000 5.000 2.000 -2.000 0.000 1.000 5.000 -7.000 3.000
+
+31.965189405482097
+
+2 0.000 0.000 1000.000 0.000 4000.000 1000.000
+
+236858407.346410206761537
+
+4 1.000 -1.000 1.000 2.000 -1.000 2.000 0.000 0.000 2.000 -3.000 -2.000 4.000
+
+0.000000000000000
+
+Page 17 of 28
+
+The 2026 ICPC Asia Wuhan Regional Contest China, Wuhan, November 1, 2026
+
+standard input
+8 15.000 -3.000 7.000 13.000 -4.000 2.000 14.000 -8.000 3.000 22.000 1.000 4.000 42.000 7.000 1.000 -1.000 0.000 2.000 -3.000 0.000 1.000 0.000 -15.000 5.000
+
+standard output 163.354738705171682
+
+Note
+
+The
+
+exact
+
+answer
+
+for
+
+the
+
+first
+
+sample
+
+is
+
+718205 16128
+
+- 4.
+
+Page 18 of 28
+
+

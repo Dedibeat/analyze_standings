@@ -1,0 +1,41 @@
+{
+  "contest_id": 1980,
+  "index": "B",
+  "name": "Choosing Cubes",
+  "rating": 800,
+  "tags": [
+    "sortings"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1980B",
+  "url": "https://codeforces.com/problemset/problem/1980/B",
+  "contest_start_time": "2024-06-03T14:35:00+00:00",
+  "statement": {
+    "title": "B. Choosing Cubes",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "Dmitry has $n$ cubes, numbered from left to right from $1$ to $n$. The cube with index $f$ is his favorite.\n\nDmitry threw all the cubes on the table, and the $i$-th cube showed the value $a_i$ ($1 \\le a_i \\le 100$). After that, he arranged the cubes in non-increasing order of their values, from largest to smallest. If two cubes show the same value, they can go in any order.\n\nAfter sorting, Dmitry removed the first $k$ cubes. Then he became interested in whether he removed his favorite cube (note that its position could have changed after sorting).\n\nFor example, if $n=5$, $f=2$, $a = [4, \\color{green}3, 3, 2, 3]$ (the favorite cube is highlighted in green), and $k = 2$, the following could have happened:\n\n After sorting $a=[4, \\color{green}3, 3, 3, 2]$, since the favorite cube ended up in the second position, it will be removed.\n\n After sorting $a=[4, 3, \\color{green}3, 3, 2]$, since the favorite cube ended up in the third position, it will not be removed.",
+    "input_spec": "The first line contains an integer $t$ ($1 \\le t \\le 1000$) — the number of test cases. Then follow the descriptions of the test cases.\n\nThe first line of each test case description contains three integers $n$, $f$, and $k$ ($1 \\le f, k \\le n \\le 100$) — the number of cubes, the index of Dmitry's favorite cube, and the number of removed cubes, respectively.\n\nThe second line of each test case description contains $n$ integers $a_i$ ($1 \\le a_i \\le 100$) — the values shown on the cubes.",
+    "output_spec": "For each test case, output one line — \"YES\" if the cube will be removed in all cases, \"NO\" if it will not be removed in any case, \"MAYBE\" if it may be either removed or left.\n\nYou can output the answer in any case. For example, the strings \"YES\", \"nO\", \"mAyBe\" will be accepted as answers.",
+    "note": null,
+    "samples": [
+      {
+        "input": "12\n5 2 2\n4 3 3 2 3\n5 5 3\n4 2 1 3 5\n5 5 2\n5 2 4 1 3\n5 5 5\n1 2 5 4 3\n5 5 4\n3 1 2 4 5\n5 5 5\n4 3 2 1 5\n6 5 3\n1 2 3 1 2 3\n10 1 1\n1 1 1 1 1 1 1 1 1 1\n1 1 1\n42\n5 2 3\n2 2 1 1 2\n2 1 1\n2 1\n5 3 1\n3 3 2 3 2",
+        "output": "\nMAYBE\nYES\nNO\nYES\nYES\nYES\nMAYBE\nMAYBE\nYES\nYES\nYES\nNO"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 130135,
+    "url": "https://codeforces.com/blog/entry/130135",
+    "tutorial": "Let $x$ be the value of the cube with the number $f$.\n\nLet's sort all the cubes by non-growth. Then let's look at the value of the $k$-th cube in order. Since the cubes are removed by non-growth, all cubes with large values will be removed, some (perhaps not all) cubes with the same value, and cubes with smaller values will not be removed.\n\nIf the value of the $k$-th cube is greater than $x$, then Dmitry's favorite cube will not be removed, because all the removed cubes will have more values. If it is less than $x$, then the favorite cube will always be removed, since the cube with the lower value will also be removed.\n\nIf the value of the $k$ th cube is equal to $x$, then some cubes with this value will be removed. However, if there are several such cubes, then perhaps not all of them will be removed. If the $k + 1$th cube is missing (for $k = n$) or if its value is less than $x$, then all cubes with this value will be removed, and the answer is YES. Otherwise, only a part of the cubes with the value $x$ will be removed, and the answer is MAYBE, because cubes with the same values are indistinguishable when sorting.",
+    "solution_code": [
+      "def solve():\n    n, f, k = map(int, input().split())\n    f -= 1\n    k -= 1\n    a = list(map(int, input().split()))\n    x = a[f]\n    a.sort(reverse=True)\n    if a[k] > x:\n        print(\"NO\")\n    elif a[k] < x:\n        print(\"YES\")\n    else:\n        print(\"YES\" if k == n - 1 or a[k + 1] < x else \"MAYBE\")\n \nt = int(input())\nfor _ in range(t):\n    solve()"
+    ]
+  }
+}

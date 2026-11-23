@@ -1,0 +1,45 @@
+{
+  "contest_id": 1946,
+  "index": "C",
+  "name": "Tree Cutting",
+  "rating": 1600,
+  "tags": [
+    "binary search",
+    "dp",
+    "greedy",
+    "implementation",
+    "trees"
+  ],
+  "points": 1500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1946C",
+  "url": "https://codeforces.com/problemset/problem/1946/C",
+  "contest_start_time": "2024-03-22T14:35:00+00:00",
+  "statement": {
+    "title": "C. Tree Cutting",
+    "time_limit": "3 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "You are given a tree with $n$ vertices.\n\nYour task is to find the maximum number $x$ such that it is possible to remove exactly $k$ edges from this tree in such a way that the size of each remaining connected component$^{\\dagger}$ is at least $x$.\n\n$^{\\dagger}$ Two vertices $v$ and $u$ are in the same connected component if there exists a sequence of numbers $t_1, t_2, \\ldots, t_k$ of arbitrary length $k$, such that $t_1 = v$, $t_k = u$, and for each $i$ from $1$ to $k - 1$, vertices $t_i$ and $t_{i+1}$ are connected by an edge.",
+    "input_spec": "Each test consists of several sets of input data. The first line contains a single integer $t$ ($1 \\le t \\le 10^4$) — the number of sets of input data. This is followed by a description of the sets of input data.\n\nThe first line of each set of input data contains two integers $n$ and $k$ ($1 \\le k  \\lt  n \\le 10^5$) — the number of vertices in the tree and the number of edges to be removed.\n\nEach of the next $n - 1$ lines of each set of input data contains two integers $v$ and $u$ ($1 \\le v, u \\le n$) — the next edge of the tree.\n\nIt is guaranteed that the sum of the values of $n$ for all sets of input data does not exceed $10^5$.",
+    "output_spec": "For each set of input data, output a single line containing the maximum number $x$ such that it is possible to remove exactly $k$ edges from the tree in such a way that the size of each remaining connected component is at least $x$.",
+    "note": "The tree in the first set of input data:\n\nAfter removing the edge $1$ — $3$, the tree will look as follows:\n\nThe tree has split into two connected components. The first component consists of two vertices: $1$ and $2$. The second connected component consists of three vertices: $3, 4$ and $5$. In both connected components, there are at least two vertices. It can be shown that the answer $3$ is not achievable, so the answer is $2$.",
+    "samples": [
+      {
+        "input": "6\n5 1\n1 2\n1 3\n3 4\n3 5\n2 1\n1 2\n6 1\n1 2\n2 3\n3 4\n4 5\n5 6\n3 1\n1 2\n1 3\n8 2\n1 2\n1 3\n2 4\n2 5\n3 6\n3 7\n3 8\n6 2\n1 2\n2 3\n1 4\n4 5\n5 6",
+        "output": "\n2\n1\n3\n1\n1\n2"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 127439,
+    "url": "https://codeforces.com/blog/entry/127439",
+    "tutorial": "Let's hang the tree from an arbitrary vertex, for definiteness let's hang the tree from vertex $1$ (proof is given below). First of all, notice that if we can obtain some answer $x$, then we can also obtain the answer $x - 1$ (exactly the same way as for $x$), so we can do a binary search for $x$.\n\nTo check the condition for a fixed $x$, we will use a greedy algorithm. We will find the maximum number of connected components into which we can cut our tree so that each component has at least $x$ vertices. We will start a dfs from vertex $1$, let's say we are currently at vertex $v$ and the number of vertices in its subtree is greater than or equal to $x$, then it is advantageous for us to remove the edge from vertex $v$ to its parent. If after this process there are at least $k + 1$ connected components, then the condition is satisfied for this $x$, otherwise it is not.\n\nProof that it doesn't matter which vertex to hang the tree from:\n\nWe need to prove that the greedy algorithm will obtain the same number of cuts for all roots. We will prove this in the order of depth-first search. It is also important to note that it doesn't matter in which order to run the greedy algorithm from the children. Let the initial root be $1$, and we want to prove it for its child $2$. Then let's see how the greedy algorithm will act in the first case: it will start from vertex $2$, and then from all its adjacent vertices except $1$, and remove some edges. When we run the greedy algorithm in the second case, we can reorder the vertices, and first run it from all adjacent vertices except $1$, and there will be the same removals. Then we will run the greedy algorithm from vertex $1$, it will perform the same removals as in the first case, if we made vertex $2$ the last one. So the only edge that may not coincide in these removals is $1-2$. If this edge did not participate in the removals the first time, then the size of the remaining part of vertex $2  \\lt  x$, so we cannot remove it now. If the edge $1-2$ was removed in the first variant, then the size of the component $1$ was $\\ge x$, and there were no vertices of subtree $2$ in it. Then when running the greedy algorithm from the second vertex, it will cut the edge $1-2$, because the size of this part became $\\ge x$, so the set of edges coincides.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n \nusing i64 = long long;\n \nvoid solve() {\n    int n, k;\n    std::cin >> n >> k;\n    std::vector<std::vector<int>> adj(n);\n    for (int i = 0; i < n - 1; i++) {\n        int v, u;\n        std::cin >> v >> u;\n        --v, --u;\n        adj[v].emplace_back(u);\n        adj[u].emplace_back(v);\n    }\n    auto check = [&](int x) {\n        int res = 0;\n        auto dfs = [&](auto self, int v, int f) -> int {\n            int sz = 1;\n            for (int u : adj[v]) {\n                if (u == f) {\n                    continue;\n                }\n                sz += self(self, u, v);\n            }\n            if (sz >= x && f != v) {\n                ++res, sz = 0;\n            }\n            return sz;\n        };\n        int t = dfs(dfs, 0, 0);\n        return (res > k || (t >= x && res == k) ? true : false);\n    };\n    int low = 1, high = n / (k + 1) + 1;\n    while (high - low > 1) {\n        int mid = (low + high) / 2;\n        if (check(mid)) {\n            low = mid;\n        } else {\n            high = mid;\n        }\n    }\n    std::cout << low << \"\\n\";\n}\n \nsigned main() {\n    std::ios::sync_with_stdio(false);\n    std::cin.tie(nullptr);\n \n    int t = 1;\n    std::cin >> t;\n \n    while (t--) {\n        solve();\n    }\n}"
+    ]
+  }
+}

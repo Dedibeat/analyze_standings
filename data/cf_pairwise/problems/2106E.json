@@ -1,0 +1,43 @@
+{
+  "contest_id": 2106,
+  "index": "E",
+  "name": "Wolf",
+  "rating": 1800,
+  "tags": [
+    "binary search",
+    "greedy",
+    "math"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2106E",
+  "url": "https://codeforces.com/problemset/problem/2106/E",
+  "contest_start_time": "2025-04-24T14:35:00+00:00",
+  "statement": {
+    "title": "E. Wolf",
+    "time_limit": "4 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Wolf has found $n$ sheep with tastiness values $p_1, p_2, ..., p_n$ where $p$ is a permutation$^{\\text{∗}}$. Wolf wants to perform binary search on $p$ to find the sheep with tastiness of $k$, but $p$ may not necessarily be sorted. The success of binary search on the range $[l, r]$ for $k$ is represented as $f(l, r, k)$, which is defined as follows:\n\nIf $l  \\gt  r$, then $f(l, r, k)$ fails. Otherwise, let $m = \\lfloor\\frac{l + r}{2}\\rfloor$, and:\n\n If $p_m = k$, then $f(l, r, k)$ is successful,\n\n If $p_m  \\lt  k$, then $f(l, r, k) = f(m+1, r, k)$,\n\n If $p_m  \\gt  k$, then $f(l, r, k) = f(l, m-1, k)$.\n\nCow the Nerd decides to help Wolf out. Cow the Nerd is given $q$ queries, each consisting of three integers $l$, $r$, and $k$. Before the search begins, Cow the Nerd may choose a non-negative integer $d$, and $d$ indices $1 \\le i_1  \\lt  i_2  \\lt  \\ldots  \\lt  i_d \\le n$ where $p_{i_j} \\neq k$ over all $1 \\leq j \\leq d$. Then, he may re-order the elements $p_{i_1}, p_{i_2}, ..., p_{i_d}$ however he likes.\n\nFor each query, output the minimum integer $d$ that Cow the Nerd must choose so that $f(l, r, k)$ can be successful, or report that it is impossible. Note that the queries are independent and the reordering is not actually performed.\n\n$^{\\text{∗}}$A permutation of length $n$ is an array that contains every integer from $1$ to $n$ exactly once.",
+    "input_spec": "The first line of the input contains a single integer $t$ $(1 \\le t \\le 10^4)$ — the number of test cases.\n\nThe first line of each test contains two integers $n$ and $q$ $(1 \\le n, q \\le 2 \\cdot 10^5)$ — the length of $p$ and the number of queries respectively.\n\nThe second line contains $n$ integers $p_1, p_2, ..., p_n$ — the tastiness of the $i$-th sheep. It is guaranteed that every integer from $1$ to $n$ appears exactly once in $p$.\n\nThe following $q$ lines contain three integers $l$, $r$, and $k$ $(1 \\le l \\le r \\le n, 1 \\le k \\le n)$ — the range that the binary search will be performed on and the integer being searched for each query.\n\nIt is guaranteed that the sum of $n$ and the sum of $q$ over all cases do not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each query, output the minimum integer $d$ that Cow the Nerd must choose so that $f(l, r, k)$ is successful on a new line. If it is impossible, output $-1$.",
+    "note": "In the first example, second query: Since $4$ does not exist in the first three elements, it is impossible to find it when searching for it in that range.\n\nIn the second example, on the first query, you may choose the indices $2$, $3$, and swap them so $p = [3, 5, 1, 2, 7, 6, 4]$. Then, $f(3, 4, 2)$ will work as follows:\n\n Let $m = \\lfloor \\frac{3 + 4}{2} \\rfloor = 3$. Because $p_3 = 1  \\lt  2$, then $f(3, 4, 2) = f(4, 4, 2)$.\n\n Let $m = \\lfloor \\frac{4 + 4}{2} \\rfloor = 4$. Because $p_4 = 2 = k$, then $f(4, 4, 2)$ is successful. Therefore, $f(3, 4, 2)$ is also successful.\n\nThe total indices chosen were $2$, so the final cost is $2$, which can be shown that is minimum. Note that for this query we can't choose index $4$, since $p_4 = k = 2$.\n\nIn the last query of the second example, we can choose indices $2, 3, 4, 5$ and re-arrange them so $p = [3, 5, 2, 7, 1, 6, 4]$. Then, $f(1, 7, 3)$ is successful.",
+    "samples": [
+      {
+        "input": "8\n5 3\n1 2 3 4 5\n1 5 4\n1 3 4\n3 4 4\n7 4\n3 1 5 2 7 6 4\n3 4 2\n2 3 5\n1 5 6\n1 7 3\n2 1\n2 1\n1 2 1\n1 1\n1\n1 1 1\n7 1\n3 4 2 5 7 1 6\n1 7 1\n16 1\n16 10 12 6 13 9 14 3 8 11 15 2 7 1 5 4\n1 16 4\n16 1\n14 1 3 15 4 5 6 16 7 8 9 10 11 12 13 2\n1 16 14\n13 1\n12 13 10 9 8 4 11 5 7 6 2 1 3\n1 13 2",
+        "output": "\n0 -1 0 \n2 0 -1 4 \n-1 \n0 \n-1 \n-1 \n-1 \n-1 "
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 142254,
+    "url": "https://codeforces.com/blog/entry/142254",
+    "tutorial": "Problem E — WOLF\n\n(Author: SpyrosAliv, Analysis: cowthecow)\n\nSolution\n\nConsider some permutation $p_1, p_2, ..., p_n$. Before answering queries, precompute the index of integer $i$ $(1 \\le i \\le n)$, suppose it is represented as $idx_i$.\n\nLet's see how to answer some query $l, r, x$. Obviously, if $idx_x$ does not belong in the range $[l, r]$, the answer is $-1$. Otherwise, we want to somehow manipulate the elements so the binary search ends up checking $idx_x$.\n\nSuppose the binary search is currently working on some range $[a, b]$. Let $m = \\lfloor\\frac{a + b}{2}\\rfloor$. If $p_m = x$, we are done. Otherwise, consider the following cases:\n\n$p_m \\lt x$ and $m \\lt idx_x$: the binary search will continue on $[m+1, b]$, and since $idx_x$ belongs in that range, we simply let it continue. We must not swap this value.\n\n$p_m \\lt x$ and $m \\gt idx_x$: the binary search will continue on $[m+1, b]$, but $idx_x$ does not belong in that range. To fix this, we must replace $p_m$ with a value that is greater than $x$, in which case the search will continue on $[a, m-1]$.\n\n$p_m \\gt x$ and $m \\lt idx_x$: the binary search will continue on $[a, m-1]$, but $idx_x$ does not belong in that range. To fix this, we must replace $p_m$ with a value that is less than $x$, in which case the search will continue on $[m+1, b]$.\n\n$p_m \\gt x$ and $m \\gt idx_x$: the binary search will continue on $[a, m-1]$, and since $idx_x$ belongs in that range, we simply let it continue. We must not swap this value.\n\nKeep doing this process until $p_m = x$. Suppose that the amount of integers less than $x$ needed are $s$, and the amount of integers greater than $x$ needed are $b$. In addition, let the values smaller than $x$ that we can't swap (because they already lead to the wanted direction) be denoted by $ss$ and those bigger as $bb$. There are $n - x$ greater values available in $p$, and $x-1$ smaller values available. Therefore, if $b \\gt n - x - bb$ or $s \\gt x - 1 - ss$, the answer is $-1$.\n\nIf the answer is not $-1$, we swap as many values as possible from $b$ and $s$ (which will be $\\min{(b, s)} * 2$) and those that are still left after that (which will be $(\\max{(b, s)} - \\min{(b, s)}) * 2)$. The final answer is $(\\max{(b, s)} - \\min{(b, s)}) * 2 + \\min{(b, s)} * 2$.\n\nImplementation\n\nRate the Problem\n\n Amazing\n\n Good\n\n Average\n\n Bad\n\n Didn't Solve",
+    "solution_code": [
+      "#include <bits/stdc++.h>\nusing namespace std;\n#define int long long\n \nvoid solve() {\n    int n, q; cin >> n >> q;\n    int arr[n+1];\n    vector<int> idx(n+1, 0);\n    for (int i = 1; i <= n; i++) {\n        cin >> arr[i];\n        idx[arr[i]] = i;\n    }\n    while (q--) {\n        int l, r, k; cin >> l >> r >> k;\n        if (idx[k] > r || idx[k] < l) {\n            cout << -1 << \" \";\n            continue;\n        }\n        int big = n - k, small = k - 1;\n        int needBig = 0, needSmall = 0;\n        int bigAv = n - k, smallAv = k - 1;\n        int lo = l, hi = r;\n        while (lo <= hi) {\n            int mid = (lo + hi) / 2;\n            if (arr[mid] == k) break;\n            if (mid < idx[k]) { // i want to go right\n                if (k < arr[mid]) {\n                    needSmall++;\n                }\n                else smallAv--;\n                small--;\n                lo = mid+1;\n            }\n            else { // i want to go left\n                if (k > arr[mid]) { \n                    needBig++;\n                }\n                else bigAv--;\n                big--;\n                hi = mid-1;\n            }\n        }\n        if (big < 0 || small < 0) {\n            cout << -1 << \" \";\n            continue;\n        }\n        int ans = 2 * min(needBig, needSmall);\n        int diff = abs(needBig - needSmall);\n        if (needBig > needSmall) {\n            if (bigAv < diff) cout << -1 << \" \";\n            else cout << ans + 2 * diff << \" \";\n        }\n        else {\n            if (smallAv < diff) cout << -1 << \" \";\n            else cout << ans + 2 * diff << \" \";\n        }\n    }\n}\n \nsigned main() {\n    int t; cin >> t;\n    while (t--){\n      solve();\n      cout << \"\\n\";\n    }\n    return 0;\n}"
+    ]
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "contest_id": 2097,
+  "index": "C",
+  "name": "Bermuda Triangle",
+  "rating": 2400,
+  "tags": [
+    "chinese remainder theorem",
+    "geometry",
+    "implementation",
+    "math",
+    "number theory"
+  ],
+  "points": 1500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2097C",
+  "url": "https://codeforces.com/problemset/problem/2097/C",
+  "contest_start_time": "2025-04-26T08:35:00+00:00",
+  "statement": {
+    "title": "C. Bermuda Triangle",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "The Bermuda Triangle — a mysterious area in the Atlantic Ocean where, according to rumors, ships and airplanes disappear without a trace. Some blame magnetic anomalies, others — portals to other worlds, but the truth remains hidden in a fog of mysteries.\n\nA regular passenger flight 814 was traveling from Miami to Nassau on a clear sunny day. Nothing foreshadowed trouble until the plane entered a zone of strange flickering fog. Radio communication was interrupted, the instruments spun wildly, and flashes of unearthly light flickered outside the windows.\n\nFor simplicity, we will assume that the Bermuda Triangle and the airplane are on a plane, and the vertices of the triangle have coordinates $(0, 0)$, $(0, n)$, and $(n, 0)$. Initially, the airplane is located at the point $(x, y)$ strictly inside the Bermuda Triangle and is moving with a velocity vector $(v_x, v_y)$. All instruments have failed, so the crew cannot control the airplane.\n\nThe airplane can escape from the triangle if it ever reaches exactly one of the vertices of the triangle. However, if at any moment (possibly non-integer) the airplane hits the boundary of the triangle (but not at a vertex), its velocity vector is immediately reflected relative to that side$^\\dagger$, and the airplane continues to move in the new direction.\n\nDetermine whether the airplane can ever escape from the Bermuda Triangle (i.e., reach exactly one of its vertices). If this is possible, also calculate how many times before that moment the airplane will hit the boundary of the triangle (each touch of the boundary, even at the same point, counts; crossing a vertex does not count).\n\n$^\\dagger$ Reflection occurs according to the usual laws of physics. The angle of incidence equals the angle of reflection.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 10^4$). The description of the test cases follows.\n\nThe only line of each test case contains five integers $n$, $x$, $y$, $v_x$, and $v_y$ ($3 \\le n \\le 10^9$, $1 \\le x, y$, $x+y  \\lt  n$, $1 \\le v_x, v_y \\le 10^9$) — numbers describing the vertices of the triangle, the initial coordinates of the airplane, and the initial velocity vector.",
+    "output_spec": "For each test case, output a single integer — the number of times the airplane will hit the boundary of the triangle before it escapes. If the airplane never escapes from the triangle, output $-1$.",
+    "note": "An illustration for the first test case is provided below:\n\nIn the second test case, the answer is the same as in the first, as all initial data, except for the speed, are the same, but the airplanes are initially moving in the same direction.\n\nIn the third test case, the answer is $-1$, as the airplane will move exclusively along the segments marked in green. An illustration is provided below:",
+    "samples": [
+      {
+        "input": "6\n6 2 2 5 2\n6 2 2 20 8\n4 1 2 1 1\n4 1 1 1 2\n4 1 1 2 1\n6 2 3 2 3",
+        "output": "\n2\n2\n-1\n-1\n-1\n5"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 142316,
+    "url": "https://codeforces.com/blog/entry/142316",
+    "tutorial": "We will use the idea of reflections. Instead of saying that the plane is reflected with respect to a side, we will say that it actually flew further but ended up in the triangle that results from reflecting the original triangle with respect to that side.\n\nAll such triangles form a pattern of the following kind. The vertices of the triangles are located at all possible points of the form $(nx, ny)$ ($x, y \\in \\mathbb{Z}$). Accordingly, it is easy to see that we can reduce the velocity vector such that $\\textrm{gcd}(v_x, v_y) = 1$. Then, to determine the time it will take for the plane to exit the triangle, we use the Chinese remainder theorem:\n\n$$ v_x t + x \\equiv 0 \\pmod{n} $$\n\n$$ v_y t + y \\equiv 0 \\pmod{n} $$\n\nAccordingly, we can compute such a minimal non-negative suitable $t$. Next, we need to calculate the number of reflections. Essentially, this is the number of times the segment $(x, y)$, $(v_x t + x, v_y t + y)$ intersects the lines in the figure above.\n\nIf the endpoint is $(t_x \\cdot n, t_y \\cdot n)$, then the number of intersections is as follows: the number of intersections with vertical segments is $t_x - 1$, with horizontal segments is $t_y - 1$, the number of lines parallel to the hypotenuse of the original triangle is $\\lfloor \\frac{1}{2}[t_x+t_y] \\rfloor$, and the number of lines perpendicular to the original hypotenuse is $\\lfloor \\frac{1}{2} |t_x-t_y| \\rfloor$.",
+    "solution_code": []
+  }
+}

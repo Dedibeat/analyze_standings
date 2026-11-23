@@ -1,0 +1,42 @@
+{
+  "contest_id": 2027,
+  "index": "B",
+  "name": "Stalin Sort",
+  "rating": 1100,
+  "tags": [
+    "brute force",
+    "greedy"
+  ],
+  "points": 1000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2027B",
+  "url": "https://codeforces.com/problemset/problem/2027/B",
+  "contest_start_time": "2024-10-26T14:35:00+00:00",
+  "statement": {
+    "title": "B. Stalin Sort",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "Stalin Sort is a humorous sorting algorithm designed to eliminate elements which are out of place instead of bothering to sort them properly, lending itself to an $\\mathcal{O}(n)$ time complexity.\n\nIt goes as follows: starting from the second element in the array, if it is strictly smaller than the previous element (ignoring those which have already been deleted), then delete it. Continue iterating through the array until it is sorted in non-decreasing order. For example, the array $[1, 4, 2, 3, 6, 5, 5, 7, 7]$ becomes $[1, 4, 6, 7, 7]$ after a Stalin Sort.\n\nWe define an array as vulnerable if you can sort it in non-increasing order by repeatedly applying a Stalin Sort to any of its subarrays$^{\\text{∗}}$, as many times as is needed.\n\nGiven an array $a$ of $n$ integers, determine the minimum number of integers which must be removed from the array to make it vulnerable.\n\n$^{\\text{∗}}$An array $a$ is a subarray of an array $b$ if $a$ can be obtained from $b$ by the deletion of several (possibly, zero or all) elements from the beginning and several (possibly, zero or all) elements from the end.",
+    "input_spec": "Each test consists of several test cases. The first line contains a single integer $t$ ($1 \\le t \\le 500$) — the number of test cases. This is followed by descriptions of the test cases.\n\nThe first line of each test case contains a single integer $n$ ($1 \\le n \\le 2000$) — the size of the array.\n\nThe second line of each test case contains $n$ integers $a_1, a_2, \\ldots, a_n$ ($1 \\le a_i \\le 10^9$).\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $2000$.",
+    "output_spec": "For each test case, output a single integer — the minimum number of integers which must be removed from the array to make it vulnerable.",
+    "note": "In the first test case, the optimal answer is to remove the numbers $3$ and $9$. Then we are left with $a = [6, 4, 2, 5, 2]$. To show this array is vulnerable, we can first apply a Stalin Sort on the subarray $[4, 2, 5]$ to get $a = [6, 4, 5, 2]$ and then apply a Stalin Sort on the subarray $[6, 4, 5]$ to get $a = [6, 2]$, which is non-increasing.\n\nIn the second test case, the array is already non-increasing, so we don't have to remove any integers.",
+    "samples": [
+      {
+        "input": "6\n7\n3 6 4 9 2 5 2\n5\n5 4 4 2 2\n8\n2 2 4 4 6 6 10 10\n1\n1000\n9\n6 8 9 10 12 9 7 5 4\n7\n300000000 600000000 400000000 900000000 200000000 400000000 200000000",
+        "output": "\n2\n0\n6\n0\n4\n2"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 135558,
+    "url": "https://codeforces.com/blog/entry/135558",
+    "tutorial": "An array is vulnerable if and only if the first element is the largest. To prove the forward direction, we can trivially perform a single operation on the entire range, which will clearly make it non-increasing. Now, let's prove the reverse direction. Consider any array in which the maximum is not the first element. Note that a Stalin Sort on any subarray will never remove the first element, and also will never remove the maximum. So if the first is not the maximum, this will always break the non-increasing property.\n\nTherefore, we just need to find the longest subsequence in which the first element is the largest. This can be done easily in $\\mathcal{O}(n^2)$ — consider each index being the first item in the subsequence, and count all items to the right of it which are smaller or equal to it. Find the maximum over all of these, then subtract this from $n$.\n\nBonus: Solve this task in $\\mathcal{O}(n \\log n)$.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n\nusing namespace std;\n\nint main() {\n    cin.tie(0)->sync_with_stdio(0);\n    int t;\n    cin >> t;\n    while (t--) {\n        int n;\n        cin >> n;\n        vector<int> A(n);\n        for (int i=0; i<n; i++) cin >> A[i];\n        int best = 0;\n        for (int i=0; i<n; i++) {\n            int curr = 0;\n            for (int j=i; j<n; j++) {\n                if (A[j] <= A[i]) {\n                    curr += 1;\n                }\n            }\n            best = max(best, curr);\n        }\n        cout << n - best << \"\\n\";\n    }\n  return 0;\n}"
+    ]
+  }
+}

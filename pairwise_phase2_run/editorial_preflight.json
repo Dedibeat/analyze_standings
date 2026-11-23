@@ -1,0 +1,20 @@
+{
+  "created_at": "2026-08-06T07:14:14.381029+00:00",
+  "project": "project-0e393569-b54a-4a67-bc5",
+  "location": "global",
+  "model": "gemini-3.5-flash",
+  "dataset": "pairwise_phase2_run/phase2_editorial_train.jsonl",
+  "dataset_sha256": "8a3a43f9f303463e49180f38d0ec53654ca9160550f9aa295e86797478d32335",
+  "examples": 400,
+  "tokens_per_epoch": 1043341,
+  "epochs": 2,
+  "estimated_training_cost_usd": 20.86682,
+  "evaluation_reserve_usd": 15.0,
+  "planned_pilot_total_usd": 35.86682,
+  "pilot_training_cap_usd": 50.0,
+  "pilot_total_cap_usd": 65.0,
+  "dispatch_allowed": true,
+  "minimum_example_tokens": 1029,
+  "maximum_example_tokens": 6842,
+  "mean_example_tokens": 2608.3525
+}

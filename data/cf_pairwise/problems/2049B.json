@@ -1,0 +1,44 @@
+{
+  "contest_id": 2049,
+  "index": "B",
+  "name": "pspspsps",
+  "rating": 1300,
+  "tags": [
+    "brute force",
+    "constructive algorithms",
+    "graph matchings",
+    "implementation"
+  ],
+  "points": 750.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2049B",
+  "url": "https://codeforces.com/problemset/problem/2049/B",
+  "contest_start_time": "2024-12-20T14:35:00+00:00",
+  "statement": {
+    "title": "B. pspspsps",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "Cats are attracted to pspspsps, but Evirir, being a dignified dragon, is only attracted to pspspsps with oddly specific requirements...\n\nGiven a string $s = s_1s_2\\ldots s_n$ of length $n$ consisting of characters p, s, and . (dot), determine whether a permutation$^{\\text{∗}}$ $p$ of length $n$ exists, such that for all integers $i$ ($1 \\le i \\le n$):\n\n If $s_i$ is p, then $[p_1, p_2, \\ldots, p_i]$ forms a permutation (of length $i$);\n\n If $s_i$ is s, then $[p_i, p_{i+1}, \\ldots, p_{n}]$ forms a permutation (of length $n-i+1$);\n\n If $s_i$ is ., then there is no additional restriction.\n\n$^{\\text{∗}}$A permutation of length $n$ is an array consisting of $n$ distinct integers from $1$ to $n$ in arbitrary order. For example, $[2,3,1,5,4]$ is a permutation, but $[1,2,2]$ is not a permutation ($2$ appears twice in the array), and $[1,3,4]$ is also not a permutation ($n=3$ but there is $4$ in the array).",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 10^4$). The description of the test cases follows.\n\nThe first line of each test case contains a single integer $n$ ($1 \\le n \\le 500$), the length of $s$.\n\nThe second line of each test case contains a string $s$ of length $n$ that consists of the characters p, s, and ..\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $5000$.",
+    "output_spec": "For each test case, output YES or NO on a line. Output YES if there is such a permutation and NO otherwise.\n\nYou can output the answer in any case (upper or lower). For example, the strings \"yEs\", \"yes\", \"Yes\", and \"YES\" will be recognized as positive responses.",
+    "note": "For the first test case, one permutation that works is $p = [3, 4, 1, 2]$. The restrictions are as follows:\n\n $s_1 =$ s: $[p_1, p_2, p_3, p_4] = [3, 4, 1, 2]$ forms a permutation.\n\n $s_2 =$ .: No additional restriction.\n\n $s_3 =$ s: $[p_3, p_4] = [1, 2]$ forms a permutation.\n\n $s_4 =$ p: $[p_1, p_2, p_3, p_4] = [3, 4, 1, 2]$ forms a permutation.\n\nFor the second test case, it can be proven that there is no permutation that satisfies all restrictions.\n\nFor the third test case, one permutation that satisfies the constraints is $p = [1, 2, 3, 4, 5]$.",
+    "samples": [
+      {
+        "input": "9\n4\ns.sp\n6\npss..s\n5\nppppp\n2\nsp\n4\n.sp.\n8\npsss....\n1\n.\n8\npspspsps\n20\n....................",
+        "output": "\nYES\nNO\nYES\nYES\nNO\nNO\nYES\nNO\nYES"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 137273,
+    "url": "https://codeforces.com/blog/entry/137273",
+    "tutorial": "2049B - pspspsps\n\nIdea & preparation: Evirir\n\nTutorial\n\n2049B - pspspsps\n\nSince the entire $p$ must be a permutation, if $s_1 =$s, we can set $s_1 = $., and if $s_n =$p, we can set $s_n =$..\n\nAfter that, the answer is YES if and only if all non-dot characters in $s$ are all p or s.\n\nIf all non-dot characters are p, we can choose the permutation $p = [1, 2, \\ldots, n]$. If all non-dot characters are s, we can choose $p = [n, n - 1, \\ldots, 1]$.\n\nOtherwise, there exists both a p and a s. Suppose for contradiction that there is a solution. Let $a$ and $b$ represent the subarrays represented by the p and s respectively. Without loss of generality, suppose $a$ is the shorter subarray.\n\nSince $b$ is also a permutation, the elements of $a$ must be in $b$. Since $p$ is a permutation, $a$ must be a subarray of $b$.\n\nHowever, $b$ cannot contain $a$: since $b$ is not the entire $p$, $b$ does not contain $p_1$. However, $a$ contains $p_1$. Contradiction.\n\nSolution",
+    "solution_code": [
+      "#include <bits/stdc++.h>\nusing namespace std;\n\nvoid solve()\n{\n    int n; cin >> n;\n    string s; cin >> s;\n    if (s[0] == 's') s[0] = '.';\n    if (s.back() == 'p') s.back() = '.';\n    bool found_p = false;\n    bool found_s = false;\n    for (const auto c : s)\n    {\n        switch (c)\n        {\n        case 'p':\n            found_p = true;\n            break;\n        case 's':\n            found_s = true;\n            break;\n        }\n    }\n    cout << (found_p && found_s ? \"NO\" : \"YES\") << '\\n';\n}\n\nint main()\n{\n    int t; cin >> t;\n    for (int i = 0; i < t; i++) solve();\n\n    return 0;\n}"
+    ]
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "contest_id": 1986,
+  "index": "A",
+  "name": "X Axis",
+  "rating": 800,
+  "tags": [
+    "brute force",
+    "geometry",
+    "math",
+    "sortings"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1986A",
+  "url": "https://codeforces.com/problemset/problem/1986/A",
+  "contest_start_time": "2024-06-23T14:50:00+00:00",
+  "statement": {
+    "title": "A. X Axis",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "You are given three points with integer coordinates $x_1$, $x_2$, and $x_3$ on the $X$ axis ($1 \\leq x_i \\leq 10$). You can choose any point with an integer coordinate $a$ on the $X$ axis. Note that the point $a$ may coincide with $x_1$, $x_2$, or $x_3$. Let $f(a)$ be the total distance from the given points to the point $a$. Find the smallest value of $f(a)$.\n\nThe distance between points $a$ and $b$ is equal to $|a - b|$. For example, the distance between points $a = 5$ and $b = 2$ is $3$.",
+    "input_spec": "Each test consists of multiple test cases. The first line contains a single integer $t$ ($1 \\leq t \\leq 10^3$) — the number of test cases. Then follows their descriptions.\n\nThe single line of each test case contains three integers $x_1$, $x_2$, and $x_3$ ($1 \\leq x_i \\leq 10$) — the coordinates of the points.",
+    "output_spec": "For each test case, output the smallest value of $f(a)$.",
+    "note": "In the first test case, the smallest value of $f(a)$ is achieved when $a = 1$: $f(1) = |1 - 1| + |1 - 1| + |1 - 1| = 0$.\n\nIn the second test case, the smallest value of $f(a)$ is achieved when $a = 5$: $f(5) = |1 - 5| + |5 - 5| + |9 - 5| = 8$.\n\nIn the third test case, the smallest value of $f(a)$ is achieved when $a = 8$: $f(8) = |8 - 8| + |2 - 8| + |8 - 8| = 6$.\n\nIn the fourth test case, the smallest value of $f(a)$ is achieved when $a = 9$: $f(10) = |10 - 9| + |9 - 9| + |3 - 9| = 7$.",
+    "samples": [
+      {
+        "input": "8\n1 1 1\n1 5 9\n8 2 8\n10 9 3\n2 1 1\n2 4 1\n7 3 5\n1 9 4",
+        "output": "\n0\n8\n6\n7\n1\n3\n4\n8"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 130783,
+    "url": "https://codeforces.com/blog/entry/130783",
+    "tutorial": "1986A — X Axis",
+    "solution_code": []
+  }
+}

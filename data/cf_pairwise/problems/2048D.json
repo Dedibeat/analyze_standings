@@ -1,0 +1,44 @@
+{
+  "contest_id": 2048,
+  "index": "D",
+  "name": "Kevin and Competition Memories",
+  "rating": 1600,
+  "tags": [
+    "binary search",
+    "brute force",
+    "data structures",
+    "greedy",
+    "sortings",
+    "two pointers"
+  ],
+  "points": 1250.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2048D",
+  "url": "https://codeforces.com/problemset/problem/2048/D",
+  "contest_start_time": "2024-12-19T14:35:00+00:00",
+  "statement": {
+    "title": "D. Kevin and Competition Memories",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Kevin used to get into Rio's Memories, and in Rio's Memories, a series of contests was once held. Kevin remembers all the participants and all the contest problems from that time, but he has forgotten the specific rounds, the distribution of problems, and the exact rankings.\n\nThere are $ m $ problems in total, with the $ i $-th problem having a difficulty of $ b_i $. Let each contest consist of $ k $ problems, resulting in a total of $ \\lfloor \\frac{m}{k} \\rfloor $ contests. This means that you select exactly $ \\lfloor \\frac{m}{k} \\rfloor \\cdot k $ problems for the contests in any combination you want, with each problem being selected at most once, and the remaining $m\\bmod k$ problems are left unused. For example, if $m = 17$ and $k = 3$, you should create exactly $5$ contests consisting of $3$ problems each, and exactly $2$ problems will be left unused.\n\nThere are $ n $ participants in the contests, with Kevin being the $1$-st participant. The $ i $-th participant has a rating of $ a_i $. During the contests, each participant solves all problems with a difficulty not exceeding their rating, meaning the $ i $-th participant solves the $ j $-th problem if and only if $ a_i \\geq b_j $. In each contest, Kevin's rank is one plus the number of participants who solve more problems than he does.\n\nFor each $ k = 1, 2, \\ldots, m $, Kevin wants to know the minimum sum of his ranks across all $ \\lfloor \\frac{m}{k} \\rfloor $ contests. In other words, for some value of $k$, after selecting the problems for each contest, you calculate the rank of Kevin in each contest and sum up these ranks over all $ \\lfloor \\frac{m}{k} \\rfloor $ contests. Your goal is to minimize this value.\n\nNote that contests for different values of $k$ are independent. It means that for different values of $k$, you can select the distribution of problems into the contests independently.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $ t $ ($ 1 \\le t \\le 5\\cdot 10^4 $).\n\nThe first line of each test case contains two integers $ n $ and $ m $ ($ 1 \\le n, m \\leq 3\\cdot 10^5 $) — the number of participants and the number of problems.\n\nThe second line of each test case contains $ n $ integers $ a_1, a_2, \\ldots, a_n $ ($ 0 \\le a_i \\le 10^9 $) — the rating of each participant.\n\nThe third line of each test case contains $ m $ integers $ b_1, b_2, \\ldots, b_m $ ($ 0 \\le b_i \\le 10^9 $) — the difficulty of each problem.\n\nIt is guaranteed that both the sum of $ n $ and the sum of $ m $ over all test cases do not exceed $ 3 \\cdot 10^5 $.",
+    "output_spec": "For each test case, output $m$ integers — the minimum sum of Kevin's ranks for each $ k = 1, 2, \\ldots, m$.",
+    "note": "For the first test case:\n\nWhen $k=1$, since each contest only contains one problem, the distribution is in fact unique. For example, in the contest which only includes the third problem (which has a difficulty of $4$), all participants except the $2$-nd can solve it. Since no one solves strictly more problems than Kevin, his ranking in this contest is $1$. Similarly, in all $4$ contests, Kevin's rankings are $1,3,1,2$, and the sum is $7$.\n\nWhen $k=2$, one optimal way is to choose the $1$-st and the $3$-rd problem to form a contest, while the $2$-nd and $4$-th for another. In the former contest, $4$ participants respectively solve $2,1,2,2$ problems, so Kevin's ranking is $1$; in the latter one, they respectively solve $0,0,2,1$, since there are $2$ participants ($3$-rd and $4$-th) solve more problems than Kevin, his ranking is $1+2=3$. Thus the answer is $1+3=4$. It can be proven that there's no way to achieve a lower sum.\n\nWhen $k=3$, we can simply choose the $1$-st, the $3$-rd, and the $4$-th problem to make a contest, and Kevin has a ranking of $2$, which is optimal.\n\nWhen $k=4$, since there's only one contest, the distribution is also unique, and Kevin's ranking is $3$.",
+    "samples": [
+      {
+        "input": "4\n4 4\n4 3 7 5\n2 5 4 6\n5 5\n5 0 4 8 6\n1 3 9 2 7\n6 7\n1 1 4 5 1 4\n1 9 1 9 8 1 0\n7 6\n1 9 1 9 8 1 0\n1 1 4 5 1 4",
+        "output": "\n7 4 2 3\n6 2 1 1 2\n7 3 2 1 1 1 1\n15 9 5 4 4 4"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 137473,
+    "url": "https://codeforces.com/blog/entry/137473",
+    "tutorial": "2048D - Kevin and Competition Memories\n\nAuthor: cmk666\n\nHint 1\n\nYou can ignore all contestants with a rating lower than yours; this does not affect the answer.\n\nHint 2\n\nYou are the contestant with the lowest rating, so any problem you can solve can also be solved by everyone else. Thus, your ranking in a competition only depends on the easiest problem you cannot solve.\n\nHint 3\n\nUse greedy algorithm.\n\nTutorial\n\n2048D - Kevin and Competition Memories\n\nRead all the hints.\n\nFirst, remove all contestants with a rating lower than yours, making you the contestant with the lowest rating. Since any problem you can solve can also be solved by everyone else, this does not affect your ranking. These problems can effectively be treated as having infinite difficulty.\n\nAt this point, you cannot solve any problem, so your ranking in a competition is given by $(1 + $ the number of contestants who solve at least one problem in that competition $)$. Therefore, we only need to focus on the easiest problem in each competition.\n\nPrecompute, for each problem, the number of contestants who can solve it, denoted as $c_i$. This can be done by sorting the contestants by rating and the problems by difficulty, then using a two-pointer or binary search approach to compute $c_i$.\n\nThe remaining task is: given $c_i$, divide all $c_i$ into $\\lfloor \\frac{n}{k} \\rfloor$ groups, each containing $k$ elements, and minimize the sum of the maximum values in each group. This can be solved using a greedy algorithm: sort $c_i$ in ascending order, and for a given $k$, the answer is $(c_k+1) + (c_{2k}+1) + \\dots$. The brute force calculation is bounded by the harmonic series, and combined with sorting, the time complexity is $O(n \\log n + m \\log m)$.",
+    "solution_code": []
+  }
+}

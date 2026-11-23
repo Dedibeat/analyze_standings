@@ -18,5 +18,6 @@
 | 2575 第十一届中国大学生程序设计竞赛 哈尔滨站（CCPC 2025 Harbin Site） | virtual | 2026-10-23 | 5 (A G J K L) | 707 | 275 / 760 | petroz_2022_2026.json |
 | 4593 The 5th Universal Cup. Stage 4: Grand Prix of Xi'an | virtual | 2026-10-25 | 4 (C H J M) | 536 | 86 / 402 | xcpcio /icpc/51st/xian |
 | 4607 The 5th Universal Cup. Stage 5: Grand Prix of Chengdu | virtual | 2026-11-01 | 6 (C D H I K M) | 894 | 35 / 319 | xcpcio /icpc/51st/chengdu |
+| 4694 The 5th Universal Cup. Stage 7: Grand Prix of Wuhan | virtual | 2026-11-21 | 6 (A B D G J K) | 988 | 42 / 369 | xcpcio /icpc/51st/wuhan |
 
 Per-problem detail, member attribution and data gaps are in the .json.

@@ -1,0 +1,43 @@
+{
+  "contest_id": 1966,
+  "index": "A",
+  "name": "Card Exchange",
+  "rating": 800,
+  "tags": [
+    "constructive algorithms",
+    "games",
+    "greedy"
+  ],
+  "points": 500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1966A",
+  "url": "https://codeforces.com/problemset/problem/1966/A",
+  "contest_start_time": "2024-04-27T14:35:00+00:00",
+  "statement": {
+    "title": "A. Card Exchange",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "You have a hand of $n$ cards, where each card has a number written on it, and a fixed integer $k$. You can perform the following operation any number of times:\n\n Choose any $k$ cards from your hand that all have the same number.\n\n Exchange these cards for $k-1$ cards, each of which can have any number you choose (including the number written on the cards you just exchanged).\n\nHere is one possible sequence of operations for the first example case, which has $k=3$:\n\nWhat is the minimum number of cards you can have in your hand at the end of this process?",
+    "input_spec": "The first line of the input contains a single integer $t$ ($1 \\le t \\le 500$) — the number of test cases. The description of the test cases follows.\n\nThe first line of each test case contains two integers $n$ and $k$ ($1 \\le n \\le 100$, $2 \\le k \\le 100$) — the number of cards you have, and the number of cards you exchange during each operation, respectively.\n\nThe next line of each test case contains $n$ integers $c_1, c_2, \\ldots c_n$ ($1 \\le c_i \\le 100$) — the numbers written on your cards.",
+    "output_spec": "For each test case, output a single integer — the minimum number of cards you can have left in your hand after any number of operations.",
+    "note": "The first example case corresponds to the picture above. The sequence of operations displayed there is optimal, so the answer is $2$.\n\nIn the second example case, no operations can be performed, so the answer is $1$.\n\nIn the fourth example case, you can repeatedly select $4$ cards numbered with $1$ and replace them with $3$ cards numbered with $1$, until there are $3$ cards left.",
+    "samples": [
+      {
+        "input": "7\n5 3\n4 1 1 4 4\n1 10\n7\n7 2\n4 2 1 100 5 2 3\n10 4\n1 1 1 1 1 1 1 1 1 1\n5 2\n3 8 1 48 7\n6 2\n10 20 30 10 20 40\n6 3\n10 20 30 10 20 40",
+        "output": "\n2\n1\n1\n3\n5\n1\n6"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 128914,
+    "url": "https://codeforces.com/blog/entry/128914",
+    "tutorial": "If you don't initially have at least $k$ copies of any number, you can't perform any operations, so the answer is $n$.\n\nOtherwise, we can show that we can always get down to $k-1$ cards, with the following algorithm:\n\n Choose any card that you have $k$ copies of, and remove those $k$ copies\n\n If you have no more cards, take any $k-1$ cards and end the process.\n\n Otherwise, let $x$ be the number on any card you have. Take $k-1$ copies of $x$. Now, you have at least $k$ copies of $x$, so return to step $1$.\n\nSince the total number of cards decreases at each step, this process will always terminate, so you will always end up with $k-1$ cards.\n\nAlso, since the total number of cards decreases by exactly $1$ at each step, and you can't do any operations if you have less than $k$ cards, it is impossible to do better than $k-1$, so our solution of $k-1$ is optimal.\n\nComplexity: $O(n)$ or $O(n \\log n)$ depending on implementation.",
+    "solution_code": [
+      "t = int(input())\n\nfor tc in range(t):\n    n, k = map(int, input().split())\n\n    cards = list(map(int, input().split()))\n    ct = {}\n\n    ans = n\n\n    for c in cards:\n        if c in ct:\n            ct.update({c: ct[c] + 1})\n        else:\n            ct.update({c: 1})\n        if ct[c] >= k:\n            ans = k - 1\n\n    print(ans)"
+    ]
+  }
+}

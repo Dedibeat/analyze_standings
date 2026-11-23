@@ -1,0 +1,44 @@
+{
+  "contest_id": 2108,
+  "index": "D",
+  "name": "Needle in a Numstack",
+  "rating": 2200,
+  "tags": [
+    "binary search",
+    "brute force",
+    "implementation",
+    "interactive"
+  ],
+  "points": 2250.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2108D",
+  "url": "https://codeforces.com/problemset/problem/2108/D",
+  "contest_start_time": "2025-05-01T14:35:00+00:00",
+  "statement": {
+    "title": "D. Needle in a Numstack",
+    "time_limit": "3 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "This is an interactive problem.\n\nYou found the numbers $k$ and $n$ in the attic, but lost two arrays $A$ and $B$.\n\nYou remember that:\n\n $|A| + |B| = n$, the total length of the arrays is $n$.\n\n $|A| \\geq k$ and $|B| \\geq k$, the length of each array is at least $k$.\n\n The arrays consist only of numbers from $1$ to $k$.\n\n If you take any $k$ consecutive elements from array $A$, they will all be different. Also, if you take any $k$ consecutive elements from array $B$, they will all be different.\n\nFortunately, a kind spirit that settled in the attic found these arrays and concatenated them into an array $C$ of length $n$. That is, the elements of array $A$ were first written into array $C$, followed by the elements of array $B$.\n\nYou can ask the kind spirit up to $250$ questions. Each question contains an index $i$ ($1 \\leq i \\leq n$). In response, you will receive the $i$-th element of the concatenated array $C$.\n\nYou need to find the lengths of arrays $A$ and $B$, or report that it is impossible to determine them uniquely.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 300$). The description of the test cases follows.\n\nThe only line of each test case contains two integers $n$ and $k$ ($1 \\leq k \\leq 50$, $2 k \\leq n \\leq 10^{6}$).\n\nNote that the sum of $n$ across test cases is not limited.",
+    "output_spec": null,
+    "note": "Consider the first example. We queried the first $3$ elements out of $5$. Now we know that the array $C$ looks like $[1, 2, 2, ?, ?]$. We know for sure that the third element is not from array $A$ — because according to the condition, any $k$ consecutive elements (in our case $k = 2$) in array $A$ are different. Thus, the third element is definitely located in array $B$. This means that the length of array $A$ is $2$, and the length of array $B$ is $3$.\n\nThe picture shows arrays from all test cases. The elements whose values were requested are marked in yellow.",
+    "samples": [
+      {
+        "input": "\n6\n5 2\n\n1\n\n2\n\n2\n\n18 4\n\n2\n\n4\n\n1\n\n1\n\n4\n\n3 1\n\n10 5\n\n9 3\n\n3\n\n3\n\n2\n\n12 4\n\n1\n\n3\n\n1\n\n3\n\n1\n\n3",
+        "output": "\n\n? 1\n\n? 2\n\n? 3\n\n! 2 3\n\n? 9\n\n? 13\n\n? 10\n\n? 14\n\n? 6\n\n! 9 9\n\n! -1\n\n! 5 5\n\n? 3\n\n? 6\n\n? 9\n\n! 6 3\n\n? 1\n\n? 2\n\n? 5\n\n? 6\n\n? 9\n\n? 10\n\n! -1"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 142512,
+    "url": "https://codeforces.com/blog/entry/142512",
+    "tutorial": "2108D - Needle in a Numstack\n\nAuthor: m3tr0\n\nSolution\n\nLet $k = 4$ and the following array is guessed:\n\n [  2   4   3   1   2   4   3   1   2   1   3   2   4   1   3   2   4   1  ]\n\nFor clarity, let's divide it into groups of $k$ elements:\n\n [  2   4   3   1  ] [  2   4   3   1  ] [  2   1   3   2  ] [  4   1   3   2  ] [  4   1  ]\n\nBy statement, the lengths of the left and right sides are at least $k$. Let's request the left $k$ and right $k$ elements. We will mark all the elements of the left array in red, and all the elements of the right array in blue:\n\n [  2   4   3   1  ] [  2   4   3   1  ] [  2   1   3   2  ] [  4   1   3   2  ] [  4   1  ]\n\nLet's add two numbers to our array on the right (for clarity of permutations):\n\n [  2   4   3   1  ] [  2   4   3   1  ] [  2   1   3   2  ] [  4   1   3   2  ] [  4   1   3   2  ]\n\nWe got the permutations in a \"normalized\" form: $[2, 4, 3, 1]$ and $[4, 1, 3, 2]$. Let's take any position where the elements in the permutations differ. Let it be the second position. Note all the elements at the selected positions in the guessed array:\n\n [  2   4   3   1  ] [  2   4   3   1  ] [  2   1   3   2  ] [  4   1   3   2  ] [  4   1   3   2  ]\n\nAmong them, we find boundary elements via binary search for $\\log\\frac{n}{k}$ queries:\n\n [  2   4   3   1  ] [  2   4   3   1  ] [  2   1   3   2  ] [  4   1   3   2  ] [  4   1   3   2  ]\n\nNext, consider the segment between these boundary elements:\n\n [  2   4   3   1  ] [  2   4   3   1  ] [  2   1   3   2  ] [  4   1   3   2  ] [  4   1   3   2  ]\n\nWe are not interested in positions that match in both permutations (in our case, this is only the third position). Let's discard the elements in these positions:\n\n [  2   4   3   1  ] [  2   4   3   1  ] [  2   1   3   2  ] [  4   1   3   2  ] [  4   1   3   2  ]\n\nUsing binary search, we find the boundary elements for $\\log k$ queries:\n\n [  2   4   3   1  ] [  2   4   3   1  ] [  2   1   3   2  ] [  4   1   3   2  ] [  4   1   3   2  ]\n\nIf there are \"no-man's land\" between the boundary elements, then there is no single solution and we output $-1$. In our case, there are no such elements, the problem is solved:\n\n [  2   4   3   1  ] [  2   4   3   1  ] [  2   1   3   2  ] [  4   1   3   2  ] [  4   1  ]\n\nTotal complexity: $2k + \\log\\frac{n}{k} + \\log k$ queries.\n\nCode",
+    "solution_code": [
+      "#include <cstdio>\n#include <cstdlib>\n#define MIN(X, Y) (((X) < (Y)) ? (X) : (Y))\n#define MAX(X, Y) (((X) > (Y)) ? (X) : (Y))\ntypedef long long l;\n\nl a[55], b[55], ui[55];\n\nl ask(l v) {\n    printf(\"? %lld\\n\", v + 1);\n    fflush(stdout);\n    l t; scanf(\"%lld\", &t);\n    return t;\n}\n\nvoid noans() {\n    printf(\"! -1\\n\");\n    fflush(stdout);\n}\n\nvoid ans(l a, l b) {\n    printf(\"! %lld %lld\\n\", a, b);\n    fflush(stdout);\n}\n\nvoid solve() {\n    l n, k; scanf(\"%lld %lld\", &n, &k);\n\n    for (l i = 0; i < k; ++i) a[i] = ask(i);\n    for (l i = n - k; i < n; ++i) b[i % k] = ask(i);\n\t\n    l uc = 0;\n    for (l i = 0; i < k; ++i) if (a[i] != b[i]) ui[uc++] = i;\n    \n    if (!uc) {\n        if (n == k * 2) ans(k, k);\n        else noans();\n        return;\n    }\n    \n    l le = ui[0], ri = ui[0] + (n - 1) / k * k;\n    while (le + k != ri) {\n        l mid = le + (ri - le) / k / 2 * k;\n        if (ask(mid) == a[ui[0]]) le = mid;\n        else ri = mid;\n    }\n    \n    l lee = 0, rii = uc;\n    while (lee + 1 != rii) {\n        l mid = (lee + rii) / 2;\n        if (ask(le - ui[0] + ui[mid]) == a[ui[mid]]) lee = mid;\n        else rii = mid;\n    }\n    \n    l pos1 = MAX(le - ui[0] + ui[lee], k - 1);\n    l pos2 = MIN(le - ui[0] + ((rii == uc) ? (ui[0] + k) : ui[rii]), n - k);\n    \n    if (pos1 + 1 != pos2) { noans(); return; }\n    ans(pos2, n - pos2);\n}\n\nint main() {\n    l t; scanf(\"%lld\", &t);\n    while (t--) solve();\n}"
+    ]
+  }
+}

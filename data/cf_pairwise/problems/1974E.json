@@ -1,0 +1,41 @@
+{
+  "contest_id": 1974,
+  "index": "E",
+  "name": "Money Buys Happiness",
+  "rating": 1800,
+  "tags": [
+    "dp"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1974E",
+  "url": "https://codeforces.com/problemset/problem/1974/E",
+  "contest_start_time": "2024-05-20T14:35:00+00:00",
+  "statement": {
+    "title": "E. Money Buys Happiness",
+    "time_limit": "3 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Being a physicist, Charlie likes to plan his life in simple and precise terms.\n\nFor the next $m$ months, starting with no money, Charlie will work hard and earn $x$ pounds per month. For the $i$-th month $(1 \\le i \\le m)$, there'll be a single opportunity of paying cost $c_i$ pounds to obtain happiness $h_i$.\n\nBorrowing is not allowed. Money earned in the $i$-th month can only be spent in a later $j$-th month ($j \\gt i$).\n\nSince physicists don't code, help Charlie find the maximum obtainable sum of happiness.",
+    "input_spec": "The first line of input contains a single integer $t$ ($1 \\le t \\le 1000$) — the number of test cases.\n\nThe first line of each test case contains two integers, $m$ and $x$ ($1 \\le m \\le 50$, $1 \\le x \\le 10^8$) — the total number of months and the monthly salary.\n\nThe $i$-th of the following $m$ lines contains two integers, $c_i$ and $h_i$ ($0 \\le c_i \\le 10^8$, $1 \\le h_i \\le 10^3$) — the cost and happiness on offer for the $i$-th month. Note that some happiness may be free ($c_i=0$ for some $i$'s).\n\nIt is guaranteed that the sum of $\\sum_i h_i$ over all test cases does not exceed $10^5$.",
+    "output_spec": "For each test case, print a single integer, the maximum sum of happiness Charlie could obtain.",
+    "note": "In the first test case, Charlie only gets paid at the end of the month, so is unable to afford anything.\n\nIn the second test case, Charlie obtains the free happiness in the first month.\n\nIn the third test case, it's optimal for Charlie to buy happiness in the second month. Even with money left at the end, Charlie could not go back in time to obtain the happiness on offer in the first month.",
+    "samples": [
+      {
+        "input": "7\n1 10\n1 5\n2 80\n0 10\n200 100\n3 100\n70 100\n100 200\n150 150\n5 8\n3 1\n5 3\n3 4\n1 5\n5 3\n2 5\n1 5\n2 1\n5 3\n2 5\n2 4\n4 1\n5 1\n3 4\n5 2\n2 1\n1 2\n3 5\n3 2\n3 2",
+        "output": "\n0\n10\n200\n15\n1\n9\n9"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 129686,
+    "url": "https://codeforces.com/blog/entry/129686",
+    "tutorial": "Let's consider the classic knapsack problem. Let $dp[j]$ be the minimum cost required to achieve happiness $j$. In the $i$-th month, we iterate through $dp[k]$ and check if $dp[k]+c_i \\le (i-1) \\cdot x$, and if so, we can afford to transition to $dp[k+h_i]$ and accordingly update $dp[k+h_i]$.\n\nThe complexity is $O(m \\cdot \\sum_i h_i)$ for each set of input data.",
+    "solution_code": [
+      "T = int(input())\nbig = float('inf')\nfor _ in range(T):\n    m, x = map(int, input().split())\n    c = []\n    h = []\n    for i in range(m):\n        ci, hi = map(int, input().split())\n        c.append(ci)\n        h.append(hi)\n    mh = sum(h)\n    dp = [0] + [big] * mh\n    for i in range(m):\n        for j in range(mh, h[i]-1, -1):\n            if dp[j-h[i]] + c[i] <= i*x:\n                dp[j] = min(dp[j], dp[j-h[i]]+c[i])\n    for i in range(mh, -1, -1):\n        if dp[i] != big:\n            print(i)\n            break"
+    ]
+  }
+}

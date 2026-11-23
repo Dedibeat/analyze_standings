@@ -1,0 +1,42 @@
+{
+  "contest_id": 2005,
+  "index": "A",
+  "name": "Simple Palindrome",
+  "rating": 900,
+  "tags": [
+    "combinatorics",
+    "constructive algorithms",
+    "greedy",
+    "math"
+  ],
+  "points": 750.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2005A",
+  "url": "https://codeforces.com/problemset/problem/2005/A",
+  "contest_start_time": "2024-09-14T14:35:00+00:00",
+  "statement": {
+    "title": "A. Simple Palindrome",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "Narek has to spend 2 hours with some 2-year-old kids at the kindergarten. He wants to teach them competitive programming, and their first lesson is about palindromes.\n\nNarek found out that the kids only know the vowels of the English alphabet (the letters $\\mathtt{a}$, $\\mathtt{e}$, $\\mathtt{i}$, $\\mathtt{o}$, and $\\mathtt{u}$), so Narek needs to make a string that consists of vowels only. After making the string, he'll ask the kids to count the number of subsequences that are palindromes. Narek wants to keep it simple, so he's looking for a string such that the amount of palindrome subsequences is minimal.\n\nHelp Narek find a string of length $n$, consisting of lowercase English vowels only (letters $\\mathtt{a}$, $\\mathtt{e}$, $\\mathtt{i}$, $\\mathtt{o}$, and $\\mathtt{u}$), which minimizes the amount of palindrome$^{\\dagger}$ subsequences$^{\\ddagger}$ in it.\n\n$^{\\dagger}$ A string is called a palindrome if it reads the same from left to right and from right to left.\n\n$^{\\ddagger}$ String $t$ is a subsequence of string $s$ if $t$ can be obtained from $s$ by removing several (possibly, zero or all) characters from $s$ and concatenating the remaining ones, without changing their order. For example, $\\mathtt{odocs}$ is a subsequence of $\\texttt{c}{\\color{red}{\\texttt{od}}}\\texttt{ef}{\\color{red}{\\texttt{o}}}\\texttt{r}{\\color{red}{\\texttt{c}}}\\texttt{e}{\\color{red}{\\texttt{s}}}$.",
+    "input_spec": "The first line of the input contains a single integer $t$ ($1 \\le t \\le 100$) — the number of test cases. Subsequently, the description of each test case follows.\n\nThe only line of each test case contains a single integer $n$ ($1 \\le n \\le 100$) — the size of the string.",
+    "output_spec": "For each test case, output any string of length $n$ that satisfies the above conditions.",
+    "note": "In the first example, $\\texttt{uo}$ has only three palindrome subsequences: $\\texttt{u}$, $\\texttt{o}$, and the empty string. It can be shown that there is no better answer.\n\nIn the third example, $\\texttt{oeiiua}$ has only eight palindrome subsequences: $\\texttt{o}$, $\\texttt{e}$, $\\texttt{i}$, $\\texttt{i}$, $\\texttt{u}$, $\\texttt{a}$, $\\texttt{ii}$, and the empty string. It can be shown that there is no better answer.",
+    "samples": [
+      {
+        "input": "3\n2\n3\n6",
+        "output": "\nuo\niae\noeiiua"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 133966,
+    "url": "https://codeforces.com/blog/entry/133966",
+    "tutorial": "2005A - Simple Palindrome\n\nHint 1\n\nLets fix the count of aeiou $C_a,C_e,C_i,C_o,C_u$\nWhat is the minimum number of subsequence palindromes?\n\nHint 2\n\nNo of palindromes that consist of only a is $2^{C_a}-1$ and similarly for eiou.\nSo lowerbound on no of palindrome is $2^{C_a}+2^{C_e}+2^{C_i}+2^{C_o}+2^{C_u}-5$\nDoes there exists a permutation where this lowerbound is achievable?\n\nHint 3\n\nThis lowerbound is achieved on strings of form aaaaaaaaaeeeeeeeeeeiiiiiiiiiioooooooooouuuuuuuuu\n\nHint 4\n\nHow to find optimal values of $C_a,C_e,C_i,C_o,C_u$?\n\nHint 5\n\nIn optimal answer $|C_x-C_y| \\le 1$.\nYou can try to prove it using exchange arguments technique.\n\nMy submission — 281138271\n\nVideo Editorial",
+    "solution_code": []
+  }
+}

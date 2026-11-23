@@ -1,0 +1,40 @@
+{
+  "contest_id": 2019,
+  "index": "B",
+  "name": "All Pairs Segments",
+  "rating": 1200,
+  "tags": [
+    "implementation",
+    "math"
+  ],
+  "points": 1000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2019B",
+  "url": "https://codeforces.com/problemset/problem/2019/B",
+  "contest_start_time": "2024-09-27T13:35:00+00:00",
+  "statement": {
+    "title": "B. All Pairs Segments",
+    "time_limit": "1.5 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Shirobon - FOX\n\n⠀\n\nYou are given $n$ points on the $x$ axis, at increasing positive integer coordinates $x_1  \\lt  x_2  \\lt  \\ldots  \\lt  x_n$.\n\nFor each pair $(i, j)$ with $1 \\leq i  \\lt  j \\leq n$, you draw the segment $[x_i, x_j]$. The segments are closed, i.e., a segment $[a, b]$ contains the points $a, a+1, \\ldots, b$.\n\nYou are given $q$ queries. In the $i$-th query, you are given a positive integer $k_i$, and you have to determine how many points with integer coordinates are contained in exactly $k_i$ segments.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 10^4$). The description of the test cases follows.\n\nThe first line of each test case contains two integers $n$, $q$ ($2 \\le n \\le 10^5$, $1 \\le q \\le 10^5$) — the number of points and the number of queries.\n\nThe second line of each test case contains $n$ integers $x_1, x_2, \\ldots, x_n$ ($1 \\leq x_1  \\lt  x_2  \\lt  \\ldots  \\lt  x_n \\leq 10^9$) — the coordinates of the $n$ points.\n\nThe third line of each test case contains $q$ integers $k_1, k_2, \\ldots, k_q$ ($1 \\leq k_i \\leq 10^{18}$) — the parameters of the $q$ queries.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $10^5$, and the sum of $q$ over all test cases does not exceed $10^5$.",
+    "output_spec": "For each test case, output a single line with $q$ integers: the $i$-th integer is the answer to the $i$-th query.",
+    "note": "In the first example, you only draw the segment $[101, 200]$. No point is contained in exactly $2$ segments, and the $100$ points $101, 102, \\ldots, 200$ are contained in exactly $1$ segment.\n\nIn the second example, you draw $15$ segments: $[1, 2], [1, 3], [1, 5], [1, 6], [1, 7], [2, 3], [2, 5], [2, 6], [2, 7], [3, 5], [3, 6], [3, 7], [5, 6], [5, 7], [6, 7]$. Points $1, 7$ are contained in exactly $5$ segments; points $2, 4, 6$ are contained in exactly $9$ segments; points $3, 5$ are contained in exactly $11$ segments.",
+    "samples": [
+      {
+        "input": "3\n2 2\n101 200\n2 1\n6 15\n1 2 3 5 6 7\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15\n5 8\n254618033 265675151 461318786 557391198 848083778\n6 9 15 10 6 9 4 4294967300",
+        "output": "\n0 100 \n0 0 0 0 2 0 0 0 3 0 2 0 0 0 0 \n291716045 0 0 0 291716045 0 301749698 0 "
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 134420,
+    "url": "https://codeforces.com/blog/entry/134420",
+    "tutorial": "2019B - All Pairs Segments\n\nAuthor: TheScrasse\n Preparation: TheScrasse\n\nHint 1\n\nCan you determine fast how many intervals contain point $p$?\n\nHint 2\n\nThe intervals that contain point $p$ are the ones with $l \\leq p$ and $r \\geq p$.\n\nHint 3\n\nDetermine how many intervals contain:\n\npoint $x_1$;\n\npoints $x_1 + 1, \\ldots, x_2 - 1$;\n\npoint $x_2$;\n\n$\\ldots$\n\npoint $x_n$.\n\nSolution\n\nFirst, let's focus on determining how many intervals contain some point $x$. These intervals are the ones with $l \\leq x$ and $x \\leq r$.\n\nSo a point $x_i \\lt p \\lt x_{i+1}$ satisfies $x_1 \\leq p, \\ldots, x_i \\leq p$, and $p \\leq x_{i+1}, \\ldots, p \\leq x_n$. It means that you have found $x_{i+1} - x_i - 1$ points contained in exactly $i(n-i)$ intervals (because there are $i$ possible left endpoints and $n-i$ possible right endpoints).\n\nSimilarly, the point $p = x_i$ is contained in $i(n-i+1) - 1$ intervals (you have to remove interval $[x_i, x_i]$, which you do not draw).\n\nSo you can use a map that stores how many points are contained in exactly $x$ intervals, and update the map in the positions $i(n-i)$ and $i(n-i+1) - 1$.\n\nComplexity: $O(n \\log n)$",
+    "solution_code": []
+  }
+}

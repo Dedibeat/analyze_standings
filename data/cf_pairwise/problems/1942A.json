@@ -1,0 +1,42 @@
+{
+  "contest_id": 1942,
+  "index": "A",
+  "name": "Farmer John's Challenge",
+  "rating": 800,
+  "tags": [
+    "constructive algorithms",
+    "math"
+  ],
+  "points": 500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1942A",
+  "url": "https://codeforces.com/problemset/problem/1942/A",
+  "contest_start_time": "2024-03-30T14:35:00+00:00",
+  "statement": {
+    "title": "A. Farmer John's Challenge",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "Trade Winds - Patrick Deng\n\n⠀\n\nLet's call an array $a$ sorted if $a_1 \\leq a_2 \\leq \\ldots \\leq a_{n - 1} \\leq a_{n}$.\n\nYou are given two of Farmer John's favorite integers, $n$ and $k$. He challenges you to find any array $a_1, a_2, \\ldots, a_{n}$ satisfying the following requirements:\n\n $1 \\leq a_i \\leq 10^9$ for each $1 \\leq i \\leq n$;\n\n Out of the $n$ total cyclic shifts of $a$, exactly $k$ of them are sorted.$^\\dagger$\n\nIf there is no such array $a$, output $-1$.\n\n$^\\dagger$The $x$-th ($1 \\leq x \\leq n$) cyclic shift of the array $a$ is $a_x, a_{x+1} \\ldots a_n, a_1, a_2 \\ldots a_{x - 1}$. If $c_{x, i}$ denotes the $i$'th element of the $x$'th cyclic shift of $a$, exactly $k$ such $x$ should satisfy $c_{x,1} \\leq c_{x,2} \\leq \\ldots \\leq c_{x, n - 1} \\leq c_{x, n}$.\n\nFor example, the cyclic shifts for $a = [1, 2, 3, 3]$ are the following:\n\n $x = 1$: $[1, 2, 3, 3]$ (sorted);\n\n $x = 2$: $[2, 3, 3, 1]$ (not sorted);\n\n $x = 3$: $[3, 3, 1, 2]$ (not sorted);\n\n $x = 4$: $[3, 1, 2, 3]$ (not sorted).",
+    "input_spec": "The first line contains $t$ ($1 \\leq t \\leq 10^3$) — the number of test cases.\n\nEach test case contains two integers $n$ and $k$ ($1 \\leq k \\leq n \\leq 10^3$) — the length of $a$ and the number of sorted cyclic shifts $a$ must have.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $10^3$.",
+    "output_spec": "For each test case, print a single line:\n\n if there is a valid array $a$, output $n$ integers, representing $a_1, a_2, \\ldots, a_{n}$;\n\n otherwise, output $-1$.\n\nIf there are multiple solutions, print any of them.",
+    "note": "In the first testcase, $a = [1, 1]$ satisfies $n = 2, k = 2$:\n\nThe two cyclic shifts of $a$ are $[a_1, a_2]$ and $[a_2, a_1]$, which are both $[1, 1]$ and are sorted.\n\nIn the second testcase, $a = [69\\,420, 69, 420]$ satisfies $n = 3, k = 1$:\n\nThe three cyclic shifts of $a$ are $[a_1, a_2, a_3]$, $[a_2, a_3, a_1]$, $[a_3, a_1, a_2]$, which are $[69\\,420, 69, 420]$, $[69, 420, 69\\,420]$, and $[420, 69\\,420, 69]$, respectively.\n\nOnly $[69, 420, 69\\,420]$ is sorted.",
+    "samples": [
+      {
+        "input": "3\n2 2\n3 1\n3 2",
+        "output": "\n1 1\n69420 69 420\n-1"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 126942,
+    "url": "https://codeforces.com/blog/entry/126942",
+    "tutorial": "1942A - Farmer John's Challenge\n\nProblem Credits: buffering\nAnalysis: buffering\n\nHint 1\n\nSolve for $k = 1$.\n\nAnswer\n\n$a = 1, 2, 3 \\dots n$ works. Why?\n\nHint 2\n\nSolve for $k = n$.\n\nAnswer\n\n$a = 1, 1, 1 \\dots 1$ works. Why?\n\nHint 3\n\nWhat other $k$ work for a given $n$?\n\nAnswer\n\nOnly $k = 1$ and $k = n$ have possible answers.\n\nSolution\n\nRead the hints.\n\nFor $k=1$, the construction $1,2,3\\dots n$ will always work because in any other cyclic shift, $n$ will be before $1$.\n\nNow, consider what happens if we want to find an array with two or more cyclic shifts that are sorted. If we consider two of these cyclic shifts, notice they are actually shifts of each other as well.\n\nSo, there should be a sorted array, and a shift of it which is also sorted. What this means is that some of the first elements in the array move to the back and stays sorted, which can only happen if all values in the array are equal.\n\nIf the array has all equal values, this gives us our construction for $k=n$. As we have seen, for $k \\gt 1$, only $k=n$ is possible. Thus, for any other $k$ not equal to $1$ or $n$, we can print $-1$.\n\nCode (C++)",
+    "solution_code": [
+      "#include <iostream>\nusing namespace std;\nint main(){\n\tint t; cin >> t;\n\twhile(t--){\n\t\tint n, k; cin >> n >> k;\n\t\tif(k == 1) for(int i = 0; i < n; i++) cout << i + 1 << \" \";\n\t\telse if(k == n) for(int i = 0; i < n; i++) cout << 1 << \" \";\n\t\telse cout << -1;\n\t\tcout << \"\\n\";\n\t}\n}"
+    ]
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "contest_id": 2038,
+  "index": "K",
+  "name": "Grid Walk",
+  "rating": 2100,
+  "tags": [
+    "brute force",
+    "dp",
+    "greedy",
+    "math",
+    "number theory"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2038K",
+  "url": "https://codeforces.com/problemset/problem/2038/K",
+  "contest_start_time": "2024-11-18T10:35:00+00:00",
+  "statement": {
+    "title": "K. Grid Walk",
+    "time_limit": "2 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "You have an $n \\times n$ grid and two integers $a$ and $b$. Both the rows and the columns are numbered from $1$ to $n$. Let's denote the cell at the intersection of the $i$-th row and the $j$-th column as $(i, j)$.\n\nYou are standing in the cell $(1, 1)$ and want to move into the cell $(n, n)$.\n\nSuppose you are in the cell $(i, j)$; in one step, you can move either into the cell $(i, j + 1)$ or into the cell $(i + 1, j)$ if the corresponding cells exist.\n\nLet's define the cost of the cell $(i, j)$ as $c(i, j) = \\gcd(i, a) + \\gcd(j, b)$ (here, $\\gcd(x,y)$ denotes the greatest common divisor of $x$ and $y$). The cost of the route from $(1, 1)$ to $(n, n)$ is the sum of costs of the visited cells (including the starting cell and the finishing cell).\n\nFind the route with minimum possible cost and print its cost.",
+    "input_spec": "The only line contains three integers $n$, $a$, and $b$ ($2 \\le n \\le 10^6$; $1 \\le a, b \\le 10^6$).",
+    "output_spec": "Print one integer — the cost of the cheapest route from $(1, 1)$ to $(n, n)$.",
+    "note": "The first example is described in the picture above.",
+    "samples": [
+      {
+        "input": "4 2 4",
+        "output": "\n21"
+      },
+      {
+        "input": "10 210 420",
+        "output": "\n125"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "missing"
+  },
+  "editorial": null
+}

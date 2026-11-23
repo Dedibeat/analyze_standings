@@ -1,0 +1,50 @@
+{
+  "contest_id": 2081,
+  "index": "G1",
+  "name": "Hard Formula",
+  "rating": 3100,
+  "tags": [
+    "math",
+    "number theory"
+  ],
+  "points": 1500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2081G1",
+  "url": "https://codeforces.com/problemset/problem/2081/G1",
+  "contest_start_time": "2025-03-15T14:35:00+00:00",
+  "statement": {
+    "title": "G1. Hard Formula",
+    "time_limit": "2 seconds",
+    "memory_limit": "1024 megabytes",
+    "legend": "This is the easy version of the problem. The difference between the versions is that in this version, the limits on $n$ and the time limit are smaller. You can hack only if you solved all versions of this problem.\n\nYou are given an integer $n$, and you need to compute $(\\sum_{k=1}^n k\\bmod\\varphi(k))\\bmod 2^{32}$, where $\\varphi(k)$ equals the number of positive integers no greater than $k$ that are coprime with $k$.",
+    "input_spec": "The only line contains a single integer $n$ ($1 \\le n \\le 10^{10})$.",
+    "output_spec": "Print a single integer, representing $(\\sum_{k=1}^n k\\bmod\\varphi(k))\\bmod 2^{32}$.",
+    "note": null,
+    "samples": [
+      {
+        "input": "5",
+        "output": "\n2"
+      },
+      {
+        "input": "10000000",
+        "output": "\n2316623097"
+      },
+      {
+        "input": "10000000000",
+        "output": "\n282084447"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 140702,
+    "url": "https://codeforces.com/blog/entry/140702",
+    "tutorial": "2081G1 - Hard Formula\n Idea: Prean\n\nHint 1\n\nIf $g'(np)\\neq g'(n)$ , then $p\\le n$ unless $n=2,p=3$ or $n=1,p=2$ .\n\nHint 2\n\nThink about the method of $\\min 25$ sieve.\n\nSolution\n\nWe define $\\displaystyle g(n)=\\frac n{\\varphi(n)}=\\prod_{p|n}\\frac p{p-1},g'(n)=\\lfloor g(n)\\rfloor$.\n\nIt's easy to see that $res=\\frac{N(N+1)}2-\\sum_{i=1}^Ng'(i)\\varphi(i)$.\n\nLet's consider how to calculate $\\sum_{i=1}^Ng'(i)\\varphi(i)$.\n\n$\\texttt{Key observation 1}$：if $g'(np)\\neq g'(n)$, then $p\\le n$ unless $n=2,p=3$ or $n=1,p=2$.\n\nProof\n$ \\begin{aligned} &\\because g(n)\\cdot\\frac p{p-1}\\ge g'(np)\\ge g'(n)+1\\\\ &\\therefore p\\le\\frac{g'(n)+1}{g'(n)+1-g(n)}\\\\ &\\therefore p\\le\\dfrac{\\left\\lfloor\\dfrac n{\\varphi(n)}\\right\\rfloor\\varphi(n)+\\varphi(n)}{\\left\\lfloor\\dfrac n{\\varphi(n)}\\right\\rfloor\\varphi(n)+\\varphi(n)-n}\\\\ &\\texttt{let}\\ x=\\left\\lfloor\\dfrac n{\\varphi(n)}\\right\\rfloor\\varphi(n)+\\varphi(n)-n\\ge 1\\\\ &\\therefore p\\le\\dfrac{x+n}x\\le n+1\\\\ \\end{aligned} $\nif $p=n+1$, then $\\dfrac{x+n}x=n+1\\implies x=1\\implies \\left(1+\\left\\lfloor \\dfrac n{\\phi(n)}\\right\\rfloor\\right)\\varphi(n) = n+1 \\implies \\varphi(n)\\mid n+1$.\n\nif $n\\gt 2$ then $\\varphi(n)\\ge 2$, but $\\varphi(n)\\mid n+1=p$, which is contradict the fact that $p$ is a prime number.\n\nThe case of $n\\le 2$ is easy to check.\n\nTherefore, all the prime factors $p$ that $\\gt \\sqrt N$ wouldn't change the number of $g'(n)$.\n\nUse a linear sieve to find all the prime numbers $\\le \\sqrt N$, following the approach for handling composite numbers in the min25 sieve：\n\nLet's define:\n $s(n,k)=\\varphi(n)\\sum_{k\\leq p\\leq\\lfloor\\frac{N}{n}\\rfloor}g'(np)\\times\\varphi(p)$ $S(n,k)=s(n,k)+\\sum_{k\\leq p\\leq\\sqrt N\\And p^e\\leq\\lfloor\\frac{N}{n}\\rfloor}S(np^e,p)+[e\\neq 1]g'(np^e)\\times\\varphi(np^e)$\nWhen $p\\leq\\frac{n+(\\varphi(n)-n\\mod\\varphi(n))}{\\varphi(n)-n\\mod\\varphi(n)}$, there is $g'(np)=g'(n)+1$, otherwise $g'(np)=g'(n)$.\n\nPre-calculate the prefix of $\\varphi(p)$ among prime numbers, we can calculate $s(n,k)$ like this:\n $s(n,k)=\\varphi(n)\\times\\left(g'(n)\\sum_{k\\leq p\\leq\\lfloor\\frac{N}{n}\\rfloor}\\varphi(p)+\\sum_{k\\leq p\\leq\\min\\left(\\frac{n+(\\varphi(n)-n\\mod\\varphi(n))}{\\varphi(n)-n\\mod\\varphi(n)},\\lfloor\\frac{N}{n}\\rfloor\\right)}\\varphi(p)\\right)$\nThe answer is $\\frac{N(N+1)}{2}-1-S(1,1)$.\n\nWith time complexity $\\mathcal O\\left(\\frac{n^{0.75}}{\\log n}\\right)$, it could pass the test cases of $N\\le 10^{11}$.\n\nCode",
+    "solution_code": [
+      "#include<cstdio>\n#include<cmath>\ntypedef unsigned long long ull;\ntypedef unsigned uint;\nconst uint M=1e6+5;\null N;const uint ANS[11]={0,0,0,1,1,2,2,3,3,6,8};\nuint B,n4,top,pri[M],F0[M],F1[M],G0[M],G1[M],SF[M],SG[M];\ninline ull Div(const ull&n,const ull&m){\n\treturn double(n)/m;\n}\ninline ull min(const ull&a,const ull&b){\n\treturn a>b?b:a;\n}\ninline uint DFS(const ull&n,uint k,const ull&phi){\n    const ull&T=Div(N,n);\n    const uint&g=int(n*1./phi),&R=min(Div((g+1)*phi,(g+1)*phi-n),min(ull(B),T));\n\tuint ans=0;\n\tif(k>top)ans=T<=B?0:g*phi*(SF[n]-SG[B]);\n\telse if(pri[k]>T)ans=0;\n\telse if(pri[k]<=R)ans=g*phi*((n<=B?SF[n]:SG[T])-SG[R])+(g+1)*phi*(SG[R]-SG[pri[k-1]]);\n\telse ans=g*phi*((n<=B?SF[n]:SG[T])-SG[pri[k-1]]);\n\tfor(;k<=top;++k){\n\t\tconst uint&p=pri[k],&w=p<=R?g+1:g;if(1ull*p*p>T)break;\n\t\tfor(ull x=n,tp=phi*(p-1);x*p<=N;tp*=p)ans+=DFS(x*=p,k+1,tp)+w*tp;\n\t\tans-=w*phi*(p-1);\n\t}\n\treturn ans;\n}\nsigned main(){\n\tscanf(\"%llu\",&N);\n\tif(N<=10)return!printf(\"%d\",ANS[N]);B=sqrt(N);n4=sqrt(B);\n\tfor(uint i=1;i<=B;++i){\n\t\tconst ull&w=Div(N,i);\n\t\tF0[i]=w-1;F1[i]=w*(w+1)/2-1;\n\t\tG0[i]=i-1;G1[i]=i*(i+1ull)/2-1;\n\t}\n\tfor(uint p=2;p<=n4;++p)if(G0[p]!=G0[p-1]){\n\t\tconst uint&lim=Div(B,p),&S0=G0[p-1],&S1=G1[p-1];pri[++top]=p;\n\t\tfor(uint k=1;k<=lim;++k){\n\t\t\tF0[k]-=F0[k*p]-S0;F1[k]-=p*(F1[k*p]-S1);\n\t\t}\n\t\tfor(uint k=lim+1;k<=B;++k){\n\t\t\tconst uint&x=Div(N,k*p);F0[k]-=G0[x]-S0;F1[k]-=p*(G1[x]-S1);\n\t\t}\n\t\tfor(uint k=B,e=lim;e>=p;--e)for(uint x=e*p,V0=G0[e]-S0,V1=p*(G1[e]-S1);k>=x;--k){\n\t\t\tG0[k]-=V0;G1[k]-=V1;\n\t\t}\n\t}\n\tfor(uint p=n4+1;p<=B;++p)if(G0[p]!=G0[p-1]){\n\t\tconst uint&lim=Div(B,p),&T=Div(N,1ll*p*p),&S0=G0[p-1],&S1=G1[p-1];pri[++top]=p;\n\t\tfor(uint k=1;k<=lim;++k){\n\t\t\tF0[k]-=F0[k*p]-S0;F1[k]-=p*(F1[k*p]-S1);\n\t\t}\n\t\tfor(uint k=lim+1;k<=T;++k){\n\t\t\tconst uint&x=Div(N,k*p);F0[k]-=G0[x]-S0;F1[k]-=p*(G1[x]-S1);\n\t\t}\n\t}\n\tfor(uint i=1;i<=B;++i)SF[i]=F1[i]-F0[i],SG[i]=G1[i]-G0[i];\n\tprintf(\"%u\",N*(N+1)/2-1-DFS(1,1,1));\n}"
+    ]
+  }
+}

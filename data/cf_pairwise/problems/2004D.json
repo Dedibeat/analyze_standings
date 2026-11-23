@@ -1,0 +1,47 @@
+{
+  "contest_id": 2004,
+  "index": "D",
+  "name": "Colored Portals",
+  "rating": 1600,
+  "tags": [
+    "binary search",
+    "brute force",
+    "data structures",
+    "graphs",
+    "greedy",
+    "implementation",
+    "shortest paths"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2004D",
+  "url": "https://codeforces.com/problemset/problem/2004/D",
+  "contest_start_time": "2024-08-15T14:35:00+00:00",
+  "statement": {
+    "title": "D. Colored Portals",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "There are $n$ cities located on a straight line. The cities are numbered from $1$ to $n$.\n\nPortals are used to move between cities. There are $4$ colors of portals: blue, green, red, and yellow. Each city has portals of two different colors. You can move from city $i$ to city $j$ if they have portals of the same color (for example, you can move between a \"blue-red\" city and a \"blue-green\" city). This movement costs $|i-j|$ coins.\n\nYour task is to answer $q$ independent queries: calculate the minimum cost to move from city $x$ to city $y$.",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases.\n\nThe first line of each test case contains two integers $n$ and $q$ ($1 \\le n, q \\le 2 \\cdot 10^5$) — the number of cities and the number of queries, respectively.\n\nThe second line contains $n$ strings of the following types: BG, BR, BY, GR, GY, or RY; the $i$-th of them describes the portals located in the $i$-th city; the symbol B indicates that there is a blue portal in the city, G — green, R — red, and Y — yellow.\n\nThe $j$-th of the next $q$ lines contains two integers $x_j$ and $y_j$ ($1 \\le x_j, y_j \\le n$) — the description of the $j$-th query.\n\nAdditional constraints on the input:\n\n the sum of $n$ over all test cases does not exceed $2 \\cdot 10^5$;\n\n the sum of $q$ over all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each query, print a single integer — the minimum cost to move from city $x$ to city $y$ (or $-1$ if it is impossible).",
+    "note": null,
+    "samples": [
+      {
+        "input": "2\n4 5\nBR BR GY GR\n1 2\n3 1\n4 4\n1 4\n4 2\n2 1\nBG RY\n1 2",
+        "output": "\n1\n4\n0\n3\n2\n-1"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 132790,
+    "url": "https://codeforces.com/blog/entry/132790",
+    "tutorial": "If cities $x$ and $y$ have a common portal, then the cost of the path is $|x-y|$.\n\nOtherwise, we have to move from city $x$ to some intermediate city $z$. It's important to note that the type of city $z$ should be different from the type of city $x$. Otherwise, we could skip city $z$ and go directly from $x$ to the next city in the path. Since the type of city $z$ doesn't match the type of city $x$, it must have a common portal with city $y$. Therefore, the optimal path look like this: $x \\rightarrow z \\rightarrow y$. Additional cities won't decrease the cost of the path.\n\nNow we have to figure out how to choose city $z$ to minimize the cost of the path. Without loss of generality, let's say that $x \\le y$. Then there are three possible locations for city $z$:\n\n $z  \\lt  x$, then the cost of the path is $(x-z) + (y-z)$;\n\n $x \\le z \\le y$, then the cost of the path is $(z-x) + (y-z) = y - x$;\n\n $y  \\lt  z$, then the cost of the path is $(z-x) + (z-y)$.\n\nIt is easy to see that in each case, to minimize the cost of the path, we should choose $z$ as close to $x$ as possible.\n\nLet's define two arrays: $\\mathrm{lf}_{i, j}$ — the index of the nearest city to the left of $i$ with type $j$, and similarly $\\mathrm{rg}_{i, j}$ — the index of the nearest city to the right of $i$ with type $j$.\n\nThen the answer to the problem is the minimum value among $|x - \\mathrm{lf}_{x, j}| + |\\mathrm{lf}_{x, j} - y|$ and $|x - \\mathrm{rg}_{x, j}| + |\\mathrm{rg}_{x, j} - y|$ for all types $j$ for which there are common portals with cities $x$ and $y$.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n \nusing namespace std;\n \nconst int INF = 1e9;\nconst string vars[] = {\"BG\", \"BR\", \"BY\", \"GR\", \"GY\", \"RY\"};\n \nint main() {\n  ios::sync_with_stdio(false); cin.tie(0);\n  int t;\n  cin >> t;\n  while (t--) {\n    int n, q;\n    cin >> n >> q;\n    vector<int> a(n);\n    for (int i = 0; i < n; ++i) {\n      char s[5];\n      cin >> s;\n      a[i] = find(vars, vars + 6, s) - vars;\n    }\n    vector<vector<int>> lf(n), rg(n);\n    for (int o = 0; o < 2; ++o) {\n      vector<int> last(6, -INF);\n      for (int i = 0; i < n; ++i) {\n        last[a[i]] = (o ? n - i - 1 : i);\n        (o ? rg[n - i - 1] : lf[i]) = last;\n      }\n      reverse(a.begin(), a.end());\n    }\n    while (q--) {\n      int x, y;\n      cin >> x >> y;\n      --x; --y;\n      int ans = INF;\n      for (int j = 0; j < 6; ++j) {\n        if (a[x] + j != 5 && j + a[y] != 5) {\n          ans = min(ans, abs(x - lf[x][j]) + abs(lf[x][j] - y));\n          ans = min(ans, abs(x - rg[x][j]) + abs(rg[x][j] - y));\n        }\n      }\n      if (ans > INF / 2) ans = -1;\n      cout << ans << '\\n';\n    }\n  }\n}"
+    ]
+  }
+}

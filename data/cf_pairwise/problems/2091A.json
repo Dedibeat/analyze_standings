@@ -1,0 +1,42 @@
+{
+  "contest_id": 2091,
+  "index": "A",
+  "name": "Olympiad Date",
+  "rating": 800,
+  "tags": [
+    "greedy",
+    "strings"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2091A",
+  "url": "https://codeforces.com/problemset/problem/2091/A",
+  "contest_start_time": "2025-03-25T14:35:00+00:00",
+  "statement": {
+    "title": "A. Olympiad Date",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "The final of the first Olympiad by IT Campus \"NEIMARK\" is scheduled for March 1, 2025. A nameless intern was tasked with forming the date of the Olympiad using digits — 01.03.2025.\n\nTo accomplish this, the intern took a large bag of digits and began drawing them one by one. In total, he drew $n$ digits — the digit $a_i$ was drawn in the $i$-th turn.\n\nYou suspect that the intern did extra work. Determine at which step the intern could have first assembled the digits to form the date of the Olympiad (the separating dots can be ignored), or report that it is impossible to form this date from the drawn digits. Note that leading zeros must be displayed.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\leq t \\leq 10^4$). The description of the test cases follows.\n\nThe first line of each test case contains a single integer $n$ ($1 \\le n \\le 20$).\n\nThe second line of each test case contains $n$ integers $a_i$ ($0 \\leq a_i \\leq 9$) — the numbers that the intern pulled out in chronological order.",
+    "output_spec": "For each test case, output the minimum number of digits that the intern could pull out. If all the digits cannot be used to make a date, output the number $0$.",
+    "note": null,
+    "samples": [
+      {
+        "input": "4\n10\n2 0 1 2 3 2 5 0 0 1\n8\n2 0 1 2 3 2 5 0\n8\n2 0 1 0 3 2 5 0\n16\n2 3 1 2 3 0 1 9 2 1 0 3 5 4 0 3",
+        "output": "\n9\n0\n8\n15"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 141047,
+    "url": "https://codeforces.com/blog/entry/141047",
+    "tutorial": "Let's start a digit counter $cnt[i]$ ($0 \\leq i \\leq 9$). At the moment when $3 \\leq cnt[0]$, $1 \\leq cnt[1]$, $2 \\leq cnt[2]$, $1 \\leq cnt[3]$, $1 \\leq cnt[5]$ — the answer is found. If after counting all the digits one of the conditions is not fulfilled, then there is no solution and the answer is $0$.\n\n$O(n)$.",
+    "solution_code": [
+      "#include <iostream>\n \nusing namespace std;\n \nvoid solve() {\n    int n;\n    cin >> n;\n    int cnt[10] = {};\n    bool f = 0;\n    \n    for (int i = 0; i < n; i++) {\n        int dig;\n        cin >> dig;\n        cnt[dig]++;\n        if (cnt[0] >= 3 && cnt[1] >= 1 && cnt[2] >= 2 &&\n            cnt[3] >= 1 && cnt[5] >= 1 && !f) {\n                cout << i + 1 << endl;\n                f = 1;\n            }\n    }\n    if (!f) cout << 0 << endl;\n}\n \nint main() {\n    int t;\n    cin >> t;\n    while (t--) {\n        solve();\n    }\n}"
+    ]
+  }
+}

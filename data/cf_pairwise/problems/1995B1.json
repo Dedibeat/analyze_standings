@@ -1,0 +1,43 @@
+{
+  "contest_id": 1995,
+  "index": "B1",
+  "name": "Bouquet (Easy Version)",
+  "rating": 1100,
+  "tags": [
+    "binary search",
+    "brute force",
+    "greedy",
+    "sortings",
+    "two pointers"
+  ],
+  "points": 1000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1995B1",
+  "url": "https://codeforces.com/problemset/problem/1995/B1",
+  "contest_start_time": "2024-07-23T14:35:00+00:00",
+  "statement": {
+    "title": "B1. Bouquet (Easy Version)",
+    "time_limit": "1.5 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "This is the easy version of the problem. The only difference is that in this version, the flowers are specified by enumeration.\n\nA girl is preparing for her birthday and wants to buy the most beautiful bouquet. There are a total of $n$ flowers in the store, each of which is characterized by the number of petals, and a flower with $k$ petals costs $k$ coins. The girl has decided that the difference in the number of petals between any two flowers she will use in her bouquet should not exceed one. At the same time, the girl wants to assemble a bouquet with the maximum possible number of petals. Unfortunately, she only has $m$ coins, and she cannot spend more. What is the maximum total number of petals she can assemble in the bouquet?",
+    "input_spec": "Each test consists of several test cases. The first line contains a single integer $t$ ($1 \\le t \\le 10\\,000$) — the number of test cases. This is followed by descriptions of the test cases.\n\nThe first line of each test case contains two integers $n$, $m$ ($1 \\le n \\le 2 \\cdot 10^5, 1 \\le m \\le 10^{18}$) — the number of flowers in the store and the number of coins the girl possesses, respectively. The second line of each test case contains $n$ integers $a_1, a_2, \\ldots, a_n$ ($1 \\le a_i \\le 10^9$), where $a_i$ is the number of petals of the $i$-th flower in the store.\n\nThe sum of $n$ over all test cases does not exceed $2 \\cdot {10}^5$.",
+    "output_spec": "For each test case, output a single integer — the maximum possible number of petals in the bouquet that the girl can assemble while meeting all the conditions listed above.",
+    "note": "In the first test case, you can assemble a bouquet with $(1, 1, 2, 2), (2, 2, 3), (1, 1), (2, 2)$. The maximum over all valid bouquets not greater than $10$ is $7$ for $(2, 2, 3)$. In the third test case, you can assemble a bouquet with only one flower of any type, so the answer is $610$. In the fourth test case, you can assemble a bouquet with $(4, 4, 5)$, which gives you $13$ petals, and it is the maximum amount of petals that the girl can buy.",
+    "samples": [
+      {
+        "input": "5\n5 10\n1 1 2 2 3\n8 20\n4 2 7 5 6 1 1 1\n8 100000\n239 30 610 122 24 40 8 2\n11 13\n2 4 11 1 1 2 3 5 4 3 2\n8 1033\n206 206 206 207 207 207 207 1000",
+        "output": "\n7\n13\n610\n13\n1033"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 131851,
+    "url": "https://codeforces.com/blog/entry/131851",
+    "tutorial": "1995B1 - Bouquet (Easy Version)\n\nHint\n\nFor each number of petals, we can bruteforce the answer for $x, x + 1$\n\nSolution\n\nFirst, we can aggregate number of flowers with $x$ petals into $c_{x}$ (for example, sort the array and then create array of pairs $(x, c_{x})$, where $c_{x}$ is the length of segment with elements equal to $x$).\n\nNote that $\\sum_{x} c_{x} = n$. Also note that for every $x$ we won't need more than $\\left\\lfloor\\frac{m}{x}\\right\\rfloor$ flowers (otherwise total number of petals will exceed $m$).\n\nThen we iterate through all $x$. Suppose that we want to assemble a bouquet with $x, x + 1$ petals. We can bruteforce the amount of flowers with $x$ petals in $O(c_{x})$. If we have $0 \\le k_1 \\le min(c_{x}, \\left\\lfloor\\frac{m}{x}\\right\\rfloor)$ flowers with $x$ petals, we already have $k_1 * x$ petals. There are still $m - k_1 * x$ coins which we can spend for flowers with $x + 1$ petals. There are at most $k_2 = min(c_{x + 1}, \\left\\lfloor\\frac{m - k_1 * x}{x + 1}\\right\\rfloor)$ flowers with $x + 1$ petal we can buy. So we need to find maximum over all such $k_1 * x + k_2 * (x + 1)$.\n\nTotal complexity is $O(\\sum_{x} c_{x}) = O(n)$ for finding the maximum and $O(n \\log n)$ for sorting.\n\nCode\n\n272263831",
+    "solution_code": []
+  }
+}

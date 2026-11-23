@@ -1,0 +1,51 @@
+{
+  "contest_id": 2042,
+  "index": "F",
+  "name": "Two Subarrays",
+  "rating": 2600,
+  "tags": [
+    "data structures",
+    "dp",
+    "implementation",
+    "matrices"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2042F",
+  "url": "https://codeforces.com/problemset/problem/2042/F",
+  "contest_start_time": "2024-12-02T14:35:00+00:00",
+  "statement": {
+    "title": "F. Two Subarrays",
+    "time_limit": "3 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "You are given two integer arrays $a$ and $b$, both of size $n$.\n\nLet's define the cost of the subarray $[l, r]$ as $a_l + a_{l + 1} + \\cdots + a_{r - 1} + a_r + b_l + b_r$. If $l=r$, then the cost of the subarray is $a_l + 2 \\cdot b_l$.\n\nYou have to perform queries of three types:\n\n \"$1$ $p$ $x$\" — assign $a_{p} := x$;\n\n \"$2$ $p$ $x$\" — assign $b_{p} := x$;\n\n \"$3$ $l$ $r$\" — find two non-empty non-overlapping subarrays within the segment $[l, r]$ with the maximum total cost and print their total cost.",
+    "input_spec": "The first line contains a single integer $n$ ($2 \\le n \\le 2 \\cdot 10^5$).\n\nThe second line contains $n$ integers $a_1, a_2, \\dots, a_n$ ($-10^9 \\le a_i \\le 10^9$).\n\nThe third line contains $n$ integers $b_1, b_2, \\dots, b_n$ ($-10^9 \\le b_i \\le 10^9$).\n\nThe fourth line contains a single integer $q$ ($1 \\le q \\le 2 \\cdot 10^5$).\n\nThe next $q$ lines contain the queries: one per line. Each query is of one of three types:\n\n \"$1$ $p$ $x$\" ($1 \\le p \\le n$; $-10^9 \\le x \\le 10^9$);\n\n \"$2$ $p$ $x$\" ($1 \\le p \\le n$; $-10^9 \\le x \\le 10^9$);\n\n \"$3$ $l$ $r$\" ($1 \\le l  \\lt  r \\le n$).\n\nIt is guaranteed that there is at least one query of the third type.",
+    "output_spec": "For each query of the third type, print the maximum possible total cost of two non-empty non-overlapping subarrays within the segment $[l, r]$.",
+    "note": null,
+    "samples": [
+      {
+        "input": "7\n3 -1 4 -3 2 4 0\n0 6 1 0 -3 -2 -1\n6\n3 1 7\n1 2 0\n3 3 6\n2 5 -3\n1 3 2\n3 1 5",
+        "output": "\n18\n7\n16"
+      },
+      {
+        "input": "10\n2 -1 -3 -2 0 4 5 6 2 5\n2 -4 -5 -1 6 2 5 -6 4 2\n10\n3 6 7\n1 10 -2\n3 5 7\n3 2 8\n2 1 -5\n2 7 4\n3 1 3\n3 3 8\n3 2 3\n1 4 4",
+        "output": "\n23\n28\n28\n-17\n27\n-22"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 136886,
+    "url": "https://codeforces.com/blog/entry/136886",
+    "tutorial": "To begin with, let's understand how to calculate the answer if we consider only one query of the third type. For this, we can use the following dynamic programming: $dp_{i, k}$ — the maximum result if we have considered the first $i$ elements and chosen $k$ boundaries of subsegments (i.e., $k=0$ — the first segment has not started yet, $k=1$ — the first segment has started, $k=2$ — the first segment is finished, but the second segment hasn't started yet, and so on). The transitions in this dynamic programming are quite straightforward: we can select the current element as the next boundary of the subsegment (increase $k$ by $1$), in which case we have to increase the value of dynamic programming by $b_{l+i}$; or we can keep the current value of $k$. Additionally, the dynamic programming value needs to be increased by $a_{l+i}$ if the value of $k$ corresponds to an open segment ($k=1$ or $k=3$). Note that an element can be both the left and the right border of the segment at the same time; so we also need a transition from $k=0$ to $k=2$ and from $k=2$ to $k=4$.\n\nNote that the transition from $dp_{i}$ to $dp_{i + 1}$ requires only $7$ numbers: $a_i$, $b_i$, $dp_{i, 0}, dp_{i, 1}, \\dots, dp_{i, 4}$. Therefore, this dynamic programming can be easily packaged within some data structure, for example, a segment tree.\n\nIn each vertex of the segment tree, let's store a transition matrix $mat_{i, j}$ of size $5 \\times 5$ — the maximum result if we started in this segment in state with $k = i$ and must end in state with $k =j$. This matrix is easy to update when changing values in the arrays $a$ and $b$, and it is also easy to merge (to merge two such matrices, it is necessary to consider triples of the form $0 \\le i \\le j \\le k \\le 4$, and there are only $35$ of them).\n\nThus, we know how to perform one query in $O(35\\log{n})$.\n\nNote that you should keep a static size array in each vertex of the segment tree (for example, you can use std::array) in C++; if you use something like a std::vector, it will consume much more memory (static arrays require about $200$ bytes for each vertex of the segment tree, which is already a lot). This also works faster in practice, even though the asymptotic complexity of the solution is the same.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n \nusing namespace std;\n\n#define forn(i, n) for (int i = 0; i < int(n); ++i)\n\nconst int N = 200 * 1000 + 13;\nconst int K = 5;\n\nusing li = long long;\nusing mat = array<array<li, K>, K>;\n\nconst li INF = 1e18;\n\nint n, q;\nli a[N], b[N];\nmat t[4 * N];\n\nmat init(li a, li b) {\n  mat c;\n  forn(i, K) forn(j, i + 1) c[j][i] = -INF;\n  c[0][0] = c[2][2] = c[4][4] = 0;\n  c[0][1] = c[2][3] = a + b;\n  c[0][2] = c[2][4] = a + b + b;\n  c[1][1] = c[3][3] = a;\n  c[1][2] = c[3][4] = a + b;\n  return c;\n}\n\nmat combine(mat a, mat b) {\n  mat c = init(-INF, -INF);\n  forn(i, K) forn(j, i + 1) forn(k, j + 1)\n    c[k][i] = max(c[k][i], a[k][j] + b[j][i]);\n  return c;\n}\n\nvoid build(int v, int l, int r) {\n  if (l + 1 == r) {\n    t[v] = init(a[l], b[l]);\n    return;\n  }\n  int m = (l + r) / 2;\n  build(v * 2 + 1, l, m);\n  build(v * 2 + 2, m, r);\n  t[v] = combine(t[v * 2 + 1], t[v * 2 + 2]);\n}\n\nvoid upd(int v, int l, int r, int p) {\n  if (l + 1 == r) {\n    t[v] = init(a[l], b[l]);\n    return;\n  }\n  int m = (l + r) / 2;\n  if (p < m) upd(v * 2 + 1, l, m, p);\n  else upd(v * 2 + 2, m, r, p);\n  t[v] = combine(t[v * 2 + 1], t[v * 2 + 2]);\n}\n\nmat get(int v, int l, int r, int L, int R) {\n  if (L >= R) return init(-INF, -INF);\n  if (l == L && r == R) return t[v];\n  int m = (l + r) / 2;\n  return combine(\n    get(v * 2 + 1, l, m, L, min(m, R)),\n    get(v * 2 + 2, m, r, max(m, L), R)\n  );\n}\n\nint main() {\n  ios::sync_with_stdio(false); cin.tie(0);\n  cin >> n;\n  forn(i, n) cin >> a[i];\n  forn(i, n) cin >> b[i];\n  build(0, 0, n);\n  cin >> q;\n  forn(_, q) {\n    int t, x, y;\n    cin >> t >> x >> y;\n    --x;\n    if (t == 1) {\n      a[x] = y;\n      upd(0, 0, n, x);\n    } else if (t == 2) {\n      b[x] = y;\n      upd(0, 0, n, x);\n    } else {\n      auto res = get(0, 0, n, x, y);\n      cout << res[0][4] << '\\n';\n    }\n  }\n}",
+      "ex. cut between (2, 3), (4, 5), (7, 8):\n       **\n    *****\n  *******\n--------->\n123456789",
+      "1 8\n2 9\n3 7",
+      "for (const auto& [pos, event] : q) {\n    for (int i : event.open) {\n        open_by_l.insert(l[i]);\n        open_by_r.insert(r[i]);\n    }\n    for (int i : event.open) {\n        auto it = open_by_r.lower_bound(r[i]);\n        if (it != open_by_r.end() && next(it) != open_by_r.end()) {\n            ans[i] += *next(it) - r[i];\n        }\n    }\n    for (int i : event.close) {\n        auto it = open_by_l.upper_bound(l[i]);\n        if (it != open_by_l.begin() && prev(it) != open_by_l.begin()) {\n            ans[i] += l[i] - *prev(prev(it));\n        }\n    }\n    for (int i : event.close) {\n        open_by_l.extract(l[i]);\n        open_by_r.extract(r[i]);\n    }\n}"
+    ]
+  }
+}

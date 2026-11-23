@@ -1,0 +1,42 @@
+{
+  "contest_id": 2014,
+  "index": "D",
+  "name": "Robert Hood and Mrs Hood",
+  "rating": 1400,
+  "tags": [
+    "brute force",
+    "data structures",
+    "greedy",
+    "sortings"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2014D",
+  "url": "https://codeforces.com/problemset/problem/2014/D",
+  "contest_start_time": "2024-09-21T14:45:00+00:00",
+  "statement": {
+    "title": "D. Robert Hood and Mrs Hood",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Impress thy brother, yet fret not thy mother.\n\nRobin's brother and mother are visiting, and Robin gets to choose the start day for each visitor.\n\nAll days are numbered from $1$ to $n$. Visitors stay for $d$ continuous days, all of those $d$ days must be between day $1$ and $n$ inclusive.\n\nRobin has a total of $k$ risky 'jobs' planned. The $i$-th job takes place between days $l_i$ and $r_i$ inclusive, for $1 \\le i \\le k$. If a job takes place on any of the $d$ days, the visit overlaps with this job (the length of overlap is unimportant).\n\nRobin wants his brother's visit to overlap with the maximum number of distinct jobs, and his mother's the minimum.\n\nFind suitable start days for the visits of Robin's brother and mother. If there are multiple suitable days, choose the earliest one.",
+    "input_spec": "The first line of the input contains a single integer $t$ ($1\\leq t \\leq 10^4$) — the number of test cases.\n\nThe first line of each test case consists of three integers $n$, $d$, $k$ ($1 \\le n \\le 10^5, 1 \\le d, k \\le n$) — the number of total days, duration of the visits, and the number of jobs.\n\nThen follow $k$ lines of each test case, each with two integers $l_i$ and $r_i$ ($1 \\le l_i \\le r_i \\le n$) — the start and end day of each job.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, output two integers, the best starting days of Robin's brother and mother respectively. Both visits must fit between day $1$ and $n$ inclusive.",
+    "note": "In the first test case, the only job fills all $2$ days, both should visit on day $1$.\n\nIn the second test case, day $2$ overlaps with $2$ jobs and day $1$ overlaps with only $1$.\n\nIn the third test case, Robert visits for days $[1,2]$, Mrs. Hood visits for days $[4,5]$.",
+    "samples": [
+      {
+        "input": "6\n2 1 1\n1 2\n4 1 2\n1 2\n2 4\n7 2 3\n1 2\n1 3\n6 7\n5 1 2\n1 2\n3 5\n9 2 1\n2 8\n9 2 4\n7 9\n4 8\n1 3\n2 3",
+        "output": "\n1 1\n2 1\n1 4\n1 1\n1 1\n3 4"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 134210,
+    "url": "https://codeforces.com/blog/entry/134210",
+    "tutorial": "2014D - Robert Hood and Mrs Hood\n\nHint 1\n\nFor each starting day lets find how many jobs it overlaps with.\n\nHint 2\n\nTwo Pointers\n\nMy submission — 282252869\n\nVideo Editorial",
+    "solution_code": []
+  }
+}

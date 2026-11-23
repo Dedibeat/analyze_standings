@@ -1,0 +1,46 @@
+{
+  "contest_id": 2074,
+  "index": "G",
+  "name": "Game With Triangles: Season 2",
+  "rating": 2100,
+  "tags": [
+    "dp",
+    "geometry"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2074G",
+  "url": "https://codeforces.com/problemset/problem/2074/G",
+  "contest_start_time": "2025-03-11T14:35:00+00:00",
+  "statement": {
+    "title": "G. Game With Triangles: Season 2",
+    "time_limit": "4 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "The Frontman greets you to this final round of the survival game.\n\nThere is a regular polygon with $n$ sides ($n \\ge 3$). The vertices are indexed as $1,2,\\ldots,n$ in clockwise order. On each vertex $i$, the pink soldiers have written a positive integer $a_i$. With this regular polygon, you will play a game defined as follows.\n\nInitially, your score is $0$. Then, you perform the following operation any number of times to increase your score.\n\n Select $3$ different vertices $i$, $j$, $k$ that you have not chosen before, and draw the triangle formed by the three vertices.\n\n Then, your score increases by $a_i \\cdot a_j \\cdot a_k$.\n\n However, you can not perform this operation if the triangle shares a positive common area with any of the triangles drawn previously.\n\n  An example of a state after two operations is on the left. The state on the right is impossible as the two triangles share a positive common area.\nYour objective is to maximize the score. Please find the maximum score you can get from this game.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 10^4$). The description of the test cases follows.\n\nThe first line of each test case contains a single integer $n$ — the number of vertices ($3 \\le n \\le 400$).\n\nThe second line of each test case contains $a_1,a_2,\\ldots,a_n$ — the integers written on vertices ($1 \\le a_i \\le 1000$).\n\nIt is guaranteed that the sum of $n^3$ over all test cases does not exceed $400^3$.",
+    "output_spec": "For each test case, output the maximum score you can get on a separate line.",
+    "note": "On the first test case, you can draw only one triangle. The maximum score $6$ is found by drawing the triangle with $i=1$, $j=2$, $k=3$.\n\nOn the second test case, you can draw only one triangle. The maximum score $24$ is found by drawing the triangle with $i=1$, $j=3$, $k=4$.\n\nOn the third test case, you can draw two triangles. There is a series of two operations that leads to the score $5$, which is the maximum.\n\nOn the fourth test case, you can draw two triangles. However, drawing two triangles leads to a score of either $6+5=11$, $15+2=17$, or $10+3=13$. The maximum score $30$ is found by drawing only one triangle with $i=2$, $j=4$, $k=6$.\n\nOn the fifth test case, you can draw three triangles. The maximum score $732$ is found by drawing three triangles as follows.",
+    "samples": [
+      {
+        "input": "6\n3\n1 2 3\n4\n2 1 3 4\n6\n2 1 2 1 1 1\n6\n1 2 1 3 1 5\n9\n9 9 8 2 4 4 3 5 3\n9\n9 9 3 2 4 4 8 5 3",
+        "output": "\n6\n24\n5\n30\n732\n696"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 140540,
+    "url": "https://codeforces.com/blog/entry/140540",
+    "tutorial": "If we cut a single edge and consider the regular polygon as a polyline of $n$ points, then we can think of using some form of Range DP to solve this problem. This is correct when you simply take the maximum value over all possible edges you can cut. It is not hard to see that doing this should not change the overall time complexity (unless you did recalculate the same state multiple times). However, it is hard to immediately think of a transition that is both correct and efficient.\n\nLet's find a trivially correct but slow solution and reduce the complexity. A correct $\\mathcal{O}(n^5)$ DP which is (arguably) easy to find is as follows.\n\n$$\\text{dp}_{[L,R]}=\\max_{L \\le i  \\lt  j  \\lt  k \\le R}{\\left ({\\text{dp}_{[L,i-1]}+\\text{dp}_{[i+1,j-1]}+\\text{dp}_{[j+1,k-1]}+\\text{dp}_{[k+1,R]}+\\text{score}(i,j,k)}\\right )}$$\n\nIt is not too hard to prove the correctness of this transition, as it follows from the conditions such that two triangles will not coincide anywhere. It is only tricky for us to improve the complexity.\n\nFirst, we can find that $\\text{score}(i,j,k)$ will also be found with $L=i$ and $k=R$ later in some smaller subproblem. Then, our transition changes.\n\n$$\\text{dp}_{[L,R]}=\\max\\left ({ {\\max_{L  \\lt  i  \\lt  R}{\\left ({\\text{dp}_{[L+1,i-1]}+\\text{dp}_{[i+1,R-1]}+\\text{score}(L,i,R)}\\right )}},{\\max_{L \\le i  \\lt  j  \\lt  R}{\\left ({\\text{dp}_{[L,i]}+\\text{dp}_{[i+1,j]}+\\text{dp}_{[j+1,R]}}\\right )}} }\\right)$$\n\nThis is a correct $\\mathcal{O}(n^4)$ DP which cuts a lot of useless transitions from the $\\mathcal{O}(n^5)$. But it is, in fact, still redundant. It can be reduced further.\n\nWe only wanted to split our range into three disjoint ones. But even by just splitting the range into two, it later splits into two other disjoint ones in our subproblem. Now we don't need to split into three, only two is necessary. So it is as follows.\n\n$$\\text{dp}_{[L,R]}=\\max\\left ({ {\\max_{L  \\lt  i  \\lt  R}{\\left ({\\text{dp}_{[L+1,i-1]}+\\text{dp}_{[i+1,R-1]}+\\text{score}(L,i,R)}\\right )}},{\\max_{L \\le i  \\lt  R}{\\left ({\\text{dp}_{[L,i]}+\\text{dp}_{[i+1,R]}}\\right )}} }\\right)$$\n\nNow this computes the correct answer in $\\mathcal{O}(n^3)$, which is the complexity we needed.\n\nIt is important to note that even though it might be easy to see the similarity to Triangulation DP problems (such as the Matrix Chain Product problem), it is not an immediate transformation from such problems. That is, it is not easy to lead to a correct transition by modifying the transition starting from Triangulation DP, and likely there will be quite an excessive amount of states that you need to compute even if you did.",
+    "solution_code": [
+      "#include<bits/stdc++.h>\nusing namespace std;\nusing ll=long long;\n \nll dp[505][505];\n \nint main()\n{\n    cin.tie(0)->sync_with_stdio(0);\n    int t;cin>>t;\n    for(int tc=0;tc<t;tc++)\n    {\n        ll n;cin>>n;\n        vector<ll>vec(n);\n        for(ll&i:vec)cin>>i;\n        for(int i=0;i<n;i++)\n        {\n            for(int j=0;j<n;j++)dp[i][j]=-1e18;\n        }\n        auto value=[&](ll i,ll j,ll k)\n        {\n            return i*j*k;\n        };\n        for(int len=1;len<=n;len++)\n        {\n            for(int L=0;L<n;L++)\n            {\n                ll ans=0;\n                ll R=(L+len-1)%n;\n                if(len<=2)\n                {\n                    dp[L][R]=0;\n                    continue;\n                }\n                if(len==3)\n                {\n                    dp[L][R]=max(0LL,value(vec[L],vec[(L+1)%n],vec[R]));\n                    continue;\n                }\n                for(int i=(L+1)%n;i!=R;i=(i+1)%n)\n                {\n                    ll val=value(vec[L],vec[i],vec[R]);\n                    if(i!=(L+1)%n)val+=dp[(L+1)%n][(i+n-1)%n];\n                    if(i!=(R+n-1)%n)val+=dp[(i+1)%n][(R+n-1)%n];\n                    ans=max(ans,val);\n                }\n                for(int i=L;i!=R;i=(i+1)%n)\n                {\n                    ans=max(ans,dp[L][i]+dp[(i+1)%n][R]);\n                }\n                dp[L][R]=ans;\n            }\n        }\n        ll ans=0;\n        for(int i=0;i<n;i++)\n        {\n            ans=max(ans,dp[i][(i+n-1)%n]);\n        }\n        cout<<ans<<\"\\n\";\n    }\n}",
+      "`the sum of radii is exactly m∗.`\n`∗Is this information really useful? Don't ask me; I don't really know.`",
+      "int msb(int i)\n{\n    return i ? __builtin_clz(1) - __builtin_clz(i) : -1;\n}\n\nvoid xortriangle(int x)\n{\n    int y = x + 1;  // if all bits are set, then x + 1 only has 1 bit set;\n    if (!(x & (x - 1)) || !(y & (y - 1))) cout<<-1<<'\\n';\n    else cout<<((1 << msb(x)) - 1)<<'\\n';\n}",
+      "func run(a []int) int {\n\tres := 0\n\tfor a[0] < a[1] && a[2] < a[3] {\n\t\tif a[0]&1 == 1 || a[1]&1 == 1 {\n\t\t\tif a[0]&1 == 1 {\n\t\t\t\ta[0] += 1\n\t\t\t} else {\n\t\t\t\ta[1] -= 1\n\t\t\t}\n\t\t\tres += a[3] - a[2]\n\t\t} else if a[2]&1 == 1 || a[3]&1 == 1 {\n\t\t\tif a[2]&1 == 1 {\n\t\t\t\ta[2] += 1\n\t\t\t} else {\n\t\t\t\ta[3] -= 1\n\t\t\t}\n\t\t\tres += a[1] - a[0]\n\t\t} else {\n\t\t\tfor i, v := range a {\n\t\t\t\ta[i] = v >> 1\n\t\t\t}\n\t\t}\n\t}\n\treturn res\n}",
+      "mp=[2]\np=1\nfor i in range(30):\n    p*=2\n    mp.append(p+1)\n \nfor _ in range(int(input())):\n    x=int(input())\n    ans=-1\n    for y in mp:\n        xor=(x^y)\n        if(x+y>xor and x+xor>y and y+xor>x and y<x):\n            ans=y\n            break\n    print(ans)"
+    ]
+  }
+}

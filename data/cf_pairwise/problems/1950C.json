@@ -1,0 +1,42 @@
+{
+  "contest_id": 1950,
+  "index": "C",
+  "name": "Clock Conversion",
+  "rating": 800,
+  "tags": [
+    "implementation",
+    "math"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1950C",
+  "url": "https://codeforces.com/problemset/problem/1950/C",
+  "contest_start_time": "2024-03-28T14:45:00+00:00",
+  "statement": {
+    "title": "C. Clock Conversion",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "Given the time in 24-hour format, output the equivalent time in 12-hour format.\n\n 24-hour format divides the day into 24 hours from $00$ to $23$, each of which has 60 minutes from $00$ to $59$.\n\n 12-hour format divides the day into two halves: the first half is $\\mathrm{AM}$, and the second half is $\\mathrm{PM}$. In each half, the hours are numbered in the order $12, 01, 02, 03, \\dots, 11$. Each hour has 60 minutes numbered from $00$ to $59$.",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\leq t \\leq 1440$) — the number of test cases.\n\nThe only line of each test case contains a string $s$ of length $5$ with format hh:mm representing a valid time in the 24-hour format. hh represents the hour from $00$ to $23$, and mm represents the minute from $00$ to $59$.\n\nThe input will always be a valid time in 24-hour format.",
+    "output_spec": "For each test case, output two strings separated by a space (\"hh:mm AM\" or \"hh:mm PM\"), which are the 12-hour equivalent to the time provided in the test case (without quotes).\n\nYou should output the time exactly as indicated; in particular, you should not remove leading zeroes.",
+    "note": null,
+    "samples": [
+      {
+        "input": "11\n09:41\n18:06\n12:14\n00:59\n00:00\n14:34\n01:01\n19:07\n11:59\n12:00\n21:37",
+        "output": "\n09:41 AM\n06:06 PM\n12:14 PM\n12:59 AM\n12:00 AM\n02:34 PM\n01:01 AM\n07:07 PM\n11:59 AM\n12:00 PM\n09:37 PM"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 127664,
+    "url": "https://codeforces.com/blog/entry/127664",
+    "tutorial": "From 24-hour format to 12-hour format, the minutes are the same. For the hours:\n\n If $\\texttt{hh}$ is $00$, then it should become $12 \\; \\mathrm{AM}$.\n\n If $\\texttt{hh}$ is from $01$ to $11$, then it should become $\\texttt{hh} \\; \\mathrm{AM}$.\n\n If $\\texttt{hh}$ is $12$, then it should become $12 \\; \\mathrm{PM}$.\n\n If $\\texttt{hh}$ is from $13$ to $23$, then it should become $(\\texttt{hh} - 12) \\; \\mathrm{PM}$.\n\n A fast way to implement this: replace the hours $h$ by $h \\bmod 12$, and if this value is $0$, set it to $12$. Be careful to handle the case when $h$ and $m$ are single digits.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n\nusing namespace std;\n\nvoid solve() {\n    int h, m; char c;\n    cin >> h >> c >> m;\n    string am = (h < 12 ? \" AM\" : \" PM\");\n    h = (h % 12 ? h % 12 : 12);\n    cout << (h < 10 ? \"0\" : \"\") << h << c << (m < 10 ? \"0\" : \"\") << m << am << '\\n';\n}\n\nint main() {\n\tios::sync_with_stdio(false);\n\tcin.tie(nullptr);\n\tint tt; cin >> tt; for (int i = 1; i <= tt; i++) {solve();}\n\t// solve();\n}"
+    ]
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "contest_id": 1958,
+  "index": "E",
+  "name": "Yet Another Permutation Constructive",
+  "rating": 1900,
+  "tags": [
+    "*special",
+    "constructive algorithms"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1958E",
+  "url": "https://codeforces.com/problemset/problem/1958/E",
+  "contest_start_time": "2024-05-13T14:35:00+00:00",
+  "statement": {
+    "title": "E. Yet Another Permutation Constructive",
+    "time_limit": "2 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "Suppose you have a permutation $p$ of $n$ integers — an array where each element is an integer from $1$ to $n$, and every integer from $1$ to $n$ appears exactly once.\n\nIn one operation, you remove every element of this permutation which is less than at least one of its neighbors. For example, when you apply the operation to $[3, 1, 2, 5, 4]$, you get $[3, 5]$. If you apply an operation again, you get $[5]$.\n\nIt's easy to see that after applying a finite number of operations, you get an array consisting of a single integer $n$.\n\nYou are given two integers $n$ and $k$. Find a permutation of $n$ integers such that it becomes an array consisting of a single element $n$ after exactly $k$ operations (and not earlier).",
+    "input_spec": "The first line contains one integer $t$ ($1 \\le t \\le 2000$) — the number of test cases.\n\nEach test case consists of one line containing two integers $n$ and $k$ ($2 \\le n \\le 100$; $1 \\le k \\le n - 1$).",
+    "output_spec": "For each test case, print the answer as follows:\n\n if a permutation of size $n$ which becomes an array consisting of a single element $n$ after exactly $k$ operations does not exist, print $-1$;\n\n otherwise, print $n$ distinct integers from $1$ to $n$ — the requested permutation. If there are multiple such permutations, print any of them.",
+    "note": null,
+    "samples": [
+      {
+        "input": "4\n5 2\n5 4\n2 1\n3 2",
+        "output": "\n3 1 2 5 4\n-1\n1 2\n2 1 3"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 129483,
+    "url": "https://codeforces.com/blog/entry/129483",
+    "tutorial": "Let the current size of the array be $m$. When an operation is applied, at least $\\lfloor \\frac{m}{2} \\rfloor$ elements will be removed, because if an element is not removed, both of its neighbors will be removed.\n\nSo, for every value of $k$, we can calculate the minimum possible size of an array $n$ (let's call it $f_k$). For $k = 1$, $f_k = 2$; for $k  \\gt  1$, this value is $f_i = 2 \\cdot f_{k-1} - 1$. We can actually derive an exact formula $f_k = 2^{k-1} + 1$, but we don't actually have to, since it can be calculated in $O(n)$.\n\nIf $n  \\lt  f_k$, obviously, there is no solution. Let's show how to construct the answer for $n = f_k$, and then let's deal with the case $n  \\gt  f_k$.\n\nFor $k = 1$, we can use an array $[1, 2]$. If we want to go from $k$ to $k+1$, we can insert elements which will be removed on the first operation between the existing elements, while increasing the existing elements by the number of elements we added (so that they are actually greater). For example, $[1, 2] \\rightarrow [2, 1, 3] \\rightarrow [4, 1, 3, 2, 5]$ (every element on even position is a newly inserted element). That's how we can resolve the case $n = f_k$.\n\nWhat if $n  \\gt  f_k$? Construct the answer for $n = f_k$. Let's say we have $m = n - f_k$ \"extra\" elements. Let's insert them in such a way that they will all be deleted during the first operation, and will not affect the existing elements. For example, we can increase every existing element by $m$, and then add $1, 2, 3, \\dots, m$ to the beginning of the array, so that they don't affect existing elements, and are all deleted during the first operation.\n\nYou have to take into account that $f_k$ might overflow. And you should first check that $f_k \\le n$, and only then construct the answer, since it takes $O(f_k + n)$.",
+    "solution_code": [
+      "private fun solve(): String {\n    val (n, k) = readInts()\n    var ans = listOf(n - 1, n)\n    repeat(k - 1) {\n        val min = ans.min()\n        val prevStart = min - ans.size + 1\n        if (prevStart <= 0) {\n            return \"-1\"\n        }\n        ans = ans.zip(prevStart .. min).flatMap { (a, b) -> listOf(a, b) }.dropLast(1)\n    }\n    ans = (1 until ans.min()) + ans\n    return ans.joinToString(\" \")\n}\nfun main() {\n    repeat(readInt()) {\n        println(solve())\n    }\n}\n\nprivate fun readInt() = readln().toInt()\nprivate fun readLongs() = readStrings().map { it.toLong() }\nprivate fun readStrings() = readln().split(\" \")\nprivate fun readInts() = readStrings().map { it.toInt() }"
+    ]
+  }
+}

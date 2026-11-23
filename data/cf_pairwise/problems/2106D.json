@@ -1,0 +1,44 @@
+{
+  "contest_id": 2106,
+  "index": "D",
+  "name": "Flower Boy",
+  "rating": 1500,
+  "tags": [
+    "binary search",
+    "dp",
+    "greedy",
+    "two pointers"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2106D",
+  "url": "https://codeforces.com/problemset/problem/2106/D",
+  "contest_start_time": "2025-04-24T14:35:00+00:00",
+  "statement": {
+    "title": "D. Flower Boy",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Flower boy has a garden of $n$ flowers that can be represented as an integer sequence $a_1, a_2, \\dots, a_n$, where $a_i$ is the beauty of the $i$-th flower from the left.\n\nIgor wants to collect exactly $m$ flowers. To do so, he will walk the garden from left to right and choose whether to collect the flower at his current position. The $i$-th flower among ones he collects must have a beauty of at least $b_i$.\n\nIgor noticed that it might be impossible to collect $m$ flowers that satisfy his beauty requirements, so before he starts collecting flowers, he can pick any integer $k$ and use his magic wand to grow a new flower with beauty $k$ and place it anywhere in the garden (between two flowers, before the first flower, or after the last flower). Because his magic abilities are limited, he may do this at most once.\n\nOutput the minimum integer $k$ Igor must pick when he performs the aforementioned operation to ensure that he can collect $m$ flowers. If he can collect $m$ flowers without using the operation, output $0$. If it is impossible to collect $m$ flowers despite using the operation, output $-1$.",
+    "input_spec": "The first line of the input contains a single integer $t$ $(1 \\le t \\le 10^4)$ — the number of test cases.\n\nThe first line of each test case contains exactly two integers $n$ and $m$ $(1 \\le m \\le n \\le 2 \\cdot 10^5)$ — the number of flowers in the garden and the number of flowers Igor wants to collect, respectively.\n\nThe second line of each test case contains $n$ integers $a_1, a_2, ..., a_n$ $(1 \\le a_i \\le 10^9)$ — where $a_i$ is the beauty of the $i$-th flower from the left in the garden.\n\nThe third line of each test case contains $m$ integers $b_1, b_2, ..., b_m$ $(1 \\le b_i \\le 10^9)$ — where $b_i$ is the minimum beauty the $i$-th flower must have that Igor will collect.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, on a separate line, output the minimum integer $k$ Igor must pick when he performs the aforementioned operation to ensure that he can collect $m$ flowers. If he can collect $m$ flowers without using the operation, output $0$. If it is impossible to collect $m$ flowers despite using the operation, output $-1$.",
+    "note": "In the first test case, suppose Igor grows a flower of beauty $6$ and places it between the third and the fourth flowers. Then, the garden will look like the following: $[3, 5, 2, 6, 3, 3, 5, 8, 1, 2]$. Then, he can select the second, fourth, sixth, seventh, and eighth flowers with beauties $[5, 6, 3, 5, 8]$.\n\nIn the third test case, he can grow a flower of beauty $7$ and place it before the first flower. The garden will look like the following: $[7, 4, 3, 5, 4, 3]$. Now, he can choose the first, second, and fourth flowers.\n\nIn the fourth test case, Igor does not need to use the operation, so the answer is $0$.\n\nIn the sixth test case, no matter how Igor performs the operation, he cannot collect $3$ flowers such that the $i$-th flower he collects has a beauty of at least $b_i$, therefore the answer is $-1$.",
+    "samples": [
+      {
+        "input": "7\n9 5\n3 5 2 3 3 5 8 1 2\n4 6 2 4 6\n6 3\n1 2 6 8 2 1\n5 4 3\n5 3\n4 3 5 4 3\n7 4 5\n6 3\n8 4 2 1 2 5\n6 1 4\n5 5\n1 2 3 4 5\n5 4 3 2 1\n6 3\n1 2 3 4 5 6\n9 8 7\n5 5\n7 7 6 7 7\n7 7 7 7 7",
+        "output": "\n6\n3\n7\n0\n-1\n-1\n7"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 142254,
+    "url": "https://codeforces.com/blog/entry/142254",
+    "tutorial": "Problem D — IGOR / FLOWER BOY\n\n(Author: cry, Analysis: cowthecow)\n\nSolution\n\nThere is a greedy strategy. Every time you see some flower in $a$, if its beauty is not less than the beauty of next flower you must pick from $b$, you will pick it. The answer is $0$ if we run the greedy without inserting a new flower in $a$ and still collecting all $m$ needed flowers.\n\nNow, consider what inserting a new flower of beauty $k$ in $a$ will do. It will allow you to \"skip\" some flower listed in $b$, as you can place it anywhere in $a$ and just pick it up when necessary. Therefore, instead of inserting a new element, we can reconsider the problem as deleting some element listed in $b$. So, one slow solution would be to try deleting $b_1$, then running the greedy on $a$, and repeat for $b_2$, $b_3, ..., b_m$. Then, we can keep the minimum $b_i$ such that the greedy was successful when deleting that flower.\n\nThe solution is too slow. Instead, we can compute for every index $1 \\le i \\le m$ the minimum index $j$ such that if we run the greedy on the prefix $a_1, a_2, ..., a_j$, we will have collected flowers $b_1, b_2, ..., b_i$. Let this value for index $i$ of $b$ be $p_i$. Do the same for each suffix of $a$. Specifically, let $s_i$ be the maximum index $j$ such that if we run the greedy on the suffix $a_j, a_{j+1}, ..., a_n$ we would have collected the flowers $b_i, b_{i+1}, ..., b_m$. These values can be calculated with two pointers.\n\nNow, we can delete $b_j$ if $p_{j-1} \\lt s_{j+1}$ (to delete $b_1$, it must be that $s_{2} \\gt 0$ and to delete $b_m$ that $p_{m-1} \\le n$). We keep the minimum among all deletable values in $b$. If there does not exist such a value the answer is $-1$.\n\nImplementation\n\nRate the Problem\n\n Amazing\n\n Good\n\n Average\n\n Bad\n\n Didn't Solve",
+    "solution_code": [
+      "#include <bits/stdc++.h>\nusing namespace std;\nconst int INF = 1e9 + 5;\n \nint main(){\n    int T; cin >> T;\n    while(T--){\n        int N, M; cin >> N >> M;\n        vector<int> a(N), b(M);\n        for(int i = 0; i < N; i++) cin >> a[i];\n        for(int i = 0; i < M; i++) cin >> b[i];\n        vector<int> backwards_match(M);\n        int j = N - 1;\n        for(int i = M - 1; i >= 0; i--){\n            while(j >= 0 && a[j] < b[i]) j--;\n            backwards_match[i] = j--;\n        }\n        vector<int> forwards_match(M);\n        j = 0;\n        for(int i = 0; i < M; i++){\n            while(j < N && a[j] < b[i]) j++;\n            forwards_match[i] = j++;\n        }\n        if(forwards_match.back() < N){\n            cout << 0 << endl;\n            continue;\n        }\n        int ans = INF;\n        for(int i = 0; i < M; i++){\n            int match_previous = i == 0 ? -1 : forwards_match[i - 1];\n            int match_next = i + 1 == M ? N : backwards_match[i + 1];\n            if(match_next > match_previous){\n                ans = min(ans, b[i]);\n            }\n        }\n        cout << (ans == INF ? -1 : ans) << \"\\n\";\n    }\n}"
+    ]
+  }
+}

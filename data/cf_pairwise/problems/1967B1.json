@@ -1,0 +1,43 @@
+{
+  "contest_id": 1967,
+  "index": "B1",
+  "name": "Reverse Card (Easy Version)",
+  "rating": 1400,
+  "tags": [
+    "brute force",
+    "math",
+    "number theory"
+  ],
+  "points": 500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1967B1",
+  "url": "https://codeforces.com/problemset/problem/1967/B1",
+  "contest_start_time": "2024-04-30T14:35:00+00:00",
+  "statement": {
+    "title": "B1. Reverse Card (Easy Version)",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "The two versions are different problems. You may want to read both versions. You can make hacks only if both versions are solved.\n\nYou are given two positive integers $n$, $m$.\n\nCalculate the number of ordered pairs $(a, b)$ satisfying the following conditions:\n\n $1\\le a\\le n$, $1\\le b\\le m$;\n\n $a+b$ is a multiple of $b \\cdot \\gcd(a,b)$.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1\\le t\\le 10^4$). The description of the test cases follows.\n\nThe first line of each test case contains two integers $n$, $m$ ($1\\le n,m\\le 2 \\cdot 10^6$).\n\nIt is guaranteed that neither the sum of $n$ nor the sum of $m$ over all test cases exceeds $2 \\cdot 10^6$.",
+    "output_spec": "For each test case, print a single integer: the number of valid pairs.",
+    "note": "In the first test case, only $(1,1)$ satisfies the conditions.\n\nIn the fourth test case, $(1,1),(2,1),(2,2),(3,1),(4,1),(5,1),(6,1),(6,2),(6,3),(7,1),(8,1),(9,1),(10,1),(10,2)$ satisfy the conditions.",
+    "samples": [
+      {
+        "input": "6\n1 1\n2 3\n3 5\n10 8\n100 1233\n1000000 1145141",
+        "output": "\n1\n3\n4\n14\n153\n1643498"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 129027,
+    "url": "https://codeforces.com/blog/entry/129027",
+    "tutorial": "Denote $\\gcd(a,b)$ as $d$. Assume that $a=pd$ and $b=qd$, then we know that $\\gcd(p,q)=1$.\n\n$(b\\cdot\\gcd(a,b))\\mid (a+b)\\iff (qd^2)\\mid (pd+qd)\\iff (qd)\\mid (p+q)$.\n\nAssume that $p+q=kqd$, then $p=(kd-1)q$. We know $q=1$ because $\\gcd(p,q)=1$.\n\nEnumerate $d$ from $1$ to $m$, we know $p+1=kd\\le\\lfloor\\frac{n}{d}\\rfloor+1$, so we add $\\left\\lfloor\\frac{\\lfloor\\frac{n}{d}\\rfloor+1}{d}\\right\\rfloor$ to answer.\n\nIn this method, $p=0,k=1,d=1$ will also be included in the answer, so we should subtract $1$ from the answer.\n\nTime Complexity: $\\mathcal O(\\sum m)$.",
+    "solution_code": [
+      "#include<bits/stdc++.h>\nusing namespace std;\ntypedef long long ll;\nconst int N=2000005;\nint tc,n,m; ll ans;\ninline void solve(){\n\tcin>>n>>m; ans=0;\n\tfor(int i=1;i<=m;i++)\n\t\tans+=(n+i)/(1ll*i*i);\n\tcout<<ans-1<<'\\n';\n}\nint main(){\n\tios::sync_with_stdio(0); cin.tie(0); cout.tie(0);\n\tcin>>tc; while(tc--) solve();\n\treturn 0;\n}"
+    ]
+  }
+}

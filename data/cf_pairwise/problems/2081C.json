@@ -1,0 +1,45 @@
+{
+  "contest_id": 2081,
+  "index": "C",
+  "name": "Quaternary Matrix",
+  "rating": 2700,
+  "tags": [
+    "bitmasks",
+    "constructive algorithms",
+    "greedy",
+    "implementation",
+    "matrices"
+  ],
+  "points": 1750.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2081C",
+  "url": "https://codeforces.com/problemset/problem/2081/C",
+  "contest_start_time": "2025-03-15T14:35:00+00:00",
+  "statement": {
+    "title": "C. Quaternary Matrix",
+    "time_limit": "2 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "A matrix is called quaternary if all its elements are $0$, $1$, $2$, or $3$.\n\nEcrade calls a quaternary matrix $A$ good if the following two properties hold.\n\n The bitwise XOR of all numbers in each row of matrix $A$ is equal to $0$.\n\n The bitwise XOR of all numbers in each column of matrix $A$ is equal to $0$.\n\nEcrade has a quaternary matrix of size $n \\times m$. He is interested in the minimum number of elements that need to be changed for the matrix to become good, and he also wants to find one of the possible resulting matrices.\n\nHowever, it seems a little difficult, so please help him!",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 2 \\cdot 10^5$). The description of the test cases follows.\n\nThe first line of each test case contains two integers $n$ and $m$ ($1 \\le n, m \\le 10^3$).\n\nThis is followed by $n$ lines, each containing exactly $m$ characters and consisting only of $0$, $1$, $2$, and $3$, describing the elements of Ecrade's matrix.\n\nIt is guaranteed that the sum of $n\\cdot m$ over all test cases does not exceed $10^6$.",
+    "output_spec": "For each test case, print the minimum number of elements that need to be changed for the matrix to become good on the first line, then print $n$ lines, each containing exactly $m$ characters and consisting only of $0$, $1$, $2$, and $3$, describing one of the possible resulting matrices.\n\nIf there are multiple possible resulting matrices, output any of them.",
+    "note": null,
+    "samples": [
+      {
+        "input": "5\n3 3\n313\n121\n313\n3 3\n000\n000\n000\n4 4\n0123\n1230\n2301\n3012\n4 4\n1232\n2110\n3122\n1311\n4 4\n1232\n2110\n3122\n1312",
+        "output": "\n3\n213\n101\n312\n0\n000\n000\n000\n0\n0123\n1230\n2301\n3012\n6\n0132\n2310\n3131\n1313\n5\n0132\n2310\n3120\n1302"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 140702,
+    "url": "https://codeforces.com/blog/entry/140702",
+    "tutorial": "2081C - Quaternary Matrix\n Idea: Ecrade_\n\nHint 1\n\nDo we really have to consider the problem on the whole matrix?\n\nHint 2\n\nUse greedy algorithm and guess some possible conclusions. Can you prove them (or construct some counterexamples) ?\n\nSolution\n\nThe problem can be rephrased as follows: Let the XOR sum of each row be $ r_1, r_2, \\ldots, r_n $, and the XOR sum of each column be $ c_1, c_2, \\ldots, c_m $. In each operation, we can choose any $ 1 \\le i \\le n $, $ 1 \\le j \\le m $, and $ 0 \\le x \\le 3 $, then let $ r_i \\leftarrow r_i \\oplus x $ and $ c_j \\leftarrow c_j \\oplus x $. The goal is to determine the minimum number of operations required to make all $ r_1, r_2, \\ldots, r_n $ and $ c_1, c_2, \\ldots, c_m $ zero.\n\nLet $ R_x\\ ( 0 \\le x \\le 3 )$ denote the count of $ x $ in $ r_1, r_2, \\ldots, r_n $, and $ C_x $ denote the count of $ x $ in $ c_1, c_2, \\ldots, c_m $. A trivial upper bound for the answer is $ s = R_1 + R_2 + R_3 + C_1 + C_2 + C_3 $, which corresponds to the scenario where each operation only zeros out one of $ r_i $ and $ c_j $.\n\nTo reduce the number of operations, we can consider grouping the non-zero elements in $ r_1, \\ldots, r_n, c_1, \\ldots, c_m $ into disjoint groups where:\n\nThe XOR sum of each group is zero.\n\nEach group contains at least one element from $ r $ and one from $ c $.\n\nFor such a group, we can reduce the number of operations by one, as there always exists an operation which can zero out both $ r_i $ and $ c_j $. Thus, the goal is to maximize the number of such groups, and the minimum number of operations will be $s - \\text{(number of groups formed)}$.\n\nDefine the following group types:\n\n$ P_2 $: Groups of the form $(R_1,C_1)$, $(R_2,C_2)$ or $(R_3,C_3)$.\n\n$ P_3 $: Groups of the form $(R_1,R_2,C_3)$, $(R_1,C_2,C_3)$, $(R_1,C_2,R_3)$, $(C_1,C_2,R_3)$, $(C_1,R_2,R_3)$ or $(C_1,R_2,C_3)$.\n\n$ P_4 $: Groups of the form $(R_1,R_1,C_2,C_2)$, $(R_1,R_1,C_3,C_3)$, $(R_2,R_2,C_1,C_1)$, $(R_2,R_2,C_3,C_3)$, $(R_3,R_3,C_1,C_1)$ or $(R_3,R_3,C_2,C_2)$.\n\nConclusion 1: There exists an optimal solution where all groups are of the form $ P_2 $, $ P_3 $, or $ P_4 $.\n\nBrief Proof\n\nEach group must have size at least 2. Groups of size 2 or 3 can only be $ P_2 $ or $ P_3 $.\n\nGroups of size 4 not conforming to $ P_4 $ (e.g., $ (R_1, R_1, R_1, C_1) $) can be decomposed into at least one $ P_2 $.\n\nLarger groups can be decomposed into combinations of $ P_2 $, $ P_3 $, and $ P_4 $.\n\nConclusion 2: There exists an optimal solution where all $ P_3 $ groups share the same structure, and so do all $ P_4 $ groups.\n\nBrief Proof\n\nTwo different $ P_3 $ groups can be decomposed into at least two $ P_2 $ or at least one $ P_2 $ and one $ P_4 $.\n\nTwo different $ P_4 $ groups can be decomposed into at least two $ P_2 $ or at least two $ P_3 $.\n\nConclusion 3: There exists an optimal solution where the elements in $ P_4 $ groups are a subset of those in $ P_3 $ groups (e.g., if $ P_3 $ is $ (R_1, R_2, C_3) $, then $ P_4 $ can only be $ (R_1, R_1, C_3, C_3) $ or $ (R_2, R_2, C_3, C_3) $). The proof is analogous to Conclusion 2 and is left as an exercise.\n\nBased on these conclusions, the optimal strategy is: first form as many $P_2$ groups as possible; then form as many $P_3$ groups as possible from the remaining elements; then form as many $P_4$ groups as possible from the remaining elements.\n\nAfter grouping, each group can be zeroed out with one less operation. Note that the remaining ungrouped elements require individual operations.\n\nThe time complexity is $O(\\sum nm)$.\n\nCode",
+    "solution_code": [
+      "#include<bits/stdc++.h>\nusing namespace std;\ntypedef long long ll;\nll t,n,m,a[1009][1009];\nchar s[1009];\nvector <ll> row[4],col[4];\ninline ll read(){\n\tll s = 0,w = 1;\n\tchar ch = getchar();\n\twhile (ch > '9' || ch < '0'){ if (ch == '-') w = -1; ch = getchar();}\n\twhile (ch <= '9' && ch >= '0') s = (s << 1) + (s << 3) + (ch ^ 48),ch = getchar();\n\treturn s * w;\n}\nint main(){\n\tt = read();\n\twhile (t --){\n\t\tn = read(),m = read();\n\t\tfor (ll i = 1;i <= 3;i += 1) row[i].clear(),col[i].clear();\n\t\tfor (ll i = 1;i <= n;i += 1){\n\t\t\tscanf(\"%s\",s + 1);\n\t\t\tfor (ll j = 1;j <= m;j += 1) a[i][j] = s[j] - '0';\n\t\t}\n\t\tfor (ll i = 1;i <= n;i += 1){\n\t\t\tll sum = 0;\n\t\t\tfor (ll j = 1;j <= m;j += 1) sum ^= a[i][j];\n\t\t\tif (sum) row[sum].emplace_back(i);\n\t\t}\n\t\tfor (ll j = 1;j <= m;j += 1){\n\t\t\tll sum = 0;\n\t\t\tfor (ll i = 1;i <= n;i += 1) sum ^= a[i][j];\n\t\t\tif (sum) col[sum].emplace_back(j);\n\t\t}\n\t\tll ans = 0;\n\t\tfor (ll i = 1;i <= 3;i += 1){\n\t\t\twhile (row[i].size() && col[i].size()){\n\t\t\t\tans += 1;\n\t\t\t\ta[row[i].back()][col[i].back()] ^= i;\n\t\t\t\trow[i].pop_back(),col[i].pop_back();\n\t\t\t}\n\t\t}\n\t\tfor (ll i = 1;i <= 3;i += 1){\n\t\t\tll j = i % 3 + 1,k = j % 3 + 1;\n\t\t\twhile (row[i].size() && col[j].size() && col[k].size()){\n\t\t\t\tans += 2;\n\t\t\t\ta[row[i].back()][col[j].back()] ^= j;\n\t\t\t\ta[row[i].back()][col[k].back()] ^= k;\n\t\t\t\trow[i].pop_back(),col[j].pop_back(),col[k].pop_back();\n\t\t\t}\n\t\t\twhile (col[i].size() && row[j].size() && row[k].size()){\n\t\t\t\tans += 2;\n\t\t\t\ta[row[j].back()][col[i].back()] ^= j;\n\t\t\t\ta[row[k].back()][col[i].back()] ^= k;\n\t\t\t\tcol[i].pop_back(),row[j].pop_back(),row[k].pop_back();\n\t\t\t}\n\t\t}\n\t\tfor (ll i = 1;i <= 3;i += 1) for (ll j = 1;j <= 3;j += 1) if (i != j){\n\t\t\twhile (row[i].size() >= 2 && col[j].size() >= 2){\n\t\t\t\tll r1 = row[i].back(); row[i].pop_back();\n\t\t\t\tll r2 = row[i].back(); row[i].pop_back();\n\t\t\t\tll c1 = col[j].back(); col[j].pop_back();\n\t\t\t\tll c2 = col[j].back(); col[j].pop_back();\n\t\t\t\tans += 3;\n\t\t\t\ta[r1][c1] ^= i;\n\t\t\t\ta[r2][c1] ^= (i ^ j);\n\t\t\t\ta[r2][c2] ^= j;\n\t\t\t}\n\t\t}\n\t\tfor (ll i = 1;i <= 3;i += 1){\n\t\t\twhile (row[i].size()) ans += 1,a[row[i].back()][1] ^= i,row[i].pop_back();\n\t\t\twhile (col[i].size()) ans += 1,a[1][col[i].back()] ^= i,col[i].pop_back();\n\t\t}\n\t\tprintf(\"%lld\\n\",ans);\n\t\tfor (ll i = 1;i <= n;i += 1,puts(\"\")) for (ll j = 1;j <= m;j += 1) printf(\"%lld\",a[i][j]);\n\t}\n\treturn 0;\n}"
+    ]
+  }
+}

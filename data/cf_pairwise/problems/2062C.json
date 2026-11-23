@@ -1,0 +1,43 @@
+{
+  "contest_id": 2062,
+  "index": "C",
+  "name": "Cirno and Operations",
+  "rating": 1200,
+  "tags": [
+    "brute force",
+    "math"
+  ],
+  "points": 1000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2062C",
+  "url": "https://codeforces.com/problemset/problem/2062/C",
+  "contest_start_time": "2025-01-26T14:35:00+00:00",
+  "statement": {
+    "title": "C. Cirno and Operations",
+    "time_limit": "2 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "Cirno has a sequence $a$ of length $n$. She can perform either of the following two operations for any (possibly, zero) times unless the current length of $a$ is $1$:\n\n Reverse the sequence. Formally, $[a_1,a_2,\\ldots,a_n]$ becomes $[a_n,a_{n-1},\\ldots,a_1]$ after the operation.\n\n Replace the sequence with its difference sequence. Formally, $[a_1,a_2,\\ldots,a_n]$ becomes $[a_2-a_1,a_3-a_2,\\ldots,a_n-a_{n-1}]$ after the operation.\n\nFind the maximum possible sum of elements of $a$ after all operations.",
+    "input_spec": "The first line of input contains a single integer $t$ ($1 \\leq t \\leq 100$) — the number of input test cases.\n\nThe first line of each test case contains a single integer $n$ ($1\\le n\\le 50$) — the length of sequence $a$.\n\nThe second line of each test case contains $n$ integers $a_1,a_2,\\ldots,a_n$ ($|a_i|\\le 1000$) — the sequence $a$.",
+    "output_spec": "For each test case, print an integer representing the maximum possible sum.",
+    "note": "In the first test case, Cirno can not perform any operation, so the answer is $-1000$.\n\nIn the second test case, Cirno firstly reverses the sequence, then replaces the sequence with its difference sequence: $[5,-3]\\to[-3,5]\\to[8]$. It can be proven that this maximizes the sum, so the answer is $8$.\n\nIn the third test case, Cirno can choose not to operate, so the answer is $1001$.",
+    "samples": [
+      {
+        "input": "5\n1\n-1000\n2\n5 -3\n2\n1000 1\n9\n9 7 9 -9 9 -8 7 -8 9\n11\n678 201 340 444 453 922 128 987 127 752 0",
+        "output": "\n-1000\n8\n1001\n2056\n269891"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 138866,
+    "url": "https://codeforces.com/blog/entry/138866",
+    "tutorial": "Let the reversal be called operation $1$, and the difference be called operation $2$. Consider swapping two adjacent operations: $12 \\to 21$. If the sequence before the operations is $[a_1, a_2, \\dots, a_n]$, then after the operations, the sequence changes from $[a_{n-1} - a_n, a_{n-2} - a_{n-1}, \\dots, a_1 - a_2]$ to $[a_n - a_{n-1}, a_{n-1} - a_{n-2}, \\dots, a_2 - a_1]$. Thus, swapping adjacent $1,2$ is equivalent to taking the negation of each element of the array.\n\nTherefore, any operation sequence is equivalent to first performing $2$ several times, and then performing $1$ several times, and then taking the negation several times. Since $1$ does not change the sum of the sequence, the answer is the maximum absolute value of the sequence sum after performing a certain number of $2$.\n\nThere is a corner case: if you don't perform $2$ at all, you can not take the negation. Besides, the upper bound of the answer is $1000\\times 2^{50}$, so you have to use 64-bit integers.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\nusing namespace std;\n \nlong long a[1010];\n \nint main(){\n\tint t;\n\tcin >> t;\n\twhile (t--){\n\t\tint n;\n\t\tcin >> n;\n\t\tfor (int i = 1; i <= n; i++) cin >> a[i];\n\t\tint now = n;\n\t\tlong long ans = -1e18;\n\t\tfor (int i = 1; i <= n; i++){\n\t\t\tlong long sum = 0;\n\t\t\tfor (int i = 1; i <= now; i++) sum = (sum + a[i]) ;\n\t\t\tif (i == 1) ans = max(ans, sum);\n\t\t\telse ans = max(ans, max(sum, ( - sum) ));\n\t\t\tfor (int i = 1; i < now; i++) a[i] = (a[i + 1] - a[i]) ;\n\t\t\tnow--;\n\t\t}\n\t\tcout << ans << endl; \n\t}\n\treturn 0;\n}",
+      "from math import *\nfor _ in range(int(input())):\n\tn=int(input())\n\ta=list(map(int,input().split()))\n\tans=sum(a)\n\twhile n>1:\n\t\tn-=1\n\t\ta=[a[i+1]-a[i] for i in range(n)]\n\t\tans=max(ans,abs(sum(a)))\n\tprint(ans)"
+    ]
+  }
+}

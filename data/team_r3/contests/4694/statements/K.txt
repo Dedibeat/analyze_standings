@@ -1,0 +1,43 @@
+The 2026 ICPC Asia Wuhan Regional Contest China, Wuhan, November 1, 2026
+
+Problem K. Salary Adjustment
+
+You are an employee of Incredibly Clever Pig Corporation (ICPC).
+There are n employees in the corporation, numbered 1, 2, . . . , n. The superior-subordinate relationships among the employees form a rooted tree with employee 1 as the root. For i = 2, 3, . . . , n, the direct superior of employee i is employee fi. It is guaranteed that 1  fi < i. The corporation is about to adjust the salaries of all its employees. The current salary of employee i is ai, and the target salary is bi. The whole adjustment process lasts exactly n days: each day, exactly one employee who has not been adjusted yet is chosen, and on that day the salary of the chosen employee is changed directly from its current value to its target value. Therefore, the adjustment process corresponds to a permutation p = (p1, p2, . . . , pn) of 1 to n, where pk denotes the employee adjusted on the k-th day. However, the corporation has strict rules about salaries. Specifically, if employee u is a superior of employee v, then at any moment the salary of employee u must not be lower than the salary of employee v. It is guaranteed that both the salaries ai before the adjustment and the salaries bi after the adjustment satisfy this rule.
+A permutation p corresponding to an adjustment process is legal if and only if this rule still holds after each day's adjustment is completed.
+Please find the number of legal permutations p, modulo 998 244 353.
+Input
+There are multiple test cases.
+The first line contains an integer T (1  T  104), indicating the number of test cases.
+For each test case:
+
+� The first line contains an integer n (2  n  2 � 105), indicating the number of employees.
+� The second line contains n - 1 integers f2, f3, � � � , fn (1  fi < i), where fi indicates the direct superior of employee i.
+� The third line contains n integers a1, a2, � � � , an (1  ai  109), indicating the current salary of each employee.
+� The fourth line contains n integers b1, b2, � � � , bn (1  bi  109), indicating the target salary of each employee.
+
+It is guaranteed that the sum of n over all test cases does not exceed 2 � 105.
+
+Output
+
+For each test case, output one line containing an integer, indicating the number of legal permutations p modulo 998 244 353.
+
+Example
+
+standard input
+
+standard output
+
+2 4 112 5342 7654 8 1112553 64354342 95772115
+
+4 1680
+
+Page 23 of 28
+
+The 2026 ICPC Asia Wuhan Regional Contest China, Wuhan, November 1, 2026
+Note
+In the first test case of the sample, the superior-subordinate relationships are as follows: employee 1 is the direct superior of employees 2 and 3, and employee 2 is the direct superior of employee 4. The current salaries are (5, 3, 4, 2), and the target salaries are (7, 6, 5, 4). The four legal permutations p are (1, 2, 3, 4), (1, 2, 4, 3), (1, 3, 2, 4), and (3, 1, 2, 4). For example, when p = (1, 2, 3, 4), the salaries change as follows:
+(5, 3, 4, 2) - (7, 3, 4, 2) - (7, 6, 4, 2) - (7, 6, 5, 2) - (7, 6, 5, 4) After the adjustment on each of these days is completed, the salary of a superior is not lower than the salary of a subordinate.
+Page 24 of 28
+
+

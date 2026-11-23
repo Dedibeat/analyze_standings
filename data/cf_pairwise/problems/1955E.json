@@ -1,0 +1,44 @@
+{
+  "contest_id": 1955,
+  "index": "E",
+  "name": "Long Inversions",
+  "rating": 1700,
+  "tags": [
+    "brute force",
+    "greedy",
+    "implementation",
+    "sortings"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1955E",
+  "url": "https://codeforces.com/problemset/problem/1955/E",
+  "contest_start_time": "2024-04-08T14:35:00+00:00",
+  "statement": {
+    "title": "E. Long Inversions",
+    "time_limit": "3 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "A binary string $s$ of length $n$ is given. A binary string is a string consisting only of the characters '1' and '0'.\n\nYou can choose an integer $k$ ($1 \\le k \\le n$) and then apply the following operation any number of times: choose $k$ consecutive characters of the string and invert them, i.e., replace all '0' with '1' and vice versa.\n\nUsing these operations, you need to make all the characters in the string equal to '1'.\n\nFor example, if $n=5$, $s=00100$, you can choose $k=3$ and proceed as follows:\n\n choose the substring from the $1$-st to the $3$-rd character and obtain $s=\\color{blue}{110}00$;\n\n choose the substring from the $3$-rd to the $5$-th character and obtain $s=11\\color{blue}{111}$;\n\nFind the maximum value of $k$ for which it is possible to make all the characters in the string equal to '1' using the described operations. Note that the number of operations required to achieve this is not important.",
+    "input_spec": "The first line contains an integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases.\n\nThe first line of each test case contains an integer $n$ ($1 \\le n \\le 5000$) — the length of the string $s$.\n\nThe second line of each test case contains a string $s$ of length $n$, consisting of the characters '1' and '0'.\n\nIt is guaranteed that the sum of the values $n^2$ over all test cases in the test does not exceed $25 \\cdot 10^6$.",
+    "output_spec": "For each test case, output the maximum integer $k$ ($1 \\le k \\le n$) for which it is possible to obtain a string $s$ consisting only of the characters '1' using the described operations.",
+    "note": null,
+    "samples": [
+      {
+        "input": "5\n5\n00100\n5\n01000\n7\n1011101\n3\n000\n2\n10",
+        "output": "\n3\n2\n4\n3\n1"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 128243,
+    "url": "https://codeforces.com/blog/entry/128243",
+    "tutorial": "No substring of the string needs to be inverted twice, as it does not change the string in any way. Let's fix $k$ and try to check if all the characters of the string can be made equal to 1. Suppose the first $i$ characters are already equal to 1, and $s_{i + 1}=0$. Then we need to invert all the bits starting from the $i + 1$-th to the $i + k$-th inclusive, i.e., not invert the first $i$ characters. If we invert any of the first $i$ characters, then we will have to invert it again. Either we will invert $s_{i + 1}$ again, so it will become equal to 0, or we will invert the characters to the left and come to the same situation, but for a smaller prefix.\n\nNaive checking for a fixed $k$ takes $O(n \\cdot k)$ time, if we honestly invert $k$ characters every time we encounter 0. We will maintain an inversion counter — how many times we need to invert a character of the string. Getting the actual value of a character is simple — if the counter is odd, invert the character. If $s_{i} = 0$, add $1$ to the counter, and remember that we need to subtract $1$ from the counter after position $i + k$, forming a segment $[i, i + k)$. This way, the complexity of the check will be $O(n)$.\n\nIt remains to iterate over $k$ and find the maximum for which it was possible to bring the string to all 1s. The complexity of the solution is $O(n ^ 2)$.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n \nusing ll = signed long long int;\n \n#define all(x) (x).begin(), (x).end()\n \nusing pii = std::array<int, 2>;\nusing pll = std::array<ll, 2>;\nusing vi = std::vector<int>;\nusing vl = std::vector<ll>;\n \nusing namespace std;\n \nvoid solve() {\n    int n;\n    string s;\n    cin >> n >> s;\n    for (int k = n; k > 0; --k) {\n        vector<char> t(n), end(n + 1);\n        for (int i = 0; i < n; ++i) {\n            t[i] = s[i] - '0';\n        }\n        int cnt = 0;\n        for (int i = 0; i < n; ++i) {\n            cnt -= end[i];\n            t[i] ^= (cnt & 1);\n            if (t[i] == 0) {\n                if (i + k <= n) {\n                    ++end[i + k];\n                    ++cnt;\n                    t[i] = 1;\n                } else {\n                    break;\n                }\n            }\n        }\n        if (*min_element(all(t)) == 1) {\n            cout << k << '\\n';\n            return;\n        }\n    }\n    assert(false);\n}\n \nint main() {\n    int t;\n    cin >> t;\n    while (t--) {\n        solve();\n    }\n}"
+    ]
+  }
+}

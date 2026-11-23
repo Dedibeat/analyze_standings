@@ -1,0 +1,40 @@
+{
+  "contest_id": 2037,
+  "index": "B",
+  "name": "Intercepted Inputs",
+  "rating": 800,
+  "tags": [
+    "brute force",
+    "implementation"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2037B",
+  "url": "https://codeforces.com/problemset/problem/2037/B",
+  "contest_start_time": "2024-11-17T14:35:00+00:00",
+  "statement": {
+    "title": "B. Intercepted Inputs",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "To help you prepare for your upcoming Codeforces contest, Citlali set a grid problem and is trying to give you a $n$ by $m$ grid through your input stream. Specifically, your input stream should contain the following:\n\n The first line contains two integers $n$ and $m$ — the dimensions of the grid.\n\n The following $n$ lines contain $m$ integers each — the values of the grid.\n\nHowever, someone has intercepted your input stream, shuffled all given integers, and put them all on one line! Now, there are $k$ integers all on one line, and you don't know where each integer originally belongs. Instead of asking Citlali to resend the input, you decide to determine the values of $n$ and $m$ yourself.\n\nOutput any possible value of $n$ and $m$ that Citlali could have provided.",
+    "input_spec": "The first line contains an integer $t$ ($1 \\leq t \\leq 10^4$) — the number of test cases.\n\nThe first line of each test case contains an integer $k$ ($3 \\leq k \\leq 2 \\cdot 10^5$) — the total number of inputs in your input stream.\n\nThe following line of each test case contains $k$ integers $a_1, a_2, \\ldots, a_k$ ($1 \\leq a_i \\leq k$) — the shuffled inputs of your input stream. It is guaranteed that $n$ and $m$ are contained within the $k$ integers.\n\nIt is guaranteed that the sum of $k$ over all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, output two integers, one possible value of $n$ and $m$. If multiple possible answers exist, output any.",
+    "note": "In the first test case, the initial input could have been the following:\n\n1 1\n\n2\n\nIn the second test case, the initial input could have been the following:\n\n3 3\n\n4 5 6\n\n7 8 9\n\n9 10 11",
+    "samples": [
+      {
+        "input": "5\n3\n1 1 2\n11\n3 3 4 5 6 7 8 9 9 10 11\n8\n8 4 8 3 8 2 8 1\n6\n2 1 4 5 3 3\n8\n1 2 6 3 8 5 5 3",
+        "output": "\n1 1\n3 3\n2 3\n4 1\n1 6"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 136334,
+    "url": "https://codeforces.com/blog/entry/136334",
+    "tutorial": "2037B — Intercepted Inputs\n\nVideo",
+    "solution_code": []
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "contest_id": 2109,
+  "index": "B",
+  "name": "Slice to Survive",
+  "rating": 1200,
+  "tags": [
+    "bitmasks",
+    "greedy",
+    "math"
+  ],
+  "points": 1000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2109B",
+  "url": "https://codeforces.com/problemset/problem/2109/B",
+  "contest_start_time": "2025-05-17T14:35:00+00:00",
+  "statement": {
+    "title": "B. Slice to Survive",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "Duelists Mouf and Fouad enter the arena, which is an $n \\times m$ grid!\n\nFouad's monster starts at cell $(a, b)$, where rows are numbered $1$ to $n$ and columns $1$ to $m$.\n\nMouf and Fouad will keep duelling until the grid consists of only one cell.\n\nIn each turn:\n\n Mouf first cuts the grid along a row or column line into two parts, discarding the part without Fouad's monster. Note that the grid must have at least two cells; otherwise, the game has already ended.\n\n After that, in the same turn, Fouad moves his monster to any cell (possibly the same one it was in) within the remaining grid.\n\n  Visualization of the phases of the fourth test case.\nMouf wants to minimize the number of turns, while Fouad wants to maximize them. How many turns will this epic duel last if both play optimally?",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 10^4$). The description of the test cases follows.\n\nThe first and only line of each test case contains four integers $n$, $m$, $a$, and $b$ ($2 \\le n, m \\le 10^9$, $1 \\le a \\le n$, $1 \\le b \\le m$) — denoting the number of rows, the number of columns, the starting row of the monster, and the starting column of the monster, respectively.",
+    "output_spec": "For each test case, output a single integer — the number of turns this epic duel will last if both play optimally.",
+    "note": "In the first test case, one possible duel sequence is as follows:\n\n Turn 1: Mouf cuts the grid horizontally along the line between the rows $1$ and $2$, removing the bottom half and leaving a $1 \\times 2$ grid.\n\n Turn 1: Fouad's monster is at the cell $(1,1)$.\n\n Turn 2: Mouf cuts the $1 \\times 2$ grid again, removes one column, and isolates the cell $(1,1)$.\n\nThe duel is completed in $2$ turns.\n\nIn the fourth case, one possible duel sequence is as follows:\n\n Turn 1: Mouf cuts the grid vertically along the line between the columns $2$ and $3$, splitting it into a $2 \\times 2$ and a $2 \\times 5$ field, then removes the $2 \\times 5$ part.\n\n Turn 1: Fouad moves the monster to the cell $(1,1)$.\n\n From this point on, the duel plays out just like the first test case—two more turns trim down the grid from $2 \\times 2$ to a single $1 \\times 1$ cell.\n\nIn total, the duel is completed in $3$ turns.\n\nYou can refer to the pictures mentioned in the problem statement for illustrations of the fourth test case.",
+    "samples": [
+      {
+        "input": "8\n2 2 1 1\n3 3 2 2\n2 7 1 4\n2 7 2 2\n8 9 4 6\n9 9 5 5\n2 20 2 11\n22 99 20 70",
+        "output": "\n2\n4\n4\n3\n6\n8\n6\n10"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 142960,
+    "url": "https://codeforces.com/blog/entry/142960",
+    "tutorial": "2109B - Slice to Survive\n\nIdea by MOUFLESS, prepared by MOUFLESS and FetFot.\n\nHints\n\nHint 1\n\nWhat changes if the turn order is reversed — starting with Fouad's move before Mouf's cut?\n\nHint 2\n\nCan the row and column dimensions be treated independently, or do they interact? How might that influence your approach?\n\nSolution\n\nWe restructure the game by grouping each move (Fouad's move) with the following cut (Mouf's cut). After Mouf performs his initial cut, each combined turn consists of Fouad first moving to any remaining cell, followed by Mouf cutting the grid.\n\nNow, let's temporarily set aside the initial cut and focus on the state of the grid just before Fouad's first move in this new structure. Suppose the remaining Grid has dimensions $n' \\times m'$. Since each cut affects only one dimension, we can handle the row and column reductions independently. Thus, the number of required turns is:\n $ f(n') + f(m') $\nwhere $f(l)$ denotes the number of turns required to reduce a $1 \\times l$ grid to a single cell. The function $f(l)$ can be defined recursively as:\n $ f(l) = \\begin{cases} 0 & l = 1, \\\\ 1 + \\max\\limits_{1 \\le i \\le l} \\min(f(i), f(l - i + 1)) & l  \\gt  1. \\end{cases} $\nGiven that $f$ is non-decreasing, the minimum between $f(i)$ and $f(l − i + 1)$ is maximized when $i = \\left\\lfloor \\frac{l}{2} \\right\\rfloor$. Thus, we simplify the recurrence as:\n $ f(l) = 1 + f\\left(\\left\\lceil \\frac{l}{2} \\right\\rceil \\right) $\nNow returning to the initial cut, note that it is in Mouf's best interest to minimize $n'$ and $m'$ since $f$ is non-decreasing. To do so, he should ensure Fouad ends up on the boundary of the remaining grid after the first cut. This yields four possible configurations:\n $ (n', m') \\in S = \\{ (a, m),\\ (n - a + 1, m),\\ (n, b),\\ (n, m - b + 1) \\} $\nThe total number of turns, including the initial cut, is:\n $ \\text{ans} = 1 + \\min\\limits_{(n', m') \\in S} \\left[ f(n') + f(m') \\right] $\nThe overall time complexity is: $O(\\log(n) + \\log(m))$.\n\nCode\n\nRate the Problem\n\nAmazing problem:\n\nGood problem:\n\nAverage problem:\n\nBad problem:\n\nDidn't solve:",
+    "solution_code": [
+      "#include<bits/stdc++.h>\n\nusing namespace std;\n\nvoid solve() {\n    int n, m, a, b;\n    cin >> n >> m >> a >> b;\n\n    vector<pair<int, int>> rec({\n    make_pair(a, m), make_pair(n - a + 1, m),\n    make_pair(n, b), make_pair(n, m - b + 1)});\n\n    int ans = n + m;\n    for (auto [n1, m1] : rec) {\n        int res = 0;\n        while (n1 > 1) {\n            ++res;\n            n1 = (n1 + 1) / 2;\n        }\n        while (m1 > 1) {\n            ++res;\n            m1 = (m1 + 1) / 2;\n        }\n        ans = min(ans, res);\n    }\n\n    cout << 1 + ans << \"\\n\";\n}\n\nint main() {\n    ios::sync_with_stdio(0), cin.tie(0);\n    int t = 1;\n    cin >> t;\n    while (t--) {\n        solve();\n    }\n}"
+    ]
+  }
+}

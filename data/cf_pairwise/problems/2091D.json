@@ -1,0 +1,43 @@
+{
+  "contest_id": 2091,
+  "index": "D",
+  "name": "Place of the Olympiad",
+  "rating": 1200,
+  "tags": [
+    "binary search",
+    "greedy",
+    "math"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2091D",
+  "url": "https://codeforces.com/problemset/problem/2091/D",
+  "contest_start_time": "2025-03-25T14:35:00+00:00",
+  "statement": {
+    "title": "D. Place of the Olympiad",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "For the final of the first Olympiad by IT Campus \"NEIMARK\", a rectangular venue was prepared. You may assume that the venue is divided into $n$ rows, each containing $m$ spots for participants' desks. A total of $k$ participants have registered for the final, and each participant will sit at an individual desk. Now, the organizing committee must choose the locations for the desks in the venue.\n\nEach desk occupies one of the $m$ spots in a row. Moreover, if several desks occupy consecutive spots in the same row, we call such a group of desks a bench, and the number of desks in the group is the bench's length. For example, seating $7$ participants on a $3 \\times 4$ venue (with $n = 3, m = 4$) can be arranged as follows:\n\nIn the figure above, the first row has one bench of length $3$, the second row has one bench of length $2$, and the third row has two benches of length $1$.\n\nThe organizing committee wants to choose the locations so that the length of the longest bench is as small as possible. In particular, the same $7$ desks can be arranged in a more optimal way, so that the lengths of all benches do not exceed $2$:\n\nGiven the integers $n$, $m$, and $k$, determine the minimum possible length of the longest bench.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\leq t \\leq 10^4$). The description of the test cases follows.\n\nA single line of each test case contains three positive integers — $n$, $m$, $k$ ($1 \\leq n, m, k \\leq 10^9$, $k \\leq n\\cdot m$).",
+    "output_spec": "For each test case, output a single number — the minimum possible length of the longest bench.",
+    "note": null,
+    "samples": [
+      {
+        "input": "5\n3 4 7\n5 5 5\n1 13 2\n2 4 7\n1 5 4",
+        "output": "\n2\n1\n1\n4\n2"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 141047,
+    "url": "https://codeforces.com/blog/entry/141047",
+    "tutorial": "Let the length of the maximal bench be $x$, then to maximize the number of desks in one row — we need to put as many benches of exactly $x$ length as possible. There should be an indent after each bench, let's say, that the length of the block is $x + 1$. The total number of such blocks in a row will be $\\lfloor \\frac{m}{x + 1} \\rfloor$, and the last bench will have a length of $m \\mod (x + 1)$.\n\nThen the number of desks in one row can reach $f(x) = x \\cdot \\lfloor \\frac{m}{x + 1} \\rfloor +(m \\mod (x + 1))$.\n\nSince the rows are independent, there should be $k \\leq n \\cdot f(x)$ desks in total. We need to find the minimum $x$, and since $f(x)$ is monotonically non-decreasing, then the answer can be found using binary search.\n\n(You can also come up with a formula, we'll leave it as an exercise).\n\n$O(log \\ k)$ or $O(1)$.",
+    "solution_code": [
+      "#include <iostream>\n \nusing namespace std;\n \nvoid solve() {\n    long long n, m, k, l, r, mid;\n    cin >> n >> m >> k;\n    l = 0, r = m;\n    \n    while (l + 1 < r) {\n        mid = (l + r) / 2;\n        if ((m / (mid + 1) * mid + m % (mid + 1)) * n >= k) {\n            r = mid;\n        } else {\n            l = mid;\n        }\n    }\n    \n    cout << r << endl;\n} \n \nint main() {\n    int t = 1;\n    cin >> t;\n    while (t--) {\n        solve();\n    }\n    \n}"
+    ]
+  }
+}

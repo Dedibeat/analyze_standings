@@ -1,0 +1,43 @@
+{
+  "contest_id": 1981,
+  "index": "B",
+  "name": "Turtle and an Infinite Sequence",
+  "rating": 1300,
+  "tags": [
+    "bitmasks",
+    "math"
+  ],
+  "points": 1000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1981B",
+  "url": "https://codeforces.com/problemset/problem/1981/B",
+  "contest_start_time": "2024-05-31T10:05:00+00:00",
+  "statement": {
+    "title": "B. Turtle and an Infinite Sequence",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "There is a sequence $a_0, a_1, a_2, \\ldots$ of infinite length. Initially $a_i = i$ for every non-negative integer $i$.\n\nAfter every second, each element of the sequence will simultaneously change. $a_i$ will change to $a_{i - 1} \\mid a_i \\mid a_{i + 1}$ for every positive integer $i$. $a_0$ will change to $a_0 \\mid a_1$. Here, $|$ denotes bitwise OR.\n\nTurtle is asked to find the value of $a_n$ after $m$ seconds. In particular, if $m = 0$, then he needs to find the initial value of $a_n$. He is tired of calculating so many values, so please help him!",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 10^4$). The description of the test cases follows.\n\nThe first line of each test case contains two integers $n, m$ ($0 \\le n, m \\le 10^9$).",
+    "output_spec": "For each test case, output a single integer — the value of $a_n$ after $m$ seconds.",
+    "note": "After $1$ second, $[a_0, a_1, a_2, a_3, a_4, a_5]$ will become $[1, 3, 3, 7, 7, 7]$.\n\nAfter $2$ seconds, $[a_0, a_1, a_2, a_3, a_4, a_5]$ will become $[3, 3, 7, 7, 7, 7]$.",
+    "samples": [
+      {
+        "input": "9\n0 0\n0 1\n0 2\n1 0\n5 2\n10 1\n20 3\n1145 14\n19198 10",
+        "output": "\n0\n1\n3\n1\n7\n11\n23\n1279\n19455"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 129848,
+    "url": "https://codeforces.com/blog/entry/129848",
+    "tutorial": "Each bit of the answer is independent, so we can calculate the value of each bit of the answer separately.\n\nLet's consider the $d$-th bit. Then, $a_i = \\left\\lfloor\\frac{i}{2^d}\\right\\rfloor \\bmod 2$.\n\nEvery second, a $1$ will \"spread\" one position to the left and right.\n\nIf $a_n$ is initially $1$, then the answer for this bit is $1$.\n\nOtherwise, $a_n$ is in a continuous segment of $0$s, and we need to calculate whether the $1$s on the left and right of this segment can \"spread\" to $a_n$. Let $x = n \\bmod 2^{d + 1}$, then $0 \\le x \\le 2^d - 1$. The left $1$ spreading to $a_n$ takes $x + 1$ seconds, and the right $1$ spreading to $a_n$ takes $2^d - x$ seconds. Therefore, if $\\min(x + 1, 2^d - x) \\le m$, then $a_n$ can become $1$. Specifically, if $n  \\lt  2^d$, then there is no $1$ on the left. Therefore, in this case, if $2^d - x \\le m$, then $a_n$ can become $1$.\n\nTime complexity: $O(\\log (n + m))$ per test case.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n#define pb emplace_back\n#define fst first\n#define scd second\n#define mkp make_pair\n#define mems(a, x) memset((a), (x), sizeof(a))\n\nusing namespace std;\ntypedef long long ll;\ntypedef double db;\ntypedef unsigned long long ull;\ntypedef long double ldb;\ntypedef pair<ll, ll> pii;\n\nvoid solve() {\n\tll n, m;\n\tscanf(\"%lld%lld\", &n, &m);\n\tll ans = 0;\n\tfor (int i = 0; i <= 30; ++i) {\n\t\tll x = n & ((1LL << (i + 1)) - 1);\n\t\tll t = (1LL << i) - x;\n\t\tif (n >= (1LL << i)) {\n\t\t\tt = min(t, x + 1);\n\t\t}\n\t\tif (x >= (1LL << i) || t <= m) {\n\t\t\tans |= (1LL << i);\n\t\t}\n\t}\n\tprintf(\"%lld\\n\", ans);\n}\n\nint main() {\n\tint T = 1;\n\tscanf(\"%d\", &T);\n\twhile (T--) {\n\t\tsolve();\n\t}\n\treturn 0;\n}",
+      "#include <bits/stdc++.h>\n#define pb emplace_back\n#define fst first\n#define scd second\n#define mkp make_pair\n#define mems(a, x) memset((a), (x), sizeof(a))\n\nusing namespace std;\ntypedef long long ll;\ntypedef double db;\ntypedef unsigned long long ull;\ntypedef long double ldb;\ntypedef pair<ll, ll> pii;\n\nvoid solve() {\n\tll n, m;\n\tscanf(\"%lld%lld\", &n, &m);\n\tll l = max(0LL, n - m), r = n + m, ans = 0;\n\tfor (int i = 31; ~i; --i) {\n\t\tif ((l & (1LL << i)) || (r & (1LL << i)) || (l >> (i + 1)) != (r >> (i + 1))) {\n\t\t\tans |= (1LL << i);\n\t\t}\n\t}\n\tprintf(\"%lld\\n\", ans);\n}\n\nint main() {\n\tint T = 1;\n\tscanf(\"%d\", &T);\n\twhile (T--) {\n\t\tsolve();\n\t}\n\treturn 0;\n}"
+    ]
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "contest_id": 1991,
+  "index": "C",
+  "name": "Absolute Zero",
+  "rating": 1300,
+  "tags": [
+    "constructive algorithms",
+    "greedy",
+    "math"
+  ],
+  "points": 1000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1991C",
+  "url": "https://codeforces.com/problemset/problem/1991/C",
+  "contest_start_time": "2024-07-28T14:35:00+00:00",
+  "statement": {
+    "title": "C. Absolute Zero",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "You are given an array $a$ of $n$ integers.\n\nIn one operation, you will perform the following two-step move:\n\n Choose an integer $x$ ($0 \\le x \\le 10^{9}$).\n\n Replace each $a_i$ with $|a_i - x|$, where $|v|$ denotes the absolute value of $v$.\n\nFor example, by choosing $x = 8$, the array $[5, 7, 10]$ will be changed into $[|5-8|, |7-8|, |10-8|] = [3,1,2]$.\n\nConstruct a sequence of operations to make all elements of $a$ equal to $0$ in at most $40$ operations or determine that it is impossible. You do not need to minimize the number of operations.",
+    "input_spec": "Each test contains multiple test cases. The first line contains a single integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases. The description of test cases follows.\n\nThe first line of each test case contains a single integer $n$ ($1 \\le n \\le 2 \\cdot 10^5$) — the length of the array $a$.\n\nThe second line of each test case contains $n$ integers $a_1, a_2, \\ldots, a_n$ ($0 \\le a_i \\le 10^9$) — the elements of the array $a$.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, output a single integer $-1$ if it is impossible to make all array elements equal to $0$ in at most $40$ operations.\n\nOtherwise, output two lines. The first line of output should contain a single integer $k$ ($0 \\le k \\le 40$) — the number of operations. The second line of output should contain $k$ integers $x_1, x_2, \\ldots, x_k$ ($0 \\le x_i \\le 10^{9}$) — the sequence of operations, denoting that on the $i$-th operation, you chose $x=x_i$.\n\nIf there are multiple solutions, output any of them.\n\nYou do not need to minimize the number of operations.",
+    "note": "In the first test case, we can perform only one operation by choosing $x = 5$, changing the array from $[5]$ to $[0]$.\n\nIn the second test case, no operations are needed because all elements of the array are already $0$.\n\nIn the third test case, we can choose $x = 6$ to change the array from $[4, 6, 8]$ to $[2, 0, 2]$, then choose $x = 1$ to change it to $[1, 1, 1]$, and finally choose $x = 1$ again to change the array into $[0, 0, 0]$.\n\nIn the fourth test case, we can make all elements $0$ by following the operation sequence $(60, 40, 20, 10, 30, 25, 5)$.\n\nIn the fifth test case, it can be shown that it is impossible to make all elements $0$ in at most $40$ operations. Therefore, the output is $-1$.",
+    "samples": [
+      {
+        "input": "5\n1\n5\n2\n0 0\n3\n4 6 8\n4\n80 40 20 10\n5\n1 2 3 4 5",
+        "output": "\n1\n5\n0\n\n3\n6 1 1\n7\n60 40 20 10 30 25 5\n-1"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 132021,
+    "url": "https://codeforces.com/blog/entry/132021",
+    "tutorial": "1991C - Absolute Zero\n\nHint\n\nCan you decrease maximum by half in one operation?\n\nVideo editorial",
+    "solution_code": []
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "contest_id": 2029,
+  "index": "B",
+  "name": "Replacement",
+  "rating": 1100,
+  "tags": [
+    "constructive algorithms",
+    "games",
+    "strings"
+  ],
+  "points": 1250.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2029B",
+  "url": "https://codeforces.com/problemset/problem/2029/B",
+  "contest_start_time": "2024-11-09T14:35:00+00:00",
+  "statement": {
+    "title": "B. Replacement",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "You have a binary string$^{\\text{∗}}$ $s$ of length $n$, and Iris gives you another binary string $r$ of length $n-1$.\n\nIris is going to play a game with you. During the game, you will perform $n-1$ operations on $s$. In the $i$-th operation ($1 \\le i \\le n-1$):\n\n First, you choose an index $k$ such that $1\\le k\\le |s| - 1$ and $s_{k} \\neq s_{k+1}$. If it is impossible to choose such an index, you lose;\n\n Then, you replace $s_ks_{k+1}$ with $r_i$. Note that this decreases the length of $s$ by $1$.\n\nIf all the $n-1$ operations are performed successfully, you win.\n\nDetermine whether it is possible for you to win this game.\n\n$^{\\text{∗}}$A binary string is a string where each character is either $\\mathtt{0}$ or $\\mathtt{1}$.",
+    "input_spec": "Each test contains multiple test cases. The first line of the input contains a single integer $t$ ($1\\le t\\le 10^4$) — the number of test cases. The description of test cases follows.\n\nThe first line of each test case contains a single integer $n$ ($2\\le n\\le 10^5$) — the length of $s$.\n\nThe second line contains the binary string $s$ of length $n$ ($s_i=\\mathtt{0}$ or $\\mathtt{1}$).\n\nThe third line contains the binary string $r$ of length $n-1$ ($r_i=\\mathtt{0}$ or $\\mathtt{1}$).\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $10^5$.",
+    "output_spec": "For each test case, print \"YES\" (without quotes) if you can win the game, and \"NO\" (without quotes) otherwise.\n\nYou can output the answer in any case (upper or lower). For example, the strings \"yEs\", \"yes\", \"Yes\", and \"YES\" will be recognized as positive responses.",
+    "note": "In the first test case, you cannot perform the first operation. Thus, you lose the game.\n\nIn the second test case, you can choose $k=1$ in the only operation, and after that, $s$ becomes equal to $\\mathtt{1}$. Thus, you win the game.\n\nIn the third test case, you can perform the following operations: $\\mathtt{1}\\underline{\\mathtt{10}}\\mathtt{1}\\xrightarrow{r_1=\\mathtt{0}} \\mathtt{1}\\underline{\\mathtt{01}} \\xrightarrow{r_2=\\mathtt{0}} \\underline{\\mathtt{10}} \\xrightarrow{r_3=\\mathtt{1}} \\mathtt{1}$.",
+    "samples": [
+      {
+        "input": "6\n2\n11\n0\n2\n01\n1\n4\n1101\n001\n6\n111110\n10000\n6\n010010\n11010\n8\n10010010\n0010010",
+        "output": "\nNO\nYES\nYES\nNO\nYES\nNO"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 133516,
+    "url": "https://codeforces.com/blog/entry/133516",
+    "tutorial": "2029B - Replacement\n\nAuthor: _istil\nFirst Blood: Benq at 00:02:30\n\nHint\n\n($\\texttt{01}$ or $\\texttt{10}$ exists) $\\Longleftrightarrow$ (both $\\texttt{0}$ and $\\texttt{1}$ exist).\n\nSolution\n\nEach time we do an operation, if $s$ consists only of $\\texttt{0}$ or $\\texttt{1}$, we surely cannot find any valid indices. Otherwise, we can always perform the operation successfully. In the $i$-th operation, if $t_i=\\texttt{0}$, we actually decrease the number of $\\texttt{1}$-s by $1$, and vice versa. Thus, we only need to maintain the number of $\\texttt{0}$-s and $\\texttt{1}$-s in $s$. If any of them falls to $0$ before the last operation, the answer is NO, otherwise, the answer is YES.\n\nTime complexity: $\\mathcal{O}(n)$ per test case.\n\nCode (C++)\n\nCode (Python 3)\n\nRate the Problem\n\nAmazing problem:\n\nGood problem:\n\nAverage problem:\n\nBad problem:\n\nDidn't solve:",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n#define all(s) s.begin(), s.end()\n\nusing namespace std;\nusing ll = long long;\n\nconst int _N = 1e5 + 5;\n\nvoid solve() {\n\tint n; cin >> n;\n\tstring s, t; cin >> s >> t;\n\tint cnt0 = count(all(s), '0'), cnt1 = n - cnt0;\n\tfor (int i = 0; i < n - 1; i++) {\n\t\tif (cnt0 == 0 || cnt1 == 0) {\n\t\t\tcout << \"NO\" << '\\n';\n\t\t\treturn;\n\t\t}\n\t\tif (t[i] == '1') cnt0--;\n\t\telse cnt1--;\n\t}\n\tcout << \"YES\" << '\\n';\n}\n\nint main() {\n\tint T; cin >> T;\n\twhile (T--) {\n\t\tsolve();\n\t}\n}",
+      "for _ in range(int(input())):\n    n = int(input())\n    s = input()\n    one = s.count(\"1\")\n    zero = s.count(\"0\")\n    ans = \"YES\"\n    for ti in input():\n        if one == 0 or zero == 0:\n            ans = \"NO\"\n            break\n        one -= 1\n        zero -= 1\n        if ti == \"1\":\n            one += 1\n        else:\n            zero += 1\n    print(ans)"
+    ]
+  }
+}

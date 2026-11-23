@@ -1,0 +1,43 @@
+{
+  "contest_id": 1990,
+  "index": "C",
+  "name": "Mad MAD Sum",
+  "rating": 1500,
+  "tags": [
+    "brute force",
+    "greedy",
+    "math"
+  ],
+  "points": 1500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1990C",
+  "url": "https://codeforces.com/problemset/problem/1990/C",
+  "contest_start_time": "2024-07-20T14:35:00+00:00",
+  "statement": {
+    "title": "C. Mad MAD Sum",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "We define the $\\operatorname{MAD}$ (Maximum Appearing Duplicate) in an array as the largest number that appears at least twice in the array. Specifically, if there is no number that appears at least twice, the $\\operatorname{MAD}$ value is $0$.\n\nFor example, $\\operatorname{MAD}([1, 2, 1]) = 1$, $\\operatorname{MAD}([2, 2, 3, 3]) = 3$, $\\operatorname{MAD}([1, 2, 3, 4]) = 0$.\n\nYou are given an array $a$ of size $n$. Initially, a variable $sum$ is set to $0$.\n\nThe following process will be executed in a sequential loop until all numbers in $a$ become $0$:\n\n Set $sum := sum + \\sum_{i=1}^{n} a_i$;\n\n Let $b$ be an array of size $n$. Set $b_i :=\\ \\operatorname{MAD}([a_1, a_2, \\ldots, a_i])$ for all $1 \\le i \\le n$, and then set $a_i := b_i$ for all $1 \\le i \\le n$.\n\nFind the value of $sum$ after the process.",
+    "input_spec": "The first line contains an integer $t$ ($1 \\leq t \\leq 2 \\cdot 10^4$) — the number of test cases.\n\nFor each test case:\n\n The first line contains an integer $n$ ($1 \\leq n \\leq 2 \\cdot 10^5$) — the size of the array $a$;\n\n The second line contains $n$ integers $a_1, a_2, \\ldots, a_n$ ($1 \\leq a_i \\leq n$) — the elements of the array.\n\nIt is guaranteed that the sum of $n$ over all test cases will not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, output the value of $sum$ in a new line.",
+    "note": "In the first test case, $a=[1]$ initially.\n\nIn the first loop:\n\n Set $sum := sum + a_1 = 0+1=1$;\n\n Set $b_1 :=\\ \\operatorname{MAD}([a_1])=\\ \\operatorname{MAD}([1])=0$, and then set $a_1 := b_1$.\n\nAfter the first loop, $a=[0]$ and the process ends. The value of $sum$ after the process is $1$.\n\nIn the second test case, $a=[2,2,3]$ initially.\n\nAfter the first loop, $a=[0,2,2]$ and $sum=7$.\n\nAfter the second loop, $a=[0,0,2]$ and $sum=11$.\n\nAfter the third loop, $a=[0,0,0]$ and $sum=13$. Then the process ends.\n\nThe value of $sum$ after the process is $13$.",
+    "samples": [
+      {
+        "input": "4\n1\n1\n3\n2 2 3\n4\n2 1 1 2\n4\n4 4 4 4",
+        "output": "\n1\n13\n9\n40"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 131716,
+    "url": "https://codeforces.com/blog/entry/131716",
+    "tutorial": "C — Mad MAD Sum\n\nhint1\n\nAfter one operation, the array becomes non-decreasing.\n\nhint2\n\nConsider $a_1=a_2=\\ldots=a_n$, the operation seems to have shifted the array right.\n\nhint3\n\nWhen does the \"right shift\" parttern happen?\n\nsolution\n\nRead hints first.\n\nLet's consider only non-decreasing arrays. Observe a continuous segments $a[l...r]=x(l \\lt r,x \\gt 0)$, after one operation, we get $a[l+1,min(r+1,n)]=x$ holds. We can conclude that if, for all non-zero contiguous segments in the array (except the last one), their lengths are all greater than $1$, then the array follows the \"right shift\" parttern. Let's say this kind of array \"good\".\n\nThe last problem is when will the array become \"good\". Let's assume we get the array $b$ after one operation on array $a$, we get $b_i \\lt b_{i+1} \\lt b_{i+2}$. We can infer that $b_i=a_i,b_{i+1}=a_{i+1}$ and there is at least $a_j=a_{i+1}(j \\le i)$, which shows that $a$ is not non-decreasing. In other words, after two operations, we can always get a \"good\" array. Then the calculating is trival.\n\nTime complexity: $O(n)$.\n\ncode\n\nfun fact\n\nThe title \"Mad MAD Sum\" is not only a pun on the words Mad and MAD (Maximum Appearing Duplicate), but also implies the solution to the problem :)",
+    "solution_code": [
+      "#include <bits/stdc++.h>\nusing namespace std;\n#define m_p make_pair\n#define all(x) (x).begin(),(x).end()\n#define sz(x) ((int)(x).size())\n#define fi first\n#define se second\ntypedef long long ll;\nmt19937 rnd(chrono::steady_clock::now().time_since_epoch().count());\nmt19937 rnf(2106);\nconst int N = 200005;\n\nint n;\nint a[N];\n\nbool c[N];\nvoid doit()\n{\n    for (int i = 1; i <= n; ++i)\n        c[i] = false;\n    int maxu = 0;\n    for (int i = 1; i <= n; ++i)\n    {\n        if (c[a[i]])\n            maxu = max(maxu, a[i]);\n        c[a[i]] = true;\n        a[i] = maxu;\n    }\n}\n\nvoid solv()\n{\n    cin >> n;\n    for (int i = 1; i <= n; ++i)\n        cin >> a[i];\n\n    ll ans = 0;\n    for (int i = 1; i <= n; ++i)\n        ans += a[i];\n    doit();\n    for (int i = 1; i <= n; ++i)\n        ans += a[i];\n    doit();\n\n    for (int i = 1; i <= n; ++i)\n        ans += (n - i + 1) * 1LL * a[i];\n    cout << ans << \"\\n\";\n}\n\nint main()\n{\n    #ifdef SOMETHING\n    freopen(\"input.txt\", \"r\", stdin);\n    //freopen(\"output.txt\", \"w\", stdout);\n    #endif // SOMETHING\n    ios_base::sync_with_stdio(false), cin.tie(0);\n\n    int tt = 1;\n    cin >> tt;\n    while (tt--)\n    {\n        solv();\n    }\n    return 0;\n}"
+    ]
+  }
+}

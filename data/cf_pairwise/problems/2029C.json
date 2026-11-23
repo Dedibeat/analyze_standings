@@ -1,0 +1,45 @@
+{
+  "contest_id": 2029,
+  "index": "C",
+  "name": "New Rating",
+  "rating": 1700,
+  "tags": [
+    "binary search",
+    "data structures",
+    "dp",
+    "greedy"
+  ],
+  "points": 1750.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2029C",
+  "url": "https://codeforces.com/problemset/problem/2029/C",
+  "contest_start_time": "2024-11-09T14:35:00+00:00",
+  "statement": {
+    "title": "C. New Rating",
+    "time_limit": "2 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "Hello, Codeforces Forcescode!\n\nKevin used to be a participant of Codeforces. Recently, the KDOI Team has developed a new Online Judge called Forcescode.\n\nKevin has participated in $n$ contests on Forcescode. In the $i$-th contest, his performance rating is $a_i$.\n\nNow he has hacked into the backend of Forcescode and will select an interval $[l,r]$ ($1\\le l\\le r\\le n$), then skip all of the contests in this interval. After that, his rating will be recalculated in the following way:\n\n Initially, his rating is $x=0$;\n\n For each $1\\le i\\le n$, after the $i$-th contest,\n\n If $l\\le i\\le r$, this contest will be skipped, and the rating will remain unchanged;\n\n Otherwise, his rating will be updated according to the following rules:\n\n If $a_i \\gt x$, his rating $x$ will increase by $1$;\n\n If $a_i=x$, his rating $x$ will remain unchanged;\n\n If $a_i \\lt x$, his rating $x$ will decrease by $1$.\n\nYou have to help Kevin to find his maximum possible rating after the recalculation if he chooses the interval $[l,r]$ optimally. Note that Kevin has to skip at least one contest.",
+    "input_spec": "Each test contains multiple test cases. The first line of the input contains a single integer $t$ ($1\\le t\\le 5\\cdot 10^4$) — the number of test cases. The description of test cases follows.\n\nThe first line of each test case contains a single integer $n$ ($1\\le n\\le 3\\cdot 10^5$) — the number of contests.\n\nThe second line contains $n$ integers $a_1,a_2,\\ldots,a_n$ ($1\\le a_i\\le n$) — the performance ratings in the contests.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $3 \\cdot 10^5$.",
+    "output_spec": "For each test case, output a single integer — the maximum possible rating after the recalculation if Kevin chooses the interval optimally.",
+    "note": "In the first test case, Kevin must skip at least one contest. If he chooses any interval of length $1$, his rating after the recalculation will be equal to $5$.\n\nIn the second test case, Kevin's optimal choice is to select the interval $[3,5]$. During the recalculation, his rating changes as follows:\n\n$$ 0 \\xrightarrow{a_1=1} 1 \\xrightarrow{a_2=2} 2 \\xrightarrow{\\mathtt{skip}} 2 \\xrightarrow{\\mathtt{skip}} 2 \\xrightarrow{\\mathtt{skip}} 2 \\xrightarrow{a_6=3} 3 \\xrightarrow{a_7=4} 4 $$\n\nIn the third test case, Kevin must skip the only contest, so his rating will remain at the initial value of $0$.\n\nIn the fourth test case, Kevin's optimal choice is to select the interval $[7,9]$. During the recalculation, his rating changes as follows:\n\n$$ 0 \\xrightarrow{a_1=9} 1 \\xrightarrow{a_2=9} 2 \\xrightarrow{a_3=8} 3 \\xrightarrow{a_4=2} 2 \\xrightarrow{a_5=4} 3 \\xrightarrow{a_6=4} 4 \\xrightarrow{\\mathtt{skip}} 4 \\xrightarrow{\\mathtt{skip}} 4 \\xrightarrow{\\mathtt{skip}} 4 $$\n\nIn the fifth test case, Kevin's optimal choice is to select the interval $[5,9]$.",
+    "samples": [
+      {
+        "input": "5\n6\n1 2 3 4 5 6\n7\n1 2 1 1 1 3 4\n1\n1\n9\n9 9 8 2 4 4 3 5 3\n10\n1 2 3 4 1 3 2 1 1 10",
+        "output": "\n5\n4\n0\n4\n5"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 133516,
+    "url": "https://codeforces.com/blog/entry/133516",
+    "tutorial": "2029C - New Rating\n\nAuthor: Error_Yuan\nFirst Blood: ksun48 at 00:05:34\n\nSolution 1 (with hints)\n\nHint 1\n\nBinary search.\n\nHint 2\n\nDo something backward.\n\nSolution\n\nFirst, do binary search on the answer. Suppose we're checking whether the answer can be $\\ge k$ now.\n\nLet $f_i$ be the current rating after participating in the $1$-st to the $i$-th contest (without skipping).\n\nLet $g_i$ be the minimum rating before the $i$-th contest to make sure that the final rating is $\\ge k$ (without skipping).\n\n$f_i$-s can be calculated easily by simulating the process in the statement. For $g_i$-s, it can be shown that\n $ g_i= \\begin{cases} g_{i+1}-1, & a_i\\ge g_{i+1}\\\\ g_{i+1}+1, & a_i \\lt  g_{i+1} \\end{cases} $\nwhere $g_{n+1}=k$.\n\nThen, we should check if there exists an interval $[l,r]$ ($1\\le l\\le r\\le n$), such that $f_{l-1}\\ge g_{r+1}$. If so, we can choose to skip $[l,r]$ and get a rating of $\\ge k$. Otherwise, it is impossible to make the rating $\\ge k$.\n\nWe can enumerate on $r$ and use a prefix max to check whether valid $l$ exists.\n\nTime complexity: $\\mathcal{O}(n\\log n)$ per test case.\n\nSolution 2 (with hints)\n\nHint 1\n\nConsider DP.\n\nHint 2\n\nThere are only three possible states for each contest: before, in, or after the skipped interval.\n\nSolution\n\nConsider $dp_{i,0/1/2}=$ the maximum rating after the $i$-th contest, where the $i$-th contest is before/in/after the skipped interval.\n\nLet $f(a,x)=$ the result rating when current rating is $a$ and the performance rating is $x$, then\n $ \\begin{cases} dp_{i,0} = f(dp_{i-1,0}, a_i),\\\\ dp_{i,1} = \\max(dp_{i-1,1}, dp_{i-1,0}), \\\\ dp_{i,2} = \\max(f(dp_{i-1,1}, a_i), f(dp_{i-1,2}, a_i)). \\end{cases} $\nAnd the final answer is $\\max(dp_{n,1}, dp_{n,2})$.\n\nTime complexity: $\\mathcal{O}(n)$ per test case.\n\nCode (Solution 1, C++)\n\nCode (Solution 2, Python 3)\n\nRate the Problem\n\nAmazing problem:\n\nGood problem:\n\nAverage problem:\n\nBad problem:\n\nDidn't solve:",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n#define all(s) s.begin(), s.end()\nusing namespace std;\nusing ll = long long;\nusing ull = unsigned long long;\n\nconst int _N = 1e5 + 5;\n\nint T;\n\nvoid solve() {\n\tint n; cin >> n;\n\tvector<int> a(n + 1);\n\tfor (int i = 1; i <= n; i++) cin >> a[i];\n\tvector<int> pre(n + 1);\n\tint curf = 0;\n\tfor (int i = 1; i <= n; i++) {\n\t\tif (curf < a[i]) curf++;\n\t\telse if (curf > a[i]) curf--;\n\t\tpre[i] = max(pre[i - 1], curf);\n\t}\n\tauto check = [&](int k) {\n\t\tint curg = k;\n\t\tfor (int i = n; i >= 1; i--) {\n\t\t\tif (pre[i - 1] >= curg) return true;\n\t\t\tif (a[i] < curg) curg++;\n\t\t\telse curg--;\n\t\t}\n\t\treturn false;\n\t};\n\tint L = 0, R = n + 1;\n\twhile (L < R) {\n\t\tint mid = (L + R + 1) >> 1;\n\t\tif (check(mid)) L = mid;\n\t\telse R = mid - 1;\n\t}\n\tcout << L << '\\n';\n\treturn;\n}\n\nint main() {\n\tios::sync_with_stdio(false), cin.tie(0), cout.tie(0);\n\tcin >> T;\n\twhile (T--) {\n\t\tsolve();\n\t}\n}",
+      "for _ in range(int(input())):\n    n = int(input())\n    \n    def f(a, x):\n        return a + (a < x) - (a > x)\n    \n    dp = [0, -n, -n]\n    for x in map(int, input().split()):\n        dp[2] = max(f(dp[1], x), f(dp[2], x))\n        dp[1] = max(dp[1], dp[0])\n        dp[0] = f(dp[0], x)\n\n    print(max(dp[1], dp[2]))"
+    ]
+  }
+}

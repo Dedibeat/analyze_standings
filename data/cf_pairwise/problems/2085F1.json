@@ -1,0 +1,42 @@
+{
+  "contest_id": 2085,
+  "index": "F1",
+  "name": "Serval and Colorful Array (Easy Version)",
+  "rating": 2600,
+  "tags": [
+    "data structures",
+    "greedy"
+  ],
+  "points": 2000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2085F1",
+  "url": "https://codeforces.com/problemset/problem/2085/F1",
+  "contest_start_time": "2025-03-22T14:35:00+00:00",
+  "statement": {
+    "title": "F1. Serval and Colorful Array (Easy Version)",
+    "time_limit": "2 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "This is the easy version of the problem. The difference between the versions is that in this version, $n\\le 3000$. You can hack only if you solved all versions of this problem.\n\nServal has a magic number $k$ ($k\\ge 2$). We call an array $r$ colorful if and only if:\n\n The length of $r$ is $k$, and\n\n Each integer between $1$ and $k$ appears exactly once in $r$.\n\nYou are given an array $a$ consisting of $n$ integers between $1$ and $k$. It is guaranteed that each integer between $1$ and $k$ appears in $a$ at least once. You can perform the following operation on $a$:\n\n Choose an index $i$ ($1\\le i  \\lt  n$), then swap $a_i$ and $a_{i+1}$.\n\nFind the minimum number of operations needed to make at least one subarray$^{\\text{∗}}$ of $a$ colorful. It can be shown that this is always possible under the constraints of the problem.\n\n$^{\\text{∗}}$An array $b$ is a subarray of an array $a$ if $b$ can be obtained from $a$ by the deletion of several (possibly, zero or all) elements from the beginning and several (possibly, zero or all) elements from the end.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 1000$). The description of the test cases follows.\n\nThe first line of each test case contains two integers $n$ and $k$ ($2\\leq k\\leq n\\leq 3000$) — the length of the array $a$ and Serval's magic number.\n\nThe second line contains $n$ integers $a_1, a_2, \\ldots, a_n$ ($1\\leq a_i\\leq k$) — the elements of the array $a$. It is guaranteed that each integer between $1$ and $k$ appears in $a$ at least once.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $3000$.",
+    "output_spec": "For each test case, output a single integer — the minimum number of operations needed to make at least one subarray of $a$ colorful.",
+    "note": "In the first test case, since the subarrays $[a_1, a_2] = [1, 2]$ and $[a_2, a_3] = [2, 1]$ are already colorful, we do not need to perform any operations. Thus, the answer is $0$.\n\nIn the second test case, we can swap $a_1$ and $a_2$ to obtain $[1, \\underline{2, 1, 3}, 1, 1, 2]$, which has a colorful subarray $[a_2, a_3, a_4] = [2, 1, 3]$. And the given array initially does not have any colorful subarrays, so the answer is $1$.",
+    "samples": [
+      {
+        "input": "6\n3 2\n1 2 1\n7 3\n2 1 1 3 1 1 2\n6 3\n1 1 2 2 2 3\n6 3\n1 2 2 2 2 3\n10 5\n5 1 3 1 1 2 2 4 1 3\n9 4\n1 2 3 3 3 3 3 2 4",
+        "output": "\n0\n1\n2\n3\n4\n5"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 140933,
+    "url": "https://codeforces.com/blog/entry/140933",
+    "tutorial": "2085F1 - Serval and Colorful Array (Easy Version)\n\nHint 1\n\nConsider the integers in the colorful subarray after swapping.\n\nHint 2\n\nHow to gather these integers together, forming a colorful subarray, with the minimum number of swaps?\n\nHint 3\n\nConsider the middle one among all the the elements in the colorful subarray.\n\nSolution\n\nConsider the elements in the colorful subarray after swapping. The first observation is as follows.\n\nObservation. Mark the elements in the colorful subarray. Before swapping, to make these marked elements continuous, gathering them toward the middle one among them minimizes the number of swaps.\n\nProof. It is not optimal to swap two marked elements. Thus, the leftmost $x$ elements will move to their right, and the rightmost $(k-x)$ elements will move to their left. They will meet at some point between the $x$-th element and the $(x+1)$-th element. If $x \\lt {k\\over 2}$, adjusting the meeting point to its right reduces $(k-x)-x \\gt 0$ swaps. If $x \\gt {k\\over 2}$, we can adjust it to its left and reduce the number of swaps similarly. Therefore, one can show that setting the meeting point to the middle of them is optimal through adjustments. $\\square$\n\nFrom the observation we can also conclude that, the minimum number of swaps required to make the marked elements continuous is the difference between the sum of the distances from each marked element to the middle position before swapping and that sum after swapping, if the marked elements are swapped toward the middle position. Notice that the latter sum is a fixed constant only related to $k$.\n\nFocusing on the middle position of the colorful subarray, we enumerate all the positions in the array as possible middle positions. For each possible middle position $p$, to form the colorful subarray whose middle position is $p$, we should choose ${k\\over 2}$ distinct integers from its left and the other $k\\over 2$ from its right. The rounding of $k\\over 2$ will not affect the correctness as long as the sum of the rounded numbers is $k$.\n\nFor each $1\\leq i\\leq k$, we should determine whether $i$ should be chosen from the left side of $p$ or the right side of $p$. Let the distance from $p$ to the rightmost integer $i$ on its left be $l_i$, and the distance for the right side be $r_i$. We should choose either $l_i$ or $r_i$ for each $i$ under the constraint that both the number of chosen $l_i$ and that of $r_i$ are $k\\over 2$, minimizing the sum of the distances we choose. This can be done by first forcing to choose all the $l_i$, and then choosing the smallest $k\\over 2$ elements of $(r_i-l_i)$ greedily.\n\nIn implementation, when enumerating the middle position $p$, both $l_i$ and $r_i$ can be simply calculated in $O(n)$ time, and then sort $(r_i - l_i)$ in $O(n\\log n)$ time. The total complexity is $O(n^2\\log n)$.\n\nCode (C++)",
+    "solution_code": [
+      "#include <cstdio>\n#include <algorithm>\n\nusing namespace std;\n\nconst int N = 3005;\nconst long long oo = 1e18;\n\nint n, k;\nint a[N], l[N], r[N], d[N];\nlong long ans;\n\nvoid solve() {\n\tscanf(\"%d%d\", &n, &k);\n\tfor (int i = 1; i <= n; i++)\n\t\tscanf(\"%d\", &a[i]);\n\tans = oo;\n\tfor (int i = 1; i <= n; i++) {\n\t\tfor (int j = 1; j <= k; j++)\n\t\t\tl[j] = r[j] = n + 1;\n\t\tfor (int j = i; j; j--)\n\t\t\tl[a[j]] = min(l[a[j]], i - j);\n\t\tfor (int j = i; j <= n; j++)\n\t\t\tr[a[j]] = min(r[a[j]], j - i);\n\t\tlong long s = 0;\n\t\tfor (int j = 1; j <= k; j++) {\n\t\t\ts += l[j];\n\t\t\td[j] = r[j] - l[j];\n\t\t}\n\t\tsort(d + 1, d + k + 1);\n\t\tfor (int j = 1; j <= (k + 1) / 2; j++)\n\t\t\ts += d[j];\n\t\tans = min(ans, s);\n\t}\n\tfor (int i = 1; i <= k; i++)\n\t\tans -= abs(i - (k + 1) / 2);\n\tprintf(\"%lld\\n\", ans);\n}\n\nint main() {\n\tint T;\n\tscanf(\"%d\", &T);\n\twhile (T--)\n\t\tsolve();\n\treturn 0;\n}"
+    ]
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "contest_id": 1951,
+  "index": "H",
+  "name": "Thanos Snap",
+  "rating": 3200,
+  "tags": [
+    "binary search",
+    "dp",
+    "games",
+    "greedy",
+    "trees"
+  ],
+  "points": 3500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1951H",
+  "url": "https://codeforces.com/problemset/problem/1951/H",
+  "contest_start_time": "2024-04-06T14:35:00+00:00",
+  "statement": {
+    "title": "H. Thanos Snap",
+    "time_limit": "3 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "Piotr Rubik - Psalm dla Ciebie\n\nඞ\n\nThere is an array $a$ of size $2^k$ for some positive integer $k$, which is initially a permutation of values from $1$ to $2^k$. Alice and Bob play the following game on the array $a$. First, a value $t$ between $1$ and $k$ is shown to both Alice and Bob. Then, for exactly $t$ turns, the following happens:\n\n Alice either does nothing, or chooses two distinct elements of the array $a$ and swaps them.\n\n Bob chooses either the left half or the right half of the array $a$ and erases it.\n\nThe score of the game is defined as the maximum value in $a$ after all $t$ turns have been played. Alice wants to maximize this score, while Bob wants to minimize it.\n\nYou need to output $k$ numbers: the score of the game if both Alice and Bob play optimally for $t$ from $1$ to $k$.",
+    "input_spec": "Each test contains multiple test cases. The first line contains an integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases. The description of the test cases follows.\n\nThe first line of each test case contains an integer $k$ ($1 \\le k \\le 20$) — the parameter of the size of $a$.\n\nThe second line of each test case contains $2^k$ integers $a_1, a_2, \\ldots, a_{2^k}$ ($1 \\le a_i \\le 2^k$, $a_i$'s are pairwise distinct) — the given array $a$.\n\nIt is guaranteed that the sum of $2^k$ over all test cases does not exceed $2^{20}$.",
+    "output_spec": "For each test case, print $k$ numbers, where the $i$-th number is the score of the game if both Alice and Bob play optimally for $t = i$.",
+    "note": "In the third test case, for $t = 2$, the game could have proceeded as follows:\n\n Initially, $a = [5, 1, 6, 4, 7, 2, 8, 3]$.\n\n Alice swaps $a_6$ and $a_8$, $a$ becomes $[5, 1, 6, 4, 7, 3, 8, 2]$.\n\n Bob erases the right half of the array, $a$ becomes $[5, 1, 6, 4]$.\n\n Alice does nothing, $a$ remains as $[5, 1, 6, 4]$.\n\n Bob erases the right half of the array, $a$ becomes $[5, 1]$.\n\n The game ends with a score of $5$.",
+    "samples": [
+      {
+        "input": "5\n1\n1 2\n2\n4 3 2 1\n3\n5 1 6 4 7 2 8 3\n4\n10 15 6 12 1 3 4 9 13 5 7 16 14 11 2 8\n5\n32 2 5 23 19 17 31 7 29 3 4 16 13 9 30 24 14 1 8 20 6 15 26 18 10 27 22 12 25 21 28 11",
+        "output": "\n1\n3 1\n7 5 1\n15 13 9 1\n31 28 25 17 1"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 128116,
+    "url": "https://codeforces.com/blog/entry/128116",
+    "tutorial": "Let $n = 2^k$. Let's see how we can solve for each $t$ first. We binary search on the answer, which results in every element being either $0$ or $1$ depending on if it's larger than the threshold, and we now need to check if the answer is $0$ or $1$.\n\nLet's instead try to directly construct Alice's strategy to achieve $1$; if we cannot construct such a strategy, the answer is $0$. The main idea here is that Alice's strategy can be represented as a perfect binary tree with $t + 1$ layers, where:\n\n Every leaf node represents a subarray of $a$ of size $2^{n - t}$.\n\n Every non-leaf node represents Alice's next action when the game is restricted to the subarray $[l, r]$ covered by this node; such an action is in the form \"swap $a_i$ and $a_j$\", where $l \\le i \\le j \\le r$.\n\nSome trivial observations:\n\n For Alice to win, we would want every leaf node to have at least one value $1$ when the game reaches that leaf node. We say a leaf is deficient if it originally did not satisfy this condition.\n\n Every leaf node that has more than one value $1$ can \"donate\" the extra $1$'s via the swapping action.\n\n If an action can be performed by Alice in a node, it can also be performed in any of its ancestors.\n\nThe third observation motivates us to look for a greedy bottom-up construction of Alice's strategy. Combining with the first two observations, we get the following greedy construction:\n\n For every node, maintain the number of deficient leaves and the number of extra $1$'s that can be donated from other leaves. At any non-leaf node, we try to match an extra $1$ with a deficient leaf (if both quantities are more than $0$), and we propagate the remaining deficient leaves and extra $1$'s to the node's parent.\n\n Alice wins if at the root node, the number of deficient leaves remaining is $0$.\n\nThis strategy can be implemented in time $O((n + 2^t) \\log n)$ or $O(n + 2^t \\log n)$ depending on implementation (to get the second complexity, note that while binary searching, the total number of element status changes between $0$ and $1$ is $O(n)$). This gives us a complexity of $O(n \\log^2 n)$ or $O(n \\log n)$ after looping through all $t$.",
+    "solution_code": []
+  }
+}

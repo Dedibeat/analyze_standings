@@ -1,0 +1,48 @@
+{
+  "contest_id": 1949,
+  "index": "E",
+  "name": "Damage per Second",
+  "rating": 2900,
+  "tags": [
+    "brute force",
+    "math"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1949E",
+  "url": "https://codeforces.com/problemset/problem/1949/E",
+  "contest_start_time": "2024-03-24T10:00:00+00:00",
+  "statement": {
+    "title": "E. Damage per Second",
+    "time_limit": "5 seconds",
+    "memory_limit": "1024 megabytes",
+    "legend": "You just created a new character in your favourite role-playing game and now have to decide how to skill him.\n\nThe two skill attributes to be chosen are: damage per hit and hits per second. Damage per hit is the amount of damage you deal with a single hit, while hits per second is the number of hits you can make in one second. Initially, both skill attributes are set at $0$. You have $k$ skill points to distribute as you want; in other words, you can choose the values of the two skills so that they are positive integers with sum at most $k$.\n\nThe tutorial of the game (the boring part you want to finish as soon as possible) consists of $n$ monsters to be killed one after the other. The $i$-th monster has $h_i$ health points, i.e., it dies after you have inflicted at least $h_i$ damage.\n\nHow can you assign the two skill attributes to minimize the time necessary to kill all the $n$ monsters?",
+    "input_spec": "The first line contains two integers $n$ and $k$ ($1\\leq n\\leq200\\,000$, $2\\leq k\\leq200\\,000$) — the number of enemies and the number of skill points.\n\nThe second line contains $n$ integers $h_i$ ($1\\leq h_i\\leq10^{13}$) — the health of the $i$th enemy.",
+    "output_spec": "Print two positive integers $x$ and $y$ ($1\\le x, y$ and $x+y\\le k$) — the number of skill points you want to invest in damage per hit and hits per second. If there are multiple optimal solutions, print any of them.",
+    "note": "In the first sample, there is only one monster and you have $7$ skill points to distribute. If you make $3$ damage per hit, you will need $5$ hits to kill it. If you do $4$ hits per second, you will need $1.25$ seconds to beat the monster. There is no way to beat the monster faster than this.\n\nIn the second sample, you will need one hit for each monster and a total time of $0.8$ seconds if you distribute $4$ skill points on damage per hit and the remaining $5$ points on hits per second.",
+    "samples": [
+      {
+        "input": "1 7\n14",
+        "output": "\n3 4"
+      },
+      {
+        "input": "4 9\n1 2 3 4",
+        "output": "\n4 5"
+      },
+      {
+        "input": "5 13\n3 4 5 6 7",
+        "output": "\n7 6"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 127514,
+    "url": "https://codeforces.com/blog/entry/127514",
+    "tutorial": "Once the sugar-coating is removed, the problem boils down to:\n\n Let $f(x) = \\sum_{i=1}^n \\left\\lceil\\frac{h_i}{x}\\right\\rceil$, and $g(x) = \\frac{f(x)}{k-x}$. Find the minimum of $g(x)$.\n\nSort the values so that $h_1\\geq h_2\\geq\\dots\\geq h_n$. Define $H:=h_1+\\dots+h_n$. From now on, we will assume that $k$ is even, so that $x=\\frac k2$ is a valid choice (the case $k$ odd is absolutely equivalent, just more annoying to write down).\n\nLet us begin with two simple observations.\n\nObservation 1. What are the \"most interesting\" values of $x$? If we ignore the ceiling in the definition of $g$, we get $g(x) \\ge \\frac{H}{x(k-x)}$ whose minimum is achieved by $x=\\frac k2$. Unless the values $h_1, \\dots, h_n$ are well-crafted, we expect the minimum of $g$ to be achieved for an $x$ very close to $\\frac k2$.\n\nObservation 2. Speeding up the computation of $g$. Let us describe a strategy to compute $g(x)$. Iterate from $i=1$ to $n$ until $i  \\lt  \\frac{h_i}{x}\\log n$. Say that such condition is satisfied for $1\\le i\\le q(x)$ and fails for $q+1$ (for notational clarity we will omit the dependence of $q$ on $x$). We compute the first part of $g(x)$, that is $\\sum_{i=1}^q \\lceil \\frac{h_i}x\\rceil$, naively in $O(q)$. For $q+1\\le i \\le n$ the quantity $\\lceil \\frac{h_i}x\\rceil$ takes at most $\\frac{h_{q+1}}x$ different values. Therefore the second part of $g(x)$, that is $\\sum_{i=q+1}^n \\lceil \\frac{h_i}x\\rceil$, can be computed in $O(\\frac{h_{q+1}}{x}\\log n) = O(q)$ by using binary search.\n\nSo, we have described a way to compute $g(x)$ in $O(q(x))$ where $q$ satisfies $h_q \\ge \\frac{qx}{\\log n}$.\n\nDescription of the algorithm. These two observations suggest the following algorithm.\n\n Maintain the running minimum $m$ of $g(x)$, initializing it as $m=g(\\frac k2)$.\n\n Iterate over all $x$, starting from those closest to $\\frac k2$ and moving further away.\n\n For each $x$, if $\\frac H{x(k-x)}\\ge m$ then skip this choice of $x$ (as it cannot be a minimizer in view of the first observation).\n\n Otherwise compute $g(x)$ in $O(q(x))$ as described in observation 2 and update $m$ accordingly.\n\nThis algorithm produces the correct answer, but is it provably fast enough? Unexpectedly yes! We will see that this algorithm has the remarkable running time $O(\\sqrt{n\\log n}k)$.\n\nRunning time analysis. Let us begin by making one further remark about the second observation. By definition of $q(x)$, we have $$ H \\ge h_1 + \\cdots + h_q \\ge qh_q \\ge \\frac{q^2x}{\\log n} \\implies q\\le \\sqrt{\\frac{H\\log n}{x}}. $$ So, we are able to compute $g(x)$ in $O(\\sqrt{\\frac{H\\log n}{x}})$ time. This is awful if $H$ is huge, but can be potentially very good if $H$ is controlled and $x$ is comparable to $k$. We will see that the opposite happens for observation 1: it is very powerful if $H$ is huge and very weak if $H$ is small. So there is a tradeoff: for $H$ large the first observation is powerful, for $H$ small the second one is powerful. This will be enough to provide a good running time for the whole algorithm.\n\nLet us now discuss the first observation. For any $1\\le x\\le k-1$, $$\\frac{H}{x(k-x)}\\leq g(x)\\leq \\frac{H}{x(k-x)} + \\frac{n}{k-x} .$$ We want to use this inequality to bound the values of $x$ that we need to check.\n\nWe have $g(\\frac k2)\\le \\frac{4H}{k^2} + \\frac{2n}{k}$ and $\\frac{H}{x(k-x)}\\leq g(x)$. Therefore, if $$ \\frac{4H}{k^2} + \\frac{2n}{k}  \\lt  \\frac{H}{x(k-x)} \\iff \\frac{k^2}4 - \\big(x-\\frac k2\\big)^2 = x(k-x)  \\lt  \\frac{H}{\\frac{4H}{k^2} + \\frac{2n}{k}} \\iff \\big(x-\\frac k2\\big)^2  \\gt  \\frac{k^2}4 - \\frac{H}{\\frac{4H}{k^2} + \\frac{2n}{k}} = \\frac{nk^3}{8H+4nk} $$ we don't have to check $x$ as it cannot yield the minimum value for $g$. In particular, we care only about the values of $x$ that satisfy $$ \\Big|x - \\frac k2\\Big| \\le \\sqrt{\\frac{nk^3}{8H}} .$$ As we anticipated, when $H$ is huge this bound is great, while when $H$ is small it is not particularly useful.\n\nConclusion. Now we have all the tools and we can conclude by considering two cases (which, morally, correspond to $H$ large and $H$ small).\n\nIf $\\sqrt{\\frac{nk^3}{8H}}  \\lt  \\frac k4$, then the interesting values of $x$ are comparable to $k$. Thus $g(x)$ can be computed in $O(\\sqrt{\\frac{H\\log n}{k}})$ and we shall do such computation $2\\sqrt{\\frac{nk^3}{8H}}$ times. So the overall complexity is $O(\\sqrt{n\\log n}k)$.\n\nOn the other hand, if $\\sqrt{\\frac{nk^3}{8H}} \\ge \\frac k4$ (which implies $H\\le 2nk$) then we use only the second observation to bound the complexity. Let us assume that we care only about values of $x$ of magnitude comparable to $k$, the other cases are easy to handle. Then, the computation of $g(x)$ requires $O(q\\log n)$. To compute $g(x)$ for all $1\\le x\\le k$, we need $$ O\\Big(\\sum_{x=1}^k \\sqrt{\\frac{H\\log n}{x}}\\Big) = \\sqrt{nk\\log n}O\\Big(\\sum_{x=1}^k x^{-1/2}\\Big) = O(\\sqrt{n\\log n}k). $$",
+    "solution_code": []
+  }
+}

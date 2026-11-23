@@ -1,0 +1,49 @@
+{
+  "contest_id": 2021,
+  "index": "E1",
+  "name": "Digital Village (Easy Version)",
+  "rating": 2300,
+  "tags": [
+    "brute force",
+    "data structures",
+    "dfs and similar",
+    "dp",
+    "dsu",
+    "fft",
+    "graphs",
+    "greedy",
+    "implementation",
+    "math",
+    "trees"
+  ],
+  "points": 1750.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2021E1",
+  "url": "https://codeforces.com/problemset/problem/2021/E1",
+  "contest_start_time": "2024-10-06T06:05:00+00:00",
+  "statement": {
+    "title": "E1. Digital Village (Easy Version)",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "This is the easy version of the problem. In the three versions, the constraints on $n$ and $m$ are different. You can make hacks only if all the versions of the problem are solved.\n\nPak Chanek is setting up internet connections for the village of Khuntien. The village can be represented as a connected simple graph with $n$ houses and $m$ internet cables connecting house $u_i$ and house $v_i$, each with a latency of $w_i$.\n\nThere are $p$ houses that require internet. Pak Chanek can install servers in at most $k$ of the houses. The houses that need internet will then be connected to one of the servers. However, since each cable has its latency, the latency experienced by house $s_i$ requiring internet will be the maximum latency of the cables between that house and the server it is connected to.\n\nFor each $k = 1,2,\\ldots,n$, help Pak Chanek determine the minimum total latency that can be achieved for all the houses requiring internet.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 100$). The description of the test cases follows.\n\nThe first line of each test case contains three integers $n$, $m$, $p$ ($2 \\le n \\le 400$; $n-1 \\le m \\le 400$; $1 \\le p \\le n$) — the number of houses, the number of cables and the number of houses that need internet.\n\nThe second line of each test case contains $p$ integers $s_1, s_2, \\ldots, s_p$ ($1 \\le s_i \\le n$) — the houses that need internet. It is guaranteed that all elements of $s$ are distinct.\n\nThe $i$-th of the next $m$ lines of each test case contains three integers $u_i$, $v_i$, and $w_i$ ($1 \\le u_i  \\lt  v_i \\le n$; $1 \\le w_i \\le 10^9$) — the internet cable connecting house $u_i$ and house $v_i$ with latency of $w_i$. It is guaranteed that the given edges form a connected simple graph.\n\nIt is guaranteed that the sum of $n^3$ and the sum of $m^3$ do not exceed $10^8$.",
+    "output_spec": "For each test case, output $n$ integers: the minimum total latency that can be achieved for all the houses requiring internet for each $k = 1,2,\\ldots,n$.",
+    "note": "In the first test case for $k=3$, a possible optimal solution is to install servers at vertices $2$, $6$ and $8$ and obtain the following latency:\n\n $\\text{latency}(2) = 0$\n\n $\\text{latency}(5) = \\max(3, 5) = 5$\n\n $\\text{latency}(6) = 0$\n\n $\\text{latency}(8) = 0$\n\n $\\text{latency}(9) = \\max(2, 4) = 4$\n\nSo the total latency is $9$.",
+    "samples": [
+      {
+        "input": "2\n9 8 5\n2 5 6 8 9\n1 2 1\n1 3 2\n3 4 10\n4 5 3\n4 6 5\n1 7 10\n7 8 4\n7 9 2\n3 3 2\n3 1\n1 2 1\n2 3 3\n1 3 2",
+        "output": "\n34 19 9 4 0 0 0 0 0\n2 0 0"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "missing"
+  },
+  "editorial": {
+    "blog_id": 134873,
+    "url": "https://codeforces.com/blog/entry/134873",
+    "tutorial": null,
+    "solution_code": []
+  }
+}

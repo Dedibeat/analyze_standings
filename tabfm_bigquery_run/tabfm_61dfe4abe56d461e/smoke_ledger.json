@@ -1,0 +1,32 @@
+{
+  "entries": {
+    "smoke_a_d4c4fe416584": {
+      "bytes_billed": 20971520,
+      "bytes_processed": 6132,
+      "completed_at": "2026-09-10T05:28:53.038143+00:00",
+      "ended": "2026-09-10T05:28:51.793000+00:00",
+      "input_hash": "d4c4fe416584571c686266a4c81ec24573600a9d3d4c30624e221f40458a4ae2",
+      "job_id": "smoke_a_d4c4fe416584",
+      "purpose": "predict:smoke_a",
+      "reserved_at": "2026-09-10T05:28:17.472848+00:00",
+      "started": "2026-09-10T05:28:18.412000+00:00",
+      "status": "complete",
+      "submitted_new": true
+    },
+    "smoke_b_b5b63a9eeeb5": {
+      "bytes_billed": 20971520,
+      "bytes_processed": 6132,
+      "completed_at": "2026-09-10T05:29:30.302083+00:00",
+      "ended": "2026-09-10T05:29:29.174000+00:00",
+      "input_hash": "b5b63a9eeeb545e1d6aadeff567f38a96111c247e6df4561067aa08627e350ed",
+      "job_id": "smoke_b_b5b63a9eeeb5",
+      "purpose": "predict:smoke_b",
+      "reserved_at": "2026-09-10T05:28:53.038821+00:00",
+      "started": "2026-09-10T05:28:54.035000+00:00",
+      "status": "complete",
+      "submitted_new": true
+    }
+  },
+  "query_limit": 10,
+  "version": 1
+}

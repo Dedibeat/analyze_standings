@@ -1,0 +1,45 @@
+{
+  "contest_id": 2032,
+  "index": "A",
+  "name": "Circuit",
+  "rating": 800,
+  "tags": [
+    "greedy",
+    "implementation",
+    "math",
+    "number theory"
+  ],
+  "points": 500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2032A",
+  "url": "https://codeforces.com/problemset/problem/2032/A",
+  "contest_start_time": "2024-11-01T14:35:00+00:00",
+  "statement": {
+    "title": "A. Circuit",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "Alice has just crafted a circuit with $n$ lights and $2n$ switches. Each component (a light or a switch) has two states: on or off. The lights and switches are arranged in a way that:\n\n Each light is connected to exactly two switches.\n\n Each switch is connected to exactly one light. It's unknown which light each switch is connected to.\n\n When all switches are off, all lights are also off.\n\n If a switch is toggled (from on to off, or vice versa), the state of the light connected to it will also toggle.\n\nAlice brings the circuit, which shows only the states of the $2n$ switches, to her sister Iris and gives her a riddle: what is the minimum and maximum number of lights that can be turned on?\n\nKnowing her little sister's antics too well, Iris takes no more than a second to give Alice a correct answer. Can you do the same?",
+    "input_spec": "Each test consists of multiple test cases. The first line contains a single integer $t$ ($1 \\le t \\le 500$) — the number of test cases. The description of the test cases follows.\n\nThe first line of each test case contains a single integer $n$ ($1 \\le n \\le 50$) — the number of lights in the circuit.\n\nThe second line of each test case contains $2n$ integers $a_1, a_2, \\ldots, a_{2n}$ ($0 \\le a_i \\le 1$) — the states of the switches in the circuit. $a_i = 0$ means the $i$-th switch is off, and $a_i = 1$ means the $i$-th switch is on.",
+    "output_spec": "For each test case, output two integers — the minimum and maximum number of lights, respectively, that can be turned on.",
+    "note": "In the first test case, there is only one light in the circuit, and no switch is on, so the light is certainly off.\n\nIn the second test case, there is only one light in the circuit, but one switch connected to it is on, so the light is on.\n\nIn the third test case, there is only one light in the circuit, and both switches are on, so the light is off as it was toggled twice.\n\nIn the fourth test case, to have no lights on, the switches can be arranged in this way:\n\n Switch $1$ and switch $4$ are connected to light $1$. Since both switches are off, light $1$ is also off.\n\n Switch $2$ and switch $6$ are connected to light $2$. Since both switches are off, light $2$ is also off.\n\n Switch $3$ and switch $5$ are connected to light $3$. Both switches are on, so light $3$ is toggled twice from its initial off state, and thus also stays off.\n\nAnd to have $2$ lights on, the switches can be arranged in this way:\n\n Switch $1$ and switch $2$ are connected to light $1$. Since both switches are off, light $1$ is also off.\n\n Switch $3$ and switch $4$ are connected to light $2$. Since switch $3$ is on and switch $4$ is off, light $2$ is toggled once from its initial off state, so it is on.\n\n Switch $5$ and switch $6$ are connected to light $3$. Since switch $5$ is on and switch $6$ is off, light $3$ is toggled once from its initial off state, so it is on.",
+    "samples": [
+      {
+        "input": "5\n1\n0 0\n1\n0 1\n1\n1 1\n3\n0 0 1 0 1 0\n3\n0 1 1 1 0 0",
+        "output": "\n0 0\n1 1\n0 0\n0 2\n1 3"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 135622,
+    "url": "https://codeforces.com/blog/entry/135622",
+    "tutorial": "Observe that an even number of switch toggles on the same light will not change that light's status. In other words, a light is on if and only if exactly one of the two switches connecting to it is on.\n\nLet's denote $\\text{cnt}_0$ and $\\text{cnt}_1$ as the number of off switches and on switches in the circuit. We see that\n\n The maximum number of on lights is $\\min(\\text{cnt}_0, \\text{cnt}_1)$: we can't achieve more than this amount since any on light decreases both $\\text{cnt}_0$ and $\\text{cnt}_1$ by $1$, and we can achieve this amount by matching $\\min(\\text{cnt}_0, \\text{cnt}_1)$ pairs of one off switch and one on switch, and the rest can be matched arbitrarily.\n\n The minimum number of on lights is $\\text{cnt}_0 \\bmod 2$. Since $\\text{cnt}_0 + \\text{cnt}_1 = 2n$, they have the same parity. Then, we can easily see that when both $\\text{cnt}_0$ and $\\text{cnt}_1$ are even, we can match $n$ pairs of the same type of switches, so there are no on lights in this case. When both $\\text{cnt}_0$ and $\\text{cnt}_1$ are odd, we must match one on switch with one off switch to make $\\text{cnt}_0$ and $\\text{cnt}_1$ even, so there is one on light in this case.\n\nThe calculation of $\\text{cnt}_0$ and $\\text{cnt}_1$ can be easily done by a simple iteration over the switches.\n\nTime complexity: $\\mathcal{O}(n)$.",
+    "solution_code": [
+      "namespace solution {\n    bool hasMultipleTests = true;\n\n    int n;\n    vector<int> a;\n\n    void preprocess() {\n\n    }\n\n    void input(int testcase) {\n        cin >> n;\n        a.clear();\n        a.resize(n * 2);\n        for (auto &z: a) cin >> z;\n    }\n\n    void solve(int testcase) {\n        int cnt0 = 0;\n\n        for (auto &z: a) {\n            cnt0 += z;\n        }\n\n        cout << (cnt0 & 1) << \" \" << min(cnt0, n * 2 - cnt0) << endl;\n    }\n}",
+      "class Solution:\n    hasMultipleTests = True\n\n    n: int = None\n    a: list = None\n\n    @classmethod\n    def preprocess(cls):\n        pass\n\n    @classmethod\n    def input(cls, testcase):\n        cls.n = int(input())\n        cls.a = list(map(int, input().split()))\n\n    @classmethod\n    def solve(cls, testcase):\n        cnt0 = sum(cls.a)\n        \n        print(cnt0 & 1, min(cnt0, cls.n*2 - cnt0))\n\n# end Solution"
+    ]
+  }
+}

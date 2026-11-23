@@ -1,0 +1,45 @@
+{
+  "contest_id": 2077,
+  "index": "E",
+  "name": "Another Folding Strip",
+  "rating": 2700,
+  "tags": [
+    "combinatorics",
+    "constructive algorithms",
+    "data structures",
+    "divide and conquer",
+    "dp",
+    "greedy",
+    "math"
+  ],
+  "points": 2250.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2077E",
+  "url": "https://codeforces.com/problemset/problem/2077/E",
+  "contest_start_time": "2025-03-10T14:45:00+00:00",
+  "statement": {
+    "title": "E. Another Folding Strip",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "For an array $b$ of length $m$, define $f(b)$ as follows.\n\nConsider a $1 \\times m$ strip, where all cells initially have darkness $0$. You want to transform it into a strip where the color at the $i$-th position has darkness $b_i$. You can perform the following operation, which consists of two steps:\n\n Fold the paper at any line between two cells. You may fold as many times as you like, or choose not to fold at all.\n\n Choose one position to drop the black dye. The dye permeates from the top and flows down to the bottom, increasing the darkness of all cells in its path by $1$. After dropping the dye, you unfold the strip.\n\nLet $f(b)$ be the minimum number of operations required to achieve the desired configuration. It can be proven that the goal can always be achieved in a finite number of operations.\n\nYou are given an array $a$ of length $n$. Evaluate\n\n$$\\sum_{l=1}^n\\sum_{r=l}^n f(a_l a_{l+1} \\ldots a_r)$$\n\nmodulo $998\\,244\\,353$.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 10^4$). The description of the test cases follows.\n\nThe first line of each test case contains a single integer $n$ ($1 \\leq n \\leq 2 \\cdot 10^5$) — the length of the array $a$.\n\nThe second line contains $n$ integers $a_1, a_2, \\ldots, a_n$ ($0 \\leq a_i \\leq 10^9$) — denoting the array $a$.\n\nIt is guaranteed that the sum of all values of $n$ across all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, output a single integer — the required sum modulo $998\\,244\\,353$.",
+    "note": "In the first test case,\n\n $f(a_1)=f(\\mathtt{0})=0$\n\n $f(a_1a_2)=f(\\mathtt{01})=1$\n\n $f(a_1a_2a_3)=f(\\mathtt{010})=1$\n\n $f(a_2)=f(\\mathtt{1})=1$\n\n $f(a_2a_3)=f(\\mathtt{10})=1$\n\n $f(a_3)=f(\\mathtt{0})=0$\n\nThis sums up to $0+1+1+1+1+0 = 4$\n\nIn the second test case, $f(a_1a_2a_3a_4a_5a_6) = 2$. Here's one possible sequence of operations.",
+    "samples": [
+      {
+        "input": "4\n3\n0 1 0\n6\n1 0 0 1 2 1\n5\n2 1 2 4 3\n12\n76 55 12 32 11 45 9 63 88 83 32 6",
+        "output": "\n4\n28\n47\n7001"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 140505,
+    "url": "https://codeforces.com/blog/entry/140505",
+    "tutorial": "2077E - Another Folding Strip\n\nHint 1\n\nFolding is basically alternating the parity of the indices.\n\nHint 2\n\nMaximum subarray sum.\n\nSolution\n\nAs mentioned in Hint 1, we can see that if the darkness of the cells $i_1, i_2, \\ldots, i_k$ increases in some operation, the parity of $i_j$ should be different from that of $i_{j+1}$ for $1 \\le j \\le k - 1$\n\nDiagram\n\nLet us try to find $f(a[1, n])$.\n\nConsider an array $b$ such that $b_i = (-1)^i a_i$ for all $1 \\le i \\le n$.\n\nLet us perform exactly one operation, and say our subsequence of indices is $i_1, i_2, \\ldots, i_k$.\n\nLet $a'$ be the updated array after performing the operation, and $b'_i = (-1)^{i'} a'_i$ for all $1 \\le i \\le n$.\n\nNow we can see that\n $ \\left| \\sum_{i = l}^{r} b'_i - \\sum_{i = l}^{r} b_i \\right| \\le 1, $\nfor all $1 \\le l \\le r \\le n$.\n\nThis is so because for any subarray $b[l, r]$, if $x$ elements at odd indices and $y$ elements at even indices were selected, we should have $|x - y| \\le 1$.\n\nSo, we can see that after any operation, the absolute sum of any subarray of $b$ decreases by at most $1$.\n\nThus, this gives us a lower bound for the value of $f(a[1, n])$, which is\n $ \\max_{1 \\le l \\le r \\le n} \\left| \\sum_{i = l}^{r} b_i \\right|. $\nNow let us consider the following greedy algorithm for selecting a subsequence $s$ of indices:\n\nStart from $i = 1$ and move to the right.\n\nIf $b_i$ is zero, we continue.\n\nIf $s$ is empty, we append $i$ to $s$, and continue.\n\nIf $i$ does not have the same parity as the last element of $s$, we append $i$ to $s$, and continue.\n\nOtherwise, we continue.\n\nNow suppose $T$ is the set of pairs of indices $(l, r)$ such that $b_l$ and $b_r$ are nonzero and\n $ \\left| \\sum_{i = l}^{r} b_i \\right| $\nis maximized.\n\nWe can prove that the absolute sum of all subarrays in $T$ would be reduced by $1$ after performing the operation.\n\nWe can notice that if $(l, r) \\in T$, then $l$ and $r$ should have the same parity. Otherwise,\n $ \\max \\left( \\left| b[l + 1, r] \\right|, \\left| b[l, r - 1] \\right| \\right)  \\gt  \\left| b[l, r] \\right|. $\nNext, we claim that $l$ should be in $s$.\n\nSuppose $l$ is not in $s$. This means that there should be an index $k$ in $s$ such that $k$ has the same parity as $l$ and there are no nonzero elements between $k$ and $l$ that have a parity different from $l$.\n\nNow if that is the case, then $b[k, r]$ would have a greater absolute sum than $b[l, r]$.\n\nThus, we conclude that $l$ will always be in $s$.\n\nNow let $d$ be the largest index in $s$ smaller than or equal to $r$.\n\nFirst of all, we should have $d \\ge l$.\n\nNow $d$ should have the same parity as $r$.\n\nThis is so because if that is not the case, we should have $d \\lt r$ and we would have selected $r$ or any other element having the same parity as $r$ after $d$ in $s$.\n\nThus, we can see that for all the pairs $(l, r) \\in T$, we should have $l$ in $s$ and the largest element smaller than or equal to $r$ in $s$ should have the same parity as that of $r$. This implies that the absolute sum of all subarrays in $T$ would be reduced by $1$ after performing the operation.\n\nThis is because if $l$ is odd, we would have added $1, -1, 1, -1, \\ldots, 1$ to the subarray $b[l, r]$, increasing the subarray sum of $b[l, r]$ by $1$.\n\nAnd if $l$ is even, we would have added $-1, 1, -1, 1, \\ldots, -1$ to the subarray $b[l, r]$, decreasing the subarray sum of $b[l, r]$ by $1$.\n\nNow we can see that the greedy algorithm would achieve the lower bound.\n\nSo, the answer for the array $a$ is the maximum absolute sum over all subarrays of $b$.\n\nLet us consider an array $c$ such that\n $ c_i = c_{i - 1} + b_i, \\quad \\text{with } c_0 = 0. $\nWe can further notice that the maximum absolute sum over all subarrays of $b$ is equal to\n $ \\max_{1 \\le i \\le n} c_i - \\min_{1 \\le i \\le n} c_i. $\nNow we can see that\n $ f(a[l, r]) = \\max_{l \\le i \\le r} c_i - \\min_{l \\le i \\le r} c_i. $\nThus,\n $ \\sum_{l = 1}^{n} \\sum_{r = l}^{n} f(a[l, r]) = \\sum_{l = 1}^{n} \\sum_{r = l}^{n} \\max_{l \\le i \\le r} c_i - \\min_{l \\le i \\le r} c_i. $\nSo,\n $ \\sum_{l = 1}^{n} \\sum_{r = l}^{n} f(a[l, r]) = \\sum_{l = 1}^{n} \\sum_{r = l}^{n} \\max_{l \\le i \\le r} c_i - \\sum_{l = 1}^{n} \\sum_{r = l}^{n} \\min_{l \\le i \\le r} c_i. $\nFinding the value of\n $ \\sum_{l = 1}^{n} \\sum_{r = l}^{n} \\max_{l \\le i \\le r} c_i $\nis a fairly standard exercise, which can be done using a stack in $O(n)$ time.\n\nSubmission: 310317161",
+    "solution_code": []
+  }
+}

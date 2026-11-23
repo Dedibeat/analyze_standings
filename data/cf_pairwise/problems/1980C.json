@@ -1,0 +1,42 @@
+{
+  "contest_id": 1980,
+  "index": "C",
+  "name": "Sofia and the Lost Operations",
+  "rating": 1300,
+  "tags": [
+    "constructive algorithms",
+    "greedy"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1980C",
+  "url": "https://codeforces.com/problemset/problem/1980/C",
+  "contest_start_time": "2024-06-03T14:35:00+00:00",
+  "statement": {
+    "title": "C. Sofia and the Lost Operations",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Sofia had an array of $n$ integers $a_1, a_2, \\ldots, a_n$. One day she got bored with it, so she decided to sequentially apply $m$ modification operations to it.\n\nEach modification operation is described by a pair of numbers $\\langle c_j, d_j \\rangle$ and means that the element of the array with index $c_j$ should be assigned the value $d_j$, i.e., perform the assignment $a_{c_j} = d_j$. After applying all modification operations sequentially, Sofia discarded the resulting array.\n\nRecently, you found an array of $n$ integers $b_1, b_2, \\ldots, b_n$. You are interested in whether this array is Sofia's array. You know the values of the original array, as well as the values $d_1, d_2, \\ldots, d_m$. The values $c_1, c_2, \\ldots, c_m$ turned out to be lost.\n\nIs there a sequence $c_1, c_2, \\ldots, c_m$ such that the sequential application of modification operations $\\langle c_1, d_1, \\rangle, \\langle c_2, d_2, \\rangle, \\ldots, \\langle c_m, d_m \\rangle$ to the array $a_1, a_2, \\ldots, a_n$ transforms it into the array $b_1, b_2, \\ldots, b_n$?",
+    "input_spec": "The first line contains an integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases.\n\nThen follow the descriptions of the test cases.\n\nThe first line of each test case contains an integer $n$ ($1 \\le n \\le 2 \\cdot 10^5$) — the size of the array.\n\nThe second line of each test case contains $n$ integers $a_1, a_2, \\ldots, a_n$ ($1 \\le a_i \\le 10^9$) — the elements of the original array.\n\nThe third line of each test case contains $n$ integers $b_1, b_2, \\ldots, b_n$ ($1 \\le b_i \\le 10^9$) — the elements of the found array.\n\nThe fourth line contains an integer $m$ ($1 \\le m \\le 2 \\cdot 10^5$) — the number of modification operations.\n\nThe fifth line contains $m$ integers $d_1, d_2, \\ldots, d_m$ ($1 \\le d_j \\le 10^9$) — the preserved value for each modification operation.\n\nIt is guaranteed that the sum of the values of $n$ for all test cases does not exceed $2 \\cdot 10^5$, similarly the sum of the values of $m$ for all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "Output $t$ lines, each of which is the answer to the corresponding test case. As an answer, output \"YES\" if there exists a suitable sequence $c_1, c_2, \\ldots, c_m$, and \"NO\" otherwise.\n\nYou can output the answer in any case (for example, the strings \"yEs\", \"yes\", \"Yes\" and \"YES\" will be recognized as a positive answer).",
+    "note": null,
+    "samples": [
+      {
+        "input": "7\n3\n1 2 1\n1 3 2\n4\n1 3 1 2\n4\n1 2 3 5\n2 1 3 5\n2\n2 3\n5\n7 6 1 10 10\n3 6 1 11 11\n3\n4 3 11\n4\n3 1 7 8\n2 2 7 10\n5\n10 3 2 2 1\n5\n5 7 1 7 9\n4 10 1 2 9\n8\n1 1 9 8 7 2 10 4\n4\n1000000000 203 203 203\n203 1000000000 203 1000000000\n2\n203 1000000000\n1\n1\n1\n5\n1 3 4 5 1",
+        "output": "\nYES\nNO\nNO\nNO\nYES\nNO\nYES"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 130135,
+    "url": "https://codeforces.com/blog/entry/130135",
+    "tutorial": "First, in the array $b_1, b_2, \\ldots, b_n$, the number $d_m$ must be present. Second, if $a_i = b_i$, we will not apply any operations to $i$. All extra operations can be applied to $a_j$, where $b_j = d_m$, they will be overwritten by the operation $d_m$. For all other $i$ ($a_i \\neq b_i$) we must apply the operation $d_k = b_i$, so it remains to check that the multiset of such $b_i$ is included in the multiset $d_1, d_2, \\ldots, d_m$.\n\nThis solution can be implemented using sorting and two pointers or std::map, resulting in a time complexity of $O((n + m) \\log n)$. If you used std::unordered_map or dict, you were most likely hacked. Check out this post.",
+    "solution_code": [
+      "#include <stdio.h>\n#include <stdbool.h>\n \n#define MAXN 200200\n#define MAXM 200200\n \nint n, m, k;\nint arr[MAXN], brr[MAXN], drr[MAXM], buf[MAXN];\n \nint cmp_i32(const void* pa, const void* pb) {\n    return *(const int*)pa - *(const int*)pb;\n}\n \nvoid build() {\n    k = 0;\n    for (int i = 0; i < n; ++i) {\n        if (arr[i] != brr[i])\n            buf[k++] = brr[i];\n    }\n    qsort(buf, k, sizeof(*buf), cmp_i32);\n}\n \nbool check() {\n    for (int i = 0; i < n; ++i)\n        if (brr[i] == drr[m - 1])\n            return true;\n    return false;\n}\n \nbool solve() {\n    if (!check()) return false;\n    qsort(drr, m, sizeof(*drr), cmp_i32);\n    int ib = 0, id = 0;\n    while (ib < k && id < m) {\n        if (buf[ib] == drr[id])\n            ++ib, ++id;\n        else if (buf[ib] < drr[id])\n            return false;\n        else ++id;\n    }\n    return ib == k;\n}\n \nint main() {\n    int t; scanf(\"%d\", &t);\n    while (t--) {\n        scanf(\"%d\", &n);\n        for (int i = 0; i < n; ++i)\n            scanf(\"%d\", arr + i);\n        for (int i = 0; i < n; ++i)\n            scanf(\"%d\", brr + i);\n        scanf(\"%d\", &m);\n        for (int j = 0; j < m; ++j)\n            scanf(\"%d\", drr + j);\n        build();\n        if (solve()) printf(\"YES\\n\");\n        else printf(\"NO\\n\");\n    }\n}"
+    ]
+  }
+}

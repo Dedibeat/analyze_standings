@@ -1,0 +1,88 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define int long long
+#define F first 
+#define S second  
+#define all(v) (v).begin(), (v).end()
+#define hha(x) cout << #x << ": " << x << " ";
+#define hhal(x) cout << #x << ": " << x << endl;
+#define print(v) cout << #v << ": "; for(auto x : v) cout << x << " "; cout << endl;
+void solve()
+{
+    int n; cin >> n;
+    vector<string> v(n);
+    int mxsz = 0;
+    for(int i = 0; i < n; i++)
+    {
+        cin >> v[i];
+        reverse(all(v[i]));
+        mxsz = max(mxsz, (int)v[i].size());
+    }
+    auto check = [&](int j)
+    {
+        map<pair<int, int>, int> mp;
+        int cnt = 0;
+        for(auto &s : v)
+        {
+            vector<int> a;
+            for(int i = 0; i < j; i++)
+            {   
+                if(s[i] == '1') a.push_back(i);
+            }   
+            int sum = 0, p = 1;
+            for(int i = j; i < s.size(); i++)
+            {
+                if(s[i] == '1') sum += p;
+                p = p * 2;
+                if(p > 1e6) p = 1e6;
+                if(sum > 1e6) sum = 1e6;
+            }
+            //hhal(sum);
+            cnt += max(sum - 1, 0LL);
+            if(sum) a.push_back(j);
+            //print(a);
+            for(int i = 1; i < a.size(); i++) 
+            {
+                
+                mp[{a[i], a[i - 1]}]++;
+            }
+        }
+        int mx = 0;
+        pair<int, int> ans;
+        for(auto &[par, freq] : mp)
+        {
+            if(freq > mx) 
+            {
+                mx = freq;
+                ans = par;
+            }
+        }
+       // hha(j); hha(cnt); hhal(mx);
+        if(mx == 0 && cnt == 0) return vector<int>{};
+        if(mx >= cnt)
+        {
+            return vector<int>{mx, ans.F, ans.S};
+        }
+        else 
+        {
+            return vector<int>{cnt};
+        }
+    };
+    int beg = max(mxsz - 20, 0LL);
+    for(int j = beg; j <= mxsz + 5; j++)
+    {
+        auto ret = check(j);
+        if(ret.size() == 3)
+        {
+            cout << j << " " << ret[1] << " " << ret[2] << " " << ret[0] << "\n";
+            return;
+        }
+    }
+    cout << "-1\n";
+}
+signed main()
+{
+    ios::sync_with_stdio(0); cin.tie(0); 
+    int t; cin >> t; while(t--)
+    solve();
+}

@@ -1,0 +1,20 @@
+{
+  "created_at": "2026-08-05T13:43:46.699258+00:00",
+  "project": "project-0e393569-b54a-4a67-bc5",
+  "location": "global",
+  "model": "gemini-3.5-flash",
+  "dataset": "pairwise_tuning_run/pilot_train.jsonl",
+  "dataset_sha256": "1359b6ad305cc33c5351da72ef15541a04e9f487f48785532a52027f59d42954",
+  "examples": 400,
+  "tokens_per_epoch": 649514,
+  "epochs": 2,
+  "estimated_training_cost_usd": 12.99028,
+  "evaluation_reserve_usd": 10.0,
+  "planned_pilot_total_usd": 22.99028,
+  "pilot_training_cap_usd": 15.0,
+  "pilot_total_cap_usd": 25.0,
+  "dispatch_allowed": true,
+  "minimum_example_tokens": 775,
+  "maximum_example_tokens": 2761,
+  "mean_example_tokens": 1623.785
+}

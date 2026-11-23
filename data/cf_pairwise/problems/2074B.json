@@ -1,0 +1,43 @@
+{
+  "contest_id": 2074,
+  "index": "B",
+  "name": "The Third Side",
+  "rating": 800,
+  "tags": [
+    "geometry",
+    "greedy",
+    "math"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2074B",
+  "url": "https://codeforces.com/problemset/problem/2074/B",
+  "contest_start_time": "2025-03-11T14:35:00+00:00",
+  "statement": {
+    "title": "B. The Third Side",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "The pink soldiers have given you a sequence $a$ consisting of $n$ positive integers.\n\nYou must repeatedly perform the following operation until there is only $1$ element left.\n\n Choose two distinct indices $i$ and $j$.\n\n Then, choose a positive integer value $x$ such that there exists a non-degenerate triangle$^{\\text{∗}}$ with side lengths $a_i$, $a_j$, and $x$.\n\n Finally, remove two elements $a_i$ and $a_j$, and append $x$ to the end of $a$.\n\nPlease find the maximum possible value of the only last element in the sequence $a$.\n\n$^{\\text{∗}}$A triangle with side lengths $a$, $b$, $c$ is non-degenerate when $a+b  \\gt  c$, $a+c  \\gt  b$, $b+c  \\gt  a$.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 10^4$). The description of the test cases follows.\n\nThe first line of each test case contains a single integer $n$ ($1 \\le n \\le 2 \\cdot 10^5$).\n\nThe second line of each test case contains $n$ integers $a_1,a_2,\\ldots,a_n$ ($1 \\le a_i \\le 1000$) — the elements of the sequence $a$.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, output the maximum possible value of the only last element on a separate line.",
+    "note": "On the first test case, there is already only one element. The value of the only last element is $10$.\n\nOn the second test case, $a$ is initially $[998,244,353]$. The following series of operations is valid:\n\n Erase $a_2=244$ and $a_3=353$, and append $596$ to the end of $a$. $a$ is now $[998,596]$.\n\n Erase $a_1=998$ and $a_2=596$, and append $1593$ to the end of $a$. $a$ is now $[1593]$.\n\nIt can be shown that the only last element cannot be greater than $1593$. Therefore, the answer is $1593$.",
+    "samples": [
+      {
+        "input": "4\n1\n10\n3\n998 244 353\n5\n1 2 3 4 5\n9\n9 9 8 2 4 4 3 5 3",
+        "output": "\n10\n1593\n11\n39"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 140540,
+    "url": "https://codeforces.com/blog/entry/140540",
+    "tutorial": "We can solve this problem by observing a property on the sum of elements.\n\nAfter each operation, it must hold that $a_i+a_j \\gt x$, and the new element is at most $a_i+a_j-1$. Therefore, the sum decreases by at least $1$.\n\nHowever, we notice that a triangle of side lengths $p$, $q$, $p+q-1$ is always non-degenerate due to the following:\n\n $p+q \\gt p+q-1$;\n\n $p+(p+q-1) \\gt q$ due to $2p-1 \\gt 0$;\n\n $q+(p+q-1) \\gt p$ due to $2q-1 \\gt 0$.\n\nTherefore, you can decrease the sum by exactly $1$ on each operation. The maximum final sum (which is the last element) is thus $\\text{sum}-n+1$.",
+    "solution_code": [
+      "t = int(input())\nfor _ in range(t):\n    n = int(input())\n    sm = sum(map(int, input().split()))\n    print(sm - n + 1)"
+    ]
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "contest_id": 1956,
+  "index": "A",
+  "name": "Nene's Game",
+  "rating": 800,
+  "tags": [
+    "binary search",
+    "brute force",
+    "data structures",
+    "games",
+    "greedy"
+  ],
+  "points": 500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1956A",
+  "url": "https://codeforces.com/problemset/problem/1956/A",
+  "contest_start_time": "2024-04-13T14:35:00+00:00",
+  "statement": {
+    "title": "A. Nene's Game",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "Nene invented a new game based on an increasing sequence of integers $a_1, a_2, \\ldots, a_k$.\n\nIn this game, initially $n$ players are lined up in a row. In each of the rounds of this game, the following happens:\n\n Nene finds the $a_1$-th, $a_2$-th, $\\ldots$, $a_k$-th players in a row. They are kicked out of the game simultaneously. If the $i$-th player in a row should be kicked out, but there are fewer than $i$ players in a row, they are skipped.\n\nOnce no one is kicked out of the game in some round, all the players that are still in the game are declared as winners.\n\nFor example, consider the game with $a=[3, 5]$ and $n=5$ players. Let the players be named player A, player B, $\\ldots$, player E in the order they are lined up initially. Then,\n\n Before the first round, players are lined up as ABCDE. Nene finds the $3$-rd and the $5$-th players in a row. These are players C and E. They are kicked out in the first round.\n\n Now players are lined up as ABD. Nene finds the $3$-rd and the $5$-th players in a row. The $3$-rd player is player D and there is no $5$-th player in a row. Thus, only player D is kicked out in the second round.\n\n In the third round, no one is kicked out of the game, so the game ends after this round.\n\n Players A and B are declared as the winners.\n\nNene has not yet decided how many people would join the game initially. Nene gave you $q$ integers $n_1, n_2, \\ldots, n_q$ and you should answer the following question for each $1 \\le i \\le q$ independently:\n\n How many people would be declared as winners if there are $n_i$ players in the game initially?",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 250$). The description of test cases follows.\n\nThe first line case contains two integers $k$ and $q$ ($1 \\le k, q \\le 100$) — the length of the sequence $a$ and the number of values $n_i$ you should solve this problem for.\n\nThe second line contains $k$ integers $a_1,a_2,\\ldots,a_k$ ($1\\leq a_1 \\lt a_2 \\lt \\ldots \\lt a_k\\leq 100$) — the sequence $a$.\n\nThe third line contains $q$ integers $n_1,n_2,\\ldots,n_q$ ($1\\leq n_i \\leq 100$).",
+    "output_spec": "For each test case, output $q$ integers: the $i$-th ($1\\le i \\le q$) of them should be the number of players declared as winners if initially $n_i$ players join the game.",
+    "note": "The first test case was explained in the statement.\n\nIn the second test case, when $n=1$, the only player stays in the game in the first round. After that, the game ends and the only player is declared as a winner.",
+    "samples": [
+      {
+        "input": "6\n2 1\n3 5\n5\n5 3\n2 4 6 7 9\n1 3 5\n5 4\n3 4 5 6 7\n1 2 3 4\n2 3\n69 96\n1 10 100\n1 1\n100\n50\n3 3\n10 20 30\n1 10 100",
+        "output": "\n2 \n1 1 1 \n1 2 2 2 \n1 10 68 \n50 \n1 9 9 "
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "missing"
+  },
+  "editorial": {
+    "blog_id": 128426,
+    "url": "https://codeforces.com/blog/entry/128426",
+    "tutorial": "A. Nene's Game\n\nIdea: Otomachi_Una\n\nTutorial\n\nObviously, a person at place $p$ will be kicked out if and only if $p \\ge a_1$.\n\nTherefore, the answer is $\\min(n,a_1-1)$.\n\nSolution",
+    "solution_code": [
+      "#include<bits/stdc++.h>\nusing namespace std;\n#define ll long long\n#define MP make_pair\nmt19937 rnd(time(0));\nint a[105];\nvoid solve(){\n\tint q,k,n;cin>>k>>q;\n\tfor(int i=1;i<=k;i++) cin>>a[i];\n\tfor(int i=1;i<=q;i++){\n\t\tcin>>n;\n\t\tcout<<min(a[1]-1,n)<<' ';\n\t}\n\tcout<<endl;\n}\nint main(){\n\tios::sync_with_stdio(false);\n\tint _;cin>>_;\n\twhile(_--) solve(); \n}"
+    ]
+  }
+}

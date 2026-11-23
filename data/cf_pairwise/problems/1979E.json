@@ -1,0 +1,46 @@
+{
+  "contest_id": 1979,
+  "index": "E",
+  "name": "Manhattan Triangle",
+  "rating": 2400,
+  "tags": [
+    "binary search",
+    "constructive algorithms",
+    "data structures",
+    "geometry",
+    "implementation",
+    "two pointers"
+  ],
+  "points": 2500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1979E",
+  "url": "https://codeforces.com/problemset/problem/1979/E",
+  "contest_start_time": "2024-06-06T14:35:00+00:00",
+  "statement": {
+    "title": "E. Manhattan Triangle",
+    "time_limit": "3 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "The Manhattan distance between two points $(x_1, y_1)$ and $(x_2, y_2)$ is defined as: $$|x_1 - x_2| + |y_1 - y_2|.$$\n\nWe call a Manhattan triangle three points on the plane, the Manhattan distances between each pair of which are equal.\n\nYou are given a set of pairwise distinct points and an even integer $d$. Your task is to find any Manhattan triangle, composed of three distinct points from the given set, where the Manhattan distance between any pair of vertices is equal to $d$.",
+    "input_spec": "Each test consists of multiple test cases. The first line contains one integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases. The description of the test cases follows.\n\nThe first line of each test case contains two integers $n$ and $d$ ($3 \\le n \\le 2 \\cdot 10^5$, $2 \\le d \\le 4 \\cdot 10^5$, $d$ is even) — the number of points and the required Manhattan distance between the vertices of the triangle.\n\nThe $(i + 1)$-th line of each test case contains two integers $x_i$ and $y_i$ ($-10^5 \\le x_i, y_i \\le 10^5$) — the coordinates of the $i$-th point. It is guaranteed that all points are pairwise distinct.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, output three distinct integers $i$, $j$, and $k$ ($1 \\le i,j,k \\le n$) — the indices of the points forming the Manhattan triangle. If there is no solution, output \"$0\\ 0\\ 0$\" (without quotes).\n\nIf there are multiple solutions, output any of them.",
+    "note": "In the first test case:\n  Points $A$, $B$, and $F$ form a Manhattan triangle, the Manhattan distance between each pair of vertices is $4$. Points $D$, $E$, and $F$ can also be the answer.\nIn the third test case:\n  Points $A$, $C$, and $E$ form a Manhattan triangle, the Manhattan distance between each pair of vertices is $6$.\nIn the fourth test case, there are no two points with a Manhattan distance of $4$, and therefore there is no suitable Manhattan triangle.",
+    "samples": [
+      {
+        "input": "6\n6 4\n3 1\n0 0\n0 -2\n5 -3\n3 -5\n2 -2\n5 4\n0 0\n0 -2\n5 -3\n3 -5\n2 -2\n6 6\n3 1\n0 0\n0 -2\n5 -3\n3 -5\n2 -2\n4 4\n3 0\n0 3\n-3 0\n0 -3\n10 8\n2 1\n-5 -1\n-4 -1\n-5 -3\n0 1\n-2 5\n-4 4\n-4 2\n0 0\n-4 1\n4 400000\n100000 100000\n-100000 100000\n100000 -100000\n-100000 -100000",
+        "output": "\n2 6 1\n4 3 5\n3 5 1\n0 0 0\n6 1 3\n0 0 0"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 130213,
+    "url": "https://codeforces.com/blog/entry/130213",
+    "tutorial": "1979E - Manhattan Triangle\n\nHint\n\nIn every Manhattan triangle there are two points such that $|x_1 - x_2| = |y_1 - y_2|$.\n\nSolution\n\nNote this fact: in every Manhattan triangle there are two points such that $|x_1 - x_2| = |y_1 - y_2|$.\n\nLet's start with distributing all points with their $(x + y)$ value.\n\nFor each point $(x; y)$ find point $(x + d / 2; y - d / 2)$ using lower bound method in corresponding set. Then we have to find the third point: it can be in either $(x + y + d)$ or $(x + y - d)$ diagonal. Borders at $x$ coordinate for them are $[x + d / 2; x + d]$ and $[x - d / 2; x]$ — it can be found using the same lower bound method.\n\nThen, distribute all points with $(x - y)$ value and do the same algorithm.\n\nTotal time complexity is $O(n \\log n)$.\n\nCode",
+    "solution_code": [
+      "#include <bits/stdc++.h>\nusing namespace std;\n\nconst int MAXC = 1e5;\nconst int MAXD = 4e5 + 10;\n\nset <pair <int, int>> diag[MAXD];\n\nvoid solve() {\n    int n, d;\n    cin >> n >> d;\n    \n    vector <int> x(n), y(n);\n    for (int i = 0; i < n; i++) {\n        cin >> x[i] >> y[i];\n        x[i] += MAXC;\n        y[i] += MAXC;\n    }\n    \n    bool found = false;\n    {\n        for (int i = 0; i < n; i++) {\n            diag[x[i] + y[i]].insert({x[i], i});\n        }\n        for (int i = 0; i < n; i++) {\n            auto it1 = diag[x[i] + y[i]].lower_bound({x[i] + d / 2, -1});\n            if (it1 == diag[x[i] + y[i]].end() || it1->first != x[i] + d / 2) continue;\n            if (x[i] + y[i] + d < MAXD) {\n                auto it2 = diag[x[i] + y[i] + d].lower_bound({x[i] + d / 2, -1});\n                if (it2 != diag[x[i] + y[i] + d].end() && it2->first <= it1->first + d / 2) {\n                    cout << i + 1 << \" \" << it1->second + 1 << \" \" << it2->second + 1 << \"\\n\";\n                    found = true;\n                    break;\n                }\n            }\n            if (x[i] + y[i] - d >= 0) {\n                auto it2 = diag[x[i] + y[i] - d].lower_bound({x[i] - d / 2, -1});\n                if (it2 != diag[x[i] + y[i] - d].end() && it2->first <= it1->first - d / 2) {\n                    cout << i + 1 << \" \" << it1->second + 1 << \" \" << it2->second + 1 << \"\\n\";\n                    found = true;\n                    break;\n                }\n            }\n        }\n        for (int i = 0; i < n; i++) {\n            diag[x[i] + y[i]].erase({x[i], i});\n        }\n    }\n    if (!found) {\n        for (int i = 0; i < n; i++) {\n            y[i] -= 2 * MAXC;\n            diag[x[i] - y[i]].insert({x[i], i});\n        }\n        for (int i = 0; i < n; i++) {\n            auto it1 = diag[x[i] - y[i]].lower_bound({x[i] + d / 2, -1});\n            if (it1 == diag[x[i] - y[i]].end() || it1->first != x[i] + d / 2) continue;\n            if (x[i] - y[i] + d < MAXD) {\n                auto it2 = diag[x[i] - y[i] + d].lower_bound({x[i] + d / 2, -1});\n                if (it2 != diag[x[i] - y[i] + d].end() && it2->first <= it1->first + d / 2) {\n                    cout << i + 1 << \" \" << it1->second + 1 << \" \" << it2->second + 1 << \"\\n\";\n                    found = true;\n                    break;\n                }\n            }\n            if (x[i] - y[i] - d >= 0) {\n                auto it2 = diag[x[i] - y[i] - d].lower_bound({x[i] - d / 2, -1});\n                if (it2 != diag[x[i] - y[i] - d].end() && it2->first <= it1->first - d / 2) {\n                    cout << i + 1 << \" \" << it1->second + 1 << \" \" << it2->second + 1 << \"\\n\";\n                    found = true;\n                    break;\n                }\n            }\n        }\n        for (int i = 0; i < n; i++) {\n            diag[x[i] - y[i]].erase({x[i], i});\n        }\n    }\n    if (!found) {\n        cout << \"0 0 0\\n\";\n    }\n}\n\nint main() {\n    int t;\n    cin >> t;\n    while (t--) {\n        solve();\n    }\n}"
+    ]
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "contest_id": 1975,
+  "index": "B",
+  "name": "378QAQ and Mocha's Array",
+  "rating": 1000,
+  "tags": [
+    "brute force",
+    "greedy",
+    "math",
+    "sortings"
+  ],
+  "points": 500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1975B",
+  "url": "https://codeforces.com/problemset/problem/1975/B",
+  "contest_start_time": "2024-05-25T14:35:00+00:00",
+  "statement": {
+    "title": "B. 378QAQ and Mocha's Array",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "Mocha likes arrays, so before her departure, 378QAQ gave her an array $a$ consisting of $n$ positive integers as a gift.\n\nMocha thinks that $a$ is beautiful if there exist two numbers $i$ and $j$ ($1\\leq i,j\\leq n$, $i\\neq j$) such that for all $k$ ($1 \\leq k \\leq n$), $a_k$ is divisible$^\\dagger$ by either $a_i$ or $a_j$.\n\nDetermine whether $a$ is beautiful.\n\n$^\\dagger$ $x$ is divisible by $y$ if there exists an integer $z$ such that $x = y \\cdot z$.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1\\leq t\\leq 500$). The description of the test cases follows.\n\nThe first line of each test case contains a single integer $n$ ($3\\leq n\\leq 10^5$) — the length of the array $a$.\n\nThe second line of each test case contains $n$ integers $a_1,a_2,\\ldots,a_n$ ($1\\leq a_i \\leq 10^9$) — the elements of the array $a$.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $10^5$.",
+    "output_spec": "For each test case, output \"Yes\" if array $a$ is beautiful, and output \"No\" otherwise.\n\nYou can output \"Yes\" and \"No\" in any case (for example, strings \"yEs\", \"yes\", \"Yes\" and \"YES\" will be recognized as a positive response).",
+    "note": "In the first test case, any two numbers in the array are coprime, so the answer is \"No\".\n\nIn the second test case, we can pick $i=2$ and $j=1$. Since every number in the array is divisible by $a_i = 1$, the answer is \"Yes\".\n\nIn the third test case, we can pick $i=3$ and $j=5$. $2$ and $4$ is divisible by $a_i = 2$ while $3$, $6$ and $12$ is divisible by $a_j = 3$, so the answer is \"Yes\".",
+    "samples": [
+      {
+        "input": "4\n3\n7 3 8\n5\n7 1 9 3 5\n5\n4 12 2 6 3\n5\n7 49 9 3 1000000000",
+        "output": "\nNo\nYes\nYes\nNo"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 129801,
+    "url": "https://codeforces.com/blog/entry/129801",
+    "tutorial": "1975B - 378QAQ and Mocha's Array\n\nIdea: Bazoka13 Solution: Bazoka13 Prepared by: Bazoka13\n\nHint 1\n\nHow to solve the problem if we only need to find a number $i$($1\\leq i\\leq n$) such that $a_k$ is divisible by $a_i$ for all $k$($1\\leq k\\leq n$)?\n\nHint 2\n\nWe only need to check whether all elements are divisible by the minimum element of the array.\n\nSolution\n\nRead the hints.\n\nSuppose the minimum element of $a$ is $x$. Then we iterate over $a$, if an element is not divisible by $x$, then we add it to $b$ ($b$ is initially empty).\n\nIf $b$ is still empty after iterating $a$, the answer is yes.\n\nIf $b$ isn't empty, we check whether all elements of $b$ are divisible by the minimum element of $b$. If so, the answer is yes. Otherwise, the answer is no.\n\nCode",
+    "solution_code": [
+      "#include<bits/stdc++.h>\nusing namespace std;\n#define ll long long\nconst int N = 1e5+10;\nint a[N];\nint main(){\n    int t;\n    cin>>t;\n    while(t--){\n        int n;\n        cin>>n;\n        int fl=0;\n        for(int i=1;i<=n;i++){\n            cin>>a[i];\n            if(a[i]==1)fl=1;\n        }\n        if(fl)cout<<\"Yes\\n\";\n        else{\n            sort(a+1,a+1+n);\n            vector<int> b;\n            for(int i=2;i<=n;i++){\n                if(a[i]%a[1])b.push_back(a[i]);\n            }\n            sort(b.begin(),b.end());\n            n = b.size();\n            for(int j=1;j<n;j++){\n                if(b[j]%b[0]){\n                    fl=1;\n                    break;\n                }\n            }\n            if(!fl)cout<<\"Yes\\n\";\n            else cout<<\"No\\n\";\n        }\n\n    }\n}"
+    ]
+  }
+}

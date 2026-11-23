@@ -1,0 +1,46 @@
+{
+  "contest_id": 2038,
+  "index": "D",
+  "name": "Divide OR Conquer",
+  "rating": 2400,
+  "tags": [
+    "binary search",
+    "bitmasks",
+    "data structures",
+    "dp",
+    "implementation"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2038D",
+  "url": "https://codeforces.com/problemset/problem/2038/D",
+  "contest_start_time": "2024-11-18T10:35:00+00:00",
+  "statement": {
+    "title": "D. Divide OR Conquer",
+    "time_limit": "3 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "You are given an array $[a_1, a_2, \\ldots a_n]$ consisting of integers between $0$ and $10^9$. You have to split this array into several segments (possibly one) in such a way that each element belongs to exactly one segment.\n\nLet the first segment be the array $[a_{l_1}, a_{l_1 + 1}, \\ldots, a_{r_1}]$, the second segment be $[a_{l_2}, a_{l_2+ 1}, \\ldots, a_{r_2}]$, ..., the last segment be $[a_{l_k}, a_{l_k+ 1}, \\ldots, a_{r_k}]$. Since every element should belong to exactly one array, $l_1 = 1$, $r_k = n$, and $r_i + 1 = l_{i+1}$ for each $i$ from $1$ to $k-1$. The split should meet the following condition: $f([a_{l_1}, a_{l_1 + 1}, \\ldots, a_{r_1}]) \\le f([a_{l_2}, a_{l_2+ 1}, \\ldots, a_{r_2}]) \\le \\dots \\le f([a_{l_k}, a_{l_k+1}, \\ldots, a_{r_k}])$, where $f(a)$ is the bitwise OR of all elements of the array $a$.\n\nCalculate the number of ways to split the array, and print it modulo $998\\,244\\,353$. Two ways are considered different if the sequences $[l_1, r_1, l_2, r_2, \\ldots, l_k, r_k]$ denoting the splits are different.",
+    "input_spec": "The first line contains an integer $n$ ($1 \\le n \\le 2 \\cdot 10^5$) — the length of the array $a$.\n\nThe second line contains $n$ integers $a_1, a_2, \\ldots, a_n$ ($0 \\le a_i \\le 10 ^9$) — the elements of the given array.",
+    "output_spec": "Print one integer — the number of ways to split the array, taken modulo $998\\,244\\,353$.",
+    "note": "In the first two examples, every way to split the array is valid.\n\nIn the third example, there are three valid ways to split the array:\n\n $k = 3$; $l_1 = 1, r_1 = 1, l_2 = 2, r_2 = 2, l_3 = 3, r_3 = 3$; the resulting arrays are $[3]$, $[4]$, $[6]$, and $3 \\le 4 \\le 6$;\n\n $k = 2$; $l_1 = 1, r_1 = 1, l_2 = 2, r_2 = 3$; the resulting arrays are $[3]$ and $[4, 6]$, and $3 \\le 6$;\n\n $k = 1$; $l_1 = 1, r_1 = 3$; there will be only one array: $[3, 4, 6]$.\n\nIf you split the array into two arrays $[3, 4]$ and $[6]$, the bitwise OR of the first array is $7$, and the bitwise OR of the second array is $6$; $7  \\gt  6$, so this way to split the array is invalid.",
+    "samples": [
+      {
+        "input": "3\n1 2 3",
+        "output": "\n4"
+      },
+      {
+        "input": "5\n1000 1000 1000 1000 1000",
+        "output": "\n16"
+      },
+      {
+        "input": "3\n3 4 6",
+        "output": "\n3"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "missing"
+  },
+  "editorial": null
+}

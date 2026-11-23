@@ -1,0 +1,44 @@
+{
+  "contest_id": 1990,
+  "index": "A",
+  "name": "Submission Bait",
+  "rating": 900,
+  "tags": [
+    "brute force",
+    "games",
+    "greedy",
+    "sortings"
+  ],
+  "points": 500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1990A",
+  "url": "https://codeforces.com/problemset/problem/1990/A",
+  "contest_start_time": "2024-07-20T14:35:00+00:00",
+  "statement": {
+    "title": "A. Submission Bait",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "Alice and Bob are playing a game in an array $a$ of size $n$.\n\nThey take turns to do operations, with Alice starting first. The player who can not operate will lose. At first, a variable $mx$ is set to $0$.\n\nIn one operation, a player can do:\n\n Choose an index $i$ ($1 \\le i \\le n$) such that $a_{i} \\geq mx$ and set $mx$ to $a_{i}$. Then, set $a_{i}$ to $0$.\n\nDetermine whether Alice has a winning strategy.",
+    "input_spec": "The first line contains an integer $t$ ($1 \\leq t \\leq 10^3$) — the number of test cases.\n\nFor each test case:\n\n The first line contains an integer $n$ ($2 \\leq n \\leq 50$) — the size of the array.\n\n The second line contains $n$ integers $a_1, a_2, \\ldots, a_n$ ($1 \\leq a_i \\leq n$) — the elements of the array.",
+    "output_spec": "For each test case, if Alice has a winning strategy, output \"YES\". Otherwise, output \"NO\".\n\nYou can output the answer in any case (upper or lower). For example, the strings \"yEs\", \"yes\", \"Yes\", and \"YES\" will be recognized as positive responses.",
+    "note": "In the first test case, Alice can choose $i=1$ since $a_1=2 \\ge mx=0$.\n\nAfter Alice's operation, $a=[0,1]$ and $mx=2$. Bob can not do any operation. Alice wins.\n\nIn the second test case, Alice doesn't have a winning strategy.\n\nFor example, if Alice chooses $i=1$, after Alice's operation: $a=[0,1]$ and $mx=1$. Then, Bob can choose $i=2$ since $a_2=1 \\ge mx=1$. After Bob's operation: $a=[0,0]$ and $mx=1$. Alice can not do any operation. Bob wins.",
+    "samples": [
+      {
+        "input": "5\n2\n2 1\n2\n1 1\n3\n3 3 3\n4\n3 3 4 4\n4\n1 2 2 2",
+        "output": "\nYES\nNO\nYES\nNO\nYES"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 131716,
+    "url": "https://codeforces.com/blog/entry/131716",
+    "tutorial": "A — Submission Bait\n\nhint1\n\nFor Alice, what if choosing the maximum value doesn't work?\n\nhint2\n\nConsider parity.\n\nsolution 1\n\nCase $1$: When all values appear an even number of times, Alice will lose. This is because no matter which number Alice chooses, Bob can mimic Alice's move.\n\nCase $2$: When at least one value appears an odd number of times, Alice will win. Alice only needs to choose the maximum value that appears an odd number of times, which will force Bob into Case $1$.\n\nTime complexity: $O(n)$.\n\nsolution 2\n\nSort the array $a$ in non-increasing order. We can observe that any state can be represented as a prefix of the array $a$. Consider dynamic programming: let $dp_i$ denote whether the first player is guaranteed to win when the state is $a_{1...i}$ ($dp_i=1$ indicates a guaranteed win for the first player). We have the following formula:\n\n$dp_1=1$;\n\n$dp_i= \\sim (dp_{i-1}$ & $dp_{id_1-1}$ & $dp_{id_2-1} \\ldots)$, where $id_j$ satisfies $a_{id_j} \\neq a_{id_j+1}$ and $id_j \\lt i$.\n\nTime complexity: $O(n^2)$.\n\ncode(solution 1)",
+    "solution_code": [
+      "#include <bits/stdc++.h>\nusing namespace std;\n#define m_p make_pair\n#define all(x) (x).begin(),(x).end()\n#define sz(x) ((int)(x).size())\n#define fi first\n#define se second\ntypedef long long ll;\nmt19937 rnd(chrono::steady_clock::now().time_since_epoch().count());\nmt19937 rnf(2106);\nconst int N = 55;\n\nint n;\nint q[N];\n\nvoid solv()\n{\n    cin >> n;\n    for (int i = 1; i <= n; ++i)\n        q[i] = 0;\n    for (int i = 1; i <= n; ++i)\n    {\n        int x;\n        cin >> x;\n        ++q[x];\n    }\n\n    for (int i = 1; i <= n; ++i)\n    {\n        if (q[i] % 2 == 1)\n        {\n            cout << \"YES\\n\";\n            return;\n        }\n    }\n    cout << \"NO\\n\";\n}\n\nint main()\n{\n    #ifdef SOMETHING\n    freopen(\"input.txt\", \"r\", stdin);\n    //freopen(\"output.txt\", \"w\", stdout);\n    #endif // SOMETHING\n    ios_base::sync_with_stdio(false), cin.tie(0);\n\n    int tt = 1;\n    cin >> tt;\n    while (tt--)\n    {\n        solv();\n    }\n    return 0;\n}"
+    ]
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "contest_id": 2062,
+  "index": "F",
+  "name": "Traveling Salescat",
+  "rating": 2900,
+  "tags": [
+    "constructive algorithms",
+    "dp",
+    "geometry",
+    "graphs",
+    "greedy",
+    "math",
+    "sortings"
+  ],
+  "points": 3500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2062F",
+  "url": "https://codeforces.com/problemset/problem/2062/F",
+  "contest_start_time": "2025-01-26T14:35:00+00:00",
+  "statement": {
+    "title": "F. Traveling Salescat",
+    "time_limit": "2 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "You are a cat selling fun algorithm problems. Today, you want to recommend your fun algorithm problems to $k$ cities.\n\nThere are a total of $n$ cities, each with two parameters $a_i$ and $b_i$. Between any two cities $i,j$ ($i\\ne j$), there is a bidirectional road with a length of $\\max(a_i + b_j , b_i + a_j)$. The cost of a path is defined as the total length of roads between every two adjacent cities along the path.\n\nFor $k=2,3,\\ldots,n$, find the minimum cost among all simple paths containing exactly $k$ distinct cities.",
+    "input_spec": "The first line of input contains a single integer $t$ ($1 \\leq t \\leq 1500$) — the number of test cases.\n\nFor each test case, the first line contains a single integer $n$ ($2 \\leq n \\leq 3\\cdot 10^3$) — the number of cities.\n\nThen $n$ lines follow, the $i$-th line contains two integers $a_i,b_i$ ($0 \\leq a_i,b_i \\leq 10^9$) — the parameters of city $i$.\n\nIt is guaranteed that the sum of $n^2$ over all test cases does not exceed $9\\cdot 10^6$.",
+    "output_spec": "For each test case, print $n-1$ integers in one line. The $i$-th integer represents the minimum cost when $k=i+1$.",
+    "note": "In the first test case:\n\n For $k=2$, the optimal path is $1\\to 2$ with a cost of $\\max(0+1,2+2)=4$.\n\n For $k=3$, the optimal path is $2\\to 1\\to 3$ with a cost of $\\max(0+1,2+2)+\\max(0+3,3+2)=4+5=9$.\n\nIn the second test case:\n\n For $k=2$, the optimal path is $1\\to 4$.\n\n For $k=3$, the optimal path is $2\\to 3\\to 5$.\n\n For $k=4$, the optimal path is $4\\to 1\\to 3\\to 5$.\n\n For $k=5$, the optimal path is $5\\to 2\\to 3\\to 1\\to 4$.",
+    "samples": [
+      {
+        "input": "3\n3\n0 2\n2 1\n3 3\n5\n2 7\n7 5\n6 3\n1 8\n7 5\n8\n899167687 609615846\n851467150 45726720\n931502759 23784096\n918190644 196992738\n142090421 475722765\n409556751 726971942\n513558832 998277529\n294328304 434714258",
+        "output": "\n4 9 \n10 22 34 46 \n770051069 1655330585 2931719265 3918741472 5033924854 6425541981 7934325514 "
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 138866,
+    "url": "https://codeforces.com/blog/entry/138866",
+    "tutorial": "Let $x_i = \\frac{a_i + b_i}{2}$, $y_i = \\frac{a_i - b_i}{2}$. Then $\\max(a_i + b_j , b_i + a_j) = \\max( x_i + y_i + x_j - y_j , x_i - y_i + x_j + y_j) = x_i + x_j + \\max(y_i - y_j, y_j - y_i)$\n\n$ = x_i + x_j + |y_i - y_j|$.\n\nConsider a road that passes through $k$ different cities, and consider the contribution as two parts, $x$ and $y$. For the contribution of $x$, the first and last cities will only contribute to the answer once. And all other cities on the path will contribute twice.\n\nFor the contribution of $y$, after determining the cities that need to be passed through and the two cities as starting or ending cities (referred to as endpoint cities), you can start from the endpoint city with smaller $y$, move to the city with the smallest $y$ among the cities to be passed through, then move to the city with the largest $y$ among the cities to be passed through, and finally move to the endpoint city with larger $y$. This way, the minimum contribution of y can be obtained while passing through all the cities that need to be passed through.\n\nYou can sort the cities by $y$ and perform a dp to find the minimum answer among the first $i$ cities where $j$ cities have been selected, including $0$ or $1$ or $2$ endpoint cities. The total time complexity is $O(n^2)$.",
+    "solution_code": [
+      "#include<bits/stdc++.h>\nusing namespace std;\nstruct apos{\n\tlong long a;\n\tlong long b;\n\tfriend bool operator<(apos a,apos b){\n\t\treturn a.b-a.a<b.b-b.a;\n\t}\n}ap[3000];\nlong long dp[3001][3],tdp[3001][3],ans[3001],inf=1000000000000000000LL;\nint main(){\n\tios::sync_with_stdio(false),cin.tie(0);\n\tint T,n,i,j,t;\n\tfor(cin>>T;T>0;T--)\n\t{\n\t\tcin>>n;\n\t\tfor(i=0;i<n;i++)cin>>ap[i].a>>ap[i].b;\n\t\tsort(ap,ap+n);\n\t\tfor(i=0;i<=n;i++)\n\t\t{\n\t\t\tfor(j=0;j<3;j++)\n\t\t\t{\n\t\t\t\tdp[i][j]=inf;\n\t\t\t\ttdp[i][j]=inf;\n\t\t\t}\n\t\t\tans[i]=inf;\n\t\t}\n\t\tfor(i=0;i<n;i++)\n\t\t{\n\t\t\ttdp[1][0]=min(tdp[1][0],ap[i].a*2);\n\t\t\ttdp[1][1]=min(tdp[1][1],ap[i].a);\n\t\t\tfor(j=1;j<n;j++)\n\t\t\t{\n\t\t\t\tfor(t=0;t<3;t++)tdp[j+1][t]=min(tdp[j+1][t],dp[j][t]+ap[i].a+ap[i].b);\n\t\t\t\ttdp[j+1][1]=min(tdp[j+1][1],dp[j][0]+ap[i].b);\n\t\t\t\ttdp[j+1][2]=min(tdp[j+1][2],dp[j][1]+ap[i].a);\n\t\t\t\tans[j+1]=min(ans[j+1],dp[j][1]+ap[i].b);\n\t\t\t\tans[j+1]=min(ans[j+1],dp[j][2]+ap[i].b*2);\n\t\t\t}\n\t\t\tfor(j=1;j<=n;j++)\n\t\t\t{\n\t\t\t\tfor(t=0;t<3;t++)\n\t\t\t\t{\n\t\t\t\t\tdp[j][t]=min(dp[j][t],tdp[j][t]);\n\t\t\t\t\ttdp[j][t]=inf;\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t\tfor(i=2;i<=n;i++)cout<<ans[i]<<' ';\n\t\tcout<<'\\n';\n\t}\n\treturn 0;\n}",
+      "class Q:\n\tdef __init__(this,x,y):\n\t\tthis.x,this.y=x+y,x-y\n\tdef __lt__(this,rhs):\n\t\treturn this.y<rhs.y\nfor _ in range(int(input())):\n\tn=int(input())\n\ta=[0]*n\n\tfor i in range(n):\n\t\tx,y=map(int,input().split())\n\t\ta[i]=Q(x,y)\n\ta.sort()\n\tl=[10**18]*(n+1)\n\tsl=l.copy();slt=l.copy();slrt=l.copy()\n\ts=10**18\n\tfor m,t in enumerate(a):\n\t\tx,y=t.x,t.y\n\t\tfor i in range(m,0,-1):\n\t\t\tslrt[i+1]=min(slrt[i+1],sl[i]+x+y,slt[i]+x*2+y*2)\n\t\t\tslt[i+1]=min(slt[i+1],slt[i]+x*2,sl[i]+x-y)\n\t\t\tsl[i+1]=min(sl[i+1],sl[i]+x*2,l[i]+x+y)\n\t\t\tl[i+1]=min(l[i+1],l[i]+x*2)\n\t\tsl[1]=min(sl[1],x-y)\n\t\tl[1]=min(l[1],x*2-y*2)\n\tprint(*[x//2 for x in slrt[2:]])"
+    ]
+  }
+}

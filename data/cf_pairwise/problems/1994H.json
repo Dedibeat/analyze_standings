@@ -1,0 +1,59 @@
+{
+  "contest_id": 1994,
+  "index": "H",
+  "name": "Fortnite",
+  "rating": 3500,
+  "tags": [
+    "combinatorics",
+    "constructive algorithms",
+    "games",
+    "greedy",
+    "hashing",
+    "interactive",
+    "math",
+    "number theory",
+    "strings"
+  ],
+  "points": 3750.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1994H",
+  "url": "https://codeforces.com/problemset/problem/1994/H",
+  "contest_start_time": "2024-07-18T14:35:00+00:00",
+  "statement": {
+    "title": "H. Fortnite",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "This is an interactive problem!\n\nTimofey is writing a competition called Capture the Flag (or CTF for short). He has one task left, which involves hacking a security system. The entire system is based on polynomial hashes$^{\\text{∗}}$.\n\nTimofey can input a string consisting of lowercase Latin letters into the system, and the system will return its polynomial hash. To hack the system, Timofey needs to find the polynomial hash parameters ($p$ and $m$) that the system uses.\n\nTimofey doesn't have much time left, so he will only be able to make $3$ queries. Help him solve the task.\n\n$^{\\text{∗}}$ The polynomial hash of a string $s$, consisting of lowercase Latin letters of length $n$, based on $p$ and modulo $m$ is $(\\mathrm{ord}(s_1) \\cdot p ^ 0 + \\mathrm{ord}(s_2) \\cdot p ^ 1 + \\mathrm{ord}(s_3) \\cdot p ^ 2 + \\ldots + \\mathrm{ord}(s_n) \\cdot p ^ {n - 1}) \\bmod m$. Where $s_i$ denotes the $i$-th character of the string $s$, $\\mathrm{ord}(\\mathrm{chr})$ denotes the ordinal number of the character $\\mathrm{chr}$ in the English alphabet, and $x \\bmod m$ is the remainder of $x$ when divided by $m$.",
+    "input_spec": "Each test consists of multiple test cases. The first line contains an integer $t$ ($1 \\leq t \\leq 10^3$) — the number of test cases.\n\nIt is guaranteed that the $p$ and $m$ used by the system satisfy the conditions: $26  \\lt  p \\leq 50$ and $p + 1  \\lt  m \\leq 2 \\cdot 10^9$.",
+    "output_spec": null,
+    "note": "Answer for the first query is $(ord(a) \\cdot 31^0 + ord(a) \\cdot 31^1) \\mod 59 = (1 + 1 \\cdot 31) \\mod 59 = 32$.\n\nAnswer for the second query is $(ord(y) \\cdot 31^0 + ord(b) \\cdot 31^1) \\mod 59 = (25 + 2 \\cdot 31) \\mod 59 = 28$.",
+    "samples": [
+      {
+        "input": "\n1\n\n32\n\n28",
+        "output": "\n? aa\n\n? yb\n\n! 31 59"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 131666,
+    "url": "https://codeforces.com/blog/entry/131666",
+    "tutorial": "The first query is $aa$, it can be used to find out $p$.\n\nThe second query is $zzzzzzzzzz$, let's calculate its hash without modulus, denote h_1, hash with modulus denote a1. Suppose we get a string with hash without modulus from $h_1 - a_1 - m$ to $h_1 - a_1 - 1$, then if we query it, we can easily find out the modulus.\n\nLet's find such a string. To do this, let's write $h_1$ in $p$-ary number system, we get $26, 26, .... 26$, and also write $(a1 + 1)$ in $p$-ary notation. Subtract the second one from the first one without transfers, take the leftmost position, where we get $ \\lt  1$, and put there and in all the left $26$, as long as the number on the left is $1$, put $26$ in it and stand in it, when the number on the left is not $1$, we just subtract 1 from it. After that we translate it all back into a string.\n\n It is claimed that this string fits, let's prove it. Its hash without modulus is obviously not greater than $h_1 - a_1 - 1$. Let's consider $2$ digits, the one in which we made $-1$ and $1$ to the left, let the number of the left digit $i$, then $a_1 + 1 \\geq 25 * p^i$, and we subtracted less than $p^{i + 1} - 25 * p^i$, less because either in $i$ that digit was $0$, or $0$ was somewhere to the left, so there could be no equality, $p \\leq 50$ by convention, $\\geq p^{i + 1} - 25 * p^i \\leq 50 * p^i - 25 * p^i = 25 * p^i \\leq a_1 + 1$ => we subtracted less than $a_1 + 1$ => not more than $a_1$ => less than m. Let's denote what we subtracted by $x$, then our hash is $h_1 - a_1 - 1 - x = h_1 - a_1 - (x + 1)$. $x  \\lt  m$ => $x + 1 \\leq m$ => $hash \\geq h1 - a1 - m$, which is what we needed to prove.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\nusing namespace std;\n\nusing ll = long long;\n\nvoid solve() {\n    cout << \"? aa\" << endl;\n    int p, v[10];\n    cin >> p; p--;\n    cout << \"? zzzzzzzzzz\" << endl;\n    int hsh, hsho;\n    ll nom = 0, cnt = 1;\n    cin >> hsh;\n    hsho = hsh;\n    hsh++;\n    for (int i = 0; i < 10; i++) {\n        nom += 26 * cnt;\n        cnt *= p;\n        v[i] = 26 - (hsh % p);\n        hsh /= p;\n    }\n    string s;\n    cnt = 1;\n    ll ch = 0;\n    for (int i = 0; i < 10; i++) {\n        if (v[i] < 1) {\n            v[i] = 26;\n            v[i + 1]--;\n        }\n        ch += cnt * v[i];\n        cnt *= p;\n        s += 'a' + (v[i] - 1);\n    }\n    cout << \"? \" << s << endl;\n    int ans;\n    cin >> ans;\n    cout << \"! \" << p << ' ' << ans + nom - ch - hsho << endl;\n}\n\nint32_t main() {\n    int t;\n    cin >> t;\n    while (t--) {\n        solve();\n    }\n}",
+      "    cin >> n >> k;\n    vll v(n), zero(n + 1, 0);\n \n    rep(i,0,n) cin >> v[i];\n \n    rep(i,0,n){\n        sum += v[i];\n        if(sum > k) {\n            sum = 0;\n            zero[i] = 1;\n        }\n    }\n \n    per(i,n - 1,0){\n        if(zero[i]) zero[i] = zero[i + 1] + 1;\n        else zero[i] = zero[i + 1];\n    }\n \n    // rep(i,0,n) cout << zero[i] << \" \";\n    // cout << nL;\n \n    sum = 0;\n    l = 0;\n    r = 0;\n    while(l < n){\n         while(r < n && sum + v[r] <= k){\n            sum += v[r++];\n        }\n        \n        ans += ((n - r - 1) - (r < n - 1 ? (zero[r + 1]) : (0))) + (r - l);\n        // cout << r << \" \";\n        sum -= v[l++];\n        if(r == n && sum <= k) ans++;\n        // cout << ans << \" \" << l << nL;\n    }\n   \n    cout << ans << nL;\n   ",
+      "1\n6 16\n1 13 12 8 6 10 ",
+      "vector<int> l(n, -1);\nint j=0;\nll sum=0;\nfor(int i=0; i<n; i++) {\n\twhile(j<n && sum<=x) {\n\t\tsum+=a[j];\n\t\tj++;\n\t}\n\tl[i]=j-1;\n\tif(sum<=x) {\n\t\tl[i]=-1;\n\t\tbreak;\n\t}\n\tsum-=a[i];\n}",
+      "#include<bits/stdc++.h>\nusing namespace std;\nint main(){\n    ios::sync_with_stdio(false); cin.tie(0); cout.tie(0);\n    int t;\n    cin>>t;\n    while(t--){\n        int n,x;\n        cin>>n>>x;\n        int arr[n];\n        for(int i(0);i<n;++i) cin>>arr[i];\n        int sum[n]={0};\n        int c[n]={0}; // counts the number of zeros from i to n-1\n        sum[n-1]=arr[n-1];\n        int ct=0; // counts number of zeros\n        long long ans=0;\n        for(int i(n-1);i>=0;--i){\n            if(i!=(n-1)){\n                sum[i]=(arr[i]+sum[i+1]);\n                c[i]=c[i+1];\n            }\n            if(sum[i]>x) sum[i]=0;\n            if(sum[i]==0){\n                ++ct;\n                c[i]=ct;\n            }\n        }\n        for(int i(0);i<n;++i){\n            ans+=(n-c[i]-i);\n        }\n\n        cout<<ans<<endl;\n    }\n\n    return 0;\n}",
+      "a = readTreeSizes()\nsortDecreasingly(a)\nans = 0\nfor (size in a) {\n    while ((ans | size) != (ans ^ size)) {\n        size--\n    }\n    ans |= size\n}\nprintln(ans)",
+      "1 2 \n1 3 \n1 4 \n1 5\n1 6\n1 7\n1 8\n1 9\n1 10\n1 11\n1 12",
+      "    scanf(\"%d\",&n);\n    char s[n], t[n];\n    scanf(\"%s\",s);\n    scanf(\"%s\",t);",
+      "    scanf(\"%d\",&n);\n    char s[n+1], t[n+1];\n    scanf(\"%s\",s);\n    scanf(\"%s\",t);",
+      "sort(all(sizes)); reverse(all(sizes));\nint ans = sizes[0];\nfor(int i = 1; i < k; i++){\n\tint prev = ans;\n\tfor(int j = 1; j <= sizes[i]; j++){\n\t\tans = max(ans, prev | j | (sizes[i] - j));\t\n\t}\t\n}\ncout << ans << endl;",
+      "1\n2\n8\n1 1 1 1 1 1 1\n8\n1 1 1 1 1 1 1"
+    ]
+  }
+}

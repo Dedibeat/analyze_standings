@@ -1,0 +1,40 @@
+{
+  "contest_id": 2048,
+  "index": "H",
+  "name": "Kevin and Strange Operation",
+  "rating": 3100,
+  "tags": [
+    "data structures",
+    "dp"
+  ],
+  "points": 2750.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2048H",
+  "url": "https://codeforces.com/problemset/problem/2048/H",
+  "contest_start_time": "2024-12-19T14:35:00+00:00",
+  "statement": {
+    "title": "H. Kevin and Strange Operation",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Kevin is exploring problems related to binary strings in Chinatown. When he was at a loss, a stranger approached him and introduced a peculiar operation:\n\n Suppose the current binary string is $ t $, with a length of $ \\vert t \\vert $. Choose an integer $ 1 \\leq p \\leq \\vert t \\vert $. For all $ 1 \\leq i  \\lt  p $, simultaneously perform the operation $ t_i = \\max(t_i, t_{i+1}) $, and then delete $ t_p $.\n\nFor example, suppose the current binary string is 01001, and you choose $ p = 4 $. Perform $ t_i = \\max(t_i, t_{i+1}) $ for $t_1$, $t_2$, and $ t_3 $, transforming the string into 11001, then delete $ t_4 $, resulting in 1101.\n\nKevin finds this strange operation quite interesting. Thus, he wants to ask you: Given a binary string $ s $, how many distinct non-empty binary strings can you obtain through any number of operations (possibly zero)?\n\nSince the answer may be very large, you only need to output the result modulo $998\\,244\\,353$.",
+    "input_spec": "Each test contains multiple test cases. The first line contains a single integer $t$ ($1\\le t \\le 10^4$) — the number of test cases.\n\nFor each test case, the only line contains a binary string $ s $ ($ 1 \\le \\lvert s \\rvert \\le 10^6 $).\n\nIt is guaranteed that the sum of $\\lvert s \\rvert$ over all test cases does not exceed $10^6$.",
+    "output_spec": "For each test case, print a single integer in the only line of the output — the number of distinct non-empty binary strings you can obtain, modulo $998\\,244\\,353$.",
+    "note": "In the first test case, all the binary strings you can obtain are: 11001, 1001, 1101, 001, 101, 111, 01, 11, and 1. There are $ 9 $ in total.",
+    "samples": [
+      {
+        "input": "2\n11001\n000110111001100",
+        "output": "\n9\n73"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 137473,
+    "url": "https://codeforces.com/blog/entry/137473",
+    "tutorial": "2048H - Kevin and Strange Operation\n\nAuthor: JoesSR\n\nHint 1\n\nConsider how to determine if the $01$ string $t$ can be generated.\n\nHint 2\n\nTry designing a DP that only records the useful variables.\n\nHint 3\n\nOptimize using data structures or improve the complexity of the transitions.\n\nTutorial\n\n2048H - Kevin and Strange Operation\n\nAssume that after performing several operations on the $01$ string $s$, we get the $01$ string $t$. It’s not hard to notice that each element in $t$ corresponds to the $\\max$ of a subset of elements from $s$. Further observation shows that this subset must form a continuous segment, so we can express $t_i$ as $\\max\\limits_{k=l_i}^{r_i} s_k$.\n\nInitially, $t = s$, so all $l_i = r_i = i$. Suppose the current length of string $t$ is $m$, corresponding to two sequences $l$ and $r$. If an operation is performed at position $p$ where $1 \\le p \\le m$, the new sequence $t'$ will correspond to two sequences $l'$ and $r'$. Then, since for $1 \\le i \\lt p$, we have $t'_i=\\max(t_i,t_{i+1})$, and for $p \\le i \\lt m$, $t'_i=t_{i+1}$, it can be observed that for $1 \\le i \\lt p$, we have $l'_i=l_i,r'_i=r_{i+1}$, and for $p \\le i \\lt m$, $l'_i=l_{i+1},r'_i=r_{i+1}$. If we only focus on the change of sequences $l$ and $r$ to $l'$ and $r'$, it is equivalent to deleting the values $l_p$ and $r_1$.\n\nThus, performing $k$ operations starting from the sequence $s$, the resulting sequence $t$ will correspond to the sequences $l$ and $r$, where $l$ is obtained by deleting any $k$ values from $1$ to $n$, and $r$ is the sequence from $k+1$ to $n$.\n\nNow, let's consider how to determine if the $01$ string $t$ can be generated. By reversing $t$ to get $t'$, the task becomes finding $n \\ge p_1 \\gt p_2 \\gt \\dots \\gt p_k \\ge 1$ such that for all $1 \\le i \\le k$, we have $t'_i=\\max\\limits_{k=p_i}^{n-i+1}s_k$. A clearly correct greedy strategy is to choose $p_i$ in the order $i=1 \\sim k$, always selecting the largest possible value.\n\nNow consider performing DP. Let $dp_{i,j}$ represent how many length-$i$ $01$ strings $t$ can be generated such that after running the above greedy algorithm, $p_i$ exactly equals $j$. We assume that $p_0 = n+1$ and the boundary condition is $dp_{0,n+1} = 1$. We now consider the transition from $dp_{i-1,j}$ to $dp_{i,*}$:\n\nIf $s[j-1, n-i+1]$ already contains $1$, then the $i$-th position in the reversed $t$ must be $1$, and it must be the case that $p_i = j-1$, so we add $dp_{i,j-1}$ to $dp_{i-1,j}$.\n\nIf $s[j-1, n-i+1]$ does not contain $1$, the $i$-th position in the reversed $t$ can be $0$. If it is $0$, then it must be the case that $p_i = j-1$, and we add $dp_{i,j-1}$ to $dp_{i-1,j}$; if we want the $i$-th position in the reversed $t$ to be $1$, we need to find the largest $pos \\le n-i+1$ such that $s_{pos} = 1$, and then set $p_i = pos$, adding $dp_{i,pos}$ to $dp_{i-1,j}$.\n\nBoth types of transitions can be considered as adding $dp_{i,j-1}$ to $dp_{i-1,j}$, then finding the largest $pos \\le n-i+1$ where $s_{pos} = 1$, and for all $j-1 \\gt pos$ (i.e., $j \\ge pos+2$), adding $dp_{i,pos}$ to $dp_{i,j}$.\n\nThe first type of transition can be viewed as a global shift of the DP array, while the second type requires calculating a segment suffix sum of the DP array and then performing a point update. This can be done efficiently using a segment tree in $O(n \\log n)$ time for all transitions.\n\nThe final answer is the sum of all $1 \\le i \\le n, 1 \\le j \\le n$ of $dp_{i,j}$. Using a segment tree for maintenance, we can also query the sum of each entry of $dp_i$ in $O(1)$ time (by setting to zero those entries where $dp_{i-1,1}$ is out of range after the shift).\n\nSince the transitions have better properties, it's actually possible to solve the problem cleverly using prefix sums in $O(n)$ time without needing complex data structures, but that is not strictly necessary.",
+    "solution_code": []
+  }
+}

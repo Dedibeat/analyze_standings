@@ -1,0 +1,46 @@
+{
+  "contest_id": 1974,
+  "index": "F",
+  "name": "Cutting Game",
+  "rating": 1900,
+  "tags": [
+    "binary search",
+    "brute force",
+    "data structures",
+    "implementation",
+    "sortings",
+    "two pointers"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1974F",
+  "url": "https://codeforces.com/problemset/problem/1974/F",
+  "contest_start_time": "2024-05-20T14:35:00+00:00",
+  "statement": {
+    "title": "F. Cutting Game",
+    "time_limit": "3 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Alice and Bob were playing a game again. They have a grid of size $a \\times b$ ($1 \\le a, b \\le 10^9$), on which there are $n$ chips, with at most one chip in each cell. The cell at the intersection of the $x$-th row and the $y$-th column has coordinates $(x, y)$.\n\nAlice made the first move, and the players took turns. On each move, a player could cut several (but not all) rows or columns from the beginning or end of the remaining grid and earn a point for each chip that was on the cut part of the grid. Each move can be described by the character 'U', 'D', 'L', or 'R' and an integer $k$:\n\n If the character is 'U', then the first $k$ remaining rows will be cut;\n\n If the character is 'D', then the last $k$ remaining rows will be cut;\n\n If the character is 'L', then the first $k$ remaining columns will be cut;\n\n If the character is 'R', then the last $k$ remaining columns will be cut.\n\nBased on the initial state of the grid and the players' moves, determine the number of points earned by Alice and Bob, respectively.",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases.\n\nThe first line of each test case contains four integers $a$, $b$, $n$, and $m$ ($2 \\le a, b \\le 10^9$, $1 \\le n, m \\le 2 \\cdot 10^5$) — the dimensions of the grid, the number of chips, and the number of moves.\n\nEach of the next $n$ lines contain two integers $x_i$ and $y_i$ ($1 \\le x_i \\le a$, $1 \\le y_i \\le b$) — the coordinates of the chips. All pairs of coordinates are distinct.\n\nEach of the next $m$ lines contain a character $c_j$ and an integer $k_j$ — the description of the $j$-th move. It is guaranteed that $k$ is less than the number of rows/columns in the current grid. In other words, a player cannot cut the entire remaining grid on their move.\n\nIt is guaranteed that the sum of the values of $n$ across all test cases in the test does not exceed $2 \\cdot 10^5$. It is guaranteed that the sum of the values of $m$ across all test cases in the test does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, output two integers — the number of points earned by Alice and Bob, respectively.",
+    "note": "Below is the game from the first example:\n\nOn her turn, Alice cut $2$ rows from the bottom and scored $2$ points, then Bob cut $1$ column from the right and scored one point. Note that if Bob had cut $1$ row from the bottom, he would have also scored $1$ point.",
+    "samples": [
+      {
+        "input": "6\n4 4 3 2\n4 1\n3 3\n2 4\nD 2\nR 1\n4 4 3 3\n4 1\n3 2\n2 3\nD 1\nL 1\nU 2\n3 5 3 2\n1 3\n2 2\n3 3\nR 2\nR 2\n6 4 4 2\n1 4\n2 3\n5 3\n1 1\nR 1\nU 1\n9 3 2 1\n6 1\n3 3\nD 8\n10 10 2 5\n7 5\n9 1\nR 1\nL 2\nD 1\nU 4\nD 1",
+        "output": "\n2 1\n2 0\n0 3\n1 1\n2 0\n0 1"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 129686,
+    "url": "https://codeforces.com/blog/entry/129686",
+    "tutorial": "First, let's sort all cells with chips in non-decreasing order of the x-coordinate (let's denote the array as $ver$), also in a separate array $hor$ we will sort them in non-decreasing order of the y-coordinate.\n\nAs we add moves, we will maintain the boundaries of the original matrix to which it was cut: we will shift the respective boundary by $k$. Obviously, the moves U will remove some prefix from the array $ver$ and add it to the answer, and the moves D will remove some suffix from the array $ver$ and add it to the answer. The same goes for the moves L and R and the array $hor$. Instead of removing elements, the current boundaries of the arrays can be maintained using two pointers.\n\nHowever, with this calculation, some chips may be counted twice: when removed vertically and when removed horizontally. To prevent this from happening, we will maintain a set of already removed vertices and before adding a chip to the answer, we will check that it has not been removed before.",
+    "solution_code": [
+      "def solve(tc):\n    a, b, n, m = map(int, input().split())\n    ver, hor = [], []\n    for i in range(n):\n        x, y = map(int, input().split())\n        ver.append((x, y))\n        hor.append((y, x))\n    deleted = set()\n    hor.sort()\n    ver.sort()\n    ans = [0, 0]\n    u, d = 1, a\n    l, r = 1, b\n    hl, hr = 0, n - 1\n    vl, vr = 0, n - 1\n    for i in range(m):\n        c, k = input().split()\n        k = int(k)\n        if c == 'U':\n            u += k\n            while vl <= vr and ver[vl][0] < u:\n                if ver[vl] not in deleted:\n                    ans[i % 2] += 1\n                    deleted.add(ver[vl])\n                vl += 1\n        if c == 'D':\n            d -= k\n            while vl <= vr and ver[vr][0] > d:\n                if ver[vr] not in deleted:\n                    ans[i % 2] += 1\n                    deleted.add(ver[vr])\n                vr -= 1\n        if c == 'L':\n            l += k\n            while hl <= hr and hor[hl][0] < l:\n                if (hor[hl][1], hor[hl][0]) not in deleted:\n                    ans[i % 2] += 1\n                    deleted.add((hor[hl][1], hor[hl][0]))\n                hl += 1\n        if c == 'R':\n            r -= k\n            while hl <= hr and hor[hr][0] > r:\n                if (hor[hr][1], hor[hr][0]) not in deleted:\n                    ans[i % 2] += 1\n                    deleted.add((hor[hr][1], hor[hr][0]))\n                hr -= 1\n    print(ans[0], ans[1])\n\n\nt = int(input())\nfor i in range(1, t + 1):\n    solve(i)"
+    ]
+  }
+}

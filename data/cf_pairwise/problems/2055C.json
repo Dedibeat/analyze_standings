@@ -1,0 +1,45 @@
+{
+  "contest_id": 2055,
+  "index": "C",
+  "name": "The Trail",
+  "rating": 1400,
+  "tags": [
+    "brute force",
+    "constructive algorithms",
+    "greedy",
+    "math",
+    "two pointers"
+  ],
+  "points": 1500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2055C",
+  "url": "https://codeforces.com/problemset/problem/2055/C",
+  "contest_start_time": "2025-01-12T14:35:00+00:00",
+  "statement": {
+    "title": "C. The Trail",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "There are no mountains in Florida, and Florida Man cannot comprehend their existence. As such, he really needs your help with this one.\n\nIn the wilderness lies a region of mountainous terrain represented as a rectangular grid with $n$ rows and $m$ columns. Each cell in the grid is identified by its position $(i, j)$, where $i$ is the row index and $j$ is the column index. The altitude of cell $(i, j)$ is denoted by $a_{i,j}$.\n\nHowever, this region has been tampered with. A path consisting of $n + m - 1$ cells, starting from the top-left corner $(1, 1)$ and ending at the bottom-right corner $(n, m)$, has been cleared. For every cell $(i, j)$ along this path, the altitude $a_{i,j}$ has been set to $0$. The path moves strictly via downward ($\\mathtt{D}$) or rightward ($\\mathtt{R}$) steps.\n\nTo restore the terrain to its original state, it is known that the region possessed a magical property before it was tampered with: all rows and all columns shared the same sum of altitudes. More formally, there exists an integer $x$ such that $\\sum_{j=1}^m a_{i, j} = x$ for all $1\\le i\\le n$, and $\\sum_{i=1}^n a_{i, j} = x$ for all $1\\le j\\le m$.\n\nYour task is to assign new altitudes to the cells on the path such that the above magical property is restored. It can be proven that a solution always exists. If there are multiple solutions that satisfy the property, any one of them may be provided.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 10^4$). The description of the test cases follows.\n\nThe first line of each test case contains two integers $n$ and $m$ ($2 \\leq n, m \\leq 1000$) — the number of rows and columns in the grid.\n\nThe second line of each test case contains a string $s$ of length $n+m-2$ ($s_i = \\mathtt{D}$ or $s_i = \\mathtt{R}$) — the steps the path makes from $(1, 1)$ to $(n, m)$. The character $\\mathtt{D}$ represents a downward step, and $\\mathtt{R}$ represents a rightward step.\n\nThe $i$-th of the next $n$ lines each contain $m$ integers $a_{i,1}, a_{i, 2}, \\ldots, a_{i,m}$ ($-10^6 \\leq a_{i,j} \\leq 10^6$) — the altitude of each cell in the grid. It is guaranteed that if a cell $(i, j)$ lies on the path, then $a_{i,j} = 0$.\n\nIt is guaranteed that the sum of $n \\cdot m$ over all test cases does not exceed $10^6$.",
+    "output_spec": "For each test case, output $n$ lines of $m$ integers representing the restored grid of altitudes $b_{i, j}$. The altitudes must satisfy $-10^{15} \\leq b_{i,j} \\leq 10^{15}$, and additionally $a_{i,j} = b_{i,j}$ if $(i, j)$ is not on the path. If multiple solutions exist, output any of them.",
+    "note": "In the first test case, the grid has been filled such that every row and column contains the numbers $1, 2, 3$ in some order, resulting in a common sum of $6$.\n\nIn the second test case, the grid has been filled such that all rows and columns sum to $0$.",
+    "samples": [
+      {
+        "input": "4\n3 3\nDRRD\n0 2 3\n0 0 0\n3 1 0\n4 5\nDRRRRDD\n0 1 0 2 3\n0 0 0 0 0\n-1 0 -3 -3 0\n0 0 0 -1 0\n2 3\nRRD\n0 0 0\n0 1 0\n5 5\nDDDDRRRR\n0 25 2 9 11\n0 6 13 20 22\n0 17 24 1 8\n0 3 10 12 19\n0 0 0 0 0",
+        "output": "\n1 2 3\n2 3 1\n3 1 2\n-6 1 0 2 3\n7 -1 3 2 -11\n-1 0 -3 -3 7\n0 0 0 -1 1\n0 -1 1\n0 1 -1\n18 25 2 9 11\n4 6 13 20 22\n15 17 24 1 8\n21 3 10 12 19\n7 14 16 23 5"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 138343,
+    "url": "https://codeforces.com/blog/entry/138343",
+    "tutorial": "2055C - The Trail\n\nHint 1\n\nPick $x$, and find the sum of the whole grid. What does this tell you?\n\nHint 2\n\nOnce you know $x$, the top left cell is fixed.\n\nHint 3\n\nWhat about the next cell on the trail?\n\nSolution\n\nThe naive solution of writing out a linear system and solving them will take $O((n + m)^3)$ time, which is too slow, so we will need a faster algorithm.\n\nWe begin by selecting a target sum $S$ for each row and column. If we calculate the sum of all numbers in the completed grid, summing over rows gives a total of $S \\cdot n$ while summing over columns gives a total of $S \\cdot m$. Therefore, in order for our choice of $S$ to be possible, we require $S \\cdot n = S \\cdot m$, and since it is possible for $n \\neq m$, we will pick $S = 0$ for our choice to be possible in all cases of $n, m$. Notice that all choices $S \\neq 0$ will fail on $n \\neq m$, as the condition $S \\cdot n = S \\cdot m$ no longer holds. As such, $S = 0$ is the only one that will work in all cases.\n\nNow, we aim to make each row and column sum to $S$. The crux of the problem is the following observation:\n\nDenote $x_1, x_2, \\dots, x_{n+m-1}$ to be the variables along the path. Let's say variables $x_1, \\dots, x_{i-1}$ have their values set for some $1 \\leq i \\lt n+m-1$. Then, either the row or column corresponding to variable $x_i$ has all of its values set besides $x_i$, and therefore we may determine exactly one possible value of $x_i$ to make its row or column sum to $0$.\n\nThe proof of this claim is simple. At variable $x_i$, we look at the corresponding path move $s_i$. If $s_i = \\tt{R}$, then the path will never revisit the column of variable $x_i$, and its column will have no remaining unset variables since $x_1, \\dots, x_{i-1}$ are already set. Likewise, if $s_i = \\tt{D}$, then the path will never revisit the row of variable $x_i$, which can then be used to determine the value of $x_i$.\n\nRepeating this process will cause every row and column except for row $n$ and column $m$ to have a sum of zero, with $x_{n+m-1}$ being the final variable. However, we will show that we can use either the row or column to determine it, and it will give a sum of zero for both row $n$ and column $m$. WLOG we use row $n$. Indeed, if the sum of all rows and columns except for column $m$ are zero, we know that the sum of all entries of the grid is zero by summing over rows. However, we may then subtract all columns except column $m$ from this total to arrive at the conclusion that column $m$ also has zero sum. Therefore, we may determine the value of $x_{n+m-1}$ using either its row or column to finish our construction, giving a solution in $O(n \\cdot m)$.\n\nImplementation",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n\n#define f first\n#define s second\n#define pb push_back\n\ntypedef long long int ll;\ntypedef unsigned long long int ull;\nusing namespace std;\ntypedef pair<int,int> pii;\ntypedef pair<ll,ll> pll;\n\ntemplate<typename T> int die(T x) { cout << x << endl; return 0; }\n\n#define mod 1000000007\n#define INF 1000000000\n#define LNF 1e15\n#define LOL 12345678912345719ll\n\nusing namespace std;\n\nint main()\n{\n    ios_base::sync_with_stdio(false);\n    cin.tie(0);\n\n    int T; cin >> T;\n    while (T--) {\n        int N, M; cin >> N >> M;\n        string S; cin >> S;\n        vector<vector<ll>> A;\n        for (int i = 0; i < N; i++) {\n            A.push_back(vector<ll>(M));\n            for (int j = 0; j < M; j++) {\n                cin >> A[i][j];\n            }\n        }\n        int x = 0, y = 0;\n        for (char c : S) {\n            if (c == 'D') {\n                long long su = 0;\n                for (int i = 0; i < M; i++) {\n                    su += A[x][i];\n                }\n                A[x][y] = -su;\n                ++x;\n            } else {\n                long long su = 0;\n                for (int i = 0; i < N; i++) {\n                    su += A[i][y];\n                }\n                A[x][y] = -su;\n                ++y;\n            }\n        }\n        long long su = 0;\n        for (int i = 0; i < M; i++) {\n            su += A[N-1][i];\n        }\n        A[N-1][M-1] = -su;\n        for (int i = 0; i < N; i++) {\n            for (int j = 0; j < M; j++) {\n                cout << A[i][j] << \" \";\n            }\n            cout << endl;\n        }\n\n    }\n    return 0;\n}"
+    ]
+  }
+}

@@ -1,0 +1,115 @@
+{
+  "predictions": [
+    {
+      "a": "2059B",
+      "b": "2065G",
+      "gap": 400,
+      "truth": "B",
+      "predicted": "B",
+      "request_location": "global",
+      "usage": {
+        "promptTokenCount": 1380,
+        "candidatesTokenCount": 12,
+        "totalTokenCount": 1392,
+        "trafficType": "ON_DEMAND",
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1380
+          }
+        ],
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 12
+          }
+        ]
+      }
+    },
+    {
+      "a": "2065G",
+      "b": "2059B",
+      "gap": 400,
+      "truth": "A",
+      "predicted": "A",
+      "request_location": "global",
+      "usage": {
+        "promptTokenCount": 1380,
+        "candidatesTokenCount": 12,
+        "totalTokenCount": 1392,
+        "trafficType": "ON_DEMAND",
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1380
+          }
+        ],
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 12
+          }
+        ]
+      }
+    },
+    {
+      "a": "2066B",
+      "b": "2064A",
+      "gap": 1100,
+      "truth": "A",
+      "predicted": "A",
+      "request_location": "global",
+      "usage": {
+        "promptTokenCount": 1507,
+        "candidatesTokenCount": 12,
+        "totalTokenCount": 1519,
+        "trafficType": "ON_DEMAND",
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1507
+          }
+        ],
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 12
+          }
+        ]
+      }
+    },
+    {
+      "a": "2064A",
+      "b": "2066B",
+      "gap": 1100,
+      "truth": "B",
+      "predicted": "B",
+      "request_location": "global",
+      "usage": {
+        "promptTokenCount": 1507,
+        "candidatesTokenCount": 12,
+        "totalTokenCount": 1519,
+        "trafficType": "ON_DEMAND",
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1507
+          }
+        ],
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 12
+          }
+        ]
+      }
+    }
+  ],
+  "project": "project-0e393569-b54a-4a67-bc5",
+  "target": "gemini-3.5-flash",
+  "location": "global",
+  "pairs_key": "baseline_pairs",
+  "thinking_level": "minimal",
+  "manifest_sha256": "946f0b40bd8be2c7aeea1f8d865c3a54c6f662deafc1680e19943f8cc406f10a",
+  "updated_at": "2026-08-05T14:06:47.210628+00:00"
+}

@@ -1,0 +1,45 @@
+{
+  "contest_id": 2018,
+  "index": "E2",
+  "name": "Complex Segments (Hard Version)",
+  "rating": 3400,
+  "tags": [
+    "binary search",
+    "data structures",
+    "divide and conquer",
+    "dsu",
+    "greedy",
+    "math",
+    "sortings"
+  ],
+  "points": 750.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2018E2",
+  "url": "https://codeforces.com/problemset/problem/2018/E2",
+  "contest_start_time": "2024-09-27T13:35:00+00:00",
+  "statement": {
+    "title": "E2. Complex Segments (Hard Version)",
+    "time_limit": "13 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Ken Arai - COMPLEX\n\n⠀\n\nThis is the hard version of the problem. In this version, the constraints on $n$ and the time limit are higher. You can make hacks only if both versions of the problem are solved.\n\nA set of (closed) segments is complex if it can be partitioned into some subsets such that\n\n all the subsets have the same size; and\n\n a pair of segments intersects if and only if the two segments are in the same subset.\n\nYou are given $n$ segments $[l_1, r_1], [l_2, r_2], \\ldots, [l_n, r_n]$. Find the maximum size of a complex subset of these segments.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 10^3$). The description of the test cases follows.\n\nThe first line of each test case contains a single integer $n$ ($1 \\le n \\le 3 \\cdot 10^5$) — the number of segments.\n\nThe second line of each test case contains $n$ integers $l_1, l_2, \\ldots, l_n$ ($1 \\le l_i \\le 2n$) — the left endpoints of the segments.\n\nThe third line of each test case contains $n$ integers $r_1, r_2, \\ldots, r_n$ ($l_i \\leq r_i \\le 2n$) — the right endpoints of the segments.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $3 \\cdot 10^5$.",
+    "output_spec": "For each test case, output a single integer: the maximum size of a complex subset of the given segments.",
+    "note": "In the first test case, all pairs of segments intersect, therefore it is optimal to form a single group containing all of the three segments.\n\nIn the second test case, there is no valid partition for all of the five segments. A valid partition with four segments is the following: $\\{\\{ [1, 5], [2, 4] \\}, \\{ [6, 9], [8, 10] \\}\\}$.\n\nIn the third test case, it is optimal to make a single group containing all the segments except the second.",
+    "samples": [
+      {
+        "input": "3\n3\n1 2 3\n5 4 6\n5\n1 2 3 6 8\n5 4 7 9 10\n5\n3 1 4 1 5\n7 2 6 5 10",
+        "output": "\n3\n4\n4"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "missing"
+  },
+  "editorial": {
+    "blog_id": 134420,
+    "url": "https://codeforces.com/blog/entry/134420",
+    "tutorial": null,
+    "solution_code": []
+  }
+}

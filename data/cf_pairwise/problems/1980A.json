@@ -1,0 +1,41 @@
+{
+  "contest_id": 1980,
+  "index": "A",
+  "name": "Problem Generator",
+  "rating": 800,
+  "tags": [
+    "math"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1980A",
+  "url": "https://codeforces.com/problemset/problem/1980/A",
+  "contest_start_time": "2024-06-03T14:35:00+00:00",
+  "statement": {
+    "title": "A. Problem Generator",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "Vlad is planning to hold $m$ rounds next month. Each round should contain one problem of difficulty levels 'A', 'B', 'C', 'D', 'E', 'F', and 'G'.\n\nVlad already has a bank of $n$ problems, where the $i$-th problem has a difficulty level of $a_i$. There may not be enough of these problems, so he may have to come up with a few more problems.\n\nVlad wants to come up with as few problems as possible, so he asks you to find the minimum number of problems he needs to come up with in order to hold $m$ rounds.\n\nFor example, if $m=1$, $n = 10$, $a=$ 'BGECDCBDED', then he needs to come up with two problems: one of difficulty level 'A' and one of difficulty level 'F'.",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\le t \\le 1000$) — the number of test cases.\n\nThe first line of each test case contains two integers $n$ and $m$ ($1 \\le n \\le 50$, $1 \\le m \\le 5$) — the number of problems in the bank and the number of upcoming rounds, respectively.\n\nThe second line of each test case contains a string $a$ of $n$ characters from 'A' to 'G' — the difficulties of the problems in the bank.",
+    "output_spec": "For each test case, output a single integer — the minimum number of problems that need to come up with to hold $m$ rounds.",
+    "note": null,
+    "samples": [
+      {
+        "input": "3\n10 1\nBGECDCBDED\n10 2\nBGECDCBDED\n9 1\nBBCDEFFGG",
+        "output": "\n2\n5\n1"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 130135,
+    "url": "https://codeforces.com/blog/entry/130135",
+    "tutorial": "It is necessary to have at least $m$ problems of each difficulty level. If there are already at least $m$ problems of difficulty level $c$, then there is no need to come up with more problems of this difficulty level. Otherwise, it is necessary to come up with $m - cnt_c$ problems, where $cnt_c$ is the number of problems of difficulty level $c$ (if more problems of this difficulty level are created, the number will not be minimum).",
+    "solution_code": [
+      "def solve():\n    n, m = map(int, input().split())\n    a = input()\n    ans = 0\n    for ch in range(ord('A'), ord('H')):\n        ans += max(0, m - a.count(chr(ch)))\n    print(ans)\n    \n    \nfor _ in range(int(input())):\n    solve()"
+    ]
+  }
+}

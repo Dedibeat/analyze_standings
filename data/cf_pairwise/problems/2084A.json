@@ -1,0 +1,42 @@
+{
+  "contest_id": 2084,
+  "index": "A",
+  "name": "Max and Mod",
+  "rating": 800,
+  "tags": [
+    "constructive algorithms",
+    "math"
+  ],
+  "points": 750.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2084A",
+  "url": "https://codeforces.com/problemset/problem/2084/A",
+  "contest_start_time": "2025-04-05T14:35:00+00:00",
+  "statement": {
+    "title": "A. Max and Mod",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "You are given an integer $n$. Find any permutation $p$ of length $n$$^{\\text{∗}}$ such that:\n\n For all $2 \\le i \\le n$, $\\max(p_{i - 1}, p_i) \\bmod i$ $^{\\text{†}}$ $= i - 1$ is satisfied.\n\nIf it is impossible to find such a permutation $p$, output $-1$.\n\n$^{\\text{∗}}$A permutation of length $n$ is an array consisting of $n$ distinct integers from $1$ to $n$ in arbitrary order. For example, $[2,3,1,5,4]$ is a permutation, but $[1,2,2]$ is not a permutation ($2$ appears twice in the array), and $[1,3,4]$ is also not a permutation ($n=3$ but there is $4$ in the array).\n\n$^{\\text{†}}$$x \\bmod y$ denotes the remainder from dividing $x$ by $y$.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 99$). The description of the test cases follows.\n\nThe first line of each test case contains a single integer $n$ ($2 \\le n \\le 100$).",
+    "output_spec": "For each test case:\n\n If such a permutation $p$ doesn't exist, output a single integer $-1$.\n\n Otherwise, output $n$ integers $p_1, p_2, \\ldots, p_n$ — the permutation $p$ you've found. If there are multiple answers, output any of them.",
+    "note": "In the first test case, it is impossible to find such a permutation $p$, so you should output $-1$.\n\nIn the fourth test case, $p = [1, 5, 2, 3, 4]$ satisfies the condition:\n\n For $i = 2$, $\\max(p_1, p_2) = 5$ and $5 \\bmod 2 = 1$.\n\n For $i = 3$, $\\max(p_2, p_3) = 5$ and $5 \\bmod 3 = 2$.\n\n For $i = 4$, $\\max(p_3, p_4) = 3$ and $3 \\bmod 4 = 3$.\n\n For $i = 5$, $\\max(p_4, p_5) = 4$ and $4 \\bmod 5 = 4$.",
+    "samples": [
+      {
+        "input": "4\n2\n3\n4\n5",
+        "output": "\n-1\n3 2 1\n-1\n1 5 2 3 4"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 141155,
+    "url": "https://codeforces.com/blog/entry/141155",
+    "tutorial": "When $n$ is odd, we can construct $p = [n, 1, 2, \\ldots, n - 1]$. In this case:\n\n For $i = 2$, $\\max(p_1, p_2) = n$ and $n \\bmod 2 = 1$.\n\n For $i \\geq 3$, $\\max(p_{i - 1}, p_i) = i - 1$ and $(i - 1) \\bmod i = i - 1$.\n\nIt can be proven that there is no solution when $n$ is even. Clearly, $n$ cannot be placed at $p_1, p_2$, or $p_n$. If $n$ is placed in position $3 \\sim n - 1$, let $x$ be the position of $n$, then we have $\\max(p_{x - 1}, p_x) = \\max(p_x, p_{x + 1}) = n$.\n\nThus, there must exist an even number $2 \\leq i \\leq n$ such that $\\max(p_{i - 1}, p_i) = n$ and it must satisfy $\\max(p_{i - 1}, p_i) \\bmod i = i - 1$. However, an even number modulo another even number can never yield an odd result, leading to a contradiction.\n\nTime complexity: $O(n)$ per test case.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n\tint T, n;\n\tcin >> T;\n\twhile (T--) {\n\t\tcin >> n;\n\t\tif (n & 1) {\n\t\t\tcout << n << ' ';\n\t\t\tfor (int i = 1; i < n; ++i) {\n\t\t\t\tcout << i << \" \\n\"[i == n - 1];\n\t\t\t}\n\t\t} else {\n\t\t\tcout << \"-1\\n\";\n\t\t}\n\t}\n\treturn 0;\n}"
+    ]
+  }
+}

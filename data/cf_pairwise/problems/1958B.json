@@ -1,0 +1,42 @@
+{
+  "contest_id": 1958,
+  "index": "B",
+  "name": "Clock in the Pool",
+  "rating": 1400,
+  "tags": [
+    "*special",
+    "math"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1958B",
+  "url": "https://codeforces.com/problemset/problem/1958/B",
+  "contest_start_time": "2024-05-13T14:35:00+00:00",
+  "statement": {
+    "title": "B. Clock in the Pool",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "You are swimming in the pool, and you need to control the time of swimming.\n\nThe pool has a clock that cycles between three different modes: showing water temperature, showing air temperature, and showing time. At the start of the $0$-th second it starts showing water temperature, at the start of the $k$-th second it switches to air temperature. At the start of the $2k$-th second, it switches to showing time.\n\nAt the start of the $3k$-th second the clock starts showing water temperature again, at the start of the $4k$-th second — air temperature, and so on.\n\nYou looked at the clock during the $m$-th second to check the time, but it may be that the clock is not showing time right now. How much time do you have to wait to see the time on the clock?\n\nAnswer $t$ independent test cases.",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases. Next $t$ cases follow.\n\nThe first and only line of each test case contains two integers $k$ and $m$ ($1 \\le k \\le 10^8; 1 \\le m \\le 10^9$) — the length of the period of the clock and the moment of time you check the clock.",
+    "output_spec": "For each test case, print a single integer — the time you have to wait from the moment $m$ until the moment the clock starts showing the time.\n\nYou can assume that you are able to read the time instantly the moment it displays on the clock.",
+    "note": "In the first test case, the clock will start showing time during the $2$-nd second, so you have to wait $2 - 1 = 1$ second.\n\nIn the second test case, the clock shows time from the $10$-th until the $15$-th second, so during the $14$-th second it shows time, and you don't have to wait.\n\nIn the third test case, during the $15$-th second, the clock is already showing water temperature. So you have to wait till the $25$-th second, when the clock starts showing time again. You'll wait $25 - 15 = 10$ seconds.\n\nIn the fourth test case, the clock will start showing time at the start of the $110$-th second, so you'll wait $110 - 110 = 0$ seconds.",
+    "samples": [
+      {
+        "input": "5\n1 1\n5 14\n5 15\n10 110\n99999999 1000000000",
+        "output": "\n1\n0\n10\n0\n99999989"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 129483,
+    "url": "https://codeforces.com/blog/entry/129483",
+    "tutorial": "Let's write down intervals when the clock shows time using formulas. Segments are $[3k \\cdot x + 2k, 3k \\cdot (x + 1))$ for all integer $x \\ge 0$.\n\nWe need to find the first interval that finished later than $m$. It may start either earlier or later than $m$, but it must finish later than $m$.\n\nIn formulas, it means that we should find the minimum $x$ such that $m  \\lt  3k \\cdot (x + 1)$ or $x  \\gt  \\frac{m}{3k} - 1$. It means that we should take $x = \\mathrm{floor}(\\frac{m}{3k})$.\n\nSince now we know $x$, we can calculate when the $x$-th interval starts: it's moment $3kx + 2k$. If $3kx + 2k  \\gt  m$, we should wait exactly $3kx + 2k - m$ seconds. If $3kx + 2k \\le m$, then time is showing right now, and we don't need to wait.",
+    "solution_code": [
+      "fun main() {\n    repeat(readInt()) {\n        val (k, m) = readInts()\n        println(maxOf(0, 2 * k - (m % (3 * k))))\n    }\n}\n\nprivate fun readInt() = readln().toInt()\nprivate fun readLongs() = readStrings().map { it.toLong() }\nprivate fun readStrings() = readln().split(\" \")\nprivate fun readInts() = readStrings().map { it.toInt() }"
+    ]
+  }
+}

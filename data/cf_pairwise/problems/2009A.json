@@ -1,0 +1,42 @@
+{
+  "contest_id": 2009,
+  "index": "A",
+  "name": "Minimize!",
+  "rating": 800,
+  "tags": [
+    "brute force",
+    "math"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2009A",
+  "url": "https://codeforces.com/problemset/problem/2009/A",
+  "contest_start_time": "2024-09-03T14:35:00+00:00",
+  "statement": {
+    "title": "A. Minimize!",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "You are given two integers $a$ and $b$ ($a \\leq b$). Over all possible integer values of $c$ ($a \\leq c \\leq b$), find the minimum value of $(c - a) + (b - c)$.",
+    "input_spec": "The first line contains $t$ ($1 \\leq t \\leq 55$) — the number of test cases.\n\nEach test case contains two integers $a$ and $b$ ($1 \\leq a \\leq b \\leq 10$).",
+    "output_spec": "For each test case, output the minimum possible value of $(c - a) + (b - c)$ on a new line.",
+    "note": "In the first test case, you can choose $c = 1$ and obtain an answer of $(1 - 1) + (2 - 1) = 1$. It can be shown this is the minimum value possible.\n\nIn the second test case, you can choose $c = 6$ and obtain an answer of $(6 - 3) + (10 - 6) = 7$. It can be shown this is the minimum value possible.",
+    "samples": [
+      {
+        "input": "3\n1 2\n3 10\n5 5",
+        "output": "\n1\n7\n0"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 133296,
+    "url": "https://codeforces.com/blog/entry/133296",
+    "tutorial": "2009A - Минимизировать!\n\nProblem Credits: cry\n Analysis: cry\n\nSolution\n\nWe choose $c$ between $a$ and $b$ $(a \\leq c \\leq b)$. The distance is $(c - a) + (b - c) = b - a$. Note that the distance does not depend on the the position $c$ at all.\n\nCode (Python) (ntarsis30)",
+    "solution_code": [
+      "for _ in range(int(input())):\n    a,b = map(int,input().split())\n    print(b-a)"
+    ]
+  }
+}

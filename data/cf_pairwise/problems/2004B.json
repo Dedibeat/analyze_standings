@@ -1,0 +1,42 @@
+{
+  "contest_id": 2004,
+  "index": "B",
+  "name": "Game with Doors",
+  "rating": 1000,
+  "tags": [
+    "brute force",
+    "greedy"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2004B",
+  "url": "https://codeforces.com/problemset/problem/2004/B",
+  "contest_start_time": "2024-08-15T14:35:00+00:00",
+  "statement": {
+    "title": "B. Game with Doors",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "There are $100$ rooms arranged in a row and $99$ doors between them; the $i$-th door connects rooms $i$ and $i+1$. Each door can be either locked or unlocked. Initially, all doors are unlocked.\n\nWe say that room $x$ is reachable from room $y$ if all doors between them are unlocked.\n\nYou know that:\n\n Alice is in some room from the segment $[l, r]$;\n\n Bob is in some room from the segment $[L, R]$;\n\n Alice and Bob are in different rooms.\n\nHowever, you don't know the exact rooms they are in.\n\nYou don't want Alice and Bob to be able to reach each other, so you are going to lock some doors to prevent that. What's the smallest number of doors you have to lock so that Alice and Bob cannot meet, regardless of their starting positions inside the given segments?",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases.\n\nThe first line of each test case contains two integers $l$ and $r$ ($1 \\le l  \\lt  r \\le 100$) — the bounds of the segment of rooms where Alice is located.\n\nThe second line of each test case contains two integers $L$ and $R$ ($1 \\le L  \\lt  R \\le 100$) — the bounds of the segment of rooms where Bob is located.",
+    "output_spec": "For each test case, print a single integer — the smallest number of doors you have to lock so that Alice and Bob cannot meet, regardless of their starting positions inside the given segments.",
+    "note": "In the first test case, it is sufficient to lock the door between rooms $2$ and $3$.\n\nIn the second test case, the following doors have to be locked: $(2,3)$, $(3,4)$, $(4,5)$.\n\nIn the third test case, the following doors have to be locked: $(5, 6)$ and $(6,7)$.",
+    "samples": [
+      {
+        "input": "4\n1 2\n3 4\n2 5\n2 5\n3 7\n6 7\n4 5\n2 8",
+        "output": "\n1\n3\n2\n3"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 132790,
+    "url": "https://codeforces.com/blog/entry/132790",
+    "tutorial": "Let's find the segment of rooms where both Alice and Bob can be. This segment is $[\\max(L, l), \\min(R, r)]$.\n\nIf it is empty, then it is sufficient to simply block any door between Alice's segment and Bob's segment, so the answer is $1$.\n\nIf it is not empty, let's denote by $x$ the number of doors in this segment — $\\min(R, r) - \\max(L, l)$. Each of these doors definitely needs to be blocked so that Alice and Bob cannot meet if they are in adjacent rooms within this segment. Therefore, the answer is at least $x$.\n\nHowever, sometimes we also need to restrict this segment on the left and/or right. If either of them is to the left of this segment (i.e., the left boundaries of their segments do not coincide), we need to block the door to the left of the intersection (and increase the answer by $1$). Similarly for the right boundary.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n \nusing namespace std;\n \nint main() {\n  int t;\n  cin >> t;\n  while (t--) {\n    int l, r, L, R;\n    cin >> l >> r >> L >> R;\n    int inter = min(r, R) - max(l, L) + 1;\n    int ans = inter - 1;\n    if (inter <= 0) {\n      ans = 1;\n    } else {\n      ans += (l != L);\n      ans += (r != R);\n    }\n    cout << ans << '\\n';\n  }\n}"
+    ]
+  }
+}

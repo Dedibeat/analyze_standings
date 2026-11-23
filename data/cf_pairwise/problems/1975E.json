@@ -1,0 +1,49 @@
+{
+  "contest_id": 1975,
+  "index": "E",
+  "name": "Chain Queries",
+  "rating": 2100,
+  "tags": [
+    "binary search",
+    "data structures",
+    "dfs and similar",
+    "implementation",
+    "trees"
+  ],
+  "points": 2000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1975E",
+  "url": "https://codeforces.com/problemset/problem/1975/E",
+  "contest_start_time": "2024-05-25T14:35:00+00:00",
+  "statement": {
+    "title": "E. Chain Queries",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "You are given a tree of $n$ vertices numbered from $1$ to $n$. Initially, all vertices are colored white or black.\n\nYou are asked to perform $q$ queries:\n\n \"u\" — toggle the color of vertex $u$ (if it was white, change it to black and vice versa).\n\nAfter each query, you should answer whether all the black vertices form a chain. That is, there exist two black vertices such that the simple path between them passes through all the black vertices and only the black vertices. Specifically, if there is only one black vertex, they form a chain. If there are no black vertices, they do not form a chain.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1\\leq t\\leq 10^4$). The description of the test cases follows.\n\nThe first line of each test case contains two integers $n$ and $q$ ($1\\leq n,q\\leq 2\\cdot 10^5$).\n\nThe second line of each test case contains $n$ integers $c_1,c_2,\\ldots,c_n$ ($c_i \\in \\{ \\mathtt{0}, \\mathtt{1} \\}$) — the initial color of the vertices. $c_i$ denotes the color of vertex $i$ where $\\mathtt{0}$ denotes the color white, and $\\mathtt{1}$ denotes the color black.\n\nThen $n - 1$ lines follow, each line contains two integers $x_i$ and $y_i$ ($1 \\le x_i,y_i \\le n$), indicating an edge between vertices $x_i$ and $y_i$. It is guaranteed that these edges form a tree.\n\nThe following $q$ lines each contain an integer $u_i$ ($1 \\le u_i \\le n$), indicating the color of vertex $u_i$ needs to be toggled.\n\nIt is guaranteed that the sum of $n$ and $q$ over all test cases respectively does not exceed $2\\cdot 10^5$.",
+    "output_spec": "For each query, output \"Yes\" if the black vertices form a chain, and output \"No\" otherwise.\n\nYou can output \"Yes\" and \"No\" in any case (for example, strings \"yEs\", \"yes\", \"Yes\" and \"YES\" will be recognized as a positive response).",
+    "note": "In the second test case, the color of the vertices are as follows:\n\nThe initial tree:\n\nThe first query toggles the color of vertex $4$:\n\nThe second query toggles the color of vertex $3$:\n\nThe third query toggles the color of vertex $2$:\n\nThe fourth query toggles the color of vertex $5$:",
+    "samples": [
+      {
+        "input": "2\n2 1\n1 0\n1 2\n1\n5 4\n1 0 0 0 0\n1 2\n1 3\n1 5\n3 4\n4\n3\n2\n5",
+        "output": "\nNo\nNo\nYes\nYes\nNo"
+      },
+      {
+        "input": "4\n5 3\n1 1 1 1 1\n3 5\n2 5\n3 4\n1 5\n1\n1\n1\n4 4\n0 0 0 0\n1 2\n2 3\n1 4\n1\n2\n3\n2\n1 1\n1\n1\n1 1\n0\n1",
+        "output": "\nYes\nNo\nYes\nYes\nYes\nYes\nNo\nNo\nYes"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 129801,
+    "url": "https://codeforces.com/blog/entry/129801",
+    "tutorial": "1975E - Chain Queries\n\nIdea: Bazoka13 Solution: Serval Prepared by: Bazoka13\n\nHint 1\n\nSuppose the tree is a rooted tree, we only need to care about the number of black child vertices of each vertex.\n\nHint 2\n\nIf the black vertices form a chain, there is no black vertex that has three or more black child vertices. And there is at most one black vertex that has two black child vertices.\n\nHint 3\n\nIf the black vertices form a chain, there is at most one black vertex whose parent vertex is white.\n\nSolution\n\nRead the hints.\n\nWe can maintain the number of black vertices with $0/1/2/3+$ black child vertices in $O(1)$. When we flip the color of one vertex, only it and its parent node are affected.\n\nIf the black vertices form a chain: - no black vertex that has three or more black child vertices and there is at most one black vertex that has two black child vertices. - there is at most one black vertex whose parent vertex is white. - if there is one black vertex that has two black child vertices, its parent vertex must be white.\n\nCode",
+    "solution_code": [
+      "#include<bits/stdc++.h>\nusing namespace std;\nconst int N = 1e6+10;\n\nint f[N];\nvector<int> g[N];\nint col[N],num[N];\nint faw,sum_two,sum_more,tot_black,xor_two;\nint n;\nvoid init(){\n    sum_two=0;\n    tot_black=0;\n    sum_more=0;\n    faw=0;\n    xor_two=0;\n    for(int i=1;i<=n;i++){\n        g[i].clear();\n        num[i]=0;\n    }\n}\n\nvoid dfs(int x,int fa){\n    f[x]=fa;\n    if(col[x]==1)tot_black++;\n    int sum=0;\n    for(auto i:g[x]){\n        if(i==fa)continue;\n        dfs(i,x);\n        if(col[i]==1)sum++;\n    }\n    if(col[fa]==0&&col[x]==1)faw++;\n    if(col[x]==1){\n        if(sum==2)sum_two++,xor_two^=x;\n        if(sum>2)sum_more++;\n    }\n    num[x]=sum;\n}\n\nvoid flip(int x){\n    col[x]^=1;\n    int d = col[x]==1?1:-1;\n    tot_black+=d;\n    if(col[f[x]]==0)faw+=d;\n    if(num[x]==2)sum_two+=d,xor_two^=x;\n    if(num[x]>2)sum_more+=d;\n    faw-=d*num[x];\n    if(col[x]==1){\n        if(col[f[x]]==1&&num[f[x]]==2)sum_two--,sum_more++,xor_two^=f[x];\n        num[f[x]]++;\n        if(col[f[x]]==1&&num[f[x]]==2)sum_two++,xor_two^=f[x];\n    }else{\n        if(col[f[x]]==1&&num[f[x]]==2)sum_two--,xor_two^=f[x];\n        num[f[x]]--;\n        if(col[f[x]]==1&&num[f[x]]==2){\n            sum_two++;\n            sum_more--;\n            xor_two^=f[x];\n        }\n    }\n}\n\nbool check(){\n    if(!tot_black)return false;\n    if(sum_more||sum_two>1)return false;\n    if(faw>1)return false;\n    if(sum_two&&col[f[xor_two]]==1)return false;\n    return true;\n}\n\nint main(){\n    int t;\n    scanf(\"%d\",&t);\n    while(t--){\n        init();\n        int q;\n        scanf(\"%d %d\",&n,&q);\n        for(int i=1;i<=n;i++) cin>>col[i];\n        for(int i=1;i<n;i++){\n            int u,v;\n            scanf(\"%d %d\",&u,&v);\n            g[u].push_back(v);\n            g[v].push_back(u);\n        }\n        dfs(1,0);\n        while(q--){\n            int x;\n            scanf(\"%d\",&x);\n            flip(x);\n            if(check()) printf(\"Yes\\n\");\n            else printf(\"No\\n\");\n        }\n    }\n}"
+    ]
+  }
+}

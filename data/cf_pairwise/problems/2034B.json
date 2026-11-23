@@ -1,0 +1,44 @@
+{
+  "contest_id": 2034,
+  "index": "B",
+  "name": "Rakhsh's Revival",
+  "rating": 1000,
+  "tags": [
+    "data structures",
+    "greedy",
+    "implementation",
+    "two pointers"
+  ],
+  "points": 750.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2034B",
+  "url": "https://codeforces.com/problemset/problem/2034/B",
+  "contest_start_time": "2024-11-30T14:35:00+00:00",
+  "statement": {
+    "title": "B. Rakhsh's Revival",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "Rostam's loyal horse, Rakhsh, has seen better days. Once powerful and fast, Rakhsh has grown weaker over time, struggling to even move. Rostam worries that if too many parts of Rakhsh's body lose strength at once, Rakhsh might stop entirely. To keep his companion going, Rostam decides to strengthen Rakhsh, bit by bit, so no part of his body is too frail for too long.\n\nImagine Rakhsh's body as a line of spots represented by a binary string $s$ of length $n$, where each $0$ means a weak spot and each $1$ means a strong one. Rostam's goal is to make sure that no interval of $m$ consecutive spots is entirely weak (all $0$s).\n\nLuckily, Rostam has a special ability called Timar, inherited from his mother Rudabeh at birth. With Timar, he can select any segment of length $k$ and instantly strengthen all of it (changing every character in that segment to $1$). The challenge is to figure out the minimum number of times Rostam needs to use Timar to keep Rakhsh moving, ensuring there are no consecutive entirely weak spots of length $m$.",
+    "input_spec": "The first line contains an integer $t$ ($1 \\le t \\le 10^4$), the number of test cases.\n\nThe first line of each test case contains three numbers $n$, $m$, $k$ ($1 \\le m, k \\le n \\le 2 \\cdot 10^5$). The second line of each test case contains a binary string $s$ of $n$ characters $s_1s_2 \\ldots s_n$. ($s_i \\in \\{$0,1$\\}$ for $1 \\le i \\le n$).\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, output the minimum number of times Rostam needs to use Timar to keep Rakhsh moving, ensuring there are no consecutive entirely weak spots of length $m$.",
+    "note": "In the first test case, we should apply an operation on each 0.\n\nIn the second test case, $s$ is already ok.\n\nIn the third test case, we can perform an operation on interval $[3,4]$ to get 001100.",
+    "samples": [
+      {
+        "input": "3\n5 1 1\n10101\n5 2 1\n10101\n6 3 2\n000000",
+        "output": "\n2\n0\n1"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 136579,
+    "url": "https://codeforces.com/blog/entry/136579",
+    "tutorial": "2034B - Rakhsh's Revival\n\nIdea: MohammadParsaElahimanesh and AmirrzwM — Preparation: AmShZ\n\nSolution\n\nWe will solve the problem using the following approach:\n\nStart from the leftmost spot and move rightwards.\n\nWhenever a consecutive segment of $m$ weak spots (i.e., $0$'s) is found, apply Timar to a segment of length $k$, starting from the last index of the weak segment.\n\nRepeat this process until no segment of $m$ consecutive weak spots remains.\n\nThe key idea behind this solution is that whenever we encounter a block of $m$ consecutive $0$'s, we need to strengthen it. Since we can apply Timar to a segment of length $k$, the optimal strategy is always to apply Timar starting at the last index of the block of $m$ consecutive $0$'s.\n\nCorrectness Proof:\n\nFor any block of $m$ consecutive $0$'s, we must apply Timar to at least one index within this block. Hence, the strengthened segment of length $k$ must overlap with the block of weak spots.\n\nSuppose an optimal solution exists where Timar is applied to a segment starting leftward within the block. Suppose we shift this segment one step to the right (closer to the end of the block). In that case, the solution remains valid and optimal since it covers all weak spots in the block while reducing unnecessary overlap with already-strengthened areas.\n\nBy always starting from the last index of a block of $m$ consecutive $0$'s, this greedy strategy ensures that Timar is used in the minimum number of applications, making it correct and efficient.\n\nImplementation",
+    "solution_code": [
+      "# include <bits/stdc++.h>\n\nusing namespace std;\n\nconst int xn = 2e5 + 10;\n\nint q, n, m, k, ps[xn];\nstring s;\n\nint main() {\n    cin >> q;\n    while (q --) {\n        cin >> n >> m >> k >> s;\n        fill(ps, ps + n, 0);\n        int ans = 0, cnt = 0, sum = 0;\n        for (int i = 0; i < n; ++ i) {\n            sum += ps[i];\n            if (sum || s[i] == '1') cnt = 0;\n            else {\n                cnt++;\n                if (cnt == m) {\n                    sum++, ans++, cnt = 0;\n                    if (i + k < n) ps[i + k]--;\n                }\n            }\n        }\n        cout << ans << \"\\n\";\n    }\n}"
+    ]
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "contest_id": 1967,
+  "index": "D",
+  "name": "Long Way to be Non-decreasing",
+  "rating": 2800,
+  "tags": [
+    "binary search",
+    "dfs and similar",
+    "graphs",
+    "implementation",
+    "shortest paths",
+    "two pointers"
+  ],
+  "points": 1750.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1967D",
+  "url": "https://codeforces.com/problemset/problem/1967/D",
+  "contest_start_time": "2024-04-30T14:35:00+00:00",
+  "statement": {
+    "title": "D. Long Way to be Non-decreasing",
+    "time_limit": "4 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "Little R is a magician who likes non-decreasing arrays. She has an array of length $n$, initially as $a_1, \\ldots, a_n$, in which each element is an integer between $[1, m]$. She wants it to be non-decreasing, i.e., $a_1 \\leq a_2 \\leq \\ldots \\leq a_n$.\n\nTo do this, she can perform several magic tricks. Little R has a fixed array $b_1\\ldots b_m$ of length $m$. Formally, let's define a trick as a procedure that does the following things in order:\n\n Choose a set $S \\subseteq \\{1, 2, \\ldots, n\\}$.\n\n For each $u \\in S$, assign $a_u$ with $b_{a_u}$.\n\nLittle R wonders how many tricks are needed at least to make the initial array non-decreasing. If it is not possible with any amount of tricks, print $-1$ instead.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1\\le t\\le 10^4$). The description of the test cases follows.\n\nThe first line of each test case contains two integers $n$ and $m$ ($1\\leq n \\leq 10^6$, $1 \\leq m \\leq 10^6$) — the length of the initial array and the range of the elements in the array.\n\nThe second line of each test case contains $n$ integers $a_1, \\ldots, a_n$ ($1 \\leq a_i \\leq m$) — the initial array.\n\nThe third line of each test case contains $m$ integers $b_1, \\ldots, b_m$ ($1 \\leq b_i \\leq m$) — the fixed magic array.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $10^6$ and the sum of $m$ over all test cases does not exceed $10^6$.",
+    "output_spec": "For each test case, output a single integer: the minimum number of tricks needed, or $-1$ if it is impossible to make $a_1, \\ldots, a_n$ non-decreasing.",
+    "note": "In the first case, the initial array $a_1, \\ldots, a_n$ is $[1, 6, 3, 7, 1]$. You can choose $S$ as follows:\n\n first trick: $S = [2, 4, 5]$, $a = [1, 1, 3, 5, 2]$;\n\n second trick: $S = [5]$, $a = [1, 1, 3, 5, 3]$;\n\n third trick: $S = [5]$, $a = [1, 1, 3, 5, 5]$.\n\n So it is possible to make $a_1, \\ldots, a_n$ non-decreasing using $3$ tricks. It can be shown that this is the minimum possible amount of tricks.\nIn the second case, it is impossible to make $a_1, \\ldots, a_n$ non-decreasing.",
+    "samples": [
+      {
+        "input": "3\n5 8\n1 6 3 7 1\n2 3 5 8 7 1 5 6\n3 3\n1 3 2\n2 1 3\n10 10\n2 8 5 4 8 4 1 5 10 10\n6 7 2 6 3 4 1 1 3 5",
+        "output": "\n3\n-1\n3"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 129027,
+    "url": "https://codeforces.com/blog/entry/129027",
+    "tutorial": "If we separately consider each operation, it could be really hard.\n\nThus, binary search on the answer of magics. Greedily, we want $a_1$ as small as possible, and then $a_2$, etc.\n\nEnumerate $i$ from $1$ to $n$. Enumerate $a_i = w$ for $w$ from $1$ to $m$. If it is possible for $a_i = w$ after $k$ steps, $i \\gets i + 1$; Otherwise, $w \\gets w + 1$. If $i$ gets to $n + 1$ first, it's valid. If $w$ gets to $m + 1$ first, it's invalid.\n\nThe last question is how to judge whether vertex $u$ is reachable from vertex $v$ in $k$ steps in $\\mathcal O(1)$ time.\n\nBuild a graph with edges $i \\to p_i$. Assume that the graph is a tree, now the condition is equivalent to\n\n $dep_u - dep_v \\leq k$;\n\n $u$ is in the subtree of $v$. We can simply check the DFS order and size: $dfn_v  \\lt  dfn_u  \\lt  dfn_v + sz_v$.\n\nHowever, the graph contains $n$ vertices and $n$ edges, so it turns out to be a pseudo forest. One of the processing ways is to cut one edge on the cycle of each pseudo tree. If the path from $u$ to $v$ doesn't contain the edge, we process the above method. Otherwise, let the cut edge be $s \\Rightarrow t$ (In fact, $s$ is exactly the root of the tree), and we want $u \\to s \\Rightarrow t \\to v$, so\n\n $dep_s - dep_u + dep_v - dep_t + 1 \\leq k$;\n\n $u$ is in the subtree of $s$, while $t$ is in the subtree of $v$.\n\nIt takes a little time to implement, but be patient and clear-minded, and you are sure to get Accepted.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n \nnamespace FastIO {\n\ttemplate <typename T> inline T read() { T x = 0, w = 0; char ch = getchar(); while (ch < '0' || ch > '9') w |= (ch == '-'), ch = getchar(); while ('0' <= ch && ch <= '9') x = x * 10 + (ch ^ '0'), ch = getchar(); return w ? -x : x; }\n\ttemplate <typename T> inline void write(T x) { if (!x) return; write<T>(x / 10), putchar(x % 10 ^ '0'); }\n\ttemplate <typename T> inline void print(T x) { if (x < 0) putchar('-'), x = -x; else if (x == 0) putchar('0'); write<T>(x); }\n\ttemplate <typename T> inline void print(T x, char en) { if (x < 0) putchar('-'), x = -x; else if (x == 0) putchar('0'); write<T>(x), putchar(en); }\n}; using namespace FastIO;\n \n#define MAXM 1000001\nint dep[MAXM], id[MAXM], dfn[MAXM], to[MAXM], sz[MAXM], tot = 0;\nstd::vector<int> ch[MAXM];\nvoid dfs(int u) {\n\tsz[u] = 1, dfn[u] = ++tot;\n\tfor (int v : ch[u]) {\n\t\tdep[v] = dep[u] + 1, id[v] = id[u];\n\t\tdfs(v), sz[u] += sz[v];\n\t}\n}\ninline bool inSub(int u, int v) /* v \\in u ? */ { return dfn[u] <= dfn[v] && dfn[v] < dfn[u] + sz[u]; }\nconstexpr int INF = 0x3f3f3f3f;\ninline int query(int u, int v) /* u -> v */ {\n\tif (u == v) return 0;\n\tif (id[u] != id[v]) return INF;\n\tint res = INF;\n\tif (inSub(v, u)) res = dep[u] - dep[v];\n\tif (inSub(v, to[id[u]])) res = std::min(dep[u] - dep[v] + dep[to[id[u]]] + 1, res);\n\t// printf(\"query(%d, %d) = %d\\n\", u, v, res);\n\treturn res;\n}\n \n#define MAXN 1000001\nint a[MAXN], N, M;\nbool check(int val) {\n\t// printf(\"check %d\\n\", val);\n\tint lst = 1;\n\tfor (int i = 1; i <= N; ++i) {\n\t\twhile (lst <= M && query(a[i], lst) > val) ++lst;\n\t\tif (lst > M) return false;\n\t\t// printf(\"a[%d] = %d\\n\", i, lst);\t\n\t}\n\treturn true;\n}\n \nnamespace DSU {\n\tint fa[MAXM];\n\tvoid inis(int n) { for (int i = 1; i <= n; ++i) fa[i] = i; }\n\tinline int find(int x) { return x == fa[x] ? x : fa[x] = find(fa[x]); }\n\tinline bool merge(int x, int y) { if (find(x) == find(y)) return false; fa[fa[x]] = fa[y]; return true; }\n}; using namespace DSU;\n \nint main() {\n\tint T = read<int>();\n\twhile (T--) {\n\t\tN = read<int>(), M = read<int>(), inis(M);\n\t\tfor (int i = 1; i <= N; ++i) a[i] = read<int>();\n\t\tfor (int x = 1; x <= M; ++x) dep[x] = id[x] = dfn[x] = to[x] = sz[x] = 0, ch[x].clear();\n\t\ttot = 0;\n\t\tfor (int i = 1, p; i <= M; ++i) {\n\t\t\tp = read<int>();\n\t\t\tif (merge(i, p)) ch[p].push_back(i); else to[i] = p;\n\t\t}\n\t\tfor (int i = 1; i <= M; ++i) if (to[i] > 0) id[i] = i, dfs(i);\n\t\tif (!check(M)) { puts(\"-1\"); continue; }\n\t\tint L = 0, R = M;\n\t\twhile (L < R) {\n\t\t\tint mid = L + R >> 1;\n\t\t\tif (check(mid)) R = mid; else L = mid + 1;\n\t\t}\n\t\tprint<int>(R, '\\n');\n\t}\n}"
+    ]
+  }
+}

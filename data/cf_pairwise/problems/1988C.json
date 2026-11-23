@@ -1,0 +1,41 @@
+{
+  "contest_id": 1988,
+  "index": "C",
+  "name": "Increasing Sequence with Fixed OR",
+  "rating": 1300,
+  "tags": [
+    "bitmasks",
+    "constructive algorithms",
+    "greedy"
+  ],
+  "points": 1000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1988C",
+  "url": "https://codeforces.com/problemset/problem/1988/C",
+  "contest_start_time": "2024-07-15T14:35:00+00:00",
+  "statement": {
+    "title": "C. Increasing Sequence with Fixed OR",
+    "time_limit": "2 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "You are given a positive integer $n$. Find the longest sequence of positive integers $a=[a_1,a_2,\\ldots,a_k]$ that satisfies the following conditions, and print the sequence:\n\n $a_i\\le n$ for all $1\\le i\\le k$.\n\n $a$ is strictly increasing. That is, $a_i \\gt a_{i-1}$ for all $2\\le i\\le k$.\n\n $a_i\\,|\\,a_{i-1}=n$ for all $2\\le i\\le k$, where $|$ denotes the bitwise OR operation.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 1000$). Description of the test cases follows.\n\nThe only line of each test case contains one integer $n$ ($1\\le n\\le 10^{18}$).\n\nIt's guaranteed that the sum of lengths of the longest valid sequences does not exceed $5\\cdot 10^5$.",
+    "output_spec": "For each testcase, print two lines. In the first line, print the length of your constructed sequence, $k$. In the second line, print $k$ positive integers, denoting the sequence. If there are multiple longest sequences, you can print any of them.",
+    "note": null,
+    "samples": [
+      {
+        "input": "4\n1\n3\n14\n23",
+        "output": "\n1\n1\n3\n1 2 3\n4\n4 10 12 14\n5\n7 18 21 22 23"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 131581,
+    "url": "https://codeforces.com/blog/entry/131581",
+    "tutorial": "1988C — Increasing Sequence with Fixed OR",
+    "solution_code": []
+  }
+}

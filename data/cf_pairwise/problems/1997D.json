@@ -1,0 +1,45 @@
+{
+  "contest_id": 1997,
+  "index": "D",
+  "name": "Maximize the Root",
+  "rating": 1500,
+  "tags": [
+    "binary search",
+    "dfs and similar",
+    "dp",
+    "greedy",
+    "trees"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1997D",
+  "url": "https://codeforces.com/problemset/problem/1997/D",
+  "contest_start_time": "2024-07-30T14:35:00+00:00",
+  "statement": {
+    "title": "D. Maximize the Root",
+    "time_limit": "3 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "You are given a rooted tree, consisting of $n$ vertices. The vertices in the tree are numbered from $1$ to $n$, and the root is the vertex $1$. The value $a_i$ is written at the $i$-th vertex.\n\nYou can perform the following operation any number of times (possibly zero): choose a vertex $v$ which has at least one child; increase $a_v$ by $1$; and decrease $a_u$ by $1$ for all vertices $u$ that are in the subtree of $v$ (except $v$ itself). However, after each operation, the values on all vertices should be non-negative.\n\nYour task is to calculate the maximum possible value written at the root using the aforementioned operation.",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases.\n\nThe first line of each test case contains a single integer $n$ ($2 \\le n \\le 2 \\cdot 10^5$) — the number of vertices in the tree.\n\nThe second line contains $n$ integers $a_1, a_2, \\dots, a_n$ ($0 \\le a_i \\le 10^9$) — the initial values written at vertices.\n\nThe third line contains $n-1$ integers $p_2, p_3, \\dots, p_n$ ($1 \\le p_i \\le n$), where $p_i$ is the parent of the $i$-th vertex in the tree. Vertex $1$ is the root.\n\nAdditional constraint on the input: the sum of $n$ over all test cases doesn't exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, print a single integer — the maximum possible value written at the root using the aforementioned operation.",
+    "note": "In the first test case, the following sequence of operations is possible:\n\n perform the operation on $v=3$, then the values on the vertices will be $[0, 1, 1, 1]$;\n\n perform the operation on $v=1$, then the values on the vertices will be $[1, 0, 0, 0]$.",
+    "samples": [
+      {
+        "input": "3\n4\n0 1 0 2\n1 1 3\n2\n3 0\n1\n5\n2 5 3 9 6\n3 1 5 2",
+        "output": "\n1\n3\n6"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 132154,
+    "url": "https://codeforces.com/blog/entry/132154",
+    "tutorial": "We can clearly say that if some value $k$ can be obtained at the root, then any value from $a_1$ to $k$ can also be obtained. Using that fact, we can use binary search to solve the problem.\n\nLet's fix some value $\\mathit{mid}$ in binary search and check if it is possible to apply an operation from the statement $\\mathit{mid}$ times to the root. Let's write the following recursive function: $\\mathit{check}(v, x)$ — the function that checks whether it is possible to obtain at least $x$ at all vertices from the subtree of $v$ (including $v$ itself) simultaneously (i. e. we had to make $x$ operations above the current vertex, can the subtree of $v$ \"support\" them?).\n\nLet the current state be $(v, x)$, then there are three cases of transitions:\n\n $v$ is a leaf, then $x \\le a_v$ should hold;\n\n $v$ is not a leaf and $x \\le a_v$, then the vertex $v$ is ok, and we have to check its subtree (i. e. $\\mathit{check}(u, x)$ should be true for all $u$ that are children of $v$).\n\n $v$ is not a leaf and $x  \\gt  a_v$, then we have to apply the operation $(x - a_v)$ times to the vertex $v$, and that adds an additional constraint on the subtree of $v$; specifically, $\\mathit{check}(u, x + (x - a_v))$ should be true for all $u$ that are children of $v$.\n\nBe careful with overflows: $x$ might grow exponentially, so you should, for example, return from the function when $x$ becomes very large.\n\nWhen we check a single value of $mid$, this recursive function is called once for each vertex in the tree, so the total time complexity of this solution is $O(n\\log{A})$, where $A$ is an upper bound of the values of the array $a$.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n \nusing namespace std;\n \nconst int INF = 1e9;\n \nint main() {\n  ios::sync_with_stdio(false); cin.tie(0);\n  int t;\n  cin >> t;\n  while (t--) {\n    int n;\n    cin >> n;\n    vector<int> a(n);\n    for (auto& x : a) cin >> x;\n    vector<vector<int>> g(n);\n    for (int i = 1; i < n; ++i) {\n        int p;\n        cin >> p;\n        g[p - 1].push_back(i);\n    }\n    \n    auto check = [&](auto&& self, int v, int x) -> bool {\n      if (x > INF) return false;\n      bool isLeaf = true;\n      if (v) x += max(0, x - a[v]);\n      for (auto u : g[v]) {\n        isLeaf = false;\n        if (!self(self, u, x)) return false;\n      }\n      return (!isLeaf || x <= a[v]);\n    };\n    \n    int l = 1, r = INF;\n    while (l <= r) {\n      int mid = (l + r) / 2;\n      if (check(check, 0, mid)) {\n        l = mid + 1;\n      } else {\n        r = mid - 1;\n      }\n    }\n    \n    cout << a[0] + l - 1 << '\\n';\n  }\n}"
+    ]
+  }
+}

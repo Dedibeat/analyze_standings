@@ -1,0 +1,47 @@
+{
+  "contest_id": 1949,
+  "index": "A",
+  "name": "Grove",
+  "rating": 3300,
+  "tags": [
+    "brute force",
+    "dfs and similar",
+    "dp",
+    "geometry",
+    "probabilities"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1949A",
+  "url": "https://codeforces.com/problemset/problem/1949/A",
+  "contest_start_time": "2024-03-24T10:00:00+00:00",
+  "statement": {
+    "title": "A. Grove",
+    "time_limit": "4 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "You want to plant trees in a square lawn of size $n \\times n$ whose corners have Cartesian coordinates $(0, 0)$, $(n, 0)$, $(0, n)$, and $(n, n)$. Trees can only be planted at locations with integer coordinates. Every tree will grow roots within a disk of radius $r$ centered at the location where the tree was planted; such disks must be fully contained in the lawn (possibly touching the boundary of the lawn) and can only intersect each other on their boundaries.\n\nFind a configuration that maximizes the number of trees.",
+    "input_spec": "The first and only line contains an integer $n$ ($1 \\leq n \\leq 20$) and a real number $r$ ($0  \\lt  r \\leq n/2$) — the length of the sides of the lawn, and the radius of the disks where each tree will grow roots. The real number $r$ is given in decimal notation with at least $1$ and at most $3$ digits after the decimal point.",
+    "output_spec": "In the first line, print the maximum number $m$ of trees that can be planted.\n\nIn the next $m$ lines, print a configuration that maximizes the number of trees. Specifically, in the $(i+1)$-th line, print two integers $x$ and $y$ — the coordinates of the location where the $i$-th tree should be planted. You can print the trees in any order.\n\nIf there are multiple solutions, print any of them.",
+    "note": "For the first sample, the sample output is shown in the following figure. Note that this is not the only configuration that maximizes the number of trees.\n\nFor the second sample, the sample output is shown in the following figure. Note that this is not the only configuration that maximizes the number of trees.",
+    "samples": [
+      {
+        "input": "6 1.241",
+        "output": "\n2\n4 2\n2 4"
+      },
+      {
+        "input": "9 2.0",
+        "output": "\n4\n2 2\n7 2\n2 6\n6 6"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 127514,
+    "url": "https://codeforces.com/blog/entry/127514",
+    "tutorial": "Let $\\delta = \\lceil r \\rceil$. Note that all trees need to be planted at least $\\delta$ away from the boundary of the lawn, so their coordinates $(x, y)$ have to satisfy $\\delta \\leq x, y \\leq n-\\delta$.\n\nFor integers $0 \\leq a_\\delta, \\dots, a_{n-\\delta} \\leq n-\\delta$, denote by $f(a_\\delta, \\dots, a_{n-\\delta})$ any configuration that maximizes the number of trees while only using locations $(x, y)$ such that $x \\leq a_y$. Our task is to compute $f(n-\\delta, \\dots, n-\\delta)$. We compute values of $f$ recursively, and store all results using memoization.\n\nLet $\\bar x = \\max(a_\\delta, \\dots, a_{n-\\delta})$, and let $\\bar y$ be such that $a_{\\bar y} = \\bar x$. Note that, if $\\bar x  \\lt  \\delta$, then $f(a_\\delta, \\dots, a_{n-\\delta})=\\emptyset$ because any tree would be too close to the left boundary of the lawn. Assuming that $\\bar x \\geq \\delta$, we try to plant or not plant a tree at the location $(\\bar x, \\bar y)$.\n\nIf we do not plant a tree at $(\\bar x, \\bar y)$, an optimal configuration is given by $f(a_\\delta', \\dots, a_{n-\\delta}')$, where $a_y' = a_y$ if $y \\neq \\bar y$ and $a_{\\bar y}' = a_{\\bar y} - 1$.\n\nIf we plant a tree at $(\\bar x, \\bar y)$, an optimal configuration is given by $f(a_\\delta', \\dots, a_{n-\\delta}') \\cup \\{ (\\bar x, \\bar y) \\}$, where $a_y'$ is the largest integer $\\leq a_y$ such that locations $(a_y', y)$ and $(\\bar x, \\bar y)$ are at distance $\\geq 2r$.\n\nThe number of recursive calls increases as $r$ decreases. For this reason, it can be beneficial to solve by hand the cases where $r$ is small. For instance, if $r\\leq 1/2$, then we can plant trees at all integer coordinates in the interior of the lawn; if $1/2  \\lt  r  \\lt  \\sqrt{2}/2$, we can plant trees at all integer coordinates $(x, y)$ in the interior of the lawn such that $x+y$ is even.\n\nIf the implementation of the above algorithm is not fast enough, it is also possible to pre-compute all optimal configurations offline. Indeed, for every $n$, there is a finite number of intervals $(p,q] \\subseteq \\mathbb R$ such that the valid configurations of trees are the same for all $r\\in (p, q]$. The boundaries of these intervals are of the form $\\sqrt{a^2+b^2}/2$ for integers $0\\leq a \\leq b \\leq n$. For instance, the first two intervals are always $(0,1/2]$ and $(1/2, \\sqrt 2/2]$, which we have already encountered above.\n\nFinally, it is also possible to solve this problem using a generic max-clique algorithm, especially in combination with the above idea to pre-compute optimal configurations offline.",
+    "solution_code": []
+  }
+}

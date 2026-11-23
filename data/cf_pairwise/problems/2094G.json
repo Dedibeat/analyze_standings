@@ -1,0 +1,43 @@
+{
+  "contest_id": 2094,
+  "index": "G",
+  "name": "Chimpanzini Bananini",
+  "rating": 1700,
+  "tags": [
+    "data structures",
+    "implementation",
+    "math"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2094G",
+  "url": "https://codeforces.com/problemset/problem/2094/G",
+  "contest_start_time": "2025-04-13T15:35:00+00:00",
+  "statement": {
+    "title": "G. Chimpanzini Bananini",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Chimpanzini Bananini stands on the brink of a momentous battle—one destined to bring finality.\n\nFor an arbitrary array $b$ of length $m$, let's denote the rizziness of the array to be $\\sum_{i=1}^mb_i\\cdot i=b_1\\cdot 1+b_2\\cdot 2+b_3\\cdot 3+\\ldots + b_m\\cdot m$.\n\nChimpanzini Bananini gifts you an empty array. There are three types of operations you can perform on it.\n\n Perform a cyclic shift on the array. That is, the array $[a_1, a_2, \\ldots, a_n]$ becomes $[a_n, a_1, a_2, \\ldots, a_{n-1}].$\n\n Reverse the entire array. That is, the array $[a_1, a_2, \\ldots, a_n]$ becomes $[a_n, a_{n-1}, \\ldots, a_1].$\n\n Append an element to the end of the array. The array $[a_1, a_2, \\ldots, a_n]$ becomes $[a_1, a_2, \\ldots, a_n, k]$ after appending $k$ to the end of the array.\n\nAfter each operation, you are interested in calculating the rizziness of your array.\n\nNote that all operations are persistent. This means that each operation modifies the array, and subsequent operations should be applied to the current state of the array after the previous operations.",
+    "input_spec": "The first line contains an integer $t$ ($1 \\leq t \\leq 10^4$) — the number of test cases.\n\nThe first line of each test case contains an integer $q$ ($1 \\leq q \\leq 2\\cdot 10^5$) — the number of operations you perform on your array.\n\nThe following $q$ lines first contain a single integer $s$ ($1 \\leq s \\leq 3$) — the operation type.\n\n If $s=1$, then the cyclic shift operation should be performed.\n\n If $s=2$, then the reversal operation should be performed.\n\n If $s=3$, then the line will contain an additional integer $k$ ($1 \\leq k \\leq 10^6$), denoting the element appended to the back of the array.\n\nIt is guaranteed that the sum of $q$ will not exceed $2\\cdot 10^5$ over all test cases. Additionally, it is guaranteed that the first operation on each test case will be one with $s=3$.",
+    "output_spec": "For each test case, output $q$ lines, outputting the rizziness of your array after each operation.",
+    "note": "The first six states of the array:\n\n $[1]$\n\n $[1, 2]$\n\n $[1, 2, 3]$\n\n $[3, 1, 2]$\n\n $[3, 1, 2, 4]$\n\n $[4, 2, 1, 3]$",
+    "samples": [
+      {
+        "input": "1\n13\n3 1\n3 2\n3 3\n1\n3 4\n2\n3 5\n1\n3 6\n2\n3 7\n2\n1",
+        "output": "\n1\n5\n14\n11\n27\n23\n48\n38\n74\n73\n122\n102\n88"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 141796,
+    "url": "https://codeforces.com/blog/entry/141796",
+    "tutorial": "2094G - Chimpanzini Bananini\n\nProblem Credits: Proof_by_QED, cry\n\nHint 1\n\nNote that reversing an array then pushing an element to the back is similar to simply pushing an element to the front. Thus, we would like to push elements to both ends of the array. What data structure supports this?\n\nAnswer\n\nA deque is the most natural choice to use. Most languages, including C++, Java, and Python, include deques in their standard library, so you likely do not have to implement it yourself.\n\nHint 2\n\nWhat other values do we need to maintain in order to keep track of score?\n\nAnswer\n\nIt suffices to keep track of the current score, the score of the array if it were backwards, the size of the array, and the sum of the array.\n\nSolution\n\nWe can solve this using a deque. Let $score$ denote the current score, and $rscore$ denote the score of the array if it were backwards. Let $size$ denote the size of the array, and $sum$ denote the sum of the array. Then we consider how these three values change as each operation is performed.\n\nSuppose operation 1 is performed. This is equivalent to popping the back element of the array and pushing it in the front. When you pop the back element of the array, $score$ decreases by $a_n \\cdot size$. Then when you push it to the front, $score$ increases by $sum$ because $a_n$ is pushed to the first spot and every element from $a_1$ to $a_{n-1}$ moves forward one spot. Notice that $rscore$ changes in the reverse way; this is equivalent to popping the front element of the array and pushing it to the back. When you pop the front element of the array, $rscore$ decreases by $sum$, and when you push it to the back, $rscore$ increases by $a_n \\cdot size$. Note that $size$ and $sum$ remain unchanged.\n\nSuppose operation 2 is performed. Then we swap $score$ and $rscore$, and we also want to \"reverse\" the array. However, it is costly to entirely reverse the deque. Instead, we will set a flag to indicate that the array has been reversed (and similarly, if the flag is already set, we will unset it). If the flag is set, we simply switch the front and back ends whenever we access or modify the deque while performing operations 1 or 3.\n\nSuppose operation 3 is performed. Then we see that $size$ increases by $1$ and $sum$ increases by $k$. Then $score$ increases by $k \\cdot size$ and $rscore$ increases by $sum$ (using the new value of $sum$), by identical reasoning to that in operation 1.\n\nAdditional optimization: we don't actually have to maintain $rscore$; we can obtain it with the expression: $(n+1)\\sum_{i=1}^na_i-score$. This is because $score + rscore = (n+1)\\sum_{i=1}^na_i$ since the $i$-th term is counted $i$ times in $score$ and $n+1-i$ times in $rscore$.\n\nCode\n\nRate The Problem!\n\n Good Problem\n\n Okay Problem\n\n Bad Problem\n\n Didn't Solve",
+    "solution_code": [
+      "#include <bits/stdc++.h>\nusing namespace std;\n#define int long long\n\nvoid solve() {\n    int norm = 0, rev = 0;\n    int q; cin >> q;\n    int tot = 0;\n    int n = 0;\n    deque<int> qNorm, qRev;\n    int p = 0;\n    while (q--) {\n        int s; cin >> s;\n        if (s == 1) {\n            int last = qNorm.back();\n            qNorm.pop_back();\n            qNorm.push_front(last);\n            norm += (tot - last);\n            norm -= last * n;\n            norm += last;\n\n            last = qRev.front();\n            qRev.pop_front();\n            qRev.push_back(last);\n            rev -= (tot - last);\n            rev += last * n;\n            rev -= last;\n        }\n        else if (s == 2) {\n            swap(rev, norm);\n            swap(qNorm, qRev);\n        }\n        else if (s == 3) {\n            n++;\n            int k; cin >> k;\n            qNorm.push_back(k);\n            qRev.push_front(k);\n            norm += k * n;\n            rev += tot;\n            rev += k;\n            tot += k;\n        }\n        cout << norm << \"\\n\";\n    }\n}\n\nsigned main() {\n    ios_base::sync_with_stdio(0);\n    cin.tie(0);\n    int t; cin >> t;\n    while (t--) solve();\n    return 0;\n}"
+    ]
+  }
+}

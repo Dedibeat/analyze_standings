@@ -1,0 +1,82 @@
+# Five-hour Codeforces solve-prediction search
+
+The requested window starts at 04:03:54 UTC on 2026-11-19 and ends at 09:03:54 UTC. The primary reference is the model at commit dcc8b87. On 2026 it scored 0.20186242 log loss, 0.06137247 Brier, 0.00107532 twenty-bin calibration error and 0.87001156 within-problem macro AUC. Improvement in all four means strict directional improvement on identical opportunities. Report point estimates and paired round uncertainty separately.
+
+## Discovery and confirmation
+
+1. Extend the historical features to include solve speed, rating history, earlier rank, time away, problem position and overlap with six algorithm-topic families. Queue current results until the round ends. The target problem is already known and its curve is fitted on other contestants, as in the original benchmark.
+2. Fit gradient-boosted decision trees on 2024 training handles, using the incumbent logit as the initial prediction. Search full, history and behavior feature subsets, tree sizes, regularization, number of boosting iterations, correction strength and field calibration. Write an atomic checkpoint after each completed trial. Only 2025 development metrics can select models.
+3. Prefer candidates improving all four 2025 metrics. Among those maximize the smaller number of improved metrics in the two chronological halves, then minimize full-period log loss. Record the full development comparison for each completed trial. Evaluate a locked finalist on the previously inspected 2026 field and report any metric that regresses. Repeated later-period comparisons are exploratory.
+4. Use remaining time for a distinct challenger or a reproducibility check on a different field split. Include uncertainty intervals and inspect where any improvement concentrates. Stop starting new jobs in time to verify and commit the results by the requested deadline.
+
+The reusable panel and model checkpoints live in the ignored CF data cache. The search requires NumPy, SciPy and LightGBM (tested version 4.7.0).
+
+**Additional families and checks specified during discovery.** The field model fits ridge-regularized per-problem coefficients using the training players in the current round. Its field-calibration inputs are scored with two interleaved training folds for the residual correction. The rolling tree model also uses player histories from earlier rated rounds of every available division. It estimates past rank performance against the earlier rating field, tracks decay, volatility, missed easy tasks, hard solves, timing and earlier performance on individual tags. It refits four times per evaluation year, using only training handles in contests that had ended before each cutoff. Features use the cached problem-tag snapshot. Historical tags are not individually timestamped. The estimand is retrospective solve prediction for a known task.
+
+Each alternate handle partition holds out a disjoint range of 51 SHA-256 first-byte values. Its problem curves and history calibration are recomputed using that partition's training field. The primary partition remains the same as in all previous experiments. An alternate-partition replay is a robustness check in the same contests; it is not independent evidence from a new season.
+
+For ensemble selection, lock one 2025 winner per family, then compare 15 quarter-step logit mixtures of the three models at overall strengths 0.65 and 1. The loss finalist follows the preceding selection rule. A second, balanced finalist uses the same full-period and two-half criteria, then maximizes the weakest of the four improvements divided by its paired round-bootstrap standard error. The latter gives calibration a voice when candidate loss improvements are clear but ECE improvements are small. Publish both finalists and retain the original against which they were selected.
+
+## Reproduction
+
+Use the CF standings and rating-change cache described in the README and the repository's problem-set metadata. The CPU runs set `OPENBLAS_NUM_THREADS=1`. The commands below build local caches and search journals; use a future Unix timestamp for each search deadline.
+
+```sh
+.venv/bin/python scripts/cf_boost_data.py
+.venv/bin/python scripts/cf_boost_data.py --from-year 2022
+.venv/bin/python scripts/cf_cross_history.py
+.venv/bin/python scripts/cf_field_search.py
+.venv/bin/python scripts/cf_factor_search.py
+.venv/bin/python scripts/cf_boost_search.py --until "$fixed_search_deadline"
+.venv/bin/python scripts/cf_rolling_boost.py --until "$rolling_search_deadline"
+.venv/bin/python scripts/cf_confirm_models.py final --freeze
+.venv/bin/python scripts/cf_confirm_models.py final --year 2026
+```
+
+For a disjoint replication partition, build both panel variants with the same `--fold` (1 through 4), and pass that fold to confirmation. The 2025 and 2026 field-calibration labels come only from the corresponding training handles. As in the earlier benchmark, later field rankings and solve times are never used as current-player features. The all-division rank-performance estimate uses a 99-quantile approximation to the earlier contest rating field.
+
+Before reading any latent-factor results, we added a fourth family to the ensemble grid. This expands it from 15 to 35 possible quarter-step mixtures at each overall strength and includes every original three-model mixture at zero factor weight. The factor model learns multidimensional player profiles from earlier solve patterns. It estimates each current task's factor loadings using the training field and delays each player's history update until the round ends. Dimensions, history retention and ridge strength are selected only on 2025. This tests whether a standings-derived player profile contributes beyond rating, speed and earlier rank.
+
+The rolling winner's training-data, timing, rank and task-specialization ablations reuse the first locked recipe and 2025 opportunities. For the final calibration audit, recombine the five disjoint evaluation folds within each contest and problem before computing macro AUC. Check sensitivity to 10, 20 and 40 reliability bins. A diagnostic estimates the expected finite-sample ECE under independent perfectly calibrated Bernoulli draws using a normal approximation per bin; repeated contestants and correlated tasks make this a reference calculation. Also report loss and Brier for earlier-defined 1000–1599 players on tasks at least 600 points harder and tasks at or below their rating.
+
+**Cross-fitted curve experiment.** The ordinary training field contributes to fitting its own task curves, whereas each evaluated player is held out. To test that asymmetry, recompute the three current problem-curve features for every training player using the other three quarters of the already designated training field. Keep each outer held-out player's original features unchanged. Refit the rolling tree learner on those inner-fold features and use its independent training-field predictions for calibration. This is a separate matched search; the previously specified four-family ensemble and its first checkpoint are unchanged.
+
+The standalone inner-fold rolling model will be frozen using the same ordinary 2025 winner rule and reported separately from both ensemble finalists. Its 2026 forecasts and disjoint-cohort replications do not select a new recipe. A scorecard reports every locked challenger rather than keeping only models that happened to pass calibration.
+
+## Official-rating reference on matched rows
+
+We also scored the official pre-round player rating against the published CF problem rating. A second comparator fits a global intercept and slope on 2,705,424 opportunities from 2024 training handles. The fitted logit is 0.44381 + 1.17363 times the usual Elo logit. This improves probabilities while preserving the within-problem player ordering. The official problem label can reflect the original evaluation field.
+
+| Period and comparator | Log loss | Brier | ECE | Within-problem AUC |
+|---|---:|---:|---:|---:|
+| 2025 raw official Elo | 0.219154 | 0.067096 | 0.032443 | 0.859925 |
+| 2025 calibrated official Elo | 0.211750 | 0.063778 | 0.008938 | 0.859925 |
+| 2026 raw official Elo | 0.225695 | 0.068632 | 0.037395 | 0.850979 |
+| 2026 calibrated official Elo | 0.215705 | 0.064558 | 0.010985 | 0.850979 |
+
+Reproduce with `OPENBLAS_NUM_THREADS=1 .venv/bin/python scripts/cf_official_metrics.py`. The 2025 raw loss agrees with the previous difficulty pilot.
+
+## Five-hour results
+
+The five-hour wall-clock allocation ended at 09:03:54 UTC. The final benchmark pools five disjoint SHA-256 handle partitions on the same 43 2026 rounds, totaling 2,155,061 predictions. Each person belongs to one test partition. For each partition, current problem calibration uses the other contestants, while the prediction model is selected once from 2025 and remains frozen.
+
+| 2026 pooled across five held-out partitions | Reference | Balanced selection | Loss selection |
+|---|---:|---:|---:|
+| Log loss ↓ | 0.202548 | 0.201463 | **0.200593** |
+| Brier ↓ | 0.061666 | 0.061364 | **0.061165** |
+| 20-bin ECE ↓ | **0.000786** | 0.000833 | 0.000771 |
+| Within-problem macro AUC ↑ | 0.862956 | 0.866714 | **0.870790** |
+
+The balanced selection improves loss, Brier and AUC but increases ECE by 0.000047. Its paired round-bootstrap interval for ECE difference was [−0.000171, +0.000204]. The loss selection improves all four point estimates. Its intervals for loss, Brier, ECE and AUC differences were respectively [−0.002131, −0.000563], [−0.0005626, −0.00025797], [−0.0002413, +0.0002044] and [+0.004350, +0.009112]. It is a strict four-metric win on point estimates and 43/43 rounds for log loss. The ECE interval includes zero.
+
+The loss selection uses 25% tree model, 75% rolling model and no separate per-problem field model. The balanced selection uses 25% tree, 25% field and 50% rolling. The standalone inner-fold rolling model, using an entirely new learner that consumes only training-player examples per fold, scores 0.197271 log loss, 0.060537 Brier, 0.000699 ECE and 0.888580 AUC on the pooled development partition. In fold zero, the unchanged reference is 0.201862, 0.061372, 0.001075 and 0.870012. Its point estimates improve all four, and its paired intervals exclude zero favorably for loss, Brier and ECE, but not AUC. This is the cleanest model-level four-metric result, while its AUC evidence is less certain.
+
+The five pooled fold results are stored individually in the confirmation cache. On the full-field holdout, the all-division feature panel changed eligibility slightly, so its separate 2026 result covers 438,408 rather than 427,752 predictions. Do not compare these counts across protocols as if the tested populations matched.
+
+The official comparator's 2025 raw log loss was reproduced at 0.219154. The all-division four-metric candidates are roughly 9% lower in log loss, 9% lower in Brier, sharply better by within-problem AUC and far better calibrated after taking advantage of other current-round contestants. This benchmark rates a problem using observed solves in that same contest. It is not a pre-contest forecast of a new problem.
+
+**Calibration sampling floor.** Pooling all five folds reduces ECE from roughly 0.0015 per fold to under 0.0008. The independent Bernoulli normal approximation for 20 bins is about 0.00060. The observed ECE differences of the final ensemble are smaller than their paired uncertainty. Finer bin counts, held-out contestants in the same task, and bootstrap resampling by round all give different views of this small calibration residual. The strict point-estimate criterion is met, but a repeat contest sample is needed to establish the ECE gain.
+
+**Historical subject signals.** On the primary rolling recipe, dropping the all-division player history worsened 2025 log loss from 0.194685 to 0.196033 and Brier from 0.059799 to 0.060106. Dropping speed slightly improved ECE from 0.001210 to 0.001175 while worsening loss and Brier. Removing rank performance or the problem-specialization block changed log loss only marginally.
+
+The complete trial journal, fold predictions and model checkpoints remain in the ignored `data/cf_ai/boost_v1/` cache. `output/cf_five_hour_trials.json.gz` is the compressed metric journal. Its script is `scripts/cf_search_audit.py --lock final --archive`.

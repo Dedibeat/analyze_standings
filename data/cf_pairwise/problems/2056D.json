@@ -1,0 +1,46 @@
+{
+  "contest_id": 2056,
+  "index": "D",
+  "name": "Unique Median",
+  "rating": 2200,
+  "tags": [
+    "binary search",
+    "brute force",
+    "combinatorics",
+    "data structures",
+    "divide and conquer",
+    "dp"
+  ],
+  "points": 2000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2056D",
+  "url": "https://codeforces.com/problemset/problem/2056/D",
+  "contest_start_time": "2025-01-17T14:35:00+00:00",
+  "statement": {
+    "title": "D. Unique Median",
+    "time_limit": "2 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "An array $b$ of $m$ integers is called good if, when it is sorted, $b_{\\left\\lfloor \\frac{m + 1}{2} \\right\\rfloor} = b_{\\left\\lceil \\frac{m + 1}{2} \\right\\rceil}$. In other words, $b$ is good if both of its medians are equal. In particular, $\\left\\lfloor \\frac{m + 1}{2} \\right\\rfloor = \\left\\lceil \\frac{m + 1}{2} \\right\\rceil$ when $m$ is odd, so $b$ is guaranteed to be good if it has an odd length.\n\nYou are given an array $a$ of $n$ integers. Calculate the number of good subarrays$^{\\text{∗}}$ in $a$.\n\n$^{\\text{∗}}$An array $x$ is a subarray of an array $y$ if $x$ can be obtained from $y$ by the deletion of several (possibly, zero or all) elements from the beginning and several (possibly, zero or all) elements from the end.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 10^4$). The description of the test cases follows.\n\nThe first line of each test case contains a single integer $n$ ($1 \\le n \\le 10^5$) — the length of the array.\n\nThe second line of each test case contains $n$ integers $a_1, a_2, \\ldots, a_n$ ($1 \\le a_i \\le \\color{red}{\\textbf{10}}$) — the given array.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $10^5$.",
+    "output_spec": "For each test case, output a single integer representing the number of good subarrays in $a$.",
+    "note": "In the first case, every subarray is good since all its elements are equal to $1$.\n\nIn the second case, an example of a good subarray is $b = [10, 2, 3, 3]$. When it is sorted, $b = [2, 3, 3, 10]$, so $b_{\\left\\lfloor \\frac{4 + 1}{2} \\right\\rfloor} = b_{\\left\\lceil \\frac{4 + 1}{2} \\right\\rceil} = b_2 = b_3 = 3$. Another example would be $b = [1, 10, 2]$. On the other hand, $b = [1, 10]$ is not good as its two medians are $1$ and $10$, which are not equal.",
+    "samples": [
+      {
+        "input": "3\n4\n1 1 1 1\n5\n1 10 2 3 3\n10\n6 3 2 3 5 3 4 2 3 5",
+        "output": "\n10\n11\n42"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 138487,
+    "url": "https://codeforces.com/blog/entry/138487",
+    "tutorial": "2056D - Равные медианы\n\nHints\n\nHint 1\n\nSolve the problem when $a_i \\le 2$.\n\nHint 2\n\nAssign $b_i = 1$ if $a_i = 2$ and $b_i = -1$ if $a_i = 1$ and calculate the number of bad subarrays.\n\nHint 3\n\nExtend this solution for $a_i \\le 10$, however, you need to take overcounting into account.\n\nSolution\n\nWhen is a subarray $a[l, r]$ not good?\n\nIf $r - l + 1$ is odd, $a[l, r]$ can't be bad. Otherwise, suppose the median of $a[l, r]$ is $x$. Then there need to be exactly $\\frac{r - l + 1}{2}$ elements in $a[l, r]$ that are $\\le x$ and exactly $\\frac{r - l + 1}{2}$ that are $ \\gt x$.\n\nThis gives us an idea to calculate the number of bad subarrays with a median of $x$.\n\nCreate another array $b$ of size $n$, where $b_i = -1$ if $a_i \\le x$ and $b_i = 1$ otherwise.\n\n$a[l, r]$, which has a median of $x$, is bad if and only if $\\sum\\limits_{i = l}^r b_i = 0$ and $r - l + 1$ is even.\n\nNotice that the second condition is not needed, as the sum of an odd length subarray of $b$ is always odd, so it can't be zero.\n\nTherefore, $a[l, r]$ with a median of $x$ is bad iff $\\sum\\limits_{i = l}^r b_i = 0$.\n\nIf there is no $x$ in $[l, r]$, then the median of $a[l, r]$ trivially can't be equal to $x$.\n\nIf there is an occurrence of $x$ in $a[l, r]$ and $\\sum\\limits_{i = l}^r b_i = 0$, notice that the median of $a[l, r]$ will always be exactly $x$. This is true because $\\frac{r - l + 1}{2}$ smallest elements of $a[l, r]$ are all $\\le x$, and there is an occurrence of $x$, so $\\frac{r - l + 1}{2}$-th smallest element must be $x$.\n\nThis allows us to simply count the number of subarrays of $b$ with a sum of $0$ and with an occurrence of $x$ to count the number of bad subarrays with median $x$.\n\nWe can subtract that value from $\\frac{n(n + 1)}{2}$ for all $x$ between $1$ and $A = 10$ to solve the problem in $O(nA)$.\n\nCode",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n\nusing namespace std;\n\nconst int MAX = 11;\n\nint main() {\n    int tests;\n    cin >> tests;\n    for(int test = 0; test < tests; test++) {\n        int n;\n        cin >> n;\n        vector<int> a(n);\n        for(auto &i : a) {\n            cin >> i;\n        }\n        long long ans = 0;\n        for(int x = 1; x < MAX; x++) {\n            vector<int> b(n);\n            for(int i = 0; i < n; i++) {\n                b[i] = (a[i] > x? 1 : -1);\n            }\n            int sum = n;\n            vector<int> pref(n);\n            for(int i = 0; i < n; i++) {\n                pref[i] = sum;\n                sum += b[i];\n            }\n            vector<int> cnt(2 * n + 1);\n            sum = n;\n            int j = 0;\n            for(int i = 0; i < n; i++) {\n                if(a[i] == x) {\n                    while(j <= i) {\n                        cnt[pref[j]]++;\n                        j++;\n                    }\n                }\n                sum += b[i];\n                ans += cnt[sum];\n            }\n        }\n        ans = 1ll * n * (n + 1) / 2 - ans;\n        cout << ans << '\\n';\n    }\n    return 0;\n}"
+    ]
+  }
+}

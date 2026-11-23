@@ -1,0 +1,44 @@
+{
+  "contest_id": 2077,
+  "index": "C",
+  "name": "Binary Subsequence Value Sum",
+  "rating": 2300,
+  "tags": [
+    "combinatorics",
+    "data structures",
+    "dp",
+    "fft",
+    "math",
+    "matrices"
+  ],
+  "points": 1500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2077C",
+  "url": "https://codeforces.com/problemset/problem/2077/C",
+  "contest_start_time": "2025-03-10T14:45:00+00:00",
+  "statement": {
+    "title": "C. Binary Subsequence Value Sum",
+    "time_limit": "3 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Last | Moment - onoken\n\nFor a binary string$^{\\text{∗}}$ $v$, the score of $v$ is defined as the maximum value of\n\n$$F\\big(v, 1, i\\big) \\cdot F\\big(v, i+1, |v|\\big)$$\n\nover all $i$ ($0 \\leq i \\leq |v|$).\n\nHere, $F\\big(v, l, r\\big) = r - l + 1 - 2 \\cdot \\operatorname{zero}(v, l, r)$, where $\\operatorname{zero}(v, l, r)$ denotes the number of $\\mathtt{0}$s in $v_lv_{l+1} \\ldots v_r$. If $l  \\gt  r$, then $F\\big(v, l, r\\big) = 0$.\n\nYou are given a binary string $s$ of length $n$ and a positive integer $q$.\n\nYou will be asked $q$ queries.\n\nIn each query, you are given an integer $i$ ($1 \\leq i \\leq n$). You must flip $s_i$ from $\\mathtt{0}$ to $\\mathtt{1}$ (or from $\\mathtt{1}$ to $\\mathtt{0}$). Find the sum of the scores over all non-empty subsequences$^{\\text{†}}$ of $s$ after each modification query.\n\nSince the result may be large, output the answer modulo $998\\,244\\,353$.\n\nNote that the modifications are persistent.\n\n$^{\\text{∗}}$A binary string is a string that consists only of the characters $\\mathtt{0}$ and $\\mathtt{1}$.\n\n$^{\\text{†}}$A binary string $x$ is a subsequence of a binary string $y$ if $x$ can be obtained from $y$ by deleting several (possibly zero or all) characters.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 10^4$). The description of the test cases follows.\n\nThe first line of each test case contains two integers $n$ and $q$ ($1 \\leq n \\leq 2 \\cdot 10^5$, $1 \\leq q \\leq 2 \\cdot 10^5$) — the length of the string $s$ and the number of modification queries, respectively.\n\nThe second line contains the binary string $s$ of length $n$, consisting of characters $\\mathtt{0}$ and $\\mathtt{1}$.\n\nThe following $q$ lines each contain an integer $i$ ($1 \\leq i \\leq n$), indicating that $s_i$ is flipped from $\\mathtt{0}$ to $\\mathtt{1}$ or from $\\mathtt{1}$ to $\\mathtt{0}$.\n\nIt is guaranteed that neither the total sum of all values of $n$ nor the total sum of all values of $q$ across all test cases exceeds $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, output $q$ lines, each line containing a single integer — the required sum modulo $998\\,244\\,353$.",
+    "note": "For the first test case, after the first modification, we have $s = \\texttt{110}$. We can compute the sum of scores over all subsequences as follows:\n\nIndicesSubsequenceScore\n\n$1$1$0$\n\n$2$1$0$\n\n$1, 2$11$1$\n\n$3$0$0$\n\n$1, 3$10$0$\n\n$2, 3$10$0$\n\n$1, 2, 3$110$0$\n\nSumming up: $0+0+1+0+0+0+0 = 1$.\n\nAfter the second modification, we have $s = \\texttt{111}$. We can compute the sum of scores over all subsequences as follows:\n\nIndicesSubsequenceScore\n\n$1$1$0$\n\n$2$1$0$\n\n$1, 2$11$1$\n\n$3$1$0$\n\n$1, 3$11$1$\n\n$2, 3$11$1$\n\n$1, 2, 3$111$2$\n\nSumming up: $0+0+1+0+1+1+2 = 5$.",
+    "samples": [
+      {
+        "input": "3\n3 2\n010\n1\n3\n10 3\n0101000110\n3\n5\n10\n24 1\n011001100110000101111000\n24",
+        "output": "\n1\n5\n512\n768\n1536\n23068672"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 140505,
+    "url": "https://codeforces.com/blog/entry/140505",
+    "tutorial": "2077C - Binary Subsequence Value Sum\n\nHint 1\n\nFind a closed-form expression for the score of a binary string.\n\nHint 2\n\nThe closed-form expression for the score of a binary string is\n $\\lfloor \\frac{cnt_0-cnt_1}{2} \\rfloor \\lceil \\frac{cnt_0-cnt_1}{2} \\rceil$\nWhere $cnt_0$ and $cnt_1$ are the number of $\\tt{0}$ and $\\tt{1}$ in the binary string, respectively.\n\nA useful rearrangement\n$\\lfloor \\frac{cnt_0-cnt_1}{2} \\rfloor \\lceil \\frac{cnt_0-cnt_1}{2} \\rceil = \\frac{(cnt_0-cnt_1)^2}{4} - \\frac{(cnt_0-cnt_1 \\mod 2)}{4}$\n\nHint 3\n\nThe expression for counting subsequences might be simpler than you think.\n\nSolution\n\nThink of $\\tt{0}$ as $-1$ and $\\tt{1}$ as $1$. Let us count the number of subsequences of a binary string which will have the sum of $i$. Let $cnt_0$ and $cnt_1$ as the number of $\\tt{0}$ and $\\tt{1}$ in the binary string. The number of subsequences is\n ${n} \\choose {i + cnt_0}$\nProof\n\nWe change the perspective on $\\tt{0}$ slightly from contributing $-1$ to the sum if chosen and $0$ to the sum if not chosen, to contributing $0$ to the sum if chosen and $1$ to the sum if not chosen. This changes the problem to having $cnt_0 + cnt_1 = n$ distinct objects and needing to pick $i+cnt_0$ of them.\n\nSo the desired sum of the score over all subsequences (see expression of score of a single string in Hint 2) is\n $ \\sum_{i = -cnt_0}^{n - cnt_0} {{n} \\choose {i + cnt_0}} (\\frac{i^2}{4} - \\frac{(i \\mod 2)}{4}) $\nAt this point, you can throw convolution at the problem by precomputing the answer for $cnt_0 = 0, 1, \\ldots, n$ and solve it in $\\mathcal{O}(n \\log n + q)$.\n\nSubmission: 310298025\n\nAlternatively, you can do more algebra to arrive at a closed-form expression.\n $ 2^{n-4}(n(n+1) - 4cnt_0n + 4cnt_0^2 - 2) $\nProof\n\nConsider\n\n$\\sum_{i = -cnt_0}^{n - cnt_0} {{n} \\choose {i + cnt_0}} i^2$\n\n$= \\sum_{i = 0}^{n} {{n} \\choose {i}} (i-cnt_0)^2$\n\n$= \\sum_{i = 0}^{n} {{n} \\choose {i}} i^2 - 2cnt_0 \\sum_{i = 0}^{n} {{n} \\choose {i}} i + cnt_0^2 \\sum_{i = 0}^{n} {{n} \\choose {i}} 1$\n\n$= n(n+1) \\cdot 2^{n-2} - 2cnt_0 n \\cdot 2^{n-1} + cnt_0^2 \\cdot 2^n$\n\nAnd\n\n$\\sum_{i = -cnt_0}^{n - cnt_0} {{n} \\choose {i + cnt_0}} (i \\mod 2) = 2^{n-1}$\n\nSo\n\n$\\frac{1}{4} \\sum_{i = -cnt_0}^{n - cnt_0} {{n} \\choose {i + cnt_0}} i^2 + (i \\mod 2)$\n\n$= \\frac{1}{4} (n(n+1) \\cdot 2^{n-2} - 2cnt_0 n \\cdot 2^{n-1} + cnt_0^2 \\cdot 2^n - 2^{n-1})$\n\n$= 2^{n-4}(n(n+1) - 4cnt_0n + 4cnt_0^2 - 2)$\n\nTime complexity: $\\mathcal{O}(n+q)$ per test case.\n\nSubmission: 310297950",
+    "solution_code": []
+  }
+}

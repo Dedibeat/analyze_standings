@@ -1,0 +1,36 @@
+{
+  "contest_id": 2010,
+  "index": "A",
+  "name": "Alternating Sum of Numbers",
+  "rating": 800,
+  "tags": [
+    "brute force",
+    "implementation",
+    "math"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2010A",
+  "url": "https://codeforces.com/problemset/problem/2010/A",
+  "contest_start_time": "2024-08-28T20:35:00+00:00",
+  "statement": {
+    "title": "A. Alternating Sum of Numbers",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "You are given a sequence of integers. Output the alternating sum of this sequence. In other words, output $a_1 - a_2 + a_3 - a_4 + a_5 - \\dots$. That is, the signs of plus and minus alternate, starting with a plus.",
+    "input_spec": "The first line of the test contains one integer $t$ ($1 \\le t \\le 1000$) — the number of test cases. Then follow $t$ test cases.\n\nThe first line of each test case contains one integer $n$ ($1 \\le n \\le 50$) — the length of the sequence. The second line of the test case contains $n$ integers $a_1, a_2, \\dots, a_n$ ($1 \\le a_i \\le 100$).",
+    "output_spec": "Output $t$ lines. For each test case, output the required alternating sum of the numbers.",
+    "note": null,
+    "samples": [
+      {
+        "input": "4\n4\n1 2 3 17\n1\n100\n2\n100 100\n5\n3 1 4 1 5",
+        "output": "\n-15\n100\n0\n10"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "missing"
+  },
+  "editorial": null
+}

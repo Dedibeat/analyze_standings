@@ -1,0 +1,36 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define int long long
+#define F first 
+#define S second  
+#define all(v) (v).begin(), (v).end()
+#define hha(x) cout << #x << ": " << x << " ";
+#define hhal(x) cout << #x << ": " << x << endl;
+#define print(v) cout << #v << ": "; for(auto x : v) cout << x << " "; cout << endl;
+void solve()
+{
+    int n; cin >> n;
+    vector<string> a(n);
+    int cnt = 1, cur = 0;
+    for(auto &s : a)
+    {
+        cin >> s;
+        if(s == "yeshenle" && cur == 1)
+        {
+            cnt++;
+            cur = 0;
+        }
+        if(s == "zaoshanghao" && cur == 0)
+        {
+            cur = 1;
+        }
+    }
+    cout << cnt << "\n";
+
+}
+signed main()
+{
+    ios::sync_with_stdio(0); cin.tie(0); 
+    //int t; cin >> t; while(t--)
+    solve();
+}

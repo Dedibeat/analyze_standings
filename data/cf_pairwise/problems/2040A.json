@@ -1,0 +1,43 @@
+{
+  "contest_id": 2040,
+  "index": "A",
+  "name": "Game of Division",
+  "rating": 800,
+  "tags": [
+    "games",
+    "math"
+  ],
+  "points": 500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2040A",
+  "url": "https://codeforces.com/problemset/problem/2040/A",
+  "contest_start_time": "2024-12-08T14:35:00+00:00",
+  "statement": {
+    "title": "A. Game of Division",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "You are given an array of integers $a_1, a_2, \\ldots, a_n$ of length $n$ and an integer $k$.\n\nTwo players are playing a game. The first player chooses an index $1 \\le i \\le n$. Then the second player chooses a different index $1 \\le j \\le n, i \\neq j$. The first player wins if $|a_i - a_j|$ is not divisible by $k$. Otherwise, the second player wins.\n\nWe play as the first player. Determine whether it is possible to win, and if so, which index $i$ should be chosen.\n\nThe absolute value of a number $x$ is denoted by $|x|$ and is equal to $x$ if $x \\ge 0$, and $-x$ otherwise.",
+    "input_spec": "Each test contains multiple test cases. The first line of input contains a single integer $t$ ($1 \\le t \\le 100$) — the number of test cases. The description of the test cases follows.\n\nThe first line of each test case contains two integers $n$ and $k$ ($1 \\le n \\le 100$; $1 \\le k \\le 100$) — the length of the array and the number $k$.\n\nThe second line of each test case contains $n$ integers $a_1, a_2, \\ldots, a_n$ ($1 \\le a_i \\le 100$) — the elements of the array $a$.",
+    "output_spec": "For each test case, if it is impossible for the first player to win, print \"NO\" (without quotes).\n\nOtherwise, print \"YES\" (without quotes) and on the next line the appropriate index $1 \\le i \\le n$. If there are multiple solutions, print any of them.\n\nYou can output each letter in any case (lowercase or uppercase). For example, the strings \"yEs\", \"yes\", \"Yes\" and \"YES\" will be recognized as a positive answer.",
+    "note": "In the first test case, the first player can choose $a_2 = 2$. Then:\n\n If the second player chooses $a_1 = 1$, the resulting difference is $|2 - 1| = 1$ which is not divisible by $k = 2$.\n\n If the second player chooses $a_3 = 3$, the resulting difference is $|2 - 3| = 1$ which is not divisible by $k = 2$.\n\nIn the second test case:\n\n If the first player chooses $a_1 = 1$ and then the second player chooses $a_4 = 5$, the resulting difference is $|1 - 5| = 4$ which is divisible by $k = 2$.\n\n If the first player chooses $a_2 = 2$ and then the second player chooses $a_3 = 4$, the resulting difference is $|2 - 4| = 2$ which is divisible by $k = 2$.\n\n If the first player chooses $a_3 = 4$ and then the second player chooses $a_2 = 2$, the resulting difference is $|4 - 2| = 2$ which is divisible by $k = 2$.\n\n If the first player chooses $a_4 = 5$ and then the second player chooses $a_1 = 1$, the resulting difference is $|5 - 1| = 4$ which is divisible by $k = 2$.\n\n In any case, the second player wins.",
+    "samples": [
+      {
+        "input": "7\n3 2\n1 2 3\n4 2\n1 2 4 5\n5 3\n10 7 3 4 5\n5 3\n1 31 15 55 36\n2 1\n17 17\n2 2\n17 18\n1 3\n6",
+        "output": "\nYES\n2\nNO\nYES\n3\nNO\nNO\nYES\n2\nYES\n1"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 137074,
+    "url": "https://codeforces.com/blog/entry/137074",
+    "tutorial": "$|x - y|$ is divisible by $k$ if and only if $x \\mod k = y \\mod k$. Let's split all numbers into groups according to the value $x \\mod k$. The second player wins if he chooses a number from the same group. This means that the first player must choose the number that is the only one in its group.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n \nusing namespace std;\n \nint main() {\n    int tt;\n    cin >> tt;\n    while (tt--) {\n        int n, k;\n        cin >> n >> k;\n        vector < vector <int> > b(k);\n        for (int i = 1; i <= n; i++) {\n            int x;\n            cin >> x;\n            b[x % k].push_back(i);\n        }\n        int res = -1;\n        for (int i = 0; i < k; i++) {\n            if ((int)b[i].size() == 1) {\n                res = b[i][0];\n                break;\n            }\n        }\n        if (res == -1) {\n            cout << \"NO\" << endl;\n        }\n        else {\n            cout << \"YES\" << endl << res << endl;\n        }\n    }\n    \n    return 0;\n}",
+      "for _ in range(int(input())):\n    n, k = map(int, input().split())\n    a = list(map(int, input().split()))\n    b = [[] for _ in range(k)]\n    for i in range(0, n):\n        x = a[i]\n        b[x % k].append(i + 1)\n    res = -1\n    for i in range(k):\n        if len(b[i]) == 1:\n            res = b[i][0]\n            break\n    if res == -1:\n        print(\"NO\")\n    else:\n        print(\"YES\\n\" + str(res))"
+    ]
+  }
+}

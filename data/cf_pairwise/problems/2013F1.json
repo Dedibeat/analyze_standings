@@ -1,0 +1,48 @@
+{
+  "contest_id": 2013,
+  "index": "F1",
+  "name": "Game in Tree (Easy Version)",
+  "rating": 2700,
+  "tags": [
+    "binary search",
+    "brute force",
+    "data structures",
+    "dp",
+    "games",
+    "greedy",
+    "implementation",
+    "trees"
+  ],
+  "points": 2000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2013F1",
+  "url": "https://codeforces.com/problemset/problem/2013/F1",
+  "contest_start_time": "2024-09-20T14:35:00+00:00",
+  "statement": {
+    "title": "F1. Game in Tree (Easy Version)",
+    "time_limit": "4 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "This is the easy version of the problem. In this version, $\\mathbf{u = v}$. You can make hacks only if both versions of the problem are solved.\n\nAlice and Bob are playing a fun game on a tree. This game is played on a tree with $n$ vertices, numbered from $1$ to $n$. Recall that a tree with $n$ vertices is an undirected connected graph with $n - 1$ edges.\n\nAlice and Bob take turns, with Alice going first. Each player starts at some vertex.\n\nOn their turn, a player must move from the current vertex to a neighboring vertex that has not yet been visited by anyone. The first player who cannot make a move loses.\n\nYou are given two vertices $u$ and $v$. Represent the simple path from vertex $u$ to $v$ as an array $p_1, p_2, p_3, \\ldots, p_m$, where $p_1 = u$, $p_m = v$, and there is an edge between $p_i$ and $p_{i + 1}$ for all $i$ ($1 \\le i  \\lt  m$).\n\nYou need to determine the winner of the game if Alice starts at vertex $1$ and Bob starts at vertex $p_j$ for each $j$ (where $1 \\le j \\le m$).",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 10^4$). The description of the test cases follows.\n\nThe first line of each test case contains a single integer $n$ ($2 \\le n \\le 2 \\cdot 10^5$) — the number of vertices in the tree.\n\nEach of the following $n - 1$ lines contains two integers $a$ and $b$ ($1 \\le a, b \\le n$), denoting an undirected edge between vertices $a$ and $b$. It is guaranteed that these edges form a tree.\n\nThe last line of each test case contains two integers $u$ and $v$ ($2 \\le u, v \\le n$, $\\mathbf{u = v}$).\n\nIt is guaranteed that the path from $u$ to $v$ does not pass through vertex $1$.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, output $m$ lines.\n\nIn the $i$-th line, print the winner of the game if Alice starts at vertex $1$ and Bob starts at vertex $p_i$. Print \"Alice\" (without quotes) if Alice wins, or \"Bob\" (without quotes) otherwise.",
+    "note": "Tree from the first and second examples.\nIn the first test case, the path will be ($2,2$). Bob starts at vertex $2$, Alice will not be able to move anywhere on her first turn and will lose.\n\nIn the second test case, the path will be ($3,3$). Bob starts at vertex $3$, Alice will move to vertex $2$, and Bob will have no remaining vertices to visit and will lose.",
+    "samples": [
+      {
+        "input": "3\n3\n1 2\n2 3\n2 2\n3\n1 2\n2 3\n3 3\n6\n1 2\n1 3\n2 4\n2 5\n1 6\n4 4",
+        "output": "\nBob\nAlice\nAlice"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "missing"
+  },
+  "editorial": {
+    "blog_id": 134298,
+    "url": "https://codeforces.com/blog/entry/134298",
+    "tutorial": null,
+    "solution_code": [
+      "#include <bits/stdc++.h>\n\nusing namespace std;\ntypedef long long ll;\ntypedef unsigned long long ull;\n\n#define forn(i,j,k) for(ll i=(j); i<=(k); i++)\n#define rofn(i,j,k) for(ll i=(j); i>=(k); i--)\n\nint main() {\n    ll t;\n    cin >> t;\n\n    ll n;\n    while(t--) {\n        cin >> n;\n        vector<ll> a(n+1);\n        ll mn = 1e15, mx=-1;\n        forn(i, 1, n) {\n            cin >> a[i];\n            mn = min(mn, a[i]);\n            mx = max(mx, a[i]);\n        }\n        \n        ll low = mn, high = mx;\n        ll alpha, beta;\n        while(low+1 < high) {\n            alpha = (low + high) / 2;\n            ll tmp = 0;\n            bool valid = true;\n            rofn(i, n, 1) {\n                tmp += a[i];\n                if(tmp > (n-i+1)*alpha) {\n                    valid = false;\n                    break;\n                }\n            }\n            if(valid) high = alpha;\n            else low = alpha;\n        }\n        alpha = high;\n\n        low = mn; high = mx;\n        while(low+1 < high) {\n            beta = (low + high) / 2;\n            ll tmp = 0;\n            bool valid = true;\n            forn(i, 1, n) {\n                tmp += a[i];\n                if(tmp < i*beta) {\n                    valid = false;\n                    break;\n                }\n            }\n            \n            if(valid) low = beta;\n            else high = beta;\n        }\n        beta = low;\n\n        cout << alpha - beta << endl;\n    }\n}"
+    ]
+  }
+}

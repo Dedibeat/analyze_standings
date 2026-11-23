@@ -1,0 +1,29 @@
+The 2026 ICPC Asia Wuhan Regional Contest China, Wuhan, November 1, 2026
+Problem G. Shuffle Playlist
+During the Card Incident, Haniyasushin Keiki collected n types of ability cards. The card types are numbered from 1 to n, and there are ai cards numbered i. In addition, Tenkyu Chimata gave her k blank cards. Now Keiki wants to play her carefully selected song collection in the Primate Spirit Garden. The song collection contains n songs, numbered 1, 2, . . . , n. When playing song i, if there is still a card numbered i, consume one; otherwise, if there is a blank card, consume one blank card; if neither is available, stop playback. To avoid playing the same song twice in a row, a playlist is generated from this song collection according to the following random shuffle rule: � At the beginning, the n songs form a playlist in an arbitrary order, and are played in that order; � When the last song in the current playlist is about to start playing, if it is playable, the current playlist
+is immediately replaced by a new playlist, in which this song is the first, and the remaining n - 1 songs are arranged arbitrarily after it. Assume that all shuffles turn out in the most favorable way for Keiki. Please help her find the maximum number of songs she can play.
+Input
+There are multiple test cases. The first line of the input contains an integer T (1  T  105), indicating the number of test cases. For each test case: � The first line contains two integers n, k (2  n  105, 0  k  1012), indicating the number of card
+types and the number of blank cards, respectively. � The second line contains n positive integers a1, a2, � � � , an (1  ai  1012), indicating the number of
+cards of each type. It is guaranteed that the sum of n over all test cases does not exceed 2 � 105.
+Output
+For each test case, output one line containing an integer, indicating the maximum number of songs Keiki can play in the optimal case.
+Example
+Page 15 of 28
+
+The 2026 ICPC Asia Wuhan Regional Contest China, Wuhan, November 1, 2026
+
+standard input
+8 30 111 40 4441 41 4441 23 147154220721 1 49 1 6 11 16 31 154 3 1000000000000 154 62 211111
+
+standard output
+3 9 14 9 41 10 1000000000010 9
+
+Note
+In the first test case of the sample, there are no blank cards. Suppose the initial playlist is [1, 2, 3]. First, songs 1 and 2 are played. When song 3 is about to start playing, the playlist is updated to [3, 1, 2] (or [3, 2, 1]). Then song 3 is played. After song 3 is played, the next song is song 1 (or song 2), but the corresponding card has already been consumed earlier, so playback stops. A total of 3 songs are played.
+In the second test case of the sample, one possible optimal case is as follows: the playlist changes as [1, 2, 3, 4]  [4, 1, 2, 3]  [3, 1, 2, 4], where the final song 4 in the last playlist cannot be played, and a total of 9 songs are played. Note that when playback reaches the last song of the list, if it cannot be played, playback stops immediately and the playlist is not updated.
+In the third test case of the sample, in the optimal case, the second time song 4 is played, a blank card is consumed.
+
+Page 16 of 28
+
+

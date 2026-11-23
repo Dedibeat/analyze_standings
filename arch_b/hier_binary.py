@@ -42,13 +42,19 @@ MU0 = 2000.0
 
 
 def fit(ds, obs=None, rows=None, sigma=300.0, tau=800.0, sigma_b=600.0, tau_b=400.0,
-        eps=1e-3, max_newton=60, cg_tol=1e-4, cg_max=500):
-    """MAP fit; returns dict(theta, b, mu, nu, nu0, newton, cg, max_step).
+        eps=1e-3, max_newton=60, cg_tol=1e-4, cg_max=500, cuts=None, cut_weight=1.0, start=None):
+    """MAP fit; returns dict(theta, b, mu, nu, nu0, newton, cg, max_step, x, b_se).
 
     ``obs`` = (obs_team, obs_prob, obs_y) restricts the likelihood cells.
     ``rows`` is a boolean mask of standings rows that define each team's
     board membership (default: every row); a team with no active row gets
     prior mean 2000.
+    ``cuts`` = (lo, hi), one pair per cell in logit units, adds an interval
+    likelihood P(cell) = sigma(g - lo) - sigma(g - hi), g = (theta - b) / s, at
+    weight ``cut_weight`` next to the binary one at 1 - ``cut_weight``
+    (``hier_time`` passes solve-time intervals; ``(0, inf)`` is a plain solve
+    and ``(-inf, 0)`` a failure). ``start`` is an earlier result's ``x``.
+    ``b_se`` is each difficulty's standard error with the teams held fixed.
     """
     team, prob, y = ((ds.team_of_row[ds.obs_row], ds.obs_prob, ds.obs_y) if obs is None else obs)
     y = np.asarray(y, float)
@@ -60,6 +66,8 @@ def fit(ds, obs=None, rows=None, sigma=300.0, tau=800.0, sigma_b=600.0, tau_b=40
     p_c = np.asarray(ds.contest_of_problem)
     has_mu, has_nu = tau > 0, tau_b > 0
     cut = np.cumsum([n_t, n_p, n_c, n_c])
+    if cuts is not None:
+        lo, hi = cuts
 
     def w_mu(mu):          # W @ mu: each team's mean board level
         out = np.bincount(r_t, r_w * mu[r_c], n_t)
@@ -81,6 +89,8 @@ def fit(ds, obs=None, rows=None, sigma=300.0, tau=800.0, sigma_b=600.0, tau_b=40
         g = (th[team] - b[prob]) / S
         m, mb = prior_means(mu, nu)
         f = np.sum(np.logaddexp(0.0, g) - y * g)
+        if cuts is not None:
+            f = (1 - cut_weight) * f + cut_weight * np.sum(np.logaddexp(0.0, lo - g) + np.logaddexp(0.0, g - hi))
         f += np.sum((th - m) ** 2) / (2 * sigma ** 2) + np.sum((b - mb) ** 2) / (2 * sigma_b ** 2)
         if has_mu:
             f += np.sum((mu - MU0) ** 2) / (2 * tau ** 2)
@@ -88,22 +98,26 @@ def fit(ds, obs=None, rows=None, sigma=300.0, tau=800.0, sigma_b=600.0, tau_b=40
             f += np.sum((nu - nu0) ** 2) / (2 * tau_b ** 2)
         return float(f)
 
-    x = np.full(n_t + n_p + 2 * n_c + 1, MU0)
+    x = np.full(n_t + n_p + 2 * n_c + 1, MU0) if start is None else start.copy()
     n_newton = n_cg = 0
     step_max = np.inf
     for n_newton in range(1, max_newton + 1):
         th, b, mu, nu, nu0 = unpack(x)
-        pr = 1.0 / (1.0 + np.exp(-(th[team] - b[prob]) / S))
+        g = (th[team] - b[prob]) / S
+        pr = 1.0 / (1.0 + np.exp(-g))
+        resid, w = pr - y, pr * (1 - pr) / S ** 2
+        if cuts is not None:
+            pa, pb = 1.0 / (1.0 + np.exp(lo - g)), 1.0 / (1.0 + np.exp(hi - g))
+            resid = (1 - cut_weight) * resid + cut_weight * (pa + pb - 1)
+            w = (1 - cut_weight) * w + cut_weight * (pa * (1 - pa) + pb * (1 - pb)) / S ** 2
         m, mb = prior_means(mu, nu)
         rt, rb = th - m, b - mb
-        resid = pr - y
         grad = np.concatenate([
             np.bincount(team, resid, n_t) / S + rt / sigma ** 2,
             -np.bincount(prob, resid, n_p) / S + rb / sigma_b ** 2,
             (-wt(rt) / sigma ** 2 + (mu - MU0) / tau ** 2) if has_mu else np.zeros(n_c),
             (-np.bincount(p_c, rb, n_c) / sigma_b ** 2 + (nu - nu0) / tau_b ** 2) if has_nu else np.zeros(n_c),
             [-np.sum(nu - nu0) / tau_b ** 2 if has_nu else 0.0]])
-        w = pr * (1 - pr) / S ** 2
         diag = np.concatenate([
             np.bincount(team, w, n_t) + 1 / sigma ** 2,
             np.bincount(prob, w, n_p) + 1 / sigma_b ** 2,
@@ -145,7 +159,15 @@ def fit(ds, obs=None, rows=None, sigma=300.0, tau=800.0, sigma_b=600.0, tau_b=40
         while objective(x + t * d) > f0 + 1e-4 * t * slope:
             t *= 0.5
             if t < 1e-8:
+                break
+        if t < 1e-8:
+            # At the optimum the predicted decrease can fall below the rounding of the
+            # objective (~1e-12 on ~2e5), so no step passes. If the whole Newton step
+            # is already below the tolerance, the fit has converged.
+            if np.max(np.abs(d)) >= eps:
                 raise RuntimeError("line search failed")
+            step_max = float(np.max(np.abs(d)))
+            break
         x = x + t * d
         step_max = float(np.max(np.abs(t * d)))
         if step_max < eps:
@@ -156,7 +178,8 @@ def fit(ds, obs=None, rows=None, sigma=300.0, tau=800.0, sigma_b=600.0, tau_b=40
         raise RuntimeError("hierarchical fit produced non-finite values")
     th, b, mu, nu, nu0 = unpack(x.copy())
     return {"theta": th, "b": b, "mu": mu, "nu": nu, "nu0": float(nu0),
-            "newton": n_newton, "cg": n_cg, "max_step": step_max}
+            "newton": n_newton, "cg": n_cg, "max_step": step_max, "x": x,
+            "b_se": 1 / np.sqrt(diag[cut[0]:cut[1]])}
 
 
 # ---------------------------------------------------------------- experiment --

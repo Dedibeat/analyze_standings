@@ -1,0 +1,41 @@
+{
+  "contest_id": 1958,
+  "index": "D",
+  "name": "Staircase",
+  "rating": 1600,
+  "tags": [
+    "*special"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1958D",
+  "url": "https://codeforces.com/problemset/problem/1958/D",
+  "contest_start_time": "2024-05-13T14:35:00+00:00",
+  "statement": {
+    "title": "D. Staircase",
+    "time_limit": "2 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "There is a staircase consisting of $n$ steps. Each step is either intact, or broken. For each broken step, an integer $a_i$ is given denoting the difficulty of repairing it.\n\nEvery day, you can either:\n\n repair an arbitrary broken step. The effort it takes to repair the $i$-th step is equal to $a_i$;\n\n or repair two adjacent broken steps. The effort it takes to repair both the $i$-th step and the $(i+1)$-th step is equal to $2 \\cdot (a_i+a_{i+1})$.\n\nYou want to repair all broken steps of the staircase, and you want to do it in the minimum possible number of days. What is the minimum total effort it will take to repair all broken steps in the minimum number of days?",
+    "input_spec": "The first line contains one integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases.\n\nEach test case consists of two lines:\n\n the first line contains one integer $n$ ($1 \\le n \\le 3 \\cdot 10^5$) — the number of steps;\n\n the second line contains $n$ integers $a_1, a_2, \\dots, a_n$ ($0 \\le a_i \\le 10^8$). If $a_i = 0$, then the $i$-th step does not need to be repaired; otherwise, the $i$-th step is broken and $a_i$ is the difficulty of repairing it.\n\nAdditional constraint on the input: the sum of values of $n$ does not exceed $3 \\cdot 10^5$.",
+    "output_spec": "For each test case, print one integer — the minimum possible total effort it will take to repair all broken steps in the minimum number of days.",
+    "note": "In the first test case, you don't have to do anything.\n\nIn the second test case, you can repair the $3$-rd and the $4$-th step during the first day, and the $2$-nd step during the second day. The total effort will be $2 \\cdot (15 + 8) + 13 = 59$.\n\nIn the third test case, you can repair the $4$-th step during the first day, and two first steps during the second day. The total effort will be $8 + 2 \\cdot (13 + 15) = 64$.",
+    "samples": [
+      {
+        "input": "6\n5\n0 0 0 0 0\n4\n0 13 15 8\n4\n13 15 0 8\n8\n1 2 3 4 5 6 7 8\n5\n99999999 100000000 99999999 99999999 99999999\n5\n2 3 4 3 2",
+        "output": "\n0\n59\n64\n72\n899999993\n24"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 129483,
+    "url": "https://codeforces.com/blog/entry/129483",
+    "tutorial": "There are two approaches to this problem: greedy and dynamic programming.\n\nGreedy approach. It's quite easy to see that we only have to consider broken steps, and repair them only once. So, we can consider each consecutive block of broken steps and solve the problem separately for it.\n\nIf a block has even length, then there is only one way to repair it in the minimum possible number of days — repair the first and the second step on the same day, then the third and the fourth, and so on. So, for an even-length block, the total effort is the $2 \\cdot \\sum a_i$.\n\nIf a block has odd length, we can choose a step which will be left without a pair (so the effort for this step will not be doubled), and all the other steps will be paired. However, if we choose a step on an even position as a single step, it has an odd number of steps to the left and an odd number of steps to the right, so we cannot split them into pairs. So, we can choose a \"single\" step only among steps on odd positions from the block, and it's quite easy to see that the best step to choose is having the maximum $a_i$.\n\nDynamic programming approach. Let $dp_i$ be a pair of two integers:\n\n the minimum number of days to repair the first $i$ steps;\n\n the minimum total effort to repair the first $i$ steps, if we do it in the minimum number of days.\n\nWhen updating dynamic programming values, we try to minimize the first value, and to break ties, minimize the second value.\n\nThe transitions are pretty straightforward:\n\n if the step $i+1$ is intact, you can just skip it and go from $dp_i$ to $dp_{i+1}$;\n\n if the step $i+1$ is broken, you can go from $dp_i$ to $dp_{i+1}$, adding $1$ to the number of days and $a_{i+1}$ to the total effort;\n\n if both steps $i+1$ and $i+2$ are broken, you can go from $dp_i$ to $dp_{i+2}$, adding $1$ to the number of days and $2 \\cdot (a_{i+1} + a_{i+2})$ to the total effort.\n\nBoth of these solutions can be implemented in $O(n)$.",
+    "solution_code": [
+      "fun main() {\n    repeat(readInt()) {\n        readInt()\n        val d = mutableListOf(mutableListOf<Long>())\n        for (i in readLongs()) {\n            if (i == 0L) {\n                d.add(mutableListOf())\n            } else {\n                d.last().add(i)\n            }\n        }\n        println(d.sumOf { l -> 2 * l.sum() - ((l.indices step 2).takeIf { l.size % 2 == 1 }?.maxOfOrNull { l[it] } ?: 0) })\n    }\n}\n\nprivate fun readInt() = readln().toInt()\nprivate fun readLongs() = readStrings().map { it.toLong() }\nprivate fun readStrings() = readln().split(\" \")\nprivate fun readInts() = readStrings().map { it.toInt() }"
+    ]
+  }
+}

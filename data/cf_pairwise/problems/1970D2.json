@@ -1,0 +1,42 @@
+{
+  "contest_id": 1970,
+  "index": "D2",
+  "name": "Arithmancy (Medium)",
+  "rating": 2600,
+  "tags": [
+    "constructive algorithms",
+    "interactive",
+    "probabilities",
+    "strings"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1970D2",
+  "url": "https://codeforces.com/problemset/problem/1970/D2",
+  "contest_start_time": "2024-05-04T07:05:00+00:00",
+  "statement": {
+    "title": "D2. Arithmancy (Medium)",
+    "time_limit": "5 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "The only difference between the versions of this problem is the maximum value of $n$.\n\nProfessor Vector is preparing to teach her Arithmancy class. She needs to prepare $n$ distinct magic words for the class. Each magic word is a string consisting of characters X and O. A spell is a string created by concatenating two magic words together. The power of a spell is equal to the number of its different non-empty substrings. For example, the power of the spell XOXO is equal to 7, because it has 7 different substrings: X, O, XO, OX, XOX, OXO and XOXO.\n\nEach student will create their own spell by concatenating two magic words. Since the students are not very good at magic yet, they will choose each of the two words independently and uniformly at random from the $n$ words provided by Professor Vector. It is therefore also possible that the two words a student chooses are the same. Each student will then compute the power of their spell, and tell it to Professor Vector. In order to check their work, and of course to impress the students, Professor Vector needs to find out which two magic words and in which order were concatenated by each student.\n\nYour program needs to perform the role of Professor Vector: first, create $n$ distinct magic words, and then handle multiple requests where it is given the spell power and needs to determine the indices of the two magic words, in the correct order, that were used to create the corresponding spell.",
+    "input_spec": null,
+    "output_spec": null,
+    "note": null,
+    "samples": [
+      {
+        "input": "\n2\n\n\n2\n15\n\n11",
+        "output": "\n\nXOXO\nX\n\n\n1 1\n\n2 1"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 129149,
+    "url": "https://codeforces.com/blog/entry/129149",
+    "tutorial": "Now we need to find 30 words, so manually solving on paper is out of question. However, \"just trying\" still works: what we can do is to keep generating random words until we find 30 that have all 900 corresponding spell powers different. Depending on how you fast is your computation of the spell power you can either do this during the time limit, or precompute locally and then just submit a solution that prints the precomputed words.\n\nTo make sure that we have to precompute only once instead of 30 times (for $n=1$, $n=2$, ...), we can find 30 words such that the $i$-th word has length $30\\cdot i$. This way the first $n$ words from this list give a valid answer to the problem for any $n \\lt =30$.\n\nTo compute the spell power, we can either use the naive approach of taking all substrings, sorting them and finding unique ones, some optimization thereof (for example, if the words are randomly generated, the chances that sufficiently long substrings coincide are vanishingly small and can be ignored), or the asymptotically optimal approach using any of the suffix data structures (the suffix array, or the suffix automaton, or the suffix tree).",
+    "solution_code": []
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "contest_id": 2093,
+  "index": "A",
+  "name": "Ideal Generator",
+  "rating": 800,
+  "tags": [
+    "math"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2093A",
+  "url": "https://codeforces.com/problemset/problem/2093/A",
+  "contest_start_time": "2025-04-08T14:35:00+00:00",
+  "statement": {
+    "title": "A. Ideal Generator",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "We call an array $a$, consisting of $k$ positive integers, palindromic if $[a_1, a_2, \\dots, a_k] = [a_k, a_{k-1}, \\dots, a_1]$. For example, the arrays $[1, 2, 1]$ and $[5, 1, 1, 5]$ are palindromic, while the arrays $[1, 2, 3]$ and $[21, 12]$ are not.\n\nWe call a number $k$ an ideal generator if any integer $n$ ($n \\ge k$) can be represented as the sum of the elements of a palindromic array of length exactly $k$. Each element of the array must be greater than $0$.\n\nFor example, the number $1$ is an ideal generator because any natural number $n$ can be generated using the array $[n]$. However, the number $2$ is not an ideal generator — there is no palindromic array of length $2$ that sums to $3$.\n\nDetermine whether the given number $k$ is an ideal generator.",
+    "input_spec": "The first line of the input contains one integer $t$ ($1 \\le t \\le 1000$) — the number of test cases.\n\nThe first and only line of each test case contains one integer $k$ ($1 \\le k \\le 1000$).",
+    "output_spec": "For each number $k$, you need to output the word \"YES\" if it is an ideal generator, or \"NO\" otherwise.\n\nYou may output \"Yes\" and \"No\" in any case (for example, the strings \"yES\", \"yes\", and \"Yes\" will be recognized as a positive answer).",
+    "note": null,
+    "samples": [
+      {
+        "input": "5\n1\n2\n3\n73\n1000",
+        "output": "\nYES\nNO\nYES\nYES\nNO"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 141434,
+    "url": "https://codeforces.com/blog/entry/141434",
+    "tutorial": "If we consider some palindromic array $a$ of the form $[a_1, a_2, \\dots, a_k]$ and its sum, we should discuss two different cases.\n\nWhen $k$ is even ($k = 2m$), the array $a$ looks as follows: $[a_1, a_2, \\dots, a_{m - 1}, a_m, a_m, a_{m - 1}, \\dots, a_2, a_1]$. Its sum in this case is the number $2 \\cdot (a_1 + a_2 + \\dots + a_m)$. This implies that any palindromic array of even length also has an even sum, and thus it is impossible to generate odd numbers $n$ for even values of $k$.\n\nOn the other hand, if $k$ is an odd number ($k = 2m + 1$), the array $a$ looks like $[a_1, a_2, \\dots, a_m, a_{m + 1}, a_m, \\dots, a_2, a_1]$. Its sum is the number $a_{m + 1} + 2 \\cdot (a_1 + a_2 + \\dots + a_m)$. In this case, for any integer $n$, there exists a palindromic array of the form $[1, \\dots, 1, n - (k - 1), 1, \\dots, 1]$.\n\nIn conclusion, if $k$ is an odd number, the answer is «Yes», and if $k$ is even, the answer will be «No».",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n \nusing namespace std;\n \nint main() {\n    int t;\n    cin >> t;\n \n    while (t--) {\n        int n;\n        cin >> n;\n        if (n % 2 == 1) {\n            cout << \"YES\\n\";\n        } else {\n            cout << \"NO\\n\";\n        }\n    }\n \n    return 0;\n}"
+    ]
+  }
+}

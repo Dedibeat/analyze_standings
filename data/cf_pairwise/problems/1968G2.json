@@ -1,0 +1,51 @@
+{
+  "contest_id": 1968,
+  "index": "G2",
+  "name": "Division + LCP (hard version)",
+  "rating": 2200,
+  "tags": [
+    "binary search",
+    "brute force",
+    "data structures",
+    "dp",
+    "hashing",
+    "math",
+    "string suffix structures",
+    "strings"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1968G2",
+  "url": "https://codeforces.com/problemset/problem/1968/G2",
+  "contest_start_time": "2024-05-02T14:45:00+00:00",
+  "statement": {
+    "title": "G2. Division + LCP (hard version)",
+    "time_limit": "3 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "This is the hard version of the problem. In this version $l\\le r$.\n\nYou are given a string $s$. For a fixed $k$, consider a division of $s$ into exactly $k$ continuous substrings $w_1,\\dots,w_k$. Let $f_k$ be the maximal possible $LCP(w_1,\\dots,w_k)$ among all divisions.\n\n$LCP(w_1,\\dots,w_m)$ is the length of the Longest Common Prefix of the strings $w_1,\\dots,w_m$.\n\nFor example, if $s=abababcab$ and $k=4$, a possible division is $\\color{red}{ab}\\color{blue}{ab}\\color{orange}{abc}\\color{green}{ab}$. The $LCP(\\color{red}{ab},\\color{blue}{ab},\\color{orange}{abc},\\color{green}{ab})$ is $2$, since $ab$ is the Longest Common Prefix of those four strings. Note that each substring consists of a continuous segment of characters and each character belongs to exactly one substring.\n\nYour task is to find $f_l,f_{l+1},\\dots,f_r$.",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases.\n\nThe first line of each test case contains two integers $n$, $l$, $r$ ($1 \\le l \\le r \\le n \\le 2 \\cdot 10^5$) — the length of the string and the given range.\n\nThe second line of each test case contains string $s$ of length $n$, all characters are lowercase English letters.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $2\\cdot 10^5$.",
+    "output_spec": "For each test case, output $r-l+1$ values: $f_l,\\dots,f_r$.",
+    "note": null,
+    "samples": [
+      {
+        "input": "7\n3 1 3\naba\n3 2 3\naaa\n7 1 5\nabacaba\n9 1 6\nabababcab\n10 1 10\naaaaaaawac\n9 1 9\nabafababa\n7 2 7\nvvzvvvv",
+        "output": "\n3 1 0 \n1 1 \n7 3 1 1 0 \n9 2 2 2 0 0 \n10 3 2 1 1 1 1 1 0 0 \n9 3 2 1 1 0 0 0 0 \n2 2 1 1 1 0 "
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 129096,
+    "url": "https://codeforces.com/blog/entry/129096",
+    "tutorial": "In general, in this version we must answer for each $k\\in\\{1,2,\\dots,n\\}$. We will use a similar idea as in the easy version considering two cases:\n\n $k\\le \\sqrt{n}$. We may calculate these values as in the easy version in $O(n\\sqrt{n}\\log n)$.\n\n $k \\gt  \\sqrt{n}$. As we divide the string into $k$ segments and the LCP is $\\ell$, then $k\\cdot \\ell\\le n$. We get, that $\\ell\\le \\sqrt{n}$. We may find the maximal possible $k$ for a fixed $\\ell$ as our answer. It works in $O(n\\sqrt{n})$.\n\nThere are other approaches to solving this problem, but the authors believe this solution is the simplest one.",
+    "solution_code": [
+      "#include<bits/stdc++.h>\nusing namespace std;\nvector<int>Zfunc(string& str){\n\tint n=str.size();\n\tvector<int>z(n);\n\tint l=0,r=0;\n\tfor(int i=1;i<n;i++){\n\t\tif(i<=r){\n\t\t\tz[i]=min(r-i+1,z[i-l]);\n\t\t}\n\t\twhile(i+z[i]<n&&str[z[i]]==str[i+z[i]]){\n\t\t\tz[i]++;\n\t\t}\n\t\tif(i+z[i]-1>r){\n\t\t\tl=i;\n\t\t\tr=i+z[i]-1;\n\t\t}\n\t}\n\treturn z;\n}\nint f(vector<int>&z,int len){\n\tint n=z.size();\n\tint cnt=1;\n\tfor(int i=len;i<n;){\n\t\tif(z[i]>=len){\n\t\t\tcnt++;\n\t\t\ti+=len;\n\t\t}else{\n\t\t\ti++;\n\t\t}\n\t}\n\treturn cnt;\n}\nint main(){\n\tint t;\n\tcin>>t;\n\twhile(t--){\n\t\tint n,L,R;\n\t\tstring s;\n\t\tcin>>n>>L>>R>>s;\n\t\tvector<int>z=Zfunc(s);\n\t\tconst int E=ceil(sqrt(n));\n\t\tvector<int>ans(n+1);\n\t\tfor(int k=1;k<=E;k++){\n\t\t\tint l=0,r=n+1;\n\t\t\twhile(r-l>1){\n\t\t\t\tint mid=(l+r)/2;\n\t\t\t\tif(f(z,mid)>=k){\n\t\t\t\t\tl=mid;\n\t\t\t\t}else{\n\t\t\t\t\tr=mid;\n\t\t\t\t}\n\t\t\t}\n\t\t\tans[k]=l;\n\t\t}\n\t\tfor(int len=1;len<=E;len++){\n\t\t\tint k=1;\n\t\t\tfor(int i=len;i<n;){\n\t\t\t\tif(z[i]>=len){\n\t\t\t\t\tk++;\n\t\t\t\t\ti+=len;\n\t\t\t\t}else{\n\t\t\t\t\ti++;\n\t\t\t\t}\n\t\t\t}\n\t\t\tans[k]=max(ans[k],len);\n\t\t}\n\t\tfor(int i=n-1;i>=1;i--){\n\t\t\tans[i]=max(ans[i],ans[i+1]);\n\t\t}\n\t\tfor(int i=L;i<=R;i++){\n\t\t\tcout<<ans[i]<<' ';\n\t\t}\n\t\tcout<<\"\\n\";\n\t}\n}",
+      "void solve() {\n    int n, m; cin >> n >> m;\n    string a, b; cin >> a >> b;\n    \n    int j = 0;\n    for(int i = 0; i < m; i++) {\n        if(a[j] == b[i]) j++; \n    }\n\n    cout << j << endl;\n}",
+      "mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());\n \nstruct Hash {\n    int n;\n    string s;\n    const ll p = 31;\n    ll mod = uniform_int_distribution<int>((int)(1e9+7), (int)(1e9+1e8))(rng);\n    vector<ll> pw, hash;\n \n    Hash(string _s) : s(_s) {\n        n = s.size();\n        pw.resize(n+1);\n        hash.resize(n+1);\n        pw[0] = 1;\n        for(int i=1; i<=n; i++) pw[i] = (pw[i-1] * p) % mod;\n        hash[0] = s[0] - 'a' + 1;\n        for(int i=1; i<n; i++) hash[i] = (hash[i-1] + pw[i] * (s[i] - 'a' + 1)) % mod;\n    }\n \n    ll getHash(int l, int r) { return (hash[r] - (l ? hash[l-1] : 0) + mod) % mod; }\n \n    bool equal(int l1, int r1, int l2, int r2) {\n        if(r1 - l1 != r2 - l2) return 0;\n        if(l1 > l2) swap(l1, l2), swap(r1, r2);\n        return (pw[l2-l1] * getHash(l1, r1) % mod) == getHash(l2, r2);\n    }\n\n    bool isPal(int l, int r) {\n        return equal(l, r, n-1-r, n-1-l);\n    }\n};",
+      "while(q--){\n   int l,r; cin>>l>>r;\n   if(a[r] == a[l-1]){\n        cout<<\"YES\"<<endl;continue;\n    }\n\n    int x = *lower_bound(mp[a[r]].begin(), mp[a[r]].end(), l);\n    int y = *lower_bound(mp[0].begin(), mp[0].end(), x+1);\n\n\n    if(y<r && y>x && x>=l)cout<<\"YES\"<<endl; else cout<<\"NO\"<<endl;\n   }"
+    ]
+  }
+}

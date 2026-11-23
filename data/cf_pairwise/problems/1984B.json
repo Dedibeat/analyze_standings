@@ -1,0 +1,42 @@
+{
+  "contest_id": 1984,
+  "index": "B",
+  "name": "Large Addition",
+  "rating": 1100,
+  "tags": [
+    "implementation",
+    "math"
+  ],
+  "points": 750.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1984B",
+  "url": "https://codeforces.com/problemset/problem/1984/B",
+  "contest_start_time": "2024-06-09T14:35:00+00:00",
+  "statement": {
+    "title": "B. Large Addition",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "A digit is large if it is between $5$ and $9$, inclusive. A positive integer is large if all of its digits are large.\n\nYou are given an integer $x$. Can it be the sum of two large positive integers with the same number of digits?",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\leq t \\leq 10^4$) — the number of test cases.\n\nThe only line of each test case contains a single integer $x$ ($10 \\leq x \\leq 10^{18}$).",
+    "output_spec": "For each test case, output $\\texttt{YES}$ if $x$ satisfies the condition, and $\\texttt{NO}$ otherwise.\n\nYou can output $\\texttt{YES}$ and $\\texttt{NO}$ in any case (for example, strings $\\texttt{yES}$, $\\texttt{yes}$, and $\\texttt{Yes}$ will be recognized as a positive response).",
+    "note": "In the first test case, we can have $658 + 679 = 1337$.\n\nIn the second test case, it can be shown that no numbers of equal length and only consisting of large digits can add to $200$.\n\nIn the third test case, we can have $696\\,969 + 696\\,969 = 1\\,393\\,938$.\n\nIn the fourth test case, we can have $777 + 657 = 1434$.",
+    "samples": [
+      {
+        "input": "11\n1337\n200\n1393938\n1434\n98765432123456789\n11111111111111111\n420\n1984\n10\n69\n119",
+        "output": "\nYES\nNO\nYES\nYES\nNO\nYES\nNO\nYES\nYES\nNO\nNO"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 130252,
+    "url": "https://codeforces.com/blog/entry/130252",
+    "tutorial": "1984B - Large Addition\n\nProblem Credits: flamestorm\nAnalysis: null_awe\n\nSolution 1\n\nHint 1\n\nWhat must the first (largest) digit be?\n\nHint 2\n\nWhat must the other non-unit digits be?\n\nHint 3\n\nWhat must the last digit be?\n\nSolution\n\nBecause every digit is large, every two digits being added together will carry to the next digit. The two addends have the same length, so the sum must be one greater in length, with the largest digit equal to $1$.\n\nFor all other digits except for the units digit, we have the value to be the sum of two large digits, plus $1$ being carried over from the previous column. This makes the acceptable range of values be from $1$ to $9$, inclusive.\n\nFor the units digit, there is no previous column to carry over a $1$, so the acceptable range of values is from $0$ to $8$, inclusive.\n\nCode (C++)",
+    "solution_code": [
+      "#include <iostream>\nusing namespace std;\n \n#define ll long long\n \nvoid solve() {\n  ll n; cin >> n;\n  n = n - n % 10 + (n % 10 + 1) % 10;\n  while (n > 9) {\n    if (n % 10 == 0) {\n      cout << \"NO\\n\";\n      return;\n    }\n    n /= 10;\n  }\n  cout << (n == 1 ? \"YES\\n\" : \"NO\\n\");\n}\n \nint main() {\n  ios_base::sync_with_stdio(false); cin.tie(NULL);\n  int t; cin >> t;\n  for (int i = 0; i < t; ++i) solve();\n  return 0;\n}"
+    ]
+  }
+}

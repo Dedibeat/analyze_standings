@@ -1,0 +1,44 @@
+{
+  "contest_id": 2060,
+  "index": "E",
+  "name": "Graph Composition",
+  "rating": 1500,
+  "tags": [
+    "dfs and similar",
+    "dsu",
+    "graphs",
+    "greedy"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2060E",
+  "url": "https://codeforces.com/problemset/problem/2060/E",
+  "contest_start_time": "2025-01-19T14:35:00+00:00",
+  "statement": {
+    "title": "E. Graph Composition",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "You are given two simple undirected graphs $F$ and $G$ with $n$ vertices. $F$ has $m_1$ edges while $G$ has $m_2$ edges. You may perform one of the following two types of operations any number of times:\n\n Select two integers $u$ and $v$ ($1 \\leq u,v \\leq n$) such that there is an edge between $u$ and $v$ in $F$. Then, remove that edge from $F$.\n\n Select two integers $u$ and $v$ ($1 \\leq u,v \\leq n$) such that there is no edge between $u$ and $v$ in $F$. Then, add an edge between $u$ and $v$ in $F$.\n\nDetermine the minimum number of operations required such that for all integers $u$ and $v$ ($1 \\leq u,v \\leq n$), there is a path from $u$ to $v$ in $F$ if and only if there is a path from $u$ to $v$ in $G$.",
+    "input_spec": "The first line contains an integer $t$ ($1 \\leq t \\leq 10^4$) — the number of independent test cases.\n\nThe first line of each test case contains three integers $n$, $m_1$, and $m_2$ ($1 \\leq n \\leq 2\\cdot 10^5$, $0 \\leq m_1,m_2 \\leq 2\\cdot 10^5$) — the number of vertices, the number of edges in $F$, and the number of edges in $G$.\n\nThe following $m_1$ lines each contain two integers $u$ and $v$ ($1 \\leq u, v\\leq n$) — there is an edge between $u$ and $v$ in $F$. It is guaranteed that there are no repeated edges or self loops.\n\nThe following $m_2$ lines each contain two integers $u$ and $v$ ($1 \\leq u,v\\leq n$) — there is an edge between $u$ and $v$ in $G$. It is guaranteed that there are no repeated edges or self loops.\n\nIt is guaranteed that the sum of $n$, the sum of $m_1$, and the sum of $m_2$ over all test cases do not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, output a single integer denoting the minimum operations required on a new line.",
+    "note": "In the first test case you can perform the following three operations:\n\n Add an edge between vertex $1$ and vertex $3$.\n\n Remove the edge between vertex $1$ and vertex $2$.\n\n Remove the edge between vertex $2$ and vertex $3$.\n\n It can be shown that fewer operations cannot be achieved.\nIn the second test case, $F$ and $G$ already fulfill the condition in the beginning.\n\nIn the fifth test case, the edges from $1$ to $3$ and from $2$ to $3$ must both be removed.",
+    "samples": [
+      {
+        "input": "5\n3 2 1\n1 2\n2 3\n1 3\n2 1 1\n1 2\n1 2\n3 2 0\n3 2\n1 2\n1 0 0\n3 3 1\n1 2\n1 3\n2 3\n1 2",
+        "output": "\n3\n0\n2\n0\n2"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 138342,
+    "url": "https://codeforces.com/blog/entry/138342",
+    "tutorial": "2060E - Составление графа\n\nProblem Credits: Friedrich\n Analysis: DivinePunishment\n\nSolution\n\nLet's solve the problem for each operation.\n\nFirst, consider the operation that removes an edge from $ F $. Divide $ G $ into its connected components and assign each vertex a component index. Then, for each edge in $ F $, if it connects vertices with different component indices, remove it and increment the operation count.\n\nThis guarantees no path between $ x $ and $ y $ in $ F $ if there is none in $ G $. Next, to ensure a path exists between $ x $ and $ y $ in $ F $ if there is one in $ G $, we divide $ F $ into connected components. After removing excess edges, each component of $ F $ only contains vertices of the same component index. The number of operations needed now is the difference between the number of connected components in $ F $ and $ G $.\n\nAll operations can be efficiently performed using DFS or DSU.\n\nCode (C++)\n\nRate The Problem!\n\n Heat\n\n Mid\n\n Horrendous\n\n Didn't Solve",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n\n#define int long long\n#define pb emplace_back\n#define mp make_pair\n#define x first\n#define y second\n#define all(a) a.begin(), a.end()\n#define rall(a) a.rbegin(), a.rend()\n\ntypedef long double ld;\ntypedef long long ll;\n\nusing namespace std;\n\nmt19937 rnd(time(nullptr));\n\nconst int inf = 1e9;\nconst int M = 1e9 + 7;\nconst ld pi = atan2(0, -1);\nconst ld eps = 1e-6;\n\nvoid Gdfs(int v, vector<vector<int>> &sl, vector<int> &col, int c){\n    col[v] = c;\n    for(int u: sl[v]){\n        if(col[u] == 0){\n            Gdfs(u, sl, col, c);\n        }\n    }\n}\n\nint Fdfs(int v, vector<vector<int>> &sl, vector<int> &col, vector<int> &old_col, int c){\n    col[v] = c;\n    int res = 0;\n    for(int u: sl[v]){\n        if(col[u] == 0){\n            if(old_col[u] != c) res++;\n            else res += Fdfs(u, sl, col, old_col, c);\n        }\n    }\n    return res;\n}\n\nvoid read_con_list(vector<vector<int>> &sl, int m){\n    for(int i = 0; i < m; ++i){\n        int u, v;\n        cin >> u >> v;\n        sl[--u].emplace_back(--v);\n        sl[v].emplace_back(u);\n    }\n}\n\nvoid solve(int tc){\n    int n, mf, mg;\n    cin >> n >> mf >> mg;\n    vector<vector<int>> fsl(n), gsl(n);\n    read_con_list(fsl, mf);\n    read_con_list(gsl, mg);\n\n    vector<int> fcol(n), gcol(n);\n    int ans = 0;\n    for(int i = 0; i < n; ++i){\n        if(gcol[i] == 0){\n            Gdfs(i, gsl, gcol, i + 1);\n        }\n        if(fcol[i] == 0){\n            ans += Fdfs(i, fsl, fcol, gcol, gcol[i]);\n            if(gcol[i] < i + 1) ans++;\n        }\n    }\n    cout << ans;\n}\n\nbool multi = true;\n\nsigned main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(nullptr);\n    cout.tie(nullptr);\n\n    int t = 1;\n    if (multi)cin >> t;\n    for (int i = 1; i <= t; ++i) {\n        solve(i);\n        cout << \"\\n\";\n    }\n    return 0;\n}"
+    ]
+  }
+}

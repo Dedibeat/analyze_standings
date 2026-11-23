@@ -1,0 +1,46 @@
+{
+  "contest_id": 1951,
+  "index": "E",
+  "name": "No Palindromes",
+  "rating": 2000,
+  "tags": [
+    "brute force",
+    "constructive algorithms",
+    "divide and conquer",
+    "greedy",
+    "hashing",
+    "implementation",
+    "math",
+    "strings"
+  ],
+  "points": 2250.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1951E",
+  "url": "https://codeforces.com/problemset/problem/1951/E",
+  "contest_start_time": "2024-04-06T14:35:00+00:00",
+  "statement": {
+    "title": "E. No Palindromes",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Christopher Tin ft. Soweto Gospel Choir - Baba Yetu\n\nඞ\n\nYou are given a string $s$ consisting of lowercase Latin characters. You need to partition$^\\dagger$ this string into some substrings, such that each substring is not a palindrome$^\\ddagger$.\n\n$^\\dagger$ A partition of a string $s$ is an ordered sequence of some $k$ strings $t_1, t_2, \\ldots, t_k$, such that $t_1 + t_2 + \\ldots + t_k = s$, where $+$ here represents the concatenation operation.\n\n$^\\ddagger$ A string $s$ is considered a palindrome if it reads the same backwards as forwards. For example, $\\mathtt{racecar}$, $\\mathtt{abccba}$, and $\\mathtt{a}$ are palindromes, but $\\mathtt{ab}$, $\\mathtt{dokibird}$, and $\\mathtt{kurosanji}$ are not.",
+    "input_spec": "Each test contains multiple test cases. The first line contains an integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases.\n\nEach test case contains a string $s$ consisting of lowercase Latin characters ($1 \\le |s| \\le 10^6$).\n\nIt is guaranteed that the sum of $|s|$ over all test cases does not exceed $10^6$.",
+    "output_spec": "For each test case, print on one line \"YES\" if there exists a partition of $s$ whose parts are not palindromes, or \"NO\" if there is no such partition.\n\nIf the answer is \"YES\", on the second line, print an integer $k$ — the number of parts that $s$ needs to be partitioned to such that each part is not a palindrome. On the third line, print $k$ strings $t_1, t_2, \\ldots, t_k$ representing such a partition. If there are multiple such partitions, print any of them.",
+    "note": "In the first test case, since $\\mathtt{sinktheyacht}$ is already non-palindrome, the partition $[\\mathtt{sinktheyacht}]$ is valid.\n\nIn the second test case, as any substring of the string $s$ is palindrome, there are no valid partitions.\n\nIn the third test case, another valid partition is $[\\mathtt{uw},\\mathtt{uo}, \\mathtt{wou}, \\mathtt{wu}]$.",
+    "samples": [
+      {
+        "input": "3\nsinktheyacht\nlllllllll\nuwuowouwu",
+        "output": "\nYES\n1\nsinktheyacht\nNO\nYES\n3\nuw uow ouwu"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 128116,
+    "url": "https://codeforces.com/blog/entry/128116",
+    "tutorial": "If $s$ is not a palindrome then we are done. If $s$ consists of only one type of character then we're also done.\n\nConsider the case when $s$ is a palindrome and there are at least $2$ distinct characters. Let $t$ be the first position where $s_t \\neq s_1$, and note that this means $s_{[1, t]}$ is not a palindrome. If $s_{[t + 1, n]}$ isn't a palindrome then we're done.\n\nOtherwise, we note that the string has the form $A\\mathtt{b}A\\mathtt{b} \\dots A\\mathtt{b}A$, where $A$ consists of $t-1$ $\\mathtt{a}$ characters (from the assumptions that $s$ and $s_{[t + 1, n]}$ are palindromes). We do a case analysis on $t$, observing that $t$ is between $2$ and $\\frac{n + 1}{2}$:\n\n If $t = \\frac{n + 1}{2}$, the string has the form $A\\mathtt{b}A$, and we can verify that this is a \"NO\" case (proof: for every partition, either the substring containing $s_1$ or the substring containing $s_n$ has length at most $\\frac{n - 1}{2}$, which means it consists of only character $\\mathtt{a}$).\n\n If $t = 2$, the string has the form $\\mathtt{abab\\dots aba}$, and we can verify that this is another \"NO\" case (proof: every partition must have an odd-length substring, which is always a palindrome).\n\n Otherwise, $s_{[1, t + 1]} = A\\mathtt{ba}$ starts with $t - 1$ $\\mathtt{a}$ characters and ends with $1$ $\\mathtt{a}$ character, and $s_{[t + 2, n]}$ starts with $t - 2$ $\\mathtt{a}$ characters and ends with $t - 1$ $\\mathtt{a}$ character. Therefore, both substrings are not palindromes, which means this is a valid partition.\n\nImplementing this idea directly gives a time complexity of $O(n)$.",
+    "solution_code": []
+  }
+}

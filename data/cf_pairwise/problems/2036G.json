@@ -1,0 +1,46 @@
+{
+  "contest_id": 2036,
+  "index": "G",
+  "name": "Library of Magic",
+  "rating": 2200,
+  "tags": [
+    "binary search",
+    "constructive algorithms",
+    "divide and conquer",
+    "interactive",
+    "math",
+    "number theory"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2036G",
+  "url": "https://codeforces.com/problemset/problem/2036/G",
+  "contest_start_time": "2024-11-02T14:35:00+00:00",
+  "statement": {
+    "title": "G. Library of Magic",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "This is an interactive problem.\n\nThe Department of Supernatural Phenomena at the Oxenfurt Academy has opened the Library of Magic, which contains the works of the greatest sorcerers of Redania — $n$ ($3 \\leq n \\leq 10^{18}$) types of books, numbered from $1$ to $n$. Each book's type number is indicated on its spine. Moreover, each type of book is stored in the library in exactly two copies! And you have been appointed as the librarian.\n\nOne night, you wake up to a strange noise and see a creature leaving the building through a window. Three thick tomes of different colors were sticking out of the mysterious thief's backpack. Before you start searching for them, you decide to compute the numbers $a$, $b$, and $c$ written on the spines of these books. All three numbers are distinct.\n\nSo, you have an unordered set of tomes, which includes one tome with each of the pairwise distinct numbers $a$, $b$, and $c$, and two tomes for all numbers from $1$ to $n$, except for $a$, $b$, and $c$. You want to find these values $a$, $b$, and $c$.\n\nSince you are not working in a simple library, but in the Library of Magic, you can only use one spell in the form of a query to check the presence of books in their place:\n\n \"xor l r\" — Bitwise XOR query with parameters $l$ and $r$. Let $k$ be the number of such tomes in the library whose numbers are greater than or equal to $l$ and less than or equal to $r$. You will receive the result of the computation $v_1 \\oplus v_2 \\oplus ... \\oplus v_k$, where $v_1 ... v_k$ are the numbers on the spines of these tomes, and $\\oplus$ denotes the operation of bitwise exclusive OR.\n\nSince your magical abilities as a librarian are severely limited, you can make no more than $150$ queries.",
+    "input_spec": "The first line of input contains an integer $t$ ($1 \\le t \\le 300$) — the number of test cases.\n\nThe first line of each test case contains a single integer $n$ ($3 \\leq n \\leq 10^{18}$) — the number of types of tomes.",
+    "output_spec": null,
+    "note": "In the first test case, the books in the library after the theft look like this:\n\nNow consider the answers to the queries:\n\n For the query \"xor 1 1\", you receive the result $1 \\oplus 1 = 0$. Two tomes satisfy the condition specified in the query — both with the number $1$.\n\n For the query \"xor 2 2\", you receive the result $2$, as only one tome satisfies the specified condition.\n\n For the query \"xor 3 3\", you receive the result $3$.\n\n For the query \"xor 4 6\", you receive the result $4 \\oplus 6 \\oplus 4 \\oplus 5 \\oplus 6 = 5$.\n\nIn the second test case, there are only $3$ types of books, and it is easy to guess that the missing ones have the numbers $1$, $2$, and $3$.",
+    "samples": [
+      {
+        "input": "\n2\n6\n\n0\n\n2\n\n3\n\n5\n\n3",
+        "output": "\n\nxor 1 1\n\nxor 2 2\n\nxor 3 3\n\nxor 4 6\n\nans 2 3 5\n\nans 1 2 3"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 135849,
+    "url": "https://codeforces.com/blog/entry/135849",
+    "tutorial": "2036G - Library of Magic\n\nIdea: m3tr0\n\nHint 1\n\nHave you considered the cases where $a \\oplus b \\oplus c = 0$?\n\nHint 2\n\nSuppose you are certain that at least one lost number is located on some segment $[le, ri]$. Can you choose a value $mid$ such that the queries xor {le} {mid} and xor {mid + 1} {ri} you can unambiguously understand on which of the segments ($[le, mid]$ or $[(mid + 1), ri]$) lies at least one lost number, even if both of these queries return $0$?\n\nTutorial\n\nTo begin with, we note that for any number $x$, $x \\oplus x = 0$ is satisfied. Therefore, by querying xor l r, you will get bitwise XOR of only those volume numbers that are in the library in a single copy (within the scope of querying $l$ and $r$, of course). Also note that for two pairwise distinct numbers $x$ and $y$, $x \\oplus y \\neq 0$ is always satisfied.\n\nInitially, our goal is — to determine the largest bit of the maximum of the lost numbers. To do this, we can go through the bits starting from the largest significant bit in n. For each $i$-th bit, we will ask xor {2^i} {min(2^(i + 1) - 1, n)}. Note that all numbers on this interval have $i$-th bit equal to one. Then if we get a result not equal to zero, then this bit is the desired largest bit of the maximum of the lost numbers. If we get a result equal to zero, then this bit is guaranteed not to be present in any of the numbers, i.e. all three numbers are less than $2^i$.\n\nLet's prove it. If we had one or two numbers on the requested interval, their XOR would not be $0$ (see the first paragraph). If all three numbers are on this interval, then the XOR of their $i$-th bit is $1 \\oplus 1 \\oplus 1 = 1$, and hence the XOR of the numbers themselves is also different from $0$.\n\nNow that we know the largest bit $i$ of the desired number, we can find this number by any realization of binary search inside the interval $[2^i; \\min(2^{i + 1} - 1, n)]$. By the answer to any query on any interval within that interval, we can unambiguously know whether our number is present on that interval or not — the proof is similar to the one above.\n\nThe first number is found. The second number can be found using any bin search, since XOR of two different numbers is always different from zero. The main thing is not to forget to “exclude” the already found number from the obtained result using the same XOR. And the third number can be found by requesting the result of the whole interval from $1$ to $n$ and “excluding” the already found two numbers from it.\n\nNumber of requests: $\\approx 2 \\cdot \\log n \\approx 120 \\lt 150$\n\nSolution (m3tr0)",
+    "solution_code": [
+      "#include <cstdio>\ntypedef long long l;\n\nl n, num1, num2;\n\nl req(l le, l ri, l num) {\n    if (le > n) return 0;\n    if (ri > n) ri = n;\n    \n    printf(\"xor %lld %lld\\n\", le, ri); fflush(stdout);\n    l res; scanf(\"%lld\", &res);\n    \n    if (num > 1 && le <= num1 && num1 <= ri) res ^= num1;\n    if (num > 2 && le <= num2 && num2 <= ri) res ^= num2;\n    return res;\n}\n\nvoid solve() {\n    scanf(\"%lld\", &n); num1 = 0; num2 = 0;\n    l start = 1LL << (63 - __builtin_clzll(n));\n\n    for (l i = start; i > 0; i >>= 1) {\n        l res = req(num1 | i, num1 | (i * 2 - 1), 1);\n        if (res) num1 |= i;\n    }\n\n    for (l i = start; i > 0; i >>= 1) {\n        l res = req(num2 | i, num2 | (i * 2 - 1), 2);\n        if (res) num2 |= i;\n    }\n    \n    printf(\"ans %lld %lld %lld\\n\", num1, num2, req(1, n, 3));\n    fflush(stdout);\n}\n\nint main() {\n    l t; scanf(\"%lld\", &t);\n    while (t--) solve();\n}"
+    ]
+  }
+}

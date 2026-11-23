@@ -1,0 +1,42 @@
+{
+  "contest_id": 2052,
+  "index": "A",
+  "name": "Adrenaline Rush",
+  "rating": 1600,
+  "tags": [
+    "constructive algorithms"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2052A",
+  "url": "https://codeforces.com/problemset/problem/2052/A",
+  "contest_start_time": "2024-12-15T07:35:00+00:00",
+  "statement": {
+    "title": "A. Adrenaline Rush",
+    "time_limit": "3 seconds",
+    "memory_limit": "1024 megabytes",
+    "legend": "Alice's friend is a big fan of the Adrenaline Rush racing competition and always strives to attend every race. However, this time, Alice is the one watching the race. To ensure her friend does not miss any important details, Alice decides to take notes on everything that happens on the track.\n\nThe first thing Alice notices before the race begins is the numbering of the cars. All the cars line up in front of the starting line in a specific order. The car closest to the line is numbered $1$, the second car is numbered $2$, and so on, up to the last car, which is numbered $n$. How convenient! — Alice thought.\n\nThe race begins with the countdown: \"Three! Two! One! Go!\". Alice observes that the cars start in their original order. However, as the race progresses, their order changes. She records whenever one car overtakes another, essentially swapping places with it on the track.\n\nDuring the race, Alice notices something curious: no car overtakes another more than once. In other words, for any two cars $x$ and $y$, there are at most two overtakes between them during the race: \"$x$ overtakes $y$\" and/or \"$y$ overtakes $x$\".\n\nAt the end of the race, Alice carefully writes down the final order of the cars $c_1, c_2, \\ldots, c_n$, where $c_1$ represents the winner of the race.\n\nAlice's friend, however, is only interested in the final ranking and discards all of Alice's notes except for the final ordering. As Alice is quite curious, she wonders: What is the longest possible sequence of overtakes she could have observed during the race? Your task is to help Alice answer this question.",
+    "input_spec": "The first line of the input contains a single integer $n\\;(1 \\le n \\le 1000)$ — the number of cars in the race.\n\nThe second line contains a permutation $c_1, c_2, \\ldots, c_n\\;(1 \\le c_i \\le n, c_i \\ne c_j)$ — the final order of the cars.",
+    "output_spec": "The first line of the output should contain a single integer $m$ — the maximum possible number of overtakes that can occur during the race.\n\nEach of the next $m$ lines should contain two integers $x$ and $y$ ($1 \\le x, y \\le n$, $x \\ne y$) representing an overtake event, where car $x$ overtakes car $y$. This means that car $x$ was directly behind car $y$ and overtakes it. The overtakes must be listed in the order they occurred during the race.\n\nAfter all $m$ overtakes have occurred, the cars must arrive at the finish line in the order $c_1, c_2, \\ldots, c_n$. Note that any car $x$ should not overtake another car $y$ more than once.\n\nIf there are multiple possible longest sequences of overtakes, output any of them.",
+    "note": null,
+    "samples": [
+      {
+        "input": "3\n2 3 1",
+        "output": "\n4\n2 1\n3 1\n3 2\n2 3"
+      },
+      {
+        "input": "1\n1",
+        "output": "\n0"
+      },
+      {
+        "input": "2\n1 2",
+        "output": "\n2\n2 1\n1 2"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "missing"
+  },
+  "editorial": null
+}

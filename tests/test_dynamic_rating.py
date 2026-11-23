@@ -130,7 +130,7 @@ class DynamicRatingTest(unittest.TestCase):
 
 
 class DynamicRatingResultTest(unittest.TestCase):
-    """The recorded findings in output/dynamic_rating.json (see details.md, 2026-10-04)."""
+    """The recorded findings in output/dynamic_rating.json (see docs/journal/, 2026-10-04)."""
 
     @classmethod
     def setUpClass(cls):

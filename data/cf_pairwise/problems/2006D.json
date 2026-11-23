@@ -1,0 +1,44 @@
+{
+  "contest_id": 2006,
+  "index": "D",
+  "name": "Iris and Adjacent Products",
+  "rating": 2600,
+  "tags": [
+    "data structures",
+    "greedy",
+    "implementation",
+    "math"
+  ],
+  "points": 2000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2006D",
+  "url": "https://codeforces.com/problemset/problem/2006/D",
+  "contest_start_time": "2024-08-30T14:35:00+00:00",
+  "statement": {
+    "title": "D. Iris and Adjacent Products",
+    "time_limit": "3 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Iris has just learned multiplication in her Maths lessons. However, since her brain is unable to withstand too complex calculations, she could not multiply two integers with the product greater than $k$ together. Otherwise, her brain may explode!\n\nHer teacher sets a difficult task every day as her daily summer holiday homework. Now she is given an array $a$ consisting of $n$ elements, and she needs to calculate the product of each two adjacent elements (that is, $a_1 \\cdot a_2$, $a_2 \\cdot a_3$, and so on). Iris wants her brain to work safely, and in order to do that, she would like to modify the array $a$ in such a way that $a_i \\cdot a_{i + 1} \\leq k$ holds for every $1 \\leq i  \\lt  n$. There are two types of operations she can perform:\n\n She can rearrange the elements of the array $a$ in an arbitrary way.\n\n She can select an arbitrary element of the array $a$ and change its value to an arbitrary integer from $1$ to $k$.\n\nIris wants to minimize the number of operations of type $2$ that she uses.\n\nHowever, that's completely not the end of the summer holiday! Summer holiday lasts for $q$ days, and on the $i$-th day, Iris is asked to solve the Math homework for the subarray $b_{l_i}, b_{l_i + 1}, \\ldots, b_{r_i}$. Help Iris and tell her the minimum number of type $2$ operations she needs to perform for each day. Note that the operations are independent for each day, i.e. the array $b$ is not changed.",
+    "input_spec": "Each test consists of multiple test cases. The first line contains a single integer $t$ ($1 \\leq t \\leq 5\\cdot 10^4$) — the number of test cases. The description of the test cases follows.\n\nThe first line of each test case contains three integers $n$, $q$ and $k$ ($2 \\leq n \\leq 10^5$, $1 \\leq q \\leq 10^5$, $1 \\leq k \\leq 10^6$) — the length of array $b$, the number of days, and the upper bound for the multiplication calculation.\n\nThe second line of each test case contains $n$ integers $b_1, b_2, \\ldots, b_n$ ($1 \\leq b_i \\leq k$) — the elements of the array $b$.\n\nThen $q$ lines follow, the $i$-th of them contains two integers $l_i$ and $r_i$ ($1 \\leq l_i  \\lt  r_i \\leq n$) — the boundaries of the subarray on the $i$-th day.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $10^5$, and the sum of $q$ over all test cases does not exceed $10^5$.",
+    "output_spec": "For each test, output a single line containing $q$ integers — the minimum number of operations of type $2$ needed for each day.",
+    "note": "In the first test case, as Iris can always multiply $1$ and $1$ together, no operations are needed, so the answer is $0$.\n\nIn the second test case, the first day's homework is $[1, 10, 9]$. Iris can rearrange its elements to get $[9, 1, 10]$, so no operations of type $2$ are needed. The second day's homework is $[10, 9]$, and she can change one element to get the array $[1, 9]$, so one operation of type $2$ is needed.",
+    "samples": [
+      {
+        "input": "5\n3 1 1\n1 1 1\n1 3\n3 2 10\n1 10 9\n1 3\n2 3\n5 4 2\n2 2 2 2 2\n1 2\n2 4\n2 5\n1 5\n6 5 10\n3 2 5 10 10 1\n1 4\n3 6\n1 6\n2 5\n5 6\n10 10 10\n10 9 8 7 6 5 4 3 2 1\n1 10\n1 9\n1 8\n1 7\n2 10\n3 10\n4 10\n5 10\n3 9\n6 8",
+        "output": "\n0 \n0 1 \n1 1 2 2 \n1 1 1 1 0 \n3 3 4 3 2 2 1 1 2 1 "
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 133382,
+    "url": "https://codeforces.com/blog/entry/133382",
+    "tutorial": "Read the hints. Let's consider how to reorder the array. Let the sorted array be $a_1,a_2,\\dots,a_n$. We can prove that it is optimal to reorder it like this: $a_n,a_1,a_{n-1},a_2,a_{n-2},\\dots$. You can find the proof at the end of the tutorial.\n\nFrom the proof or anything we can discover the restriction is: for all $i$ that $1\\le i\\le \\frac n2$, $a_i\\times a_{n-i+1}\\le k$.\n\nLet $cnt(l,r)$ denote the number of elements with values in range $[l,r]$. We can rewrite the restrictions into: for each $i$ that $1\\le i\\le \\sqrt k$, it must satisfy that $\\min(cnt(1,i),\\lfloor\\frac n2\\rfloor)\\ge \\min(cnt(\\lfloor\\frac k{i+1}\\rfloor+1,k),\\lfloor\\frac n2\\rfloor)$. This means that the number of $a_j$ that cannot fit $i+1$ must not be greater than the number of $a_j\\le i$, and only $\\lfloor\\frac n2\\rfloor$ numbers should be considered. Note that there're only $O(\\sqrt k)$ range sums on the value range to consider, which is acceptable. Consider a modify operation, we obviously change the maximum value into $1$. This increases every $cnt(1,i)$ by $1$ and decreases every non-zero $cnt(\\lfloor\\frac k{i+1}\\rfloor+1,k)$ by $1$, so the answer is easy to calculate. Just notice the situation when $cnt(1,\\sqrt k)$ is too small and the length of the interval is too short.\n\nHow to maintain $cnt(1,i)$ for all subintervals? You can consider simply prefix sums, but its time constant factor seems too large for a 2-dimensional array. So we lowered the memory limit to reduce such issues. An easy way to handle is: solve the problem offline, and for each $i$ we calculate the prefix sum for $cnt(1,i)$ and $cnt(\\lfloor\\frac k{i+1}\\rfloor+1,k)$, and then answer all the queries. In this way the time constant factor becomes much smaller and the memory becomes $O(n+q+k)$.\n\nAnother way to solve is to use Mo's algorithm. It uses $O(n+q+k)$ memory and $O(n\\sqrt q)$ time.\n\nThe time complexity is $O(\\sqrt k\\sum(n+q))$.\n\nProof for the optimal way to reorder:\n\nIf $n=1$, it's correct.\n\nFirst, it is optimal to put $a_n$ at the first position. Suppose there's a way to reorder that $a_n$ is not at the first position: $a_{p_1},a_{p_2},\\dots,a_{p_k=n},\\dots$, we can always reverse the prefix $a_{p_1},a_{p_2},\\dots,a_{p_k}$ so that it still satisfies the condition but $a_n$ is at the first position.\n\nThen, it is optimal to put $a_1$ at the second position. Suppose there's a way to reorder that $a_n$ is at the first position and $a_{t\\neq 1}$ at the second position, as $a_t$ and $a_1$ both can fit $a_n$, we can consider them the same(any number can be put beside them), so it's possible to swap $a_t$ and $a_1$.\n\nIf $a_1\\times a_n \\gt k$, then the array isn't good. Otherwise, any number can be put beside $a_1$, so the method of reordering $a_2,a_3,\\dots,a_{n-1}$ can be reduced to the same problem of $n'=n-2$. So the conclusion is proved.",
+    "solution_code": [
+      "#include<bits/stdc++.h>\nusing namespace std;\n#define all(v)      v.begin(),v.end()\n#define pb          push_back\n#define REP(i,b,e)  for(int i=(b);i<(int)(e);++i)\n#define over(x)     {cout<<(x)<<endl;return;}\nint n,q,r;\nint a[300005];\nint sum[300005];\nint ql[300005],qr[300005];\nint ans[300005];\nint cnt[300005],cnt2[300005];\nvoid Main() {\n\tcin>>n>>q>>r;\n\tREP(i,0,n)cin>>a[i];\n\tsum[0]=0;\n\tint B=sqrt(r);\n\tREP(i,0,n)sum[i+1]=sum[i]+(a[i]<=B);\n\tREP(i,0,q){\n\t\tint x,y;\n\t\tcin>>x>>y;\n\t\t--x,--y;\n\t\tql[i]=x;qr[i]=y;\n\t\tans[i]=0;\n\t\tif(sum[y+1]-sum[x]<(y-x+1)/2)ans[i]=(y-x+1)/2-sum[y+1]+sum[x];\n\t}\n\tREP(i,0,B){\n\t\tREP(j,0,n+1)cnt[j]=cnt2[j]=0;\n\t\tREP(j,0,n){\n\t\t\tcnt[j+1]=cnt[j]+(a[j]<=i);\n\t\t\tcnt2[j+1]=cnt2[j]+(a[j]<=r/(i+1));\n\t\t}\n\t\tREP(j,0,q){\n\t\t\tint x=ql[j],y=qr[j],l=y-x+1;\n\t\t\tint c1=cnt2[y+1]-cnt2[x],c2=cnt[y+1]-cnt[x];\n\t\t\tans[j]=max(ans[j],min((l-c1-c2+1)/2,l/2-c2));\n\t\t}\n\t}\n\tREP(i,0,q)cout<<ans[i]<<' ';\n\tcout<<endl;\n}\nvoid TC() {\n    int tc=1;\n    cin>>tc;\n\twhile(tc--){\n\t\tMain();\n\t\tcout.flush();\n\t}\n}\nsigned main() {\n\treturn cin.tie(0),cout.tie(0),ios::sync_with_stdio(0),TC(),0;\n}\n/*\n1. CLEAR the arrays (ESPECIALLY multitests)\n2. DELETE useless output\n */"
+    ]
+  }
+}

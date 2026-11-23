@@ -1,0 +1,42 @@
+{
+  "contest_id": 2093,
+  "index": "B",
+  "name": "Expensive Number",
+  "rating": 900,
+  "tags": [
+    "greedy",
+    "math"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2093B",
+  "url": "https://codeforces.com/problemset/problem/2093/B",
+  "contest_start_time": "2025-04-08T14:35:00+00:00",
+  "statement": {
+    "title": "B. Expensive Number",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "The cost of a positive integer $n$ is defined as the result of dividing the number $n$ by the sum of its digits.\n\nFor example, the cost of the number $104$ is $\\frac{104}{1 + 0 + 4} = 20.8$, and the cost of the number $111$ is $\\frac{111}{1 + 1 + 1} = 37$.\n\nYou are given a positive integer $n$ that does not contain leading zeros. You can remove any number of digits from the number $n$ (including none) so that the remaining number contains at least one digit and is strictly greater than zero. The remaining digits cannot be rearranged. As a result, you may end up with a number that has leading zeros.\n\nFor example, you are given the number $103554$. If you decide to remove the digits $1$, $4$, and one digit $5$, you will end up with the number $035$, whose cost is $\\frac{035}{0 + 3 + 5} = 4.375$.\n\nWhat is the minimum number of digits you need to remove from the number so that its cost becomes the minimum possible?",
+    "input_spec": "The first line contains an integer $t$ ($1 \\leq t \\leq 1000$) — the number of test cases.\n\nThe only line of each test case contains a positive integer $n$ ($1 \\leq n  \\lt  10^{100}$) without leading zeros.",
+    "output_spec": "For each test case, output one integer on a new line — the number of digits that need to be removed from the number so that its cost becomes minimal.",
+    "note": null,
+    "samples": [
+      {
+        "input": "4\n666\n13700\n102030\n7",
+        "output": "\n2\n4\n3\n0"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 141434,
+    "url": "https://codeforces.com/blog/entry/141434",
+    "tutorial": "We will prove that the minimum possible cost of the resulting number is always equal to $1$. Consider an arbitrary positive number $n = \\overline{a_1a_2\\ldots a_k}$, where $a_i$ are its digits in order. We evaluate the cost of this number as $cost(n) = \\frac{\\overline{a_1a_2\\ldots a_k}}{a_1+a_2+\\ldots+a_k} = \\frac{a_1 \\cdot 10^{k - 1} + a_2\\cdot 10^{k - 2} + \\ldots + a_k}{a_1+a_2+\\ldots+a_k} \\geq \\frac{a_1+a_2+\\ldots+a_k}{a_1+a_2+\\ldots+a_k} = 1$. We also note that if any of the digits $a_1, a_2, \\ldots, a_{k - 1}$ are not equal to zero, then the inequality will be strict. Thus, a cost of $1$ can always be achieved by leaving exactly one non-zero digit and several leading zeros before it.\n\nTherefore, our task reduces to leaving some non-zero digit and as many leading zeros as possible before it. To do this, we will keep the rightmost non-zero digit in the number, all the zeros to its left, and remove the other digits.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n \nusing namespace std;\n \nint main() {\n    int t;\n    cin >> t;\n    while (t--) {\n        string s;\n        cin >> s;\n        int n = s.size();\n        bool met_positive = false;\n        int cnt_zero = 0;\n        \n        for (auto i = n - 1; i >= 0; --i) {\n            if (s[i] != '0') {\n                met_positive = true;\n            } else if (met_positive) {\n                cnt_zero++;\n            }\n        }\n        \n        cout << n - (cnt_zero + 1) << '\\n';\n    }\n    return 0;\n}"
+    ]
+  }
+}

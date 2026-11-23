@@ -1,0 +1,54 @@
+{
+  "contest_id": 1974,
+  "index": "G",
+  "name": "Money Buys Less Happiness Now ",
+  "rating": 2000,
+  "tags": [
+    "data structures",
+    "greedy",
+    "sortings"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1974G",
+  "url": "https://codeforces.com/problemset/problem/1974/G",
+  "contest_start_time": "2024-05-20T14:35:00+00:00",
+  "statement": {
+    "title": "G. Money Buys Less Happiness Now",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "You can never buy enough happiness, so here we go again! In this version, you can only buy $h_i = 1$ unit of happiness each month, but the number of months is hugely increased. We are in the realm of quantum happiness and time dilation.\n\nBeing a physicist, Charlie likes to plan his life in simple and precise terms.\n\nFor the next $m$ months, starting with no money, Charlie will work hard and earn $x$ pounds per month. For the $i$-th month $(1 \\le i \\le m)$, there'll be a single opportunity of paying cost $c_i$ pounds to obtain one unit of happiness. You cannot buy more than one unit each month.\n\nBorrowing is not allowed. Money earned in the $i$-th month can only be spent in a later $j$-th month ($j \\gt i$).\n\nSince physicists don't code, help Charlie find the maximum reachable units of happiness.",
+    "input_spec": "The first line of the input contains $t$ ($1 \\leq t \\leq 10^4$) — the number of test cases.\n\nThe first line of each test case contains two integers, $m$ and $x$ ($1 \\le m \\le 2 \\cdot 10^5$, $1 \\le x \\le 10^3$) — the total number of months and the monthly salary.\n\nThe second line of each test case contains $m$ integers $c_1, c_2, \\dots, c_m$ ($1 \\leq c_i \\leq 10^3$) — the cost of one unit of happiness for each month.\n\nIt is guaranteed that sum of $m$ over all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, output one integer — the maximal amount of happiness Charlie can get.",
+    "note": null,
+    "samples": [
+      {
+        "input": "6\n3 3\n2 2 2\n6 5\n2 2 8 2 6 8\n6 4\n4 10 3 8 6 10\n2 1\n1 1\n4 1\n4 1 3 1\n4 2\n1 3 4 3",
+        "output": "\n2\n4\n3\n1\n2\n1"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 129686,
+    "url": "https://codeforces.com/blog/entry/129686",
+    "tutorial": "Let us consider the smallest element $c_m$ (and the rightmost if equal). Suppose we do not take it. Now, we emulate the decisions from the first month up to month $m$. Note that if we chose some element on the left of $m$ we could have chosen the smallest one $c_m$ instead. Thus, we can go greedy: go over the costs in the sorted order and check whether we can take it. To check whether there are enough pounds from the previous months we can use the segment tree. When we take the happiness during month $m$ we need to reduce the amount of pounds on the left by $c_m$.\n\nThis greedy approach can be implemented simpler. We just need to go over the costs from the first month and maintain the heap (or set/priority queue) of chosen costs. When we go over a new cost we check whether we can pay for it and, if positive, we add it to our answer. Otherwise, we remove the largest chosen cost from the heap, compare it with the current cost, and put back the smaller one.",
+    "solution_code": [
+      "from heapq import *\nfor _ in range(int(input())):\n    m, x = map(int, input().split())\n    c = [int(x) for x in input().split()]\n    budget = 0\n    Q = []\n    for i in c:\n        if budget >= i:\n            heappush(Q, -i)\n            budget -= i\n        elif Q and -Q[0] > i:\n            budget += -heappop(Q)-i\n            heappush(Q, -i)\n        budget += x\n    print(len(Q))",
+      "void solve(int test)\n{\n\n    int n;\n    cin >> n;\n\n    string s, ans;\n    cin >> s;\n\n    map<char, int> mp, turn;\n\n    for (auto e : s)\n        mp[e]++;\n\n    if ((mp['N'] + mp['S']) % 2 != 0 || (mp['W'] + mp['E']) % 2 != 0)\n    {\n        no;\n        return;\n    }\n\n    if (n == 2 && (mp['N'] == 1 || mp['W'] == 1) )\n    {\n        no;\n        return;\n    }\n\n    turn['E'] = 1, turn['W'] = 1;\n\n    for (auto e : s)\n    {\n        if (turn[e] % 2)\n            ans += 'H';\n\n        else\n            ans += 'R';\n\n        turn[e]++;\n    }\n    cout << ans << \"\\n\";\n}",
+      "5\n2 1 1 1 1",
+      "int rec(vi &c, vi &h, int cur_mon, int m, int salary, int x, int happiness, vvi &dp){\n    if(cur_mon>m)   return 0;\n\n    if(dp[cur_mon][happiness]!=-1) return dp[cur_mon][happiness];\n    int op= rec(c,h,cur_mon+1, m, salary+x, x, happiness, dp);\n\n    if(salary>=c[cur_mon]){\n        op= max(op, h[cur_mon] + rec(c,h,cur_mon+1, m, salary-c[cur_mon]+x, x, happiness+h[cur_mon],dp));\n    }\n    return dp[cur_mon][happiness]=op;\n    // return op;\n} \n\nvoid solve(int test)   \n{\n    debug(test)\n    int m, x;   cin>>m>>x;\n    vi c(m+1,0), h(m+1,0);\n    rep(i,1,m)  cin>>c[i]>>h[i];\n\n    vector<vector<int>> dp(m+1, vector<int>(50001,-1));\n    cout<<rec(c,h,1,m,0,x,0, dp)<<nline;\n    \n}  ",
+      "    #define int long long\n    int n;\n    cin >> n;\n    vector<int> nums(n, 0);\n    for (int i = 0; i < n; i++) cin >> nums[i];\n    int ans = 0;\n    map<int, map<int, int>> mp1,mp2,mp3;\n    map<int, map<int, map<int, int>>> mp;\n    for (int i = 0; i < n - 2; i++)\n    {\n        ans +=   mp1[nums[i]][nums[i + 1]] \n                + mp2[nums[i]][nums[i + 2]] \n                + mp3[nums[i + 1]][nums[i + 2]] \n                - 3*mp[nums[i]][nums[i + 1]][nums[i + 2]];\n        mp1[nums[i]][nums[i + 1]]++;\n        mp2[nums[i]][nums[i + 2]]++;\n        mp3[nums[i + 1]][nums[i + 2]]++;\n        mp[nums[i]][nums[i + 1]][nums[i + 2]]++;\n    }\n    cout<<ans<<endl;",
+      "ans-=j.second*j.second;",
+      "ans-=1LL*j.second*j.second;",
+      "#define ll long long\n#define pb push_back\nint main(){\n    ll t;\n    cin>>t;\n    while(t--){\n        ll n;\n        cin>>n;\n        string s;\n        cin>>s;\n        vector<ll>u;vector<ll>d;vector<ll>e;vector<ll>w;\n        vector<vector<ll>>mega;\n        for(ll i=0;i<n;i++){\n            if(s[i]=='N')u.pb(i);\n            if(s[i]=='W')w.pb(i);\n            if(s[i]=='E')e.pb(i);\n            if(s[i]=='S')d.pb(i);\n        }\n        if((u.size()+d.size())%2==0 && (w.size()+e.size())%2==0){\n            string ans=s;\n            if(u.size()%2==1){\n                ans[u[u.size()-1]]='R';\n                ans[d[d.size()-1]]='R';\n                u.pop_back();d.pop_back();\n            }\n            if(e.size()%2==1){\n                ans[e[e.size()-1]]='H';\n                ans[w[w.size()-1]]='H';\n                e.pop_back();w.pop_back();\n            }\n            mega.push_back(u);mega.push_back(d);mega.push_back(e);mega.push_back(w);\n            for(ll i=0;i<4;i++){\n                for(ll j=0;j<mega[i].size();j++){//mega[i] is nothing but u,d,w,e\n                    if(j>=mega[i].size()/2){\n                        ans[mega[i][j]]='R';\n                    }\n                    else ans[mega[i][j]]='H';\n                }\n            }\n            ll flagr=0,flagh=0;\n            for(ll i=0;i<n;i++){\n                if(ans[i]=='R')flagr=1;\n                if(ans[i]=='H')flagh=1;\n            }\n            if(flagr==0||flagh==0)cout<<\"NO\"<<endl;\n            else cout<<ans<<endl;\n        }\n        else{\n            cout<<\"NO\"<<endl;\n        }\n    }\n    return 0;\n}",
+      "row[x1].size()>0",
+      "Explanation for problem E - ",
+      "Caution : ",
+      "#include<bits/stdc++.h>\nusing namespace std;\n#define ll long long\nint mod=1000000007;\n\nvoid solve(){\n    int m,x;\n    cin>>m>>x;\n    vector<int> cost(m,0),hap(m,0);\n    for(int i=0;i<m;i++){\n        cin>>cost[i]>>hap[i];\n    }\n    unordered_map<int,int> mp;\n    mp[0]=0;\n    set<int> s;\n    s.insert(0);\n    for(int i=0;i<m;i++){\n        int money=x*i;\n        int k=mp[-1*(*s.lower_bound(-1*money))];\n        int spent=-1*(*s.lower_bound(-1*money));\n        if(cost[i]<=money){\n            int k1=hap[i]+mp[-1*(*s.lower_bound(-1*(money-cost[i])))];\n            if(k1>k){\n                spent=-1*(*s.lower_bound(-1*(money-cost[i])))+cost[i];\n            }\n            k=max(k,k1);\n        }\n        mp[spent]=k;\n        s.insert(-1*spent);\n    }\n    cout<<mp[-1*(*s.lower_bound(-1*(x*(m-1))))]<<endl;\n}\n\nint main(){\n    cin.tie(0)->sync_with_stdio(0);\n    int t=1;\n    cin>>t;\n    while(t>0){\n        solve();\n        t--;\n    }\n}"
+    ]
+  }
+}

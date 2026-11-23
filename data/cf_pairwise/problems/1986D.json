@@ -1,0 +1,44 @@
+{
+  "contest_id": 1986,
+  "index": "D",
+  "name": "Mathematical Problem",
+  "rating": 1400,
+  "tags": [
+    "brute force",
+    "dp",
+    "greedy",
+    "implementation",
+    "math",
+    "two pointers"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1986D",
+  "url": "https://codeforces.com/problemset/problem/1986/D",
+  "contest_start_time": "2024-06-23T14:50:00+00:00",
+  "statement": {
+    "title": "D. Mathematical Problem",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "You are given a string $s$ of length $n  \\gt  1$, consisting of digits from $0$ to $9$. You must insert exactly $n - 2$ symbols $+$ (addition) or $\\times$ (multiplication) into this string to form a valid arithmetic expression.\n\nIn this problem, the symbols cannot be placed before the first or after the last character of the string $s$, and two symbols cannot be written consecutively. Also, note that the order of the digits in the string cannot be changed. Let's consider $s = 987009$:\n\n From this string, the following arithmetic expressions can be obtained: $9 \\times 8 + 70 \\times 0 + 9 = 81$, $98 \\times 7 \\times 0 + 0 \\times 9 = 0$, $9 + 8 + 7 + 0 + 09 = 9 + 8 + 7 + 0 + 9 = 33$. Note that the number $09$ is considered valid and is simply transformed into $9$.\n\n From this string, the following arithmetic expressions cannot be obtained: $+9 \\times 8 \\times 70 + 09$ (symbols should only be placed between digits), $98 \\times 70 + 0 + 9$ (since there are $6$ digits, there must be exactly $4$ symbols).\n\nThe result of the arithmetic expression is calculated according to the rules of mathematics — first all multiplication operations are performed, then addition. You need to find the minimum result that can be obtained by inserting exactly $n - 2$ addition or multiplication symbols into the given string $s$.",
+    "input_spec": "Each test consists of multiple test cases. The first line contains a single integer $t$ ($1 \\leq t \\leq 10^4$) — the number of test cases. Then follows their description.\n\nThe first line of each test case contains a single integer $n$ ($2 \\leq n \\leq 20$) — the length of the string $s$.\n\nThe second line of each test case contains a string $s$ of length $n$, consisting of digits from $0$ to $9$.",
+    "output_spec": "For each test case, output the minimum result of the arithmetic expression that can be obtained by inserting exactly $n - 2$ addition or multiplication symbols into the given string.",
+    "note": "In the first four test cases, we cannot add symbols, so the answer will be the original number.\n\nIn the fifth test case, the optimal answer looks as follows: $9 \\times 01 = 9 \\times 1 = 9$.\n\nIn the sixth test case, the optimal answer looks as follows: $1 \\times 01 = 1 \\times 1 = 1$.\n\nIn the seventh test case, the optimal answer looks as follows: $2 + 3 + 3 + 11 = 19$.\n\nIn the eighth test case, one of the optimal answers looks as follows: $98 \\times 7 \\times 0 + 0 \\times 9 = 0$.",
+    "samples": [
+      {
+        "input": "18\n2\n10\n2\n74\n2\n00\n2\n01\n3\n901\n3\n101\n5\n23311\n6\n987009\n7\n1111111\n20\n99999999999999999999\n20\n00000000000000000000\n4\n0212\n18\n057235283621345395\n4\n1112\n20\n19811678487321784121\n4\n1121\n4\n2221\n3\n011",
+        "output": "\n10\n74\n0\n1\n9\n1\n19\n0\n11\n261\n0\n0\n0\n12\n93\n12\n24\n0"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 130783,
+    "url": "https://codeforces.com/blog/entry/130783",
+    "tutorial": "1986D — Mathematical Problem",
+    "solution_code": []
+  }
+}

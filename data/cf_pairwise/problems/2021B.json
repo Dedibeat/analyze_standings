@@ -1,0 +1,42 @@
+{
+  "contest_id": 2021,
+  "index": "B",
+  "name": "Maximize Mex",
+  "rating": 1200,
+  "tags": [
+    "brute force",
+    "greedy",
+    "math",
+    "number theory"
+  ],
+  "points": 750.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2021B",
+  "url": "https://codeforces.com/problemset/problem/2021/B",
+  "contest_start_time": "2024-10-06T06:05:00+00:00",
+  "statement": {
+    "title": "B. Maximize Mex",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "You are given an array $a$ of $n$ positive integers and an integer $x$. You can do the following two-step operation any (possibly zero) number of times:\n\n Choose an index $i$ ($1 \\leq i \\leq n$).\n\n Increase $a_i$ by $x$, in other words $a_i := a_i + x$.\n\nFind the maximum value of the $\\operatorname{MEX}$ of $a$ if you perform the operations optimally.\n\nThe $\\operatorname{MEX}$ (minimum excluded value) of an array is the smallest non-negative integer that is not in the array. For example:\n\n The $\\operatorname{MEX}$ of $[2,2,1]$ is $0$ because $0$ is not in the array.\n\n The $\\operatorname{MEX}$ of $[3,1,0,1]$ is $2$ because $0$ and $1$ are in the array but $2$ is not.\n\n The $\\operatorname{MEX}$ of $[0,3,1,2]$ is $4$ because $0$, $1$, $2$ and $3$ are in the array but $4$ is not.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 5000$). The description of the test cases follows.\n\nThe first line of each test case contains two integers $n$ and $x$ ($1 \\le n \\le 2 \\cdot 10^5$; $1 \\le x \\le 10^9$) — the length of the array and the integer to be used in the operation.\n\nThe second line of each test case contains $n$ integers $a_1, a_2, \\ldots, a_n$ ($0 \\le a_i \\le 10^9$) — the given array.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, output a single integer: the maximum $\\operatorname{MEX}$ of $a$ if you perform the operations optimally.",
+    "note": "In the first test case, the $\\operatorname{MEX}$ of $a$ is $4$ without performing any operations, which is the maximum.\n\nIn the second test case, the $\\operatorname{MEX}$ of $a$ is $5$ without performing any operations. If we perform two operations both with $i=1$, we will have the array $a=[5,3,4,1,0,2]$. Then, the $\\operatorname{MEX}$ of $a$ will become $6$, which is the maximum.\n\nIn the third test case, the $\\operatorname{MEX}$ of $a$ is $0$ without performing any operations, which is the maximum.",
+    "samples": [
+      {
+        "input": "3\n6 3\n0 3 2 1 5 2\n6 2\n1 3 4 1 0 2\n4 5\n2 5 10 3",
+        "output": "\n4\n6\n0"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 134873,
+    "url": "https://codeforces.com/blog/entry/134873",
+    "tutorial": "For the $\\operatorname{MEX}$ to be at least $k$, then each non-negative integer from $0$ to $k-1$ must appear at least once in the array.\n\nFirst, notice that since there are only $n$ elements in the array, there are at most $n$ different values, so the $\\operatorname{MEX}$ can only be at most $n$. And since we can only increase an element's value, that means every element with values bigger than $n$ can be ignored.\n\nWe construct a frequency array $\\text{freq}$ such that $\\text{freq}[k]$ is the number of elements in $a$ with value $k$.\n\nNotice that the values just need to appear at least once to contribute to the $\\operatorname{MEX}$, so two or more elements with the same value should be split into different values to yield a potentially better result. To find the maximum possible $\\operatorname{MEX}$, we iterate each index $k$ in the array $\\text{freq}$ from $0$ to $n$. In each iteration of $k$, if we find $\\text{freq[k]} \\gt 0$, that means it's possible to have the $\\operatorname{MEX}$ be bigger than $k$, so we can iterate $k$ to the next value. Before we iterate to the next value, if we find $\\text{freq}[k] \\gt 1$, that indicates duplicates, so we should do an operation to all except one of those values to change them into $k+x$, which increases $\\text{freq}[k+x]$ by $\\text{freq}[k]-1$ and changes $\\text{freq}[k]$ into $1$. In each iteration of $k$, if we find $\\text{freq}[k]=0$, that means, $k$ is the maximum $\\operatorname{MEX}$ we can get, and we should end the process.\n\nTime complexity for each test case: $O(n)$",
+    "solution_code": []
+  }
+}

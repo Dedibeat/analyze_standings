@@ -1,0 +1,48 @@
+{
+  "contest_id": 1949,
+  "index": "G",
+  "name": "Scooter",
+  "rating": 2300,
+  "tags": [
+    "graphs",
+    "greedy"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1949G",
+  "url": "https://codeforces.com/problemset/problem/1949/G",
+  "contest_start_time": "2024-03-24T10:00:00+00:00",
+  "statement": {
+    "title": "G. Scooter",
+    "time_limit": "2 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "The Czech Technical University campus consists of $n$ buildings, indexed from $1$ to $n$. In each building, there can be a math class scheduled, or a computer science class, or neither (but not both). Additionally, in each building, there is at most one professor, and each professor is either an expert in mathematics or in computer science.\n\nAs an intern at University Express Inc., your job is to quickly transport the professors to their classes. For this, you have been granted a brand new two-person scooter, able to accommodate yourself, plus at most one passenger.\n\nInitially, you are the only person on the scooter. When you arrive at a building, you may drop off or pick up professors to/from that building. However, in order to improve the efficiency of your task, you are allowed to drive to each of the $n$ buildings at most once, in the order of your choice (you can also decide where to start the itinerary).\n\nAfter the end of your itinerary, in each building where a math class is scheduled, there must be a professor expert in math, and in each building where a computer science class is scheduled, there must be a professor expert in computer science.\n\nDevise an itinerary that makes it possible to teach all classes.",
+    "input_spec": "The first line contains an integer $n$ ($1\\le n \\le 2000$) — the number of buildings in the campus.\n\nThe second line contains a string of $c$ of length $n$ consisting of the characters $\\texttt{-}$, $\\texttt{C}$, $\\texttt{M}$ — the $i$-th character denotes the subject of the class scheduled in the $i$-th building. $\\texttt{C}$ stands for computer science, $\\texttt{M}$ stands for mathematics, while $\\texttt{-}$ means that there is no class scheduled in the $i$-th building.\n\nThe third line contains a string $p$ of length $n$ consisting of the characters $\\texttt{-}$, $\\texttt{C}$, $\\texttt{M}$ — the $i$-th character denotes the expertise of the professor in the $i$-th building (if there is a professor). $\\texttt{C}$ stands for computer science, $\\texttt{M}$ stands for mathematics, while $\\texttt{-}$ means that there is no professor in the $i$-th building.\n\nIt is guaranteed that, for all tests given to your program, there exists a valid itinerary.",
+    "output_spec": "In the first line print an integer $l$ — the number of operations in your chosen itinerary.\n\nThe $i$-th ($1 \\leq i \\leq l$) of the next $l$ lines must contain one of three commands:\n\n $\\texttt{DRIVE } x$ — go to the building with the number $x$ ($1 \\leq x \\leq n$);\n\n $\\texttt{PICKUP}$ — pick up the professor which was initially at the current building;\n\n $\\texttt{DROPOFF}$ — drop off the passenger professor at the current building.\n\nIn order for the itinerary to be valid, the following conditions must hold:\n\n No two $\\texttt{DRIVE}$ instructions should go to the same building;\n\n At most one $\\texttt{DROPOFF}$ and one $\\texttt{PICKUP}$ instruction in this order should be issued at each specific building;\n\n For all $\\texttt{PICKUP}$ instructions, there must be a professor initially at the building, as well as no one already riding along on the scooter;\n\n For all $\\texttt{DROPOFF}$ instructions, there must be a professor riding along at the time of the command;\n\n After the itinerary, in each building, if there is a class in that building, there must be a professor expert in the class' subject (either initially, or because they were dropped off there).\n\nNote that, in particular, you cannot pick up a professor that you just dropped off for an itinerary to be valid.",
+    "note": "In the first sample, You start by driving to building number $3$. You then pick up the mathematics professor. After dropping him off at building number $2$, where a mathematics class is being held, you pick up the computer science professor from there, and drop her off at building number $1$, finishing your itinerary.",
+    "samples": [
+      {
+        "input": "3\nCM-\n-CM",
+        "output": "\n7\nDRIVE 3\nPICKUP\nDRIVE 2\nDROPOFF\nPICKUP\nDRIVE 1\nDROPOFF"
+      },
+      {
+        "input": "1\nC\nC",
+        "output": "\n0"
+      },
+      {
+        "input": "2\n-M\nMC",
+        "output": "\n4\nDRIVE 1\nPICKUP\nDRIVE 2\nDROPOFF"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 127514,
+    "url": "https://codeforces.com/blog/entry/127514",
+    "tutorial": "First and foremost, let's notice that we can ignore professors that are already in a proper building, as well as empty buildings (in essence, all positions $i$ such that $c_i = p_i$).\n\nMore so, if there are no positions $i$ such that $c_i \\neq p_i$ then we can simply answer $\\texttt{YES}$ without doing any operations.\n\nFrom this point on, we will assume that for all $i$, we have $c_i \\neq p_i$.\n\nGeneral idea. Intuitively, we would want to iteratively pick up the professor from some building and drive them to a building where a corresponding class is held. However, we must make sure to not visit the same place twice. Multiple greedy solutions might solve this, but we also have to take into account implementation effort and the number of edge cases to consider. In this sense, we advise the reader to not rush into writing an implementation just yet, and instead try to simplify the solution as much as possible on paper.\n\nAn easier subproblem. The issue with the problem currently is that there is much room for making choices and, consequently, much room for making an erroneous decision. Let's consider the easier subproblem where there are exactly as many professors of a given class types as there are classes. Even though one might say that this makes the problem tighter, it actually paradoxically makes it easier! This is mainly because, as tight as it is, there is not much room for bad decisions.\n\nA key observation is that this subproblem (and, as it turns out, the original problem as well) is $\\textbf{impossible}$ if there are no buildings where no class is being held, as there is simply no way of returning to the starting position to drop off the corresponding professor (note, again, that we are ignoring positions $i$ with $c_i = p_i$).\n\nTherefore, a greedy strategy that works for this subproblem is simply repeatedly choosing a professor from a building where no class is being held and driving them to one of the buildings where their class is being held. If one prioritizes buildings where there are professors before those where there are no professors, the key condition never becomes unsatisfied, thus the problem is solved.\n\nSolving the original problem. Going back, let's solve the original problem. We can do that by simply reducing it to the easier version, by removing \"excess\" professors from some of the buildings. At the same time, note that we have to make sure the key observation above remains valid throughout the removal process. One easy and correct way of doing that is, yet again, the greedy approach of simply prioritizing removing professors from buildings where there are classes to buldings with no classes.\n\nFinal complexity of the solution is $\\mathcal{O}(n)$.",
+    "solution_code": []
+  }
+}

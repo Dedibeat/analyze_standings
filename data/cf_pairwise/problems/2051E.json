@@ -1,0 +1,45 @@
+{
+  "contest_id": 2051,
+  "index": "E",
+  "name": "Best Price",
+  "rating": 1600,
+  "tags": [
+    "binary search",
+    "brute force",
+    "data structures",
+    "greedy",
+    "sortings"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2051E",
+  "url": "https://codeforces.com/problemset/problem/2051/E",
+  "contest_start_time": "2024-12-22T14:35:00+00:00",
+  "statement": {
+    "title": "E. Best Price",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "A batch of Christmas trees has arrived at the largest store in Berland. $n$ customers have already come to the store, wanting to buy them.\n\nBefore the sales begin, the store needs to determine the price for one tree (the price is the same for all customers). To do this, the store has some information about each customer.\n\nFor the $i$-th customer, two integers $a_i$ and $b_i$ are known, which define their behavior:\n\n if the price of the product is at most $a_i$, the customer will buy a tree and leave a positive review;\n\n otherwise, if the price of the product is at most $b_i$, the customer will buy a tree but leave a negative review;\n\n otherwise, the customer will not buy a tree at all.\n\nYour task is to calculate the maximum possible earnings for the store, given that it can receive no more than $k$ negative reviews.",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases.\n\nThe first line of each test case contains two integers $n$ and $k$ ($1 \\le n \\le 2 \\cdot 10^5$; $0 \\le k \\le n$).\n\nThe second line contains $n$ integers $a_1, a_2, \\dots, a_n$ ($1 \\le a_i \\le 2 \\cdot 10^9$).\n\nThe third line contains $n$ integers $b_1, b_2, \\dots, b_n$ ($1 \\le b_i \\le 2 \\cdot 10^9$; $a_i  \\lt  b_i$).\n\nAdditional constraint on the input: the sum of $n$ over all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, print a single integer — the maximum possible earnings for the store, given that it can receive no more than $k$ negative reviews.",
+    "note": "Consider the example from the statement:\n\n In the first test case, the price should be set to $1$. Then both customers will buy one tree each and leave no negative reviews;\n\n In the second test case, the price should be set to $5$. Then the only customer will buy a tree and leave a negative review;\n\n In the third test case, the price should be set to $3$. Then all customers will buy one tree each, and the store will receive two negative reviews.\n\n In the fourth test case, the price should be set to $7$. Then two customers will buy one tree each, and the store will receive one negative review.",
+    "samples": [
+      {
+        "input": "5\n2 0\n2 1\n3 4\n1 1\n2\n5\n3 3\n1 5 2\n3 6 4\n4 3\n2 3 2 8\n3 7 3 9\n3 1\n2 9 5\n12 14 9",
+        "output": "\n2\n5\n9\n14\n15"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 137623,
+    "url": "https://codeforces.com/blog/entry/137623",
+    "tutorial": "First, let's design a solution in $O(n^2)$. We can solve the problem in $O(n \\cdot max b_i)$, if we iterate on the price $p$ we use, and for every price, calculate the number of trees bought and the number of negative reviews. However, we don't need to check every possible price from $1$ to $max b_i$: let's instead check every integer in the union of $a$ and $b$ (or check every $a_i$, and then check every $b_i$).\n\nWhy is it always optimal? Suppose some integer price $p$ which is not present in the union of $a$ and $b$ is optimal. Then, if we use $p+1$ instead of $p$, the status of each customer will be the same, but we will get more money for each tree we sell. So, it is enough to check the elements of $a$ and the elements of $b$ as possible prices.\n\nThis works in $O(n^2)$, we need to speed it up. I will explain two different methods that allow to check every price faster.\n\nEvent processing (or sweep line):\n\nShortly, we process all possible prices in ascending order, and when we go from one price to the next, we update the customers which no longer want to buy a tree with a new price, and the customers which will leave a negative review if the price is increased.\n\nOne of the ways to implement it is as follows. For every customer, create two \"events\" of the type \"when price exceeds $a_i$, the customer will leave a negative review\" and \"when price exceeds $b_i$, the customer will no longer buy a tree and leave a negative review\". These events can be implemented as pairs of integers $(a_i, 1)$ and $(b_i, 2)$.\n\nThen, we can sort the events and process them from left to right in sorted order, maintaining the number of trees and negative reviews. When we process the event with price $p$, the change it makes will come into effect only when the price exceeds $p$, so we should first update the answer, then apply the change from the event. Furthermore, all events with the same price value should be processed at the same time (so if there are multiple events with the same price value, you don't update the answer after processing only several of them). All of this is a bit complicated to implement, that's why I would like to show you an\n\nAlternative approach:\n\nFor every price $p$, we need to calculate two values:\n\n the number of trees bought, i. e. the number of customers $i$ such that $b_i \\ge p$;\n\n the number of negative reviews, i. e. the number of customers $i$ such that $a_i  \\lt  p \\le b_i$.\n\nThe first one can be calculated in $O(\\log n)$ with binary search, if we sort the array $b$. The second one is a bit trickier.\n\nLet's calculate it as follows: take the number of trees bought, and then subtract the number of trees bought without a negative review (which is the number of customers $i$ such that $a_i \\ge p$). If we sort both arrays $a$ and $b$, this value can also be processed in $O(\\log n)$ with binary search. So, we spend $O(\\log n)$ time to check one possible price, and the number of different prices we have to check is up to $2n$, so this solution works in $O(n \\log n)$.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n \nusing namespace std;\n\nint main() {\n  ios::sync_with_stdio(false); cin.tie(0);\n  int t;\n  cin >> t;\n  while (t--) {\n    int n, k;\n    cin >> n >> k;\n    vector<int> a(n), b(n);\n    for (auto &x : a) cin >> x;\n    for (auto &x : b) cin >> x;\n    vector<pair<int, int>> ev;\n    for (int i = 0; i < n; ++i) {\n      ev.emplace_back(a[i], 1);\n      ev.emplace_back(b[i], 2);\n    }\n    sort(ev.begin(), ev.end());\n    long long ans = 0;\n    int cnt = n, bad = 0;\n    for (int i = 0; i < 2 * n;) {\n      auto [x, y] = ev[i];\n      if (bad <= k) ans = max(ans, x * 1LL * cnt);\n      while (i < 2 * n && ev[i].first == x) {\n        bad += (ev[i].second == 1);\n        bad -= (ev[i].second == 2);\n        cnt -= (ev[i].second == 2);\n        ++i;\n      }\n    }\n    cout << ans << '\\n';\n  }\n}"
+    ]
+  }
+}

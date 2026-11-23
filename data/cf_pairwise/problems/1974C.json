@@ -1,0 +1,42 @@
+{
+  "contest_id": 1974,
+  "index": "C",
+  "name": "Beautiful Triple Pairs",
+  "rating": 1400,
+  "tags": [
+    "combinatorics",
+    "data structures"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1974C",
+  "url": "https://codeforces.com/problemset/problem/1974/C",
+  "contest_start_time": "2024-05-20T14:35:00+00:00",
+  "statement": {
+    "title": "C. Beautiful Triple Pairs",
+    "time_limit": "4 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Polycarp was given an array $a$ of $n$ integers. He really likes triples of numbers, so for each $j$ ($1 \\le j \\le n - 2$) he wrote down a triple of elements $[a_j, a_{j + 1}, a_{j + 2}]$.\n\nPolycarp considers a pair of triples $b$ and $c$ beautiful if they differ in exactly one position, that is, one of the following conditions is satisfied:\n\n $b_1 \\ne c_1$ and $b_2 = c_2$ and $b_3 = c_3$;\n\n $b_1 = c_1$ and $b_2 \\ne c_2$ and $b_3 = c_3$;\n\n $b_1 = c_1$ and $b_2 = c_2$ and $b_3 \\ne c_3$.\n\nFind the number of beautiful pairs of triples among the written triples $[a_j, a_{j + 1}, a_{j + 2}]$.",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases.\n\nThe first line of each test case contains a single integer $n$ ($3 \\le n \\le 2 \\cdot 10^5$) — the length of the array $a$.\n\nThe second line of each test case contains $n$ integers $a_1, a_2, \\dots, a_n$ ($1 \\le a_i \\le 10^6$) — the elements of the array.\n\nIt is guaranteed that the sum of the values of $n$ for all test cases in the test does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, output a single integer — the number of beautiful pairs of triples among the pairs of the form $[a_j, a_{j + 1}, a_{j + 2}]$.\n\nNote that the answer may not fit into 32-bit data types.",
+    "note": "In the first example, $a = [3, 2, 2, 2, 3]$, Polycarp will write the following triples:\n\n $[3, 2, 2]$;\n\n $[2, 2, 2]$;\n\n $[2, 2, 3]$.\n\n The beautiful pairs are triple $1$ with triple $2$ and triple $2$ with triple $3$.\nIn the third example, $a = [1, 2, 3, 2, 2, 3, 4, 2]$, Polycarp will write the following triples:\n\n $[1, 2, 3]$;\n\n $[2, 3, 2]$;\n\n $[3, 2, 2]$;\n\n $[2, 2, 3]$;\n\n $[2, 3, 4]$;\n\n $[3, 4, 2]$;\n\n The beautiful pairs are triple $1$ with triple $4$, triple $2$ with triple $5$, and triple $3$ with triple $6$.",
+    "samples": [
+      {
+        "input": "8\n5\n3 2 2 2 3\n5\n1 2 1 2 1\n8\n1 2 3 2 2 3 4 2\n4\n2 1 1 1\n8\n2 1 1 2 1 1 1 1\n7\n2 1 1 1 1 1 1\n6\n2 1 1 1 1 1\n5\n2 1 1 1 1",
+        "output": "\n2\n0\n3\n1\n8\n4\n3\n2"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 129686,
+    "url": "https://codeforces.com/blog/entry/129686",
+    "tutorial": "To consider each pair only once, we will go from left to right and while adding a new triplet, we will add to the answer the number of already added triplets that form a beautiful pair with the current one.\n\nWe will maintain a map with triplets, to denote a triplet with an error, we will place $0$ (or any other value that cannot occur in the array $a$) in place of the error.\n\nThus, for each triplet $b$, the already found triplets $(0, b_2, b_3)$, $(b_1, 0, b_3)$, $(b_1, b_2, 0)$ will be good. In each case, triplets equal to $b$ will also be included, so they need to be subtracted from each of the three cases.",
+    "solution_code": [
+      "def solve():\n    n = int(input())\n    a = [int(x) for x in input().split()]\n    cnt = dict()\n    ans = 0\n    for i in range(n - 2):\n        triplet = (a[i], a[i + 1], a[i + 2])\n        mist = [0] * 3\n        mist[0] = (0, a[i + 1], a[i + 2])\n        mist[1] = (a[i], 0, a[i + 2])\n        mist[2] = (a[i], a[i + 1], 0)\n        for trip in mist:\n            ans += cnt.get(trip, 0) - cnt.get(triplet, 0)\n            cnt[trip] = cnt.get(trip, 0) + 1\n        cnt[triplet] = cnt.get(triplet, 0) + 1\n    print(ans)\n    \n    \nfor i in range(int(input())):\n    solve()"
+    ]
+  }
+}

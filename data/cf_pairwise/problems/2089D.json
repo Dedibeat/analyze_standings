@@ -1,0 +1,41 @@
+{
+  "contest_id": 2089,
+  "index": "D",
+  "name": "Conditional Operators",
+  "rating": 3200,
+  "tags": [
+    "constructive algorithms"
+  ],
+  "points": 2500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2089D",
+  "url": "https://codeforces.com/problemset/problem/2089/D",
+  "contest_start_time": "2025-03-23T05:35:00+00:00",
+  "statement": {
+    "title": "D. Conditional Operators",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "In C++, the conditional operator ?: is used as the value of x?y:z is $y$ if $x$ is true; otherwise, the value is $z$. $x$, $y$, and $z$ may also be expressions. It is right-associated; that is, a?b:c?d:e is equivalent to a?b:(c?d:e). $0$ means false and $1$ means true.\n\nGiven a binary string with length $2n+1$, you need to show whether the value of the expression can be $1$ after inserting $n$ conditional operators into the string. You can use parentheses. For example, the string 10101 can be transformed into (1?0:1)?0:1, whose value is $1$.",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\le t \\le 10\\,000)$, the number of test cases. The description of the test cases follows.\n\nIn the first line of each test case, there is a single integer $n$ ($1 \\le n \\le 1.5 \\cdot 10^5)$.\n\nIn the second line of each test case, there is a binary string of length $2n + 1$.\n\nIt is guaranteed that the sum of $n$ across all test cases does not exceed $1.5 \\cdot 10^5$.",
+    "output_spec": "For each test case, on the first line, output Yes if the string can be transformed into an expression of value $1$; otherwise, output No.\n\nIf the answer is Yes, output the expression on the second line. You can use parentheses, but the order of the characters in the original string must remain the same. The length of your expression must be no more than $10n+1000$.",
+    "note": "The first test case — is the one mentioned in the problem description.\n\nIn the second test case, it is clear that regardless of how the conditional operator is used, the result will always be zero.",
+    "samples": [
+      {
+        "input": "2\n2\n10101\n2\n00000",
+        "output": "\nYes\n(1?0:1)?(0):1\nNo"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 141053,
+    "url": "https://codeforces.com/blog/entry/141053",
+    "tutorial": "2089D - Conditional Operators\n Idea: E.Space\n\nSolution\n\nEach operation transform three adjacent characters into one. If the string starts with 11, the answer should be yes since we can first transform the remaining part into a single 0 or 1 and then the value of 11? is always $1$.\n\nIf the string ends with 1, only 101 has no solution, otherwise it starts with 11 or 0, or we can transform 10? in the front of the string into a 0. Then transform the rest part of the string into a single character to make the last operation 0?(anything):1 makes 1.\n\nIf an operation transformed a string ending with 0 into one ending with 1, it must be 1?1:0 makes 1.\n\nConsider the case where the strings contains 11 as a substring. After transforming the remaining part, ?11?? or ??11? will be derived. The cases are 01100, 00110, 01110, 10110. All other cases start with 11 or end with 1.\n\nAll cases of ??11? have a solution:\n\n(0?0:1)?1:0 makes 1.\n\n(0?1:1)?1:0 makes 1.\n\n1?(0?1:1):0 makes 1.\n\nHowever, 01100 has no solution.\n\nSince 0?0:1 equals 1, before the last 1, any two adjacent 0's with no 1 in between can be eliminated. Thus, if there are two 1's with an even number of 0's in between, and there are an even number of characters in front the former 1, i.e., (..)*1(00)*1(..)*0 in regular expression, the answer should be yes, since after eliminating the 0's in between, the 1's become adjacent. The parity of the characters before the former 1 guarantees that it will not become 01100.\n\nAnother case is that the string ends with 0 and every pair of adjacent 1's has an odd number of 0's in between. Since 0(1?0:1)0 makes 000, 1(0?1:0)1 makes 101, 10(1?0:0)01 makes 10001, there is no way to change the parity of the consecutive 0's to make 11 to change the ending 0 into 1.\n\nIn the remaining case, there are even 0's between some pair of adjacent 1's, but the number of characters before the first 1 is odd, there must be only one pair. Suppose the string is 1-indexed. It is because the indices of such pair of 1's must be [odd, even]; while the indices in the previous case must be [even, odd]. Thus, if there are two such pairs of this case [odd, even], in the parity sequence [odd, even, ..., odd, even] there must be an [even, odd] as a substring.\n\nTherefore, any other pair of adjacent 1's must have odd 0's in between, i.e., $0(00)^*\\color{blue}{(10(00)^*)^*}\\color{red}1\\color{black}(00)^*\\color{red}1\\color{blue}{((00)^*01)^*}\\color{black}(00)^+$ in regular expression. Any operation remains the string in this case, except that the string is $0(00)^*\\color{blue}{(10(00)^*)^*}\\color{red}1\\color{red}1\\color{black}(00)^+$ and the operation is $\\color{red}1\\color{black}?\\color{red}1\\color{black}:0$ makes 1. Since it must ends with 00, it becomes a string ending with 0 and every pair of adjacent 1's has odd 0's in between, which is a case mentioned before that has no solution.\n\nIn conclusion, it has a solution if and only of at least one of the two following conditions is met:\n\nIt ends with 1 but it is not 101.\n\nIt has two adjacent 1's such that there are even 0's in between and the number of characters before the former 1 is even.\n\nCode",
+    "solution_code": [
+      "#include<bits/stdc++.h>\nchar s[333333];\nchar val(char x,char y,char z){\n\treturn x=='1'?y:z;\n}\nstd::pair<std::string, char> fold(int l,int r){\n\tstd::string str;\n\tchar v=s[r];\n\tfor(int i=l;i<r;i+=2){\n\t\tstr+=s[i];\n\t\tstr+='?';\n\t\tstr+=s[i+1];\n\t\tstr+=':';\n\t}\n\tstr+=s[r];\n\tfor(int i=r-2;i>=l;i-=2){\n\t\tv=val(s[i],s[i+1],v);\n\t}\n\treturn std::make_pair(str,v);\n}\nvoid solve(){\n\tint n;\n\tscanf(\"%d\",&n);\n\tn=2*n+1;\n\tscanf(\"%s\",s+1);\n\tint last=0;\n\tfor(int i=1;i<=n;++i){\n\t\tif(s[i]=='1'&&last>0){\n\t\t\tif(i%2==0&&last&1){\n\t\t\t\tputs(\"Yes\");\n\t\t\t\tstd::string s4=fold(last+1,i).first;\n\t\t\t\tauto tmp=fold(i+1,n);\n\t\t\t\tstd::string s5=tmp.first;\n\t\t\t\tchar v5=tmp.second;\n\t\t\t\tif(last==1){\n\t\t\t\t\tprintf(\"1?(%s):(%s)\\n\",s4.c_str(),s5.c_str());\n\t\t\t\t\treturn;\n\t\t\t\t}\n\t\t\t\ttmp=fold(1,last-2);\n\t\t\t\tstd::string s1=tmp.first;\n\t\t\t\tchar v1=tmp.second;\n\t\t\t\tif(v1=='1'){\n\t\t\t\t\tprintf(\"(%s)?(%c?1:(%s)):(%s)\\n\",s1.c_str(),s[last-1],s4.c_str(),s5.c_str());\n\t\t\t\t}\n\t\t\t\telse{\n\t\t\t\t\tprintf(\"((%s)?%c:1)?(%s):(%s)\\n\",s1.c_str(),s[last-1],s4.c_str(),s5.c_str());\n\t\t\t\t}\n\t\t\t\treturn;\n\t\t\t}\n\t\t}\n\t\tif(s[i]=='1'){\n\t\t\tlast=i;\n\t\t}\n\t}\n\tif(s[n]=='1'&&std::string(s+1)!=\"101\"){\n\t\tputs(\"Yes\");\n\t\tauto left=s[1]=='0'?fold(1,1):fold(1,3);\n\t\tauto mid=s[1]=='0'?fold(2,n-1):fold(4,n-1);\n\t\tprintf(\"(%s)?(%s):1\\n\",left.first.c_str(),mid.first.c_str());\n\t\treturn;\n\t}\n\tputs(\"No\");\n\treturn;\n}\nint main(){\n\tint T;\n\tscanf(\"%d\",&T);\n\twhile(T--){\n\t\tsolve();\n\t}\n\treturn 0;\n}"
+    ]
+  }
+}

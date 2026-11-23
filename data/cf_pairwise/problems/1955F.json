@@ -1,0 +1,45 @@
+{
+  "contest_id": 1955,
+  "index": "F",
+  "name": "Unfair Game",
+  "rating": 1800,
+  "tags": [
+    "dp",
+    "games",
+    "greedy",
+    "math",
+    "schedules"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1955F",
+  "url": "https://codeforces.com/problemset/problem/1955/F",
+  "contest_start_time": "2024-04-08T14:35:00+00:00",
+  "statement": {
+    "title": "F. Unfair Game",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Alice and Bob gathered in the evening to play an exciting game on a sequence of $n$ integers, each integer of the sequence doesn't exceed $4$. The rules of the game are too complex to describe, so let's just describe the winning condition — Alice wins if the bitwise XOR of all the numbers in the sequence is non-zero; otherwise, Bob wins.\n\nThe guys invited Eve to act as a judge. Initially, Alice and Bob play with $n$ numbers. After one game, Eve removes one of the numbers from the sequence, then Alice and Bob play with $n-1$ numbers. Eve removes one number again, after which Alice and Bob play with $n - 2$ numbers. This continues until the sequence of numbers is empty.\n\nEve seems to think that in such a game, Alice almost always wins, so she wants Bob to win as many times as possible. Determine the maximum number of times Bob can win against Alice if Eve removes the numbers optimally.",
+    "input_spec": "The first line contains an integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases.\n\nThe first and only line of each test case contains four integers $p_i$ ($0 \\le p_i \\le 200$) — the number of ones, twos, threes, and fours in the sequence at the beginning of the game.",
+    "output_spec": "For each test case, print the maximum number of times Bob will win in a separate line, if Eve removes the numbers optimally.",
+    "note": "In the first example, Bob wins when Eve has not removed any numbers yet.\n\nIn the second example, Bob wins if Eve removes one one and one three.",
+    "samples": [
+      {
+        "input": "5\n1 1 1 0\n1 0 1 2\n2 2 2 0\n3 3 2 0\n0 9 9 9",
+        "output": "\n1\n1\n3\n3\n12"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 128243,
+    "url": "https://codeforces.com/blog/entry/128243",
+    "tutorial": "Let's try to solve the problem if all the numbers in the sequence are equal to $4$. If the number of elements is even, the bitwise XOR is zero, and if it's odd, then it's equal to $4$. By removing one $4$ at a time, Eve will change the parity, so the answer will be $\\lfloor {p_4 \\over 2} \\rfloor$.\n\nSuppose there are some other numbers in the sequence besides $4$. For Bob to win, the number of $4$s still needs to be even. Therefore, we can solve the problem for the remaining numbers separately from the fours.\n\nOne of the solutions uses dynamic programming. Let's denote $dp_{i,j,k}$ as the maximum number of Bob's wins, if there were initially $i$ ones, $j$ twos, and $k$ threes. Since an empty sequence is not considered in the answer, then $dp_{0,0,0} = 0$. We will iterate over which number to remove, and get the following transitions: $dp_{i,j,k} = \\max(dp_{i - 1,j,k}, dp_{i,j - 1,k}, dp_{i,j,k - 1}) + x(i,j,k)$. Here, $x(i,j,k) = 1$ if the bitwise XOR of $i$ ones, $j$ twos, and $k$ threes is zero, and $x(i,j,k) = 0$ otherwise. The complexity of calculating these values is $O(N ^ 3)$, where $N = 200$.\n\nAnother solution is analytical. Bob wins in two cases: if the number of ones, twos, and threes is even; if the number of ones, twos, and threes is odd. In the first case, the bitwise XOR is zero, because each number occurs an even number of times, and in the second case, $1 \\oplus 2 \\oplus 3 = 0$.\n\nTo maintain the parities, Eve needs to remove the same number, so with two removals, Bob will win once. If the second condition is not initially met, it is always more advantageous to remove numbers to reach the first case, then the answer is $\\sum^{3}_{i = 1} \\lfloor{cnt_i \\over 2}\\rfloor$. If the second condition is already met, then $1$ needs to be added to the answer.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n \nusing namespace std;\n \nconst int N = 201;\n \nint dp[N][N][N];\n \nvoid precalc() {\n    dp[0][0][0] = 0;\n    for (int i = 0; i < N; ++i) {\n        for (int j = 0; j < N; ++j) {\n            for (int k = 0; k < N; ++k) {\n                int prev = 0;\n                if (i) prev = max(prev, dp[i - 1][j][k]);\n                if (j) prev = max(prev, dp[i][j - 1][k]);\n                if (k) prev = max(prev, dp[i][j][k - 1]);\n                dp[i][j][k] = prev;\n                int xr = ((i & 1) * 1) ^ ((j & 1) * 2) ^ ((k & 1) * 3);\n                if (xr == 0 && (i || j || k)) {\n                    ++dp[i][j][k];\n                }\n            }\n        }\n    }\n}\n \nvoid solve() {\n    vector<int> cnt(4);\n    for (int i = 0; i < 4; ++i) {\n        cin >> cnt[i];\n    }\n    cout << dp[cnt[0]][cnt[1]][cnt[2]] + cnt[3] / 2 << '\\n';\n}\n \nint main() {\n    precalc();\n    int t;\n    cin >> t;\n    while (t--) {\n        solve();\n    }\n}"
+    ]
+  }
+}

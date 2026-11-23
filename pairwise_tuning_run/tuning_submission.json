@@ -1,0 +1,16 @@
+{
+  "name": "projects/703166210069/locations/us-central1/tuningJobs/2518784060365471744",
+  "tunedModelDisplayName": "cf-pairwise-pilot-20260805",
+  "baseModel": "gemini-3.5-flash",
+  "supervisedTuningSpec": {
+    "trainingDatasetUri": "gs://gctc-vertex-batch-703166210069/cf-pairwise-20260805/pilot-v1/pilot_train.jsonl",
+    "validationDatasetUri": "gs://gctc-vertex-batch-703166210069/cf-pairwise-20260805/pilot-v1/pilot_validation.jsonl",
+    "hyperParameters": {
+      "epochCount": "2"
+    },
+    "exportLastCheckpointOnly": true
+  },
+  "state": "JOB_STATE_PENDING",
+  "createTime": "2026-08-05T13:55:35.337735Z",
+  "updateTime": "2026-08-05T13:55:35.337735Z"
+}

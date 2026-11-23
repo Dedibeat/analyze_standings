@@ -1,0 +1,42 @@
+{
+  "contest_id": 2023,
+  "index": "B",
+  "name": "Skipping",
+  "rating": 1700,
+  "tags": [
+    "binary search",
+    "dp",
+    "graphs",
+    "shortest paths"
+  ],
+  "points": 1000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2023B",
+  "url": "https://codeforces.com/problemset/problem/2023/B",
+  "contest_start_time": "2024-10-20T09:05:00+00:00",
+  "statement": {
+    "title": "B. Skipping",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "It is already the year $3024$, ideas for problems have long run out, and the olympiad now takes place in a modified individual format. The olympiad consists of $n$ problems, numbered from $1$ to $n$. The $i$-th problem has its own score $a_i$ and a certain parameter $b_i$ ($1 \\le b_i \\le n$).\n\nInitially, the testing system gives the participant the first problem. When the participant is given the $i$-th problem, they have two options:\n\n They can submit the problem and receive $a_i$ points;\n\n They can skip the problem, in which case they will never be able to submit it.\n\nThen, the testing system selects the next problem for the participant from problems with indices $j$, such that:\n\n If he submitted the $i$-th problem, it looks at problems with indices $j  \\lt  i$;\n\n If he skipped the $i$-th problem, it looks at problems with indices $j \\leq b_i$.\n\nAmong these problems, it selects the problem with the maximum index that it has not previously given to the participant (he has neither submitted nor skipped it before). If there is no such problem, then the competition for the participant ends, and their result is equal to the sum of points for all submitted problems. In particular, if the participant submits the first problem, then the competition for them ends. Note that the participant receives each problem at most once.\n\nProkhor has prepared thoroughly for the olympiad, and now he can submit any problem. Help him determine the maximum number of points he can achieve.",
+    "input_spec": "Each test consists of multiple test cases. The first line contains a single integer $t$ ($1 \\leq t \\leq 10^5$) — the number of test cases. The description of the test cases follows.\n\nThe first line of each test case contains a single integer $n$ ($1 \\leq n \\leq 4 \\cdot 10^5$) — the number of problems in the olympiad.\n\nThe second line of each test case contains $n$ integers $a_1, a_2, \\ldots, a_n$ ($1 \\leq a_i \\leq 10^9$) — the scores of the problems.\n\nThe third line of each test case contains $n$ integers $b_1, b_2, \\ldots, b_n$ ($1 \\leq b_i \\leq n$) — the parameters of the problems.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $4 \\cdot 10^5$.",
+    "output_spec": "For each test case, output a single integer — the maximum number of points that Prokhor can achieve.",
+    "note": "In the first test case, Prokhor can skip the first problem; then he will receive the problem with index $b_1 = 2$. Prokhor can submit it and receive $a_2 = 16$ points. After that, the competition will end because Prokhor has already received all problems. Note that if Prokhor submits the first problem, he will receive $a_1 = 15$ points, but the competition will end immediately.\n\nIn the second test case, Prokhor can skip the first problem; then he will receive the problem with index $b_1 = 3$. Prokhor can submit it and receive $a_3 = 100$ points. After that, Prokhor will receive the second problem, which he can skip to receive the problem with index $b_2 = 4$. Prokhor can submit the fourth problem and receive another $a_4 = 100$ points. After that, the competition ends because Prokhor has already received all problems with indices not exceeding $4$. Thus, Prokhor will receive a total of $200$ points.\n\nIn the third test case, Prokhor can submit the first problem and receive $100$ points, after which the competition will end immediately.",
+    "samples": [
+      {
+        "input": "4\n2\n15 16\n2 1\n5\n10 10 100 100 1000\n3 4 1 1 1\n3\n100 49 50\n3 2 2\n4\n100 200 300 1000\n2 3 4 1",
+        "output": "\n16\n200\n100\n1000"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 135341,
+    "url": "https://codeforces.com/blog/entry/135341",
+    "tutorial": "Notice that it makes no sense for us to skip problems for which $b_i \\leq i$, since we can solve the problem, earn points for it, and the next problem will be chosen from the numbers $ j  \\lt  i $. If we skip it, we do not earn points, and the next problem will be chosen from the same set of problems or even a smaller one.\n\nWe also note that if we are at problem $ i $ and the maximum problem number that has been assigned to us earlier in the competition is $ j \\geqslant b_i $, then it makes no sense to skip this problem, because after skipping, we could have reached the next problem from problem $ j $ simply by solving problems.\n\nUnder these conditions, it turns out that all the problems assigned to us, after the competition ends, are on some prefix of the set of problems (i.e., there exists some number $ i $ from $ 1 $ to $ n $ such that all problems with numbers $ j \\leq i $ were received by us, and problems with numbers $ j  \\gt  i $ were not received). This is indeed the case; let $ i $ be the maximum problem number that has been assigned to us. After this problem is assigned, we will not skip any more problems, as we have already proven that it is not beneficial, which means we will only solve problems and will solve all problems with numbers $ j  \\lt  i $ that have not been visited before.\n\nInstead of trying to maximize the total score for the solved problems, we will aim to minimize the total score for the skipped problems. We will incur a penalty equal to $ a_i $ for a skipped problem and $ 0 $ if we solve it. We know that the answer lies on some prefix, so now we want to determine the minimum penalty required to reach each problem.\n\nLet's solve the following subproblem. We are given the same problems, and the following two options if we are at problem $ i $:\n\n Pay a penalty of $ 0 $ and move to problem $ i - 1 $, if such a problem exists;\n\n Pay a penalty of $ a_i $ and move to problem $ b_i $.\n\nNow we are allowed to visit each problem as many times as we want. In this case, we can construct a weighted directed graph of the following form:\n\n The graph has $ n $ vertices, each vertex $ i $ corresponds to problem $ i $;\n\n For each $ i  \\gt  1 $, there is an edge of weight $ 0 $ from vertex $ i $ to vertex $ i - 1 $;\n\n For each $ i $, there is an edge of weight $ a_i $ from vertex $ i $ to vertex $ b_i $.\n\nThus, our task reduces to finding the shortest distance from vertex $ 1 $ to each vertex. Recall that the shortest distance guarantees that on the way to vertex $ i $, we visited each vertex at most once, which means that if we reached problem $ i $ with some penalty, we can solve all problems on the prefix up to $ i $ (inclusive), since the points for all skipped problems will be compensated by the penalty. Since we already know that the optimal answer lies on one of the prefixes, we need to know the total points for the problems for each prefix, which can be easily done using prefix sums. After that, from all the values of the difference between the prefix sum and the minimum penalty needed to reach vertex $ i $, we will choose the maximum across all prefixes $ i $, and this will be the answer.\n\nWe will find the shortest distance using Dijkstra's algorithm in $ O(n \\log n) $.\n\nPrefix sums are calculated in $ O(n) $.\n\nFinal asymptotic complexity: $ O(n \\log n) $.",
+    "solution_code": []
+  }
+}

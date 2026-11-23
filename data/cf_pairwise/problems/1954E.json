@@ -1,0 +1,56 @@
+{
+  "contest_id": 1954,
+  "index": "E",
+  "name": "Chain Reaction",
+  "rating": 2200,
+  "tags": [
+    "binary search",
+    "data structures",
+    "dsu",
+    "greedy",
+    "implementation",
+    "math",
+    "number theory"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1954E",
+  "url": "https://codeforces.com/problemset/problem/1954/E",
+  "contest_start_time": "2024-04-12T14:35:00+00:00",
+  "statement": {
+    "title": "E. Chain Reaction",
+    "time_limit": "3 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "There are $n$ monsters standing in a row. The $i$-th monster has $a_i$ health points.\n\nEvery second, you can choose one alive monster and launch a chain lightning at it. The lightning deals $k$ damage to it, and also spreads to the left (towards decreasing $i$) and to the right (towards increasing $i$) to alive monsters, dealing $k$ damage to each. When the lightning reaches a dead monster or the beginning/end of the row, it stops. A monster is considered alive if its health points are strictly greater than $0$.\n\nFor example, consider the following scenario: there are three monsters with health equal to $[5, 2, 7]$, and $k = 3$. You can kill them all in $4$ seconds:\n\n launch a chain lightning at the $3$-rd monster, then their health values are $[2, -1, 4]$;\n\n launch a chain lightning at the $1$-st monster, then their health values are $[-1, -1, 4]$;\n\n launch a chain lightning at the $3$-rd monster, then their health values are $[-1, -1, 1]$;\n\n launch a chain lightning at the $3$-th monster, then their health values are $[-1, -1, -2]$.\n\nFor each $k$ from $1$ to $\\max(a_1, a_2, \\dots, a_n)$, calculate the minimum number of seconds it takes to kill all the monsters.",
+    "input_spec": "The first line contains a single integer $n$ ($1 \\le n \\le 10^5$) — the number of monsters.\n\nThe second line contains $n$ integers $a_1, a_2, \\dots, a_n$ ($1 \\le a_i \\le 10^5$) — the health points of the $i$-th monster.",
+    "output_spec": "For each $k$ from $1$ to $\\max(a_1, a_2, \\dots, a_n)$, output the minimum number of seconds it takes to kill all the monsters.",
+    "note": null,
+    "samples": [
+      {
+        "input": "3\n5 2 7",
+        "output": "\n10 6 4 3 2 2 1 "
+      },
+      {
+        "input": "4\n7 7 7 7",
+        "output": "\n7 4 3 2 2 2 1 "
+      },
+      {
+        "input": "10\n1 9 7 6 2 4 7 8 1 3",
+        "output": "\n17 9 5 4 3 3 3 2 1 "
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 128421,
+    "url": "https://codeforces.com/blog/entry/128421",
+    "tutorial": "Let's solve the problem for a single $k$. We'll start with $k = 1$ for simplicity.\n\nThe first lightning can be launched at any monster, as it will always spread to all of them. We will continue launching lightnings until a monster dies. When one or more monsters die, the problem breaks down into several independent subproblems, because no lightning will pass through dead monsters. This means that there is no concept of \"minimum number of seconds\" — the answer does not depend on the choice of monsters to launch the lightnings.\n\nGreat, so how do we calculate this answer? The idea is as follows. We will attack the first monster until it dies. This will take $a_1$ seconds. We then move on to the second monster. If it has more health than the first one, we need to launch an additional $a_2 - a_1$ lightnings to kill it. Otherwise, it will already be dead. How much damage will the third monster receive in both cases? Let's say it has a lot of health. In the first case, it will receive $a_2$ damage, because all the lightnings will reach it. But in the second case, it will also receive $a_2$ damage, because the lightnings launched at the first monster after the death of the second one will not reach the third one. This means that we now need to compare the health of the second monster with the third one in the same way. And so on. This means that the $i$-th monster needs to be hit with $\\max(0, a_i - a_{i - 1})$ lightnings.\n\nThen the answer for $k = 1$ is equal to $a_1 + \\sum\\limits_{i = 2}^{n} \\max(0, a_i - a_{i - 1})$.\n\nHow to calculate the answer for any $k$? In fact, the difference is not very significant. It is sufficient to change the health of each monster from $a_i$ to $\\lceil \\frac{a_i}{k} \\rceil$, and the entire process described earlier will remain the same. Therefore, the answer for any $k$ is equal to $\\lceil \\frac{a_1}{k} \\rceil + \\sum\\limits_{i = 2}^{n} \\max(0, \\lceil \\frac{a_i}{k} \\rceil - \\lceil \\frac{a_{i - 1}}{k} \\rceil)$.\n\nTo further optimize this solution, another transformation is needed. Ideally, we would like each $a_i$ to contribute to the answer independently of other values. And this can almost be achieved. Notice that the maximum returns $0$ only if $a_i  \\lt  a_{i - 1}$ for any $k$, not just for $k = 1$. This may require proof, but it is quite obvious.\n\nThis means that the coefficient for $\\lceil \\frac{a_i}{k} \\rceil$ in the answer depends on two conditions:\n\n it is increased by $1$ if $i = 1$ or $a_i \\ge a_{i - 1}$;\n\n it is decreased by $1$ if $i  \\lt  n$ and $a_i  \\lt  a{i + 1}$.\n\nLet's call this coefficient for the $i$-th monster $c_i$. Therefore, we need to calculate $\\sum\\limits_{i = 1}^n c_i \\cdot \\lceil \\frac{a_i}{k} \\rceil$.\n\nThere are two ways to optimize the solution further.\n\nThe first option is to notice that $\\lceil \\frac{a_i}{k} \\rceil$ doesn't take a lot of different values for different $k$. More precisely, it is $O(\\sqrt{a_i})$. This can be shown as follows. Consider $\\lceil \\frac{a_i}{k} \\rceil = x$. Either $k \\le \\sqrt{a_i}$, or $x \\le \\sqrt{a_i}$. Therefore, $x$ takes no more than $2 \\sqrt{a_i}$ different values.\n\nThen the solution can be implemented as follows. For each $a_i$, we will identify all possible values that the rounding result takes. For each of them, we will find the range of $k$ for which the result is equal to that. And we will add the contribution of the $i$-th monster within this range of values to the result. This can be done using a difference array to achieve a complexity of $O(n \\cdot \\sqrt{A})$.\n\nThe second option is a bit smarter. Let's take another look at the formula for calculating the answer for a fixed $k$: $\\sum\\limits_{i = 1}^n c_i \\cdot \\lceil \\frac{a_i}{k} \\rceil$. Let's group the terms by equal values of $\\lceil \\frac{a_i}{k} \\rceil$. What do they look like? Numbers from $1$ to $k$ give the value $1$. Numbers from $k + 1$ to $2k$ give the value $2$, and so on. This means that for a certain $k$, there are $\\frac{A}{k}$ segments, on each of which we need to calculate the sum of $c_i$ for those $i$ for which $a_i$ fall into this segment. The total number of segments for all $k$ is $O(A \\log A)$. The complexity of the solution will then be $O(n + A \\log A)$.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n \n#define forn(i, n) for (int i = 0; i < int(n); i++)\n \nusing namespace std;\n \nint divup(int a, int b){\n    return (a + b - 1) / b;\n}\n \nint main() {\n    cin.tie(0);\n    ios::sync_with_stdio(false);\n    int n;\n    cin >> n;\n    vector<int> a(n);\n    forn(i, n) cin >> a[i];\n    int mx = *max_element(a.begin(), a.end());\n    vector<long long> ans(mx + 1);\n    forn(i, n){\n        int coef = 0;\n        if (i == 0 || a[i] > a[i - 1]) ++coef;\n        if (i + 1 < n && a[i] < a[i + 1]) --coef;\n        int r = a[i];\n        ans[r] += coef;\n        while (r > 0){\n            int val = divup(a[i], r);\n            int l = divup(a[i], val);\n            ans[l - 1] += coef * val;\n            ans[r] -= coef * val;\n            r = l - 1;\n        }\n    }\n    forn(i, mx) ans[i + 1] += ans[i];\n    forn(i, mx) cout << ans[i] << ' ';\n    cout << '\\n';\n    return 0;\n}",
+      "#include <bits/stdc++.h>\n \n#define forn(i, n) for (int i = 0; i < int(n); i++)\n \nusing namespace std;\n \nint main() {\n    cin.tie(0);\n    ios::sync_with_stdio(false);\n    int n;\n    cin >> n;\n    vector<int> a(n);\n    forn(i, n) cin >> a[i];\n    int mx = *max_element(a.begin(), a.end());\n    vector<long long> pr(mx + 1);\n    forn(i, n){\n        int coef = 0;\n        if (i == 0 || a[i] > a[i - 1]) ++coef;\n        if (i + 1 < n && a[i] < a[i + 1]) --coef;\n        pr[a[i]] += coef;\n    }\n    forn(i, mx) pr[i + 1] += pr[i];\n    for (int k = 1; k <= mx; ++k){\n        long long ans = 0;\n        for (int l = 1, val = 1; l <= mx; l += k, ++val)\n            ans += val * 1ll * (pr[min(mx, l + k - 1)] - pr[l - 1]);\n        cout << ans << ' ';\n    }\n    cout << '\\n';\n    return 0;\n}"
+    ]
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "contest_id": 1993,
+  "index": "B",
+  "name": "Parity and Sum",
+  "rating": 1100,
+  "tags": [
+    "constructive algorithms",
+    "greedy"
+  ],
+  "points": 1000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1993B",
+  "url": "https://codeforces.com/problemset/problem/1993/B",
+  "contest_start_time": "2024-08-04T14:35:00+00:00",
+  "statement": {
+    "title": "B. Parity and Sum",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "Given an array $a$ of $n$ positive integers.\n\nIn one operation, you can pick any pair of indexes $(i, j)$ such that $a_i$ and $a_j$ have distinct parity, then replace the smaller one with the sum of them. More formally:\n\n If $a_i  \\lt  a_j$, replace $a_i$ with $a_i + a_j$;\n\n Otherwise, replace $a_j$ with $a_i + a_j$.\n\nFind the minimum number of operations needed to make all elements of the array have the same parity.",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases.\n\nThe first line of each test case contains a single integer $n$ ($1 \\le n \\le 2 \\cdot 10^5$).\n\nThe second line contains $n$ integers $a_1, a_2, \\ldots, a_n$ ($1 \\le a_i \\le 10^9$) — the elements of array $a$.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, output a single integer — the minimum number of operations required.",
+    "note": "In the first test case, all integers already have the same parity. Therefore, no operation is needed.\n\nIn the third test case, we can perform two operations $(1, 2)$ and $(1, 3)$. The array $a$ transforms as follows: $a = [\\color{red}2, \\color{red}3, 4] \\longrightarrow [\\color{red}5, 3, \\color{red}4] \\longrightarrow [5, 3, 9]$.\n\nIn the fourth test case, an example of an optimal sequence of operations is $(1, 2)$, $(1, 3)$, $(1, 4)$, and $(1, 4)$. The array $a$ transforms as follows: $a = [\\color{red}3, \\color{red}2, 2, 8] \\longrightarrow [\\color{red}3, 5, \\color{red}2, 8] \\longrightarrow [\\color{red}3, 5, 5, \\color{red}8] \\longrightarrow [\\color{red}{11}, 5, 5, \\color{red}8] \\longrightarrow [11, 5, 5, 19]$.",
+    "samples": [
+      {
+        "input": "7\n5\n1 3 5 7 9\n4\n4 4 4 4\n3\n2 3 4\n4\n3 2 2 8\n6\n4 3 6 1 2 1\n6\n3 6 1 2 1 2\n5\n999999996 999999997 999999998 999999999 1000000000",
+        "output": "\n0\n0\n2\n4\n3\n3\n3"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 132185,
+    "url": "https://codeforces.com/blog/entry/132185",
+    "tutorial": "1993B - Parity and Sum\n\nHint 1\n\nFind a way to make all the elements even. Then odd.\n\nHint 2\n\nIn the worst case, the number of operations required is the number of even elements + 1. Why?\n\nSolution\n\nFirst, if all elements already have the same parity, we don't need to do perform any operation.\n\nNext, if the array contains both $even$ and $odd$ numbers. In this case, it is impossible to convert all elements to $even$ numbers.\n\nWhy?\n\nIf we apply an operation on:\n\ntwo $odd$ elements, one of them remains $odd$.\n\ntwo elements of distinct parities, one of them is replaced with their sum, which is an $odd$ number.\n\nThis implies even if we want to change an $odd$ element to $even$ number, it fails in both ways possible.\n\nSo we just want to convert all of them to $odd$ numbers. Now come the greedy part:\n\n$even + even = even \\longrightarrow$ it doesn't reduce the number of $even$ elements, so skip it.\n\n$odd + odd = even \\longrightarrow$ this creates another $even$ number, indeed very awful.\n\n$even + odd = odd \\longrightarrow$ this is great, but only if the sum replaces the $even$ one (which means $even \\lt odd$).\n\nLet's find the largest $odd$ element and call it $s$. Then traverse each $even$ elements $t$ in non-decreasing order and apply an operation on $s$ and $t$:\n\nIf $t \\lt s$, $s+t$ becomes largest odd number. Thus, we set $s := s+t$. This reduce the number of even element by $1$.\n\nIf $t \\gt s$, before we do this operation, we need to do another on $s$ and the largest even element to make $s$ the largest in the array. Note that this case only happens at most once.\n\nAs a result, the answer is the number of even elements (plus $1$ if the second case occurs).\n\nTime complexity: $O(n\\log n)$.\n\nCode (python)",
+    "solution_code": [
+      "t = int(input())\nfor _ in range(t):\n    n = int(input())\n    a = list(map(int, input().split()))\n\n    s = -1\n    v = []\n    for x in a:\n        if x%2 == 0:\n            v.append(x)\n        elif x > s:\n            s = x\n    v.sort()\n\n    if s == -1 or v == []:\n        print(0)\n        continue\n    \n    ans = len(v)\n    for t in v:\n        if t < s:\n            s += t\n        else:\n            ans += 1\n            break\n\n    print(ans)"
+    ]
+  }
+}

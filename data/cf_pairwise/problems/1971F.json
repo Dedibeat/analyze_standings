@@ -1,0 +1,46 @@
+{
+  "contest_id": 1971,
+  "index": "F",
+  "name": "Circle Perimeter",
+  "rating": 1600,
+  "tags": [
+    "binary search",
+    "brute force",
+    "dfs and similar",
+    "geometry",
+    "implementation",
+    "math"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1971F",
+  "url": "https://codeforces.com/problemset/problem/1971/F",
+  "contest_start_time": "2024-05-10T14:35:00+00:00",
+  "statement": {
+    "title": "F. Circle Perimeter",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "Given an integer $r$, find the number of lattice points that have a Euclidean distance from $(0, 0)$ greater than or equal to $r$ but strictly less than $r+1$.\n\nA lattice point is a point with integer coordinates. The Euclidean distance from $(0, 0)$ to the point $(x,y)$ is $\\sqrt{x^2 + y^2}$.",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\leq t \\leq 1000$) — the number of test cases.\n\nThe only line of each test case contains a single integer $r$ ($1 \\leq r \\leq 10^5$).\n\nThe sum of $r$ over all test cases does not exceed $10^5$.",
+    "output_spec": "For each test case, output a single integer — the number of lattice points that have an Euclidean distance $d$ from $(0, 0)$ such that $r \\leq d  \\lt  r+1$.",
+    "note": "The points for the first three test cases are shown below.",
+    "samples": [
+      {
+        "input": "6\n1\n2\n3\n4\n5\n1984",
+        "output": "\n8\n16\n20\n24\n40\n12504"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 129364,
+    "url": "https://codeforces.com/blog/entry/129364",
+    "tutorial": "There are many solutions to this problem, some of which involve binary search, but we will present a solution that doesn't use it. In fact, our solution is basically just brute force, but with some small observations that make it pass. See the implementation for more detail.\n\nFirst, we can only count points $(x,y)$ such that $x \\geq 0$ and $y  \\gt  0$; we can multiply by $4$ at the end to get points in all four quadrants, by symmetry.\n\nLet's store a variable $\\mathrm{height}$ initially equal to $r$. It will tell us the maximum $y$-value to look at.\n\nIterate through all values of $x$ from $0$ to $r$. For each $x$, decrease $\\mathrm{height}$ until the distance of $(x,\\mathrm{height})$ to the origin is $ \\lt  r+1$. Then, brute force all values of $y$ from $\\mathrm{height}$ downwards until we hit a point whose distance to the origin is $ \\lt  r$; at this point, we break and add the number of valid points to our total.\n\nNote that we essentially only look at points whose distance to the origin is between $r$ and $r+1$; that is, we brute force over all valid points.\n\nHow many valid points are there? Well, we can roughly estimate the number of points as the area of the region, which is $\\pi(r^2 - (r-1)^2) = 2\\pi r - \\pi$. This means we only visit $\\mathcal{O}(r)$ points per test case, which is fast enough.",
+    "solution_code": [
+      "#include <iostream>\nusing namespace std;\n \nvoid solve()\n{\n    long long r;\n    cin >> r;\n    long long height = r;\n    long long ans = 0;\n    for(long long i = 0; i <= r; i++)\n    {\n        while(i*i+height*height >= (r+1)*(r+1))\n        {\n            height--;\n        }\n        long long cop = height;\n        while(i*i+cop*cop >= r*r && cop > 0)\n        {\n            cop--;\n            ans++;\n        }\n    }\n    cout << ans*4 << endl;\n}\n \nint32_t main(){\n    int t = 1;\n    cin >> t;\n    while (t--) {\n        solve();\n    }\n}\n \n \n "
+    ]
+  }
+}

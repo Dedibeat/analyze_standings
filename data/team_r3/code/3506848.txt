@@ -1,0 +1,58 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define int long long
+#define F first 
+#define S second  
+#define all(v) (v).begin(), (v).end()
+#define hha(x) cout << #x << ": " << x << " ";
+#define hhal(x) cout << #x << ": " << x << endl;
+#define print(v) cout << #v << ": "; for(auto x : v) cout << x << " "; cout << endl;
+void solve()
+{
+    int n; cin >> n;
+    vector<int> a(n), b(n);
+    map<int, int> mpa, mpb;
+    for(int i = 0; i < n; i++)
+    {
+        cin >> a[i];
+        mpa[a[i]]++;
+    }
+    for(int i = 0; i < n; i++)
+    {
+        cin >> b[i];
+        mpb[b[i]]++;
+    }
+    vector<pair<int, int>> v(all(mpb));
+    sort(all(v), [&](pair<int, int> f, pair<int, int> s)
+    {
+        return f.F - f.S > s.F - s.S;
+    });
+    int cur = 0;
+    while(v.size())
+    {
+        auto [x, freq] = v.back();
+        int pos = x - freq;
+        if(pos <= cur)
+        {
+            cur += freq;
+            v.pop_back();
+        }
+        else break;
+    }
+    for(auto [x, freq] : v)
+    {
+        if(mpa[x] < freq)
+        {
+            cout << "NO\n";
+            return;
+        }
+        mpa[x] -= freq;
+    }
+    cout << "YES\n";
+}
+signed main()
+{
+    ios::sync_with_stdio(0); cin.tie(0); 
+    int t; cin >> t; while(t--)
+    solve();
+}

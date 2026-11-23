@@ -1,0 +1,42 @@
+{
+  "contest_id": 2075,
+  "index": "A",
+  "name": "To Zero",
+  "rating": 800,
+  "tags": [
+    "greedy",
+    "math"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2075A",
+  "url": "https://codeforces.com/problemset/problem/2075/A",
+  "contest_start_time": "2025-03-17T14:35:00+00:00",
+  "statement": {
+    "title": "A. To Zero",
+    "time_limit": "2 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "You are given two integers $n$ and $k$; $k$ is an odd number not less than $3$. Your task is to turn $n$ into $0$.\n\nTo do this, you can perform the following operation any number of times: choose a number $x$ from $1$ to $k$ and subtract it from $n$. However, if the current value of $n$ is even (divisible by $2$), then $x$ must also be even, and if the current value of $n$ is odd (not divisible by $2$), then $x$ must be odd.\n\nIn different operations, you can choose the same values of $x$, but you don't have to. So, there are no limitations on using the same value of $x$.\n\nCalculate the minimum number of operations required to turn $n$ into $0$.",
+    "input_spec": "The first line contains one integer $t$ ($1 \\le t \\le 10000$) — the number of test cases.\n\nEach test case consists of one line containing two integers $n$ and $k$ ($3 \\le k \\le n \\le 10^9$, $k$ is odd).",
+    "output_spec": "For each test case, output one integer — the minimum number of operations required to turn $n$ into $0$.",
+    "note": "In the first example from the statement, you can first subtract $5$ from $39$ to get $34$. Then subtract $6$ five times to get $4$. Finally, subtract $4$ to get $0$.\n\nIn the second example, you can subtract $3$ once, and then subtract $2$ three times.\n\nIn the third example, you can subtract $2$ three times.",
+    "samples": [
+      {
+        "input": "8\n39 7\n9 3\n6 3\n999967802 3\n5 5\n6 5\n999999999 3\n1000000000 3",
+        "output": "\n7\n4\n3\n499983901\n1\n2\n499999999\n500000000"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 140781,
+    "url": "https://codeforces.com/blog/entry/140781",
+    "tutorial": "If you subtract an odd number from an odd number, you will get an even number. And if you subtract an even number from an even number, you will also get an even number. Therefore, after each operation, we obtain an even number.\n\nAdditionally, we can always subtract the maximum number that we can. If the result of the subtraction is less than $0$, we can simply use a smaller value of $x$ in the last operation.\n\nBased on this, we can write the following solution: initially, if $n$ is odd, subtract $k$ from it to make it even (or do nothing if it is already even). Then subtract $(k-1)$ from the resulting $n$ until we reach $0$ or a negative number.\n\nHowever, we may have to subtract $(k-1)$ from $n$ for a long time. Therefore, let's speed this up. We need to find the minimum number of operations $m$ such that $m(k-1) \\ge n$. That is, $m$ is $\\lceil \\frac{n}{k-1} \\rceil$ (the result of dividing $n$ by $(k-1)$, rounded up).\n\nYou can simply calculate $\\lceil \\frac{n}{k-1} \\rceil$ using double precision floating-point numbers (type double) and round it using some standard function like ceil; in this problem, you won't have issues with calculation accuracy. However, with large values of $n$ and $k$, you may get an incorrect answer due to precision errors, so it's better to divide $n$ by $(k-1)$ with rounding up using integers. To divide the number $x$ by the number $y$ without using floating-point numbers, you can use one of two methods:\n\n either perform integer division of $x$ by $y$ rounding down (this is standard integer division), and then add $1$ to the answer if $x \\bmod y \\ne 0$;\n\n or divide $(x+y-1)$ by $y$ rounding down; this will automatically increase the answer by $1$ compared to dividing $x$ by $y$ if $x$ is not divisible by $y$.",
+    "solution_code": [
+      "t = int(input())\nfor i in range(t):\n    n, k = map(int, input().split())\n    ans = 0\n    if n % 2 == 1:\n        n -= k\n        ans = 1\n    k -= 1\n    ans += (n + k - 1) // k\n    print(ans)"
+    ]
+  }
+}

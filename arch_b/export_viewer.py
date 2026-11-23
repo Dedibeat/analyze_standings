@@ -1,16 +1,9 @@
-"""Build the Architecture B viewer: survival ratings on the Codeforces scale.
+"""Build the ratings viewer with the released hierarchical binary-with-time fit.
 
     python -m arch_b.export_viewer
 
-Runs the UCup-anchored **survival** fit over the filtered tagged.json and bundles
-per-contest problem difficulties and team abilities/performances into
-output/ratings_viewer_b.html. Self-contained -- opens from disk, no server.
-
-Problem difficulties are the shipped DE ratings from
-output/problem_ratings_calibrated.json (``arch_b.calibrate.problem_cf``; no
-uncertainty estimate). DE needs per-problem features, so team theta/performance
-use the scalar gym-shape + affine map instead (an extrapolation, not separately
-validated). The two axes therefore no longer share one map.
+Problems, team abilities and rank-derived performances share the released CF map.
+Writes the self-contained output/ratings_viewer_b.html.
 """
 
 import json
@@ -21,9 +14,8 @@ import numpy as np
 from arch_a.elo import HI, LO
 from arch_a.fixedpoint import _performance_ratings
 from arch_a.load import _max_solve_seconds, dedupe_contests, row_solved_any, team_key
-from . import survival
-from .joint import TAGGED, estimate_joint
-from .calibrate import _anchors, _gym_shape, problem_cf
+from .joint import TAGGED
+from .calibrate import problem_cf
 from .run import MIN_SOLVE_HOURS
 
 OUT_DIR = os.path.join(os.path.dirname(__file__), os.pardir, "output")
@@ -31,26 +23,14 @@ TEMPLATE = os.path.join(os.path.dirname(__file__), "viewer_template.html")
 
 
 def build_data():
-    ds, theta, b, _, uf = estimate_joint(
-        fit_fn=survival.fit, min_solve_hours=MIN_SOLVE_HOURS, verbose=False)
-
+    from .shipped import shipped_fit, to_cf
+    from .export_virtual_calc import _rank_official_within_event
+    ds, theta, b, _, uf = shipped_fit()
     rows_by_contest = [np.where(ds.contest_of_row == ci)[0] for ci in range(len(ds.contests))]
     rho = _performance_ratings(theta, ds, rows_by_contest)
+    rho = _rank_official_within_event(theta, ds, rows_by_contest, rho)
 
-    # affine map our-difficulty -> Codeforces points, fit on the CF-mirrored anchors
-    recs = [{"contest_id": int(cid), "problem_label": lab, "problem_name": name,
-             "difficulty": float(b[p])}
-            for p, (cid, lab, pid, name) in enumerate(ds.problems)]
-    our, cf, _ = _anchors(recs)
-    shape = _gym_shape(recs)
-    if shape is None:
-        shape = lambda x: np.asarray(x, float)  # noqa: E731
-    slope, intercept = np.polyfit(shape(our), cf, 1)
-    to_cf = lambda x: float(np.clip(  # noqa: E731
-        slope * shape(np.asarray([x], float))[0] + intercept, LO, HI))
-
-    # Problem difficulties are the shipped DE ratings (calibrate.py), which
-    # carry no uncertainty estimate; to_cf above is only for team numbers.
+    # Problems and teams share the released hierarchical-with-time scale.
     cf_of = problem_cf(ds.problems)
     prob_by_contest = {}
     for p, (cid, label, pid, name) in enumerate(ds.problems):

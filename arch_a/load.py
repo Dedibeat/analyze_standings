@@ -36,7 +36,7 @@ DATA_PATH = os.path.join(os.path.dirname(__file__), os.pardir, "data", "ucup_s4.
 
 # ICPC season vs calendar year: continental *Championships* and the World Finals
 # are held the calendar year *after* the regional season they belong to (see the
-# season map in details.md), so their season is ``year - 1``; everything else is
+# season map in docs/journal/), so their season is ``year - 1``; everything else is
 # its calendar year. Used only when ``season_key`` separates teams by season.
 _CHAMPIONSHIP = re.compile(r"championship|world final", re.I)
 
@@ -99,18 +99,31 @@ def _roster_token(members, season=None):
     return None
 
 
+# Boards whose official ($DEFAULT) rows carry solve times in minutes, not seconds
+# (Rocky Mountain 2023: at most 295 there, against 3297..17302 in the other rows).
+MINUTE_BOARDS = {1483}
+
+
+def _solved(cell):
+    """A solve inside the contest window. QOJ lists a few solves from before the
+    start (negative time); they are not contest results."""
+    return bool(cell.get("solved")) and (cell.get("time_seconds") or 0) >= 0
+
+
 def row_solved_any(standing, problem_labels=None):
-    """True if this row solved a problem included in the fit.
+    """True if this row belongs in the fit: it solved a problem, listed or not.
 
     Some QOJ standings contain labels that are absent from the contest's parsed
-    problem list.  Those cells cannot be modeled without inventing problem
-    metadata, so they must not by themselves retain a row as a solved team.
+    problem list.  Those cells cannot be modeled, but a row that solved only
+    such problems did take part, so it stays as a failure of the listed ones.
+    Requiring a *listed* solve selected rows on the outcome: a board listing one
+    problem kept exactly its solvers (CCPC Harbin 2025 M read 44 of 44 solved
+    instead of 44 of 654). ``problem_labels`` is the board's listed labels; a
+    board that lists none has nothing to fit and keeps no row.
     """
-    problems = standing.get("problems") or {}
-    if problem_labels is None:
-        return any(p.get("solved") for p in problems.values())
-    return any(p.get("solved") for label, p in problems.items()
-               if label in problem_labels)
+    if problem_labels is not None and not problem_labels:
+        return False
+    return any(_solved(p) for p in (standing.get("problems") or {}).values())
 
 
 class _UnionFind:
@@ -167,12 +180,17 @@ def member_identity(raw, season_by_cid=None):
     (``_trusted_names``), its isolated ``dj:`` key is unioned to a ``tn:<name>``
     node so the name links its appearances across contests (like stable ids,
     names stay season-agnostic).
+
+    Rosters sharing two members are unioned last, in file order, and a link is
+    refused when its two components already played a common contest.
     """
     trusted = _trusted_names(raw)
     uf = _UnionFind()
-    pair_root = {}  # (member-pair, season) -> first roster token carrying it
+    pair_links = []     # (member-pair, season, roster token) in file order
+    contests_of = {}    # row identity node -> contests it played
     for c in raw:
-        season = None if season_by_cid is None else season_by_cid[c["contest_id"]]
+        cid = c["contest_id"]
+        season = None if season_by_cid is None else season_by_cid[cid]
         for s in c["standings"]:
             tid = s["team_id"]
             stable = None if tid.startswith("$DEFAULT") else "id:" + tid
@@ -182,20 +200,32 @@ def member_identity(raw, season_by_cid=None):
             if stable is None and roster is None:
                 nm = _norm_member(s.get("team_name") or "")
                 if nm in trusted:
-                    uf.union(f"dj:{c['contest_id']}::{tid}", "tn:" + nm)
+                    uf.union(f"dj:{cid}::{tid}", "tn:" + nm)
             if roster is not None:
                 uf.find(roster)
                 if stable is not None:
                     uf.union(stable, roster)
-                # Rosters sharing >=2 members are the same team whose third
-                # member was respelled or substituted: an exact-token identity
-                # would split them (measured: ~3.7k such near-miss pairs).
                 mem = sorted({_norm_member(m) for m in s["members"]})
-                for pair in combinations(mem, 2):
-                    key = (pair, season)
-                    first = pair_root.setdefault(key, roster)
-                    if first != roster:
-                        uf.union(first, roster)
+                pair_links.extend((pair, season, roster) for pair in combinations(mem, 2))
+            node = roster or stable or f"dj:{cid}::{tid}"
+            contests_of.setdefault(node, set()).add(cid)
+    # Rosters sharing >=2 members are the same team whose third member was
+    # respelled or substituted: an exact-token identity would split them
+    # (measured: ~3.7k such near-miss pairs). Unioned transitively, though,
+    # these links chain a school's successive rosters into one team that
+    # plays up to four rows of one contest. Two rows of one contest are
+    # never one team, so a link whose two sides share a contest is refused.
+    played = {}
+    for node, cids in contests_of.items():
+        played.setdefault(uf.find(node), set()).update(cids)
+    pair_root = {}  # (member-pair, season) -> first roster token carrying it
+    for pair, season, roster in pair_links:
+        first = pair_root.setdefault((pair, season), roster)
+        ra, rb = uf.find(first), uf.find(roster)
+        if ra == rb or played.get(ra, set()) & played.get(rb, set()):
+            continue
+        uf.union(ra, rb)
+        played[rb] = played.pop(ra, set()) | played.get(rb, set())
     # --- WF top-team linking ---
     # For each (university, season), find the best-ranked team that has a
     # roster, then link WF teams (which carry the same affiliation but no
@@ -299,7 +329,7 @@ class Dataset:
     # Observed competitor--problem cells, in COO form (row-major: sorted by row,
     # then by problem).  A cell is observed exactly when the problem belongs to
     # the row's contest, including no-attempt cells, which are censored
-    # non-solves (see the solve_mask decision in details.md).  The dense
+    # non-solves (see the solve_mask decision in docs/journal/).  The dense
     # (n_rows, n_problems) matrices this replaces were 99.65% empty -- every
     # consumer either flattened them straight back to these arrays
     # (``model._observations``) or reduced them per problem (``solved_count``).
@@ -328,10 +358,11 @@ def load(path=DATA_PATH, uf=None, season_key=False, min_solve_hours=None):
     needs the UCup and tagged datasets to agree on who is who). When omitted, the
     union-find is built from this call's own rows.
 
-    Standing rows that solved no listed problem are dropped (``row_solved_any``):
-    labels absent from a contest's parsed problem list are not part of the fit.
+    Standing rows that solved nothing are dropped (``row_solved_any``). Labels
+    absent from a contest's parsed problem list are not part of the fit, but a
+    row that solved only such problems is kept as a failure of the listed ones.
     A team's contest count ``N_t`` is therefore the number of contests where it
-    solved something in the modeled problem set. ``uf`` is still built over
+    solved something. Solve times are in seconds (``MINUTE_BOARDS`` converted). ``uf`` is still built over
     *all* rows, so identity links carried only by a zero-solve row are preserved.
 
     ``season_key`` separates recurring rosters by ICPC season (``season_of``), so a
@@ -421,6 +452,7 @@ def load(path=DATA_PATH, uf=None, season_key=False, min_solve_hours=None):
             rank_of_row.append(int(s["rank"]))
             participation_of_row.append((cid, source_row))
             official_of_row.append(str(s.get("team_id") or "").startswith("$DEFAULT"))
+            unit = 60 if cid in MINUTE_BOARDS and official_of_row[-1] else 1
 
             y = np.zeros(len(block), dtype=bool)
             tau = np.full(len(block), np.nan, dtype=np.float32)
@@ -431,11 +463,11 @@ def load(path=DATA_PATH, uf=None, season_key=False, min_solve_hours=None):
                     continue  # standings problem not in problem list; skip defensively
                 k = slot[col]
                 wrong[k] = int(pdata.get("wrong_attempts", 0))
-                if pdata.get("solved"):
+                if _solved(pdata):
                     y[k] = True
                     t = pdata.get("time_seconds")
                     assert t is not None, f"solved cell without time in contest {cid}"
-                    tau[k] = t
+                    tau[k] = t * unit
             row_chunks.append(np.full(len(block), ri, dtype=np.int64))
             prob_chunks.append(block)
             y_chunks.append(y)

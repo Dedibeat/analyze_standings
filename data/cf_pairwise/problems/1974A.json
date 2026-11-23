@@ -1,0 +1,42 @@
+{
+  "contest_id": 1974,
+  "index": "A",
+  "name": "Phone Desktop",
+  "rating": 800,
+  "tags": [
+    "greedy",
+    "math"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1974A",
+  "url": "https://codeforces.com/problemset/problem/1974/A",
+  "contest_start_time": "2024-05-20T14:35:00+00:00",
+  "statement": {
+    "title": "A. Phone Desktop",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "Little Rosie has a phone with a desktop (or launcher, as it is also called). The desktop can consist of several screens. Each screen is represented as a grid of size $5 \\times 3$, i.e., five rows and three columns.\n\nThere are $x$ applications with an icon size of $1 \\times 1$ cells; such an icon occupies only one cell of the screen. There are also $y$ applications with an icon size of $2 \\times 2$ cells; such an icon occupies a square of $4$ cells on the screen. Each cell of each screen can be occupied by no more than one icon.\n\nRosie wants to place the application icons on the minimum number of screens. Help her find the minimum number of screens needed.",
+    "input_spec": "The first line of the input contains $t$ ($1 \\leq t \\leq 10^4$) — the number of test cases.\n\nThe first and only line of each test case contains two integers $x$ and $y$ ($0 \\leq x, y \\leq 99$) — the number of applications with a $1 \\times 1$ icon and the number of applications with a $2 \\times 2$ icon, respectively.",
+    "output_spec": "For each test case, output the minimal number of required screens on a separate line.",
+    "note": "The solution for the first test case can look as follows:\n  Blue squares represent empty spaces for icons, green squares represent $1 \\times 1$ icons, red squares represent $2 \\times 2$ icons\nThe solution for the third test case can look as follows:",
+    "samples": [
+      {
+        "input": "11\n1 1\n7 2\n12 4\n0 3\n1 0\n8 1\n0 0\n2 0\n15 0\n8 2\n0 9",
+        "output": "\n1\n1\n2\n2\n1\n1\n0\n1\n1\n2\n5"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 129686,
+    "url": "https://codeforces.com/blog/entry/129686",
+    "tutorial": "Note that on one screen we can put no more than two $2 \\times 2$ icons. Thus, we need at least $Z = \\lceil y / 2 \\rceil$ screens. Then, we check how many $1 \\times 1$ icons we can put on these screens: $15 \\cdot Z - 4 \\cdot y$. The $1 \\times 1$ icons left we need to put on additional screens.",
+    "solution_code": [
+      "nt = int(input())\n \nfor t in range(nt):\n    line = input()\n    x, y = [int(q) for q in line.split()]\n    mm = (y + 1) // 2\n    x -= (mm * 5 * 3 - y * 2 * 2)\n    x = max(x, 0)\n    mm += (x + 5 * 3 - 1) // (5 * 3)\n    print(mm)"
+    ]
+  }
+}

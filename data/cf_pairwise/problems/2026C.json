@@ -1,0 +1,46 @@
+{
+  "contest_id": 2026,
+  "index": "C",
+  "name": "Action Figures",
+  "rating": 1500,
+  "tags": [
+    "binary search",
+    "brute force",
+    "constructive algorithms",
+    "data structures",
+    "greedy",
+    "implementation"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2026C",
+  "url": "https://codeforces.com/problemset/problem/2026/C",
+  "contest_start_time": "2024-10-28T14:35:00+00:00",
+  "statement": {
+    "title": "C. Action Figures",
+    "time_limit": "2.5 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "There is a shop that sells action figures near Monocarp's house. A new set of action figures will be released shortly; this set contains $n$ figures, the $i$-th figure costs $i$ coins and is available for purchase from day $i$ to day $n$.\n\nFor each of the $n$ days, Monocarp knows whether he can visit the shop.\n\nEvery time Monocarp visits the shop, he can buy any number of action figures which are sold in the shop (of course, he cannot buy an action figure that is not yet available for purchase). If Monocarp buys at least two figures during the same day, he gets a discount equal to the cost of the most expensive figure he buys (in other words, he gets the most expensive of the figures he buys for free).\n\nMonocarp wants to buy exactly one $1$-st figure, one $2$-nd figure, ..., one $n$-th figure from the set. He cannot buy the same figure twice. What is the minimum amount of money he has to spend?",
+    "input_spec": "The first line contains one integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases.\n\nEach test case consists of two lines:\n\n the first line contains one integer $n$ ($1 \\le n \\le 4 \\cdot 10^5$) — the number of figures in the set (and the number of days);\n\n the second line contains a string $s$ ($|s| = n$, each $s_i$ is either 0 or 1). If Monocarp can visit the shop on the $i$-th day, then $s_i$ is 1; otherwise, $s_i$ is 0.\n\nAdditional constraints on the input:\n\n in each test case, $s_n$ is 1, so Monocarp is always able to buy all figures during the $n$-th day;\n\n the sum of $n$ over all test cases does not exceed $4 \\cdot 10^5$.",
+    "output_spec": "For each test case, print one integer — the minimum amount of money Monocarp has to spend.",
+    "note": "In the first test case, Monocarp buys the $1$-st figure on the $1$-st day and spends $1$ coin.\n\nIn the second test case, Monocarp can buy the $1$-st and the $3$-rd figure on the $3$-rd day, the $2$-nd and the $4$-th figure on the $4$-th day, and the $5$-th and the $6$-th figure on the $6$-th day. Then, he will spend $1+2+5=8$ coins.\n\nIn the third test case, Monocarp can buy the $2$-nd and the $3$-rd figure on the $3$-rd day, and all other figures on the $7$-th day. Then, he will spend $1+2+4+5+6 = 18$ coins.",
+    "samples": [
+      {
+        "input": "4\n1\n1\n6\n101101\n7\n1110001\n5\n11111",
+        "output": "\n1\n8\n18\n6"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 135680,
+    "url": "https://codeforces.com/blog/entry/135680",
+    "tutorial": "Consider the following solution: we iterate on the number of figures we get for free (let this number be $k$), and for each value of $k$, we try to check if it is possible to get $k$ figures for free, and if it is, find the best figures which we get for free.\n\nFor a fixed value of $k$, it is optimal to visit the shop exactly $k$ times: if we visit the shop more than $k$ times, then during some visits, we buy only one figure — instead of that, we can buy figures from these visits during the last day, so there are no visits during which we buy only one figure.\n\nIt is quite obvious that if we want to visit the shop $k$ times, we always can do it during the last $k$ days with $s_i=1$. Let the last $k$ days with $s_i=1$ be $x_1, x_2, \\dots, x_k$ (from right to left, so $x_1  \\gt  x_2  \\gt  \\dots  \\gt  x_k$). It is impossible to get a total discount of more than $(x_1 + x_2 + \\dots + x_k)$ if we visit the shop only $k$ times, since when we visit the shop on day $i$, the maximum discount we can get during that day is $i$.\n\nNow suppose we can't get the figures $\\{x_1, x_2, \\dots, x_k\\}$ for free, but we can get some other set of figures $\\{y_1, y_2, \\dots, y_k\\}$ ($y_1  \\gt  y_2  \\gt  \\dots  \\gt  y_k$) for free. Let's show that this is impossible. Consider the first $j$ such that $x_j \\ne y_j$:\n\n if $y_j  \\gt  x_j$, it means that on some suffix of days (from day $y_j$ to day $n$), we visit the shop $j$ times. But since $x_1, x_2, \\dots, x_{j-1}, x_j$ are the last $j$ days when we visit the shop, then we can't visit the shop $j$ times from day $y_j$ to day $n$, so this is impossible;\n\n otherwise, if $y_j  \\lt  x_j$, it means that during the day $x_j$, we get some figure $f$ for free, but it is not $x_j$. Let's get the figure $x_j$ for free during that day instead (swap the figures $f$ and $x_j$). Using a finite number of such transformations, we can show that we can get the figures $\\{x_1, x_2, \\dots, x_k\\}$ for free.\n\nNow, for a fixed value of $k$, we know which figures we should get for free. And if we increase the value of $k$, our total discount increases as well. Let's find the greatest possible $k$ with binary search, and we will get a solution working in $O(n \\log n)$.\n\nThe only thing that's left is checking that some value of $k$ is achievable. To do it, we can mark the $k$ figures we try to get for free, and simulate the process, iterating the figures from left to right. If on some prefix, the number of figures we want to get for free is greater than the number of figures we pay for, then it is impossible, since we can't find a \"match\" for every figure we want to get for free.",
+    "solution_code": [
+      "#include<bits/stdc++.h>\n \nusing namespace std;\n \nconst int N = 400043;\nchar buf[N];\n \nbool can(const string& s, int k)\n{\n    int n = s.size();\n    vector<int> used(n);\n    for(int i = n - 1; i >= 0; i--)\n        if(k > 0 && s[i] == '1')\n        {\n            used[i] = 1;\n            k--;\n        }\n    int cur = 0;\n    for(int i = 0; i < n; i++)\n        if(used[i])\n        {\n            cur--;\n            if(cur < 0) return false;\n        }\n        else cur++;\n    return true;\n}   \n \nvoid solve()\n{\n    int n;\n    scanf(\"%d\", &n);\n    scanf(\"%s\", buf);                         \n    if(n == 1)\n    {\n        puts(\"1\");\n        return;\n    }\n    string s = buf;\n    int count_1 = 0;\n    for(auto x : s) if (x == '1') count_1++;\n    int l = 1;\n    int r = count_1 + 1;\n    while(r - l > 1)\n    {\n        int mid = (l + r) / 2;\n        if(can(s, mid))\n            l = mid;\n        else\n            r = mid;\n    }\n    long long ans = 0;\n    for(int i = n - 1; i >= 0; i--)\n        if(s[i] == '1' && l > 0)\n            l--;\n        else\n            ans += (i + 1);\n    printf(\"%lld\\n\", ans);\n}\n \nint main()\n{\n    int t;\n    scanf(\"%d\", &t);\n    for(int i = 0; i < t; i++)\n        solve();\n}"
+    ]
+  }
+}

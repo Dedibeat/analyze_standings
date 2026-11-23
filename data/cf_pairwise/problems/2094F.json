@@ -1,0 +1,41 @@
+{
+  "contest_id": 2094,
+  "index": "F",
+  "name": "Trulimero Trulicina",
+  "rating": 1600,
+  "tags": [
+    "constructive algorithms"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2094F",
+  "url": "https://codeforces.com/problemset/problem/2094/F",
+  "contest_start_time": "2025-04-13T15:35:00+00:00",
+  "statement": {
+    "title": "F. Trulimero Trulicina",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Trulicina gives you integers $n$, $m$, and $k$. It is guaranteed that $k\\geq 2$ and $n\\cdot m\\equiv 0 \\pmod{k}$.\n\nOutput a $n$ by $m$ grid of integers such that each of the following criteria hold:\n\n Each integer in the grid is between $1$ and $k$, inclusive.\n\n Each integer from $1$ to $k$ appears an equal number of times.\n\n No two cells that share an edge have the same integer.\n\nIt can be shown that such a grid always exists. If there are multiple solutions, output any.",
+    "input_spec": "The first line contains an integer $t$ ($1 \\leq t \\leq 10^4$) — the number of test cases.\n\nThe first line of each test case contains three integers $n$, $m$, and $k$ ($2 \\leq n\\cdot m\\leq 2\\cdot 10^5, 2\\leq k\\leq n\\cdot m, n\\cdot m\\equiv 0 \\pmod{k})$.\n\nIt is guaranteed that the sum of $n\\cdot m$ over all test cases does not exceed $2\\cdot 10^5$.",
+    "output_spec": "For each test case, output $n$ lines, each containing $m$ integers that satisfy the criteria. If there are multiple solutions, output any.",
+    "note": null,
+    "samples": [
+      {
+        "input": "3\n2 2 2\n3 4 6\n5 5 25",
+        "output": "\n1 2\n2 1\n1 6 1 6\n2 5 2 5\n3 4 3 4\n17 2 12 25 14\n3 1 6 19 11\n8 20 23 24 4\n9 10 5 13 21\n22 7 15 18 16"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 141796,
+    "url": "https://codeforces.com/blog/entry/141796",
+    "tutorial": "2094F - Trulimero Trulicina\n\nProblem Credits: Proof_by_QED\n\nHint\n\nWhat would happen if we tried outputting the numbers $1, \\dots, k, 1, \\dots, k, \\dots$ in the natural reading order? For example, for $n=3$, $m=4$, and $k=6$, we would output the following:\n\n 1  2  3  4\n\n 5  6  1  2\n\n 3  4  5  6\n\nIn which cases does this fail?\n\nAnswer\n\nThis fails if and only if $m$ is a multiple of $k$, because we see that horizontally adjacent elements differ by $1\\pmod k$ and vertically adjacent elements differ by $m\\pmod k$. Now try to resolve this case.\n\nSolution\n\nThere are many working constructions for this problem; one of them is to case on whether or not $m$ is a multiple of $k$.\n\nSuppose $m$ is not a multiple of $k$. For example, consider the second sample, where $n=3$, $m=4$, and $k=6$. Then we can output the numbers $1, \\dots, k, 1, \\dots, k, \\dots$ in the natural reading order, as follows:\n\n 1  2  3  4\n\n 5  6  1  2\n\n 3  4  5  6\n\nand we see that any two horizontally adjacent elements differ by $1\\pmod k$, whereas any two vertically adjacent elements differ by $m\\pmod k$, so no two adjacent elements are the same, as desired.\n\nNow, suppose $m$ is a multiple of $k$. For example, consider the case $n=4$, $m=6$, and $k=3$. Suppose we were to try the above strategy, then we get:\n\n 1  2  3  1  2  3\n\n 1  2  3  1  2  3\n\n 1  2  3  1  2  3\n\n 1  2  3  1  2  3\n\nwhich doesn't work, since vertically adjacent elements are the same. We can fix this by cyclically shifting every other row as follows:\n\n 1  2  3  1  2  3\n\n 2  3  1  2  3  1\n\n 1  2  3  1  2  3\n\n 2  3  1  2  3  1\n\nand we see that any two horizontally adjacent elements differ by $1\\pmod k$ as before, whereas any two vertically adjacent elements also differ by $1\\pmod k$, so no two adjacent elements are the same, as desired.\n\nCode\n\nRate The Problem!\n\n Good Problem\n\n Okay Problem\n\n Bad Problem\n\n Didn't Solve",
+    "solution_code": [
+      "import sys\ninput = sys.stdin.readline\nfor _ in range(int(input())):\n    n,m,k = map(int,input().split())\n    LAST = [-1 for _ in range(m)]\n    for i in range(n):\n        shift = False\n        CUR = [0 for _ in range(m)]\n        for j in range(m):\n            elm = ((i * m + j) % k) + 1\n            if elm == LAST[j]:\n                shift = True\n            CUR[j] = elm\n        if shift:\n            CUR = [CUR[(j+1)%m] for j in range(m)]\n        print(*CUR)\n        LAST = CUR"
+    ]
+  }
+}

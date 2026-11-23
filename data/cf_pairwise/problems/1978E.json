@@ -1,0 +1,45 @@
+{
+  "contest_id": 1978,
+  "index": "E",
+  "name": "Computing Machine",
+  "rating": 2000,
+  "tags": [
+    "brute force",
+    "data structures",
+    "dp",
+    "greedy",
+    "implementation"
+  ],
+  "points": 2000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1978E",
+  "url": "https://codeforces.com/problemset/problem/1978/E",
+  "contest_start_time": "2024-06-16T09:05:00+00:00",
+  "statement": {
+    "title": "E. Computing Machine",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Sasha has two binary strings $s$ and $t$ of the same length $n$, consisting of the characters 0 and 1.\n\nThere is also a computing machine that can perform two types of operations on binary strings $a$ and $b$ of the same length $k$:\n\n If $a_{i} = a_{i + 2} =$ 0, then you can assign $b_{i + 1} :=$ 1 ($1 \\le i \\le k - 2$).\n\n If $b_{i} = b_{i + 2} =$ 1, then you can assign $a_{i + 1} :=$ 1 ($1 \\le i \\le k - 2$).\n\nSasha became interested in the following: if we consider the string $a=s_ls_{l+1}\\ldots s_r$ and the string $b=t_lt_{l+1}\\ldots t_r$, what is the maximum number of 1 characters in the string $a$ that can be obtained using the computing machine. Since Sasha is very curious but lazy, it is up to you to answer this question for several pairs $(l_i, r_i)$ that interest him.",
+    "input_spec": "Each test consists of multiple test cases. The first line contains a single integer $t$ ($1 \\le t \\le 10^{4}$) — the number of test cases. The description of the test cases follows.\n\nThe first line of each test case contains a single integer $n$ ($1 \\le n \\le 2 \\cdot 10^5$) — the length of the strings $s$ and $t$.\n\nThe second line of each test case contains a binary string $s$ of length $n$, consisting of the characters 0 and 1.\n\nThe third line of each test case contains a binary string $t$ of length $n$, consisting of the characters 0 and 1.\n\nThe fourth line of each test case contains a single integer $q$ ($1 \\le q \\le 2 \\cdot 10^5$) — the number of queries.\n\nThe $i$-th of the following lines contains two integers $l_{i}$ and $r_{i}$ ($1 \\le l_{i} \\le r_{i} \\le n$) — the boundaries of the $i$-th pair of substrings that interest Sasha.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $2 \\cdot 10^5$ and the sum of $q$ over all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, output $q$ integers — the answers to all queries.",
+    "note": "In the first test case:\n\n In the first query, $a =$ 11, so the maximum number of 1 characters is $2$.\n\n In the second query, $a =$ 111, so the maximum number of 1 characters is $3$.\n\nIn the second test case:\n\n In the first query, $a =$ 101 and $b =$ 110. No operations can be performed, so the maximum number of 1 characters is $2$.\n\n In the second query, $a =$ 1010 and $b =$ 1101. Since $a_2 = a_4 =$ 0, we can assign $b_3 :=$ 1. Now $b_1 = b_3 =$ 1, so we can assign $a_2 :=$ 1. The string $a$ becomes 1110, so the maximum number of 1 characters is $3$.",
+    "samples": [
+      {
+        "input": "3\n4\n1111\n0000\n2\n1 2\n2 4\n4\n1010\n1101\n2\n1 3\n1 4\n6\n010101\n011010\n5\n2 3\n1 6\n2 5\n4 4\n3 6",
+        "output": "\n2\n3\n2\n3\n1\n4\n3\n1\n2"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 130527,
+    "url": "https://codeforces.com/blog/entry/130527",
+    "tutorial": "Notice that it is advantageous to perform only operations of the first type first, and then only operations of the second type. Perform all possible operations of the first type on the string $t$ and save it in $t'$. Perform all possible operations of the second type on the string $s$, using $t'$, and save it in $s'$. Calculate the prefix sums on the string $s'$. Let $len$ be the length of the query range. The answer to queries with small length ranges ($len  \\lt  5$) can be computed by simulating the proposed process. For longer strings, it can be guaranteed that in the string $a$ with the maximum number of 1 characters, $a_{3}a_{4}\\ldots a_{len - 2}$ will match the characters $s'_{3}s'_{4}\\ldots s'_{len - 2}$, their count can be found using prefix sums. Separately check if $a_{1}$, $a_{2}$, $a_{len - 1}$, $a_{len}$ can become 1.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\nusing namespace std;\n \nint main () {\n  ios_base::sync_with_stdio(0); cin.tie(0);\n  int T;\n  cin >> T;\n  while (T--) {\n    int n;\n    string s, t;\n    cin >> n >> s >> t;\n    auto get_range = [&] (int i) {\n      if (s[i] == '1') return make_pair(i, i);\n      int l = -1, r = -1;\n      if (i > 0 && t[i-1] == '1') l = i-1;\n      else if (i > 1 && t[i-1] == '0' && s[i-2] == '0') l = i-2;\n      if (i+1 < n && t[i+1] == '1') r = i+1;\n      else if (i+2 < n && t[i+1] == '0' && s[i+2] == '0') r = i+2;\n      if (l == -1) r = -1;\n      if (r == -1) l = -1;\n      return make_pair(l, r);\n    };\n \n    vector<int> pref(n+1);\n    for (int i = 0; i < n; i++) pref[i+1] = pref[i] + (get_range(i).first != -1);\n \n    int q;\n    cin >> q;\n    while (q--) {\n      int l, r;\n      cin >> l >> r;\n      int ans = 0;\n      if (r-l <= 5) {\n        for (int i = l-1; i < r; i++) {\n          auto [ll, rr] = get_range(i);\n          if (ll >= l-1 && rr < r) ans++;\n        }\n      }\n      else {\n        ans = pref[r] - pref[l-1];\n        for (int j: {l-1, l, r-2, r-1}) {\n          auto [ll, rr] = get_range(j);\n          if (ll != -1 && (ll < l-1 || rr >= r)) ans--;\n        }\n      }\n      cout << ans << '\\n';\n    }\n  }\n}"
+    ]
+  }
+}

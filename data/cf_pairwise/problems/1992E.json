@@ -1,0 +1,45 @@
+{
+  "contest_id": 1992,
+  "index": "E",
+  "name": "Novice's Mistake",
+  "rating": 1700,
+  "tags": [
+    "brute force",
+    "constructive algorithms",
+    "implementation",
+    "math",
+    "strings"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1992E",
+  "url": "https://codeforces.com/problemset/problem/1992/E",
+  "contest_start_time": "2024-07-11T14:35:00+00:00",
+  "statement": {
+    "title": "E. Novice's Mistake",
+    "time_limit": "3 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "One of the first programming problems by K1o0n looked like this: \"Noobish_Monk has $n$ $(1 \\le n \\le 100)$ friends. Each of them gave him $a$ $(1 \\le a \\le 10000)$ apples for his birthday. Delighted with such a gift, Noobish_Monk returned $b$ $(1 \\le b \\le \\min(10000, a \\cdot n))$ apples to his friends. How many apples are left with Noobish_Monk?\"\n\nK1o0n wrote a solution, but accidentally considered the value of $n$ as a string, so the value of $n \\cdot a - b$ was calculated differently. Specifically:\n\n when multiplying the string $n$ by the integer $a$, he will get the string $s=\\underbrace{n + n + \\dots + n + n}_{a\\ \\text{times}}$\n\n when subtracting the integer $b$ from the string $s$, the last $b$ characters will be removed from it. If $b$ is greater than or equal to the length of the string $s$, it will become empty.\n\nLearning about this, ErnKor became interested in how many pairs $(a, b)$ exist for a given $n$, satisfying the constraints of the problem, on which K1o0n's solution gives the correct answer.\n\n\"The solution gives the correct answer\" means that it outputs a non-empty string, and this string, when converted to an integer, equals the correct answer, i.e., the value of $n \\cdot a - b$.",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\le t \\le 100$)  — the number of test cases.\n\nFor each test case, a single line of input contains an integer $n$ ($1 \\le n \\le 100$).\n\nIt is guaranteed that in all test cases, $n$ is distinct.",
+    "output_spec": "For each test case, output the answer in the following format:\n\nIn the first line, output the integer $x$ — the number of bad tests for the given $n$.\n\nIn the next $x$ lines, output two integers $a_i$ and $b_i$ — such integers that K1o0n's solution on the test \"$n$ $a_i$ $b_i$\" gives the correct answer.",
+    "note": "In the first example, $a = 20$, $b = 18$ are suitable, as \"$\\text{2}$\" $\\cdot 20 - 18 =$ \"$\\text{22222222222222222222}$\"$- 18 = 22 = 2 \\cdot 20 - 18$",
+    "samples": [
+      {
+        "input": "3\n2\n3\n10",
+        "output": "\n3\n20 18 \n219 216 \n2218 2214 \n1\n165 162 \n1\n1262 2519 "
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 131461,
+    "url": "https://codeforces.com/blog/entry/131461",
+    "tutorial": "1992E - Novice's Mistake\n\nIdea: Noobish_Monk, K1o0n\n\nPreparation: K1o0n\n\nTutorial\n\nNotice that $n * a - b$ is strictly less than $10^6$, i.e., it has no more than $6$ digits. The number of characters in the strange calculation $n * a - b$ is equal to $|n| * a - b$, where $|n|$ is the number of digits in n. Let's iterate over the value of $a$, and then determine the boundaries $minB$ and $maxB$ for it, such that $|n| * a \\gt maxB$ and $|n| * a - minB \\le 6$. Then: \\begin{cases} minB = |n| * a- 6 \\\\ maxB = |n| * a- 1 \\end{cases} Let's iterate over all $b$ from $minB$ to $maxB$. To quickly check the strange calculation, let's only find its first $|n| * a - b$ digits. This way, we can find all suitable pairs $(a, b)$.\n\nSolution complexity: $O(a)$.\n\nSolution (Python)",
+    "solution_code": [
+      "for _ in range(int(input())):\n    n = int(input())\n    sn = str(n)\n    lenN = len(str(n))\n    ans = []\n    for a in range(1, 10001):\n        minB = max(1, lenN * a - 5)\n        maxB = lenN * a\n        for b in range(minB, maxB):\n            x = n * a - b\n            y = 0\n            for i in range(lenN * a - b):\n                y = y * 10 + int(sn[i % lenN])\n            if x == y:\n                ans.append((a, b))\n    print(len(ans))\n    for p in ans:\n        print(*p)"
+    ]
+  }
+}

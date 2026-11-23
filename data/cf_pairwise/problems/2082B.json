@@ -1,0 +1,42 @@
+{
+  "contest_id": 2082,
+  "index": "B",
+  "name": "Floor or Ceil",
+  "rating": 1600,
+  "tags": [
+    "brute force",
+    "greedy"
+  ],
+  "points": 1000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2082B",
+  "url": "https://codeforces.com/problemset/problem/2082/B",
+  "contest_start_time": "2025-03-15T14:35:00+00:00",
+  "statement": {
+    "title": "B. Floor or Ceil",
+    "time_limit": "1 second",
+    "memory_limit": "512 megabytes",
+    "legend": "Ecrade has an integer $x$. There are two kinds of operations.\n\n Replace $x$ with $\\left\\lfloor \\dfrac{x}{2}\\right\\rfloor$, where $\\left\\lfloor \\dfrac{x}{2}\\right\\rfloor$ is the greatest integer $\\le \\dfrac{x}{2}$.\n\n Replace $x$ with $\\left\\lceil \\dfrac{x}{2}\\right\\rceil$, where $\\left\\lceil \\dfrac{x}{2}\\right\\rceil$ is the smallest integer $\\ge \\dfrac{x}{2}$.\n\nEcrade will perform exactly $n$ first operations and $m$ second operations in any order. He wants to know the minimum and the maximum possible value of $x$ after $n+m$ operations. However, it seems a little difficult, so please help him!",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 10^4$). The description of the test cases follows.\n\nThe only line of each test case contains three integers $x$, $n$, and $m$ ($0 \\le x, n, m \\le 10^9$).",
+    "output_spec": "For each test case, print two integers in one line, representing the minimum and the maximum possible value of $x$ after $n + m$ operations.",
+    "note": "For simplicity, we call the first operation $\\text{OPER 1}$ and the second operation $\\text{OPER 2}$.\n\nIn the first test case:\n\n If we perform $12 \\xrightarrow{\\text{OPER 2}} 6 \\xrightarrow{\\text{OPER 2}} 3 \\xrightarrow{\\text{OPER 1}} 1$, we can obtain the minimum possible value $1$.\n\n If we perform $12 \\xrightarrow{\\text{OPER 2}} 6 \\xrightarrow{\\text{OPER 1}} 3 \\xrightarrow{\\text{OPER 2}} 2$, we can obtain the maximum possible value $2$.",
+    "samples": [
+      {
+        "input": "5\n12 1 2\n12 1 1\n12 0 0\n12 1000000000 1000000000\n706636307 0 3",
+        "output": "\n1 2\n3 3\n12 12\n0 0\n88329539 88329539"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 140702,
+    "url": "https://codeforces.com/blog/entry/140702",
+    "tutorial": "2082B - Floor or Ceil\n Idea: Ecrade_, FairyWinx\n\nHint 1\n\nConsider $x$ in binary form.\n\nHint 2\n\nWhat are all possible values of $x$ after $n+m$ operations?\n\nSolution\n\nLet's consider how to find the maximum value first.\n\nConsider $x$ in binary form. Let the number formed by the last $n+m$ bits of $x$ be denoted as $r$, and the remaining higher bits form the number $l$ (for instance, if $x=12=(1100)_2$, $n=1$, $m=2$, then $l=1=(1)_2$, $r=4=(100)_2$), then the final value of $x$ after $n+m$ operations will be either $l$ or $l+1$, depending on whether a carry-over occurs in $r$ during the last operation.\n\nIf there are no $1$s in the higher $m$ bits of $r$, then the carry-over in $r$ during the last operation can never occur (operating on some small tests may give you a better understanding). Otherwise, we can choose to perform $n$ floor operations first followed by $m$ ceil operations, which can guarantee a carry-over in $r$ during the last operation.\n\nThis demonstrates that performing $n$ floor operations first followed by $m$ ceil operations will always yield the maximum value. Similarly, performing $m$ ceil operations first followed by $n$ floor operations will always produce the minimum value. We can simply simulate these operations because after $O(\\log x)$ same operations, $x$ will remain unchanged.\n\nThe time complexity is $O(T\\log x)$.\n\nCode",
+    "solution_code": [
+      "#include<bits/stdc++.h>\nusing namespace std;\ntypedef long long ll;\nll t,x,n,m;\ninline ll read(){\n\tll s = 0,w = 1;\n\tchar ch = getchar();\n\twhile (ch > '9' || ch < '0'){ if (ch == '-') w = -1; ch = getchar();}\n\twhile (ch <= '9' && ch >= '0') s = (s << 1) + (s << 3) + (ch ^ 48),ch = getchar();\n\treturn s * w;\n}\nll F(ll x,ll n){\n\twhile (n --){\n\t\tif (!x) return x;\n\t\tx = (x >> 1);\n\t}\n\treturn x;\n}\nll C(ll x,ll n){\n\twhile (n --){\n\t\tif (x <= 1) return x;\n\t\tx = ((x + 1) >> 1);\n\t}\n\treturn x;\n}\nint main(){\n\tt = read();\n\twhile (t --){\n\t\tx = read(),n = read(),m = read();\n\t\tprintf(\"%lld %lld\\n\",F(C(x,m),n),C(F(x,n),m));\n\t}\n\treturn 0;\n}"
+    ]
+  }
+}

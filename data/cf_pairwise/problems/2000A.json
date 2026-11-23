@@ -1,0 +1,43 @@
+{
+  "contest_id": 2000,
+  "index": "A",
+  "name": "Primary Task",
+  "rating": 800,
+  "tags": [
+    "implementation",
+    "math",
+    "strings"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2000A",
+  "url": "https://codeforces.com/problemset/problem/2000/A",
+  "contest_start_time": "2024-08-13T14:40:00+00:00",
+  "statement": {
+    "title": "A. Primary Task",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "Dmitry wrote down $t$ integers on the board, and that is good. He is sure that he lost an important integer $n$ among them, and that is bad.\n\nThe integer $n$ had the form $\\text{10^x}$ ($x \\ge 2$), where the symbol '$\\text{^}$' denotes exponentiation.. Something went wrong, and Dmitry missed the symbol '$\\text{^}$' when writing the important integer. For example, instead of the integer $10^5$, he would have written $105$, and instead of $10^{19}$, he would have written $1019$.\n\nDmitry wants to understand which of the integers on the board could have been the important integer and which could not.",
+    "input_spec": "The first line of the input contains one integer $t$ ($1 \\le t \\le 10^4$) — the number of integers on the board.\n\nThe next $t$ lines each contain an integer $a$ ($1 \\le a \\le 10000$) — the next integer from the board.",
+    "output_spec": "For each integer on the board, output \"YES\" if it could have been the important integer and \"NO\" otherwise.\n\nYou may output each letter in any case (lowercase or uppercase). For example, the strings \"yEs\", \"yes\", \"Yes\", and \"YES\" will be accepted as a positive answer.",
+    "note": null,
+    "samples": [
+      {
+        "input": "7\n100\n1010\n101\n105\n2033\n1019\n1002",
+        "output": "\nNO\nYES\nNO\nYES\nNO\nYES\nNO"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 132689,
+    "url": "https://codeforces.com/blog/entry/132689",
+    "tutorial": "You need to check that the number has the form '$\\text{10x}$', where $x$ is an integer without leading zeros. This means it must start with '10'; if the length of the number is $3$, then the third digit must be at least $2$; if the length is greater, then the third digit must be at least $1$ (all such numbers $x$ are at least $10$).\n\nAdditionally, under these constraints, you can simply check that for the given number $a$, either $102 \\le a \\le 109$ or $1010 \\le a \\le 1099$ holds true.",
+    "solution_code": [
+      "for _ in range(int(input())):\n    a = int(input())\n    if 102 <= a <= 109 or 1010 <= a <= 1099:\n        print(\"YES\")\n    else:\n        print(\"NO\")"
+    ]
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "contest_id": 1977,
+  "index": "B",
+  "name": "Binary Colouring",
+  "rating": 1100,
+  "tags": [
+    "bitmasks",
+    "constructive algorithms",
+    "greedy",
+    "math"
+  ],
+  "points": 1250.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1977B",
+  "url": "https://codeforces.com/problemset/problem/1977/B",
+  "contest_start_time": "2024-05-26T14:35:00+00:00",
+  "statement": {
+    "title": "B. Binary Colouring",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "You are given a positive integer $x$. Find any array of integers $a_0, a_1, \\ldots, a_{n-1}$ for which the following holds:\n\n $1 \\le n \\le 32$,\n\n $a_i$ is $1$, $0$, or $-1$ for all $0 \\le i \\le n - 1$,\n\n $x = \\displaystyle{\\sum_{i=0}^{n - 1}{a_i \\cdot 2^i}}$,\n\n There does not exist an index $0 \\le i \\le n - 2$ such that both $a_{i} \\neq 0$ and $a_{i + 1} \\neq 0$.\n\nIt can be proven that under the constraints of the problem, a valid array always exists.",
+    "input_spec": "Each test contains multiple test cases. The first line of input contains a single integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases. The description of the test cases follows.\n\nThe only line of each test case contains a single positive integer $x$ ($1 \\le x  \\lt  2^{30}$).",
+    "output_spec": "For each test case, output two lines.\n\nOn the first line, output an integer $n$ ($1 \\le n \\le 32$) — the length of the array $a_0, a_1, \\ldots, a_{n-1}$.\n\nOn the second line, output the array $a_0, a_1, \\ldots, a_{n-1}$.\n\nIf there are multiple valid arrays, you can output any of them.",
+    "note": "In the first test case, one valid array is $[1]$, since $(1) \\cdot 2^0 = 1$.\n\nIn the second test case, one possible valid array is $[0,-1,0,0,1]$, since $(0) \\cdot 2^0 + (-1) \\cdot 2^1 + (0) \\cdot 2^2 + (0) \\cdot 2^3 + (1) \\cdot 2^4 = -2 + 16 = 14$.",
+    "samples": [
+      {
+        "input": "7\n1\n14\n24\n15\n27\n11\n19",
+        "output": "\n1\n1\n5\n0 -1 0 0 1\n6\n0 0 0 -1 0 1\n5\n-1 0 0 0 1\n6\n-1 0 -1 0 0 1\n5\n-1 0 -1 0 1\n5\n-1 0 1 0 1"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 129858,
+    "url": "https://codeforces.com/blog/entry/129858",
+    "tutorial": "Problem 1977B - Binary Colouring was created by alexchist and prepared by Stefan2417.\n\n1977B - Binary Colouring\n\nTutorial\n\nWe will iterate over the prefix of $i$ bits and construct a correct answer for the number formed by the prefix bits of the number $x$. We are interested in considering only the one bits, as they are the only ones that affect the value of the number $x$.\n\nIf we have already placed a one at position $i$ in the answer, we need to somehow add $2^i$ to the number. To do this, we simply zero out the $i$-th bit in the answer and set it at $i + 1$ — this will add $2 \\cdot 2^i = 2^{i+1}$.\n\nNow, the $i$-th position in the answer holds $0$.\n\nLet's consider what we placed at position $i-1$ in the answer. If it's $0$, then everything is fine; we just place $1$ at position $i$. If it's $1$, we have a situation of [1 1], which we correct by making it [-1 0 1] — placing $-1$ at $i-1$, leaving $0$ at $i$, and placing $1$ at $i+1$. This will add $2^i$ to the sum because $2^i + 2^{i-1} = 2^{i+1} - 2^{i-1}$. The remaining case is when $i-1$ holds $-1$, but this is impossible because our forward operations only place ones, and $-1$ is placed behind.\n\nThe final time complexity is $O(\\log(x))$ per test case.\n\nAuthor's code\n\nFeedback\n\nGood problem\n\nAverage problem\n\nBad problem",
+    "solution_code": [
+      "#include \"bits/stdc++.h\"\n\n#define all(a) a.begin(), a.end()\n#define pb push_back\ntypedef long long ll;\nusing namespace std;\nmt19937 rnd(std::chrono::high_resolution_clock::now().time_since_epoch().count());\n \n/// Actual code starts here\nconst int N = 100005;\n \nvoid solve() {\n    ll x;\n    cin >> x;\n    vector<int> res(31, 0);\n    for (int i = 0; i < 30; i++) {\n        if (1ll & (x >> i)) {\n            if (res[i]) {\n                res[i + 1] = 1;\n                res[i] = 0;\n            } else if (i > 0) {\n                if (res[i - 1] == 1) {\n                    res[i + 1] = 1;\n                    res[i - 1] = -1;\n                } else {\n                    res[i] = 1;\n                }\n            } else if (i == 0) {\n                res[i] = 1;\n            }\n        }\n    }\n    cout << 31 << '\\n';\n    for (int i = 0; i <= 30; i++) {\n        cout << res[i] << ' ';\n    }\n    cout << '\\n';\n}\n \nsigned main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    cout.tie(nullptr);\n    int tt = 1;\n    cin >> tt;\n    while (tt--)\n        solve();\n}"
+    ]
+  }
+}

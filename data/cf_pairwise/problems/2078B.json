@@ -1,0 +1,43 @@
+{
+  "contest_id": 2078,
+  "index": "B",
+  "name": "Vicious Labyrinth",
+  "rating": 1100,
+  "tags": [
+    "constructive algorithms",
+    "graphs",
+    "greedy",
+    "implementation",
+    "math"
+  ],
+  "points": 750.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2078B",
+  "url": "https://codeforces.com/problemset/problem/2078/B",
+  "contest_start_time": "2025-03-10T14:45:00+00:00",
+  "statement": {
+    "title": "B. Vicious Labyrinth",
+    "time_limit": "1.5 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Axium Crisis - ak+q\n\nThere are $n$ cells in a labyrinth, and cell $i$ ($1 \\leq i \\leq n$) is $n - i$ kilometers away from the exit. In particular, cell $n$ is the exit. Note also that each cell is connected to the exit but is not accessible from any other cell in any way.\n\nIn each cell, there is initially exactly one person stuck in it. You want to help everyone get as close to the exit as possible by installing a teleporter in each cell $i$ ($1 \\leq i \\leq n$), which translocates the person in that cell to another cell $a_i$.\n\nThe labyrinth owner caught you in the act. Amused, she let you continue, but under some conditions:\n\n Everyone must use the teleporter exactly $k$ times.\n\n No teleporter in any cell can lead to the same cell it is in. Formally, $i \\neq a_i$ for all $1 \\leq i \\leq n$.\n\nYou must find a teleporter configuration that minimizes the sum of distances of all individuals from the exit after using the teleporter exactly $k$ times while still satisfying the restrictions of the labyrinth owner.\n\nIf there are many possible configurations, you can output any of them.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 10^4$). The description of the test cases follows.\n\nThe first and only line of each test case contains two integers $n$ and $k$ ($2 \\leq n \\leq 2 \\cdot 10^5$, $1 \\leq k \\leq 10^9$) — the number of cells in the labyrinth and the value $k$.\n\nIt is guaranteed that the total sum of $n$ across all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, output $n$ integers — the destinations of the teleporters $a_1, a_2, \\ldots, a_n$ in order, satisfying the given conditions ($1 \\leq a_i \\leq n$, $a_i \\neq i$).",
+    "note": "In the first test case, the position of each person is as follows.\n\n Before teleporting: $[1, 2]$.\n\n First teleportation: $[2, 1]$.\n\nThe distance sum is $(2-2) + (2-1) = 1$, which is the minimum possible.\n\nIn the second test case, the position of each person is as follows.\n\n Before teleporting: $[1, 2, 3]$.\n\n First teleportation: $[2, 3, 2]$.\n\n Second teleportation: $[3, 2, 3]$.\n\nThe distance sum is $(3-3) + (3-2) + (3-3) = 1$, which is the minimum possible.",
+    "samples": [
+      {
+        "input": "2\n2 1\n3 2",
+        "output": "2 1\n2 3 2"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 140505,
+    "url": "https://codeforces.com/blog/entry/140505",
+    "tutorial": "2078B - Vicious Labyrinth\n\nHint 1\n\nTry to put as many people in cell $n$ as possible.\n\nHint 2\n\nThe minimum sum of distances will always be $1$.\n\nSolution\n\nThe following configuration gives $1$ as the sum of distances.\n\nFor odd $k$: $n, n, \\ldots, n, n, n-1$\n\nFor even $k$: $n-1, n-1, \\ldots, n-1, n, n-1$\n\nAnd the sum of distances cannot be $0$.\n\nProof\n\nLook at this as a directed (or more specifically, a functional) graph. There will be a cycle, and people in the same cycle will never be in the same cell, so not everyone can simultaneously be in cell $n$.\n\nTime complexity: $\\mathcal{O}(n)$ per test case.\n\nSubmission: 310297574\n\nExtra\n\nProve that the optimal configuration is unique.",
+    "solution_code": []
+  }
+}

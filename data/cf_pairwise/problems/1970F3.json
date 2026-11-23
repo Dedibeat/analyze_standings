@@ -1,0 +1,51 @@
+{
+  "contest_id": 1970,
+  "index": "F3",
+  "name": "Playing Quidditch (Hard)",
+  "rating": 2300,
+  "tags": [
+    "implementation"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1970F3",
+  "url": "https://codeforces.com/problemset/problem/1970/F3",
+  "contest_start_time": "2024-05-04T07:05:00+00:00",
+  "statement": {
+    "title": "F3. Playing Quidditch (Hard)",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "This afternoon, you decided to enjoy the first days of Spring by taking a walk outside. As you come near the Quidditch field, you hear screams. Once again, there is a conflict about the score: the two teams are convinced that they won the game! To prevent this problem from happening one more time, you decide to get involved in the refereeing of the matches.\n\nNow, you will stay in the stadium to watch the game and count the score. At the end of the game, you will decide the winner.\n\nToday, two teams are competing: the red Gryffindor (R) and the blue Ravenclaw (B) team. Each team is composed of $P$ players ($1 \\leq P \\leq 10$).\n\nThe field is a rectangle of $N$ lines and $M$ columns ($3 \\leq N, M \\leq 99$, $N$ and $M$ are odd). All the positions are integers, and several entities are allowed to be at the same position in the field. At the beginning of the game, the field contains goals for the two teams (each team can own between one and five goals), the players, and exactly one Quaffle. In this version of the problem, one Bludger and a Golden Snitch can be present.\n\nA game is composed of $T$ steps ($0 \\leq T \\leq 10000$). At each step, one entity on the field (a player or a ball) performs one action. All entities can move. A player can also catch a ball or throw the Quaffle that it is carrying. To catch a ball, a player must be located on the same cell as it. The Quaffle does not perform any action while it is being carried; it only follows the movements of the player. If a player carrying the Quaffle decides to throw it, the Quaffle is simply put at the current position of the player. If a player is on the same cell as a Bludger (either after a movement from the player or the Bludger), the player is eliminated. If the player is eliminated while it is carrying the Quaffle, the Quaffle remains on the cell containing both the player and the Bludger after the move. It is guaranteed that this never occurs while the player is in a cell containing a goal.\n\nTo win a point, a player must leave the Quaffle at a goal of the other team. When it does, the team of the player wins one point, and the Quaffle instantly moves to the middle of the field (the cell at the $(M+1)/2$-th column of the $(N+1)/2$-th line of the field, starting from 1). There is no goal in the middle of the field. If a player puts the ball in its own goal, the other team wins the point. If a player catches the Golden Snitch, their team wins 10 points and the game is over.",
+    "input_spec": "On the first line, the integers $N$ and $M$.\n\nThe description of the field follows: $N$ lines of $M$ pairs of characters separated by spaces. Each pair of characters represents a position on the field. It can be either:\n\n .. to represent an empty cell\n\n R0, ..., R9, B0, ..., B9 to represent a player. The first character is the team of the player, and the second is the number of the player in the team. Each pair of characters is unique, but it is not guaranteed that all the pairs appear in the grid.\n\n RG or BG to represent a goal. The blue team tries to put the ball in a red goal (RG) while the red team tries to put the ball in a blue goal (BG).\n\n .Q to represent the Quaffle, which is the ball that the players use to score goals.\n\n .B to represent the Bludger.\n\n .S to represent the Golden Snitch.\n\nThe next line contains $T$, the number of steps that compose the game. $T$ lines follow, each describing one action. It contains several pieces of information separated by a space. First, a pair of characters representing the entity that must perform the action. Second, the description of the action:\n\n U, D, L, R indicate that the entity moves on the grid. It can move to the top of the grid (U), to the bottom (D), to the left (L), or to the right (R). Each entity moves by only one cell at a time.\n\n C indicates that the player catches the ball (only a player can catch a ball). Then, there is a space followed by a pair of characters: the description of the ball caught by the player. This information is needed since several balls can be in the same cell.\n\n T indicates that the player throws the Quaffle that it is carrying.\n\nAll the actions performed by the entities are guaranteed to be valid: the players stay in the field, don't catch a ball if they are not in the same cell, don't release the Quaffle if they are not carrying it, ...",
+    "output_spec": "You must output the description of the main events of the game, one event per line. More precisely:\n\n Each time a team scores, you must print t RED GOAL or t BLUE GOAL, depending on the team who scored, where t is the current time (the position of the action in the list of actions, starting from 0). In the case where a player scores in the wrong goal (a red player scores in the red goal, or a blue player scores in the blue goal), you must print the name of the team who wins one point, that is, the other team.\n\n Each time a player is eliminated, you must print t p ELIMINATED, where t is the current time and p is the player who is eliminated. The format to print the player is the same as in the input.\n\n If the Golden Snitch is caught, you must print t RED CATCH GOLDEN SNITCH or t BLUE CATCH GOLDEN SNITCH, depending on the team who caught the Golden Snitch, where t is the current time.\n\nThe events must be printed in ascending order of t. If several players are eliminated at the same time, the events must be written is alphabetical order: B0, ..., B9, R0, ... R9.\n\nAt the end of the game, you must print the final score as: FINAL SCORE: r b, where r is the score of the red team and b is the score of the blue team.",
+    "note": "In the first example, the red player takes the Quaffle, move it and throw it. The blue player catches the ball, goes to the red goal and scores.\n\nIn the second example, the red player takes the ball and scores in the goal of their own team: the blue team wins a point.\n\nIn the third example, the Bludger goes at the position of R0: R0 is eliminated. Then, B0 moves to the position of the Bludger: B0 is eliminated too.\n\nIn the fourth example, a red player catches the Golden Snitch. Their team wins 10 points, and the game ends.\n\nYou can find one more example in the easy version of the problem",
+    "samples": [
+      {
+        "input": "3 5\n.. .. R0 .. ..\nRG .. .Q .. BG\n.. .. B0 .. ..\n12\nR0 D\nR0 C .Q\nR0 R\nR0 T\nR0 D\nB0 R\nB0 U\nB0 C .Q\nB0 L\nB0 L\nB0 L\nB0 T",
+        "output": "\n11 BLUE GOAL\nFINAL SCORE: 0 1"
+      },
+      {
+        "input": "3 5\n.. .. R0 .. ..\nRG .. .Q .. BG\n.. .. B0 .. ..\n5\nR0 D\nR0 C .Q\nR0 L\nR0 L\nR0 T",
+        "output": "\n4 BLUE GOAL\nFINAL SCORE: 0 1"
+      },
+      {
+        "input": "5 5\n.. .. .. .. ..\n.. .. .. .. ..\nRG R0 .Q B0 BG\n.. .. .. .. ..\n.. .. .B .. ..\n5\n.B L\n.B U\n.B U\nB0 L\nB0 L",
+        "output": "\n2 R0 ELIMINATED\n4 B0 ELIMINATED\nFINAL SCORE: 0 0"
+      },
+      {
+        "input": "5 5\n.. R0 .S B0 ..\n.. .. .. .. ..\nRG .. .Q .. BG\n.. .. .. .. ..\n.. R1 .B B1 ..\n4\n.S D\nR0 D\nR0 R\nR0 C .S",
+        "output": "\n3 RED CATCH GOLDEN SNITCH\nFINAL SCORE: 10 0"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 129149,
+    "url": "https://codeforces.com/blog/entry/129149",
+    "tutorial": "This subject does not contain theoretical difficulty: it is only needed to simulate the game following the rules described in the statement.\n\nTo be able to perform the simulation easily, it is useful to store wisely the current state of the game.\n\n the position of the goals, either in a grid, a set or a list\n\n the position of the players, for example a list containing the position of each player\n\n the position of the balls\n\n the current score of each team\n\nThen, at each step of the simulation, the current state must be updated following the rules.",
+    "solution_code": []
+  }
+}

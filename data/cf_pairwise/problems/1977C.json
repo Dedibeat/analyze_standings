@@ -1,0 +1,47 @@
+{
+  "contest_id": 1977,
+  "index": "C",
+  "name": "Nikita and LCM",
+  "rating": 1900,
+  "tags": [
+    "brute force",
+    "data structures",
+    "dp",
+    "greedy",
+    "math",
+    "number theory",
+    "sortings"
+  ],
+  "points": 1750.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1977C",
+  "url": "https://codeforces.com/problemset/problem/1977/C",
+  "contest_start_time": "2024-05-26T14:35:00+00:00",
+  "statement": {
+    "title": "C. Nikita and LCM",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Nikita is a student passionate about number theory and algorithms. He faces an interesting problem related to an array of numbers.\n\nSuppose Nikita has an array of integers $a$ of length $n$. He will call a subsequence$^\\dagger$ of the array special if its least common multiple (LCM) is not contained in $a$. The LCM of an empty subsequence is equal to $0$.\n\nNikita wonders: what is the length of the longest special subsequence of $a$? Help him answer this question!\n\n$^\\dagger$ A sequence $b$ is a subsequence of $a$ if $b$ can be obtained from $a$ by the deletion of several (possibly, zero or all) elements, without changing the order of the remaining elements. For example, $[5,2,3]$ is a subsequence of $[1,5,7,8,2,4,3]$.",
+    "input_spec": "Each test contains multiple test cases. The first line of input contains a single integer $t$ ($1 \\le t \\le 2000$) — the number of test cases. The description of the test cases follows.\n\nThe first line of each test case contains a single integer $n$ ($1 \\le n \\le 2000$) — the length of the array $a$.\n\nThe second line of each test case contains $n$ integers $a_1, a_2, \\ldots, a_n$ ($1 \\le a_i \\le 10^9$) — the elements of the array $a$.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $2000$.",
+    "output_spec": "For each test case, output a single integer — the length of the longest special subsequence of $a$.",
+    "note": "In the first test case, the LCM of any non-empty subsequence is contained in $a$, so the answer is $0$.\n\nIn the second test case, we can take the subsequence $[3, 2, 10, 1]$, its LCM is equal to $30$, which is not contained in $a$.\n\nIn the third test case, we can take the subsequence $[2, 3, 6, 100\\,003]$, its LCM is equal to $600\\,018$, which is not contained in $a$.",
+    "samples": [
+      {
+        "input": "6\n5\n1 2 4 8 16\n6\n3 2 10 20 60 1\n7\n2 3 4 6 12 100003 1200036\n9\n2 42 7 3 6 7 7 1 6\n8\n4 99 57 179 10203 2 11 40812\n1\n1",
+        "output": "\n0\n4\n4\n5\n8\n0"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 129858,
+    "url": "https://codeforces.com/blog/entry/129858",
+    "tutorial": "Problem 1977C - Nikita and LCM was created and prepared by Stefan2417.\n\n1977C - Nikita and LCM\n\nHint\n\nTry to check if the entire array $a$ can be the answer.\n\nTutorial\n\nFirst, let's understand if we can take the entire array $a$ as the special subsequence.\n\nTo do this, find the LCM($a_1, a_2, \\dots, a_n$). If it is greater than max($a_1, a_2, \\dots, a_n$), then obviously such a number is not in the subsequence, because $LCM \\geq max$.\n\nAfter this check, it becomes known that each $a_i \\ | \\ max(a_1, a_2, \\dots, a_n)$.\n\nThen we iterate over the divisors of the maximum and greedily check for the presence of a subsequence with such an LCM.\n\nIf we do this naively, it will be $O(\\sqrt{C} + n \\cdot d(C) \\cdot \\log(C))$, but this is already sufficient.\n\nNote that we can count the occurrence of each number and check only the distinct numbers. Then the complexity will be $O(\\sqrt{C} + d(C)^2 \\cdot \\log(C))$.\n\nAuthor's code\n\nFeedback\n\nGood problem\n\nAverage problem\n\nBad problem",
+    "solution_code": [
+      "#include \"bits/stdc++.h\"\n \n#define err(x) cerr << \"[\"#x\"]  \" << (x) << \"\\n\"\n#define errv(x) {cerr << \"[\"#x\"]  [\"; for (const auto& ___ : (x)) cerr << ___ << \", \"; cerr << \"]\\n\";}\n#define errvn(x, n) {cerr << \"[\"#x\"]  [\"; for (auto ___ = 0; ___ < (n); ++___) cerr << (x)[___] << \", \"; cerr << \"]\\n\";}\n#define all(a) a.begin(), a.end()\n#define pb push_back\ntypedef long long ll;\ntypedef long double ld;\nusing namespace std;\nconst int MOD = 1000000007;\nmt19937 rnd(std::chrono::high_resolution_clock::now().time_since_epoch().count());\n \ntemplate<typename T1, typename T2>\ninline bool relaxmi(T1 &a, const T2 &b) {\n    return a > b ? a = b, true : false;\n}\n \ntemplate<typename T1, typename T2>\ninline bool relaxma(T1 &a, const T2 &b) {\n    return a < b ? a = b, true : false;\n}\n \ndouble GetTime() { return clock() / (double) CLOCKS_PER_SEC; }\n \n/// Actual code starts here\nconst int N = 100005;\n \nint calc(vector<pair<int, int>> &t, int d) {\n    int LCM = 0, cnt = 0;\n    for (auto [j, c]: t) {\n        if (d % j == 0) {\n            if (LCM == 0) LCM = j;\n            else LCM = lcm(LCM, j);\n            cnt += c;\n        }\n    }\n    if (LCM != d) cnt = 0;\n    return cnt;\n}\n \nvoid solve() {\n    int n;\n    cin >> n;\n    vector<int> v(n);\n    for (auto &i: v) cin >> i;\n    ll LCM = 1;\n    int mx = *max_element(all(v));\n    for (auto i: v) {\n        LCM = lcm(LCM, i);\n        if (LCM > mx) {\n            cout << n << '\\n';\n            return;\n        }\n    }\n    map<int, int> cnt;\n    for (auto i: v) cnt[i]++;\n    vector<pair<int, int>> t;\n    for (auto i: cnt)\n        t.push_back(i);\n    int res = 0;\n    for (int i = 1; i * i <= mx; i++) {\n        if (mx % i == 0) {\n            if (!cnt.contains(i))\n                relaxma(res, calc(t, i));\n            if (!cnt.contains(mx / i))\n                relaxma(res, calc(t, mx / i));\n        }\n    }\n    cout << res << '\\n';\n}\n \nsigned main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    cout.tie(nullptr);\n    int tt = 1;\n    cin >> tt;\n    while (tt--)\n        solve();\n}"
+    ]
+  }
+}

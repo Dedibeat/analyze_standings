@@ -127,7 +127,7 @@ function chip(v){ return `<span class="rating" style="background:${ratingColor(v
 function esc(s){ return String(s).replace(/[&<>]/g, m=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[m])); }
 
 // dense internal-scale -> CF-points lookup (built server-side from the same
-// gym-shape + affine calibration as arch_b.calibrate; linearly interpolated)
+// released affine hierarchical-with-time calibration; linearly interpolated)
 function toCf(x){
   const {lo, step, ys} = DATA.to_cf;
   x = Math.max(DATA.scale.lo, Math.min(DATA.scale.hi, x));

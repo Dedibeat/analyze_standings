@@ -1,0 +1,43 @@
+{
+  "contest_id": 1992,
+  "index": "G",
+  "name": "Ultra-Meow",
+  "rating": 2000,
+  "tags": [
+    "combinatorics",
+    "dp",
+    "math"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1992G",
+  "url": "https://codeforces.com/problemset/problem/1992/G",
+  "contest_start_time": "2024-07-11T14:35:00+00:00",
+  "statement": {
+    "title": "G. Ultra-Meow",
+    "time_limit": "2.5 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "K1o0n gave you an array $a$ of length $n$, consisting of numbers $1, 2, \\ldots, n$. Accept it? Of course! But what to do with it? Of course, calculate $\\text{MEOW}(a)$.\n\nLet $\\text{MEX}(S, k)$ be the $k$-th positive (strictly greater than zero) integer in ascending order that is not present in the set $S$. Denote $\\text{MEOW}(a)$ as the sum of $\\text{MEX}(b, |b| + 1)$, over all distinct subsets $b$ of the array $a$.\n\nExamples of $\\text{MEX}(S, k)$ values for sets:\n\n $\\text{MEX}(\\{3,2\\}, 1) = 1$, because $1$ is the first positive integer not present in the set;\n\n $\\text{MEX}(\\{4,2,1\\}, 2) = 5$, because the first two positive integers not present in the set are $3$ and $5$;\n\n $\\text{MEX}(\\{\\}, 4) = 4$, because there are no numbers in the empty set, so the first $4$ positive integers not present in it are $1, 2, 3, 4$.",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases.\n\nIn a single line of each test case, an integer $n$ ($1 \\le n \\le 5000$) is entered, the size of the array of gifted numbers.\n\nIt is guaranteed that the sum of $n^2$ over all test cases does not exceed $25 \\cdot 10^6$.",
+    "output_spec": "For each test case, output a single number — $\\text{MEOW}(a)$. Since it may be very large, output it modulo $10^9 + 7$.",
+    "note": null,
+    "samples": [
+      {
+        "input": "5\n2\n3\n4999\n5\n1",
+        "output": "\n12\n31\n354226409\n184\n4"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 131461,
+    "url": "https://codeforces.com/blog/entry/131461",
+    "tutorial": "1992G - Ultra-Meow\n\nIdea: Noobish_Monk, K1o0n\n\nPreparation: K1o0n\n\nTutorial\n\nWe will iterate over the size of the set $k$ and its $\\text{MEOW}$, $m$. If $2k \\geqslant n$, then the set $x$ will fill all the remaining numbers up to $n$, and there may still be some larger than $n$ in it, so the $MEOW$ of all such sets will be $2k+1$, and there will be a total of $C(n, k)$ such sets for each $k$. If $2k \\lt n$, $m$ lies in the interval from $k+1$ to $2k+1$. Notice that there can be exactly $m - 1 - k$ numbers before $m$, and correspondingly $2k + 1 - m$ numbers to the right of $m$, so the answer needs to be added with $C_{m - 1}^{m - 1 - k} \\cdot C_{n - m}^{2k + 1 - m} \\cdot m$.\n\nAsymptotic complexity of the solution: $O(n^2)$.\n\nSolution (C++)",
+    "solution_code": [
+      "#include <iostream>\n\nusing namespace std;\n\nconst int mod = 1e9 + 7;\n\nint add(int a, int b) {\n    if (a + b >= mod)\n        return a + b - mod;\n    return a + b;\n}\n\nint sub(int a, int b) {\n    if (a < b)\n        return a + mod - b;\n    return a - b;\n}\n\nint mul(int a, int b) {\n    return (int)((1ll * a * b) % mod);\n}\n\nint binpow(int a, int pw) {\n    int b = 1;\n    while (pw) {\n        if (pw & 1)\n            b = mul(b, a);\n        a = mul(a, a);\n        pw >>= 1;\n    }\n    return b;\n}\n\nint inv(int a) {\n    return binpow(a, mod - 2);\n}\n\nconst int N = 15000;\nint f[N], r[N];\n\nvoid precalc() {\n    f[0] = 1;\n    for (int i = 1; i < N; i++)\n        f[i] = mul(f[i - 1], i);\n    r[N - 1] = inv(f[N - 1]);\n    for (int i = N - 2; i > -1; i--)\n        r[i] = mul(r[i + 1], i + 1);\n}\n\nint C(int n, int k) {\n    if (n < 0 || k < 0 || n < k)\n        return 0;\n    return mul(f[n], mul(r[k], r[n - k]));\n}\n\ninline void solve() {\n    int n;\n    cin >> n;\n    int ans = 1;\n    for (int k = 1; k <= n; k++) {\n        if (2 * k >= n) {\n            ans = add(ans, mul(2 * k + 1, C(n, k)));\n            continue;\n        }\n        for (int m = k + 1; m <= 2 * k + 1; m++) {\n            int c = mul(C(m - 1, m - 1 - k), C(n - m, 2 * k + 1 - m));\n            ans = add(ans, mul(mul(C(m - 1, m - 1 - k), C(n - m, 2 * k + 1 - m)), m));\n        }\n    }\n    cout << ans << '\\n';\n}\n\nsigned main() {\n    int T = 1;\n    cin >> T;\n    precalc();\n    while(T--)\n        solve();\n    return 0;\n}"
+    ]
+  }
+}

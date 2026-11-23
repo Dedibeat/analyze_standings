@@ -1,0 +1,44 @@
+{
+  "contest_id": 1950,
+  "index": "E",
+  "name": "Nearly Shortest Repeating Substring",
+  "rating": 1500,
+  "tags": [
+    "brute force",
+    "implementation",
+    "number theory",
+    "strings"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1950E",
+  "url": "https://codeforces.com/problemset/problem/1950/E",
+  "contest_start_time": "2024-03-28T14:45:00+00:00",
+  "statement": {
+    "title": "E. Nearly Shortest Repeating Substring",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "You are given a string $s$ of length $n$ consisting of lowercase Latin characters. Find the length of the shortest string $k$ such that several (possibly one) copies of $k$ can be concatenated together to form a string with the same length as $s$ and, at most, one different character.\n\nMore formally, find the length of the shortest string $k$ such that $c = \\underbrace{k + \\cdots + k}_{x\\rm\\ \\text{times}}$ for some positive integer $x$, strings $s$ and $c$ has the same length and $c_i \\neq s_i$ for at most one $i$ (i.e. there exist $0$ or $1$ such positions).",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\leq t \\leq 10^3$) — the number of test cases.\n\nThe first line of each test case contains a single integer $n$ ($1 \\leq n \\leq 2\\cdot10^5$) — the length of string $s$.\n\nThe second line of each test case contains the string $s$, consisting of lowercase Latin characters.\n\nThe sum of $n$ over all test cases does not exceed $2\\cdot10^5$.",
+    "output_spec": "For each test case, print the length of the shortest string $k$ satisfying the constraints in the statement.",
+    "note": "In the first test case, you can select $k = \\texttt{a}$ and $k+k+k+k = \\texttt{aaaa}$, which only differs from $s$ in the second position.\n\nIn the second test case, you cannot select $k$ of length one or two. We can have $k = \\texttt{abba}$, which is equal to $s$.",
+    "samples": [
+      {
+        "input": "5\n4\nabaa\n4\nabba\n13\nslavicgslavic\n8\nhshahaha\n20\nstormflamestornflame",
+        "output": "\n1\n4\n13\n2\n10"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 127664,
+    "url": "https://codeforces.com/blog/entry/127664",
+    "tutorial": "Let's call a string a period if it can be multiplied to the same length as $s$\n\nWhat are the possibilities for the lengths of the period? Clearly, it must be a divisor of $n$. So the solution is to check all divisors of $n$ and see the smallest one that works.\n\nTo check if length $l$ works, multiply the prefix of length $l$ until it's the same length as $s$ and check how many differences there are. However, the different letter can be in the prefix(for example, $\\texttt{hshaha}$ and $l = 2$), so we also check the same for the suffix of length $l$. If either of them is true, output $l$.\n\nAll numbers at most $10^5$ have at most $128$ divisors, so this will take $\\sim 128 \\cdot 10^5$ operations, which is fast enough.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\nusing namespace std;\n\nvoid solve() {\n    int n;\n    cin >> n;\n    string s;\n    cin >> s;\n    for(int i = 1; i <= n; i++)\n    {\n        if(n%i == 0)\n        {\n            int satisfy = 2;\n            for(int j = 0; j < i; j++)\n            {\n                for(int k = j+i; k < n; k+=i)\n                {\n                    if(s[k] != s[j])\n                    {\n                        satisfy--;\n                    }\n                }\n            }\n            if(satisfy > 0)\n            {\n                cout << i << endl;\n                return;\n            }\n            satisfy = 2;\n            for(int j = n-i; j < n; j++)\n            {\n                for(int k = j-i; k >= 0; k-=i)\n                {\n                    if(s[k] != s[j])\n                    {\n                        satisfy--;\n                    }\n                }\n            }\n            if(satisfy > 0)\n            {\n                cout << i << endl;\n                return;\n            }\n        }\n    }\n}\n\nint32_t main(){\n    int t = 1;\n    cin >> t;\n    while (t--) {\n        solve();\n    }\n}"
+    ]
+  }
+}

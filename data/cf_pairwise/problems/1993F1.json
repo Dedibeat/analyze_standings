@@ -1,0 +1,45 @@
+{
+  "contest_id": 1993,
+  "index": "F1",
+  "name": "Dyn-scripted Robot (Easy Version)",
+  "rating": 2400,
+  "tags": [
+    "brute force",
+    "chinese remainder theorem",
+    "constructive algorithms",
+    "math",
+    "number theory"
+  ],
+  "points": 2500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1993F1",
+  "url": "https://codeforces.com/problemset/problem/1993/F1",
+  "contest_start_time": "2024-08-04T14:35:00+00:00",
+  "statement": {
+    "title": "F1. Dyn-scripted Robot (Easy Version)",
+    "time_limit": "3 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "This is the easy version of the problem. The only difference is that in this version $k \\le n$. You can make hacks only if both versions of the problem are solved.\n\nGiven a $w \\times h$ rectangle on the $Oxy$ plane, with points $(0, 0)$ at the bottom-left and $(w, h)$ at the top-right of the rectangle.\n\nYou also have a robot initially at point $(0, 0)$ and a script $s$ of $n$ characters. Each character is either L, R, U, or D, which tells the robot to move left, right, up, or down respectively.\n\nThe robot can only move inside the rectangle; otherwise, it will change the script $s$ as follows:\n\n If it tries to move outside a vertical border, it changes all L characters to R's (and vice versa, all R's to L's).\n\n If it tries to move outside a horizontal border, it changes all U characters to D's (and vice versa, all D's to U's).\n\nThen, it will execute the changed script starting from the character which it couldn't execute.\n  An example of the robot's movement process, $s = \\texttt{\"ULULURD\"}$\nThe script $s$ will be executed for $k$ times continuously. All changes to the string $s$ will be retained even when it is repeated. During this process, how many times will the robot move to the point $(0, 0)$ in total? Note that the initial position does NOT count.",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases.\n\nThe first line of each test case contains four integers $n$, $k$, $w$, and $h$ ($1 \\le n, w, h \\le 10^6$; $1 \\le k \\le n$).\n\nThe second line contains a single string $s$ of size $n$ ($s_i \\in \\{\\texttt{L}, \\texttt{R}, \\texttt{U}, \\texttt{D}\\}$) — the script to be executed.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $10^6$.",
+    "output_spec": "For each test case, print a single integer — the number of times the robot reaches $(0, 0)$ when executing script $s$ for $k$ times continuously.",
+    "note": "In the first test case, the robot only moves up and right. In the end, it occupies the position $(2, 2)$ but never visits $(0, 0)$. So the answer is $0$.\n\nIn the second test case, each time executing the script the robot visits the origin twice. And since $k=2$, it visits the origin $2 \\cdot 2 = 4$ times overall.\n\nIn the third test case, the visualization is shown as below:",
+    "samples": [
+      {
+        "input": "5\n2 2 2 2\nUR\n4 2 1 1\nLLDD\n6 3 3 1\nRLRRRL\n5 5 3 3\nRUURD\n7 5 3 4\nRRDLUUU",
+        "output": "\n0\n4\n3\n0\n1"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 132185,
+    "url": "https://codeforces.com/blog/entry/132185",
+    "tutorial": "1993F1 - Dyn-scripted Robot (Easy Version)\n\nHint 1\n\nLet the robot moves freely (no modification on the script).\n\nHint 2\n\nThe new path of the robot is the \"mirrored\" version of how the robot must go.\n\nGeneral idea\n\nImagine we have two robots, let's call them Alex and Bob. Alex is the one who follows the instruction well, but Bob doesn't (if he tries to move outside the box, he keeps going without modifying the script). Then, you follow the path of each robot that is moving. How do you think their paths differ from each other?\n\nYes! Suppose at some moment they reach the top side of the box at the same time. Suddenly, Bob wants to move up while Alex know the discipline and modify the script before executing the command and move down. Then, each of them is $1$ unit away from the top side of the box. If Bob keeps moving up, Alex keep moving down. In case Bob changes his mind and move down then this time Alex changes her mind and move up.\n\nWhat do we learn from this? They move like two objects facing each other through a mirror. Actually there are four mirror of them, placing at the four sides of the box.\n\nNow, let's say Bob moves up so much that Alex follows the script and reaches the top side and the bottom side as well. Because of that, she has to change the script once again and start moving up like Bob.\n\nWhen Alex reaches the bottom side at point $(x, 0)$, then Bob should be at point $(x, 2H)$ (prove it yourself!). If Bob keeps moving up to the point $(x, 4H), (x, 6H), or (x, 8H), \\dots$, at these moment Alex will also be at point $(x, 0)$. That being said, Alex's position is $(x, 0)$ then Bob's position must be $(x, y)$ where y is a multiple of $2H$.\n\nThis idea is exactly the same as if Bob were moving sideways (left or right). As we only care about the number of times Alex's position is $(0, 0)$, we know that if we don't change the script at all, the position of the robot must be $(x, y)$ where $x$ is a multiple of $2W$, and $y$ is a multiple of $2H$.\n\nSolution\n\nSo apparently, we need to calculate the number of times the robot reaches $(x, y)$, where $x$ is a multiple of $2W$ and $y$ is a multiple of $2H$ (see the general idea above).\n\nLet's call $t_k = (x_k, y_k)$ how much the robot moves (in direction) after executing the first $k$ commands of the script. Then: $t_0 = (0, 0)$ and $t_k$ can be calculated through $t_{k-1}$ and $s_k$.\n\nThe robot will execute the script $k$ times and the script contains $n$ commands, so we have $nk$ positions to check out. Each position can be represented by: $(x, y) = it_n + t_j = (ix_n + x_j, iy_n + y_j)$ (where $0\\le i\\le k-1$ and $1\\le j\\le n$). Besides, we need:\n\n$x\\equiv 0\\pmod{2W} \\Longrightarrow ix_n + x_j\\equiv 0\\pmod{2W} \\Longrightarrow x_j\\equiv -ix_n\\pmod{2W}$\n\n$y\\equiv 0\\pmod{2H} \\Longrightarrow iy_n + y_j\\equiv 0\\pmod{2H} \\Longrightarrow y_j\\equiv -iy_n\\pmod{2H}$\n\nLastly, we can traverse all possible $i$ from $0$ to $k-1$ and count the number of $j$ that satisfies the above equivalence. One possible way to do this is to use a map to count each element in the array $t_1, t_2, \\dots, t_n$. Summing all the counts will give the answer for this problem.\n\nTime complexity: $O((n + k)\\log n)$\n\nCode (C++)",
+    "solution_code": [
+      "#include <bits/stdc++.h>\nusing namespace std;\n \nusing ll = long long;\nconst int N = 1e6 + 5;\n \nstring s;\nll n, k, w, h;\nll tx[2*N], ty[2*N];\nmap<pair<ll, ll>, ll> cnt;\n \nint main() {\n    cin.tie(0)->sync_with_stdio(0);\n    \n    int t;\n    cin >> t;\n \n    while (t--) {\n        cin >> n >> k >> w >> h >> s;\n \n        cnt.clear();\n        ll x = 0, y = 0;\n \n        for (int i = 0; i < n; i++) {\n            if (s[i] == 'L') x--;\n            if (s[i] == 'R') x++;\n            if (s[i] == 'D') y--;\n            if (s[i] == 'U') y++;\n\n            x = (x + 2*w) % (2*w);\n            y = (y + 2*h) % (2*h);\n            cnt[{x, y}]++;\n        }\n \n        ll ans = 0;\n        for (int i = 0; i < k; i++) {\n            ll vx = (-i*x%(2*w) + 2*w)%(2*w);\n            ll vy = (-i*y%(2*h) + 2*h)%(2*h);\n            ans += cnt[{vx, vy}];\n        }\n\n        cout << ans << '\\n';\n    }\n}"
+    ]
+  }
+}

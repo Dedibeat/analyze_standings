@@ -1,0 +1,36 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define int long long
+#define F first 
+#define S second  
+#define all(v) (v).begin(), (v).end()
+#define hha(x) cout << #x << ": " << x << " ";
+#define hhal(x) cout << #x << ": " << x << endl;
+#define print(v) cout << #v << ": "; for(auto x : v) cout << x << " "; cout << endl;
+void solve()
+{
+    int n, k; cin >> n >> k;
+    vector<int> a(n); for(auto &x : a) cin >> x;
+    sort(a.begin(), a.end());
+    int c = (a[0] + k) * 2, cur = 0, b = 0;
+    for(int i = 0; i < n; i++) {
+        cur += a[i];
+        if(i) c = min(c, (cur + k - 1) / (i));
+    }
+    for(int i = 0; i < n; i++) b += max(0ll, c - a[i]);
+    int ans = c * (n - 1) + 1, mn = a[0];
+    for(int i = n - 1; i >= 0; i--) {
+        mn = min(mn, a[i] - 1);
+        if(a[i] <= c) b++;
+        if(b <= c - 1 + k) ans++;
+        else break;
+    }
+    ans = min((c + 1) * (n - 1), ans);
+    cout << ans << '\n';
+}
+signed main()
+{
+    ios::sync_with_stdio(0); cin.tie(0); 
+    int t; cin >> t; while(t--)
+    solve();
+}

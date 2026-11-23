@@ -1,0 +1,43 @@
+{
+  "contest_id": 2033,
+  "index": "C",
+  "name": "Sakurako's Field Trip",
+  "rating": 1400,
+  "tags": [
+    "dp",
+    "greedy",
+    "two pointers"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2033C",
+  "url": "https://codeforces.com/problemset/problem/2033/C",
+  "contest_start_time": "2024-10-24T14:35:00+00:00",
+  "statement": {
+    "title": "C. Sakurako's Field Trip",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Even in university, students need to relax. That is why Sakurakos teacher decided to go on a field trip. It is known that all of the students will be walking in one line. The student with index $i$ has some topic of interest which is described as $a_i$. As a teacher, you want to minimise the disturbance of the line of students.\n\nThe disturbance of the line is defined as the number of neighbouring people with the same topic of interest. In other words, disturbance is the number of indices $j$ ($1 \\le j  \\lt  n$) such that $a_j = a_{j + 1}$.\n\nIn order to do this, you can choose index $i$ ($1\\le i\\le n$) and swap students at positions $i$ and $n-i+1$. You can perform any number of swaps.\n\nYour task is to determine the minimal amount of disturbance that you can achieve by doing the operation described above any number of times.",
+    "input_spec": "The first line contains one integer $t$ ($1\\le t\\le 10^4$) — the number of test cases.\n\nEach test case is described by two lines.\n\n The first line contains one integer $n$ ($2 \\le n \\le 10^5$) — the length of the line of students.\n\n The second line contains $n$ integers $a_i$ ($1\\le a_i\\le n$) — the topics of interest of students in line.\n\nIt is guaranteed that the sum of $n$ across all test cases does not exceed $2\\cdot 10^5$.",
+    "output_spec": "For each test case, output the minimal possible disturbance of the line that you can achieve.",
+    "note": "In the first example, it is necessary to apply the operation to $i=2$, thus the array will become $[1, \\textbf{2}, 1, \\textbf{1}, 3]$, with the bold elements indicating those that have swapped places. The disturbance of this array is equal to $1$.\n\nIn the fourth example, it is sufficient to apply the operation to $i=3$, thus the array will become $[2, 1, \\textbf{2}, \\textbf{1}, 2, 4]$. The disturbance of this array is equal to $0$.\n\nIn the eighth example, it is sufficient to apply the operation to $i=3$, thus the array will become $[1, 4, \\textbf{1}, 5, \\textbf{3}, 1, 3]$. The disturbance of this array is equal to $0$.",
+    "samples": [
+      {
+        "input": "9\n5\n1 1 1 2 3\n6\n2 1 2 2 1 1\n4\n1 2 1 1\n6\n2 1 1 2 2 4\n4\n2 1 2 3\n6\n1 2 2 1 2 1\n5\n4 5 5 1 5\n7\n1 4 3 5 1 1 3\n7\n3 1 3 2 2 3 3",
+        "output": "\n1\n2\n1\n0\n0\n1\n1\n0\n2"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 135520,
+    "url": "https://codeforces.com/blog/entry/135520",
+    "tutorial": "Note that the answer is influenced by neighboring elements. This allows us to optimally place elements $i$ and $n - i + 1$ with respect to elements $i - 1$ and $n - i + 2$.\n\nThus, we need to be able to choose the best order for an array of $4$ elements. Let's consider several types of arrays:\n\n $[1, x, y, 1]$ or $[x, 1, 1, y]$ (the ones denote equal elements): swaps will not change the answer;\n\n $[1, 1, y, 2]$: a swap will improve the answer if $y \\ne 1$, otherwise the answer will not change;\n\nThus, if $a[i - 1] = a[i]$ or $a[n - i + 2] = a[n - i + 1]$, then swapping elements $a[i]$ and $a[n - i + 1]$ will either not change the answer or improve it. After all swaps, we only need to calculate the final disturbance.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\nusing namespace std;\nint main(){\n    int t;\n    cin>>t;\n    while(t--){\n        int n;\n        cin>>n;\n        int a[n+1];\n        for(int i=1;i<=n;i++){\n            cin>>a[i];\n        }\n        for(int i=n/2-1;i>=1;i--){\n            if(a[i]==a[i+1] || a[n-i+1]==a[n-i]){\n                swap(a[i],a[n-i+1]);\n            }\n        }\n        int re=0;\n        for(int i=1;i<n;i++){\n            re+=(a[i]==a[i+1]);\n        }\n        cout<<re<<endl;\n    }\n}"
+    ]
+  }
+}

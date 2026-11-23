@@ -1,0 +1,45 @@
+{
+  "contest_id": 2050,
+  "index": "G",
+  "name": "Tree Destruction",
+  "rating": 1900,
+  "tags": [
+    "dfs and similar",
+    "dp",
+    "trees"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2050G",
+  "url": "https://codeforces.com/problemset/problem/2050/G",
+  "contest_start_time": "2024-12-05T14:35:00+00:00",
+  "statement": {
+    "title": "G. Tree Destruction",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Given a tree$^{\\text{∗}}$ with $n$ vertices. You can choose two vertices $a$ and $b$ once and remove all vertices on the path from $a$ to $b$, including the vertices themselves. If you choose $a=b$, only one vertex will be removed.\n\nYour task is to find the maximum number of connected components$^{\\text{†}}$ that can be formed after removing the path from the tree.\n\n$^{\\text{∗}}$A tree is a connected graph without cycles.\n\n$^{\\text{†}}$A connected component is a set of vertices such that there is a path along the edges from any vertex to any other vertex in the set (and it is not possible to reach vertices not belonging to this set)",
+    "input_spec": "The first line of the input contains one integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases.\n\nThe first line of each test case contains one integer $n$ ($2 \\le n \\le 2 \\cdot 10^5$) — the size of the tree.\n\nThe next $n-1$ lines contain two integers $u$ and $v$ ($1 \\le u, v \\le n$, $u \\ne v$) — the vertices connected by an edge. It is guaranteed that the edges form a tree.\n\nIt is guaranteed that the sum of $n$ across all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, output one integer — the maximum number of connected components that can be achieved using the described operation.",
+    "note": null,
+    "samples": [
+      {
+        "input": "6\n2\n1 2\n5\n1 2\n2 3\n3 4\n3 5\n4\n1 2\n2 3\n3 4\n5\n2 1\n3 1\n4 1\n5 4\n6\n2 1\n3 1\n4 1\n5 3\n6 3\n6\n2 1\n3 2\n4 2\n5 3\n6 4",
+        "output": "\n1\n3\n2\n3\n4\n3"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 137018,
+    "url": "https://codeforces.com/blog/entry/137018",
+    "tutorial": "Let's choose some vertices $a$ and $b$, between which there are $k$ edges. Then, when removing this path, the tree will split into $s - 2 \\cdot k$, where $s$ is the sum of the degrees of the vertices on the path (this is exactly how many edges are connected to the chosen path).\n\nLet's suspend the tree from vertex $1$, and for each vertex $v$ of the given tree, we will calculate two values: $\\text{dp[v].x}$ — the best answer if the path starts at vertex $v$ and ends in its subtree, and $\\text{dp[v].y}$ — the best answer if the path passes through vertex $v$ from one of its children to another. The recalculations of the dynamic programming will be similar to those used in finding the diameter of the tree using dynamic programming.\n\nThe answer will be the largest value among all $\\text{dp[v].x}$ and $\\text{dp[v].y}$.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n\n#define int long long\n#define x first\n#define y second\n\nusing namespace std;\n\nvoid dfs(int v, int p, vector<vector<int>> &sl, vector<pair<int, int>> &dp){\n    dp[v].x = sl[v].size();\n    int m1 = -1, m2 = -1;\n    for(int u: sl[v]){\n        if(u == p){\n            continue;\n        }\n        dfs(u, v, sl, dp);\n        dp[v].x = max(dp[v].x, dp[u].x + (int)sl[v].size() - 2);\n        m2 = max(m2, dp[u].x);\n        if(m1 < m2) swap(m1, m2);\n    }\n    dp[v].y = dp[v].x;\n    if(m2 != -1){\n        dp[v].y = m1 + m2 + sl[v].size() - 4;\n    }\n}\n\nvoid solve(int tc){\n    int n;\n    cin >> n;\n    vector<vector<int>> sl(n);\n    for(int i = 1; i < n; ++i){\n        int u, v;\n        cin >> u >> v;\n        sl[--u].emplace_back(--v);\n        sl[v].emplace_back(u);\n    }\n    vector<pair<int, int>> dp(n);\n    dfs(0, 0, sl, dp);\n    int ans = 0;\n    for(int i = 0; i < n; ++i){\n        ans = max(ans, max(dp[i].x, dp[i].y));\n    }\n    cout << ans;\n}\n\nbool multi = true;\n\nsigned main() {\n    int t = 1;\n    if (multi)cin >> t;\n    for (int i = 1; i <= t; ++i) {\n        solve(i);\n        cout << \"\\n\";\n    }\n    return 0;\n}",
+      "evc = n / 2;\nif (n & 1) evc++;",
+      "evc = (n + 1) / 2 ; "
+    ]
+  }
+}

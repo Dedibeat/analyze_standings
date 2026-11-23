@@ -1,0 +1,43 @@
+{
+  "contest_id": 1970,
+  "index": "C1",
+  "name": "Game on Tree (Easy)",
+  "rating": 1400,
+  "tags": [
+    "games"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1970C1",
+  "url": "https://codeforces.com/problemset/problem/1970/C1",
+  "contest_start_time": "2024-05-04T07:05:00+00:00",
+  "statement": {
+    "title": "C1. Game on Tree (Easy)",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "This is the easy version of the problem. The difference in this version is that $t=1$ and we work on an array-like tree.\n\nRon and Hermione are playing a game on a tree of $n$ nodes that are initially inactive. This tree is special because it has exactly two leaves. It can thus be seen as an array. The game consists of $t$ rounds, each of which starts with a stone on exactly one node, which is considered as activated. A move consists of picking an inactive neighbor of the node with a stone on it and moving the stone there (thus activating this neighbor). Ron makes the first move, after which he alternates with Hermione until no valid move is available. The player that cannot make a move loses the round. If both players play optimally, who wins each round of this game?\n\nNote that all the rounds are played with the same tree; only the starting node changes. Moreover, after each round, all active nodes are considered inactive again.",
+    "input_spec": "The first line contains integers $n$ ($2 \\leq n \\leq 2\\times 10^5$), $t$ ($t=1$), the number of nodes in the tree and the number of rounds, respectively.\n\nThe next $n-1$ lines contain two integers $1 \\leq u, v \\leq n$ each, corresponding to an edge of the tree. It is guaranteed that the tree has exactly two leaves.\n\nThe next line contains $t$ integers $1 \\leq u_1 , \\dots, u_t \\leq n$, corresponding to the node where the stone is initially put.",
+    "output_spec": "The output consists of $t=1$ line which is either \"Ron\" or \"Hermione\".",
+    "note": null,
+    "samples": [
+      {
+        "input": "3 1\n2 3\n3 1\n3",
+        "output": "\nRon"
+      },
+      {
+        "input": "5 1\n1 2\n2 3\n3 4\n4 5\n5",
+        "output": "\nHermione"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 129149,
+    "url": "https://codeforces.com/blog/entry/129149",
+    "tutorial": "We are given a linked list with an initial coin at index $1 \\leq i \\leq n$. There are $i-1$ nodes to its left and $n-i$ nodes to its right. Note that after the first move, all the remaining moves are fixed since there will be exactly one inactive neighbor.  If one of $i-1, n-i$ is odd, Ron should move to the corresponding node as there will be an even number left thus guaranteeing a victory for Ron. Otherwise, Hermione is guaranteed to win.",
+    "solution_code": []
+  }
+}

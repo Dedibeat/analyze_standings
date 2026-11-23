@@ -1,0 +1,41 @@
+{
+  "contest_id": 1950,
+  "index": "A",
+  "name": "Stair, Peak, or Neither?",
+  "rating": 800,
+  "tags": [
+    "implementation"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1950A",
+  "url": "https://codeforces.com/problemset/problem/1950/A",
+  "contest_start_time": "2024-03-28T14:45:00+00:00",
+  "statement": {
+    "title": "A. Stair, Peak, or Neither?",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "You are given three digits $a$, $b$, and $c$. Determine whether they form a stair, a peak, or neither.\n\n A stair satisfies the condition $a \\lt b \\lt c$.\n\n A peak satisfies the condition $a \\lt b \\gt c$.",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\leq t \\leq 1000$) — the number of test cases.\n\nThe only line of each test case contains three digits $a$, $b$, $c$ ($0 \\leq a$, $b$, $c \\leq 9$).",
+    "output_spec": "For each test case, output \"STAIR\" if the digits form a stair, \"PEAK\" if the digits form a peak, and \"NONE\" otherwise (output the strings without quotes).",
+    "note": null,
+    "samples": [
+      {
+        "input": "7\n1 2 3\n3 2 1\n1 5 3\n3 4 1\n0 0 0\n4 1 7\n4 5 7",
+        "output": "\nSTAIR\nNONE\nPEAK\nPEAK\nNONE\nNONE\nSTAIR"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 127664,
+    "url": "https://codeforces.com/blog/entry/127664",
+    "tutorial": "You just need to write two if-statements and check the two cases. Please note that some languages like C++ won't allow a chain of comparisons like a < b < c, and you should instead write it as a < b && b < c.",
+    "solution_code": [
+      "#include <iostream>\n\nvoid solve() {\n\tint a, b, c;\n\tstd::cin >> a >> b >> c;\n\tif(a < b && b < c) std::cout << \"STAIR\"<< \"\\n\";\n\telse if(a < b && b > c) std::cout << \"PEAK\"<< \"\\n\";\n\telse std::cout << \"NONE\" << \"\\n\";\n}\n\nint main() {\n\tint tt; std::cin >> tt;\n\twhile(tt--) \n\t    solve();\n}"
+    ]
+  }
+}

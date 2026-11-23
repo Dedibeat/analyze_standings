@@ -1,0 +1,42 @@
+{
+  "contest_id": 2064,
+  "index": "A",
+  "name": "Brogramming Contest",
+  "rating": 800,
+  "tags": [
+    "greedy",
+    "strings"
+  ],
+  "points": 500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2064A",
+  "url": "https://codeforces.com/problemset/problem/2064/A",
+  "contest_start_time": "2025-02-16T14:35:00+00:00",
+  "statement": {
+    "title": "A. Brogramming Contest",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "One day after waking up, your friend challenged you to a brogramming contest. In a brogramming contest, you are given a binary string$^{\\text{∗}}$ $s$ of length $n$ and an initially empty binary string $t$. During a brogramming contest, you can make either of the following moves any number of times:\n\n remove some suffix$^{\\text{†}}$ from $s$ and place it at the end of $t$, or\n\n remove some suffix from $t$ and place it at the end of $s$.\n\n To win the brogramming contest, you must make the minimum number of moves required to make $s$ contain only the character $\\texttt{0}$ and $t$ contain only the character $\\texttt{1}$. Find the minimum number of moves required.\n\n$^{\\text{∗}}$A binary string is a string consisting of characters $\\texttt{0}$ and $\\texttt{1}$.\n\n$^{\\text{†}}$A string $a$ is a suffix of a string $b$ if $a$ can be obtained from deletion of several (possibly, zero or all) elements from the beginning of $b$.",
+    "input_spec": "The first line contains an integer $t$ ($1 \\le t \\le 100$) — the number of test cases.\n\nThe first line of each test case is an integer $n$ ($1 \\le n \\le 1000$) — the length of the string $s$.\n\nThe second line of each test case contains the binary string $s$.\n\nThe sum of $n$ across all test cases does not exceed $1000$.",
+    "output_spec": "For each testcase, output the minimum number of moves required.",
+    "note": "An optimal solution to the first test case is as follows:\n\n $s = \\texttt{00}\\color{red}{\\texttt{110}}$, $t =$ empty string.\n\n $s = \\texttt{00}$, $t = \\texttt{11}\\color{red}{\\texttt{0}}$.\n\n $s = \\texttt{000}$, $t = \\texttt{11}$.\n\nIt can be proven that there is no solution using less than $2$ moves.\n\nIn the second test case, you have to move the whole string from $s$ to $t$ in one move.\n\nIn the fourth test case, you don't have to do any moves.",
+    "samples": [
+      {
+        "input": "5\n5\n00110\n4\n1111\n3\n001\n5\n00000\n3\n101",
+        "output": "\n2\n1\n1\n0\n3"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 138912,
+    "url": "https://codeforces.com/blog/entry/138912",
+    "tutorial": "2064A - Brogramming Contest:\n\nSolution\n\nNotice that if $s$ starts with a $1$ we must move the entire string $s$ to $t$ at some point. Also Notice that if we perform the operation, the total number of occurrences of $01$ and $10$ across both strings can only decrease by one. This gives us an upper bound on the answer being the number of occurrences of $01$ and $10$ in $s$ adding one to this if it starts with the character $1$.\n\nNow the following construction uses the same number of moves as the upper bound (thus showing it is the minimum number of moves): If $s$ begins with $1$ then select the entire string $s$ and move it to $t$. Then repeatedly find the first character in $s$ or $t$ which is not equal to the character before it (note under this construction such an index can only exist in one string at a time) and selected the suffix starting from this character and move it to the other string. During this construction some prefix of $s$ will contain $0$s and some prefix of $t$ will contain $1$s, so after each move the total number of $01$ and $10$ will decrease.\n\nSo the answer to this problem will be the number of $01$ and $10$ in $s$ adding one to the answer if it starts with $1$.\n\nCode(c++)",
+    "solution_code": [
+      "#include<bits/stdc++.h>\nusing namespace std;\ntypedef long long ll;\n#define debug(x) cout << #x << \" = \" << x << \"\\n\";\n#define vdebug(a) cout << #a << \" = \"; for(auto x: a) cout << x << \" \"; cout << \"\\n\";\nmt19937 rng(chrono::steady_clock::now().time_since_epoch().count());\nint uid(int a, int b) { return uniform_int_distribution<int>(a, b)(rng); }\nll uld(ll a, ll b) { return uniform_int_distribution<ll>(a, b)(rng); }\n\nvoid solve(){\n    int n;\n    cin >> n;\n    \n    string s;\n    cin >> s;\n    \n    int ans = 0;\n    for (int i = 0; i < n - 1; i++) {\n        if (s[i] != s[i + 1]) ans++;\n    }\n\n    if (s[0] == '1') ans++;\n    cout << ans << \"\\n\";\n}\n\nint main(){\n    ios::sync_with_stdio(false);\n    cin.tie(0);\n    cout.tie(0);\n    \n    int t;\n    cin >> t;\n    while (t--) solve();\n}"
+    ]
+  }
+}

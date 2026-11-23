@@ -1,0 +1,40 @@
+{
+  "contest_id": 2061,
+  "index": "F1",
+  "name": "Kevin and Binary String (Easy Version)",
+  "rating": 2100,
+  "tags": [
+    "greedy",
+    "implementation"
+  ],
+  "points": 2000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2061F1",
+  "url": "https://codeforces.com/problemset/problem/2061/F1",
+  "contest_start_time": "2025-01-20T14:35:00+00:00",
+  "statement": {
+    "title": "F1. Kevin and Binary String (Easy Version)",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "This is the easy version of the problem. The difference between the versions is that in this version, string $t$ consists of only '0' and '1'. You can hack only if you solved all versions of this problem.\n\nKevin has a binary string $s$ of length $n$. Kevin can perform the following operation:\n\n Choose two adjacent blocks of $s$ and swap them.\n\nA block is a maximal substring$^{\\text{∗}}$ of identical characters. Formally, denote $s[l,r]$ as the substring $s_l s_{l+1} \\ldots s_r$. A block is $s[l,r]$ satisfying:\n\n $l=1$ or $s_l\\not=s_{l-1}$.\n\n $s_l=s_{l+1} = \\ldots = s_{r}$.\n\n $r=n$ or $s_r\\not=s_{r+1}$.\n\nAdjacent blocks are two blocks $s[l_1,r_1]$ and $s[l_2,r_2]$ satisfying $r_1+1=l_2$.\n\nFor example, if $s=\\mathtt{000}\\,\\mathbf{11}\\,\\mathbf{00}\\,\\mathtt{111}$, Kevin can choose the two blocks $s[4,5]$ and $s[6,7]$ and swap them, transforming $s$ into $\\mathtt{000}\\,\\mathbf{00}\\,\\mathbf{11}\\,\\mathtt{111}$.\n\nGiven a string $t$ of length $n$ consisting of '0', '1' and '?', Kevin wants to determine the minimum number of operations required to perform such that for any index $i$ ($1\\le i\\le n$), if $t_i\\not=$ '?' then $s_i=t_i$. If it is impossible, output $-1$.\n\n$^{\\text{∗}}$A string $a$ is a substring of a string $b$ if $a$ can be obtained from $b$ by the deletion of several (possibly, zero or all) characters from the beginning and several (possibly, zero or all) characters from the end.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 10^4$). The description of the test cases follows.\n\nThe first line of each test case contains a string $s$ consisting of '0' and '1'.\n\nThe second line of each test case contains a string $t$ consisting of '0' and '1'.\n\nIt is guaranteed that the lengths of $s$ and $t$ are the same.\n\nIt is guaranteed that the sum of the length of $s$ over all test cases will not exceed $4\\cdot 10^5$.",
+    "output_spec": "For each test case, output one integer — the minimum number of operations required. If it is impossible, output $-1$.",
+    "note": "In the first test case, the possible way is shown in the statement.\n\nIn the second test case, one possible way could be:\n\n Swap blocks $[2, 2], [3, 3]$, $s$ will become $\\mathtt{001101}$.\n\n Swap blocks $[3, 4], [5, 5]$, $s$ will become $\\mathtt{000111}$.\n\n Swap blocks $[1, 3], [4, 6]$, $s$ will become $\\mathtt{111000}$.",
+    "samples": [
+      {
+        "input": "6\n0001100111\n0000011111\n010101\n111000\n0101\n0110\n0101\n1010\n011001\n001110\n0\n1",
+        "output": "\n1\n3\n1\n-1\n-1\n-1"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "missing"
+  },
+  "editorial": {
+    "blog_id": 138620,
+    "url": "https://codeforces.com/blog/entry/138620",
+    "tutorial": null,
+    "solution_code": []
+  }
+}

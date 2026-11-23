@@ -1,0 +1,43 @@
+{
+  "contest_id": 1983,
+  "index": "F",
+  "name": "array-value",
+  "rating": 2500,
+  "tags": [
+    "binary search",
+    "bitmasks",
+    "data structures",
+    "greedy",
+    "two pointers"
+  ],
+  "points": 2500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1983F",
+  "url": "https://codeforces.com/problemset/problem/1983/F",
+  "contest_start_time": "2024-07-07T14:35:00+00:00",
+  "statement": {
+    "title": "F. array-value",
+    "time_limit": "4 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "You have an array of non-negative integers $a_1, a_2, \\ldots, a_n$.\n\nThe value of a sub-array of length $\\ge 2$, $a[l, r] = [a_l, a_{l+1}, \\ldots, a_r]$ is the minimum value of $a_i \\oplus a_j$ such that $l \\le i  \\lt  j \\le r$, where $\\oplus$ is the xor (exclusive-or) operator.\n\nYou have to find the $k$-th smallest value over all sub-arrays of length $\\ge 2$.",
+    "input_spec": "The first line of the input contains multiple test cases $t$ ($1 \\le t \\le 2 \\cdot 10^4$).\n\nThe first line of each test case contains integer numbers $n$ and $k$ ($2 \\le n \\le 10^5$, $1 \\le k \\le \\frac{n\\cdot(n-1)}{2}$).\n\nThe second line of the input contains $n$ non-negative integer numbers $a_1, a_2, \\ldots, a_n$ ($0 \\le a_i \\le 10^9$) — the array itself.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $10^5$.",
+    "output_spec": "Print the $k$-th smallest value obtained over all subarrays of length at least $2$.",
+    "note": "In the first testcase, we have subarrays with their smallest exclusive-or pair as:\n\n$[1,2]: 3$\n\n$[2,3]: 1$\n\n$[3,4]: 7$\n\n$[4,5]: 1$\n\n$[1,2,3]: 1$\n\n$[2,3,4]: 1$\n\n$[3,4,5]: 1$\n\n$[1,2,3,4]: 1$\n\n$[2,3,4,5]: 1$\n\n$[1,2,3,4,5]: 1$\n\nThe sorted order would be: $1, 1, 1, 1, 1, 1, 1, 1, 3, 7$. Therefore, the second smallest element would be $1$.",
+    "samples": [
+      {
+        "input": "4\n5 2\n1 2 3 4 5\n2 1\n4 3\n4 6\n1 2 4 8\n5 9\n1 2 3 4 5",
+        "output": "\n1\n7\n12\n3"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 131268,
+    "url": "https://codeforces.com/blog/entry/131268",
+    "tutorial": "We can binary search on the the value of the $k$th-smallest and maintain the number of subarrays with xor-pair less than the value. This way, we can find the $k$th-smallest value easily.\n\nIn order to maintain the number of subarrays, we can use our popular xor data structure called trie.\n\nFor a given binary searched value, we will traverse from left to right, putting in the values of the array in our trie with their highest corresponding indices.\n\nFor a fixed index $i$, we would like to find the highest index $j \\lt i$ such that the subarray from $[j,i]$ contains xor-pair less than the fixed upper bound. Then all subarrays with their left end between $[1,j]$ and right end fixed at $i$ will have xor-pair less than the value.\n\nTherefore, this becomes a sliding window where we want to maximize the value of the left end $j$ so that the number of subarrays for a fixed right end $i$ becomes as large as possible.\n\nTo achieve this, we would maintain in our trie the following two things: - the current bit (on/off) - the maximum index which reached this bit in our trie\n\nNow when querying: - if both searched bit and current array index bit is $1$: take the max for left index from child \"on\" bit and go to child \"off\" bit - if both searched bit and current array index bit is $0$: just go to child \"off\" bit - if searched bit is $1$ and current array index bit is $0$: take the max for left index from child \"off\" bit and go to child \"on\" bit - if searched bit is $0$ and current array index bit is $1$: just go to child \"on\" bit\n\nThis is done so that we can find the maximum left index for the given fixed right index at $i$. We follow binary searched value as closely as possible while traversing the trie to stay under the upper bound as well as maximize the left index.\n\nFinally, putting the values and corresponding index in the trie is trivial. Simply follow the trie and put in the corresponding bits the maximum index which can reach that bit.\n\nThis way we can solve this problem in $O(n \\log^2 n)$",
+    "solution_code": []
+  }
+}

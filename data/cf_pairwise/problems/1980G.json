@@ -1,0 +1,55 @@
+{
+  "contest_id": 1980,
+  "index": "G",
+  "name": "Yasya and the Mysterious Tree",
+  "rating": 2300,
+  "tags": [
+    "bitmasks",
+    "data structures",
+    "dfs and similar",
+    "graphs",
+    "greedy",
+    "strings",
+    "trees"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1980G",
+  "url": "https://codeforces.com/problemset/problem/1980/G",
+  "contest_start_time": "2024-06-03T14:35:00+00:00",
+  "statement": {
+    "title": "G. Yasya and the Mysterious Tree",
+    "time_limit": "2.5 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "Yasya was walking in the forest and accidentally found a tree with $n$ vertices. A tree is a connected undirected graph with no cycles.\n\nNext to the tree, the girl found an ancient manuscript with $m$ queries written on it. The queries can be of two types.\n\nThe first type of query is described by the integer $y$. The weight of each edge in the tree is replaced by the bitwise exclusive OR of the weight of that edge and the integer $y$.\n\nThe second type is described by the vertex $v$ and the integer $x$. Yasya chooses a vertex $u$ ($1 \\le u \\le n$, $u \\neq v$) and mentally draws a bidirectional edge of weight $x$ from $v$ to $u$ in the tree.\n\nThen Yasya finds a simple cycle in the resulting graph and calculates the bitwise exclusive OR of all the edges in it. She wants to choose a vertex $u$ such that the calculated value is maximum. This calculated value will be the answer to the query. It can be shown that such a cycle exists and is unique under the given constraints (independent of the choice of $u$). If an edge between $v$ and $u$ already existed, a simple cycle is the path $v \\to u \\to v$.\n\nNote that the second type of query is performed mentally, meaning the tree does not change in any way after it.\n\nHelp Yasya answer all the queries.",
+    "input_spec": "The first line contains an integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases.\n\nThe descriptions of the test cases follow.\n\nThe first line of each test case contains two integers $n$, $m$ ($2 \\le n \\le 2 \\cdot 10^5$, $1 \\le m \\le 2 \\cdot 10^5$) — the number of vertices in the tree and the number of queries.\n\nThe next $n - 1$ lines of each test case contain three integers $v$, $u$, $w$ ($1 \\le v, u \\le n$, $1 \\le w \\le 10^9$) — the ends of some edge in the tree and its weight.\n\nIt is guaranteed that the given set of edges forms a tree.\n\nThe next $m$ lines of each test case describe the queries:\n\n ^ $y$ ($1 \\le y \\le 10^9$) — parameter of the first type query;\n\n ? $v$ $x$ ($1 \\le v \\le n$, $1 \\le x \\le 10^9$) — parameters of the second type query.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $2 \\cdot 10^5$. The same is guaranteed for $m$.",
+    "output_spec": "For each test case, output the answers to the queries of the second type.",
+    "note": null,
+    "samples": [
+      {
+        "input": "2\n3 7\n1 2 1\n3 1 8\n^ 5\n? 2 9\n^ 1\n? 1 10\n^ 6\n? 3 1\n? 2 9\n5 6\n1 2 777\n3 2 2812\n4 1 16\n5 3 1000000000\n^ 4\n? 3 123\n? 5 1000000000\n^ 1000000000\n? 1 908070\n? 2 1",
+        "output": "\n13 15 11 10 \n1000000127 2812 999756331 999999756 "
+      },
+      {
+        "input": "3\n8 4\n8 6 3\n6 3 4\n2 5 4\n7 6 2\n7 1 10\n4 1 4\n5 1 2\n^ 4\n^ 7\n? 7 8\n? 4 10\n5 6\n3 1 4\n2 3 9\n4 3 6\n5 2 10\n? 5 7\n^ 1\n^ 8\n? 4 10\n? 1 9\n? 3 6\n4 2\n2 1 4\n4 3 5\n2 3 4\n^ 13\n? 1 10",
+        "output": "\n14 13 \n13 8 11 11 \n10 "
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 130135,
+    "url": "https://codeforces.com/blog/entry/130135",
+    "tutorial": "We will hang the tree on the vertex $1$ and count for each vertex $d_v$ — xor on the path from it to the root. This can be done by depth-first traversal in $O(n)$.\n\nNow let's learn how to solve the problem in $O(n)$ for each query. The first type of query can be executed straightforwardly. Notice that due to the properties of the xor operation, the values will only change for vertices at odd depth (the depth of the root is $0$). At the same time, they will change trivially: they will be xored with $y$. To answer the second query, it is necessary to realize that the xor on a simple cycle $v \\to \\text{lca}(v, u) \\to u \\to v$ is equal to $d_v \\oplus d_u \\oplus x$. Indeed, the path from $\\text{lca(v, u)}$ to the root will be counted twice, so it will turn into $0$, and no other extra edges will be included in this xor. With due skill, you can try to speed up such a solution with AVX instructions, but the time constraints were chosen strictly.\n\nFor a complete solution to the problem, you can use the data structure prefix tree (trie). With its help, you can find in $O(\\log x)$ for the number $x$ such a $y$ in the set, that $x \\oplus y$ is maximal. Since $d_v$ change differently, you will have to use two tries — for vertices at even and odd heights. Operations of the first type can be accumulated in the variable $w_\\text{odd}$ and added to the xor expression. In addition, you must not forget to remove $d_v$ from the necessary trie when answering the second query, and then insert it back. To do this, you can maintain a counter of terminal leaves in each vertex and use this information during descent.\n\nThus, the final asymptotic is $O((n + m) \\log 10^9)$.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\nusing namespace std;\n \nstruct trie {\n    int l, c;\n    vector<array<int, 2>> node;\n    vector<int> cnt;\n    trie(int l, int max_members) : l(l), c(0), node((l + 2) * max_members + 3), cnt((l + 2) * max_members + 3) {}\n    void add(int x) {\n        int cur = 0;\n        for (int i = l; i >= 0; --i) {\n            bool has_bit = (1 << i) & x;\n            if (!node[cur][has_bit]) {\n                node[cur][has_bit] = ++c;\n            }\n            cur = node[cur][has_bit];\n            ++cnt[cur];\n        }\n    }\n    void remove(int x) {\n        int cur = 0;\n        for (int i = l; i >= 0; --i) {\n            bool has_bit = (1 << i) & x;\n            if (!node[cur][has_bit]) {\n                node[cur][has_bit] = ++c;\n            }\n            cur = node[cur][has_bit];\n            --cnt[cur];\n        }\n    }\n    int find_max(int x) {\n        int cur = 0, ans = 0;\n        for (int i = l; i >= 0; --i) {\n            bool has_bit = (1 << i) & x;\n            if (node[cur][!has_bit] && cnt[node[cur][!has_bit]]) {\n                ans += 1 << i;\n                cur = node[cur][!has_bit];\n            }\n            else {\n                cur = node[cur][has_bit];\n            }\n        }\n        return ans;\n    }\n};\n \nconst int N = 2e5 + 2;\nint x[N];\nbitset<N> dp;\nvector<array<int, 2>> e[N];\n \nvoid dfs(int c, int p) {\n    for (auto [i, w] : e[c]) {\n        if (i == p) {\n            continue;\n        }\n        dp[i] = !dp[c];\n        x[i] = x[c] ^ w;\n        dfs(i, c);\n    }\n}\n \nvoid solve() {\n    int n, m, gx = 0;\n    cin >> n >> m;\n    for (int i = 1; i <= n; ++i) {\n        e[i].clear();\n    }\n    for (int i = 1, u, v, w; i < n; ++i) {\n        cin >> u >> v >> w;\n        e[u].push_back({v, w});\n        e[v].push_back({u, w});\n    }\n    dfs(1, 0);\n    vector<trie> t(2, trie(30, n));\n    for (int i = 1; i <= n; ++i) {\n        t[dp[i]].add(x[i]);\n    }\n    while (m--) {\n        char c;\n        cin >> c;\n        if (c == '^') {\n            int y;\n            cin >> y;\n            gx ^= y;\n        }\n        else {\n            int a, b;\n            cin >> a >> b;\n            t[dp[a]].remove(x[a]);\n            int same_group = t[dp[a]].find_max(x[a] ^ b);\n            int diff_group = t[1 - dp[a]].find_max(x[a] ^ b ^ gx);\n            t[dp[a]].add(x[a]);\n            cout << max(same_group, diff_group) << \"\\n\";\n        }\n    }\n}\n \nint main() {\n    ios_base::sync_with_stdio(0); cin.tie(0);\n    int t;\n    cin >> t;\n    while (t--) {\n        solve();\n    }\n    return 0;\n}",
+      "int n; cin>>n; int a[n],b[n]; read(a,n); read(b,n);\nint m; cin>>m; int d[m]; read(d,m);\nif(count(b,b+n,d[m-1])==0) no;\nmap<int,int> diff;\nfor(int i=0;i<m;i++) diff[d[i]]++;\nfor(int i=0;i<n;i++)\n{\n   if(a[i]!=b[i])\n   {\n     if(diff[b[i]]==0) no;\n     diff[b[i]]--;\n   }\n}\nyes;",
+      "for(int i = 1; i <= k; ++i){\n        auto e = a[i - 1];\n        if(ans[idx[e]] == 0)continue;\n        int tot = total[i - 1];\n        int cr = cur[i - 1];\n        int lst = last[i - 1];\n        for(int j = i + 1; j <= k; ++j){\n            auto ee = a[j - 1];\n            if(cr > ee.y){\n                tot += (cr - 1) * (lst - ee.x);\n                cr = ee.y;\n                lst = ee.x;\n            }\n            if(ans[idx[ee]] == 1){\n                ans[idx[e]] = tot - total[j];\n                break;\n            }\n        }\n    }",
+      "// Hacking quicksort solutions during competitions\n// Author: https://codeforces.com/profile/halyavin \n\n#include <bits/stdc++.h>\nusing namespace std;\n\nvector<int> anti_sort(size_t n) {\n    vector<int> res(2 * n + 1);\n    iota(res.begin(), res.end(), 0);\n    for (size_t i = n; i-- > 0;) {\n        swap(res[2 * i + 1], res[i + n]);\n    }\n    for (auto &x : res) x++;\n    return res;\n}\n\nint main() {\n    cin.tie(0)->sync_with_stdio(0);\n    vector<int> gen = anti_sort(2e5 / 2 - 1);\n    int n = gen.size();\n    cout << \"1\\n\" << n << '\\n';\n    for (int i = 0; i < n; i++) {\n        cout << gen[i] << \" \\n\"[i == n - 1];\n    }\n    for (int i = 0; i < n; i++) {\n        cout << gen[i] << \" \\n\"[i == n - 1];\n    }\n    cout << n << '\\n';\n    for (int i = 0; i < n; i++) {\n        cout << gen[i] << \" \\n\"[i == n - 1];\n    }\n}",
+      "1\n2 3\n1 2 3\n6 4 5\n\n1 2 3\n5 6 4"
+    ]
+  }
+}

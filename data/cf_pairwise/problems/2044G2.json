@@ -1,0 +1,46 @@
+{
+  "contest_id": 2044,
+  "index": "G2",
+  "name": "Medium Demon Problem (hard version)",
+  "rating": 1900,
+  "tags": [
+    "dfs and similar",
+    "dp",
+    "dsu",
+    "graphs",
+    "implementation",
+    "trees"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2044G2",
+  "url": "https://codeforces.com/problemset/problem/2044/G2",
+  "contest_start_time": "2024-12-15T14:35:00+00:00",
+  "statement": {
+    "title": "G2. Medium Demon Problem (hard version)",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "This is the hard version of the problem. The key difference between the two versions is highlighted in bold.\n\nA group of $n$ spiders has come together to exchange plushies. Initially, each spider has $1$ plushie. Every year, if spider $i$ has at least one plushie, he will give exactly one plushie to spider $r_i$. Otherwise, he will do nothing. Note that all plushie transfers happen at the same time. In this version, each spider is allowed to have more than 1 plushie at any point in time.\n\nThe process is stable in the current year if each spider has the same number of plushies (before the current year's exchange) as he did the previous year (before the previous year's exchange). Note that year $1$ can never be stable.\n\nFind the first year in which the process becomes stable.",
+    "input_spec": "The first line contains an integer $t$ ($1 \\leq t \\leq 10^4$) — the number of test cases.\n\nThe first line of each test case contains an integer $n$ ($2 \\leq n \\leq 2 \\cdot 10^5$) — the number of spiders.\n\nThe following line contains $n$ integers $r_1, r_2, \\ldots, r_n$ ($1 \\leq r_i \\leq n, r_i \\neq i$) — the recipient of the plushie of each spider.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, output an integer on a new line, the first year in which the process becomes stable.",
+    "note": "For the second test case:\n\n At year $1$, the following array shows the number of plushies each spider has: $[1, 1, 1, 1, 1]$. Then, year $1$'s exchange happens.\n\n At year $2$, the following array shows the number of plushies each spider has: $[1, 1, 1, 1, 1]$. Since this array is the same as the previous year, this year is stable.\n\nFor the third test case:\n\n At year $1$, the following array shows the number of plushies each spider has: $[1, 1, 1, 1, 1]$. Then, year $1$'s exchange happens.\n\n At year $2$, the following array shows the number of plushies each spider has: $[1, 2, 1, 1, 0]$. Then, year $2$'s exchange happens.\n\n At year $3$, the following array shows the number of plushies each spider has: $[1, 3, 0, 1, 0]$. Then, year $3$'s exchange happens.\n\n At year $4$, the following array shows the number of plushies each spider has: $[1, 4, 0, 0, 0]$. Then, year $4$'s exchange happens.\n\n At year $5$, the following array shows the number of plushies each spider has: $[1, 4, 0, 0, 0]$. Since this array is the same as the previous year, this year is stable.",
+    "samples": [
+      {
+        "input": "5\n2\n2 1\n5\n2 3 4 5 1\n5\n2 1 4 2 3\n5\n4 1 1 5 4\n10\n4 3 9 1 6 7 9 10 10 3",
+        "output": "\n2\n2\n5\n5\n5"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 137306,
+    "url": "https://codeforces.com/blog/entry/137306",
+    "tutorial": "2044G2 - Medium Demon Problem (hard version)\n\nProblem Credits: Lilypad\n Analysis: Proof_by_QED\n\nSolution\n\nNote that similarly to G1, once all plushies end up in the hands of spiders who are in a loop, the process becomes stable.\n\nLet's model the input as a collection of rooted forests. For each spider $i$, if $i$ is part of a loop, then let's compress the loop into a single node and use that as the root of a tree. Otherwise, if spider $i$ gives a present to spider $r_i$, then let's draw an edge from $i$ to $r_i$. Now, let $i$ be any node that is not part of a loop. How long will it take until spider $i$ runs out of presents? We can see that it is the subtree size of $i$, as one present leaves the subtree each year.\n\nThus, our challenge now is to process the nodes in an efficient order such that we can find the subtree size of all nodes. This can be done with topological sorting, which gives us an order that processes all nodes starting from the leaf upwards. After the topological sort, we may do dynamic programming to find subtree sizes of all nodes. Let $dp[i]$ be the number of days until spider $i$ runs out of presents. Let's suppose that we already calculated $dp[i]$ (we initialize it to be $1$ for all nodes since each spider starts with a present). Then, we should add $dp[i]$ to $dp[r_i]$. Doing this and adding up all $dp$ values of nodes directly before a cycle will yield the answer.\n\nCode (C++)",
+    "solution_code": [
+      "#include<bits/stdc++.h>\n#define ll long long\nusing namespace std;\n\n\nint main()\n{\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    int tt;\n    cin>>tt;\n    while(tt--)\n    {\n        int n;\n        cin>>n;\n        vector<int> r(n+1),d(n+1),v(n+1,1);\n        for(int i=1;i<=n;i++)\n        {\n            cin>>r[i];\n            d[r[i]]++;\n        }\n        set<pair<int,int> > s;\n        for(int i=1;i<=n;i++)\n        {\n            s.insert({d[i],i});\n        }\n        int ans=2;\n        queue<int> q;\n        while(!s.empty()&&(*s.begin()).first==0)\n        {\n            while(!s.empty()&&(*s.begin()).first==0)\n            {\n                int k=(*s.begin()).second;\n                ans=max(ans,v[k]+2);v[r[k]]+=v[k];\n                auto it=s.find({d[r[k]],r[k]});\n                d[r[k]]--;\n                if(it!=s.end())\n                {\n                    s.erase(it);\n                    q.push(r[k]);\n                }\n                s.erase(s.begin());\n            }\n            while(!q.empty())\n                s.insert({d[q.front()],q.front()}),q.pop();\n        }\n        cout<<ans<<'\\n';\n    }\n    return 0;\n}"
+    ]
+  }
+}

@@ -1,0 +1,43 @@
+The 2026 ICPC Asia Wuhan Regional Contest China, Wuhan, November 1, 2026
+Problem B. When Does BPE Stop Doubling?
+A tokenizer is an important natural language processing tool that splits a continuous text string into tokens that a model can use for training and inference. Byte-Pair Encoding is an algorithm for training a tokenizer. Now there is a corpus used for tokenizer training. In the training system, it will be represented as d token strings. The training system denotes a token string in the form [a1, a2, ..., an], where ai is the token ID of the i-th token in the string, and n is the length of the string. Initially, the i-th string in the corpus is [0, 0, . . . , 0]. Here, 1  ni < 2200 000.
+ni zeros
+The frequency of a token string is defined as the total number of times it occurs as a contiguous substring among all strings in the corpus. For example, suppose the corpus contains two strings [0, 0, 0] and [0, 0, 1]; then the frequency of [0, 0] is 3. Training of Byte-Pair Encoding is performed in rounds. The j-th round (numbered starting from 1) performs the following operations in order:
+1. Choose the length-2 token string with the current maximum frequency. If multiple length-2 token strings tie for the maximum frequency, choose the lexicographically smallest one. If there is no length-2 token string with frequency greater than 0, terminate training and do not perform the remaining steps of this round and the next round.
+2. Let the chosen string be [xj, yj]. The algorithm creates the j-th merge rule, defined as follows: for a string, repeatedly replace the current leftmost contiguous substring [xj, yj] by [j] until no contiguous substring [xj, yj] exists in the string. For example, when applying the merge rule "replace [0, 0] by [1]" to the string [0, 0, 0, 0, 0], it becomes [1, 1, 0].
+3. Apply the j-th merge rule to every corpus string.
+A merge rule is called a self-merge rule if xj = yj, and a mixed rule otherwise. Determine whether a mixed rule will appear before training stops. If it will, also find four numbers k, xk+1, yk+1, f , with the following meanings:
+� The first k merge rules are all self-merge rules; � The (k + 1)-th merge rule is the first mixed rule in training; it processes [xk+1, yk+1]; � f is the frequency of [xk+1, yk+1] in the entire corpus when the (k + 1)-th rule is selected.
+ [x, y] is lexicographically smaller than [x, y] if and only if x < x, or x = x and y < y.
+Input
+There are multiple test cases. The first line contains an integer T (1  T  2 � 105), the number of test cases. For each test case:
+� the first line contains an integer d (1  d  2 � 105), the number of token strings in the corpus. � The next d lines follow. The i-th line contains an integer ni (1  ni < 2200 000), given in its binary
+representation without leading zeros.
+It is guaranteed that the sum of the bit lengths of ni over all test cases does not exceed 2 � 105.
+Output
+For each test case, output one line.
+Page 3 of 28
+
+The 2026 ICPC Asia Wuhan Regional Contest China, Wuhan, November 1, 2026
+
+If there is never a mixed rule during training, output one line containing a single integer -1.
+
+Otherwise, output one line containing four integers k, xk+1, yk+1, f , whose meanings are given above.
+
+Example
+
+standard input
+
+standard output
+
+6 1 11 4 1 10 100 1000 1 111 3 11 11 100 8 1101011 10010 101 1101 10001 10000 111010 10111 7 11 1001 1001 100001 100001 100001 100001
+
+1101 -1 2101 1102 5102 4404
+
+Note
+For the first test case of the sample, n1 = 3, the only corpus string is [0, 0, 0]. In the first round, the only length-2 string that occurs is [0, 0], and it occurs 2 times, so its frequency is 2. The first rule merges [0, 0] into [1]; after applying it from left to right, the corpus string becomes [1, 0].
+In the second round, the only length-2 string that occurs is [1, 0], with frequency 1, so the second rule chooses [1, 0]. It is the first mixed rule. Before it, there is exactly 1 self-merge rule, so the answer is 1 1 0 1.
+
+Page 4 of 28
+
+

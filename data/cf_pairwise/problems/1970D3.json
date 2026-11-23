@@ -1,0 +1,39 @@
+{
+  "contest_id": 1970,
+  "index": "D3",
+  "name": "Arithmancy (Hard)",
+  "rating": 3100,
+  "tags": [
+    "interactive"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1970D3",
+  "url": "https://codeforces.com/problemset/problem/1970/D3",
+  "contest_start_time": "2024-05-04T07:05:00+00:00",
+  "statement": {
+    "title": "D3. Arithmancy (Hard)",
+    "time_limit": "10 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "The only difference between the versions of this problem is the maximum value of $n$.\n\nProfessor Vector is preparing to teach her Arithmancy class. She needs to prepare $n$ distinct magic words for the class. Each magic word is a string consisting of characters X and O. A spell is a string created by concatenating two magic words together. The power of a spell is equal to the number of its different non-empty substrings. For example, the power of the spell XOXO is equal to 7, because it has 7 different substrings: X, O, XO, OX, XOX, OXO and XOXO.\n\nEach student will create their own spell by concatenating two magic words. Since the students are not very good at magic yet, they will choose each of the two words independently and uniformly at random from the $n$ words provided by Professor Vector. It is therefore also possible that the two words a student chooses are the same. Each student will then compute the power of their spell, and tell it to Professor Vector. In order to check their work, and of course to impress the students, Professor Vector needs to find out which two magic words and in which order were concatenated by each student.\n\nYour program needs to perform the role of Professor Vector: first, create $n$ distinct magic words, and then handle multiple requests where it is given the spell power and needs to determine the indices of the two magic words, in the correct order, that were used to create the corresponding spell.",
+    "input_spec": null,
+    "output_spec": null,
+    "note": null,
+    "samples": [
+      {
+        "input": "\n2\n\n\n2\n15\n\n11",
+        "output": "\n\nXOXO\nX\n\n\n1 1\n\n2 1"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 129149,
+    "url": "https://codeforces.com/blog/entry/129149",
+    "tutorial": "The previous approach of just generating random words does not even come close to working for $n=1000$ (in fact, it is hard to push it beyond roughly $n=50$). Now we need to add our own insights to the process.\n\nThe first idea is: in order to answer the queries, we will likely need to know the spell power for all $n^2$ possible spells. But even if we use a suffix array to compute the spell power, it will be too slow to compute the spell power $10^6$ times for spells of length around $6\\cdot 10^4$. Therefore it is better to choose the magic words in such a way that computing the spell power of a concatenation of two such words can be done in $O(1)$.\n\nOne way to achieve this is to choose some family of magic words $g_i$ with a regular structure and a single parameter $i$, and just figure out the function $f(i, j)$ for the spell power for the concatenation of $g_i$ and $g_j$ on paper, hopefully it will be easy to figure out and quick to compute.\n\nThen, what we can do is to go in increasing order of $i$, and try to take the next word $g_i$ into our set by checking if after adding it to the set, the newly added spells have spell powers that are different from each other and from the existing spell powers. Since we compute the spell power in $O(1)$, the total running time of this process is around $O(n\\cdot k)$, where $k$ is the number of $g_i$ we had to check before we managed to add $n$ of them into the set.\n\nThe only remaining difficulty, and of course it is actually the main part of the solution, is to choose the family $g_i$. Here we have two main competing constraints:\n\n The words have to have simple structure, so that we can compute $f(i, j)$ quickly (in both senses: quickly figure out the formula, and the formula should be simple).\n\n However, we must have $f(i, j) \\ne f(j, i)$. It turns out that this rules out many word families with a very simple structure.\n\nWe expect that once you realize the two constraints above, after a small amount of experimentation you will stumble upon a family that works. Here are two families that work that we know about, but I expect that there are many many more:\n\n $g_i=\\texttt{XOX}^{i-1}$. So $g_1=\\texttt{XO}$, $g_2=\\texttt{XOX}$, $g_3=\\texttt{XOXX}$, and so on. We found this family in the upsolving solution from one of the teams in the onsite round.\n\n $g_i=\\texttt{XO}^i\\texttt{XO}^i$. So $g_1=\\texttt{XOXO}$, $g_2=\\texttt{XOOXOO}$, $g_3=\\texttt{XOOOXOOO}$ and so on. This family actually leads to a string slightly longer than 30000 for $n=1000$, but it can be fixed by skipping the short strings that lead to too many collisions later (so we actually use $g_i=\\texttt{XO}^{i+5n}\\texttt{XO}^{i+5n}$). This was the original reference solution.\n\nAs you noticed, our solution does not use the fact that the interactor is guaranteed to be random. The reason the problem was set like this is that we're not aware of a way to find collisions quickly enough that we could use to simply check if the $n$ printed magic words yield $n^2$ distinct spell powers. Therefore to make the problem well-defined and avoid the need for contestants to guess how strong the checker is, we made it weak (just trying 1000 random spells) but well-specified.",
+    "solution_code": []
+  }
+}

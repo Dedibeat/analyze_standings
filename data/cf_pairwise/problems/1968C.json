@@ -1,0 +1,42 @@
+{
+  "contest_id": 1968,
+  "index": "C",
+  "name": "Assembly via Remainders",
+  "rating": 1000,
+  "tags": [
+    "constructive algorithms",
+    "number theory"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1968C",
+  "url": "https://codeforces.com/problemset/problem/1968/C",
+  "contest_start_time": "2024-05-02T14:45:00+00:00",
+  "statement": {
+    "title": "C. Assembly via Remainders",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "You are given an array $x_2,x_3,\\dots,x_n$. Your task is to find any array $a_1,\\dots,a_n$, where:\n\n $1\\le a_i\\le 10^9$ for all $1\\le i\\le n$.\n\n $x_i=a_i \\bmod a_{i-1}$ for all $2\\le i\\le n$.\n\nHere $c\\bmod d$ denotes the remainder of the division of the integer $c$ by the integer $d$. For example $5 \\bmod 2 = 1$, $72 \\bmod 3 = 0$, $143 \\bmod 14 = 3$.\n\nNote that if there is more than one $a$ which satisfies the statement, you are allowed to find any.",
+    "input_spec": "The first line contains a single integer $t$ $(1\\le t\\le 10^4)$ — the number of test cases.\n\nThe first line of each test case contains a single integer $n$ $(2\\le n\\le 500)$ — the number of elements in $a$.\n\nThe second line of each test case contains $n-1$ integers $x_2,\\dots,x_n$ $(1\\le x_i\\le 500)$ — the elements of $x$.\n\nIt is guaranteed that the sum of values $n$ over all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case output any $a_1,\\dots,a_n$ ($1 \\le a_i \\le 10^9$) which satisfies the statement.",
+    "note": "In the first test case $a=[3,5,4,9]$ satisfies the conditions, because:\n\n $a_2\\bmod a_1=5\\bmod 3=2=x_2$;\n\n $a_3\\bmod a_2=4\\bmod 5=4=x_3$;\n\n $a_4\\bmod a_3=9\\bmod 4=1=x_4$;",
+    "samples": [
+      {
+        "input": "5\n4\n2 4 1\n3\n1 1\n6\n4 2 5 1 2\n2\n500\n3\n1 5",
+        "output": "\n3 5 4 9\n2 5 11\n5 14 16 5 11 24\n501 500\n2 7 5"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 129096,
+    "url": "https://codeforces.com/blog/entry/129096",
+    "tutorial": "Notice that $((a+b) \\bmod a)=b$ for $0\\le b \\lt  a$. So we may try to generate a sequence with $b=x_i$.\n\nLet us take $a_1=1000$, because $1000$ is larger than any of $x_i$. Then, we can take $a_i$ as $a_{i-1}+x_i$, since $((a_{i-1}+x_i)\\bmod a_{i-1})=x_i$ will be hold.\n\nThe maximal value of $a$ will be at most $1000+500n$ what is smaller than $10^9$.",
+    "solution_code": [
+      "#include<iostream>\nusing namespace std;\nint main(){\n\tint t;\n\tcin>>t;\n\twhile(t--){\n\t\tint n;\n\t\tcin>>n;\n\t\tint S=1000;\n\t\tcout<<S<<\" \";\n\t\tfor(int i=2;i<=n;i++){\n\t\t\tint x;\n\t\t\tcin>>x;\n\t\t\tS+=x;\n\t\t\tcout<<S<<\" \";\n\t\t}\n\t\tcout<<\"\\n\";\n\t}\n}"
+    ]
+  }
+}

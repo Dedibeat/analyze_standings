@@ -1,0 +1,55 @@
+{
+  "contest_id": 2008,
+  "index": "H",
+  "name": "Sakurako's Test",
+  "rating": 2100,
+  "tags": [
+    "binary search",
+    "brute force",
+    "greedy",
+    "math",
+    "number theory"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2008H",
+  "url": "https://codeforces.com/problemset/problem/2008/H",
+  "contest_start_time": "2024-09-01T14:35:00+00:00",
+  "statement": {
+    "title": "H. Sakurako's Test",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "Sakurako will soon take a test. The test can be described as an array of integers $n$ and a task on it:\n\nGiven an integer $x$, Sakurako can perform the following operation any number of times:\n\n Choose an integer $i$ ($1\\le i\\le n$) such that $a_i\\ge x$;\n\n Change the value of $a_i$ to $a_i-x$.\n\nUsing this operation any number of times, she must find the minimum possible median$^{\\text{∗}}$ of the array $a$.\n\nSakurako knows the array but does not know the integer $x$. Someone let it slip that one of the $q$ values of $x$ will be in the next test, so Sakurako is asking you what the answer is for each such $x$.\n\n$^{\\text{∗}}$The median of an array of length $n$ is the element that stands in the middle of the sorted array (at the $\\frac{n+2}{2}$-th position for even $n$, and at the $\\frac{n+1}{2}$-th for odd)",
+    "input_spec": "The first line contains one integer $t$ ($1\\le t\\le 10^4$)  — the number of test cases.\n\nThe first line of each test case contains two integers $n$ and $q$ ($1\\le n,q\\le 10^5$)  — the number of elements in the array and the number of queries.\n\nThe second line of each test case contains $n$ integers $a_1, a_2, \\dots, a_n$ ($1\\le a_i\\le n$)  — the elements of the array.\n\nThe following $q$ lines each contain one integer $x$ ($1\\le x\\le n$).\n\nIt is guaranteed that the sum of $n$ across all test cases does not exceed $10^5$. The same guarantee applies to the sum of $q$ across all test cases.",
+    "output_spec": "For each test case, output $q$ integers  — the answer for each query.",
+    "note": null,
+    "samples": [
+      {
+        "input": "2\n5 5\n1 2 3 4 5\n1\n2\n3\n4\n5\n6 3\n1 2 6 4 1 3\n2\n1\n5",
+        "output": "\n0 1 1 1 2 \n1 0 2 "
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 133509,
+    "url": "https://codeforces.com/blog/entry/133509",
+    "tutorial": "Let's fix one $x$ and try to solve this task for it. As we know, in $0-$indexed array median is $\\lfloor\\frac{n}{2}\\rfloor$ where $n$ is number of elements in the array, so to find median, we need to find the smallest element which has at least $\\lfloor\\frac{n}{2}\\rfloor$ elements in the array that is less or equal to it. Also, it is obvious, that we need to decrease all elements till we can, since the least element, the least median of the array is. So, after all operation, we change $a_i$ to $a_i \\mod x$.\n\nHow to find number of $i$ that $a_i\\mod x\\le m$ for some $m$. In fact, we can try to find number of elements in range $[k\\cdot x,k\\cdot x+m]$ for all $k$, since all this elements will be less then $m$ if we take it by modulo $x$. To find number of elements in such range, we can notice that $a_i\\le n$, so we can make prefix sum of counting array (let's call it $pref[i]$ number of elements less or equal $i$) and then number of elements in tange $[a,b]$ will be $pref[b]-pref[a-1]$. Also, since $a_i\\le n$, $k$ will be less then $\\frac{n}{x}$, so for fixed $x$ our solution will work in $\\frac{n}{x}\\cdot log(n)$. Let's precompute it for all $x$ in range $[1,n]$. Then, it will work in time $\\sum_{x=1}^{n+1}\\frac{n}{x}\\cdot log(n)=log(n)\\cdot \\sum_{x=1}^{n+1}\\frac{n}{x} \\stackrel{(*)}{=} log(n)\\cdot n\\cdot log(n)=n\\cdot log^2(n)$.\n\n$(*)$ This transition is true because of $\\sum_{i=1}^{n+1}\\frac{n}{x}$ is harmonic series. It means, $\\sum_{i=1}^{n+1}\\frac{n}{x}=n\\cdot \\sum_{i=1}^{n+1}\\frac{1}{x}\\le n\\cdot log(n)$.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n\nusing namespace std;\n\nint main()\n{\n    int t=1;\n    cin>>t;\n    for(int i=1;i<=t;i++)\n    {\n        int n,m;\n        cin>>n>>m;\n        vector<int>a(n);\n        vector<int>c(n+1,0ll);\n        for(int i=0;i<n;i++)\n        {\n            cin>>a[i];\n            c[a[i]]++;\n        }\n        for(int i=1;i<=n;i++)\n        {\n            c[i]+=c[i-1];\n        }\n        int res[n+1]={0};\n        for(int x=1;x<=n;x++)\n        {\n            int l=0,r=x;\n            while(l<r)\n            {\n                int mid=(l+r)/2;\n                int cnt=c[mid];\n                for(int k=1;k*x<=n;k++)\n                {\n                    cnt+=c[min(k*x+mid,n)]-c[k*x-1];\n                }\n                if(cnt-1>=n/2)\n                {\n                    r=mid;\n                }\n                else\n                {\n                    l=mid+1;\n                }\n            }\n            res[x]=l;\n        }\n        while(m--)\n        {\n            int x;\n            cin>>x;\n            cout<<res[x]<<\" \";\n        }\n        cout<<endl;\n    }\n}",
+      "for _ in range(int(input())):\n    n, m = map(int, input().split())\n    a = list(map(int, input().split()))\n    c = [0] * (n + 1)\n    \n    for i in range(n):\n        c[a[i]] += 1\n    \n    for i in range(1, n + 1):\n        c[i] += c[i - 1]\n    \n    res = [0] * (n + 1)\n    \n    for x in range(1, n + 1):\n        l, r = 0, x\n        while l < r:\n            mid = (l + r) // 2\n            cnt = c[mid]\n            for k in range(1, n // x + 1):\n                cnt += c[min(k * x + mid, n)] - c[k * x - 1]\n            if cnt - 1 >= n // 2:\n                r = mid\n            else:\n                l = mid + 1\n        res[x] = l\n    \n    for _ in range(m):\n        x = int(input())\n        print(res[x])",
+      "void solve() {\n    int N;\n    std::cin >> N;\n    std::string S;\n    std::cin >> S;\n    for(int i = 0; i < N; ++i) {\n        S[i] -= 'a';\n    }\n \n    int ans = INF;\n    std::vector<std::array<std::array<int, 2>, 2>> dp(N + 1);\n    for(int i = 0; i < 26; ++i) {\n        for(int j = 0; j < 26; ++j) {\n            dp[0][0][0] = 0;\n            dp[0][0][1] = dp[0][1][0] = dp[0][1][1] = INF;\n            for(int k = 0; k < N; ++k) {\n                dp[k + 1][0][0] = dp[k + 1][0][1] = dp[k + 1][1][0] = dp[k + 1][1][1] = INF;\n                chmin(dp[k + 1][0][1], dp[k][0][0] + (S[k] != i));\n                chmin(dp[k + 1][1][0], dp[k][0][0] + 1);\n                chmin(dp[k + 1][0][0], dp[k][0][1] + (S[k] != j));\n                chmin(dp[k + 1][1][1], dp[k][0][1] + 1);\n                chmin(dp[k + 1][1][1], dp[k][1][0] + (S[k] != i));\n                chmin(dp[k + 1][1][0], dp[k][1][1] + (S[k] != j));\n            }\n            ans = std::min({ans, dp[N][0][0], dp[N][1][0]});\n        }\n    }\n \n    std::cout << ans << '\\n';\n    \n    return;\n}",
+      "#include <bits/stdc++.h>\n#define pb push_back\n#define int long long\n#define all(x) x.begin(), x.end()\n#define rall(x) x.rbegin(), x.rend()\n#define lb lower_bound\n#define ub upper_bound\n#define fastio ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0)\nusing namespace std;\n#define MOD 1000000007\n\nusing namespace std;\n\nint modmul(int a , int b , int mod){\n    return (a % mod * b % mod) % mod;\n}\n\nint fastpow(int a, int b, int mod) {\n    int ans = 1;\n    a = a%mod;\n    while (b > 0) {\n        if (b & 1) {\n            ans = modmul(ans,a,mod);\n        }\n        a = modmul(a,a,mod);\n        b >>= 1;\n    }\n    return ans%mod;\n}\n\n\nint inv( int a , int p){\n    return fastpow(a , p-2 , p);\n}\n\n\nsigned main() {\n    ios::sync_with_stdio(false);\n    cin.tie(0);\n    \n    int t;\n    cin >> t;\n    while (t--) {\n        int n;\n        cin >> n;\n        vector<int> a(n);\n        int sum = 0;\n        for (int i = 0; i < n; i++) {\n            cin >> a[i];\n            sum = (sum + a[i])%MOD;\n        }\n        sum = (sum%MOD * sum%MOD)%MOD;\n        int pairsum = 0;\n        for(int i=0;i<n;i++){\n            pairsum = (pairsum + ((a[i]%MOD*a[i]%MOD)%MOD))%MOD;\n        }\n        int paircnt = (n*(n-1))%MOD;\n        int num = (sum%MOD - pairsum%MOD);\n        int paircnt_inv = inv(paircnt,MOD)%MOD;\n        num = (num%MOD*paircnt_inv%MOD)%MOD;\n        cout << num << endl;\n    }\n    \n    return 0;\n}",
+      "Input:\n2 10\n1 1\nOutput:\n11",
+      "Input:\n3 1\n1 2 3\nOutput:\n3",
+      "Input:\n3 2\n1 2 4\nOutput:\n4",
+      "(1, 1) -> (1, 2) -> (1, 3) -> (1, 4) -> (1, 5) -> (1, 6) -> (1, 7) -> ...",
+      "if(n%2==0)\n        {\n            vector<int>v[2]={vector<int>(26),vector<int>(26)};\n            for(int i=0;i<n;i++)\n            {\n                v[i%2][s[i]-'a']++;\n            }\n            for(int i=0;i<2;i++)\n            {\n                int mx=0;\n                for(int j=0;j<26;j++)\n                {\n                    mx=max(mx,v[i][j]);\n                }\n                res-=mx;\n            }\n            cout<<res<<endl;\n        }",
+      "int id = 0;\n\nwhile(id<n&&s[id]=='1'){\n   id++;\n}\nif(id==n){\n   if(n==4){\n      cout<<\"Yes\"<<endl;\n   }\n   else{\n      cout<<\"No\"<<endl;\n   }\n}\nelse{\n   if((id-1)*(id-1)==n){\n      cout<<\"Yes\"<<endl; \n   }\n   else{\n      cout<<\"No\"<<endl;\n   }\n}",
+      "1 1 1 1 1\n1 0 1 0 1\n1 0 0 0 1\n1 0 0 0 1\n1 1 1 1 1"
+    ]
+  }
+}

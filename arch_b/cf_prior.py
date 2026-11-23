@@ -50,7 +50,7 @@ no other yardstick reaches (``--validate``): over those 57 teams fitted theta
 agrees with CF team ability at Pearson +0.75 / Spearman +0.76, and the implied
 compression is ``cf ~ 2.86 * theta`` -- far steeper than the 1.63 slope the
 shipped difficulty map applies over the same range, even though theta and b
-share one logit scale by construction. See the anchoring audit in details.md.
+share one logit scale by construction. See the anchoring audit in docs/journal/.
 
     python -m arch_b.cf_prior             # coverage report
     python -m arch_b.cf_prior --validate  # + score the fitted ability axis

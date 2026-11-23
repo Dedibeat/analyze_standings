@@ -1,0 +1,42 @@
+{
+  "contest_id": 2106,
+  "index": "A",
+  "name": "Dr. TC",
+  "rating": 800,
+  "tags": [
+    "brute force",
+    "math"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2106A",
+  "url": "https://codeforces.com/problemset/problem/2106/A",
+  "contest_start_time": "2025-04-24T14:35:00+00:00",
+  "statement": {
+    "title": "A. Dr. TC",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "In order to test his patients' intelligence, Dr. TC created the following test.\n\nFirst, he creates a binary string$^{\\text{∗}}$ $s$ having $n$ characters. Then, he creates $n$ binary strings $a_1, a_2, \\ldots, a_n$. It is known that $a_i$ is created by first copying $s$, then flipping the $i$'th character ($\\texttt{1}$ becomes $\\texttt{0}$ and vice versa). After creating all $n$ strings, he arranges them into a grid where the $i$'th row is $a_i$.\n\nFor example,\n\n If $s = \\texttt{101}$, $a = [\\texttt{001}, \\texttt{111}, \\texttt{100}]$.\n\n If $s = \\texttt{0000}$, $a = [\\texttt{1000}, \\texttt{0100}, \\texttt{0010}, \\texttt{0001}]$.\n\nThe patient needs to count the number of $1$s written on the board in less than a second. Can you pass the test?\n\n$^{\\text{∗}}$A binary string is a string that only consists of characters $\\texttt{1}$ and $\\texttt{0}$.",
+    "input_spec": "The first line of the input consists of a single integer $t$ ($1 \\le t \\le 1000$) — the number of test cases.\n\nThe first line of each test case contains a single integer $n$ ($1 \\le n \\le 10$) — the length of the binary string $s$.\n\nThe second line of each test case contains a single binary string $s$ of size $n$.",
+    "output_spec": "For each test case, output a single integer, the number of $\\texttt{1}$s on the board.",
+    "note": "The first example is explained in the statement.\n\nFor the second example, the only string written on the board will be the string $\\texttt{0}$; therefore, the answer is $0$.\n\nIn the third example, the following strings will be written on the board: $[\\texttt{10000}, \\texttt{01000}, \\texttt{00100}, \\texttt{00010}, \\texttt{00001}]$; so there are five $\\texttt{1}$s written on the board.",
+    "samples": [
+      {
+        "input": "5\n3\n101\n1\n1\n5\n00000\n2\n11\n3\n010",
+        "output": "\n5\n0\n5\n2\n4"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 142254,
+    "url": "https://codeforces.com/blog/entry/142254",
+    "tutorial": "Problem A — DR. TC\n\n(Author & Analysis: SpyrosAliv)\n\nSolution\n\nEvery character of $a$ is flipped in exactly one string. Therefore, if $a_i = 1$, we need to add $n-1$ to the answer (since the $i$-$th$ character will stay $1$ for $n-1$ strings), and if $a_i = 0$ we need to add $1$ (since the $i$-$th$ character will be $1$ in exactly one string).\n\nImplementation\n\nRate the Problem\n\n Amazing\n\n Good\n\n Average\n\n Bad\n\n Didn't Solve",
+    "solution_code": [
+      "#include <bits/stdc++.h>\nusing namespace std;\n \nvoid solve() {\n    int n; cin >> n;\n    string s; cin >> s;\n    int ans = 0;\n    for (auto x: s) {\n        if (x == '0') ans++;\n        else ans += n - 1;\n    }\n    cout << ans << '\\n';\n}\n \nint main() {\n    int t; cin >> t;\n    while (t--) solve();\n    return 0;\n}"
+    ]
+  }
+}

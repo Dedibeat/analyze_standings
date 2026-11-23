@@ -1,0 +1,44 @@
+{
+  "contest_id": 2034,
+  "index": "F1",
+  "name": "Khayyam's Royal Decree (Easy Version)",
+  "rating": 2500,
+  "tags": [
+    "combinatorics",
+    "dp",
+    "math",
+    "sortings"
+  ],
+  "points": 2000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2034F1",
+  "url": "https://codeforces.com/problemset/problem/2034/F1",
+  "contest_start_time": "2024-11-30T14:35:00+00:00",
+  "statement": {
+    "title": "F1. Khayyam's Royal Decree (Easy Version)",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "This is the easy version of the problem. The only differences between the two versions are the constraints on $k$ and the sum of $k$.\n\nIn ancient Persia, Khayyam, a clever merchant and mathematician, is playing a game with his prized treasure chest containing $n$ red rubies worth $2$ dinars each and $m$ blue sapphires worth $1$ dinar each. He also has a satchel, which starts empty, and $k$ scrolls with pairs $(r_1, b_1), (r_2, b_2), \\ldots, (r_k, b_k)$ that describe special conditions.\n\nThe game proceeds for $n + m$ turns as follows:\n\n Khayyam draws a gem uniformly at random from the chest.\n\n He removes the gem from the chest and places it in his satchel.\n\n If there exists a scroll $i$ ($1 \\leq i \\leq k$) such that the chest contains exactly $r_i$ red rubies and $b_i$ blue sapphires, Khayyam receives a royal decree that doubles the value of all the gems in his satchel as a reward for achieving a special configuration.\n\nNote that the value of some gems might be affected by multiple decrees, and in that case the gems' value is doubled multiple times.\n\nDetermine the expected value of Khayyam's satchel at the end of the game, modulo $998,244,353$.\n\nFormally, let $M = 998,244,353$. It can be shown that the exact answer can be expressed as an irreducible fraction $\\frac{p}{q}$, where $p$ and $q$ are integers and $q \\not \\equiv 0 \\pmod{M}$. Output the integer equal to $p \\cdot q^{-1} \\bmod M$. In other words, output such an integer $x$ that $0 \\le x  \\lt  M$ and $x \\cdot q \\equiv p \\pmod{M}$.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 500$). The description of the test cases follows.\n\nThe first line of each test case contains three integers $n$, $m$, and $k$ ($1 \\leq n, m \\leq 2 \\cdot 10^5$, $0 \\leq k \\leq 500$) — the number of red rubies, the number of blue sapphires, and the number of scrolls describing special conditions, respectively.\n\nEach of the next $k$ lines contains two integers $r_i$, $b_i$ ($0 \\leq r_i \\leq n$, $0 \\leq b_i \\leq m$, $1 \\leq r_i + b_i \\leq n+m-1$). It is guaranteed that the pairs $(r_i, b_i)$ are distinct.\n\nIt is guaranteed that the sum of $n$ and the sum of $m$ over all test cases do not exceed $2 \\cdot 10^5$, and the sum of $k$ over all test cases does not exceed $500$.",
+    "output_spec": "For each test case, print a single integer: the expected value of Khayyam's satchel at the end of the process, modulo $998,244,353$.",
+    "note": "In the first test case, at the end of the process, there will always be $3$ red rubies and $4$ blue sapphires. None of the special conditions described in the scrolls are met, so the value of Khayyam's satchel remains unchanged. The total value of the satchel at the end is always $2 \\cdot 3 + 1 \\cdot 4 = 10$.\n\nIn the second test case, consider the following two cases:\n\n With probability $1/2$, Khayyam draws a red ruby, and the value of his satchel becomes $2$. Then with probability $1$, he draws a blue sapphire, and the value of his satchel becomes $3$.\n\n With probability $1/2$, Khayyam draws a blue sapphire, and the value of his satchel becomes $1$. At this point, the chest contains $r_1 = 1$ red rubies and $b_1 = 0$ blue sapphires, which match the special condition described in a scroll. As a result, the value of the satchel is doubled to $2 \\cdot 1 = 2$. Then with probability $1$, he draws a red ruby, and the value of his satchel becomes $4$.\n\nThus, the expected value at the end is $\\frac{1}{2} \\cdot 3 + \\frac{1}{2} \\cdot 4 = \\frac{7}{2}$, which is $499,122,180$ modulo $998,244,353$.",
+    "samples": [
+      {
+        "input": "5\n3 4 0\n1 1 1\n1 0\n3 3 2\n1 1\n2 2\n3 3 2\n2 1\n1 2\n10 4 5\n1 0\n8 0\n6 4\n0 2\n7 4",
+        "output": "\n10\n499122180\n798595498\n149736666\n414854846"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 136579,
+    "url": "https://codeforces.com/blog/entry/136579",
+    "tutorial": "2034F1 - Khayyam's Royal Decree (Easy Version)\n\nIdea and Preparation: TheScrasse\n\nSolution\n\nStep 1: For simplicity, redefine the special conditions for the number of rubies and sapphires in your satchel (not chest). Add two dummy states, $(0,0)$ and $(n,m)$ for convenience (the first one indexed as $0$ and the second one indexed as $k+1$). Note that these dummy states won’t involve doubling the value.\n\nStep 2: Order the redefined conditions $(x, y)$ in increasing order based on the value of $x + y$.\n\nStep 3: Define $ways_{i,j}$ as the number of ways to move from state $i$ to state $j$ without passing through any other special condition. This can be computed using inclusion-exclusion in $O(k^3)$.\n\nStep 4: Define $cost_{i,j}$, the increase in value for moving directly from state $i$ to state $j$ without intermediate doubling, as:\n\n $cost_{i,j} = 2|x_i - x_j| + |y_i - y_j|$\n\nStep 5: Define $dp_i$ as the total sum of the value of your satchel across all ways to reach the state defined by the $i$-th condition. This can be computed recursively as:\n\n $dp_i = 2 \\sum_{0 \\leq j  \\lt  i} ways_{j,i} \\times (dp_j + \\binom{x_j + y_j}{x_j} \\times cost_{j,i})$\n\nStep 6: Compute the final answer as the value of $dp_{k+1}$ divided by the total number of ways to move from $(0,0)$ to $(n,m)$, which is $\\binom{n+m}{n}$.\n\nImplementation",
+    "solution_code": [
+      "#include <bits/stdc++.h>\nusing namespace std;\n \n#define nl \"\\n\"\n#define nf endl\n#define ll long long\n#define pb push_back\n#define _ << ' ' <<\n \n#define INF (ll)1e18\n#define mod 998244353\n#define maxn 400010\n \nll fc[maxn], nv[maxn];\n \nll fxp(ll b, ll e) {\n    ll r = 1, k = b;\n    while (e != 0) {\n        if (e % 2) r = (r * k) % mod;\n        k = (k * k) % mod; e /= 2;\n    }\n    return r;\n}\n \nll inv(ll x) {\n    return fxp(x, mod - 2);\n}\n \nll bnm(ll a, ll b) {\n    if (a < b || b < 0) return 0;\n    ll r = (fc[a] * nv[b]) % mod;\n    r = (r * nv[a - b]) % mod;\n    return r;\n}\n \nint main() {\n    ios::sync_with_stdio(0);\n    cin.tie(0);\n \n    fc[0] = 1; nv[0] = 1;\n    for (ll i = 1; i < maxn; i++) {\n        fc[i] = (i * fc[i - 1]) % mod; nv[i] = inv(fc[i]);\n    }\n \n    ll t; cin >> t;\n    while (t--) {\n        ll n, m, k; cin >> n >> m >> k;\n        vector<array<ll, 2>> a(k + 2, {0, 0});\n        for (ll i = 1; i <= k; i++) {\n            cin >> a[i][0] >> a[i][1];\n            a[i][0] = n - a[i][0]; a[i][1] = m - a[i][1];\n        }\n        a[k + 1] = {n, m}; k++;\n        sort(a.begin() + 1, a.end());\n \n        auto paths = [&](ll i, ll j) {\n            ll dx = a[j][0] - a[i][0], dy = a[j][1] - a[i][1];\n            return bnm(dx + dy, dx);\n        };\n \n        auto add = [&](ll &x, ll y) {\n            x = (x + y) % mod;\n            x = (x + mod) % mod;\n        };\n \n        vector direct(k + 1, vector<ll>(k + 1, 0));\n        for (ll i = 1; i <= k; i++) {\n            for (ll j = i - 1; j >= 0; j--) {\n                direct[j][i] = paths(j, i);\n                for (ll l = j + 1; l < i; l++) {\n                    add(direct[j][i], -paths(j, l) * direct[l][i]);\n                }\n            }\n        }\n \n        vector<ll> dp(k + 1, 0);\n        for (ll i = 1; i <= k; i++) {\n            for (ll j = 0; j < i; j++) {\n                if (direct[j][i] == 0) continue;\n                ll partial = dp[j];\n                ll delta = 2 * (a[i][0] - a[j][0]) + (a[i][1] - a[j][1]);\n                add(partial, paths(0, j) * delta);\n                add(dp[i], partial * direct[j][i]);\n            }\n            if (i != k) dp[i] = (2 * dp[i]) % mod;\n        }\n \n        ll ans = (dp[k] * inv(bnm(n + m, m))) % mod;\n        cout << ans << nl;\n    }\n \n    return 0;\n}"
+    ]
+  }
+}

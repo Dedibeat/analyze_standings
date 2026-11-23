@@ -1,0 +1,44 @@
+{
+  "contest_id": 2034,
+  "index": "A",
+  "name": "King Keykhosrow's Mystery",
+  "rating": 800,
+  "tags": [
+    "brute force",
+    "chinese remainder theorem",
+    "math",
+    "number theory"
+  ],
+  "points": 500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2034A",
+  "url": "https://codeforces.com/problemset/problem/2034/A",
+  "contest_start_time": "2024-11-30T14:35:00+00:00",
+  "statement": {
+    "title": "A. King Keykhosrow's Mystery",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "There is a tale about the wise King Keykhosrow who owned a grand treasury filled with treasures from across the Persian Empire. However, to prevent theft and ensure the safety of his wealth, King Keykhosrow's vault was sealed with a magical lock that could only be opened by solving a riddle.\n\nThe riddle involves two sacred numbers $a$ and $b$. To unlock the vault, the challenger must determine the smallest key number $m$ that satisfies two conditions:\n\n $m$ must be greater than or equal to at least one of $a$ and $b$.\n\n The remainder when $m$ is divided by $a$ must be equal to the remainder when $m$ is divided by $b$.\n\nOnly by finding the smallest correct value of $m$ can one unlock the vault and access the legendary treasures!",
+    "input_spec": "The first line of the input contains an integer $t$ ($1 \\leq t \\leq 100$), the number of test cases.\n\nEach test case consists of a single line containing two integers $a$ and $b$ ($1 \\leq a, b \\leq 1000$).",
+    "output_spec": "For each test case, print the smallest integer $m$ that satisfies the conditions above.",
+    "note": "In the first test case, you can see that:\n\n $4 \\bmod 4 = 0$ but $4 \\bmod 6 = 4$\n\n $5 \\bmod 4 = 1$ but $5 \\bmod 6 = 5$\n\n $6 \\bmod 4 = 2$ but $6 \\bmod 6 = 0$\n\n $7 \\bmod 4 = 3$ but $7 \\bmod 6 = 1$\n\n $8 \\bmod 4 = 0$ but $8 \\bmod 6 = 2$\n\n $9 \\bmod 4 = 1$ but $9 \\bmod 6 = 3$\n\n $10 \\bmod 4 = 2$ but $10 \\bmod 6 = 4$\n\n $11 \\bmod 4 = 3$ but $11 \\bmod 6 = 5$\n\n so no integer less than $12$ satisfies the desired properties.",
+    "samples": [
+      {
+        "input": "2\n4 6\n472 896",
+        "output": "\n12\n52864"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 136579,
+    "url": "https://codeforces.com/blog/entry/136579",
+    "tutorial": "2034A - King Keykhosrow's Mystery\n\nIdea: ArshiaDadras — Preparation: AmirrzwM\n\nSolution\n\nStep 1: Prove that for the minimum value of $m$, we must have $m \\% a = m \\% b = 0$.\n\nStep 2: To prove this, show that if $m \\% a = m \\% b = x \\gt 0$, then $m-1$ will also satisfy the problem's requirements.\n\nStep 3: Since $m \\ge \\min(a , b)$, if $x \\gt 0$, then $m \\gt \\min(a , b)$ must hold. Therefore, $m - 1 \\ge \\min(a , b)$ implies that $m-1$ satisfies the requirements.\n\nStep 4: Thus, $m$ must be divisible by both $a$ and $b$. The smallest such $m$ is $lcm(a, b)$ which can be calculated in $O(\\log(\\max(a, b)))$.\n\nImplementation",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n\nusing namespace std;\n\nint main(){\n  int tt;\n  cin >> tt;\n  while(tt--){\n    int a, b;\n    cin >> a >> b;\n    cout << lcm(a , b) << endl;\n  }\n}"
+    ]
+  }
+}

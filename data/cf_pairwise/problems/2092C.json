@@ -1,0 +1,44 @@
+{
+  "contest_id": 2092,
+  "index": "C",
+  "name": "Asuna and the Mosquitoes",
+  "rating": 1200,
+  "tags": [
+    "constructive algorithms",
+    "greedy",
+    "math"
+  ],
+  "points": 1250.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2092C",
+  "url": "https://codeforces.com/problemset/problem/2092/C",
+  "contest_start_time": "2025-03-29T14:35:00+00:00",
+  "statement": {
+    "title": "C. Asuna and the Mosquitoes",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "For her birthday, each of Asuna's $n$ admirers gifted her a tower. The height of the tower from the $i$-th admirer is equal to $a_i$.\n\nAsuna evaluates the beauty of the received gifts as $\\max(a_1, a_2, \\ldots, a_n)$. She can perform the following operation an arbitrary number of times (possibly, zero).\n\n Take such $1 \\le i \\neq j \\le n$ that $a_i + a_j$ is odd and $a_i  \\gt  0$, then decrease $a_i$ by $1$ and increase $a_j$ by $1$.\n\n It is easy to see that the heights of the towers remain non-negative during the operations.\nHelp Asuna find the maximum possible beauty of the gifts after any number of operations!",
+    "input_spec": "Each test consists of several test cases. The first line of the input data contains one integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases. The description of the test cases follows.\n\nThe first line of each test case contains a single integer $n$ ($1 \\leq n \\leq 2 \\cdot 10^5$) — the number of admirers of Asuna.\n\nThe second line of each test case contains $n$ integers $a_1, a_2, \\ldots, a_n \\ (1 \\le a_i \\le 10^9)$ — the heights of the towers.\n\nIt is guaranteed that the sum of $n$ across all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, output a single integer: the maximum value of the beauty of the gifts that Asuna can achieve.",
+    "note": "In the first test case, no pair of towers satisfies the required condition for applying the operation, so no operations can be performed. In this case, the answer is $\\max(5, \\ 3, \\ 9) = 9$.\n\nIn the second test case, the operation with $i = 2$ and $j = 1$ can be applied twice. After that, the array becomes: $a \\ = \\ [5, \\ 0]$. Thus, the answer is 5.\n\nIn the third test case, the following sequence of operations can be applied:\n\n Operation with $i=1$ and $j=2$.\n$[1, \\ 2, \\ 2, \\ 1] \\quad \\rightarrow \\quad [0, \\ 3, \\ 2, \\ 1]$\n\n Operation with $i=3$ and $j=2$.\n$[0, \\ 3, \\ 2, \\ 1] \\quad \\rightarrow \\quad [0, \\ 4, \\ 1, \\ 1]$\n\n Operation with $i=3$ and $j=2$.\n$[0, \\ 4, \\ 1, \\ 1] \\quad \\rightarrow \\quad [0, \\ 5, \\ 0, \\ 1]$\n\n$\\max(0, \\ 5, \\ 0, \\ 1) \\ = \\ 5$.\n\nTherefore, the answer is 5.",
+    "samples": [
+      {
+        "input": "4\n3\n5 3 9\n2\n3 2\n4\n1 2 2 1\n5\n5 4 3 2 9",
+        "output": "\n9\n5\n5\n21"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 141023,
+    "url": "https://codeforces.com/blog/entry/141023",
+    "tutorial": "2092C - Asuna and the Mosquitoes\n\nAuthor: sergeev.PRO\n\nHint 1\n\nConsider two cases: first, when all numbers have the same parity; and second, when there is at least one even and one odd number.\n\nHint 2\n\nLet $S$ be the sum of all numbers, and $k$ be the number of odd numbers in the array. Then, in the second case, the answer is $S - k + 1$.\n\nSolution\n\nCase 1. All numbers in $a$ have the same parity. In this case, it is impossible to perform any operation, so the answer is $\\max(a)$.\n\nCase 2. There is at least one even and one odd number. Let $S$ be the sum of all numbers, and $k$ be the number of odd numbers in the array. We will now prove that the answer is $S - k + 1$.\n\nFirst of all, the answer cannot exceed $S - k + 1$, since the number of odd elements in the array remains unchanged after performing the operation.\n\nSecondly, we will show that $S - k + 1$ is always achievable. Consider an arbitrary odd number $A \\in a$. We can then merge all even numbers into $A$ $\\left( \\text{i.e.} \\ (A, 2k) \\to (A + 2k, 0) \\right)$, resulting in an array consisting of the number $A + 2m$, $k-1$ odd numbers, and zeros for the remaining elements (here $2m$ denotes the sum of all even numbers in the initial array).\n\nAfter this step, for each remaining odd number, we can sacrifice one unit by transferring it to any zero element in the array and then merge the resulting even number into $A$. It's easy to see that there will always be at least one zero available in the array before merging each odd number. Eventually, we will obtain an array consisting of one element equal to $S - k + 1$, $k - 1$ elements equal to one, and zeros filling the remaining positions.\n\nTherefore, the answer in this case will be $S-k+1$.\n\nCode (C++)\n\nCode (Python)\n\nRate the problem\n\n Amazing problem:\n\n Good problem:\n\n Average problem:\n\n Bad problem:\n\n Didn't solve:",
+    "solution_code": [
+      "#include <algorithm>\n#include <iostream>\n#include <vector>\n \nusing namespace std;\n \nvoid solve() {\n    int n; cin >> n;\n    vector <int> a(n);\n    long long ans = 0, cnt = 0;\n    for (int i = 0; i < n; ++i) {\n        cin >> a[i];\n        ans += a[i]; cnt += (a[i] & 1);\n    }\n    if (!cnt || cnt == n) {\n        cout << *max_element(a.begin(), a.end()) << '\\n';\n    } else {\n        cout << ans - cnt + 1 << '\\n';\n    }\n}\n \nsigned main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(nullptr);\n    cout.tie(nullptr);\n    int t; cin >> t;\n    while (t--) solve();\n}",
+      "t = int(input())\n \nfor test in range(t):\n    n = int(input())\n    a = [int(i) for i in input().split()]\n    ans, cnt = 0, 0\n    for i in a:\n        ans += i\n        cnt += i % 2\n        \n    if not cnt or cnt == n:\n        print(max(a))\n    else:\n        print(ans - cnt + 1)"
+    ]
+  }
+}

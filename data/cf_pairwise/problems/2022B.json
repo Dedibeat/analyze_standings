@@ -1,0 +1,43 @@
+{
+  "contest_id": 2022,
+  "index": "B",
+  "name": "Kar Salesman",
+  "rating": 1300,
+  "tags": [
+    "binary search",
+    "greedy",
+    "math"
+  ],
+  "points": 1000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2022B",
+  "url": "https://codeforces.com/problemset/problem/2022/B",
+  "contest_start_time": "2024-10-13T19:35:00+00:00",
+  "statement": {
+    "title": "B. Kar Salesman",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "Karel is a salesman in a car dealership. The dealership has $n$ different models of cars. There are $a_i$ cars of the $i$-th model. Karel is an excellent salesperson and can convince customers to buy up to $x$ cars (of Karel's choice), as long as the cars are from different models.\n\nDetermine the minimum number of customers Karel has to bring in to sell all the cars.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 10^4$). The description of the test cases follows.\n\nThe first line of each test case contains two integers $n$ and $x$ ($1 \\le n \\le 5 \\cdot 10^5$; $1 \\le x \\le 10$) — the number of different models of cars and the maximum number of cars Karel can convince a customer to buy.\n\nThe second line contains $n$ integers $a_1, a_2, \\ldots, a_n$ ($1 \\le a_i \\le 10^9$) — the number of cars of each model.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $5 \\cdot 10^5$.",
+    "output_spec": "For each test case, output the minimum possible number of customers needed to sell all the cars.",
+    "note": "For the first case, Karel only needs to lure in $3$ customers. He will convince the customers to buy the following models of cars:\n\n Customer $1$ buys $2$ cars with model $1$ and $3$.\n\n Customer $2$ buys $2$ cars with model $1$ and $2$.\n\n Customer $3$ buys $2$ cars with model $1$ and $3$.\n\nFor the second case, Karel only needs to lure in $3$ customers. He will convince the customers to buy the following models of cars:\n\n Customer $1$ buys $2$ cars with model $1$ and $3$.\n\n Customer $2$ buys $3$ cars with model $1$, $2$ and $3$.\n\n Customer $3$ buys $1$ car with model $3$.",
+    "samples": [
+      {
+        "input": "4\n3 2\n3 1 2\n3 3\n2 1 3\n5 3\n2 2 1 9 2\n7 4\n2 5 3 3 5 2 5",
+        "output": "\n3\n3\n9\n7"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 135095,
+    "url": "https://codeforces.com/blog/entry/135095",
+    "tutorial": "2022B - Kar Salesman\n\nStep 1\n\nSince no customer can buy more than one car from the same model, the minimum number of clients we need is determined by the model with the most cars. Therefore, we need at least:\n $\\max\\{a_1, a_2, \\cdots a_n\\}$\nclients, because even if a customer buys cars from other models, they cannot exceed this limit for any single model.\n\nStep 2\n\nEach client can buy up to $x$ cars from different models. To distribute all the cars among the clients, we also need to consider the total number of cars. Thus, the minimum number of clients needed is at least:\n $\\displaystyle\\left\\lceil \\frac{a_1 + a_2 + \\cdots + a_n}{x}\\right\\rceil$\nThis ensures that all cars can be distributed across the clients, respecting the limit of $x$ cars per customer.\n\nStep 3\n\nThe actual number of clients required is the maximum of the two values:\n $\\displaystyle\\max\\left\\{\\left\\lceil \\frac{a_1 + a_2 + \\cdots + a_n}{x}\\right\\rceil, \\max\\{a_1, a_2, \\cdots a_n\\}\\right\\}$\nThis gives us a lower bound for the number of clients required, satisfying both constraints (the maximum cars of a single model and the total number of cars).\n\nAlternative Solution\n\nApply binary search on the answer.\n\nProof 1\n\nTo demonstrate that this is always sufficient, we can reason that the most efficient strategy is to reduce the car count for the models with the largest numbers first. By doing so, we maximize the benefit of allowing each client to buy up to $x$ cars from different models.\n\nAfter distributing the cars, two possible outcomes will arise:\n\nAll models will have the same number of remaining cars, and this situation will be optimal when the total cars are evenly distributed (matching the $\\displaystyle\\left\\lceil \\frac{a_1 + a_2 + ... + a_n}{x}\\right\\rceil$ bound).\n\nThere will be still a quantity of models less than or equal to x remaining, which matches the case where the maximum number of cars from a single model $\\max(a_1, a_2, ..., a_n)$ determines the bound.\n\nProof 2 (by Errorgorn)\n\nImagine a grid of size $w \\times x$, where $w$ represents the minimum number of clients needed:\n $\\displaystyle w = \\max\\left\\{\\left\\lceil \\frac{a_1 + a_2 + \\cdots + a_n}{x}\\right\\rceil, \\max\\{a_1, a_2, \\cdots a_n\\}\\right\\}$\nNow, place the cars in this grid by filling it column by column, from the first model to the $n$-th model. This method ensures that each client will buy cars from different models and no client exceeds the $x$ car limit. Since the total number of cars is less than or equal to the size of the grid, this configuration guarantees that all cars will be sold within $w$ clients.\n\nCode:\n\nKey Takeaway\n\nIf you don't know how to solve a problem, try to solve for small cases to find a pattern.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\nusing namespace std;\n \nint main() {\n\tint t;\n\tcin>>t;\n\twhile(t--)\n\t{\n\t\tlong long n,x;\n\t\tcin>>n>>x;\n\t\tvector<long long>arr(n);\n\t\tlong long sum=0;\n\t\tlong long maximo=0;\n\t\tfor(int k=0;k<n;k++)\n\t\t{\n\t\t\tcin>>arr[k];\n\t\t\tmaximo=max(maximo,arr[k]);\n\t\t\tsum+=arr[k];\n\t\t}\n\t\tlong long sec=(sum+x-1)/(long long)x;\n\t\tcout<<max(maximo,sec)<<endl;\n\t}\n}"
+    ]
+  }
+}

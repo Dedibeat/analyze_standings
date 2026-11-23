@@ -1,0 +1,42 @@
+{
+  "contest_id": 1971,
+  "index": "B",
+  "name": "Different String",
+  "rating": 800,
+  "tags": [
+    "implementation",
+    "strings"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1971B",
+  "url": "https://codeforces.com/problemset/problem/1971/B",
+  "contest_start_time": "2024-05-10T14:35:00+00:00",
+  "statement": {
+    "title": "B. Different String",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "You are given a string $s$ consisting of lowercase English letters.\n\nRearrange the characters of $s$ to form a new string $r$ that is not equal to $s$, or report that it's impossible.",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\leq t \\leq 1000$) — the number of test cases.\n\nThe only line of each test case contains a string $s$ of length at most $10$ consisting of lowercase English letters.",
+    "output_spec": "For each test case, if no such string $r$ exists as described in the statement, output \"NO\" (without quotes).\n\nOtherwise, output \"YES\" (without quotes). Then, output one line — the string $r$, consisting of letters of string $s$.\n\nYou can output \"YES\" and \"NO\" in any case (for example, strings \"yEs\", \"yes\", and \"Yes\" will be recognized as a positive response).\n\nIf multiple answers are possible, you can output any of them.",
+    "note": "In the first test case, another possible answer is $\\texttt{forcescode}$.\n\nIn the second test case, all rearrangements of $\\texttt{aaaaa}$ are equal to $\\texttt{aaaaa}$.",
+    "samples": [
+      {
+        "input": "8\ncodeforces\naaaaa\nxxxxy\nco\nd\nnutdealer\nmwistht\nhhhhhhhhhh",
+        "output": "\nYES\nforcodesec\nNO\nYES\nxxyxx\nYES\noc\nNO\nYES\nundertale\nYES\nthtsiwm\nNO"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 129364,
+    "url": "https://codeforces.com/blog/entry/129364",
+    "tutorial": "Since the string is length at most $10$, we can try all swaps of two characters of the string. This is $\\mathcal{O}(|s|^2)$ per test case, which is fast enough. If none of them create a different string, then all characters in the original string are the same, so the answer is NO.\n\nBonus: Actually, it's enough to try all swaps with the first character, solving the problem in $\\mathcal{O}(|s|)$. Why?",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n \nusing namespace std;\n \nconst int MAX = 200'007;\nconst int MOD = 1'000'000'007;\n \nvoid solve() {\n\tstring s;\n\tcin >> s;\n\tbool ok = false;\n\tfor (int i = 1; i < (int)(s.length()); i++) {\n\t\tif (s[i] != s[0]) {swap(s[i], s[0]); ok = true; break;}\n\t}\t\n\tif (!ok) {\n\t\tcout << \"NO\\n\"; return;\n\t}\n\tcout << \"YES\\n\";\n\tcout << s << '\\n';\n}\n \nint main() {\n\tint tt; cin >> tt; for (int i = 1; i <= tt; i++) {solve();}\n\t// solve();\n}"
+    ]
+  }
+}

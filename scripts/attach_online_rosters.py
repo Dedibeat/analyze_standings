@@ -15,7 +15,7 @@ the key alone):
   round's roster and the board.
 
 Rows that already have >=2 members are left alone, so rerunning is a no-op.
-Measured before shipping (details.md, 2026-09-28): calibrated LOCO neutral,
+Measured before shipping (docs/journal/, 2026-09-28): calibrated LOCO neutral,
 held-out Asia East cell log loss -0.00069 [-0.00141, -0.00005].
 """
 

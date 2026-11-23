@@ -1,0 +1,43 @@
+{
+  "contest_id": 1971,
+  "index": "E",
+  "name": "Find the Car",
+  "rating": 1500,
+  "tags": [
+    "binary search",
+    "math",
+    "sortings"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1971E",
+  "url": "https://codeforces.com/problemset/problem/1971/E",
+  "contest_start_time": "2024-05-10T14:35:00+00:00",
+  "statement": {
+    "title": "E. Find the Car",
+    "time_limit": "3 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Timur is in a car traveling on the number line from point $0$ to point $n$. The car starts moving from point $0$ at minute $0$.\n\nThere are $k+1$ signs on the line at points $0, a_1, a_2, \\dots, a_k$, and Timur knows that the car will arrive there at minutes $0, b_1, b_2, \\dots, b_k$, respectively. The sequences $a$ and $b$ are strictly increasing with $a_k = n$.\n\nBetween any two adjacent signs, the car travels with a constant speed. Timur has $q$ queries: each query will be an integer $d$, and Timur wants you to output how many minutes it takes the car to reach point $d$, rounded down to the nearest integer.",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\leq t \\leq 10^4$) — the number of test cases.\n\nThe first line of each test case contains three integers $n$, $k$, and $q$, ($k \\leq n \\leq 10^9$; $1 \\leq k, q \\leq 10^5$) — the final destination, the number of points Timur knows the time for, and the number of queries respectively.\n\nThe second line of each test case contains $k$ integers $a_i$ ($1 \\leq a_i \\leq n$; $a_i  \\lt  a_{i+1}$ for every $1 \\leq i \\leq k-1$; $a_k = n$).\n\nThe third line of each test case contains $k$ integers $b_i$ ($1 \\leq b_i \\leq 10^9$; $b_i  \\lt  b_{i+1}$ for every $1 \\leq i \\leq k-1$).\n\nEach of the following $q$ lines contains a single integer $d$ ($0 \\leq d \\leq n$) — the distance that Timur asks the minutes passed for.\n\nThe sum of $k$ over all test cases doesn't exceed $10^5$, and the sum of $q$ over all test cases doesn't exceed $10^5$.",
+    "output_spec": "For each query, output a single integer — the number of minutes passed until the car reaches the point $d$, rounded down.",
+    "note": "For the first test case, the car goes from point $0$ to point $10$ in $10$ minutes, so the speed is $1$ unit per minute and:\n\n At point $0$, the time will be $0$ minutes.\n\n At point $6$, the time will be $6$ minutes.\n\n At point $7$, the time will be $7$ minutes.\n\nFor the second test case, between points $0$ and $4$, the car travels at a speed of $1$ unit per minute and between $4$ and $10$ with a speed of $2$ units per minute and:\n\n At point $6$, the time will be $5$ minutes.\n\n At point $4$, the time will be $4$ minutes.\n\n At point $2$, the time will be $2$ minutes.\n\n At point $7$, the time will be $5.5$ minutes, so the answer is $5$.\n\nFor the fourth test case, the car travels with $1.2$ units per minute, so the answers to the queries are:\n\n At point $2$, the time will be $1.66\\dots$ minutes, so the answer is $1$.\n\n At point $6$, the time will be $5$ minutes.\n\n At point $5$, the time will be $4.16\\dots$ minutes, so the answer is $4$.",
+    "samples": [
+      {
+        "input": "4\n10 1 3\n10\n10\n0\n6\n7\n10 2 4\n4 10\n4 7\n6\n4\n2\n7\n1000000000 1 1\n1000000000\n1000000000\n99999999\n6 1 3\n6\n5\n2\n6\n5",
+        "output": "\n0 6 7 \n5 4 2 5 \n99999999 \n1 5 4 "
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 129364,
+    "url": "https://codeforces.com/blog/entry/129364",
+    "tutorial": "For each query, we binary search to find the last sign we passed (since the array $a$ is sorted). Say it is $a_r$. Then, $b_r$ minutes have passed.\n\nTo find out how much time has passed since we left that sign, we know that the speed between sign $r$ and $r+1$ is $\\frac{a_{r+1} - a_r}{b_{r+1} - b_r} \\, \\frac{\\text{distance}}{\\text{minute}}$ (by the usual formula for speed).\n\nWe have passed a distance $c - a_r$ since the last sign, so the total number of minutes since the last sign is $$\\frac{b_{r+1} - b_r}{a_{r+1} - a_r} \\, \\frac{\\text{minute}}{\\text{distance}} \\times c - a_r \\, \\text{distance} = (c - a_r) \\times \\frac{b_{r+1} - b_r}{a_{r+1} - a_r} \\, \\text{minutes}.$$ Adding this to our $b_r$ from before, we get the answer.\n\nBe careful about using floating-point numbers, as they can behave strangely. Our solution below doesn't use them at all.",
+    "solution_code": [
+      "#include <iostream>\n#include <algorithm>\n#include <vector>\n#include <array>\n#include <set>\n#include <map>\n#include <queue>\n#include <stack>\n#include <list>\n#include <chrono>\n#include <random>\n#include <cstdlib>\n#include <cmath>\n#include <ctime>\n#include <cstring>\n#include <iomanip>\n#include <bitset>\n#include <cassert>\ntypedef long long  ll;\nusing namespace std;\n \nvoid solve()\n{\n    int n, k, q;\n    cin >> n >> k >> q;\n    vector<long long> a(k+1), b(k+1);\n    a[0] = 0;\n    b[0] = 0;\n    for(int i = 1; i <= k; i++)\n    {\n        cin >> a[i];\n    }\n    for(int i = 1; i <= k; i++)\n    {\n        cin >> b[i];\n    }\n    for(int i = 0; i < q; i++)\n    {\n        long long c;\n        cin >> c;\n        int l = 0, r = k;\n        while(l <= r)\n        {\n            int mid = l+r>>1;\n            if(a[mid] > c)\n            {\n                r = mid-1;\n            }\n            else\n            {\n                l = mid+1;\n            }\n        }\n        if(a[r] == c)\n        {\n            cout << b[r] << \" \";\n            continue;\n        }\n        long long ans = b[r] + (c-a[r])*(b[r+1]-b[r])/(a[r+1]-a[r]);\n        cout << ans << \" \";\n    }\n    cout << endl;\n}\n \nint32_t main(){\n    int t = 1;\n    cin >> t;\n    while (t--) {\n        solve();\n    }\n}\n \n \n "
+    ]
+  }
+}

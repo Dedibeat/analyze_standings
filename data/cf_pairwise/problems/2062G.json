@@ -1,0 +1,44 @@
+{
+  "contest_id": 2062,
+  "index": "G",
+  "name": "Permutation Factory",
+  "rating": 3500,
+  "tags": [
+    "flows",
+    "geometry",
+    "graph matchings",
+    "graphs"
+  ],
+  "points": 4000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2062G",
+  "url": "https://codeforces.com/problemset/problem/2062/G",
+  "contest_start_time": "2025-01-26T14:35:00+00:00",
+  "statement": {
+    "title": "G. Permutation Factory",
+    "time_limit": "2 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "You are given two permutations $p_1,p_2,\\ldots,p_n$ and $q_1,q_2,\\ldots,q_n$ of length $n$. In one operation, you can select two integers $1\\leq i,j\\leq n,i\\neq j$ and swap $p_i$ and $p_j$. The cost of the operation is $\\min (|i-j|,|p_i-p_j|)$.\n\nFind the minimum cost to make $p_i = q_i$ hold for all $1\\leq i\\leq n$ and output a sequence of operations to achieve the minimum cost.\n\nA permutation of length $n$ is an array consisting of $n$ distinct integers from $1$ to $n$ in arbitrary order. For example, $[2,3,1,5,4]$ is a permutation, but $[1,2,2]$ is not a permutation ($2$ appears twice in the array), and $[1,3,4]$ is also not a permutation ($n=3$ but there is $4$ in the array).",
+    "input_spec": "The first line of input contains a single integer $t$ ($1 \\leq t \\leq 10^4$) — the number of input test cases.\n\nThe first line of each test case contains one integer $n$ ($2 \\le n \\le 100$) — the length of permutations $p$ and $q$.\n\nThe second line contains $n$ integers $p_1,p_2,\\ldots,p_n$ ($1\\leq p_i\\leq n$) — the permutation $p$. It is guaranteed that $p_1,p_2,\\ldots,p_n$ is a permutation of $1,2,\\ldots,n$.\n\nThe third line contains $n$ integers $q_1,q_2,\\ldots,q_n$ ($1\\leq q_i\\leq n$) — the permutation $q$. It is guaranteed that $q_1,q_2,\\ldots,q_n$ is a permutation of $1,2,\\ldots,n$.\n\nIt is guaranteed that the sum of $n^3$ over all test cases does not exceed $10^6$.",
+    "output_spec": "For each test case, output the total number of operations $k$ ($0\\le k\\le n^2$) on the first line. Then output $k$ lines, each containing two integers $i,j$ ($1\\le i,j\\le n$, $i\\neq j$) representing an operation to swap $p_i$ and $p_j$ in order.\n\nIt can be shown that no optimal operation sequence has a length greater than $n^2$.",
+    "note": "In the second test case, you can swap $p_1,p_3$ costing $\\min(|1-3|,|1-3|)=2$. Then $p$ equals $q$ with a cost of $2$.\n\nIn the third test case, you can perform the following operations:\n\nInitially, $p=[2,1,4,3]$.\n\n Swap $p_1,p_4$ costing $\\min(|1-4|,|2-3|)=1$, resulting in $p=[3,1,4,2]$.\n\n Swap $p_2,p_4$ costing $\\min(|2-4|,|1-2|)=1$, resulting in $p=[3,2,4,1]$.\n\n Swap $p_1,p_3$ costing $\\min(|1-3|,|3-4|)=1$. Then $p$ equals $q$ with a cost of $3$.",
+    "samples": [
+      {
+        "input": "4\n2\n2 1\n2 1\n3\n1 2 3\n3 2 1\n4\n2 1 4 3\n4 2 3 1\n5\n1 4 3 2 5\n5 2 3 4 1",
+        "output": "\n0\n1\n1 3\n3\n1 4\n2 4\n1 3\n4\n1 2\n4 5\n2 5\n1 4"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 138866,
+    "url": "https://codeforces.com/blog/entry/138866",
+    "tutorial": "Because the cost of an operation is $\\min(|i-j|,|p_i-p_j|)$, we can consider this operation as two operations with different costs, one costing $|i-j|$ and the other costing $|p_i-p_j|$.\n\nConsider each number in the permutation as a point $(i, p_i)$ on a two-dimensional plane. So the first operation can be seen as moving $(i, p_i)$ to $(i, p_j)$, and simultaneously moving $(j, p_j)$ to $(j, p_i)$. The second operation can be seen as moving $(i, p_i)$ to $(j, p_i)$ and simultaneously moving $(j, p_j)$ to $(i, p_j)$. The cost of both modes of movement is the coordinate distance between these two points.\n\nSupposing that the restriction that two points should be moved simultaneously is removed. Meanwhile, divide the cost of one operation equally between the movements of two points. Then, the cost of moving a point from one coordinate to another is the Manhattan distance between these two points divided by $2$, and the minimum cost is the minimum cost matching to move each point of $p$ to match each point of $q$.\n\nNext, we will prove that the minimum answer obtained after removing the simultaneous movement restriction can always be obtained under restricted conditions.\n\nFirst, find any minimum cost matching between points of $p$ and points of $q$. Assume that point $(i,p_i)$ matches point $(a_i,q_{a_i})$, where $a$ is also a permutation. We first make point moves parallel to the x-axis direction. If there exists $a_i \\neq i$, find the $i$ with the smallest $a_i$ among them. Then, there must exist $j$ where $a_i \\le j  \\lt  i \\le a_j$. By performing such operations on $i$ and $j$, these two points can be moved without increasing the total cost. Continuously performing this operation can complete the movement of all points in the x-axis direction. The same applies to the movement in the y-axis direction.\n\nUsing the minimum cost and maximum flow to find the minimum cost matching and checking every pair of $(i,j)$ to find a swappable pair will result in a solution with $O(n^4)$ time complexity. Using the Kuhn-Munkres Algorithm to find the minimum cost matching, checking only $a_i$ mentioned above can achieve a time complexity of $O (n^3)$, but is not required.",
+    "solution_code": [
+      "#include<bits/stdc++.h>\nusing namespace std;\nstruct linex{\n\tint v;\n\tint w;\n\tint nxt;\n\tint c;\n};\nint head[210],cnt,cpos[210],vis[210],qvis[210],totc,dis[210],inf=1000000000;\nlinex l[21000];\nqueue<int>que;\nvoid add(int u,int v,int w,int c){\n\tl[cnt].nxt=head[u];\n\thead[u]=cnt;\n\tl[cnt].v=v;\n\tl[cnt].w=w;\n\tl[cnt].c=c;\n\tcnt++;\n\tl[cnt].nxt=head[v];\n\thead[v]=cnt;\n\tl[cnt].v=u;\n\tl[cnt].w=0;\n\tl[cnt].c=-c;\n\tcnt++;\n}\nint spfa(int st,int en,int n){\n\tint i,j,t;\n\tfor(i=0;i<n;i++)\n\t{\n\t\tvis[i]=0;\n\t\tdis[i]=inf;\n\t\tcpos[i]=head[i];\n\t}\n\tque.push(st);\n\tdis[st]=0;\n\tvis[st]=1;\n\tqvis[st]=1;\n\twhile(!que.empty())\n\t{\n\t\tt=que.front();\n\t\tque.pop();\n\t\tqvis[t]=0;\n\t\tfor(j=head[t];j!=-1;j=l[j].nxt)\n\t\t{\n\t\t\tif(l[j].w>0&&dis[l[j].v]>dis[t]+l[j].c)\n\t\t\t{\n\t\t\t\tdis[l[j].v]=dis[t]+l[j].c;\n\t\t\t\tvis[l[j].v]=1;\n\t\t\t\tif(!qvis[l[j].v])\n\t\t\t\t{\n\t\t\t\t\tque.push(l[j].v);\n\t\t\t\t\tqvis[l[j].v]=1;\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n\treturn vis[en];\n}\nlong long dfs(int p,int en,int curr){\n\tint x,j,flow=0;\n\tif(p==en)return curr;\n\tfor(j=cpos[p];j!=-1&&flow<curr;j=l[j].nxt)\n\t{\n\t\tcpos[p]=j;\n\t\tqvis[p]=1;\n\t\tif(l[j].w>0&&dis[l[j].v]==dis[p]+l[j].c&&!qvis[l[j].v])\n\t\t{\n\t\t\tx=dfs(l[j].v,en,min(curr-flow,l[j].w));\n\t\t\tflow+=x;\n\t\t\tl[j].w-=x;\n\t\t\tl[j^1].w+=x;\n\t\t\ttotc+=l[j].c*x;\n\t\t}\n\t\tqvis[p]=0;\n\t}\n\treturn flow;\n}\nint p[100],q[100],id[100][100];\nint cabs(int x){\n\tif(x<0)x=-x;\n\treturn x;\n}\nstruct point{\n\tint x;\n\tint y;\n\tint tx;\n\tint ty;\n}pc[100];\nvector<int>ansv[2];\nint main(){\n\tios::sync_with_stdio(false),cin.tie(0);\n\tsrand(time(0));\n\tint T,n,i,j,flow,flag;\n\tfor(cin>>T;T>0;T--)\n\t{\n\t\tcin>>n;\n\t\tfor(i=0;i<n;i++)\n\t\t{\n\t\t\tcin>>p[i];\n\t\t\tp[i]--;\n\t\t}\n\t\tfor(i=0;i<n;i++)\n\t\t{\n\t\t\tcin>>q[i];\n\t\t\tq[i]--;\n\t\t}\n\t\tfor(i=0;i<n*2+2;i++)head[i]=-1;\n\t\tcnt=0;\n\t\ttotc=0;\n\t\tflow=0;\n\t\tfor(i=0;i<n;i++)\n\t\t{\n\t\t\tadd(n*2,i,1,0);\n\t\t\tadd(i+n,n*2+1,1,0);\n\t\t\tfor(j=0;j<n;j++)\n\t\t\t{\n\t\t\t\tid[i][j]=cnt;\n\t\t\t\tadd(i,j+n,1,cabs(i-j)+cabs(p[i]-q[j]));\n\t\t\t}\n\t\t}\n\t\twhile(spfa(n*2,n*2+1,n*2+2))flow+=dfs(n*2,n*2+1,inf);\n\t\tfor(i=0;i<n;i++)\n\t\t{\n\t\t\tpc[i].x=i;\n\t\t\tpc[i].y=p[i];\n\t\t\tfor(j=0;j<n;j++)\n\t\t\t{\n\t\t\t\tif(l[id[i][j]].w==0)\n\t\t\t\t{\n\t\t\t\t\tpc[i].tx=j;\n\t\t\t\t\tpc[i].ty=q[j];\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t\twhile(1)\n\t\t{\n\t\t\tflag=0;\n\t\t\tfor(i=0;i<n;i++)\n\t\t\t{\n\t\t\t\tfor(j=0;j<n;j++)\n\t\t\t\t{\n\t\t\t\t\tif(pc[j].tx<=pc[i].x&&pc[i].x<pc[j].x&&pc[j].x<=pc[i].tx)\n\t\t\t\t\t{\n\t\t\t\t\t\tansv[0].push_back(pc[i].x);\n\t\t\t\t\t\tansv[1].push_back(pc[j].x);\n\t\t\t\t\t\tswap(pc[i].x,pc[j].x);\n\t\t\t\t\t\tflag=1;\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t\tif(!flag)break;\n\t\t}\n\t\twhile(1)\n\t\t{\n\t\t\tflag=0;\n\t\t\tfor(i=0;i<n;i++)\n\t\t\t{\n\t\t\t\tfor(j=0;j<n;j++)\n\t\t\t\t{\n\t\t\t\t\tif(pc[j].ty<=pc[i].y&&pc[i].y<pc[j].y&&pc[j].y<=pc[i].ty)\n\t\t\t\t\t{\n\t\t\t\t\t\tansv[0].push_back(pc[i].x);\n\t\t\t\t\t\tansv[1].push_back(pc[j].x);\n\t\t\t\t\t\tswap(pc[i].y,pc[j].y);\n\t\t\t\t\t\tflag=1;\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t\tif(!flag)break;\n\t\t}\n\t\tcout<<ansv[0].size()<<'\\n';\n\t\tfor(i=0;i<ansv[0].size();i++)cout<<ansv[0][i]+1<<' '<<ansv[1][i]+1<<'\\n';\n\t\tansv[0].clear();\n\t\tansv[1].clear();\n\t}\n\treturn 0;\n}"
+    ]
+  }
+}

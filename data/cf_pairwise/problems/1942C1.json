@@ -1,0 +1,43 @@
+{
+  "contest_id": 1942,
+  "index": "C1",
+  "name": "Bessie's Birthday Cake (Easy Version)",
+  "rating": 1300,
+  "tags": [
+    "geometry",
+    "greedy",
+    "math"
+  ],
+  "points": 1250.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1942C1",
+  "url": "https://codeforces.com/problemset/problem/1942/C1",
+  "contest_start_time": "2024-03-30T14:35:00+00:00",
+  "statement": {
+    "title": "C1. Bessie's Birthday Cake (Easy Version)",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Proof Geometric Construction Can Solve All Love Affairs - manbo-p\n\n⠀\n\nThis is the easy version of the problem. The only difference between the two versions is the constraint on $y$. In this version $y = 0$. You can make hacks only if both versions are solved.\n\nBessie has received a birthday cake from her best friend Elsie, and it came in the form of a regular polygon with $n$ sides. The vertices of the cake are numbered from $1$ to $n$ clockwise. You and Bessie are going to choose some of those vertices to cut non-intersecting diagonals into the cake. In other words, the endpoints of the diagonals must be part of the chosen vertices.\n\nBessie would only like to give out pieces of cake which result in a triangle to keep consistency. The size of the pieces doesn't matter, and the whole cake does not have to be separated into all triangles (other shapes are allowed in the cake, but those will not be counted).\n\nBessie has already chosen $x$ of those vertices that can be used to form diagonals. She wants you to choose no more than $y$ other vertices such that the number of triangular pieces of cake she can give out is maximized.\n\nWhat is the maximum number of triangular pieces of cake Bessie can give out?",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\leq t \\leq 10^4$) — the number of test cases.\n\nThe first line of each test case consists of three integers, $n$, $x$, and $y$ ($4 \\leq n \\leq 10^9$, $2 \\leq x \\leq \\min(n, 2 \\cdot 10^5)$, $y = 0$) — the number of sides of the polygon, number of vertices Bessie has chosen, and the maximum number of other vertices you can choose.\n\nThe second line consists of $x$ distinct integers from $1$ to $n$, representing the vertices Bessie has chosen.\n\nIt is guaranteed the sum of $x$ over all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, output a single integer: the maximum number of non-intersecting triangular pieces of cake she can give out.",
+    "note": "In test cases $1$, $2$ and $3$, you can get $2$, $6$ and $2$ non-intersecting triangular pieces of cake, respectively. A possible construction is shown in the following pictures:\n\nThe green dots represent vertices that can be used, the blue lines represent diagonals that are drawn, and the red numbers represent triangles that are counted.",
+    "samples": [
+      {
+        "input": "3\n8 4 0\n1 6 2 5\n8 8 0\n1 3 2 5 4 6 7 8\n4 2 0\n1 3",
+        "output": "\n2\n6\n2"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 126942,
+    "url": "https://codeforces.com/blog/entry/126942",
+    "tutorial": "1942C1 - Bessie's Birthday Cake (Easy Version) and 1942C2 - Bessie's Birthday Cake (Hard Version)\n\nProblem Credits: cry\nAnalysis: cry\n\nSolution (Easy Version)\n\nIgnoring $n$ for now, let's just focus on the $x$ chosen vertices. Sort the $x$ vertices and connect adjacent vertices to form its own smaller polygon. By drawing out some cases or if you're familiar with triangulation (video that proves by induction), you can form $x - 2$ triangles by drawing diagonals in a polygon with $x$ vertices. If you don't know it, one possible construction that always work is fixing one vertex $v$ and drawing diagonals to every other vertex not adjacent to $v$. Now, let's consider the original $n$-sided polygon. In additional to the aforementioned construction, to close the $x$-sided polygon up: for every non-adjacent vertex in the chosen vertices based on the bigger $n$-sided polygon, draw a diagonal between them. Through this construction, we can always guarantee $x - 2$ triangles.\n\nHowever, this doesn't account for all triangles, as some triangles can form sides with the bigger $n$-sided polygon. These triangles occur exactly when two adjacent vertex in $x$ have exactly one vertex not in $x$ between them but part of the bigger polygon. This is because one side is from the diagonals we drew, and the other two sides form from the $n$-sided polygon.\n\nTherefore, the answer is $x - 2$ + (number of adjacent chosen vertices $2$ apart). Note that the first chosen vertex is also adjacent to last chosen vertex in $x$.\n\nSolution (Hard Version)\n\nRead the solution to the easy version first.\n\nWe can now reduce the problem to the following: For every vertex we choose, we can make one more triangle. For every chosen vertices two apart, we can make one more triangle. Let's focus on the latter condition. To maximize the effect of our $y$ vertices, we want to prioritize vertices $v$ that satisfy the following: the vertex is not included in $x$ and there is a chosen vertex two apart. Let's denote such $v$ as good.\n\nLet vertex $a$ and $b$ $(a \\lt b)$ be adjacent chosen vertices in the $x$-sided polygon. There are $g = b - a - 1$ vertices for us to choose between them. There are two cases: if $g$ is odd, then we can choose $\\lfloor \\frac{g}{2} \\rfloor$ vertices to form $\\lfloor \\frac{g}{2}\\rfloor + 1$ extra triangles. This is because all of the vertices we choose will be good. if $g$ is even, then we can choose $\\frac{g}{2}$ vertices to make $\\frac{g}{2}$ extra triangles. This is because one of the vertices we choose will not be good. This shows that it is always optimal to process smaller and odd $g$ first.\n\nAfter processing these adjacent gaps, if we have any leftover vertices, we can just ignore them. This is because since we have maximized the number of good vertices, even though any further vertex we place will increase the answer by $1$, it will break two good vertices which will decrease the answer by $1$.\n\nCode (C++)",
+    "solution_code": [
+      "#include <bits/stdc++.h>\nusing namespace std;\n\nvoid solve(){\n\tint n, x, y; cin >> n >> x >> y;\n\tint initial_y = y;\n\tvector<int> chosen(x);\n\tfor(int& i: chosen) cin >> i;\n\tsort(chosen.begin(), chosen.end());\n\tint ans = x - 2;\n\tint triangles_from_even_g = 0;\n\tvector<int> odd_g;\n\tauto process_gap = [&](int g) -> void{\n\t\tif(g <= 1){\n\t\t\t// already two apart\n\t\t\tans += g;\n\t\t}\n\t\telse if(g % 2 == 1){\n\t\t\todd_g.push_back(g / 2);\n\t\t}\n\t\telse{\n\t\t\ttriangles_from_even_g += g / 2;\n\t\t}\n\t};\n\tfor(int i = 0; i < x - 1; i++){\n\t\tprocess_gap(chosen[i + 1] - chosen[i] - 1);\n\t}\n\tprocess_gap((chosen[0] + n) - chosen[x - 1] - 1);\n\tsort(odd_g.begin(), odd_g.end());\n\tfor(int g: odd_g){\n\t\tif(y >= g){\n\t\t\t// all vertices are good, so we can make g + 1 triangles\n\t\t\tans += g + 1;\n\t\t\ty -= g;\n\t\t}\n\t\telse{\n\t\t\tans += y;\n\t\t\ty = 0;\n\t\t\tbreak;\n\t\t}\n\t}\n\tint even_triangles = min(triangles_from_even_g, y);\n\ty -= even_triangles;\n\tans += even_triangles;\n\tint used_vertices = initial_y - y;\n\tans += used_vertices;\n\tcout << ans << \"\\n\";\n}\n\nint main(){\n\tcin.tie(0) -> sync_with_stdio(0);\n\tint T = 1;\n\tcin >> T;\n\twhile(T--) solve();\n}\n\n/*   /\\_/\\\n*   (= ._.)\n*   / >  \\>\n*/"
+    ]
+  }
+}

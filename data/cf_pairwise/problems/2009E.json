@@ -1,0 +1,44 @@
+{
+  "contest_id": 2009,
+  "index": "E",
+  "name": "Klee's SUPER DUPER LARGE Array!!!",
+  "rating": 1400,
+  "tags": [
+    "binary search",
+    "math",
+    "ternary search"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2009E",
+  "url": "https://codeforces.com/problemset/problem/2009/E",
+  "contest_start_time": "2024-09-03T14:35:00+00:00",
+  "statement": {
+    "title": "E. Klee's SUPER DUPER LARGE Array!!!",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Klee has an array $a$ of length $n$ containing integers $[k, k+1, ..., k+n-1]$ in that order. Klee wants to choose an index $i$ ($1 \\leq i \\leq n$) such that $x = |a_1 + a_2 + \\dots + a_i - a_{i+1} - \\dots - a_n|$ is minimized. Note that for an arbitrary integer $z$, $|z|$ represents the absolute value of $z$.\n\nOutput the minimum possible value of $x$.",
+    "input_spec": "The first line contains $t$ ($1 \\leq t \\leq 10^4$) — the number of test cases.\n\nEach test case contains two integers $n$ and $k$ ($2 \\leq n, k \\leq 10^9$) — the length of the array and the starting element of the array.",
+    "output_spec": "For each test case, output the minimum value of $x$ on a new line.",
+    "note": "In the first sample, $a = [2, 3]$. When $i = 1$ is chosen, $x = |2-3| = 1$. It can be shown this is the minimum possible value of $x$.\n\nIn the third sample, $a = [3, 4, 5, 6, 7]$. When $i = 3$ is chosen, $x = |3 + 4 + 5 - 6 - 7| = 1$. It can be shown this is the minimum possible value of $x$.",
+    "samples": [
+      {
+        "input": "4\n2 2\n7 2\n5 3\n1000000000 1000000000",
+        "output": "\n1\n5\n1\n347369930"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 133296,
+    "url": "https://codeforces.com/blog/entry/133296",
+    "tutorial": "2009E - СУПЕР ДУПЕР БОЛЬШОЙ Массив Кли!!!\n\nProblem Credits: cry\n Analysis: cry\n\nSolution\n\nWe can rewrite $x$ as $|a_1+\\dots+a_i-(a_{i+1}+\\dots+a_n)|$. Essentially, we want to minimize the absolute value difference between the sums of the prefix and the suffix. With absolute value problems. it's always good to consider the positive and negative cases separately. We will consider the prefix greater than the suffix separately with the less than case.\n\nWe can use binary search to search for the greatest $i$ such that $a_1 + \\dots + a_i \\leq a_{i+1} + \\dots + a_n$. Note that here, the positive difference is minimized. If we move to $i+1$, then the negative difference is minimized (since the sum of prefix will now be less than the sum of suffix). The answer is the minimum absolute value of both cases.\n\nTo evaluate $a_1 + \\dots + a_i$ fast, we can use the sum of arithmetic sequence formula.\n\nCode (Python) (ntarsis30)\n\nBonus: Solve in $\\mathcal{O}(1)$.\n\nCode (Python) (Non-origination)",
+    "solution_code": [
+      "from collections import Counter\ndef val(mid):\n    val1 = (mid+k-1+k)*mid//2\n    val2 = (k+n-1+k)*n//2 - val1\n    return val1,val2\nfor _ in range(int(input())):\n    n,k = map(int,input().split())\n    lo = 1\n    hi = n\n    curr = 1\n    while lo <= hi:\n        mid = (lo+hi)//2\n        a,b = val(mid)\n        if b>a:\n            curr = mid\n            lo = mid+1\n        else:\n            hi = mid-1\n    a1,b1 = val(curr)\n    a2,b2 = val(curr+1)\n    print(min(b1-a1,a2-b2))",
+      "import sys\ninput=sys.stdin.readline\n\nfrom math import floor,sqrt\n\nf=lambda x: (2*x*x + x*(4*k-2) + (n-n*n-2*k*n))//2\n\nt=int(input())\nfor _ in range(t):\n    n,k=map(int,input().split())\n    D=4*k*k + 4*k*(n-1) + (2*n*n-2*n+1)\n    i=(floor(sqrt(D))-(2*k-1))//2\n    ans=min(abs(f(i)),abs(f(i+1)))\n    print(ans) "
+    ]
+  }
+}

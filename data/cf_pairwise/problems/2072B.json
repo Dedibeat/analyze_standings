@@ -1,0 +1,43 @@
+{
+  "contest_id": 2072,
+  "index": "B",
+  "name": "Having Been a Treasurer in the Past, I Help Goblins Deceive",
+  "rating": 900,
+  "tags": [
+    "combinatorics",
+    "constructive algorithms",
+    "strings"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2072B",
+  "url": "https://codeforces.com/problemset/problem/2072/B",
+  "contest_start_time": "2025-02-25T14:35:00+00:00",
+  "statement": {
+    "title": "B. Having Been a Treasurer in the Past, I Help Goblins Deceive",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "After completing the first quest, Akito left the starting cave. After a while, he stumbled upon a goblin village.\n\nSince Akito had nowhere to live, he wanted to find out the price of housing. It is well known that goblins write numbers as a string of characters '-' and '_', and the value represented by the string $s$ is the number of distinct subsequences$^{\\text{∗}}$ of the string $s$ that are equal to the string \"-_-\" (this is very similar to goblin faces).\n\nFor example, the string $s=$\"-_--_-\" represents the number $6$, as it has $6$ subsequences \"-_-\":\n\n $s_1+s_2+s_3$\n\n $s_1+s_2+s_4$\n\n $s_1+s_2+s_6$\n\n $s_1+s_5+s_6$\n\n $s_3+s_5+s_6$\n\n $s_4+s_5+s_6$\n\nInitially, the goblins wrote a random string-number $s$ in response to Akito's question, but then they realized that they wanted to take as much gold as possible from the traveler. To do this, they ask you to rearrange the characters in the string $s$ so that the value of the number represented by the string $s$ is maximized.\n\n$^{\\text{∗}}$A subsequence of a string $a$ is a string $b$ that can be obtained by deleting several (possibly $0$) characters from $a$. Subsequences are considered different if they are obtained by deleting different sets of indices.",
+    "input_spec": "The first line contains the number $t$ ($1 \\le t \\le 10^4$) — the number of test cases.\n\nIn the first line of each test case, there is one number $n$ ($1 \\le n \\le 2 \\cdot 10^5$) — the length of the string written by the goblins.\n\nIn the second line of each test case, there is a string $s$ of length $n$, consisting only of characters '-' and '_' — the string written by the goblins.\n\nIt is guaranteed that the sum of $n$ across all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, you need to output one number — the maximum number of subsequences equal to the string \"-_-\", if the characters in the string $s$ are optimally rearranged.",
+    "note": "In the first test case, it is beneficial to rearrange the characters to form the string \"-_-\". This is the only string of three characters that has at least one subsequence \"-_-\".\n\nIn the second test case, there is only one character \"-\", and at least two are needed for the subsequence \"-_-\". This means that for any rearrangement of characters, the answer will be $0$.\n\nIn the seventh and eighth test cases, the length of the string $n  \\lt  3$, which means that subsequences of length $3$ do not exist.",
+    "samples": [
+      {
+        "input": "8\n3\n--_\n5\n__-__\n9\n--__-_---\n4\n_--_\n10\n_-_-_-_-_-\n7\n_------\n1\n-\n2\n_-",
+        "output": "\n1\n0\n27\n2\n30\n9\n0\n0"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 140039,
+    "url": "https://codeforces.com/blog/entry/140039",
+    "tutorial": "For $n \\le 2$ or when the number of $i$ such that $s_i = $ '-' is less than two or there are no indices $i$ where $s_i = $ '_', the answer will be $0$.\n\nOtherwise, let's solve the problem if there is only one symbol '_' in the string. It is easy to see that the string will look like a prefix of length $\\ell_p$ made of '-', a single symbol '_', and a suffix of length $\\ell_s$ made of the remaining '-'. Then the number of subsequences is equal to $\\ell_p \\cdot \\ell_s$. The sum $\\ell_p + \\ell_s$ is fixed and equals the number of '-' symbols in the string, let's call this number $c$. It is straightforward to show that the optimal $\\ell_p = \\left\\lfloor \\frac{c}{2} \\right\\rfloor$, and the optimal $\\ell_s = \\left\\lceil \\frac{c}{2} \\right\\rceil$.\n\nNow let's return to the original problem. In fact, the solution above is also optimal for it! The string will still consist of a prefix of length $\\ell_p$ made of '-', a suffix of length $\\ell_s$ made of '-', and $(n - c)$ symbols '_' in the middle. $(n - c)$ is constant, which means we need to maximize the product $\\ell_p \\cdot \\ell_s$, and we already know how to do that. Thus, the answer is simply $\\left\\lfloor \\frac{c}{2} \\right\\rfloor \\cdot \\left\\lceil \\frac{c}{2} \\right\\rceil \\cdot (n - c)$.\n\nAsymptotic complexity: $\\mathcal{O}(n)$.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n\nusing namespace std;\n\nvoid solve() {\n  int n;\n  string s;\n  cin >> n >> s;\n  int64_t dash = count(s.begin(), s.end(), '-');\n  int64_t under = n - dash;\n  int64_t ans = (dash / 2) * (dash - dash / 2) * under;\n  cout << ans << '\\n';\n}\n\nint main() {\n  int tt;\n  cin >> tt;\n  while (tt --> 0) {\n    solve();\n  }\n  return 0;\n}"
+    ]
+  }
+}

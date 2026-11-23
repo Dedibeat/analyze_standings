@@ -1,0 +1,42 @@
+{
+  "contest_id": 1955,
+  "index": "D",
+  "name": "Inaccurate Subsequence Search",
+  "rating": 1400,
+  "tags": [
+    "data structures",
+    "two pointers"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1955D",
+  "url": "https://codeforces.com/problemset/problem/1955/D",
+  "contest_start_time": "2024-04-08T14:35:00+00:00",
+  "statement": {
+    "title": "D. Inaccurate Subsequence Search",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Maxim has an array $a$ of $n$ integers and an array $b$ of $m$ integers ($m \\le n$).\n\nMaxim considers an array $c$ of length $m$ to be good if the elements of array $c$ can be rearranged in such a way that at least $k$ of them match the elements of array $b$.\n\nFor example, if $b = [1, 2, 3, 4]$ and $k = 3$, then the arrays $[4, 1, 2, 3]$ and $[2, 3, 4, 5]$ are good (they can be reordered as follows: $[1, 2, 3, 4]$ and $[5, 2, 3, 4]$), while the arrays $[3, 4, 5, 6]$ and $[3, 4, 3, 4]$ are not good.\n\nMaxim wants to choose every subsegment of array $a$ of length $m$ as the elements of array $c$. Help Maxim count how many selected arrays will be good.\n\nIn other words, find the number of positions $1 \\le l \\le n - m + 1$ such that the elements $a_l, a_{l+1}, \\dots, a_{l + m - 1}$ form a good array.",
+    "input_spec": "The first line contains an integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases.\n\nThe first line of each test case contains three integers $n$, $m$, and $k$ ($1 \\le k \\le m \\le n \\le 2 \\cdot 10^5$) — the number of elements in arrays $a$ and $b$, the required number of matching elements.\n\nThe second line of each test case contains $n$ integers $a_1, a_2, \\dots, a_n$ ($1 \\le a_i \\le 10^6$) — the elements of array $a$. Elements of the array $a$ are not necessarily unique.\n\nThe third line of each test case contains $m$ integers $b_1, b_2, \\dots, b_m$ ($1 \\le b_i \\le 10^6$) — the elements of array $b$. Elements of the array $b$ are not necessarily unique.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $2 \\cdot 10^5$. Similarly, it is guaranteed that the sum of $m$ over all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, output the number of good subsegments of array $a$ on a separate line.",
+    "note": "In the first example, all subsegments are good.\n\nIn the second example, good subsegments start at positions $1$, $2$, and $3$.\n\nIn the third example, good subsegments start at positions $1$ and $2$.",
+    "samples": [
+      {
+        "input": "5\n7 4 2\n4 1 2 3 4 5 6\n1 2 3 4\n7 4 3\n4 1 2 3 4 5 6\n1 2 3 4\n7 4 4\n4 1 2 3 4 5 6\n1 2 3 4\n11 5 3\n9 9 2 2 10 9 7 6 3 6 3\n6 9 7 8 10\n4 1 1\n4 1 5 6\n6",
+        "output": "\n4\n3\n2\n4\n1"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 128243,
+    "url": "https://codeforces.com/blog/entry/128243",
+    "tutorial": "How to check if two arrays are good? For each element of $b$, try to pair it with an element from array $a$. If we managed to create $k$ or more pairs, then the arrays are good.\n\nSince rearranging the elements of the array is allowed, we will maintain three multisets $C$, $D$, and $E$. In $D$, we will store all elements from $b$ for which we found a pair, and in $C$ and $E$, all elements from $b$ and $a$ for which a pair was not found, i.e., $C \\cap E = \\emptyset$. Then the arrays are good if $|D| \\ge k$.\n\nIt remains to understand how to find all good subsegments using this data organization. Suppose we shift the left boundary $l$ by $1$, simultaneously moving the right boundary, where $r = l + m - 1$. We need to remove the pair with the element $a_l$ from $D$, if it exists, and immediately try to find a replacement for the removed pair in $E$. After that, we try to find a pair for $a_r$ from $C$, and if a pair cannot be found, we place the element in $E$.\n\nThe complexity of the solution is $O(n \\log n)$ or $O(n)$ if a hash table is used.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n \nusing ll = signed long long int;\n \n#define all(x) (x).begin(), (x).end()\n \nusing pii = std::pair<int, int>;\nusing pll = std::pair<ll, ll>;\n \nusing namespace std;\n \nvoid solve() {\n    int n, m;\n    size_t k;\n    cin >> n >> m >> k;\n    vector<int> a(n);\n    for (int i = 0; i < n; ++i) {\n        cin >> a[i];\n    }\n    multiset<int> todo, done, extra;\n    for (int j = 0; j < m; ++j) {\n        int b;\n        cin >> b;\n        todo.insert(b);\n    }\n    for (int j = 0; j < m; ++j) {\n        if (todo.find(a[j]) != todo.end()) {\n            todo.erase(todo.find(a[j]));\n            done.insert(a[j]);\n        } else {\n            extra.insert(a[j]);\n        }\n    }\n    int ans = (done.size() >= k);\n    for (int r = m; r < n; ++r) {\n        int old = a[r - m];\n        if (extra.find(old) != extra.end()) {\n            extra.erase(extra.find(old));\n        } else if (done.find(old) != done.end()) {\n            done.erase(done.find(old));\n            todo.insert(old);\n        }\n        if (todo.find(a[r]) != todo.end()) {\n            todo.erase(todo.find(a[r]));\n            done.insert(a[r]);\n        } else {\n            extra.insert(a[r]);\n        }\n        ans += (done.size() >= k);\n    }\n    cout << ans << '\\n';\n}\n \nint main() {\n    int t;\n    cin >> t;\n    while (t--) {\n        solve();\n    }\n}"
+    ]
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "contest_id": 2075,
+  "index": "D",
+  "name": "Equalization",
+  "rating": 2000,
+  "tags": [
+    "bitmasks",
+    "brute force",
+    "dp",
+    "graphs",
+    "math"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2075D",
+  "url": "https://codeforces.com/problemset/problem/2075/D",
+  "contest_start_time": "2025-03-17T14:35:00+00:00",
+  "statement": {
+    "title": "D. Equalization",
+    "time_limit": "3.5 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "You are given two non-negative integers $x$ and $y$.\n\nYou can perform the following operation any number of times (possibly zero): choose a positive integer $k$ and divide either $x$ or $y$ by $2^k$ rounding down. The cost of this operation is $2^k$. However, there is an additional constraint: you cannot select the same value of $k$ more than once.\n\nYour task is to calculate the minimum possible cost in order to make $x$ equal to $y$.",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\le t \\le 10^5$) — the number of test cases.\n\nThe only line of each test case contains two integers $x$ and $y$ ($0 \\le x, y \\le 10^{17}$).",
+    "output_spec": "For each test case, print a single integer — the minimum possible cost in order to make $x$ equal to $y$.",
+    "note": "In the first example, you can proceed as follows: choose $k=1$ and divide $y$ by $2$. After that, $x$ and $y$ are equal to $0$.\n\nIn the second example, you can proceed as follows: choose $k=2$ and divide $x$ by $4$; choose $k=1$ and divide $y$ by $2$. After that, $x$ and $y$ are equal to $1$.\n\nIn the third example, numbers already are equal.",
+    "samples": [
+      {
+        "input": "5\n0 1\n6 2\n3 3\n13 37\n4238659325782394 12983091057341925",
+        "output": "\n2\n6\n0\n26\n32764"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 140781,
+    "url": "https://codeforces.com/blog/entry/140781",
+    "tutorial": "Note that for any positive integer $x$, the following equality holds: $\\left\\lfloor\\frac{\\left\\lfloor\\frac{x}{2^a}\\right\\rfloor}{2^b}\\right\\rfloor = \\left\\lfloor\\frac{x}{2^{a+b}}\\right\\rfloor$. This means that for each number, only the total power of two by which it will be divided is significant.\n\nDue to the restriction that the same power of two cannot be used twice, we can divide all powers (in this problem, we can consider powers from $1$ to $60$) into three groups: the powers by which $x$ will be divided; the powers by which $y$ will be divided; and the powers that will not be used.\n\nHowever, there may be many suitable partitions, but we need to minimize the cost. To do so, we can use dynamic programming to calculate $dp_{k, i, j}$ — the minimum cost if we considered the first $k$ powers, with the sum of the first group equal to $i$ and the sum of the second group equal to $j$. The transitions in this dynamic programming are straightforward: either we add the next power to the first group, or to the second, or we exclude it.\n\nNote that this dynamic programming can be computed once and then used to calculate the answer for any given test case. Using this dynamic programming, the answer can be computed as follows: iterate over $i$ and $j$ such that $\\left\\lfloor\\frac{x}{2^i}\\right\\rfloor = \\left\\lfloor\\frac{y}{2^j}\\right\\rfloor$, and select the minimum among the values $dp_{60, i, j}$.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n \nusing namespace std;\n\nusing li = long long;\n\nconst int B = 60;\nconst li INF = 1e18;\n\nint main() {\n  ios::sync_with_stdio(false); cin.tie(0);\n  array<array<li, B>, B> dp;\n  for (int i = 0; i < B; ++i) {\n    for (int j = 0; j < B; ++j) {\n      dp[i][j] = INF;\n    }\n  }\n  dp[0][0] = 0;\n  for (int x = 0; x < B; ++x) {\n    for (int i = B - 1; i >= 0; --i) {\n      for (int j = B - 1; j >= 0; --j) {\n        if (dp[i][j] == INF) continue;\n        if (i + x < B) dp[i + x][j] = min(dp[i + x][j], dp[i][j] + (1LL << x));\n        if (j + x < B) dp[i][j + x] = min(dp[i][j + x], dp[i][j] + (1LL << x));\n      }\n    }\n  }\n  int t;\n  cin >> t;\n  while (t--) {\n    li x, y;\n    cin >> x >> y;\n    li ans = INF;\n    for (int i = 0; i < B; ++i) {\n      for (int j = 0; j < B; ++j) {\n        if ((x >> i) == (y >> j)) ans = min(ans, dp[i][j]);\n      }\n    }\n    cout << ans << '\\n';\n  }\n}"
+    ]
+  }
+}

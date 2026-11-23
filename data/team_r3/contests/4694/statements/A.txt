@@ -1,0 +1,28 @@
+The 2026 ICPC Asia Wuhan Regional Contest China, Wuhan, November 1, 2026
+Problem A. It Is Late at Night, Remember to Rest
+Rose is a lovely girl, and she is messing around in the ICPC Wuhan Regional Contestants Group.
+Figure 1: The group-chat log. There are n messages in the group chat, each of which is a string consisting only of lowercase letters. All messages fall into three categories: � yeshenle (meaning "it is late at night, remember to rest"), which can only appear between 00:00 and
+00:59. � zaoshanghao (meaning "good morning, another wonderful day has begun"), which can only appear
+between 07:00 and 07:59. � Other messages, which may appear at any time of a day. Note that only messages that exactly match yeshenle or zaoshanghao have restrictions on when they may appear; messages such as yeshenlexiuxi and zaoshang may appear at any time of a day. Define the range of a day as 00:00 to 23:59. Now, given these n messages in chronological order by sending time, please help her find the minimum number of days that these messages span.
+Input
+The first line contains an integer n (1  n  105), indicating the number of messages. The next n lines each contain a string s (1  |s|  15) consisting only of lowercase letters, giving all messages in chronological order.
+Output
+Output one line containing an integer, indicating the minimum number of days that these messages span.
+Example
+Page 1 of 28
+
+The 2026 ICPC Asia Wuhan Regional Contest China, Wuhan, November 1, 2026
+
+standard input
+6 yeshenle welcome yeshenle zaoshanghao balloons yeshenle
+3 cloud lightbulb balloon
+
+standard output 2
+1
+
+Note
+The first sample is shown in the image in the statement. It can be proved that, according to the rules in the statement, these messages cannot be sent within the same day, so they span at least two days.
+
+Page 2 of 28
+
+

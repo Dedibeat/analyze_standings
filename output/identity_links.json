@@ -1,0 +1,97 @@
+{
+ "setting": [
+  5,
+  0.25,
+  true
+ ],
+ "identities": {
+  "shipped": {
+   "teams": 37797,
+   "nested_loco_rmse": 205.71424029160272,
+   "hand_both_rmse": 229.80944443541088,
+   "cf_1900_2500_bias": 62.478967589070685,
+   "ec_minus_gym_median": 313.813510227606,
+   "jinan_2022_d": 2358.819922875742,
+   "held_out": {
+    "1": {
+     "log_loss": 0.24024620011409853,
+     "brier": 0.07180195290859304,
+     "cells": 210965,
+     "linked_log_loss": 0.21014999060667414,
+     "linked_cells": 142058,
+     "cold_log_loss": 0.3022922524775121,
+     "cold_cells": 68907,
+     "solve_count_rmse": 1.512819076797188,
+     "linked_pair_accuracy": 0.815636060922966,
+     "linked_pairs": 815653
+    },
+    "2": {
+     "log_loss": 0.24220177831313874,
+     "brier": 0.07239674446934166,
+     "cells": 209696,
+     "linked_log_loss": 0.21049094473611651,
+     "linked_cells": 141330,
+     "cold_log_loss": 0.3077561782991053,
+     "cold_cells": 68366,
+     "solve_count_rmse": 1.527236363356723,
+     "linked_pair_accuracy": 0.811121048028068,
+     "linked_pairs": 814024
+    }
+   }
+  },
+  "no_pair_links": {
+   "teams": 42860,
+   "nested_loco_rmse": 204.43868218470885,
+   "hand_both_rmse": 227.25036314819405,
+   "cf_1900_2500_bias": 60.705533381581816,
+   "ec_minus_gym_median": 297.44173798428847,
+   "jinan_2022_d": 2305.077609230932,
+   "held_out": {
+    "1": {
+     "log_loss": 0.2456709606325787,
+     "brier": 0.07350219485475154,
+     "cells": 210965,
+     "linked_log_loss": 0.21408832313199067,
+     "linked_cells": 129365,
+     "cold_log_loss": 0.2957406652926721,
+     "cold_cells": 81600,
+     "solve_count_rmse": 1.5478017707184648,
+     "linked_pair_accuracy": 0.8198786948153421,
+     "linked_pairs": 662956
+    },
+    "2": {
+     "log_loss": 0.2475449141706338,
+     "brier": 0.07399924632716724,
+     "cells": 209696,
+     "linked_log_loss": 0.2139624281847437,
+     "linked_cells": 128220,
+     "cold_log_loss": 0.30039417472724894,
+     "cold_cells": 81476,
+     "solve_count_rmse": 1.558864593782448,
+     "linked_pair_accuracy": 0.8157271344841552,
+     "linked_pairs": 654315
+    }
+   }
+  }
+ },
+ "cf_rmse_no_pair_links_minus_shipped": {
+  "difference": -1.2755581068938682,
+  "bootstrap_2.5_97.5": [
+   -3.0312459634423603,
+   0.12171613789839288
+  ]
+ },
+ "log_loss_no_pair_links_minus_shipped": {
+  "1": [
+   0.005424760518480176,
+   0.003474120353093528,
+   0.00758228845881069
+  ],
+  "2": [
+   0.005343135857495046,
+   0.00354594553964369,
+   0.007272580354891052
+  ]
+ },
+ "adopt_no_pair_links": false
+}

@@ -1,0 +1,47 @@
+{
+  "contest_id": 1994,
+  "index": "D",
+  "name": "Funny Game",
+  "rating": 1900,
+  "tags": [
+    "constructive algorithms",
+    "dsu",
+    "graphs",
+    "greedy",
+    "math",
+    "number theory",
+    "trees"
+  ],
+  "points": 2000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1994D",
+  "url": "https://codeforces.com/problemset/problem/1994/D",
+  "contest_start_time": "2024-07-18T14:35:00+00:00",
+  "statement": {
+    "title": "D. Funny Game",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Vanya has a graph with $n$ vertices (numbered from $1$ to $n$) and an array $a$ of $n$ integers; initially, there are no edges in the graph. Vanya got bored, and to have fun, he decided to perform $n - 1$ operations.\n\nOperation number $x$ (operations are numbered in order starting from $1$) is as follows:\n\n Choose $2$ different numbers $1 \\leq u,v \\leq n$, such that $|a_u - a_v|$ is divisible by $x$.\n\n Add an undirected edge between vertices $u$ and $v$ to the graph.\n\nHelp Vanya get a connected$^{\\text{∗}}$ graph using the $n - 1$ operations, or determine that it is impossible.\n\n$^{\\text{∗}}$A graph is called connected if it is possible to reach any vertex from any other by moving along the edges.",
+    "input_spec": "Each test consists of multiple test cases. The first line contains an integer $t$ ($1 \\le t \\le 10^{3}$) — the number of test cases. Then follows the description of the test cases.\n\nThe first line of each test case contains the number $n$ ($1 \\leq n \\leq 2000$) — the number of vertices in the graph.\n\nThe second line of each test case contains $n$ numbers $a_1, a_2, \\cdots a_n$ ($1 \\leq a_i \\leq 10^9$).\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $2000$.",
+    "output_spec": "For each test case, if there is no solution, then output \"No\" (without quotes).\n\nOtherwise, output \"Yes\" (without quotes), and then output $n - 1$ lines, where in the $i$-th line, output the numbers $u$ and $v$ that need to be chosen for operation $i$.\n\nYou can output each letter in any case (for example, the strings \"yEs\", \"yes\", \"Yes\", and \"YES\" will be recognized as a positive answer).",
+    "note": "Let's consider the second test case.\n\n First operation $(x = 1)$: we can connect vertices $4$ and $1$, since $|a_4 - a_1| = |13 - 99| = |-86| = 86$, and $86$ is divisible by $1$.\n\n Second operation $(x = 2)$: we can connect vertices $2$ and $1$, since $|a_2 - a_1| = |7 - 99| = |-92| = 92$, and $92$ is divisible by $2$.\n\n Third operation $(x = 3)$: we can connect vertices $3$ and $2$, since $|a_3 - a_2| = |1 - 7| = |-6| = 6$, and $6$ is divisible by $3$.\n\n  From the picture, it can be seen that a connected graph is obtained.",
+    "samples": [
+      {
+        "input": "8\n2\n1 4\n4\n99 7 1 13\n5\n10 2 31 44 73\n5\n87 6 81 44 32\n5\n62 35 33 79 16\n5\n6 51 31 69 42\n5\n52 63 25 21 5\n12\n33 40 3 11 31 43 37 8 50 5 12 22",
+        "output": "\nYES\n2 1\nYES\n4 1\n2 1\n3 2\nYES\n5 1\n4 1\n3 1\n2 1\nYES\n4 1\n3 1\n2 1\n5 4\nYES\n3 1\n5 1\n2 1\n4 2\nYES\n4 1\n5 1\n2 1\n3 2\nYES\n2 1\n5 2\n3 1\n4 3\nYES\n9 1\n12 9\n11 1\n10 1\n6 1\n7 6\n2 1\n8 2\n5 2\n3 1\n4 1"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 131666,
+    "url": "https://codeforces.com/blog/entry/131666",
+    "tutorial": "Note that we have only $n - 1$ edges, so after each operation, the number of connectivity components must decrease by $1$.\n\nSince the order of operations is not important, we will perform the operations in reverse order. Then after the operation with number $x$, there will be $x + 1$ connectivity components in the graph. For each component, let's take any of its vertices $v$ and look at the number that corresponds to it. Note that we have chosen $x + 1$ numbers, so by the pigeonhole principle, some two numbers will be equal modulo $x$. This means that we find two vertices $u$ and $v$ from different components such that $|a_u - a_v|$ is a multiple of $x$. By drawing an edge between $u$ and $v$, we will achieve what we want — the number of connectivity components will become $1$ less.\n\nNow it remains to go through the operations in reverse order and print the answer.",
+    "solution_code": [
+      "#include<bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    int tests;\n    cin >> tests;\n    while (tests--) {\n        int n;\n        cin >> n;\n        vector<int> a(n);\n        for (auto& i : a) cin >> i;\n        vector<int> pos(n);\n        iota(pos.begin(), pos.end(), 0);\n        vector<pair<int, int>> ans;\n        for (int i = n - 1; i; --i) {\n            vector<int> occ(i, -1);\n            for (auto j : pos) {\n                if (occ[a[j] % i] != -1) {\n                    ans.emplace_back(j, occ[a[j] % i]);\n                    pos.erase(find(pos.begin(), pos.end(), j));\n                    break;\n                }\n                occ[a[j] % i] = j;\n            }\n        }\n        reverse(ans.begin(), ans.end());\n        cout << \"YES\\n\";\n        for (auto [x, y] : ans) cout << x + 1 << ' ' << y + 1 << '\\n';\n    }\n}"
+    ]
+  }
+}

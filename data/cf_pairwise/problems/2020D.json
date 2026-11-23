@@ -1,0 +1,46 @@
+{
+  "contest_id": 2020,
+  "index": "D",
+  "name": "Connect the Dots",
+  "rating": 1800,
+  "tags": [
+    "brute force",
+    "dp",
+    "dsu",
+    "graphs",
+    "math",
+    "trees"
+  ],
+  "points": 1500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2020D",
+  "url": "https://codeforces.com/problemset/problem/2020/D",
+  "contest_start_time": "2024-09-29T15:35:00+00:00",
+  "statement": {
+    "title": "D. Connect the Dots",
+    "time_limit": "2 seconds",
+    "memory_limit": "512 megabytes",
+    "legend": "One fine evening, Alice sat down to play the classic game \"Connect the Dots\", but with a twist.\n\nTo play the game, Alice draws a straight line and marks $n$ points on it, indexed from $1$ to $n$. Initially, there are no arcs between the points, so they are all disjoint. After that, Alice performs $m$ operations of the following type:\n\n She picks three integers $a_i$, $d_i$ ($1 \\le d_i \\le 10$), and $k_i$.\n\n She selects points $a_i, a_i+d_i, a_i+2d_i, a_i+3d_i, \\ldots, a_i+k_i\\cdot d_i$ and connects each pair of these points with arcs.\n\nAfter performing all $m$ operations, she wants to know the number of connected components$^\\dagger$ these points form. Please help her find this number.\n\n$^\\dagger$ Two points are said to be in one connected component if there is a path between them via several (possibly zero) arcs and other points.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 10^5$). The description of the test cases follows.\n\nThe first line of each test case contains two integers $n$ and $m$ ($1 \\le n \\le 2 \\cdot 10^5$, $1 \\le m \\le 2 \\cdot 10^5$).\n\nThe $i$-th of the following $m$ lines contains three integers $a_i$, $d_i$, and $k_i$ ($1 \\le a_i \\le a_i + k_i\\cdot d_i \\le n$, $1 \\le d_i \\le 10$, $0 \\le k_i \\le n$).\n\nIt is guaranteed that both the sum of $n$ and the sum of $m$ over all test cases do not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, output the number of connected components.",
+    "note": "In the first test case, there are $n = 10$ points. The first operation joins the points $1$, $3$, $5$, $7$, and $9$. The second operation joins the points $2$, $4$, $6$, $8$, and $10$. There are thus two connected components: $\\{1, 3, 5, 7, 9\\}$ and $\\{2, 4, 6, 8, 10\\}$.\n\nIn the second test case, there are $n = 100$ points. The only operation joins the points $19$, $21$, $23$, $25$, and $27$. Now all of them form a single connected component of size $5$. The other $95$ points form single-point connected components. Thus, the answer is $1 + 95 = 96$.\n\nIn the third test case, there are $n = 100$ points. After the operations, all odd points from $1$ to $79$ will be in one connected component of size $40$. The other $60$ points form single-point connected components. Thus, the answer is $1 + 60 = 61$.",
+    "samples": [
+      {
+        "input": "3\n10 2\n1 2 4\n2 2 4\n100 1\n19 2 4\n100 3\n1 2 5\n7 2 6\n17 2 31",
+        "output": "\n2\n96\n61"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 134516,
+    "url": "https://codeforces.com/blog/entry/134516",
+    "tutorial": "D. Connect the Dots\n\nBy P.V.Sekhar\n\nHint 1\n\nThe value of $d$ is very small.\n\nHint 2\n\nTry using Disjoint Set Union (DSU).\n\nSolution\n\nThe main idea is to take advantage of the low upper bound of $d_i$ and apply the Disjoint Set Union.\n\nWe will consider $dp[j][w]$, which denotes the number of ranges that contain the $j$ node in connection by the triplets/ranges with $w$ as $d$ and $j$ is not $a\\ +\\ k\\ *\\ d$, and $id[j][w]$, which denotes the node that represents an overall connected component of which $j$ node is part of for now.\n\nThe size of both $dp$ and $id$ is $max_j * max_w = (n) * 10 = 10\\ n$.\n\nWe will maintain two other arrays, $Start_cnt[j][w]$ and $End_cnt[j][w]$, which store the number of triplets with $j$ as $a_i$ and $a_i+k_i*d_i$, respectively, and with $w$ as $d_i$, to help us maintain the beginning and end of ranges.\n\nWe will now apply Disjoint Set Union. For each $i$th triplet, we assume $a_i$ will be the parent node of the Set created by $a_i$, $a_i$ + $d_i$, ..., $a_i+k_i*d_i$.\n\nThe transitions of $dp$ are as follows:\n\n1) if $j \\ge 10$ (max of $d_i$): for all $w$, $dp[j][w]$ are the same as $dp[j-w][w]$, just with some possible changes. These changes are due to $j$ being the start or the end of some triplet with $d_i$ as $w.$ So, let us start with $dp[j][w]$ as $Start_cnt[j][w] - End_cnt[j][w]$. If $dp[j-w][w]$ is non-zero, then perform a union operation (of DSU) between the $j$ node and $id[j-w][w]$, increment $dp[j][w]$ by $dp[j-w][w]$, and assign $id[j][w]$ as $id[j-w][w]$. This unites the ranges over the $j$ node.\n\n2) if $j \\lt 10$ (max of $d_i$): we do the same as above; rather than doing for all $w,$ we would restrict ourselves with $w$ from $0$ to $j-1$.\n\nThe net time complexity = updation of $dp[j][w]$ value by $Start_cnt$ and $End_cnt$ + union operations due to union of $id[j-w][w]$ with $j$ over all $w$ + incrementing $dp$ values (by $dp[j-w][w]$) + copying $id$ values = $10\\ n + 10\\ nlogn + 10\\ n + 10\\ n= 10 nlogn + 30n$ (in worst case) = $O(max_d*n*logn)$.\n\nCode",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n#define ll long long\nusing namespace std;\nconst ll N = 2e5+2;\nconst ll C = 10 + 1;\n \nvector<ll> par(N), sz(N, 0);\nvector<vector<ll>> dp(N, vector<ll> (C, 0)), ind(N, vector<ll> (C, 0)), start_cnt(N, vector<ll> (C, 0)), end_cnt(N, vector<ll> (C,0));\n \nll find_par(ll a) {\n    if (par[a] == a) return a;\n    return par[a] = find_par(par[a]);\n}\n \nvoid unite(ll a, ll b){\n    a = find_par(a), b = find_par(b);\n    if (a == b) return;\n    if (sz[b] > sz[a]) swap(a, b);\n    sz[a] += sz[b];\n    par[b] = a;\n}\n \nvoid reset(ll n) {\n    for (ll i = 1; i <= n; i++) {\n        par[i] = i;\n        sz[i] = 1;\n        for (ll j = 1; j < C; j++) {\n            dp[i][j] = start_cnt[i][j] = end_cnt[i][j] = 0;\n            ind[i][j] = i;\n        }\n    }\n}\n \nvoid solve() {\n    ll n, m, a, d, k;\n    cin >> n >> m;\n    reset(n);\n    for (ll i = 0; i < m; i++) {\n        cin >> a >> d >> k;\n        start_cnt[a][d]++;\n        end_cnt[a + k * d][d]++;\n    }\n    for (ll i = 1; i <= n; i++) {\n        for (ll j = 1; j < C; j++) {\n            dp[i][j] = start_cnt[i][j] - end_cnt[i][j];\n            if (i-j < 1) continue;\n            if (dp[i-j][j]) {\n                unite(ind[i-j][j], i);\n                ind[i][j] = ind[i-j][j];\n                dp[i][j] += dp[i-j][j];\n            }\n        }\n    }\n    ll ans = 0;\n    for (ll i = 1; i <= n; i++) {\n        if (find_par(i) == i) ans++;\n    }\n    cout << ans << \"\\n\";\n}\n \nint main() {\n    ll t;\n    cin >> t;\n    while (t--) {\n        solve();\n    }\n}"
+    ]
+  }
+}

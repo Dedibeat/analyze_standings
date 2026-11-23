@@ -1,0 +1,42 @@
+{
+  "contest_id": 1968,
+  "index": "B",
+  "name": "Prefiquence",
+  "rating": 800,
+  "tags": [
+    "greedy",
+    "two pointers"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1968B",
+  "url": "https://codeforces.com/problemset/problem/1968/B",
+  "contest_start_time": "2024-05-02T14:45:00+00:00",
+  "statement": {
+    "title": "B. Prefiquence",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "You are given two binary strings $a$ and $b$. A binary string is a string consisting of the characters '0' and '1'.\n\nYour task is to determine the maximum possible number $k$ such that a prefix of string $a$ of length $k$ is a subsequence of string $b$.\n\nA sequence $a$ is a subsequence of a sequence $b$ if $a$ can be obtained from $b$ by the deletion of several (possibly, zero or all) elements.",
+    "input_spec": "The first line consists of a single integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases.\n\nThe first line of each test case contains two integers $n$ and $m$ ($1\\le n,m \\le 2 \\cdot 10^5$) — the length of string $a$ and the length of string $b$, respectively.\n\nThe second line of each test case contains a binary string $a$ of length $n$.\n\nThe third line of each test case contains a binary string $b$ of length $m$.\n\nIt is guaranteed that the sum of values $n$ over all test cases does not exceed $2 \\cdot 10^5$. Similarly, the sum of values $m$ over all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, output a single number — the maximum $k$, such that the first $k$ characters of $a$ form a subsequence of $b$.",
+    "note": "In the first example, the string '$10$' is a subsequence of '$1\\color{red}11\\color{red}0$' but the string '$100$' is not. So the answer is $2$.\n\nIn the fifth example, $a$='$100$', $b$='$1\\color{red}{10}1\\color{red}0$', whole string $a$ is a subsequence of string $b$. So the answer is $3$.\n\nIn the sixth example, string $b$ does not contain '$1$' so the answer is $0$.",
+    "samples": [
+      {
+        "input": "6\n5 4\n10011\n1110\n3 3\n100\n110\n1 3\n1\n111\n4 4\n1011\n1111\n3 5\n100\n11010\n3 1\n100\n0",
+        "output": "\n2\n2\n1\n1\n3\n0"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 129096,
+    "url": "https://codeforces.com/blog/entry/129096",
+    "tutorial": "We will be solving this task using dynamic programming.\n\nLet us define $dp_i$ as the maximal prefix of $a$ that is contained in $b_1,\\dots,b_i$ as a subsequence.\n\nThen the transitions are as follows:\n\n if $b_i$ is equal to $a_{dp_{i-1}+1}$ then $dp_i = dp_{i-1} + 1$.\n\n otherwise $dp_i=dp_{i-1}$.\n\nThe answer is $dp_{m}$.",
+    "solution_code": [
+      "#include<iostream>\n#include<vector>\nusing namespace std;\nint main(){\n\tint t;\n\tcin>>t;\n\twhile(t--){\n\t\tint n,m;\n\t\tcin>>n>>m;\n\t\tvector<char>a(n+1),b(m+1);\n\t\tfor(int i=1;i<=n;i++){\n\t\t\tcin>>a[i];\n\t\t}\n\t\tfor(int i=1;i<=m;i++){\n\t\t\tcin>>b[i];\n\t\t}\n\t\tvector<int>dp(m+1);\n\t\tdp[1]=(a[1]==b[1]?1:0);\n\t\tfor(int i=2;i<=m;i++){\n\t\t\tif(dp[i-1]!=n && b[i]==a[dp[i-1]+1]){\n\t\t\t\tdp[i]=dp[i-1]+1;\n\t\t\t}else{\n\t\t\t\tdp[i]=dp[i-1];\n\t\t\t}\n\t\t}\n\t\tcout<<dp[m]<<\"\\n\";\n\t}\n}"
+    ]
+  }
+}

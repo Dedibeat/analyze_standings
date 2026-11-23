@@ -1,0 +1,43 @@
+{
+  "contest_id": 2096,
+  "index": "B",
+  "name": "Wonderful Gloves",
+  "rating": 1100,
+  "tags": [
+    "greedy",
+    "math",
+    "sortings"
+  ],
+  "points": 750.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2096B",
+  "url": "https://codeforces.com/problemset/problem/2096/B",
+  "contest_start_time": "2025-04-19T14:35:00+00:00",
+  "statement": {
+    "title": "B. Wonderful Gloves",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "You are the proud owner of many colorful gloves, and you keep them in a drawer. Each glove is in one of $n$ colors numbered $1$ to $n$. Specifically, for each $i$ from $1$ to $n$, you have $l_i$ left gloves and $r_i$ right gloves with color $i$.\n\nUnfortunately, it's late at night, so you can't see any of your gloves. In other words, you will only know the color and the type (left or right) of a glove after you take it out of the drawer.\n\nA matching pair of gloves with color $i$ consists of exactly one left glove and one right glove with color $i$. Find the minimum number of gloves you need to take out of the drawer to guarantee that you have at least $k$ matching pairs of gloves with different colors.\n\nFormally, find the smallest positive integer $x$ such that:\n\n For any set of $x$ gloves you take out of the drawer, there will always be at least $k$ matching pairs of gloves with different colors.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 10^4$). The description of the test cases follows.\n\nThe first line of each test case contains two integers $n$, $k$ ($1 \\leq k \\leq n \\leq 2 \\cdot 10^5$) — the number of different colors, and the minimum number of required matching pairs of gloves.\n\nThe second line of each test case contains $n$ integers $l_1, l_2, \\ldots, l_n$ ($1 \\leq l_i \\leq 10^9$) — the number of left gloves with color $i$ for each $i$ from $1$ to $n$.\n\nThe third line of each test case contains $n$ integers $r_1, r_2, \\ldots, r_n$ ($1 \\leq r_i \\leq 10^9$) — the number of right gloves with color $i$ for each $i$ from $1$ to $n$.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, output a single integer — the minimum number of gloves you need to take out of the drawer.",
+    "note": "In the first test case, you must take out all of the gloves, so the answer is $6$.\n\nIn the second test case, the answer is $101$. If you take out $100$ gloves or fewer, then it is possible that all of them are left gloves, which means you won't have a matching pair of gloves.\n\nIn the third test case, the answer is $303$. If you only take out $302$ gloves, then one possible scenario is as follows:\n\n Color $1$: $100$ left gloves, $200$ right gloves\n\n Color $2$: $1$ left glove, $0$ right gloves\n\n Color $3$: $0$ left gloves, $1$ right glove\n\nYou only have multiple matching pairs of gloves with color $1$. So you won't have at least $2$ matching pairs of gloves with different colors.",
+    "samples": [
+      {
+        "input": "5\n3 3\n1 1 1\n1 1 1\n1 1\n100\n1\n3 2\n100 1 1\n200 1 1\n5 2\n97 59 50 87 36\n95 77 33 13 74\n10 6\n97 59 50 87 36 95 77 33 13 74\n91 14 84 33 54 89 68 34 14 15",
+        "output": "\n6\n101\n303\n481\n1010"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 142070,
+    "url": "https://codeforces.com/blog/entry/142070",
+    "tutorial": "2096B - Wonderful Gloves\n\nIdea: SanguineChameleon\n\nStep 1\n\nLet's look at the third test case in the example. We have $k = 2$, and the answer is $x = 303$. If we take out $302$ gloves, then it's possible that we only have matching pairs of $1$ color.\n\nHow can we generalize this fact for any $k$ and $x$?\n\nAnswer\n\nIf we take out $(x - 1)$ gloves or fewer, then it's possible that we only have at most $(k - 1)$ matching pairs of different colors.\n\nStep 2\n\nSo we can solve the problem as follows:\n\nLet $y$ be the maximum number of gloves we can take out so that there are at most $(k - 1)$ matching pairs of different colors. Then the answer to the problem is $x = y + 1$.\n\nSet $m = k - 1$. Now we need to find the maximum number of gloves so that there are at most $m$ matching pairs of different colors.\n\nStep 3\n\nTry solving it for $m = 0$ first.\n\nStep 4\n\nWhen $m = 0$, we want to find the maximum number of gloves so that there are no matching pairs.\n\nTherefore, for each color $i$, we can either take all the left gloves, or all the right gloves. So we should choose the type with more gloves.\n\nFormally, let $a_i = \\max(l_i, r_i)$. Then the maximum number of gloves we can take is $y = a_1 + a_2 + \\ldots + a_n$.\n\nStep 5\n\nNow, using the solution for $m = 0$, solve it for $m = 1$. Then solve it for $m = 2$, and so on.\n\nStep 6\n\nWhen $m = 0$, we take $a_i$ gloves of color $i$. So we're left with $b_i = \\min(l_i, r_i)$ gloves of color $i$ that we haven't taken.\n\nTo get from $m = 0$ to $m = 1$, we can additionally form matching pairs of $1$ color. Therefore, we can choose a color $i$, and take the remaining $b_i$ gloves. So we should choose the color $i$ with the maximum value of $b_i$.\n\nIn other words, for $m = 1$, the maximum number of gloves we can take is $y = a_1 + a_2 + \\ldots + a_n + \\max(b_1, b_2, \\ldots, b_n)$.\n\nTo get from $m = 0$ to $m = 2$, we can additionally form matching pairs of $2$ different colors. Therefore, we can choose two different colors $i$ and $j$, and take the remaining $b_i + b_j$ gloves. So we should choose the two colors $i$ and $j$ with the maximum value of $b_i + b_j$.\n\nWe can generalize this idea for any $m$.\n\nStep 7\n\nSo the algorithm is as follows:\n\nSet $m = k - 1$.\n\nFor each $i$ from $1$ to $n$, let $a_i = \\max(l_i, r_i)$ and $b_i = \\min(l_i, r_i)$.\n\nSet $y = a_1 + a_2 + \\ldots + a_n$.\n\nSort the values of $b$ in descending order.\n\nAdd the $m$ largest values of $b$ to $y$.\n\nThe answer is $x = y + 1$.\n\nThe time complexity of this solution is $O(n \\log n)$.\n\nImplementation",
+    "solution_code": [
+      "#include <bits/stdc++.h>\nusing namespace std;\n\nvoid test() {\n    int n, k;\n    cin >> n >> k;\n    int m = k - 1;\n\n    vector<int> l(n);\n    for (int i = 0; i < n; i++) {\n        cin >> l[i];\n    }\n    vector<int> r(n);\n    for (int i = 0; i < n; i++) {\n        cin >> r[i];\n    }\n\n    vector<int> a(n), b(n);\n    long long y = 0;\n    for (int i = 0; i < n; i++) {\n        a[i] = max(l[i], r[i]);\n        b[i] = min(l[i], r[i]);\n        y += a[i];\n    }\n\n    sort(b.begin(), b.end(), greater<>());\n    for (int i = 0; i < m; i++) {\n        y += b[i];\n    }\n\n    long long x = y + 1;\n    cout << x << '\\n';\n}\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(nullptr);\n\n    int t;\n    cin >> t;\n    for (int i = 0; i < t; i++) {\n        test();\n    }\n    \n    return 0;\n}"
+    ]
+  }
+}

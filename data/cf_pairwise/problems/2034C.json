@@ -1,0 +1,44 @@
+{
+  "contest_id": 2034,
+  "index": "C",
+  "name": "Trapped in the Witch's Labyrinth",
+  "rating": 1400,
+  "tags": [
+    "constructive algorithms",
+    "dfs and similar",
+    "graphs",
+    "implementation"
+  ],
+  "points": 1500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2034C",
+  "url": "https://codeforces.com/problemset/problem/2034/C",
+  "contest_start_time": "2024-11-30T14:35:00+00:00",
+  "statement": {
+    "title": "C. Trapped in the Witch's Labyrinth",
+    "time_limit": "3 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "In the fourth labor of Rostam, the legendary hero from the Shahnameh, an old witch has created a magical maze to trap him. The maze is a rectangular grid consisting of $n$ rows and $m$ columns. Each cell in the maze points in a specific direction: up, down, left, or right. The witch has enchanted Rostam so that whenever he is in a cell, he will move to the next cell in the direction indicated by that cell.\n\nIf Rostam eventually exits the maze, he will be freed from the witch's enchantment and will defeat her. However, if he remains trapped within the maze forever, he will never escape.\n\nThe witch has not yet determined the directions for all the cells. She wants to assign directions to the unspecified cells in such a way that the number of starting cells from which Rostam will be trapped forever is maximized. Your task is to find the maximum number of starting cells which make Rostam trapped.",
+    "input_spec": "The first line of the input contains an integer $t$ ($1 \\leq t \\leq 10^4$), the number of test cases.\n\nFor each test case:\n\n The first line contains two integers $n$ and $m$ ($1 \\leq n, m \\leq 1000$), representing the number of rows and columns in the maze.\n\n Each of the next $n$ lines contains a string of $m$ characters representing the directions in the maze. Each character is one of the following:\n\n U (up)\n\n D (down)\n\n L (left)\n\n R (right)\n\n ? (unspecified direction)\n\nIt's guaranteed that the sum of $n \\cdot m$ over all test cases is at most $10^6$.",
+    "output_spec": "For each test case, print a single integer, the maximum number of starting cells from which Rostam will be trapped forever after assigning directions to the unspecified cells optimally.",
+    "note": "In the first test case, all of the cells will be good no matter what you do.\n\nIn the second test case, if you assign the ?s like the picture below, all of the cells will be bad:\n\nIn the third test case, if you assign the ?s like the picture below, you will have $5$ bad cells (red-shaded cells):",
+    "samples": [
+      {
+        "input": "3\n3 3\nUUU\nL?R\nDDD\n2 3\n???\n???\n3 3\n?U?\nR?L\nRDL",
+        "output": "\n0\n6\n5"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 136579,
+    "url": "https://codeforces.com/blog/entry/136579",
+    "tutorial": "2034C - Trapped in the Witch's Labyrinth\n\nIdea: MohammadParsaElahimanesh — Preparation: AmirrzwM\n\nSolution\n\nIf a cell has a fixed direction (i.e., it points to another cell), and following that direction leads outside the maze, it must eventually exit the maze. Such cells cannot be part of any loop.\n\nWe can analyze the remaining cells once we identify cells that lead out of the maze. Any undirected cell or $?$ cell might either lead to the exit or form part of a loop.\n\nIf all neighboring cells of a $?$ cell can eventually lead out of the maze, then this $?$ cell will also lead out of the maze. The state of such $?$ cells can be determined based on their surroundings.\n\nFor any remaining cells (directed cells that do not lead out of the maze, or other $?$ cells that cannot be determined to lead to an exit), we can assign directions such that starting from those cells will eventually lead to a loop. These cells will form the loops.\n\nTo find how many cells will eventually lead to a loop, we can use a Depth-First Search (DFS) on the reversed graph, where all directions are reversed. By performing DFS starting from the \"out-of-maze\" cells, we can identify all cells that are reachable from the outside and thus will eventually lead out of the maze.\n\nCount the number of cells that can reach the exit. Subtract this number from the total number of cells in the maze to determine how many are part of loops (i.e., cells that cannot reach the exit).\n\nImplementation",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n \nusing namespace std;\n \nint main() \n{\n    int tc;\n    cin >> tc;\n    while(tc--){\n        int n, m;\n        cin >> n >> m;\n        string c[n+1];\n        for(int i = 1 ; i <= n ; i++) cin >> c[i] , c[i] = \"-\" + c[i];\n        vector<pair<int,int>> jda[n+2][m+2];\n        for(int i = 1 ; i <= n ; i++){\n            for(int j = 1 ; j <= m ; j++){\n                if(c[i][j] == 'U') jda[i-1][j].push_back({i , j});\n                if(c[i][j] == 'R') jda[i][j+1].push_back({i , j});\n                if(c[i][j] == 'D') jda[i+1][j].push_back({i , j});\n                if(c[i][j] == 'L') jda[i][j-1].push_back({i , j});\n            }\n        }\n        int vis[n+2][m+2] = {};\n        queue<pair<int,int>> q;\n        for(int j = 0 ; j <= m+1 ; j++) vis[0][j] = 1 , q.push({0 , j});\n        for(int i = 1 ; i <= n+1 ; i++) vis[i][0] = 1 , q.push({i , 0});\n        for(int j = 1 ; j <= m+1 ; j++) vis[n+1][j] = 1 , q.push({n+1 , j});\n        for(int i = 1 ; i <= n ; i++) vis[i][m+1] = 1 , q.push({i , m+1});\n        while(q.size()){\n            auto [i , j] = q.front();\n            q.pop();\n            for(auto [a , b] : jda[i][j]){\n                if(vis[a][b] == 0){\n                    vis[a][b] = 1;\n                    q.push({a , b});\n                }\n            }\n        }\n        for(int i = 1 ; i <= n ; i++){\n            for(int j = 1 ; j <= m ; j++){\n                if(c[i][j] == '?' and\n                vis[i-1][j] and vis[i][j+1] and vis[i+1][j] and vis[i][j-1]) vis[i][j] = 1;\n            }\n        }\n        int ans = n * m;\n        for(int i = 1 ; i <= n ; i++){\n            for(int j = 1 ; j <= m ; j++){\n                if(vis[i][j] == 1) ans -= 1;\n            }\n        }\n        cout << ans << endl;\n    }\n    return 0;\n}"
+    ]
+  }
+}

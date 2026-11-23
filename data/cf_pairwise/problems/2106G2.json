@@ -1,0 +1,46 @@
+{
+  "contest_id": 2106,
+  "index": "G2",
+  "name": "Baudelaire (hard version)",
+  "rating": 2500,
+  "tags": [
+    "binary search",
+    "dfs and similar",
+    "divide and conquer",
+    "implementation",
+    "interactive",
+    "trees"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2106G2",
+  "url": "https://codeforces.com/problemset/problem/2106/G2",
+  "contest_start_time": "2025-04-24T14:35:00+00:00",
+  "statement": {
+    "title": "G2. Baudelaire (hard version)",
+    "time_limit": "3 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "This is the Hard Version of the problem. The only difference between the two versions is that in the Hard Version the tree may be of any shape.\n\nThis problem is interactive.\n\nBaudelaire is very rich, so he bought a tree of size $n$, rooted at some arbitrary node. Additionally, every node has a value of $1$ or $-1$.\n\nCow the Nerd saw the tree and fell in love with it. However, computer science doesn't pay him enough, so he can't afford to buy it. Baudelaire decided to play a game with Cow the Nerd, and if he won, he would gift him the tree.\n\nCow the Nerd does not know which node is the root, and he doesn't know the values of the nodes either. However, he can ask Baudelaire queries of two types:\n\n $1$ $k$ $u_1$ $u_2$ $...$ $u_k$: Let $f(u)$ be the sum of the values of all nodes in the path from the root of the tree to node $u$. Cow the Nerd may choose an integer $k$ $(1 \\le k \\le n)$ and $k$ nodes $u_1, u_2, ..., u_k$, and he will receive the value $f(u_1) + f(u_2) + ... + f(u_k)$.\n\n $2$ $u$: Baudelaire will toggle the value of node $u$. Specifically, if the value of $u$ is $1$, it will become $-1$, and vice versa.\n\nCow the Nerd wins if he guesses the value of every node correctly (the values of the final tree, after performing the queries) within $n + 200$ total queries. Can you help him win?",
+    "input_spec": "The first line of the input contains a single integer $t$ $(1 \\le t \\le 100)$, the number of test cases.\n\nThe first line of each test case contains a single integer $n$ $(2 \\le n \\le 10^3)$, the size of the tree.\n\nEach of the next $n-1$ lines contains two integers $u$ and $v$ $(1 \\le u, v \\le n, u \\neq v)$, denoting an edge between nodes $u$ and $v$ in the tree.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $10^3$ and that each graph provided is a valid tree.",
+    "output_spec": null,
+    "note": "In the first example, the root of the tree is node $4$ and the values are: $[-1, -1, -1, 1]$ (the $i$-th value is the value of node $i$).\n\nInitially, $f(1) = 0, f(2) = 0, f(3) = -1, f(4) = 1$. Therefore, the answer to our first query is $f(1) + f(2) + f(4) = 1$, and of the second query is $f(3) + f(1) = -1$.\n\nAfter toggling the value of node $4$, the values are $[-1, -1, -1, -1]$. In addition, $f(1) = -2, f(2) = -2, f(3) = -3, f(4) = -1$. Therefore, $f(1) + f(2) + f(4) = -5$ and $f(3) + f(1) = -5$.\n\nWe answer that the final values of the nodes are $[-1, -1, -1, -1]$, which is correct. Notice that we report the values of the nodes after the changes, and not before.\n\nIn the second example, the root of the tree is $2$ and the initial values are $[1, 1]$.\n\nIn the last example, the root of the tree is $1$ and the initial values are $[-1, 1, 1, 1, 1, 1, -1]$.\n\nNote that this is just an explanation of how the queries work, and it is not supposed to use any specific strategy to solve the problem.",
+    "samples": [
+      {
+        "input": "\n3\n4\n1 4\n4 2\n2 3\n\n1\n\n-1\n\n\n-5\n\n-5\n\n2\n1 2\n\n2\n\n7\n1 2\n2 7\n7 3\n7 4\n7 5\n7 6\n\n-1",
+        "output": "\n\n\n\n\n\n? 1 3 1 2 4\n\n? 1 2 3 1\n\n? 2 4\n? 1 3 1 2 4\n\n? 1 2 3 1\n\n! -1 -1 -1 -1\n\n\n? 1 1 1\n\n! 1 1\n\n\n\n\n\n\n? 1 1 1\n\n! -1 1 1 1 1 1 -1"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 142254,
+    "url": "https://codeforces.com/blog/entry/142254",
+    "tutorial": "Problem G2 — BAUDELAIRE (Hard Version)\n\n(Author & Analysis: SpyrosAliv)\n\nSolution\n\nRead the solution to the Easy Version first.\n\nObviously, if we know the parent of some node, we know which nodes are under that node's subtree, so we never have to consider them as candidates for the root of the tree. Let's use this to choose nodes in a way such that each time we eliminate as many candidates as possible, even in the worst case.\n\nSpecifically, consider querying for the centroid of the tree (a centroid of a tree is a node that if it is deleted, every connected component left has size no more than half of the original tree). When querying for the centroid, there are two cases: either it is the root of the tree, in which case we are finished, or we find its parent, which eliminates at least half of the current candidates. Then, we delete all nodes that could not possibly be the root, and query for the new centroid.\n\nSince the candidates get halved each time, we repeat the above process no more than $\\log n$ times. In the absolute worst case (which is not realistic), we make $3\\log (n) + 3\\log (\\frac{n}{2}) + 3\\log (\\frac{n}{4}) + ... + 3$ queries. For $n = 1000$, this is about $165$ queries. I do want to stress that this case is impossible; the $200$ queries are pretty loose but I want to allow a lot of different solutions (there are some even better ones than the one I described here, feel free to describe better solutions in the comments).\n\nImplementation\n\nRate the Problem\n\n Amazing\n\n Good\n\n Average\n\n Bad\n\n Didn't Solve",
+    "solution_code": [
+      "#include <bits/stdc++.h>\nusing namespace std;\n#define int long long\n \nvector<vector<int>> tree, cd;\nvector<int> sub, val;\nvector<bool> del;\nint n, cdRoot = -1;\n \nint ask(vector<int> a) {\n    int k = a.size();\n    cout << \"? 1 \" << k << \" \";\n    for (auto x: a) {\n        cout << x << \" \";\n    }\n    cout << endl;\n    int ans; cin >> ans;\n    return ans;\n}\n \nvoid toggle(int u) {\n    cout << \"? 2 \" << u << endl;\n}\n \nvoid answer(vector<int> ans) {\n    cout << \"! \";\n    for (int i = 1; i <= n; i++) cout << ans[i] << \" \";\n    cout << endl;\n}\n \nvoid calc_sums(int node, int par = 0) {\n    sub[node] = 0;\n    if (del[node]) return;\n    for (auto next: tree[node]) {\n        if (next == par) continue;\n        calc_sums(next, node);\n        sub[node] += sub[next];\n    }\n    sub[node]++;\n}\n \nint find_centroid(int node, int sz, int par = 0) {\n    for (auto next: tree[node]) {\n        if (next == par || del[next]) continue;\n        if (sub[next] * 2 >= sz) return find_centroid(next, sz, node);\n    }\n    return node;\n}\n \nvoid build(int node, int prev) {\n    cd[prev].push_back(node);\n    del[node] = true;\n    for (auto next: tree[node]) {\n        if (del[next]) continue;\n        calc_sums(next, node);\n        int cent = find_centroid(next, sub[next], node);\n        build(cent, node);\n    }\n}\n \nbool inspect(vector<int> a, int tog) {\n    int b4 = ask(a);\n    toggle(tog);\n    int aft = ask(a);\n    int k = a.size();\n    int must = b4;\n    if (aft < b4) {\n        must -= 2 * k;\n    }\n    else must += 2 * k;\n    if (aft != must) return true;\n    else return false;\n}\n \nint find_sus(vector<int> a, int tog) {\n    int k = a.size();\n    int lo = 0, hi = k-1;\n    int ans = -1;\n    while (lo <= hi) {\n        int mid = (lo + hi) / 2;\n        vector<int> qr;\n        for (int j = 0; j <= mid; j++) {\n            qr.push_back(a[j]);\n        }\n        if (inspect(qr, tog)) {\n            ans = mid;\n            hi = mid-1;\n        }\n        else lo = mid+1;\n    }\n    return ans; \n}\n \nint find_root(int node, int par = 0) {\n    if (cd[node].empty()) return node;\n    vector<int> ch;\n    for (auto next: cd[node]) {\n        if (next == par) continue;\n        ch.push_back(next);\n    }\n    int sus = find_sus(ch, node);\n    if (sus == -1) return node;\n    return find_root(ch[sus], node);\n}\n \nvoid find_vals(int node, int par = 0, int above = 0) {\n    val[node] -= above;\n    above += val[node];\n    for (auto next: tree[node]) {\n        if (next != par) {\n            find_vals(next, node, above);\n        }\n    }\n}\n \nvoid solve() {\n    cin >> n;\n    cd.assign(n+1, {});\n    tree.assign(n+1, {});\n    for (int i = 1; i < n; i++) {\n        int u, v; cin >> u >> v;\n        tree[u].push_back(v);\n        tree[v].push_back(u);\n    }    \n    del.assign(n+1, false);\n    sub.assign(n+1, 0);\n    calc_sums(1);\n    cdRoot = find_centroid(1, n);\n    build(cdRoot, 0);\n    int root = find_root(cdRoot);\n    val.resize(n+1);\n    for (int i = 1; i <= n; i++) {\n        val[i] = ask({i});\n    }\n    find_vals(root);\n    answer(val);\n}\n \nsigned main() {\n    ios_base::sync_with_stdio(0);\n    cin.tie(0);\n    int t; cin >> t;\n    while (t--) solve();\n    return 0;\n}"
+    ]
+  }
+}

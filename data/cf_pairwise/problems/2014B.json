@@ -1,0 +1,39 @@
+{
+  "contest_id": 2014,
+  "index": "B",
+  "name": "Robin Hood and the Major Oak",
+  "rating": 800,
+  "tags": [
+    "math"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2014B",
+  "url": "https://codeforces.com/problemset/problem/2014/B",
+  "contest_start_time": "2024-09-21T14:45:00+00:00",
+  "statement": {
+    "title": "B. Robin Hood and the Major Oak",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "In Sherwood, the trees are our shelter, and we are all children of the forest.\n\nThe Major Oak in Sherwood is known for its majestic foliage, which provided shelter to Robin Hood and his band of merry men and women.\n\nThe Major Oak grows $i^i$ new leaves in the $i$-th year. It starts with $1$ leaf in year $1$.\n\nLeaves last for $k$ years on the tree. In other words, leaves grown in year $i$ last between years $i$ and $i+k-1$ inclusive.\n\nRobin considers even numbers lucky. Help Robin determine whether the Major Oak will have an even number of leaves in year $n$.",
+    "input_spec": "The first line of the input contains a single integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases.\n\nEach test case consists of two integers $n$, $k$ ($1 \\le n \\le 10^9$, $1 \\le k \\le n$) — the requested year and the number of years during which the leaves remain.",
+    "output_spec": "For each test case, output one line, \"YES\" if in year $n$ the Major Oak will have an even number of leaves and \"NO\" otherwise.\n\nYou can output the answer in any case (upper or lower). For example, the strings \"yEs\", \"yes\", \"Yes\", and \"YES\" will be recognized as positive responses.",
+    "note": "In the first test case, there is only $1$ leaf.\n\nIn the second test case, $k=1$, so in the $2$-nd year there will be $2^2=4$ leaves.\n\nIn the third test case, $k=2$, so in the $2$-nd year there will be $1+2^2=5$ leaves.\n\nIn the fourth test case, $k=2$, so in the $3$-rd year there will be $2^2 + 3^3 = 4 + 27 = 31$ leaves.",
+    "samples": [
+      {
+        "input": "5\n1 1\n2 1\n2 2\n3 2\n4 4",
+        "output": "\nNO\nYES\nNO\nNO\nYES"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 134210,
+    "url": "https://codeforces.com/blog/entry/134210",
+    "tutorial": "2014B - Robin Hood and the Major Oak\n\nHint 1\n\nOn last day only leaf grown between n-k+1 and n day will remain.\n\nHint 2\n\npow(i,i) is odd if i is odd, even if i is even.\n\nHint 3\n\nWe need no of odd numbers between n-k+1 and n\n\nMy submission — 282233711\n\nVideo Editorial",
+    "solution_code": []
+  }
+}

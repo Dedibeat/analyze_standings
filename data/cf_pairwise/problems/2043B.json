@@ -1,0 +1,42 @@
+{
+  "contest_id": 2043,
+  "index": "B",
+  "name": "Digits",
+  "rating": 1100,
+  "tags": [
+    "math",
+    "number theory"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2043B",
+  "url": "https://codeforces.com/problemset/problem/2043/B",
+  "contest_start_time": "2024-12-24T14:35:00+00:00",
+  "statement": {
+    "title": "B. Digits",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "Artem wrote the digit $d$ on the board exactly $n!$ times in a row. So, he got the number $dddddd \\dots ddd$ (exactly $n!$ digits).\n\nNow he is curious about which odd digits from $1$ to $9$ divide the number written on the board.",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\le t \\le 100$) — the number of test cases. The next $t$ test cases follow.\n\nEach test case consists of a single line containing two integers $n$ and $d$ ($2 \\le n \\le 10^9$, $1 \\le d \\le 9$).",
+    "output_spec": "For each test case, output the odd digits in ascending order that divide the number written on the board.",
+    "note": "The factorial of a positive integer $n$ ($n!$) is the product of all integers from $1$ to $n$. For example, the factorial of $5$ is $1 \\cdot 2 \\cdot 3 \\cdot 4 \\cdot 5 = 120$.",
+    "samples": [
+      {
+        "input": "3\n2 6\n7 1\n8 5",
+        "output": "\n1 3 \n1 3 7 9 \n1 3 5 7 9 "
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 137801,
+    "url": "https://codeforces.com/blog/entry/137801",
+    "tutorial": "There are several ways to solve this problem. I will describe two of them.\n\nUsing divisibility rules (a lot of math involved):\n\nWe can try divisibility rules for all odd integers from $1$ to $9$ and find out whether they work for our numbers:\n\n $1$ is always the answer, since every integer is divisible by $1$:\n\n a number is divisible by $3$ iff its sum of digits is divisible by $3$. Since our number consists of $n!$ digits $d$, then either $n!$ or $d$ should be divisible by $3$; so, $n \\ge 3$ or $d \\bmod 3 = 0$;\n\n a number is divisible by $9$ iff its sum of digits is divisible by $9$. This is a bit trickier than the case with $3$, because it is possible that both $n!$ and $d$ are divisible by $3$ (not $9$), and it makes the sum of digits divisible by $9$;\n\n a number is divisible by $5$ iff its last digit is $5$ or $0$. Just check that $d=5$, and that's it;\n\n probably the trickiest case: a number is divisible by $7$ iff, when this number is split into blocks of $3$ digits (possibly with the first block shorter than $3$ digits), the sign-alternating sum of these blocks is divisible by $7$. Like, $1234569$ is divisible by $7$ because $(1-234+569)$ is divisible by $7$. If we apply this rule to our numbers from the problem, we can use the fact that when $n \\ge 3$, the number can be split into several blocks of length $6$, and each such block changes the alternating sum by $0$. So, if $n \\ge 3$ or $d = 7$, our number is divisible by $7$.\n\nAlmost brute force (much less math involved):\n\nFirst, we actually need a little bit of math. If you take a number consisting of $n!$ digits equal to $d$, it is always divisible by $(n-1)!$ digits equal to $d$. This is because, if you write some integer repeatedly, the resulting number will be divisible by the original number, like, for example, $424242$ is divisible by $42$.\n\nSo, if for some $n = k$, the number is divisible by some digit, then for $n = k+1$, the number will also be divisible for some digit.\n\nThis means that there exists an integer $m$ such that for all integers $n \\ge m$, the results are the same if you use the same digit $d$. So, we can set $n = \\min(n, m)$, and if $m$ is small enough, use brute force.\n\nWhat is the value of $m$? The samples tell us that the number consisting of $7!$ ones is divisible by $1$, $3$, $7$ and $9$ (and divisibility by $5$ depends only on $d$), so you can actually use $m=7$. It is also possible to reduce $m$ to $6$, but this is not required.\n\nSo, the solution is: reduce $n$ to something like $7$ if it is greater than $7$, then use brute force. You can either calculate the remainder of a big number modulo small number using a for-loop, or, if you code in Java or Python, use built-in big integers (just be careful with Python, modern versions of it forbid some operations with integers longer than $4300$ digits, you might need to override that behavior).",
+    "solution_code": [
+      "import sys\n \nsys.set_int_max_str_digits(6000)\n \ndef fact(x):\n    if x == 0:\n        return 1\n    return x * fact(x - 1)\n \nt = int(input())\nfor i in range(t):\n    n, k = map(int, input().split())\n    n = min(n, 7)\n    s = int(str(k) * fact(n))\n    for i in range(1, 10, 2):\n        if s % i == 0:\n            print(i, end = ' ')\n    print()"
+    ]
+  }
+}

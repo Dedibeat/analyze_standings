@@ -1,0 +1,43 @@
+{
+  "contest_id": 1976,
+  "index": "A",
+  "name": "Verify Password",
+  "rating": 800,
+  "tags": [
+    "implementation",
+    "sortings",
+    "strings"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "1976A",
+  "url": "https://codeforces.com/problemset/problem/1976/A",
+  "contest_start_time": "2024-05-30T14:35:00+00:00",
+  "statement": {
+    "title": "A. Verify Password",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Monocarp is working on his new site, and the current challenge is to make the users pick strong passwords.\n\nMonocarp decided that strong passwords should satisfy the following conditions:\n\n password should consist only of lowercase Latin letters and digits;\n\n there should be no digit that comes after a letter (so, after each letter, there is either another letter or the string ends);\n\n all digits should be sorted in the non-decreasing order;\n\n all letters should be sorted in the non-decreasing order.\n\nNote that it's allowed for the password to have only letters or only digits.\n\nMonocarp managed to implement the first condition, but he struggles with the remaining ones. Can you help him to verify the passwords?",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\le t \\le 1000$) — the number of testcases.\n\nThe first line of each testcase contains a single integer $n$ ($1 \\le n \\le 20$) — the length of the password.\n\nThe second line contains a string, consisting of exactly $n$ characters. Each character is either a lowercase Latin letter or a digit.",
+    "output_spec": "For each testcase, print \"YES\" if the given password is strong and \"NO\" otherwise.",
+    "note": "In the second testcase, the letters are not sorted in the non-decreasing order.\n\nIn the fourth testcase, there is a digit that comes after a letter — digit '1' after a letter 'c'.",
+    "samples": [
+      {
+        "input": "5\n4\n12ac\n5\n123wa\n9\nallllmost\n5\nac123\n6\n011679",
+        "output": "\nYES\nNO\nYES\nNO\nYES"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 129992,
+    "url": "https://codeforces.com/blog/entry/129992",
+    "tutorial": "There's no real idea in the problem, the main difficulty is the implementation.\n\nMany programming languages have functions to check if a character is a digit or if it's a letter. They can be used to check that no digit follows a letter.\n\nHow does the order check work? Well, most languages allow you to compare characters with inequality signs (so, we have to check that $s_i \\le s_{i + 1}$ for all corresponding $i$ — separately for digits and letters). How does that work? Inside the language, every character is assigned a code. That's called an ASCII table. It contains digits, letters and lots of other characters. And the less or equal check uses that table.\n\nIf you look at the table carefully, you'll notice that the digits come before the lowercase Latin letters. Digits have codes from 48 to 57 and the lowercase letters have codes from 97 to 122. Thus, you can ignore the check that the digits come before the letters and just make sure that all characters of the string (regardless of their types) and sorted in a non-decreasing order.\n\nFor example, you can sort the string and compare the result with the original string. If they are the same, then the answer is \"YES\". Alternatively, you can use function is_sorted if your language has it.\n\nOverall complexity: $O(n)$ or $O(n \\log n)$ per testcase.",
+    "solution_code": [
+      "for _ in range(int(input())):\n\tn = int(input())\n\ts = input()\n\tprint(\"YES\" if list(s) == sorted(s) else \"NO\")"
+    ]
+  }
+}

@@ -1,6 +1,22 @@
-Read details.md before task.
-After task is done update details.md and README.md if nessesary.
-Also commit ur changes after task is done.
+## Before a task
+
+1. Read `docs/STATUS.md`. It covers what ships now, the rules that are easy to
+   break, and open threads.
+2. Use `README.md`, the repository map, to find where things live. Each code or
+   data folder has its own `CLAUDE.md` module map.
+3. For history, `grep -i <topic> docs/journal/INDEX.md` and open only the
+   matching entries. Never read the whole journal.
+
+## After a task
+
+1. Add `docs/journal/YYYY-MM-DD-<slug>.md`. Record the request, what was done,
+   results with numbers, what changed or didn't, and the reproduce command. Add
+   one line to `docs/journal/INDEX.md` (`date · area · [title](file) — outcome`).
+2. Update `docs/STATUS.md` if what ships, a rule or an open thread changed.
+3. Update `README.md` and the folder `CLAUDE.md` if you added a folder, a
+   top-level file, a module or a tool family. Long plans and reports go to
+   `docs/reports/<area>/`; run instructions go to `docs/usage/`.
+4. Commit your changes.
 
 If anything is missing report it instead of assuming and guessing. 
 If tool is missing ask it to be installed or install it your self.

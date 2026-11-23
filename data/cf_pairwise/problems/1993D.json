@@ -1,0 +1,43 @@
+{
+  "contest_id": 1993,
+  "index": "D",
+  "name": "Med-imize",
+  "rating": 2200,
+  "tags": [
+    "binary search",
+    "dp",
+    "greedy"
+  ],
+  "points": 2000.0,
+  "type": "PROGRAMMING",
+  "problem_id": "1993D",
+  "url": "https://codeforces.com/problemset/problem/1993/D",
+  "contest_start_time": "2024-08-04T14:35:00+00:00",
+  "statement": {
+    "title": "D. Med-imize",
+    "time_limit": "2 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Given two positive integers $n$ and $k$, and another array $a$ of $n$ integers.\n\nIn one operation, you can select any subarray of size $k$ of $a$, then remove it from the array without changing the order of other elements. More formally, let $(l, r)$ be an operation on subarray $a_l, a_{l+1}, \\ldots, a_r$ such that $r-l+1=k$, then performing this operation means replacing $a$ with $[a_1, \\ldots, a_{l-1}, a_{r+1}, \\ldots, a_n]$.\n\nFor example, if $a=[1,2,3,4,5]$ and we perform operation $(3,5)$ on this array, it will become $a=[1,2]$. Moreover, operation $(2, 4)$ results in $a=[1,5]$, and operation $(1,3)$ results in $a=[4,5]$.\n\nYou have to repeat the operation while the length of $a$ is greater than $k$ (which means $|a| \\gt k$). What is the largest possible median$^\\dagger$ of all remaining elements of the array $a$ after the process?\n\n$^\\dagger$The median of an array of length $n$ is the element whose index is $\\left \\lfloor (n+1)/2 \\right \\rfloor$ after we sort the elements in non-decreasing order. For example: $median([2,1,5,4,3]) = 3$, $median([5]) = 5$, and $median([6,8,2,4]) = 4$.",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\le t \\le 10^4$) — the number of test cases.\n\nThe first line of each test case contains two integers $n$ and $k$ ($1 \\le n, k \\le 5 \\cdot 10^5$).\n\nThe second line contains $n$ integers $a_1, a_2, \\ldots, a_n$ ($1 \\le a_i \\le 10^9$) — the array $a$.\n\nIt is guaranteed that the sum of $n$ over all test cases does not exceed $5 \\cdot 10^5$.",
+    "output_spec": "For each test case, print a single integer — the largest median possible after performing the operations.",
+    "note": "In the first test case, you can select a subarray $(l, r)$ which can be either $(1, 3)$ or $(2, 4)$. Thus, two obtainable final arrays are $[3]$ and $[2]$. The former one has the larger median ($3  \\gt  2$) so the answer is $3$.\n\nIn the second test case, three obtainable final arrays are $[6, 4]$, $[3, 4]$, and $[3, 2]$. Their medians are $4$, $3$, and $2$ respectively. The answer is $4$.\n\nIn the third test case, only one element is left in the final array and it can be any element of the initial array. The largest one among them is $9$, so the answer is $9$.",
+    "samples": [
+      {
+        "input": "5\n4 3\n3 9 9 2\n5 3\n3 2 5 6 4\n7 1\n5 9 2 6 5 4 6\n8 2\n7 1 2 6 8 3 4 5\n4 5\n3 4 5 6",
+        "output": "\n3\n4\n9\n6\n4"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 132185,
+    "url": "https://codeforces.com/blog/entry/132185",
+    "tutorial": "1993D - Med-imize\n\nHint 1\n\nIs there any method to calculate median without sorting?\n\nHint 2\n\nIs there any relationship between the original array with the final array?\n\nSolution\n\nNote: in order to explain this solution easier, we'll suppose all arrays are 0-indexed.\n\nIf $n \\le k$, we don't have to remove any segment since the statement only tell us to do it while the length of $a$ is greater than $k$. That way, the median of $a$ is fixed. Let's find a way to calculate this value without sorting the array.\n\nGiven an integer $x$. If $x$ is less than or equal to the median of $a$, then suppose we sort $a$ in increasing order, $x$ is somewhat to the left of $med(a)$. That means the number of elements greater than or equal to $x$ is more than the number of elements less than $x$. Using this observation, we can create another array $b$ of the same size as $a$, such that $b[i] = 1$ if $a[i] \\ge x$, otherwise $b[i] = -1$. The trick here is if $sum(b) \\gt 0$, then the condition $x \\le med(a)$ is satisfied. Using this trick, we can easily binary search the median of $a$ by fixing value of $x$, checking if $sum(b) \\gt 0$ and adjusting the value range of $med(a)$.\n\nHow about $n \\gt k$. In this case, we'll keep using the same strategy as above. That is: fix the value of $x$, find a way to delete segments of $a$ so that the array $b$ has largest sum, check if that sum is greater than $0$ and adjust the value range of the answer.\n\nNote that each time we delete a segment, the size of $a$ is reduced by $k$. We do that until $|a|\\le k$. Let's call the final array $a$ after deleting segments $a'$. After some calculation, we come up with $|a'| = ((n-1)\\bmod k) + 1$.\n\nAlso, it can be seen that the elements $a'[0], \\dots, a'[m-1]$ (where $m = |a'|$) always originate from the elements $a[i_0], \\dots, a[i_{m-1}]$ such that $i_0\\equiv 0\\pmod k, i_1\\equiv 1\\pmod k, \\dots, i_{m-1}\\equiv m-1\\pmod k$.\n\nWhy?\n\nSuppose we want to delete the segment $[i, i+k-1]$ from $a$. This operation shift all the elements from the right by $k$ units to the left, which means the indexes are subtracted by $k$ units. But if we only care about the indexes modulo $k$ before and after deleting the segments, shifting $k$ units doesn't change their modulos at all.\n\nWith all above observations, we come up with the following DP formula to find the optimal segment deletions:\n\n$dp[0] = b[0]$\n\nIf $i\\equiv 0\\pmod k$ and $i \\gt 0$, then $dp[i] = max(dp[i-k], b[i])$\n\nOtherwise $dp[i] = dp[i-1] + b[i]$. If $i \\gt k$ then maximize $dp[i]$ by $dp[i-k]$\n\nThen, the maximum sum of $b$ in the optimal deletions equals to $dp[n-1]$.\n\nTime complexity: $O(n\\log max(a))$.\n\nCode (C++)",
+    "solution_code": [
+      "#include <bits/stdc++.h>\nusing namespace std;\n\nconst int N = 500005;\n\nint n, k, a[N];\nint dp[N], b[N];\n\nbool check(int med) {\n    for (int i = 0; i < n; i++) {\n        if (a[i] >= med) {\n            b[i] = 1;\n        } else {\n            b[i] = -1;\n        }\n    }\n\n    dp[0] = b[0];\n    for (int i = 1; i < n; i++) {\n        if (i%k == 0) {\n            dp[i] = max(dp[i-k], b[i]);\n        } else {\n            dp[i] = dp[i-1] + b[i];\n            if (i > k) {\n                dp[i] = max(dp[i], dp[i-k]);\n            }\n        }\n    }\n\n    return dp[n-1] > 0;\n}\n\nint main() {\n    cin.tie(0)->sync_with_stdio(0);\n\n    int t; cin >> t;\n    while (t--) {\n        cin >> n >> k;\n\n        for (int i = 0; i < n; i++) {\n            cin >> a[i];\n        }\n\n        int lo = 1, hi = 1e9;\n        while (lo <= hi) {\n            int mid = lo + hi >> 1;\n            if (check(mid)) {\n                lo = mid + 1;\n            } else {\n                hi = mid - 1;\n            }\n        }\n\n        cout << hi << '\\n';\n    }\n}"
+    ]
+  }
+}

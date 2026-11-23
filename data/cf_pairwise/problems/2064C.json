@@ -1,0 +1,44 @@
+{
+  "contest_id": 2064,
+  "index": "C",
+  "name": "Remove the Ends",
+  "rating": 1300,
+  "tags": [
+    "brute force",
+    "constructive algorithms",
+    "dp",
+    "greedy"
+  ],
+  "points": 1250.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2064C",
+  "url": "https://codeforces.com/problemset/problem/2064/C",
+  "contest_start_time": "2025-02-16T14:35:00+00:00",
+  "statement": {
+    "title": "C. Remove the Ends",
+    "time_limit": "3 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "You have an array $a$ of length $n$ consisting of non-zero integers. Initially, you have $0$ coins, and you will do the following until $a$ is empty:\n\n Let $m$ be the current size of $a$. Select an integer $i$ where $1 \\le i \\le m$, gain $|a_i|$$^{\\text{∗}}$ coins, and then:\n\n if $a_i  \\lt  0$, then replace $a$ with $[a_1,a_2,\\ldots,a_{i - 1}]$ (that is, delete the suffix beginning with $a_i$);\n\n otherwise, replace $a$ with $[a_{i + 1},a_{i + 2},\\ldots,a_m]$ (that is, delete the prefix ending with $a_i$).\n\nFind the maximum number of coins you can have at the end of the process.\n\n$^{\\text{∗}}$Here $|a_i|$ represents the absolute value of $a_i$: it equals $a_i$ when $a_i  \\gt  0$ and $-a_i$ when $a_i  \\lt  0$.",
+    "input_spec": "The first line contains an integer $t$ ($1 \\le t \\le 10^4$) — the number of testcases.\n\nThe first line of each testcase contains an integer $n$ ($1 \\le n \\le 2 \\cdot 10^5$) — the length of $a$.\n\nThe second line of each testcase contains $n$ integers $a_1,a_2,\\ldots,a_n$ ($-10^9 \\le a_i \\le 10^9$, $a_i \\ne 0$).\n\nThe sum of $n$ across all testcases does not exceed $2 \\cdot 10^5$.",
+    "output_spec": "For each test case, output the maximum number of coins you can have at the end of the process.",
+    "note": "An example of how to get $23$ coins in the first testcase is as follows:\n\n $a = [3, 1, 4, -1, -5, \\color{red}{-9}] \\xrightarrow{i = 6} a = [3, 1, 4, -1, -5] $, and get $9$ coins.\n\n $a = [\\color{red}{3}, 1, 4, -1, -5] \\xrightarrow{i = 1} a = [1, 4, -1, -5] $, and get $3$ coins.\n\n $a = [\\color{red}{1}, 4, -1, -5] \\xrightarrow{i = 1} a = [4, -1, -5] $, and get $1$ coin.\n\n $a = [4, -1, \\color{red}{-5}] \\xrightarrow{i = 3} a = [4, -1] $, and get $5$ coins.\n\n $a = [4, \\color{red}{-1}] \\xrightarrow{i = 2} a = [4] $, and get $1$ coin.\n\n $a = [\\color{red}{4}] \\xrightarrow{i = 1} a = [] $, and get $4$ coins.\n\n After all the operations, you have $23$ coins.\nAn example of how to get $40$ coins in the second testcase is as follows:\n\n $a = [-10, -3, -17, \\color{red}{1}, 19, 20] \\xrightarrow{i = 4} a = [19, 20] $, and get $1$ coin.\n\n $a = [\\color{red}{19}, 20] \\xrightarrow{i = 1} a = [20] $, and get $19$ coins.\n\n $a = [\\color{red}{20}] \\xrightarrow{i = 1} a = [] $, and get $20$ coins.\n\n After all the operations, you have $40$ coins.",
+    "samples": [
+      {
+        "input": "3\n6\n3 1 4 -1 -5 -9\n6\n-10 -3 -17 1 19 20\n1\n1",
+        "output": "\n23\n40\n1"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 138912,
+    "url": "https://codeforces.com/blog/entry/138912",
+    "tutorial": "2064C - Remove the Ends\n\nSolution\n\nFirst see that at any point we should either remove the leftmost positive element or the rightmost negative element, as if we were to take a positive element that is not the leftmost one we could have just taken the leftmost one first and had a higher score, a similar argument can be made for taking the rightmost negative element. Now if you do either of these moves some number of times you will always take some prefix of positive numbers and then the remaining suffix of negative numbers, and so to calculate the answer we only need to check all $n + 1$ ways to split the array into a prefix and suffix and take the maximum across them all which is easy to do in $O(n)$.\n\nCode(c++)",
+    "solution_code": [
+      "#include<bits/stdc++.h>\nusing namespace std;\ntypedef long long ll;\n#define debug(x) cout << #x << \" = \" << x << \"\\n\";\n#define vdebug(a) cout << #a << \" = \"; for(auto x: a) cout << x << \" \"; cout << \"\\n\";\nmt19937 rng(chrono::steady_clock::now().time_since_epoch().count());\nint uid(int a, int b) { return uniform_int_distribution<int>(a, b)(rng); }\nll uld(ll a, ll b) { return uniform_int_distribution<ll>(a, b)(rng); }\n\nvoid solve(){\n    int n;\n    cin >> n;\n\n    vector<int> a(n);\n    for (int &x : a)\n        cin >> x;\n\n    vector<ll> pre(n), suf(n);\n    if (a[0] > 0)\n        pre[0] = a[0];\n\n    for (int i = 1; i < n; i++){\n        pre[i] = pre[i - 1];\n        if (a[i] > 0)\n            pre[i] += a[i];\n    }\n\n    if (a[n - 1] < 0)\n        suf[n - 1] = -a[n - 1];\n    \n    for (int i = n - 2; i >= 0; i--){\n        suf[i] = suf[i + 1];\n        if (a[i] < 0)\n            suf[i] -= a[i];\n    }\n\n    ll ans = 0;\n    for (int i = 0; i < n; i++)\n        ans = max(ans, pre[i] + suf[i]);\n    \n    cout << ans << \"\\n\";\n}\n\nint main(){\n    ios::sync_with_stdio(false);\n    cin.tie(0);\n    cout.tie(0);\n    \n    int t;\n    cin >> t;\n    while (t--) solve();\n}"
+    ]
+  }
+}

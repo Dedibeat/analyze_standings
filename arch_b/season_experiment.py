@@ -11,7 +11,7 @@ For each config it runs the UCup-anchored **survival** fit and reports:
 
 * connectivity of the team-sharing contest graph (the risk: keying by season must
   not fragment the single scale into per-season islands — the reason plain
-  year-keying was rejected, see details.md);
+  year-keying was rejected, see docs/journal/);
 * agreement with the held-out external opinions — Codeforces ratings (Spearman +
   leave-one-contest-out affine RMSE) and the LLM difficulty buckets.
 

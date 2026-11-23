@@ -1,0 +1,47 @@
+{
+  "contest_id": 2072,
+  "index": "E",
+  "name": "Do You Love Your Hero and His Two-Hit Multi-Target Attacks?",
+  "rating": 1500,
+  "tags": [
+    "binary search",
+    "brute force",
+    "constructive algorithms",
+    "dp",
+    "geometry",
+    "greedy",
+    "math"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2072E",
+  "url": "https://codeforces.com/problemset/problem/2072/E",
+  "contest_start_time": "2025-02-25T14:35:00+00:00",
+  "statement": {
+    "title": "E. Do You Love Your Hero and His Two-Hit Multi-Target Attacks?",
+    "time_limit": "3 seconds",
+    "memory_limit": "256 megabytes",
+    "legend": "Akito decided to study a new powerful spell. Since it possesses immeasurable strength, it certainly requires a lot of space and careful preparation. For this, Akito went out into the field. Let's represent the field as a Cartesian coordinate system.\n\nFor the spell, Akito needs to place $0 \\le n \\le 500$ staffs at distinct integer coordinates in the field such that there will be exactly $k$ pairs $(i, j)$ such that $1 \\le i  \\lt  j \\le n$ and $\\rho(i, j) = d(i, j)$.\n\nHere, for two points with integer coordinates $a = (x_a, y_a)$ and $b = (x_b, y_b)$, $\\rho(a, b) = \\sqrt{(x_a - x_b)^2 + (y_a - y_b)^2}$ and $d(a, b) = |x_a - x_b| + |y_a - y_b|$.",
+    "input_spec": "The first line of input contains a single number $t$ ($1 \\le t \\le 1000$) — the number of test cases.\n\nIn the only line of each test case, there is a single number $k$ ($0 \\le k \\le 10^5$) — the number of pairs of staffs for which the equality $\\rho(i, j) = d(i, j)$ must hold.",
+    "output_spec": "For each test case, the first line of output should print the number $n$ ($0 \\le n \\le 500$) — the number of placed staffs.\n\nIn the following $n$ lines, pairs of integers $x_i, y_i$ $(-10^9 \\le x_i, y_i \\le 10^9)$ should be printed — the coordinates of the $i$-th staff. The points in which staffs stand must be distinct.",
+    "note": null,
+    "samples": [
+      {
+        "input": "3\n0\n2\n5",
+        "output": "\n6\n69 52\n4 20\n789 9308706\n1337 1337\n-1234 -5678\n23456178 707\n10\n-236 -346262358\n273568 6435267\n2365437 31441367\n246574 -45642372\n-236 56\n4743623 -192892 \n10408080 -8173135\n-237415357 31441367\n-78125638 278\n56 143231\n5\n1 1\n2 1\n1 5\n3 5\n1 10"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 140039,
+    "url": "https://codeforces.com/blog/entry/140039",
+    "tutorial": "After playing a bit with the formulas $\\rho(a, b)$ and $d(a, b)$, we can derive that $\\rho(a, b) = d(a, b)$ if $x_a = x_b$ or $y_a = y_b$.\n\nLet us define a recursive function $f(k, x_0, y_0)$ that returns a set of sticks $P$ such that there are exactly $k$ unordered pairs that satisfy the condition, given that for all sticks $p \\in P$, $x_p \\ge x_0$ and $y_p \\ge y_0$.\n\nIf $k = 0$, the function will return an empty set. For $k  \\gt  0$, we find the maximum $m$ such that $\\frac{m(m - 1)}{2} \\le k$. Next, we add the sticks $(x_0, y_0), (x_0 + 1, y_0), \\ldots, (x_0 + m - 1, y_0)$ to the set $P$. Note that any pair from this set satisfies the condition, and thus there are exactly $\\frac{m(m - 1)}{2}$ such pairs. We then combine the current set $P$ with the set $f(k - \\frac{m(m - 1)}{2}, x_0 + m, y_0 + 1)$. This will yield the set of sticks that meets the problem's requirements.\n\nWe will prove that there will be no more than $500$ points. Let $g(x) = \\frac{x(x - 1)}{2}$. In fact, the value $k - g(m) \\le 446$, since $g(x + 1) - g(x) = \\frac{x(x + 1)}{2} - \\frac{x(x - 1)}{2} = \\frac{x}{2}(x + 1 - x + 1) = x$, and the maximum value of $g(x) \\le 10^5$ is $g(447)$, which means the maximum value of $g(x + 1) - g(x) = 446$. For $k \\le 446$, the algorithm places no more than 43 sticks; for $k = g(x)$, the algorithm will place $x$ sticks, thus the maximum number of sticks will be $447 + 43 = 490 \\le 500$.\n\nAsymptotic complexity: $\\mathcal{O}(\\sqrt{k})$.",
+    "solution_code": [
+      "#include <bits/stdc++.h>\n\nusing namespace std;\n\nvector<pair<int64_t, int64_t>> rec(int64_t k, int64_t x0 = 0, int64_t y0 = 0) {\n  if (!k) {\n    return {};\n  }\n  int64_t delta = 0;\n  while (delta * (delta - 1) / 2 <= k) {\n    delta++;\n  }\n  delta--;\n  auto remaining = rec(k - delta * (delta - 1) / 2, x0 + delta + 1, y0 + 1);\n  vector<pair<int64_t, int64_t>> ans;\n  for (int x = x0; x < x0 + delta; ++x) {\n    ans.push_back({x, y0});\n  }\n  ans.insert(ans.end(), remaining.begin(), remaining.end());\n  return ans;\n}\n\nvoid solve() {\n  int64_t k;\n  cin >> k;\n  if (!k) {\n    cout << \"1\\n69 52\\n\";\n    return;\n  }\n  auto ans = rec(k, 0, 0);\n  cout << ans.size() << '\\n';\n  for (auto [x, y] : ans) {\n    cout << x << ' ' << y << '\\n';\n  }\n}\n\nint main() {\n  int tt = 1;\n  cin >> tt;\n  while (tt --> 0) {\n    solve();\n  }\n  return 0;\n}"
+    ]
+  }
+}

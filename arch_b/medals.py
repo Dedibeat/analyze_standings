@@ -14,7 +14,7 @@ Badge model (medal-bar thresholds on the fitted difficulty scale): each tier's
 bar is the difficulty at which the cutoff cohort — the +-WINDOW official ranks
 around the cutoff team — actually solves at 50% odds: their per-problem solve
 rates are isotonic-regressed (PAVA, non-increasing in the UCup-anchored
-survival-model difficulty b) and the bar is the b where the smoothed rate
+hierarchical-with-time difficulty b) and the bar is the b where the smoothed rate
 crosses 0.5. A problem is badged with the weakest tier whose bar clears it:
 
     bronze if b_p <= bar_bronze; silver if <= bar_silver; gold if <= bar_gold;
@@ -34,7 +34,7 @@ scale (predicted-minus-actual solve rate +0.10 bronze / +0.34 gold), and even
 the solve-count-inversion ability is miscalibrated at the 50% point (where it
 predicts 50%, cutoff cohorts actually solve 57-92%) because EA fields' solve
 curves are far steeper than the global Rasch slope (the 2PL finding: EA
-discrimination ~2.1, see details.md). The isotonic crossing measures the 50%
+discrimination ~2.1, see docs/journal/). The isotonic crossing measures the 50%
 point directly and stays a threshold on b, so badges remain monotone in
 difficulty and cross-contest comparable.
 
@@ -73,11 +73,8 @@ import numpy as np
 
 from arch_a import elo
 from arch_a.load import dedupe_contests, team_key
-from . import survival
-from .joint import TAGGED, estimate_joint
-from .calibrate import _anchors, _gym_shape
+from .joint import TAGGED
 from .export_virtual_calc import performance_fit
-from .run import MIN_SOLVE_HOURS
 
 OUT = os.path.join(os.path.dirname(__file__), os.pardir, "output")
 XCPCIO_CACHE = os.path.join(os.path.dirname(__file__), os.pardir,
@@ -150,17 +147,6 @@ def medal_contests():
     return out
 
 
-def _cf_map(records):
-    """The composed b -> CF-points map from arch_b.calibrate (monotone)."""
-    shape = _gym_shape(records)
-    if shape is None:
-        shape = lambda t: np.asarray(t, float)
-    our, cf, _ = _anchors(records)
-    slope, intercept = np.polyfit(shape(our), cf, 1)
-    return lambda t: float(np.clip(slope * shape(np.array([t]))[0] + intercept,
-                                   elo.LO, elo.HI))
-
-
 def _pava_decreasing(y):
     """Isotonic non-increasing fit (pool adjacent violators), unit weights."""
     blocks = [[-v, 1] for v in y]
@@ -207,13 +193,8 @@ def _cohort_bar(cohort, bs_sorted, labels_sorted):
 
 
 def main():
-    ds, theta, b, _, uf = estimate_joint(fit_fn=survival.fit,
-                                            min_solve_hours=MIN_SOLVE_HOURS)
-    # records for the calibration helpers (same shape run.py exports)
-    records = [{"contest_id": int(cid), "problem_label": label,
-                "problem_name": name, "difficulty": float(b[p])}
-               for p, (cid, label, _pid, name) in enumerate(ds.problems)]
-    to_cf = _cf_map(records)
+    from .shipped import shipped_fit, to_cf
+    ds, theta, b, _, uf = shipped_fit()
     perf_cf = performance_fit()[3]  # (contest_id, source row) -> (team, CF performance)
 
     team_idx = {tk: i for i, tk in enumerate(ds.teams)}

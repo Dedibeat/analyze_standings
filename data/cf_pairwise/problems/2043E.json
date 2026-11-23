@@ -1,0 +1,47 @@
+{
+  "contest_id": 2043,
+  "index": "E",
+  "name": "Matrix Transformation",
+  "rating": 2300,
+  "tags": [
+    "bitmasks",
+    "brute force",
+    "data structures",
+    "dfs and similar",
+    "graphs",
+    "greedy",
+    "implementation"
+  ],
+  "points": null,
+  "type": "PROGRAMMING",
+  "problem_id": "2043E",
+  "url": "https://codeforces.com/problemset/problem/2043/E",
+  "contest_start_time": "2024-12-24T14:35:00+00:00",
+  "statement": {
+    "title": "E. Matrix Transformation",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "You are given two matrices $A$ and $B$ of size $n \\times m$, filled with integers between $0$ and $10^9$. You can perform the following operations on matrix $A$ in any order and any number of times:\n\n &=: choose two integers $i$ and $x$ ($1 \\le i \\le n$, $x \\ge 0$) and replace each element in row $i$ with the result of the bitwise AND operation between $x$ and that element. Formally, for every $j \\in [1, m]$, the element $A_{i,j}$ is replaced with $A_{i,j} \\text{ & } x$;\n\n  |=: choose two integers $j$ and $x$ ($1 \\le j \\le m$, $x \\ge 0$) and replace each element in column $j$ with the result of the bitwise OR operation between $x$ and that element. Formally, for every $i \\in [1, n]$, the element $A_{i,j}$ is replaced with $A_{i,j} \\text{ | } x$.\n\nThe value of $x$ may be chosen differently for different operations.\n\nDetermine whether it is possible to transform matrix $A$ into matrix $B$ using the given operations any number of times (including zero).",
+    "input_spec": "The first line contains a single integer $t$ ($1 \\le t \\le 100$) — the number of test cases. Then, $t$ test cases follow.\n\nEach test case is given as follows:\n\n the first line contains two integers $n$ and $m$ ($1 \\le n, m \\le 10^3$; $n \\cdot m \\le 10^3$) — the dimensions of the matrices $A$ and $B$;\n\n the following $n$ lines describe the matrix $A$, where the $i$-th line contains $m$ integers $A_{i,1}, A_{i,2}, \\dots, A_{i,m}$ ($0 \\le A_{i,j} \\le 10^9$);\n\n the following $n$ lines describe the matrix $B$, where the $i$-th line contains $m$ integers $B_{i,1}, B_{i,2}, \\dots, B_{i,m}$ ($0 \\le B_{i,j} \\le 10^9$).",
+    "output_spec": "For each test case, output Yes if it is possible to transform the matrix $A$ into the matrix $B$; otherwise, output No. Each letter can be output in any case, upper or lower.",
+    "note": "Let's consider the second set of input data and show a sequence of operations that transforms matrix $A$ into matrix $B$:\n\nInitially, the matrix looks like this:\n\n$\\begin{bmatrix} 10&10\\\\ 42&42\\\\ \\end{bmatrix}$\n\nApply an operation of the first type with parameters $i = 1$ and $x = 0$. As a result, we get the matrix:\n\n$\\begin{bmatrix} 0&0\\\\ 42&42\\\\ \\end{bmatrix}$\n\nApply an operation of the first type with parameters $i = 2$ and $x = 0$. As a result, we get the matrix:\n\n$\\begin{bmatrix} 0&0\\\\ 0&0\\\\ \\end{bmatrix}$\n\nApply an operation of the second type with parameters $j = 1$ and $x = 21$. As a result, we get the matrix:\n\n$\\begin{bmatrix} 21&0\\\\ 21&0\\\\ \\end{bmatrix}$\n\nApply an operation of the second type with parameters $j = 2$ and $x = 21$. As a result, we get the matrix:\n\n$\\begin{bmatrix} 21&21\\\\ 21&21\\\\ \\end{bmatrix}$\n\nThus, we have transformed matrix $A$ into matrix $B$.",
+    "samples": [
+      {
+        "input": "4\n1 1\n12\n13\n2 2\n10 10\n42 42\n21 21\n21 21\n2 2\n74 10\n42 106\n21 85\n85 21\n2 4\n1 2 3 4\n5 6 7 8\n3 2 3 4\n1 0 1 0",
+        "output": "\nYes\nYes\nNo\nYes"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 137801,
+    "url": "https://codeforces.com/blog/entry/137801",
+    "tutorial": "Every operation which affects multiple bits can be split into several operations which only affect one bit. For example, if you make an  |= operation with $x=11$, it is the same as making three  |= operations with $x=1$, $x=2$ and $x=8$. So, let's solve the problem for each bit separately.\n\nIf we consider only one bit, the problem becomes the following one:\n\nYou are given a binary matrix $A$, and you have to check if it is possible to transform it into another binary matrix $B$. The operations you can make are \"set all elements in some row to $0$\" and \"set all elements in some column to $1$\".\n\nLet's find all cells where $A_{i,j} \\ne B_{i,j}$. If $A_{i,j} = 0$ and $B_{i,j} = 1$, then it means that we definitely have to apply an operation to the $j$-th column. Otherwise, if $A_{i,j} = 1$ and $B_{i,j} = 0$, then we definitely have to apply an operation to the $i$-th row. That way, we can find the operations we definitely need to apply. It's pretty obvious that we don't need to do the same operation twice — if we do the same operation to the same row/column twice, we can discard the first operation, since it will be overwritten by the last operation.\n\nBut these are not all operations we need to apply. Suppose $B_{i,j} = 0$, and we change everything in the $j$-th column to $1$. Then, we have to make an operation with the $i$-th row to set $B_{i,j}$ back to $0$. This means that after you apply an operation to the $j$-th column, you have to do an operation with the $i$-th row. Same when $B_{i,j} = 1$: after you apply an operation to the $i$-th row, you have to do an operation with the $j$-th column.\n\nLet's build a graph where every operation will be represented by a vertex, and a directed edge $x \\rightarrow y$ means that, if you apply the operation $x$, the operation $y$ must be applied after that. Some vertices of this graph represent operations which we definitely need to apply. If there is a cycle reachable from one of these vertices, the transformation is impossible, since we will apply operations forever and never get the matrix we need. But if there is no cycle reachable from any operation we need to apply, then we can \"mark\" all operations reachable from the operations we need, and apply them in the order of topological sorting, and we will get exactly the matrix $B$ (for every cell that was changed, the last operation applied to it will make it correct; and we enforced that we need to apply operations to all cells that must change).\n\nSearching for a cycle in a directed graph can be done with \"three-colored DFS\" — a modification of DFS which, for each vertex, maintains one of three states — either this vertex wasn't reached by DFS at all, or it was already reached and is on the DFS stack, or this vertex was already fully processed (both reached by DFS and deleted from the DFS stack). This way, we can find a back-edge that creates the cycle as follows: if we try to go from a vertex to another vertex which is on the DFS stack, it means that we have found a cycle. There are other methods of cycle detection, but this one is the most common.\n\nIf for every bit, we can make the transformations we need, the answer is Yes. Otherwise, the answer is No. The solution works in $O(n m \\log A)$.",
+    "solution_code": [
+      "#include<bits/stdc++.h>\n \nusing namespace std;\n \nstruct graph\n{\n    int V;\n    vector<vector<int>> g;\n    vector<int> color;\n \n    bool dfs(int v)\n    {\n        if(color[v] != 0) return false;\n        color[v] = 1;\n        bool res = false;\n        for(auto y : g[v])\n        {\n            if(color[y] == 2) continue;\n            else if(color[y] == 0)\n                res |= dfs(y);\n            else res = true;\n        }\n        color[v] = 2;\n        return res;\n    }\n \n    void add_edge(int x, int y)\n    {\n        g[x].push_back(y);\n    }\n \n    graph(int V)\n    {\n        this->V = V;\n        this->g.resize(V);\n        this->color.resize(V);\n    };\n};\n \nint get_bit(int x, int y)\n{\n    return (x >> y) & 1;\n}\n \nbool check(const vector<vector<int>>& a, const vector<vector<int>>& b, int k)\n{\n    int n = a.size();\n    int m = a[0].size();\n    vector<bool> must_row(n);\n    vector<bool> must_col(m);\n    auto G = graph(n + m);\n    for(int i = 0; i < n; i++)\n        for(int j = 0; j < m; j++)\n        {\n            if(get_bit(a[i][j], k) != get_bit(b[i][j], k))\n            {\n                if(get_bit(b[i][j], k) == 0) must_row[i] = true;\n                else must_col[j] = true;\n            }\n            if(get_bit(b[i][j], k) == 0) G.add_edge(j + n, i);\n            else G.add_edge(i, j + n);\n        }                 \n    for(int i = 0; i < n; i++)\n        if(must_row[i] && G.dfs(i))\n            return false;\n    for(int j = 0; j < m; j++)\n        if(must_col[j] && G.dfs(j + n))\n            return false;\n    return true;\n}\n \nvoid solve()\n{\n    int n, m;\n    scanf(\"%d %d\", &n, &m);\n    vector<vector<int>> a(n, vector<int>(m));\n    auto b = a;\n    for(int i = 0; i < n; i++)\n        for(int j = 0; j < m; j++)\n            scanf(\"%d\", &a[i][j]);\n    for(int i = 0; i < n; i++)\n        for(int j = 0; j < m; j++)\n            scanf(\"%d\", &b[i][j]);\n    for(int i = 0; i < 30; i++)\n    {\n        if(!check(a, b, i))\n        {\n            puts(\"No\");\n            return;\n        }\n    }\n    puts(\"Yes\");\n}\n \nint main()\n{                             \n    int t;\n    scanf(\"%d\", &t);\n    for(int i = 0; i < t; i++) solve();\n}"
+    ]
+  }
+}

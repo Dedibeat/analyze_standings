@@ -1,0 +1,42 @@
+{
+  "contest_id": 2071,
+  "index": "A",
+  "name": "The Play Never Ends",
+  "rating": 800,
+  "tags": [
+    "math",
+    "number theory"
+  ],
+  "points": 500.0,
+  "type": "PROGRAMMING",
+  "problem_id": "2071A",
+  "url": "https://codeforces.com/problemset/problem/2071/A",
+  "contest_start_time": "2025-02-28T14:35:00+00:00",
+  "statement": {
+    "title": "A. The Play Never Ends",
+    "time_limit": "1 second",
+    "memory_limit": "256 megabytes",
+    "legend": "Let's introduce a two-player game, table tennis, where a winner is always decided and draws are impossible.\n\nThree players, Sosai, Fofo, and Hohai, want to spend the rest of their lives playing table tennis. They decided to play forever in the following way:\n\n In each match, two players compete while the third spectates.\n\n To ensure fairness, no player can play three times in a row. The player who plays twice in a row must sit out as a spectator in the next match, which will be played by the other two players. Otherwise, the winner and the spectator will play in the next match, while the loser will spectate.\n\nNow, the players, fully immersed in this infinite loop of matches, have tasked you with solving the following problem:\n\nGiven an integer $k$, determine whether the spectator of the first match can be the spectator in the $k$-th match.",
+    "input_spec": "Each test contains multiple test cases. The first line contains the number of test cases $t$ ($1 \\le t \\le 1000$). The description of the test cases follows.\n\nThe only line of each test case contains one integer $k$ ($1 \\le k \\le 10^9$).",
+    "output_spec": "For each test case, print \"YES\" (without quotes) if the spectator of the first match can be the spectator of the $k$-th match, and \"NO\" (without quotes) otherwise.\n\nYou can output the answer in any case (upper or lower). For example, the strings \"yEs\", \"yes\", \"Yes\", and \"YES\" will be recognized as positive responses.",
+    "note": "In the first test case, the spectator of the first match is already a spectator in the $1$st match.\n\nIn the second test case, the spectator of the first match will play in the $2$nd match regardless of the result of the first match.",
+    "samples": [
+      {
+        "input": "4\n1\n2\n333\n1000000000",
+        "output": "\nYES\nNO\nNO\nYES"
+      }
+    ]
+  },
+  "fetch": {
+    "statement": "ok",
+    "editorial": "ok"
+  },
+  "editorial": {
+    "blog_id": 140115,
+    "url": "https://codeforces.com/blog/entry/140115",
+    "tutorial": "2071A - The Play Never Ends\n\nHints\n\nHint 1\n\nWhen Fofo is the spectator of the first match, what is the earliest subsequent game in which he will spectate again?\n\nHint 2\n\nSuppose Sosai wins the first game. What becomes clear?\n\nSolution\n\nOnce the winner of the first match is decided, the rest of the game is completely predictable.\n\nFor example, if Hohai wins the first match which Fofo spectated, we can see that:\n $ {} $ $ \\text{Sosai} \\overset{\\text{Spectator of 1st: Fofo}}{\\longleftrightarrow} \\text{Hohai} $ $ \\text{Fofo} \\overset{\\text{Spectator of 2nd: Sosai}}{\\longleftrightarrow} \\text{Hohai} $ $ \\text{Fofo} \\overset{\\text{Spectator of 3rd: Hohai}}{\\longleftrightarrow} \\text{Sosai} $ $ \\text{Hohai} \\overset{\\text{Spectator of 4th: Fofo}}{\\longleftrightarrow} \\text{Sosai} $ $ \\text{Hohai} \\overset{\\text{Spectator of 5th: Sosai}}{\\longleftrightarrow} \\text{Fofo} $ $ \\text{Sosai} \\overset{\\text{Spectator of 6th: Hohai}}{\\longleftrightarrow} \\text{Fofo} $ $ \\text{Sosai} \\overset{\\text{Spectator of 7th: Fofo}}{\\longleftrightarrow} \\text{Hohai} $\nNo matter who wins in the second match, Hohai won't be able to continue playing in the third match (even if he wins the second match) since he has already played two times in a row. Similarly, Fofo won't be able to play in the fourth match because he has already played twice in a row, regardless of the match result.\n\nAs a result, Fofo won't be able to spectate in the $k$-th match for any $k$ of the form $3x + 1$.\n\nThe overall time complexity is: $O(1)$.\n\nCode\n\nRate the Problem\n\nAmazing problem:\n\nGood problem:\n\nAverage problem:\n\nBad problem:\n\nDidn't solve:",
+    "solution_code": [
+      "#include<bits/stdc++.h>\nusing namespace std;\nvoid solve() {\n    int k;\n    cin >> k;\n    if (k % 3 == 1) {\n        cout << \"Yes\\n\";\n    } else {\n        cout << \"No\\n\";\n    }\n}\nint main() {\n    ios::sync_with_stdio(0), cin.tie(0);\n    int tt = 1;\n    cin >> tt;\n    while (tt--) {\n        solve();\n    }\n}"
+    ]
+  }
+}
