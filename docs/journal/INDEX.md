@@ -128,3 +128,4 @@ to other files may name the old root locations (reports keep their filenames und
 - 2026-11-23 · hong-kong · [NUM-R^3 contest performances and Hong Kong projections](2026-11-23-team-form-hk.md) — 2463 virtual, 2267 official, 2347 combined with a 100-point virtual deduction.
 - 2026-11-23 · hong-kong · [Head-to-head results and the 29 unlinked HK teams](2026-11-23-hk-opponent-replay.md) — direct qualifier baseline around 31/112 or 32/126 after estimating all entrants.
 - 2026-11-23 · hong-kong · [The difficulty of twentieth at Hong Kong](2026-11-23-hk-top-twenty.md) — six cross-format standouts, eight well ahead in both qualifiers, historical seat line 32–37.
+- 2026-11-23 · hong-kong · [Which Hong Kong gold estimate applies?](2026-11-23-hk-gold-argument.md) — 41% on Chengdu form vs 8% on Shenyang form in the Reviewed scenario.
