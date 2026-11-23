@@ -125,3 +125,4 @@ to other files may name the old root locations (reports keep their filenames und
 - 2026-11-22 · hong-kong · [Hong Kong registration: 11-22 export, the field is full](2026-11-22-hong-kong-registration-11-22-export-field-is-full.md) — 95/95 non-local and 17/~20 local Reviewed, cut at school #199; 6.3 expected golds vs 12.3 in 2025; NUM-R^3 Reviewed
 - 2026-11-22 · teaching · [Competitive programming problems for tutorial videos](2026-11-22-tutorial-video-problems.md) — 21 problems with opening questions and short proofs across four techniques
 - 2026-11-22 · teaching · [Binary search for tutorial videos](2026-11-22-binary-search-tutorial-videos.md) — added six worked puzzles, bringing the guide to 27
+- 2026-11-23 · hong-kong · [NUM-R^3 contest performances and Hong Kong projections](2026-11-23-team-form-hk.md) — 2463 virtual, 2267 official, 2347 combined with a 100-point virtual deduction.
