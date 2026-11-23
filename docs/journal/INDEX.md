@@ -130,3 +130,4 @@ to other files may name the old root locations (reports keep their filenames und
 - 2026-11-23 · hong-kong · [The difficulty of twentieth at Hong Kong](2026-11-23-hk-top-twenty.md) — six cross-format standouts, eight well ahead in both qualifiers, historical seat line 32–37.
 - 2026-11-23 · hong-kong · [Which Hong Kong gold estimate applies?](2026-11-23-hk-gold-argument.md) — 41% on Chengdu form vs 8% on Shenyang form in the Reviewed scenario.
 - 2026-11-23 · hong-kong · [Simulated finishing rank at Shenyang form](2026-11-23-hk-simulated-finish.md) — median 27th/28th, 34%/31% top twenty, reproduced 10%/13% gold.
+- 2026-11-23 · hong-kong · [Current-season EC-Final cutoff and gold comparison](2026-11-23-hk-ecfinal-current-season.md) — seven-site projection reaches mainland tier 78; HK tenth seat around 29th/30th at full uptake, 23rd at 90%.

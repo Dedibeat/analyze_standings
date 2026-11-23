@@ -4,7 +4,7 @@ Current state of the project. Keep this file short (≤150 lines) and true: when
 task changes what ships, what is open, or a rule below, edit this file in the same
 commit. History belongs in [journal/](journal/INDEX.md), not here.
 
-Last updated: 2026-11-22 (QOJ cached-download fix; Wuhan 2026 dossier; HK field full).
+Last updated: 2026-11-23 (HK EC-Final seat projection from five completed mainland sites).
 
 ## What ships
 
@@ -142,6 +142,9 @@ release steps above. Full history:
   The [training plan](reports/team-r3/hong-kong-2027.md) starts with a Wuhan 2026 virtual on Nov 21 and runs through the regional.
   The 11-22 list is full: 95/95 non-local Reviewed, NUM-R^3 among them
   ([entry](journal/2026-11-22-hong-kong-registration-11-22-export-field-is-full.md)).
+  [The 2026 allocation replay](journal/2026-11-23-hk-ecfinal-current-season.md)
+  puts the tenth HK seat around 29th–30th if mainland places are filled, or 23rd
+  if 10% stay vacant. Shanghai, Nanchang and first-round registrations are pending.
   The EC-Final estimate is 2027-01-22/23. Forecasts are in the
   hong-kong / ec-final journal entries; coaching data is in `data/team_r3/` and
   [usage/team-r3.md](usage/team-r3.md).
