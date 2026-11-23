@@ -142,8 +142,10 @@ release steps above. Full history:
   The [training plan](reports/team-r3/hong-kong-2027.md) starts with a Wuhan 2026 virtual on Nov 21 and runs through the regional.
   The 11-22 list is full: 95/95 non-local Reviewed, NUM-R^3 among them
   ([entry](journal/2026-11-22-hong-kong-registration-11-22-export-field-is-full.md)).
-  Current Hong Kong read: about 19th, gold ~10–20%. Virtuals overstated
-  Shenyang onsite by ~150 CF ([backtest](journal/2026-11-23-hk-form-backtest.md)).
+  Current Hong Kong read (Shenyang form, simulated): median finish 27th
+  (middle half 17–40), top 20 ~34%, gold ~10–13%; 23rd / 43% / 15% if the
+  unmeasured teams are weak. Virtuals overstated Shenyang onsite by ~150 CF
+  ([backtest](journal/2026-11-23-hk-form-backtest.md)).
   The EC-Final estimate is 2027-01-22/23. Forecasts are in the
   hong-kong / ec-final journal entries; coaching data is in `data/team_r3/` and
   [usage/team-r3.md](usage/team-r3.md).

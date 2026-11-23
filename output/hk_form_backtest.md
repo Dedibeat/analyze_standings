@@ -53,3 +53,12 @@ Monte Carlo: gold = top round(10%) of the attending field; NUM-R^3's own strengt
 | All virtuals recency-weighted −100 | 2377 | 74 | 16 | 25% | 15% (top 11 of 112) | 18% (top 13 of 126) | 14% (top 11 of 112) |
 | Chengdu virtual repeated | 2592 | 35 | 8 | 62% | 47% (top 11 of 112) | 53% (top 13 of 126) | 45% (top 11 of 112) |
 | Mean of the 15 QOJ virtuals (Changchun left out) | 2480 | 53 | 13 | 42% | 29% (top 11 of 112) | 34% (top 13 of 126) | 27% (top 11 of 112) |
+
+## Finishing rank at Shenyang form (same simulation)
+
+Sorting mean strengths of measured teams gives the deterministic position above; the simulated finish adds the day's noise and the teams with no 2026 result.
+
+| field | median finish | middle half | top 20 | top 35 | gold | unmeasured teams ahead (mean) |
+|---|---|---|---|---|---|---|
+| Reviewed (112) | 27 | 17–40 | 34% | 68% | 10% | 4.8 |
+| Reviewed + Pending (126) | 28 | 18–43 | 31% | 64% | 13% | 5.1 |

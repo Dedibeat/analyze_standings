@@ -97,7 +97,8 @@ def weighted(vs, on):
 
 
 def simulate(c, me_perf, me_sd, sd_app, reviewed_only, online_extra=1.0, seed=0):
-    """P(gold) for a team of true strength ~ N(me_perf, me_sd) in the Hong Kong field."""
+    """P(gold), the gold count, the field size, and the finishing ranks of a team of true strength
+    ~ N(me_perf, me_sd) in the Hong Kong field (plus how many of the teams ahead were unmeasured)."""
     rng = np.random.default_rng(seed)
     field = [r for r in c.reg if r["team"] != c.me["team"] and (r["status"] == "Reviewed" or not reviewed_only)]
     known = [r for r in field if r["strength"] is not None]
@@ -107,14 +108,14 @@ def simulate(c, me_perf, me_sd, sd_app, reviewed_only, online_extra=1.0, seed=0)
                    * (online_extra if r["onsite"] is None else 1.0) for r in known])
     n_unknown = len(field) - len(known)
     gold = round(0.1 * (len(field) + 1))
-    hits = 0
-    for _ in range(SIMS):
+    ranks, unk_ahead = np.empty(SIMS, int), np.empty(SIMS, int)
+    for i in range(SIMS):
         true = rng.normal(mu, sd)
         unk = rng.choice(pool, n_unknown) + rng.normal(0, sd_app, n_unknown)
         day = np.concatenate([true + rng.normal(0, sd_app, len(mu)), unk])
         me = rng.normal(me_perf, me_sd) + rng.normal(0, sd_app)
-        hits += 1 + int((day > me).sum()) <= gold
-    return hits / SIMS, gold, len(field) + 1
+        ranks[i], unk_ahead[i] = 1 + int((day > me).sum()), int((unk > me).sum())
+    return float(np.mean(ranks <= gold)), gold, len(field) + 1, ranks, unk_ahead
 
 
 def main():
@@ -177,7 +178,18 @@ def main():
         mc = [simulate(c, p, sd_app / math.sqrt(3), sd_app, rev, extra)
               for rev, extra in ((True, 1.0), (False, 1.0), (True, 2.0))]
         L.append(f"| {name} | {p:.0f} | {c.sy_rank(p)} | {pos} | {100 * pr['gold']:.0f}% | "
-                 + " | ".join(f"{100 * g:.0f}% (top {k} of {n})" for g, k, n in mc) + " |")
+                 + " | ".join(f"{100 * g:.0f}% (top {k} of {n})" for g, k, n, *_ in mc) + " |")
+        if name == "Shenyang onsite repeated":
+            finish = mc[:2]
+    L += ["", "## Finishing rank at Shenyang form (same simulation)", "",
+          "Sorting mean strengths of measured teams gives the deterministic position above; the simulated "
+          "finish adds the day's noise and the teams with no 2026 result.", "",
+          "| field | median finish | middle half | top 20 | top 35 | gold | unmeasured teams ahead (mean) |",
+          "|---|---|---|---|---|---|---|"]
+    for label, (g, k, n, ranks, unk) in zip(("Reviewed", "Reviewed + Pending"), finish):
+        q1, q2, q3 = np.percentile(ranks, [25, 50, 75])
+        L.append(f"| {label} ({n}) | {q2:.0f} | {q1:.0f}–{q3:.0f} | {100 * np.mean(ranks <= 20):.0f}% | "
+                 f"{100 * np.mean(ranks <= 35):.0f}% | {100 * g:.0f}% | {unk.mean():.1f} |")
     OUT.write_text("\n".join(L) + "\n", encoding="utf-8")
     print("\n".join(L))
 

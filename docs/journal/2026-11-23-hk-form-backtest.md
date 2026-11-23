@@ -91,3 +91,42 @@ from the linked field):
 Reproduce: `python3 scripts/hk_form_backtest.py` (~1.5 min) →
 `output/hk_form_backtest.md`; `python3 scripts/hk_shenyang_rank.py --virtual
 Chengdu:35 --virtual Wuhan:53 --virtual 'CCPC Changchun:29'`.
+
+## Follow-up: simulated finishing rank, not sorted position (same day)
+
+**Codex's correction.** Codex asked for the headline to be the simulated
+finish rather than the 19th from sorting the measured teams' means.
+`simulate` now also returns the finishing ranks, and the output has a
+"Finishing rank at Shenyang form" table. It reproduces Codex's replay
+exactly:
+
+| field | median finish | middle half | top 20 | top 35 | gold |
+|---|---|---|---|---|---|
+| Reviewed (112) | 27 | 17–40 | 34% | 68% | 10% |
+| Reviewed + Pending (126) | 28 | 18–43 | 31% | 64% | 13% |
+
+**Why 27th and not 19th:**
+- **The day's noise.** With noise, about 24 measured teams are expected
+  ahead, not 18. Many teams sit just below NUM-R^3 and each has a small
+  chance to pass it.
+- **Unmeasured teams.** On average 4.8 of the 19 unmeasured Reviewed teams
+  finish ahead.
+
+**Sensitivity to the unmeasured teams** (scratch run, Reviewed field):
+- The simulation draws them from the whole linked pool, i.e. as strong as a
+  typical measured team.
+- Most of them are low-ranked schools or Hong Kong/Macau locals with no
+  online result (上海电力, 大连理工盘锦, 昆山杜克, 澳门城市, New Mongol IT, 岭南,
+  华北理工, 南京晓庄 …). Only a few could be strong (苏州大学, 兰州大学, HKU).
+- Drawing them from the weaker half of the pool, or leaving them out, gives:
+  median **23rd** (15–34), top 20 **43%**, gold **15%**.
+- So the honest range is a median finish of 23–28, top 20 31–43% and gold
+  10–15%, with the published draw at the pessimistic end.
+
+**Agreed qualifications:**
+- The Shenyang backtest is retrospective. The rating scale is the full fit,
+  and the Changchun map uses regional rows that include Shenyang. The
+  direction of the miss is solid; the size, 150, rests on one onsite result.
+- Wuhan (2478) supports holding the forecast where it is. It does not show
+  that the team's form stayed exactly flat, because the adjusted estimates
+  share the Shenyang anchor.
