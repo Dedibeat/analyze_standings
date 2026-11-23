@@ -126,3 +126,4 @@ to other files may name the old root locations (reports keep their filenames und
 - 2026-11-22 · teaching · [Competitive programming problems for tutorial videos](2026-11-22-tutorial-video-problems.md) — 21 problems with opening questions and short proofs across four techniques
 - 2026-11-22 · teaching · [Binary search for tutorial videos](2026-11-22-binary-search-tutorial-videos.md) — added six worked puzzles, bringing the guide to 27
 - 2026-11-23 · hong-kong · [NUM-R^3 contest performances and Hong Kong projections](2026-11-23-team-form-hk.md) — 2463 virtual, 2267 official, 2347 combined with a 100-point virtual deduction.
+- 2026-11-23 · hong-kong · [Head-to-head results and the 29 unlinked HK teams](2026-11-23-hk-opponent-replay.md) — direct qualifier baseline around 31/112 or 32/126 after estimating all entrants.
