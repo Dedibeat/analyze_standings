@@ -49,6 +49,7 @@ gives the exact command and outputs. Credentials come from the environment
 
 - `team_r3_participations.py`: official and virtual participations.
 - `hk_shenyang_rank.py`: Hong Kong registrants ranked by Shenyang-equivalent 2026 strength; `--virtual BOARD:RANK` places a virtual result there.
+- `hk_form_backtest.py`: does practice predict onsite (pre-Shenyang backtest) and NUM-R^3 Hong Kong gold by Monte Carlo.
 - `team_r3_digest.py`: per-contest dossier reading aid.
 - `team_r3_cf.py`, `team_r3_cf_rounds.py`: members on Codeforces.
 

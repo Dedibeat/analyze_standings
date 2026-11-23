@@ -25,6 +25,7 @@ import csv
 import json
 import math
 import sys
+from types import SimpleNamespace
 from pathlib import Path
 
 import numpy as np
@@ -62,19 +63,15 @@ def official_ranked(rows):
     return [(i, r, k + 1) for k, (i, r) in enumerate(off)]
 
 
-def main():
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--team", default="NUM-R^3")
-    ap.add_argument("--virtual", action="append", default=[], metavar="BOARD:RANK",
-                    help="a virtual result as an official-equivalent rank, e.g. Chengdu:35 or 'CCPC Changchun':29")
-    args = ap.parse_args()
-
+def build(file, team="NUM-R^3"):
+    """Registrants with their 2026 appearances on the performance scale (``reg``, ``ranked``, ``me``), the
+    boards, the CCPC maps, and the helpers ``sy_rank(perf)`` and ``virtual_perf(board, rank)``."""
     _, _, _, lookup = performance_fit()
     perf = {k: v[1] for k, v in lookup.items()}
     tagged = {c["contest_id"]: c for c in json.load(open(ROOT / "data" / "tagged.json"))}
 
     data = og.load()
-    reg = hf.link_registered(hf.read_registration(hf.REGISTRATION), data)
+    reg = hf.link_registered(hf.read_registration(file), data)
     solved = {(r["round"], og.norm_school(r["school"]), og.norm_name(r["team"])): int(r["solved"] or 0)
               for r in data["online_teams"] if r["season"] == "2026"}
     online_rows = {rnd: collections.defaultdict(list) for rnd in ONLINE}  # team name -> [(row, solved)]
@@ -173,12 +170,44 @@ def main():
         onsite = [p for c, p, _ in r["apps"] if not c.startswith("Online")]
         r["onsite"] = float(np.mean(onsite)) if onsite else None
     ranked = sorted((r for r in reg if r["strength"] is not None), key=lambda r: -r["strength"])
-    me = next(r for r in reg if r["team"] == args.team)
+    me = next(r for r in reg if r["team"] == team)
+    return SimpleNamespace(**{k: v for k, v in locals().items() if k != "f"})
+
+
+def hk_model(c, file):
+    """perf -> online strength x (linear fit over registrants with both online rounds), then the
+    field-relative Hong Kong model on the registered field (``arch_b.hk_field_2026``).
+    Returns ``(intercept, slope, r, n, chances)``; ``chances(perf)`` gives ``(x, {gold, silver, bronze})``."""
+    both = [(np.mean([p for k, p, _ in r["apps"] if k.startswith("Online")]), r["x"]) for r in c.reg
+            if r["x"] is not None and sum(k.startswith("Online") for k, _, _ in r["apps"]) == 2]
+    slope, icpt = np.polyfit(*zip(*both), 1)
+    res = hf.run(file)
+    past = [r for r in hf.hk.link_hk(c.data, og.online_strengths(c.data["online_teams"]))
+            if r["season"] in hf.om.HK_SEASONS and r["x"] is not None]
+    w_rel, line = hf.fit(past, True), {n: -math.log(v) for n, v in res["lines_registered"].items()}
+
+    def chances(p):
+        x = icpt + slope * p
+        return x, hf.predict(w_rel, x, line)
+    return icpt, slope, float(np.corrcoef(*zip(*both))[0, 1]), len(both), chances
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--team", default="NUM-R^3")
+    ap.add_argument("--file", type=Path, default=ROOT / "data" / "icpc_hk_macau_public_teams_20261122.xlsx",
+                    help="Hong Kong registration export (default: the 11-22 one)")
+    ap.add_argument("--virtual", action="append", default=[], metavar="BOARD:RANK",
+                    help="a virtual result as an official-equivalent rank, e.g. Chengdu:35 or 'CCPC Changchun':29")
+    args = ap.parse_args()
+    c = build(args.file, args.team)
+    reg, ranked, me, data = c.reg, c.ranked, c.me, c.data
+    regionals, ccpc_maps, sy_rank, virtual_perf = c.regionals, c.ccpc_maps, c.sy_rank, c.virtual_perf
     above = [r for r in ranked if r["strength"] > me["strength"]]
     above_onsite = [r for r in reg if r["onsite"] is not None and r["onsite"] > me["onsite"]]
 
     L = [f"# {args.team} in the 2026 Hong Kong field, by Shenyang rank", "",
-         f"Registration: `{hf.REGISTRATION.name}` ({len(reg)} teams); {len(ranked)} have a 2026 result "
+         f"Registration: `{args.file.name}` ({len(reg)} teams); {len(ranked)} have a 2026 result "
          f"({sum(1 for r in reg if r['onsite'] is not None)} onsite: regional or CCPC).", "",
          f"Shenyang official board: {len(regionals['Shenyang'])} teams.", "",
          "## CCPC maps (perf = a + b log rank, line-ups with a 2026 regional)", "",
@@ -203,16 +232,10 @@ def main():
     if args.virtual:
         # Hong Kong medal chances: perf -> online strength x (linear fit over registrants with both online
         # rounds), then the field-relative Hong Kong model on the registered field (arch_b.hk_field_2026).
-        both = [(np.mean([p for c, p, _ in r["apps"] if c.startswith("Online")]), r["x"]) for r in reg
-                if r["x"] is not None and sum(c.startswith("Online") for c, _, _ in r["apps"]) == 2]
-        slope, icpt = np.polyfit(*zip(*both), 1)
-        res = hf.run()
-        past = [r for r in hf.hk.link_hk(data, og.online_strengths(data["online_teams"]))
-                if r["season"] in hf.om.HK_SEASONS and r["x"] is not None]
-        w_rel, line = hf.fit(past, True), {n: -math.log(v) for n, v in res["lines_registered"].items()}
+        icpt, slope, corr, n_both, chances = hk_model(c, args.file)
         L += ["", "## Virtuals and the Hong Kong field", "",
               f"Online-equivalent rank: x = {icpt:.3f} + {slope:.5f} perf (r = "
-              f"{np.corrcoef(*zip(*both))[0, 1]:.2f}, {len(both)} registrants). Gold / silver / bronze: "
+              f"{corr:.2f}, {n_both} registrants). Gold / silver / bronze: "
               "field-relative Hong Kong model on the registered field. "
               f"'−{VIRTUAL_DISCOUNT}' reads the virtual {VIRTUAL_DISCOUNT} CF weaker.", "",
               "| result | perf | Shenyang-eq. | Hong Kong position | online-eq. rank | gold / silver / bronze |",
@@ -224,8 +247,7 @@ def main():
             p = virtual_perf(board, int(k))
             cases += [(f"{board} virtual #{k}", p), (f"{board} virtual #{k} −{VIRTUAL_DISCOUNT}", p - VIRTUAL_DISCOUNT)]
         for label, p in cases:
-            x = icpt + slope * p
-            pr = hf.predict(w_rel, x, line)
+            x, pr = chances(p)
             pos = 1 + sum(1 for r in ranked if r["strength"] > p and r["team"] != args.team)
             L.append(f"| {label} | {p:.0f} | {sy_rank(p)} | {pos} of {len(ranked)} | {math.exp(-x):.0f} | "
                      + " / ".join(f"{100 * pr[c]:.0f}%" for c in hf.om.CLASSES[:3]) + " |")
